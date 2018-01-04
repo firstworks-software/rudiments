@@ -9,6 +9,7 @@
 	added various replaceFirst/replaceAll methods to charstring
 	fixed some subtle codetree bugs that could cause parsing of a
 		concatenation to succeed at eof inappropriately
+	updated xmldomevents to support multiple events per xmldomnode
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

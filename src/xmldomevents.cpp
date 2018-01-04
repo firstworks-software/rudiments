@@ -58,7 +58,8 @@ bool xmldomevents::setEvents(const char *events) {
 		return false;
 	}
 
-	pvt->_eventsnode=pvt->_etree.getRootNode()->getFirstTagChild("events");
+	pvt->_eventsnode=pvt->_etree.getRootNode()->
+					getFirstTagChild("events","events");
 
 	debugPrintf(1,"success\n");
 	return true;
@@ -75,8 +76,11 @@ bool xmldomevents::setEventHandler(const char *event,
 				!node->isNullNode();
 				node=node->getNextTag()) {
 
-		// for each instance where "event" is referenced...
-		if (!charstring::compare(
+		// for each <events:"event"> tag, and for each tag with an
+		// event="event" attribute...
+		if ((!charstring::compare(node->getNamespace(),"events") &&
+				!charstring::compare(node->getName(),event)) ||
+			!charstring::compare(
 				node->getAttributeValue("event"),event)) {
 
 			// attach the event handler to the node
@@ -130,15 +134,58 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		// call the event handler
 		xmldomnode	*next=(handler)?
 					handler(codetreenode,etnode,pvt->_data):
-					codetreenode->getNextTag();
+					codetreenode;
 
-		// bail if it returned null
+		// if there are a set of event handlers then call those too,
+		// but skip the check if we're at the top of the event node
+		// tree...
+		// FIXME: this works but it's slow...  instead, build a list
+		// of handlers and make that the private data of the eventnode
+		// instead of just the one handler, then iterate over the list
+		if (etnode!=pvt->_eventsnode) {
+			for (etnode=etnode->getFirstTagChild();
+					!etnode->isNullNode();
+					etnode=etnode->getNextTagSibling()) {
+
+				// we can only continue to process events if
+				// the previous event returned the same
+				// codetreenode, so bail if we got something
+				// else back
+				if (next!=codetreenode) {
+					break;
+				}
+
+				// the set of events must be the first tags
+				// inside of the parent node, so bail if we
+				// find something with a namespace other than
+				// "events"
+				if (charstring::compare(
+					etnode->getNamespace(),"events")) {
+					break;
+				}
+
+				// get the event handler
+				handler=(xmldomeventhandler_t)
+						etnode->getPrivateData();
+				if (!handler) {
+					continue;
+				}
+
+				// call the event handler
+				next=handler(codetreenode,etnode,pvt->_data);
+				if (!next) {
+					break;
+				}
+			}
+		}
+
+		// bail if the next node was set null
 		if (!next) {
 			debugPrintf(1,"} failed\n");
 			return false;
 		}
 
-		// continue walking from the node that the handler returned
+		// continue walking
 		codetreenode=next;
 	}
 

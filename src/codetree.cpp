@@ -580,7 +580,6 @@ bool codetree::endOfStringOk(xmldomnode *grammarnode) {
 			return false;
 		}
 
-//stdoutput.printf("got: %s\n",name);
 		switch (name[0]) {
 			case OPTION:
 			case REPETITION:
@@ -590,26 +589,19 @@ bool codetree::endOfStringOk(xmldomnode *grammarnode) {
 			case NONTERMINAL:
 				def=(xmldomnode *)sib->getPrivateData();
 				if (!def || def->isNullNode()) {
-//stdoutput.printf("eof failed - def not found\n");
 					return false;
 				}
-//stdoutput.printf("eof check nt\n");
-//def->print(&stdoutput);
 				if (!endOfStringOk(def->getFirstTagChild())) {
-//stdoutput.printf("  fail\n");
 					return false;
 				}
-//stdoutput.printf("  pass\n");
 				break;
 			case CONCATENATION:
 			case ALTERNATION:
 				if (!endOfStringOk(sib->getFirstTagChild())) {
-//stdoutput.printf("eof failed in concat/alt\n");
 					return false;
 				}
 				break;
 			default:
-//stdoutput.printf("eof failed, found %s\n",sib->getName());
 				return false;
 		}
 	}
