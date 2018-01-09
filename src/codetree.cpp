@@ -116,6 +116,18 @@ bool codetreegrammar::tagStart(const char *ns, const char *name) {
 	return xmldom::tagStart(ns,newname);
 }
 
+bool codetreegrammar::tagEnd(const char *ns, const char *name) {
+
+	bool	retval=xmldom::tagEnd(ns,name);
+
+	if (name[0]==GRAMMAR[0]) {
+		buildNonTerminalNodeAssociations(
+			getRootNode()->getFirstTagChild(GRAMMAR));
+	}
+
+	return retval;
+}
+
 bool codetreegrammar::attributeName(const char *name) {
 
 	// the first letters of this one collides with other names and requires
@@ -163,6 +175,33 @@ bool codetreegrammar::attributeValue(const char *value) {
 
 bool codetreegrammar::hasRecursiveBreak() {
 	return pvt->_hasrecursivebreak;
+}
+
+void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
+
+	// For each <nonterminal> tag, this method attaches a pointer to the
+	// corresponding <definition> tag.  That way, when the parser encounters
+	// a nonterminal and needs to look up the definition it can do it
+	// directly rather than having to search the tree.  This yields a
+	// significant performance improvement at the cost of only a single
+	// pass through the tree to assign the pointers.
+
+	// if it's a nonterminal node
+	if (node->getName()[0]==NONTERMINAL) {
+
+		// find the associated definition and attach it to this node
+		node->setPrivateData((void *)
+			getRootNode()->
+				getFirstTagChild(GRAMMAR)->
+					getFirstTagChild(DEFINITION,NAME,
+						node->getAttributeValue(NAME)));
+	}
+
+	// process children
+	for (xmldomnode *child=node->getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		buildNonTerminalNodeAssociations(child);
+	}
 }
 
 struct break_t {
@@ -255,7 +294,7 @@ bool codetree::parse(const char *input,
 	pvt->_grammartag->setPrivateData((void *)
 		pvt->_grammartag->getFirstTagChild(DEFINITION,NAME,
 							startsymbol));
-	buildNonTerminalNodeAssociations(pvt->_grammartag);
+	//buildNonTerminalNodeAssociations(pvt->_grammartag);
 
 	// initialize a node for processing exceptions
 	pvt->_excnode=new xmldomnode(output->getTree(),
@@ -287,31 +326,6 @@ bool codetree::parse(const char *input,
 	pvt->_excnode=NULL;
 
 	return retval;
-}
-
-void codetree::buildNonTerminalNodeAssociations(xmldomnode *node) {
-
-	// For each <nonterminal> tag, this method attaches a pointer to the
-	// corresponding <definition> tag.  That way, when the parser encounters
-	// a nonterminal and needs to look up the definition it can do it
-	// directly rather than having to search the tree.  This yields a
-	// significant performance improvement at the cost of only a single
-	// pass through the tree to assign the pointers.
-
-	// if it's a nonterminal node
-	if (node->getName()[0]=='n') {
-
-		// find the associated definition and attach it to this node
-		node->setPrivateData((void *)
-			pvt->_grammartag->getFirstTagChild(DEFINITION,NAME,
-						node->getAttributeValue(NAME)));
-	}
-
-	// process children
-	for (xmldomnode *child=node->getFirstTagChild();
-		!child->isNullNode(); child=child->getNextTagSibling()) {
-		buildNonTerminalNodeAssociations(child);
-	}
 }
 
 char codetree::getSymbolType(xmldomnode *nt) {

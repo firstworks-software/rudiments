@@ -10,6 +10,7 @@
 	fixed some subtle codetree bugs that could cause parsing of a
 		concatenation to succeed at eof inappropriately
 	updated xmldomevents to support multiple events per xmldomnode
+	moved codetree nonterminal-build to codetreegrammar
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

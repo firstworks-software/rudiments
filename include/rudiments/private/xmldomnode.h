@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 	friend class codetree;
+	friend class codetreegrammar;
 	friend class xmldomevents;
 	private:
 		void		init(xmldomnode *nullnode);

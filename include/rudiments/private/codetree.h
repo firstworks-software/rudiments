@@ -2,8 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		void	buildNonTerminalNodeAssociations(
-					xmldomnode *node);
 		char	getSymbolType(xmldomnode *nt);
 		bool	isTag(xmldomnode *nt);
 		bool	parseChild(xmldomnode *grammarnode,
