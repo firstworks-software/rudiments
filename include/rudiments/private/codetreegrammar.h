@@ -7,6 +7,10 @@
 		bool	tagEnd(const char *ns, const char *name);
 		bool	attributeName(const char *name);
 		bool	attributeValue(const char *value);
+
+		void	buildDefinitionDictionary();
 		void	buildNonTerminalNodeAssociations(xmldomnode *node);
+
+		xmldomnode	*getDefinition(const char *name);
 
 		codetreegrammarprivate	*pvt;

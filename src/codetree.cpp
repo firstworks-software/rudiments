@@ -3,6 +3,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/linkedlist.h>
+#include <rudiments/dictionary.h>
 #include <rudiments/stdio.h>
 
 
@@ -80,6 +81,8 @@ class codetreegrammarprivate {
 	private:
 		char	_currentattribute;
 		bool	_hasrecursivebreak;
+
+		dictionary<const char *, xmldomnode *>	_definitions;
 };
 
 codetreegrammar::codetreegrammar() : xmldom(false) {
@@ -121,6 +124,7 @@ bool codetreegrammar::tagEnd(const char *ns, const char *name) {
 	bool	retval=xmldom::tagEnd(ns,name);
 
 	if (name[0]==GRAMMAR[0]) {
+		buildDefinitionDictionary();
 		buildNonTerminalNodeAssociations(
 			getRootNode()->getFirstTagChild(GRAMMAR));
 	}
@@ -177,6 +181,23 @@ bool codetreegrammar::hasRecursiveBreak() {
 	return pvt->_hasrecursivebreak;
 }
 
+void codetreegrammar::buildDefinitionDictionary() {
+
+	// Build a dictionary, mapping the names of nonterminals to the
+	// associated <definition> tag.  This makes lookups much faster
+	// in buildNonTerminalNodeAssociations, but more importantly, in
+	// codetree::write().
+
+	pvt->_definitions.clear();
+	for (xmldomnode *node=getRootNode()->
+				getFirstTagChild(GRAMMAR)->
+				getFirstTagChild(DEFINITION);
+			!node->isNullNode();
+			node=node->getNextTagSibling(DEFINITION)) {
+		pvt->_definitions.setValue(node->getAttributeValue(NAME),node);
+	}
+}
+
 void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
 
 	// For each <nonterminal> tag, this method attaches a pointer to the
@@ -190,11 +211,8 @@ void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
 	if (node->getName()[0]==NONTERMINAL) {
 
 		// find the associated definition and attach it to this node
-		node->setPrivateData((void *)
-			getRootNode()->
-				getFirstTagChild(GRAMMAR)->
-					getFirstTagChild(DEFINITION,NAME,
-						node->getAttributeValue(NAME)));
+		node->setPrivateData((void *)pvt->_definitions.
+				getValue(node->getAttributeValue(NAME)));
 	}
 
 	// process children
@@ -202,6 +220,11 @@ void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		buildNonTerminalNodeAssociations(child);
 	}
+}
+
+xmldomnode *codetreegrammar::getDefinition(const char *name) {
+	xmldomnode	*def=pvt->_definitions.getValue(name);
+	return (def)?def:getNullNode();
 }
 
 struct break_t {
@@ -289,12 +312,10 @@ bool codetree::parse(const char *input,
 	// get the namespace
 	pvt->_ns=pvt->_grammartag->getAttributeValue(NAMESPACE);
 
-	// build non-terminal node associations
-	// (see method for explanation)
+	// (re)set the start symbol
 	pvt->_grammartag->setPrivateData((void *)
-		pvt->_grammartag->getFirstTagChild(DEFINITION,NAME,
-							startsymbol));
-	//buildNonTerminalNodeAssociations(pvt->_grammartag);
+		((codetreegrammar *)(pvt->_grammartag->getTree()))->
+						getDefinition(startsymbol));
 
 	// initialize a node for processing exceptions
 	pvt->_excnode=new xmldomnode(output->getTree(),
@@ -1024,7 +1045,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
-	// find the definition
+	// get the definition
 	xmldomnode	*def=(xmldomnode *)grammarnode->getPrivateData();
 	if (!def || def->isNullNode()) {
 		debugPrintIndent(1);
@@ -1267,9 +1288,9 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	}
 
 	// get the node's definition
-	xmldomnode	*def=pvt->_grammartag->getFirstTagChild(
-							DEFINITION,NAME,
-							node->getName());
+	xmldomnode	*def=((codetreegrammar *)
+				(pvt->_grammartag->getTree()))->
+					getDefinition(node->getName());
 	if (def->isNullNode()) {
 		debugPrintIndent(1);
 		debugPrintf(1,"ERROR: definition %s not found\n",
