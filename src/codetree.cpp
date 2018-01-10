@@ -98,7 +98,7 @@ codetreegrammar::~codetreegrammar() {
 bool codetreegrammar::tagStart(const char *ns, const char *name) {
 
 	// get the first letter of the name
-	char	ch=name[0];
+	char	ch=*name;
 
 	// the first letters of these collide with other tags and require
 	// special handling...
@@ -123,7 +123,7 @@ bool codetreegrammar::tagEnd(const char *ns, const char *name) {
 
 	bool	retval=xmldom::tagEnd(ns,name);
 
-	if (name[0]==GRAMMAR[0]) {
+	if (*name==GRAMMAR[0]) {
 		buildDefinitionDictionary();
 		buildNonTerminalNodeAssociations(
 			getRootNode()->getFirstTagChild(GRAMMAR));
@@ -137,12 +137,12 @@ bool codetreegrammar::attributeName(const char *name) {
 	// the first letters of this one collides with other names and requires
 	// special handling...
 	// tag collides with type
-	char	ch=name[0];
+	char	ch=*name;
 	if (!charstring::compare(name,"tag")) {
 		ch=TAG[0];
 	}
 
-	pvt->_currentattribute=name[0];
+	pvt->_currentattribute=*name;
 
 	if (ch=='r') {
 		pvt->_hasrecursivebreak=true;
@@ -165,7 +165,7 @@ bool codetreegrammar::attributeValue(const char *value) {
 	// the first letters of this one collides with other values and requires
 	// special handling...
 	// line collides with literal
-	char	ch=value[0];
+	char	ch=*value;
 	if (!charstring::compare(value,"line")) {
 		ch=LINE;
 	}
@@ -208,7 +208,7 @@ void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
 	// pass through the tree to assign the pointers.
 
 	// if it's a nonterminal node
-	if (node->getName()[0]==NONTERMINAL) {
+	if (*(node->getName())==NONTERMINAL) {
 
 		// find the associated definition and attach it to this node
 		node->setPrivateData((void *)pvt->_definitions.
@@ -354,7 +354,7 @@ char codetree::getSymbolType(xmldomnode *nt) {
 	if (charstring::isNullOrEmpty(symboltype)) {
 		return INLINE;
 	}
-	return symboltype[0];
+	return *symboltype;
 }
 
 bool codetree::isTag(xmldomnode *nt) {
@@ -362,7 +362,7 @@ bool codetree::isTag(xmldomnode *nt) {
 	if (charstring::isNullOrEmpty(tag)) {
 		return false;
 	}
-	return (tag[0]==YES);
+	return (*tag==YES);
 }
 
 bool codetree::parseChild(xmldomnode *grammarnode,
@@ -396,7 +396,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	bool		retval=true;
 	const char	*name=grammarnode->getName();
 	if (name) {
-		switch (name[0]) {
+		switch (*name) {
 			case CONCATENATION:
 				if (!parseConcatenation(grammarnode,
 							treeparent,
@@ -521,7 +521,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 		// if the next node is an exception...
 		xmldomnode	*sibling=grammarnode->getNextTagSibling();
 		name=sibling->getName();
-		if (!sibling->isNullNode() && name && name[0]=='e') {
+		if (!sibling->isNullNode() && name && *name=='e') {
 
 			// create some local buffers
 			pvt->_excbuffer.clear();
@@ -581,13 +581,8 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 
-		if (pvt->_endofstring && !endOfStringOk(child)) {
-			debugPrintIndent(4);
-			debugPrintf(4,"} concatenation failed\n");
-			return false;
-		}
-
-		if (!parseChild(child,treeparent,codeposition,ntbuffer)) {
+		if ((pvt->_endofstring && !endOfStringOk(child)) || 
+			!parseChild(child,treeparent,codeposition,ntbuffer)) {
 			debugPrintIndent(4);
 			debugPrintf(4,"} concatenation failed\n");
 			return false;
@@ -615,7 +610,7 @@ bool codetree::endOfStringOk(xmldomnode *grammarnode) {
 			return false;
 		}
 
-		switch (name[0]) {
+		switch (*name) {
 			case OPTION:
 			case REPETITION:
 			case BREAK:
@@ -804,7 +799,7 @@ bool codetree::compareValue(const char *code,
 	// first, check for beginning-of-line characters,
 	// which should only occur at the beginning of a value
 	// (STX is used to represent the beginning of a line)
-	if (value && value[0]==STX) {
+	if (value && *value==STX) {
 		if (code==pvt->_beginningofinput || *(code-1)=='\n') {
 			value++;
 			(*valuelength)--;
@@ -822,7 +817,7 @@ bool codetree::compareValue(const char *code,
 	}
 
 	// see if the code matches this value
-	if (!((casesensitive && casesensitive[0]=='f')?
+	if (!((casesensitive && *casesensitive=='f')?
 		!charstring::compareIgnoringCase(value,code,lengthtocompare):
 		!charstring::compare(value,code,lengthtocompare))) {
 		return false;
@@ -1013,7 +1008,7 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 	const char	*recurse=grammarnode->getAttributeValue(RECURSIVE);
 
 	// add this break to the stack, if necessary
-	if (recurse && recurse[0]=='t') {
+	if (recurse && *recurse=='t') {
 		break_t	*b=new break_t;
 		b->value=value;
 		b->valuelength=valuelength;
@@ -1054,22 +1049,28 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 		return false;
 	}
 
-	// get the name (or alias)
-	const char	*name=def->getAttributeValue(NAME);
-	const char	*alias=def->getAttributeValue(ALIAS);
-	if (alias) {
-		name=alias;
-	}
-
 	// some variables...
 	xmldomnode	*codenode=NULL;
 	stringbuffer	*localntbuffer=NULL;
+	const char	*name=NULL;
+	const char	*alias=NULL;
+	char		symboltype='\0';
+
+	// we can defer getting the name/alias and symboltype until
+	// later unless we're debugging...
+	if (pvt->_debuglevel>=2) {
+		name=def->getAttributeValue(NAME);
+		alias=def->getAttributeValue(ALIAS);
+		if (alias) {
+			name=alias;
+		}
+		symboltype=getSymbolType(def);
+	}
 
 	// If a nonterminal buffer was passed in then we're apparently already
 	// building up another nonterminal that stores a literal value.  In
 	// that case we don't need to do anything but pass the current code
 	// parent and nonterminal buffer forward.
-	const char	symboltype=getSymbolType(def);
 	if (!ntbuffer) {
 
 		// If no nonterminal buffer was passed in...
@@ -1081,7 +1082,16 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 		// parent forward.  If it has a type of literal, then we
 		// need to create a buffer to build up the value in and pass it
 		// forward too...
+		symboltype=getSymbolType(def);
 		if (symboltype!=NONE) {
+
+			// get the name/alias
+			name=def->getAttributeValue(NAME);
+			alias=def->getAttributeValue(ALIAS);
+			if (alias) {
+				name=alias;
+			}
+
 			codenode=new xmldomnode(treeparent->getTree(),
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
@@ -1403,7 +1413,7 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 
 	// if it started with a backspace then either remove the preceeding
 	// carriage-return/line-feed or back up one level of indention
-	if (string[0]=='\b') {
+	if (*string=='\b') {
 
 		// make sure not to attempt to indent less than 0
 		if (pvt->_depth) {
