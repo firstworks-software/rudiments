@@ -671,65 +671,6 @@ int main(int argc, const char **argv) {
 			"numbers,12345678,234567,3456,45"));
 	delete[] newstr;
 
-	regularexpression	match;
-	match.compile("[0-9]*");
-	from.compile("5");
-	newstr=charstring::replace(original,&match,true,&from,"five",true);
-	test("replace regex/match-from-to (larger)",
-		!charstring::compare(newstr,
-			"01234five6789,1234five678,234five67,34five6,4five"));
-	delete[] newstr;
-
-	from.compile("45");
-	newstr=charstring::replace(original,&match,true,&from,"fourfive",true);
-	test("replace regex/match-from-to (larger)",
-		!charstring::compare(newstr,
-			"0123fourfive6789,123fourfive678,"
-			"23fourfive67,3fourfive6,fourfive"));
-	delete[] newstr;
-
-	original="4545454545,45454545,454545,4545,45";
-	from.compile("5");
-	newstr=charstring::replace(original,&match,true,&from,"five",true);
-	test("replace regex/match-from-to (global,global)",
-		!charstring::compare(newstr,
-			"4five4five4five4five4five,"
-			"4five4five4five4five,"
-			"4five4five4five,"
-			"4five4five,"
-			"4five"));
-	delete[] newstr;
-
-	newstr=charstring::replace(original,&match,true,&from,"five",false);
-	test("replace regex/match-from-to (global,first)",
-		!charstring::compare(newstr,
-			"4five45454545,"
-			"4five454545,"
-			"4five4545,"
-			"4five45,"
-			"4five"));
-	delete[] newstr;
-
-	newstr=charstring::replace(original,&match,false,&from,"five",false);
-	test("replace regex/match-from-to (first,first)",
-		!charstring::compare(newstr,
-			"4five45454545,"
-			"45454545,"
-			"454545,"
-			"4545,"
-			"45"));
-	delete[] newstr;
-
-	newstr=charstring::replace(original,&match,false,&from,"five",true);
-	test("replace regex/match-from-to (first,global)",
-		!charstring::compare(newstr,
-			"4five4five4five4five4five,"
-			"45454545,"
-			"454545,"
-			"4545,"
-			"45"));
-	delete[] newstr;
-
 	stdoutput.printf("\n");
 
 

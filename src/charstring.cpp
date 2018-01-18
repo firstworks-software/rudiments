@@ -302,7 +302,7 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 char *charstring::replace(const char *str,
 				regularexpression *from,
 				const char *to,
-				bool replaceglobal) {
+				bool global) {
 	
 	// declare buffer for new string
 	stringbuffer	newstring;
@@ -340,115 +340,12 @@ char *charstring::replace(const char *str,
 		ptr=start;
 
 		// bail if we're not replacing globally
-		if (!replaceglobal) {
+		if (!global) {
 			break;
 		}
 	}
 
 	// append the rest of the chunk
-	newstring.append(start);
-
-	// return the string that contains the replacements
-	return newstring.detachString();
-}
-
-char *charstring::replace(const char *str,
-				regularexpression *match,
-				bool matchglobal,
-				regularexpression *from,
-				const char *to,
-				bool replaceglobal) {
-
-	// declare buffer for new string
-	stringbuffer	newstring;
-
-	const char	*start=str;
-	const char	*ptr=start;
-	for (;;) {
-
-		// look for a matching part
-		if (!*ptr || !match->match(ptr) ||
-				!match->getSubstringCount()) {
-
-			// bail if no match is found
-			break;
-		}
-
-		// get the bounds of the matching chunk
-		int32_t		mi=match->getSubstringCount()-1;
-		const char	*matchstart=match->getSubstringStart(mi);
-		const char	*matchend=match->getSubstringEnd(mi);
-
-		// move on if they're the same
-		if (matchend==matchstart) {
-			ptr++;
-			continue;
-		}
-
-		// get a copy of the matching chunk
-		char		*matchchunk=charstring::duplicate(matchstart,
-							matchend-matchstart);
-
-		// append the previous, non-matching part of the main string
-		newstring.append(start,matchstart-start);
-
-		// transform the chunk...
-
-		start=matchchunk;
-		ptr=start;
-		for (;;) {
-
-			// look for a matching part
-			if (!*ptr || !from->match(ptr) ||
-					!from->getSubstringCount()) {
-
-				// bail if no match is found
-				break;
-			}
-
-			// get the bounds of the matching chunk
-			int32_t		fi=from->getSubstringCount()-1;
-			const char	*fromstart=
-					from->getSubstringStart(fi);
-			const char	*fromend=
-					from->getSubstringEnd(fi);
-
-			// move on if they're the same
-			if (fromend==fromstart) {
-				ptr++;
-				continue;
-			}
-
-			// append the previous, non-matching part of the chunk
-			newstring.append(start,fromstart-start);
-
-			// append the replacement part
-			newstring.append(to);
-
-			// move the start forward in the matching chunk
-			start=fromend;
-			ptr=start;
-
-			// bail if we're not replacing globally
-			if (!replaceglobal) {
-				break;
-			}
-		}
-
-		// append the rest of the chunk
-		newstring.append(start);
-
-		// move the start forward in the main string
-		start=matchend;
-		ptr=start;
-
-		// bail if we're not matching globally
-		if (!matchglobal) {
-			break;
-		}
-	}
-
-	// append the rest of the main string
 	newstring.append(start);
 
 	// return the string that contains the replacements
