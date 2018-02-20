@@ -854,6 +854,7 @@ enable_xmldomevents
 enable_codetree
 enable_compiler
 enable_prompt
+enable_templateengine
 enable_shared
 enable_static
 with_pic
@@ -1559,6 +1560,7 @@ Optional Features:
   --disable-codetree      Don't build codetree class
   --disable-compiler      Don't build compiler class
   --disable-prompt        Don't build prompt class
+  --disable-templateengine Don't build templateengine class
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -3066,6 +3068,13 @@ if test "${enable_prompt+set}" = set; then :
   enableval=$enable_prompt; INCLUDE_PROMPT="0"
 else
   INCLUDE_PROMPT="1"
+fi
+
+# Check whether --enable-templateengine was given.
+if test "${enable_templateengine+set}" = set; then :
+  enableval=$enable_templateengine; INCLUDE_TEMPLATEENGINE="0"
+else
+  INCLUDE_TEMPLATEENGINE="1"
 fi
 
 
@@ -34389,6 +34398,14 @@ then
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 prompt.h promptincludes.h"
 	SRCS="$SRCS prompt.cpp"
 	LOBJS="$LOBJS prompt.lo"
+fi
+
+if ( test "$INCLUDE_TEMPLATEENGINE" = "1" )
+then
+	HEADERS3="$HEADERS3 templateengine.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 templateengine.h templateengineincludes.h"
+	SRCS="$SRCS templateengine.cpp"
+	LOBJS="$LOBJS templateengine.lo"
 fi
 
 

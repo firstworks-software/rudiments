@@ -338,6 +338,10 @@ AC_ARG_ENABLE(prompt,
 	[  --disable-prompt        Don't build prompt class],
 	INCLUDE_PROMPT="0",
 	INCLUDE_PROMPT="1")
+AC_ARG_ENABLE(templateengine,
+	[  --disable-templateengine Don't build templateengine class],
+	INCLUDE_TEMPLATEENGINE="0",
+	INCLUDE_TEMPLATEENGINE="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -4254,6 +4258,14 @@ then
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 prompt.h promptincludes.h"
 	SRCS="$SRCS prompt.cpp"
 	LOBJS="$LOBJS prompt.lo"
+fi
+
+if ( test "$INCLUDE_TEMPLATEENGINE" = "1" )
+then
+	HEADERS3="$HEADERS3 templateengine.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 templateengine.h templateengineincludes.h"
+	SRCS="$SRCS templateengine.cpp"
+	LOBJS="$LOBJS templateengine.lo"
 fi
 
 

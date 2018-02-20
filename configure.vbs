@@ -83,7 +83,8 @@ srcs="winsock.cpp "+_
 	"url.cpp "+_
 	"sha1.cpp "+_
 	"md5.cpp "+_
-	"prompt.cpp"
+	"prompt.cpp"+_
+	"templateengine.cpp"
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -147,7 +148,8 @@ lobjs="winsock.obj "+_
 	"url.obj "+_
 	"sha1.obj "+_
 	"md5.obj "+_
-	"prompt.obj"
+	"prompt.obj"+_
+	"templateengine.obj"
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
@@ -223,7 +225,8 @@ headers3="xmldom.h "+_
 	"hash.h "+_
 	"sha1.h "+_
 	"md5.h "+_
-	"prompt.h"
+	"prompt.h"+_
+	"templateengine.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -391,7 +394,9 @@ privateheaders7="codetree.h "+_
 	"md5.h "+_
 	"md5includes.h "+_
 	"prompt.h "+_
-	"promptincludes.h"
+	"promptincludes.h"+_
+	"templateengine.h"+_
+	"templateengineincludes.h"
 
 ' version
 RUDIMENTS_VERSION="1.0.7"
