@@ -68,7 +68,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(const unsigned char *string);
+		ssize_t	write(const unsigned char *string);
 
 		/** Writes the first "size" bytes of "string" to the
 		 *  stringbuffer at the current position and increments the
@@ -78,7 +78,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(const unsigned char *string,
+		ssize_t	write(const unsigned char *string,
 							size_t size);
 
 		/** Writes "string" to the stringbuffer at the current position
@@ -88,7 +88,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(const char *string);
+		ssize_t	write(const char *string);
 
 		/** Writes the first "size" bytes of "string" to the
 		 *  stringbuffer at the current position and increments the
@@ -98,7 +98,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(const char *string, size_t size);
+		ssize_t	write(const char *string, size_t size);
 
 		/** Writes "character" to the stringbuffer at the current
 		 *  position and increments the current position to the next
@@ -107,7 +107,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(char character);
+		ssize_t	write(char character);
 
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
@@ -117,7 +117,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(int16_t number);
+		ssize_t	write(int16_t number);
 
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
@@ -127,7 +127,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(int32_t number);
+		ssize_t	write(int32_t number);
 
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
@@ -137,7 +137,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(int64_t number);
+		ssize_t	write(int64_t number);
 
 		/** Writes "character" to the stringbuffer at the current
 		 *  position and increments the current position to the next
@@ -146,7 +146,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(unsigned char character);
+		ssize_t	write(unsigned char character);
 
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
@@ -156,7 +156,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(uint16_t number);
+		ssize_t	write(uint16_t number);
 
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
@@ -166,7 +166,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(uint32_t number);
+		ssize_t	write(uint32_t number);
 
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
@@ -176,7 +176,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(uint64_t number);
+		ssize_t	write(uint64_t number);
 
 		/** Converts "number" to a string (using a default scale of 4)
 		 *  and writes it to the stringbuffer at the current position
@@ -186,7 +186,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(float number);
+		ssize_t	write(float number);
 
 		/** Converts "number" to a string using the specified "scale"
 		 *  and writes it to the stringbuffer at the current position
@@ -196,7 +196,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(float number, uint16_t scale);
+		ssize_t	write(float number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
 		 *  "precision" and "scale" and writes it to the stringbuffer
@@ -207,7 +207,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(float number, uint16_t precision,
+		ssize_t	write(float number, uint16_t precision,
 							uint16_t scale);
 
 		/** Converts "number" to a string (using a default scale of 4)
@@ -218,7 +218,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(double number);
+		ssize_t	write(double number);
 
 		/** Converts "number" to a string using the specified "scale"
 		 *  and writes it to the stringbuffer at the current position
@@ -228,7 +228,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(double number, uint16_t scale);
+		ssize_t	write(double number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
 		 *  "precision" and "scale" and writes it to the stringbuffer
@@ -239,7 +239,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		stringbuffer	*write(double number, uint16_t precision,
+		ssize_t	write(double number, uint16_t precision,
 							uint16_t scale);
 
 

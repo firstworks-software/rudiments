@@ -200,7 +200,7 @@ ssize_t socketserver::lowLevelRead(void *buf, ssize_t count) {
 			count,0);
 }
 
-ssize_t socketserver::lowLevelWrite(const void *buf, ssize_t count) const {
+ssize_t socketserver::lowLevelWrite(const void *buf, ssize_t count) {
 	return ::send(fd(),
 			#ifdef RUDIMENTS_HAVE_SEND_WITH_VOID
 			buf,

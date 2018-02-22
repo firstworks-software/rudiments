@@ -523,165 +523,155 @@ void filedescriptor::dontUseAsyncWrite() {
 	pvt->_asyncwrite=false;
 }
 
-ssize_t filedescriptor::write(uint16_t number) const {
+ssize_t filedescriptor::write(uint16_t number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(uint32_t number) const {
+ssize_t filedescriptor::write(uint32_t number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(uint64_t number) const {
+ssize_t filedescriptor::write(uint64_t number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(int16_t number) const {
+ssize_t filedescriptor::write(int16_t number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(int32_t number) const {
+ssize_t filedescriptor::write(int32_t number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(int64_t number) const {
+ssize_t filedescriptor::write(int64_t number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(float number) const {
+ssize_t filedescriptor::write(float number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(double number) const {
+ssize_t filedescriptor::write(double number) {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned char character) const {
+ssize_t filedescriptor::write(unsigned char character) {
 	return write(character,-1,-1);
 }
 
-ssize_t filedescriptor::write(bool value) const {
+ssize_t filedescriptor::write(bool value) {
 	return write(value,-1,-1);
 }
 
-ssize_t filedescriptor::write(char character) const {
+ssize_t filedescriptor::write(char character) {
 	return write(character,-1,-1);
 }
 
-ssize_t filedescriptor::write(const unsigned char *string, size_t size) const {
+ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
 	return write(string,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(const char *string, size_t size) const {
+ssize_t filedescriptor::write(const char *string, size_t size) {
 	return write(string,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(const unsigned char *string) const {
+ssize_t filedescriptor::write(const unsigned char *string) {
 	return write(string,charstring::length(string),-1,-1);
 }
 
-ssize_t filedescriptor::write(const char *string) const {
+ssize_t filedescriptor::write(const char *string) {
 	return write(string,charstring::length(string),-1,-1);
 }
 
-ssize_t filedescriptor::write(const void *buffer, size_t size) const {
+ssize_t filedescriptor::write(const void *buffer, size_t size) {
 	return write(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(uint16_t number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(uint16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
 	return bufferedWrite(&number,sizeof(uint16_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(uint32_t number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(uint32_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
 	return bufferedWrite(&number,sizeof(uint32_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(uint64_t number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(uint64_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
 	return bufferedWrite(&number,sizeof(uint64_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(int16_t number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(int16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint16_t)number);
 	}
 	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(int32_t number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(int32_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint32_t)number);
 	}
 	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(int64_t number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(int64_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint64_t)number);
 	}
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(float number,
-				int32_t sec,int32_t usec) const {
+ssize_t filedescriptor::write(float number, int32_t sec,int32_t usec) {
 	return bufferedWrite(&number,sizeof(float),sec,usec);
 }
 
-ssize_t filedescriptor::write(double number,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(double number, int32_t sec, int32_t usec) {
 	return bufferedWrite(&number,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned char character,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedWrite(&character,sizeof(unsigned char),sec,usec);
 }
 
-ssize_t filedescriptor::write(bool value,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(bool value, int32_t sec, int32_t usec) {
 	return bufferedWrite(&value,sizeof(bool),sec,usec);
 }
 
-ssize_t filedescriptor::write(char character,
-				int32_t sec, int32_t usec) const {
+ssize_t filedescriptor::write(char character, int32_t sec, int32_t usec) {
 	return bufferedWrite(&character,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size,
-					int32_t sec, int32_t usec) const {
+						int32_t sec, int32_t usec) {
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedWrite(buffer,size,sec,usec);
 }
 
@@ -1315,7 +1305,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 }
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
-					int32_t sec, int32_t usec) const {
+						int32_t sec, int32_t usec) {
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("bufferedWrite of %d bytes\n",(int)count);
@@ -1413,7 +1403,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	return byteswritten;
 }
 
-bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) const {
+bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	if (!pvt->_writebuffer) {
 		return true;
 	}
@@ -1429,7 +1419,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) const {
 }
 
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
-					int32_t sec, int32_t usec) const {
+						int32_t sec, int32_t usec) {
 
 	if (!buf) {
 		return 0;
@@ -1601,7 +1591,7 @@ void filedescriptor::lowLevelWriteWorker(void *attr) {
 	}
 }
 
-ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) const {
+ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) {
 
 	if (pvt->_asyncwrite) {
 
@@ -1665,7 +1655,7 @@ ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) const {
 	}
 }
 
-ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
+ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) {
 	#if defined(RUDIMENTS_HAVE__WRITE)
 		return _write(pvt->_fd,buf,count);
 	#elif defined(RUDIMENTS_HAVE_WRITE)

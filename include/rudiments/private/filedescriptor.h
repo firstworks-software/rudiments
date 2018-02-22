@@ -12,11 +12,11 @@
 		virtual	ssize_t	bufferedRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec);
 		virtual	ssize_t	bufferedWrite(const void *buf, ssize_t count,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 		virtual	ssize_t	safeRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec);
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 		bool		setNoDelay(int32_t onoff);
 
 		int32_t	getSockOpt(int32_t level, int32_t optname,
@@ -27,9 +27,9 @@
 		virtual	ssize_t	lowLevelRead(void *buf,
 						ssize_t count);
 		virtual	ssize_t	midLevelWrite(const void *buf,
-						ssize_t count) const;
+						ssize_t count);
 		virtual	ssize_t	lowLevelWrite(const void *buf,
-						ssize_t count) const;
+						ssize_t count);
 		virtual int32_t	lowLevelClose();
 
 		const char	*type() const;

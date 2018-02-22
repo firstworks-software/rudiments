@@ -11,7 +11,7 @@ class filedescriptorprivate;
 
 /** The filedescriptor class is a base class for other classes that utilize
  *  file descriptors. */
-class RUDIMENTS_DLLSPEC filedescriptor {
+class RUDIMENTS_DLLSPEC filedescriptor : public destination {
 	public:
 		/** Creates an instance of the filedescriptor class. */
 		filedescriptor();
@@ -88,142 +88,142 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(uint16_t number) const;
+		ssize_t	write(uint16_t number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(uint32_t number) const;
+		ssize_t	write(uint32_t number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(uint64_t number) const;
+		ssize_t	write(uint64_t number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(int16_t number) const;
+		ssize_t	write(int16_t number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(int32_t number) const;
+		ssize_t	write(int32_t number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(int64_t number) const;
+		ssize_t	write(int64_t number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(float number) const;
+		ssize_t	write(float number);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred. */
-		ssize_t	write(double number) const;
+		ssize_t	write(double number);
 
 		/** Writes "character" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(unsigned char character) const;
+		ssize_t	write(unsigned char character);
 
 		/** Writes "character" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(char character) const;
+		ssize_t	write(char character);
 
 		/** Writes "value" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(bool value) const;
+		ssize_t	write(bool value);
 
 		/** Writes NULL-terminated "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred. */
-		ssize_t	write(const unsigned char *string) const;
+		ssize_t	write(const unsigned char *string);
 
 		/** Writes NULL-terminated "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred. */
-		ssize_t	write(const char *string) const;
+		ssize_t	write(const char *string);
 
 		/** Writes "size" bytes of "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred.  Note that it is
  		 *  possible to write beyond the string's NULL terminator
  		 *  using this method.  */
-		ssize_t	write(const unsigned char *string, size_t size) const;
+		ssize_t	write(const unsigned char *string, size_t size);
 
 		/** Writes "size" bytes of "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred.  Note that it is
  		 *  possible to write beyond the string's NULL terminator
  		 *  using this method.  */
-		ssize_t	write(const char *string, size_t size) const;
+		ssize_t	write(const char *string, size_t size);
 
 		/** Writes "size" bytes of "buffer" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred. */
-		ssize_t	write(const void *buffer, size_t size) const;
+		ssize_t	write(const void *buffer, size_t size);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(uint16_t number, int32_t sec, int32_t usec) const;
+		ssize_t	write(uint16_t number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(uint32_t number, int32_t sec, int32_t usec) const;
+		ssize_t	write(uint32_t number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(uint64_t number, int32_t sec, int32_t usec) const;
+		ssize_t	write(uint64_t number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(int16_t number, int32_t sec, int32_t usec) const;
+		ssize_t	write(int16_t number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(int32_t number, int32_t sec, int32_t usec) const;
+		ssize_t	write(int32_t number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(int64_t number, int32_t sec, int32_t usec) const;
+		ssize_t	write(int64_t number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(float number, int32_t sec, int32_t usec) const;
+		ssize_t	write(float number, int32_t sec, int32_t usec);
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(double number, int32_t sec, int32_t usec) const;
+		ssize_t	write(double number, int32_t sec, int32_t usec);
 
 		/** Writes "character" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
@@ -231,21 +231,21 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
 		ssize_t	write(unsigned char character,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Writes "character" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(char character, int32_t sec, int32_t usec) const;
+		ssize_t	write(char character, int32_t sec, int32_t usec);
 
 		/** Writes "value" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(bool value, int32_t sec, int32_t usec) const;
+		ssize_t	write(bool value, int32_t sec, int32_t usec);
 
 		/** Writes NULL-terminated "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -253,7 +253,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
 		ssize_t	write(const unsigned char *string,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Writes NULL-terminated "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -261,7 +261,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
 		ssize_t	write(const char *string,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Writes "size" bytes of "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -270,7 +270,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  timeout occurred.  Note that it is possible to write beyond
 		 *  the string's NULL terminator using this method.  */
 		ssize_t	write(const unsigned char *string, size_t size,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Writes "size" bytes of "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -279,7 +279,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  timeout occurred.  Note that it is possible to write beyond
 		 *  the string's NULL terminator using this method.  */
 		ssize_t	write(const char *string, size_t size,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Writes "size" bytes of "buffer" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -287,7 +287,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
 		ssize_t	write(const void *buffer, size_t size,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Prints "..." to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules. */
@@ -949,7 +949,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  "usec" microseconds, then the method will fail.  Set either
 		 *  "sec" or "usec" to -1 to disable the timeout and allow the
 		 *  method to block until the buffer has been flushed. */
-		bool	flushWriteBuffer(int32_t sec, int32_t usec) const;
+		bool	flushWriteBuffer(int32_t sec, int32_t usec);
 
 
 		/** If an application does many small reads, the overhead of

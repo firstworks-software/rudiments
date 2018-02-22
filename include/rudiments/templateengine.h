@@ -1,19 +1,19 @@
-// Copyright (c) 1999-2017 David Muse
+// Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-#ifndef TEMPLATEENGINE_H
-#define TEMPLATEENGINE_H
+#ifndef RUDIMENTS_TEMPLATEENGINE_H
+#define RUDIMENTS_TEMPLATEENGINE_H
 
 #include <rudiments/private/templateengineincludes.h>
 
 
 /** File parsers must have this function signature: */
-typedef bool (*fileparser_t)(stringbuffer *output,
+typedef bool (*fileparser_t)(destination *output,
 					const char *filename,
 					void *data);
 
 /** Block parsers must have this function signature: */
-typedef bool (*blockparser_t)(stringbuffer *output,
+typedef bool (*blockparser_t)(destination *output,
 					const char *blockname,
 					const char *block,
 					uint64_t blocklength,
@@ -31,7 +31,7 @@ struct fileparser {
 /** This struct associates module/file with parser and is used with
  *  handlePage() below. */
 struct blockparser {
-	stringbuffer		*output;
+	destination		*output;
 	const char	 	*blockname;
 	blockparser_t		parser;
 	void			*data;
@@ -74,7 +74,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 * 
 		 *  Returns true on success and false if the file parser
 		 *  method returns false or if no fileparser was found. */
-		bool	parse(stringbuffer *output,
+		bool	parse(destination *output,
 				const char *filename,
 				fileparser *fileparsers,
 				dictionary< const char *, const char * > *vars);
@@ -93,7 +93,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 * 
 		 *  Returns false if a block parser method returns false and
 		 *  true otherwise. */
-		bool	parse(stringbuffer *output,
+		bool	parse(destination *output,
 				const char *filename,
 				blockparser *blockparsers,
 				dictionary< const char *, const char * > *vars);
@@ -112,7 +112,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 *
 		 *  Returns false if a block parser method returns false and
 		 *  true otherwise. */
-		bool	parse(stringbuffer *output,
+		bool	parse(destination *output,
 				const char *block,
 				uint64_t blocklength,
 				blockparser *blockparsers,

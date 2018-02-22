@@ -154,9 +154,10 @@ ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 	return bytescopied;
 }
 
-bytebuffer *bytebuffer::write(const unsigned char *data, size_t size) {
+ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
 	size_t	bytescopied;
-	return copy((unsigned char *)data,size,true,&bytescopied);
+	copy((unsigned char *)data,size,true,&bytescopied);
+	return bytescopied;
 }
 
 bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
@@ -251,74 +252,74 @@ bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
 	return this;
 }
 
-bytebuffer *bytebuffer::write(const char *string) {
+ssize_t bytebuffer::write(const char *string) {
 	return write(reinterpret_cast<const unsigned char *>(string),
 					charstring::length(string));
 }
 
-bytebuffer *bytebuffer::write(const char *string, size_t size) {
+ssize_t bytebuffer::write(const char *string, size_t size) {
 	return write(reinterpret_cast<const unsigned char *>(string),size);
 }
 
-bytebuffer *bytebuffer::write(char character) {
+ssize_t bytebuffer::write(char character) {
 	return write(reinterpret_cast<const unsigned char *>(&character),
 								sizeof(char));
 }
 
-bytebuffer *bytebuffer::write(int16_t number) {
+ssize_t bytebuffer::write(int16_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int16_t));
 }
 
-bytebuffer *bytebuffer::write(int32_t number) {
+ssize_t bytebuffer::write(int32_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int32_t));
 }
 
-bytebuffer *bytebuffer::write(int64_t number) {
+ssize_t bytebuffer::write(int64_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int64_t));
 }
 
-bytebuffer *bytebuffer::write(unsigned char character) {
+ssize_t bytebuffer::write(unsigned char character) {
 	return write(reinterpret_cast<const unsigned char *>(&character),
 							sizeof(unsigned char));
 }
 
-bytebuffer *bytebuffer::write(uint16_t number) {
+ssize_t bytebuffer::write(uint16_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint16_t));
 }
 
-bytebuffer *bytebuffer::write(uint32_t number) {
+ssize_t bytebuffer::write(uint32_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint32_t));
 }
 
-bytebuffer *bytebuffer::write(uint64_t number) {
+ssize_t bytebuffer::write(uint64_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint64_t));
 }
 
-bytebuffer *bytebuffer::write(float number) {
+ssize_t bytebuffer::write(float number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(float));
 }
 
-bytebuffer *bytebuffer::write(double number) {
+ssize_t bytebuffer::write(double number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(double));
 }
 
-bytebuffer *bytebuffer::writeFormatted(const char *format, ...) {
+ssize_t bytebuffer::writeFormatted(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	bytebuffer	*retval=writeFormatted(format,&argp);
+	ssize_t	retval=writeFormatted(format,&argp);
 	va_end(argp);
 	return retval;
 }
 
-bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
+ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 
 	// write the formatted data to a buffer
 	char	*buffer=NULL;
@@ -343,7 +344,7 @@ bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
 		delete[] buffer;
 	#endif
 	
-	return this;
+	return size;
 }
 
 void bytebuffer::clear() {
@@ -486,7 +487,8 @@ void bytebuffer::setPosition(size_t pos) {
 
 bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
 	pvt->_pos=pvt->_end;
-	return write(data,size);
+	write(data,size);
+	return this;
 }
 
 bytebuffer *bytebuffer::append(const char *string) {
@@ -558,7 +560,8 @@ bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
 
 bytebuffer *bytebuffer::appendFormatted(const char *format, va_list *argp) {
 	pvt->_pos=pvt->_end;
-	return writeFormatted(format,argp);
+	writeFormatted(format,argp);
+	return this;
 }
 
 void bytebuffer::truncate(size_t pos) {

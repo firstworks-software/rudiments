@@ -166,80 +166,76 @@ stringbuffer *stringbuffer::append(double number, uint16_t precision,
 	return (stringbuffer *)appendFormatted("%*.*f",precision,scale,number);
 }
 
-stringbuffer *stringbuffer::write(const unsigned char *string) {
-	return (stringbuffer *)bytebuffer::
-				write(string,charstring::length(string));
+ssize_t stringbuffer::write(const unsigned char *string) {
+	return bytebuffer::write(string,charstring::length(string));
 }
 
-stringbuffer *stringbuffer::write(const unsigned char *string, size_t size) {
-	return (stringbuffer *)bytebuffer::write(string,size);
+ssize_t stringbuffer::write(const unsigned char *string, size_t size) {
+	return bytebuffer::write(string,size);
 }
 
-stringbuffer *stringbuffer::write(const char *string) {
-	return (stringbuffer *)bytebuffer::
-				write(string,charstring::length(string));
+ssize_t stringbuffer::write(const char *string) {
+	return bytebuffer::write(string,charstring::length(string));
 }
 
-stringbuffer *stringbuffer::write(const char *string, size_t size) {
-	return (stringbuffer *)bytebuffer::write(string,size);
+ssize_t stringbuffer::write(const char *string, size_t size) {
+	return bytebuffer::write(string,size);
 }
 
-stringbuffer *stringbuffer::write(char character) {
-	return (stringbuffer *)bytebuffer::write(character);
+ssize_t stringbuffer::write(char character) {
+	return bytebuffer::write(character);
 }
 
-stringbuffer *stringbuffer::write(int16_t number) {
-	return (stringbuffer *)writeFormatted("%hd",number);
+ssize_t stringbuffer::write(int16_t number) {
+	return writeFormatted("%hd",number);
 }
 
-stringbuffer *stringbuffer::write(int32_t number) {
-	return (stringbuffer *)writeFormatted("%d",number);
+ssize_t stringbuffer::write(int32_t number) {
+	return writeFormatted("%d",number);
 }
 
-stringbuffer *stringbuffer::write(int64_t number) {
-	return (stringbuffer *)writeFormatted("%lld",number);
+ssize_t stringbuffer::write(int64_t number) {
+	return writeFormatted("%lld",number);
 }
 
-stringbuffer *stringbuffer::write(unsigned char character) {
-	return (stringbuffer *)bytebuffer::write(character);
+ssize_t stringbuffer::write(unsigned char character) {
+	return bytebuffer::write(character);
 }
 
-stringbuffer *stringbuffer::write(uint16_t number) {
-	return (stringbuffer *)writeFormatted("%hd",number);
+ssize_t stringbuffer::write(uint16_t number) {
+	return writeFormatted("%hd",number);
 }
 
-stringbuffer *stringbuffer::write(uint32_t number) {
-	return (stringbuffer *)writeFormatted("%d",number);
+ssize_t stringbuffer::write(uint32_t number) {
+	return writeFormatted("%d",number);
 }
 
-stringbuffer *stringbuffer::write(uint64_t number) {
-	return (stringbuffer *)bytebuffer::writeFormatted("%lld",number);
+ssize_t stringbuffer::write(uint64_t number) {
+	return bytebuffer::writeFormatted("%lld",number);
 }
 
-stringbuffer *stringbuffer::write(float number) {
+ssize_t stringbuffer::write(float number) {
 	return write(number,4);
 }
 
-stringbuffer *stringbuffer::write(float number, uint16_t scale) {
-	return (stringbuffer *)writeFormatted("%.*f",scale,number);
+ssize_t stringbuffer::write(float number, uint16_t scale) {
+	return writeFormatted("%.*f",scale,number);
 }
 
-stringbuffer *stringbuffer::write(float number, uint16_t precision,
-							uint16_t scale) {
-	return (stringbuffer *)writeFormatted("%*.*f",precision,scale,number);
+ssize_t stringbuffer::write(float number, uint16_t precision, uint16_t scale) {
+	return writeFormatted("%*.*f",precision,scale,number);
 }
 
-stringbuffer *stringbuffer::write(double number) {
+ssize_t stringbuffer::write(double number) {
 	return write(number,4);
 }
 
-stringbuffer *stringbuffer::write(double number, uint16_t scale) {
-	return (stringbuffer *)writeFormatted("%.*f",scale,number);
+ssize_t stringbuffer::write(double number, uint16_t scale) {
+	return writeFormatted("%.*f",scale,number);
 }
 
-stringbuffer *stringbuffer::write(double number, uint16_t precision,
-							uint16_t scale) {
-	return (stringbuffer *)writeFormatted("%*.*f",precision,scale,number);
+ssize_t stringbuffer::write(double number, uint16_t precision, uint16_t scale) {
+	return writeFormatted("%*.*f",precision,scale,number);
 }
 
 void stringbuffer::truncate(size_t pos) {

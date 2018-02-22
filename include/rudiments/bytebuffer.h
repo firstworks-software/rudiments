@@ -18,7 +18,7 @@ class bytebufferprivate;
  *
  *  It is generally more efficient to reuse the same bytebuffer over and
  *  over than to allocate a new one for each operation. */
-class RUDIMENTS_DLLSPEC bytebuffer {
+class RUDIMENTS_DLLSPEC bytebuffer : public destination {
 	public:
 
 		/** Creates an instance of the bytebuffer class with
@@ -68,7 +68,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(const unsigned char *data, size_t size);
+		ssize_t	write(const unsigned char *data, size_t size);
 
 		/** Writes "string" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -77,7 +77,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(const char *string);
+		ssize_t	write(const char *string);
 
 		/** Writes the first "size" bytes of "string" to the
 		 *  bytebuffer at the current position and increments the
@@ -87,7 +87,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(const char *string, size_t size);
+		ssize_t	write(const char *string, size_t size);
 
 		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -96,7 +96,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(char character);
+		ssize_t	write(char character);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -105,7 +105,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(int16_t number);
+		ssize_t	write(int16_t number);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -114,7 +114,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(int32_t number);
+		ssize_t	write(int32_t number);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -123,7 +123,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(int64_t number);
+		ssize_t	write(int64_t number);
 
 		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -132,7 +132,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(unsigned char character);
+		ssize_t	write(unsigned char character);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -141,7 +141,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(uint16_t number);
+		ssize_t	write(uint16_t number);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -150,7 +150,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(uint32_t number);
+		ssize_t	write(uint32_t number);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -159,7 +159,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(uint64_t number);
+		ssize_t	write(uint64_t number);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -168,7 +168,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(float number);
+		ssize_t	write(float number);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -177,12 +177,12 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		bytebuffer	*write(double number);
+		ssize_t	write(double number);
 
 		/** Writes "..." to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
 		 *  rules. */
-		bytebuffer	*writeFormatted(const char *format, ...);
+		ssize_t	writeFormatted(const char *format, ...);
 
 		/** Writes "argp" to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
@@ -190,8 +190,7 @@ class RUDIMENTS_DLLSPEC bytebuffer {
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
-		bytebuffer	*writeFormatted(const char *format,
-							va_list *argp);
+		ssize_t	writeFormatted(const char *format, va_list *argp);
 
 
 		/** Appends the first "size" bytes of "data" to the

@@ -127,7 +127,7 @@ const char *templateengine::getIncludeEnd() {
 }
 
 bool templateengine::parse(
-			stringbuffer *output,
+			destination *output,
 			const char *filename,
 			fileparser *fileparsers,
 			dictionary< const char *, const char * > *vars) {
@@ -156,7 +156,7 @@ bool templateengine::parse(
 }
 
 bool templateengine::parse(
-			stringbuffer *output,
+			destination *output,
 			const char *filename,
 			blockparser *blockparsers,
 			dictionary< const char *, const char * > *vars) {
@@ -199,7 +199,7 @@ bool templateengine::parse(
 }
 
 bool templateengine::parse(
-			stringbuffer *output,
+			destination *output,
 			const char *block,
 			uint64_t blocklength,
 			blockparser *blockparsers,
@@ -209,7 +209,7 @@ bool templateengine::parse(
 
 bool templateengine::parse(
 			bool justvariables,
-			stringbuffer *output,
+			destination *output,
 			const char *block,
 			uint64_t blocklength,
 			blockparser *blockparsers,
@@ -281,7 +281,7 @@ bool templateengine::parse(
 }
 
 void templateengine::replaceVariable(
-			stringbuffer *output, char **buffer,
+			destination *output, char **buffer,
 			dictionary< const char *, const char * > *vars) {
 
 	// replace the variable with the corresponding value
@@ -426,7 +426,7 @@ bool templateengine::getName(
 }
 
 bool templateengine::parseBlock(
-			stringbuffer *output,
+			destination *output,
 			const char *blockname,
 			const char *block,
 			uint64_t blocklength,
