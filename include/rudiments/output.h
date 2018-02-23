@@ -1,12 +1,12 @@
 // Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_DESTINATION_H
-#define RUDIMENTS_DESTINATION_H
+#ifndef RUDIMENTS_OUTPUT_H
+#define RUDIMENTS_OUTPUT_H
 
-#include <rudiments/private/destinationincludes.h>
+#include <rudiments/private/outputincludes.h>
 
-class RUDIMENTS_DLLSPEC destination {
+class RUDIMENTS_DLLSPEC output {
 	public:
 		virtual	ssize_t	write(const unsigned char *string,
 							size_t size)=0;

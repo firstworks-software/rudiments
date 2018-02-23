@@ -127,7 +127,7 @@ const char *templateengine::getIncludeEnd() {
 }
 
 bool templateengine::parse(
-			destination *output,
+			output *out,
 			const char *filename,
 			fileparser *fileparsers,
 			dictionary< const char *, const char * > *vars) {
@@ -148,7 +148,7 @@ bool templateengine::parse(
 		// then use it to parse the file
 		if (regularexpression::match(filename,file.getString())) {
 			return (fileparsers[index].parser)(
-						output,filename,
+						out,filename,
 						fileparsers[index].data);
 		}
 	}
@@ -156,7 +156,7 @@ bool templateengine::parse(
 }
 
 bool templateengine::parse(
-			destination *output,
+			output *out,
 			const char *filename,
 			blockparser *blockparsers,
 			dictionary< const char *, const char * > *vars) {
@@ -183,7 +183,7 @@ bool templateengine::parse(
 		}
 		
 		// parse the contents of the file
-		retval=parse(false,output,filecontents,
+		retval=parse(false,out,filecontents,
 					filelength,blockparsers,vars);
 
 		// clean up
@@ -199,17 +199,17 @@ bool templateengine::parse(
 }
 
 bool templateengine::parse(
-			destination *output,
+			output *out,
 			const char *block,
 			uint64_t blocklength,
 			blockparser *blockparsers,
 			dictionary< const char *, const char * > *vars) {
-	return parse(false,output,block,blocklength,blockparsers,vars);
+	return parse(false,out,block,blocklength,blockparsers,vars);
 }
 
 bool templateengine::parse(
 			bool justvariables,
-			destination *output,
+			output *out,
 			const char *block,
 			uint64_t blocklength,
 			blockparser *blockparsers,
@@ -230,7 +230,7 @@ bool templateengine::parse(
 					pvt->varstart,
 					pvt->varstartlen)) {
 
-			replaceVariable(output,&buffer,vars);
+			replaceVariable(out,&buffer,vars);
 
 		// handle a block
 		} else if (!justvariables && 
@@ -248,7 +248,7 @@ bool templateengine::parse(
 			char		*blockbodyptr=buffer;
 			uint64_t	blockbodylen;
 			if (!getBlockLength(&buffer,&blockbodylen) ||
-				!parseBlock(output,
+				!parseBlock(out,
 						namestr.getString(),
 						blockbodyptr,blockbodylen,
 						blockparsers,vars)) {
@@ -265,14 +265,14 @@ bool templateengine::parse(
 			// return false on failure
 			stringbuffer	filename;
 			if (!getIncludeFilename(&buffer,&filename,vars) ||
-				!parse(output,filename.getString(),
+				!parse(out,filename.getString(),
 						blockparsers,vars)) {
 				return false;
 			}
 
 		// if not any of the above, just write out the character
 		} else {
-			output->write((char)*buffer);
+			out->write((char)*buffer);
 			buffer++;
 		}
 	}
@@ -281,7 +281,7 @@ bool templateengine::parse(
 }
 
 void templateengine::replaceVariable(
-			destination *output, char **buffer,
+			output *out, char **buffer,
 			dictionary< const char *, const char * > *vars) {
 
 	// replace the variable with the corresponding value
@@ -291,7 +291,7 @@ void templateengine::replaceVariable(
 		char		*var=charstring::duplicate(start,end-start);
 		const char	*repl;
 		if (vars->getValue(var,&repl)) {
-			output->write(repl);
+			out->write(repl);
 			*buffer=end+pvt->varendlen;
 			delete[] var;
 			return;
@@ -300,7 +300,7 @@ void templateengine::replaceVariable(
 	}
 
 	// if not found, just print out the variable-start marker
-	output->write(pvt->varstart);
+	out->write(pvt->varstart);
 	(*buffer)+=pvt->varstartlen;
 }
 
@@ -426,7 +426,7 @@ bool templateengine::getName(
 }
 
 bool templateengine::parseBlock(
-			destination *output,
+			output *out,
 			const char *blockname,
 			const char *block,
 			uint64_t blocklength,
@@ -438,7 +438,7 @@ bool templateengine::parseBlock(
 		for (uint64_t index=0; blockparsers[index].parser; index++) {
 			blockparser	*sh=&blockparsers[index];
 			if (!charstring::compare(blockname,sh->blockname)) {
-				return sh->parser(sh->output,
+				return sh->parser(sh->out,
 							sh->blockname,
 							block,blocklength,
 							sh->data);
@@ -448,5 +448,5 @@ bool templateengine::parseBlock(
 
 	// if there was no block parser registered for this block,
 	// just parse it using variables from the parent block
-	return parse(false,output,block,blocklength,NULL,vars);
+	return parse(false,out,block,blocklength,NULL,vars);
 }

@@ -18,7 +18,7 @@ class bytebufferprivate;
  *
  *  It is generally more efficient to reuse the same bytebuffer over and
  *  over than to allocate a new one for each operation. */
-class RUDIMENTS_DLLSPEC bytebuffer : public destination {
+class RUDIMENTS_DLLSPEC bytebuffer : public output {
 	public:
 
 		/** Creates an instance of the bytebuffer class with

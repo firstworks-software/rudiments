@@ -4,13 +4,13 @@
 	private:
 
 		bool	parse(bool justvariables,
-					destination *output,
+					output *out,
 					const char *block,
 					uint64_t blocklength,
 					blockparser *blockparsers,
 					dictionary< const char *,
 							const char * > *vars);
-		void	replaceVariable(destination *output,
+		void	replaceVariable(output *out,
 					char **buffer,
 					dictionary< const char *,
 							const char * > *vars);
@@ -30,7 +30,7 @@
 							const char * > *vars,
 					const char *end,
 					uint16_t endlen);
-		bool	parseBlock(destination *output,
+		bool	parseBlock(output *out,
 					const char *blockname,
 					const char *block,
 					uint64_t blocklength,

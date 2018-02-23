@@ -8,12 +8,12 @@
 
 
 /** File parsers must have this function signature: */
-typedef bool (*fileparser_t)(destination *output,
+typedef bool (*fileparser_t)(output *out,
 					const char *filename,
 					void *data);
 
 /** Block parsers must have this function signature: */
-typedef bool (*blockparser_t)(destination *output,
+typedef bool (*blockparser_t)(output *out,
 					const char *blockname,
 					const char *block,
 					uint64_t blocklength,
@@ -31,7 +31,7 @@ struct fileparser {
 /** This struct associates module/file with parser and is used with
  *  handlePage() below. */
 struct blockparser {
-	destination		*output;
+	output		*out;
 	const char	 	*blockname;
 	blockparser_t		parser;
 	void			*data;
@@ -74,17 +74,17 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 * 
 		 *  Returns true on success and false if the file parser
 		 *  method returns false or if no fileparser was found. */
-		bool	parse(destination *output,
+		bool	parse(output *out,
 				const char *filename,
 				fileparser *fileparsers,
 				dictionary< const char *, const char * > *vars);
 
-		/** Parses the file at "filename" and writes the output to
-		 *  "output".  For each variable encountered, values from
+		/** Parses the file at "filename" and writes the out to
+		 *  "out".  For each variable encountered, values from
 		 *  "vars" are substituted.  For each block encountered, the
 		 *  block is looked up in "blockparsers" and the
 		 *  appropriate block parser method is called.  The block
-		 *  parser method is passed "req", "resp", "output", the
+		 *  parser method is passed "req", "resp", "out", the
 		 *  name, data and length of the block and "data" from the
 		 *  blockparser entry.
 		 * 
@@ -93,18 +93,18 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 * 
 		 *  Returns false if a block parser method returns false and
 		 *  true otherwise. */
-		bool	parse(destination *output,
+		bool	parse(output *out,
 				const char *filename,
 				blockparser *blockparsers,
 				dictionary< const char *, const char * > *vars);
 
-		/** Parses "length" bytes of "block" and writes the output to
-		 *  "output".  For each variable encountered, values from
+		/** Parses "length" bytes of "block" and writes the out to
+		 *  "out".  For each variable encountered, values from
 		 *  "vars" are substituted.  For each nested block
 		 *  encountered, the block is looked up in "blockparsers"
 		 *  and the appropriate block parser method is called.  The
 		 *  block parser method is passed "req", "resp", the name,
-		 *  data and length of the block, "output" and "data" from
+		 *  data and length of the block, "out" and "data" from
 		 *  the blockparser entry.
 		 *
 		 *  If a block is encountered but no block parser method is
@@ -112,7 +112,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 *
 		 *  Returns false if a block parser method returns false and
 		 *  true otherwise. */
-		bool	parse(destination *output,
+		bool	parse(output *out,
 				const char *block,
 				uint64_t blocklength,
 				blockparser *blockparsers,

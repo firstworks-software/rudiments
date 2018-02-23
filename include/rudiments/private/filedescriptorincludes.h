@@ -4,7 +4,7 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
-#include <rudiments/destination.h>
+#include <rudiments/output.h>
 #include <rudiments/security.h>
 #include <rudiments/resultcodes.h>
 
