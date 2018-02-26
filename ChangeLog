@@ -13,6 +13,9 @@
 	moved codetree nonterminal-build to codetreegrammar
 	added nonterminal definition dictionary to codetree
 	added templateengine from stencil
+	added input/output interfaces
+	made filedescriptor an input/output
+	made bytebuffer an output
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class
