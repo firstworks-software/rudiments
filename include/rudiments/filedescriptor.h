@@ -11,7 +11,7 @@ class filedescriptorprivate;
 
 /** The filedescriptor class is a base class for other classes that utilize
  *  file descriptors. */
-class RUDIMENTS_DLLSPEC filedescriptor : public output {
+class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 	public:
 		/** Creates an instance of the filedescriptor class. */
 		filedescriptor();
