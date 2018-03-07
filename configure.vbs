@@ -148,8 +148,8 @@ lobjs="winsock.obj "+_
 	"url.obj "+_
 	"sha1.obj "+_
 	"md5.obj "+_
-	"prompt.obj"+_
-	"templateengine.obj"
+	"prompt.obj "+_
+	"templateengine.obj "
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
