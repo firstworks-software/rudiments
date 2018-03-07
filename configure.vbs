@@ -83,8 +83,8 @@ srcs="winsock.cpp "+_
 	"url.cpp "+_
 	"sha1.cpp "+_
 	"md5.cpp "+_
-	"prompt.cpp"+_
-	"templateengine.cpp"
+	"prompt.cpp "+_
+	"templateengine.cpp "
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
