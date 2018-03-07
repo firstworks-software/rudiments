@@ -2,5 +2,6 @@ extendedKeyUsage	= serverAuth, clientAuth
 subjectAltName		= @alt_names
 
 [ alt_names ]
-DNS.1			= db.localdomain
-DNS.2			= localdomain
+#DNS.1			= db.localdomain
+DNS.1			= Ushadevi.NECAPSIN.COM
+#DNS.2			= localdomain

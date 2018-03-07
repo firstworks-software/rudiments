@@ -9,8 +9,10 @@ prompt			= no
 [ req_distinguished_name ]
 0.organizationName	= Rudiments
 organizationalUnitName	= Rudiments Server Department
-emailAddress		= root@db.localdomain
+#emailAddress		= root@db.localdomain
+emailAddress		= root@Ushadevi.NECAPSIN.COM
 localityName		= Atlanta
 stateOrProvinceName	= Georgia
 countryName		= US
-commonName		= db.localdomain
+#commonName		= db.localdomain
+commonName		= Ushadevi.NECAPSIN.COM
