@@ -225,10 +225,10 @@ headers3="xmldom.h "+_
 	"hash.h "+_
 	"sha1.h "+_
 	"md5.h "+_
-	"prompt.h"+_
-	"templateengine.h"+_
-	"output.h"+_
-	"input.h"
+	"prompt.h "+_
+	"templateengine.h "+_
+	"output.h "+_
+	"input.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -396,10 +396,11 @@ privateheaders7="codetree.h "+_
 	"md5.h "+_
 	"md5includes.h "+_
 	"prompt.h "+_
-	"promptincludes.h"+_
-	"templateengine.h"+_
-	"templateengineincludes.h"+_
-	"destinationincludes.h"
+	"promptincludes.h "+_
+	"templateengine.h "+_
+	"templateengineincludes.h "+_
+	"outputincludes.h "+_
+	"inputincludes.h "
 
 ' version
 RUDIMENTS_VERSION="1.0.7"
