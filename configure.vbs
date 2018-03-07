@@ -84,7 +84,9 @@ srcs="winsock.cpp "+_
 	"sha1.cpp "+_
 	"md5.cpp "+_
 	"prompt.cpp "+_
-	"templateengine.cpp "
+	"templateengine.cpp "+_
+	"output.cpp "+_
+	"input.cpp "
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -149,7 +151,9 @@ lobjs="winsock.obj "+_
 	"sha1.obj "+_
 	"md5.obj "+_
 	"prompt.obj "+_
-	"templateengine.obj "
+	"templateengine.obj "+_
+	"output.obj "+_
+	"input.obj "
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
