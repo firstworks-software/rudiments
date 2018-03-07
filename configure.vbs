@@ -227,7 +227,8 @@ headers3="xmldom.h "+_
 	"md5.h "+_
 	"prompt.h"+_
 	"templateengine.h"+_
-	"destination.h"
+	"output.h"+_
+	"input.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
