@@ -16,6 +16,7 @@
 	added input/output interfaces
 	made filedescriptor an input/output
 	made bytebuffer an output
+	configure.vbs sets versions in vdproj files now
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class
