@@ -596,7 +596,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	long double	toFloat(const char *string);
 
 		/** Converts "string" to a floating point number.
-		 *  Presumes "string" to be formatted per the C locale. */
+		 *  Presumes "string" to be formatted per the C locale.
+		 *  (i.e. using a . as a decimal point) */
 		static	long double	toFloatC(const char *string);
 
 		/** Converts "string" to a floating point number.  If
