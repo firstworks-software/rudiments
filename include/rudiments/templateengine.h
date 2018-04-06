@@ -44,27 +44,11 @@ class templateengineprivate;
 class RUDIMENTS_DLLSPEC templateengine {
 	public:
 
+		/** Creates an instance of the templateengine class. */
 		templateengine();
+
+		/** Deletes this instance of the templateengine class. */
 		virtual	~templateengine();
-
-		void	setVariableStart(const char *delimiter);
-		void	setVariableEnd(const char *delimiter);
-		void	setBlockStartStart(const char *delimiter);
-		void	setBlockStartEnd(const char *delimiter);
-		void	setBlockEndStart(const char *delimiter);
-		void	setBlockEndEnd(const char *delimiter);
-		void	setIncludeStart(const char *delimiter);
-		void	setIncludeEnd(const char *delimiter);
-
-		const char	*getVariableStart();
-		const char	*getVariableEnd();
-		const char	*getBlockStartStart();
-		const char	*getBlockStartEnd();
-		const char	*getBlockEndStart();
-		const char	*getBlockEndEnd();
-		const char	*getIncludeStart();
-		const char	*getIncludeEnd();
-
 
 		/** Looks up "filename" in "fileparsers", and calls the
 		 *  appropriate file parser method.
@@ -117,6 +101,190 @@ class RUDIMENTS_DLLSPEC templateengine {
 				uint64_t blocklength,
 				blockparser *blockparsers,
 				dictionary< const char *, const char * > *vars);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the beginning of a variable to "delimiter".
+		 *
+		 *  Defaults to "$(".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		void	setVariableStart(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the end of a variable to "delimiter".
+		 *
+		 *  Defaults to ")".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		void	setVariableEnd(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  beginning of a block-start to "delimiter".
+		 *
+		 *  Defaults to "<!-- start ".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		void	setBlockStartStart(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the end of a block-start to "delimiter".
+		 *
+		 *  Defaults to " -->".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		void	setBlockStartEnd(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the beginning of a block-end to "delimiter".
+		 *
+		 *  Defaults to "<!-- end ".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		void	setBlockEndStart(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the end of a block-end to "delimiter".
+		 *
+		 *  Defaults to " -->".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		void	setBlockEndEnd(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the beginning of an include to "delimiter".
+		 *
+		 *  Defaults to "<!-- include ".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- include filename -->
+		 */
+		void	setIncludeStart(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the end of an include to "delimiter".
+		 *
+		 *  Defaults to " -->".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- include filename -->
+		 */
+		void	setIncludeEnd(const char *delimiter);
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the beginning of a variable.
+		 *
+		 *  The defaults is "$(".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		const char	*getVariableStart();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the end of a variable.
+		 *
+		 *  The defaults is ")".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		const char	*getVariableEnd();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  beginning of a block-start.
+		 *
+		 *  The default is "<!-- start ".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		const char	*getBlockStartStart();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the end of a block-start.
+		 *
+		 *  The default is " -->".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		const char	*getBlockStartEnd();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the beginning of a block-end.
+		 *
+		 *  The defaults is "<!-- end ".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		const char	*getBlockEndStart();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the end of a block-end.
+		 *
+		 *  The defaults is " -->".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- start block -->
+		 *  ... block ...
+		 *  <!-- end block -->
+		 */
+		const char	*getBlockEndEnd();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the beginning of an include.
+		 *
+		 *  The defaults is "<!-- include ".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- include filename -->
+		 */
+		const char	*getIncludeStart();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the end of an include.
+		 *
+		 *  The default is " -->".
+		 *
+		 *  For example, by defaults, blocks are delimited like:
+		 *
+		 *  <!-- include filename -->
+		 */
+		const char	*getIncludeEnd();
 
 	#include <rudiments/private/templateengine.h>
 };

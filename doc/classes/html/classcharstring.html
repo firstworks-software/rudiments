@@ -177,6 +177,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:abad77b36d0eec9ca35a406831109762f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07968b66d24662882092a4c2271c2c13"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a07968b66d24662882092a4c2271c2c13">replace</a> (char *str, const char *oldchars, char newchar)</td></tr>
 <tr class="separator:a07968b66d24662882092a4c2271c2c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a302139f9219dc67eaeb38e1b0ebc0fe1"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a302139f9219dc67eaeb38e1b0ebc0fe1">replace</a> (const char *str, const char *oldstr, const char *newstr)</td></tr>
+<tr class="separator:a302139f9219dc67eaeb38e1b0ebc0fe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c70e192045f19ec39b286196a856fa0"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a1c70e192045f19ec39b286196a856fa0">replace</a> (const char *str, const char *const *oldstrset, ssize_t *oldstrlen, const char *const *newstrset)</td></tr>
+<tr class="separator:a1c70e192045f19ec39b286196a856fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fd550f73d8264d84d3d90e9079186b8"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a9fd550f73d8264d84d3d90e9079186b8">replace</a> (const char *str, <a class="el" href="classregularexpression.html">regularexpression</a> *from, const char *to, <a class="el" href="classbool.html">bool</a> global)</td></tr>
+<tr class="separator:a9fd550f73d8264d84d3d90e9079186b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5e54591b205e5ba4132614f896898e2"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ad5e54591b205e5ba4132614f896898e2">integerLength</a> (int16_t number)</td></tr>
 <tr class="separator:ad5e54591b205e5ba4132614f896898e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade18243a4b3533bdd08acfb70b29b50c"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ade18243a4b3533bdd08acfb70b29b50c">integerLength</a> (int32_t number)</td></tr>
@@ -257,6 +263,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a4d7e38a561245a3048659dfd0484480c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d442266dc0d4c038dd8a74020e99183"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8d442266dc0d4c038dd8a74020e99183">toFloat</a> (const char *string)</td></tr>
 <tr class="separator:a8d442266dc0d4c038dd8a74020e99183"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a808e46375b95f97fefcbe14ebcb5b015"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a808e46375b95f97fefcbe14ebcb5b015">toFloatC</a> (const char *string)</td></tr>
+<tr class="separator:a808e46375b95f97fefcbe14ebcb5b015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95e023039060ff5b3d2accad7b3f0b46"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a95e023039060ff5b3d2accad7b3f0b46">toFloat</a> (const char *string, const char **endptr)</td></tr>
 <tr class="separator:a95e023039060ff5b3d2accad7b3f0b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44724d3227b514d47c66dae361670e76"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a44724d3227b514d47c66dae361670e76">convertAmount</a> (const char *amount)</td></tr>
@@ -265,29 +273,29 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a2f9a276d5121a8ffe1c1946e834f38d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1cc8f6c7805bade4af5b18325171d09"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ae1cc8f6c7805bade4af5b18325171d09">convertAmount</a> (int64_t amount, uint16_t padding)</td></tr>
 <tr class="separator:ae1cc8f6c7805bade4af5b18325171d09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8f341ffc3de9854cdd87036f89daeff"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ae8f341ffc3de9854cdd87036f89daeff">httpEscape</a> (const char *input)</td></tr>
+<tr class="memitem:ae8f341ffc3de9854cdd87036f89daeff"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ae8f341ffc3de9854cdd87036f89daeff">httpEscape</a> (const char *<a class="el" href="classinput.html">input</a>)</td></tr>
 <tr class="separator:ae8f341ffc3de9854cdd87036f89daeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d86e9945dc920e4f72e3b49c75928f3"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8d86e9945dc920e4f72e3b49c75928f3">httpUnescape</a> (const char *input)</td></tr>
+<tr class="memitem:a8d86e9945dc920e4f72e3b49c75928f3"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8d86e9945dc920e4f72e3b49c75928f3">httpUnescape</a> (const char *<a class="el" href="classinput.html">input</a>)</td></tr>
 <tr class="separator:a8d86e9945dc920e4f72e3b49c75928f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e9f80c6c6ee8d286bf3c89d5ff2fe2f"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8e9f80c6c6ee8d286bf3c89d5ff2fe2f">escape</a> (const char *input, const char *characters)</td></tr>
+<tr class="memitem:a8e9f80c6c6ee8d286bf3c89d5ff2fe2f"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8e9f80c6c6ee8d286bf3c89d5ff2fe2f">escape</a> (const char *<a class="el" href="classinput.html">input</a>, const char *characters)</td></tr>
 <tr class="separator:a8e9f80c6c6ee8d286bf3c89d5ff2fe2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6163e738bc637b2ce2eb0c7978cfe96"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ab6163e738bc637b2ce2eb0c7978cfe96">unescape</a> (const char *input)</td></tr>
+<tr class="memitem:ab6163e738bc637b2ce2eb0c7978cfe96"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ab6163e738bc637b2ce2eb0c7978cfe96">unescape</a> (const char *<a class="el" href="classinput.html">input</a>)</td></tr>
 <tr class="separator:ab6163e738bc637b2ce2eb0c7978cfe96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab443b3151b4d0f7a9fa8cff42877d9dd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ab443b3151b4d0f7a9fa8cff42877d9dd">escape</a> (const char *input, uint64_t inputsize, char **output, uint64_t *outputsize, const char *characters)</td></tr>
+<tr class="memitem:ab443b3151b4d0f7a9fa8cff42877d9dd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ab443b3151b4d0f7a9fa8cff42877d9dd">escape</a> (const char *<a class="el" href="classinput.html">input</a>, uint64_t inputsize, char **<a class="el" href="classoutput.html">output</a>, uint64_t *outputsize, const char *characters)</td></tr>
 <tr class="separator:ab443b3151b4d0f7a9fa8cff42877d9dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8af59b3eb75e77d8598e6ee883646765"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8af59b3eb75e77d8598e6ee883646765">unescape</a> (const char *input, uint64_t inputsize, char **output, uint64_t *outputsize)</td></tr>
+<tr class="memitem:a8af59b3eb75e77d8598e6ee883646765"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a8af59b3eb75e77d8598e6ee883646765">unescape</a> (const char *<a class="el" href="classinput.html">input</a>, uint64_t inputsize, char **<a class="el" href="classoutput.html">output</a>, uint64_t *outputsize)</td></tr>
 <tr class="separator:a8af59b3eb75e77d8598e6ee883646765"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ff7a09b4baea6462ea1e98c343fcc4f"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a2ff7a09b4baea6462ea1e98c343fcc4f">base64Encode</a> (const unsigned char *input)</td></tr>
+<tr class="memitem:a2ff7a09b4baea6462ea1e98c343fcc4f"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a2ff7a09b4baea6462ea1e98c343fcc4f">base64Encode</a> (const unsigned char *<a class="el" href="classinput.html">input</a>)</td></tr>
 <tr class="separator:a2ff7a09b4baea6462ea1e98c343fcc4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afeed904af8c76df886898bd33ca9f337"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#afeed904af8c76df886898bd33ca9f337">base64Encode</a> (const unsigned char *input, uint64_t inputsize)</td></tr>
+<tr class="memitem:afeed904af8c76df886898bd33ca9f337"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#afeed904af8c76df886898bd33ca9f337">base64Encode</a> (const unsigned char *<a class="el" href="classinput.html">input</a>, uint64_t inputsize)</td></tr>
 <tr class="separator:afeed904af8c76df886898bd33ca9f337"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9775ebe8b7357730de281de58799d7bb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a9775ebe8b7357730de281de58799d7bb">base64Encode</a> (const unsigned char *input, uint64_t inputsize, char **output, uint64_t *outputsize)</td></tr>
+<tr class="memitem:a9775ebe8b7357730de281de58799d7bb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a9775ebe8b7357730de281de58799d7bb">base64Encode</a> (const unsigned char *<a class="el" href="classinput.html">input</a>, uint64_t inputsize, char **<a class="el" href="classoutput.html">output</a>, uint64_t *outputsize)</td></tr>
 <tr class="separator:a9775ebe8b7357730de281de58799d7bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98b865679161445d243e9a77d81f406d"><td class="memItemLeft" align="right" valign="top">static unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a98b865679161445d243e9a77d81f406d">base64Decode</a> (const char *input)</td></tr>
+<tr class="memitem:a98b865679161445d243e9a77d81f406d"><td class="memItemLeft" align="right" valign="top">static unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a98b865679161445d243e9a77d81f406d">base64Decode</a> (const char *<a class="el" href="classinput.html">input</a>)</td></tr>
 <tr class="separator:a98b865679161445d243e9a77d81f406d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ea3efc3c5ecd7774b9bfa8b6e4c64ca"><td class="memItemLeft" align="right" valign="top">static unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a6ea3efc3c5ecd7774b9bfa8b6e4c64ca">base64Decode</a> (const char *input, uint64_t inputsize)</td></tr>
+<tr class="memitem:a6ea3efc3c5ecd7774b9bfa8b6e4c64ca"><td class="memItemLeft" align="right" valign="top">static unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a6ea3efc3c5ecd7774b9bfa8b6e4c64ca">base64Decode</a> (const char *<a class="el" href="classinput.html">input</a>, uint64_t inputsize)</td></tr>
 <tr class="separator:a6ea3efc3c5ecd7774b9bfa8b6e4c64ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c1380ac12a30624bc0f77d9e3312341"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a7c1380ac12a30624bc0f77d9e3312341">base64Decode</a> (const char *input, uint64_t inputsize, unsigned char **output, uint64_t *outputsize)</td></tr>
+<tr class="memitem:a7c1380ac12a30624bc0f77d9e3312341"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a7c1380ac12a30624bc0f77d9e3312341">base64Decode</a> (const char *<a class="el" href="classinput.html">input</a>, uint64_t inputsize, unsigned char **<a class="el" href="classoutput.html">output</a>, uint64_t *outputsize)</td></tr>
 <tr class="separator:a7c1380ac12a30624bc0f77d9e3312341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf414cf77e1afe90af0941d89bab7902"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#adf414cf77e1afe90af0941d89bab7902">obfuscate</a> (char *str)</td></tr>
 <tr class="separator:adf414cf77e1afe90af0941d89bab7902"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4156,7 +4164,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="abad77b36d0eec9ca35a406831109762f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abad77b36d0eec9ca35a406831109762f">&#9670;&nbsp;</a></span>replace() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abad77b36d0eec9ca35a406831109762f">&#9670;&nbsp;</a></span>replace() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4199,7 +4207,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a07968b66d24662882092a4c2271c2c13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07968b66d24662882092a4c2271c2c13">&#9670;&nbsp;</a></span>replace() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a07968b66d24662882092a4c2271c2c13">&#9670;&nbsp;</a></span>replace() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4238,6 +4246,148 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Replaces all instances of any of the characters in the set "oldchar" in "str" with "newchar" </p>
+
+</div>
+</div>
+<a id="a302139f9219dc67eaeb38e1b0ebc0fe1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a302139f9219dc67eaeb38e1b0ebc0fe1">&#9670;&nbsp;</a></span>replace() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::replace </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>oldstr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>newstr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a new string which is a copy of "str" in which all instances of "oldstr" have been replaced with "newstr" </p>
+
+</div>
+</div>
+<a id="a1c70e192045f19ec39b286196a856fa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c70e192045f19ec39b286196a856fa0">&#9670;&nbsp;</a></span>replace() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::replace </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *const *&#160;</td>
+          <td class="paramname"><em>oldstrset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ssize_t *&#160;</td>
+          <td class="paramname"><em>oldstrlen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *const *&#160;</td>
+          <td class="paramname"><em>newstrset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a new string which is a copy of "str" in which all instances of strings found in the NULL-terminated array "oldstrset", the lengths of which are given by the array "oldstrlen", have been replaced with the commensurate string found in the NULL-terminated array "newstrset", which must have the same number of members as "oldstrset" </p>
+
+</div>
+</div>
+<a id="a9fd550f73d8264d84d3d90e9079186b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fd550f73d8264d84d3d90e9079186b8">&#9670;&nbsp;</a></span>replace() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::replace </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classregularexpression.html">regularexpression</a> *&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>global</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a new string which is a copy of "str" in which parts that match "from" have been replaced with "to".</p>
+<p>If "global" is true then all matching parts are replaced. If "global" is false then only the first matching part is replaced. </p>
 
 </div>
 </div>
@@ -4934,6 +5084,33 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a808e46375b95f97fefcbe14ebcb5b015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a808e46375b95f97fefcbe14ebcb5b015">&#9670;&nbsp;</a></span>toFloatC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static long double charstring::toFloatC </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a floating point number. Presumes "string" to be formatted per the C locale. </p>
+
+</div>
+</div>
 <a id="a968eb7324ca9f6790d5f165082d3da4f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a968eb7324ca9f6790d5f165082d3da4f">&#9670;&nbsp;</a></span>toInteger() <span class="overload">[1/4]</span></h2>
 
@@ -5365,7 +5542,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 5 2017 22:27:22 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 6 2018 12:05:40 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
