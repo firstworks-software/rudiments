@@ -596,8 +596,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	long double	toFloat(const char *string);
 
 		/** Converts "string" to a floating point number.
-		 *  Presumes "string" to be formatted per the C locale.
-		 *  (i.e. using a . as a decimal point) */
+		 *
+		 *  If "string" uses a "." as a decimal point (per the "C"
+		 *  locale) then the "." is first converted to the appropriate
+		 *  decimal-delimiter for the current locale.
+		 *
+		 *  (Currently only supported on linux/unix platforms that
+		 *  provide the locale.h header.  On other platforms, it just
+		 *  falls through to toFloat().)
+		 */
 		static	long double	toFloatC(const char *string);
 
 		/** Converts "string" to a floating point number.  If
