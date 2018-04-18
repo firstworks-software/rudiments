@@ -4710,26 +4710,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A36BDEDAFBBF4236BE75D058378C5729"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\url.h~"
-            "TargetName" = "8:url.h~"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A3F82BC48EDE4E6FB3660A0013CAEC18"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\serialportprofile.h"

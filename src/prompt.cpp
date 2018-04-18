@@ -350,8 +350,15 @@ history_truncate_file (const char *filename, int nlines)
 		}
 	}
 	fflush(fp);
-	if((off = ftello(fp)) > 0)
+	if((off = ftello(fp)) > 0) {
+
+		// suppress unused-result warning
 		ftrunc = ftruncate(fileno(fp), off);
+
+		// suppress unused-but-set warning
+		if (ftrunc) {
+		}
+	}
 out3:
 	fclose(tp);
 out2:
