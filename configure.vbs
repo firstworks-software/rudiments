@@ -449,7 +449,7 @@ set fso=CreateObject("Scripting.FileSystemObject")
 
 
 ' get top_builddir
-top_builddir=fso.GetAbsolutePathName(".")
+top_builddir=chr(34) & fso.GetAbsolutePathName(".") & chr(34)
 
 
 ' determine VC++ version and architecture
@@ -543,11 +543,16 @@ end if
 
 ' determine config.h template...
 
-' default to VS2015
-configwindowsh="include\\rudiments\\private\\config_vs2015.h"
+' default to VS2017
+configwindowsh="include\\rudiments\\private\\config_vs2017.h"
+
+
+' VS2015
+if version=19 then
+	configwindowsh="include\\rudiments\\private\\config_vs2015.h"
 
 ' VS2013
-if version=18 then
+elseif version=18 then
 	configwindowsh="include\\rudiments\\private\\config_vs2013.h"
 
 ' VS2010 and VS2012
