@@ -23,7 +23,7 @@
 #endif
 
 //#define DEBUG_CURL 1
-#define DEBUG_HTTP 1
+//#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
@@ -481,7 +481,6 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	#endif
 	if (pvt->_isc.write(request.getString(),request.getStringLength())!=
 					(ssize_t)request.getStringLength()) {
-
 		delete[] host;
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("http: send request failed\n");
@@ -576,18 +575,6 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 			break;
 		}
 		delete[] header;
-	}
-
-	if (!retval) {
-		#ifdef DEBUG_HTTP
-		stdoutput.printf("http: neither content length "
-				"nor chunked encoding header found\n");
-		stdoutput.printf("http: retrying without keep-alive\n");
-		#endif
-		delete[] location;
-		delete[] host;
-		close();
-		return httpOpen(urlname,userpwd);
 	}
 
 	// keep-alive is the default in HTTP/1.1, so we'll reenable it
@@ -695,6 +682,13 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 				pvt->_chunksize=0;
 			}
 
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: returning %d bytes "
+						"(%d remain in chunk)\n",
+						bytesread,
+						pvt->_chunksize-pvt->_chunkpos);
+			#endif
+
 		} else {
 
 			// eof condition
@@ -709,14 +703,11 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 			// (so we can decide later if we've hit an eof)
 			pvt->_fetchedsofar+=bytesread;
 
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: returning %d bytes\n",
+								bytesread);
+			#endif
 		}
-
-		#ifdef DEBUG_HTTP
-		stdoutput.printf("http: returning %d bytes "
-					"(%d remain in chunk)\n",
-					bytesread,
-					pvt->_chunksize-pvt->_chunkpos);
-		#endif
 	}
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	else {
@@ -848,6 +839,27 @@ bool url::getChunkSize(bool bof) {
 
 	// clean up
 	delete[] csstring;
+
+	// if we find a chunk size of 0, then read the crlf after it
+	if (pvt->_chunksize==0) {
+		char	crlf[2];
+		if (pvt->_isc.read(crlf,sizeof(crlf))<
+					(ssize_t)sizeof(crlf)) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http:   get trailing crlf failed\n");
+			#endif
+			return false;
+		}
+		if (charstring::compare(crlf,"\r\n",2)) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http:   unexpected characters "
+							"in trailing crlf: ");
+			stdoutput.safePrint(crlf,2);
+			stdoutput.write('\n');
+			#endif
+			return false;
+		}
+	}
 
 	// return
 	return retval;
