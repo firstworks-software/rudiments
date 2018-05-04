@@ -354,7 +354,7 @@ const char *gss::getSspiStatusString(uint32_t status) {
 				return "SEC_E_CERT_WRONG_USAGE";
 				break;
 			#endif
-			#ifdef SEC_E_DOWNGRADE_DETECTED:
+			#ifdef SEC_E_DOWNGRADE_DETECTED
 			case SEC_E_DOWNGRADE_DETECTED:
 				return "SEC_E_DOWNGRADE_DETECTED";
 				break;
