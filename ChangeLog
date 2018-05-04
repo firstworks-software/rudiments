@@ -18,6 +18,7 @@
 	made bytebuffer an output
 	configure.vbs sets versions in vdproj files now
 	added config_vs2017.h and v2015 detection to configure.vbs
+	added keepalive to http urls
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

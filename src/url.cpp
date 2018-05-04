@@ -23,7 +23,7 @@
 #endif
 
 //#define DEBUG_CURL 1
-//#define DEBUG_HTTP 1
+#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
@@ -47,6 +47,12 @@ class urlprivate {
 		bool			_bof;
 		ssize_t			_chunksize;
 		ssize_t			_chunkpos;
+
+		bool			_keepalive;
+		char			*_previousproto;
+		char			*_httpprevioushost;
+		char			*_httppreviousport;
+
 		#ifdef RUDIMENTS_HAS_LIBCURL
 			CURL	*_curl;
 			CURLM	*_curlm;
@@ -65,6 +71,11 @@ url::url() : file() {
 	dontGetCurrentPropertiesOnOpen();
 
 	pvt->_isc.allowShortReads();
+
+	pvt->_keepalive=false;
+	pvt->_previousproto=NULL;
+	pvt->_httpprevioushost=NULL;
+	pvt->_httppreviousport=NULL;
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	pvt->_curl=NULL;
@@ -98,6 +109,11 @@ url::~url() {
 	// access pvt->_curl or pvt->_isc so we need to call close(), before
 	// deleting pvt.
 	close();
+
+	delete[] pvt->_previousproto;
+	delete[] pvt->_httpprevioushost;
+	delete[] pvt->_httppreviousport;
+
 	delete pvt;
 }
 
@@ -123,22 +139,38 @@ void url::init() {
 bool url::lowLevelOpen(const char *name, int32_t flags,
 				mode_t perms, bool useperms) {
 
+	// skip leading whitespace
+	while (*name && character::isWhitespace(*name)) {
+		name++;
+	}
+
+	// disable keepalive if protocol changed
+	const char	*protodelim=charstring::findFirst(name,"://");
+	char		*proto=NULL;
+	if (protodelim) {
+		proto=charstring::duplicate(name,protodelim-name);
+		if (pvt->_keepalive &&
+			charstring::compare(proto,pvt->_previousproto)) {
+			pvt->_keepalive=false;
+		}
+	}
+
 	// clean up from a previous run
-	close();
+	if (!pvt->_keepalive) {
+		close();
+	}
 	init();
+
+	// reset previous protocol
+	delete[] pvt->_previousproto;
+	pvt->_previousproto=proto;
 
 	// for now, don't support create or write
 	if (perms || useperms || flags&O_WRONLY || flags&O_RDWR) {
 		return false;
 	}
 
-	// skip leading whitespace
-	while (*name && character::isWhitespace(*name)) {
-		name++;
-	}
-
 	// don't support local files
-	const char	*protodelim=charstring::findFirst(name,"://");
 	if (!protodelim || !charstring::compare(name,"file://",7)) {
 		return false;
 	}
@@ -368,9 +400,10 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	// parse out the host, port and path
 	const char	*protodelim=charstring::findFirst(urlname,"://");
 	const char	*path=charstring::findFirstOrEnd(protodelim+3,'/');
-	char	*host=charstring::duplicate(protodelim+3,path-protodelim-3);
+	char		*host=charstring::duplicate(protodelim+3,
+							path-protodelim-3);
 	const char	*port="80";
-	char	*colon=charstring::findFirst(host,':');
+	char		*colon=charstring::findFirst(host,':');
 	if (colon) {
 		port=colon+1;
 		*colon='\0';
@@ -379,17 +412,44 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	#ifdef DEBUG_HTTP
 	stdoutput.printf("host: %s\n",host),
 	stdoutput.printf("port: %s\n",port);
-	stdoutput.printf("userpwd: %s\n\n",userpwd);
+	stdoutput.printf("userpwd: %s\n",userpwd);
+	stdoutput.printf("keepalive: %d\n\n",pvt->_keepalive);
+	stdoutput.printf("previous host: %s\n",pvt->_httpprevioushost);
+	stdoutput.printf("previous port: %s\n",pvt->_httppreviousport);
 	#endif
 
-	// connect to the host
-	if (!pvt->_isc.connect(host,charstring::toUnsignedInteger(port),
-								-1,-1,0,0)) {
+	if (!pvt->_keepalive ||
+		(charstring::compare(host,pvt->_httpprevioushost) &&
+		charstring::compare(port,pvt->_httppreviousport))) {
+
+		// close any connection left open by a previous keepalive
+		// (if we're not doing keepalive then open() will already
+		// have called close(), so we don't need to do it here)
+		if (pvt->_keepalive) {
+			close();
+		}
+
+		// connect to the host
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http: connect failed\n");
+		stdoutput.printf("Connecting...\n\n");
 		#endif
-		return false;
+		if (!pvt->_isc.connect(host,charstring::toUnsignedInteger(port),
+								-1,-1,0,0)) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: connect failed\n");
+			#endif
+			delete[] host;
+			return false;
+		}
+	} else {
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("Reusing existing connection...\n\n");
+		#endif
 	}
+
+	// reset keepalive
+	bool	reused=pvt->_keepalive;
+	pvt->_keepalive=false;
 
 	// finagle path
 	if (charstring::isNullOrEmpty(path)) {
@@ -419,13 +479,23 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	#ifdef DEBUG_HTTP
 	stdoutput.printf("Request:\n%s",request.getString());
 	#endif
-	if (pvt->_isc.write(request.getString(),
-				request.getStringLength())!=
-				(ssize_t)request.getStringLength()) {
+	if (pvt->_isc.write(request.getString(),request.getStringLength())!=
+					(ssize_t)request.getStringLength()) {
+
+		delete[] host;
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("http: send request failed\n");
 		#endif
-		return false;
+
+		if (reused) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: retrying without keep-alive\n");
+			#endif
+			close();
+			return httpOpen(urlname,userpwd);
+		} else {
+			return false;
+		}
 	}
 
 	// fetch and process the headers
@@ -434,17 +504,33 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	pvt->_chunked=false;
 	pvt->_bof=true;
 	char	*location=NULL;
+	bool	connectionclose=false;
 	#ifdef DEBUG_HTTP
 	stdoutput.printf("Response Headers:\n");
 	#endif
 	for (;;) {
 
 		char	*header=NULL;
-		if (pvt->_isc.read(&header,"\r\n",MAX_HEADER_SIZE)<2) {
+		ssize_t	result=pvt->_isc.read(&header,"\r\n",MAX_HEADER_SIZE);
+		if (reused && result<1) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: fetch headers failed\n");
+			stdoutput.printf("http: retrying without keep-alive\n");
+			#endif
+			delete[] location;
+			delete[] header;
+			delete[] host;
+			close();
+			return httpOpen(urlname,userpwd);
+		}
+
+		if (result<2) {
 			#ifdef DEBUG_HTTP
 			stdoutput.printf("http: fetch headers failed\n");
 			#endif
+			delete[] location;
 			delete[] header;
+			delete[] host;
 			return false;
 		}
 
@@ -480,6 +566,9 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 				location=locstr.detachString();
 			}
 			charstring::rightTrim(location);
+		} else if (!charstring::compare(header,
+					"Connection: close",17)) {
+			connectionclose=true;
 		}
 
 		if (!charstring::compare(header,"\r\n")) {
@@ -487,6 +576,28 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 			break;
 		}
 		delete[] header;
+	}
+
+	if (!retval) {
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("http: neither content length "
+				"nor chunked encoding header found\n");
+		stdoutput.printf("http: retrying without keep-alive\n");
+		#endif
+		delete[] location;
+		delete[] host;
+		close();
+		return httpOpen(urlname,userpwd);
+	}
+
+	// keep-alive is the default in HTTP/1.1, so we'll reenable it
+	// unless the server explicitly requested "Connection: close"
+	if (!connectionclose) {
+		pvt->_keepalive=true;
+		delete[] pvt->_httpprevioushost;
+		pvt->_httpprevioushost=charstring::duplicate(host);
+		delete[] pvt->_httppreviousport;
+		pvt->_httppreviousport=charstring::duplicate(port);
 	}
 
 	#ifdef DEBUG_HTTP
@@ -509,13 +620,7 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		delete[] location;
 	}
 
-	#ifdef DEBUG_HTTP
-	else if (!retval) {
-		stdoutput.printf("http: neither content length "
-				"nor chunked encoding header found\n");
-	}
-	#endif
-
+	delete[] host;
 	return retval;
 }
 
@@ -543,6 +648,7 @@ int32_t url::lowLevelClose() {
 		}
 	}
 	#endif
+
 	return retval;
 }
 

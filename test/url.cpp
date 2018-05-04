@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 #include <rudiments/permissions.h>
+#include <rudiments/snooze.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
@@ -17,24 +18,32 @@ int main(int argc, const char **argv) {
 			"http://rudiments.sourceforge.net/knowncontent.html";
 
 	url	u;
-	test("open",u.open(urlname,O_RDONLY|O_BINARY));
-	char	*contents=u.getContents();
-	test("get contents",!charstring::compare(testcontents,contents));
-	delete[] contents;
-	test("close",u.close());
+	for (uint16_t i=0; i<4; i++) {
 
-	test("open",u.open(urlname,O_RDONLY));
-	const char	*ptr=testcontents;
-	char	buffer[1024];
-	for (;;) {
-		ssize_t	s=u.read(buffer,sizeof(buffer));
-		test("chunk",!charstring::compare(ptr,buffer,s));
-		if (s<(ssize_t)sizeof(buffer)) {
-			break;
+		if (i%2) {
+			test("close",u.close());
 		}
-		ptr+=s;
+		test("open",u.open(urlname,O_RDONLY|O_BINARY));
+		char	*contents=u.getContents();
+		test("get contents",
+			!charstring::compare(testcontents,contents));
+		delete[] contents;
+
+		if (i%2) {
+			test("close",u.close());
+		}
+		test("open",u.open(urlname,O_RDONLY));
+		const char	*ptr=testcontents;
+		char	buffer[1024];
+		for (;;) {
+			ssize_t	s=u.read(buffer,sizeof(buffer));
+			test("chunk",!charstring::compare(ptr,buffer,s));
+			if (s<(ssize_t)sizeof(buffer)) {
+				break;
+			}
+			ptr+=s;
+		}
 	}
-	test("close",u.close());
 
 	stdoutput.printf("\n");
 }
