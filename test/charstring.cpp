@@ -303,7 +303,7 @@ int main(int argc, const char **argv) {
 	const char	*original="!@#$%^&*()hello-+";
 	char    *escbuffer=charstring::httpEscape("!@#$%^&*()hello-+");
 	test("escaped",!charstring::compare(escbuffer,
-					"!@#$%25%5E&*()hello-%2B"));
+					"!@%23$%25%5E&*()hello-%2B"));
 	char	*unescbuffer=charstring::httpUnescape(escbuffer);
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
