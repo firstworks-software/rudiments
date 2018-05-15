@@ -105,6 +105,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_11DD15EA93394176A5FDE69D5ABE6189"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1279109E1F3A455AACF7CB12A68F7B34"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -585,6 +591,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_65C023DB12E94F93AC2B87E045D34EB0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_66158122B3564D65A46D12C442F0EA78"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -838,6 +850,12 @@
         "Entry"
         {
         "MsmKey" = "8:_86C665724C6C46268994214EC2D0E9CA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_87BEF83BA6BB4BDAACA56A669A74198A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1952,6 +1970,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\process.h"
             "TargetName" = "8:process.h"
+            "Tag" = "8:"
+            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_11DD15EA93394176A5FDE69D5ABE6189"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\templateengine.h"
+            "TargetName" = "8:templateengine.h"
             "Tag" = "8:"
             "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
             "Condition" = "8:"
@@ -3468,6 +3506,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_65C023DB12E94F93AC2B87E045D34EB0"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\templateengineincludes.h"
+            "TargetName" = "8:templateengineincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_66158122B3564D65A46D12C442F0EA78"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\snooze.h"
@@ -4274,6 +4332,26 @@
             "TargetName" = "8:unixsocketclientincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87BEF83BA6BB4BDAACA56A669A74198A"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\templateengine.h"
+            "TargetName" = "8:templateengine.h"
+            "Tag" = "8:"
+            "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
