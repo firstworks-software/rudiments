@@ -27,11 +27,15 @@ int main(int argc, const char **argv) {
 	file	fd;
 	test("create file",fd.create("memorymap.txt",
 				permissions::evalPermString("rw-r--r--")));
+	
+	char	*buffer=new char[allocgran];
 	for (uint16_t i=0; i<10; i++) {
 		for (size_t j=0; j<allocgran; j++) {
-			fd.write((char)('0'+i));
+			buffer[j]='0'+i;
 		}
+		fd.write(buffer,allocgran);
 	}
+	delete[] buffer;
 	
 	// loop, mapping blocks of the file
 	memorymap	mm;
