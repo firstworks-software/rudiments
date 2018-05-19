@@ -16803,8 +16803,6 @@ $as_echo "no" >&6; }
 fi
 
 
-#FW_CHECK_TESTS_NEED_FPIC
-
 if ( test -n "`echo $LDFLAGS | grep '\-Wl,\-z,relro'`" )
 then
 	CPPFLAGS="-fPIC $CPPFLAGS"
