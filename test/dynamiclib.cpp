@@ -18,7 +18,11 @@ int main(int argc, const char **argv) {
 #else
 	// decide on a file to use
 	const char	*dirs[]={
-		"/lib64","/usr/lib64","/lib","/usr/lib",NULL
+		"/lib64","/usr/lib64","/lib","/usr/lib",
+		// FIXME: other architectures
+		"/lib/x86_64-linux-gnu",
+		"/usr/lib/x86_64-linux-gnu",
+		NULL
 	};
 	char	*f=NULL;
 	for (const char * const *dir=dirs; *dir; dir++) {

@@ -436,6 +436,8 @@ AC_SUBST(CXXFLAGS)
 FW_CHECK_NULL_REDEFINE
 FW_CHECK_F_NO_BUILTIN
 
+FW_CHECK_TESTS_NEED_FPIC
+
 echo "******************************"
 
 dnl Checks for header files.
@@ -816,9 +818,15 @@ AC_MSG_CHECKING(for dbghelp.h)
 AC_TRY_COMPILE([#include <dbghelp.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DBGHELP_H, 1, Some systems have dbghelp.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+dnl reenable -Werror because _G_config.h is deprecated on
+dnl some systems and we want to exclude it on those systems
+CPPFLAGS="$CPPFLAGS $WERROR"
+CXXFLAGS="$CPPFLAGS $WERROR"
 AC_MSG_CHECKING(for _G_config.h)
 AC_TRY_COMPILE([#include <_G_config.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_G_CONFIG_H, 1, Some systems have _G_config.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
+CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
 
 AC_MSG_CHECKING(for locale.h)
 AC_TRY_COMPILE([#include <locale.h>],
