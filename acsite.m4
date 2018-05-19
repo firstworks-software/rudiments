@@ -433,25 +433,6 @@ fi
 ])
 
 
-AC_DEFUN([FW_CHECK_TESTS_NEED_FPIC],
-[
-
-AC_MSG_CHECKING(whether tests work without -fPIC)
-
-WITHOUT="no"
-AC_TRY_COMPILE([],[int a; a=1;],WITHOUT="yes"; AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-if ( test "$WITHOUT" = "no" )
-then
-	AC_MSG_CHECKING(whether tests work with -fPIC)
-
-	CPPFLAGS="-fPIC $CPPFLAGS"
-	AC_TRY_COMPILE([],[int a; a=1;],AC_MSG_RESULT(yes),AC_MSG_RESULT(no); AC_MSG_ERROR(compiling fails with or without -fPIC))
-fi
-
-])
-
-
 dnl Determines what extension shared object files have
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
