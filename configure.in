@@ -826,7 +826,7 @@ AC_TRY_COMPILE([#include <dbghelp.h>],
 dnl reenable -Werror because _G_config.h is deprecated on
 dnl some systems and we want to exclude it on those systems
 CPPFLAGS="$CPPFLAGS $WERROR"
-CXXFLAGS="$CPPFLAGS $WERROR"
+CXXFLAGS="$CXXFLAGS $WERROR"
 AC_MSG_CHECKING(for _G_config.h)
 AC_TRY_COMPILE([#include <_G_config.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_G_CONFIG_H, 1, Some systems have _G_config.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
