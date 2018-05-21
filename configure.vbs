@@ -407,7 +407,7 @@ privateheaders7="codetree.h "+_
 	"inputincludes.h "
 
 ' version
-RUDIMENTS_VERSION="1.0.7"
+RUDIMENTS_VERSION="1.0.8"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"

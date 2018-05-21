@@ -1,3 +1,5 @@
+1.0.8 - ...
+
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the
 		event of a double-free
