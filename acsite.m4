@@ -16,9 +16,13 @@ fi
 
 AC_DEFUN([FW_CHECK_FILE],
 [
+echo -n "check: $1"
 if ( test -r "$1" )
 then
+	echo "  yes"
 	eval "$2"
+else
+	echo "  no"
 fi
 ])
 
@@ -457,9 +461,17 @@ then
 	LIBDIR="lib"
 else
 	case $host_cpu in
-		x86_64 ) LIBDIR="lib64" ;;
-		* ) LIBDIR="lib" ;;
+		x86_64 )
+			LIBDIR="lib64"
+			;;
+		* )
+			LIBDIR="lib"
+			;;
 	esac
+fi
+if ( test "$LIBDIR" = "lib64" -a ! -d "/lib64" )
+then
+	LIBDIR="lib"
 fi
 AC_MSG_RESULT($LIBDIR)
 ])
