@@ -47,8 +47,11 @@ void syncronize(void *args) {
 				if (next==1) {
 					output.append(1);
 					next=2;
+					tm.unlock();
+					break;
+				} else {
+					tm.unlock();
 				}
-				tm.unlock();
 			} while (next!=2);
 
 			do {
@@ -58,6 +61,8 @@ void syncronize(void *args) {
 				if (next==3) {
 					output.append(3);
 					next=4;
+					tm.unlock();
+					break;
 				}
 				tm.unlock();
 			} while (next!=4);
@@ -69,6 +74,8 @@ void syncronize(void *args) {
 				if (next==2) {
 					output.append(2);
 					next=3;
+					tm.unlock();
+					break;
 				}
 				tm.unlock();
 			} while (next!=3);
@@ -80,6 +87,8 @@ void syncronize(void *args) {
 				if (next==4) {
 					output.append(4);
 					next=1;
+					tm.unlock();
+					break;
 				}
 				tm.unlock();
 			} while (next!=1);
