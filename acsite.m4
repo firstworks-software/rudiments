@@ -16,13 +16,9 @@ fi
 
 AC_DEFUN([FW_CHECK_FILE],
 [
-echo -n "check: $1"
 if ( test -r "$1" )
 then
-	echo "  yes"
 	eval "$2"
-else
-	echo "  no"
 fi
 ])
 
