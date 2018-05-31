@@ -162,6 +162,7 @@ bool DICTIONARY_CLASS::remove(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
 	return false;
@@ -176,6 +177,7 @@ bool DICTIONARY_CLASS::remove(dictionarynode<keytype,valuetype> *node) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
 	return false;

@@ -1,4 +1,4 @@
-1.0.8 - ...
+1.0.8 - fixed some xmlsax/xmldom memory leaks
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

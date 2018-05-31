@@ -204,12 +204,11 @@ bool xmlsax::parseString(const char *string) {
 
 void xmlsax::close() {
 
-	// reset string/fd/line
-	reset();
-
 	// close any previously opened files
 	delete pvt->_fl;
-	pvt->_fl=NULL;
+
+	// reset string/fd/line
+	reset();
 }
 
 bool xmlsax::parse() {

@@ -151,6 +151,7 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	if (!fl.close()) {
 		retval=false;
 	}
+	delete xml;
 	return retval;
 }
 
