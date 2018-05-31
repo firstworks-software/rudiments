@@ -1,4 +1,5 @@
 1.0.8 - fixed some dictionary and xmlsax memory leaks
+	fixed lib/lib64 detection in configure script
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the
