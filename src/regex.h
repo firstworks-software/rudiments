@@ -439,7 +439,7 @@ typedef struct
    unfortunately clutters up the declarations a bit, but I think it's
    worth it.  */
 
-#if __STDC__
+#if __STDC__ 
 
 # define _RE_ARGS(args) args
 
@@ -448,7 +448,12 @@ typedef struct
 # ifdef _WIN32
 #  define _RE_ARGS(args) args
 # else /* not _WIN32 */
-#  define _RE_ARGS(args) ()
+#  ifdef __USLC__
+#   define _RE_ARGS(args) args
+#   define REGEX_MALLOC 1
+#  else
+#   define _RE_ARGS(args) ()
+#  endif
 # endif
 
 #endif /* not __STDC__ */

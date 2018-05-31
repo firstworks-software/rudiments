@@ -1,5 +1,8 @@
 1.0.8 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script
+	fixed Werror management in configure script
+	fixed race condition in threadmutext test
+	--enable-built-in-regex works on uw7 now
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

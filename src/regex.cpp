@@ -44,7 +44,7 @@
 #endif
 
 #ifndef PARAMS
-# if defined __GNUC__ || (defined __STDC__ && __STDC__) || defined _WIN32
+# if defined __GNUC__ || (defined __STDC__ && __STDC__) || defined _WIN32 || defined __USLC__
 #  define PARAMS(args) args
 # else
 #  define PARAMS(args) ()
