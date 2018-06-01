@@ -139,8 +139,8 @@ int main(int argc, const char **argv) {
 
 		fl.open(testfiletxt,O_RDWR);
 		test("lock 1",fl.lockFile(
-				#if defined(F_RDLCK) && defined(F_WRLCK)
-					F_RDLCK|F_WRLCK
+				#if defined(F_WRLCK)
+					F_WRLCK
 				#else
 					0
 				#endif
@@ -172,16 +172,16 @@ int main(int argc, const char **argv) {
 		fl.open(testfiletxt,O_RDWR);
 
 		test("try lock 2",!fl.tryLockFile(
-				#if defined(F_RDLCK) && defined(F_WRLCK)
-					F_RDLCK|F_WRLCK
+				#if defined(F_WRLCK)
+					F_WRLCK
 				#else
 					0
 				#endif
 					));
 
 		test("lock 2",fl.lockFile(
-				#if defined(F_RDLCK) && defined(F_WRLCK)
-					F_RDLCK|F_WRLCK
+				#if defined(F_WRLCK)
+					F_WRLCK
 				#else
 					0
 				#endif

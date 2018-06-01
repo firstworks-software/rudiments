@@ -4,6 +4,7 @@
 	fixed race condition in threadmutext test
 	--enable-built-in-regex works on uw7 now
 	added regularexpression match-with-length methods
+	fixed file test on OSR and UnixWare
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the
