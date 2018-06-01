@@ -10,6 +10,7 @@
 	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
+	#include <rudiments/charstring.h>
 	extern "C" {
 		#include <regex.h>
 	}
@@ -17,6 +18,7 @@
 	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
+	#include <rudiments/charstring.h>
 	#include "regex.h"
 #endif
 
@@ -38,6 +40,7 @@ class regularexpressionprivate {
 			pcre_extra	*_extra;
 		#else
 			regex_t	_expr;
+			char	*_strcopy;
 		#endif
 	
 		#define RUDIMENTS_REGEX_MATCHES 128
@@ -67,6 +70,7 @@ void regularexpression::regularexpressionInit() {
 		pvt->_extra=NULL;
 	#else
 		bytestring::zero(&pvt->_expr,sizeof(pvt->_expr));
+		pvt->_strcopy=NULL;
 	#endif
 	pvt->_null=false;
 	pvt->_matchcount=0;
@@ -84,6 +88,7 @@ regularexpression::~regularexpression() {
 		}
 	#else
 		regfree(&pvt->_expr);
+		delete[] pvt->_strcopy;
 	#endif
 	delete pvt;
 }
@@ -129,7 +134,7 @@ bool regularexpression::study() {
 	#endif
 }
 
-bool regularexpression::match(const char *str) {
+bool regularexpression::match(const char *str, size_t length) {
 	if (!str) {
 		return pvt->_null;
 	}
@@ -137,12 +142,23 @@ bool regularexpression::match(const char *str) {
 		pvt->_str=str;
 		pvt->_matchcount=-1;
 		return (pvt->_expr &&
-			(pvt->_matchcount=pcre_exec(pvt->_expr,
-						pvt->_extra,
-						pvt->_str,
-						charstring::length(pvt->_str),
+			(pvt->_matchcount=pcre_exec(pvt->_expr,pvt->_extra,
+						pvt->_str,length,
 						0,0,pvt->_matches,
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
+	#else
+		delete[] pvt->_strcopy;
+		pvt->_strcopy=charstring::duplicate(str,length);
+		return match(pvt->_strcopy);
+	#endif
+}
+
+bool regularexpression::match(const char *str) {
+	if (!str) {
+		return pvt->_null;
+	}
+	#ifdef RUDIMENTS_HAS_PCRE
+		return match(str,charstring::length(str));
 	#else
 		pvt->_str=str;
 		for (int32_t i=0; i<pvt->_matchcount; i++) {
@@ -206,6 +222,12 @@ const char *regularexpression::getSubstringStart(int32_t index) {
 const char *regularexpression::getSubstringEnd(int32_t index) {
 	int32_t	offset=getSubstringEndOffset(index);
 	return (offset>-1)?(pvt->_str+offset):NULL;
+}
+
+bool regularexpression::match(const char *str, size_t length,
+						const char *pattern) {
+	regularexpression	re;
+	return (re.compile(pattern) && re.match(str,length));
 }
 
 bool regularexpression::match(const char *str, const char *pattern) {

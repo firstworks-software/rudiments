@@ -36,6 +36,21 @@ int main(int argc, const char **argv) {
         stdoutput.printf("\n");
 
 
+        stdoutput.printf("static match %s (with length)\n",mtc);
+        str="Hello";
+        test(str,!regularexpression::match(str,4,mtc));
+        str="Hello Dave";
+        test(str,!regularexpression::match(str,4,mtc));
+        test(str,regularexpression::match(str,10,mtc));
+        str="Hello Dave Goodbye";
+        test(str,!regularexpression::match(str,4,mtc));
+        test(str,regularexpression::match(str,11,mtc));
+        str="Dave Goodbye";
+        test(str,!regularexpression::match(str,3,mtc));
+        test(str,regularexpression::match(str,4,mtc));
+        stdoutput.printf("\n");
+
+
         stdoutput.printf("instance match %s\n",mtc);
         regularexpression       re;
 	test("compile",re.compile(mtc));

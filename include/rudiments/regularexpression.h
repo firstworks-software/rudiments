@@ -16,8 +16,13 @@ class regularexpressionprivate;
 class RUDIMENTS_DLLSPEC regularexpression {
 	public:
 
-		/** Returns true if "str" matches "pattern"
-		 *  and false if "str" doesn't match "pattern". */
+		/** Returns true if the first "length" bytes of "str" matches
+		 *  "pattern" and false otherwise. */
+		static	bool	match(const char *str, size_t length,
+							const char *pattern);
+
+		/** Returns true if "str" matches "pattern" and false
+		 *  otherwise. */
 		static	bool	match(const char *str, const char *pattern);
 
 
@@ -53,6 +58,14 @@ class RUDIMENTS_DLLSPEC regularexpression {
 		 *  Returns true if the match was successful and
 		 *  false if it was not. */
 		bool	match(const char *str);
+
+		/** Matches the first "length" bytes of "str" against the
+		 *  regular expression compiled earlier using the compile
+		 *  method.
+		 * 
+		 *  Returns true if the match was successful and
+		 *  false if it was not. */
+		bool	match(const char *str, size_t length);
 
 		/** Returns the number of substrings of "str" passed into
 		 *  match() that match "pattern" passed into compile(). */
