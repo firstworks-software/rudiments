@@ -174,6 +174,7 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 // http://www.linuxmisc.com/9-unix-programmer/af8e2f1e03a2b913.htm
 #ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
 	#undef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
+	#define RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS 1
 	#define msg_accrights msg_control
 	#define msg_accrightslen msg_controllen
 #endif

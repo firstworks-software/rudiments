@@ -16,15 +16,17 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+const char	*handofffile="file.txt";
 const char	*handoffsck="handoff.sck";
 
 void handoff1() {
 
 	// create a file containing "bye"
-	file::remove("file.txt");
+	file::remove(handofffile);
 	file	f;
 	test("handoff1 - create file",
-		f.create("file.txt",permissions::evalPermString("rw-r--r--")));
+		f.create("handofffile",
+			permissions::evalPermString("rw-r--r--")));
 	test("handoff1 - write to file",f.write("bye",3)==3);
 
 	// open a unix socket
@@ -100,7 +102,7 @@ void handoff2() {
 	test("handoff2 - contents",!charstring::compare(buf,"bye"));
 
 	// clean up
-	file::remove("file.txt");
+	file::remove(handofffile);
 
 
 	// receive handoffclient
@@ -131,12 +133,19 @@ void handoffclient() {
 
 int main(int argc, const char **argv) {
 
+	// FIXME: this really ought to work on OSR
+        char    *os=sys::getOperatingSystemName();
+	if (!charstring::compare(os,"SCO_SV",6)) {
+		//notsupported=true;
+		handofffile="/tmp/file.txt";
+		handoffsck="/tmp/handoff.sck";
+	}
+
 	if (argc==1) {
 
 		header("handoff");
 
         	// not supported on Cygwin, Linux < 2.2, syllable...
-        	char    *os=sys::getOperatingSystemName();
         	char    *rel=sys::getOperatingSystemRelease();
         	double  ver=charstring::toFloat(rel);
         	bool	notsupported=
@@ -144,12 +153,6 @@ int main(int argc, const char **argv) {
                			(!charstring::compare(os,"Linux",5) &&
 				ver<2.2) ||
 				!charstring::compare(os,"syllable",8));
-		// FIXME: this really ought to work on OSR
-		if (!charstring::compare(os,"SCO_SV",6)) {
-			notsupported=true;
-			//handoffsck="/tmp/handoff.sck";
-		}
-		delete[] os;
 		delete[] rel;
 		if (notsupported) {
 			stdoutput.printf("	not supported\n\n");
@@ -192,4 +195,6 @@ int main(int argc, const char **argv) {
 
 		handoff2();
 	}
+
+	delete[] os;
 }
