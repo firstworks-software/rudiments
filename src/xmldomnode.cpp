@@ -697,50 +697,47 @@ bool xmldomnode::insertAttribute(const char *name, const char *value,
 				&pvt->_attributecount);
 }
 
-void xmldomnode::xml(stringbuffer *strb,
-			filedescriptor *fd,
-			bool indent,
-			uint16_t *indentlevel) const {
+void xmldomnode::xml(output *out, bool indent, uint16_t *indentlevel) const {
 
 	xmldomnode	*current;
 	if (pvt->_type==ROOT_XMLDOMNODETYPE) {
 		current=pvt->_firstchild;
 		for (uint64_t i=0; i<pvt->_childcount; i++) {
-			current->xml(strb,fd,indent,indentlevel);
+			current->xml(out,indent,indentlevel);
 			current=current->pvt->_next;
 		}
 	} else if (pvt->_type==TAG_XMLDOMNODETYPE) {
 		if (indent && indentlevel) {
 			for (uint16_t i=0; i<*indentlevel; i++) {
-				append(strb,fd," ");
+				out->write(" ");
 			}
 		}
-		append(strb,fd,"<");
+		out->write("<");
 		if (pvt->_namespace) {
-			safeAppend(strb,fd,pvt->_namespace);
-			append(strb,fd,":");
+			safeWrite(out,pvt->_namespace);
+			out->write(":");
 		}
-		safeAppend(strb,fd,pvt->_name);
+		safeWrite(out,pvt->_name);
 		current=pvt->_firstattribute;
 		for (uint64_t i=0; i<pvt->_attributecount; i++) {
-			append(strb,fd," ");
-			current->xml(strb,fd,indent,indentlevel);
+			out->write(" ");
+			current->xml(out,indent,indentlevel);
 			current=current->pvt->_next;
 		}
 		if (pvt->_childcount) {
-			append(strb,fd,">");
+			out->write(">");
 			if (indent && indentlevel) {
 				if (pvt->_firstchild->getType()!=
 						TEXT_XMLDOMNODETYPE &&
 					pvt->_firstchild->getType()!=
 						CDATA_XMLDOMNODETYPE) {
-					append(strb,fd,"\n");
+					out->write("\n");
 				}
 				*indentlevel=*indentlevel+2;
 			}
 			current=pvt->_firstchild;
 			for (uint64_t i=0; i<pvt->_childcount; i++) {
-				current->xml(strb,fd,indent,indentlevel);
+				current->xml(out,indent,indentlevel);
 				current=current->pvt->_next;
 			}
 			if (indent && indentlevel) {
@@ -751,99 +748,57 @@ void xmldomnode::xml(stringbuffer *strb,
 						CDATA_XMLDOMNODETYPE) {
 					for (uint16_t i=0;
 						i<*indentlevel; i++) {
-						append(strb,fd," ");
+						out->write(" ");
 					}
 				}
 			}
-			append(strb,fd,"</");
+			out->write("</");
 			if (pvt->_namespace) {
-				safeAppend(strb,fd,pvt->_namespace);
-				append(strb,fd,":");
+				safeWrite(out,pvt->_namespace);
+				out->write(":");
 			}
-			safeAppend(strb,fd,pvt->_name);
-			append(strb,fd,">");
+			safeWrite(out,pvt->_name);
+			out->write(">");
 			if (indent && indentlevel) {
-				append(strb,fd,"\n");
+				out->write("\n");
 			}
 		} else {
 			if (pvt->_name[0]=='?') {
-				append(strb,fd,"?>");
+				out->write("?>");
 			} else if (pvt->_name[0]=='!') {
-				append(strb,fd,">");
+				out->write(">");
 			} else {
-				append(strb,fd,"/>");
+				out->write("/>");
 			}
 			if (indent && indentlevel) {
-				append(strb,fd,"\n");
+				out->write("\n");
 			}
 		}
 	} else if (pvt->_type==TEXT_XMLDOMNODETYPE) {
-		safeAppend(strb,fd,pvt->_value);
+		safeWrite(out,pvt->_value);
 	} else if (pvt->_type==ATTRIBUTE_XMLDOMNODETYPE) {
 		if (pvt->_parent->pvt->_name[0]=='!') {
-			append(strb,fd,"\"");
-			safeAppend(strb,fd,pvt->_value);
-			append(strb,fd,"\"");
+			out->write("\"");
+			safeWrite(out,pvt->_value);
+			out->write("\"");
 		} else {
-			safeAppend(strb,fd,pvt->_name);
-			append(strb,fd,"=\"");
-			safeAppend(strb,fd,pvt->_value);
-			append(strb,fd,"\"");
+			safeWrite(out,pvt->_name);
+			out->write("=\"");
+			safeWrite(out,pvt->_value);
+			out->write("\"");
 		}
 	} else if (pvt->_type==COMMENT_XMLDOMNODETYPE) {
-		append(strb,fd,"<!--");
-		safeAppend(strb,fd,pvt->_value);
-		append(strb,fd,"-->");
+		out->write("<!--");
+		safeWrite(out,pvt->_value);
+		out->write("-->");
 	} else if (pvt->_type==CDATA_XMLDOMNODETYPE) {
-		append(strb,fd,"<![CDATA[");
-		safeAppend(strb,fd,pvt->_value);
-		append(strb,fd,"]]>");
+		out->write("<![CDATA[");
+		safeWrite(out,pvt->_value);
+		out->write("]]>");
 	}
 }
 
-void xmldomnode::append(stringbuffer *strb,
-				filedescriptor *fd,
-				const char *str) const {
-	if (strb) {
-		strb->append(str);
-	} else if (fd) {
-		fd->write(str);
-	}
-}
-
-void xmldomnode::append(stringbuffer *strb,
-				filedescriptor *fd,
-				const char *str, size_t len) const {
-	if (strb) {
-		strb->append(str,len);
-	} else if (fd) {
-		fd->write(str,len);
-	}
-}
-
-void xmldomnode::append(stringbuffer *strb,
-				filedescriptor *fd,
-				char ch) const {
-	if (strb) {
-		strb->append(ch);
-	} else if (fd) {
-		fd->write(ch);
-	}
-}
-
-void xmldomnode::append(stringbuffer *strb,
-				filedescriptor *fd,
-				uint16_t ch) const {
-	if (strb) {
-		strb->append(ch);
-	} else if (fd) {
-		fd->write(ch);
-	}
-}
-
-void xmldomnode::safeAppend(stringbuffer *strb,
-				filedescriptor *fd,
-				const char *str) const {
+void xmldomnode::safeWrite(output *out, const char *str) const {
 
 	if (!str) {
 		return;
@@ -870,20 +825,20 @@ void xmldomnode::safeAppend(stringbuffer *strb,
 					static_cast<unsigned char>(*ch));
 		}
 		if (entity || num) {
-			append(strb,fd,start,ch-start);
+			out->write(start,ch-start);
 			if (entity) {
-				append(strb,fd,entity);
+				out->write(entity);
 				entity=NULL;
 			} else {
-				append(strb,fd,"&#");
-				append(strb,fd,num);
-				append(strb,fd,";");
+				out->write("&#");
+				out->write(num);
+				out->write(";");
 				num=0;
 			}
 			start=ch+1;
 		}
 	}
-	append(strb,fd,start,ch-start);
+	out->write(start,ch-start);
 }
 
 xmldomnode *xmldomnode::getNode(xmldomnode *first,
@@ -1728,18 +1683,13 @@ bool xmldomnode::deleteAttribute(xmldomnode *attribute) {
 
 stringbuffer *xmldomnode::xml() const {
 	stringbuffer *strb=new stringbuffer();
-	xml(strb,NULL,false,NULL);
+	xml(strb,false,NULL);
 	return strb;
 }
 
-void xmldomnode::print(stringbuffer *strb) const {
+void xmldomnode::print(output *out) const {
 	uint16_t	indentlevel=0;
-	xml(strb,NULL,true,&indentlevel);
-}
-
-void xmldomnode::print(filedescriptor *fd) const {
-	uint16_t	indentlevel=0;
-	xml(NULL,fd,true,&indentlevel);
+	xml(out,true,&indentlevel);
 }
 
 stringbuffer *xmldomnode::getPath() const {

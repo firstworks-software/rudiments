@@ -1359,13 +1359,11 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  stringbuffer. */
 		stringbuffer	*xml() const;
 
-		/** Prints a text representation of the tree
-		 *  starting at this node into "strb". */
-		void	print(stringbuffer *strb) const;
-
-		/** Prints a text representation of the tree
-		 *  starting at this node to filedescriptor "fd". */
-		void	print(filedescriptor *fd) const;
+		/** Prints a text representation of the tree starting at this
+		 *  node into "out" which can be an instance of stringbuffer,
+		 *  filedescriptor, or any other class that implements
+		 *  the output interface. */
+		void	print(output *out) const;
 
 		/** If the xmldomnode is an element, returns the
 		 *  "path" of the xmldomnode.  The path will have

@@ -137,26 +137,10 @@
 					xmldomnode **first,
 					xmldomnode **last,
 					uint64_t *count);
-		void		xml(stringbuffer *strb,
-					filedescriptor *fd,
+		void		xml(output *out,
 					bool indent,
 					uint16_t *indentlevel) const;
-		void		append(stringbuffer *strb,
-						filedescriptor *fd,
-						const char *str) const;
-		void		append(stringbuffer *strb,
-						filedescriptor *fd,
-						const char *str,
-						size_t len) const;
-		void		append(stringbuffer *strb,
-						filedescriptor *fd,
-						char ch) const;
-		void		append(stringbuffer *strb,
-						filedescriptor *fd,
-						uint16_t ch) const;
-		void		safeAppend(stringbuffer *strb,
-						filedescriptor *fd,
-						const char *str) const;
+		void		safeWrite(output *out, const char *str) const;
 		bool		match(xmldomnode *node,
 						const char *ns,
 						const char *name,

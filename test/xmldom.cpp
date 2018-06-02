@@ -223,6 +223,7 @@ int main(int argc, const char **argv) {
 	header("xmldom");
 
 	xmldom	x;
+	stringbuffer	strb;
 
 	stdoutput.printf("normal...\n");
 	test("parse string",x.parseString(normal));
