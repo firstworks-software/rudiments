@@ -63,7 +63,7 @@ class linkedlist {
 		linkedlist();
 
 		/** Deletes this instance of the linkedlist class and all of
-		 *  its linkedlistnodes.  Note however, that the data stored
+		 *  its linkedlistnodes.  Note however, that the value stored
 		 *  in each linkedlistnode is not deleted by this call. */
 		~linkedlist();
 
@@ -185,9 +185,19 @@ class linkedlist {
 		void	heapSort();
 
 		/** Deletes all linkedlistnodes currently in the linkedlist.
-		 *  Note however, that the data stored in each linkedlistnode
+		 *  Note however, that the value stored in each linkedlistnode
 		 *  is not deleted by this call. */
 		void	clear();
+
+		/** Deletes all linkedlistnodes currently in the linkedlist,
+		 *  deleting the value stored in each linkedlistnode as
+		 *  well. */
+		void	clearAndDelete();
+
+		/** Deletes all linkedlistnodes currently in the linkedlist,
+		 *  deleting the value stored in each linkedlistnode as well,
+		 *  which is presumed to be an array. */
+		void	clearAndArrayDelete();
 
 		/** Prints out a representation of the linkedlist. */
 		void	print() const;

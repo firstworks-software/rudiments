@@ -1132,12 +1132,7 @@ void gsscredentials::close() {
 			pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 		}
 	#endif
-	for (linkedlistnode< gssmechanism * > *node=
-					pvt->_amlist.getFirst();
-					node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	pvt->_amlist.clear();
+	pvt->_amlist.clearAndDelete();
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)

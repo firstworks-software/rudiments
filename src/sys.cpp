@@ -289,10 +289,7 @@ char *sys::getHostName() {
 		char	*hostname=file::getContents(fname.getString());
 
 		// clean up the list
-		for (linkedlistnode< char *> *n=nodenames.getFirst();
-							n; n=n->getNext()) {
-			delete[] n->getValue();
-		}
+		nodenames.clearAndArrayDelete();
 
 		// return the hostname
 		return (!charstring::isNullOrEmpty(hostname))?hostname:NULL;

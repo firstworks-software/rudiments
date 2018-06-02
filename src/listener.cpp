@@ -187,11 +187,7 @@ void listener::removeFileDescriptor(filedescriptor *fd) {
 }
 
 void listener::removeAllFileDescriptors() {
-	for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst();
-						node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	pvt->_fdlist.clear();
+	pvt->_fdlist.clearAndDelete();
 	pvt->_dirty=true;
 }
 

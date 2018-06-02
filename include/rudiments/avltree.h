@@ -80,7 +80,7 @@ class avltree {
 		avltree();
 
 		/** Deletes this instance of the avltree class and all of
-		 *  its avltreenodes.  Note however, that the data stored
+		 *  its avltreenodes.  Note however, that the value stored
 		 *  in each avltreenode is not deleted by this call. */
 		~avltree();
 
@@ -159,9 +159,18 @@ class avltree {
 							valuetype value);
 
 		/** Deletes all avltreenodes currently in the avltree.
-		 *  Note however, that the data stored in each avltreenode
+		 *  Note however, that the value stored in each avltreenode
 		 *  is not deleted by this call. */
 		void	clear();
+
+		/** Deletes all avltreenodes currently in the avltree,
+		 *  deleting the value stored in each avltreenode as well. */
+		void	clearAndDelete();
+
+		/** Deletes all avltreenodes currently in the avltree,
+		 *  deleting the value stored in each avltreenode as well,
+		 *  which is presuemd to be an array. */
+		void	clearAndArrayDelete();
 
 		/** Prints out an xml-style representation of the avltree. */
 		void	print() const;

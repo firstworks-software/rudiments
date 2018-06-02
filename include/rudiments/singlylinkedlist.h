@@ -67,7 +67,7 @@ class singlylinkedlist {
 		singlylinkedlist();
 
 		/** Deletes this instance of the singlylinkedlist class and all
-		 *  of its singlylinkedlistnodes.  Note however, that the data
+		 *  of its singlylinkedlistnodes.  Note however, that the value
 		 *  stored in each singlylinkedlistnode is not deleted by this
 		 *  call. */
 		~singlylinkedlist();
@@ -180,9 +180,20 @@ class singlylinkedlist {
 		void	heapSort();
 
 		/** Deletes all singlylinkedlistnodes currently in the
-		 *  singlylinkedlist.  Note however, that the data stored in
+		 *  singlylinkedlist.  Note however, that the value stored in
 		 *  each singlylinkedlistnode is not deleted by this call. */
 		void	clear();
+
+		/** Deletes all singlylinkedlistnodes currently in the
+		 *  singlylinkedlist, deleting the value stored in each
+		 *  singlylinkedlistnode as well. */
+		void	clearAndDelete();
+
+		/** Deletes all singlylinkedlistnodes currently in the
+		 *  singlylinkedlist, deleting the value stored in each
+		 *  singlylinkedlistnode as well, which is presumed to be
+		 *  an array. */
+		void	clearAndArrayDelete();
 
 		/** Prints out a representation of the linkedlist. */
 		void	print() const;

@@ -175,8 +175,50 @@ class dictionary {
 		/** Returns the list used internally. */
 		linkedlist< dictionarynode<keytype,valuetype> *> *getList();
 
-		/** Deletes all dictionarynodes currently in the dictionary. */
+		/** Deletes all dictionarynodes currently in the dictionary.
+		 *  Note however, that the key and value stored in each
+		 *  dictionarynode is not deleted by this call. */
 		void	clear();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the key and value stored in each dictionarynode
+		 *  as well. */
+		void	clearAndDelete();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the key and value stored in each dictionarynode
+		 *  as well, which is both presumed to be arrays. */
+		void	clearAndArrayDelete();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the key (but not the value) stored in each
+		 *  dictionarynode as well. */
+		void	clearAndDeleteKeys();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the key (but not the value) stored in each
+		 *  dictionarynode as well, which is presumed to be an array. */
+		void	clearAndArrayDeleteKeys();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the value (but not the key) stored in each
+		 *  dictionarynode as well. */
+		void	clearAndDeleteValues();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the value (but not the key) stored in each
+		 *  dictionarynode as well, which is presumed to be an array. */
+		void	clearAndArrayDeleteValues();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the key and value stored in each dictionarynode
+		 *  as well.  Each value is presumed to be an array.*/
+		void	clearAndDeleteKeysAndArrayDeleteValues();
+
+		/** Deletes all dictionarynodes currently in the dictionary,
+		 *  deleting the key and value stored in each dictionarynode
+		 *  as well.  Each key is presumed to be an array.*/
+		void	clearAndArrayDeleteKeysAndDeleteValues();
 
 		/** Prints out a representation of the dictionary. */
 		void	print();

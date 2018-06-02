@@ -3,7 +3,6 @@
 
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
-#include <rudiments/linkedlist.h>
 #include <rudiments/filesystem.h>
 #include <rudiments/sys.h>
 
@@ -63,11 +62,7 @@ xmldom::~xmldom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
-	for (linkedlistnode< dictionarynode< char *, uint64_t> *>
-				*node=pvt->_strcache.getList()->getFirst();
-				node; node=node->getNext()) {
-		delete[] node->getValue()->getKey();
-	}
+	pvt->_strcache.clearAndArrayDeleteKeys();
 	delete pvt;
 }
 
@@ -111,12 +106,7 @@ void xmldom::reset() {
 		delete pvt->_rootnode;
 		pvt->_rootnode=pvt->_nullnode;
 	}
-	for (linkedlistnode< dictionarynode< char *, uint64_t> *>
-				*node=pvt->_strcache.getList()->getFirst();
-				node; node=node->getNext()) {
-		delete[] node->getValue()->getKey();
-	}
-	pvt->_strcache.clear();
+	pvt->_strcache.clearAndArrayDeleteKeys();
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
 	pvt->_top=NULL;

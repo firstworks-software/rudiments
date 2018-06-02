@@ -196,6 +196,106 @@ void DICTIONARY_CLASS::clear() {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndDelete() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete node->getValue()->getKey();
+		delete node->getValue()->getValue();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndArrayDelete() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete[] node->getValue()->getKey();
+		delete[] node->getValue()->getValue();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndDeleteKeys() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete node->getValue()->getKey();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndArrayDeleteKeys() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete[] node->getValue()->getKey();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndDeleteValues() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete node->getValue()->getValue();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndArrayDeleteValues() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete[] node->getValue()->getValue();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndDeleteKeysAndArrayDeleteValues() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete node->getValue()->getKey();
+		delete[] node->getValue()->getValue();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clearAndArrayDeleteKeysAndDeleteValues() {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
+		delete[] node->getValue()->getKey();
+		delete node->getValue()->getValue();
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 linkedlist<keytype> *DICTIONARY_CLASS::getKeys() {
 	linkedlist<keytype>	*keys=new linkedlist<keytype>();
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *>

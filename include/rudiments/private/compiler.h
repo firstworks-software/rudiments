@@ -10,7 +10,4 @@
 				xmldomnode *xmlparams,
 				linkedlist< compilermodule * > *modulelist);
 
-		void	clearModules(
-				linkedlist< compilermodule * > *modulelist);
-
 		compilerprivate	*pvt;

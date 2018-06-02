@@ -65,19 +65,11 @@ compiler::compiler() {
 }
 
 compiler::~compiler() {
-
-	clearModules(&(pvt->_preprocessors));
-	clearModules(&(pvt->_processors));
-	clearModules(&(pvt->_postprocessors));
-
-	for (linkedlistnode< dynamiclib * >
-			*plnode=pvt->_plugins.getFirst();
-			plnode; plnode=plnode->getNext()) {
-		delete plnode->getValue();
-	}
-
-	clearModulePaths();
-
+	pvt->_preprocessors.clearAndDelete();
+	pvt->_processors.clearAndDelete();
+	pvt->_postprocessors.clearAndDelete();
+	pvt->_plugins.clearAndDelete();
+	pvt->_modulepaths.clearAndArrayDelete();
 	delete pvt;
 }
 
@@ -86,12 +78,7 @@ void compiler::appendModulePath(const char *path) {
 }
 
 void compiler::clearModulePaths() {
-	for (linkedlistnode< char * >
-			*mpnode=pvt->_modulepaths.getFirst();
-			mpnode; mpnode=mpnode->getNext()) {
-		delete[] mpnode->getValue();
-	}
-	pvt->_modulepaths.clear();
+	pvt->_modulepaths.clearAndArrayDelete();
 }
 
 linkedlist< char * >	*compiler::getModulePaths() {
@@ -180,16 +167,6 @@ bool compiler::appendModule(const char *filename,
 	return true;;
 }
 
-void compiler::clearModules(linkedlist< compilermodule * > *modulelist) {
-	for (linkedlistnode< compilermodule * >
-			*node=modulelist->getFirst();
-			node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	modulelist->clear();
-}
-
-
 void compiler::appendPreProcessor(compilerpreprocessor *module) {
 	pvt->_preprocessors.append(module);
 }
@@ -211,7 +188,7 @@ bool compiler::appendPreProcessor(const char *filename,
 }
 
 void compiler::clearPreProcessors() {
-	clearModules(&(pvt->_preprocessors));
+	pvt->_preprocessors.clearAndDelete();
 }
 
 linkedlist< compilermodule * > *compiler::getPreProcessors() {
@@ -239,7 +216,7 @@ bool compiler::appendProcessor(const char *filename,
 }
 
 void compiler::clearProcessors() {
-	clearModules(&(pvt->_processors));
+	pvt->_processors.clearAndDelete();
 }
 
 linkedlist< compilermodule * > *compiler::getProcessors() {
@@ -267,7 +244,7 @@ bool compiler::appendPostProcessor(const char *filename,
 }
 
 void compiler::clearPostProcessors() {
-	clearModules(&(pvt->_postprocessors));
+	pvt->_postprocessors.clearAndDelete();
 }
 
 linkedlist< compilermodule * > *compiler::getPostProcessors() {

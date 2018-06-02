@@ -511,6 +511,14 @@ void LINKEDLIST_CLASS::heapSort() {
 	}
 }
 
+// NOTE: Don't collapse the clear methods into a single method, or the compiler
+// will attempt to compile calls to:
+// 	delete current->getValue();
+// 	and
+// 	delete[] current->getValue();
+// even if the app just calls clear().  This will fail for primitive types or
+// when the type has a private destructor.
+
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::clear() {
@@ -518,6 +526,38 @@ void LINKEDLIST_CLASS::clear() {
 	linkedlistnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
+		delete current;
+		current=next;
+	}
+	first=NULL;
+	last=NULL;
+	length=0;
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::clearAndDelete() {
+	linkedlistnode<valuetype>	*next;
+	linkedlistnode<valuetype>	*current=first;
+	while (current) {
+		next=current->getNext();
+		delete current->getValue();
+		delete current;
+		current=next;
+	}
+	first=NULL;
+	last=NULL;
+	length=0;
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::clearAndArrayDelete() {
+	linkedlistnode<valuetype>	*next;
+	linkedlistnode<valuetype>	*current=first;
+	while (current) {
+		next=current->getNext();
+		delete[] current->getValue();
 		delete current;
 		current=next;
 	}

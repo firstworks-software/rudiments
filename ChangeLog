@@ -8,6 +8,8 @@
 	disabled chown in file test on Windows (not reliable over cifs)
 	fixed file descriptor passing on OSR
 	updated xmldomnode::print() to use the output interface
+	added various clearAndDelete...() methods to container classes
+	reenabled chat class by default
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

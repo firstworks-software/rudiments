@@ -229,6 +229,14 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 	return current;
 }
 
+// NOTE: Don't collapse the clear methods into a single method, or the compiler
+// will attempt to compile calls to:
+// 	delete current->getValue();
+// 	and
+// 	delete[] current->getValue();
+// even if the app just calls clear().  This will fail for primitive types or
+// when the type has a private destructor.
+
 AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void AVLTREE_CLASS::clear() {
@@ -270,6 +278,114 @@ void AVLTREE_CLASS::clear() {
 		// on the tree itself.
 		i++;
 		#endif
+		delete node;
+
+		// continue with parent...
+		node=p;
+	}
+
+	#ifdef DEBUG_AVLTREE
+	stdoutput.printf("} cleared %d nodes\n\n",i);
+	#endif
+
+	// clear pointers and length
+	top=NULL;
+	first=NULL;
+	last=NULL;
+	length=0;
+}
+
+AVLTREE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void AVLTREE_CLASS::clearAndDelete() {
+
+	#ifdef DEBUG_AVLTREE
+	uint64_t	i=0;
+	stdoutput.printf("clearing %d nodes {\n",length);
+	#endif
+
+	// start at the top
+	AVLTREENODE_CLASS	*node=top;
+	while (node) {
+
+		// go right one, then go left as far as possible
+		if (node->getRightChild()) {
+			node=node->getRightChild();
+		}
+		while (node->getLeftChild()) {
+			node=node->getLeftChild();
+		}
+
+		// get the parent
+		AVLTREENODE_CLASS	*p=node->getParent();
+		if (p) {
+			if (p->getLeftChild()==node) {
+				p->setLeftChild(NULL);
+			} else {
+				p->setRightChild(NULL);
+			}
+		}
+
+		// delete the node
+		#ifdef DEBUG_AVLTREE
+		stdoutput.printf("	clearing %lld\n",i);
+		i++;
+		#endif
+		delete node->getValue();
+		delete node;
+
+		// continue with parent...
+		node=p;
+	}
+
+	#ifdef DEBUG_AVLTREE
+	stdoutput.printf("} cleared %d nodes\n\n",i);
+	#endif
+
+	// clear pointers and length
+	top=NULL;
+	first=NULL;
+	last=NULL;
+	length=0;
+}
+
+AVLTREE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void AVLTREE_CLASS::clearAndArrayDelete() {
+
+	#ifdef DEBUG_AVLTREE
+	uint64_t	i=0;
+	stdoutput.printf("clearing %d nodes {\n",length);
+	#endif
+
+	// start at the top
+	AVLTREENODE_CLASS	*node=top;
+	while (node) {
+
+		// go right one, then go left as far as possible
+		if (node->getRightChild()) {
+			node=node->getRightChild();
+		}
+		while (node->getLeftChild()) {
+			node=node->getLeftChild();
+		}
+
+		// get the parent
+		AVLTREENODE_CLASS	*p=node->getParent();
+		if (p) {
+			if (p->getLeftChild()==node) {
+				p->setLeftChild(NULL);
+			} else {
+				p->setRightChild(NULL);
+			}
+		}
+
+		// delete the node
+		#ifdef DEBUG_AVLTREE
+		stdoutput.printf("	clearing %lld\n",i);
+		i++;
+		#endif
+		delete[] node->getValue();
 		delete node;
 
 		// continue with parent...
