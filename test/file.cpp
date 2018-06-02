@@ -77,7 +77,10 @@ int main(int argc, const char **argv) {
 
 		// not supported on syllable
 		if (charstring::compare(osname,"syllable")) {
+			// not reliable over cifs
+			#ifndef WIN32
 			test("chown",fl.changeOwner(username,groupname));
+			#endif
 		}
 
 		delete[] username;
