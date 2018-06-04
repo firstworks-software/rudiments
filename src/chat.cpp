@@ -134,7 +134,12 @@ void chat::appendAbortString(const char *string) {
 }
 
 void chat::clearAbortStrings() {
-	pvt->_aborts.clearAndArrayDelete();
+	for (singlylinkedlistnode< char * > *sln=pvt->_aborts.getFirst();
+						sln; sln=sln->getNext()) {
+		char	*abortstring=sln->getValue();
+		delete[] abortstring;
+	}
+	pvt->_aborts.clear();
 }
 
 void chat::flush() {
