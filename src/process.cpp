@@ -1133,13 +1133,14 @@ bool process::getRetryFailedFork() {
 	return _retry;
 }
 
-void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
+void process::backtrace(output *out, uint32_t maxframes) {
 	#if defined(RUDIMENTS_HAVE_BACKTRACE)
 		unsigned char	**btarray=new unsigned char *[maxframes];
 		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
 		char	**btstrings=backtrace_symbols((void **)btarray,btsize);
 		for (size_t i=0; i<btsize; i++) {
-			buffer->append(btstrings[i])->append('\n');
+			out->write(btstrings[i]);
+			out->write('\n');
 		}
 		delete[] btstrings;
 		delete[] btarray;
@@ -1164,11 +1165,11 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 		for (WORD i=0; i<btsize; i++) {
 			if (SymFromAddr(process,(DWORD64)btarray[i],
 							NULL,symbolinfo)) {
-				buffer->append("\?\?\?(")->
-					append(symbolinfo->Name)->
-					append(")[0x")->
-					append(symbolinfo->Address)->
-					append("]\n");
+				output->write("\?\?\?(");
+				output->write(symbolinfo->Name);
+				output->write(")[0x");
+				output->write(symbolinfo->Address);
+				output->write("]\n");
 			}
 		}
 		free(line);
@@ -1177,26 +1178,8 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 	#endif
 }
 
-void process::backtrace(stringbuffer *buffer) {
-	backtrace(buffer,128);
-}
-
-void process::backtrace(filedescriptor *fd, uint32_t maxframes) {
-	#ifdef RUDIMENTS_HAVE_BACKTRACE
-		unsigned char	**btarray=new unsigned char *[maxframes];
-		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
-		backtrace_symbols_fd((void **)btarray,btsize,
-					fd->getFileDescriptor());
-		delete[] btarray;
-	#else
-		stringbuffer	buf;
-		backtrace(&buf,maxframes);
-		fd->write(buf.getString(),buf.getStringLength());
-	#endif
-}
-
-void process::backtrace(filedescriptor *fd) {
-	backtrace(fd,128);
+void process::backtrace(output *out) {
+	backtrace(out,128);
 }
 
 void process::backtrace(const char *filename) {

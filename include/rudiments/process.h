@@ -362,8 +362,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  to include in the backtrace.
 		 *
 		 *  (Not supported on all platforms.) */
-		static void	backtrace(stringbuffer *buffer,
-						uint32_t maxframes);
+		static void	backtrace(output *out, uint32_t maxframes);
 
 		/** Writes the backtrace for the current thread to "buffer".
 		 *  
@@ -371,26 +370,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  backtrace.
 		 *  
 		 *  (Not supported on all platforms.) */
-		static void	backtrace(stringbuffer *buffer);
-
-		/** Writes the backtrace for the current thread to the
-		 *  filedescriptor "fd".
-		 *  
-		 *  "maxframes" indicates the maximum number of stack frames
-		 *  to include in the backtrace.
-		 *
-		 *  (Not supported on all platforms.) */
-		static void	backtrace(filedescriptor *fd,
-						uint32_t maxframes);
-
-		/** Writes the backtrace for the current thread to the
-		 *  filedescriptor "fd".
-		 *  
-		 *  A maximum of 128 stack frames will be included in the
-		 *  backtrace.
-		 *  
-		 *  (Not supported on all platforms.) */
-		static void	backtrace(filedescriptor *fd);
+		static void	backtrace(output *out);
 
 		/** Appends the backtrace for the current thread to "filename".
 		 *  
