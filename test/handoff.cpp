@@ -13,6 +13,7 @@
 #include <rudiments/process.h>
 #include <rudiments/snooze.h>
 #include <rudiments/sys.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 

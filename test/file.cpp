@@ -12,6 +12,7 @@
 #include <rudiments/sys.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
+#include <rudiments/stringbuffer.h>
 #include "test.cpp"
 
 const char	*testfiletxt="testfile.txt";

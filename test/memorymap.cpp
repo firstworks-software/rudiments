@@ -8,6 +8,7 @@
 #include <rudiments/memorymap.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 

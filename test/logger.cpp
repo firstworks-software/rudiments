@@ -6,6 +6,7 @@
 #include <rudiments/datetime.h>
 #include <rudiments/snooze.h>
 #include <rudiments/process.h>
+#include <rudiments/stringbuffer.h>
 #ifdef RUDIMENTS_HAVE_SYSLOG_H
 	#include <syslog.h>
 #endif
