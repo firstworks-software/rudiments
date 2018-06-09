@@ -3,6 +3,9 @@
 
 #include <rudiments/input.h>
 
+input::~input() {
+}
+
 ssize_t input::read(unsigned char *string, size_t size,
 						int32_t sec, int32_t usec) {
 	return read(string,size);
