@@ -12,6 +12,8 @@
 	reenabled chat class by default
 	updated process::backtrace() to take an output, consolidated methods
 	added explicit virtual destructors to input/output classes
+	removed unused containerutilinlines.h header
+	improved dlopen/-ldl configure test
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

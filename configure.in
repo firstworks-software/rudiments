@@ -2963,16 +2963,48 @@ FILE f; f._fd=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE__FD,1,Some sys
 
 echo "******************************"
 
+if ( test "$INCLUDE_DYNAMICLIB" = "1" )
+then
 
 dnl Checks for dynamic loader functions
 echo
 echo "***** Dynamic Loader *********"
 
+DLOPEN=""
 AC_MSG_CHECKING(for dlopen)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_DLFCN_H
 	#include <dlfcn.h>
 #endif],
-dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+dlopen("",0);,DLOPEN="yes"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test "$DLOPEN" = "yes" )
+then
+	DLLIB=""
+	AC_MSG_CHECKING(whether we can link against -ldl)
+	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_DLFCN_H
+	#include <dlfcn.h>
+#endif],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	if ( test -z "$DLLIB" )
+	then
+		AC_MSG_CHECKING(whether we can link without -ldl)
+		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_DLFCN_H
+		#include <dlfcn.h>
+#endif],[dlopen("",0);],[$CPPFLAGS],[],[],[AC_MSG_RESULT(yes)],[DLOPEN=""; AC_MSG_RESULT(no)])
+	fi
+
+	if ( test -z "$DLOPEN" )
+	then
+		AC_MSG_WARN(no dlopen link configuration found - disabling dlopen)
+	fi
+
+	AC_SUBST(DLLIB)
+fi
+
+if ( test "$DLOPEN" = "yes" )
+then
+	AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen)
+fi
 
 AC_MSG_CHECKING(for LoadLibrary)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
@@ -2986,16 +3018,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test "$INCLUDE_DYNAMICLIB" = "1" )
-then
-	AC_MSG_CHECKING(whether we can link against -ldl)
-	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_DLFCN_H
-	#include <dlfcn.h>
-#endif],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
-fi
-AC_SUBST(DLLIB)
-
 echo "******************************"
+
+fi
 
 
 dnl Checks for byte swap functions
