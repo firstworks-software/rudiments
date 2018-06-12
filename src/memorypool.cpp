@@ -20,8 +20,9 @@
 #endif
 
 class memorypoolbuffer {
-	friend class memorypool;
-	private:
+	//friend class memorypool;
+	//private:
+	public:
 			memorypoolbuffer(size_t size);
 			~memorypoolbuffer();
 

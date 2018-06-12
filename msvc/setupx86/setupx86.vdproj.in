@@ -3966,26 +3966,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7B52BE99C06B4E07BAC48119C55A63C5"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\containerutilinlines.h"
-            "TargetName" = "8:containerutilinlines.h"
-            "Tag" = "8:"
-            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7CE47F030B0740E58274D2FAABDE1735"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\regularexpressionincludes.h"

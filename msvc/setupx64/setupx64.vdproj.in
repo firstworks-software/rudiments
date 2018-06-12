@@ -6072,26 +6072,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D99FD978482B4EF0ADC32F9449791AC4"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\containerutilinlines.h"
-            "TargetName" = "8:containerutilinlines.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DA2BB9B5D5CC4C43B81D22D0F249A5C5"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\input.h"

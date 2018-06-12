@@ -62,7 +62,6 @@ int main(int argc, const char **argv) {
 	a1.id=1;
 	a1.detach=false;
 
-
 	stdoutput.printf("attached...\n");
 
 	// run threads in attached mode
