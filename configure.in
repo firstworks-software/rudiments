@@ -342,6 +342,14 @@ AC_ARG_ENABLE(templateengine,
 	[  --disable-templateengine Don't build templateengine class],
 	INCLUDE_TEMPLATEENGINE="0",
 	INCLUDE_TEMPLATEENGINE="1")
+AC_ARG_ENABLE(csvsax,
+	[  --disable-csvsax        Don't build csvsax class],
+	INCLUDE_CSVSAX="0",
+	INCLUDE_CSVSAX="1")
+AC_ARG_ENABLE(csvdom,
+	[  --disable-csvdom        Don't build csvdom class],
+	INCLUDE_CSVDOM="0",
+	INCLUDE_CSVDOM="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -4219,12 +4227,28 @@ then
 	LOBJS="$LOBJS bytebuffer.lo"
 fi
 
+if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 dom.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h"
+	SRCS="$SRCS dom.cpp"
+	LOBJS="$LOBJS dom.lo"
+fi
+
 if ( test "$INCLUDE_XMLDOM" = "1" )
 then
 	HEADERS3="$HEADERS3 xmldom.h xmldomnode.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldom.h xmldomincludes.h xmldomnode.h xmldomnodeincludes.h"
 	SRCS="$SRCS xmldom.cpp xmldomnode.cpp"
 	LOBJS="$LOBJS xmldom.lo xmldomnode.lo"
+fi
+
+if ( test "$INCLUDE_XMLSAX" = "1" -o "$INCLUDE_CSVSAX" = "1" )
+then
+	HEADERS3="$HEADERS3 sax.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 sax.h saxincludes.h"
+	SRCS="$SRCS sax.cpp"
+	LOBJS="$LOBJS sax.lo"
 fi
 
 if ( test "$INCLUDE_XMLSAX" = "1" )
@@ -4312,6 +4336,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 templateengine.h templateengineincludes.h"
 	SRCS="$SRCS templateengine.cpp"
 	LOBJS="$LOBJS templateengine.lo"
+fi
+
+if ( test "$INCLUDE_CSVSAX" = "1" )
+then
+	HEADERS3="$HEADERS3 csvsax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS6 csvsax.h csvsaxincludes.h"
+	SRCS="$SRCS csvsax.cpp"
+	LOBJS="$LOBJS csvsax.lo"
+fi
+
+if ( test "$INCLUDE_CSVDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 csvdom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS6 csvdom.h csvdomincludes.h"
+	SRCS="$SRCS csvdom.cpp"
+	LOBJS="$LOBJS csvdom.lo"
 fi
 
 

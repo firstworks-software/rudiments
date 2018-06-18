@@ -3,6 +3,7 @@
 
 #include <rudiments/compiler.h>
 #include <rudiments/character.h>
+#include <rudiments/file.h>
 #include <rudiments/sys.h>
 
 

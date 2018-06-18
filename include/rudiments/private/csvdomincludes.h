@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/dll.h>
-#include <rudiments/sax.h>
+#include <rudiments/csvsax.h>
+#include <rudiments/dom.h>
+
+#include <sys/types.h>

@@ -1,15 +1,11 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2018 David Muse
 // See the COPYING file for more information
 
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
+#include <rudiments/file.h>
 #include <rudiments/filesystem.h>
 #include <rudiments/sys.h>
-
-// FIXME: what needs this?
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
 
 class xmldomprivate {
 	friend class xmldom;
@@ -18,23 +14,21 @@ class xmldomprivate {
 		xmldomnode		*_rootnode;
 		xmldomnode		*_currentparent;
 		xmldomnode		*_currentattribute;
-		bool			_stringcacheenabled;
-		dictionary< char *, uint64_t >	_strcache;
 
 		xmldomnode		*_top;
 		uint64_t		_topposition;
 };
 
-xmldom::xmldom() : xmlsax() {
+xmldom::xmldom() : xmlsax(), dom() {
 	init(true);
 }
 
-xmldom::xmldom(bool stringcacheenabled) : xmlsax() {
+xmldom::xmldom(bool stringcacheenabled) : xmlsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-xmldom::xmldom(const xmldom &x) : xmlsax() {
-	init(x.pvt->_stringcacheenabled);
+xmldom::xmldom(const xmldom &x) : xmlsax(), dom() {
+	init(stringCacheEnabled());
 	pvt->_rootnode=x.pvt->_rootnode->clone(this);
 }
 
@@ -52,7 +46,6 @@ void xmldom::init(bool stringcacheenabled) {
 	pvt->_rootnode=pvt->_nullnode;
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
-	pvt->_stringcacheenabled=stringcacheenabled;
 	pvt->_top=NULL;
 	pvt->_topposition=0;
 }
@@ -62,7 +55,6 @@ xmldom::~xmldom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
-	pvt->_strcache.clearAndArrayDeleteKeys();
 	delete pvt;
 }
 
@@ -106,15 +98,12 @@ void xmldom::reset() {
 		delete pvt->_rootnode;
 		pvt->_rootnode=pvt->_nullnode;
 	}
-	pvt->_strcache.clearAndArrayDeleteKeys();
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
 	pvt->_top=NULL;
 	pvt->_topposition=0;
-}
-
-bool xmldom::stringCacheEnabled() {
-	return pvt->_stringcacheenabled;
+	dom::reset();
+	xmlsax::reset();
 }
 
 bool xmldom::writeFile(const char *filename, mode_t perms) const {
@@ -221,37 +210,6 @@ bool xmldom::cdata(const char *string) {
 					CDATA_XMLDOMNODETYPE,
 					NULL,"cdata",string));
 	return true;
-}
-
-const char *xmldom::cacheString(const char *string) {
-	if (!string) {
-		return NULL;
-	}
-	dictionarynode< char *, uint64_t > 	*node=
-				pvt->_strcache.getNode((char *)string);
-	if (node) {
-		node->setValue(node->getValue()+1);
-		return node->getKey();
-	}
-	char	*copy=charstring::duplicate(string);
-	pvt->_strcache.setValue(copy,1);
-	return copy;
-}
-
-void xmldom::unCacheString(const char *string) {
-	if (!string) {
-		return;
-	}
-	dictionarynode< char *, uint64_t > 	*node=
-				pvt->_strcache.getNode((char *)string);
-	if (node) {
-		node->setValue(node->getValue()-1);
-		if (!node->getValue()) {
-			char	*data=node->getKey();
-			pvt->_strcache.remove(node);
-			delete[] data;
-		}
-	}
 }
 
 void xmldom::insertChild(xmldomnode *child) {

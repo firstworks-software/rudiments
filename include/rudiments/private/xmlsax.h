@@ -1,13 +1,8 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
 	private:
-			void	reset();
-			void	close();
 			bool	parse();
-			bool	parseLocalFile(const char *filename);
-			bool	parseRemoteFile(const char *filename);
-			void	parseFailed();
 			bool	parseTag(char current, char *next);
 			void	parseTagFailed();
 			bool	parseTagName(char current,
@@ -21,9 +16,6 @@
 			void	parseAttributeFailed();
 			bool	parseText(char current, char *next);
 			void	parseTextFailed();
-			char	skipWhitespace(char current);
-			char	getCharacter();
-			bool	mapFile();
 
 				xmlsax(const xmlsax &x);
 			xmlsax	&operator=(const xmlsax &x);

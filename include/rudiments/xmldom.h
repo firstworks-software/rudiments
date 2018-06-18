@@ -1,4 +1,4 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
 #ifndef RUDIMENTS_XMLDOM_H
@@ -9,7 +9,7 @@
 class xmldomprivate;
 
 /** The xmldom class implements a minimal XML DOM parser. */
-class RUDIMENTS_DLLSPEC xmldom : public xmlsax {
+class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 	public:
 
 		/** Creates a new instance of the xmldom class. */
@@ -55,10 +55,6 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax {
 		/** Writes the current DOM tree to "filename" and sets
 		 *  permissions of the file to "perms". */
 		bool	writeFile(const char *filename, mode_t perms) const;
-
-		/** Returns true if the string cache is enabled and false
-		 *  if it is disabled. */
-		bool	stringCacheEnabled();
 
 	#include <rudiments/private/xmldom.h>
 };

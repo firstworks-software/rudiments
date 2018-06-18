@@ -1,4 +1,4 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
 	friend class xmldomnode;
@@ -18,9 +18,6 @@
 
 				xmldom(const xmldom &x);
 			xmldom	&operator=(const xmldom &x);
-
-			const char	*cacheString(const char *string);
-			void		unCacheString(const char *string);
 
 	private:
 			bool	parseFile(const char *string,

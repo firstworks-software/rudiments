@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/xmldom.h>
+#include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"

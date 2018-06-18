@@ -61,7 +61,8 @@ PROGS3= handoff \
 	url \
 	gssserver \
 	gssclient \
-	md5sum
+	md5sum \
+	csvsax
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -294,6 +295,9 @@ gssclient: gssclient.cpp gssclient.$(OBJ)
 
 md5sum: md5sum.cpp md5sum.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) md5sum.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+csvsax: csvsax.cpp csvsax.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csvsax.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 socketbench: socketbench.cpp socketbench.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) socketbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

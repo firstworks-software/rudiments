@@ -1,4 +1,4 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
 #ifndef RUDIMENTS_XMLSAX_H
@@ -8,10 +8,10 @@
 
 class xmlsaxprivate;
 
-/** The xmlsax class is a base class for an XML SAX parser.  To use this
- *  class, you should create a class that inherits from it and implements the
- *  virtual methods. */
-class RUDIMENTS_DLLSPEC xmlsax {
+/** The xmlsax class is a base class for an SAX-style parser for XML data.  To
+ *  use this class, you should create a class that inherits from it and
+ *  implements its protected virtual methods. */
+class RUDIMENTS_DLLSPEC xmlsax : public sax {
 	public:
 
 		/** Creates an instance of the xmlsax class. */
@@ -19,23 +19,6 @@ class RUDIMENTS_DLLSPEC xmlsax {
 
 		/** Deletes this instance of the xmlsax class. */
 		virtual	~xmlsax();
-
-
-		/** Parses file "filename" and calls the appropriate callback
-		 *  when tags, attributes, text, etc. are encountered.
-		 *
-		 *  Returns true on success or false otherwise. */
-		virtual bool	parseFile(const char *filename);
-
-		/** Parses "string"  and calls the appropriate callback
-		 *  when tags, attributes, text, etc. are encountered.
-		 *
-		 *  Returns true on success or false otherwise. */
-		virtual bool	parseString(const char *string);
-
-		/** If parseFile() or parseString() fails, this method
-		 *  returns the error that caused the failure. */
-		const char	*getError();
 
 	protected:
 
