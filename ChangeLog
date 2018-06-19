@@ -14,8 +14,9 @@
 	added explicit virtual destructors to input/output classes
 	removed unused containerutilinlines.h header
 	improved dlopen/-ldl configure test
-	split out sax and dom classes from xmlsax and xmldom
+	abstracted sax and dom classes
 	added csvsax and csvdom classes
+	renamed xmldomnode and xmldomevents to domnode and domevents
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

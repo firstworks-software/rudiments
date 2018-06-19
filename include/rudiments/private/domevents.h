@@ -4,4 +4,4 @@
 	private:
 		domnode	*findEvent(domnode *codetreenode);
 
-		xmldomeventsprivate	*pvt;
+		domeventsprivate	*pvt;

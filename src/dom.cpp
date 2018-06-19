@@ -8,7 +8,10 @@
 class domprivate {
 	friend class dom;
 	private:
-		bool			_stringcacheenabled;
+		domnode		*_nullnode;
+		domnode		*_rootnode;
+
+		bool				_stringcacheenabled;
 		dictionary< char *, uint64_t >	_strcache;
 };
 
@@ -22,27 +25,54 @@ dom::dom(bool stringcacheenabled) {
 
 dom::dom(const dom &x) {
 	init(x.pvt->_stringcacheenabled);
+	pvt->_rootnode=x.pvt->_rootnode->clone(this);
 }
 
 dom &dom::operator=(const dom &x) {
 	if (this!=&x) {
 		reset();
+		pvt->_rootnode=x.pvt->_rootnode->clone(this);
 	}
 	return *this;
 }
 
 void dom::init(bool stringcacheenabled) {
 	pvt=new domprivate;
+	pvt->_nullnode=domnode::createNullNode(this);
+	pvt->_rootnode=pvt->_nullnode;
 	pvt->_stringcacheenabled=stringcacheenabled;
 }
 
 dom::~dom() {
+	if (!pvt->_rootnode->isNullNode()) {
+		delete pvt->_rootnode;
+	}
+	delete pvt->_nullnode;
 	pvt->_strcache.clearAndArrayDeleteKeys();
 	delete pvt;
 }
 
 void dom::reset() {
+	if (!pvt->_rootnode->isNullNode()) {
+		pvt->_rootnode->cascadeOnDelete();
+		delete pvt->_rootnode;
+		pvt->_rootnode=pvt->_nullnode;
+	}
 	pvt->_strcache.clearAndArrayDeleteKeys();
+}
+
+void dom::createRootNode() {
+	pvt->_rootnode=new domnode(this,pvt->_nullnode,
+					ROOT_DOMNODETYPE,
+					NULL,"document",NULL);
+}
+
+domnode *dom::getRootNode() const {
+	return (pvt->_rootnode)?pvt->_rootnode:pvt->_nullnode;
+}
+
+domnode *dom::getNullNode() const {
+	return pvt->_nullnode;
 }
 
 bool dom::stringCacheEnabled() {

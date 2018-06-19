@@ -1,27 +1,27 @@
 // Copyright (c) 2015  David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_XMLDOMEVENTS_H
-#define RUDIMENTS_XMLDOMEVENTS_H
+#ifndef RUDIMENTS_DOMEVENTS_H
+#define RUDIMENTS_DOMEVENTS_H
 
 #include <rudiments/dom.h>
-#include <rudiments/private/xmldomeventsincludes.h>
+#include <rudiments/private/domeventsincludes.h>
 
-class xmldomeventsprivate;
+class domeventsprivate;
 
-typedef domnode *(*xmldomeventhandler_t)(domnode *codetreenode,
+typedef domnode *(*domeventhandler_t)(domnode *codetreenode,
 						domnode *eventtreenode,
 						void *data);
 
-class RUDIMENTS_DLLSPEC xmldomevents {
+class RUDIMENTS_DLLSPEC domevents {
 	public:
-		xmldomevents();
-		~xmldomevents();
+		domevents();
+		~domevents();
 
 		bool	setEvents(const char *events);
 
 		bool	setEventHandler(const char *event,
-					xmldomeventhandler_t handler);
+					domeventhandler_t handler);
 
 		bool	setData(void *data);
 
@@ -42,7 +42,7 @@ class RUDIMENTS_DLLSPEC xmldomevents {
 						domnode *eventtreenode,
 						void *data);
 
-	#include <rudiments/private/xmldomevents.h>
+	#include <rudiments/private/domevents.h>
 };
 
 #endif

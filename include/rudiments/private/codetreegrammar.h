@@ -9,8 +9,8 @@
 		bool	attributeValue(const char *value);
 
 		void	buildDefinitionDictionary();
-		void	buildNonTerminalNodeAssociations(xmldomnode *node);
+		void	buildNonTerminalNodeAssociations(domnode *node);
 
-		xmldomnode	*getDefinition(const char *name);
+		domnode	*getDefinition(const char *name);
 
 		codetreegrammarprivate	*pvt;

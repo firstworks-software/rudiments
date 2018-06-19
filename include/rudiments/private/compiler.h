@@ -7,7 +7,7 @@
 				const char *classname,
 				const char *id,
 				const char *textparams,
-				xmldomnode *xmlparams,
+				domnode *xmlparams,
 				linkedlist< compilermodule * > *modulelist);
 
 		compilerprivate	*pvt;

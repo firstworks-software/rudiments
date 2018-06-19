@@ -42,6 +42,16 @@ class RUDIMENTS_DLLSPEC dom {
 		/** Parses string "string" and generates a DOM tree. */
 		virtual bool	parseString(const char *string)=0;
 
+		/** Returns the root node of the DOM tree. */
+		virtual domnode	*getRootNode() const;
+
+		/** Returns the null node of the DOM tree. */
+		virtual domnode	*getNullNode() const;
+
+		/** Creates a new root node.  This is useful for building a
+		 *  tree from scratch. */
+		virtual void	createRootNode();
+
 		/** Writes the current DOM tree to "filename" and sets
 		 *  permissions of the file to "perms". */
 		virtual bool	writeFile(const char *filename,

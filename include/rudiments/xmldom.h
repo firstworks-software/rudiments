@@ -19,7 +19,7 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		 *  user to enable or disable the "string cache" for this
 		 *  instance.
 		 *
-		 *  By default, as each xmldomnode is added to the xmldom tree,
+		 *  By default, as each domnode is added to the xmldom tree,
 		 *  tag and attribute names and values are stored in a string
 		 *  cache and pointers into the cache are assigned to each node.
 		 *  Reference counters are kept and the string is removed from
@@ -28,8 +28,8 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		 *  speed.
 		 *
 		 *  If the string cache is disabled then memory is allocated in
-		 *  each xmldomnode for names and values and freed when the
-		 *  xmldomnode is freed.  This is faster but uses much more
+		 *  each domnode for names and values and freed when the
+		 *  domnode is freed.  This is faster but uses much more
 		 *  memory. */
 		xmldom(bool stringcacheenabled);
 
@@ -41,12 +41,6 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 
 		/** Parses string "string" and generates a DOM tree. */
 		bool	parseString(const char *string);
-
-		/** Returns the root node of the DOM tree. */
-		xmldomnode	*getRootNode() const;
-
-		/** Returns the null node of the DOM tree. */
-		xmldomnode	*getNullNode() const;
 
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */

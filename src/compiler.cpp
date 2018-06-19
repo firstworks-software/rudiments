@@ -44,7 +44,7 @@ class compilerprivate {
 		const char	*_startsymbol;
 		const char	*_outputgrammar;
 
-		xmldomnode	*_metadata;
+		domnode	*_metadata;
 
 		uint8_t		_debuglevel;
 
@@ -90,7 +90,7 @@ bool compiler::appendModule(const char *filename,
 				const char *classname,
 				const char *id,
 				const char *textparams,
-				xmldomnode *xmlparams,
+				domnode *xmlparams,
 				linkedlist< compilermodule *> *modulelist) {
 
 	pvt->_errorstr.clear();
@@ -175,7 +175,7 @@ void compiler::appendPreProcessor(compilerpreprocessor *module) {
 bool compiler::appendPreProcessor(const char *filename,
 						const char *classname,
 						const char *id,
-						xmldomnode *parameters) {
+						domnode *parameters) {
 	return appendModule(filename,classname,id,
 				NULL,parameters,&(pvt->_preprocessors));
 }
@@ -203,7 +203,7 @@ void compiler::appendProcessor(compilerprocessor *module) {
 bool compiler::appendProcessor(const char *filename,
 						const char *classname,
 						const char *id,
-						xmldomnode *parameters) {
+						domnode *parameters) {
 	return appendModule(filename,classname,id,
 				NULL,parameters,&(pvt->_processors));
 }
@@ -231,7 +231,7 @@ void compiler::appendPostProcessor(compilerpostprocessor *module) {
 bool compiler::appendPostProcessor(const char *filename,
 						const char *classname,
 						const char *id,
-						xmldomnode *parameters) {
+						domnode *parameters) {
 	return appendModule(filename,classname,id,
 				NULL,parameters,&(pvt->_postprocessors));
 }
@@ -263,7 +263,7 @@ bool compiler::setOutputGrammar(const char *grammar) {
 	return true;
 }
 
-void compiler::setMetaData(xmldomnode *metadata) {
+void compiler::setMetaData(domnode *metadata) {
 	pvt->_metadata=metadata;
 }
 
@@ -344,7 +344,7 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 		// parse into a tree
 		xmldom		tree;
 		tree.createRootNode();
-		xmldomnode	*root=tree.getRootNode();
+		domnode	*root=tree.getRootNode();
 		const char	*codeposition=NULL;
 		if (!pvt->_ct.parse(inptr,
 					pvt->_inputgrammar,
@@ -426,7 +426,7 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 	return true;
 }
 
-bool compiler::process(xmldomnode *root) {
+bool compiler::process(domnode *root) {
 
 	// process...
 	for (linkedlistnode< compilermodule *>
@@ -518,7 +518,7 @@ bool compilermodule::setParameters(const char *parameters) {
 	return true;
 }
 
-void compilermodule::setParameters(xmldomnode *parameters) {
+void compilermodule::setParameters(domnode *parameters) {
 	if (xmld) {
 		delete xmld;
 		xmld=NULL;
@@ -530,7 +530,7 @@ const char *compilermodule::getId() {
 	return id;
 }
 
-xmldomnode *compilermodule::getParameters() {
+domnode *compilermodule::getParameters() {
 	return parameters;
 }
 

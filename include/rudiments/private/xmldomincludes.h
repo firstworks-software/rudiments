@@ -4,6 +4,6 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/xmlsax.h>
 #include <rudiments/dom.h>
-#include <rudiments/xmldomnode.h>
+#include <rudiments/domnode.h>
 
 #include <sys/types.h>

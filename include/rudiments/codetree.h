@@ -351,7 +351,7 @@ class RUDIMENTS_DLLSPEC codetree {
 		bool	parse(const char *input,
 					const char *grammar,
 					const char *startsymbol,
-					xmldomnode *output,
+					domnode *output,
 					const char **codeposition);
 
 		/** Parses "input" using "grammar", starting with "startsymbol",
@@ -362,20 +362,20 @@ class RUDIMENTS_DLLSPEC codetree {
 		bool	parse(const char *input,
 					codetreegrammar *grammar,
 					const char *startsymbol,
-					xmldomnode *output,
+					domnode *output,
 					const char **codeposition);
 
 		/** Interprets the XML representation of the code "input" using
 		 *  "grammar" and appends it as code to "output".  Returns true
 		 *  if this succeeds and false otherwise. */
-		bool	write(xmldomnode *input,
+		bool	write(domnode *input,
 					const char *grammar,
 					stringbuffer *output);
 
 		/** Interprets the XML representation of the code "input" using
 		 *  "grammar" and appends it as code to "output".  Returns true
 		 *  if this succeeds and false otherwise. */
-		bool	write(xmldomnode *input,
+		bool	write(domnode *input,
 					codetreegrammar *grammar,
 					stringbuffer *output);
 
@@ -387,7 +387,7 @@ class RUDIMENTS_DLLSPEC codetree {
 
 class codetreegrammarprivate;
 
-/** A child class of xmldom with various codetree-specific optimizations. */
+/** A child class of dom with various codetree-specific optimizations. */
 class RUDIMENTS_DLLSPEC codetreegrammar : public xmldom {
 	friend class codetree;
 	public:

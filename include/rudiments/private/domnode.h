@@ -1,75 +1,75 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
 	friend class codetree;
 	friend class codetreegrammar;
-	friend class xmldomevents;
+	friend class domevents;
 	private:
-		void		init(xmldomnode *nullnode);
-		xmldomnode	*getNode(xmldomnode *first,
+		void		init(domnode *nullnode);
+		domnode	*getNode(domnode *first,
 					uint64_t position,
 					const char *ns,
 					const char *name,
 					bool ignorecase,
 					uint64_t count) const;
-		xmldomnode	*getAttribute(
+		domnode	*getAttribute(
 					const char *name,
 					bool ignorecase) const;
-		xmldomnode	*getFirstChild(
+		domnode	*getFirstChild(
 					const char *ns,
 					const char *name,
 					bool ignorecase) const;
-		xmldomnode	*getFirstChild(
-					const char *ns,
-					const char *name,
-					const char *attributename,
-					const char *attributevalue,
-					bool ignorecase) const;
-		xmldomnode	*getFirstTagChild(
-					const char *ns,
-					const char *name,
-					bool ignorecase) const;
-		xmldomnode	*getFirstTagChild(
+		domnode	*getFirstChild(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
-		xmldomnode	*getPreviousTagSibling(
+		domnode	*getFirstTagChild(
 					const char *ns,
 					const char *name,
 					bool ignorecase) const;
-		xmldomnode	*getPreviousTagSibling(
-					const char *ns,
-					const char *name,
-					const char *attributename,
-					const char *attributevalue,
-					bool ignorecase) const;
-		xmldomnode	*getNextTagSibling(
-					const char *ns,
-					const char *name,
-					bool ignorecase) const;
-		xmldomnode	*getNextTagSibling(
+		domnode	*getFirstTagChild(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
-		xmldomnode	*getFirstTagDescendent(
+		domnode	*getPreviousTagSibling(
 					const char *ns,
 					const char *name,
 					bool ignorecase) const;
-		xmldomnode	*getFirstTagDescendent(
+		domnode	*getPreviousTagSibling(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
-		bool		insertNode(xmldomnode *node,
+		domnode	*getNextTagSibling(
+					const char *ns,
+					const char *name,
+					bool ignorecase) const;
+		domnode	*getNextTagSibling(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const;
+		domnode	*getFirstTagDescendent(
+					const char *ns,
+					const char *name,
+					bool ignorecase) const;
+		domnode	*getFirstTagDescendent(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const;
+		bool		insertNode(domnode *node,
 					uint64_t position,
-					xmldomnodetype type,
-					xmldomnode **first,
-					xmldomnode **last,
+					domnodetype type,
+					domnode **first,
+					domnode **last,
 					uint64_t *count);
 		bool		deleteFirstChild(
 					const char *ns,
@@ -125,34 +125,34 @@
 					const char *newns,
 					const char *newname,
 					bool ignorecase);
-		bool		deleteNode(xmldomnode *node,
+		bool		deleteNode(domnode *node,
 					uint64_t position,
 					const char *name,
-					xmldomnode **first,
-					xmldomnode **last,
+					domnode **first,
+					domnode **last,
 					uint64_t *count);
-		xmldomnode	*unlinkNode(xmldomnode *node,
+		domnode		*unlinkNode(domnode *node,
 					uint64_t position,
 					const char *name,
-					xmldomnode **first,
-					xmldomnode **last,
+					domnode **first,
+					domnode **last,
 					uint64_t *count);
 		void		xml(output *out,
 					bool indent,
 					uint16_t *indentlevel) const;
 		void		safeWrite(output *out, const char *str) const;
-		bool		match(xmldomnode *node,
+		bool		match(domnode *node,
 						const char *ns,
 						const char *name,
 						bool ignorecase) const;
-		bool		match(xmldomnode *node,
+		bool		match(domnode *node,
 						const char *ns,
 						const char * const *set) const;
 
 		void	setPrivateData(void *privatedata);
 		void	*getPrivateData();
 
-				xmldomnode(const xmldomnode &x);
-		xmldomnode	&operator=(const xmldomnode &x);
+				domnode(const domnode &x);
+		domnode	&operator=(const domnode &x);
 
-		xmldomnodeprivate	*pvt;
+		domnodeprivate	*pvt;

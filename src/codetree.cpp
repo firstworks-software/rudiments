@@ -82,7 +82,7 @@ class codetreegrammarprivate {
 		char	_currentattribute;
 		bool	_hasrecursivebreak;
 
-		dictionary<const char *, xmldomnode *>	_definitions;
+		dictionary<const char *, domnode *>	_definitions;
 };
 
 codetreegrammar::codetreegrammar() : xmldom(false) {
@@ -189,7 +189,7 @@ void codetreegrammar::buildDefinitionDictionary() {
 	// codetree::write().
 
 	pvt->_definitions.clear();
-	for (xmldomnode *node=getRootNode()->
+	for (domnode *node=getRootNode()->
 				getFirstTagChild(GRAMMAR)->
 				getFirstTagChild(DEFINITION);
 			!node->isNullNode();
@@ -198,7 +198,7 @@ void codetreegrammar::buildDefinitionDictionary() {
 	}
 }
 
-void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
+void codetreegrammar::buildNonTerminalNodeAssociations(domnode *node) {
 
 	// For each <nonterminal> tag, this method attaches a pointer to the
 	// corresponding <definition> tag.  That way, when the parser encounters
@@ -216,14 +216,14 @@ void codetreegrammar::buildNonTerminalNodeAssociations(xmldomnode *node) {
 	}
 
 	// process children
-	for (xmldomnode *child=node->getFirstTagChild();
+	for (domnode *child=node->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		buildNonTerminalNodeAssociations(child);
 	}
 }
 
-xmldomnode *codetreegrammar::getDefinition(const char *name) {
-	xmldomnode	*def=pvt->_definitions.getValue(name);
+domnode *codetreegrammar::getDefinition(const char *name) {
+	domnode	*def=pvt->_definitions.getValue(name);
 	return (def)?def:getNullNode();
 }
 
@@ -238,7 +238,7 @@ class codetreeprivate {
 	friend class codetree;
 	private:
 		codetreegrammar		_grammar;
-		xmldomnode		*_grammartag;
+		domnode		*_grammartag;
 		bool			_error;
 		uint32_t		_depth;
 		const char		*_indentstring;
@@ -249,7 +249,7 @@ class codetreeprivate {
 		const char		*_finalcodeposition;
 		uint8_t			_debuglevel;
 		stringbuffer		_excbuffer;
-		xmldomnode		*_excnode;
+		domnode		*_excnode;
 		bool			_endofstring;
 
 		bool					_break;
@@ -285,7 +285,7 @@ void codetree::setDebugLevel(uint8_t debuglevel) {
 bool codetree::parse(const char *input,
 			const char *grammar,
 			const char *startsymbol,
-			xmldomnode *output,
+			domnode *output,
 			const char **codeposition) {
 
 	// load the input grammar
@@ -300,7 +300,7 @@ bool codetree::parse(const char *input,
 bool codetree::parse(const char *input,
 			codetreegrammar *grammar,
 			const char *startsymbol,
-			xmldomnode *output,
+			domnode *output,
 			const char **codeposition) {
 
 	// verify the grammar
@@ -318,9 +318,9 @@ bool codetree::parse(const char *input,
 						getDefinition(startsymbol));
 
 	// initialize a node for processing exceptions
-	pvt->_excnode=new xmldomnode(output->getTree(),
+	pvt->_excnode=new domnode(output->getTree(),
 					output->getNullNode(),
-					TAG_XMLDOMNODETYPE,
+					TAG_DOMNODETYPE,
 					NULL,"excnode",NULL);
 
 	// re-init the error
@@ -349,7 +349,7 @@ bool codetree::parse(const char *input,
 	return retval;
 }
 
-char codetree::getSymbolType(xmldomnode *nt) {
+char codetree::getSymbolType(domnode *nt) {
 	const char	*symboltype=nt->getAttributeValue(TYPE);
 	if (charstring::isNullOrEmpty(symboltype)) {
 		return INLINE;
@@ -357,7 +357,7 @@ char codetree::getSymbolType(xmldomnode *nt) {
 	return *symboltype;
 }
 
-bool codetree::isTag(xmldomnode *nt) {
+bool codetree::isTag(domnode *nt) {
 	const char	*tag=nt->getAttributeValue(TAG);
 	if (charstring::isNullOrEmpty(tag)) {
 		return false;
@@ -365,8 +365,8 @@ bool codetree::isTag(xmldomnode *nt) {
 	return (*tag==YES);
 }
 
-bool codetree::parseChild(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseChild(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -519,7 +519,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	if (retval) {
 
 		// if the next node is an exception...
-		xmldomnode	*sibling=grammarnode->getNextTagSibling();
+		domnode	*sibling=grammarnode->getNextTagSibling();
 		name=sibling->getName();
 		if (!sibling->isNullNode() && name && *name=='e') {
 
@@ -570,15 +570,15 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	return retval;
 }
 
-bool codetree::parseConcatenation(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseConcatenation(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
 	debugPrintf(4,"concatenation... {\n");
 
 	// all children must parse successfully
-	for (xmldomnode *child=grammarnode->getFirstTagChild();
+	for (domnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 
 		if ((pvt->_endofstring && !endOfStringOk(child)) || 
@@ -594,14 +594,14 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 	return true;
 }
 
-bool codetree::endOfStringOk(xmldomnode *grammarnode) {
+bool codetree::endOfStringOk(domnode *grammarnode) {
 
-	xmldomnode	*def=NULL;
+	domnode	*def=NULL;
 	const char	*name=NULL;
 
 	// if we hit the end of the string, then we've only parsed sucessfully
 	// if this node and everything downstream of it is optional
-	for (xmldomnode *sib=grammarnode;
+	for (domnode *sib=grammarnode;
 			!sib->isNullNode(); sib=sib->getNextTagSibling()) {
 
 		name=sib->getName();
@@ -617,7 +617,7 @@ bool codetree::endOfStringOk(xmldomnode *grammarnode) {
 			case EXCEPTION:
 				break;
 			case NONTERMINAL:
-				def=(xmldomnode *)sib->getPrivateData();
+				def=(domnode *)sib->getPrivateData();
 				if (!def || def->isNullNode()) {
 					return false;
 				}
@@ -639,8 +639,8 @@ bool codetree::endOfStringOk(xmldomnode *grammarnode) {
 	return true;
 }
 
-bool codetree::parseAlternation(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseAlternation(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
@@ -657,7 +657,7 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 
 	// one of the children must parse successfully
 	bool	retval=false;
-	for (xmldomnode *child=grammarnode->getFirstTagChild();
+	for (domnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		if (parseChild(child,treeparent,codeposition,ntbuffer)) {
 			retval=true;
@@ -688,8 +688,8 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 	return retval;
 }
 
-bool codetree::parseOption(xmldomnode *grammarnode, 
-				xmldomnode *treeparent,
+bool codetree::parseOption(domnode *grammarnode, 
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
@@ -708,15 +708,15 @@ bool codetree::parseOption(xmldomnode *grammarnode,
 	return true;
 }
 
-bool codetree::parseRepetition(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseRepetition(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
 	debugPrintf(4,"repetition... {\n");
 
 	// there should be only one child, and zero or more instances of it
-	xmldomnode	*child=grammarnode->getFirstTagChild();
+	domnode	*child=grammarnode->getFirstTagChild();
 	bool		anyfound=false;
 	for (;;) {
 
@@ -738,8 +738,8 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 	}
 }
 
-bool codetree::parseException(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseException(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
@@ -758,8 +758,8 @@ bool codetree::parseException(xmldomnode *grammarnode,
 	return false;
 }
 
-bool codetree::parseTerminal(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseTerminal(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -827,8 +827,8 @@ bool codetree::compareValue(const char *code,
 	return (lookforeot)?(*(code+lengthtocompare)=='\0'):true;
 }
 
-bool codetree::parseLetter(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseLetter(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -854,8 +854,8 @@ bool codetree::parseLetter(xmldomnode *grammarnode,
 	return false;
 }
 
-bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+bool codetree::parseLowerCaseLetter(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer) {
 
@@ -882,8 +882,8 @@ bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
 	return false;
 }
 
-bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+bool codetree::parseUpperCaseLetter(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer) {
 
@@ -910,8 +910,8 @@ bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
 	return false;
 }
 
-bool codetree::parseDigit(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseDigit(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -938,8 +938,8 @@ bool codetree::parseDigit(xmldomnode *grammarnode,
 }
 
 bool codetree::parseNonPrintableCharacter(
-				xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+				domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -965,8 +965,8 @@ bool codetree::parseNonPrintableCharacter(
 	return false;
 }
 
-bool codetree::parseSet(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseSet(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -996,8 +996,8 @@ bool codetree::parseSet(xmldomnode *grammarnode,
 	return false;
 }
 
-bool codetree::parseBreak(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseBreak(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
@@ -1035,13 +1035,13 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 	return false;
 }
 
-bool codetree::parseNonTerminal(xmldomnode *grammarnode,
-				xmldomnode *treeparent,
+bool codetree::parseNonTerminal(domnode *grammarnode,
+				domnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
 	// get the definition
-	xmldomnode	*def=(xmldomnode *)grammarnode->getPrivateData();
+	domnode	*def=(domnode *)grammarnode->getPrivateData();
 	if (!def || def->isNullNode()) {
 		debugPrintIndent(1);
 		debugPrintf(1,"ERROR: nonterminal %s not found\n",
@@ -1050,7 +1050,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 	}
 
 	// some variables...
-	xmldomnode	*codenode=NULL;
+	domnode	*codenode=NULL;
 	stringbuffer	*localntbuffer=NULL;
 	const char	*name=NULL;
 	const char	*alias=NULL;
@@ -1092,9 +1092,9 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 				name=alias;
 			}
 
-			codenode=new xmldomnode(treeparent->getTree(),
+			codenode=new domnode(treeparent->getTree(),
 						treeparent->getNullNode(),
-						TAG_XMLDOMNODETYPE,
+						TAG_DOMNODETYPE,
 						pvt->_ns,name,NULL);
 		}
 		if (symboltype==LITERAL) {
@@ -1219,7 +1219,7 @@ bool codetree::parseBreakStack(const char **codeposition) {
 	return false;
 }
 
-bool codetree::write(xmldomnode *input,
+bool codetree::write(domnode *input,
 			const char *grammar,
 			stringbuffer *output) {
 
@@ -1242,7 +1242,7 @@ bool codetree::write(xmldomnode *input,
 	return write(input,&pvt->_grammar,output);
 }
 
-bool codetree::write(xmldomnode *input,
+bool codetree::write(domnode *input,
 			codetreegrammar *grammar,
 			stringbuffer *output) {
 
@@ -1269,7 +1269,7 @@ bool codetree::write(xmldomnode *input,
 	return writeNode(input,output);
 }
 
-bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
+bool codetree::writeNode(domnode *node, stringbuffer *output) {
 
 	// we're done
 	if (node->isNullNode()) {
@@ -1286,8 +1286,8 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	}
 
 	// if it's the root node then just write the children and return
-	if (node->getType()==ROOT_XMLDOMNODETYPE) {
-		for (xmldomnode *child=node->getFirstTagChild();
+	if (node->getType()==ROOT_DOMNODETYPE) {
+		for (domnode *child=node->getFirstTagChild();
 				!child->isNullNode();
 				child=child->getNextTagSibling()) {
 			if (!writeNode(child,output)) {
@@ -1298,7 +1298,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	}
 
 	// get the node's definition
-	xmldomnode	*def=((codetreegrammar *)
+	domnode	*def=((codetreegrammar *)
 				(pvt->_grammartag->getTree()))->
 					getDefinition(node->getName());
 	if (def->isNullNode()) {
@@ -1328,7 +1328,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	writeStartEnd(output,start);
 	if (tag) {
 		output->append("<")->append(node->getName());
-		for (xmldomnode *att=node->getAttribute((uint64_t)0);
+		for (domnode *att=node->getAttribute((uint64_t)0);
 				!att->isNullNode(); att=att->getNextSibling()) {
 			if (charstring::compare(att->getName(),"value")) {
 				output->append(' ');
@@ -1358,7 +1358,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		}
 
 		// write the children
-		for (xmldomnode *child=node->getFirstTagChild();
+		for (domnode *child=node->getFirstTagChild();
 				!child->isNullNode();
 				child=child->getNextTagSibling()) {
 			if (!writeNode(child,output)) {

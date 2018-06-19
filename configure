@@ -850,7 +850,7 @@ enable_unixserver
 enable_bytebuffer
 enable_xmldom
 enable_xmlsax
-enable_xmldomevents
+enable_domevents
 enable_codetree
 enable_compiler
 enable_prompt
@@ -1558,7 +1558,7 @@ Optional Features:
   --disable-bytebuffer    Don't build bytebuffer class
   --disable-xmldom        Don't build xmldom class
   --disable-xmlsax        Don't build xmlsax class
-  --disable-xmldomevents  Don't build xmldomevents class
+  --disable-domevents  Don't build domevents class
   --disable-codetree      Don't build codetree class
   --disable-compiler      Don't build compiler class
   --disable-prompt        Don't build prompt class
@@ -3046,11 +3046,11 @@ else
   INCLUDE_XMLSAX="1"
 fi
 
-# Check whether --enable-xmldomevents was given.
-if test "${enable_xmldomevents+set}" = set; then :
-  enableval=$enable_xmldomevents; INCLUDE_XMLDOMEVENTS="0"
+# Check whether --enable-domevents was given.
+if test "${enable_domevents+set}" = set; then :
+  enableval=$enable_domevents; INCLUDE_DOMEVENTS="0"
 else
-  INCLUDE_XMLDOMEVENTS="1"
+  INCLUDE_DOMEVENTS="1"
 fi
 
 # Check whether --enable-codetree was given.
@@ -34417,18 +34417,18 @@ fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
 then
-	HEADERS3="$HEADERS3 dom.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h"
-	SRCS="$SRCS dom.cpp"
-	LOBJS="$LOBJS dom.lo"
+	HEADERS3="$HEADERS3 dom.h domnode.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h"
+	SRCS="$SRCS dom.cpp domnode.cpp"
+	LOBJS="$LOBJS dom.lo domnode.lo"
 fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )
 then
-	HEADERS3="$HEADERS3 xmldom.h xmldomnode.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldom.h xmldomincludes.h xmldomnode.h xmldomnodeincludes.h"
-	SRCS="$SRCS xmldom.cpp xmldomnode.cpp"
-	LOBJS="$LOBJS xmldom.lo xmldomnode.lo"
+	HEADERS3="$HEADERS3 xmldom.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldom.h xmldomincludes.h"
+	SRCS="$SRCS xmldom.cpp"
+	LOBJS="$LOBJS xmldom.lo"
 fi
 
 if ( test "$INCLUDE_XMLSAX" = "1" -o "$INCLUDE_CSVSAX" = "1" )
@@ -34447,12 +34447,12 @@ then
 	LOBJS="$LOBJS xmlsax.lo"
 fi
 
-if ( test "$INCLUDE_XMLDOMEVENTS" = "1" )
+if ( test "$INCLUDE_DOMEVENTS" = "1" )
 then
-	HEADERS3="$HEADERS3 xmldomevents.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldomevents.h xmldomeventsincludes.h"
-	SRCS="$SRCS xmldomevents.cpp"
-	LOBJS="$LOBJS xmldomevents.lo"
+	HEADERS3="$HEADERS3 domevents.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 domevents.h domeventsincludes.h"
+	SRCS="$SRCS domevents.cpp"
+	LOBJS="$LOBJS domevents.lo"
 fi
 
 if ( test "$INCLUDE_CODETREE" = "1" )

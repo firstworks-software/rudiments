@@ -2,72 +2,72 @@
 // See the COPYING file for more information.
 
 	private:
-		char	getSymbolType(xmldomnode *nt);
-		bool	isTag(xmldomnode *nt);
-		bool	parseChild(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		char	getSymbolType(domnode *nt);
+		bool	isTag(domnode *nt);
+		bool	parseChild(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseConcatenation(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseConcatenation(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	endOfStringOk(xmldomnode *grammarnode);
-		bool	parseAlternation(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	endOfStringOk(domnode *grammarnode);
+		bool	parseAlternation(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseOption(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseOption(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseRepetition(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseRepetition(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseException(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseException(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseTerminal(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseTerminal(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
 		bool	compareValue(const char *code,
 					const char *value,
 					size_t *valuelength,
 					const char *casesensitive);
-		bool	parseLetter(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseLetter(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseLowerCaseLetter(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseLowerCaseLetter(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseUpperCaseLetter(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseUpperCaseLetter(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseDigit(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseDigit(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
 		bool	parseNonPrintableCharacter(
-					xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+					domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseSet(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseSet(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseBreak(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseBreak(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	parseNonTerminal(xmldomnode *grammarnode,
-					xmldomnode *treeparent,
+		bool	parseNonTerminal(domnode *grammarnode,
+					domnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
 
@@ -75,7 +75,7 @@
 		void	popBreakStack();
 		bool	parseBreakStack(const char **codeposition);
 
-		bool	writeNode(xmldomnode *node,
+		bool	writeNode(domnode *node,
 					stringbuffer *output);
 		void	indent(stringbuffer *output);
 		void	writeStartEnd(stringbuffer *output,

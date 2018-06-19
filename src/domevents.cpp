@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/domevents.h>
+#include <rudiments/xmldom.h>
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || \
 	(defined(__USLC__) && !defined(__GNUC__)) || \
@@ -31,8 +32,8 @@
 class domeventsprivate {
 	friend class domevents;
 	private:
-		dom		_etree;
-		domnode	*_eventsnode;
+		xmldom		_etree;
+		domnode		*_eventsnode;
 		void		*_data;
 		uint8_t		_debuglevel;
 };

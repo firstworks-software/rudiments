@@ -3,7 +3,7 @@
 
 #include <rudiments/chat.h>
 #include <rudiments/xmldom.h>
-#include <rudiments/xmldomnode.h>
+#include <rudiments/domnode.h>
 #include <rudiments/regularexpression.h>
 #include <rudiments/snooze.h>
 #include <rudiments/charstring.h>
@@ -69,15 +69,15 @@ int32_t chat::runScript(const char *script, char **abort,
 	}
 
 	// get the <script> tag
-	xmldomnode	*root=xmld.getRootNode();
-	xmldomnode	*scriptnode=root->getFirstTagChild("script");
+	domnode	*root=xmld.getRootNode();
+	domnode	*scriptnode=root->getFirstTagChild("script");
 	if (root->isNullNode() || scriptnode->isNullNode()) {
 		return RESULT_ERROR;
 	}
 	root->cascadeOnDelete();
 
 	// run through the children of the <script> tag...
-	for (xmldomnode *node=scriptnode->getFirstTagChild();
+	for (domnode *node=scriptnode->getFirstTagChild();
 			!node->isNullNode();
 			node=node->getNextTagSibling()) {
 

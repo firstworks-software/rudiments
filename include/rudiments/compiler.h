@@ -29,7 +29,7 @@ class compilerpostprocessor;
  *
  *  In the processing step, the output of the final preprocessing module is
  *  parsed by an instance of the codetree class, using the provided input
- *  grammar, producing an xmldom tree which represents the code.  The tree and
+ *  grammar, producing an dom tree which represents the code.  The tree and
  *  optional metadata is then passed through a chain of processing modules which
  *  convert the tree from representing one type of code to a tree representing
  *  another type of code.  The output of the final processing module is
@@ -49,8 +49,8 @@ class compilerpostprocessor;
  *  The pre and post-processing modules directly manipulate code and might
  *  make heavy use of the file, charstring/bytestring and
  *  stringbuffer/bytebuffer classes.  The processing modules manipulate an
- *  xmldom tree representing code and would likely make heavy use of the
- *  xmldomnode class.
+ *  dom tree representing code and would likely make heavy use of the
+ *  domnode class.
  *  
  *
  *  The input and output code may be text or binary.  The framework is geared
@@ -95,7 +95,7 @@ class RUDIMENTS_DLLSPEC compiler {
 		bool	appendPreProcessor(const char *filename,
 						const char *classname,
 						const char *id,
-						xmldomnode *parameters);
+						domnode *parameters);
 
 		/** Dynamically loads preprocessor module "filename".
 		 *  Calls function new_"classname" to create an instance of
@@ -129,7 +129,7 @@ class RUDIMENTS_DLLSPEC compiler {
 		bool	appendProcessor(const char *filename,
 						const char *classname,
 						const char *id,
-						xmldomnode *parameters);
+						domnode *parameters);
 
 		/** Dynamically loads processor module "filename".
 		 *  Calls function new_"classname" to create an instance of
@@ -163,7 +163,7 @@ class RUDIMENTS_DLLSPEC compiler {
 		bool	appendPostProcessor(const char *filename,
 						const char *classname,
 						const char *id,
-						xmldomnode *parameters);
+						domnode *parameters);
 
 		/** Dynamically loads postprocessor module "filename".
 		 *  Calls function new_"classname" to create an instance of
@@ -210,7 +210,7 @@ class RUDIMENTS_DLLSPEC compiler {
 		 *
 		 *  When the compilation is complete, it may contain the
 		 *  locations of files that were created by the process. */
-		void	setMetaData(xmldomnode *metadata);
+		void	setMetaData(domnode *metadata);
 
 
 		/** Passes "input" through the preprocessors, input grammar,
@@ -242,7 +242,7 @@ class RUDIMENTS_DLLSPEC compiler {
 		 *  as well.
 		 *
 		 *  Returns true on success and false on failure.  */
-		bool	process(xmldomnode *root);
+		bool	process(domnode *root);
 
 
 		/** Returns the error that occurred if compile() fails. */
@@ -275,20 +275,20 @@ class RUDIMENTS_DLLSPEC compilermodule {
 		bool	setParameters(const char *parameters);
 
 		/** Sets parameters for this instance. */
-		void	setParameters(xmldomnode *parameters);
+		void	setParameters(domnode *parameters);
 
 		/** Returns the id of this instance. */
 		const char	*getId();
 
 		/** Returns the parameters of this instance. */
-		xmldomnode	*getParameters();
+		domnode	*getParameters();
 
 	protected:
 		const char	*id;
-		xmldomnode	*parameters;
+		domnode	*parameters;
 
 	private:
-		xmldom		*xmld;
+		dom		*xmld;
 };
 
 
@@ -313,7 +313,7 @@ class RUDIMENTS_DLLSPEC compilerpreprocessor : public compilermodule {
 		 *  Returns true on success and false on failure. */
 		virtual bool	process(const char *input,
 					stringbuffer *output,
-					xmldomnode *metadata)=0;
+					domnode *metadata)=0;
 };
 
 
@@ -336,8 +336,8 @@ class RUDIMENTS_DLLSPEC compilerprocessor : public compilermodule {
 		 *  optionally referring to and/or updating "metadata"
 		 *  during the process.
 		 *  Returns true on success and false on failure. */
-		virtual bool	process(xmldomnode *tree,
-					xmldomnode *metadata)=0;
+		virtual bool	process(domnode *tree,
+					domnode *metadata)=0;
 };
 
 
@@ -364,7 +364,7 @@ class RUDIMENTS_DLLSPEC compilerpostprocessor : public compilermodule {
 		 *  Returns true on success and false on failure. */
 		virtual bool	process(const char *input,
 					stringbuffer *output,
-					xmldomnode *metadata)=0;
+					domnode *metadata)=0;
 };
 
 #endif

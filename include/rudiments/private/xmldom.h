@@ -1,7 +1,7 @@
 // Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
-	friend class xmldomnode;
+	friend class domnode;
 	protected:
 			void	init(bool stringcacheenabled);
 			void	reset();
@@ -21,11 +21,11 @@
 
 	private:
 			bool	parseFile(const char *string,
-						xmldomnode *parent,
+						domnode *parent,
 						uint64_t position);
 			bool	parseString(const char *string,
-						xmldomnode *parent,
+						domnode *parent,
 						uint64_t position);
-			void	insertChild(xmldomnode *child);
+			void	insertChild(domnode *child);
 
 			xmldomprivate	*pvt;
