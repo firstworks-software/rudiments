@@ -4,13 +4,13 @@
 #ifndef RUDIMENTS_XMLDOMEVENTS_H
 #define RUDIMENTS_XMLDOMEVENTS_H
 
-#include <rudiments/xmldom.h>
+#include <rudiments/dom.h>
 #include <rudiments/private/xmldomeventsincludes.h>
 
 class xmldomeventsprivate;
 
-typedef xmldomnode *(*xmldomeventhandler_t)(xmldomnode *codetreenode,
-						xmldomnode *eventtreenode,
+typedef domnode *(*xmldomeventhandler_t)(domnode *codetreenode,
+						domnode *eventtreenode,
 						void *data);
 
 class RUDIMENTS_DLLSPEC xmldomevents {
@@ -25,21 +25,21 @@ class RUDIMENTS_DLLSPEC xmldomevents {
 
 		bool	setData(void *data);
 
-		bool	process(xmldomnode *codetreenode);
+		bool	process(domnode *codetreenode);
 
 		void	setDebugLevel(uint8_t debuglevel);
 
 
-		static	xmldomnode	*ignore(xmldomnode *codetreenode,
-						xmldomnode *eventtreenode,
+		static	domnode	*ignore(domnode *codetreenode,
+						domnode *eventtreenode,
 						void *data);
 
-		static	xmldomnode	*rename(xmldomnode *codetreenode,
-						xmldomnode *eventtreenode,
+		static	domnode	*rename(domnode *codetreenode,
+						domnode *eventtreenode,
 						void *data);
 
-		static	xmldomnode	*revalue(xmldomnode *codetreenode,
-						xmldomnode *eventtreenode,
+		static	domnode	*revalue(domnode *codetreenode,
+						domnode *eventtreenode,
 						void *data);
 
 	#include <rudiments/private/xmldomevents.h>

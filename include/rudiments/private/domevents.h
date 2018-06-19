@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		xmldomnode	*findEvent(xmldomnode *codetreenode);
+		domnode	*findEvent(domnode *codetreenode);
 
 		xmldomeventsprivate	*pvt;

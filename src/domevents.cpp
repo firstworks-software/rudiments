@@ -1,7 +1,7 @@
 // Copyright (c) 2015  David Muse
 // See the COPYING file for more information.
 
-#include <rudiments/xmldomevents.h>
+#include <rudiments/domevents.h>
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || \
 	(defined(__USLC__) && !defined(__GNUC__)) || \
@@ -28,26 +28,26 @@
 
 #endif
 
-class xmldomeventsprivate {
-	friend class xmldomevents;
+class domeventsprivate {
+	friend class domevents;
 	private:
-		xmldom		_etree;
-		xmldomnode	*_eventsnode;
+		dom		_etree;
+		domnode	*_eventsnode;
 		void		*_data;
 		uint8_t		_debuglevel;
 };
 
-xmldomevents::xmldomevents() {
-	pvt=new xmldomeventsprivate;
+domevents::domevents() {
+	pvt=new domeventsprivate;
 	pvt->_eventsnode=NULL;
 	pvt->_data=NULL;
 	pvt->_debuglevel=0;
 }
 
-xmldomevents::~xmldomevents() {
+domevents::~domevents() {
 }
 
-bool xmldomevents::setEvents(const char *events) {
+bool domevents::setEvents(const char *events) {
 
 	debugPrintf(1,"setting events... ");
 
@@ -65,14 +65,14 @@ bool xmldomevents::setEvents(const char *events) {
 	return true;
 }
 
-bool xmldomevents::setEventHandler(const char *event,
-					xmldomeventhandler_t handler) {
+bool domevents::setEventHandler(const char *event,
+					domeventhandler_t handler) {
 
 	debugPrintf(1,"setting event handler for %s... ",event);
 
 	// walk the event tree...
 	uint64_t	count=0;
-	for (xmldomnode *node=pvt->_etree.getRootNode();
+	for (domnode *node=pvt->_etree.getRootNode();
 				!node->isNullNode();
 				node=node->getNextTag()) {
 
@@ -94,12 +94,12 @@ bool xmldomevents::setEventHandler(const char *event,
 	return true;
 }
 
-bool xmldomevents::setData(void *data) {
+bool domevents::setData(void *data) {
 	pvt->_data=data;
 	return true;
 }
 
-bool xmldomevents::process(xmldomnode *codetreenode) {
+bool domevents::process(domnode *codetreenode) {
 
 	debugPrintf(1,"process {\n");
 
@@ -107,7 +107,7 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 	while (!codetreenode->isNullNode()) {
 
 		// find the corresponding node in the event tree
-		xmldomnode	*etnode=findEvent(codetreenode);
+		domnode	*etnode=findEvent(codetreenode);
 
 		// avoid loops...
 		// If this event tree node is already set as the private
@@ -128,11 +128,11 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		}
 
 		// get the event handler
-		xmldomeventhandler_t	handler=
-				(xmldomeventhandler_t)etnode->getPrivateData();
+		domeventhandler_t	handler=
+				(domeventhandler_t)etnode->getPrivateData();
 
 		// call the event handler
-		xmldomnode	*next=(handler)?
+		domnode	*next=(handler)?
 					handler(codetreenode,etnode,pvt->_data):
 					codetreenode;
 
@@ -165,7 +165,7 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 				}
 
 				// get the event handler
-				handler=(xmldomeventhandler_t)
+				handler=(domeventhandler_t)
 						etnode->getPrivateData();
 				if (!handler) {
 					continue;
@@ -193,7 +193,7 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 	return true;
 }
 
-xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
+domnode *domevents::findEvent(domnode *codetreenode) {
 
 	// get the name of the current code tree node, we'll need them later...
 	const char	*ctnodens=codetreenode->getNamespace();
@@ -213,7 +213,7 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 	// parent of this codetreenode has an event tree node attached to it,
 	// then start there.  If it doesn't, then start at the top of the 
 	// event node tree.
-	xmldomnode	*p=(xmldomnode *)codetreenode->
+	domnode	*p=(domnode *)codetreenode->
 					getParent()->getPrivateData();
 	if (!p || p->isNullNode()) {
 		p=pvt->_eventsnode;
@@ -225,7 +225,7 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 			p->getName());
 
 	// walk the children of the parent event tree node...
-	xmldomnode *c=p->getFirstTagChild(ctnodens,ctnodename);
+	domnode *c=p->getFirstTagChild(ctnodens,ctnodename);
 	while (!c->isNullNode()) {
 
 		// test values too, if necessary...
@@ -284,6 +284,6 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 	return c;
 }
 
-void xmldomevents::setDebugLevel(uint8_t debuglevel) {
+void domevents::setDebugLevel(uint8_t debuglevel) {
 	pvt->_debuglevel=debuglevel;
 }
