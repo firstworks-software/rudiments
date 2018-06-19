@@ -113,7 +113,9 @@ bool csvdom::writeFile(const char *filename, mode_t perms) const {
 }
 
 void csvdom::writeValue(file *fl, domnode *value) const {
+	// FIXME: don't write quotes unless original value was quoted
 	fl->write(getQuote());
+	// FIXME: escape chars...
 	fl->write(value->getAttributeValue("value"));
 	fl->write(getQuote());
 }
