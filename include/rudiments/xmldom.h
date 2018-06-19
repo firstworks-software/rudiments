@@ -50,6 +50,29 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		 *  permissions of the file to "perms". */
 		bool	writeFile(const char *filename, mode_t perms) const;
 
+	protected:
+
+		/** Gets called when a start tag is parsed. */
+		virtual	bool	tagStart(const char *ns, const char *name);
+
+		/** Gets called when an attribute name is parsed. */
+		virtual	bool	attributeName(const char *name);
+
+		/** Gets called when an attribute value is parsed. */
+		virtual	bool	attributeValue(const char *value);
+
+		/** Gets called when a block of text is parsed. */
+		virtual	bool	text(const char *string);
+
+		/** Gets called when an end tag is parsed. */
+		virtual	bool	tagEnd(const char *ns, const char *name);
+
+		/** Gets called when a comment is parsed. */
+		virtual	bool	comment(const char *string);
+
+		/** Gets called when cdata is parsed. */
+		virtual	bool	cdata(const char *string);
+
 	#include <rudiments/private/xmldom.h>
 };
 

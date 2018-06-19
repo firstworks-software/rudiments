@@ -3,6 +3,8 @@
 
 #include <rudiments/csvsax.h>
 #include <rudiments/stdio.h>
+#define DEBUG_MESSAGES
+#include <rudiments/debugprint.h>
 
 enum csvstate {
 	HEADER_START=0,
@@ -30,6 +32,9 @@ class csvsaxprivate {
 
 csvsax::csvsax() : sax() {
 	pvt=new csvsaxprivate;
+	pvt->_quote='"';
+	pvt->_escape='\\';
+	pvt->_delimiter=',';
 }
 
 csvsax::~csvsax() {
@@ -38,9 +43,6 @@ csvsax::~csvsax() {
 
 void csvsax::reset() {
 	pvt->_state=HEADER_START;
-	pvt->_quote='"';
-	pvt->_escape='\\';
-	pvt->_delimiter=',';
 	sax::reset();
 }
 
@@ -48,7 +50,7 @@ void csvsax::setQuote(char quote) {
 	pvt->_quote=quote;
 }
 
-char csvsax::getQuote() {
+char csvsax::getQuote() const {
 	return pvt->_quote;
 }
 
@@ -56,7 +58,7 @@ void csvsax::setDelimiter(char delimiter) {
 	pvt->_delimiter=delimiter;
 }
 
-char csvsax::getDelimiter() {
+char csvsax::getDelimiter() const {
 	return pvt->_delimiter;
 }
 
@@ -64,55 +66,55 @@ void csvsax::setEscape(char escape) {
 	pvt->_escape=escape;
 }
 
-char csvsax::getEscape() {
+char csvsax::getEscape() const {
 	return pvt->_escape;
 }
 
 bool csvsax::headerStart() {
 	// by default, just return success
-stdoutput.printf("headerStart {\n");
+	debugPrintf("headerStart {\n");
 	return true;
 }
 
 bool csvsax::column(const char *name) {
 	// by default, just return success
-stdoutput.printf("    column: \"%s\"\n",name);
+	debugPrintf("    column: \"%s\"\n",name);
 	return true;
 }
 
 bool csvsax::headerEnd() {
 	// by default, just return success
-stdoutput.printf("}\n");
+	debugPrintf("}\n");
 	return true;
 }
 
 bool csvsax::bodyStart() {
 	// by default, just return success
-stdoutput.printf("bodyStart {\n");
+	debugPrintf("bodyStart {\n");
 	return true;
 }
 
 bool csvsax::rowStart() {
 	// by default, just return success
-stdoutput.printf("    rowStart {\n");
+	debugPrintf("    rowStart {\n");
 	return true;
 }
 
 bool csvsax::field(const char *value) {
 	// by default, just return success
-stdoutput.printf("        field: \"%s\"\n",value);
+	debugPrintf("        field: \"%s\"\n",value);
 	return true;
 }
 
 bool csvsax::rowEnd() {
 	// by default, just return success
-stdoutput.printf("    }\n");
+	debugPrintf("    }\n");
 	return true;
 }
 
 bool csvsax::bodyEnd() {
 	// by default, just return success
-stdoutput.printf("}\n");
+	debugPrintf("}\n");
 	return true;
 }
 

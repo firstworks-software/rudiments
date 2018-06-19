@@ -6,16 +6,6 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
-			virtual bool	tagStart(const char *ns,
-							const char *name);
-			virtual bool	attributeName(const char *name);
-			virtual bool	attributeValue(const char *value);
-			virtual bool	text(const char *string);
-			virtual bool	tagEnd(const char *ns,
-							const char *name);
-			virtual bool	comment(const char *string);
-			virtual bool	cdata(const char *string);
-
 				xmldom(const xmldom &x);
 			xmldom	&operator=(const xmldom &x);
 

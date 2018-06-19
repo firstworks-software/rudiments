@@ -36,9 +36,45 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Deletes this instance of the csvdom class. */
 		virtual	~csvdom();
 
+		/** Parses file "filename" and generates a DOM tree. */
+		bool	parseFile(const char *filename);
+
+		/** Parses string "string" and generates a DOM tree. */
+		bool	parseString(const char *string);
+
+		/** Creates a new root node.  This is useful for building a
+		 *  tree from scratch. */
+		void	createRootNode();
+
 		/** Writes the current DOM tree to "filename" and sets
 		 *  permissions of the file to "perms". */
 		bool	writeFile(const char *filename, mode_t perms) const;
+
+	protected:
+
+		/** Gets called when the start of the header is encountered. */
+		virtual	bool	headerStart();
+
+		/** Gets called when a column name is parsed. */
+		virtual	bool	column(const char *name);
+
+		/** Gets called when the end of the header is encountered. */
+		virtual	bool	headerEnd();
+
+		/** Gets called when the start of the body is encountered. */
+		virtual	bool	bodyStart();
+
+		/** Gets called when the start of a row is encountered. */
+		virtual	bool	rowStart();
+
+		/** Gets called when a field is parsed. */
+		virtual	bool	field(const char *value);
+
+		/** Gets called when the end of a row is encountered. */
+		virtual	bool	rowEnd();
+
+		/** Gets called when the end of the body is encountered. */
+		virtual	bool	bodyEnd();
 
 	#include <rudiments/private/csvdom.h>
 };

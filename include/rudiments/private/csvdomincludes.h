@@ -4,5 +4,7 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/csvsax.h>
 #include <rudiments/dom.h>
+#include <rudiments/domnode.h>
+#include <rudiments/file.h>
 
 #include <sys/types.h>
