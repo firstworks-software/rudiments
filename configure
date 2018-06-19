@@ -34529,7 +34529,7 @@ fi
 if ( test "$INCLUDE_CSVSAX" = "1" )
 then
 	HEADERS3="$HEADERS3 csvsax.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS6 csvsax.h csvsaxincludes.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 csvsax.h csvsaxincludes.h"
 	SRCS="$SRCS csvsax.cpp"
 	LOBJS="$LOBJS csvsax.lo"
 fi
@@ -34537,7 +34537,7 @@ fi
 if ( test "$INCLUDE_CSVDOM" = "1" )
 then
 	HEADERS3="$HEADERS3 csvdom.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS6 csvdom.h csvdomincludes.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 csvdom.h csvdomincludes.h"
 	SRCS="$SRCS csvdom.cpp"
 	LOBJS="$LOBJS csvdom.lo"
 fi
