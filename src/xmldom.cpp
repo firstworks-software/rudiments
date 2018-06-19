@@ -27,11 +27,13 @@ xmldom::xmldom(bool stringcacheenabled) : xmlsax(), dom(stringcacheenabled) {
 
 xmldom::xmldom(const xmldom &x) : xmlsax(), dom() {
 	init(stringCacheEnabled());
+	// FIXME: call dom::dom(x)
 }
 
 xmldom &xmldom::operator=(const xmldom &x) {
 	if (this!=&x) {
 		reset();
+		// FIXME: call dom::operator=
 	}
 	return *this;
 }

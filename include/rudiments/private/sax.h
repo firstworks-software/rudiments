@@ -1,14 +1,16 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-			virtual void	reset();
-			virtual void	close();
+			void	reset();
+			void	close();
+
 			virtual bool	parse()=0;
-			virtual bool	parseLocalFile(const char *filename);
-			virtual bool	parseRemoteFile(const char *filename);
-			virtual char	skipWhitespace(char current);
-			virtual char	getCharacter();
-			virtual bool	mapFile();
+
+			bool	parseLocalFile(const char *filename);
+			bool	parseRemoteFile(const char *filename);
+			char	skipWhitespace(char current);
+			char	getCharacter();
+			bool	mapFile();
 
 			stringbuffer	*getErrorString();
 			uint32_t	getLine();
