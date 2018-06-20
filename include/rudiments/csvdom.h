@@ -56,7 +56,7 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		virtual	bool	headerStart();
 
 		/** Gets called when a column name is parsed. */
-		virtual	bool	column(const char *name);
+		virtual	bool	column(const char *name, bool quoted);
 
 		/** Gets called when the end of the header is encountered. */
 		virtual	bool	headerEnd();
@@ -68,7 +68,7 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		virtual	bool	rowStart();
 
 		/** Gets called when a field is parsed. */
-		virtual	bool	field(const char *value);
+		virtual	bool	field(const char *value, bool quoted);
 
 		/** Gets called when the end of a row is encountered. */
 		virtual	bool	rowEnd();

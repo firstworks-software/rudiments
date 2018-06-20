@@ -25,15 +25,14 @@ xmldom::xmldom(bool stringcacheenabled) : xmlsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-xmldom::xmldom(const xmldom &x) : xmlsax(), dom() {
+xmldom::xmldom(const xmldom &x) : xmlsax(), dom(x) {
 	init(stringCacheEnabled());
-	// FIXME: call dom::dom(x)
 }
 
 xmldom &xmldom::operator=(const xmldom &x) {
 	if (this!=&x) {
 		reset();
-		// FIXME: call dom::operator=
+		dom::operator=(x);
 	}
 	return *this;
 }

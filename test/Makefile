@@ -121,6 +121,7 @@ tests: all
 	$(THISDIR)url$(EXE)
 	$(THISDIR)userentry$(EXE)
 	$(THISDIR)xmldom$(EXE)
+	$(THISDIR)csvdom$(EXE)
 	
 clean:
 	$(LTCLEAN) $(RM) $(PROGS0)
@@ -128,7 +129,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
 	$(LTCLEAN) $(RM) socketbench$(EXE) bytestringbench$(EXE)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 

@@ -35,21 +35,13 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 		/** Returns the character that separates columns and fields. */
 		char	getDelimiter() const;
 
-		/** Sets the character that escapes other characters inside
-		 *  of columns and fields to "escape". */
-		void	setEscape(char escape);
-
-		/** Returns the character that escapes other characters inside
-		 *  of columns and fields. */
-		char	getEscape() const;
-
 	protected:
 
 		/** Gets called when the start of the header is encountered. */
 		virtual	bool	headerStart();
 
 		/** Gets called when a column name is parsed. */
-		virtual	bool	column(const char *name);
+		virtual	bool	column(const char *name, bool quoted);
 
 		/** Gets called when the end of the header is encountered. */
 		virtual	bool	headerEnd();
@@ -61,7 +53,7 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 		virtual	bool	rowStart();
 
 		/** Gets called when a field is parsed. */
-		virtual	bool	field(const char *value);
+		virtual	bool	field(const char *value, bool quoted);
 
 		/** Gets called when the end of a row is encountered. */
 		virtual	bool	rowEnd();

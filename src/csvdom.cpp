@@ -5,6 +5,8 @@
 #include <rudiments/file.h>
 #include <rudiments/filesystem.h>
 #include <rudiments/sys.h>
+//#define DEBUG_MESSAGES
+#include <rudiments/debugprint.h>
 
 class csvdomprivate {
 	friend class csvdom;
@@ -20,15 +22,14 @@ csvdom::csvdom(bool stringcacheenabled) : csvsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-csvdom::csvdom(const csvdom &x) : csvsax(), dom() {
+csvdom::csvdom(const csvdom &x) : csvsax(), dom(x) {
 	init(stringCacheEnabled());
-	// FIXME: call dom::dom(x)
 }
 
 csvdom &csvdom::operator=(const csvdom &x) {
 	if (this!=&x) {
 		reset();
-		// FIXME: call dom::operator=
+		dom::operator=(x);
 	}
 	return *this;
 }
@@ -46,7 +47,7 @@ bool csvdom::parseFile(const char *filename) {
 }
 
 bool csvdom::parseString(const char *string) {
-	return csvsax::parseFile(string);
+	return csvsax::parseString(string);
 }
 
 void csvdom::reset() {
@@ -76,11 +77,14 @@ bool csvdom::writeFile(const char *filename, mode_t perms) const {
 
 	bool	retval=true;
 	domnode	*root=getRootNode();
-	domnode	*header=root->getFirstTagChild("header");
+#ifdef DEBUG_MESSAGES
+	root->print(&stdoutput);
+#endif
+	domnode	*header=root->getFirstTagChild("h");
 	bool	firstcolumn=true;
-	for (domnode *column=header->getFirstTagChild("column");
+	for (domnode *column=header->getFirstTagChild("c");
 			!column->isNullNode();
-			column=column->getNextTagSibling("column")) {
+			column=column->getNextTagSibling("c")) {
 		if (firstcolumn) {
 			firstcolumn=false;
 		} else {
@@ -89,13 +93,13 @@ bool csvdom::writeFile(const char *filename, mode_t perms) const {
 		writeValue(&fl,column);
 	}
 	fl.write("\n");
-	for (domnode *row=root->getFirstTagChild("row");
+	for (domnode *row=root->getFirstTagChild("r");
 			!row->isNullNode();
-			row=row->getNextTagSibling("row")) {
+			row=row->getNextTagSibling("r")) {
 		bool	firstrow=true;
-		for (domnode *field=row->getFirstTagChild("field");
+		for (domnode *field=row->getFirstTagChild("f");
 				!field->isNullNode();
-				field=field->getNextTagSibling("field")) {
+				field=field->getNextTagSibling("f")) {
 			if (firstrow) {
 				firstrow=false;
 			} else {
@@ -113,11 +117,19 @@ bool csvdom::writeFile(const char *filename, mode_t perms) const {
 }
 
 void csvdom::writeValue(file *fl, domnode *value) const {
-	// FIXME: don't write quotes unless original value was quoted
-	fl->write(getQuote());
-	// FIXME: escape chars...
-	fl->write(value->getAttributeValue("value"));
-	fl->write(getQuote());
+	const char	*v=value->getAttributeValue("v");
+	if (value->getAttributeValue("q")[0]=='y') {
+		fl->write(getQuote());
+		for (const char *ptr=v; *ptr; ptr++) {
+			if (*ptr==getQuote()) {
+				fl->write(*ptr);
+			}
+			fl->write(*ptr);
+		}
+		fl->write(getQuote());
+	} else {
+		fl->write(v);
+	}
 }
 
 bool csvdom::headerStart() {
@@ -126,17 +138,18 @@ bool csvdom::headerStart() {
 	}
 	domnode	*headernode=new domnode(this,getNullNode(),
 						TAG_DOMNODETYPE,
-						NULL,"header",NULL);
+						NULL,"h",NULL);
 	pvt->_currentparent->appendChild(headernode);
 	pvt->_currentparent=headernode;
 	return true;
 }
 
-bool csvdom::column(const char *name) {
+bool csvdom::column(const char *name, bool quoted) {
 	domnode	*columnnode=new domnode(this,getNullNode(),
 						TAG_DOMNODETYPE,
-						NULL,"column",NULL);
-	columnnode->setAttributeValue("value",name);
+						NULL,"c",NULL);
+	columnnode->setAttributeValue("v",name);
+	columnnode->setAttributeValue("q",(quoted)?"y":"n");
 	pvt->_currentparent->appendChild(columnnode);
 	return true;
 }
@@ -153,17 +166,18 @@ bool csvdom::bodyStart() {
 bool csvdom::rowStart() {
 	domnode	*rownode=new domnode(this,getNullNode(),
 						TAG_DOMNODETYPE,
-						NULL,"row",NULL);
+						NULL,"r",NULL);
 	pvt->_currentparent->appendChild(rownode);
 	pvt->_currentparent=rownode;
 	return true;
 }
 
-bool csvdom::field(const char *value) {
+bool csvdom::field(const char *value, bool quoted) {
 	domnode	*fieldnode=new domnode(this,getNullNode(),
 						TAG_DOMNODETYPE,
-						NULL,"field",NULL);
-	fieldnode->setAttributeValue("value",value);
+						NULL,"f",NULL);
+	fieldnode->setAttributeValue("v",value);
+	fieldnode->setAttributeValue("q",(quoted)?"y":"n");
 	pvt->_currentparent->appendChild(fieldnode);
 	return true;
 }

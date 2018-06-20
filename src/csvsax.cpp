@@ -3,7 +3,7 @@
 
 #include <rudiments/csvsax.h>
 #include <rudiments/stdio.h>
-#define DEBUG_MESSAGES
+//#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
 enum csvstate {
@@ -26,14 +26,12 @@ class csvsaxprivate {
 	private:
 		csvstate	_state;
 		char		_quote;
-		char		_escape;
 		char		_delimiter;
 };
 
 csvsax::csvsax() : sax() {
 	pvt=new csvsaxprivate;
 	pvt->_quote='"';
-	pvt->_escape='\\';
 	pvt->_delimiter=',';
 }
 
@@ -62,23 +60,15 @@ char csvsax::getDelimiter() const {
 	return pvt->_delimiter;
 }
 
-void csvsax::setEscape(char escape) {
-	pvt->_escape=escape;
-}
-
-char csvsax::getEscape() const {
-	return pvt->_escape;
-}
-
 bool csvsax::headerStart() {
 	// by default, just return success
 	debugPrintf("headerStart {\n");
 	return true;
 }
 
-bool csvsax::column(const char *name) {
+bool csvsax::column(const char *name, bool quoted) {
 	// by default, just return success
-	debugPrintf("    column: \"%s\"\n",name);
+	debugPrintf("    column: \"%s\" (%squoted)\n",name,(quoted)?"":"not ");
 	return true;
 }
 
@@ -100,9 +90,10 @@ bool csvsax::rowStart() {
 	return true;
 }
 
-bool csvsax::field(const char *value) {
+bool csvsax::field(const char *value, bool quoted) {
 	// by default, just return success
-	debugPrintf("        field: \"%s\"\n",value);
+	debugPrintf("        field: \"%s\" (%squoted)\n",
+					value,(quoted)?"":"not ");
 	return true;
 }
 
@@ -122,12 +113,19 @@ bool csvsax::parse() {
 
 	stringbuffer	current;
 	bool		quoted=false;
+	bool		inquotes=false;
 	bool		ignore=false;
+	bool		keepchar=false;
+	char		ch='\0';
 
 	for (;;) {
 
 		// get a character
-		char	ch=getCharacter();
+		if (!keepchar) {
+			ch=getCharacter();
+		} else {
+			keepchar=false;
+		}
 
 		// at the very beginning of the file, skip leading \n or \r
 		// and return an error if the file/string was empty
@@ -144,40 +142,41 @@ bool csvsax::parse() {
 			break;
 		}
 
-		// deal with escape characters
-		bool	wasescaped=(ch==pvt->_escape);
-		if (wasescaped) {
-			ch=getCharacter();
-		}
-
 		// handle various states
 		if (pvt->_state==HEADER_START) {
 			headerStart();
 			pvt->_state=COLUMN_START;
-			quoted=false;
 		}
 		if (pvt->_state==COLUMN_START) {
 			quoted=(ch==pvt->_quote);
 			pvt->_state=COLUMN;
 			if (quoted) {
+				inquotes=true;
 				continue;
 			}
 		}
 		if (pvt->_state==COLUMN) {
-			if (!wasescaped) {
-				if (quoted && ch==pvt->_quote) {
-					ignore=true;
-					continue;
-				} else if (ch==pvt->_delimiter) {
+			if (inquotes) {
+				if (ch==pvt->_quote) {
+					ch=getCharacter();
+					if (ch!=pvt->_quote) {
+						inquotes=false;
+						keepchar=true;
+						ignore=true;
+						continue;
+					}
+				}
+			} else {
+				if (ch==pvt->_delimiter) {
 					pvt->_state=COLUMN_END;
-					column(current.getString());
+					column(current.getString(),quoted);
 					current.clear();
 					ignore=false;
 					pvt->_state=COLUMN_START;
 					continue;
 				} else if (ch=='\n') {
 					pvt->_state=COLUMN_END;
-					column(current.getString());
+					column(current.getString(),quoted);
 					current.clear();
 					ignore=false;
 					pvt->_state=HEADER_END;
@@ -206,24 +205,32 @@ bool csvsax::parse() {
 			quoted=(ch==pvt->_quote);
 			pvt->_state=FIELD;
 			if (quoted) {
+				inquotes=true;
 				continue;
 			}
 		}
 		if (pvt->_state==FIELD) {
-			if (!wasescaped) {
-				if (quoted && ch==pvt->_quote) {
-					ignore=true;
-					continue;
-				} else if (ch==pvt->_delimiter) {
+			if (inquotes) {
+				if (ch==pvt->_quote) {
+					ch=getCharacter();
+					if (ch!=pvt->_quote) {
+						inquotes=false;
+						keepchar=true;
+						ignore=true;
+						continue;
+					}
+				}
+			} else {
+				if (ch==pvt->_delimiter) {
 					pvt->_state=FIELD_END;
-					field(current.getString());
+					field(current.getString(),quoted);
 					current.clear();
 					ignore=false;
 					pvt->_state=FIELD_START;
 					continue;
 				} else if (ch=='\n') {
 					pvt->_state=FIELD_END;
-					field(current.getString());
+					field(current.getString(),quoted);
 					current.clear();
 					ignore=false;
 					pvt->_state=ROW_END;

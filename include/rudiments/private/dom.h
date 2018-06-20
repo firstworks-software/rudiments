@@ -9,9 +9,8 @@
 			const char	*cacheString(const char *string);
 			void		unCacheString(const char *string);
 
-	private:
-
 				dom(const dom &x);
 			dom	&operator=(const dom &x);
 
+	private:
 			domprivate	*pvt;
