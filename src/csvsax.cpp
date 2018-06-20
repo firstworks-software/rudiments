@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/csvsax.h>
-#include <rudiments/stdio.h>
 //#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
@@ -33,6 +32,7 @@ csvsax::csvsax() : sax() {
 	pvt=new csvsaxprivate;
 	pvt->_quote='"';
 	pvt->_delimiter=',';
+	reset();
 }
 
 csvsax::~csvsax() {
