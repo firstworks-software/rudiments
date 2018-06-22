@@ -51,12 +51,6 @@ class RUDIMENTS_DLLSPEC memorypool {
 		 *  to accomodate allocations. */
 		unsigned char	*allocate(size_t size);
 
-		/** Returns a pointer to a contiguous block of "size"
-		 *  bytes in the pool.  The pool will grow as necessary
-		 *  to accomodate allocations.  Each byte of data in
-		 *  the block of data is set to 0. */
-		unsigned char	*allocateAndZero(size_t size);
-
 		/** Shrinks the pool back down to it's initial size
 		 *  and frees all previously allocated blocks.
 		 *

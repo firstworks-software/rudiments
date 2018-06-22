@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/memorypool.h>
-#include <rudiments/bytestring.h>
 #include <rudiments/linkedlist.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -218,12 +217,6 @@ unsigned char *memorypool::allocate(size_t length) {
 	#endif
 
 	// return the buffer
-	return buffer;
-}
-
-unsigned char *memorypool::allocateAndZero(size_t length) {
-	unsigned char	*buffer=allocate(length);
-	bytestring::zero(buffer,length);
 	return buffer;
 }
 
