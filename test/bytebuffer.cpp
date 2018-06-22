@@ -11,12 +11,22 @@ int main(int argc, const char **argv) {
 	header("bytebuffer");
 
 	// Create a bytebuffer.
-	bytebuffer	bb(10,10);
+	bytebuffer	bb;
 	stdoutput.printf("create...\n");
 	test("create(), getSize()",bb.getSize()==0);
 	test("create(), getPosition()",bb.getPosition()==0);
 	test("create(), getEnd()",bb.getEnd()==0);
-	test("create(), getActualSize()",bb.getActualSize()==10);
+	test("create(), getActualSize()",bb.getActualSize()==128);
+	test("create(), getInitialSize()",bb.getInitialSize()==128);
+	test("create(), getIncrementSize()",bb.getIncrementSize()==32);
+	bb.clear(10,10);
+	stdoutput.printf("create...\n");
+	test("create(),clear(), getSize()",bb.getSize()==0);
+	test("create(),clear(), getPosition()",bb.getPosition()==0);
+	test("create(),clear(), getEnd()",bb.getEnd()==0);
+	test("create(),clear(), getActualSize()",bb.getActualSize()==10);
+	test("create(),clear(), getInitialSize()",bb.getInitialSize()==10);
+	test("create(),clear(), getIncrementSize()",bb.getIncrementSize()==10);
 	stdoutput.printf("\n");
 
 	// Append some string sequences to the buffer.

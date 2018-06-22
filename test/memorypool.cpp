@@ -10,13 +10,21 @@ int main(int argc, const char **argv) {
 
 	header("memorypool");
 
-
 	uint16_t	i;
 	uint16_t	j;
 	bool		success;
-	memorypool	mp(32,16,10);
 	char		*segment[60];
 
+	memorypool	mp;
+	stdoutput.printf("create/clear...\n");
+	test("create(), getInitialSize()",mp.getInitialSize()==512);
+	test("create(), getIncrementSize()",mp.getIncrementSize()==128);
+	test("create(), getResizeInterval()",mp.getResizeInterval()==100);
+	mp.clear(32,16,10);
+	test("create(),clear(),getInitialSize()",mp.getInitialSize()==32);
+	test("create(),clear(),getIncrementSize()",mp.getIncrementSize()==16);
+	test("create(),clear(),getResizeInterval()",mp.getResizeInterval()==10);
+	stdoutput.printf("\n");
 
 	// characters...
 	stdoutput.printf("char...\n");
