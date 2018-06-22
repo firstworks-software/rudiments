@@ -108,6 +108,18 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
+uint64_t dynamicarray<valuetype>::getInitialSize() const {
+	return initial;
+}
+
+template< class valuetype >
+RUDIMENTS_TEMPLATE_INLINE
+uint64_t dynamicarray<valuetype>::getIncrement() const {
+	return extsize;
+}
+
+template< class valuetype >
+RUDIMENTS_TEMPLATE_INLINE
 uint64_t dynamicarray<valuetype>::getLength() const {
 	return len;
 }
@@ -168,6 +180,12 @@ void dynamicarray<valuetype>::clearExtentList() {
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
 void dynamicarray<valuetype>::clear() {
+	return clear(initial,extsize);
+}
+
+template< class valuetype >
+RUDIMENTS_TEMPLATE_INLINE
+void dynamicarray<valuetype>::clear(uint64_t initialsize, uint64_t increment) {
 
 	// remove all but the first extent
 	curext=extents.getLast();
@@ -178,6 +196,10 @@ void dynamicarray<valuetype>::clear() {
 		extents.remove(curext);
  		curext=prev;
 	}
+
+	// reset the initial/incremental sizes
+	initial=initialsize;
+	extsize=increment;
 
 	// reinit first extent
 	valuetype	*ext=curext->getValue();

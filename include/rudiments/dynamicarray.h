@@ -65,11 +65,21 @@ class dynamicarray {
 		 *  dynamicarray. */
 		valuetype	&operator[](uint64_t index);
 
+		/*  Returns the size of the initial extent. */
+		uint64_t	getInitialSize() const;
+
+		/*  Returns the size of each incremental extent. */
+		uint64_t	getIncrement() const;
+
 		/** Returns the length of the array. */
 		uint64_t	getLength() const;
 
 		/** Clears the array, deleting all of its values. */
 		void	clear();
+
+		/** Clears the array, deleting all of its values and resetting
+		 *  the sizes of the initial and incremental extents. */
+		void	clear(uint64_t initialsize, uint64_t increment);
 
 	#include <rudiments/private/dynamicarray.h>
 };

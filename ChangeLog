@@ -22,6 +22,7 @@
 	renamed regularexpression::compile() to setPattern(), added getPattern()
 	renamed memorypool::deallocate() to memorypool::clear()
 	renamed memorypool::allocateAndClear() to memorypool::allocateAndZero()
+	added clear-with-parameter-reset methods to dynamicarray
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the
