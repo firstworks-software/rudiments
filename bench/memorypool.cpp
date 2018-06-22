@@ -16,7 +16,7 @@ int main(int argc, const char **argv) {
 	// stress
 	stdoutput.printf("stress...\n");
 
-	// allocate from the pool, deallocating after each cycle...
+	// allocate from the pool, clearng after each cycle...
 	stdoutput.printf("	memory pool... ");
 	memorypool	*mp=new memorypool(32,16,10);
 	datetime	dt;
@@ -26,7 +26,7 @@ int main(int argc, const char **argv) {
 		for (j=1; j<=stresssize; j++) {
 			mp->allocate(j);
 		}
-		mp->deallocate();
+		mp->clear();
 	}
 	dt.getSystemDateAndTime();
 	time_t	end=dt.getEpoch();
@@ -36,7 +36,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("%d seconds\n",memorypooltime);
 
 
-	// ...as opposed to allocating and deallocating on-demand
+	// ...as opposed to allocating and clearng on-demand
 	stdoutput.printf("	on-demand...   ");
 	dt.getSystemDateAndTime();
 	start=dt.getEpoch();
@@ -59,7 +59,7 @@ int main(int argc, const char **argv) {
 #endif
 
 	// ...and as opposed to allocating on-demand, keeping a chunk-list,
-	// and deallocating all chunks after each cycle
+	// and clearng all chunks after each cycle
 	stdoutput.printf("	chunk-list...  ");
 	char	*chunklist[stresssize];
 	dt.getSystemDateAndTime();

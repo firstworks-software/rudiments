@@ -54,17 +54,17 @@ class RUDIMENTS_DLLSPEC memorypool {
 		/** Returns a pointer to a contiguous block of "size"
 		 *  bytes in the pool.  The pool will grow as necessary
 		 *  to accomodate allocations.  Each byte of data in
-		 *  the block of data is set to NULL. */
-		unsigned char	*allocateAndClear(size_t size);
+		 *  the block of data is set to 0. */
+		unsigned char	*allocateAndZero(size_t size);
 
 		/** Shrinks the pool back down to it's initial size
 		 *  and frees all previously allocated blocks.
 		 *
-		 *  When deallocate() has been called "resizeinterval"
+		 *  When clear() has been called "resizeinterval"
 		 *  times (see constructor), it evaluates the average amount
 		 *  of memory allocated (since the last time it did this) and
 		 *  resizes the initial buffer size to this size. */
-		void	deallocate();
+		void	clear();
 
 	#include <rudiments/private/memorypool.h>
 };

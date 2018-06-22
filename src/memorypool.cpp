@@ -55,7 +55,7 @@ class memorypoolprivate {
 		size_t	_increment;
 		size_t	_resizeinterval;
 
-		size_t	_deallocations;
+		size_t	_clears;
 		size_t	_total;
 		size_t	_average;
 };
@@ -92,7 +92,7 @@ void memorypool::init(size_t initialsize,
 	pvt->_increment=increment+MEMORYPOOLPAD(increment);
 	pvt->_resizeinterval=resizeinterval;
 
-	pvt->_deallocations=0;
+	pvt->_clears=0;
 	pvt->_total=0;
 	pvt->_average=0;
 
@@ -221,16 +221,16 @@ unsigned char *memorypool::allocate(size_t length) {
 	return buffer;
 }
 
-unsigned char *memorypool::allocateAndClear(size_t length) {
+unsigned char *memorypool::allocateAndZero(size_t length) {
 	unsigned char	*buffer=allocate(length);
 	bytestring::zero(buffer,length);
 	return buffer;
 }
 
-void memorypool::deallocate() {
+void memorypool::clear() {
 
 	#ifdef DEBUG_DEALLOCATE
-	stdoutput.printf("deallocate {\n");
+	stdoutput.printf("clear {\n");
 	#endif
 
 	// if the pool was unused during this iteration...
@@ -262,22 +262,22 @@ void memorypool::deallocate() {
 	}
 	pvt->_bufferlist.clear();
 
-	// bump deallocations counter
-	pvt->_deallocations++;
+	// bump clears counter
+	pvt->_clears++;
 
 	// update the running average
-	pvt->_average-=pvt->_average/pvt->_deallocations;
-	pvt->_average+=pvt->_total/pvt->_deallocations;
+	pvt->_average-=pvt->_average/pvt->_clears;
+	pvt->_average+=pvt->_total/pvt->_clears;
 
 	#ifdef DEBUG_DEALLOCATE
-	stdoutput.printf("	num: %d\n",pvt->_deallocations);
+	stdoutput.printf("	num: %d\n",pvt->_clears);
 	stdoutput.printf("	avg: %d\n",pvt->_average);
 	stdoutput.printf("	tot: %d\n",pvt->_total);
 	#endif
 
 	// if it's time to re-evaluate and
 	// re-size the first buffer then do that
-	if (pvt->_deallocations==pvt->_resizeinterval) {
+	if (pvt->_clears==pvt->_resizeinterval) {
 
 		#ifdef DEBUG_RESIZE
 		stdoutput.printf("	resize {\n");
@@ -316,7 +316,7 @@ void memorypool::deallocate() {
 		#endif
 
 		// reset counters
-		pvt->_deallocations=0;
+		pvt->_clears=0;
 		pvt->_average=0;
 
 		#ifdef DEBUG_RESIZE

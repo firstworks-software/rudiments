@@ -37,7 +37,7 @@ int main(int argc, const char **argv) {
 		}
 	}
 	test("first run",success);
-	mp.deallocate();
+	mp.clear();
 
 	// second run
 	segment[0]=(char *)mp.allocate(40);
@@ -79,7 +79,7 @@ int main(int argc, const char **argv) {
 		}
 	}
 	test("second run (A)",success);
-	mp.deallocate();
+	mp.clear();
 	stdoutput.printf("\n");
 
 
@@ -100,7 +100,7 @@ int main(int argc, const char **argv) {
 	test("uint64_t",*p64==3);
 	test("uint32_t",*p32==2);
 	test("uint16_t",*p16==1);
-	mp.deallocate();
+	mp.clear();
 	stdoutput.printf("\n");
 
 
@@ -159,6 +159,6 @@ int main(int argc, const char **argv) {
 	}
 	test("uint16_t",success);
 
-	mp.deallocate();
+	mp.clear();
 	stdoutput.printf("\n");
 }
