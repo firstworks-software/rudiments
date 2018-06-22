@@ -12,6 +12,9 @@ class chatprivate;
  * (such as a modem) over a file descriptor or set of file descriptors. */
 class RUDIMENTS_DLLSPEC chat {
 	public:
+		/** Creates an instance of the chat class. */
+		chat();
+
 		/** Creates an instance of the chat class.  Data will be
 		 *  written to and read from "fd". */
 		chat(filedescriptor *fd);
@@ -22,6 +25,21 @@ class RUDIMENTS_DLLSPEC chat {
 
 		/** Deletes this instance of the chat class. */
 		~chat();
+
+		/* Sets the read file descriptor to "rfd". */
+		void	setReadFileDescriptor(filedescriptor *rfd);
+
+		/* Sets the write file descriptor to "wfd". */
+		void	setWriteFileDescriptor(filedescriptor *wfd);
+
+		/* Sets the read and write file descriptor to "fd". */
+		void	setReadAndWriteFileDescriptor(filedescriptor *fd);
+
+		/* Returns the read file descriptor. */
+		filedescriptor	*getReadFileDescriptor();
+
+		/* Returns the write file descriptor. */
+		filedescriptor	*getWriteFileDescriptor();
 
 		/** Runs "script" which is expected to be a chunk of XML of the
 		 *  following format:

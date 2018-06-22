@@ -7,7 +7,7 @@ int main(int argc, const char **argv) {
 	const char	*pattern="(\\w+) (\\w+)";
 
 	regularexpression	re;
-	re.compile(pattern);
+	re.setPattern(pattern);
 	re.match(string);
 
 	stdoutput.printf("\"%s\" matches \"%s\" %d times\n",

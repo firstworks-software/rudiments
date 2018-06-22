@@ -6,3 +6,7 @@
 				memorypool(const memorypool &m);
 		memorypool	&operator=(const memorypool &m);
 		memorypoolprivate	*pvt;
+
+		void	init(size_t initialsize,
+				size_t increment,
+				size_t resizeinterval);

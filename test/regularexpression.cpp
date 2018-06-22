@@ -53,7 +53,7 @@ int main(int argc, const char **argv) {
 
         stdoutput.printf("instance match %s\n",mtc);
         regularexpression       re;
-	test("compile",re.compile(mtc));
+	test("setPattern",re.setPattern(mtc));
         str="Hello";
         test(str,!re.match(str));
 	//printMatches(&re);
@@ -95,7 +95,7 @@ int main(int argc, const char **argv) {
         stdoutput.printf("optional whitespace match\n");
 	mtc="^[ 	\r\n]*((create|CREATE|drop|DROP)[ 	\r\n]+)|"
 			"((begin|BEGIN|rollback|ROLLBACK)[ 	\r\n]*)";
-	test("compile",re.compile(mtc));
+	test("setPattern",re.setPattern(mtc));
 	test("study",re.study());
         str="create table";
         test(str,re.match(str));
@@ -134,7 +134,7 @@ int main(int argc, const char **argv) {
 	if (charstring::compare(osname,"SunOS")) {
 
         	stdoutput.printf("wildcard word match\n");
-		test("compile",re.compile("(\\w+) (\\w+)"));
+		test("setPattern",re.setPattern("(\\w+) (\\w+)"));
         	str="hello world";
         	test(str,re.match(str));
 		//printMatches(&re);
@@ -161,7 +161,7 @@ int main(int argc, const char **argv) {
 
 
         stdoutput.printf("NULLs\n");
-	test("compile",re.compile(NULL));
+	test("setPattern",re.setPattern(NULL));
 	test("study",re.study());
         test("match",re.match(NULL));
 	//printMatches(&re);

@@ -658,7 +658,7 @@ int main(int argc, const char **argv) {
 
 	original="0123456789,12345678,234567,3456,45";
 	regularexpression	from;
-	from.compile("[0-9]*");
+	from.setPattern("[0-9]*");
 	newstr=charstring::replace(original,&from,"numbers",true);
 	test("replace regex/from-to (global)",
 		!charstring::compare(newstr,

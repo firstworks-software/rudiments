@@ -13,6 +13,12 @@ class commandlineprivate {
 		char	**_argv;
 };
 
+commandline::commandline() {
+	pvt=new commandlineprivate;
+	pvt->_argc=0;
+	pvt->_argv=NULL;
+}
+
 commandline::commandline(int32_t argc, const char **argv) {
 	pvt=new commandlineprivate;
 	pvt->_argc=argc;
@@ -21,6 +27,11 @@ commandline::commandline(int32_t argc, const char **argv) {
 
 commandline::~commandline() {
 	delete pvt;
+}
+
+void commandline::initialize(int32_t argc, const char **argv) {
+	pvt->_argc=argc;
+	pvt->_argv=(char **)argv;
 }
 
 const char *commandline::getValue(const char *arg) const {

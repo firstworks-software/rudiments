@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 	};
 
 	regularexpression	re;
-	re.compile(pattern);
+	re.setPattern(pattern);
 	re.study();
 
 	for (const char * const *s=strings; *s; s++) {

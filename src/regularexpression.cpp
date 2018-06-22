@@ -33,7 +33,8 @@
 class regularexpressionprivate {
 	friend class regularexpression;
 	private:
-		bool	_null;
+		bool		_null;
+		const char	*_pattern;
 
 		#ifdef RUDIMENTS_HAS_PCRE
 			pcre		*_expr;
@@ -55,15 +56,15 @@ class regularexpressionprivate {
 };
 
 regularexpression::regularexpression() {
-	regularexpressionInit();
+	init();
 }
 
 regularexpression::regularexpression(const char *pattern) {
-	regularexpressionInit();
-	compile(pattern);
+	init();
+	setPattern(pattern);
 }
 
-void regularexpression::regularexpressionInit() {
+void regularexpression::init() {
 	pvt=new regularexpressionprivate;
 	#ifdef RUDIMENTS_HAS_PCRE
 		pvt->_expr=NULL;
@@ -73,6 +74,7 @@ void regularexpression::regularexpressionInit() {
 		pvt->_strcopy=NULL;
 	#endif
 	pvt->_null=false;
+	pvt->_pattern=NULL;
 	pvt->_matchcount=0;
 	pvt->_str=NULL;
 	bytestring::zero(pvt->_matches,sizeof(pvt->_matches));
@@ -93,12 +95,13 @@ regularexpression::~regularexpression() {
 	delete pvt;
 }
 
-bool regularexpression::compile(const char *pattern) {
+bool regularexpression::setPattern(const char *pattern) {
 	pvt->_null=false;
 	if (!pattern) {
 		pvt->_null=true;
 		return true;
 	}
+	pvt->_pattern=pattern;
 	#ifdef RUDIMENTS_HAS_PCRE
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
@@ -115,6 +118,10 @@ bool regularexpression::compile(const char *pattern) {
 		regfree(&pvt->_expr);
 		return !regcomp(&pvt->_expr,pattern,REG_EXTENDED);
 	#endif
+}
+
+const char *regularexpression::getPattern() const {
+	return pvt->_pattern;
 }
 
 bool regularexpression::study() {
@@ -227,10 +234,10 @@ const char *regularexpression::getSubstringEnd(int32_t index) {
 bool regularexpression::match(const char *str, size_t length,
 						const char *pattern) {
 	regularexpression	re;
-	return (re.compile(pattern) && re.match(str,length));
+	return (re.setPattern(pattern) && re.match(str,length));
 }
 
 bool regularexpression::match(const char *str, const char *pattern) {
 	regularexpression	re;
-	return (re.compile(pattern) && re.match(str));
+	return (re.setPattern(pattern) && re.match(str));
 }

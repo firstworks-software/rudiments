@@ -66,7 +66,24 @@ class memorypoolprivate {
 // that don't require it though, to conserve memory.
 #define MEMORYPOOLPAD(a) ((8-(a%8))%8)
 
+memorypool::memorypool() {
+	init(512,128,100);
+}
+
 memorypool::memorypool(size_t initialsize,
+			size_t increment,
+			size_t resizeinterval) {
+	init(initialsize,increment,resizeinterval);
+}
+
+memorypool::~memorypool() {
+	for (memorypoollistnode	*node=pvt->_first; node; node=node->getNext()) {
+		delete node->getValue();
+	}
+	delete pvt;
+}
+
+void memorypool::init(size_t initialsize,
 			size_t increment,
 			size_t resizeinterval) {
 	pvt=new memorypoolprivate;
@@ -81,13 +98,6 @@ memorypool::memorypool(size_t initialsize,
 
 	pvt->_bufferlist.append(new memorypoolbuffer(pvt->_initialsize));
 	pvt->_first=pvt->_bufferlist.getFirst();
-}
-
-memorypool::~memorypool() {
-	for (memorypoollistnode	*node=pvt->_first; node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	delete pvt;
 }
 
 unsigned char *memorypool::allocate(size_t length) { 

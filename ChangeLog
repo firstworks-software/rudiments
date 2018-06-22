@@ -18,6 +18,8 @@
 	added csvsax and csvdom classes
 	renamed xmldomnode and xmldomevents to domnode and domevents
 	refactored write/print/xml methods of dom/domnode classes
+	refactored some classes to have trivial constructors
+	renamed regularexpression::compile() to setPattern(), added getPattern()
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

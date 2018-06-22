@@ -17,6 +17,18 @@ class memorypoolprivate;
  *  have to store. */
 class RUDIMENTS_DLLSPEC memorypool {
 	public:
+		/** Creates a memory pool of initial size 512 bytes.
+		 * 
+		 *  When the pool needs to grow, it will grow by at least
+		 *  128 bytes.  If more than 128 bytes are requested, it will
+		 *  grow by that amount instead.
+		 * 
+		 *  When deallocate() has been called 100 times,
+		 *  it will evaluate the average amount of memory
+		 *  allocated (since the last time it did this) and
+		 *  resize the initial buffer size to this size. */
+		memorypool();
+
 		/** Creates a memory pool of initial size "initialsize".
 		 * 
 		 *  When the pool needs to grow, it will grow by at least

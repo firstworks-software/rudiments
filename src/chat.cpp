@@ -25,6 +25,13 @@ class chatprivate {
 		singlylinkedlist< char * >	_aborts;
 };
 
+chat::chat() {
+	pvt=new chatprivate;
+	pvt->_readfd=NULL;
+	pvt->_writefd=NULL;
+	pvt->_timeout=45;
+}
+
 chat::chat(filedescriptor *fd) {
 	pvt=new chatprivate;
 	pvt->_readfd=fd;
@@ -41,6 +48,27 @@ chat::chat(filedescriptor *rfd, filedescriptor *wfd) {
 
 chat::~chat() {
 	delete pvt;
+}
+
+void chat::setReadFileDescriptor(filedescriptor *rfd) {
+	pvt->_readfd=rfd;
+}
+
+void chat::setWriteFileDescriptor(filedescriptor *wfd) {
+	pvt->_writefd=wfd;
+}
+
+void chat::setReadAndWriteFileDescriptor(filedescriptor *fd) {
+	pvt->_readfd=fd;
+	pvt->_writefd=fd;
+}
+
+filedescriptor *chat::getReadFileDescriptor() {
+	return pvt->_readfd;
+}
+
+filedescriptor *chat::getWriteFileDescriptor() {
+	return pvt->_writefd;
 }
 
 int32_t chat::runScript(const char *script, char **abort) {

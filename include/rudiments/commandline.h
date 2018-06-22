@@ -14,10 +14,18 @@ class RUDIMENTS_DLLSPEC commandline {
 	public:
 
 		/** Creates an instance of the commandline class. */
+		commandline();
+
+		/** Creates an instance of the commandline class and sets its
+		 *  argument count and arguments to "argc" and "argv". */
 		commandline(int32_t argc, const char **argv);
 
 		/** Deletes this instance of the commandline class. */
 		~commandline();
+
+		/** Sets the argument count and arguments to
+		 *  "argc" and "argv". */
+		void initialize(int32_t argc, const char **argv);
 
 		/** Looks for either:
 		 * 	-arg value

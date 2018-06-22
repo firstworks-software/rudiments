@@ -30,23 +30,27 @@ class RUDIMENTS_DLLSPEC regularexpression {
 		regularexpression();
 
 		/** Creates an instance of the regularexpression class and
- 		 *  compiles the regular expression given in "pattern". */
+ 		 *  sets the regular expression of this instance to
+ 		 *  "pattern". */
 		regularexpression(const char *pattern);
 
 		/** Deletes this instance of the regular expression class. */
 		~regularexpression();
 
-		/** Compiles the regular expression given in "pattern".
+		/** Sets the regular expression of this instance to "pattern".
 		 *
 		 *  Returns true if the compilation succeeded and false
 		 *  if it failed. */
-		bool	compile(const char *pattern);
+		bool	setPattern(const char *pattern);
 
-		/** Studies the previously compiled pattern so it can be
-		 *  executed faster.  If you plan on calling match()
-		 *  several times on this pattern, studying it may be
-		 *  worthwhile.  If not, the studying the pattern may
-		 *  take longer than the time saved by studying it.
+		/** Returns the regular expression of this instance. */
+		const char	*getPattern() const;
+
+		/** Studies the current pattern so it can be executed faster.
+		 *  If you plan on calling match() several times on this
+		 *  pattern, studying it may be worthwhile.  If not, the
+		 *  studying the pattern may take longer than the time saved
+		 *  by studying it.
 		 * 
 		 *  Returns true if the study succeeded
 		 *  and false if if failed. */
