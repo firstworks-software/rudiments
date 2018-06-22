@@ -10,3 +10,7 @@
 		void	init(size_t initialsize,
 				size_t increment,
 				size_t resizeinterval);
+		void	clear(bool resetinitialsize,
+				size_t initialsize,
+				size_t increment,
+				size_t resizeinterval);

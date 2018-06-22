@@ -15,7 +15,7 @@
 #endif
 
 #define DEFAULT_INITIALSIZE 128
-#define DEFAULT_INCREMENT 32
+#define DEFAULT_INCREMENTSIZE 32
 
 class bytebufferprivate {
 	friend class bytebuffer;
@@ -52,7 +52,7 @@ class bytebufferprivate {
 };
 
 bytebuffer::bytebuffer() {
-	init(NULL,0,0);
+	init(NULL,DEFAULT_INITIALSIZE,DEFAULT_INCREMENTSIZE);
 }
 
 bytebuffer::bytebuffer(size_t initialsize, size_t incrementsize) {
@@ -65,12 +65,13 @@ bytebuffer::bytebuffer(unsigned char *initialcontents,
 }
 
 void bytebuffer::init(unsigned char *initialcontents,
-			size_t initialsize, size_t incrementsize) {
-	if (initialsize==0) {
+				size_t initialsize,
+				size_t incrementsize) {
+	if (!initialsize) {
 		initialsize=DEFAULT_INITIALSIZE;
 	}
-	if (incrementsize==0) {
-		incrementsize=DEFAULT_INCREMENT;
+	if (!incrementsize) {
+		incrementsize=DEFAULT_INCREMENTSIZE;
 	}
 	pvt=new bytebufferprivate;
 	pvt->_initialextentsize=initialsize;
@@ -383,11 +384,11 @@ void bytebuffer::clear(bool resetpositions,
 	}
 
 	// reset the initial/incremental sizes and first extent
-	if (initialsize==0) {
+	if (!initialsize) {
 		initialsize=DEFAULT_INITIALSIZE;
 	}
-	if (incrementsize==0) {
-		incrementsize=DEFAULT_INCREMENT;
+	if (!incrementsize) {
+		incrementsize=DEFAULT_INCREMENTSIZE;
 	}
 	if (resetveryinitialsize) {
 		pvt->_initialextentsize=initialsize;

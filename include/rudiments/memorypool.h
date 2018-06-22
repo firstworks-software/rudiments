@@ -32,7 +32,7 @@ class RUDIMENTS_DLLSPEC memorypool {
 		/** Creates a memory pool of initial size "initialsize".
 		 * 
 		 *  When the pool needs to grow, it will grow by at least
-		 *  "increment" bytes.  If more than "increment" bytes
+		 *  "incrementsize" bytes.  If more than "incrementsize" bytes
 		 *  are requested, it will grow by that amount instead.
 		 * 
 		 *  When deallocate() has been called "resizeinterval" times,
@@ -40,11 +40,21 @@ class RUDIMENTS_DLLSPEC memorypool {
 		 *  allocated (since the last time it did this) and
 		 *  resize the initial buffer size to this size. */
 		memorypool(size_t initialsize,
-				size_t increment,
+				size_t incrementsize,
 				size_t resizeinterval);
 
 		/** Deletes this instance of the memorypool class. */
 		~memorypool();
+
+		/** Returns the initial size of the pool. */
+		size_t	getInitialSize() const;
+
+		/** Returns the size that the pool will grow by when it needs
+		 *  to grow. */
+		size_t	getIncrementSize() const;
+
+		/** Returns the pool's resize interval. */
+		size_t	getResizeInterval() const;
 
 		/** Returns a pointer to a contiguous block of "size"
 		 *  bytes in the pool.  The pool will grow as necessary
@@ -59,6 +69,29 @@ class RUDIMENTS_DLLSPEC memorypool {
 		 *  of memory allocated (since the last time it did this) and
 		 *  resizes the initial buffer size to this size. */
 		void	clear();
+
+		/** Shrinks the pool back down to it's initial size
+		 *  and frees all previously allocated blocks.
+		 *
+		 *  Also resets the increment size and the resize interval to
+		 *  the specified values.
+		 *
+		 *  When clear() has been called "resizeinterval"
+		 *  times (see constructor), it evaluates the average amount
+		 *  of memory allocated (since the last time it did this) and
+		 *  resizes the initial buffer size to this size. */
+		void	clear(size_t incrementsize,
+				size_t resizeinterval);
+
+		/** Shrinks the pool back down to it's initial size
+		 *  and frees all previously allocated blocks.
+		 *
+		 *  Also resets the increment size and the resize interval to
+		 *  the specified values, and immediately resets the initial
+		 *  buffer size to initialsize. */
+		void	clear(size_t initialsize,
+				size_t incrementsize,
+				size_t resizeinterval);
 
 	#include <rudiments/private/memorypool.h>
 };

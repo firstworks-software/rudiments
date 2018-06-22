@@ -18,6 +18,10 @@
 	#include <rudiments/stdio.h>
 #endif
 
+#define DEFAULT_INITIALSIZE 512
+#define DEFAULT_INCREMENTSIZE 128
+#define DEFAULT_RESIZEINTERVAL 100
+
 class memorypoolbuffer {
 	friend class memorypool;
 	private:
@@ -51,7 +55,7 @@ class memorypoolprivate {
 		memorypoollistnode	*_first;
 
 		size_t	_initialsize;
-		size_t	_increment;
+		size_t	_incrementsize;
 		size_t	_resizeinterval;
 
 		size_t	_clears;
@@ -66,13 +70,13 @@ class memorypoolprivate {
 #define MEMORYPOOLPAD(a) ((8-(a%8))%8)
 
 memorypool::memorypool() {
-	init(512,128,100);
+	init(DEFAULT_INITIALSIZE,DEFAULT_INCREMENTSIZE,DEFAULT_RESIZEINTERVAL);
 }
 
 memorypool::memorypool(size_t initialsize,
-			size_t increment,
+			size_t incrementsize,
 			size_t resizeinterval) {
-	init(initialsize,increment,resizeinterval);
+	init(initialsize,incrementsize,resizeinterval);
 }
 
 memorypool::~memorypool() {
@@ -83,12 +87,22 @@ memorypool::~memorypool() {
 }
 
 void memorypool::init(size_t initialsize,
-			size_t increment,
+			size_t incrementsize,
 			size_t resizeinterval) {
-	pvt=new memorypoolprivate;
 
+	if (!initialsize) {
+		initialsize=DEFAULT_INITIALSIZE;
+	}
+	if (!incrementsize) {
+		incrementsize=DEFAULT_INCREMENTSIZE;
+	}
+	if (!resizeinterval) {
+		resizeinterval=DEFAULT_RESIZEINTERVAL;
+	}
+
+	pvt=new memorypoolprivate;
 	pvt->_initialsize=initialsize+MEMORYPOOLPAD(initialsize);
-	pvt->_increment=increment+MEMORYPOOLPAD(increment);
+	pvt->_incrementsize=incrementsize+MEMORYPOOLPAD(incrementsize);
 	pvt->_resizeinterval=resizeinterval;
 
 	pvt->_clears=0;
@@ -97,6 +111,18 @@ void memorypool::init(size_t initialsize,
 
 	pvt->_bufferlist.append(new memorypoolbuffer(pvt->_initialsize));
 	pvt->_first=pvt->_bufferlist.getFirst();
+}
+
+size_t memorypool::getInitialSize() const {
+	return pvt->_initialsize;
+}
+
+size_t memorypool::getIncrementSize() const {
+	return pvt->_incrementsize;
+}
+
+size_t memorypool::getResizeInterval() const {
+	return pvt->_resizeinterval;
 }
 
 unsigned char *memorypool::allocate(size_t length) { 
@@ -143,8 +169,8 @@ unsigned char *memorypool::allocate(size_t length) {
 		// increase size by increments of at least 10% for better
 		// performance and 10% max memory usage penalty - Claudio Freire
 		size_t	incr=length;
-		if (incr<pvt->_increment) {
-			incr=pvt->_increment;
+		if (incr<pvt->_incrementsize) {
+			incr=pvt->_incrementsize;
 		}
 		if (incr<(pvt->_total/10)) {
 			incr=(pvt->_total/10);
@@ -221,10 +247,45 @@ unsigned char *memorypool::allocate(size_t length) {
 }
 
 void memorypool::clear() {
+	clear(false,0,pvt->_incrementsize,pvt->_resizeinterval);
+}
+
+void memorypool::clear(size_t incrementsize,
+			size_t resizeinterval) {
+	clear(false,0,incrementsize,resizeinterval);
+}
+
+void memorypool::clear(size_t initialsize,
+			size_t incrementsize,
+			size_t resizeinterval) {
+	clear(true,initialsize,incrementsize,resizeinterval);
+}
+
+void memorypool::clear(bool resetinitialsize,
+				size_t initialsize,
+				size_t incrementsize,
+				size_t resizeinterval) {
 
 	#ifdef DEBUG_DEALLOCATE
 	stdoutput.printf("clear {\n");
 	#endif
+
+	if (!initialsize) {
+		initialsize=DEFAULT_INITIALSIZE;
+	}
+	if (!incrementsize) {
+		incrementsize=DEFAULT_INCREMENTSIZE;
+	}
+	if (!resizeinterval) {
+		resizeinterval=DEFAULT_RESIZEINTERVAL;
+	}
+
+	// reset sizes/interval
+	if (resetinitialsize) {
+		pvt->_initialsize=initialsize+MEMORYPOOLPAD(initialsize);
+	}
+	pvt->_incrementsize=incrementsize+MEMORYPOOLPAD(incrementsize);
+	pvt->_resizeinterval=resizeinterval;
 
 	// if the pool was unused during this iteration...
 	// (a surprisingly common case)
@@ -268,9 +329,33 @@ void memorypool::clear() {
 	stdoutput.printf("	tot: %d\n",pvt->_total);
 	#endif
 
-	// if it's time to re-evaluate and
-	// re-size the first buffer then do that
-	if (pvt->_clears==pvt->_resizeinterval) {
+	// if we force-resized the first buffer...
+	if (resetinitialsize) {
+
+		#ifdef DEBUG_RESIZE
+		stdoutput.printf("	force-resize {\n");
+		stdoutput.printf("		current    : %d\n",
+							firstmembuf->_size);
+		stdoutput.printf("		new        : %d\n",
+							pvt->_initialsize);
+		#endif
+
+		delete[] firstmembuf->_buffer;
+		firstmembuf->_buffer=new unsigned char[pvt->_initialsize];
+		firstmembuf->_size=pvt->_initialsize;
+
+		// reset counters
+		pvt->_clears=0;
+		pvt->_average=0;
+
+		#ifdef DEBUG_RESIZE
+		stdoutput.printf("	}\n");
+		#endif
+
+	} else
+	// if it's time to re-evaluate and re-size the first buffer...
+	// (_clears could be > _resizeinterval if _resizeinterval was reset)
+	if (pvt->_clears>=pvt->_resizeinterval) {
 
 		#ifdef DEBUG_RESIZE
 		stdoutput.printf("	resize {\n");
