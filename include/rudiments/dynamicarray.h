@@ -45,8 +45,8 @@ class dynamicarray {
 		/** Creates an empty instance of the dynamicarray class.
 		 *  The initial extent will be created with "initialsize"
 		 *  members and each successive extent will be created with
-		 *  "increment" members. */
-		dynamicarray(uint64_t initialsize, uint64_t increment);
+		 *  "incrementsize" members. */
+		dynamicarray(uint64_t initialsize, uint64_t incrementsize);
 
 		/** Creates an instance of the dynamicarray class
 		 *  that is a copy of "v". */
@@ -69,7 +69,7 @@ class dynamicarray {
 		uint64_t	getInitialSize() const;
 
 		/*  Returns the size of each incremental extent. */
-		uint64_t	getIncrement() const;
+		uint64_t	getIncrementSize() const;
 
 		/** Returns the length of the array. */
 		uint64_t	getLength() const;
@@ -79,7 +79,7 @@ class dynamicarray {
 
 		/** Clears the array, deleting all of its values and resetting
 		 *  the sizes of the initial and incremental extents. */
-		void	clear(uint64_t initialsize, uint64_t increment);
+		void	clear(uint64_t initialsize, uint64_t incrementsize);
 
 	#include <rudiments/private/dynamicarray.h>
 };

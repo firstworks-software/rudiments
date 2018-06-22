@@ -26,17 +26,18 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		bytebuffer();
 
 		/** Creates an instance of the bytebuffer class with
-		 *  the specified "initialsize" and "increment" parameters. */
-		bytebuffer(size_t initialsize, size_t increment);
+		 *  the specified "initialsize" and "incrementsize"
+		 *  parameters. */
+		bytebuffer(size_t initialsize, size_t incrementsize);
 
 		/** Creates an instance of the bytebuffer class.
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program.  The initial
-		 *  size and increment may be specified respectively by the
-		 *  "initialsize" and "increment" parameters. */
+		 *  size and increment size may be specified respectively by
+		 *  the "initialsize" and "incrementsize" parameters. */
 		bytebuffer(unsigned char *initialcontents,
-					size_t initialsize, size_t increment);
+				size_t initialsize, size_t incrementsize);
 
 		/** Creates an instance of the bytebuffer class
 		 *  that is a copy of "v". */
@@ -315,6 +316,18 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Empties the bytebuffer. */
 		void	clear();
 
+		/** Empties the bytebuffer and resets the specified
+		 *  "initialsize" and "incrementsize" parameters. */
+		void	clear(size_t initialsize, size_t incrementsize);
+
+		/** Empties the bytebuffer and attaches the buffer
+		 *  "initialcontents" to the instance as the initial contents.
+		 *  This buffer should not be freed by the calling program.
+		 *  Also resets the specified "initialsize" and "incrementsize"
+		 *  parameters. */
+		void	clear(unsigned char *initialcontents,
+				size_t initialsize, size_t incrementsize);
+
 		/** Returns the current data stored in the bytebuffer. */
 		const unsigned char	*getBuffer();
 
@@ -330,6 +343,12 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  may be larger than the value returned by
 		 *  getSize() since the buffer grows in chunks. */
 		size_t		getActualSize();
+
+		/** Returns the size of the original initial exent. */
+		size_t		getInitialSize();
+
+		/** Returns the size of each of the incremental extents. */
+		size_t		getIncrementSize();
 
 		/** Returns a pointer to the buffer currently
 		 *  stored in the bytebuffer, then resets

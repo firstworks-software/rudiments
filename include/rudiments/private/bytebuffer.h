@@ -5,7 +5,10 @@
 		void		init(unsigned char *initialcontents,
 					size_t initialsize, size_t increment);
 		void		clearExtentList();
-		void		clear(bool resetpositions);
+		void		clear(bool resetpositions,
+					bool resetveryinitialsize,
+					unsigned char *initialcontents,
+					size_t initialsize, size_t increment);
 		bytebuffer	*copy(unsigned char *data,
 						size_t size, bool copyin,
 						size_t *bytescopied);

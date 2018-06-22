@@ -13,8 +13,8 @@ dynamicarray<valuetype>::dynamicarray() {
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
 dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
-						uint64_t increment) {
-	init((initialsize)?initialsize:128,(increment)?increment:32);
+					uint64_t incrementsize) {
+	init((initialsize)?initialsize:128,(incrementsize)?incrementsize:32);
 }
 
 template< class valuetype >
@@ -39,11 +39,11 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
 void dynamicarray<valuetype>::init(uint64_t initialsize,
-						uint64_t increment) {
+					uint64_t incrementsize) {
 	size=0;
 	len=0;
 	initial=initialsize;
-	extsize=increment;
+	extsize=incrementsize;
 	extend(initialsize);
 	curext=extents.getFirst();
 	curind=0;
@@ -114,7 +114,7 @@ uint64_t dynamicarray<valuetype>::getInitialSize() const {
 
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
-uint64_t dynamicarray<valuetype>::getIncrement() const {
+uint64_t dynamicarray<valuetype>::getIncrementSize() const {
 	return extsize;
 }
 
@@ -185,7 +185,8 @@ void dynamicarray<valuetype>::clear() {
 
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
-void dynamicarray<valuetype>::clear(uint64_t initialsize, uint64_t increment) {
+void dynamicarray<valuetype>::clear(uint64_t initialsize,
+					uint64_t incrementsize) {
 
 	// remove all but the first extent
 	curext=extents.getLast();
@@ -199,7 +200,7 @@ void dynamicarray<valuetype>::clear(uint64_t initialsize, uint64_t increment) {
 
 	// reset the initial/incremental sizes
 	initial=initialsize;
-	extsize=increment;
+	extsize=incrementsize;
 
 	// reinit first extent
 	valuetype	*ext=curext->getValue();

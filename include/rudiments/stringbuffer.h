@@ -27,17 +27,17 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		stringbuffer();
 
 		/** Creates an instance of the stringbuffer class with the
-		 *  specified "initialsize" and "increment" parameters. */
-		stringbuffer(size_t initialsize, size_t increment);
+		 *  specified "initialsize" and "incrementsize" parameters. */
+		stringbuffer(size_t initialsize, size_t incrementsize);
 
 		/** Creates an instance of the stringbuffer class.
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program.  The initial
-		 *  size and increment may be specified respectively by the
-		 *  "initialsize" and "increment" parameters. */
+		 *  size and increment size may be specified respectively by
+		 *  the "initialsize" and "incrementsize" parameters. */
 		stringbuffer(char *initialcontents,
-				size_t initialsize, size_t increment);
+				size_t initialsize, size_t incrementsize);
 
 		/** Creates an instance of the stringbuffer class
 		 *  that is a copy of "s". */
@@ -444,6 +444,18 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 
 		/** Empties the stringbuffer. */
 		void	clear();
+
+		/** Empties the bytebuffer and resets the specified
+		 *  "initialsize" and "incrementsize" parameters. */
+		void	clear(size_t initialsize, size_t incrementsize);
+
+		/** Empties the bytebuffer and attaches the buffer
+		 *  "initialcontents" to the instance as the initial contents.
+		 *  This buffer should not be freed by the calling program.
+		 *  Also resets the specified "initialsize" and "incrementsize"
+		 *  parameters. */
+		void	clear(char *initialcontents,
+				size_t initialsize, size_t incrementsize);
 
 		/** Returns the string currently stored in the stringbuffer. */
 		const char	*getString();

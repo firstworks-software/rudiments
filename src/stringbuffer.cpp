@@ -14,14 +14,14 @@ stringbuffer::stringbuffer() : bytebuffer() {
 	pvt=NULL;
 }
 
-stringbuffer::stringbuffer(size_t initialsize, size_t increment) :
-			bytebuffer(initialsize,increment) {
+stringbuffer::stringbuffer(size_t initialsize, size_t incrementsize) :
+			bytebuffer(initialsize,incrementsize) {
 }
 
 stringbuffer::stringbuffer(char *initialcontents,
-				size_t initialsize, size_t increment) :
+				size_t initialsize, size_t incrementsize) :
 			bytebuffer((unsigned char *)initialcontents,
-						initialsize,increment) {
+						initialsize,incrementsize) {
 }
 
 stringbuffer::stringbuffer(const stringbuffer &s) : bytebuffer(s) {
@@ -64,6 +64,16 @@ size_t stringbuffer::getPosition() {
 
 void stringbuffer::clear() {
 	bytebuffer::clear();
+}
+
+void stringbuffer::clear(size_t initialsize, size_t incrementsize) {
+	bytebuffer::clear(initialsize,incrementsize);
+}
+
+void stringbuffer::clear(char *initialcontents,
+				size_t initialsize, size_t incrementsize) {
+	bytebuffer::clear((unsigned char *)initialcontents,
+					initialsize,incrementsize);
 }
 
 stringbuffer *stringbuffer::append(const unsigned char *string) {

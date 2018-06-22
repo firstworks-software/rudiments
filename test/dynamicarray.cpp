@@ -44,10 +44,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("create <test>...\n");
 	test("create, getLength()",da1.getLength()==0);
 	test("create, getInitialSize()",da1.getInitialSize()==128);
-	test("create, getIncrement()",da1.getIncrement()==32);
+	test("create, getIncrementSize()",da1.getIncrementSize()==32);
 	da1.clear(25,10);
 	test("clear, getInitialSize()",da1.getInitialSize()==25);
-	test("clear, getIncrement()",da1.getIncrement()==10);
+	test("clear, getIncrementSize()",da1.getIncrementSize()==10);
 	stdoutput.printf("\n");
 
 	// set/check values
