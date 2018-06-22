@@ -46,9 +46,12 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		 *  tree from scratch. */
 		void	createRootNode();
 
-		/** Writes the current DOM tree to "filename" and sets
-		 *  permissions of the file to "perms". */
-		bool	writeFile(const char *filename, mode_t perms) const;
+		/** Writes the current DOM tree to "out".
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is output
+		 *  as-is. */
+		bool	write(output *out, bool indent) const;
 
 	protected:
 

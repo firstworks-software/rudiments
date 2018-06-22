@@ -686,13 +686,13 @@ bool domnode::insertAttribute(const char *name, const char *value,
 				&pvt->_attributecount);
 }
 
-void domnode::xml(output *out, bool indent, uint16_t *indentlevel) const {
+void domnode::write(output *out, bool indent, uint16_t *indentlevel) const {
 
 	domnode	*current;
 	if (pvt->_type==ROOT_DOMNODETYPE) {
 		current=pvt->_firstchild;
 		for (uint64_t i=0; i<pvt->_childcount; i++) {
-			current->xml(out,indent,indentlevel);
+			current->write(out,indent,indentlevel);
 			current=current->pvt->_next;
 		}
 	} else if (pvt->_type==TAG_DOMNODETYPE) {
@@ -710,7 +710,7 @@ void domnode::xml(output *out, bool indent, uint16_t *indentlevel) const {
 		current=pvt->_firstattribute;
 		for (uint64_t i=0; i<pvt->_attributecount; i++) {
 			out->write(" ");
-			current->xml(out,indent,indentlevel);
+			current->write(out,indent,indentlevel);
 			current=current->pvt->_next;
 		}
 		if (pvt->_childcount) {
@@ -726,7 +726,7 @@ void domnode::xml(output *out, bool indent, uint16_t *indentlevel) const {
 			}
 			current=pvt->_firstchild;
 			for (uint64_t i=0; i<pvt->_childcount; i++) {
-				current->xml(out,indent,indentlevel);
+				current->write(out,indent,indentlevel);
 				current=current->pvt->_next;
 			}
 			if (indent && indentlevel) {
@@ -820,7 +820,9 @@ void domnode::safeWrite(output *out, const char *str) const {
 				entity=NULL;
 			} else {
 				out->write("&#");
-				out->write(num);
+				char	*numstr=charstring::parseNumber(num);
+				out->write(numstr);
+				delete[] numstr;
 				out->write(";");
 				num=0;
 			}
@@ -1655,15 +1657,13 @@ bool domnode::deleteAttribute(domnode *attribute) {
 				&pvt->_attributecount);
 }
 
-stringbuffer *domnode::xml() const {
-	stringbuffer *strb=new stringbuffer();
-	xml(strb,false,NULL);
-	return strb;
+void domnode::write(output *out) const {
+	write(out,false);
 }
 
-void domnode::print(output *out) const {
+void domnode::write(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	xml(out,true,&indentlevel);
+	write(out,indent,(indent)?&indentlevel:NULL);
 }
 
 stringbuffer *domnode::getPath() const {

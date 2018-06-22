@@ -4,6 +4,9 @@
 #include <rudiments/dom.h>
 #include <rudiments/charstring.h>
 #include <rudiments/dictionary.h>
+#include <rudiments/filesystem.h>
+#include <rudiments/file.h>
+#include <rudiments/sys.h>
 
 class domprivate {
 	friend class dom;
@@ -73,6 +76,36 @@ domnode *dom::getRootNode() const {
 
 domnode *dom::getNullNode() const {
 	return pvt->_nullnode;
+}
+
+bool dom::writeFile(const char *filename, mode_t perms) const {
+	filesystem	fs;
+	off64_t	optblocksize;
+	if (fs.open(filename)) {
+		optblocksize=fs.getOptimumTransferBlockSize();
+	} else {
+		optblocksize=sys::getPageSize();
+	}
+	file	fl;
+	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {
+		return false;
+	}
+	fl.setWriteBufferSize(optblocksize);
+	bool	retval=write(&fl);
+	fl.flushWriteBuffer(-1,-1);
+	if (!fl.close()) {
+		retval=false;
+	}
+	return retval;
+}
+
+bool dom::write(output *out) const {
+	return write(out,false);
+}
+
+bool dom::write(output *out, bool indent) const {
+	getRootNode()->write(out,indent);
+	return true;
 }
 
 bool dom::stringCacheEnabled() {

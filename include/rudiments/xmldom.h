@@ -46,10 +46,6 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		 *  tree from scratch. */
 		void	createRootNode();
 
-		/** Writes the current DOM tree to "filename" and sets
-		 *  permissions of the file to "perms". */
-		bool	writeFile(const char *filename, mode_t perms) const;
-
 	protected:
 
 		/** Gets called when a start tag is parsed. */

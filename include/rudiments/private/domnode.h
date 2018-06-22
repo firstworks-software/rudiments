@@ -137,7 +137,7 @@
 					domnode **first,
 					domnode **last,
 					uint64_t *count);
-		void		xml(output *out,
+		void		write(output *out,
 					bool indent,
 					uint16_t *indentlevel) const;
 		void		safeWrite(output *out, const char *str) const;

@@ -440,7 +440,7 @@ bool compiler::process(domnode *root) {
 		debugPrintf(1,"\ninput to processor \"%s\":\n\n",
 							mod->getId());
 		if (pvt->_debuglevel>=1) {
-			root->print(&stdoutput);
+			root->write(&stdoutput,true);
 		}
 		debugPrintf(1,"\n\n===================="
 				"====================\n\n");
@@ -459,7 +459,7 @@ bool compiler::process(domnode *root) {
 		debugPrintf(1,"\noutput from processor \"%s\":\n\n",
 							mod->getId());
 		if (pvt->_debuglevel>=1) {
-			root->print(&stdoutput);
+			root->write(&stdoutput,true);
 		}
 		debugPrintf(1,"\n\n===================="
 				"====================\n\n");

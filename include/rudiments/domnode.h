@@ -1319,18 +1319,21 @@ class RUDIMENTS_DLLSPEC domnode {
 		domnode	*clone(dom *dom);
 
 
-		/** Allocates a stringbuffer, writes a text
-		 *  representation of the tree starting at this
-		 *  node to it and returns the stringbuffer;
-		 *  The calling program must deallocate the
-		 *  stringbuffer. */
-		stringbuffer	*xml() const;
-
-		/** Prints a text representation of the tree starting at this
+		/** Writes a text representation of the tree starting at this
 		 *  node into "out" which can be an instance of stringbuffer,
 		 *  filedescriptor, or any other class that implements
 		 *  the output interface. */
-		void	print(output *out) const;
+		void	write(output *out) const;
+
+		/** Writes a text representation of the tree starting at this
+		 *  node into "out" which can be an instance of stringbuffer,
+		 *  filedescriptor, or any other class that implements
+		 *  the output interface.
+		 *
+		 *  If "indent" is true then the output is automatically
+		 *  indented.  If "indent" is false, then the domnode is
+		 *  output as-is. */
+		void	write(output *out, bool indent) const;
 
 		/** If the domnode is an element, returns the
 		 *  "path" of the domnode.  The path will have

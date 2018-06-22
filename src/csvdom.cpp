@@ -61,21 +61,8 @@ void csvdom::createRootNode() {
 	pvt->_currentparent=getRootNode();
 }
 
-bool csvdom::writeFile(const char *filename, mode_t perms) const {
-	filesystem	fs;
-	off64_t	optblocksize;
-	if (fs.open(filename)) {
-		optblocksize=fs.getOptimumTransferBlockSize();
-	} else {
-		optblocksize=sys::getPageSize();
-	}
-	file	fl;
-	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {
-		return false;
-	}
-	fl.setWriteBufferSize(optblocksize);
+bool csvdom::write(output *out, bool indent) const {
 
-	bool	retval=true;
 	domnode	*root=getRootNode();
 #ifdef DEBUG_MESSAGES
 	root->print(&stdoutput);
@@ -88,11 +75,11 @@ bool csvdom::writeFile(const char *filename, mode_t perms) const {
 		if (firstcolumn) {
 			firstcolumn=false;
 		} else {
-			fl.write(getDelimiter());
+			out->write(getDelimiter());
 		}
-		writeValue(&fl,column);
+		writeValue(out,column);
 	}
-	fl.write("\n");
+	out->write("\n");
 	for (domnode *row=root->getFirstTagChild("r");
 			!row->isNullNode();
 			row=row->getNextTagSibling("r")) {
@@ -103,32 +90,28 @@ bool csvdom::writeFile(const char *filename, mode_t perms) const {
 			if (firstrow) {
 				firstrow=false;
 			} else {
-				fl.write(getDelimiter());
+				out->write(getDelimiter());
 			}
-			writeValue(&fl,field);
+			writeValue(out,field);
 		}
-		fl.write("\n");
+		out->write("\n");
 	}
-	fl.flushWriteBuffer(-1,-1);
-	if (!fl.close()) {
-		retval=false;
-	}
-	return retval;
+	return true;
 }
 
-void csvdom::writeValue(file *fl, domnode *value) const {
+void csvdom::writeValue(output *out, domnode *value) const {
 	const char	*v=value->getAttributeValue("v");
 	if (value->getAttributeValue("q")[0]=='y') {
-		fl->write(getQuote());
+		out->write(getQuote());
 		for (const char *ptr=v; *ptr; ptr++) {
 			if (*ptr==getQuote()) {
-				fl->write(*ptr);
+				out->write(*ptr);
 			}
-			fl->write(*ptr);
+			out->write(*ptr);
 		}
-		fl->write(getQuote());
+		out->write(getQuote());
 	} else {
-		fl->write(v);
+		out->write(v);
 	}
 }
 

@@ -6,7 +6,7 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
-			void	writeValue(file *fl, domnode *value) const;
+			void	writeValue(output *out, domnode *value) const;
 
 				csvdom(const csvdom &x);
 			csvdom	&operator=(const csvdom &x);

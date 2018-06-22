@@ -3,9 +3,6 @@
 
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
-#include <rudiments/file.h>
-#include <rudiments/filesystem.h>
-#include <rudiments/sys.h>
 
 class xmldomprivate {
 	friend class xmldom;
@@ -95,34 +92,6 @@ void xmldom::reset() {
 void xmldom::createRootNode() {
 	dom::createRootNode();
 	pvt->_currentparent=getRootNode();
-}
-
-bool xmldom::writeFile(const char *filename, mode_t perms) const {
-	filesystem	fs;
-	off64_t	optblocksize;
-	if (fs.open(filename)) {
-		optblocksize=fs.getOptimumTransferBlockSize();
-	} else {
-		optblocksize=sys::getPageSize();
-	}
-	file	fl;
-	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {
-		return false;
-	}
-	fl.setWriteBufferSize(optblocksize);
-	stringbuffer	*xml=getRootNode()->xml();
-	xml->append('\n');
-	bool	retval=true;
-	ssize_t	length=charstring::length(xml->getString());
-	if (fl.write(xml->getString(),length)!=length) {
-		retval=false;
-	}
-	fl.flushWriteBuffer(-1,-1);
-	if (!fl.close()) {
-		retval=false;
-	}
-	delete xml;
-	return retval;
 }
 
 bool xmldom::tagStart(const char *ns, const char *name) {

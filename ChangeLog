@@ -17,6 +17,7 @@
 	abstracted sax and dom classes
 	added csvsax and csvdom classes
 	renamed xmldomnode and xmldomevents to domnode and domevents
+	refactored write/print/xml methods of dom/domnode classes
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

@@ -48,7 +48,7 @@ const char normal[]=
 "	</test2>\n"
 "	text after test2\n"
 "	<!-- comment after test2 -->\n"
-"</test>\n";
+"</test>";
 
 
 const char ns[]=
@@ -92,7 +92,7 @@ const char ns[]=
 "	</testns:test2>\n"
 "	text after test2\n"
 "	<!-- comment after test2 -->\n"
-"</testns:test>\n";
+"</testns:test>";
 
 
 const char entities[]=
@@ -102,7 +102,7 @@ const char entities[]=
 "	&amp;&lt;&gt;&apos;&quot;&#200;\n"
 "	&amp&lt&gt&apos&quot\n"
 "	&&&&&\n"
-"</test>\n";
+"</test>";
 
 const char entitiesresult[]=
 "<?xml version=\"1.0\"?>\n"
@@ -111,7 +111,7 @@ const char entitiesresult[]=
 "	&amp;&lt;&gt;&apos;&quot;&#200;\n"
 "	&amp;amp&amp;lt&amp;gt&amp;apos&amp;quot\n"
 "	&amp;&amp;&amp;&amp;&amp;\n"
-"</test>\n";
+"</test>";
 
 
 const char cdata[]=
@@ -120,7 +120,7 @@ const char cdata[]=
 "	<![CDATA[ test [ test [ test [test]]]]]>\n"
 "	<![CDATA[ test [ test [ test [test]]]]]>\n"
 "	<![CDATA[ test [ test [ test [test]]]]]>\n"
-"</test>\n";
+"</test>";
 
 
 const char target[]=
@@ -129,7 +129,7 @@ const char target[]=
 "	<?target test1=\"test1\"?>\n"
 "	<?target test2=\"test2\"?>\n"
 "	<?target test3=\"test3\"?>\n"
-"</test>\n";
+"</test>";
 
 
 const char singlequotes[]=
@@ -173,7 +173,7 @@ const char singlequotes[]=
 "	</test2>\n"
 "	text after test2\n"
 "	<!-- comment after test2 -->\n"
-"</test>\n";
+"</test>";
 
 
 const char oddspacing[]=
@@ -217,7 +217,7 @@ const char oddspacing[]=
 "	< / test2 >\n"
 "	text after test2\n"
 "	<!-- comment after test2 -->\n"
-"< / test >\n";
+"< / test >";
 
 int main(int argc, const char **argv) {
 
