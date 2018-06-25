@@ -2,12 +2,8 @@
 // See the COPYING file for more information.
 
 		void		setType(domnodetype type);
-		void		setNamespace(const char *ns);
 		void		setName(const char *name);
 		void		setValue(const char *value);
-		void		setParent(domnode *parent);
-		void		setPreviousSibling(domnode *previous);
-		void		setNextSibling(domnode *next);
 		domnode		*clone();
 		domnode		*clone(dom *dom);
 

@@ -8,8 +8,15 @@ class cursordomnodeprivate {
 	private:
 };
 
-cursordomnode::cursordomnode(dom *dom, domnode *nullnode) : domnode(dom,nullnode) {
+cursordomnode::cursordomnode(dom *dom, domnode *nullnode) :
+						domnode(dom,nullnode) {
 	pvt=new cursordomnodeprivate;
+}
+
+cursordomnode::cursordomnode(dom *dom, domnode *nullnode, const char *ns) :
+							domnode(dom,nullnode) {
+	pvt=new cursordomnodeprivate;
+	setNamespace(ns);
 }
 
 cursordomnode::~cursordomnode() {
@@ -18,10 +25,6 @@ cursordomnode::~cursordomnode() {
 
 domnodetype cursordomnode::getType() const {
 	return NULL_DOMNODETYPE;
-}
-
-const char *cursordomnode::getNamespace() const {
-	return NULL;
 }
 
 const char *cursordomnode::getName() const {
@@ -88,27 +91,11 @@ void cursordomnode::setType(domnodetype type) {
 	// do nothing
 }
 
-void cursordomnode::setNamespace(const char *ns) {
-	// do nothing
-}
-
 void cursordomnode::setName(const char *name) {
 	// do nothing
 }
 
 void cursordomnode::setValue(const char *value) {
-	// do nothing
-}
-
-void cursordomnode::setParent(domnode *parent) {
-	// do nothing
-}
-
-void cursordomnode::setPreviousSibling(domnode *previous) {
-	// do nothing
-}
-
-void cursordomnode::setNextSibling(domnode *next) {
 	// do nothing
 }
 

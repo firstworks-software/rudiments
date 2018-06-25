@@ -28,15 +28,15 @@ class RUDIMENTS_DLLSPEC cursordomnode : public domnode {
 		 *  "node2" doesn't exist. */
 		cursordomnode(dom *dom, domnode *nullnode);
 
+		/** ... */
+		cursordomnode(dom *dom, domnode *nullnode, const char *ns);
+
 		/** Deletes the node, all attribute nodes and
 		 *  optionally all child nodes, recursively. */
 		virtual	~cursordomnode();
 
 		/** Returns the type of the node. */
 		virtual	domnodetype	getType() const;
-
-		/** Returns the namespace of the node. */
-		virtual	const char	*getNamespace() const;
 
 		/** Returns the name of the node. */
 		virtual	const char	*getName() const;

@@ -691,10 +691,13 @@ bool domnode::insertAttribute(const char *name, const char *value,
 
 void domnode::write(output *out, bool indent, uint16_t *indentlevel) const {
 
+	// NOTE: this method is written a little strangely
+	// to work correctly with cursordomnodes
+
 	domnode	*current;
 	if (getType()==ROOT_DOMNODETYPE) {
-		current=pvt->_firstchild;
-		for (uint64_t i=0; i<getChildCount(); i++) {
+		current=getFirstChild();
+		while (!current->isNullNode()) {
 			current->write(out,indent,indentlevel);
 			current=current->getNextSibling();
 		}
@@ -711,33 +714,31 @@ void domnode::write(output *out, bool indent, uint16_t *indentlevel) const {
 		}
 		safeWrite(out,getName());
 		current=pvt->_firstattribute;
-		for (uint64_t i=0; i<pvt->_attributecount; i++) {
+		while (current && !current->isNullNode()) {
 			out->write(" ");
 			current->write(out,indent,indentlevel);
 			current=current->getNextSibling();
 		}
-		if (getChildCount()) {
+		current=getFirstChild();
+		if (!current->isNullNode()) {
 			out->write(">");
 			if (indent && indentlevel) {
-				if (pvt->_firstchild->getType()!=
-						TEXT_DOMNODETYPE &&
-					pvt->_firstchild->getType()!=
-						CDATA_DOMNODETYPE) {
+				if (current->getType()!=TEXT_DOMNODETYPE &&
+					current->getType()!=CDATA_DOMNODETYPE) {
 					out->write("\n");
 				}
 				*indentlevel=*indentlevel+2;
 			}
-			current=pvt->_firstchild;
-			for (uint64_t i=0; i<getChildCount(); i++) {
+			domnodetype	prevtype=current->getType();
+			while (!current->isNullNode()) {
 				current->write(out,indent,indentlevel);
+				prevtype=current->getType();
 				current=current->getNextSibling();
 			}
 			if (indent && indentlevel) {
 				*indentlevel=*indentlevel-2;
-				if (pvt->_lastchild->getType()!=
-						TEXT_DOMNODETYPE &&
-					pvt->_lastchild->getType()!=
-						CDATA_DOMNODETYPE) {
+				if (prevtype!=TEXT_DOMNODETYPE &&
+					prevtype!=CDATA_DOMNODETYPE) {
 					for (uint16_t i=0;
 						i<*indentlevel; i++) {
 						out->write(" ");
@@ -1019,7 +1020,7 @@ constnamevaluepairs *domnode::getAttributes() const {
 	}
 
 	constnamevaluepairs	*nvp=new constnamevaluepairs();
-	for (uint64_t i=0; i<pvt->_attributecount; i++) {
+	for (uint64_t i=0; i<getAttributeCount(); i++) {
 		nvp->setValue(getAttribute(i)->getName(),
 				getAttribute(i)->getValue());
 	}
@@ -1154,7 +1155,7 @@ uint64_t domnode::getAttributeCount() const {
 
 domnode *domnode::getAttribute(uint64_t position) const {
 	return getNode(pvt->_firstattribute,position,
-				NULL,NULL,false,pvt->_attributecount);
+				NULL,NULL,false,getAttributeCount());
 }
 
 domnode *domnode::getAttribute(const char *name) const {
@@ -1167,7 +1168,7 @@ domnode *domnode::getAttributeIgnoringCase(const char *name) const {
 
 domnode *domnode::getAttribute(const char *name, bool ignorecase) const {
 	return getNode(pvt->_firstattribute,0,
-				NULL,name,ignorecase,pvt->_attributecount);
+				NULL,name,ignorecase,getAttributeCount());
 }
 
 const char *domnode::getAttributeValue(uint64_t position) const {
