@@ -857,6 +857,7 @@ enable_prompt
 enable_templateengine
 enable_csvsax
 enable_csvdom
+enable_cursordomnode
 enable_shared
 enable_static
 with_pic
@@ -1565,6 +1566,7 @@ Optional Features:
   --disable-templateengine Don't build templateengine class
   --disable-csvsax        Don't build csvsax class
   --disable-csvdom        Don't build csvdom class
+  --disable-cursordomnode Don't build cursordomnode class
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -3093,6 +3095,13 @@ if test "${enable_csvdom+set}" = set; then :
   enableval=$enable_csvdom; INCLUDE_CSVDOM="0"
 else
   INCLUDE_CSVDOM="1"
+fi
+
+# Check whether --enable-cursordomnode was given.
+if test "${enable_cursordomnode+set}" = set; then :
+  enableval=$enable_cursordomnode; INCLUDE_CURSORDOMNODE="0"
+else
+  INCLUDE_CURSORDOMNODE="1"
 fi
 
 
@@ -34417,10 +34426,10 @@ fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
 then
-	HEADERS3="$HEADERS3 dom.h domnode.h cursordomnode.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h cursordomnode.h cursordomnodeincludes.h"
-	SRCS="$SRCS dom.cpp domnode.cpp cursordomnode.cpp"
-	LOBJS="$LOBJS dom.lo domnode.lo cursordomnode.lo"
+	HEADERS3="$HEADERS3 dom.h domnode.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h"
+	SRCS="$SRCS dom.cpp domnode.cpp"
+	LOBJS="$LOBJS dom.lo domnode.lo"
 fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )
@@ -34540,6 +34549,14 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 csvdom.h csvdomincludes.h"
 	SRCS="$SRCS csvdom.cpp"
 	LOBJS="$LOBJS csvdom.lo"
+fi
+
+if ( test "$INCLUDE_CURSORDOMNODE" = "1" )
+then
+	HEADERS3="$HEADERS3 cursordomnode.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 cursordomnode.h cursordomnodeincludes.h"
+	SRCS="$SRCS cursordomnode.cpp"
+	LOBJS="$LOBJS cursordomnode.lo"
 fi
 
 

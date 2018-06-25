@@ -350,6 +350,10 @@ AC_ARG_ENABLE(csvdom,
 	[  --disable-csvdom        Don't build csvdom class],
 	INCLUDE_CSVDOM="0",
 	INCLUDE_CSVDOM="1")
+AC_ARG_ENABLE(cursordomnode,
+	[  --disable-cursordomnode Don't build cursordomnode class],
+	INCLUDE_CURSORDOMNODE="0",
+	INCLUDE_CURSORDOMNODE="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -4229,10 +4233,10 @@ fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
 then
-	HEADERS3="$HEADERS3 dom.h domnode.h cursordomnode.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h cursordomnode.h cursordomnodeincludes.h"
-	SRCS="$SRCS dom.cpp domnode.cpp cursordomnode.cpp"
-	LOBJS="$LOBJS dom.lo domnode.lo cursordomnode.lo"
+	HEADERS3="$HEADERS3 dom.h domnode.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h"
+	SRCS="$SRCS dom.cpp domnode.cpp"
+	LOBJS="$LOBJS dom.lo domnode.lo"
 fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )
@@ -4352,6 +4356,14 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 csvdom.h csvdomincludes.h"
 	SRCS="$SRCS csvdom.cpp"
 	LOBJS="$LOBJS csvdom.lo"
+fi
+
+if ( test "$INCLUDE_CURSORDOMNODE" = "1" )
+then
+	HEADERS3="$HEADERS3 cursordomnode.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 cursordomnode.h cursordomnodeincludes.h"
+	SRCS="$SRCS cursordomnode.cpp"
+	LOBJS="$LOBJS cursordomnode.lo"
 fi
 
 
