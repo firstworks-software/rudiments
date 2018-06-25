@@ -1,15 +1,15 @@
 // Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_LIVEDOMNODE_H
-#define RUDIMENTS_LIVEDOMNODE_H
+#ifndef RUDIMENTS_CURSORDOMNODE_H
+#define RUDIMENTS_CURSORDOMNODE_H
 
-#include <rudiments/private/livedomnodeincludes.h>
+#include <rudiments/private/cursordomnodeincludes.h>
 
-class livedomnodeprivate;
+class cursordomnodeprivate;
 
-/** The livedomnode class provides a ... */
-class RUDIMENTS_DLLSPEC livedomnode : public domnode {
+/** The cursordomnode class provides a ... */
+class RUDIMENTS_DLLSPEC cursordomnode : public domnode {
 	public:
 		/** Creates a new node and intializes its
 		 *  member variables to NULL.
@@ -26,11 +26,11 @@ class RUDIMENTS_DLLSPEC livedomnode : public domnode {
 		 *  from causing the program to crash trying to
 		 *  dereference a NULL pointer if, for example,
 		 *  "node2" doesn't exist. */
-		livedomnode(dom *dom, domnode *nullnode);
+		cursordomnode(dom *dom, domnode *nullnode);
 
 		/** Deletes the node, all attribute nodes and
 		 *  optionally all child nodes, recursively. */
-		virtual	~livedomnode();
+		virtual	~cursordomnode();
 
 		/** Returns the type of the node. */
 		virtual	domnodetype	getType() const;
@@ -98,7 +98,7 @@ class RUDIMENTS_DLLSPEC livedomnode : public domnode {
 		 *  nullnode and false otherwise. */
 		virtual	bool	isNullNode() const;
 
-	#include <rudiments/private/livedomnode.h>
+	#include <rudiments/private/cursordomnode.h>
 };
 
 #endif

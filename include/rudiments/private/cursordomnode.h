@@ -32,7 +32,7 @@
 					uint64_t *count);
 
 	private:
-				livedomnode(const livedomnode &x);
-		livedomnode	&operator=(const livedomnode &x);
+				cursordomnode(const cursordomnode &x);
+		cursordomnode	&operator=(const cursordomnode &x);
 
-		livedomnodeprivate	*pvt;
+		cursordomnodeprivate	*pvt;
