@@ -158,7 +158,7 @@ class RUDIMENTS_DLLSPEC domnode {
 
 			/** Deletes the node, all attribute nodes and
 			 *  optionally all child nodes, recursively. */
-			~domnode();
+		virtual	~domnode();
 
 
 		/** Creates a special "null node" whose parent, next sibling,
@@ -183,16 +183,16 @@ class RUDIMENTS_DLLSPEC domnode {
 
 
 		/** Returns the type of the node. */
-		domnodetype	getType() const;
+		virtual	domnodetype	getType() const;
 
 		/** Returns the namespace of the node. */
-		const char	*getNamespace() const;
+		virtual	const char	*getNamespace() const;
 
 		/** Returns the name of the node. */
-		const char	*getName() const;
+		virtual	const char	*getName() const;
 
 		/** Returns the value of node. */
-		const char	*getValue() const;
+		virtual	const char	*getValue() const;
 
 
 		/** Returns a pointer to the tree that this node is
@@ -201,15 +201,15 @@ class RUDIMENTS_DLLSPEC domnode {
 
 		/** Returns a pointer to the parent node or the
 		 *  nullnode if none exists. */
-		domnode	*getParent() const;
+		virtual	domnode	*getParent() const;
 
 		/** Returns the position of the node, relative to its
 		 *  siblings. */
-		uint64_t	getPosition() const;
+		virtual	uint64_t	getPosition() const;
 
 		/** Returns a pointer to the previous sibling
 		 *  node or the nullnode if none exists. */
-		domnode	*getPreviousSibling() const;
+		virtual	domnode	*getPreviousSibling() const;
 
 		/** Returns a pointer to the previous sibling
 		 *  node whose type is TAG_DOMNODE.  If no
@@ -299,7 +299,7 @@ class RUDIMENTS_DLLSPEC domnode {
 
 		/** Returns a pointer to the next sibling node
 		 *  or the nullnode if none exists. */
-		domnode	*getNextSibling() const;
+		virtual	domnode	*getNextSibling() const;
 
 		/** Returns a pointer to the next sibling node
 		 *  whose type is TAG_DOMNODE.  If no match
@@ -403,13 +403,17 @@ class RUDIMENTS_DLLSPEC domnode {
 
 
 		/** Returns the number of immediate child nodes. */
-		uint64_t	getChildCount() const;
+		virtual	uint64_t	getChildCount() const;
 
-		/** Returns the firest child node named "name"
+		/** Returns the first child node or the nullnode
+		 *  if no children are found. */
+		virtual	domnode	*getFirstChild() const;
+
+		/** Returns the first child node named "name"
 		 *  or the nullnode if not found. */
 		domnode	*getFirstChild(const char *name) const;
 
-		/** Returns the firest child node in namespace "ns"
+		/** Returns the first child node in namespace "ns"
 		 *  named "name" or the nullnode if not found. */
 		domnode	*getFirstChild(const char *ns,
 						const char *name) const;
@@ -708,29 +712,31 @@ class RUDIMENTS_DLLSPEC domnode {
 
 
 		/** Returns the number of attributes. */
-		uint64_t	getAttributeCount() const;
+		virtual	uint64_t	getAttributeCount() const;
 
 		/** Returns the attribute named "name"
 		 *  or the nullnode if not found. */
-		domnode	*getAttribute(const char *name) const;
+		virtual	domnode	*getAttribute(const char *name) const;
 
 		/** Returns the attribute named "name" (ignoring case)
 		 *  or the nullnode if not found. */
-		domnode	*getAttributeIgnoringCase(
+		virtual	domnode	*getAttributeIgnoringCase(
 						const char *name) const;
 
 		/** Returns the attribute node at index
 		 *  "position" or the nullnode if not found. */
-		domnode	*getAttribute(uint64_t position) const;
+		virtual	domnode	*getAttribute(uint64_t position) const;
 
 		/** Returns the value of the attribute named
 		 *  "name" or the nullnode if not found. */
-		const char	*getAttributeValue(const char *name) const;
+		virtual	const char	*getAttributeValue(
+						const char *name) const;
 
 		/** Returns the value of the attribute node at
 		 *  index "position" or the nullnode if not
 		 *  found. */
-		const char	*getAttributeValue(uint64_t position) const;
+		virtual	const char	*getAttributeValue(
+						uint64_t position) const;
 
 		/** Returns the attribute names and values in
 		 *  a constnamevaluepairs dictionary.  The
@@ -761,32 +767,32 @@ class RUDIMENTS_DLLSPEC domnode {
 
 		/** Returns true if this node is the special
 		 *  nullnode and false otherwise. */
-		bool	isNullNode() const;
+		virtual	bool	isNullNode() const;
 
 
 		/** Sets the node type to "type". */
-		void	setType(domnodetype type);
+		virtual	void	setType(domnodetype type);
 
 		/** Sets the node namespace to "ns". */
-		void	setNamespace(const char *ns);
+		virtual	void	setNamespace(const char *ns);
 
 		/** Sets the node name to "name". */
-		void	setName(const char *name);
+		virtual	void	setName(const char *name);
 
 		/** Sets the node namespace to "ns" and node name to "name". */
 		void	setName(const char *ns, const char *name);
 
 		/** Sets the node value to "value". */
-		void	setValue(const char *value);
+		virtual	void	setValue(const char *value);
 
 		/** Sets the parent of the node to "parent". */
-		void	setParent(domnode *parent);
+		virtual	void	setParent(domnode *parent);
 
 		/** Sets the previous sibling of the node to "previous". */
-		void	setPreviousSibling(domnode *previous);
+		virtual	void	setPreviousSibling(domnode *previous);
 
 		/** Sets the next sibling of the node to "next". */
-		void	setNextSibling(domnode *next);
+		virtual	void	setNextSibling(domnode *next);
 
 		/** Inserts "child" into the list of child nodes at
 		 *  "position".  The position of the next sibling
@@ -1312,11 +1318,11 @@ class RUDIMENTS_DLLSPEC domnode {
 
 		/** Clones this node and all of its children and returns a
 		 *  pointer to the clone. */
-		domnode	*clone();
+		virtual	domnode	*clone();
 
 		/** Clones this node and all of its children in tree "dom"
 		 *  and returns a pointer to the clone. */
-		domnode	*clone(dom *dom);
+		virtual	domnode	*clone(dom *dom);
 
 
 		/** Writes a text representation of the tree starting at this

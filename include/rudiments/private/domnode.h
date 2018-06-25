@@ -1,11 +1,31 @@
 // Copyright (c) 2018 David Muse
 // See the COPYING file for more information.
 
+	protected:
+		virtual	bool		insertNode(domnode *node,
+							uint64_t position,
+							domnodetype type,
+							domnode **first,
+							domnode **last,
+							uint64_t *count);
+		virtual	bool		deleteNode(domnode *node,
+							uint64_t position,
+							const char *name,
+							domnode **first,
+							domnode **last,
+							uint64_t *count);
+		virtual	domnode		*unlinkNode(domnode *node,
+							uint64_t position,
+							const char *name,
+							domnode **first,
+							domnode **last,
+							uint64_t *count);
+
 	friend class codetree;
 	friend class codetreegrammar;
 	friend class domevents;
 	private:
-		void		init(domnode *nullnode);
+		void		init(dom *dom, domnode *nullnode);
 		domnode	*getNode(domnode *first,
 					uint64_t position,
 					const char *ns,
@@ -65,12 +85,6 @@
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
-		bool		insertNode(domnode *node,
-					uint64_t position,
-					domnodetype type,
-					domnode **first,
-					domnode **last,
-					uint64_t *count);
 		bool		deleteFirstChild(
 					const char *ns,
 					const char *name,
@@ -125,18 +139,6 @@
 					const char *newns,
 					const char *newname,
 					bool ignorecase);
-		bool		deleteNode(domnode *node,
-					uint64_t position,
-					const char *name,
-					domnode **first,
-					domnode **last,
-					uint64_t *count);
-		domnode		*unlinkNode(domnode *node,
-					uint64_t position,
-					const char *name,
-					domnode **first,
-					domnode **last,
-					uint64_t *count);
 		void		write(output *out,
 					bool indent,
 					uint16_t *indentlevel) const;

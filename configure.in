@@ -4229,10 +4229,10 @@ fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
 then
-	HEADERS3="$HEADERS3 dom.h domnode.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h"
-	SRCS="$SRCS dom.cpp domnode.cpp"
-	LOBJS="$LOBJS dom.lo domnode.lo"
+	HEADERS3="$HEADERS3 dom.h domnode.h livedomnode.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h livedomnode.h livedomnodeincludes.h"
+	SRCS="$SRCS dom.cpp domnode.cpp livedomnode.cpp"
+	LOBJS="$LOBJS dom.lo domnode.lo livedomnode.lo"
 fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )
