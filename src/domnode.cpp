@@ -713,7 +713,7 @@ void domnode::write(output *out, bool indent, uint16_t *indentlevel) const {
 			out->write(":");
 		}
 		safeWrite(out,getName());
-		current=pvt->_firstattribute;
+		current=getAttribute((uint64_t)0);
 		while (current && !current->isNullNode()) {
 			out->write(" ");
 			current->write(out,indent,indentlevel);

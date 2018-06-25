@@ -75,14 +75,6 @@ domnode *cursordomnode::getAttribute(uint64_t position) const {
 	return getNullNode();
 }
 
-const char *cursordomnode::getAttributeValue(const char *name) const {
-	return NULL;
-}
-
-const char *cursordomnode::getAttributeValue(uint64_t position) const {
-	return NULL;
-}
-
 bool cursordomnode::isNullNode() const {
 	return true;
 }

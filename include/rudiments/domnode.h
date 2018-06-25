@@ -729,14 +729,12 @@ class RUDIMENTS_DLLSPEC domnode {
 
 		/** Returns the value of the attribute named
 		 *  "name" or the nullnode if not found. */
-		virtual	const char	*getAttributeValue(
-						const char *name) const;
+		const char	*getAttributeValue(const char *name) const;
 
 		/** Returns the value of the attribute node at
 		 *  index "position" or the nullnode if not
 		 *  found. */
-		virtual	const char	*getAttributeValue(
-						uint64_t position) const;
+		const char	*getAttributeValue(uint64_t position) const;
 
 		/** Returns the attribute names and values in
 		 *  a constnamevaluepairs dictionary.  The
