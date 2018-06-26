@@ -384,8 +384,6 @@ class RUDIMENTS_DLLSPEC codetree {
 	#include <rudiments/private/codetree.h>
 };
 
-class codetreegrammarprivate;
-
 /** A child class of dom with various codetree-specific optimizations. */
 class RUDIMENTS_DLLSPEC codetreegrammar : public xmldom {
 	friend class codetree;
