@@ -6,8 +6,6 @@
 
 #include <rudiments/private/environmentincludes.h>
 
-class environmentprivate;
-
 /** The environment class provides static methods for accessing and
  *  manipulating environment variables. */
 class RUDIMENTS_DLLSPEC environment {

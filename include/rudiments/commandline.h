@@ -6,8 +6,6 @@
 
 #include <rudiments/private/commandlineincludes.h>
 
-class commandlineprivate;
-
 /** The commandline class provides methods for parsing command line
  *  arguments. */
 class RUDIMENTS_DLLSPEC commandline {

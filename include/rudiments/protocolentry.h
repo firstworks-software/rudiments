@@ -6,8 +6,6 @@
 
 #include <rudiments/private/protocolentryincludes.h>
 
-class protocolentryprivate;
-
 /** The protocolentry class provides methods for retrieving entries from the
  *  protocol file (/etc/protocols on unix). */
 class RUDIMENTS_DLLSPEC protocolentry {

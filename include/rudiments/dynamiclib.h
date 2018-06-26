@@ -6,8 +6,6 @@
 
 #include <rudiments/private/dynamiclibincludes.h>
 
-class dynamiclibprivate;
-
 /** The dynamiclib class provides methods for loading, unloading and calling
  *  functions from dynamically linked libraries. */
 class RUDIMENTS_DLLSPEC dynamiclib {

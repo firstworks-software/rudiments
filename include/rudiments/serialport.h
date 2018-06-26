@@ -6,8 +6,6 @@
 
 #include <rudiments/private/serialportincludes.h>
 
-class serialportprivate;
-
 /** The serialport class is similar to the filedescriptor class, but read()
  *  returns EOF when a timeout has occurred.  This class should be used when
  *  communicating over a serial port.

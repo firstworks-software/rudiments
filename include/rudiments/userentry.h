@@ -6,8 +6,6 @@
 
 #include <rudiments/private/userentryincludes.h>
 
-class userentryprivate;
-
 /** The userentry class provides methods for retrieving information about
  *  users. */
 class RUDIMENTS_DLLSPEC userentry {

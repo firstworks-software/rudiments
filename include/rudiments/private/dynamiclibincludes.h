@@ -4,3 +4,5 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 #include <rudiments/threadmutex.h>
+
+class dynamiclibprivate;

@@ -16,3 +16,5 @@
 		unsigned char	c_cc[NCCS];
 	};
 #endif
+
+class serialportprofileprivate;

@@ -7,7 +7,6 @@
 #include <rudiments/private/filedescriptorincludes.h>
 
 class listener;
-class filedescriptorprivate;
 
 /** The filedescriptor class is a base class for other classes that utilize
  *  file descriptors. */

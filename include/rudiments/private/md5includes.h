@@ -2,3 +2,5 @@
 // See the COPYING file for more information.
 
 #include <rudiments/hash.h>
+
+class md5private;

@@ -6,8 +6,6 @@
 
 #include <rudiments/private/threadmutexincludes.h>
 
-class threadmutexprivate;
-
 /** The threadmutex class provides mutual exclusion locks between separate
  *  threads of a single process. */
 class RUDIMENTS_DLLSPEC threadmutex {

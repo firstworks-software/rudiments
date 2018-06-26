@@ -4,3 +4,5 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/dictionary.h>
 #include <rudiments/threadmutex.h>
+
+class environmentprivate;

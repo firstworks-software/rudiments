@@ -6,8 +6,6 @@
 
 #include <rudiments/private/datetimeincludes.h>
 
-class datetimeprivate;
-
 /** The datetime class represents a date/time combination and provides methods
  *  for getting and setting dates and times, converting date/time formats and
  *  accessing various date/time values. */

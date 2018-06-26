@@ -6,8 +6,6 @@
 
 #include <rudiments/private/sharedmemoryincludes.h>
 
-class sharedmemoryprivate;
-
 /** Shared memory segments allow multiple processes to access a common
  *  address space.
  * 

@@ -3,3 +3,5 @@
 
 #include <rudiments/stringbuffer.h>
 #include <rudiments/dictionary.h>
+
+class templateengineprivate;

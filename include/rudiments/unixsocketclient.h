@@ -6,8 +6,6 @@
 
 #include <rudiments/private/unixsocketclientincludes.h>
 
-class unixsocketclientprivate;
-
 /** The unixsocketclient class allows you to write programs that can talk to
  *  other programs on the same machine over TCP stream sockets.
  * 

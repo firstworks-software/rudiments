@@ -6,8 +6,6 @@
 
 #include <rudiments/private/semaphoresetincludes.h>
 
-class semaphoresetprivate;
-
 /** Semaphores allow processes to synchronize their activities.
  *
  *  A semaphore is just a number with two primary operations that can be 

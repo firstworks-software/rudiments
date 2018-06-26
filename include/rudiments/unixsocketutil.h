@@ -6,8 +6,6 @@
 
 #include <rudiments/private/unixsocketutilincludes.h>
 
-class unixsocketutilprivate;
-
 /** The unixsocketutil class is just a base class for other classes that use
  *  unix sockets.  It is unlikely to need to be used directly. */
 class RUDIMENTS_DLLSPEC unixsocketutil {

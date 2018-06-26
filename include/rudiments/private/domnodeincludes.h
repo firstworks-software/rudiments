@@ -5,3 +5,5 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/output.h>
 #include <rudiments/dictionary.h>
+
+class domnodeprivate;

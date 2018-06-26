@@ -6,8 +6,6 @@
 
 #include <rudiments/private/groupentryincludes.h>
 
-class groupentryprivate;
-
 /** The groupentry class provides methods for retrieving information about
  *  user groups. */
 class RUDIMENTS_DLLSPEC groupentry {

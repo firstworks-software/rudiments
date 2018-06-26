@@ -6,8 +6,6 @@
 
 #include <rudiments/private/clientincludes.h>
 
-class clientprivate;
-
 /** The client class provides a base class for classes that implement the
  *  client side of a client-server communication model. */
 class RUDIMENTS_DLLSPEC client : public filedescriptor {

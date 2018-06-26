@@ -24,3 +24,5 @@
 	#include <sys/types.h>
 	#include <sys/statvfs.h>
 #endif
+
+class filesystemprivate;

@@ -5,3 +5,5 @@
 #include <rudiments/private/inttypes.h>
 
 #include <rudiments/threadmutex.h>
+
+class hostentryprivate;

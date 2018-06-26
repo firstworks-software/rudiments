@@ -4,3 +4,5 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/socketserver.h>
 #include <rudiments/inetsocketutil.h>
+
+class inetsocketserverprivate;

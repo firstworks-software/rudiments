@@ -10,3 +10,5 @@
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif
+
+class sharedmemoryprivate;

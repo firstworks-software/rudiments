@@ -6,8 +6,6 @@
 
 #include <rudiments/private/xmlsaxincludes.h>
 
-class xmlsaxprivate;
-
 /** The xmlsax class is a base class for an SAX-style parser for XML data.  To
  *  use this class, you should create a class that inherits from it and
  *  implements its protected virtual methods. */

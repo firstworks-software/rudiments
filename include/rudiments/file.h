@@ -6,8 +6,6 @@
 
 #include <rudiments/private/fileincludes.h>
 
-class fileprivate;
-
 /** The file class provides methods for interacting with files and for 
  *  discovering the properties associated with a file such as permissions,
  *  ownership, size, etc.

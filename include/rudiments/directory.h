@@ -6,8 +6,6 @@
 
 #include <rudiments/private/directoryincludes.h>
 
-class directoryprivate;
-
 /** The directory class provides methods for opening/closing a directory and
  *  traversing it's files and subdirectories. */
 class RUDIMENTS_DLLSPEC directory {

@@ -6,8 +6,6 @@
 
 #include <rudiments/private/modemclientincludes.h>
 
-class modemclientprivate;
-
 /** The modemclient implements methods for connecting to and communicating with
  *  a remote host using a modem. */
 class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {

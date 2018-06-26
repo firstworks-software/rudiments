@@ -6,8 +6,6 @@
 
 #include <rudiments/private/deviceincludes.h>
 
-class deviceprivate;
-
 /** The device class provides methods for interacting with devices.
  *
  *  It is different from the file class only in that it provides a method

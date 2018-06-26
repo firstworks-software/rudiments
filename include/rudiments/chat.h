@@ -6,8 +6,6 @@
 
 #include <rudiments/private/chatincludes.h>
 
-class chatprivate;
-
 /** The chat class implements methods for chatting with something
  * (such as a modem) over a file descriptor or set of file descriptors. */
 class RUDIMENTS_DLLSPEC chat {

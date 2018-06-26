@@ -9,8 +9,6 @@
 typedef singlylinkedlistnode<filedescriptor *>	listenerlistnode;
 typedef singlylinkedlist<filedescriptor *>	listenerlist;
 
-class listenerprivate;
-
 /** The listener class listens for activity on a pool of filedescriptors
  *  or children of the filedescriptor class. */
 class RUDIMENTS_DLLSPEC listener {

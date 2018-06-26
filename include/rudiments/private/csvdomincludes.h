@@ -8,3 +8,5 @@
 #include <rudiments/output.h>
 
 #include <sys/types.h>
+
+class csvdomprivate;

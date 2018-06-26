@@ -6,7 +6,6 @@
 
 #include <rudiments/private/compilerincludes.h>
 
-class compilerprivate;
 class compilermodule;
 class compilerpreprocessor;
 class compilerprocessor;

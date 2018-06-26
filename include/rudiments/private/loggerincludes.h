@@ -4,3 +4,7 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/linkedlist.h>
 #include <rudiments/file.h>
+
+class syslogdestinationprivate;
+class filedestinationprivate;
+class loggerprivate;

@@ -33,3 +33,5 @@
 	#define	MAP_COPY	8192
 	#define	MAP_LOCAL	16384
 #endif
+
+class memorymapprivate;

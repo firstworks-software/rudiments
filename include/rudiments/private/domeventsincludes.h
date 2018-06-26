@@ -2,3 +2,5 @@
 // See the COPYING file for more information.
 
 #include <rudiments/dom.h>
+
+class domeventsprivate;

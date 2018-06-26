@@ -6,8 +6,6 @@
 
 #include <rudiments/private/saxincludes.h>
 
-class saxprivate;
-
 /** The sax class is a base class for a SAX-style parser.  To use this class,
  *  you should create a class that inherits from one if its immediate children
  *  and implements the protected virtual methods of that class. */

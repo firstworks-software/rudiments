@@ -6,8 +6,6 @@
 
 #include <rudiments/private/threadincludes.h>
 
-class threadprivate;
-
 /** The thread class provides a simple thread implementation. */
 class RUDIMENTS_DLLSPEC thread {
 	public:

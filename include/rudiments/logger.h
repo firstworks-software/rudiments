@@ -12,8 +12,6 @@ class RUDIMENTS_DLLSPEC logdestination {
 	#include <rudiments/private/logdestination.h>
 };
 
-class syslogdestinationprivate;
-
 /** The syslogdestination class writes log data to syslog. */
 class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 	public:
@@ -43,8 +41,6 @@ class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 	#include <rudiments/private/syslogdestination.h>
 };
 
-
-class filedestinationprivate;
 
 /** The filedestination class writes log data to a file. */
 class RUDIMENTS_DLLSPEC filedestination : public logdestination {
@@ -88,8 +84,6 @@ class RUDIMENTS_DLLSPEC stderrdestination : public logdestination {
 
 typedef linkedlistnode<logdestination *>	loggerlistnode;
 typedef linkedlist<logdestination *>		loggerlist;
-
-class loggerprivate;
 
 /** The logger class and associated logdestination classes provide methods for
  *  logging data from an application.  The following destinations are supported:

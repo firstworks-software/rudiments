@@ -6,8 +6,6 @@
 
 #include <rudiments/private/xmldomincludes.h>
 
-class xmldomprivate;
-
 /** The xmldom class implements a minimal XML DOM parser. */
 class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 	public:

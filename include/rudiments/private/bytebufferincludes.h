@@ -10,3 +10,5 @@
 #ifdef RUDIMENTS_HAVE_STDARG_H
 	#include <stdarg.h>
 #endif
+
+class bytebufferprivate;

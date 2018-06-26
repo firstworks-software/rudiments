@@ -4,3 +4,5 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/socketclient.h>
 #include <rudiments/unixsocketutil.h>
+
+class unixsocketclientprivate;

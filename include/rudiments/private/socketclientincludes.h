@@ -14,3 +14,5 @@
 #endif
 
 #include <rudiments/client.h>
+
+class socketclientprivate;

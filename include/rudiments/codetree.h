@@ -7,7 +7,6 @@
 #include <rudiments/private/codetreeincludes.h>
 
 class codetreegrammar;
-class codetreeprivate;
 
 /** The codetree class implements a generic parser that can parse source code
  *  (or similarly structured input) and create an XML tree representing the

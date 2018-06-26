@@ -6,8 +6,6 @@
 
 #include <rudiments/private/bytebufferincludes.h>
 
-class bytebufferprivate;
-
 /** The bytebuffer class can be used to store binary data of arbitrary length.
  *
  *  Internally, the class stores this data in a series of extents which are

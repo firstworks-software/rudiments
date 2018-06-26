@@ -6,8 +6,6 @@
 
 #include <rudiments/private/csvdomincludes.h>
 
-class csvdomprivate;
-
 /** The csvdom class implements a minimal CSV DOM parser. */
 class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 	public:

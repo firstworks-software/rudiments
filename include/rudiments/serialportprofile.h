@@ -6,8 +6,6 @@
 
 #include <rudiments/private/serialportprofileincludes.h>
 
-class serialportprofileprivate;
-
 // cfmakeraw, cfsetspeed???
 // wraps struct termios
 

@@ -6,8 +6,6 @@
 
 #include <rudiments/private/modemserverincludes.h>
 
-class modemserverprivate;
-
 /** The modemserver class allows you to write programs taht can talk to
  *  other programs across a direct serial modem connection.
  *

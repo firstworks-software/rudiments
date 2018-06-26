@@ -7,3 +7,5 @@
 #include <sys/types.h>
 
 #include <rudiments/private/inttypes.h>
+
+class stringbufferprivate;

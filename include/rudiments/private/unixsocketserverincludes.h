@@ -6,3 +6,5 @@
 #include <rudiments/unixsocketutil.h>
 
 #include <sys/types.h>
+
+class unixsocketserverprivate;

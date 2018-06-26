@@ -4,3 +4,5 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/server.h>
 #include <rudiments/private/modemutil.h>
+
+class modemserverprivate;

@@ -6,8 +6,6 @@
 
 #include <rudiments/private/inetsocketserverincludes.h>
 
-class inetsocketserverprivate;
-
 /** The inetsocketserver class allows you to write programs that can talk to
  *  other programs across a network over TCP stream sockets.
  * 

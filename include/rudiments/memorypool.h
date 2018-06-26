@@ -6,8 +6,6 @@
 
 #include <rudiments/private/memorypoolincludes.h>
 
-class memorypoolprivate;
-
 /** The memorypool class provides methods for creating and using a memory pool.
  *
  *  If you have an iterative process that requires variable amounts of memory

@@ -5,3 +5,5 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/codetree.h>
 #include <rudiments/dynamiclib.h>
+
+class compilerprivate;

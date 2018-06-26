@@ -6,8 +6,6 @@
 
 #include <rudiments/private/urlincludes.h>
 
-class urlprivate;
-
 /** The url class provides read access to urls.
  *
  *  Its parent class: file provides provides open(), read(), and close()

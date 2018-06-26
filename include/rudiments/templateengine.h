@@ -37,8 +37,6 @@ struct blockparser {
 	void			*data;
 };
 
-class templateengineprivate;
-
 /** The templateengine class provides a framework for registering user-defined
  *  methods to parse and perform replacements in marked-up files or strings. */
 class RUDIMENTS_DLLSPEC templateengine {

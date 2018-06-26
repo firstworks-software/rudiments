@@ -6,8 +6,6 @@
 
 #include <rudiments/private/signalclassesincludes.h>
 
-class signalsetprivate;
-
 /** A signalset it just a collection of signals.  Many signal-related functions
  *  take signalsets for arguments.  The signalset class makes signalsets
  *  easy to manage. */
@@ -89,7 +87,6 @@ class RUDIMENTS_DLLSPEC signalmanager {
 
 /** The signalhandler class provides methods for catching and handling
  *  signals. */
-class signalhandlerprivate;
 class RUDIMENTS_DLLSPEC signalhandler {
 	public:
 

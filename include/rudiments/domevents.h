@@ -7,8 +7,6 @@
 #include <rudiments/dom.h>
 #include <rudiments/private/domeventsincludes.h>
 
-class domeventsprivate;
-
 typedef domnode *(*domeventhandler_t)(domnode *codetreenode,
 						domnode *eventtreenode,
 						void *data);

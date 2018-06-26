@@ -5,3 +5,5 @@
 #include <rudiments/resultcodes.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/dictionary.h>
+
+class clientprivate;

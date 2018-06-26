@@ -6,8 +6,6 @@
 
 #include <rudiments/private/promptincludes.h>
 
-class promptprivate;
-
 /** The prompt class provides methods for displaying a prompt and accepting
  *  user input.
  *

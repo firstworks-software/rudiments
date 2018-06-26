@@ -6,8 +6,6 @@
 
 #include <rudiments/private/sysincludes.h>
 
-class sysprivate;
-
 /** The sys class provides methods for controlling the state of and
  *  accessing information about the operating system. */
 

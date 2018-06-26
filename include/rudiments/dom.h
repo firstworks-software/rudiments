@@ -6,8 +6,6 @@
 
 #include <rudiments/private/domincludes.h>
 
-class domprivate;
-
 /** The dom class implements a minimal DOM-style parser. */
 class RUDIMENTS_DLLSPEC dom {
 	public:

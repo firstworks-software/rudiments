@@ -6,8 +6,6 @@
 
 #include <rudiments/private/regularexpressionincludes.h>
 
-class regularexpressionprivate;
-
 /** The regularexpression class provides methods for making comparisons
  *  between text and regular expressions.
  * 

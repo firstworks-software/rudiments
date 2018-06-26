@@ -6,8 +6,6 @@
 
 #include <rudiments/private/socketserverincludes.h>
 
-class socketserverprivate;
-
 /** The socketserver class provides a base class for classes that implement
  *  the server side of a client-server communication model over a socket. */
 class RUDIMENTS_DLLSPEC socketserver : public server {

@@ -7,3 +7,5 @@
 #include <rudiments/domnode.h>
 
 #include <sys/types.h>
+
+class xmldomprivate;

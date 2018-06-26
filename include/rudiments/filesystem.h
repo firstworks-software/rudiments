@@ -6,8 +6,6 @@
 
 #include <rudiments/private/filesystemincludes.h>
 
-class filesystemprivate;
-
 /** The filesystem class provides methods for discovering the properties
  *  associated with a filesystem such as type, total and free blocks, total and
  *  free inodes, etc.

@@ -17,7 +17,6 @@ enum domnodetype {
 };
 
 class dom;
-class domnodeprivate;
 
 /** The domnode class provides a generic container for DOM tree elements.
  *  One can navigate the nodes of the tree, modify the tree and read or modify

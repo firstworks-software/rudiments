@@ -6,8 +6,6 @@
 
 #include <rudiments/private/md5includes.h>
 
-class md5private;
-
 /** The md5 class provides a simple md5 implementation. */
 class RUDIMENTS_DLLSPEC md5 : public hash {
 	public:

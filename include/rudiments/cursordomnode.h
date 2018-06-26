@@ -6,8 +6,6 @@
 
 #include <rudiments/private/cursordomnodeincludes.h>
 
-class cursordomnodeprivate;
-
 /** The cursordomnode class provides a base class for a special kind of domnode
  *  which allows data from a backend data store to be embedded in a dom tree
  *  without having to actually copy the data into memory.

@@ -5,3 +5,5 @@
 #include <rudiments/private/inttypes.h>
 #include <sys/types.h>
 #include <rudiments/threadmutex.h>
+
+class directoryprivate;

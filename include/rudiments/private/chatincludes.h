@@ -4,3 +4,5 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/dictionary.h>
+
+class chatprivate;

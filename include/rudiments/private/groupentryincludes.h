@@ -8,3 +8,5 @@
 #include <sys/types.h>
 
 #include <rudiments/threadmutex.h>
+
+class groupentryprivate;

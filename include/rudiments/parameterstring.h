@@ -6,8 +6,6 @@
 
 #include <rudiments/private/parameterstringincludes.h>
 
-class parameterstringprivate;
-
 /** The parameterstring class provides methods for parsing and accessing
  *  name/value pairs in so-called "parameter strings" formatted like this:
  * 

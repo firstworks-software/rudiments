@@ -6,8 +6,6 @@
 
 #include <rudiments/private/socketclientincludes.h>
 
-class socketclientprivate;
-
 /** The socketclient class provides a base class for classes that implement
  *  the client side of a client-server communication model over a socket. */
 class RUDIMENTS_DLLSPEC socketclient : public client {

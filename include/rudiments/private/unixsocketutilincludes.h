@@ -18,3 +18,5 @@
 		char	sun_path[512];
 	};
 #endif
+
+class unixsocketutilprivate;

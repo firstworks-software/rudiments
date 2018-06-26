@@ -5,3 +5,5 @@
 #include <rudiments/client.h>
 #include <rudiments/private/modemutil.h>
 #include <rudiments/stringbuffer.h>
+
+class modemclientprivate;

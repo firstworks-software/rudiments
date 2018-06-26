@@ -6,8 +6,6 @@
 
 #include <rudiments/private/stringbufferincludes.h>
 
-class stringbufferprivate;
-
 /** The stringbuffer class can be used to store strings of arbitrary length.
  *
  *  Internally, the class stores this data in a series of extents which are

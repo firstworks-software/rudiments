@@ -6,8 +6,6 @@
 
 #include <rudiments/private/randomnumberincludes.h>
 
-class randomnumberprivate;
-
 /** The randomnumber class provides methods for generating and scaling 
  *  random numbers.
  * 

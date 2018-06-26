@@ -6,8 +6,6 @@
 
 #include <rudiments/private/inetsocketclientincludes.h>
 
-class inetsocketclientprivate;
-
 /** The inetsocketclient class allows you to write programs that can talk to
  *  other programs across a network over TCP stream sockets.
  * 

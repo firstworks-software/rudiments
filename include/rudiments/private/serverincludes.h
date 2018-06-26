@@ -3,3 +3,5 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/filedescriptor.h>
+
+class serverprivate;

@@ -5,3 +5,5 @@
 #include <sys/types.h>
 
 #include <rudiments/server.h>
+
+class socketserverprivate;

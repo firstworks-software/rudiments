@@ -5,3 +5,5 @@
 #include <rudiments/resultcodes.h>
 #include <rudiments/singlylinkedlist.h>
 #include <rudiments/filedescriptor.h>
+
+class listenerprivate;

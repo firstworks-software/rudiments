@@ -6,8 +6,6 @@
 
 #include <rudiments/private/sha1includes.h>
 
-class sha1private;
-
 /** The sha1 class provides a simple sha1 implementation. */
 class RUDIMENTS_DLLSPEC sha1 : public hash {
 	public:
