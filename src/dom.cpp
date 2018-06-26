@@ -108,6 +108,11 @@ bool dom::write(output *out, bool indent) const {
 	return true;
 }
 
+void dom::write(const domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) const {
+	// do nothing
+}
+
 bool dom::stringCacheEnabled() {
 	return pvt->_stringcacheenabled;
 }

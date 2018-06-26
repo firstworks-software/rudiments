@@ -9,6 +9,11 @@
 			const char	*cacheString(const char *string);
 			void		unCacheString(const char *string);
 
+			virtual void	write(const domnode *dn,
+						output *out,
+						bool indent,
+						uint16_t *indentlevel) const;
+
 				dom(const dom &x);
 			dom	&operator=(const dom &x);
 

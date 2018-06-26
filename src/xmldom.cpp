@@ -165,3 +165,151 @@ void xmldom::insertChild(domnode *child) {
 	}
 	pvt->_currentparent->insertChild(child,pos);
 }
+
+void xmldom::write(const domnode *dn, output *out,
+			bool indent, uint16_t *indentlevel) const {
+
+	// NOTE: this method is written a little strangely
+	// to work correctly with cursordomnodes
+
+	domnode	*current;
+	if (dn->getType()==ROOT_DOMNODETYPE) {
+		current=dn->getFirstChild();
+		while (!current->isNullNode()) {
+			write(current,out,indent,indentlevel);
+			current=current->getNextSibling();
+		}
+	} else if (dn->getType()==TAG_DOMNODETYPE) {
+		if (indent && indentlevel) {
+			for (uint16_t i=0; i<*indentlevel; i++) {
+				out->write(" ");
+			}
+		}
+		out->write("<");
+		if (dn->getNamespace()) {
+			safeWrite(out,dn->getNamespace());
+			out->write(":");
+		}
+		safeWrite(out,dn->getName());
+		current=dn->getAttribute((uint64_t)0);
+		while (current && !current->isNullNode()) {
+			out->write(" ");
+			write(current,out,indent,indentlevel);
+			current=current->getNextSibling();
+		}
+		current=dn->getFirstChild();
+		if (!current->isNullNode()) {
+			out->write(">");
+			if (indent && indentlevel) {
+				if (current->getType()!=TEXT_DOMNODETYPE &&
+					current->getType()!=CDATA_DOMNODETYPE) {
+					out->write("\n");
+				}
+				*indentlevel=*indentlevel+2;
+			}
+			domnodetype	prevtype=current->getType();
+			while (!current->isNullNode()) {
+				write(current,out,indent,indentlevel);
+				prevtype=current->getType();
+				current=current->getNextSibling();
+			}
+			if (indent && indentlevel) {
+				*indentlevel=*indentlevel-2;
+				if (prevtype!=TEXT_DOMNODETYPE &&
+					prevtype!=CDATA_DOMNODETYPE) {
+					for (uint16_t i=0;
+						i<*indentlevel; i++) {
+						out->write(" ");
+					}
+				}
+			}
+			out->write("</");
+			if (dn->getNamespace()) {
+				safeWrite(out,dn->getNamespace());
+				out->write(":");
+			}
+			safeWrite(out,dn->getName());
+			out->write(">");
+			if (indent && indentlevel) {
+				out->write("\n");
+			}
+		} else {
+			if (dn->getName()[0]=='?') {
+				out->write("?>");
+			} else if (dn->getName()[0]=='!') {
+				out->write(">");
+			} else {
+				out->write("/>");
+			}
+			if (indent && indentlevel) {
+				out->write("\n");
+			}
+		}
+	} else if (dn->getType()==TEXT_DOMNODETYPE) {
+		safeWrite(out,dn->getValue());
+	} else if (dn->getType()==ATTRIBUTE_DOMNODETYPE) {
+		if (dn->getParent()->getName()[0]=='!') {
+			out->write("\"");
+			safeWrite(out,dn->getValue());
+			out->write("\"");
+		} else {
+			safeWrite(out,dn->getName());
+			out->write("=\"");
+			safeWrite(out,dn->getValue());
+			out->write("\"");
+		}
+	} else if (dn->getType()==COMMENT_DOMNODETYPE) {
+		out->write("<!--");
+		safeWrite(out,dn->getValue());
+		out->write("-->");
+	} else if (dn->getType()==CDATA_DOMNODETYPE) {
+		out->write("<![CDATA[");
+		safeWrite(out,dn->getValue());
+		out->write("]]>");
+	}
+}
+
+void xmldom::safeWrite(output *out, const char *str) const {
+
+	if (!str) {
+		return;
+	}
+
+	const char	*start=str;
+	const char	*ch=start;
+	const char	*entity=NULL;
+	uint16_t	num=0;
+
+	for (; *ch; ch++) {
+		if (*ch=='&') {
+			entity="&amp;";
+		} else if (*ch=='<') {
+			entity="&lt;";
+		} else if (*ch=='>') {
+			entity="&gt;";
+		} else if (*ch=='\'') {
+			entity="&apos;";
+		} else if (*ch=='"') {
+			entity="&quot;";
+		} else if ((signed char)*ch<0) {
+			num=static_cast<uint16_t>(
+					static_cast<unsigned char>(*ch));
+		}
+		if (entity || num) {
+			out->write(start,ch-start);
+			if (entity) {
+				out->write(entity);
+				entity=NULL;
+			} else {
+				out->write("&#");
+				char	*numstr=charstring::parseNumber(num);
+				out->write(numstr);
+				delete[] numstr;
+				out->write(";");
+				num=0;
+			}
+			start=ch+1;
+		}
+	}
+	out->write(start,ch-start);
+}

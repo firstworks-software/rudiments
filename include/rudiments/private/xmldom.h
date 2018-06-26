@@ -6,6 +6,11 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
+			void	write(const domnode *dn,
+						output *out,
+						bool indent,
+						uint16_t *indentlevel) const;
+
 				xmldom(const xmldom &x);
 			xmldom	&operator=(const xmldom &x);
 
@@ -17,5 +22,6 @@
 						domnode *parent,
 						uint64_t position);
 			void	insertChild(domnode *child);
+			void	safeWrite(output *out, const char *str) const;
 
 			xmldomprivate	*pvt;
