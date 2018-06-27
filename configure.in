@@ -350,6 +350,14 @@ AC_ARG_ENABLE(csvdom,
 	[  --disable-csvdom        Don't build csvdom class],
 	INCLUDE_CSVDOM="0",
 	INCLUDE_CSVDOM="1")
+AC_ARG_ENABLE(jsonsax,
+	[  --disable-jsonsax       Don't build jsonsax class],
+	INCLUDE_JSONSAX="0",
+	INCLUDE_JSONSAX="1")
+AC_ARG_ENABLE(jsondom,
+	[  --disable-jsondom       Don't build jsondom class],
+	INCLUDE_JSONDOM="0",
+	INCLUDE_JSONDOM="1")
 AC_ARG_ENABLE(cursordomnode,
 	[  --disable-cursordomnode Don't build cursordomnode class],
 	INCLUDE_CURSORDOMNODE="0",
@@ -4231,7 +4239,7 @@ then
 	LOBJS="$LOBJS bytebuffer.lo"
 fi
 
-if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
+if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" -o "$INCLUDE_JSONDOM" = "1" )
 then
 	HEADERS3="$HEADERS3 dom.h domnode.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h"
@@ -4247,7 +4255,7 @@ then
 	LOBJS="$LOBJS xmldom.lo"
 fi
 
-if ( test "$INCLUDE_XMLSAX" = "1" -o "$INCLUDE_CSVSAX" = "1" )
+if ( test "$INCLUDE_XMLSAX" = "1" -o "$INCLUDE_CSVSAX" = "1" -o "$INCLUDE_JSONSAX" = "1" )
 then
 	HEADERS3="$HEADERS3 sax.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 sax.h saxincludes.h"
@@ -4356,6 +4364,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 csvdom.h csvdomincludes.h"
 	SRCS="$SRCS csvdom.cpp"
 	LOBJS="$LOBJS csvdom.lo"
+fi
+
+if ( test "$INCLUDE_JSONSAX" = "1" )
+then
+	HEADERS3="$HEADERS3 jsonsax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 jsonsax.h jsonsaxincludes.h"
+	SRCS="$SRCS jsonsax.cpp"
+	LOBJS="$LOBJS jsonsax.lo"
+fi
+
+if ( test "$INCLUDE_JSONDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 jsondom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 jsondom.h jsondomincludes.h"
+	SRCS="$SRCS jsondom.cpp"
+	LOBJS="$LOBJS jsondom.lo"
 fi
 
 if ( test "$INCLUDE_CURSORDOMNODE" = "1" )

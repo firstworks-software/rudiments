@@ -857,6 +857,8 @@ enable_prompt
 enable_templateengine
 enable_csvsax
 enable_csvdom
+enable_jsonsax
+enable_jsondom
 enable_cursordomnode
 enable_shared
 enable_static
@@ -1566,6 +1568,8 @@ Optional Features:
   --disable-templateengine Don't build templateengine class
   --disable-csvsax        Don't build csvsax class
   --disable-csvdom        Don't build csvdom class
+  --disable-jsonsax       Don't build jsonsax class
+  --disable-jsondom       Don't build jsondom class
   --disable-cursordomnode Don't build cursordomnode class
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
@@ -3095,6 +3099,20 @@ if test "${enable_csvdom+set}" = set; then :
   enableval=$enable_csvdom; INCLUDE_CSVDOM="0"
 else
   INCLUDE_CSVDOM="1"
+fi
+
+# Check whether --enable-jsonsax was given.
+if test "${enable_jsonsax+set}" = set; then :
+  enableval=$enable_jsonsax; INCLUDE_JSONSAX="0"
+else
+  INCLUDE_JSONSAX="1"
+fi
+
+# Check whether --enable-jsondom was given.
+if test "${enable_jsondom+set}" = set; then :
+  enableval=$enable_jsondom; INCLUDE_JSONDOM="0"
+else
+  INCLUDE_JSONDOM="1"
 fi
 
 # Check whether --enable-cursordomnode was given.
@@ -34424,7 +34442,7 @@ then
 	LOBJS="$LOBJS bytebuffer.lo"
 fi
 
-if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" )
+if ( test "$INCLUDE_XMLDOM" = "1" -o "$INCLUDE_CSVDOM" = "1" -o "$INCLUDE_JSONDOM" = "1" )
 then
 	HEADERS3="$HEADERS3 dom.h domnode.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 dom.h domincludes.h domnode.h domnodeincludes.h"
@@ -34440,7 +34458,7 @@ then
 	LOBJS="$LOBJS xmldom.lo"
 fi
 
-if ( test "$INCLUDE_XMLSAX" = "1" -o "$INCLUDE_CSVSAX" = "1" )
+if ( test "$INCLUDE_XMLSAX" = "1" -o "$INCLUDE_CSVSAX" = "1" -o "$INCLUDE_JSONSAX" = "1" )
 then
 	HEADERS3="$HEADERS3 sax.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 sax.h saxincludes.h"
@@ -34549,6 +34567,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 csvdom.h csvdomincludes.h"
 	SRCS="$SRCS csvdom.cpp"
 	LOBJS="$LOBJS csvdom.lo"
+fi
+
+if ( test "$INCLUDE_JSONSAX" = "1" )
+then
+	HEADERS3="$HEADERS3 jsonsax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 jsonsax.h jsonsaxincludes.h"
+	SRCS="$SRCS jsonsax.cpp"
+	LOBJS="$LOBJS jsonsax.lo"
+fi
+
+if ( test "$INCLUDE_JSONDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 jsondom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 jsondom.h jsondomincludes.h"
+	SRCS="$SRCS jsondom.cpp"
+	LOBJS="$LOBJS jsondom.lo"
 fi
 
 if ( test "$INCLUDE_CURSORDOMNODE" = "1" )

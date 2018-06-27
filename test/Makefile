@@ -62,7 +62,8 @@ PROGS3= handoff \
 	gssserver \
 	gssclient \
 	md5sum \
-	csvdom
+	csvdom \
+	jsondom
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -122,6 +123,7 @@ tests: all
 	$(THISDIR)userentry$(EXE)
 	$(THISDIR)xmldom$(EXE)
 	$(THISDIR)csvdom$(EXE)
+	$(THISDIR)jsondom$(EXE)
 	
 clean:
 	$(LTCLEAN) $(RM) $(PROGS0)
@@ -129,7 +131,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
 	$(LTCLEAN) $(RM) socketbench$(EXE) bytestringbench$(EXE)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
@@ -299,6 +301,9 @@ md5sum: md5sum.cpp md5sum.$(OBJ)
 
 csvdom: csvdom.cpp csvdom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csvdom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+jsondom: jsondom.cpp jsondom.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) jsondom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 socketbench: socketbench.cpp socketbench.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) socketbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
