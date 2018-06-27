@@ -270,10 +270,10 @@ bool sax::mapFile() {
 	return false;
 }
 
-stringbuffer *sax::getErrorString() {
-	return &pvt->_err;
-}
-
-uint32_t sax::getLine() {
-	return pvt->_line;
+void sax::parseFailed(const char *thing) {
+        pvt->_err.clear();
+        pvt->_err.append("error: parse ");
+	pvt->_err.append(thing);
+	pvt->_err.append(" failed at line ");
+        pvt->_err.append(pvt->_line);
 }

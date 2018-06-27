@@ -113,6 +113,12 @@ void dom::write(const domnode *dn, output *out,
 	// do nothing
 }
 
+void dom::writeIndent(output *out, uint16_t indent) const {
+	for (uint16_t i=0; i<indent; i++) {
+		out->write(" ");
+	}
+}
+
 bool dom::stringCacheEnabled() {
 	return pvt->_stringcacheenabled;
 }

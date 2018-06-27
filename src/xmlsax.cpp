@@ -99,7 +99,7 @@ bool xmlsax::parseTag(char current, char *next) {
 
 	// make sure there's a <, skip any whitespace after it
 	if (ch!='<' || !(ch=skipWhitespace(getCharacter()))) {
-		parseTagFailed();
+		parseFailed("tag");
 		return false;
 	}
 
@@ -111,7 +111,7 @@ bool xmlsax::parseTag(char current, char *next) {
 	} else if (ch=='/') {
 		endtag=1;
 		if (!(ch=skipWhitespace(getCharacter()))) {
-			parseTagFailed();
+			parseFailed("tag");
 			return false;
 		}
 	}
@@ -120,20 +120,20 @@ bool xmlsax::parseTag(char current, char *next) {
 	pvt->_tagns.clear();
 	pvt->_tagname.clear();
 	if (!parseTagName(ch,&pvt->_tagns,&pvt->_tagname,&ch)) {
-		parseTagFailed();
+		parseFailed("tag");
 		return false;
 	}
 
 	// handle comments and cdata
 	if (!charstring::compare(pvt->_tagname.getString(),"!--")) {
 		if (!(ch=parseComment(ch))) {
-			parseTagFailed();
+			parseFailed("tag");
 			return false;
 		}
 		return (*next=getCharacter())!='\0';
 	} else if (!charstring::compare(pvt->_tagname.getString(),"![CDATA[")) {
 		if (!(ch=parseCData(ch))) {
-			parseTagFailed();
+			parseFailed("tag");
 			return false;
 		}
 		return (*next=getCharacter())!='\0';
@@ -143,7 +143,7 @@ bool xmlsax::parseTag(char current, char *next) {
 
 		// skip whitespace after the tag name and look for >
 		if (!(ch=skipWhitespace(ch)) || ch!='>') {
-			parseTagFailed();
+			parseFailed("tag");
 			return false;
 		}
 
@@ -161,7 +161,7 @@ bool xmlsax::parseTag(char current, char *next) {
 
 			// skip any whitespace before the attribute
 			if (!(ch=skipWhitespace(ch))) {
-				parseTagFailed();
+				parseFailed("tag");
 				return false;
 			}
 	
@@ -170,7 +170,7 @@ bool xmlsax::parseTag(char current, char *next) {
 				endtag=1;
 				if (!(ch=skipWhitespace(getCharacter())) ||
 								ch!='>') {
-					parseTagFailed();
+					parseFailed("tag");
 					return false;
 				}
 				break;
@@ -178,7 +178,7 @@ bool xmlsax::parseTag(char current, char *next) {
 				// ? standalone tag, make sure there's a >
 				// immediately following the ?
 				if (!(ch=getCharacter()) || ch!='>') {
-					parseTagFailed();
+					parseFailed("tag");
 					return false;
 				}
 				break;
@@ -187,7 +187,7 @@ bool xmlsax::parseTag(char current, char *next) {
 				break;
 			} else {
 				if (!(ch=parseAttribute(ch,standalone))) {
-					parseTagFailed();
+					parseFailed("tag");
 					return false;
 				}
 			}
@@ -227,10 +227,7 @@ bool xmlsax::parseTagName(char current, stringbuffer *ns,
 
 			// we should not run into a NULL or EOF here, if we
 			// do then it's an error
-			getErrorString()->clear();
-			getErrorString()->append("error: parseTagName() ");
-			getErrorString()->append("failed at line ");
-			getErrorString()->append(getLine());
+			parseFailed("tag name");
 			return false;
 
 		} else if (ch=='[') {
@@ -377,7 +374,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 
 				// if we got whitespace, skip past it
 				if (!(ch=skipWhitespace(ch))) {
-					parseAttributeFailed();
+					parseFailed("attribute");
 					return '\0';
 				}
 	
@@ -393,7 +390,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 					// for non-standalone, make sure there's
 					// an = after the whitespace
 					if (ch!='=') {
-						parseAttributeFailed();
+						parseFailed("attribute");
 						return '\0';
 					}
 				}
@@ -424,7 +421,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 		// if we don't get one then that's an error
 		if (!(ch=skipWhitespace(getCharacter())) ||
 					(ch!='"' && ch!='\'')) {
-			parseAttributeFailed();
+			parseFailed("attribute");
 			return '\0';
 		}
 	}
@@ -479,7 +476,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 
 					// if we hit the end, that's
 					// an error
-					parseAttributeFailed();
+					parseFailed("attribute");
 					return '\0';
 
 				} else if (result<0) {
@@ -634,7 +631,7 @@ bool xmlsax::parseText(char current, char *next) {
 			if (!result) {
 
 				// if we hit the end, that's an error
-				parseTextFailed();
+				parseFailed("text");
 				*next='\0';
 				return false;
 
@@ -665,24 +662,4 @@ bool xmlsax::parseText(char current, char *next) {
 		// get the next character
 		ch=getCharacter();
 	}
-}
-
-void xmlsax::parseTagFailed() {
-	getErrorString()->clear();
-	getErrorString()->append("error: parseTagFailed() "
-						"failed at line ");
-	getErrorString()->append(getLine());
-}
-
-void xmlsax::parseAttributeFailed() {
-	getErrorString()->clear();
-	getErrorString()->append("error: parseAttributeFailed() "
-						"failed at line ");
-	getErrorString()->append(getLine());
-}
-
-void xmlsax::parseTextFailed() {
-	getErrorString()->clear();
-	getErrorString()->append("error: parseText() failed at line ");
-	getErrorString()->append(getLine());
 }

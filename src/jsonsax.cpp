@@ -181,7 +181,7 @@ bool jsonsax::parseObject(char current, char *next) {
 
 	// make sure there's a {, skip any whitespace after it
 	if (ch!='{' || !(ch=skipWhitespace(getCharacter()))) {
-		parseObjectFailed();
+		parseFailed("object");
 		return false;
 	}
 
@@ -191,6 +191,11 @@ bool jsonsax::parseObject(char current, char *next) {
 
 	// parse members
 	for (;;) {
+
+		// handle empty objects or trailing commas
+		if (ch=='}') {
+			break;
+		}
 
 		if (!memberStart()) {
 			return false;
@@ -208,7 +213,7 @@ bool jsonsax::parseObject(char current, char *next) {
 
 		// make sure there's a colon
 		if (ch!=':') {
-			parseObjectFailed();
+			parseFailed("object");
 			return false;
 		}
 
@@ -234,7 +239,7 @@ bool jsonsax::parseObject(char current, char *next) {
 
 	// make sure there's a }
 	if (ch!='}') {
-		parseObjectFailed();
+		parseFailed("object");
 		return false;
 	}
 
@@ -253,7 +258,7 @@ bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 
 	// make sure there's a "
 	if (ch!='"') {
-		parseStrFailed();
+		parseFailed("str");
 		return false;
 	}
 
@@ -263,7 +268,7 @@ bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 		if (ch=='"') {
 			break;
 		} else if (ch=='\0') {
-			parseStrFailed();
+			parseFailed("str");
 			return false;
 		} else {
 			str->append(ch);
@@ -326,13 +331,57 @@ bool jsonsax::parseValue(char current, char *next) {
 		return valueEnd();
 	}
 
-	parseValueFailed();
+	parseFailed("value");
 	return false;
 }
 
 bool jsonsax::parseArray(char current, char *next) {
-	// FIXME: ...
-	return false;
+
+	char	ch=current;
+
+	// make sure there's a [, skip any whitespace after it
+	if (ch!='[' || !(ch=skipWhitespace(getCharacter()))) {
+		parseFailed("array");
+		return false;
+	}
+
+	if (!arrayStart()) {
+		return false;
+	}
+
+	// parse values
+	for (;;) {
+
+		// handle empty arrays or trailing commas
+		if (ch==']') {
+			break;
+		}
+
+		if (!parseValue(ch,&ch)) {
+			return false;
+		}
+
+		// keep going if we find a comma, otherwise we're done
+		if (ch==',') {
+			ch=skipWhitespace(getCharacter());
+		} else {
+			break;
+		}
+	}
+
+	// make sure there's a ]
+	if (ch!=']') {
+		parseFailed("array");
+		return false;
+	}
+
+	if (!arrayEnd()) {
+		return false;
+	}
+
+	// skip whitespace after the closing ] and return the next character
+	*next=skipWhitespace(getCharacter());
+	return true;
 }
 
 bool jsonsax::parseNumber(stringbuffer *str, char current, char *next) {
@@ -377,7 +426,7 @@ bool jsonsax::parseLiteral(const char *literal, char current, char *next) {
 	const char	*ptr=literal;
 	while (ch && *ptr) {
 		if (ch!=*ptr) {
-			parseLiteralFailed();
+			parseFailed("literal");
 			return false;
 		}
  		ch=getCharacter();
@@ -387,39 +436,4 @@ bool jsonsax::parseLiteral(const char *literal, char current, char *next) {
 	// skip whitespace after and return the next character
 	*next=skipWhitespace(ch);
 	return true;
-}
-
-void jsonsax::parseObjectFailed() {
-        getErrorString()->clear();
-        getErrorString()->append("error: parseObjectFailed() "
-                                                "failed at line ");
-        getErrorString()->append(getLine());
-}
-
-void jsonsax::parseStrFailed() {
-        getErrorString()->clear();
-        getErrorString()->append("error: parseStrFailed() "
-                                                "failed at line ");
-        getErrorString()->append(getLine());
-}
-
-void jsonsax::parseValueFailed() {
-        getErrorString()->clear();
-        getErrorString()->append("error: parseValueFailed() "
-                                                "failed at line ");
-        getErrorString()->append(getLine());
-}
-
-void jsonsax::parseNumberFailed() {
-        getErrorString()->clear();
-        getErrorString()->append("error: parseNumberFailed() "
-                                                "failed at line ");
-        getErrorString()->append(getLine());
-}
-
-void jsonsax::parseLiteralFailed() {
-        getErrorString()->clear();
-        getErrorString()->append("error: parseLiteralFailed() "
-                                                "failed at line ");
-        getErrorString()->append(getLine());
 }

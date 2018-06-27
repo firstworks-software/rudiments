@@ -11,9 +11,7 @@
 			char	skipWhitespace(char current);
 			char	getCharacter();
 			bool	mapFile();
-
-			stringbuffer	*getErrorString();
-			uint32_t	getLine();
+			void	parseFailed(const char *thing);
 	private:
 				sax(const sax &x);
 			sax	&operator=(const sax &x);

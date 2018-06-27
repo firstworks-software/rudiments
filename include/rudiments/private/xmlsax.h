@@ -4,7 +4,6 @@
 	private:
 			bool	parse();
 			bool	parseTag(char current, char *next);
-			void	parseTagFailed();
 			bool	parseTagName(char current,
 						stringbuffer *ns,
 						stringbuffer *name,
@@ -13,9 +12,7 @@
 			char	parseCData(char current);
 			char	parseAttribute(char current, char standalone);
 			int32_t	getGeneralEntity(char breakchar);
-			void	parseAttributeFailed();
 			bool	parseText(char current, char *next);
-			void	parseTextFailed();
 
 				xmlsax(const xmlsax &x);
 			xmlsax	&operator=(const xmlsax &x);

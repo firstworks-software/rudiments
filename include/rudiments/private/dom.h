@@ -13,6 +13,8 @@
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;
+			virtual	void	writeIndent(output *out,
+						uint16_t indent) const;
 
 				dom(const dom &x);
 			dom	&operator=(const dom &x);

@@ -1,0 +1,26 @@
+// Copyright (c) 2018 David Muse
+// See the COPYING file for more information.
+
+	friend class domnode;
+	protected:
+			void	init(bool stringcacheenabled);
+			void	reset();
+
+			void	write(const domnode *dn,
+						output *out,
+						bool indent,
+						uint16_t *indentlevel) const;
+
+				jsondom(const jsondom &x);
+			jsondom	&operator=(const jsondom &x);
+
+	private:
+			bool	parseFile(const char *string,
+						domnode *parent,
+						uint64_t position);
+			bool	parseString(const char *string,
+						domnode *parent,
+						uint64_t position);
+			void	insertChild(domnode *child);
+
+			jsondomprivate	*pvt;

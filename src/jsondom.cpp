@@ -3,6 +3,7 @@
 
 #include <rudiments/jsondom.h>
 #include <rudiments/charstring.h>
+#include <rudiments/xmldom.h>
 
 class jsondomprivate {
 	friend class jsondom;
@@ -79,78 +80,187 @@ void jsondom::createRootNode() {
 }
 
 bool jsondom::objectStart() {
-	// FIXME: implement this
-	return false;
+	if (getRootNode()->isNullNode()) {
+		createRootNode();
+	}
+	pvt->_currentparent=pvt->_currentparent->appendTag("o");
+	return true;
 }
 
 bool jsondom::memberStart() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent=pvt->_currentparent->appendTag("m");
+	return true;
 }
 
 bool jsondom::memberName(const char *name) {
-	// FIXME: implement this
-	return false;
-}
-
-bool jsondom::valueStart() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent->setAttributeValue("n",name);
+	return true;
 }
 
 bool jsondom::stringValue(const char *value) {
-	// FIXME: implement this
-	return false;
+	domnode	*valuetag=pvt->_currentparent->appendTag("s");
+	valuetag->setAttributeValue("v",value);
+	return true;
 }
 
 bool jsondom::numberValue(const char *value) {
-	// FIXME: implement this
-	return false;
+	domnode	*valuetag=pvt->_currentparent->appendTag("n");
+	valuetag->setAttributeValue("v",value);
+	return true;
 }
 
 bool jsondom::trueValue() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent->appendTag("t");
+	return true;
 }
 
 bool jsondom::falseValue() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent->appendTag("f");
+	return true;
 }
 
 bool jsondom::nullValue() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent->appendTag("u");
+	return true;
 }
 
 bool jsondom::arrayStart() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent=pvt->_currentparent->appendTag("a");
+	return true;
 }
 
 bool jsondom::arrayEnd() {
-	// FIXME: implement this
-	return false;
-}
-
-bool jsondom::valueEnd() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent=pvt->_currentparent->getParent();
+	return true;
 }
 
 bool jsondom::memberEnd() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent=pvt->_currentparent->getParent();
+	return true;
 }
 
 bool jsondom::objectEnd() {
-	// FIXME: implement this
-	return false;
+	pvt->_currentparent=pvt->_currentparent->getParent();
+	return true;
 }
 
-void jsondom::insertChild(domnode *child) {
+bool jsondom::write(output *out) const {
+	return dom::write(out,true);
 }
 
 void jsondom::write(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
+
+	if (dn->getType()==ROOT_DOMNODETYPE) {
+		write(dn->getFirstTagChild(),out,indent,indentlevel);
+		return;
+	} else if (dn->getType()!=TAG_DOMNODETYPE) {
+		return;
+	}
+
+	const char	*name=dn->getName();
+	switch (*name) {
+		case 'o':
+			{
+			if (indent) {
+				if (*indentlevel) {
+					out->write('\n');
+				}
+				writeIndent(out,*indentlevel);
+			}
+			out->write('{');
+			if (indent) {
+				out->write('\n');
+				*indentlevel=*indentlevel+2;
+			}
+			bool	first=true;
+			for (domnode *child=dn->getFirstTagChild();
+					!child->isNullNode();
+					child=child->getNextTagSibling()) {
+				if (first) {
+					first=false;
+				} else {
+					out->write(',');
+					if (indent) {
+						out->write('\n');
+					}
+				}
+				write(child,out,indent,indentlevel);
+			}
+			if (indent) {
+				out->write('\n');
+				*indentlevel=*indentlevel-2;
+				writeIndent(out,*indentlevel);
+			}
+			out->write('}');
+			}
+			break;
+		case 'm':
+			if (indent) {
+				writeIndent(out,*indentlevel);
+			}
+			out->write('"');
+			out->write(dn->getAttributeValue("n"));
+			out->write('"');
+			if (indent) {
+				out->write(' ');
+			}
+			out->write(':');
+			if (indent) {
+				out->write(' ');
+			}
+			write(dn->getFirstTagChild(),out,indent,indentlevel);
+			break;
+		case 's':
+			out->write('"');
+			out->write(dn->getAttributeValue("v"));
+			out->write('"');
+			break;
+		case 'n':
+			out->write(dn->getAttributeValue("v"));
+			break;
+		case 't':
+			out->write("true");
+			break;
+		case 'f':
+			out->write("false");
+			break;
+		case 'u':
+			out->write("null");
+			break;
+		case 'a':
+			if (indent) {
+				out->write('\n');
+				writeIndent(out,*indentlevel);
+			}
+			out->write('[');
+			if (indent) {
+				out->write('\n');
+				*indentlevel=*indentlevel+2;
+			}
+			bool	first=true;
+			for (domnode *child=dn->getFirstTagChild();
+					!child->isNullNode();
+					child=child->getNextTagSibling()) {
+				if (first) {
+					first=false;
+				} else {
+					out->write(',');
+					if (indent) {
+						out->write('\n');
+					}
+				}
+				if (indent) {
+					writeIndent(out,*indentlevel);
+				}
+				write(child,out,indent,indentlevel);
+			}
+			if (indent) {
+				out->write('\n');
+				*indentlevel=*indentlevel-2;
+				writeIndent(out,*indentlevel);
+			}
+			out->write(']');
+			break;
+	}
 }

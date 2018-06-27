@@ -181,9 +181,7 @@ void xmldom::write(const domnode *dn, output *out,
 		}
 	} else if (dn->getType()==TAG_DOMNODETYPE) {
 		if (indent && indentlevel) {
-			for (uint16_t i=0; i<*indentlevel; i++) {
-				out->write(" ");
-			}
+			writeIndent(out,*indentlevel);
 		}
 		out->write("<");
 		if (dn->getNamespace()) {
@@ -217,10 +215,7 @@ void xmldom::write(const domnode *dn, output *out,
 				*indentlevel=*indentlevel-2;
 				if (prevtype!=TEXT_DOMNODETYPE &&
 					prevtype!=CDATA_DOMNODETYPE) {
-					for (uint16_t i=0;
-						i<*indentlevel; i++) {
-						out->write(" ");
-					}
+					writeIndent(out,*indentlevel);
 				}
 			}
 			out->write("</");
