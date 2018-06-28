@@ -40,12 +40,12 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		/** Parses string "string" and generates a DOM tree. */
 		bool	parseString(const char *string);
 
-		/** Writes the current DOM tree to "out". */
-		bool	write(output *out) const;
-
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */
 		void	createRootNode();
+
+		/** Writes the current DOM tree to "out". */
+		virtual bool	write(output *out) const;
 
 	protected:
 

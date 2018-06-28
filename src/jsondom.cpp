@@ -3,12 +3,12 @@
 
 #include <rudiments/jsondom.h>
 #include <rudiments/charstring.h>
-#include <rudiments/xmldom.h>
 
 class jsondomprivate {
 	friend class jsondom;
 	private:
-		domnode		*_currentparent;
+		domnode			*_current;
+		linkedlist<bool>	_inarray;
 };
 
 jsondom::jsondom() : jsonsax(), dom() {
@@ -33,7 +33,7 @@ jsondom &jsondom::operator=(const jsondom &x) {
 
 void jsondom::init(bool stringcacheenabled) {
 	pvt=new jsondomprivate;
-	pvt->_currentparent=NULL;
+	pvt->_current=NULL;
 }
 
 jsondom::~jsondom() {
@@ -47,7 +47,7 @@ bool jsondom::parseFile(const char *filename) {
 bool jsondom::parseFile(const char *filename,
 				domnode *parent, uint64_t position) {
 	if (parent) {
-		pvt->_currentparent=parent;
+		pvt->_current=parent;
 	} else {
 		reset();
 	}
@@ -61,86 +61,96 @@ bool jsondom::parseString(const char *string) {
 bool jsondom::parseString(const char *string,
 				domnode *parent, uint64_t position) {
 	if (parent) {
-		pvt->_currentparent=parent;
+		pvt->_current=parent;
 	} else {
 		reset();
 	}
+#if 0
+	bool	retval=jsonsax::parseString(string);
+	uint16_t	indentlevel=0;
+	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	return retval;
+#endif
 	return jsonsax::parseString(string);
 }
 
 void jsondom::reset() {
-	pvt->_currentparent=NULL;
+	pvt->_current=NULL;
 	dom::reset();
 	jsonsax::reset();
 }
 
 void jsondom::createRootNode() {
 	dom::createRootNode();
-	pvt->_currentparent=getRootNode();
+	pvt->_current=getRootNode();
 }
 
 bool jsondom::objectStart() {
 	if (getRootNode()->isNullNode()) {
 		createRootNode();
+	} else {
+		pvt->_current=whichNode();
+		pvt->_current->setAttributeValue("t","o");
 	}
-	pvt->_currentparent=pvt->_currentparent->appendTag("o");
 	return true;
 }
 
 bool jsondom::memberStart() {
-	pvt->_currentparent=pvt->_currentparent->appendTag("m");
 	return true;
 }
 
 bool jsondom::memberName(const char *name) {
-	pvt->_currentparent->setAttributeValue("n",name);
+	pvt->_current=pvt->_current->appendTag(name);
 	return true;
 }
 
 bool jsondom::stringValue(const char *value) {
-	domnode	*valuetag=pvt->_currentparent->appendTag("s");
-	valuetag->setAttributeValue("v",value);
+	domnode	*node=whichNode();
+	node->setAttributeValue("t","s");
+	node->setAttributeValue("v",value);
 	return true;
 }
 
 bool jsondom::numberValue(const char *value) {
-	domnode	*valuetag=pvt->_currentparent->appendTag("n");
-	valuetag->setAttributeValue("v",value);
+	domnode	*node=whichNode();
+	node->setAttributeValue("t","n");
+	node->setAttributeValue("v",value);
 	return true;
 }
 
 bool jsondom::trueValue() {
-	pvt->_currentparent->appendTag("t");
+	whichNode()->setAttributeValue("t","t");
 	return true;
 }
 
 bool jsondom::falseValue() {
-	pvt->_currentparent->appendTag("f");
+	whichNode()->setAttributeValue("t","f");
 	return true;
 }
 
 bool jsondom::nullValue() {
-	pvt->_currentparent->appendTag("u");
+	whichNode()->setAttributeValue("t","u");
 	return true;
 }
 
 bool jsondom::arrayStart() {
-	pvt->_currentparent=pvt->_currentparent->appendTag("a");
+	whichNode()->setAttributeValue("t","a");
 	return true;
 }
 
 bool jsondom::arrayEnd() {
-	pvt->_currentparent=pvt->_currentparent->getParent();
 	return true;
 }
 
 bool jsondom::memberEnd() {
-	pvt->_currentparent=pvt->_currentparent->getParent();
+	pvt->_current=pvt->_current->getParent();
 	return true;
 }
 
 bool jsondom::objectEnd() {
-	pvt->_currentparent=pvt->_currentparent->getParent();
+	if (pvt->_current!=getRootNode()) {
+		pvt->_current=pvt->_current->getParent();
+	}
 	return true;
 }
 
@@ -148,18 +158,40 @@ bool jsondom::write(output *out) const {
 	return dom::write(out,true);
 }
 
+domnode *jsondom::whichNode() {
+	// if we're in an array then append a "v" tag and use it,
+	// otherwise just use the current tag
+	const char	*t=pvt->_current->getAttributeValue("t");
+	return (t && t[0]=='a')?
+			pvt->_current->appendTag("v"):
+			pvt->_current;
+}
+
 void jsondom::write(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
-	if (dn->getType()==ROOT_DOMNODETYPE) {
-		write(dn->getFirstTagChild(),out,indent,indentlevel);
-		return;
-	} else if (dn->getType()!=TAG_DOMNODETYPE) {
+	if (dn->getType()!=TAG_DOMNODETYPE && dn->getType()!=ROOT_DOMNODETYPE) {
 		return;
 	}
 
-	const char	*name=dn->getName();
-	switch (*name) {
+	if (pvt->_inarray.getLength() && !pvt->_inarray.getLast()->getValue()) {
+		if (indent) {
+			writeIndent(out,*indentlevel);
+		}
+		out->write('"');
+		out->write(dn->getName());
+		out->write('"');
+		if (indent) {
+			out->write(' ');
+		}
+		out->write(':');
+		if (indent) {
+			out->write(' ');
+		}
+	}
+
+	const char	*type=getType(dn);
+	switch (*type) {
 		case 'o':
 			{
 			if (indent) {
@@ -173,6 +205,7 @@ void jsondom::write(const domnode *dn, output *out,
 				out->write('\n');
 				*indentlevel=*indentlevel+2;
 			}
+			pvt->_inarray.append(false);
 			bool	first=true;
 			for (domnode *child=dn->getFirstTagChild();
 					!child->isNullNode();
@@ -187,6 +220,7 @@ void jsondom::write(const domnode *dn, output *out,
 				}
 				write(child,out,indent,indentlevel);
 			}
+			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
 				out->write('\n');
 				*indentlevel=*indentlevel-2;
@@ -194,22 +228,6 @@ void jsondom::write(const domnode *dn, output *out,
 			}
 			out->write('}');
 			}
-			break;
-		case 'm':
-			if (indent) {
-				writeIndent(out,*indentlevel);
-			}
-			out->write('"');
-			out->write(dn->getAttributeValue("n"));
-			out->write('"');
-			if (indent) {
-				out->write(' ');
-			}
-			out->write(':');
-			if (indent) {
-				out->write(' ');
-			}
-			write(dn->getFirstTagChild(),out,indent,indentlevel);
 			break;
 		case 's':
 			out->write('"');
@@ -238,6 +256,7 @@ void jsondom::write(const domnode *dn, output *out,
 				out->write('\n');
 				*indentlevel=*indentlevel+2;
 			}
+			pvt->_inarray.append(true);
 			bool	first=true;
 			for (domnode *child=dn->getFirstTagChild();
 					!child->isNullNode();
@@ -255,6 +274,7 @@ void jsondom::write(const domnode *dn, output *out,
 				}
 				write(child,out,indent,indentlevel);
 			}
+			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
 				out->write('\n');
 				*indentlevel=*indentlevel-2;
@@ -263,4 +283,65 @@ void jsondom::write(const domnode *dn, output *out,
 			out->write(']');
 			break;
 	}
+}
+
+const char *jsondom::getType(const domnode *dn) const {
+
+	// if this is the root node then it's an object
+	if (dn->getType()==ROOT_DOMNODETYPE) {
+		return "o";
+	}
+
+	// first try attribute "t"
+	const char	*type=dn->getAttributeValue("t");
+
+	// then try attribute "type"
+	if (charstring::isNullOrEmpty(type)) {
+		type=dn->getAttributeValue("type");
+	}
+
+	// we use 'u' to represent a null because 'n' represents a number,
+	// so if we find type="null" then bump the return value to the 'u'
+	if (!charstring::compare(type,"null")) {
+		type++;
+	}
+
+	// if the type isn't provided, then try to derive it from the value
+	if (charstring::isNullOrEmpty(type)) {
+		const char	*v=getValue(dn);
+		if (charstring::isNullOrEmpty(v)) {
+			// FIXME: actually, it could also be an array,
+			// see if there are multiple children with the
+			// same name...
+			// of course, it could be an array with 1 member or
+			// an empty array...
+			type="o";
+		} else if (!charstring::compare(v,"true")) {
+			type="t";
+		} else if (!charstring::compare(v,"false")) {
+			type="f";
+		} else if (!charstring::compare(v,"null")) {
+			type="u";
+		} else if (charstring::isNumber(v)) {
+			type="n";
+		} else {
+			type="s";
+		}
+	}
+
+	return type;
+}
+
+const char *jsondom::getValue(const domnode *dn) const {
+
+	// first try attribute "v"
+	const char	*value=dn->getAttributeValue("v");
+
+	// then try attribute "value"
+	if (charstring::isNullOrEmpty(value)) {
+		value=dn->getAttributeValue("value");
+	}
+
+	// FIXME: then fall back to the immediate text node
+	return value;
 }

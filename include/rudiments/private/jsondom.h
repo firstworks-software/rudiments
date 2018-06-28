@@ -21,6 +21,8 @@
 			bool	parseString(const char *string,
 						domnode *parent,
 						uint64_t position);
-			void	insertChild(domnode *child);
+			domnode	*whichNode();
+			const char	*getType(const domnode *dn) const;
+			const char	*getValue(const domnode *dn) const;
 
 			jsondomprivate	*pvt;

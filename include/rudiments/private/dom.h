@@ -15,6 +15,8 @@
 						uint16_t *indentlevel) const;
 			virtual	void	writeIndent(output *out,
 						uint16_t indent) const;
+			virtual	void	safeWrite(output *out,
+						const char *str) const;
 
 				dom(const dom &x);
 			dom	&operator=(const dom &x);
