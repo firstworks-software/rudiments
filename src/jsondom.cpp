@@ -207,9 +207,16 @@ void jsondom::write(const domnode *dn, output *out,
 			}
 			pvt->_inarray.append(false);
 			bool	first=true;
-			for (domnode *child=dn->getFirstTagChild();
+			// NOTE: this loop uses getFirstChild/getNextSibling
+			// and ignores non-tags rather than just calling
+			// getFirstTagChild/getNextTagSibling to work correctly
+			// with cursordomnodes
+			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
-					child=child->getNextTagSibling()) {
+					child=child->getNextSibling()) {
+				if (child->getType()!=TAG_DOMNODETYPE) {
+					continue;
+				}
 				if (first) {
 					first=false;
 				} else {
@@ -231,11 +238,15 @@ void jsondom::write(const domnode *dn, output *out,
 			break;
 		case 's':
 			out->write('"');
-			out->write(dn->getAttributeValue("v"));
+			// FIXME: handle escaped quotes
+			out->write(getValue(dn));
 			out->write('"');
 			break;
 		case 'n':
-			out->write(dn->getAttributeValue("v"));
+			{
+			const char	*v=getValue(dn);
+			out->write((!charstring::isNullOrEmpty(v))?v:"0");
+			}
 			break;
 		case 't':
 			out->write("true");
@@ -258,9 +269,16 @@ void jsondom::write(const domnode *dn, output *out,
 			}
 			pvt->_inarray.append(true);
 			bool	first=true;
-			for (domnode *child=dn->getFirstTagChild();
+			// NOTE: this loop uses getFirstChild/getNextSibling
+			// and ignores non-tags rather than just calling
+			// getFirstTagChild/getNextTagSibling to work correctly
+			// with cursordomnodes
+			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
-					child=child->getNextTagSibling()) {
+					child=child->getNextSibling()) {
+				if (child->getType()!=TAG_DOMNODETYPE) {
+					continue;
+				}
 				if (first) {
 					first=false;
 				} else {
