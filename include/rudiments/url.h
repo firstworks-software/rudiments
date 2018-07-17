@@ -41,6 +41,12 @@ class RUDIMENTS_DLLSPEC url : public file {
 		/** Deletes this instance of the url class. */
 		virtual	~url();
 
+		void	useHttpGet();
+		void	useHttpPost();
+
+		void	setHttpPostContentType(const char *contenttype);
+		void	setHttpPostData(const char *data, uint64_t size);
+
 	#include <rudiments/private/url.h>
 };
 

@@ -53,6 +53,11 @@ class urlprivate {
 		char			*_httpprevioushost;
 		char			*_httppreviousport;
 
+		bool			_usehttppost;
+		const char		*_httppostcontenttype;
+		const char		*_httppostdata;
+		uint64_t		_httppostdatasize;
+
 		#ifdef RUDIMENTS_HAS_LIBCURL
 			CURL	*_curl;
 			CURLM	*_curlm;
@@ -76,6 +81,11 @@ url::url() : file() {
 	pvt->_previousproto=NULL;
 	pvt->_httpprevioushost=NULL;
 	pvt->_httppreviousport=NULL;
+
+	pvt->_usehttppost=false;
+	pvt->_httppostcontenttype=NULL;
+	pvt->_httppostdata=NULL;
+	pvt->_httppostdatasize=0;
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	pvt->_curl=NULL;
@@ -134,6 +144,23 @@ void url::init() {
 	pvt->_eof=false;
 	pvt->_stillrunning=0;
 	#endif
+}
+
+void url::useHttpGet() {
+	pvt->_usehttppost=true;
+}
+
+void url::useHttpPost() {
+	pvt->_usehttppost=false;
+}
+
+void url::setHttpPostContentType(const char *contenttype) {
+	pvt->_httppostcontenttype=contenttype;
+}
+
+void url::setHttpPostData(const char *data, uint64_t size) {
+	pvt->_httppostdata=data;
+	pvt->_httppostdatasize=size;
 }
 
 bool url::lowLevelOpen(const char *name, int32_t flags,
@@ -458,7 +485,7 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 
 	// build the request
 	stringbuffer	request;
-	request.append("GET ")->append(path);
+	request.append((pvt->_usehttppost)?"POST ":"GET ")->append(path);
 	request.append(" HTTP/1.1\r\n");
 	request.append("User-Agent: rudiments/");
 	request.append(RUDIMENTS_VERSION);
@@ -473,6 +500,17 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		request.append("\r\n");
 	}
 	request.append("Accept: */*\r\n");
+	if (pvt->_usehttppost) {
+		request.append("Content-Type: ");
+		request.append(pvt->_httppostcontenttype);
+		request.append("\r\n");
+		request.append("Content-Length: ");
+		request.append(pvt->_httppostdatasize);
+		request.append("\r\n");
+		request.append("\r\n");
+		request.append(pvt->_httppostdata);
+		request.append("\r\n");
+	}
 	request.append("\r\n");
 
 	// send the request
