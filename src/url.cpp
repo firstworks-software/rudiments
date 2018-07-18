@@ -147,11 +147,11 @@ void url::init() {
 }
 
 void url::useHttpGet() {
-	pvt->_usehttppost=true;
+	pvt->_usehttppost=false;
 }
 
 void url::useHttpPost() {
-	pvt->_usehttppost=false;
+	pvt->_usehttppost=true;
 }
 
 void url::setHttpPostContentType(const char *contenttype) {
