@@ -40,6 +40,8 @@ class urlprivate {
 		bool			_usingbuiltin;
 		inetsocketclient	_isc;
 
+		stringbuffer		*_request;
+
 		uint64_t		_contentlength;
 		uint64_t		_fetchedsofar;
 
@@ -76,6 +78,9 @@ url::url() : file() {
 	dontGetCurrentPropertiesOnOpen();
 
 	pvt->_isc.allowShortReads();
+	pvt->_isc.setWriteBufferSize(65536);
+
+	pvt->_request=NULL;
 
 	pvt->_keepalive=false;
 	pvt->_previousproto=NULL;
@@ -123,6 +128,8 @@ url::~url() {
 	delete[] pvt->_previousproto;
 	delete[] pvt->_httpprevioushost;
 	delete[] pvt->_httppreviousport;
+
+	delete pvt->_request;
 
 	delete pvt;
 }
@@ -484,41 +491,57 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	}
 
 	// build the request
-	stringbuffer	request;
-	request.append((pvt->_usehttppost)?"POST ":"GET ")->append(path);
-	request.append(" HTTP/1.1\r\n");
-	request.append("User-Agent: rudiments/");
-	request.append(RUDIMENTS_VERSION);
-	request.append("\r\n");
-	request.append("Host: ")->append(host)->append("\r\n");
+	if (!pvt->_request) {
+		pvt->_request=new stringbuffer();
+	}
+	pvt->_request->clear();
+	pvt->_request->append((pvt->_usehttppost)?"POST ":"GET ")->append(path);
+	pvt->_request->append(" HTTP/1.1\r\n"
+				"User-Agent: rudiments/"
+				RUDIMENTS_VERSION
+				"\r\n"
+				"Host: ");
+	pvt->_request->append(host);
+	pvt->_request->append("\r\n");
 	if (userpwd) {
-		request.append("Authorization: Basic ");
+		pvt->_request->append("Authorization: Basic ");
 		char	*userpwd64=charstring::base64Encode(
 					(const unsigned char *)userpwd);
-		request.append(userpwd64);
+		pvt->_request->append(userpwd64);
 		delete[] userpwd64;
-		request.append("\r\n");
+		pvt->_request->append("\r\n");
 	}
-	request.append("Accept: */*\r\n");
+	pvt->_request->append("Accept: */*\r\n");
 	if (pvt->_usehttppost) {
-		request.append("Content-Type: ");
-		request.append(pvt->_httppostcontenttype);
-		request.append("\r\n");
-		request.append("Content-Length: ");
-		request.append(pvt->_httppostdatasize);
-		request.append("\r\n");
-		request.append("\r\n");
-		request.append(pvt->_httppostdata);
-		request.append("\r\n");
+		pvt->_request->append("Content-Type: ");
+		pvt->_request->append(pvt->_httppostcontenttype);
+		pvt->_request->append("\r\n"
+					"Content-Length: ");
+		pvt->_request->append(pvt->_httppostdatasize);
+		pvt->_request->append("\r\n"
+					"\r\n");
 	}
-	request.append("\r\n");
 
 	// send the request
 	#ifdef DEBUG_HTTP
-	stdoutput.printf("Request:\n%s",request.getString());
+	stdoutput.printf("Request:\n%s",pvt->_request->getString());
+	if (pvt->_usehttppost) {
+		stdoutput.write(pvt->_httppostdata,pvt->_httppostdatasize);
+		stdoutput.write("\r\n");
+	}
+	stdoutput.write("\r\n");
 	#endif
-	if (pvt->_isc.write(request.getString(),request.getStringLength())!=
-					(ssize_t)request.getStringLength()) {
+	ssize_t	requestlength=pvt->_request->getStringLength();
+	if (pvt->_isc.write(pvt->_request->getString(),
+					requestlength)!=requestlength ||
+		((pvt->_usehttppost)?
+			(pvt->_isc.write(pvt->_httppostdata,
+					pvt->_httppostdatasize)!=
+					(ssize_t)pvt->_httppostdatasize ||
+			pvt->_isc.write("\r\n",2)!=2):false) ||
+		pvt->_isc.write("\r\n",2)!=2 ||
+		!pvt->_isc.flushWriteBuffer(-1,-1)) {
+
 		delete[] host;
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("http: send request failed\n");
