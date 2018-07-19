@@ -111,15 +111,18 @@ stringbuffer *stringbuffer::append(int64_t number) {
 }
 
 stringbuffer *stringbuffer::append(int16_t number, uint16_t zeropadding) {
-	return (stringbuffer *)appendFormatted("%0*hd",zeropadding,number);
+	return append((int64_t)number,zeropadding);
 }
 
 stringbuffer *stringbuffer::append(int32_t number, uint16_t zeropadding) {
-	return (stringbuffer *)appendFormatted("%0*d",zeropadding,number);
+	return append((int64_t)number,zeropadding);
 }
 
 stringbuffer *stringbuffer::append(int64_t number, uint16_t zeropadding) {
-	return (stringbuffer *)appendFormatted("%0*lld",zeropadding,number);
+	char	*num=charstring::parseNumber(number,zeropadding);
+	append(num);
+	delete[] num;
+	return this;
 }
 
 stringbuffer *stringbuffer::append(unsigned char character) {
@@ -139,15 +142,18 @@ stringbuffer *stringbuffer::append(uint64_t number) {
 }
 
 stringbuffer *stringbuffer::append(uint16_t number, uint16_t zeropadding) {
-	return (stringbuffer *)appendFormatted("%0*hd",zeropadding,number);
+	return append((uint64_t)number,zeropadding);
 }
 
 stringbuffer *stringbuffer::append(uint32_t number, uint16_t zeropadding) {
-	return (stringbuffer *)appendFormatted("%0*d",zeropadding,number);
+	return append((uint64_t)number,zeropadding);
 }
 
 stringbuffer *stringbuffer::append(uint64_t number, uint16_t zeropadding) {
-	return (stringbuffer *)appendFormatted("%0*lld",zeropadding,number);
+	char	*num=charstring::parseNumber(number,zeropadding);
+	append(num);
+	delete[] num;
+	return this;
 }
 
 stringbuffer *stringbuffer::append(float number) {

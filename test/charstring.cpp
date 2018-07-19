@@ -422,6 +422,8 @@ int main(int argc, const char **argv) {
 	test("isInteger: -100",charstring::isInteger("-100"));
 	test("isInteger: -100.5",!charstring::isInteger("-100.5"));
 	test("isInteger: -100.5.10",!charstring::isInteger("-100.5.10"));
+	test("integerLength: 0",
+			charstring::integerLength((int64_t)0)==1);
 	test("integerLength: 1",
 			charstring::integerLength((int64_t)1)==1);
 	test("integerLength: 10",
@@ -438,6 +440,16 @@ int main(int argc, const char **argv) {
 			charstring::integerLength((int64_t)-100)==4);
 	test("integerLength: -1000",
 			charstring::integerLength((int64_t)-1000)==5);
+	test("integerLength: 0",
+			charstring::integerLength((uint64_t)0)==1);
+	test("integerLength: 1",
+			charstring::integerLength((uint64_t)1)==1);
+	test("integerLength: 10",
+			charstring::integerLength((uint64_t)10)==2);
+	test("integerLength: 100",
+			charstring::integerLength((uint64_t)100)==3);
+	test("integerLength: 1000",
+			charstring::integerLength((uint64_t)1000)==4);
 
 	uint64_t	testuint64=ULONG_MAX;
 	char		*teststr=charstring::parseNumber(testuint64);

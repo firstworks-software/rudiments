@@ -130,7 +130,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) socketbench$(EXE) bytestringbench$(EXE)
+	$(LTCLEAN) $(RM) socketbench$(EXE) bytestringbench$(EXE) charstringbench$(EXE)
 	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json handofffile
 	cd certificates $(AND) $(MAKE) clean
 
@@ -208,6 +208,9 @@ sharedmemory: sharedmemory.cpp sharedmemory.$(OBJ)
 
 charstring: charstring.cpp charstring.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) charstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+charstringbench: charstringbench.cpp charstringbench.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) charstringbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 datetime: datetime.cpp datetime.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) datetime.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

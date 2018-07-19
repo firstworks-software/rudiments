@@ -822,24 +822,25 @@ char *charstring::parseNumber(int64_t number) {
 }
 
 char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
+	if (number>=0) {
+		return parseNumber((uint64_t)number,zeropadding);
+	}
 	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-	char	*str=new char[strlength];
-	int32_t	strindex=strlength-1;
-	str[strindex--]='\0';
-	int64_t	posnumber=(number>=0)?number:-1*number;
-	while (posnumber) {
-		str[strindex--]='0'+posnumber%10;
-		posnumber/=10;
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
+	char		*ptr=new char[strlength+1];
+	*ptr='-';
+	ptr+=strlength;
+	*ptr='\0';
+	number*=-1;
+	strlength--;
+	while (strlength) {
+		ptr--;
+		*ptr='0'+number%10;
+		number/=10;
+		strlength--;
 	}
-	int32_t	finish=(number>=0)?-1:0;
-	while (strindex>finish) {
-		str[strindex--]='0';
-	}
-	if (number<0) {
-		str[strindex]='-';
-	}
-	return str;
+	ptr--;
+	return ptr;
 }
 
 char *charstring::parseNumber(uint64_t number) {
@@ -848,18 +849,17 @@ char *charstring::parseNumber(uint64_t number) {
 
 char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-	char	*str=new char[strlength];
-	int32_t	strindex=strlength-1;
-	str[strindex--]='\0';
-	while (number) {
-		str[strindex--]='0'+number%10;
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
+	char		*ptr=new char[strlength+1];
+	ptr+=strlength;
+	*ptr='\0';
+	while (strlength) {
+		ptr--;
+		*ptr='0'+number%10;
 		number/=10;
+		strlength--;
 	}
-	while (strindex>-1) {
-		str[strindex--]='0';
-	}
-	return str;
+	return ptr;
 }
 
 char *charstring::parseNumber(float number) {

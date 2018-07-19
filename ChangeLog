@@ -27,6 +27,8 @@
 	added cursordomnode class
 	added jsonsax and jsondom classes
 	added some http-post options to url class
+	improved performance of charstring::integerLength(),
+		charstring::parseInteger(), and stringbuffer::append(integer)
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the
