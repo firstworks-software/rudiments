@@ -18,7 +18,10 @@ PROGS = dictionary \
 	memorypool \
 	randomnumber \
 	inetsocketclient \
-	inetsocketserver
+	inetsocketserver \
+	bytestring \
+	charstring \
+	socket
 
 .SUFFIXES: .lo .obj
 
@@ -75,3 +78,12 @@ inetsocketclient: inetsocketclient.cpp inetsocketclient.$(OBJ)
 
 inetsocketserver: inetsocketserver.cpp inetsocketserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+bytestring: bytestring.cpp bytestring.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+charstring: charstring.cpp charstring.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) charstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+socket: socket.cpp socket.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) socket.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

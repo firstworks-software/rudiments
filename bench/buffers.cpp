@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
 	char	block[1024];
 	for (uint64_t b=0; b<sizeof(block); b++) {
-		block[b]='a';
+		block[b]='a'+(b%10);
 	}
 
 	for (uint64_t i=1; i<=1024; i=i*2) {

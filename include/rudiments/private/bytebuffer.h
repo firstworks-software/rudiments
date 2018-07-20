@@ -9,12 +9,16 @@
 					bool resetveryinitialsize,
 					unsigned char *initialcontents,
 					size_t initialsize, size_t increment);
-		bytebuffer	*copy(unsigned char *data,
-						size_t size, bool copyin,
+		void		copyIn(unsigned char *data,
+						size_t size);
+		void		copyOut(unsigned char *data,
+						size_t size,
 						size_t *bytescopied);
 		void		extend(size_t size);
 		unsigned char	*coalesce(bool replaceinitial);
 		void		bytebufferClone(const bytebuffer &v);
+		void		goToEnd();
+		void		findExtent();
 
 		size_t		_end();
 		void		_end(size_t e);
