@@ -1,25 +1,13 @@
 // Copyright (c) 2017  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/datetime.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
+#include "../test/test.cpp"
 
 #define APPENDITERATIONS 1024*1024*2
 #define PARSEITERATIONS 1024*1024*4
 #define LENGTHITERATIONS 1024*1024*10
-
-void displayTime(datetime *start, datetime *end) {
-	uint32_t	sec=end->getEpoch()-start->getEpoch();
-	int32_t		usec=end->getMicroseconds()-start->getMicroseconds();
-	if (usec<0) {
-		sec--;
-		usec=usec+100000;
-	}
-	long double	totalsec=(long double)sec+
-					(((long double)usec)/1000000.0);
-	stdoutput.printf("%Lf\n",totalsec);
-}
 
 int main() {
 

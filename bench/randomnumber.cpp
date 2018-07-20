@@ -2,8 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/randomnumber.h>
-#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
+#include "../test/test.cpp"
 
 int main(int argc, const char **argv) {
 
@@ -15,8 +15,9 @@ int main(int argc, const char **argv) {
 	r.setSeed(0);
 
 	datetime	start;
-	start.getSystemDateAndTime();
+	datetime	end;
 
+	start.getSystemDateAndTime();
 	for (uint64_t l=0; l<randmax; l++) {
 		uint32_t	result;
 		if (!r.generateNumber(&result)) {
@@ -31,9 +32,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 	}
-
-	datetime	end;
 	end.getSystemDateAndTime();
 
-	stdoutput.printf("%d seconds\n",end.getEpoch()-start.getEpoch());
+	displayTime(&start,&end);
 }

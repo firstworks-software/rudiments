@@ -1,7 +1,6 @@
 // Copyright (c) 2017  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
@@ -15,6 +14,7 @@
 #ifdef RUDIMENTS_HAVE_G_CONFIG_H
 	#include <_G_config.h>
 #endif
+#include "../test/test.cpp"
 
 #define ITERATIONS 2048
 #define BUFFERSIZE (4*1024*1024)
@@ -47,18 +47,6 @@ void *copy8(void *dest, const void *src, size_t size) {
 		return memcpy(dest,src,size);
 	}
 	return NULL;
-}
-
-void displayTime(datetime *start, datetime *end) {
-	uint32_t	sec=end->getEpoch()-start->getEpoch();
-	int32_t		usec=end->getMicroseconds()-start->getMicroseconds();
-	if (usec<0) {
-		sec--;
-		usec=usec+100000;
-	}
-	long double	totalsec=(long double)sec+
-					(((long double)usec)/1000000.0);
-	stdoutput.printf("%Lf\n",totalsec);
 }
 
 int main() {

@@ -14,8 +14,8 @@
 #elif defined(USE_SINGLYLINKEDLIST)
 	#include <rudiments/singlylinkedlist.h>
 #endif
-#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
+#include "../test/test.cpp"
 
 #define ITEMS 1024*1024
 #define ITERS 320
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 	singlylinkedlist<uint64_t>	l;
 #endif
 	datetime	start;
-	datetime	finish;
+	datetime	end;
 
 	stdoutput.printf("appending %d items (%d times)\n",ITEMS,ITERS);
 
@@ -61,8 +61,7 @@ int main(int argc, char **argv) {
 
 		stdoutput.printf(".");
 	}
-	finish.getSystemDateAndTime();
+	end.getSystemDateAndTime();
 
-	stdoutput.printf("\n%lld seconds\n\n",
-			finish.getEpoch()-start.getEpoch());
+	displayTime(&start,&end);
 }

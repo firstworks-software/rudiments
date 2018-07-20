@@ -9,9 +9,9 @@
 #include <rudiments/file.h>
 #include <rudiments/directory.h>
 #include <rudiments/permissions.h>
-#include <rudiments/datetime.h>
 #include <rudiments/snooze.h>
 #include <rudiments/commandline.h>
+#include <rudiments/datetime.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -250,6 +250,9 @@ void listen(bool nonblocking) {
 
 void session(socketclient *clnt) {
 
+	datetime	start;
+	datetime	end;
+
 	// use async write if necessary
 	if (asyncwrite) {
 		clnt->useAsyncWrite();
@@ -311,7 +314,6 @@ void session(socketclient *clnt) {
 		// loop, writing to the server
 		stdoutput.printf("		writing %d times...\n",
 								loopcount);
-		datetime	start;
 		start.getSystemDateAndTime();
 		for (uint32_t i=0; i<loopcount; i++) {
 			uint32_t	byteswritten=0;
@@ -347,7 +349,6 @@ void session(socketclient *clnt) {
 			}
 		}
 		clnt->flushWriteBuffer(-1,-1);
-		datetime	end;
 		end.getSystemDateAndTime();
 
 		// Mbps

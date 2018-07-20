@@ -6,8 +6,8 @@
 #elif defined(USE_STRINGBUFFER)
 	#include <rudiments/stringbuffer.h>
 #endif
-#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
+#include "../test/test.cpp"
 
 #define ITEMS 1024*1024*10
 #define ITERS 10
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 	stringbuffer	str;
 #endif
 	datetime	start;
-	datetime	finish;
+	datetime	end;
 
 	char	block[1024];
 	for (uint64_t b=0; b<sizeof(block); b++) {
@@ -45,9 +45,8 @@ int main(int argc, char **argv) {
 
 			stdoutput.printf(".");
 		}
-		finish.getSystemDateAndTime();
+		end.getSystemDateAndTime();
 
-		stdoutput.printf("\n%lld seconds\n\n",
-				finish.getEpoch()-start.getEpoch());
+		displayTime(&start,&end);
 	}
 }
