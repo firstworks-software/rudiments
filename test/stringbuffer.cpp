@@ -121,7 +121,7 @@ int main(int argc, const char **argv) {
 			charstring::append(str,"0123456789abcdef");
 		}
 
-		strb=new stringbuffer(data,charstring::length(data),32);
+		strb=new stringbuffer(data,charstring::length(data));
 		for (uint16_t j=0; j<=(i+1)*100; j++) {
 			strb->append("0123456789abcdef");
 			charstring::append(str,"0123456789abcdef");

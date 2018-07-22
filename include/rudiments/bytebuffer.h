@@ -8,12 +8,6 @@
 
 /** The bytebuffer class can be used to store binary data of arbitrary length.
  *
- *  Internally, the class stores this data in a series of extents which are
- *  coalesced when getBuffer() or detachBuffer() are called.  The size of the
- *  initial and incremental extents may be defined in the constructor.
- *
- *  When cleared, all extents except for the initial extent are freed.
- *
  *  It is generally more efficient to reuse the same bytebuffer over and
  *  over than to allocate a new one for each operation. */
 class RUDIMENTS_DLLSPEC bytebuffer : public output {
@@ -24,18 +18,14 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		bytebuffer();
 
 		/** Creates an instance of the bytebuffer class with
-		 *  the specified "initialsize" and "incrementsize"
-		 *  parameters. */
-		bytebuffer(size_t initialsize, size_t incrementsize);
+		 *  the specified "initialsize". */
+		bytebuffer(size_t initialsize);
 
 		/** Creates an instance of the bytebuffer class.
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
-		 *  should not be freed by the calling program.  The initial
-		 *  size and increment size may be specified respectively by
-		 *  the "initialsize" and "incrementsize" parameters. */
-		bytebuffer(unsigned char *initialcontents,
-				size_t initialsize, size_t incrementsize);
+		 *  should not be freed by the calling program. */
+		bytebuffer(unsigned char *initialcontents, size_t initialsize);
 
 		/** Creates an instance of the bytebuffer class
 		 *  that is a copy of "v". */
@@ -315,16 +305,15 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		void	clear();
 
 		/** Empties the bytebuffer and resets the specified
-		 *  "initialsize" and "incrementsize" parameters. */
-		void	clear(size_t initialsize, size_t incrementsize);
+		 *  "initialsize" parameter. */
+		void	clear(size_t initialsize);
 
 		/** Empties the bytebuffer and attaches the buffer
 		 *  "initialcontents" to the instance as the initial contents.
 		 *  This buffer should not be freed by the calling program.
-		 *  Also resets the specified "initialsize" and "incrementsize"
-		 *  parameters. */
+		 *  Also resets the specified "initialsize". */
 		void	clear(unsigned char *initialcontents,
-				size_t initialsize, size_t incrementsize);
+						size_t initialsize);
 
 		/** Returns the current data stored in the bytebuffer. */
 		const unsigned char	*getBuffer();
@@ -333,10 +322,6 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  bytebuffer. */
 		size_t		getSize();
 
-		/** Returns the position in the buffer at which the next
-		 *  append will occur. */
-		size_t		getEnd();
-
 		/** Returns the actual size of the buffer which
 		 *  may be larger than the value returned by
 		 *  getSize() since the buffer grows in chunks. */
@@ -344,9 +329,6 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 
 		/** Returns the size of the original initial exent. */
 		size_t		getInitialSize();
-
-		/** Returns the size of each of the incremental extents. */
-		size_t		getIncrementSize();
 
 		/** Returns a pointer to the buffer currently
 		 *  stored in the bytebuffer, then resets

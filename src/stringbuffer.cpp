@@ -14,14 +14,11 @@ stringbuffer::stringbuffer() : bytebuffer() {
 	pvt=NULL;
 }
 
-stringbuffer::stringbuffer(size_t initialsize, size_t incrementsize) :
-			bytebuffer(initialsize,incrementsize) {
+stringbuffer::stringbuffer(size_t initialsize) : bytebuffer(initialsize) {
 }
 
-stringbuffer::stringbuffer(char *initialcontents,
-				size_t initialsize, size_t incrementsize) :
-			bytebuffer((unsigned char *)initialcontents,
-						initialsize,incrementsize) {
+stringbuffer::stringbuffer(char *initialcontents, size_t initialsize) :
+		bytebuffer((unsigned char *)initialcontents,initialsize) {
 }
 
 stringbuffer::stringbuffer(const stringbuffer &s) : bytebuffer(s) {
@@ -45,7 +42,7 @@ const char *stringbuffer::getString() {
 	bytebuffer::append('\0');
 	const char	*retval=(const char *)getBuffer();
 	_position(_position()-1);
-	_end(_end()-1);
+	_size(_size()-1);
 	return retval;
 }
 
@@ -66,14 +63,12 @@ void stringbuffer::clear() {
 	bytebuffer::clear();
 }
 
-void stringbuffer::clear(size_t initialsize, size_t incrementsize) {
-	bytebuffer::clear(initialsize,incrementsize);
+void stringbuffer::clear(size_t initialsize) {
+	bytebuffer::clear(initialsize);
 }
 
-void stringbuffer::clear(char *initialcontents,
-				size_t initialsize, size_t incrementsize) {
-	bytebuffer::clear((unsigned char *)initialcontents,
-					initialsize,incrementsize);
+void stringbuffer::clear(char *initialcontents, size_t initialsize) {
+	bytebuffer::clear((unsigned char *)initialcontents,initialsize);
 }
 
 stringbuffer *stringbuffer::append(const unsigned char *string) {

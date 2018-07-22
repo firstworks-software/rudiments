@@ -8,34 +8,25 @@
 
 /** The stringbuffer class can be used to store strings of arbitrary length.
  *
- *  Internally, the class stores this data in a series of extents which are
- *  coalesced when getString() or detachString() are called.  The size of the
- *  initial and incremental extents may be defined in the constructor, if
- *  desired.
- *
- *  When cleared, all extents are freed except for the initial extent.
- *
  *  It is generally more efficient to reuse the same stringbuffer over and
  *  over than to allocate a new one for each operation. */
 class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 	public:
 
 		/** Creates an instance of the stringbuffer class with
-		 *  default initial size and increment parameters. */
+		 *  default initial size. */
 		stringbuffer();
 
 		/** Creates an instance of the stringbuffer class with the
-		 *  specified "initialsize" and "incrementsize" parameters. */
-		stringbuffer(size_t initialsize, size_t incrementsize);
+		 *  specified "initialsize". */
+		stringbuffer(size_t initialsize);
 
 		/** Creates an instance of the stringbuffer class.
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program.  The initial
-		 *  size and increment size may be specified respectively by
-		 *  the "initialsize" and "incrementsize" parameters. */
-		stringbuffer(char *initialcontents,
-				size_t initialsize, size_t incrementsize);
+		 *  size may be specified by the "initialsize" parameter. */
+		stringbuffer(char *initialcontents, size_t initialsize);
 
 		/** Creates an instance of the stringbuffer class
 		 *  that is a copy of "s". */
@@ -444,16 +435,14 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		void	clear();
 
 		/** Empties the bytebuffer and resets the specified
-		 *  "initialsize" and "incrementsize" parameters. */
-		void	clear(size_t initialsize, size_t incrementsize);
+		 *  "initialsize" parameter. */
+		void	clear(size_t initialsize);
 
 		/** Empties the bytebuffer and attaches the buffer
 		 *  "initialcontents" to the instance as the initial contents.
 		 *  This buffer should not be freed by the calling program.
-		 *  Also resets the specified "initialsize" and "incrementsize"
-		 *  parameters. */
-		void	clear(char *initialcontents,
-				size_t initialsize, size_t incrementsize);
+		 *  Also resets the specified "initialsize" parameter. */
+		void	clear(char *initialcontents, size_t initialsize);
 
 		/** Returns the string currently stored in the stringbuffer. */
 		const char	*getString();

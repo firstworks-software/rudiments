@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
 	std::string	str;
 #elif defined(USE_STRINGBUFFER)
 	stringbuffer	str;
+	stdoutput.printf("initial size: %d\n",str.getInitialSize());
 #endif
 	datetime	start;
 	datetime	end;
@@ -40,10 +41,7 @@ int main(int argc, char **argv) {
 			for (uint64_t k=0; k<ITEMS/i; k++) {
 				str.append(block,i);
 			}
-
 			str.clear();
-
-			stdoutput.printf(".");
 		}
 		end.getSystemDateAndTime();
 

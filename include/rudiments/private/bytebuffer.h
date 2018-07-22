@@ -3,25 +3,12 @@
 
 	protected:
 		void		init(unsigned char *initialcontents,
-					size_t initialsize, size_t increment);
-		void		clearExtentList();
-		void		clear(bool resetpositions,
-					bool resetveryinitialsize,
-					unsigned char *initialcontents,
-					size_t initialsize, size_t increment);
-		void		copyIn(unsigned char *data,
-						size_t size);
-		void		copyOut(unsigned char *data,
-						size_t size,
-						size_t *bytescopied);
-		void		extend(size_t size);
-		unsigned char	*coalesce(bool replaceinitial);
+						size_t initialsize);
 		void		bytebufferClone(const bytebuffer &v);
-		void		goToEnd();
-		void		findExtent();
+		void		extend(size_t finalpos, size_t size);
 
-		size_t		_end();
-		void		_end(size_t e);
+		size_t		_size();
+		void		_size(size_t s);
 		size_t		_position();
 		void		_position(size_t pos);
 
