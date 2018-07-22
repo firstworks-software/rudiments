@@ -4,8 +4,6 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/linkedlist.h>
-#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_VASPRINTF
 	#include <stdio.h>
@@ -125,7 +123,7 @@ void bytebuffer::extend(size_t finalpos, size_t size) {
 		} while (finalpos>pvt->_actualsize);
 
 		unsigned char	*newbuffer=new unsigned char[pvt->_actualsize];
-		bytestring::copy(newbuffer,pvt->_buffer,pvt->_size);
+		bytestring::unsafeCopy(newbuffer,pvt->_buffer,pvt->_size);
 		delete[] pvt->_buffer;
 		pvt->_buffer=newbuffer;
 	}
