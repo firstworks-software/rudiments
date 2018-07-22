@@ -96,7 +96,7 @@ ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 		return 0;
 	}
 
-	bytestring::copy(data,pvt->_buffer+pvt->_pos,size);
+	bytestring::unsafeCopy(data,pvt->_buffer+pvt->_pos,size);
 	pvt->_pos+=size;
 	return size;
 }
@@ -107,7 +107,7 @@ ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
 	}
 	size_t	finalpos=pvt->_pos+size;
 	extend(finalpos,size);
-	bytestring::copy(pvt->_buffer+pvt->_pos,data,size);
+	bytestring::unsafeCopy(pvt->_buffer+pvt->_pos,data,size);
 	pvt->_pos=finalpos;
 	if (finalpos>pvt->_size) {
 		pvt->_size=finalpos;
