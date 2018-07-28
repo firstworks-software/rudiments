@@ -1018,7 +1018,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 		}
 
 		// max-bytes-read condition
-		if (maxbytes && temp.getStringLength()>maxbytes) {
+		if (maxbytes && temp.getSize()>maxbytes) {
 			retval=RESULT_MAX;
 			break;
 		}
@@ -1027,7 +1027,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 	if (retval>=RESULT_SUCCESS) {
 
 		// get the size to return
-		retval=temp.getStringLength();
+		retval=temp.getSize();
 
 		// set the return buffer
 		if (buffer) {

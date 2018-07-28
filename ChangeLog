@@ -30,6 +30,7 @@
 	improved performance of charstring::integerLength(),
 		charstring::parseInteger(), and stringbuffer::append(integer)
 	refactored bytebuffer/stringbuffer to improve performance
+	getStringLength() -> getSize() in read() with terminator
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the
