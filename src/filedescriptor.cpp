@@ -84,7 +84,9 @@
 	#include <arpa/inet.h>
 #endif
 #ifdef RUDIMENTS_HAVE_BYTESWAP_H
-	#include <byteswap.h>
+	#ifdef RUDIMENTS_HAVE_SAFE_BYTESWAP_H_AFTER_NETINET_IN_H
+		#include <byteswap.h>
+	#endif
 #endif
 #ifdef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
 	#include <machine/endian.h>

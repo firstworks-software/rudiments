@@ -593,6 +593,11 @@ AC_MSG_CHECKING(for byteswap.h)
 AC_TRY_COMPILE([#include <byteswap.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_BYTESWAP_H, 1, Some systems have byteswap.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(whether safe to include byteswap.h after netinet/in.h)
+AC_TRY_COMPILE([#include <netinet/in.h>
+#include <byteswap.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SAFE_BYTESWAP_H_AFTER_NETINET_IN_H, 1, On some systems you cant include byteswap.h after netinet/in.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for machine/endian.h)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>

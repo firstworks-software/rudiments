@@ -1042,6 +1042,9 @@
 /* Do we have real-time-clock RTC_SET_TIME support */
 /* #undef RUDIMENTS_HAVE_RTC_SET_TIME */
 
+/* On some systems you cant include byteswap.h after netinet/in.h */
+#define RUDIMENTS_HAVE_SAFE_BYTESWAP_H_AFTER_NETINET_IN_H 1
+
 /* SCO has /dev/table/avenrun instead of getloadavg */
 /* #undef RUDIMENTS_HAVE_SCO_AVENRUN */
 
