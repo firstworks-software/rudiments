@@ -32,6 +32,7 @@
 	refactored bytebuffer/stringbuffer to improve performance
 	getStringLength() -> getSize() in read() with terminator
 	added safe-to-include-byteswap.h-after-netinet/in.h configure test
+	updated tls code to actually use RUDIMENTS_SSL_VOID_PTR macro
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

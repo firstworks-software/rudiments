@@ -1630,7 +1630,13 @@ ssize_t tlscontext::read(void *buf, ssize_t count) {
 		if (!pvt->_ssl) {
 			return RESULT_ERROR;
 		}
-		int	ret=SSL_read(pvt->_ssl,buf,count);
+		int	ret=SSL_read(pvt->_ssl,
+					#ifdef RUDIMENTS_SSL_VOID_PTR
+					buf,
+					#else
+					(char *)buf,
+					#endif
+					count);
 		setError(ret);
 		return ret;
 	#elif defined(RUDIMENTS_HAS_SSPI)
@@ -1651,7 +1657,13 @@ ssize_t tlscontext::write(const void *buf, ssize_t count) {
 		if (!pvt->_ssl) {
 			return RESULT_ERROR;
 		}
-		int	ret=SSL_write(pvt->_ssl,buf,count);
+		int	ret=SSL_write(pvt->_ssl,
+					#ifdef RUDIMENTS_SSL_VOID_PTR
+					buf,
+					#else
+					(const char *)buf,
+					#endif
+					count);
 		setError(ret);
 		return ret;
 	#elif defined(RUDIMENTS_HAS_SSPI)

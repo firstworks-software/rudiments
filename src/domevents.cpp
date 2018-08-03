@@ -6,7 +6,7 @@
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || \
 	(defined(__USLC__) && !defined(__GNUC__)) || \
-	defined(__VMS)
+	defined(__VMS) || defined(__DECCXX)
 
 	// degenerate debug macros for really incapable compilers
 	// (old microsoft compilers, unixware native compiler, openvms compiler)

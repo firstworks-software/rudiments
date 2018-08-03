@@ -16,7 +16,7 @@ struct args {
 };
 
 stringbuffer	output;
-threadmutex	tm;
+threadmutex	thrm;
 uint16_t	next=1;
 
 void syncronize(void *args) {
@@ -43,54 +43,54 @@ void syncronize(void *args) {
 			do {
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
-				tm.lock();
+				thrm.lock();
 				if (next==1) {
 					output.append(1);
 					next=2;
-					tm.unlock();
+					thrm.unlock();
 					break;
 				} else {
-					tm.unlock();
+					thrm.unlock();
 				}
 			} while (next!=2);
 
 			do {
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
-				tm.lock();
+				thrm.lock();
 				if (next==3) {
 					output.append(3);
 					next=4;
-					tm.unlock();
+					thrm.unlock();
 					break;
 				}
-				tm.unlock();
+				thrm.unlock();
 			} while (next!=4);
 		} else {
 			do {
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
-				tm.lock();
+				thrm.lock();
 				if (next==2) {
 					output.append(2);
 					next=3;
-					tm.unlock();
+					thrm.unlock();
 					break;
 				}
-				tm.unlock();
+				thrm.unlock();
 			} while (next!=3);
 
 			do {
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
-				tm.lock();
+				thrm.lock();
 				if (next==4) {
 					output.append(4);
 					next=1;
-					tm.unlock();
+					thrm.unlock();
 					break;
 				}
-				tm.unlock();
+				thrm.unlock();
 			} while (next!=1);
 		}
 	}
