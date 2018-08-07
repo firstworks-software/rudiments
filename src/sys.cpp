@@ -84,11 +84,45 @@
 #endif
 
 #include <stdio.h>
+#ifdef RUDIMENTS_HAVE_SYS_MMAN_H
+	#include <sys/mman.h>
+#endif
 
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
 #ifndef SSIZE_MAX
         #define SSIZE_MAX 16383
+#endif
+
+#ifdef RUDIMENTS_HAVE_MPROTECT_CADDR_T
+	#define MPROTECT_ADDRCAST caddr_t
+#else
+	#define MPROTECT_ADDRCAST void *
+#endif
+
+#ifdef RUDIMENTS_HAVE_MINCORE_CADDR_T
+	#define MINCORE_ADDRCAST caddr_t
+#else
+	#define MINCORE_ADDRCAST void *
+#endif
+
+
+#ifdef RUDIMENTS_HAVE_MLOCK_CADDR_T
+	#define MLOCK_ADDRCAST caddr_t
+#else
+	#define MLOCK_ADDRCAST void *
+#endif
+
+#ifdef RUDIMENTS_HAVE_MUNLOCK_CADDR_T
+	#define MUNLOCK_ADDRCAST caddr_t
+#else
+	#define MUNLOCK_ADDRCAST void *
+#endif
+
+#ifdef RUDIMENTS_HAVE_MADVISE_CADDR_T
+	#define MADVISE_ADDRCAST caddr_t
+#else
+	#define MADVISE_ADDRCAST void *
 #endif
 
 
@@ -1179,5 +1213,208 @@ char sys::getDirectorySeparator() {
 		return '.';
 	#else
 		return '/';
+	#endif
+}
+
+bool sys::setProtection(unsigned char *ptr, size_t len, int32_t protection) {
+	#ifdef RUDIMENTS_HAVE_MPROTECT
+		int32_t	result;
+		error::clearError();
+		do {
+			result=mprotect(
+				reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
+				len,protection);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::sequentialAccess(unsigned char *ptr, size_t len) {
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
+		return mAdvise(ptr,len,MADV_SEQUENTIAL);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return true;
+	#endif
+}
+
+bool sys::randomAccess(unsigned char *ptr, size_t len) {
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_RANDOM)
+		return mAdvise(ptr,len,MADV_RANDOM);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return true;
+	#endif
+}
+
+bool sys::willNeed(unsigned char *ptr, size_t len) {
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_WILLNEED)
+		return mAdvise(ptr,len,MADV_WILLNEED);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return true;
+	#endif
+}
+
+bool sys::wontNeed(unsigned char *ptr, size_t len) {
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_DONTNEED)
+		return mAdvise(ptr,len,MADV_DONTNEED);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return true;
+	#endif
+}
+
+bool sys::normalAccess(unsigned char *ptr, size_t len) {
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_NORMAL)
+		return mAdvise(ptr,len,MADV_NORMAL);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return true;
+	#endif
+}
+
+bool sys::lock(unsigned char *ptr, size_t len) {
+	#ifdef RUDIMENTS_HAVE_MLOCK
+		int32_t	result;
+		error::clearError();
+		do {
+			result=mlock(reinterpret_cast<MLOCK_ADDRCAST>(ptr),len);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::unlock(unsigned char *ptr, size_t len) {
+	#ifdef RUDIMENTS_HAVE_MUNLOCK
+		int32_t	result;
+		error::clearError();
+		do {
+			result=munlock(
+				reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),
+				len);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::notPagedOut(unsigned char *ptr, size_t len) {
+
+	#ifdef RUDIMENTS_HAVE_MINCORE
+		// create an array of char's, 1 for each page
+		int32_t		pagesize=sys::getAllocationGranularity();
+		int32_t		tmplen=(len+pagesize-1)/pagesize;
+		#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
+			char		*tmp=new char[tmplen];
+		#else
+			unsigned char	*tmp=new unsigned char[tmplen];
+		#endif
+
+		// call mincore to fill the array
+		int32_t		result;
+		error::clearError();
+		do {
+			result=mincore(
+				reinterpret_cast<MINCORE_ADDRCAST>(ptr),
+				len,tmp);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result) {
+			delete[] tmp;
+			return false;
+		}
+
+		// look through the array, if any of the
+		// pages aren't in memory, return false
+		for (int32_t i=0; i<tmplen; i++) {
+			if (tmp[i]) {
+				delete[] tmp;
+				return false;
+			}
+		}
+		delete[] tmp;
+		return true;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::disablePaging() {
+	#if defined(MCL_CURRENT) && defined(MCL_FUTURE)
+		return mLockAll(MCL_CURRENT|MCL_FUTURE);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::disablePagingOfCurrent() {
+	#if defined(MCL_CURRENT)
+		return mLockAll(MCL_CURRENT);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::disablePagingOfNew() {
+	#if defined(MCL_FUTURE)
+		return mLockAll(MCL_FUTURE);
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::enablePaging() {
+	#ifdef RUDIMENTS_HAVE_MUNLOCKALL
+		int32_t	result;
+		error::clearError();
+		do {
+			result=munlockall();
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool sys::mAdvise(unsigned char *start, size_t length, int32_t advice) {
+	#if defined(RUDIMENTS_HAVE_MADVISE)
+		int32_t	result;
+		error::clearError();
+		do {
+			result=madvise(
+				reinterpret_cast<MADVISE_ADDRCAST>(start),
+				length,advice);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return true;
+	#endif
+}
+
+bool sys::mLockAll(int32_t flags) {
+	#ifdef RUDIMENTS_HAVE_MLOCKALL
+		int32_t	result;
+		error::clearError();
+		do {
+			result=mlockall(flags);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
 	#endif
 }

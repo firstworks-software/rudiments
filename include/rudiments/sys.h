@@ -287,6 +287,148 @@ class RUDIMENTS_DLLSPEC sys {
 		/** Returns the character used to separate directories in a
 		 *  path. */
 		static	char	getDirectorySeparator();
+
+		/** Sets the protection of the memory map to "protection"
+		 *  for "len" bytes, starting at "ptr".
+		 * 
+		 *  "protection" may be:
+		 * 	PROT_NONE - pages may not be accessed
+		 *  or an or'ed combination of the following:
+		 *  	PROT_EXEC - pages may be excuted
+		 * 	PROT_READ - pages may be read
+		 * 	PROT_WRITE - pages may be written
+		 *  "protection" may not conflict with the open mode
+		 *  of the file. (eg. if the file was opened readonly
+		 *  then PROT_WRITE may not be used).
+		 *
+		 *  Note that not all filesystems support all of those options.
+		 * 
+		 *  Returns true on success and false on failure. */
+		static	bool	setProtection(unsigned char *ptr,
+							size_t len,
+							int32_t protection);
+
+		/** Advises the kernel that you are going to access the region
+		 *  of memory begining at byte "ptr", for "len" bytes,
+		 *  sequentially so the kernel can perform some optimizations.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
+		 *  On operating systems don't support this method, it
+		 *  returns true but don't actually do anything. */
+		static	bool	sequentialAccess(unsigned char *ptr,
+							size_t len);
+
+		/** Advises the kernel that you are going to access the region
+		 *  of memory begining at byte "ptr", for "len" bytes, randomly
+		 *  so the kernel can perform some optimizations.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
+		 *  On operating systems don't support this method, it
+		 *  returns true but don't actually do anything. */
+		static	bool	randomAccess(unsigned char *ptr,
+							size_t len);
+
+		/** Advises the kernel that you are going to access the region
+		 *  of memory begining at byte "ptr", for "len" bytes, in the
+		 *  near future so the kernel can perform some optimizations.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
+		 *  On operating systems don't support this method, it
+		 *  returns true but don't actually do anything. */
+		static	bool	willNeed(unsigned char *ptr, size_t len);
+
+		/** Advises the kernel that you are not going to access the
+		 *  region of memory begining at byte "ptr", for "len"
+		 *  bytes, in the near future so the kernel can perform some
+		 *  optimizations.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
+		 *  On operating systems don't support this method, it
+		 *  returns true but don't actually do anything. */
+		static	bool	wontNeed(unsigned char *ptr, size_t len);
+
+		/** Advises the kernel that you are going to access the
+		 *  region of memory begining at byte "ptr", for "len" bytes,
+		 *  normally so the kernel can undo any previously applied
+		 *  optimizations.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
+		 *  On operating systems don't support this method, it
+		 *  returns true but don't actually do anything. */
+		static	bool	normalAccess(unsigned char *ptr, size_t len);
+
+		/** Disables paging of memory, starting at "ptr", for "len"
+		 *  bytes.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support locking, this method
+		 *  returns false. */
+		static	bool	lock(unsigned char *ptr, size_t len);
+
+		/** Enables paging of memory, starting at "ptr", for "len"
+		 *  bytes.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support locking, this method
+		 *  returns false. */
+		static	bool	unlock(unsigned char *ptr, size_t len);
+
+		/** Returns true if all pages of memory starting at "ptr",
+		 *  for "len" bytes are not paged out.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support checking whether
+		 *  pages of the memory map are currently cached
+		 *  in system ram, this method returns false. */
+		static	bool	notPagedOut(unsigned char *ptr, size_t len);
+
+
+		/** Disables paging of the entire address space of the process,
+		 *  including any newly allocated pages.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support locking,
+		 *  this method returns false; */
+		static	bool	disablePaging();
+
+		/** Disables paging of the entire address space of the process.
+		 *  Newly allocated pages may still be paged out.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support locking,
+		 *  this method returns false; */
+		static	bool	disablePagingOfCurrent();
+
+		/** Disables paging of any newly allocated pages in the address
+		 *  space of the process.  Currently allocated pages may still
+		 *  be paged out.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support locking,
+		 *  this method returns false; */
+		static	bool	disablePagingOfNew();
+
+		/** Enables paging of all pages of the address space of the
+		 *  process.
+		 *
+		 *  Returns true on success and false on failure.
+		 * 
+		 *  On systems that don't support locking,
+		 *  this method returns false; */
+		static	bool	enablePaging();
+
+	#include <rudiments/private/sys.h>
 };
 
 #endif
