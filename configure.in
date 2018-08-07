@@ -4213,7 +4213,7 @@ fi
 if ( test "$INCLUDE_SYSTEM" = "1" )
 then
 	HEADERS2="$HEADERS2 sys.h"
-	PRIVATEHEADERS5="$PRIVATEHEADERS5 sysincludes.h"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 sys.h sysincludes.h"
 	SRCS="$SRCS sys.cpp"
 	LOBJS="$LOBJS sys.lo"
 fi
