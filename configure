@@ -23623,6 +23623,7 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+HAS_TSZET=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tzset" >&5
 $as_echo_n "checking for tzset... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -23643,9 +23644,36 @@ $as_echo "#define RUDIMENTS_HAS_TZSET 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }; HAS_TZSET="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test "$HAS_TZSET" = "no" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for undefined tzset" >&5
+$as_echo_n "checking for undefined tzset... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+extern void tzset();
+int
+main ()
+{
+tzset();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAS_UNDEFINED_TZSET 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _tzset" >&5
 $as_echo_n "checking for _tzset... " >&6; }
@@ -29993,6 +30021,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+HAS_FTRUNCATE=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ftruncate" >&5
 $as_echo_n "checking for ftruncate... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -30018,9 +30047,36 @@ $as_echo "#define RUDIMENTS_HAVE_FTRUNCATE 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }; HAS_FTRUNCATE="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test "$HAS_FTRUNCATE" = "no" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for undefined ftruncate" >&5
+$as_echo_n "checking for undefined ftruncate... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+extern int ftruncate(int,int);
+int
+main ()
+{
+ftruncate(0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _chsize_s" >&5
 $as_echo_n "checking for _chsize_s... " >&6; }
@@ -30456,6 +30512,7 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+HAS_FSYNC=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for fsync" >&5
 $as_echo_n "checking for fsync... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -30478,9 +30535,36 @@ $as_echo "#define RUDIMENTS_HAVE_FSYNC 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }; HAS_FSYNC="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test "$HAS_FSYNC" = "no" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for undefined fsync" >&5
+$as_echo_n "checking for undefined fsync... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+extern int fsync(int);
+int
+main ()
+{
+fsync(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_UNDEFINED_FSYNC 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
 
 if ( test -n "$MINGW32" )
 then

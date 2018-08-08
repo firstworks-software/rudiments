@@ -34,6 +34,8 @@
 	added safe-to-include-byteswap.h-after-netinet/in.h configure test
 	updated tls code to actually use RUDIMENTS_SSL_VOID_PTR macro
 	moved various madvise/mprotect/mlock methods to sys class
+	added tests for systems that have, but don't define tzset, ftruncate,
+		and fsync
 
 1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
 		and dynamciclib destructors to be less disatsterous in the

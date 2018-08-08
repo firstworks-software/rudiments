@@ -91,6 +91,14 @@
 	#define X_OK	0
 #endif
 
+#ifdef RUDIMENTS_HAVE_UNDEFINED_FSYNC
+int fsync(int);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE
+int ftruncate(int,int);
+#endif
+
 class fileprivate {
 	friend class file;
 	private:
@@ -724,7 +732,8 @@ bool file::truncate() const {
 bool file::truncate(off64_t length) const {
 	int32_t	result;
 	do {
-		#if defined(RUDIMENTS_HAVE_FTRUNCATE)
+		#if defined(RUDIMENTS_HAVE_FTRUNCATE) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE)
 			result=::ftruncate(fd(),length);
 		#elif defined(RUDIMENTS_HAVE__CHSIZE_S)
 			result=_chsize_s(fd(),length);
@@ -1432,7 +1441,8 @@ char *file::resolveSymbolicLink(const char *filename) {
 }
 
 bool file::sync() const {
-	#if defined(RUDIMENTS_HAVE_FSYNC)
+	#if defined(RUDIMENTS_HAVE_FSYNC) || \
+		defined(RUDIMENTS_HAVE_UNDEFINED_FSYNC)
 		int32_t	result;
 		error::clearError();
 		do {

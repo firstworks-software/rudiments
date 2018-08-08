@@ -180,6 +180,9 @@
 /* Some systems have tzset */
 #undef RUDIMENTS_HAS_TZSET
 
+/* Some systems have tzset but dont define it */
+#undef RUDIMENTS_HAS_UNDEFINED_TZSET
+
 /* SSL has X509_get_signature_nid */
 #undef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID
 
@@ -1373,6 +1376,12 @@
 
 /* Some systems have uname */
 #undef RUDIMENTS_HAVE_UNAME
+
+/* Some systems have fsync but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_FSYNC
+
+/* Some systems have ftruncate but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE
 
 /* Some systems have __vsnprintf but its not defined */
 #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF

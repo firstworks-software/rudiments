@@ -33,6 +33,10 @@
 	#include <os/kernel/OS.h>
 #endif
 
+#ifdef RUDIMENTS_HAS_UNDEFINED_TZSET
+extern void tzset();
+#endif
+
 class datetimeprivate {
 	friend class datetime;
 	private:
@@ -226,7 +230,8 @@ bool datetime::initialize(const void *tmstruct) {
 		}
 		#if defined(RUDIMENTS_HAS__TZSET)
 			_tzset();
-		#elif defined(RUDIMENTS_HAS_TZSET)
+		#elif defined(RUDIMENTS_HAS_TZSET) || \
+			defined(RUDIMENTS_HAS_UNDEFINED_TZSET)
 			tzset();
 		#else
 			#error no tzset or anything like it
@@ -752,7 +757,8 @@ void datetime::processTZ(void *tms) {
 	// Use tzset to get the timezone name
 	#if defined(RUDIMENTS_HAS__TZSET)
 		_tzset();
-	#elif defined(RUDIMENTS_HAS_TZSET)
+	#elif defined(RUDIMENTS_HAS_TZSET) || \
+		defined(RUDIMENTS_HAS_UNDEFINED_TZSET)
 		tzset();
 	#else
 		#error no tzset or anything like it

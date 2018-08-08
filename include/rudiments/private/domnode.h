@@ -22,7 +22,7 @@
 							uint64_t *count);
 
 	friend class codetree;
-	friend class codetreegrammar;
+	friend class grammar;
 	friend class domevents;
 	private:
 		void		init(dom *dom, domnode *nullnode);

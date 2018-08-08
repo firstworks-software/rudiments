@@ -76,8 +76,8 @@ static const char	YES='y';
 static const char	STX=0x2;
 static const char	EOT=0x4;
 
-class codetreegrammarprivate {
-	friend class codetreegrammar;
+class grammarprivate {
+	friend class grammar;
 	private:
 		char	_currentattribute;
 		bool	_hasrecursivebreak;
@@ -85,17 +85,17 @@ class codetreegrammarprivate {
 		dictionary<const char *, domnode *>	_definitions;
 };
 
-codetreegrammar::codetreegrammar() : xmldom(false) {
-	pvt=new codetreegrammarprivate;
+grammar::grammar() : xmldom(false) {
+	pvt=new grammarprivate;
 	pvt->_currentattribute='\0';
 	pvt->_hasrecursivebreak=false;
 }
 
-codetreegrammar::~codetreegrammar() {
+grammar::~grammar() {
 	delete pvt;
 }
 
-bool codetreegrammar::tagStart(const char *ns, const char *name) {
+bool grammar::tagStart(const char *ns, const char *name) {
 
 	// get the first letter of the name
 	char	ch=*name;
@@ -119,7 +119,7 @@ bool codetreegrammar::tagStart(const char *ns, const char *name) {
 	return xmldom::tagStart(ns,newname);
 }
 
-bool codetreegrammar::tagEnd(const char *ns, const char *name) {
+bool grammar::tagEnd(const char *ns, const char *name) {
 
 	bool	retval=xmldom::tagEnd(ns,name);
 
@@ -132,7 +132,7 @@ bool codetreegrammar::tagEnd(const char *ns, const char *name) {
 	return retval;
 }
 
-bool codetreegrammar::attributeName(const char *name) {
+bool grammar::attributeName(const char *name) {
 
 	// the first letters of this one collides with other names and requires
 	// special handling...
@@ -155,7 +155,7 @@ bool codetreegrammar::attributeName(const char *name) {
 	return xmldom::attributeName(newname);
 }
 
-bool codetreegrammar::attributeValue(const char *value) {
+bool grammar::attributeValue(const char *value) {
 
 	// only modify values for the type attribute
 	if (pvt->_currentattribute!=TYPE[0]) {
@@ -177,11 +177,11 @@ bool codetreegrammar::attributeValue(const char *value) {
 	return xmldom::attributeValue(newvalue);
 }
 
-bool codetreegrammar::hasRecursiveBreak() {
+bool grammar::hasRecursiveBreak() {
 	return pvt->_hasrecursivebreak;
 }
 
-void codetreegrammar::buildDefinitionDictionary() {
+void grammar::buildDefinitionDictionary() {
 
 	// Build a dictionary, mapping the names of nonterminals to the
 	// associated <definition> tag.  This makes lookups much faster
@@ -198,7 +198,7 @@ void codetreegrammar::buildDefinitionDictionary() {
 	}
 }
 
-void codetreegrammar::buildNonTerminalNodeAssociations(domnode *node) {
+void grammar::buildNonTerminalNodeAssociations(domnode *node) {
 
 	// For each <nonterminal> tag, this method attaches a pointer to the
 	// corresponding <definition> tag.  That way, when the parser encounters
@@ -222,7 +222,7 @@ void codetreegrammar::buildNonTerminalNodeAssociations(domnode *node) {
 	}
 }
 
-domnode *codetreegrammar::getDefinition(const char *name) {
+domnode *grammar::getDefinition(const char *name) {
 	domnode	*def=pvt->_definitions.getValue(name);
 	return (def)?def:getNullNode();
 }
@@ -237,7 +237,7 @@ struct break_t {
 class codetreeprivate {
 	friend class codetree;
 	private:
-		codetreegrammar		_grammar;
+		grammar		_grammar;
 		domnode		*_grammartag;
 		bool			_error;
 		uint32_t		_depth;
@@ -298,13 +298,13 @@ bool codetree::parse(const char *input,
 }
 
 bool codetree::parse(const char *input,
-			codetreegrammar *grammar,
+			grammar *grm,
 			const char *startsymbol,
 			domnode *output,
 			const char **codeposition) {
 
 	// verify the grammar
-	pvt->_grammartag=grammar->getRootNode()->getFirstTagChild(GRAMMAR);
+	pvt->_grammartag=grm->getRootNode()->getFirstTagChild(GRAMMAR);
 	if (pvt->_grammartag->isNullNode()) {
 		return false;
 	}
@@ -314,7 +314,7 @@ bool codetree::parse(const char *input,
 
 	// (re)set the start symbol
 	pvt->_grammartag->setPrivateData((void *)
-		((codetreegrammar *)(pvt->_grammartag->getTree()))->
+		((grammar *)(pvt->_grammartag->getTree()))->
 						getDefinition(startsymbol));
 
 	// initialize a node for processing exceptions
@@ -1243,7 +1243,7 @@ bool codetree::write(domnode *input,
 }
 
 bool codetree::write(domnode *input,
-			codetreegrammar *grammar,
+			grammar *grammar,
 			stringbuffer *output) {
 
 	// if we have an empty input, just return
@@ -1298,8 +1298,7 @@ bool codetree::writeNode(domnode *node, stringbuffer *output) {
 	}
 
 	// get the node's definition
-	domnode	*def=((codetreegrammar *)
-				(pvt->_grammartag->getTree()))->
+	domnode	*def=((grammar *)(pvt->_grammartag->getTree()))->
 					getDefinition(node->getName());
 	if (def->isNullNode()) {
 		debugPrintIndent(1);

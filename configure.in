@@ -1432,9 +1432,17 @@ AC_MSG_CHECKING(for clock_settime)
 AC_TRY_LINK([#include <time.h>],
 clock_settime(0,0);,AC_DEFINE(RUDIMENTS_HAVE_CLOCK_SETTIME,1,Some systems have clock_settime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+HAS_TSZET=""
 AC_MSG_CHECKING(for tzset)
 AC_TRY_COMPILE([#include <time.h>],
-tzset();,AC_DEFINE(RUDIMENTS_HAS_TZSET,1,Some systems have tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+tzset();,AC_DEFINE(RUDIMENTS_HAS_TZSET,1,Some systems have tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_TZSET="no")
+
+if ( test "$HAS_TZSET" = "no" )
+then
+	AC_MSG_CHECKING(for undefined tzset)
+	AC_TRY_COMPILE([extern void tzset();],
+tzset();,AC_DEFINE(RUDIMENTS_HAS_UNDEFINED_TZSET,1,Some systems have tzset but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for _tzset)
 AC_TRY_COMPILE([#include <time.h>],
@@ -2711,6 +2719,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 truncate("",0);,AC_DEFINE(RUDIMENTS_HAVE_TRUNCATE,1,Some systems have truncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+HAS_FTRUNCATE=""
 AC_MSG_CHECKING(for ftruncate)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
@@ -2718,7 +2727,14 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif],
-ftruncate(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FTRUNCATE,1,Some systems have ftruncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+ftruncate(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FTRUNCATE,1,Some systems have ftruncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no); HAS_FTRUNCATE="no")
+
+if ( test "$HAS_FTRUNCATE" = "no" )
+then
+	AC_MSG_CHECKING(for undefined ftruncate)
+	AC_TRY_COMPILE([extern int ftruncate(int,int);],
+ftruncate(0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE,1,Some systems have ftruncate but dont define it) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for _chsize_s)
 AC_TRY_COMPILE([
@@ -2835,11 +2851,19 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 mkstemp(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+HAS_FSYNC=""
 AC_MSG_CHECKING(for fsync)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
-fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_FSYNC,1,Some systems have fsync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_FSYNC,1,Some systems have fsync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no); HAS_FSYNC="no")
+
+if ( test "$HAS_FSYNC" = "no" )
+then
+	AC_MSG_CHECKING(for undefined fsync)
+	AC_TRY_COMPILE([extern int fsync(int);],
+fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_FSYNC,1,Some systems have fsync but dont define it) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
 
 if ( test -n "$MINGW32" )
 then

@@ -13,4 +13,4 @@
 
 		domnode	*getDefinition(const char *name);
 
-		codetreegrammarprivate	*pvt;
+		grammarprivate	*pvt;
