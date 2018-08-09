@@ -10,7 +10,7 @@
 uint32_t	iterations=5;
 uint32_t	members=1024;
 
-char	alphabet[]="abdefghijklmnopqrstuvwxyz";
+char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
 
 int main(int argc, const char **argv) {
 

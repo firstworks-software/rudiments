@@ -5,6 +5,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_VASPRINTF
 	#include <stdio.h>
 	#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -94,18 +98,15 @@ ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 		return 0;
 	}
 
-	bytestring::unsafeCopy(data,pvt->_buffer+pvt->_pos,size);
+	memcpy(data,pvt->_buffer+pvt->_pos,size);
 	pvt->_pos+=size;
 	return size;
 }
 
 ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
-	if (!size) {
-		return 0;
-	}
 	size_t	finalpos=pvt->_pos+size;
-	extend(finalpos,size);
-	bytestring::unsafeCopy(pvt->_buffer+pvt->_pos,data,size);
+	extend(finalpos);
+	memcpy(pvt->_buffer+pvt->_pos,data,size);
 	pvt->_pos=finalpos;
 	if (finalpos>pvt->_size) {
 		pvt->_size=finalpos;
@@ -113,17 +114,19 @@ ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
 	return size;
 }
 
-void bytebuffer::extend(size_t finalpos, size_t size) {
-	if (finalpos>pvt->_actualsize) {
+inline
+void bytebuffer::extend(size_t requiredsize) {
+	if (requiredsize>pvt->_actualsize) {
 
 		// can I do this with just math?
 		do {
-			pvt->_actualsize*=3;
-			pvt->_actualsize/=2;
-		} while (finalpos>pvt->_actualsize);
+			pvt->_actualsize=pvt->_actualsize*3/2;
+		} while (requiredsize>pvt->_actualsize);
+
+		// FIXME: we need a growth cap
 
 		unsigned char	*newbuffer=new unsigned char[pvt->_actualsize];
-		bytestring::unsafeCopy(newbuffer,pvt->_buffer,pvt->_size);
+		memcpy(newbuffer,pvt->_buffer,pvt->_size);
 		delete[] pvt->_buffer;
 		pvt->_buffer=newbuffer;
 	}
@@ -209,7 +212,7 @@ ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 
 	// extend the list of buffers to accommodate
 	// "size" bytes beyond the current position
-	extend(pvt->_pos+size,size);
+	extend(pvt->_pos+size);
 
 	// write the buffer
 	write(buffer,size);
@@ -225,16 +228,13 @@ ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 }
 
 void bytebuffer::clear() {
-	delete[] pvt->_buffer;
-	pvt->_buffer=new unsigned char[pvt->_initialsize];
 	pvt->_size=0;
-	pvt->_actualsize=pvt->_initialsize;
 	pvt->_pos=0;
 }
 
 void bytebuffer::clear(size_t initialsize) {
 	delete[] pvt->_buffer;
-	pvt->_buffer=new unsigned char[pvt->_initialsize];
+	pvt->_buffer=new unsigned char[initialsize];
 	pvt->_size=0;
 	pvt->_actualsize=initialsize;
 	pvt->_pos=0;
@@ -285,7 +285,10 @@ void bytebuffer::setPosition(size_t pos) {
 
 bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
 	pvt->_pos=pvt->_size;
-	write(data,size);
+	pvt->_size+=size;
+	extend(pvt->_size);
+	memcpy(pvt->_buffer+pvt->_pos,data,size);
+	pvt->_pos=pvt->_size;
 	return this;
 }
 

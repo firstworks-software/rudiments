@@ -20,7 +20,10 @@
 		#define _XOPEN_SOURCE
 		#define UN_XOPEN_SOURCE
 	#endif
-	#include <sys/socket.h>
+	#ifndef RUDIMENTS_SYS_SOCKET_H
+	#define RUDIMENTS_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
 	#ifdef UN_XOPEN_SOURCE
 		#undef _XOPEN_SOURCE
 	#endif

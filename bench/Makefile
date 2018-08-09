@@ -13,6 +13,7 @@ PROGS = dictionary \
 	map \
 	singlylinkedlist \
 	stringbuffer \
+	bytebuffer \
 	string \
 	vector \
 	memorypool \
@@ -60,6 +61,9 @@ singlylinkedlist: singlylinkedlist.cpp singlylinkedlist.$(OBJ)
 
 stringbuffer: stringbuffer.cpp stringbuffer.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) stringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytebuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 string: string.cpp string.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) string.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

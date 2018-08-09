@@ -229,14 +229,18 @@ then
 	AC_MSG_CHECKING(for -Werror)
 	FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Werror],[],[],[WERROR="-Werror"])
 
-	dnl disable -Werror on Haiku, and Minix as their header files throw warnings
+	dnl disable -Werror on Haiku, Minix, and Ultrix as their header files throw warnings
 	dnl disable -Werror on mingw32 as the regex.cpp file has unused variables that
 	dnl are hard to fix
+echo "host_os is $host_os"
 	case $host_os in
 		*haiku* )
 			WERROR=""
 			;;
 		*minix* )
+			WERROR=""
+			;;
+		*ultrix* )
 			WERROR=""
 			;;
 		*mingw32* )

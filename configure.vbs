@@ -236,7 +236,6 @@ headers3="xmldom.h "+_
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
-	"rudimentsinlines.h "+_
 	"inttypes.h "+_
 	"new.h "+_
 	"winsock.h "+_

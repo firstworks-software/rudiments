@@ -5,6 +5,8 @@
 	#include <string>
 #elif defined(USE_STRINGBUFFER)
 	#include <rudiments/stringbuffer.h>
+#elif defined(USE_BYTEBUFFER)
+	#include <rudiments/bytebuffer.h>
 #endif
 #include <rudiments/stdio.h>
 #include "../test/test.cpp"
@@ -19,6 +21,9 @@ int main(int argc, char **argv) {
 	std::string	str;
 #elif defined(USE_STRINGBUFFER)
 	stringbuffer	str;
+	stdoutput.printf("initial size: %d\n",str.getInitialSize());
+#elif defined(USE_BYTEBUFFER)
+	bytebuffer	str;
 	stdoutput.printf("initial size: %d\n",str.getInitialSize());
 #endif
 	datetime	start;

@@ -31,10 +31,6 @@ void *bytestring::copy(void *dest, const void *src, size_t size) {
 	return (dest && src)?memcpy(dest,src,size):NULL;
 }
 
-void *bytestring::unsafeCopy(void *dest, const void *src, size_t size) {
-	return memcpy(dest,src,size);
-}
-
 void *bytestring::copyWithOverlap(void *dest, const void *src, size_t size) {
 	return (dest && src)?memmove(dest,src,size):NULL;
 }

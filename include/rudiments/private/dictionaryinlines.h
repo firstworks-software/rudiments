@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/stdio.h>
-#include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/nodeinlines.h>
 
 #define DICTIONARY_TEMPLATE \
@@ -12,19 +11,19 @@
 	dictionary<keytype,valuetype>
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 DICTIONARY_CLASS::dictionary() {
 	trackinsertionorder=true;
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 DICTIONARY_CLASS::~dictionary() {
 	clear();
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool DICTIONARY_CLASS::setTrackInsertionOrder(bool trackinsertionorder) {
 	if (!tree.getLength()) {
 		this->trackinsertionorder=trackinsertionorder;
@@ -34,13 +33,13 @@ bool DICTIONARY_CLASS::setTrackInsertionOrder(bool trackinsertionorder) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool DICTIONARY_CLASS::getTrackInsertionOrder() {
 	return trackinsertionorder;
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
 	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
@@ -55,7 +54,7 @@ void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::setValues(keytype *keys, valuetype *values) {
 	keytype		*key=keys;
 	valuetype	*value=values;
@@ -67,7 +66,7 @@ void DICTIONARY_CLASS::setValues(keytype *keys, valuetype *values) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::setValues(keytype const *keys, valuetype const *values) {
 	if (keys && values) {
 		keytype const	*key=keys;
@@ -81,7 +80,7 @@ void DICTIONARY_CLASS::setValues(keytype const *keys, valuetype const *values) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::setValues(keytype *keys, valuetype *values,
 							uint64_t count) {
 	if (keys && values) {
@@ -96,7 +95,7 @@ void DICTIONARY_CLASS::setValues(keytype *keys, valuetype *values,
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::setValues(keytype const *keys, valuetype const *values,
 							uint64_t count) {
 	if (keys && values) {
@@ -111,7 +110,7 @@ void DICTIONARY_CLASS::setValues(keytype const *keys, valuetype const *values,
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::setValues(dictionary<keytype,valuetype> *dict) {
 	if (dict) {
 		for (linkedlistnode< dictionarynode< keytype, valuetype > *>
@@ -124,7 +123,7 @@ void DICTIONARY_CLASS::setValues(dictionary<keytype,valuetype> *dict) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
@@ -135,7 +134,7 @@ bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 valuetype DICTIONARY_CLASS::getValue(keytype key) {
 	valuetype	value;
 	if (getValue(key,&value)) {
@@ -145,7 +144,7 @@ valuetype DICTIONARY_CLASS::getValue(keytype key) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::getNode(keytype key) {
 	avltreenode< dictionarynode<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
@@ -155,7 +154,7 @@ dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::getNode(keytype key) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool DICTIONARY_CLASS::remove(keytype key) {
 	avltreenode< dictionarynode<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
@@ -169,7 +168,7 @@ bool DICTIONARY_CLASS::remove(keytype key) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool DICTIONARY_CLASS::remove(dictionarynode<keytype,valuetype> *node) {
 	avltreenode< dictionarynode<keytype,valuetype> *>
 					*tnode=tree.find(node);
@@ -184,7 +183,7 @@ bool DICTIONARY_CLASS::remove(dictionarynode<keytype,valuetype> *node) {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clear() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -195,7 +194,7 @@ void DICTIONARY_CLASS::clear() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndDelete() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -208,7 +207,7 @@ void DICTIONARY_CLASS::clearAndDelete() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndArrayDelete() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -221,7 +220,7 @@ void DICTIONARY_CLASS::clearAndArrayDelete() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndDeleteKeys() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -233,7 +232,7 @@ void DICTIONARY_CLASS::clearAndDeleteKeys() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndArrayDeleteKeys() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -245,7 +244,7 @@ void DICTIONARY_CLASS::clearAndArrayDeleteKeys() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndDeleteValues() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -257,7 +256,7 @@ void DICTIONARY_CLASS::clearAndDeleteValues() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndArrayDeleteValues() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -269,7 +268,7 @@ void DICTIONARY_CLASS::clearAndArrayDeleteValues() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndDeleteKeysAndArrayDeleteValues() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -282,7 +281,7 @@ void DICTIONARY_CLASS::clearAndDeleteKeysAndArrayDeleteValues() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::clearAndArrayDeleteKeysAndDeleteValues() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -295,7 +294,7 @@ void DICTIONARY_CLASS::clearAndArrayDeleteKeysAndDeleteValues() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 linkedlist<keytype> *DICTIONARY_CLASS::getKeys() {
 	linkedlist<keytype>	*keys=new linkedlist<keytype>();
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *>
@@ -306,13 +305,13 @@ linkedlist<keytype> *DICTIONARY_CLASS::getKeys() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltree< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getTree() {
 	return &tree;
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 linkedlist< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getList() {
 	if (!trackinsertionorder) {
 		list.clear();
@@ -325,7 +324,7 @@ linkedlist< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getList() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARY_CLASS::print() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
@@ -335,7 +334,7 @@ void DICTIONARY_CLASS::print() {
 }
 
 DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
 							find(keytype key) {
 	dictionarynode<keytype,valuetype>	fnode(key,(valuetype)0);
@@ -349,55 +348,55 @@ avltreenode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
 	dictionarynode<keytype,valuetype>
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 DICTIONARYNODE_CLASS::dictionarynode(keytype key, valuetype value) {
 	this->key=key;
 	this->value=value;
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 DICTIONARYNODE_CLASS::~dictionarynode() {}
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARYNODE_CLASS::setKey(keytype key) {
 	this->key=key;
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARYNODE_CLASS::setValue(valuetype value) {
 	this->value=value;
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 keytype DICTIONARYNODE_CLASS::getKey() const {
 	return key;
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 valuetype DICTIONARYNODE_CLASS::getValue() const {
 	return value;
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t DICTIONARYNODE_CLASS::compare(keytype testkey) const {
 	return node_compare(key,testkey);
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t DICTIONARYNODE_CLASS::compare(
 		dictionarynode<keytype,valuetype> *testnode) const {
 	return node_compare(key,testnode->key);
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void DICTIONARYNODE_CLASS::print() const {
 	node_print(key);
 	stdoutput.printf(":");
@@ -407,7 +406,7 @@ void DICTIONARYNODE_CLASS::print() const {
 
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t node_compare(
 			dictionarynode<keytype,valuetype> *value1,
 			dictionarynode<keytype,valuetype> *value2) {
@@ -415,7 +414,7 @@ int32_t node_compare(
 }
 
 DICTIONARYNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void node_compare(dictionarynode<keytype,valuetype> *value) {
 	node_print(value);
 }

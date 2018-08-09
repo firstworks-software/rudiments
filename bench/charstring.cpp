@@ -17,7 +17,7 @@ int main() {
 
 	stdoutput.printf("append(int64_t)\n");
 	start.getSystemDateAndTime();
-	stringbuffer	str(1024,1024);
+	stringbuffer	str(1024);
 	for (uint64_t i=0; i<APPENDITERATIONS; i++) {
 		str.append((int64_t)1234567890123456789);
 		str.append((int64_t)123456789012345678);

@@ -7,7 +7,10 @@
 
 // for socklen_t
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	#include <sys/socket.h>
+	#ifndef RUDIMENTS_SYS_SOCKET_H
+	#define RUDIMENTS_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>

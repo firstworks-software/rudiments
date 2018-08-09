@@ -5,7 +5,7 @@
 		void		init(unsigned char *initialcontents,
 						size_t initialsize);
 		void		bytebufferClone(const bytebuffer &v);
-		void		extend(size_t finalpos, size_t size);
+		void		extend(size_t requiredsize);
 
 		size_t		_size();
 		void		_size(size_t s);

@@ -4,7 +4,6 @@
 //#define DEBUG_AVLTREE 1
 
 #include <rudiments/stdio.h>
-#include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/nodeinlines.h>
 
 #define AVLTREE_TEMPLATE template <class valuetype>
@@ -16,7 +15,7 @@
 #define AVLTREENODE_CLASS avltreenode<valuetype>
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREE_CLASS::avltree() {
 	top=NULL;
 	first=NULL;
@@ -25,19 +24,19 @@ AVLTREE_CLASS::avltree() {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREE_CLASS::~avltree() {
 	clear();
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREE_CLASS::insert(valuetype value) {
 	insert(new avltreenode<valuetype>(value));
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREE_CLASS::insert(avltreenode<valuetype> *node) {
 
 	// degenerate case
@@ -78,7 +77,7 @@ void AVLTREE_CLASS::insert(avltreenode<valuetype> *node) {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::detach(avltreenode<valuetype> *node) {
 
 	// degenerate case
@@ -111,14 +110,14 @@ avltreenode<valuetype> *AVLTREE_CLASS::detach(avltreenode<valuetype> *node) {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool AVLTREE_CLASS::remove(valuetype value) {
 	avltreenode<valuetype>	*current=find(value);
 	return (current)?remove(current):false;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool AVLTREE_CLASS::removeAll(valuetype value) {
 	bool	removed=false;
 	while (remove(value)) {
@@ -128,58 +127,58 @@ bool AVLTREE_CLASS::removeAll(valuetype value) {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool AVLTREE_CLASS::remove(avltreenode<valuetype> *node) {
 	delete detach(node);
 	return true;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint64_t AVLTREE_CLASS::getLength() const {
 	return length;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::getTop() {
 	return top;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::getFirst() {
 	return first;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::getLast() {
 	return last;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::getPrevious(
 					avltreenode<valuetype> *node) {
 	return (node)?node->getPrevious():NULL;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::getNext(
 					avltreenode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::find(valuetype value) {
 	return find((avltreenode<valuetype> *)top,value);
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREE_CLASS::find(
 					avltreenode<valuetype> *startnode,
 					valuetype value) {
@@ -238,7 +237,7 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 // when the type has a private destructor.
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREE_CLASS::clear() {
 
 	#ifdef DEBUG_AVLTREE
@@ -296,7 +295,7 @@ void AVLTREE_CLASS::clear() {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREE_CLASS::clearAndDelete() {
 
 	#ifdef DEBUG_AVLTREE
@@ -350,7 +349,7 @@ void AVLTREE_CLASS::clearAndDelete() {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREE_CLASS::clearAndArrayDelete() {
 
 	#ifdef DEBUG_AVLTREE
@@ -404,7 +403,7 @@ void AVLTREE_CLASS::clearAndArrayDelete() {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREE_CLASS::print() const {
 	if (top) {
 		top->print();
@@ -412,7 +411,7 @@ void AVLTREE_CLASS::print() const {
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS::avltreenode(valuetype value) {
 	this->value=value;
 	parent=NULL;
@@ -423,54 +422,54 @@ AVLTREENODE_CLASS::avltreenode(valuetype value) {
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS::~avltreenode() {
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::setValue(valuetype value) {
 	this->value=value;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 valuetype AVLTREENODE_CLASS::getValue() const {
 	return value;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getParent() {
 	return parent;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getLeftChild() {
 	return left;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getRightChild() {
 	return right;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint8_t AVLTREENODE_CLASS::getLeftHeight() {
 	return leftheight;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint8_t AVLTREENODE_CLASS::getRightHeight() {
 	return rightheight;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 
 	// reverse in-order, depth-first traversal...
@@ -515,7 +514,7 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 
 	// in-order, depth-first traversal...
@@ -560,26 +559,26 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t AVLTREENODE_CLASS::compare(valuetype value) const {
 	return node_compare(this->value,value);
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t AVLTREENODE_CLASS::compare(avltreenode<valuetype> *peer) const {
 	return node_compare(this->value,peer->value);
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::print() const {
 	uint16_t	indentlevel=0;
 	print("top",&indentlevel);
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
 	// print an xml-style representation of the node and its descendents
 	for (uint16_t i=0; i<*indentlevel; i++) {
@@ -609,25 +608,25 @@ void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::setParent(AVLTREENODE_CLASS *node) {
 	parent=node;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::setLeftChild(AVLTREENODE_CLASS *node) {
 	left=node;
 }
 
 AVLTREENODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::setRightChild(AVLTREENODE_CLASS *node) {
 	right=node;
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::insert(avltreenode<valuetype> *node,
 				avltreenode<valuetype> **treetop) {
 
@@ -692,7 +691,7 @@ void AVLTREENODE_CLASS::insert(avltreenode<valuetype> *node,
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::detach(avltreenode<valuetype> **treetop) {
 
 	#ifdef DEBUG_AVLTREE
@@ -888,7 +887,7 @@ void AVLTREENODE_CLASS::detach(avltreenode<valuetype> **treetop) {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 
 	// move up the tree, starting with the parent of "node"...
@@ -923,7 +922,7 @@ void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void AVLTREENODE_CLASS::balance(avltreenode<valuetype> **treetop) {
 
 	// AVL balance...
@@ -1009,7 +1008,7 @@ void AVLTREENODE_CLASS::balance(avltreenode<valuetype> **treetop) {
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate(
 					avltreenode<valuetype> **treetop) {
 
@@ -1074,7 +1073,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate(
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate(
 					avltreenode<valuetype> **treetop) {
 
@@ -1145,7 +1144,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate(
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate(
 					avltreenode<valuetype> **treetop) {
 
@@ -1210,7 +1209,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate(
 }
 
 AVLTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate(
 					avltreenode<valuetype> **treetop) {
 

@@ -3830,7 +3830,7 @@ HEADERS1="linkedlist.h singlylinkedlist.h avltree.h"
 HEADERS2="dictionary.h hash.h sha1.h md5.h"
 HEADERS3="dynamicarray.h staticarray.h output.h input.h"
 PRIVATEHEADERS0="config.h debugprint.h"
-PRIVATEHEADERS1="rudimentsinlines.h inttypes.h new.h"
+PRIVATEHEADERS1="inttypes.h new.h"
 PRIVATEHEADERS2="winsock.h dll.h"
 PRIVATEHEADERS3="linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h nodeinlines.h avltree.h avltreeincludes.h avltreeinlines.h avltreenode.h"
 PRIVATEHEADERS4="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlistinlines.h singlylinkedlistnode.h"
@@ -4143,7 +4143,7 @@ fi
 if ( test "$INCLUDE_BYTESTRING" = "1" )
 then
 	HEADERS2="$HEADERS2 bytestring.h"
-	PRIVATEHEADERS4="$PRIVATEHEADERS4 bytestring.h bytestringincludes.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 bytestringincludes.h"
 	SRCS="$SRCS bytestring.cpp"
 	LOBJS="$LOBJS bytestring.lo"
 fi

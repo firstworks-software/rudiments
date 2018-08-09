@@ -7,4 +7,4 @@
 #include <rudiments/dictionary.h>
 
 class codetreeprivate;
-class grammarprivate;
+class codetreegrammarprivate;

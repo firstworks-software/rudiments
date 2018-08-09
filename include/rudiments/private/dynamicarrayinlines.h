@@ -1,31 +1,30 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information.
 
-#include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/new.h>
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 dynamicarray<valuetype>::dynamicarray() {
 	init(128,32);
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
 					uint64_t incrementsize) {
 	init((initialsize)?initialsize:128,(incrementsize)?incrementsize:32);
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) {
 	init(v.initial,v.extsize);
 	dynamicarrayClone(v);
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 					const dynamicarray<valuetype> &v) {
 	if (this!=&v) {
@@ -37,7 +36,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void dynamicarray<valuetype>::init(uint64_t initialsize,
 					uint64_t incrementsize) {
 	size=0;
@@ -50,7 +49,7 @@ void dynamicarray<valuetype>::init(uint64_t initialsize,
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void dynamicarray<valuetype>::dynamicarrayClone(
 				const dynamicarray<valuetype> &v) {
 
@@ -91,13 +90,13 @@ void dynamicarray<valuetype>::dynamicarrayClone(
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 dynamicarray<valuetype>::~dynamicarray() {
 	clearExtentList();
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 	extend(index+1);
 	if (index>=len) {
@@ -107,25 +106,25 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint64_t dynamicarray<valuetype>::getInitialSize() const {
 	return initial;
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint64_t dynamicarray<valuetype>::getIncrementSize() const {
 	return extsize;
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint64_t dynamicarray<valuetype>::getLength() const {
 	return len;
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void dynamicarray<valuetype>::extend(uint64_t size) {
 	uint64_t	inc=(extents.getLength())?extsize:initial;
 	while (this->size<size) {
@@ -137,7 +136,7 @@ void dynamicarray<valuetype>::extend(uint64_t size) {
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 
 	// move to the extent that contains the specified index
@@ -165,7 +164,7 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void dynamicarray<valuetype>::clearExtentList() {
 	curext=extents.getFirst();
 	while (curext) {
@@ -178,13 +177,13 @@ void dynamicarray<valuetype>::clearExtentList() {
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void dynamicarray<valuetype>::clear() {
 	return clear(initial,extsize);
 }
 
 template< class valuetype >
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void dynamicarray<valuetype>::clear(uint64_t initialsize,
 					uint64_t incrementsize) {
 

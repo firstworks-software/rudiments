@@ -6,7 +6,7 @@
 
 #include <rudiments/private/codetreeincludes.h>
 
-class grammar;
+class codetreegrammar;
 
 /** The codetree class implements a generic parser that can parse source code
  *  (or similarly structured input) and create an XML tree representing the
@@ -359,7 +359,7 @@ class RUDIMENTS_DLLSPEC codetree {
 		 *  and false otherwise.  If parsing fails, "codeposition" is
 		 *  set to the location in the code that parsing failed. */
 		bool	parse(const char *input,
-					grammar *grammar,
+					codetreegrammar *grammar,
 					const char *startsymbol,
 					domnode *output,
 					const char **codeposition);
@@ -375,7 +375,7 @@ class RUDIMENTS_DLLSPEC codetree {
 		 *  "grammar" and appends it as code to "output".  Returns true
 		 *  if this succeeds and false otherwise. */
 		bool	write(domnode *input,
-					grammar *grammar,
+					codetreegrammar *grammar,
 					stringbuffer *output);
 
 		/** Sets the debug level.  Debug is written to standard out. */
@@ -385,14 +385,14 @@ class RUDIMENTS_DLLSPEC codetree {
 };
 
 /** A child class of dom with various codetree-specific optimizations. */
-class RUDIMENTS_DLLSPEC grammar : public xmldom {
+class RUDIMENTS_DLLSPEC codetreegrammar : public xmldom {
 	friend class codetree;
 	public:
-		/** Creates a new instance of the grammar class. */
-		grammar();
+		/** Creates a new instance of the codetreegrammar class. */
+		codetreegrammar();
 
-		/** Deletes this instance of the grammar class. */
-		~grammar();
+		/** Deletes this instance of the codetreegrammar class. */
+		~codetreegrammar();
 
 	#include <rudiments/private/codetreegrammar.h>
 };

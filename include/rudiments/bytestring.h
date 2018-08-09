@@ -135,8 +135,6 @@ class RUDIMENTS_DLLSPEC bytestring {
 							size_t haystacksize,
 							const void *needle, 
 							size_t needlesize);
-
-	#include <rudiments/private/bytestring.h>
 };
 
 #endif

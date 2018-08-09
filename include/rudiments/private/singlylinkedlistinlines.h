@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/stdio.h>
-#include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/nodeinlines.h>
 
 #define SINGLYLINKEDLIST_TEMPLATE template <class valuetype>
@@ -10,7 +9,7 @@
 #define SINGLYLINKEDLIST_CLASS singlylinkedlist<valuetype>
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 SINGLYLINKEDLIST_CLASS::singlylinkedlist() {
 	first=NULL;
 	last=NULL;
@@ -18,19 +17,19 @@ SINGLYLINKEDLIST_CLASS::singlylinkedlist() {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 SINGLYLINKEDLIST_CLASS::~singlylinkedlist() {
 	clear();
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::prepend(valuetype value) {
 	prepend(new singlylinkedlistnode<valuetype>(value));
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::prepend(singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return;
@@ -45,13 +44,13 @@ void SINGLYLINKEDLIST_CLASS::prepend(singlylinkedlistnode<valuetype> *node) {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::append(valuetype value) {
 	append(new singlylinkedlistnode<valuetype>(value));
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::append(singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return;
@@ -66,7 +65,7 @@ void SINGLYLINKEDLIST_CLASS::append(singlylinkedlistnode<valuetype> *node) {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::insertAfter(
 				singlylinkedlistnode<valuetype> *node,
 				valuetype value) {
@@ -74,7 +73,7 @@ void SINGLYLINKEDLIST_CLASS::insertAfter(
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::insertAfter(
 				singlylinkedlistnode<valuetype> *node,
 				singlylinkedlistnode<valuetype> *newnode) {
@@ -90,7 +89,7 @@ void SINGLYLINKEDLIST_CLASS::insertAfter(
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::moveAfter(
 				singlylinkedlistnode<valuetype> *node,
 				singlylinkedlistnode<valuetype> *nodetomove) {
@@ -124,7 +123,7 @@ void SINGLYLINKEDLIST_CLASS::moveAfter(
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::detach(singlylinkedlistnode<valuetype> *node) {
 
 	if (node==first && node==last) {
@@ -151,7 +150,7 @@ void SINGLYLINKEDLIST_CLASS::detach(singlylinkedlistnode<valuetype> *node) {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
 	singlylinkedlistnode<valuetype> *current=first;
 	if (!current->compare(value)) {
@@ -185,7 +184,7 @@ bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
 	if (!first) {
 		return true;
@@ -230,7 +229,7 @@ bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 bool SINGLYLINKEDLIST_CLASS::remove(singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return false;
@@ -267,38 +266,38 @@ bool SINGLYLINKEDLIST_CLASS::remove(singlylinkedlistnode<valuetype> *node) {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 uint64_t SINGLYLINKEDLIST_CLASS::getLength() const {
 	return length;
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::getFirst() {
 	return first;
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::getLast() {
 	return last;
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::getNext(
 					singlylinkedlistnode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(valuetype value) {
 	return find((singlylinkedlistnode<valuetype> *)first,value);
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(
 				singlylinkedlistnode<valuetype> *startnode,
 				valuetype value) {
@@ -312,7 +311,7 @@ singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::insertionSort() {
 
 	// insertion sort with a few optimization...
@@ -392,7 +391,7 @@ void SINGLYLINKEDLIST_CLASS::insertionSort() {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::heapSort() {
 
 	// if there are 0 or 1 items in the list then it's already sorted
@@ -534,7 +533,7 @@ void SINGLYLINKEDLIST_CLASS::heapSort() {
 // when the type has a private destructor.
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::clear() {
 	singlylinkedlistnode<valuetype>	*next;
 	singlylinkedlistnode<valuetype>	*current=first;
@@ -549,7 +548,7 @@ void SINGLYLINKEDLIST_CLASS::clear() {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::clearAndDelete() {
 	singlylinkedlistnode<valuetype>	*next;
 	singlylinkedlistnode<valuetype>	*current=first;
@@ -565,7 +564,7 @@ void SINGLYLINKEDLIST_CLASS::clearAndDelete() {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::clearAndArrayDelete() {
 	singlylinkedlistnode<valuetype>	*next;
 	singlylinkedlistnode<valuetype>	*current=first;
@@ -581,13 +580,13 @@ void SINGLYLINKEDLIST_CLASS::clearAndArrayDelete() {
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::print() const {
 	print(length);
 }
 
 SINGLYLINKEDLIST_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
 	uint64_t	i=0;
 	for (singlylinkedlistnode<valuetype> *current=first;
@@ -608,56 +607,56 @@ void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
 #define SINGLYLINKEDLISTNODE_CLASS singlylinkedlistnode<valuetype>
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 SINGLYLINKEDLISTNODE_CLASS::singlylinkedlistnode(valuetype value) {
 	this->value=value;
 	next=NULL;
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 SINGLYLINKEDLISTNODE_CLASS::~singlylinkedlistnode() {
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLISTNODE_CLASS::setValue(valuetype value) {
 	this->value=value;
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 valuetype SINGLYLINKEDLISTNODE_CLASS::getValue() const {
 	return value;
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 SINGLYLINKEDLISTNODE_CLASS *SINGLYLINKEDLISTNODE_CLASS::getNext() {
 	return next;
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t SINGLYLINKEDLISTNODE_CLASS::compare(valuetype value) const {
 	return node_compare(this->value,value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 int32_t SINGLYLINKEDLISTNODE_CLASS::compare(
 				singlylinkedlistnode<valuetype> *peer) const {
 	return node_compare(this->value,peer->value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLISTNODE_CLASS::print() const {
 	node_print(value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
+inline
 void SINGLYLINKEDLISTNODE_CLASS::setNext(SINGLYLINKEDLISTNODE_CLASS *next) {
 	this->next=next;
 }
