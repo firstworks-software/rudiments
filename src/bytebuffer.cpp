@@ -118,7 +118,6 @@ inline
 void bytebuffer::extend(size_t requiredsize) {
 	if (requiredsize>pvt->_actualsize) {
 
-		// can I do this with just math?
 		do {
 			pvt->_actualsize=pvt->_actualsize*3/2;
 		} while (requiredsize>pvt->_actualsize);
@@ -284,10 +283,16 @@ void bytebuffer::setPosition(size_t pos) {
 }
 
 bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
+#if 0
 	pvt->_pos=pvt->_size;
 	pvt->_size+=size;
 	extend(pvt->_size);
 	memcpy(pvt->_buffer+pvt->_pos,data,size);
+#else
+	extend(pvt->_size+size);
+	memcpy(pvt->_buffer+pvt->_size,data,size);
+	pvt->_size+=size;
+#endif
 	pvt->_pos=pvt->_size;
 	return this;
 }

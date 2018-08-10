@@ -12,8 +12,8 @@
 #include "../test/test.cpp"
 
 #define ITEMS 1024*1024*10
-#define ITERS 10
-//#define ITERS 160
+//#define ITERS 10
+#define ITERS 160
 
 int main(int argc, char **argv) {
 
