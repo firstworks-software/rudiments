@@ -161,11 +161,11 @@ lobjs="winsock.obj "+_
 	"templateengine.obj "+_
 	"output.obj "+_
 	"input.obj "+_
-	"csvsax.cpp "+_
-	"csvdom.cpp "+_
-	"jsonsax.cpp "+_
-	"jsondom.cpp "+_
-	"cursordomnode.cpp"
+	"csvsax.obj "+_
+	"csvdom.obj "+_
+	"jsonsax.obj "+_
+	"jsondom.obj "+_
+	"cursordomnode.obj"
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
