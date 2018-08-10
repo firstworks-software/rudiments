@@ -129,6 +129,9 @@
 /* Rudiments supports PCRE */
 #undef RUDIMENTS_HAS_PCRE
 
+/* Some systems have sendmsg */
+#undef RUDIMENTS_HAS_SENDMSG
+
 /* Rudiments supports SSL */
 #undef RUDIMENTS_HAS_SSL
 
@@ -179,6 +182,9 @@
 
 /* Some systems have tzset */
 #undef RUDIMENTS_HAS_TZSET
+
+/* Some systems have sendmsg but dont define it */
+#undef RUDIMENTS_HAS_UNDEFINED_SENDMSG
 
 /* Some systems have tzset but dont define it */
 #undef RUDIMENTS_HAS_UNDEFINED_TZSET
