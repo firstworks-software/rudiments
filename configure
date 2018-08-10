@@ -34516,9 +34516,7 @@ fi
 if ( test "$INCLUDE_STRINGBUFFER" = "1" )
 then
 	HEADERS2="$HEADERS2 stringbuffer.h"
-	PRIVATEHEADERS5="$PRIVATEHEADERS5 stringbuffer.h stringbufferincludes.h"
-	SRCS="$SRCS stringbuffer.cpp"
-	LOBJS="$LOBJS stringbuffer.lo"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 stringbuffer.h stringbufferincludes.h stringbufferinlines.h"
 fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )

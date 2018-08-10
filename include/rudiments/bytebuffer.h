@@ -59,15 +59,6 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(const unsigned char *data, size_t size);
 
-		/** Writes "string" to the bytebuffer at the current
-		 *  position and increments the current position to the next
-		 *  byte after the data that was written.  If necessary, the
-		 *  internal buffer will grow to accommodate the new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const char *string);
-
 		/** Writes the first "size" bytes of "string" to the
 		 *  bytebuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
@@ -77,6 +68,15 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(const char *string, size_t size);
+
+		/** Writes "string" to the bytebuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const char *string);
 
 		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -190,13 +190,6 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(const unsigned char *data, size_t size);
 
-		/** Appends "string" to the bytebuffer, growing the
-		 *  internal buffer as necessary to accommodate the new data. 
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		bytebuffer	*append(const char *string);
-
 		/** Appends the first "size" bytes of "string" to the
 		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
@@ -204,6 +197,13 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(const char *string, size_t size);
+
+		/** Appends "string" to the bytebuffer, growing the
+		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(const char *string);
 
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 

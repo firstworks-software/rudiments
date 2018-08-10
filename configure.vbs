@@ -65,7 +65,6 @@ srcs="winsock.cpp "+_
 	"sharedmemory.cpp "+_
 	"signalclasses.cpp "+_
 	"snooze.cpp "+_
-	"stringbuffer.cpp "+_
 	"sys.cpp "+_
 	"unixsocketclient.cpp "+_
 	"unixsocketserver.cpp "+_
@@ -132,7 +131,6 @@ lobjs="winsock.obj "+_
 	"sharedmemory.obj "+_
 	"signalclasses.obj "+_
 	"snooze.obj "+_
-	"stringbuffer.obj "+_
 	"sys.obj "+_
 	"unixsocketclient.obj "+_
 	"unixsocketserver.obj "+_
@@ -351,8 +349,8 @@ privateheaders6="signalhandler.h "+_
 	"signalclassesincludes.h "+_
 	"snooze.h "+_
 	"snoozeincludes.h "+_
-	"stringbuffer.h "+_
 	"stringbufferincludes.h "+_
+	"stringbufferinlines.h "+_
 	"sysincludes.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketclientincludes.h "+_
