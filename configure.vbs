@@ -372,6 +372,7 @@ privateheaders6="signalhandler.h "+_
 	"snoozeincludes.h "+_
 	"stringbufferincludes.h "+_
 	"stringbufferinlines.h "+_
+	"sys.h "+_
 	"sysincludes.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketclientincludes.h "+_
