@@ -185,7 +185,7 @@
 /* #undef RUDIMENTS_HAS_TZSET */
 
 /* Some systems have tzset but dont define it */
-/* #undef RUDIMENTS_HAVE_UNDEFINED_TZSET */
+/* #undef RUDIMENTS_HAS_UNDEFINED_TZSET */
 
 /* SSL has X509_get_signature_nid */
 /* #undef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID */
