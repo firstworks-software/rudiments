@@ -8,7 +8,10 @@
 
 // some systems need this for key_t
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
+	#ifndef RUDIMENTS_SYS_IPC_H
+	#define RUDIMENTS_SYS_IPC_H
+		#include <sys/ipc.h>
+	#endif
 #endif
 
 // for open flags

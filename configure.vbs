@@ -69,10 +69,12 @@ srcs="winsock.cpp "+_
 	"unixsocketclient.cpp "+_
 	"unixsocketserver.cpp "+_
 	"bytebuffer.cpp "+_
-	"xmldom.cpp "+_
-	"xmldomnode.cpp "+_
+	"sax.cpp "+_
+	"dom.cpp "+_
+	"domnode.cpp "+_
 	"xmlsax.cpp "+_
-	"xmldomevents.cpp "+_
+	"xmldom.cpp "+_
+	"domevents.cpp "+_
 	"codetree.cpp "+_
 	"compiler.cpp "+_
 	"inetsocketutil.cpp "+_
@@ -85,7 +87,12 @@ srcs="winsock.cpp "+_
 	"prompt.cpp "+_
 	"templateengine.cpp "+_
 	"output.cpp "+_
-	"input.cpp "
+	"input.cpp "+_
+	"csvsax.cpp "+_
+	"csvdom.cpp "+_
+	"jsonsax.cpp "+_
+	"jsondom.cpp "+_
+	"cursordomnode.cpp"
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -135,10 +142,12 @@ lobjs="winsock.obj "+_
 	"unixsocketclient.obj "+_
 	"unixsocketserver.obj "+_
 	"bytebuffer.obj "+_
+	"sax.obj "+_
+	"dom.obj "+_
+	"domnode.obj "+_
 	"xmldom.obj "+_
-	"xmldomnode.obj "+_
 	"xmlsax.obj "+_
-	"xmldomevents.obj "+_
+	"domevents.obj "+_
 	"codetree.obj "+_
 	"compiler.obj "+_
 	"inetsocketutil.obj "+_
@@ -151,7 +160,12 @@ lobjs="winsock.obj "+_
 	"prompt.obj "+_
 	"templateengine.obj "+_
 	"output.obj "+_
-	"input.obj "
+	"input.obj "+_
+	"csvsax.cpp "+_
+	"csvdom.cpp "+_
+	"jsonsax.cpp "+_
+	"jsondom.cpp "+_
+	"cursordomnode.cpp"
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
@@ -210,10 +224,12 @@ headers2="protocolentry.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketserver.h "+_
 	"bytebuffer.h "
-headers3="xmldom.h "+_
-	"xmldomnode.h "+_
+headers3="sax.h "+_
+	"dom.h "+_
+	"domnode.h "+_
 	"xmlsax.h "+_
-	"xmldomevents.h "+_
+	"xmldom.h "+_
+	"domevents.h "+_
 	"codetree.h "+_
 	"compiler.h "+_
 	"inetsocketutil.h "+_
@@ -230,7 +246,12 @@ headers3="xmldom.h "+_
 	"prompt.h "+_
 	"templateengine.h "+_
 	"output.h "+_
-	"input.h "
+	"input.h "+_
+	"csvsax.h "+_
+	"csvdom.h "+_
+	"jsonsax.h "+_
+	"jsondom.h "+_
+	"cursordomnode.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -358,14 +379,18 @@ privateheaders6="signalhandler.h "+_
 	"unixsocketserverincludes.h "+_
 	"bytebuffer.h "+_
 	"bytebufferincludes.h "+_
+	"sax.h "+_
+	"saxincludes.h "+_
+	"dom.h "+_
+	"domincludes.h "+_
+	"domnode.h "+_
+	"domnodeincludes.h "+_
 	"xmldom.h "+_
 	"xmldomincludes.h "+_
-	"xmldomnode.h "+_
-	"xmldomnodeincludes.h "+_
 	"xmlsax.h "+_
 	"xmlsaxincludes.h "+_
-	"xmldomevents.h "+_
-	"xmldomeventsincludes.h"
+	"domevents.h "+_
+	"domeventsincludes.h"
 privateheaders7="codetree.h "+_
 	"codetreeincludes.h "+_
 	"codetreegrammar.h "+_
@@ -401,7 +426,17 @@ privateheaders7="codetree.h "+_
 	"templateengine.h "+_
 	"templateengineincludes.h "+_
 	"outputincludes.h "+_
-	"inputincludes.h "
+	"inputincludes.h "+_
+	"csvsax.h "+_
+	"csvsaxincludes.h "+_
+	"csvdom.h "+_
+	"csvdomincludes.h "+_
+	"jsonsax.h "+_
+	"jsonsaxincludes.h "+_
+	"jsondom.h "+_
+	"jsondomincludes.h "+_
+	"cursordomnode.h "+_
+	"cursordomnodeincludes.h "
 
 ' version
 RUDIMENTS_VERSION="1.0.8"
