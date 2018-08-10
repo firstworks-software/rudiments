@@ -261,9 +261,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		stringbuffer	*append(const char *string, size_t size) {
-			return (stringbuffer *)bytebuffer::append(string,size);
-		}
+		stringbuffer	*append(const char *string, size_t size);
 
 		/** Appends "character" to the stringbuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data.
