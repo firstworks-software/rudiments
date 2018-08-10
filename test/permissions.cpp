@@ -6,17 +6,24 @@
 #include <rudiments/charstring.h>
 #include "test.cpp"
 
+#ifndef _WIN32
+const char	*permsfile="permissions.txt";
+#else
+// local file not reliable on SMB mount
+const char	*permsfile="C:\\permissions.txt";
+#endif
+
 int main(int argc, const char **argv) {
 
 	header("permissions");
 
-        file::remove("permissions.txt");
+        file::remove(permsfile);
 
 
 	stdoutput.printf("perm strings...\n");
         file	fd;
 	test("create with perms",
-			fd.open("permissions.txt",O_RDWR|O_CREAT,
+			fd.open(permsfile,O_RDWR|O_CREAT,
                                 permissions::evalPermString("rw-r--r--")));
         test("change perms",
 		permissions::setFilePermissions(fd.getFileDescriptor(),
@@ -26,13 +33,13 @@ int main(int argc, const char **argv) {
 				permissions::evalPermOctal(fd.getPermissions()),
 				"rw-rw-r--"));
         fd.close();
-        file::remove("permissions.txt");
+        file::remove(permsfile);
 	stdoutput.printf("\n");
 
 
 	stdoutput.printf("perm octals...\n");
         test("create with perms",
-			fd.open("permissions.txt",O_RDWR|O_CREAT,
+			fd.open(permsfile,O_RDWR|O_CREAT,
                                 	permissions::ownerReadWrite()|
                                 	permissions::groupRead()|
                                 	permissions::othersRead()));
@@ -52,6 +59,6 @@ int main(int argc, const char **argv) {
                                 	permissions::groupReadWrite()|
                                 	permissions::othersRead()));
         fd.close();
-        file::remove("permissions.txt");
+        file::remove(permsfile);
 	stdoutput.printf("\n");
 }
