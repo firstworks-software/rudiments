@@ -34,8 +34,7 @@ int main(int argc, char **argv) {
 		block[b]='a'+(b%10);
 	}
 
-	//for (uint64_t i=1; i<=1024; i=i*2) {
-	for (uint64_t i=1; i<2; i=i*2) {
+	for (uint64_t i=1; i<=1024; i=i*2) {
 
 		stdoutput.printf("append %d characters "
 				"(%lld at a time, %d iterations)\n",

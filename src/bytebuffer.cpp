@@ -105,7 +105,9 @@ ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 
 ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
 	size_t	finalpos=pvt->_pos+size;
-	extend(finalpos);
+	if (finalpos>pvt->_actualsize) {
+		extend(finalpos);
+	}
 	memcpy(pvt->_buffer+pvt->_pos,data,size);
 	pvt->_pos=finalpos;
 	if (finalpos>pvt->_size) {
@@ -114,21 +116,18 @@ ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
 	return size;
 }
 
-inline
 void bytebuffer::extend(size_t requiredsize) {
-	if (requiredsize>pvt->_actualsize) {
 
-		do {
-			pvt->_actualsize=pvt->_actualsize*3/2;
-		} while (requiredsize>pvt->_actualsize);
+	do {
+		pvt->_actualsize=pvt->_actualsize*3/2;
+	} while (requiredsize>pvt->_actualsize);
 
-		// FIXME: we need a growth cap
+	// FIXME: we need a growth cap
 
-		unsigned char	*newbuffer=new unsigned char[pvt->_actualsize];
-		memcpy(newbuffer,pvt->_buffer,pvt->_size);
-		delete[] pvt->_buffer;
-		pvt->_buffer=newbuffer;
-	}
+	unsigned char	*newbuffer=new unsigned char[pvt->_actualsize];
+	memcpy(newbuffer,pvt->_buffer,pvt->_size);
+	delete[] pvt->_buffer;
+	pvt->_buffer=newbuffer;
 }
 
 ssize_t bytebuffer::write(const char *string, size_t size) {
@@ -211,7 +210,9 @@ ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 
 	// extend the list of buffers to accommodate
 	// "size" bytes beyond the current position
-	extend(pvt->_pos+size);
+	if (pvt->_pos+size>pvt->_actualsize) {
+		extend(pvt->_pos+size);
+	}
 
 	// write the buffer
 	write(buffer,size);
@@ -283,7 +284,9 @@ void bytebuffer::setPosition(size_t pos) {
 }
 
 bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
-	extend(pvt->_size+size);
+	if (pvt->_size+size>pvt->_actualsize) {
+		extend(pvt->_size+size);
+	}
 	memcpy(pvt->_buffer+pvt->_size,data,size);
 	pvt->_size+=size;
 	pvt->_pos=pvt->_size;
@@ -291,7 +294,9 @@ bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
 }
 
 bytebuffer *bytebuffer::append(const char *data, size_t size) {
-	extend(pvt->_size+size);
+	if (pvt->_size+size>pvt->_actualsize) {
+		extend(pvt->_size+size);
+	}
 	memcpy(pvt->_buffer+pvt->_size,data,size);
 	pvt->_size+=size;
 	pvt->_pos=pvt->_size;
