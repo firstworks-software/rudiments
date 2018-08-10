@@ -549,6 +549,9 @@
 /* Some systems have getpagesize */
 #undef RUDIMENTS_HAVE_GETPAGESIZE
 
+/* Some systems have getpeername */
+#undef RUDIMENTS_HAVE_GETPEERNAME
+
 /* Some systems have getpgid */
 #undef RUDIMENTS_HAVE_GETPGID
 
@@ -999,6 +1002,9 @@
 /* Some systems have reboot with 2 argument */
 #undef RUDIMENTS_HAVE_REBOOT_2
 
+/* Some systems have recvmsg */
+#undef RUDIMENTS_HAVE_RECVMSG
+
 /* recv has a void * on most systems */
 #undef RUDIMENTS_HAVE_RECV_WITH_VOID
 
@@ -1385,6 +1391,12 @@
 
 /* Some systems have ftruncate but dont define it */
 #undef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE
+
+/* Some systems have getpeername but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME
+
+/* Some systems have recvmsg but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_RECVMSG
 
 /* Some systems have sendmsg but dont define it */
 #undef RUDIMENTS_HAVE_UNDEFINED_SENDMSG

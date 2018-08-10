@@ -211,6 +211,10 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define FD f->_fd
 #endif
 
+#ifdef RUDIMENTS_HAVE_UNDEFINED_SENDMSG
+extern "C" ssize_t sendmsg(int, const struct msghdr *,int);
+#endif
+
 class filedescriptorprivate {
 	friend class filedescriptor;
 	private:
@@ -1968,7 +1972,12 @@ bool filedescriptor::passFileDescriptor(int32_t fd) {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=sendmsg(pvt->_fd,&messageheader,0);
+		#if defined(RUDIMENTS_HAVE_SENDMSG) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_SENDMSG)
+			result=sendmsg(pvt->_fd,&messageheader,0);
+		#else
+			#error no sendmsg or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					pvt->_retryinterruptedwrites);
 

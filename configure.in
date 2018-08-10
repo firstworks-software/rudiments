@@ -1791,9 +1791,70 @@ then
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-extern "C" void sendmsg(int, const struct msghdr *,int);],
+extern "C" ssize_t sendmsg(int, const struct msghdr *,int);],
 sendmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_SENDMSG,1,Some systems have sendmsg but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
+
+HAS_RECVMSG=""
+AC_MSG_CHECKING(for recvmsg)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+recvmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_RECVMSG,1,Some systems have recvmsg) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_RECVMSG="no")
+
+if ( test "$HAS_RECVMSG" = "no" )
+then
+	AC_MSG_CHECKING(for undefined recvmsg)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" ssize_t recvmsg(int, struct msghdr *,int);],
+recvmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_RECVMSG,1,Some systems have recvmsg but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_GETPEERNAME=""
+AC_MSG_CHECKING(for getpeername)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+getpeername(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETPEERNAME,1,Some systems have getpeername) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_GETPEERNAME="no")
+
+if ( test "$HAS_GETPEERNAME" = "no" )
+then
+	AC_MSG_CHECKING(for undefined getpeername)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int getpeername(int, struct sockaddr *,socklen_t *);],
+getpeername(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME,1,Some systems have getpeername but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
 
 echo "******************************"
 
