@@ -1440,7 +1440,7 @@ tzset();,AC_DEFINE(RUDIMENTS_HAS_TZSET,1,Some systems have tzset) AC_MSG_RESULT(
 if ( test "$HAS_TZSET" = "no" )
 then
 	AC_MSG_CHECKING(for undefined tzset)
-	AC_TRY_LINK([extern void tzset();],
+	AC_TRY_LINK([extern "C" void tzset();],
 tzset();,AC_DEFINE(RUDIMENTS_HAS_UNDEFINED_TZSET,1,Some systems have tzset but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
@@ -1777,7 +1777,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/socket.h>
 #endif
 ],
-sendmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAS_SENDMSG,1,Some systems have sendmsg) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_SENDMSG="no")
+sendmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SENDMSG,1,Some systems have sendmsg) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_SENDMSG="no")
 
 if ( test "$HAS_SENDMSG" = "no" )
 then
@@ -1791,8 +1791,8 @@ then
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-extern void sendmsg(int, const struct msghdr *,int);],
-sendmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAS_UNDEFINED_SENDMSG,1,Some systems have sendmsg but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+extern "C" void sendmsg(int, const struct msghdr *,int);],
+sendmsg(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_SENDMSG,1,Some systems have sendmsg but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 echo "******************************"
@@ -2762,7 +2762,7 @@ ftruncate(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FTRUNCATE,1,Some systems have ftruncate
 if ( test "$HAS_FTRUNCATE" = "no" )
 then
 	AC_MSG_CHECKING(for undefined ftruncate)
-	AC_TRY_LINK([extern int ftruncate(int,int);],
+	AC_TRY_LINK([extern "C" int ftruncate(int,int);],
 ftruncate(0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE,1,Some systems have ftruncate but dont define it) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
@@ -2891,7 +2891,7 @@ fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_FSYNC,1,Some systems have fsync) AC_MSG_RESUL
 if ( test "$HAS_FSYNC" = "no" )
 then
 	AC_MSG_CHECKING(for undefined fsync)
-	AC_TRY_LINK([extern int fsync(int);],
+	AC_TRY_LINK([extern "C" int fsync(int);],
 fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_FSYNC,1,Some systems have fsync but dont define it) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 

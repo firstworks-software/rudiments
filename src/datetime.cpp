@@ -33,8 +33,8 @@
 	#include <os/kernel/OS.h>
 #endif
 
-#ifdef RUDIMENTS_HAS_UNDEFINED_TZSET
-extern void tzset();
+#ifdef RUDIMENTS_HAVE_UNDEFINED_TZSET
+extern "C" void tzset();
 #endif
 
 class datetimeprivate {

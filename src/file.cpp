@@ -92,11 +92,11 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_UNDEFINED_FSYNC
-int fsync(int);
+extern "C" int fsync(int);
 #endif
 
 #ifdef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE
-int ftruncate(int,int);
+extern "C" int ftruncate(int,int);
 #endif
 
 class fileprivate {

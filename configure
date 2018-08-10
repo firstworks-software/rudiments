@@ -23658,7 +23658,7 @@ then
 $as_echo_n "checking for undefined tzset... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-extern void tzset();
+extern "C" void tzset();
 int
 main ()
 {
@@ -25019,7 +25019,7 @@ sendmsg(0,0,0);
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAS_SENDMSG 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_SENDMSG 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -25043,7 +25043,7 @@ $as_echo_n "checking for undefined sendmsg... " >&6; }
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-extern void sendmsg(int, const struct msghdr *,int);
+extern "C" void sendmsg(int, const struct msghdr *,int);
 int
 main ()
 {
@@ -25054,7 +25054,7 @@ sendmsg(0,0,0);
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAS_UNDEFINED_SENDMSG 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_UNDEFINED_SENDMSG 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -30133,7 +30133,7 @@ then
 $as_echo_n "checking for undefined ftruncate... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-extern int ftruncate(int,int);
+extern "C" int ftruncate(int,int);
 int
 main ()
 {
@@ -30622,7 +30622,7 @@ then
 $as_echo_n "checking for undefined fsync... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-extern int fsync(int);
+extern "C" int fsync(int);
 int
 main ()
 {

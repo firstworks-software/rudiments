@@ -129,9 +129,6 @@
 /* Rudiments supports PCRE */
 #undef RUDIMENTS_HAS_PCRE
 
-/* Some systems have sendmsg */
-#undef RUDIMENTS_HAS_SENDMSG
-
 /* Rudiments supports SSL */
 #undef RUDIMENTS_HAS_SSL
 
@@ -182,9 +179,6 @@
 
 /* Some systems have tzset */
 #undef RUDIMENTS_HAS_TZSET
-
-/* Some systems have sendmsg but dont define it */
-#undef RUDIMENTS_HAS_UNDEFINED_SENDMSG
 
 /* Some systems have tzset but dont define it */
 #undef RUDIMENTS_HAS_UNDEFINED_TZSET
@@ -1041,6 +1035,9 @@
 /* Some systems define union semun */
 #undef RUDIMENTS_HAVE_SEMUN
 
+/* Some systems have sendmsg */
+#undef RUDIMENTS_HAVE_SENDMSG
+
 /* send has a const void * on most systems */
 #undef RUDIMENTS_HAVE_SEND_WITH_VOID
 
@@ -1388,6 +1385,9 @@
 
 /* Some systems have ftruncate but dont define it */
 #undef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE
+
+/* Some systems have sendmsg but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_SENDMSG
 
 /* Some systems have __vsnprintf but its not defined */
 #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
