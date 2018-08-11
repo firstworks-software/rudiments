@@ -59,6 +59,13 @@
 	};
 #endif
 
+#ifdef RUDIMENTS_HAVE_ULTRIX_STATFS
+#include <sys/param.h>
+#include <sys/mount.h>
+extern "C" int statfs(char *,struct fs_data *);
+extern "C" int fstatfs(int,struct fs_data *);
+#endif
+
 class filesystemprivate {
 	friend class filesystem;
 	private:
@@ -66,7 +73,11 @@ class filesystemprivate {
 			struct		statvfs	_st;
 		#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS) || \
 				defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-			struct		statfs	_st;
+			#ifdef RUDIMENTS_HAVE_ULTRIX_STATFS
+				struct		fs_data	_st;
+			#else
+				struct		statfs	_st;
+			#endif
 		#else
 			#error no statvfs, statfs or anything like it
 		#endif

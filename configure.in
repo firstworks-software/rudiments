@@ -1855,6 +1855,95 @@ extern "C" int getpeername(int, struct sockaddr *,socklen_t *);],
 getpeername(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME,1,Some systems have getpeername but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
+HAS_GETSOCKOPT=""
+AC_MSG_CHECKING(for getsockopt)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+getsockopt(0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETSOCKOPT,1,Some systems have getsockopt) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_GETSOCKOPT="no")
+
+if ( test "$HAS_GETSOCKOPT" = "no" )
+then
+	AC_MSG_CHECKING(for undefined getsockopt)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int getsockopt(int, int, int, void *, socklen_t *);],
+getsockopt(0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_GETSOCKOPT,1,Some systems have getsockopt but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_SETSOCKOPT=""
+AC_MSG_CHECKING(for setsockopt)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+setsockopt(0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETSOCKOPT,1,Some systems have setsockopt) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_SETSOCKOPT="no")
+
+if ( test "$HAS_SETSOCKOPT" = "no" )
+then
+	AC_MSG_CHECKING(for undefined setsockopt)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int setsockopt(int, int, int, const void *, socklen_t);],
+setsockopt(0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_SETSOCKOPT,1,Some systems have setsockopt but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_SOCKET=""
+AC_MSG_CHECKING(for socket)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+socket(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SOCKET,1,Some systems have socket) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_SOCKET="no")
+
+if ( test "$HAS_SOCKET" = "no" )
+then
+	AC_MSG_CHECKING(for undefined socket)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int socket(int, int, int);],
+socket(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_SOCKET,1,Some systems have socket but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
 echo "******************************"
 

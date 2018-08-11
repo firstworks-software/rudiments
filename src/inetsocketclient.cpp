@@ -23,6 +23,10 @@
 	#include <stdlib.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_UNDEFINED_SOCKET
+	extern "C" int socket(int,int,int);
+#endif
+
 class inetsocketclientprivate {
 	friend class inetsocketclient;
 	private:
@@ -242,9 +246,14 @@ int32_t inetsocketclient::connect() {
 				// create an inet socket
 				error::clearError();
 				do {
-					fd(::socket(ainfo->ai_family,
+					#if defined(RUDIMENTS_HAVE_SOCKET) || \
+						defined(RUDIMENTS_HAVE_UNDEFINED_SOCKET)
+						fd(::socket(ainfo->ai_family,
 							ainfo->ai_socktype,
 							ainfo->ai_protocol));
+					#else
+						#error no socket or anything like it
+					#endif
 				} while (fd()==-1 &&
 					error::getErrorNumber()==EINTR);
 				if (fd()==-1) {
@@ -348,9 +357,14 @@ int32_t inetsocketclient::connect() {
 				// create an inet socket
 				error::clearError();
 				do {
-					fd(::socket(AF_INET,
+					#if defined(RUDIMENTS_HAVE_SOCKET) || \
+						defined(RUDIMENTS_HAVE_UNDEFINED_SOCKET)
+						fd(::socket(AF_INET,
 							SOCK_STREAM,
 							pe.getNumber()));
+					#else
+						#error no socket or anything like it
+					#endif
 				} while (fd()==-1 &&
 					error::getErrorNumber()==EINTR);
 				if (fd()==-1) {

@@ -621,6 +621,9 @@
 /* Some systems have getsid */
 #undef RUDIMENTS_HAVE_GETSID
 
+/* Some systems have getsockopt */
+#undef RUDIMENTS_HAVE_GETSOCKOPT
+
 /* Some systems have getspnam */
 #undef RUDIMENTS_HAVE_GETSPNAM
 
@@ -1104,6 +1107,9 @@
 /* Some systems have setsid */
 #undef RUDIMENTS_HAVE_SETSID
 
+/* Some systems have setsockopt */
+#undef RUDIMENTS_HAVE_SETSOCKOPT
+
 /* Some systems have SetSystemTime */
 #undef RUDIMENTS_HAVE_SETSYSTEMTIME
 
@@ -1136,6 +1142,9 @@
 
 /* Some systems have sockaddr_un */
 #undef RUDIMENTS_HAVE_SOCKADDR_UN
+
+/* Some systems have socket */
+#undef RUDIMENTS_HAVE_SOCKET
 
 /* some type of statfs */
 #undef RUDIMENTS_HAVE_SOME_KIND_OF_STATFS
@@ -1395,11 +1404,20 @@
 /* Some systems have getpeername but dont define it */
 #undef RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME
 
+/* Some systems have getsockopt but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_GETSOCKOPT
+
 /* Some systems have recvmsg but dont define it */
 #undef RUDIMENTS_HAVE_UNDEFINED_RECVMSG
 
 /* Some systems have sendmsg but dont define it */
 #undef RUDIMENTS_HAVE_UNDEFINED_SENDMSG
+
+/* Some systems have setsockopt but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_SETSOCKOPT
+
+/* Some systems have socket but dont define it */
+#undef RUDIMENTS_HAVE_UNDEFINED_SOCKET
 
 /* Some systems have __vsnprintf but its not defined */
 #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF

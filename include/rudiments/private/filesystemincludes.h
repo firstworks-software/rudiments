@@ -24,5 +24,8 @@
 	#include <sys/types.h>
 	#include <sys/statvfs.h>
 #endif
+#if defined(RUDIMENTS_HAVE_ULTRIX_STATFS)
+	#include <sys/types.h>
+#endif
 
 class filesystemprivate;

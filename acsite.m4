@@ -2210,7 +2210,8 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/param.h>
-#include <sys/mount.h>],
+#include <sys/mount.h>
+extern int statfs(char *, struct fs_data *);],
 [/* ultrix style */
 struct fs_data sfs;
 sfs.fd_req.flags=0;

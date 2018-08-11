@@ -556,6 +556,9 @@
 /* Some systems have getpagesize */
 /* #undef RUDIMENTS_HAVE_GETPAGESIZE */
 
+/* Some systems have getpeername */
+#define RUDIMENTS_HAVE_GETPEERNAME 1
+
 /* Some systems have getpgid */
 /* #undef RUDIMENTS_HAVE_GETPGID */
 
@@ -648,6 +651,9 @@
 
 /* Some systems have getsid */
 /* #undef RUDIMENTS_HAVE_GETSID */
+
+/* Some systems have getsockopt */
+#define RUDIMENTS_HAVE_GETSOCKOPT 1
 
 /* Some systems have getspnam */
 /* #undef RUDIMENTS_HAVE_GETSPNAM */
@@ -1021,6 +1027,9 @@
 /* Some systems have reboot with 2 argument */
 /* #undef RUDIMENTS_HAVE_REBOOT_2 */
 
+/* Some systems have recvmsg */
+#define RUDIMENTS_HAVE_RECVMSG 1
+
 /* recv has a void * on most systems */
 /* #undef RUDIMENTS_HAVE_RECV_WITH_VOID */
 
@@ -1062,6 +1071,9 @@
 
 /* Some systems define union semun */
 /* #undef RUDIMENTS_HAVE_SEMUN */
+
+/* Some systems have sendmsg */
+#define RUDIMENTS_HAVE_SENDMSG 1
 
 /* send has a const void * on most systems */
 /* #undef RUDIMENTS_HAVE_SEND_WITH_VOID */
@@ -1123,6 +1135,9 @@
 /* Some systems have setsid */
 /* #undef RUDIMENTS_HAVE_SETSID */
 
+/* Some systems have setsockopt */
+#define RUDIMENTS_HAVE_SETSOCKOPT 1
+
 /* Some systems have SetSystemTime */
 #define RUDIMENTS_HAVE_SETSYSTEMTIME 1
 
@@ -1155,6 +1170,9 @@
 
 /* Some systems have sockaddr_un */
 /* #undef RUDIMENTS_HAVE_SOCKADDR_UN */
+
+/* Some systems have socket */
+#define RUDIMENTS_HAVE_SOCKET 1
 
 /* some type of statfs */
 /* #undef RUDIMENTS_HAVE_SOME_KIND_OF_STATFS */
@@ -1428,6 +1446,24 @@
 
 /* Some systems have ftruncate but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE */
+
+/* Some systems have getpeername but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME */
+
+/* Some systems have getsockopt but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_GETSOCKOPT */
+
+/* Some systems have recvmsg but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_RECVMSG */
+
+/* Some systems have sendmsg but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_SENDMSG */
+
+/* Some systems have setsockopt but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_SETSOCKOPT */
+
+/* Some systems have socket but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_SOCKET */
 
 /* Some systems have __vsnprintf but its not defined */
 /* #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF */

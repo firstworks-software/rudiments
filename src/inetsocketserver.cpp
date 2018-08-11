@@ -24,6 +24,10 @@ typedef unsigned long	in_addr_t;
 	#define INADDR_NONE ((in_addr_t)-1)
 #endif
 
+#ifdef RUDIMENTS_HAVE_UNDEFINED_SOCKET
+	extern "C" int socket(int,int,int);
+#endif
+
 class inetsocketserverprivate {
 	friend class inetsocketserver;
 	private:
@@ -109,7 +113,12 @@ bool inetsocketserver::initialize(const char *address, uint16_t port) {
 	// create the socket
 	error::clearError();
 	do {
-		fd(::socket(AF_INET,SOCK_STREAM,0));
+		#if defined(RUDIMENTS_HAVE_SOCKET) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_SOCKET)
+			fd(::socket(AF_INET,SOCK_STREAM,0));
+		#else
+			#error no socket or anything like it
+		#endif
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);
 	if (fd()==-1) {
 		return false;

@@ -215,6 +215,22 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 extern "C" ssize_t sendmsg(int, const struct msghdr *,int);
 #endif
 
+#ifdef RUDIMENTS_HAVE_UNDEFINED_RECVMSG
+extern "C" ssize_t recvmsg(int, struct msghdr *,int);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME
+extern "C" int getpeername(int, struct sockaddr *,socklen_t *);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_GETSOCKOPT
+extern "C" int getsockopt(int, int, int, void *, socklen_t *);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_SETSOCKOPT
+extern "C" int setsockopt(int, int, int, const void *, socklen_t);
+#endif
+
 class filedescriptorprivate {
 	friend class filedescriptor;
 	private:
@@ -2112,7 +2128,12 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 			return false;
 		}
 		if (result>-1) {
-			result=recvmsg(pvt->_fd,&messageheader,0);
+			#if defined(RUDIMENTS_HAVE_RECVMSG) || \
+				defined(RUDIMENTS_HAVE_UNDEFINED_RECVMSG)
+				result=recvmsg(pvt->_fd,&messageheader,0);
+			#else
+				#error no recvmsg or anything like it
+			#endif
 		}
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					pvt->_retryinterruptedreads);
@@ -2374,8 +2395,14 @@ char *filedescriptor::getPeerAddress() const {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=getpeername(pvt->_fd,
-				(struct sockaddr *)&clientsin,&size);
+		#if defined(RUDIMENTS_HAVE_GETPEERNAME) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME)
+			result=getpeername(pvt->_fd,
+						(struct sockaddr *)&clientsin,
+						&size);
+		#else
+			#error no getpeername or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 
 	// if getpeername was successful and the peer was an inet socket,
@@ -2396,9 +2423,14 @@ int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
 	}
 	error::clearError();
 	do {
-		result=getsockopt(pvt->_fd,level,optname,
-			(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,
-			&tempoptlen);
+		#if defined(RUDIMENTS_HAVE_GETSOCKOPT) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_GETSOCKOPT)
+			result=getsockopt(pvt->_fd,level,optname,
+				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,
+				&tempoptlen);
+		#else
+			#error no getsockopt or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (optlen) {
 		*optlen=tempoptlen;
@@ -2411,8 +2443,14 @@ int32_t filedescriptor::setSockOpt(int32_t level, int32_t optname,
 	int32_t	result;
 	error::clearError();
 	do {
-		result=setsockopt(pvt->_fd,level,optname,
-			(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)optval,optlen);
+		#if defined(RUDIMENTS_HAVE_SETSOCKOPT) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_SETSOCKOPT)
+			result=setsockopt(pvt->_fd,level,optname,
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)optval,
+				optlen);
+		#else
+			#error no setsockopt or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }

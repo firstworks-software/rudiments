@@ -14,6 +14,10 @@
 
 #include <rudiments/private/winsock.h>
 
+#ifdef RUDIMENTS_HAVE_UNDEFINED_SOCKET
+	extern "C" int socket(int,int,int);
+#endif
+
 class unixsocketserverprivate {
 	friend class unixsocketserver;
 	private:
@@ -99,7 +103,12 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 	// create the socket
 	error::clearError();
 	do {
-		fd(::socket(AF_UNIX,SOCK_STREAM,0));
+		#if defined(RUDIMENTS_HAVE_SOCKET) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_SOCKET)
+			fd(::socket(AF_UNIX,SOCK_STREAM,0));
+		#else
+			#error no socket or anything like it
+		#endif
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);
 	if (fd()==-1) {
 		return false;
