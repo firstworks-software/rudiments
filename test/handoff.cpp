@@ -26,7 +26,7 @@ void handoff1() {
 	file::remove(handofffile);
 	file	f;
 	test("handoff1 - create file",
-		f.create("handofffile",
+		f.create(handofffile,
 			permissions::evalPermString("rw-r--r--")));
 	test("handoff1 - write to file",f.write("bye",3)==3);
 
