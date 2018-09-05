@@ -1,4 +1,4 @@
-1.0.8 - fixed some dictionary and xmlsax memory leaks
+1.1.0 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script
 	fixed Werror management in configure script
 	fixed race condition in threadmutext test

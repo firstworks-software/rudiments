@@ -440,7 +440,7 @@ privateheaders7="codetree.h "+_
 	"cursordomnodeincludes.h "
 
 ' version
-RUDIMENTS_VERSION="1.0.8"
+RUDIMENTS_VERSION="1.1.0"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"
