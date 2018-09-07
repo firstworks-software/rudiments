@@ -440,15 +440,8 @@ pid_t process::spawn(const char *command,
 
 		// append the args
 		if (args) {
-			bool	veryfirst=true;
 			bool	first=true;
 			for (const char * const *arg=args; *arg; arg++) {
-				if (veryfirst) {
-					veryfirst=false;
-					// the first arg should be the name of
-					// the command, which we need to ignore
-					continue;
-				}
 				if (!first || batchfile) {
 					if (spaceleft>1) {
 						cmdl.append(" ");
