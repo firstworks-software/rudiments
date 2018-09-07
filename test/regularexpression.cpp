@@ -7,7 +7,7 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-/*void printMatches(regularexpression *re) {
+void printMatches(regularexpression *re) {
 	for (int32_t i=0; i<re->getSubstringCount(); i++) {
 		stdoutput.printf("match %d start: \"%s\"\n",
 					i,re->getSubstringStart(i));
@@ -15,7 +15,7 @@
 					i,re->getSubstringEnd(i));
 	}
 	stdoutput.printf("%d matches\n\n",re->getSubstringCount());
-}*/
+}
 
 int main(int argc, const char **argv) {
 

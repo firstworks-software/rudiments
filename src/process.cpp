@@ -13,6 +13,7 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_PROCESS
+	#include <rudiments/stringbuffer.h>
 	#include <rudiments/environment.h>
 	#include <rudiments/bytestring.h>
 #endif
@@ -406,6 +407,102 @@ pid_t process::spawn(const char *command,
 		return exec(command,args);
 	#elif defined(RUDIMENTS_HAVE_CREATE_PROCESS)
 
+		// get the fully qualified (and then shortened)
+		// version of the command
+		char	*shortcommand=fullyQualifiedCommand(command);
+
+		// are we trying to run a batch file?
+		size_t	shortcommandlen=charstring::length(shortcommand);
+		bool	batchfile=
+			(shortcommandlen>=4 &&
+				!charstring::compareIgnoringCase(
+					shortcommand+shortcommandlen-4,".bat"));
+
+		// Create the command line from the args...
+		// CreateProcess must be able to modify the command line (for
+		// some reason, and there's no indication as to whether it could
+		// try to use more bytes than originally passed in) and will
+		// only accept a command line of 32768 chars or less.
+		stringbuffer	cmdl;
+		size_t		spaceleft=32768;
+
+		// If we're trying to run a batch file then we need to use
+		// cmd.exe as our command and use /c batchfilename [args]
+		// as the args, so append /c and the batch file name first.
+		if (batchfile) {
+			cmdl.append("/c ");
+			spaceleft-=3;
+			if (spaceleft>shortcommandlen) {
+				cmdl.append(shortcommand);
+				spaceleft-=shortcommandlen;
+			}
+		}
+
+		// append the args
+		if (args) {
+			bool	veryfirst=true;
+			bool	first=true;
+			for (const char * const *arg=args; *arg; arg++) {
+				if (veryfirst) {
+					veryfirst=false;
+					// the first arg should be the name of
+					// the command, which we need to ignore
+					continue;
+				}
+				if (!first || batchfile) {
+					if (spaceleft>1) {
+						cmdl.append(" ");
+						spaceleft--;
+					} else {
+						break;
+					}
+				}
+				if (first) {
+					first=false;
+				}
+				char	*qarg=quoteArg(*arg);
+				size_t	size=charstring::length(qarg);
+				if (spaceleft>size) {
+					cmdl.append(qarg);
+					delete[] qarg;
+					spaceleft-=size;
+				} else {
+					delete[] qarg;
+					break;
+				}
+			}
+		}
+		char	*commandline=cmdl.detachString();
+
+		// replace the command with (fully qualified and shortened)
+		// cmd.exe if we're trying to run a batch file
+		if (batchfile) {
+			char	*shortcmd=fullyQualifiedCommand("cmd.exe");
+			delete[] shortcommand;
+			shortcommand=shortcmd;
+		}
+
+		// create the new process and return it's pid on success
+		STARTUPINFO		si;
+		PROCESS_INFORMATION	pi;
+		bytestring::zero(&si,sizeof(si));
+		bytestring::zero(&pi,sizeof(pi));
+		bool	success=(CreateProcess(shortcommand,commandline,
+					NULL,NULL,TRUE,
+					(detached)?CREATE_NEW_PROCESS_GROUP:0,
+					NULL,NULL,&si,&pi)==TRUE);
+		delete[] shortcommand;
+		delete[] commandline;
+		return (success)?pi.dwProcessId:-1;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+char *process::fullyQualifiedCommand(const char *command) {
+
+	#if defined(RUDIMENTS_HAVE_CREATE_PROCESS)
 		// if the command doesn't include a backslash then search
 		// the path for it
 		char	*fqcommand=NULL;
@@ -420,90 +517,63 @@ pid_t process::spawn(const char *command,
 			charstring::split(path,";",true,&dirs,&dircount);
 
 			// search each directory in the PATH
+			// (actually, try the current directory first, it's not
+			// in the PATH, but should be searched first)
 			size_t	cmdlen=charstring::length(command);
-			for (uint64_t i=0; i<dircount; i++) {
+			for (uint64_t i=0; i<=dircount; i++) {
+
+				char	*dir=NULL;
+				if (!i) {
+					dir=directory::
+						getCurrentWorkingDirectory();
+				} else {
+					dir=dirs[i-1];
+				}
 
 				fqcommand=new char[
-						charstring::length(dirs[i])+1+
+						charstring::length(dir)+1+
 						cmdlen+1];
 
-				charstring::copy(fqcommand,dirs[i]);
+				charstring::copy(fqcommand,dir);
 				charstring::append(fqcommand,"\\");
 				charstring::append(fqcommand,command);
 
-				delete[] dirs[i];
+				delete[] dir;
 
 				if (file::exists(fqcommand)) {
+					// if we found the command in the
+					// current directory, then don't
+					// prepend the directory to it,
+					// just use it as-is
+					if (!i) {
+						delete[] fqcommand;
+						fqcommand=charstring::
+							duplicate(command);
+					}
 					break;
 				}
 
 				delete[] fqcommand;
 				fqcommand=NULL;
 			}
-	
+
 			// clean up
 			delete[] dirs;
+		}
+		if (!fqcommand) {
+			return NULL;
 		}
 
 		// get the short form of the fully qualified command
 		// (this will work on older versions of windows)
-		char	shortcommand[32768];
-		GetShortPathName(fqcommand,shortcommand,sizeof(shortcommand));
+		size_t	shortcommandsize=charstring::length(fqcommand)+1;
+		char	*shortcommand=new char[shortcommandsize];
+		GetShortPathName(fqcommand,shortcommand,shortcommandsize);
 		delete[] fqcommand;
 
-		// Create the command line from the args...
-		// CreateProcess must be able to modify the command line (for
-		// some reason, and there's no indication as to whether it could
-		// try to use more bytes than originally passed in) and will
-		// only accept a command line of 32768 chars or less.
-		char	commandline[32768];
-		if (args) {
-			commandline[0]='\0';
-			bool	first=true;
-			size_t	totalsize=0;
-			for (const char * const *arg=args; *arg; arg++) {
-				if (!first) {
-					if (totalsize+1<32767) {
-						charstring::append(
-							commandline," ");
-					} else {
-						break;
-					}
-					totalsize=totalsize+1;
-				} else {
-					first=false;
-				}
-				char	*qarg=quoteArg(*arg);
-				size_t	size=charstring::length(qarg);
-				if (totalsize+size<32767) {
-					charstring::append(commandline,qarg);
-					delete[] qarg;
-				} else {
-					delete[] qarg;
-					break;
-				}
-				totalsize=totalsize+size;
-			}
-		}
-
-		// create the new process and return it's pid on success
-		STARTUPINFO		si;
-		PROCESS_INFORMATION	pi;
-		bytestring::zero(&si,sizeof(si));
-		bytestring::zero(&pi,sizeof(pi));
-		bool	success=(CreateProcess(shortcommand,commandline,
-					NULL,NULL,TRUE,
-					(detached)?CREATE_NEW_PROCESS_GROUP:0,
-					NULL,NULL,&si,&pi)==TRUE);
-		if (!success) {
-			stdoutput.printf("%s\n",shortcommand);
-			stdoutput.printf("error: %s\n",
-					error::getNativeErrorString());
-		}
-		return (success)?pi.dwProcessId:-1;
+		return shortcommand;
 	#else
-		RUDIMENTS_SET_ENOSYS
-		return false;
+		return NULL;
 	#endif
 }
 

@@ -7,6 +7,7 @@
 		static	void	defaultShutDown(int32_t signum);
 		static	void	defaultCrash(int32_t signum);
 		static	void	waitForChildrenToExit(int32_t signum);
+		static	char	*fullyQualifiedCommand(const char *command);
 
 		static	signalhandler	_deadchildhandler;
 		static	signalhandler	_shutdownhandler;

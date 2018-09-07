@@ -1,6 +1,7 @@
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 #include <rudiments/datetime.h>
+#include <rudiments/error.h>
 
 void header(const char *title) {
 	stdoutput.printf("\n===============================================================================\n");
@@ -13,6 +14,9 @@ void test(const char *printstring, bool result) {
 	stdoutput.write((result)?": success":": failed");
 	stdoutput.write("\n");
 	if (!result) {
+		stdoutput.printf("%d: %s\n",
+			error::getErrorNumber(),
+			error::getErrorString());
 		process::exit(1);
 	}
 }
