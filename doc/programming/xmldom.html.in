@@ -1,13 +1,13 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the xmldom and xmldomnode classes</title>
+<title>firstworks   Programming with Rudiments using the xmldom and domnode classes</title>
 <link href="../css/styles.css" rel="stylesheet">
 </head>
 <body>
 
-<span class="heading">Using the xmldom and xmldomnode classes</span><br><br>
+<span class="heading">Using the xmldom and domnode classes</span><br><br>
 
-<p>The xmldom and xmldomnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the xmldomnode class.  The xmldomnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
+<p>The xmldom and domnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
 
 <p>The following XML file contains an address book.</p>
 
