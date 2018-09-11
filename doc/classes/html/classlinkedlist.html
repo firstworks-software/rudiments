@@ -99,6 +99,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afa063da3e912159f6227a8393edd231b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41fdddb4304c2c221830daf6dfb1bc2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinkedlist.html#a41fdddb4304c2c221830daf6dfb1bc2e">clear</a> ()</td></tr>
 <tr class="separator:a41fdddb4304c2c221830daf6dfb1bc2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8770bb08e7ba001a921b4bba79b9531a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinkedlist.html#a8770bb08e7ba001a921b4bba79b9531a">clearAndDelete</a> ()</td></tr>
+<tr class="separator:a8770bb08e7ba001a921b4bba79b9531a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95201936c5dcf7b46dd728802e4ea24f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinkedlist.html#a95201936c5dcf7b46dd728802e4ea24f">clearAndArrayDelete</a> ()</td></tr>
+<tr class="separator:a95201936c5dcf7b46dd728802e4ea24f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad0cd381070ecae1a1601f6800eeb659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinkedlist.html#aad0cd381070ecae1a1601f6800eeb659">print</a> () const</td></tr>
 <tr class="separator:aad0cd381070ecae1a1601f6800eeb659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bb101fda31fa5ce5ca05aa8d2688ff0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinkedlist.html#a4bb101fda31fa5ce5ca05aa8d2688ff0">print</a> (uint64_t count) const</td></tr>
@@ -147,7 +151,7 @@ template&lt;class valuetype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes this instance of the linkedlist class and all of its linkedlistnodes. Note however, that the data stored in each linkedlistnode is not deleted by this call. </p>
+<p>Deletes this instance of the linkedlist class and all of its linkedlistnodes. Note however, that the value stored in each linkedlistnode is not deleted by this call. </p>
 
 </div>
 </div>
@@ -210,7 +214,47 @@ template&lt;class valuetype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes all linkedlistnodes currently in the linkedlist. Note however, that the data stored in each linkedlistnode is not deleted by this call. </p>
+<p>Deletes all linkedlistnodes currently in the linkedlist. Note however, that the value stored in each linkedlistnode is not deleted by this call. </p>
+
+</div>
+</div>
+<a id="a95201936c5dcf7b46dd728802e4ea24f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95201936c5dcf7b46dd728802e4ea24f">&#9670;&nbsp;</a></span>clearAndArrayDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classlinkedlist.html">linkedlist</a>&lt; valuetype &gt;::clearAndArrayDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all linkedlistnodes currently in the linkedlist, deleting the value stored in each linkedlistnode as well, which is presumed to be an array. </p>
+
+</div>
+</div>
+<a id="a8770bb08e7ba001a921b4bba79b9531a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8770bb08e7ba001a921b4bba79b9531a">&#9670;&nbsp;</a></span>clearAndDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classlinkedlist.html">linkedlist</a>&lt; valuetype &gt;::clearAndDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all linkedlistnodes currently in the linkedlist, deleting the value stored in each linkedlistnode as well. </p>
 
 </div>
 </div>
@@ -770,7 +814,7 @@ template&lt;class valuetype&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:52 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -81,6 +81,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af0518646f04de9e99389456372d19f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5ea2c25e5737f421f3d2d712c0cb3e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classavltree.html#ae5ea2c25e5737f421f3d2d712c0cb3e6">clear</a> ()</td></tr>
 <tr class="separator:ae5ea2c25e5737f421f3d2d712c0cb3e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487085ac53e1832ff48f80a1cc5d1876"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classavltree.html#a487085ac53e1832ff48f80a1cc5d1876">clearAndDelete</a> ()</td></tr>
+<tr class="separator:a487085ac53e1832ff48f80a1cc5d1876"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a16d9550b89617bae1450606b6cba0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classavltree.html#a3a16d9550b89617bae1450606b6cba0a">clearAndArrayDelete</a> ()</td></tr>
+<tr class="separator:a3a16d9550b89617bae1450606b6cba0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fc0b11ff4f626f902948a39dc0a11dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classavltree.html#a8fc0b11ff4f626f902948a39dc0a11dd">print</a> () const</td></tr>
 <tr class="separator:a8fc0b11ff4f626f902948a39dc0a11dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -127,7 +131,7 @@ template&lt;class valuetype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes this instance of the avltree class and all of its avltreenodes. Note however, that the data stored in each avltreenode is not deleted by this call. </p>
+<p>Deletes this instance of the avltree class and all of its avltreenodes. Note however, that the value stored in each avltreenode is not deleted by this call. </p>
 
 </div>
 </div>
@@ -148,7 +152,47 @@ template&lt;class valuetype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes all avltreenodes currently in the avltree. Note however, that the data stored in each avltreenode is not deleted by this call. </p>
+<p>Deletes all avltreenodes currently in the avltree. Note however, that the value stored in each avltreenode is not deleted by this call. </p>
+
+</div>
+</div>
+<a id="a3a16d9550b89617bae1450606b6cba0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a16d9550b89617bae1450606b6cba0a">&#9670;&nbsp;</a></span>clearAndArrayDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classavltree.html">avltree</a>&lt; valuetype &gt;::clearAndArrayDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all avltreenodes currently in the avltree, deleting the value stored in each avltreenode as well, which is presuemd to be an array. </p>
+
+</div>
+</div>
+<a id="a487085ac53e1832ff48f80a1cc5d1876"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a487085ac53e1832ff48f80a1cc5d1876">&#9670;&nbsp;</a></span>clearAndDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classavltree.html">avltree</a>&lt; valuetype &gt;::clearAndDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all avltreenodes currently in the avltree, deleting the value stored in each avltreenode as well. </p>
 
 </div>
 </div>
@@ -481,7 +525,7 @@ template&lt;class valuetype&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:51 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

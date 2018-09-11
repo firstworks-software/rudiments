@@ -244,6 +244,8 @@ $(function() {
   <tr><td class="entry"><a class="el" href="classfiledescriptor.html#afc7ab52f6588fed5d3333a2846123781">safePrint</a>(const char *str, int32_t length)</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classfile.html#aa4be96f824d575d8f3f0e52332510501">sequentialAccess</a>(off64_t start, size_t len) const</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classfiledescriptor.html#a5e38ff382e70ed0993fcb087aae86ca0">setFileDescriptor</a>(int32_t filedesc)</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>setHttpPostContentType</b>(const char *contenttype) (defined in <a class="el" href="classurl.html">url</a>)</td><td class="entry"><a class="el" href="classurl.html">url</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>setHttpPostData</b>(const char *data, uint64_t size) (defined in <a class="el" href="classurl.html">url</a>)</td><td class="entry"><a class="el" href="classurl.html">url</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classfile.html#af8cdb0be3e8036f1bd397c9cbb083eca">setLastAccessAndModificationTimes</a>(const char *filename, time_t lastaccesstime, time_t lastmodtime)</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
   <tr><td class="entry"><a class="el" href="classfile.html#a3ce25590b08e59d127a3b2f69c3a930b">setLastAccessAndModificationTimes</a>(const char *filename)</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classfile.html#a56e11fe5ffb750dbe9353aef54e6ba09">setLastAccessTime</a>(const char *filename, time_t lastaccesstime)</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
@@ -289,6 +291,8 @@ $(function() {
   <tr class="even"><td class="entry"><a class="el" href="classfile.html#a5f7881a88b78431bf06cf3fba382c1ac">unlockRemainderFromEnd</a>(off64_t start) const</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classurl.html#a372cf743a751a94a1a68dcbe19a9951d">url</a>()</td><td class="entry"><a class="el" href="classurl.html">url</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classfiledescriptor.html#a4615670eb577c34f8924caf547b3d17a">useBlockingMode</a>() const</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>useHttpGet</b>() (defined in <a class="el" href="classurl.html">url</a>)</td><td class="entry"><a class="el" href="classurl.html">url</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>useHttpPost</b>() (defined in <a class="el" href="classurl.html">url</a>)</td><td class="entry"><a class="el" href="classurl.html">url</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classfiledescriptor.html#a68d4f98f00a3794e44bafb8c94f7b906">useNaglesAlgorithm</a>()</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classfiledescriptor.html#a42225c84a85cb29c0c1f525048db2698">useNonBlockingMode</a>() const</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classfiledescriptor.html#a35d080030568eb641769420b3fdc2af3">waitForNonBlockingRead</a>(int32_t sec, int32_t usec) const</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"></td></tr>
@@ -330,11 +334,13 @@ $(function() {
   <tr><td class="entry"><a class="el" href="classfile.html#a3f0077f843b4a7cdf02fe1db52e04246">writeable</a>(const char *filename)</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classfile.html#a537ffc79479984a334e6706bbcfb744f">~file</a>()</td><td class="entry"><a class="el" href="classfile.html">file</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classfiledescriptor.html#ade7e2d6dd54324862720e600c3342b89">~filedescriptor</a>()</td><td class="entry"><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~input</b>() (defined in <a class="el" href="classinput.html">input</a>)</td><td class="entry"><a class="el" href="classinput.html">input</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>~output</b>() (defined in <a class="el" href="classoutput.html">output</a>)</td><td class="entry"><a class="el" href="classoutput.html">output</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classurl.html#a0570db18bedb7932f402b33b8ada8adb">~url</a>()</td><td class="entry"><a class="el" href="classurl.html">url</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:52 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

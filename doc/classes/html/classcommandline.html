@@ -47,10 +47,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a11f1f7a4b91ef83a6d71ef10470de566"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#a11f1f7a4b91ef83a6d71ef10470de566">commandline</a> ()</td></tr>
+<tr class="separator:a11f1f7a4b91ef83a6d71ef10470de566"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09e3e44e1e03fab7e3830f51e9b34d0a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#a09e3e44e1e03fab7e3830f51e9b34d0a">commandline</a> (int32_t argc, const char **argv)</td></tr>
 <tr class="separator:a09e3e44e1e03fab7e3830f51e9b34d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5059409e288c8524927de991d82b11ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#a5059409e288c8524927de991d82b11ef">~commandline</a> ()</td></tr>
 <tr class="separator:a5059409e288c8524927de991d82b11ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacbe7e13741c4d7788d2ed177233a5d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#aacbe7e13741c4d7788d2ed177233a5d6">initialize</a> (int32_t argc, const char **argv)</td></tr>
+<tr class="separator:aacbe7e13741c4d7788d2ed177233a5d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5829c2c05347f28d5ccc956cfd8fab3"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#af5829c2c05347f28d5ccc956cfd8fab3">getValue</a> (const char *arg) const</td></tr>
 <tr class="separator:af5829c2c05347f28d5ccc956cfd8fab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abab7faa2f4b55a5e6313f8207f4aa131"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#abab7faa2f4b55a5e6313f8207f4aa131">getValue</a> (const char *arg, const char *abbr) const</td></tr>
@@ -63,8 +67,26 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The commandline class provides methods for parsing command line arguments. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a11f1f7a4b91ef83a6d71ef10470de566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11f1f7a4b91ef83a6d71ef10470de566">&#9670;&nbsp;</a></span>commandline() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">commandline::commandline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates an instance of the commandline class. </p>
+
+</div>
+</div>
 <a id="a09e3e44e1e03fab7e3830f51e9b34d0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09e3e44e1e03fab7e3830f51e9b34d0a">&#9670;&nbsp;</a></span>commandline()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a09e3e44e1e03fab7e3830f51e9b34d0a">&#9670;&nbsp;</a></span>commandline() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -88,7 +110,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates an instance of the commandline class. </p>
+<p>Creates an instance of the commandline class and sets its argument count and arguments to "argc" and "argv". </p>
 
 </div>
 </div>
@@ -214,10 +236,39 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aacbe7e13741c4d7788d2ed177233a5d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacbe7e13741c4d7788d2ed177233a5d6">&#9670;&nbsp;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void commandline::initialize </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char **&#160;</td>
+          <td class="paramname"><em>argv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the argument count and arguments to "argc" and "argv". </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:52 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -89,6 +89,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setValues</b> (keytyp
 <tr class="separator:abaf61ecc28944eefde614b1df0dee4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4dc5082d5990a401478b0436666022eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#a4dc5082d5990a401478b0436666022eb">clear</a> ()</td></tr>
 <tr class="separator:a4dc5082d5990a401478b0436666022eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fb3d5475a4d8002bcad3e4d55b85ddd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#a2fb3d5475a4d8002bcad3e4d55b85ddd">clearAndDelete</a> ()</td></tr>
+<tr class="separator:a2fb3d5475a4d8002bcad3e4d55b85ddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52da936c47c31d7f997fa4b24e13b8dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#a52da936c47c31d7f997fa4b24e13b8dd">clearAndArrayDelete</a> ()</td></tr>
+<tr class="separator:a52da936c47c31d7f997fa4b24e13b8dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade2167b500f555970639b713c0d9780d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#ade2167b500f555970639b713c0d9780d">clearAndDeleteKeys</a> ()</td></tr>
+<tr class="separator:ade2167b500f555970639b713c0d9780d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa66aa79c33f494508962e16a124954df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#aa66aa79c33f494508962e16a124954df">clearAndArrayDeleteKeys</a> ()</td></tr>
+<tr class="separator:aa66aa79c33f494508962e16a124954df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac92bd1365f13175bd507f02edffd5ccc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#ac92bd1365f13175bd507f02edffd5ccc">clearAndDeleteValues</a> ()</td></tr>
+<tr class="separator:ac92bd1365f13175bd507f02edffd5ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae70e64ddc7a6bd0ca6fb5f3fd85fa1de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#ae70e64ddc7a6bd0ca6fb5f3fd85fa1de">clearAndArrayDeleteValues</a> ()</td></tr>
+<tr class="separator:ae70e64ddc7a6bd0ca6fb5f3fd85fa1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af28f1a133d09d9966105ced6882e66dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#af28f1a133d09d9966105ced6882e66dd">clearAndDeleteKeysAndArrayDeleteValues</a> ()</td></tr>
+<tr class="separator:af28f1a133d09d9966105ced6882e66dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a512bf9a9ce95bd9d13d627bac1a4dc9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#a512bf9a9ce95bd9d13d627bac1a4dc9d">clearAndArrayDeleteKeysAndDeleteValues</a> ()</td></tr>
+<tr class="separator:a512bf9a9ce95bd9d13d627bac1a4dc9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27f961a651c00543ed06eb7766ffe7f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#a27f961a651c00543ed06eb7766ffe7f7">print</a> ()</td></tr>
 <tr class="separator:a27f961a651c00543ed06eb7766ffe7f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -188,7 +204,167 @@ template&lt;class keytype, class valuetype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes all dictionarynodes currently in the dictionary. </p>
+<p>Deletes all dictionarynodes currently in the dictionary. Note however, that the key and value stored in each dictionarynode is not deleted by this call. </p>
+
+</div>
+</div>
+<a id="a52da936c47c31d7f997fa4b24e13b8dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52da936c47c31d7f997fa4b24e13b8dd">&#9670;&nbsp;</a></span>clearAndArrayDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndArrayDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the key and value stored in each dictionarynode as well, which is both presumed to be arrays. </p>
+
+</div>
+</div>
+<a id="aa66aa79c33f494508962e16a124954df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa66aa79c33f494508962e16a124954df">&#9670;&nbsp;</a></span>clearAndArrayDeleteKeys()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndArrayDeleteKeys </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the key (but not the value) stored in each dictionarynode as well, which is presumed to be an array. </p>
+
+</div>
+</div>
+<a id="a512bf9a9ce95bd9d13d627bac1a4dc9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a512bf9a9ce95bd9d13d627bac1a4dc9d">&#9670;&nbsp;</a></span>clearAndArrayDeleteKeysAndDeleteValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndArrayDeleteKeysAndDeleteValues </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the key and value stored in each dictionarynode as well. Each key is presumed to be an array. </p>
+
+</div>
+</div>
+<a id="ae70e64ddc7a6bd0ca6fb5f3fd85fa1de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae70e64ddc7a6bd0ca6fb5f3fd85fa1de">&#9670;&nbsp;</a></span>clearAndArrayDeleteValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndArrayDeleteValues </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the value (but not the key) stored in each dictionarynode as well, which is presumed to be an array. </p>
+
+</div>
+</div>
+<a id="a2fb3d5475a4d8002bcad3e4d55b85ddd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fb3d5475a4d8002bcad3e4d55b85ddd">&#9670;&nbsp;</a></span>clearAndDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the key and value stored in each dictionarynode as well. </p>
+
+</div>
+</div>
+<a id="ade2167b500f555970639b713c0d9780d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade2167b500f555970639b713c0d9780d">&#9670;&nbsp;</a></span>clearAndDeleteKeys()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndDeleteKeys </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the key (but not the value) stored in each dictionarynode as well. </p>
+
+</div>
+</div>
+<a id="af28f1a133d09d9966105ced6882e66dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af28f1a133d09d9966105ced6882e66dd">&#9670;&nbsp;</a></span>clearAndDeleteKeysAndArrayDeleteValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndDeleteKeysAndArrayDeleteValues </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the key and value stored in each dictionarynode as well. Each value is presumed to be an array. </p>
+
+</div>
+</div>
+<a id="ac92bd1365f13175bd507f02edffd5ccc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac92bd1365f13175bd507f02edffd5ccc">&#9670;&nbsp;</a></span>clearAndDeleteValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class keytype, class valuetype&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdictionary.html">dictionary</a>&lt; keytype, valuetype &gt;::clearAndDeleteValues </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deletes all dictionarynodes currently in the dictionary, deleting the value (but not the key) stored in each dictionarynode as well. </p>
 
 </div>
 </div>
@@ -557,7 +733,7 @@ template&lt;class keytype, class valuetype&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:52 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -149,14 +149,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a90a11c63fcd5235d5f85d3eecb12ddfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab005f4dce5bb63023677c08ca543c80a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab005f4dce5bb63023677c08ca543c80a">getRetryFailedFork</a> ()</td></tr>
 <tr class="separator:ab005f4dce5bb63023677c08ca543c80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9878406b3b660bf2adfdc6cebbcfa98"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab9878406b3b660bf2adfdc6cebbcfa98">backtrace</a> (<a class="el" href="classstringbuffer.html">stringbuffer</a> *buffer, uint32_t maxframes)</td></tr>
-<tr class="separator:ab9878406b3b660bf2adfdc6cebbcfa98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a645220413729978bdd992ed795055e30"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a645220413729978bdd992ed795055e30">backtrace</a> (<a class="el" href="classstringbuffer.html">stringbuffer</a> *buffer)</td></tr>
-<tr class="separator:a645220413729978bdd992ed795055e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac960f0bd8535405da82405064d72a76c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ac960f0bd8535405da82405064d72a76c">backtrace</a> (<a class="el" href="classfiledescriptor.html">filedescriptor</a> *fd, uint32_t maxframes)</td></tr>
-<tr class="separator:ac960f0bd8535405da82405064d72a76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a335f23419d605a807f847aadba0e8493"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a335f23419d605a807f847aadba0e8493">backtrace</a> (<a class="el" href="classfiledescriptor.html">filedescriptor</a> *fd)</td></tr>
-<tr class="separator:a335f23419d605a807f847aadba0e8493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03f3c2f43ef3c67c7edcbe05124e7a3c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a03f3c2f43ef3c67c7edcbe05124e7a3c">backtrace</a> (<a class="el" href="classoutput.html">output</a> *out, uint32_t maxframes)</td></tr>
+<tr class="separator:a03f3c2f43ef3c67c7edcbe05124e7a3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f6ac1a0c9edcceeaabb01c61aeb908"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ae4f6ac1a0c9edcceeaabb01c61aeb908">backtrace</a> (<a class="el" href="classoutput.html">output</a> *out)</td></tr>
+<tr class="separator:ae4f6ac1a0c9edcceeaabb01c61aeb908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5d88b2c3c0af1800d1869e579ff9e88"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#aa5d88b2c3c0af1800d1869e579ff9e88">backtrace</a> (const char *filename)</td></tr>
 <tr class="separator:aa5d88b2c3c0af1800d1869e579ff9e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad15b8f24259825cdeaef1f7b6815ace7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ad15b8f24259825cdeaef1f7b6815ace7">backtrace</a> (const char *filename, mode_t perms, uint32_t maxframes)</td></tr>
@@ -192,8 +188,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab9878406b3b660bf2adfdc6cebbcfa98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9878406b3b660bf2adfdc6cebbcfa98">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[1/6]</span></h2>
+<a id="a03f3c2f43ef3c67c7edcbe05124e7a3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03f3c2f43ef3c67c7edcbe05124e7a3c">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,8 +200,8 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static void process::backtrace </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classstringbuffer.html">stringbuffer</a> *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
+          <td class="paramtype"><a class="el" href="classoutput.html">output</a> *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -231,8 +227,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a645220413729978bdd992ed795055e30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a645220413729978bdd992ed795055e30">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[2/6]</span></h2>
+<a id="ae4f6ac1a0c9edcceeaabb01c61aeb908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f6ac1a0c9edcceeaabb01c61aeb908">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -243,8 +239,8 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static void process::backtrace </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classstringbuffer.html">stringbuffer</a> *&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classoutput.html">output</a> *&#160;</td>
+          <td class="paramname"><em>out</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -255,81 +251,13 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Writes the backtrace for the current thread to "buffer".</p>
-<p>A maximum of 128 stack frames will be included in the backtrace.</p>
-<p>(Not supported on all platforms.) </p>
-
-</div>
-</div>
-<a id="ac960f0bd8535405da82405064d72a76c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac960f0bd8535405da82405064d72a76c">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[3/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::backtrace </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfiledescriptor.html">filedescriptor</a> *&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>maxframes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Writes the backtrace for the current thread to the filedescriptor "fd".</p>
-<p>"maxframes" indicates the maximum number of stack frames to include in the backtrace.</p>
-<p>(Not supported on all platforms.) </p>
-
-</div>
-</div>
-<a id="a335f23419d605a807f847aadba0e8493"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a335f23419d605a807f847aadba0e8493">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::backtrace </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfiledescriptor.html">filedescriptor</a> *&#160;</td>
-          <td class="paramname"><em>fd</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Writes the backtrace for the current thread to the filedescriptor "fd".</p>
 <p>A maximum of 128 stack frames will be included in the backtrace.</p>
 <p>(Not supported on all platforms.) </p>
 
 </div>
 </div>
 <a id="aa5d88b2c3c0af1800d1869e579ff9e88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5d88b2c3c0af1800d1869e579ff9e88">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5d88b2c3c0af1800d1869e579ff9e88">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -358,7 +286,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="ad15b8f24259825cdeaef1f7b6815ace7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad15b8f24259825cdeaef1f7b6815ace7">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[6/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad15b8f24259825cdeaef1f7b6815ace7">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1887,7 +1815,7 @@ process into the background." Returns true on success and false on failure. </p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:52 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

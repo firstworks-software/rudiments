@@ -47,23 +47,53 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5ce706ecdf7438a5f051ba1121fafcf2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a5ce706ecdf7438a5f051ba1121fafcf2">memorypool</a> (size_t initialsize, size_t increment, size_t resizeinterval)</td></tr>
-<tr class="separator:a5ce706ecdf7438a5f051ba1121fafcf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4076462d8538f4b7f57975aedb2c2a13"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a4076462d8538f4b7f57975aedb2c2a13">memorypool</a> ()</td></tr>
+<tr class="separator:a4076462d8538f4b7f57975aedb2c2a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68d7ecbdac72773118c81b77b17f0baf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a68d7ecbdac72773118c81b77b17f0baf">memorypool</a> (size_t initialsize, size_t incrementsize, size_t resizeinterval)</td></tr>
+<tr class="separator:a68d7ecbdac72773118c81b77b17f0baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f2157ae604ab35cea05fa69d7bfa40c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a5f2157ae604ab35cea05fa69d7bfa40c">~memorypool</a> ()</td></tr>
 <tr class="separator:a5f2157ae604ab35cea05fa69d7bfa40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a224a19b6fd4f4c43d805653880ab65c7"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a224a19b6fd4f4c43d805653880ab65c7">getInitialSize</a> () const</td></tr>
+<tr class="separator:a224a19b6fd4f4c43d805653880ab65c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1f1be0b5924263f8fb48734a94155c6"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#af1f1be0b5924263f8fb48734a94155c6">getIncrementSize</a> () const</td></tr>
+<tr class="separator:af1f1be0b5924263f8fb48734a94155c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a587f7df6fabd2a62242fcd28657fc051"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a587f7df6fabd2a62242fcd28657fc051">getResizeInterval</a> () const</td></tr>
+<tr class="separator:a587f7df6fabd2a62242fcd28657fc051"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63103948cab76bc1e5fc4c741b56acbd"><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a63103948cab76bc1e5fc4c741b56acbd">allocate</a> (size_t size)</td></tr>
 <tr class="separator:a63103948cab76bc1e5fc4c741b56acbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa480e88f146457e373985530ce8dd1b0"><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#aa480e88f146457e373985530ce8dd1b0">allocateAndClear</a> (size_t size)</td></tr>
-<tr class="separator:aa480e88f146457e373985530ce8dd1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af30aec3a16851598ad69b7fd17ba487f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate</a> ()</td></tr>
-<tr class="separator:af30aec3a16851598ad69b7fd17ba487f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2de95afbe5529b62df5b229d0d4d4cb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a2de95afbe5529b62df5b229d0d4d4cb0">clear</a> ()</td></tr>
+<tr class="separator:a2de95afbe5529b62df5b229d0d4d4cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9a7defeff067c8e993e0585e8508698"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#ae9a7defeff067c8e993e0585e8508698">clear</a> (size_t incrementsize, size_t resizeinterval)</td></tr>
+<tr class="separator:ae9a7defeff067c8e993e0585e8508698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f13edaa3cb934210c4fcb308a96312f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a5f13edaa3cb934210c4fcb308a96312f">clear</a> (size_t initialsize, size_t incrementsize, size_t resizeinterval)</td></tr>
+<tr class="separator:a5f13edaa3cb934210c4fcb308a96312f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The memorypool class provides methods for creating and using a memory pool.</p>
 <p>If you have an iterative process that requires variable amounts of memory for each iteration, using a memory pool can perform better than allocating memory on-demand and consume less memory than allocating static buffers that are large enough to accommodate the maximum amount of data you may have to store. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5ce706ecdf7438a5f051ba1121fafcf2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ce706ecdf7438a5f051ba1121fafcf2">&#9670;&nbsp;</a></span>memorypool()</h2>
+<a id="a4076462d8538f4b7f57975aedb2c2a13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4076462d8538f4b7f57975aedb2c2a13">&#9670;&nbsp;</a></span>memorypool() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">memorypool::memorypool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a memory pool of initial size 512 bytes.</p>
+<p>When the pool needs to grow, it will grow by at least 128 bytes. If more than 128 bytes are requested, it will grow by that amount instead.</p>
+<p>When deallocate() has been called 100 times, it will evaluate the average amount of memory allocated (since the last time it did this) and resize the initial buffer size to this size. </p>
+
+</div>
+</div>
+<a id="a68d7ecbdac72773118c81b77b17f0baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68d7ecbdac72773118c81b77b17f0baf">&#9670;&nbsp;</a></span>memorypool() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -78,7 +108,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>increment</em>, </td>
+          <td class="paramname"><em>incrementsize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -94,8 +124,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Creates a memory pool of initial size "initialsize".</p>
-<p>When the pool needs to grow, it will grow by at least "increment" bytes. If more than "increment" bytes are requested, it will grow by that amount instead.</p>
-<p>When <a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate()</a> has been called "resizeinterval" times, it will evaluate the average amount of memory allocated (since the last time it did this) and resize the initial buffer size to this size. </p>
+<p>When the pool needs to grow, it will grow by at least "incrementsize" bytes. If more than "incrementsize" bytes are requested, it will grow by that amount instead.</p>
+<p>When deallocate() has been called "resizeinterval" times, it will evaluate the average amount of memory allocated (since the last time it did this) and resize the initial buffer size to this size. </p>
 
 </div>
 </div>
@@ -137,33 +167,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa480e88f146457e373985530ce8dd1b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa480e88f146457e373985530ce8dd1b0">&#9670;&nbsp;</a></span>allocateAndClear()</h2>
+<a id="a2de95afbe5529b62df5b229d0d4d4cb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2de95afbe5529b62df5b229d0d4d4cb0">&#9670;&nbsp;</a></span>clear() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char* memorypool::allocateAndClear </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns a pointer to a contiguous block of "size" bytes in the pool. The pool will grow as necessary to accomodate allocations. Each byte of data in the block of data is set to NULL. </p>
-
-</div>
-</div>
-<a id="af30aec3a16851598ad69b7fd17ba487f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af30aec3a16851598ad69b7fd17ba487f">&#9670;&nbsp;</a></span>deallocate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void memorypool::deallocate </td>
+          <td class="memname">void memorypool::clear </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -171,14 +182,135 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Shrinks the pool back down to it's initial size and frees all previously allocated blocks.</p>
-<p>When <a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate()</a> has been called "resizeinterval" times (see constructor), it evaluates the average amount of memory allocated (since the last time it did this) and resizes the initial buffer size to this size. </p>
+<p>When <a class="el" href="classmemorypool.html#a2de95afbe5529b62df5b229d0d4d4cb0">clear()</a> has been called "resizeinterval" times (see constructor), it evaluates the average amount of memory allocated (since the last time it did this) and resizes the initial buffer size to this size. </p>
+
+</div>
+</div>
+<a id="ae9a7defeff067c8e993e0585e8508698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9a7defeff067c8e993e0585e8508698">&#9670;&nbsp;</a></span>clear() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void memorypool::clear </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>incrementsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>resizeinterval</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Shrinks the pool back down to it's initial size and frees all previously allocated blocks.</p>
+<p>Also resets the increment size and the resize interval to the specified values.</p>
+<p>When <a class="el" href="classmemorypool.html#a2de95afbe5529b62df5b229d0d4d4cb0">clear()</a> has been called "resizeinterval" times (see constructor), it evaluates the average amount of memory allocated (since the last time it did this) and resizes the initial buffer size to this size. </p>
+
+</div>
+</div>
+<a id="a5f13edaa3cb934210c4fcb308a96312f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f13edaa3cb934210c4fcb308a96312f">&#9670;&nbsp;</a></span>clear() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void memorypool::clear </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>initialsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>incrementsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>resizeinterval</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Shrinks the pool back down to it's initial size and frees all previously allocated blocks.</p>
+<p>Also resets the increment size and the resize interval to the specified values, and immediately resets the initial buffer size to initialsize. </p>
+
+</div>
+</div>
+<a id="af1f1be0b5924263f8fb48734a94155c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1f1be0b5924263f8fb48734a94155c6">&#9670;&nbsp;</a></span>getIncrementSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t memorypool::getIncrementSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the size that the pool will grow by when it needs to grow. </p>
+
+</div>
+</div>
+<a id="a224a19b6fd4f4c43d805653880ab65c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a224a19b6fd4f4c43d805653880ab65c7">&#9670;&nbsp;</a></span>getInitialSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t memorypool::getInitialSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the initial size of the pool. </p>
+
+</div>
+</div>
+<a id="a587f7df6fabd2a62242fcd28657fc051"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a587f7df6fabd2a62242fcd28657fc051">&#9670;&nbsp;</a></span>getResizeInterval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t memorypool::getResizeInterval </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the pool's resize interval. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 6 2018 13:16:24 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Sep 11 2018 11:36:52 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
