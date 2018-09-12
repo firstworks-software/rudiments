@@ -76,7 +76,7 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Mon Sep 05 2018 David Muse <david.muse@firstworks.com> - 1.1.0-1
+* Wed Sep 05 2018 David Muse <david.muse@firstworks.com> - 1.1.0-1
 - Updated to version 1.1.0.
 
 * Fri Sep 08 2017 David Muse <david.muse@firstworks.com> - 1.0.7-1
