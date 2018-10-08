@@ -64,7 +64,7 @@ bytebuffer::bytebuffer(const bytebuffer &v) {
 
 bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
 	if (this!=&v) {
-		delete pvt->_buffer;
+		delete[] pvt->_buffer;
 		delete pvt;
 		bytebufferClone(v);
 	}
