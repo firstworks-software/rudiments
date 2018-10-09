@@ -265,8 +265,25 @@ bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 	// get the string into the stringbuffer
 	for (;;) {
 		ch=getCharacter();
-		// FIXME: handle escaped-quotes
-		if (ch=='"') {
+		if (ch=='\\') {
+			ch=getCharacter();
+			if (ch=='b') {
+				str->append('\b');
+			} else if (ch=='f') {
+				str->append('\f');
+			} else if (ch=='n') {
+				str->append('\n');
+			} else if (ch=='r') {
+				str->append('\r');
+			} else if (ch=='t') {
+				str->append('\t');
+			} else if (ch=='\\' || ch=='\"') {
+				str->append(ch);
+			} else {
+				str->append('\\');
+				str->append(ch);
+			}
+		} else if (ch=='"') {
 			break;
 		} else if (ch=='\0') {
 			parseFailed("str");

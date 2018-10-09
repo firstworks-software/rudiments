@@ -1,5 +1,6 @@
 1.1.1 - spec file tweaks
 	fixed missing [] in bytebuffer = operator
+	fixed json escaping in parse/write
 
 1.1.0 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script
