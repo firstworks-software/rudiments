@@ -13,6 +13,7 @@
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
+#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
@@ -70,6 +71,16 @@ class urlprivate {
 			int32_t		_stillrunning;
 			listener	_l;
 		#endif
+
+		bool		_opentimings;
+		uint64_t	_openbuild;
+		uint64_t	_openconnect;
+		uint64_t	_opensend;
+		uint64_t	_openwait;
+		uint64_t	_openrecv;
+
+		datetime	_start;
+		datetime	_end;
 };
 
 url::url() : file() {
@@ -96,6 +107,13 @@ url::url() : file() {
 	pvt->_curl=NULL;
 	pvt->_curlm=NULL;
 	#endif
+
+	pvt->_opentimings=false;
+	pvt->_openbuild=0;
+	pvt->_openconnect=0;
+	pvt->_opensend=0;
+	pvt->_openwait=0;
+	pvt->_openrecv=0;
 
 	init();
 	type("url");
@@ -172,6 +190,16 @@ void url::setHttpPostData(const char *data, uint64_t size) {
 
 bool url::lowLevelOpen(const char *name, int32_t flags,
 				mode_t perms, bool useperms) {
+
+	// timings
+	if (pvt->_opentimings) {
+		pvt->_openbuild=0;
+		pvt->_openconnect=0;
+		pvt->_opensend=0;
+		pvt->_openwait=0;
+		pvt->_openrecv=0;
+		pvt->_start.getSystemDateAndTime();
+	}
 
 	// skip leading whitespace
 	while (*name && character::isWhitespace(*name)) {
@@ -456,6 +484,13 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		(charstring::compare(host,pvt->_httpprevioushost) &&
 		charstring::compare(port,pvt->_httppreviousport))) {
 
+		// timings
+		if (pvt->_opentimings) {
+			pvt->_end.getSystemDateAndTime();
+			pvt->_openbuild+=interval();
+			pvt->_start.getSystemDateAndTime();
+		}
+
 		// close any connection left open by a previous keepalive
 		// (if we're not doing keepalive then open() will already
 		// have called close(), so we don't need to do it here)
@@ -474,6 +509,13 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 			#endif
 			delete[] host;
 			return false;
+		}
+
+		// timings
+		if (pvt->_opentimings) {
+			pvt->_end.getSystemDateAndTime();
+			pvt->_openconnect+=interval();
+			pvt->_start.getSystemDateAndTime();
 		}
 	} else {
 		#ifdef DEBUG_HTTP
@@ -522,6 +564,13 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 					"\r\n");
 	}
 
+	// timings
+	if (pvt->_opentimings) {
+		pvt->_end.getSystemDateAndTime();
+		pvt->_openbuild+=interval();
+		pvt->_start.getSystemDateAndTime();
+	}
+
 	// send the request
 	#ifdef DEBUG_HTTP
 	stdoutput.printf("Request:\n%s",pvt->_request->getString());
@@ -558,6 +607,21 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		}
 	}
 
+	// timings
+	if (pvt->_opentimings) {
+		pvt->_end.getSystemDateAndTime();
+		pvt->_opensend+=interval();
+
+		pvt->_start.getSystemDateAndTime();
+		listener	lsnr;
+		lsnr.addReadFileDescriptor(this);
+		lsnr.listen();
+		pvt->_end.getSystemDateAndTime();
+		pvt->_openwait+=interval();
+
+		pvt->_start.getSystemDateAndTime();
+	}
+
 	// fetch and process the headers
 	bool	retval=false;
 	pvt->_contentlength=0;
@@ -581,6 +645,14 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 			delete[] header;
 			delete[] host;
 			close();
+
+			// timings
+			if (pvt->_opentimings) {
+				pvt->_end.getSystemDateAndTime();
+				pvt->_openrecv+=interval();
+				pvt->_start.getSystemDateAndTime();
+			}
+
 			return httpOpen(urlname,userpwd);
 		}
 
@@ -666,6 +738,12 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		pvt->_isc.close();
 		retval=httpOpen(location,userpwd);
 		delete[] location;
+	}
+
+	// timings
+	if (pvt->_opentimings) {
+		pvt->_end.getSystemDateAndTime();
+		pvt->_openrecv+=interval();
 	}
 
 	delete[] host;
@@ -1126,4 +1204,39 @@ ssize_t url::getContents(const char *name, unsigned char *buffer,
 	ssize_t	bytes=u.getContents(buffer,buffersize);
 	u.close();
 	return bytes;
+}
+
+void url::enableOpenTimings() {
+	pvt->_opentimings=true;
+}
+
+void url::disableOpenTimings() {
+	pvt->_opentimings=false;
+}
+
+void url::getOpenTimings(uint64_t *build,
+				uint64_t *connect,
+				uint64_t *send,
+				uint64_t *wait,
+				uint64_t *recv) {
+	if (build) {
+		*build=pvt->_openbuild;
+	}
+	if (connect) {
+		*connect=pvt->_openconnect;
+	}
+	if (send) {
+		*send=pvt->_opensend;
+	}
+	if (wait) {
+		*wait=pvt->_openwait;
+	}
+	if (recv) {
+		*recv=pvt->_openrecv;
+	}
+}
+
+uint64_t url::interval() {
+	return ((pvt->_end.getEpoch()*1000000+pvt->_end.getMicroseconds())-
+		(pvt->_start.getEpoch()*1000000+pvt->_start.getMicroseconds()));
 }

@@ -19,6 +19,14 @@
 						unsigned char *buffer,
 						size_t buffersize);
 
+		void	enableOpenTimings();
+		void	disableOpenTimings();
+		void	getOpenTimings(uint64_t *build,
+					uint64_t *connect,
+					uint64_t *send,
+					uint64_t *wait,
+					uint64_t *recv);
+
 	protected:
 		bool	lowLevelOpen(const char *name, int32_t flags,
 						mode_t perms, bool useperms);
@@ -37,5 +45,7 @@
 
 		static	bool	initUrl();
 		static	void	shutDownUrl();
+
+		uint64_t	interval();
 
 		urlprivate	*pvt;
