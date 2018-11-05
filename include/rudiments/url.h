@@ -47,6 +47,8 @@ class RUDIMENTS_DLLSPEC url : public file {
 		void	setHttpPostContentType(const char *contenttype);
 		void	setHttpPostData(const char *data, uint64_t size);
 
+		const char	*getError();
+
 	#include <rudiments/private/url.h>
 };
 

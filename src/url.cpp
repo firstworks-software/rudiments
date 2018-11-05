@@ -81,6 +81,8 @@ class urlprivate {
 
 		datetime	_start;
 		datetime	_end;
+
+		stringbuffer	_error;
 };
 
 url::url() : file() {
@@ -169,6 +171,8 @@ void url::init() {
 	pvt->_eof=false;
 	pvt->_stillrunning=0;
 	#endif
+
+	pvt->_error.clear();
 }
 
 void url::useHttpGet() {
@@ -504,8 +508,12 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		#endif
 		if (!pvt->_isc.connect(host,charstring::toUnsignedInteger(port),
 								-1,-1,0,0)) {
+			pvt->_error.append("http - connect failed: ");
+			char	*err=error::getErrorString();
+			pvt->_error.append(err);
+			delete[] err;
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: connect failed\n");
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			delete[] host;
 			return false;
@@ -591,14 +599,19 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		pvt->_isc.write("\r\n",2)!=2 ||
 		!pvt->_isc.flushWriteBuffer(-1,-1)) {
 
-		delete[] host;
+		pvt->_error.append("http - send request failed:");
+		char	*err=error::getErrorString();
+		pvt->_error.append(err);
+		delete[] err;
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http: send request failed\n");
+		stdoutput.printf("%s\n",pvt->_error.getString());
 		#endif
+		delete[] host;
 
 		if (reused) {
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: retrying without keep-alive\n");
+			stdoutput.printf("http - retrying "
+					"without keep-alive\n");
 			#endif
 			close();
 			return httpOpen(urlname,userpwd);
@@ -638,8 +651,9 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		ssize_t	result=pvt->_isc.read(&header,"\r\n",MAX_HEADER_SIZE);
 		if (reused && result<1) {
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: fetch headers failed\n");
-			stdoutput.printf("http: retrying without keep-alive\n");
+			stdoutput.printf("http - fetch headers failed\n");
+			stdoutput.printf("http - retrying "
+					"without keep-alive\n");
 			#endif
 			delete[] location;
 			delete[] header;
@@ -657,8 +671,12 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		}
 
 		if (result<2) {
+			pvt->_error.append("http - fetch headers failed: ");
+			char	*err=error::getErrorString();
+			pvt->_error.append(err);
+			delete[] err;
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: fetch headers failed\n");
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			delete[] location;
 			delete[] header;
@@ -722,22 +740,35 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 
 	#ifdef DEBUG_HTTP
 	if (pvt->_contentlength) {
-		stdoutput.printf("http: content length: %lld\n",
+		stdoutput.printf("http - content length: %lld\n",
 						pvt->_contentlength);
 	}
 	if (pvt->_chunked) {
-		stdoutput.printf("http: chunked encoding\n");
+		stdoutput.printf("http - chunked encoding\n");
 	}
 	if (location) {
-		stdoutput.printf("http: location: %s\n",location);
+		stdoutput.printf("http - location: %s\n",location);
 	}
 	#endif
 
 	// if we got a location header, then try to open that
 	if (location) {
+
 		pvt->_isc.close();
 		retval=httpOpen(location,userpwd);
 		delete[] location;
+
+	}
+
+	// otherwise, handle errors
+	else if (!retval) {
+		pvt->_error.append("http - fetch headers failed: no "
+					"\"Content-Length\", "
+					"\"Transfer-Encoding: chunked\", or "
+					"\"Location\" header found");
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("%s\n",pvt->_error.getString());
+		#endif
 	}
 
 	// timings
@@ -785,7 +816,7 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 	if (pvt->_usingbuiltin) {
 
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("\nhttp: lowLevelRead(%d)\n",size);
+		stdoutput.printf("\nhttp - lowLevelRead(%d)\n",size);
 		#endif
 
 		if (pvt->_chunked) {
@@ -822,7 +853,7 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 			}
 
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: returning %d bytes "
+			stdoutput.printf("http - returning %d bytes "
 						"(%d remain in chunk)\n",
 						bytesread,
 						pvt->_chunksize-pvt->_chunkpos);
@@ -843,7 +874,7 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 			pvt->_fetchedsofar+=bytesread;
 
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: returning %d bytes\n",
+			stdoutput.printf("http - returning %d bytes\n",
 								bytesread);
 			#endif
 		}
@@ -894,26 +925,32 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 bool url::getChunkSize(bool bof) {
 
 	#ifdef DEBUG_HTTP
-	stdoutput.printf("http:   get chunk size...\n");
+	stdoutput.printf("http -   get chunk size...\n");
 	#endif
 
 	// read the \r\n trailing behind the previous chunk
 	if (!bof) {
 
 		char	crlf[2];
-		if (pvt->_isc.read(crlf,sizeof(crlf))<
-					(ssize_t)sizeof(crlf)) {
+		if (pvt->_isc.read(crlf,sizeof(crlf))<(ssize_t)sizeof(crlf)) {
+			pvt->_error.append("http -   "
+					"get trailing crlf failed: ");
+			char	*err=error::getErrorString();
+			pvt->_error.append(err);
+			delete[] err;
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http:   get trailing crlf failed\n");
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			return false;
 		}
 		if (charstring::compare(crlf,"\r\n",2)) {
+			pvt->_error.appendFormatted("http -   "
+						"unexpected characters "
+						"in trailing crlf: "
+						"0x%02x 0x%02x",
+						crlf[0],crlf[1]);
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http:   unexpected characters "
-							"in trailing crlf: ");
-			stdoutput.safePrint(crlf,2);
-			stdoutput.write('\n');
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			return false;
 		}
@@ -921,13 +958,13 @@ bool url::getChunkSize(bool bof) {
 
 	// get until the end-of-line (should be at least 3 bytes too)
 	char	*csstring=NULL;
-	ssize_t	bytesread=pvt->_isc.read(&csstring,"\r\n",
-					MAX_HEADER_SIZE);
+	ssize_t	bytesread=pvt->_isc.read(&csstring,"\r\n",MAX_HEADER_SIZE);
 	if (bytesread<3) {
+		pvt->_error.appendFormatted("http -   "
+						"invalid chunk size: %.*s",
+						bytesread,csstring);
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http:   invalid chunk size:");
-		stdoutput.safePrint(csstring,bytesread);
-		stdoutput.write('\n');
+		stdoutput.printf("%s\n",pvt->_error.getString());
 		#endif
 		return false;
 	}
@@ -952,10 +989,11 @@ bool url::getChunkSize(bool bof) {
 		} else if (*c>='A' && *c<='F') {
 			base='A'-10;
 		} else {
+			pvt->_error.appendFormatted("http -   "
+						"invalid chunk size: %.*s",
+						bytesread,csstring);
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http:   invalid chunk size:");
-			stdoutput.safePrint(csstring,bytesread);
-			stdoutput.write('\n');
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			retval=false;
 			break;
@@ -971,7 +1009,7 @@ bool url::getChunkSize(bool bof) {
 	#ifdef DEBUG_HTTP
 	charstring::rightTrim(csstring);
 	if (retval) {
-		stdoutput.printf("http:   chunk size is: %d (%s in hex)\n",
+		stdoutput.printf("http -   chunk size is: %d (%s in hex)\n",
 						pvt->_chunksize,csstring);
 	}
 	#endif
@@ -982,19 +1020,25 @@ bool url::getChunkSize(bool bof) {
 	// if we find a chunk size of 0, then read the crlf after it
 	if (pvt->_chunksize==0) {
 		char	crlf[2];
-		if (pvt->_isc.read(crlf,sizeof(crlf))<
-					(ssize_t)sizeof(crlf)) {
+		if (pvt->_isc.read(crlf,sizeof(crlf))<(ssize_t)sizeof(crlf)) {
+			pvt->_error.append("http -   "
+					"get trailing crlf failed: ");
+			char	*err=error::getErrorString();
+			pvt->_error.append(err);
+			delete[] err;
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http:   get trailing crlf failed\n");
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			return false;
 		}
 		if (charstring::compare(crlf,"\r\n",2)) {
+			pvt->_error.appendFormatted("http -   "
+						"unexpected characters "
+						"in trailing crlf: "
+						"0x%02x 0x%02x",
+						crlf[0],crlf[1]);
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http:   unexpected characters "
-							"in trailing crlf: ");
-			stdoutput.safePrint(crlf,2);
-			stdoutput.write('\n');
+			stdoutput.printf("%s\n",pvt->_error.getString());
 			#endif
 			return false;
 		}
@@ -1204,6 +1248,10 @@ ssize_t url::getContents(const char *name, unsigned char *buffer,
 	ssize_t	bytes=u.getContents(buffer,buffersize);
 	u.close();
 	return bytes;
+}
+
+const char *url::getError() {
+	return (pvt->_error.getSize())?pvt->_error.getString():NULL;
 }
 
 void url::enableOpenTimings() {
