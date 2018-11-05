@@ -753,11 +753,9 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 
 	// if we got a location header, then try to open that
 	if (location) {
-
 		pvt->_isc.close();
 		retval=httpOpen(location,userpwd);
 		delete[] location;
-
 	}
 
 	// otherwise, handle errors
