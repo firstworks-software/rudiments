@@ -2,6 +2,7 @@
 	fixed missing [] in bytebuffer = operator
 	fixed json escaping in parse/write
 	added url::getError()
+	added sha256 class
 
 1.1.0 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script

@@ -5,13 +5,19 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
 
-#include <openssl/sha.h>
+#if defined(RUDIMENTS_HAS_SSL)
+	#include <openssl/sha.h>
+#else
+	#define SHA256_DIGEST_LENGTH 32
+#endif
 
 class sha256private {
 	friend class sha256;
 	private:
-		SHA256_CTX	_ctx;
-		uint8_t		_result[SHA256_DIGEST_LENGTH+1];
+		#if defined(RUDIMENTS_HAS_SSL)
+			SHA256_CTX	_ctx;
+			uint8_t		_result[SHA256_DIGEST_LENGTH+1];
+		#endif
 		hasherror_t	_err;
 };
 
@@ -26,20 +32,25 @@ sha256::~sha256() {
 
 bool sha256::append(const unsigned char *data, uint32_t length) {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	if (!SHA256_Update(&pvt->_ctx,data,length)) {
-		// FIXME: set error...
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (!SHA256_Update(&pvt->_ctx,data,length)) {
+			// FIXME: set error...
+			return false;
+		}
+		return true;
+	#else
 		return false;
-	}
-	return true;
+	#endif
 }
 
 const unsigned char *sha256::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	if (SHA256_Final(pvt->_result,&pvt->_ctx)) {
-		pvt->_result[SHA256_DIGEST_LENGTH]='\0';
-	} else {
-		pvt->_result[0]='\0';
-	}
+	pvt->_result[0]='\0';
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (SHA256_Final(pvt->_result,&pvt->_ctx)) {
+			pvt->_result[SHA256_DIGEST_LENGTH]='\0';
+		}
+	#endif
 	return pvt->_result;
 }
 
@@ -49,12 +60,16 @@ uint32_t sha256::getHashLength() {
 
 bool sha256::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	bytestring::zero(pvt->_result,sizeof(pvt->_result));
-	if (!SHA256_Init(&pvt->_ctx)) {
-		// FIXME: set error...
+	#if defined(RUDIMENTS_HAS_SSL)
+		bytestring::zero(pvt->_result,sizeof(pvt->_result));
+		if (!SHA256_Init(&pvt->_ctx)) {
+			// FIXME: set error...
+			return false;
+		}
+		return true;
+	#else
 		return false;
-	}
-	return true;
+	#endif
 }
 
 hasherror_t sha256::getError() {
