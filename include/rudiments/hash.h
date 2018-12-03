@@ -11,7 +11,8 @@ enum hasherror_t {
 	HASH_ERROR_SUCCESS=0,
 	HASH_ERROR_NULL,
 	HASH_ERROR_INPUT_TOO_LONG,
-	HASH_ERROR_STATE_ERROR
+	HASH_ERROR_STATE_ERROR,
+	HASH_ERROR_UNSUPPORTED
 };
 
 /** The hash class provides a simple hash interface. */
