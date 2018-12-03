@@ -50,10 +50,11 @@ bool sha1::append(const unsigned char *data, uint32_t length) {
 const unsigned char *sha1::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (SHA1_Final(pvt->_result,&pvt->_context)) {
-			pvt->_result[SHA_DIGEST_LENGTH]='\0';
-		} else {
+		if (!SHA1_Final(pvt->_result,&pvt->_context)) {
+			// FIXME: set error...
 			pvt->_result[0]='\0';
+		} else {
+			pvt->_result[SHA_DIGEST_LENGTH]='\0';
 		}
 		return pvt->_result;
 	#else
@@ -77,8 +78,8 @@ uint32_t sha1::getHashLength() {
 
 bool sha1::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
+	bytestring::zero(pvt->_result,sizeof(pvt->_result));
 	#if defined(RUDIMENTS_HAS_SSL)
-		bytestring::zero(pvt->_result,sizeof(pvt->_result));
 		if (!SHA1_Init(&pvt->_context)) {
 			// FIXME: set error...
 			return false;
@@ -87,7 +88,6 @@ bool sha1::clear() {
 	#else
 		int	result=SHA1Reset(&pvt->_context);
 		setError(result);
-		bytestring::zero(pvt->_result,sizeof(pvt->_result));
 		return (result==shaSuccess);
 	#endif
 }

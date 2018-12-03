@@ -68,8 +68,6 @@ class MD5
 		void MD5Update (MD5_CONTEXT*, const unsigned char*, uint64_t);
 		void MD5Final (unsigned char [16], MD5_CONTEXT*);
 
-		static char *MD5ConvertToAscii(const unsigned char *);
-
 	MD5(){};
 };
 
@@ -360,19 +358,4 @@ void MD5::MD5_memset (POINTER output,int value,uint64_t len)
 	uint64_t i;
 	for (i = 0; i < len; i++)
 		((char *)output)[i] = (char)value;
-}
-
-char *MD5::MD5ConvertToAscii(const unsigned char *digest)
-{
-
-	//converte the hash to a string and return it
-	char *asciihash=new char[33];
-
-	uint16_t	p=0;
-	for(uint16_t i=0; i<16; i++) {
-		charstring::printf(&asciihash[p],3,"%02x",digest[i]);
-		p+=2;
-	}	
-	asciihash[32]='\0';
-	return asciihash;
 }
