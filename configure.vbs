@@ -83,6 +83,7 @@ srcs="winsock.cpp "+_
 	"socketclient.cpp "+_
 	"url.cpp "+_
 	"sha1.cpp "+_
+	"sha256.cpp "+_
 	"md5.cpp "+_
 	"prompt.cpp "+_
 	"templateengine.cpp "+_
@@ -156,6 +157,7 @@ lobjs="winsock.obj "+_
 	"socketclient.obj "+_
 	"url.obj "+_
 	"sha1.obj "+_
+	"sha256.obj "+_
 	"md5.obj "+_
 	"prompt.obj "+_
 	"templateengine.obj "+_
@@ -242,6 +244,7 @@ headers3="sax.h "+_
 	"security.h "+_
 	"hash.h "+_
 	"sha1.h "+_
+	"sha256.h "+_
 	"md5.h "+_
 	"prompt.h "+_
 	"templateengine.h "+_
@@ -420,6 +423,8 @@ privateheaders7="codetree.h "+_
 	"hashincludes.h "+_
 	"sha1.h "+_
 	"sha1includes.h "+_
+	"sha256.h "+_
+	"sha256includes.h "+_
 	"md5.h "+_
 	"md5includes.h "+_
 	"prompt.h "+_
