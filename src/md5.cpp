@@ -21,13 +21,13 @@ class md5private {
 			MD5_CONTEXT	_context;
 			MD5		_md5;
 		#endif
-		unsigned char	*_hash;
-		unsigned char	_buff[16];
+		char		*_string;
+		unsigned char	_hash[16];
 };
 
 md5::md5() {
 	pvt=new md5private;
-	pvt->_hash=NULL;
+	pvt->_string=NULL;
 	clear();
 }
 
@@ -50,33 +50,27 @@ bool md5::append(const unsigned char *data, uint32_t length) {
 
 const unsigned char *md5::getHash() {
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!MD5_Final(pvt->_buff,&pvt->_context)) {
+		if (!MD5_Final(pvt->_hash,&pvt->_context)) {
 			// FIXME: set error...
 			return (const unsigned char *)"";
 		}
 	#else
-		pvt->_md5.MD5Final(pvt->_buff,&pvt->_context);
+		pvt->_md5.MD5Final(pvt->_hash,&pvt->_context);
 	#endif
-	delete[] pvt->_hash;
-	pvt->_hash=new unsigned char[sizeof(pvt->_buff)*2+1];
-	uint16_t	hi=0;
-	for (uint16_t bi=0; bi<sizeof(pvt->_buff); bi++) {
-		charstring::printf((char *)&pvt->_hash[hi],3,
-					"%02x",pvt->_buff[bi]);
-		hi+=2;
-	}
-	pvt->_hash[sizeof(pvt->_buff)*2]='\0';
 	return pvt->_hash;
+	//delete[] pvt->_string;
+	//pvt->_string=charstring::hexEncode(pvt->_hash,sizeof(pvt->_hash));
+	//return pvt->_string;
 }
 
-uint32_t md5::getHashLength() {
-	return charstring::length(pvt->_hash);
+uint64_t md5::getHashLength() {
+	return sizeof(pvt->_hash);
 }
 
 bool md5::clear() {
-	delete[] pvt->_hash;
-	pvt->_hash=(unsigned char *)charstring::duplicate("");
-	bytestring::zero(pvt->_buff,sizeof(pvt->_buff));
+	delete[] pvt->_string;
+	pvt->_string=charstring::duplicate("");
+	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!MD5_Init(&pvt->_context)) {
 			// FIXME: set error

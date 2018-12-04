@@ -15,10 +15,10 @@ class sha1private {
 	private:
 		#if defined(RUDIMENTS_HAS_SSL)
 			SHA_CTX		_context;
-			uint8_t		_result[SHA_DIGEST_LENGTH+1];
+			uint8_t		_hash[SHA_DIGEST_LENGTH];
 		#else
 			SHA1Context	_context;
-			uint8_t		_result[SHA1HashSize+1];
+			uint8_t		_hash[SHA1HashSize];
 		#endif
 		hasherror_t	_err;
 };
@@ -50,25 +50,22 @@ bool sha1::append(const unsigned char *data, uint32_t length) {
 const unsigned char *sha1::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!SHA1_Final(pvt->_result,&pvt->_context)) {
+		if (!SHA1_Final(pvt->_hash,&pvt->_context)) {
 			// FIXME: set error...
-			pvt->_result[0]='\0';
-		} else {
-			pvt->_result[SHA_DIGEST_LENGTH]='\0';
+			return NULL;
 		}
-		return pvt->_result;
+		return pvt->_hash;
 	#else
-		int	result=SHA1Result(&pvt->_context,pvt->_result);
+		int	result=SHA1Result(&pvt->_context,pvt->_hash);
 		setError(result);
 		if (result==shaSuccess) {
-			pvt->_result[SHA1HashSize]='\0';
-			return pvt->_result;
+			return pvt->_hash;
 		}
 		return NULL;
 	#endif
 }
 
-uint32_t sha1::getHashLength() {
+uint64_t sha1::getHashLength() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		return SHA_DIGEST_LENGTH;
 	#else
@@ -78,7 +75,7 @@ uint32_t sha1::getHashLength() {
 
 bool sha1::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	bytestring::zero(pvt->_result,sizeof(pvt->_result));
+	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!SHA1_Init(&pvt->_context)) {
 			// FIXME: set error...

@@ -36,7 +36,7 @@ class RUDIMENTS_DLLSPEC hash {
 		virtual	const unsigned char	*getHash()=0;
 
 		/** Returns the length of the hash in bytes. */
-		virtual	uint32_t	getHashLength()=0;
+		virtual	uint64_t	getHashLength()=0;
 
 		/** Clears the current hash and any data that had
  		 *  previously been appended.  Returns true on success or

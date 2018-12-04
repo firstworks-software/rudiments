@@ -26,7 +26,7 @@ class RUDIMENTS_DLLSPEC sha256 : public hash {
 		const unsigned char	*getHash();
 
 		/** Returns the length of the hash in bytes. */
-		uint32_t	getHashLength();
+		uint64_t	getHashLength();
 
 		/** Clears the current hash and any data that had
  		 *  previously been appended.  Returns true on success or

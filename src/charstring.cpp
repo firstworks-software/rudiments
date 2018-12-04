@@ -1878,6 +1878,18 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	(*outputsize)-=(input[inputsize-1]=='=')+(input[inputsize-2]=='=');
 }
 
+char *charstring::hexEncode(const unsigned char *input, uint64_t inputsize) {
+
+	char	*output=new char[inputsize*2+1];
+	uint16_t	oi=0;
+	for (uint16_t ii=0; ii<inputsize; ii++) {
+		printf((char *)&output[oi],3,"%02x",input[ii]);
+		oi+=2;
+	}
+	output[inputsize*2]='\0';
+	return output;
+}
+
 char *charstring::insertString(const char *dest,
 				const char *src, uint64_t index) {
 

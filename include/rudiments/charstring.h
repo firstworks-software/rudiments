@@ -702,6 +702,13 @@ class RUDIMENTS_DLLSPEC charstring {
 						unsigned char **output,
 						uint64_t *outputsize);
 
+		/** Converts binary string "input" of size "inputsize" into
+		 *  a hex representation of the bytes.  For example, the bytes:
+		 *  0x01 0x02 0xa1 0xa2 would be converted to the string
+		 *  0102a1a2 */
+		static	char		*hexEncode(const unsigned char *input,
+							uint64_t inputsize);
+
 		/** Obfuscates "str" by adding 128 to each character. */
 		static void	obfuscate(char *str);
 

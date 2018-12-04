@@ -22,7 +22,9 @@ int main(int argc, const char **argv) {
 
 	md5	m;
 	m.append(contents,f.getSize());
-	stdoutput.printf("%s\n",m.getHash());
+	char	*str=charstring::hexEncode(m.getHash(),m.getHashLength());
+	stdoutput.printf("%s\n",str);
+	delete[] str;
 
 	delete[] contents;
 }
