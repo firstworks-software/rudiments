@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/md5.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 #include <rudiments/file.h>
