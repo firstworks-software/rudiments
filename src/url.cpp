@@ -5,16 +5,16 @@
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <rudiments/bytestring.h>
 	#include <rudiments/threadmutex.h>
-	#include <rudiments/error.h>
 	#include <rudiments/snooze.h>
-	#include <rudiments/listener.h>
 #endif
+#include <rudiments/listener.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
+#include <rudiments/error.h>
 
 #include <rudiments/private/winsock.h>
 
