@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		sha256private	*pvt;
-
 		void	setError(int32_t err);
+
+		sha256private	*pvt;

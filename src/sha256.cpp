@@ -7,6 +7,7 @@
 
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/sha.h>
+	#include <openssl/err.h>
 #endif
 
 class sha256private {
@@ -32,7 +33,7 @@ bool sha256::append(const unsigned char *data, uint32_t length) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!SHA256_Update(&pvt->_context,data,length)) {
-			// FIXME: set error...
+			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 		return true;
@@ -46,7 +47,7 @@ const unsigned char *sha256::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!SHA256_Final(pvt->_hash,&pvt->_context)) {
-			// FIXME: set error...
+			setError(ERR_GET_REASON(ERR_get_error()));
 			return NULL;
 		}
 		return pvt->_hash;
@@ -69,7 +70,7 @@ bool sha256::clear() {
 	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!SHA256_Init(&pvt->_context)) {
-			// FIXME: set error...
+			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 		return true;
@@ -86,16 +87,10 @@ hasherror_t sha256::getError() {
 void sha256::setError(int32_t err) {
 	#if defined(RUDIMENTS_HAS_SSL)
 		// FIXME: implement this...
+		pvt->_err=HASH_ERROR_NULL;
+		// clear the queue
+		while (ERR_get_error()) {}
 	#else
-		switch (err) {
-			case shaNull:
-				pvt->_err=HASH_ERROR_NULL;
-			case shaInputTooLong:
-				pvt->_err=HASH_ERROR_INPUT_TOO_LONG;
-			case shaStateError:
-				pvt->_err=HASH_ERROR_STATE_ERROR;
-			default:
-				pvt->_err=HASH_ERROR_SUCCESS;
-		}
+		// FIXME: implement this
 	#endif
 }

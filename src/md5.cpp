@@ -8,6 +8,7 @@
 
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/md5.h>
+	#include <openssl/err.h>
 #else
 	#include "md5rfc1321.cpp"
 #endif
@@ -21,13 +22,12 @@ class md5private {
 			MD5_CONTEXT	_context;
 			MD5		_md5;
 		#endif
-		char		*_string;
 		unsigned char	_hash[16];
+		hasherror_t	_err;
 };
 
 md5::md5() {
 	pvt=new md5private;
-	pvt->_string=NULL;
 	clear();
 }
 
@@ -36,9 +36,10 @@ md5::~md5() {
 }
 
 bool md5::append(const unsigned char *data, uint32_t length) {
+	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!MD5_Update(&pvt->_context,data,length)) {
-			// FIXME: set error...
+			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 		return true;
@@ -49,18 +50,16 @@ bool md5::append(const unsigned char *data, uint32_t length) {
 }
 
 const unsigned char *md5::getHash() {
+	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!MD5_Final(pvt->_hash,&pvt->_context)) {
-			// FIXME: set error...
+			setError(ERR_GET_REASON(ERR_get_error()));
 			return (const unsigned char *)"";
 		}
 	#else
 		pvt->_md5.MD5Final(pvt->_hash,&pvt->_context);
 	#endif
 	return pvt->_hash;
-	//delete[] pvt->_string;
-	//pvt->_string=charstring::hexEncode(pvt->_hash,sizeof(pvt->_hash));
-	//return pvt->_string;
 }
 
 uint64_t md5::getHashLength() {
@@ -68,12 +67,11 @@ uint64_t md5::getHashLength() {
 }
 
 bool md5::clear() {
-	delete[] pvt->_string;
-	pvt->_string=charstring::duplicate("");
+	pvt->_err=HASH_ERROR_SUCCESS;
 	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!MD5_Init(&pvt->_context)) {
-			// FIXME: set error
+			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 	#else
@@ -83,5 +81,16 @@ bool md5::clear() {
 }
 
 hasherror_t md5::getError() {
-	return HASH_ERROR_SUCCESS;
+	return pvt->_err;
+}
+
+void md5::setError(int32_t err) {
+	#if defined(RUDIMENTS_HAS_SSL)
+		// FIXME: implement this...
+		pvt->_err=HASH_ERROR_NULL;
+		// clear the queue
+		while (ERR_get_error()) {}
+	#else
+		// FIXME: implement this...
+	#endif
 }
