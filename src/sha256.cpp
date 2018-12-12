@@ -5,9 +5,12 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
 
+#undef RUDIMENTS_HAS_SSL
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/sha.h>
 	#include <openssl/err.h>
+#else
+	#include "sha256rfc4642.cpp"
 #endif
 
 class sha256private {
@@ -16,6 +19,9 @@ class sha256private {
 		#if defined(RUDIMENTS_HAS_SSL)
 			SHA256_CTX	_context;
 			uint8_t		_hash[SHA256_DIGEST_LENGTH];
+		#else
+			sha256_ctx	_context;
+			sha256_t	_hash;
 		#endif
 		hasherror_t	_err;
 };
@@ -38,7 +44,7 @@ bool sha256::append(const unsigned char *data, uint32_t length) {
 		}
 		return true;
 	#else
-		pvt->_err=HASH_ERROR_UNSUPPORTED;
+		sha256_update(&pvt->_context,data,length);
 		return false;
 	#endif
 }
@@ -52,8 +58,8 @@ const unsigned char *sha256::getHash() {
 		}
 		return pvt->_hash;
 	#else
-		pvt->_err=HASH_ERROR_UNSUPPORTED;
-		return NULL;
+		sha256_done(&pvt->_context,&pvt->_hash);
+		return pvt->_hash.u.u8;
 	#endif
 }
 
@@ -67,15 +73,16 @@ uint64_t sha256::getHashLength() {
 
 bool sha256::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
+		bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 		if (!SHA256_Init(&pvt->_context)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 		return true;
 	#else
-		pvt->_err=HASH_ERROR_UNSUPPORTED;
+		bytestring::zero(pvt->_hash.u.u8,sizeof(pvt->_hash.u.u8));
+		sha256_init(&pvt->_context);
 		return false;
 	#endif
 }
@@ -91,6 +98,6 @@ void sha256::setError(int32_t err) {
 		// clear the queue
 		while (ERR_get_error()) {}
 	#else
-		// FIXME: implement this
+		pvt->_err=HASH_ERROR_NULL;
 	#endif
 }
