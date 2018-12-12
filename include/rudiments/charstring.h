@@ -674,15 +674,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to base64Encode above but only encodes
 		 *  the first "inputsize" characters of "input" */
 		static	char	*base64Encode(const unsigned char *input,
-						uint64_t inputsize);
+							uint64_t inputsize);
 
 		/** similar to base64Encode() above, but returns the
 		 *  result in "output" and "outputsize" rather than in a
 		 *  return value */
 		static	void	base64Encode(const unsigned char *input,
-						uint64_t inputsize,
-						char **output,
-						uint64_t *outputsize);
+							uint64_t inputsize,
+							char **output,
+							uint64_t *outputsize);
 
 		/** base64-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -702,18 +702,37 @@ class RUDIMENTS_DLLSPEC charstring {
 						unsigned char **output,
 						uint64_t *outputsize);
 
-		/** Converts binary string "input" of size "inputsize" into
-		 *  a hex representation of the bytes.  For example, the bytes:
-		 *  0x01 0x02 0xa1 0xa2 would be converted to the string
-		 *  0102a1a2 */
+		/** hex-encodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program. */
+		static	char	*hexEncode(const unsigned char *input);
+
+		/** similar to hexEncode above but only encodes
+		 *  the first "inputsize" characters of "input" */
 		static	char	*hexEncode(const unsigned char *input,
 							uint64_t inputsize);
 
-		/** Converts a hex representation of a binary string to the
-		 *  binary string, returning it in "output" and setting
-		 *  "outputsize".  "output" is allocated inside the method
-		 *  and returned.  Eg. the string 0102a1a2 would be converted
-		 *  to the byte string: 0x01 0x02 0xa1 0xa2. */
+		/** similar to base64Encode() above, but returns the
+		 *  result in "output" and "outputsize" rather than in a
+		 *  return value */
+		static	void	hexEncode(const unsigned char *input,
+						uint64_t inputsize,
+						char **output,
+						uint64_t *outputsize);
+
+		/** hex-decodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program. */
+		static	unsigned char	*hexDecode(const char *input);
+
+		/** similar to hexDecode above but only decodes
+		 *  the first "inputsize" characters of "input" */
+		static	unsigned char	*hexDecode(const char *input,
+							uint64_t inputsize);
+
+		/** similar to hexDecode() above, but returns the
+		 *  result in "output" and "outputsize" rather than in a
+		 *  return value */
 		static	void	hexDecode(const char *input,
 						uint64_t inputsize,
 						unsigned char **output,

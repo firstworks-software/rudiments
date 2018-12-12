@@ -207,39 +207,39 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// from Thomas Hobbes's Leviathan...
+	unsigned char	hexstr1[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.";
+	unsigned char	hexstr2[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure";
+	unsigned char	hexstr3[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasur";
+	unsigned char	hexstr4[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasu";
+
 	// base64
 	stdoutput.printf("base64...\n");
-	// from Thomas Hobbes's Leviathan...
-	unsigned char	base64str1[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.";
-	unsigned char	base64str2[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure";
-	unsigned char	base64str3[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasur";
-	unsigned char	base64str4[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasu";
-
-	char	*encoded1=charstring::base64Encode(base64str1);
+	char	*encoded1=charstring::base64Encode(hexstr1);
 	unsigned char	*decoded1=charstring::base64Decode(encoded1);
 	test("base64 test 1",
-		!charstring::compare((char *)decoded1,(char *)base64str1));
+		!charstring::compare((char *)decoded1,(char *)hexstr1));
 	delete[] encoded1;
 	delete[] decoded1;
 
-	char	*encoded2=charstring::base64Encode(base64str2);
+	char	*encoded2=charstring::base64Encode(hexstr2);
 	unsigned char	*decoded2=charstring::base64Decode(encoded2);
 	test("base64 test 2",
-		!charstring::compare((char *)decoded2,(char *)base64str2));
+		!charstring::compare((char *)decoded2,(char *)hexstr2));
 	delete[] encoded2;
 	delete[] decoded2;
 
-	char	*encoded3=charstring::base64Encode(base64str3);
+	char	*encoded3=charstring::base64Encode(hexstr3);
 	unsigned char	*decoded3=charstring::base64Decode(encoded3);
 	test("base64 test 3",
-		!charstring::compare((char *)decoded3,(char *)base64str3));
+		!charstring::compare((char *)decoded3,(char *)hexstr3));
 	delete[] encoded3;
 	delete[] decoded3;
 
-	char	*encoded4=charstring::base64Encode(base64str4);
+	char	*encoded4=charstring::base64Encode(hexstr4);
 	unsigned char	*decoded4=charstring::base64Decode(encoded4);
 	test("base64 test 4",
-		!charstring::compare((char *)decoded4,(char *)base64str4));
+		!charstring::compare((char *)decoded4,(char *)hexstr4));
 	delete[] encoded4;
 	delete[] decoded4;
 
@@ -298,6 +298,86 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// hex
+	stdoutput.printf("hex...\n");
+	encoded1=charstring::hexEncode(hexstr1);
+	decoded1=charstring::hexDecode(encoded1);
+	test("hex test 1",
+		!charstring::compare((char *)decoded1,(char *)hexstr1));
+	delete[] encoded1;
+	delete[] decoded1;
+
+	encoded2=charstring::hexEncode(hexstr2);
+	decoded2=charstring::hexDecode(encoded2);
+	test("hex test 2",
+		!charstring::compare((char *)decoded2,(char *)hexstr2));
+	delete[] encoded2;
+	delete[] decoded2;
+
+	encoded3=charstring::hexEncode(hexstr3);
+	decoded3=charstring::hexDecode(encoded3);
+	test("hex test 3",
+		!charstring::compare((char *)decoded3,(char *)hexstr3));
+	delete[] encoded3;
+	delete[] decoded3;
+
+	encoded4=charstring::hexEncode(hexstr4);
+	decoded4=charstring::hexDecode(encoded4);
+	test("hex test 4",
+		!charstring::compare((char *)decoded4,(char *)hexstr4));
+	delete[] encoded4;
+	delete[] decoded4;
+
+	charstring::hexEncode(bytes,6,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 5",
+		!bytestring::compare(decodedbytes,bytes,6));
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+
+	charstring::hexEncode(bytes,5,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 6",
+		!bytestring::compare(decodedbytes,bytes,5));
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+
+	charstring::hexEncode(bytes,4,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 7",
+		!bytestring::compare(decodedbytes,bytes,4));
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+
+	charstring::hexEncode(bytes,3,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 8",
+		!bytestring::compare(decodedbytes,bytes,3));
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+
+	charstring::hexEncode(bytes,2,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 9",
+		!bytestring::compare(decodedbytes,bytes,2));
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+
+	charstring::hexEncode(bytes,1,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 10",
+		!bytestring::compare(decodedbytes,bytes,1));
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+	stdoutput.printf("\n");
+
+
 	// http escape the buffer
 	stdoutput.printf("http-escape...\n");
 	const char	*original="!@#$%^&*()hello-+";
@@ -308,20 +388,6 @@ int main(int argc, const char **argv) {
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
 	delete[] unescbuffer;
-	stdoutput.printf("\n");
-
-
-	// hex encode the buffer
-	stdoutput.printf("hex-encoded...\n");
-	const unsigned char	*data=(const unsigned char *)"abcdefgh";
-	char    *hexbuffer=charstring::hexEncode(data,8);
-	test("encoded",!charstring::compare(hexbuffer,"6162636465666768"));
-	unsigned char	*output;
-	uint64_t	outputlength;
-	charstring::hexDecode(hexbuffer,16,&output,&outputlength);
-	test("decoded data",!charstring::compare((char *)output,(char *)data));
-	test("decoded length",(outputlength==8));
-	delete[] hexbuffer;
 	stdoutput.printf("\n");
 
 
