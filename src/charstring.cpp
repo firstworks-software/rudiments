@@ -1880,7 +1880,17 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 
 char *charstring::hexEncode(const unsigned char *input, uint64_t inputsize) {
 
-	char	*output=new char[inputsize*2+1];
+	// handle null input
+	if (!input) {
+		return NULL;
+	}
+
+	// handle 0-length input
+	if (!inputsize) {
+		return charstring::duplicate("");
+	}
+
+	char		*output=new char[inputsize*2+1];
 	uint16_t	oi=0;
 	for (uint16_t ii=0; ii<inputsize; ii++) {
 		printf((char *)&output[oi],3,"%02x",input[ii]);
@@ -1888,6 +1898,58 @@ char *charstring::hexEncode(const unsigned char *input, uint64_t inputsize) {
 	}
 	output[inputsize*2]='\0';
 	return output;
+}
+
+void charstring::hexDecode(const char *input, uint64_t inputsize,
+				unsigned char **output, uint64_t *outputsize) {
+
+	// handle null input
+	if (!input) {
+		*output=NULL;
+		*outputsize=0;
+		return;
+	}
+
+	// handle 0-length input
+	if (!inputsize) {
+		*output=(unsigned char *)charstring::duplicate("");
+		*outputsize=0;
+		return;
+	}
+
+	// deal with invalid input sizes
+	if (inputsize%2) {
+		inputsize--;
+	}
+
+	// create output buffer and init output size
+	*output=new unsigned char[inputsize/2+1];
+	*outputsize=0;
+
+	// convert...
+	const char	*end=input+inputsize;
+	while (input!=end) {
+		unsigned char	sixteens=*input;
+		if (sixteens>='A' && sixteens<='Z') {
+			sixteens-='A';
+		} else if (sixteens>='a' && sixteens<='z') {
+			sixteens-='a';
+		} else if (sixteens>='0' && sixteens<='9') {
+			sixteens-='0';
+		}
+		input++;
+		unsigned char	ones=*input;
+		if (ones>='A' && ones<='Z') {
+			ones-='A';
+		} else if (ones>='a' && ones<='z') {
+			ones-='a';
+		} else if (ones>='0' && ones<='9') {
+			ones-='0';
+		}
+		input++;
+		(*output)[*outputsize]=sixteens*16+ones;
+		(*outputsize)++;
+	}
 }
 
 char *charstring::insertString(const char *dest,

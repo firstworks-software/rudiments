@@ -311,6 +311,20 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// hex encode the buffer
+	stdoutput.printf("hex-encoded...\n");
+	const unsigned char	*data=(const unsigned char *)"abcdefgh";
+	char    *hexbuffer=charstring::hexEncode(data,8);
+	test("encoded",!charstring::compare(hexbuffer,"6162636465666768"));
+	unsigned char	*output;
+	uint64_t	outputlength;
+	charstring::hexDecode(hexbuffer,16,&output,&outputlength);
+	test("decoded data",!charstring::compare((char *)output,(char *)data));
+	test("decoded length",(outputlength==8));
+	delete[] hexbuffer;
+	stdoutput.printf("\n");
+
+
 	// sets
 	stdoutput.printf("sets...\n");
 	const char	*alphabet=

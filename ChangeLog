@@ -4,8 +4,8 @@
 	added url::getError()
 	added sha256 class
 	sha1, sha256, and md5 use openssl now if available
-	hash::getHash() returns binary data now (for all hashes) and added
-		charstring::hexEncode() to convert it to a string
+	hash::getHash() returns binary data now (for all hashes)
+	added charstring::hexEncode()/hexDecode() to convert it to/from a string
 
 1.1.0 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script
