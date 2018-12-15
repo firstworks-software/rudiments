@@ -1,4 +1,4 @@
-1.1.1 - spec file tweaks
+1.2.0 - spec file tweaks
 	fixed missing [] in bytebuffer = operator
 	fixed json escaping in parse/write
 	added url::getError()
