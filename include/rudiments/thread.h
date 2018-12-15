@@ -1,4 +1,4 @@
-// Copyright (c) 2013 David Muse
+// Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
 #ifndef RUDIMENTS_THREAD_H

@@ -1,3 +1,6 @@
+// Copyright (c) 1999-2018 David Muse
+// See the COPYING file for more information.
+
 #include <rudiments/codetree.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
