@@ -55,6 +55,7 @@ class urlprivate {
 		char			*_previousproto;
 		char			*_httpprevioushost;
 		char			*_httppreviousport;
+		char			*_httpuseragent;
 
 		bool			_usehttppost;
 		const char		*_httppostcontenttype;
@@ -99,6 +100,9 @@ url::url() : file() {
 	pvt->_previousproto=NULL;
 	pvt->_httpprevioushost=NULL;
 	pvt->_httppreviousport=NULL;
+	pvt->_httpuseragent=charstring::duplicate(
+				"User-Agent: rudiments/"
+				RUDIMENTS_VERSION);
 
 	pvt->_usehttppost=false;
 	pvt->_httppostcontenttype=NULL;
@@ -148,6 +152,7 @@ url::~url() {
 	delete[] pvt->_previousproto;
 	delete[] pvt->_httpprevioushost;
 	delete[] pvt->_httppreviousport;
+	delete[] pvt->_httpuseragent;
 
 	delete pvt->_request;
 
@@ -190,6 +195,11 @@ void url::setHttpPostContentType(const char *contenttype) {
 void url::setHttpPostData(const char *data, uint64_t size) {
 	pvt->_httppostdata=data;
 	pvt->_httppostdatasize=size;
+}
+
+void url::setHttpUserAgent(const char *useragent) {
+	delete[] pvt->_httpuseragent;
+	pvt->_httpuseragent=charstring::duplicate(useragent);
 }
 
 bool url::lowLevelOpen(const char *name, int32_t flags,
@@ -394,6 +404,11 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 				CURLSSH_AUTH_ANY)==CURLE_OK) &&
 			#endif
 
+			// set the user agent
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_USERAGENT,
+				pvt->_httpuseragent)==CURLE_OK &&
+
 			// set up write handler
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_WRITEFUNCTION,curlReadData)==CURLE_OK &&
@@ -547,9 +562,9 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	pvt->_request->clear();
 	pvt->_request->append((pvt->_usehttppost)?"POST ":"GET ")->append(path);
 	pvt->_request->append(" HTTP/1.1\r\n"
-				"User-Agent: rudiments/"
-				RUDIMENTS_VERSION
-				"\r\n"
+				"User-Agent: ");
+	pvt->_request->append(pvt->_httpuseragent);
+	pvt->_request->append("\r\n"
 				"Host: ");
 	pvt->_request->append(host);
 	pvt->_request->append("\r\n");
