@@ -3,6 +3,7 @@
 
 #include <rudiments/url.h>
 #ifdef RUDIMENTS_HAS_LIBCURL
+	#include <rudiments/bytebuffer.h>
 	#include <rudiments/bytestring.h>
 	#include <rudiments/threadmutex.h>
 	#include <rudiments/snooze.h>
@@ -65,9 +66,8 @@ class urlprivate {
 		#ifdef RUDIMENTS_HAS_LIBCURL
 			CURL	*_curl;
 			CURLM	*_curlm;
-			unsigned char	_b[CURL_MAX_WRITE_SIZE];
+			bytebuffer	_bb;
 			uint64_t	_breadpos;
-			ssize_t		_bsize;
 			bool		_eof;
 			int32_t		_stillrunning;
 			listener	_l;
@@ -171,8 +171,8 @@ void url::init() {
 	pvt->_chunkpos=0;
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
+	pvt->_bb.clear();
 	pvt->_breadpos=0;
-	pvt->_bsize=0;
 	pvt->_eof=false;
 	pvt->_stillrunning=0;
 	#endif
@@ -411,6 +411,10 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_USERAGENT,
 				pvt->_httpuseragent)==CURLE_OK &&
+
+			// follow any http Location headers we might get
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_FOLLOWLOCATION,1L)==CURLE_OK &&
 
 			// set up write handler
 			curl_easy_setopt(pvt->_curl,
@@ -898,13 +902,17 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	else {
 
+		#ifdef DEBUG_CURL
+		stdoutput.printf("\ncurl - lowLevelRead(%d)\n",size);
+		#endif
+
 		// buffer some data, if necessary
-		if (pvt->_bsize==0 && !pvt->_eof) {
+		if (pvt->_bb.getSize()==0 && !pvt->_eof) {
 
 			error::clearError();
 
 			#ifdef DEBUG_CURL
-				stdoutput.printf("\n\ncalling curlPerform()\n");
+				stdoutput.printf("\ncalling curlPerform()\n");
 			#endif
 			if (!curlPerform()) {
 				return -1;
@@ -919,19 +927,26 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 
 		// don't attempt to return more bytes
 		// than there are in the buffer
-		if (size>pvt->_bsize) {
-			size=pvt->_bsize;
+		if ((uint64_t)size>pvt->_bb.getSize()-pvt->_breadpos) {
+			size=pvt->_bb.getSize()-pvt->_breadpos;
 		}
 
 		// copy data from the buffer
-		bytestring::copy(buffer,pvt->_b+pvt->_breadpos,size);
+		bytestring::copy(buffer,
+			pvt->_bb.getBuffer()+pvt->_breadpos,
+			size);
 
 		// adjust the buffer position and size
 		pvt->_breadpos=pvt->_breadpos+size;
-		pvt->_bsize=pvt->_bsize-size;
 
 		// return how much was actually read
 		bytesread=size;
+
+		// clear the buffer, if we read all of it
+		if (pvt->_breadpos==pvt->_bb.getPosition()) {
+			pvt->_bb.clear();
+			pvt->_breadpos=0;
+		}
 	}
 	#endif
 
@@ -1149,7 +1164,7 @@ bool url::curlPerform() {
 
 	// if no data is available though, or if we just need to
 	// try and get more data, then loop back and try again
-	} while (pvt->_bsize==0 && pvt->_stillrunning);
+	} while (!pvt->_bb.getSize() && pvt->_stillrunning);
 
 	return true;
 
@@ -1175,17 +1190,15 @@ size_t url::curlReadData(void *buffer, size_t size, size_t nmemb, void *userp) {
 	size=size*nmemb;
 
 	// copy data into the buffer
-	bytestring::copy(u->pvt->_b,buffer,size);
-
-	// adjust the buffer position and size
-	u->pvt->_breadpos=0;
-	u->pvt->_bsize=size;
+	u->pvt->_bb.append((unsigned char *)buffer,size);
 
 	// did we fetch the entire file?
-	u->pvt->_eof=!u->pvt->_bsize;
+	u->pvt->_eof=!size;
 
 	#ifdef DEBUG_CURL
-		stdoutput.printf("    %d bytes buffered\n",size);
+		stdoutput.printf("    %d bytes buffered this read\n",size);
+		stdoutput.printf("    %d bytes buffered total\n",
+						u->pvt->_bb.getSize());
 	#endif
 
 	// return how much data was buffered

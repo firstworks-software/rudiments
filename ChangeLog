@@ -7,6 +7,8 @@
 	hash::getHash() returns binary data now (for all hashes)
 	added charstring::hexEncode()/hexDecode() to convert it to/from a string
 	added http user agent to url
+	fixed some https read bugs in url class
+	url class follows Location headers with https now
 
 1.1.0 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script
