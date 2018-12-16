@@ -350,6 +350,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		stdoutput.printf("user: \"%s\"\n",user);
 		stdoutput.printf("password: \"%s\"\n",password);
 		#endif
+		stdoutput.printf("useragent: \"%s\"\n",pvt->_httpuseragent);
 		#endif
 
 		if (
@@ -359,7 +360,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 			// set up debug
 			#ifdef DEBUG_CURL
 			curl_easy_setopt(pvt->_curl,
-				CURLOPT_VERBOSE,1)==CURLE_OK &&
+				CURLOPT_VERBOSE,1L)==CURLE_OK &&
 			#endif
 
 			// set up the url to open
@@ -385,6 +386,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 				CURLOPT_USERPWD,userpwd)==CURLE_OK) &&
 			#endif
 
+			(charstring::compare(cleanurl,"ssh://",6) || (
 			// if a password is supplied, then use password
 			// authentication for ssh protocols, or otherwise
 			// allow curl to choose an appropriate auth type
@@ -401,8 +403,9 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 				CURLSSH_AUTH_PASSWORD)==CURLE_OK) ||
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_SSH_AUTH_TYPES,
-				CURLSSH_AUTH_ANY)==CURLE_OK) &&
+				CURLSSH_AUTH_ANY)==CURLE_OK)
 			#endif
+			)) &&
 
 			// set the user agent
 			curl_easy_setopt(pvt->_curl,
