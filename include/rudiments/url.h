@@ -47,6 +47,7 @@ class RUDIMENTS_DLLSPEC url : public file {
 		void	setHttpPostContentType(const char *contenttype);
 		void	setHttpPostData(const char *data, uint64_t size);
 		void	setHttpUserAgent(const char *useragent);
+		void	setHttpHeaders(const char *headers);
 
 		const char	*getError();
 

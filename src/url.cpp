@@ -57,6 +57,7 @@ class urlprivate {
 		char			*_httpprevioushost;
 		char			*_httppreviousport;
 		char			*_httpuseragent;
+		char			*_httpheaders;
 
 		bool			_usehttppost;
 		const char		*_httppostcontenttype;
@@ -67,6 +68,7 @@ class urlprivate {
 			CURL	*_curl;
 			CURLM	*_curlm;
 			bytebuffer	_bb;
+			//unsigned char	_b[CURL_MAX_WRITE_SIZE];
 			uint64_t	_breadpos;
 			bool		_eof;
 			int32_t		_stillrunning;
@@ -103,6 +105,7 @@ url::url() : file() {
 	pvt->_httpuseragent=charstring::duplicate(
 				"User-Agent: rudiments/"
 				RUDIMENTS_VERSION);
+	pvt->_httpheaders=NULL;
 
 	pvt->_usehttppost=false;
 	pvt->_httppostcontenttype=NULL;
@@ -153,6 +156,7 @@ url::~url() {
 	delete[] pvt->_httpprevioushost;
 	delete[] pvt->_httppreviousport;
 	delete[] pvt->_httpuseragent;
+	delete[] pvt->_httpheaders;
 
 	delete pvt->_request;
 
@@ -199,7 +203,18 @@ void url::setHttpPostData(const char *data, uint64_t size) {
 
 void url::setHttpUserAgent(const char *useragent) {
 	delete[] pvt->_httpuseragent;
-	pvt->_httpuseragent=charstring::duplicate(useragent);
+	if (useragent) {
+		pvt->_httpuseragent=charstring::duplicate(useragent);
+	} else {
+		pvt->_httpuseragent=charstring::duplicate(
+					"User-Agent: rudiments/"
+					RUDIMENTS_VERSION);
+	}
+}
+
+void url::setHttpHeaders(const char *headers) {
+	delete[] pvt->_httpheaders;
+	pvt->_httpheaders=charstring::duplicate(headers);
 }
 
 bool url::lowLevelOpen(const char *name, int32_t flags,
@@ -353,6 +368,30 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		stdoutput.printf("useragent: \"%s\"\n",pvt->_httpuseragent);
 		#endif
 
+		// split http headers if necessary
+		struct curl_slist	*headerlist=NULL;
+		if (!charstring::compare(cleanurl,"https://",8) &&
+						pvt->_httpheaders) {
+			#ifdef DEBUG_CURL
+			stdoutput.printf("headers:\n");
+			#endif
+			char		**headers;
+			uint64_t	headercount;
+			charstring::split(pvt->_httpheaders,"\n",true,
+						&headers,&headercount);
+			for (uint64_t i=0; i<headercount; i++) {
+				charstring::bothTrim(headers[i],'\r');
+				charstring::bothTrim(headers[i],'\n');
+				#ifdef DEBUG_CURL
+				stdoutput.printf("%s\n",headers[i]);
+				#endif
+				headerlist=curl_slist_append(
+						headerlist,headers[i]);
+				delete[] headers[i];
+			}
+			delete[] headers;
+		}
+
 		if (
 			// init this curl instance
 			(pvt->_curl=curl_easy_init()) &&
@@ -411,6 +450,11 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_USERAGENT,
 				pvt->_httpuseragent)==CURLE_OK &&
+
+			// set headers
+			(!headerlist ||
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_HTTPHEADER,headerlist)==CURLE_OK) &&
 
 			// follow any http Location headers we might get
 			curl_easy_setopt(pvt->_curl,
@@ -474,6 +518,8 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 
 			close();
 		}
+
+		curl_slist_free_all(headerlist);
 	}
 	#endif
 
