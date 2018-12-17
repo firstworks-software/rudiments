@@ -1370,6 +1370,47 @@ size_t charstring::lengthNotContainingSet(const char *haystack,
 	#endif
 }
 
+char *charstring::before(const char *str, const char *delimiter) {
+	return between(str,NULL,delimiter);
+}
+
+char *charstring::between(const char *str, const char *start, const char *end) {
+
+	// find the start (or use beginning of "str" if "start" is empty/NULL)
+	const char	*s=NULL;
+	if (charstring::isNullOrEmpty(start)) {
+		s=str;
+	} else {
+		s=findFirst(str,start);
+	}
+	if (!s) {
+		return NULL;
+	}
+
+	// bump past the start
+	if (s!=str) {
+		s+=charstring::length(start);
+	}
+
+	// find the end (or use end of "str" if "end" is empty/NULL)
+	const char	*e=NULL;
+	if (charstring::isNullOrEmpty(end)) {
+		for (e=s; *e; e++) {}
+	} else {
+		e=findFirst(s,end);
+	}
+	if (!e) {
+		return NULL;
+	}
+
+	// copy out the string between s and e
+	return charstring::duplicate(s,e-s);
+}
+
+char *charstring::after(const char *str, const char *delimiter) {
+	return between(str,delimiter,NULL);
+}
+
 char *charstring::duplicate(const char *str) {
 	if (!str) {
 		return NULL;

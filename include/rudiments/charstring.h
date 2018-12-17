@@ -281,6 +281,29 @@ class RUDIMENTS_DLLSPEC charstring {
 							char *haystack,
 							const char *set);
 
+		/** Returns the string from the beginning of "str" until
+		 *  Note that this method allocates a buffer for the return
+		 *  value internally and returns it.  The calling program
+		 *  must deallocate this buffer. */
+		static char	*before(const char *str,
+						const char *delimiter);
+
+		/** Returns the string between "start" and "end".
+		 *  Note that this method allocates a buffer for the return
+		 *  value internally and returns it.  The calling program
+		 *  must deallocate this buffer. */
+		static char	*between(const char *str,
+						const char *start,
+						const char *end);
+
+		/** Returns the string from the "delimiter" until the end
+		 *  of the string.
+		 *  Note that this method allocates a buffer for the return
+		 *  value internally and returns it.  The calling program
+		 *  must deallocate this buffer. */
+		static char	*after(const char *str,
+						const char *delimiter);
+
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters in "set". */

@@ -192,6 +192,17 @@ int main(int argc, const char **argv) {
 	charstring::split("1.2.3.4.5.6",".",false,NULL,NULL);
 	stdoutput.printf("\n");
 
+	// before, between, after
+	stdoutput.printf("before/between/after...\n");
+	char	*bef=charstring::before("one two three four five"," two");
+	test("before",!charstring::compare(bef,"one"));
+	char	*btw=charstring::between("one two three four five",
+							"two "," four");
+	test("between",!charstring::compare(btw,"three"));
+	char	*aft=charstring::after("one two three four five","four ");
+	test("after",!charstring::compare(aft,"five"));
+	stdoutput.printf("\n");
+
 
 	// escape/unescape
 	stdoutput.printf("escape/unescape...\n");
