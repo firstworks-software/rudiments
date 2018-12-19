@@ -158,6 +158,55 @@ class dictionary {
 		 *  found. */
 		bool	remove(keytype key);
 
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the key and value stored in the dictionarynode as well.
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	removeAndDelete(keytype key);
+
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the key and value stored in the dictionarynode as well,
+		 *  which are both presumed to be arrays.
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	removeAndArrayDelete(keytype key);
+
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the key stored in the dictionarynode as well.
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	removeAndDeleteKey(keytype key);
+
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the key stored in the dictionarynode as well, which is
+		 *  presumed to be an array.
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	removeAndArrayDeleteKey(keytype key);
+
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the value stored in the dictionarynode as well.
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	removeAndDeleteValue(keytype key);
+
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the value stored in the dictionarynode as well, which is
+		 *  presumed to be an array.
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	removeAndArrayDeleteValue(keytype key);
+
+		/** Removes the dictionarynode associated with "key", deleting
+		 *  the key and value stored in the dictionarynode as well.
+		 *  The value is presumed to be an array.*/
+		bool	removeAndDeleteKeyAndArrayDeleteValue(keytype key);
+
+		/** Deletes the dictionarynodes associated with "key",
+		 *  deleting the key and value stored in the dictionarynode
+		 *  as well.  The key is presumed to be an array.*/
+		bool	removeAndArrayDeleteKeyAndDeleteValue(keytype key);
+
 		/** Removes the specified dictionarynode.
 		 *  Returns true on success or false if "node" was NULL. */
 		bool	remove(dictionarynode<keytype,valuetype> *node);
@@ -187,7 +236,7 @@ class dictionary {
 
 		/** Deletes all dictionarynodes currently in the dictionary,
 		 *  deleting the key and value stored in each dictionarynode
-		 *  as well, which is both presumed to be arrays. */
+		 *  as well, which are both presumed to be arrays. */
 		void	clearAndArrayDelete();
 
 		/** Deletes all dictionarynodes currently in the dictionary,

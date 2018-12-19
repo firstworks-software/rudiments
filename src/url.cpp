@@ -25,7 +25,7 @@
 #endif
 
 //#define DEBUG_CURL 1
-//#define DEBUG_HTTP 1
+#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
@@ -103,8 +103,7 @@ url::url() : file() {
 	pvt->_httpprevioushost=NULL;
 	pvt->_httppreviousport=NULL;
 	pvt->_httpuseragent=charstring::duplicate(
-				"User-Agent: rudiments/"
-				RUDIMENTS_VERSION);
+				"rudiments/" RUDIMENTS_VERSION);
 	pvt->_httpheaders=NULL;
 
 	pvt->_usehttppost=false;
@@ -207,8 +206,7 @@ void url::setHttpUserAgent(const char *useragent) {
 		pvt->_httpuseragent=charstring::duplicate(useragent);
 	} else {
 		pvt->_httpuseragent=charstring::duplicate(
-					"User-Agent: rudiments/"
-					RUDIMENTS_VERSION);
+					"rudiments/" RUDIMENTS_VERSION);
 	}
 }
 
@@ -544,14 +542,45 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	}
 
 	#ifdef DEBUG_HTTP
+	stdoutput.printf("url: %s\n",urlname),
 	stdoutput.printf("host: %s\n",host),
 	stdoutput.printf("port: %s\n",port);
-	stdoutput.printf("userpwd: %s\n",userpwd);
-	stdoutput.printf("keepalive: %d\n\n",pvt->_keepalive);
 	stdoutput.printf("previous host: %s\n",pvt->_httpprevioushost);
 	stdoutput.printf("previous port: %s\n",pvt->_httppreviousport);
+	stdoutput.printf("userpwd: %s\n",userpwd);
+	stdoutput.printf("useragent: \"%s\"\n",pvt->_httpuseragent);
+	stdoutput.printf("keepalive: %d\n\n",pvt->_keepalive);
 	#endif
 
+	// split headers
+	dictionary<char *,const char *>	headerdict;
+	#ifdef DEBUG_HTTP
+	stdoutput.printf("headers:\n");
+	#endif
+	char		**headers;
+	uint64_t	headercount;
+	charstring::split(pvt->_httpheaders,"\n",true,&headers,&headercount);
+	for (uint64_t i=0; i<headercount; i++) {
+
+		charstring::bothTrim(headers[i],'\r');
+		charstring::bothTrim(headers[i],'\n');
+
+		char	*headerkey=headers[i];
+		char	*headervalue=NULL;
+		char	*colon=charstring::findFirst(headers[i],":");
+		if (colon) {
+			*colon='\0';
+			do {
+				colon++;
+			} while (*colon && character::isWhitespace(*colon));
+			headervalue=colon;
+		}
+
+		headerdict.setValue(headerkey,headervalue);
+	}
+	delete[] headers;
+
+	// connect to the host, or reuse existing connection, if possible...
 	if (!pvt->_keepalive ||
 		(charstring::compare(host,pvt->_httpprevioushost) &&
 		charstring::compare(port,pvt->_httppreviousport))) {
@@ -593,6 +622,7 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 			pvt->_openconnect+=interval();
 			pvt->_start.getSystemDateAndTime();
 		}
+
 	} else {
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("Reusing existing connection...\n\n");
@@ -613,31 +643,111 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		pvt->_request=new stringbuffer();
 	}
 	pvt->_request->clear();
+
 	pvt->_request->append((pvt->_usehttppost)?"POST ":"GET ")->append(path);
-	pvt->_request->append(" HTTP/1.1\r\n"
-				"User-Agent: ");
-	pvt->_request->append(pvt->_httpuseragent);
-	pvt->_request->append("\r\n"
-				"Host: ");
-	pvt->_request->append(host);
-	pvt->_request->append("\r\n");
-	if (userpwd) {
+	pvt->_request->append(" HTTP/1.1\r\n");
+
+	// user agent (if provided)
+	const char	*useragent=headerdict.getValue((char *)"User-Agent");
+	if (useragent) {
+		pvt->_request->append("User-Agent: ");
+		pvt->_request->append(useragent);
+		pvt->_request->append("\r\n");
+		headerdict.removeAndArrayDeleteKey((char *)"User-Agent");
+	} else {
+		pvt->_request->append("User-Agent: ");
+		pvt->_request->append(pvt->_httpuseragent);
+		pvt->_request->append("\r\n");
+	}
+
+	// host
+	const char	*hostval=headerdict.getValue((char *)"Host");
+	if (hostval) {
+		pvt->_request->append("Host: ");
+		pvt->_request->append(hostval);
+		pvt->_request->append("\r\n");
+		headerdict.removeAndArrayDeleteKey((char *)"Host");
+	} else {
+		pvt->_request->append("Host: ");
+		pvt->_request->append(host);
+		pvt->_request->append("\r\n");
+	}
+
+	// authorization
+	const char	*auth=headerdict.getValue((char *)"Authorization");
+	if (auth) {
+		pvt->_request->append("Authorization: Basic ");
+		pvt->_request->append(auth);
+		pvt->_request->append("\r\n");
+		headerdict.removeAndArrayDeleteKey((char *)"Authorization");
+	} else if (userpwd) {
 		pvt->_request->append("Authorization: Basic ");
 		char	*userpwd64=charstring::base64Encode(
-					(const unsigned char *)userpwd);
+				(const unsigned char *)userpwd);
 		pvt->_request->append(userpwd64);
 		delete[] userpwd64;
 		pvt->_request->append("\r\n");
 	}
-	pvt->_request->append("Accept: */*\r\n");
+
+	// accept
+	const char	*accept=headerdict.getValue((char *)"Accept");
+	if (accept) {
+		pvt->_request->append("Accept: ");
+		pvt->_request->append(accept);
+		pvt->_request->append("\r\n");
+		headerdict.removeAndArrayDeleteKey((char *)"Accept");
+	} else {
+		pvt->_request->append("Accept: */*\r\n");
+	}
+
+	// content-type (allow httppost data to override)
+	const char	*ctype=headerdict.getValue((char *)"Content-Type");
+	if (ctype) {
+		if (!pvt->_usehttppost || !pvt->_httppostcontenttype) {
+			pvt->_request->append("Content-Type: ");
+			pvt->_request->append(ctype);
+			pvt->_request->append("\r\n");
+		}
+		headerdict.removeAndArrayDeleteKey((char *)"Content-Type");
+	}
+
+	// content-length (allow httppost data to override)
+	const char	*clen=headerdict.getValue((char *)"Content-Length");
+	if (clen) {
+		if (!pvt->_usehttppost || !pvt->_httppostdatasize) {
+			pvt->_request->append("Content-Length: ");
+			pvt->_request->append(clen);
+			pvt->_request->append("\r\n");
+		}
+		headerdict.removeAndArrayDeleteKey((char *)"Content-Length");
+	}
+
+	// content-type/length from httppost data
 	if (pvt->_usehttppost) {
 		pvt->_request->append("Content-Type: ");
 		pvt->_request->append(pvt->_httppostcontenttype);
-		pvt->_request->append("\r\n"
-					"Content-Length: ");
+		pvt->_request->append("\r\n");
+		pvt->_request->append("Content-Length: ");
 		pvt->_request->append(pvt->_httppostdatasize);
-		pvt->_request->append("\r\n"
-					"\r\n");
+		pvt->_request->append("\r\n");
+	}
+
+	// send the rest of the headers...
+	linkedlist<char *>	*keys=headerdict.getKeys();
+	for (linkedlistnode<char *> *node=keys->getFirst();
+					node; node=node->getNext()) {
+		pvt->_request->append(node->getValue());
+		pvt->_request->append(": ");
+		pvt->_request->append(headerdict.getValue(node->getValue()));
+		pvt->_request->append("\r\n");
+	}
+	delete keys;
+	headerdict.clearAndArrayDeleteKeys();
+
+	// for http post, add an additional line break
+	// to divide headers and post data
+	if (pvt->_usehttppost) {
+		pvt->_request->append("\r\n");
 	}
 
 	// timings

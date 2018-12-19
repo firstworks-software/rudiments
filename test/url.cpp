@@ -20,6 +20,17 @@ int main(int argc, const char **argv) {
 	url	u;
 	for (uint16_t i=0; i<4; i++) {
 
+		u.useHttpGet();
+		if (i%2) {
+			u.setHttpUserAgent("unknown/1.0");
+			u.setHttpHeaders("Foo: foo\r\n"
+					"Bar: bar\r\n"
+					"Baz: baz\r\n");
+		} else {
+			u.setHttpUserAgent(NULL);
+			u.setHttpHeaders(NULL);
+		}
+
 		if (i%2) {
 			test("close",u.close());
 		}
