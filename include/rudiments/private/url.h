@@ -36,7 +36,8 @@
 	private:
 		void	init();
 
-		bool	httpOpen(const char *urlname, const char *userpwd);
+		bool	httpOpen(const char *urlname, char *userpwd);
+		bool	curlOpen(const char *urlname, char *userpwd);
 		bool	getChunkSize(bool bof);
 
 		bool	curlPerform();

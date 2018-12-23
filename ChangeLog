@@ -9,6 +9,7 @@
 	added charstring::before/between/after
 	added http user agent to url class
 	added http headers to url class
+	added http post via curl support to url class
 
 1.1.0 - fixed some dictionary and xmlsax memory leaks
 	fixed lib/lib64 detection in configure script

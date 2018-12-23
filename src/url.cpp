@@ -107,7 +107,7 @@ url::url() : file() {
 	pvt->_httpheaders=NULL;
 
 	pvt->_usehttppost=false;
-	pvt->_httppostcontenttype=NULL;
+	pvt->_httppostcontenttype="application/x-www-form-urlencoded";
 	pvt->_httppostdata=NULL;
 	pvt->_httppostdatasize=0;
 
@@ -192,7 +192,11 @@ void url::useHttpPost() {
 }
 
 void url::setHttpPostContentType(const char *contenttype) {
-	pvt->_httppostcontenttype=contenttype;
+	if (contenttype) {
+		pvt->_httppostcontenttype=contenttype;
+	} else {
+		pvt->_httppostcontenttype="application/x-www-form-urlencoded";
+	}
 }
 
 void url::setHttpPostData(const char *data, uint64_t size) {
@@ -265,10 +269,6 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 	}
 
 	// extract user and password (and combined userpwd) from url...
-	#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-	char	*user=NULL;
-	char	*password=NULL;
-	#endif
 	char	*userpwd=NULL;
 	char	*cleanurl=NULL;
 
@@ -308,218 +308,15 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		return false;
 	}
 
+	// open...
 	bool	retval=false;
-
-	// http...
-	if (!charstring::compare(cleanurl,"http://",7)) {
-
-		// connect and request file
-		if (httpOpen(cleanurl,userpwd)) {
-
-			#ifdef DEBUG_HTTP
-			stdoutput.printf("open succeeded, fd: %d\n",
-					pvt->_isc.getFileDescriptor());
-			#endif
-
-			fd(pvt->_isc.getFileDescriptor());
-
-			retval=true;
-
-		} else {
-
-			#ifdef DEBUG_HTTP
-			stdoutput.printf("open failed\n");
-			#endif
-
-			close();
-		}
-
+	bool	usehttp=!charstring::compare(cleanurl,"http://",7);
+	if ((usehttp && httpOpen(cleanurl,userpwd)) ||
+			curlOpen(cleanurl,userpwd)) {
+		retval=true;
+	} else {
+		close();
 	}
-	#ifdef RUDIMENTS_HAS_LIBCURL
-	else {
-
-		// not using built-in protocol handler
-		pvt->_usingbuiltin=false;
-
-		// clear any existing errors
-		error::clearError();
-
-		// split to separate user/password if necessary
-		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-		if (userpwd) {
-			user=userpwd;
-			password=charstring::findFirst(userpwd,':');
-			if (password) {
-				password++;
-				*(password-1)='\0';
-			}
-		}
-		#endif
-
-		#ifdef DEBUG_CURL
-		stdoutput.printf("url: \"%s\"\n",cleanurl);
-		stdoutput.printf("userpwd: \"%s\"\n",userpwd);
-		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-		stdoutput.printf("user: \"%s\"\n",user);
-		stdoutput.printf("password: \"%s\"\n",password);
-		#endif
-		stdoutput.printf("useragent: \"%s\"\n",pvt->_httpuseragent);
-		#endif
-
-		// split http headers if necessary
-		struct curl_slist	*headerlist=NULL;
-		if (!charstring::compare(cleanurl,"https://",8) &&
-						pvt->_httpheaders) {
-			#ifdef DEBUG_CURL
-			stdoutput.printf("headers:\n");
-			#endif
-			char		**headers;
-			uint64_t	headercount;
-			charstring::split(pvt->_httpheaders,"\n",true,
-						&headers,&headercount);
-			for (uint64_t i=0; i<headercount; i++) {
-				charstring::bothTrim(headers[i],'\r');
-				charstring::bothTrim(headers[i],'\n');
-				#ifdef DEBUG_CURL
-				stdoutput.printf("%s\n",headers[i]);
-				#endif
-				headerlist=curl_slist_append(
-						headerlist,headers[i]);
-				delete[] headers[i];
-			}
-			delete[] headers;
-		}
-
-		if (
-			// init this curl instance
-			(pvt->_curl=curl_easy_init()) &&
-
-			// set up debug
-			#ifdef DEBUG_CURL
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_VERBOSE,1L)==CURLE_OK &&
-			#endif
-
-			// set up the url to open
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_URL,cleanurl)==CURLE_OK &&
-
-			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-			// set the user
-			(!user ||
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_USERNAME,user)==CURLE_OK) &&
-
-			// set the password
-			(!password ||
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_PASSWORD,password)==CURLE_OK) &&
-
-			#elif defined(RUDIMENTS_HAS_CURLOPT_USERPWD)
-
-			// set the user/password
-			(!userpwd ||
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_USERPWD,userpwd)==CURLE_OK) &&
-			#endif
-
-			(charstring::compare(cleanurl,"ssh://",6) || (
-			// if a password is supplied, then use password
-			// authentication for ssh protocols, or otherwise
-			// allow curl to choose an appropriate auth type
-			#ifdef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES
-			((
-			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-			password
-			#elif defined(RUDIMENTS_HAS_CURLOPT_USERPWD)
-			userpwd
-			#endif
-			&&
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_SSH_AUTH_TYPES,
-				CURLSSH_AUTH_PASSWORD)==CURLE_OK) ||
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_SSH_AUTH_TYPES,
-				CURLSSH_AUTH_ANY)==CURLE_OK)
-			#endif
-			)) &&
-
-			// set the user agent
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_USERAGENT,
-				pvt->_httpuseragent)==CURLE_OK &&
-
-			// set headers
-			(!headerlist ||
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_HTTPHEADER,headerlist)==CURLE_OK) &&
-
-			// follow any http Location headers we might get
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_FOLLOWLOCATION,1L)==CURLE_OK &&
-
-			// set up write handler
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_WRITEFUNCTION,curlReadData)==CURLE_OK &&
-			curl_easy_setopt(pvt->_curl,
-				CURLOPT_WRITEDATA,this)==CURLE_OK &&
-
-			// init the multi instance
-			(pvt->_curlm=curl_multi_init()) &&
-
-			// add the curl instance to the multi instance
-			curl_multi_add_handle(pvt->_curlm,
-				pvt->_curl)==CURLM_OK &&
-
-			// connect
-			curlPerform()) {
-
-			// It's actually possible for all of this above
-			// to succeed, but for the file descriptor to
-			// still be -1.
-			//
-			// As soon as curl has read the entire file, it
-			// closes the connection and invalidates the
-			// descriptor.
-			//
-			// If the file is small enough, that'll all happen
-			// during a single call to curl_multi_perform().
-			//
-			// I tried telling it to just connect and not read
-			// anything, but even then, it appears to buffer the
-			// data, close the connection and invalidate the
-			// file descriptor anyway, it just doesn't call its
-			// "I've got data callback" until the next call
-			// to curl_multi_perform().
-			//
-			// Even when you can get a hold of it, the file
-			// descriptor appears to be in non-blocking mode,
-			// and setting it otherwise appears to break curl.
-			//
-			// It seems a bit of a ponderous heap, actually.
-			// I'm sure there's some paradigm that it fits neatly
-			// into, but definitely not into the unix "everything's
-			// a file" or Windows "everything's a handle" paradigms.
-
-			#ifdef DEBUG_CURL
-			stdoutput.printf("open succeeded, fd: %d\n",
-						getFileDescriptor());
-			#endif
-
-			retval=true;
-
-		} else {
-
-			#ifdef DEBUG_CURL
-			stdoutput.printf("open failed\n");
-			#endif
-
-			close();
-		}
-
-		curl_slist_free_all(headerlist);
-	}
-	#endif
 
 	delete[] cleanurl;
 	delete[] userpwd;
@@ -527,7 +324,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 	return retval;
 }
 
-bool url::httpOpen(const char *urlname, const char *userpwd) {
+bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// parse out the host, port and path
 	const char	*protodelim=charstring::findFirst(urlname,"://");
@@ -703,7 +500,7 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	// content-type (allow httppost data to override)
 	const char	*ctype=headerdict.getValue((char *)"Content-Type");
 	if (ctype) {
-		if (!pvt->_usehttppost || !pvt->_httppostcontenttype) {
+		if (!pvt->_usehttppost) {
 			pvt->_request->append("Content-Type: ");
 			pvt->_request->append(ctype);
 			pvt->_request->append("\r\n");
@@ -714,7 +511,7 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	// content-length (allow httppost data to override)
 	const char	*clen=headerdict.getValue((char *)"Content-Length");
 	if (clen) {
-		if (!pvt->_usehttppost || !pvt->_httppostdatasize) {
+		if (!pvt->_usehttppost) {
 			pvt->_request->append("Content-Length: ");
 			pvt->_request->append(clen);
 			pvt->_request->append("\r\n");
@@ -954,6 +751,336 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	}
 
 	delete[] host;
+
+	// set file descriptor on success
+	if (retval) {
+		stdoutput.printf("open succeeded, fd: %d\n",
+						getFileDescriptor());
+		fd(pvt->_isc.getFileDescriptor());
+	}
+
+	#ifdef DEBUG_HTTP
+	if (retval) {
+		stdoutput.printf("open succeeded, fd: %d\n",
+						getFileDescriptor());
+	} else {
+		stdoutput.printf("open failed\n");
+	}
+	#endif
+
+	return retval;
+}
+
+bool url::curlOpen(const char *urlname, char *userpwd) {
+
+	bool	retval=false;
+
+	#ifdef RUDIMENTS_HAS_LIBCURL
+
+	// not using built-in protocol handler
+	pvt->_usingbuiltin=false;
+
+	// clear any existing errors
+	error::clearError();
+
+	// split to separate user/password if necessary
+	#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+	char	*user=NULL;
+	char	*password=NULL;
+	if (userpwd) {
+		user=userpwd;
+		password=charstring::findFirst(userpwd,':');
+		if (password) {
+			password++;
+			*(password-1)='\0';
+		}
+	}
+	#endif
+
+	#ifdef DEBUG_CURL
+	stdoutput.printf("url: \"%s\"\n",urlname);
+	stdoutput.printf("userpwd: \"%s\"\n",userpwd);
+	#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+	stdoutput.printf("user: \"%s\"\n",user);
+	stdoutput.printf("password: \"%s\"\n",password);
+	#endif
+	stdoutput.printf("useragent: \"%s\"\n",pvt->_httpuseragent);
+	#endif
+
+	// detect some specific protocols
+	bool	ishttp=!charstring::compare(urlname,"https://",8);
+	bool	isssh=!charstring::compare(urlname,"ssh://",6);
+
+	// split http headers if necessary
+	struct curl_slist	*headerlist=NULL;
+	if (!ishttp && pvt->_httpheaders) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("headers:\n");
+		#endif
+		char		**headers;
+		uint64_t	headercount;
+		charstring::split(pvt->_httpheaders,"\n",true,
+					&headers,&headercount);
+		for (uint64_t i=0; i<headercount; i++) {
+			charstring::bothTrim(headers[i],'\r');
+			charstring::bothTrim(headers[i],'\n');
+			#ifdef DEBUG_CURL
+			stdoutput.printf("%s\n",headers[i]);
+			#endif
+			headerlist=curl_slist_append(
+					headerlist,headers[i]);
+			delete[] headers[i];
+		}
+		delete[] headers;
+	}
+
+	bool	success=true;
+	// init this curl instance
+	pvt->_curl=curl_easy_init();
+	if (!pvt->_curl) {
+		success=false;
+	}
+
+	// set up debug
+	#ifdef DEBUG_CURL
+	if (success && curl_easy_setopt(pvt->_curl,
+				CURLOPT_VERBOSE,1L)!=CURLE_OK) {
+		stdoutput.printf("curl debug failed\n");
+		success=false;
+	}
+	#endif
+
+	// set up the url to open
+	if (success && curl_easy_setopt(pvt->_curl,
+				CURLOPT_URL,urlname)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set url failed\n");
+		#endif
+		success=false;
+	}
+
+	#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+	// set the user
+	if (success && user && curl_easy_setopt(pvt->_curl,
+				CURLOPT_USERNAME,user)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set username failed\n");
+		#endif
+		success=false;
+	}
+	
+	// set the password
+	if (success && password && curl_easy_setopt(pvt->_curl,
+				CURLOPT_PASSWORD,password)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set password failed\n");
+		#endif
+		success=false;
+	}
+
+	#elif defined(RUDIMENTS_HAS_CURLOPT_USERPWD)
+	// set the user/password
+	if (success && userpwd && curl_easy_setopt(pvt->_curl,
+				CURLOPT_USERPWD,userpwd)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set userpwd failed\n");
+		#endif
+		success=false;
+	}
+	#endif
+
+	if (success && isssh) {
+
+		// if a password is supplied, then use password
+		// authentication for ssh protocols, or otherwise
+		// allow curl to choose an appropriate auth type
+		#ifdef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES
+			if (
+			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+				password &&
+			#elif defined(RUDIMENTS_HAS_CURLOPT_USERPWD)
+				userpwd &&
+			#endif
+				curl_easy_setopt(pvt->_curl,
+					CURLOPT_SSH_AUTH_TYPES,
+					CURLSSH_AUTH_PASSWORD)!=CURLE_OK) {
+				#ifdef DEBUG_CURL
+				stdoutput.printf("curl set ssh "
+						"auth type password failed\n");
+				#endif
+				success=false;
+			} else if (curl_easy_setopt(pvt->_curl,
+					CURLOPT_SSH_AUTH_TYPES,
+					CURLSSH_AUTH_ANY)!=CURLE_OK) {
+				#ifdef DEBUG_CURL
+				stdoutput.printf("curl set ssh "
+						"auth type all failed\n");
+				#endif
+				success=false;
+			}
+		#endif
+	}
+
+	if (ishttp) {
+
+		// set the user agent
+		if (success && curl_easy_setopt(pvt->_curl,
+					CURLOPT_USERAGENT,
+					pvt->_httpuseragent)!=CURLE_OK) {
+			#ifdef DEBUG_CURL
+			stdoutput.printf("curl set user agent failed\n");
+			#endif
+			success=false;
+		}
+
+		// set post data
+		if (pvt->_usehttppost) {
+
+			// use post
+			if (success && curl_easy_setopt(pvt->_curl,
+						CURLOPT_POST,1L)!=CURLE_OK) {
+				#ifdef DEBUG_CURL
+				stdoutput.printf("curl set use post failed\n");
+				#endif
+				success=false;
+			}
+
+			// post data size
+			if (success && curl_easy_setopt(pvt->_curl,
+					CURLOPT_POSTFIELDSIZE,
+					pvt->_httppostdatasize)!=CURLE_OK) {
+				#ifdef DEBUG_CURL
+				stdoutput.printf("curl set post "
+							"data size failed\n");
+				#endif
+				success=false;
+			}
+
+			// post data
+			if (success && curl_easy_setopt(pvt->_curl,
+					CURLOPT_POSTFIELDS,
+					pvt->_httppostdata)!=CURLE_OK) {
+				#ifdef DEBUG_CURL
+				stdoutput.printf("curl set post "
+							"data failed\n");
+				#endif
+				success=false;
+			}
+
+			// post header
+			if (success) {
+				stringbuffer	hdr;
+				hdr.append("Content-Type: ");
+				hdr.append(pvt->_httppostcontenttype);
+				hdr.append("\r\n");
+				curl_slist_append(headerlist,hdr.getString());
+			}
+		}
+
+		// set headers
+		if (success && headerlist && curl_easy_setopt(pvt->_curl,
+						CURLOPT_HTTPHEADER,
+						headerlist)!=CURLE_OK) {
+			#ifdef DEBUG_CURL
+			stdoutput.printf("curl set header list failed\n");
+			#endif
+			success=false;
+		}
+	}
+
+	// follow any Location headers we might get
+	if (success && curl_easy_setopt(pvt->_curl,
+				CURLOPT_FOLLOWLOCATION,1L)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set follow location failed\n");
+		#endif
+		success=false;
+	}
+
+	// set up write handler
+	if (success && curl_easy_setopt(pvt->_curl,
+				CURLOPT_WRITEFUNCTION,curlReadData)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set write function failed\n");
+		#endif
+		success=false;
+	}
+	if (success && curl_easy_setopt(pvt->_curl,
+				CURLOPT_WRITEDATA,this)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set write data failed\n");
+		#endif
+		success=false;
+	}
+
+	// init the multi instance
+	if (success) {
+		pvt->_curlm=curl_multi_init();
+		if (!pvt->_curlm) {
+			#ifdef DEBUG_CURL
+			stdoutput.printf("curl init multi instance failed\n");
+			#endif
+			success=false;
+		}
+	}
+
+	// add the curl instance to the multi instance
+	if (curl_multi_add_handle(pvt->_curlm,pvt->_curl)!=CURLM_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl add multi instance failed\n");
+		#endif
+		success=false;
+	}
+
+	// connect
+	if (success && curlPerform()) {
+
+		// It's actually possible for all of this above
+		// to succeed, but for the file descriptor to
+		// still be -1.
+		//
+		// As soon as curl has read the entire file, it
+		// closes the connection and invalidates the
+		// descriptor.
+		//
+		// If the file is small enough, that'll all happen
+		// during a single call to curl_multi_perform().
+		//
+		// I tried telling it to just connect and not read
+		// anything, but even then, it appears to buffer the
+		// data, close the connection and invalidate the
+		// file descriptor anyway, it just doesn't call its
+		// "I've got data callback" until the next call
+		// to curl_multi_perform().
+		//
+		// Even when you can get a hold of it, the file
+		// descriptor appears to be in non-blocking mode,
+		// and setting it otherwise appears to break curl.
+		//
+		// It seems a bit of a ponderous heap, actually.
+		// I'm sure there's some paradigm that it fits neatly
+		// into, but definitely not into the unix "everything's
+		// a file" or Windows "everything's a handle" paradigms.
+
+		retval=true;
+
+	} else {
+
+		close();
+	}
+
+	curl_slist_free_all(headerlist);
+	#endif
+
+	#ifdef DEBUG_CURL
+	if (retval) {
+		stdoutput.printf("open succeeded, fd: %d\n",
+						getFileDescriptor());
+	} else {
+		stdoutput.printf("open failed\n");
+	}
+	#endif
+
 	return retval;
 }
 
@@ -1248,6 +1375,9 @@ bool url::curlPerform() {
 			long		timeout=-1;
 			if (curl_multi_timeout(pvt->_curlm,
 						&timeout)!=CURLM_OK) {
+				#ifdef DEBUG_CURL
+				stdoutput.printf("curl multi timeout failed\n");
+				#endif
 				return false;
 			}
 			if (timeout>=0) {
@@ -1270,6 +1400,9 @@ bool url::curlPerform() {
 		FD_ZERO(&fdexecp);
 		if (curl_multi_fdset(pvt->_curlm,
 				&fdread,&fdwrite,&fdexecp,&maxfd)!=CURLM_OK) {
+			#ifdef DEBUG_CURL
+			stdoutput.printf("curl multi fdset failed\n");
+			#endif
 			return false;
 		}
 
@@ -1288,6 +1421,8 @@ bool url::curlPerform() {
 			// descriptor associated with it...
 			if (fd()==-1) {
 
+				pvt->_l.removeAllFileDescriptors();
+
 				// figure out which fd it was and set the
 				// class' file descriptor to it
 				for (int32_t i=0; i<=maxfd; i++) {
@@ -1296,6 +1431,11 @@ bool url::curlPerform() {
 					// even if we're only reading
 					if (FD_ISSET(i,&fdread) ||
 						FD_ISSET(i,&fdwrite)) {
+						#ifdef DEBUG_CURL
+						stdoutput.printf(
+							"listening "
+							"on fd: %d\n",i);
+						#endif
 						fd(i);
 						break;
 					}
@@ -1308,6 +1448,11 @@ bool url::curlPerform() {
 			// the file descriptor, and time out after the
 			// recomended amount of time...
 			if (pvt->_l.listen(sec,usec)==RESULT_ERROR) {
+				#ifdef DEBUG_CURL
+				char	*err=error::getErrorString();
+				stdoutput.printf("listen failed: %s\n",err);
+				delete[] err;
+				#endif
 				return false;
 			}
 		}
@@ -1315,6 +1460,9 @@ bool url::curlPerform() {
 		// and now, hopefully, some data will be ready
 		if (curl_multi_perform(pvt->_curlm,
 				(int *)&pvt->_stillrunning)!=CURLM_OK) {
+			#ifdef DEBUG_CURL
+			stdoutput.printf("curl multi perform failed\n");
+			#endif
 			return false;
 		}
 
