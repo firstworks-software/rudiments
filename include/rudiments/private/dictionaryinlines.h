@@ -308,6 +308,146 @@ bool DICTIONARY_CLASS::remove(dictionarynode<keytype,valuetype> *node) {
 
 DICTIONARY_TEMPLATE
 inline
+bool DICTIONARY_CLASS::removeAndDelete(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete tnode->getValue()->getKey();
+		delete tnode->getValue()->getValue();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndArrayDelete(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete[] tnode->getValue()->getKey();
+		delete[] tnode->getValue()->getValue();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndDeleteKey(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete tnode->getValue()->getKey();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndArrayDeleteKey(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete[] tnode->getValue()->getKey();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndDeleteValue(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete tnode->getValue()->getValue();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndArrayDeleteValue(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete[] tnode->getValue()->getValue();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndDeleteKeyAndArrayDeleteValue(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete tnode->getValue()->getKey();
+		delete[] tnode->getValue()->getValue();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
+bool DICTIONARY_CLASS::removeAndArrayDeleteKeyAndDeleteValue(
+				dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		delete[] tnode->getValue()->getKey();
+		delete tnode->getValue()->getValue();
+		delete tnode->getValue();
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+inline
 void DICTIONARY_CLASS::clear() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {
