@@ -176,6 +176,20 @@ bool LINKEDLIST_CLASS::remove(valuetype value) {
 
 LINKEDLIST_TEMPLATE
 inline
+bool LINKEDLIST_CLASS::removeAndDelete(valuetype value) {
+	linkedlistnode<valuetype>	*current=find(value);
+	return (current)?removeAndDelete(current):false;
+}
+
+LINKEDLIST_TEMPLATE
+inline
+bool LINKEDLIST_CLASS::removeAndArrayDelete(valuetype value) {
+	linkedlistnode<valuetype>	*current=find(value);
+	return (current)?removeAndArrayDelete(current):false;
+}
+
+LINKEDLIST_TEMPLATE
+inline
 bool LINKEDLIST_CLASS::removeAll(valuetype value) {
 
 	linkedlistnode<valuetype>	*current=first;
@@ -208,6 +222,54 @@ bool LINKEDLIST_CLASS::remove(linkedlistnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
+	delete node;
+	length--;
+	return true;
+}
+
+LINKEDLIST_TEMPLATE
+inline
+bool LINKEDLIST_CLASS::removeAndDelete(linkedlistnode<valuetype> *node) {
+	if (!node) {
+		return false;
+	}
+	if (node->getNext()) {
+		node->getNext()->setPrevious(node->getPrevious());
+	}
+	if (node->getPrevious()) {
+		node->getPrevious()->setNext(node->getNext());
+	}
+	if (node==first) {
+		first=node->getNext();
+	}
+	if (node==last) {
+		last=node->getPrevious();
+	}
+	delete node->getValue();
+	delete node;
+	length--;
+	return true;
+}
+
+LINKEDLIST_TEMPLATE
+inline
+bool LINKEDLIST_CLASS::removeAndArrayDelete(linkedlistnode<valuetype> *node) {
+	if (!node) {
+		return false;
+	}
+	if (node->getNext()) {
+		node->getNext()->setPrevious(node->getPrevious());
+	}
+	if (node->getPrevious()) {
+		node->getPrevious()->setNext(node->getNext());
+	}
+	if (node==first) {
+		first=node->getNext();
+	}
+	if (node==last) {
+		last=node->getPrevious();
+	}
+	delete[] node->getValue();
 	delete node;
 	length--;
 	return true;

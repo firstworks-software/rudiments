@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/dictionary.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
@@ -359,5 +360,90 @@ int main(int argc, const char **argv) {
 	intstrdict.clear();
 	test("clear: getKeys()->getLength",
 		intstrdict.getKeys()->getLength()==0);
+	stdoutput.printf("\n");
+
+	// remove and delete
+	stdoutput.printf("remove/clear and delete:\n");
+	dictionary<stringbuffer *, stringbuffer *>	strbstrbdict;
+	stringbuffer	*onekey=new stringbuffer();
+	onekey->append("one");
+	stringbuffer	*oneval=new stringbuffer();
+	oneval->append("one");
+	stringbuffer	*twokey=new stringbuffer();
+	twokey->append("two");
+	stringbuffer	*twoval=new stringbuffer();
+	twoval->append("two");
+	stringbuffer	*threekey=new stringbuffer();
+	threekey->append("three");
+	stringbuffer	*threeval=new stringbuffer();
+	threeval->append("three");
+	strbstrbdict.setValue(onekey,oneval);
+	strbstrbdict.setValue(twokey,twoval);
+	strbstrbdict.setValue(threekey,threeval);
+	test("...and delete: getValue(): one,one",
+			strbstrbdict.getValue(onekey)==oneval);
+	test("...and delete: getValue(): two,two",
+			strbstrbdict.getValue(twokey)==twoval);
+	test("...and delete: getValue(): three,three",
+			strbstrbdict.getValue(threekey)==threeval);
+	test("...and delete: removeAndDelete(): one",
+			strbstrbdict.removeAndDelete(onekey));
+	test("...and delete: removeAndDelete(): two",
+			strbstrbdict.removeAndDelete(twokey));
+	test("...and delete: removeAndDelete(): three",
+			strbstrbdict.removeAndDelete(threekey));
+	onekey=new stringbuffer();
+	onekey->append("one");
+	oneval=new stringbuffer();
+	oneval->append("one");
+	twokey=new stringbuffer();
+	twokey->append("two");
+	twoval=new stringbuffer();
+	twoval->append("two");
+	threekey=new stringbuffer();
+	threekey->append("three");
+	threeval=new stringbuffer();
+	threeval->append("three");
+	strbstrbdict.setValue(onekey,oneval);
+	strbstrbdict.setValue(twokey,twoval);
+	strbstrbdict.setValue(threekey,threeval);
+	strbstrbdict.clearAndDelete();
+	test("...and delete: clear(): ...",
+				!strbstrbdict.getValue(oneval));
+	stdoutput.printf("\n");
+
+	// remove and array delete
+	stdoutput.printf("remove/clear and array delete:\n");
+	dictionary<char *, char *>	charchardict;
+	charchardict.setValue(charstring::duplicate("one"),
+				charstring::duplicate("one"));
+	charchardict.setValue(charstring::duplicate("two"),
+				charstring::duplicate("two"));
+	charchardict.setValue(charstring::duplicate("three"),
+				charstring::duplicate("three"));
+	test("...and array delete: getValue(): one,one",
+		!charstring::compare(charchardict.getValue(
+					(char *)"one"),(char *)"one"));
+	test("...and array delete: getValue(): two,two",
+		!charstring::compare(charchardict.getValue(
+					(char *)"two"),(char *)"two"));
+	test("...and array delete: getValue(): three,three",
+		!charstring::compare(charchardict.getValue(
+					(char *)"three"),(char *)"three"));
+	test("...and array delete: removeAndArrayDelete(): one",
+			charchardict.removeAndArrayDelete((char *)"one"));
+	test("...and array delete: removeAndArrayDelete(): two",
+			charchardict.removeAndArrayDelete((char *)"two"));
+	test("...and array delete: removeAndArrayDelete(): three",
+			charchardict.removeAndArrayDelete((char *)"three"));
+	charchardict.setValue(charstring::duplicate("one"),
+				charstring::duplicate("one"));
+	charchardict.setValue(charstring::duplicate("two"),
+				charstring::duplicate("two"));
+	charchardict.setValue(charstring::duplicate("three"),
+				charstring::duplicate("three"));
+	charchardict.clearAndArrayDelete();
+	test("...and array delete: clear(): ...",
+				!charchardict.getValue((char *)"one"));
 	stdoutput.printf("\n");
 }

@@ -124,6 +124,25 @@ class linkedlist {
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
 
+		/** Deletes the first linkedlistnode containing "value",
+		 *  deleting the value stored in the linkedlistnode as well.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndDelete(valuetype value);
+
+		/** Deletes the first linkedlistnode containing "value",
+		 *  deleting the value stored in the linkedlistnode as well,
+		 *  which is presumed to be an array.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndArrayDelete(valuetype value);
+
 		/** Deletes all linkedlistnodes containing "value".
 		 * 
 		 *  Note that this operation requires a search and is expensive
@@ -140,6 +159,27 @@ class linkedlist {
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(linkedlistnode<valuetype> *node);
+
+		/** Removed linkedlistnode "node" from the linkedlist,
+		 *  deleting the value stored in the linkedlistnode as well.
+		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndDelete(linkedlistnode<valuetype> *node);
+
+		/** Removed linkedlistnode "node" from the linkedlist,
+		 *  deleting the value stored in the linkedlistnode as well,
+		 *  which is presumed to be an array.
+		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndArrayDelete(linkedlistnode<valuetype> *node);
 
 		/** Returns the number of nodes in the linkedlist. */
 		uint64_t	getLength() const;
