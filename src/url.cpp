@@ -268,7 +268,12 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		return false;
 	}
 
-	// extract user and password (and combined userpwd) from url...
+	// init the framework, if necessary
+	if (!initUrl()) {
+		return false;
+	}
+
+	// extract user, password, and combined userpwd from url...
 	char	*userpwd=NULL;
 	char	*cleanurl=NULL;
 
@@ -300,12 +305,6 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 
 	} else {
 		cleanurl=charstring::duplicate(name);
-	}
-
-
-	// init the framework, if necessary
-	if (!initUrl()) {
-		return false;
 	}
 
 	// open...
@@ -754,8 +753,6 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// set file descriptor on success
 	if (retval) {
-		stdoutput.printf("open succeeded, fd: %d\n",
-						getFileDescriptor());
 		fd(pvt->_isc.getFileDescriptor());
 	}
 
