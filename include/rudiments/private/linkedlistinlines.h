@@ -196,7 +196,42 @@ bool LINKEDLIST_CLASS::removeAll(valuetype value) {
 	linkedlistnode<valuetype>	*next;
 	while (current) {
 		next=current->getNext();
-		if (!current->compare(value) && !remove(current)) {
+		if (!current->compare(value) &&
+				!remove(current)) {
+			return false;
+		}
+		current=next;
+	}
+	return true;
+}
+
+LINKEDLIST_TEMPLATE
+inline
+bool LINKEDLIST_CLASS::removeAllAndDelete(valuetype value) {
+
+	linkedlistnode<valuetype>	*current=first;
+	linkedlistnode<valuetype>	*next;
+	while (current) {
+		next=current->getNext();
+		if (!current->compare(value) &&
+				!removeAndDelete(current)) {
+			return false;
+		}
+		current=next;
+	}
+	return true;
+}
+
+LINKEDLIST_TEMPLATE
+inline
+bool LINKEDLIST_CLASS::removeAllAndArrayDelete(valuetype value) {
+
+	linkedlistnode<valuetype>	*current=first;
+	linkedlistnode<valuetype>	*next;
+	while (current) {
+		next=current->getNext();
+		if (!current->compare(value) &&
+				!removeAndArrayDelete(current)) {
 			return false;
 		}
 		current=next;
