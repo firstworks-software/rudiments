@@ -123,6 +123,26 @@ class singlylinkedlist {
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
 
+		/** Deletes the first singlylinkedlistnode containing "value",
+		 *  deleting the value stored in the singlylinkedlistnode as
+		 *  well.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndDelete(valuetype value);
+
+		/** Deletes the first singlylinkedlistnode containing "value",
+		 *  deleting the value stored in the singlylinkedlistnode as
+		 *  well, which is presumed to be an array.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndArrayDelete(valuetype value);
+
 		/** Deletes all singlylinkedlistnodes containing "value".
 		 *
 		 *  Note that this operation requires a search and is expensive
@@ -131,6 +151,25 @@ class singlylinkedlist {
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
+
+		/** Deletes all linkedlistnodes containing "value",
+		 *  deleting the values stored in the linkedlistnodes as well.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	removeAllAndDelete(valuetype value);
+
+		/** Deletes all singlylinkedlistnodes containing "value",
+		 *  deleting the values stored in the singlylinkedlistnodes as
+		 *  well, which are presumed to be arrays.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	removeAllAndArrayDelete(valuetype value);
 
 		/** Removed singlylinkedlistnode "node" from the
 		 *  singlylinkedlist.
@@ -141,6 +180,31 @@ class singlylinkedlist {
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(singlylinkedlistnode<valuetype> *node);
+
+		/** Removed singlylinkedlistnode "node" from the
+		 *  singlylinkedlist, deleting the value stored in the
+		 *  singlylinkedlistnode as well.
+		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndDelete(
+				singlylinkedlistnode<valuetype> *node);
+
+		/** Removed singlylinkedlistnode "node" from the
+		 *  singlylinkedlist, deleting the value stored in the
+		 *  singlylinkedlistnode as well, which is presumed to be an
+		 *  array.
+		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	removeAndArrayDelete(
+				singlylinkedlistnode<valuetype> *node);
 
 		/** Returns the number of nodes in the singlylinkedlist. */
 		uint64_t	getLength() const;

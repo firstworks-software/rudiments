@@ -185,6 +185,76 @@ bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
 
 SINGLYLINKEDLIST_TEMPLATE
 inline
+bool SINGLYLINKEDLIST_CLASS::removeAndDelete(valuetype value) {
+	singlylinkedlistnode<valuetype> *current=first;
+	if (!current->compare(value)) {
+		if (first==last) {
+			first=NULL;
+			last=NULL;
+		} else {
+			first=first->getNext();
+		}
+	} else {
+		singlylinkedlistnode<valuetype> *prev=first;
+		current=current->getNext();
+		while (current) {
+			if (!current->compare(value)) {
+				prev->setNext(current->getNext());
+				break;
+			}
+			prev=current;
+			current=current->getNext();
+		}
+		if (last==current) {
+			last=prev;
+		}
+	}
+	if (current) {
+		delete current->getValue();
+		delete current;
+		length--;
+		return true;
+	}
+	return false;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+inline
+bool SINGLYLINKEDLIST_CLASS::removeAndArrayDelete(valuetype value) {
+	singlylinkedlistnode<valuetype> *current=first;
+	if (!current->compare(value)) {
+		if (first==last) {
+			first=NULL;
+			last=NULL;
+		} else {
+			first=first->getNext();
+		}
+	} else {
+		singlylinkedlistnode<valuetype> *prev=first;
+		current=current->getNext();
+		while (current) {
+			if (!current->compare(value)) {
+				prev->setNext(current->getNext());
+				break;
+			}
+			prev=current;
+			current=current->getNext();
+		}
+		if (last==current) {
+			last=prev;
+		}
+	}
+	if (current) {
+		delete[] current->getValue();
+		delete current;
+		length--;
+		return true;
+	}
+	return false;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+inline
 bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
 	if (!first) {
 		return true;
@@ -230,6 +300,102 @@ bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
 
 SINGLYLINKEDLIST_TEMPLATE
 inline
+bool SINGLYLINKEDLIST_CLASS::removeAllAndDelete(valuetype value) {
+	if (!first) {
+		return true;
+	}
+	bool	retval=false;
+	singlylinkedlistnode<valuetype> *current=first;
+	while (!current->compare(value)) {
+		retval=true;
+		if (first==last) {
+			first=NULL;
+			last=NULL;
+			delete current->getValue();
+			delete current;
+			length--;
+			return true;
+		} else {
+			first=first->getNext();
+			delete current->getValue();
+			delete current;
+			length--;
+			current=first;
+		}
+	}
+	singlylinkedlistnode<valuetype> *prev=first;
+	current=current->getNext();
+	while (current) {
+		if (!current->compare(value)) {
+			retval=true;
+			singlylinkedlistnode<valuetype> *temp=
+							current->getNext();
+			prev->setNext(temp);
+			if (last==current) {
+				last=prev;
+			}
+			delete current->getValue();
+			delete current;
+			length--;
+			current=temp;
+		} else {
+			prev=current;
+			current=current->getNext();
+		}
+	}
+	return retval;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+inline
+bool SINGLYLINKEDLIST_CLASS::removeAllAndArrayDelete(valuetype value) {
+	if (!first) {
+		return true;
+	}
+	bool	retval=false;
+	singlylinkedlistnode<valuetype> *current=first;
+	while (!current->compare(value)) {
+		retval=true;
+		if (first==last) {
+			first=NULL;
+			last=NULL;
+			delete[] current->getValue();
+			delete current;
+			length--;
+			return true;
+		} else {
+			first=first->getNext();
+			delete[] current->getValue();
+			delete current;
+			length--;
+			current=first;
+		}
+	}
+	singlylinkedlistnode<valuetype> *prev=first;
+	current=current->getNext();
+	while (current) {
+		if (!current->compare(value)) {
+			retval=true;
+			singlylinkedlistnode<valuetype> *temp=
+							current->getNext();
+			prev->setNext(temp);
+			if (last==current) {
+				last=prev;
+			}
+			delete[] current->getValue();
+			delete current;
+			length--;
+			current=temp;
+		} else {
+			prev=current;
+			current=current->getNext();
+		}
+	}
+	return retval;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+inline
 bool SINGLYLINKEDLIST_CLASS::remove(singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return false;
@@ -258,6 +424,84 @@ bool SINGLYLINKEDLIST_CLASS::remove(singlylinkedlistnode<valuetype> *node) {
 		}
 	}
 	if (current) {
+		delete current;
+		length--;
+		return true;
+	}
+	return false;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+inline
+bool SINGLYLINKEDLIST_CLASS::removeAndDelete(
+				singlylinkedlistnode<valuetype> *node) {
+	if (!node) {
+		return false;
+	}
+	singlylinkedlistnode<valuetype> *current=first;
+	if (current==node) {
+		if (first==last) {
+			first=NULL;
+			last=NULL;
+		} else {
+			first=first->getNext();
+		}
+	} else {
+		singlylinkedlistnode<valuetype> *prev=first;
+		current=current->getNext();
+		while (current) {
+			if (current==node) {
+				prev->setNext(current->getNext());
+				break;
+			}
+			prev=current;
+			current=current->getNext();
+		}
+		if (last==current) {
+			last=prev;
+		}
+	}
+	if (current) {
+		delete current->getValue();
+		delete current;
+		length--;
+		return true;
+	}
+	return false;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+inline
+bool SINGLYLINKEDLIST_CLASS::removeAndArrayDelete(
+				singlylinkedlistnode<valuetype> *node) {
+	if (!node) {
+		return false;
+	}
+	singlylinkedlistnode<valuetype> *current=first;
+	if (current==node) {
+		if (first==last) {
+			first=NULL;
+			last=NULL;
+		} else {
+			first=first->getNext();
+		}
+	} else {
+		singlylinkedlistnode<valuetype> *prev=first;
+		current=current->getNext();
+		while (current) {
+			if (current==node) {
+				prev->setNext(current->getNext());
+				break;
+			}
+			prev=current;
+			current=current->getNext();
+		}
+		if (last==current) {
+			last=prev;
+		}
+	}
+	if (current) {
+		delete[] current->getValue();
 		delete current;
 		length--;
 		return true;
