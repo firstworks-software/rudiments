@@ -118,6 +118,20 @@ bool AVLTREE_CLASS::remove(valuetype value) {
 
 AVLTREE_TEMPLATE
 inline
+bool AVLTREE_CLASS::removeAndDelete(valuetype value) {
+	avltreenode<valuetype>	*current=find(value);
+	return (current)?removeAndDelete(current):false;
+}
+
+AVLTREE_TEMPLATE
+inline
+bool AVLTREE_CLASS::removeAndArrayDelete(valuetype value) {
+	avltreenode<valuetype>	*current=find(value);
+	return (current)?removeAndArrayDelete(current):false;
+}
+
+AVLTREE_TEMPLATE
+inline
 bool AVLTREE_CLASS::removeAll(valuetype value) {
 	bool	removed=false;
 	while (remove(value)) {
@@ -128,8 +142,46 @@ bool AVLTREE_CLASS::removeAll(valuetype value) {
 
 AVLTREE_TEMPLATE
 inline
+bool AVLTREE_CLASS::removeAllAndDelete(valuetype value) {
+	bool	removed=false;
+	while (removeAndDelete(value)) {
+		removed=true;
+	}
+	return removed;
+}
+
+AVLTREE_TEMPLATE
+inline
+bool AVLTREE_CLASS::removeAllAndArrayDelete(valuetype value) {
+	bool	removed=false;
+	while (removeAndArrayDelete(value)) {
+		removed=true;
+	}
+	return removed;
+}
+
+AVLTREE_TEMPLATE
+inline
 bool AVLTREE_CLASS::remove(avltreenode<valuetype> *node) {
 	delete detach(node);
+	return true;
+}
+
+AVLTREE_TEMPLATE
+inline
+bool AVLTREE_CLASS::removeAndDelete(avltreenode<valuetype> *node) {
+	avltreenode<valuetype> *detachednode=detach(node);
+	delete detachednode->getValue();
+	delete detachednode;
+	return true;
+}
+
+AVLTREE_TEMPLATE
+inline
+bool AVLTREE_CLASS::removeAndArrayDelete(avltreenode<valuetype> *node) {
+	avltreenode<valuetype> *detachednode=detach(node);
+	delete[] detachednode->getValue();
+	delete detachednode;
 	return true;
 }
 

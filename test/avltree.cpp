@@ -374,4 +374,43 @@ int main(int argc, char **argv) {
 	test("remove/find",!finderror);
 	test("remove/ultimate length",strt.getLength()==0);
 	stdoutput.printf("\n");
+
+
+	// remove/clear and delete
+	stdoutput.printf("remove/clear and delete...\n");
+	avltree<stringbuffer *>	strbt;
+	stringbuffer	*strb1=new stringbuffer();
+	strb1->append("1");
+	strbt.insert(strb1);
+	stringbuffer	*strb2=new stringbuffer();
+	strb2->append("2");
+	strbt.insert(strb2);
+	stringbuffer	*strb3=new stringbuffer();
+	strb3->append("3");
+	strbt.insert(strb3);
+	stringbuffer	*strb4=new stringbuffer();
+	strb4->append("4");
+	strbt.insert(strb4);
+	strbt.removeAndDelete(strb3);
+	test("remove, getLength(): ",strbt.getLength()==3);
+	strbt.removeAndDelete(strb4);
+	test("remove, getLength(): ",strbt.getLength()==2);
+	strbt.clearAndDelete();
+	test("clear, getLength(): ",!strbt.getLength());
+	stdoutput.printf("\n");
+
+	// remove/clear and array delete
+	stdoutput.printf("remove/clear and array delete...\n");
+	avltree<char *>	chart;
+	chart.insert(charstring::duplicate("1"));
+	chart.insert(charstring::duplicate("2"));
+	chart.insert(charstring::duplicate("3"));
+	chart.insert(charstring::duplicate("4"));
+	chart.removeAndArrayDelete((char *)"1");
+	test("remove, getLength(): ",chart.getLength()==3);
+	chart.removeAndArrayDelete((char *)"2");
+	test("remove, getLength(): ",chart.getLength()==2);
+	chart.clearAndArrayDelete();
+	test("clear, getLength(): ",!chart.getLength());
+	stdoutput.printf("\n");
 }
