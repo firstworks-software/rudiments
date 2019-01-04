@@ -1,0 +1,26 @@
+Source: rudiments
+Priority: optional
+Maintainer: David Muse <david.muse@firstworks.com>
+Build-Depends: debhelper (>=9),autotools-dev
+Standards-Version: 3.9.6
+Section: libs
+Homepage: http://rudiments.sourceforge.net
+
+Package: rudiments-dev
+Section: libdevel
+Architecture: any
+Depends: rudiments (= ${binary:Version}), ${misc:Depends}
+Description: Development files for rudiments
+ Development files for rudiments.
+
+Package: rudiments
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: C++ class library for developing systems and applications
+ A C++ class library for developing systems and applications.  Rudiments
+ includes frameworks for processes, threads, clients, servers, loggers and
+ compilers.  It also includes data structures for buffers, arrays, linked lists
+ and dictionaries, and utility classes for processing text and binary data,
+ regular expressions, random numbers, encryption, date and time, system
+ information, files, directories, file-systems, inter-process communication,
+ dynamic libraries, and XML.

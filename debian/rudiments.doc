@@ -1,0 +1,10 @@
+Document: rudiments
+Title: Debian rudiments Manual
+Author: David Muse <david.muse@firstworks.com>
+Abstract: This manual describes what rudiments is
+ and how it can be used.
+Section: unknown
+
+Format: HTML
+Index: /usr/share/doc/rudiments/index.html
+Files: /usr/share/doc/rudiments/*
