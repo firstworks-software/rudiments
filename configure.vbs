@@ -93,7 +93,8 @@ srcs="winsock.cpp "+_
 	"csvdom.cpp "+_
 	"jsonsax.cpp "+_
 	"jsondom.cpp "+_
-	"cursordomnode.cpp"
+	"cursordomnode.cpp"+_
+	"websocket.cpp"
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -254,7 +255,8 @@ headers3="sax.h "+_
 	"csvdom.h "+_
 	"jsonsax.h "+_
 	"jsondom.h "+_
-	"cursordomnode.h"
+	"cursordomnode.h"+_
+	"websocket.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -442,7 +444,9 @@ privateheaders7="codetree.h "+_
 	"jsondom.h "+_
 	"jsondomincludes.h "+_
 	"cursordomnode.h "+_
-	"cursordomnodeincludes.h "
+	"cursordomnodeincludes.h "+_
+	"websocket.h"+_
+	"websocketincludes.h"
 
 ' version
 RUDIMENTS_VERSION="1.2.0"

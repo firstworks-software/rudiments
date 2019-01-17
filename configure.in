@@ -4154,6 +4154,12 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 tls.h tlscontext.h tlscertificate.h tlsincludes.h"
 	SRCS="$SRCS tls.cpp"
 	LOBJS="$LOBJS tls.lo"
+
+	# include websocket too
+	HEADERS3="$HEADERS3 websocket.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 websocket.h websocketincludes.h"
+	SRCS="$SRCS websocket.cpp"
+	LOBJS="$LOBJS websocket.lo"
 fi
 
 if ( test "$INCLUDE_FILESYSTEM" = "1" )
