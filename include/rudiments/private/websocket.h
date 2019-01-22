@@ -5,7 +5,12 @@
 
 		bool	acceptInternal();
 		ssize_t	readInternal(void *buf, ssize_t count);
-		ssize_t	writeInternal(const void *buf, ssize_t count);
+		ssize_t	write(const void *buf, ssize_t count,
+						unsigned char opcode);
+		ssize_t	writeInternal(const void *buf, ssize_t count,
+						unsigned char opcode);
 		ssize_t	copyOut(void *buf, ssize_t count);
+		bool	pong();
+		bool	validatePong();
 
 		websocketprivate	*pvt;

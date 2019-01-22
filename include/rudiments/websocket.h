@@ -62,6 +62,12 @@ class RUDIMENTS_DLLSPEC websocket : public securitycontext {
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	write(const void *buf, ssize_t count);
 
+		/** Pings the peer with "count" bytes of "buf" data.  Returns
+		 *  true if the peer responds with the same data or false if
+		 *  the peer doesn't respond or responds with different
+		 *  data. */
+		bool ping(const unsigned char *buf, ssize_t count);
+
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */
 		ssize_t pending();

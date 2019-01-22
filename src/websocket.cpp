@@ -45,9 +45,12 @@ class websocketprivate {
 		char		*_protocol;
 		char		*_ext;
 
-		uint64_t	_bufferpos;
-		uint64_t	_buffersize;
 		unsigned char	*_buffer;
+		uint64_t	_buffersize;
+		uint64_t	_bufferpos;
+
+		unsigned char	*_pingbuffer;
+		uint64_t	_pingbuffersize;
 };
 
 websocket::websocket() : securitycontext() {
@@ -57,9 +60,11 @@ websocket::websocket() : securitycontext() {
 	pvt->_key=NULL;
 	pvt->_protocol=NULL;
 	pvt->_ext=NULL;
-	pvt->_bufferpos=0;
-	pvt->_buffersize=0;
 	pvt->_buffer=NULL;
+	pvt->_buffersize=0;
+	pvt->_bufferpos=0;
+	pvt->_pingbuffer=NULL;
+	pvt->_pingbuffersize=0;
 }
 
 websocket::~websocket() {
@@ -67,6 +72,7 @@ websocket::~websocket() {
 	delete[] pvt->_protocol;
 	delete[] pvt->_ext;
 	delete[] pvt->_buffer;
+	delete[] pvt->_pingbuffer;
 	delete pvt;
 }
 
@@ -454,181 +460,200 @@ ssize_t websocket::readInternal(void *buf, ssize_t count) {
 		stdoutput.write("websocket::read() {\n");
 	#endif
 
-	// read header...
+	bool	loop=true;
+	while (loop) {
 
-	// read first byte
-	unsigned char	firstbyte=0;
-	if (pvt->_fd->read(&firstbyte)!=sizeof(firstbyte)) {
-		#ifdef DEBUG_READ
-			stdoutput.write("	firstbyte error\n}\n");
-		#endif
-		// FIXME: set error
-		return RESULT_ERROR;
-	}
+		// read header...
 
-	// first byte is 4 flags and 4-bit opcode
-	// FIXME: do something with these...
-	unsigned char	flags=firstbyte>>4;
-	unsigned char	opcode=firstbyte&0x0f;
-
-	// parse flags
-	// FIXME: do something with these...
-	unsigned char	fin=(flags&0x08)>>3;
-	unsigned char	rsv1=(flags&0x04)>>2;
-	unsigned char	rsv2=(flags&0x02)>>1;
-	unsigned char	rsv3=flags&0x01;
-	#ifdef DEBUG_READ
-		stdoutput.write("	firstbyte: ");
-		stdoutput.printBits(firstbyte);
-		stdoutput.write("\n");
-		stdoutput.printf("	fin: %d\n",fin);
-		stdoutput.printf("	rsv1: %d\n",rsv1);
-		stdoutput.printf("	rsv2: %d\n",rsv2);
-		stdoutput.printf("	rsv3: %d\n",rsv3);
-		stdoutput.printf("	opcode: 0x%02x\n",opcode);
-	#endif
-
-	if (fin) {
-		// FIXME: ...
-	}
-	if (rsv1) {
-		// FIXME: ...
-	}
-	if (rsv2) {
-		// FIXME: ...
-	}
-	if (rsv3) {
-		// FIXME: ...
-	}
-
-	switch (opcode) {
-		case OPCODE_CONT_FRAME:
-			// FIXME: ...
-			break;
-		case OPCODE_TEXT_FRAME:
-			// FIXME: ...
-			break;
-		case OPCODE_BINARY_FRAME:
-			// FIXME: ...
-			break;
-		case OPCODE_CONNECTION_CLOSE:
-			// FIXME: ...
-			break;
-		case OPCODE_PING:
-			// FIXME: ...
-			break;
-		case OPCODE_PONG:
-			// FIXME: ...
-			break;
-	}
-
-	// read payload length
-	unsigned char	payloadlen1=0;
-	uint16_t	payloadlen2=0;
-	uint64_t	payloadlen3=0;
-	if (pvt->_fd->read(&payloadlen1)!=sizeof(payloadlen1)) {
-		#ifdef DEBUG_READ
-			stdoutput.write("	payload length 1 error\n}\n");
-		#endif
-		// FIXME: set error
-		return RESULT_ERROR;
-	}
-
-	// first bit is the mask, next 7 are actual payload length
-	unsigned char	mask=(payloadlen1&0x80)>>7;
-	payloadlen1=payloadlen1&0x7f;
-
-	#ifdef DEBUG_READ
-		stdoutput.printf("	mask: %d\n",mask);
-	#endif
-
-	// if this is a client then mask must be 0
-	// if this is a server then mask must be 1
-	if ((pvt->_isclient && mask) || (!pvt->_isclient && !mask)) {
-		#ifdef DEBUG_READ
-			stdoutput.printf("	wrong mask: %d\n}\n",mask);
-		#endif
-		// FIXME: set error
-		// FIXME: close the connection
-		return RESULT_ERROR;
-	}
-
-	// read extended payload length
-	if (payloadlen1==126) {
-		if (pvt->_fd->read(&payloadlen2)!=sizeof(payloadlen2)) {
+		// read first byte
+		unsigned char	firstbyte=0;
+		if (pvt->_fd->read(&firstbyte)!=sizeof(firstbyte)) {
 			#ifdef DEBUG_READ
-				stdoutput.write("	"
-					"payload length 2 error:\n}\n");
+				stdoutput.write("	firstbyte error\n}\n");
 			#endif
 			// FIXME: set error
 			return RESULT_ERROR;
 		}
-		pvt->_buffersize=payloadlen2;
-	} else if (payloadlen1==127) {
-		if (pvt->_fd->read(&payloadlen3)!=sizeof(payloadlen3)) {
+
+		// first byte is 4 flags and 4-bit opcode
+		// FIXME: do something with these...
+		unsigned char	flags=firstbyte>>4;
+		unsigned char	opcode=firstbyte&0x0f;
+
+		// parse flags
+		// FIXME: do something with these...
+		unsigned char	fin=(flags&0x08)>>3;
+		unsigned char	rsv1=(flags&0x04)>>2;
+		unsigned char	rsv2=(flags&0x02)>>1;
+		unsigned char	rsv3=flags&0x01;
+		#ifdef DEBUG_READ
+			stdoutput.write("	firstbyte: ");
+			stdoutput.printBits(firstbyte);
+			stdoutput.write("\n");
+			stdoutput.printf("	fin: %d\n",fin);
+			stdoutput.printf("	rsv1: %d\n",rsv1);
+			stdoutput.printf("	rsv2: %d\n",rsv2);
+			stdoutput.printf("	rsv3: %d\n",rsv3);
+			stdoutput.printf("	opcode: 0x%02x\n",opcode);
+		#endif
+
+		if (fin) {
+			// FIXME: ...
+		}
+		if (rsv1) {
+			// FIXME: ...
+		}
+		if (rsv2) {
+			// FIXME: ...
+		}
+		if (rsv3) {
+			// FIXME: ...
+		}
+
+		// read payload length
+		unsigned char	payloadlen1=0;
+		uint16_t	payloadlen2=0;
+		uint64_t	payloadlen3=0;
+		if (pvt->_fd->read(&payloadlen1)!=sizeof(payloadlen1)) {
 			#ifdef DEBUG_READ
 				stdoutput.write("	"
-					"payload length 3 error\n}\n");
+						"payload length 1 error\n}\n");
 			#endif
 			// FIXME: set error
 			return RESULT_ERROR;
 		}
-		pvt->_buffersize=payloadlen3;
-	} else {
-		pvt->_buffersize=payloadlen1;
-	}
 
-	#ifdef DEBUG_READ
-		stdoutput.printf("	payload length 1: %d\n",payloadlen1);
-		stdoutput.printf("	payload length 2: %d\n",payloadlen2);
-		stdoutput.printf("	payload length 3: %d\n",payloadlen3);
-	#endif
+		// first bit is the mask, next 7 are actual payload length
+		unsigned char	mask=(payloadlen1&0x80)>>7;
+		payloadlen1=payloadlen1&0x7f;
 
-	// read masking key
-	unsigned char	maskingkey[4];
-	if (mask) {
-		if (pvt->_fd->read(maskingkey,sizeof(maskingkey))!=
+		#ifdef DEBUG_READ
+			stdoutput.printf("	mask: %d\n",mask);
+		#endif
+
+		// if this is a client then mask must be 0
+		// if this is a server then mask must be 1
+		if ((pvt->_isclient && mask) || (!pvt->_isclient && !mask)) {
+			#ifdef DEBUG_READ
+				stdoutput.printf("	"
+						"wrong mask: %d\n}\n",mask);
+			#endif
+			// FIXME: set error
+			// FIXME: close the connection
+			return RESULT_ERROR;
+		}
+
+		// read extended payload length
+		if (payloadlen1==126) {
+			if (pvt->_fd->read(&payloadlen2)!=sizeof(payloadlen2)) {
+				#ifdef DEBUG_READ
+					stdoutput.write("	"
+						"payload length 2 error:\n}\n");
+				#endif
+				// FIXME: set error
+				return RESULT_ERROR;
+			}
+			pvt->_buffersize=payloadlen2;
+		} else if (payloadlen1==127) {
+			if (pvt->_fd->read(&payloadlen3)!=sizeof(payloadlen3)) {
+				#ifdef DEBUG_READ
+					stdoutput.write("	"
+						"payload length 3 error\n}\n");
+				#endif
+				// FIXME: set error
+				return RESULT_ERROR;
+			}
+			pvt->_buffersize=payloadlen3;
+		} else {
+			pvt->_buffersize=payloadlen1;
+		}
+
+		#ifdef DEBUG_READ
+			stdoutput.printf("	payload length 1: %d\n",
+								payloadlen1);
+			stdoutput.printf("	payload length 2: %d\n",
+								payloadlen2);
+			stdoutput.printf("	payload length 3: %d\n",
+								payloadlen3);
+		#endif
+
+		// read masking key
+		unsigned char	maskingkey[4];
+		if (mask) {
+			if (pvt->_fd->read(maskingkey,sizeof(maskingkey))!=
 							sizeof(maskingkey)) {
+				#ifdef DEBUG_READ
+					stdoutput.write("	"
+						"masking key error\n}\n");
+				#endif
+				// FIXME: set error
+				return RESULT_ERROR;
+			}
+		}
+
+		#ifdef DEBUG_READ
+			stdoutput.write("	masking key: ");
+			stdoutput.safePrint(maskingkey,sizeof(maskingkey));
+			stdoutput.write("\n");
+		#endif
+
+
+		// read payload
+		delete[] pvt->_buffer;
+		pvt->_buffer=new unsigned char[pvt->_buffersize];
+		if (pvt->_fd->read(pvt->_buffer,pvt->_buffersize)!=
+						(ssize_t)pvt->_buffersize) {
 			#ifdef DEBUG_READ
-				stdoutput.write("	"
-					"masking key error\n}\n");
+				stdoutput.write("	payload error\n}\n");
 			#endif
 			// FIXME: set error
 			return RESULT_ERROR;
 		}
-	}
 
-	#ifdef DEBUG_READ
-		stdoutput.write("	masking key: ");
-		stdoutput.safePrint(maskingkey,sizeof(maskingkey));
-		stdoutput.write("\n");
-	#endif
+		// unmask payload (if necessary)
+		if (mask) {
+			for (uint64_t i=0; i<pvt->_buffersize; i++) {
+				pvt->_buffer[i]=pvt->_buffer[i]^maskingkey[i%4];
+			}
+		}
 
-
-	// read payload
-	delete[] pvt->_buffer;
-	pvt->_buffer=new unsigned char[pvt->_buffersize];
-	if (pvt->_fd->read(pvt->_buffer,pvt->_buffersize)!=
-						(ssize_t)pvt->_buffersize) {
 		#ifdef DEBUG_READ
-			stdoutput.write("	payload error\n}\n");
+			stdoutput.write("	payload:\n");
+			stdoutput.safePrint(pvt->_buffer,pvt->_buffersize);
+			stdoutput.write("\n");
 		#endif
-		// FIXME: set error
-		return RESULT_ERROR;
-	}
 
-	// unmask payload (if necessary)
-	if (mask) {
-		for (uint64_t i=0; i<pvt->_buffersize; i++) {
-			pvt->_buffer[i]=pvt->_buffer[i]^maskingkey[i%4];
+		switch (opcode) {
+			case OPCODE_PING:
+				if (!pong()) {
+					// FIXME: set error
+					return RESULT_ERROR;
+				}
+				break;
+			case OPCODE_PONG:
+				if (!validatePong()) {
+					// FIXME: set error
+					return RESULT_ERROR;
+				}
+				break;
+			case OPCODE_CONNECTION_CLOSE:
+				// FIXME: close the connection
+				loop=false;
+				break;
+			case OPCODE_CONT_FRAME:
+				loop=false;
+				break;
+			case OPCODE_TEXT_FRAME:
+				loop=false;
+				break;
+			case OPCODE_BINARY_FRAME:
+				loop=false;
+				break;
+			default:
+				// FIXME: set error
+				return RESULT_ERROR;
 		}
 	}
-
-	#ifdef DEBUG_READ
-		stdoutput.write("	payload:\n");
-		stdoutput.safePrint(pvt->_buffer,pvt->_buffersize);
-		stdoutput.write("\n");
-	#endif
 
 	#ifdef DEBUG_READ
 		stdoutput.write("}\n");
@@ -651,6 +676,12 @@ ssize_t websocket::copyOut(void *buf, ssize_t count) {
 }
 
 ssize_t websocket::write(const void *buf, ssize_t count) {
+	// FIXME: Select text/binary somehow...
+	return write(buf,count,OPCODE_TEXT_FRAME);
+}
+
+ssize_t websocket::write(const void *buf, ssize_t count,
+						unsigned char opcode) {
 
 	// temporarily disable the security context so
 	// local writes don't use websocket::write();
@@ -661,7 +692,7 @@ ssize_t websocket::write(const void *buf, ssize_t count) {
 	pvt->_fd->setSecurityContext(NULL);
 
 	// write...
-	ssize_t	retval=writeInternal(buf,count);
+	ssize_t	retval=writeInternal(buf,count,opcode);
 
 	// reset security context
 	pvt->_fd->setSecurityContext(this);
@@ -669,7 +700,8 @@ ssize_t websocket::write(const void *buf, ssize_t count) {
 	return retval;
 }
 
-ssize_t websocket::writeInternal(const void *buf, ssize_t count) {
+ssize_t websocket::writeInternal(const void *buf, ssize_t count,
+							unsigned char opcode) {
 
 	#ifdef DEBUG_WRITE
 		stdoutput.write("websocket::write() {\n");
@@ -683,8 +715,6 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t count) {
 	unsigned char	rsv2=0;
 	unsigned char	rsv3=0;
 	unsigned char	flags=(fin<<3)|(rsv1<<2)|(rsv2<<1)|rsv3;
-	// FIXME: Select text/binary somehow...
-	unsigned char	opcode=OPCODE_TEXT_FRAME;
 	unsigned char	firstbyte=(flags<<4)|opcode;
 
 	#ifdef DEBUG_WRITE
@@ -840,4 +870,24 @@ bool websocket::close() {
 
 ssize_t websocket::getSizeMax() {
 	return SSIZE_MAX;
+}
+
+bool websocket::ping(const unsigned char *buf, ssize_t count) {
+	delete[] pvt->_pingbuffer;
+	pvt->_pingbuffer=(unsigned char *)bytestring::duplicate(buf,count);
+	pvt->_pingbuffersize=count;
+	return false;
+}
+
+bool websocket::pong() {
+	return (write(pvt->_buffer,
+			pvt->_buffersize,
+			OPCODE_PING)==(ssize_t)pvt->_buffersize);
+}
+
+bool websocket::validatePong() {
+	return (pvt->_buffersize==pvt->_pingbuffersize &&
+			bytestring::compare(pvt->_buffer,
+						pvt->_pingbuffer,
+						pvt->_pingbuffersize));
 }
