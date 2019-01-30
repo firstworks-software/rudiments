@@ -672,6 +672,11 @@ ssize_t websocket::copyOut(void *buf, ssize_t count) {
 
 	bytestring::copy(buf,pvt->_buffer+pvt->_bufferpos,bytestocopy);
 	pvt->_bufferpos+=bytestocopy;
+
+	if (pvt->_bufferpos==pvt->_buffersize) {
+		pvt->_bufferpos=0;
+		pvt->_buffersize=0;
+	}
 	return bytestocopy;
 }
 
