@@ -20,9 +20,9 @@
 #endif
 
 //#define DEBUG_CONNECT 1
-#define DEBUG_ACCEPT 1
-#define DEBUG_READ 1
-#define DEBUG_WRITE 1
+//#define DEBUG_ACCEPT 1
+//#define DEBUG_READ 1
+//#define DEBUG_WRITE 1
 
 // FIXME do this some other way...
 #define MAXBYTES 1024*1024*512
