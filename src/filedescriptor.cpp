@@ -986,7 +986,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 	bytestring::zero(term,termlen);
 
 	// initialize some variables
-	int32_t	sizeread;
+	ssize_t	sizeread;
 	char	charbuffer;
 	bool	escaped=false;
 	bool	copytobuffer;
