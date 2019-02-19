@@ -131,7 +131,7 @@ bool websocket::acceptInternal() {
 	// read the request
 	char	*request=NULL;
 	ssize_t	result=pvt->_fd->read(&request,"\r\n",MAXBYTES);
-	if (request<0) {
+	if (result<0) {
 		delete[] request;
 		if (result==RESULT_ERROR) {
 			#ifdef DEBUG_ACCEPT
