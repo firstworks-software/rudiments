@@ -51,7 +51,8 @@ make %{?_smp_mflags}
 make install DESTDIR=%{buildroot}
 
 %files
-%{_libdir}/librudiments.so.*
+%{_libdir}/librudiments.so.6
+%{_libdir}/librudiments.so.6.*
 %doc AUTHORS ChangeLog
 %exclude %{_libdir}/librudiments.la
 %if 0%{?fedora}
@@ -72,7 +73,8 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Web Feb 20 2019 David Muse <david.muse@firstworks.com> - 1.2.0-1
+* Wed Feb 20 2019 David Muse <david.muse@firstworks.com> - 1.2.0-1
+- Removed globbing of library major version.
 - Removed calls to /sbin/ldconfig.
 - Updated to version 1.2.0.
 
