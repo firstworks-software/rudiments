@@ -1,0 +1,12 @@
+# default to debian
+DIST_BUILD_DEPENDS="libssl1.0-dev"
+
+# override for ubuntu
+dpkg-vendor --derives-from Ubuntu
+if ( test "$?" = "0" )
+then
+	DIST_BUILD_DEPENDS="libssl-dev"
+fi
+
+# update control file
+sed -e "s|@DIST_BUILD_DEPENDS@|$DIST_BUILD_DEPENDS|" control.in > control
