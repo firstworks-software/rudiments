@@ -50,10 +50,6 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=%{buildroot}
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
 %{_libdir}/librudiments.so.*
 %doc AUTHORS ChangeLog
@@ -76,7 +72,8 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Fri Dec 14 2018 David Muse <david.muse@firstworks.com> - 1.2.0-1
+* Web Feb 20 2019 David Muse <david.muse@firstworks.com> - 1.2.0-1
+- Removed calls to /sbin/ldconfig.
 - Updated to version 1.2.0.
 
 * Mon Sep 05 2018 David Muse <david.muse@firstworks.com> - 1.1.0-1
