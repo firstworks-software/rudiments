@@ -78,7 +78,7 @@ make install DESTDIR=%{buildroot}
 - Removed calls to /sbin/ldconfig.
 - Updated to version 1.2.0.
 
-* Mon Sep 05 2018 David Muse <david.muse@firstworks.com> - 1.1.0-1
+* Wed Sep 05 2018 David Muse <david.muse@firstworks.com> - 1.1.0-1
 - Updated to version 1.1.0.
 - Added gcc-c++ to BuildRequires.
 

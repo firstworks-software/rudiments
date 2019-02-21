@@ -3,12 +3,12 @@ Priority: optional
 Maintainer: David Muse <david.muse@firstworks.com>
 Homepage: http://rudiments.sourceforge.net
 Standards-Version: 3.9.6
-Build-Depends: debhelper (>=9),autotools-dev, libedit-dev, @DIST_BUILD_DEPENDS@, libcurl4-openssl-dev, libkrb5-dev
+Build-Depends: debhelper (>=9),autotools-dev, libedit-dev, @LIBSSL_DEV@, libcurl4-openssl-dev, libkrb5-dev
 
 Package: rudiments
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libedit2, openssl, libcurl3, libkrb5-3
+Depends: ${shlibs:Depends}, ${misc:Depends}, libedit2, openssl, @LIBCURL@, libkrb5-3
 Description: C++ class library for developing systems and applications
  A C++ class library for developing systems and applications.  Rudiments
  includes frameworks for processes, threads, clients, servers, loggers and
