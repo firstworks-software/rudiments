@@ -93,7 +93,7 @@ srcs="winsock.cpp "+_
 	"csvdom.cpp "+_
 	"jsonsax.cpp "+_
 	"jsondom.cpp "+_
-	"cursordomnode.cpp"+_
+	"cursordomnode.cpp "+_
 	"websocket.cpp"
 
 lobjs="winsock.obj "+_
@@ -255,7 +255,7 @@ headers3="sax.h "+_
 	"csvdom.h "+_
 	"jsonsax.h "+_
 	"jsondom.h "+_
-	"cursordomnode.h"+_
+	"cursordomnode.h "+_
 	"websocket.h"
 
 privateheaders0="config.h "+_
@@ -445,7 +445,7 @@ privateheaders7="codetree.h "+_
 	"jsondomincludes.h "+_
 	"cursordomnode.h "+_
 	"cursordomnodeincludes.h "+_
-	"websocket.h"+_
+	"websocket.h "+_
 	"websocketincludes.h"
 
 ' version
