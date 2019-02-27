@@ -1,1 +1,0 @@
-# Rudiments NSIS script
