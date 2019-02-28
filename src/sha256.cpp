@@ -15,7 +15,8 @@
 class sha256private {
 	friend class sha256;
 	private:
-		#if defined(RUDIMENTS_HAS_SSL)
+		#if defined(RUDIMENTS_HAS_SSL) && \
+			defined(RUDIMENTS_HAS_SHA256_CTX)
 			SHA256_CTX	_context;
 			uint8_t		_hash[SHA256_DIGEST_LENGTH];
 		#else
@@ -36,7 +37,7 @@ sha256::~sha256() {
 
 bool sha256::append(const unsigned char *data, uint32_t length) {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	#if defined(RUDIMENTS_HAS_SSL)
+	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		if (!SHA256_Update(&pvt->_context,data,length)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
@@ -50,7 +51,7 @@ bool sha256::append(const unsigned char *data, uint32_t length) {
 
 const unsigned char *sha256::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	#if defined(RUDIMENTS_HAS_SSL)
+	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		if (!SHA256_Final(pvt->_hash,&pvt->_context)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return NULL;
@@ -63,7 +64,7 @@ const unsigned char *sha256::getHash() {
 }
 
 uint64_t sha256::getHashLength() {
-	#if defined(RUDIMENTS_HAS_SSL)
+	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		return SHA256_DIGEST_LENGTH;
 	#else
 		return 32;
@@ -72,7 +73,7 @@ uint64_t sha256::getHashLength() {
 
 bool sha256::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
-	#if defined(RUDIMENTS_HAS_SSL)
+	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 		if (!SHA256_Init(&pvt->_context)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
@@ -91,7 +92,7 @@ hasherror_t sha256::getError() {
 }
 
 void sha256::setError(int32_t err) {
-	#if defined(RUDIMENTS_HAS_SSL)
+	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		// FIXME: implement this...
 		pvt->_err=HASH_ERROR_NULL;
 		// clear the queue
