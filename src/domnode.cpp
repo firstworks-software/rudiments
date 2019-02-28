@@ -16,9 +16,9 @@ class domnodeprivate {
 		dom		*_dom;
 		bool		_cascade;
 		domnodetype	_type;
-		const char	*_namespace;
-		const char	*_name;
-		const char	*_value;
+		char		*_namespace;
+		char		*_name;
+		char		*_value;
 		domnode		*_parent;
 		domnode		*_next;
 		domnode		*_nexttag;
@@ -110,9 +110,9 @@ domnode::~domnode() {
 		pvt->_dom->unCacheString(pvt->_name);
 		pvt->_dom->unCacheString(pvt->_value);
 	} else {
-		delete[] (char *)pvt->_namespace;
-		delete[] (char *)pvt->_name;
-		delete[] (char *)pvt->_value;
+		delete[] pvt->_namespace;
+		delete[] pvt->_name;
+		delete[] pvt->_value;
 	}
 	delete pvt;
 }
@@ -1039,9 +1039,9 @@ void domnode::setType(domnodetype type) {
 void domnode::setNamespace(const char *ns) {
 	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_namespace);
-		pvt->_namespace=pvt->_dom->cacheString(ns);
+		pvt->_namespace=(char *)pvt->_dom->cacheString(ns);
 	} else {
-		delete[] (char *)pvt->_namespace;
+		delete[] pvt->_namespace;
 		pvt->_namespace=charstring::duplicate(ns);
 	}
 }
@@ -1049,9 +1049,9 @@ void domnode::setNamespace(const char *ns) {
 void domnode::setName(const char *name) {
 	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_name);
-		pvt->_name=pvt->_dom->cacheString(name);
+		pvt->_name=(char *)pvt->_dom->cacheString(name);
 	} else {
-		delete[] (char *)pvt->_name;
+		delete[] pvt->_name;
 		pvt->_name=charstring::duplicate(name);
 	}
 }
@@ -1064,9 +1064,9 @@ void domnode::setName(const char *ns, const char *name) {
 void domnode::setValue(const char *value) {
 	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_value);
-		pvt->_value=pvt->_dom->cacheString(value);
+		pvt->_value=(char *)pvt->_dom->cacheString(value);
 	} else {
-		delete[] (char *)pvt->_value;
+		delete[] pvt->_value;
 		pvt->_value=charstring::duplicate(value);
 	}
 }
