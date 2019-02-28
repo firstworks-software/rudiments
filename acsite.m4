@@ -1038,6 +1038,9 @@ then
 		AC_MSG_CHECKING(for X509_get_signature_nid)
 		FW_TRY_LINK([#include <openssl/x509.h>],[X509_get_signature_nid(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_X509_GET_SIGNATURE_NID,1,SSL has X509_get_signature_nid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		AC_MSG_CHECKING(for SHA256_CTX)
+		FW_TRY_LINK([#include <openssl/sha.h>],[SHA256_CTX c;],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SHA256_CTX,1,SSL has SHA256_CTX) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 		AC_MSG_CHECKING(whether platform requires default cipher of PROFILE=SYSTEM)
 		if ( test -r "/etc/os-release" )
 		then

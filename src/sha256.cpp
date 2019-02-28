@@ -5,7 +5,7 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
 
-#if defined(RUDIMENTS_HAS_SSL)
+#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 	#include <openssl/sha.h>
 	#include <openssl/err.h>
 #else

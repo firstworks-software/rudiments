@@ -130,6 +130,9 @@
 /* Rudiments supports PCRE */
 /* #undef RUDIMENTS_HAS_PCRE */
 
+/* SSL has SHA256_CTX */
+/* #undef RUDIMENTS_HAS_SHA256_CTX */
+
 /* Rudiments supports SSL */
 /* #undef RUDIMENTS_HAS_SSL */
 
