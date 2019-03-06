@@ -179,7 +179,7 @@ void dynamicarray<valuetype>::clearExtentList() {
 template< class valuetype >
 inline
 void dynamicarray<valuetype>::clear() {
-	return clear(initial,extsize);
+	clear(initial,extsize);
 }
 
 template< class valuetype >
