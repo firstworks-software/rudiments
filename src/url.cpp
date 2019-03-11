@@ -810,7 +810,7 @@ bool url::curlOpen(const char *urlname, char *userpwd) {
 
 	// split http headers if necessary
 	struct curl_slist	*headerlist=NULL;
-	if (!ishttp && pvt->_httpheaders) {
+	if (ishttp && pvt->_httpheaders) {
 		#ifdef DEBUG_CURL
 		stdoutput.printf("headers:\n");
 		#endif
