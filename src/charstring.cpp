@@ -986,6 +986,8 @@ bool charstring::isYes(const char *string) {
 		next=string[3];
 	} else if (!charstring::compareIgnoringCase(string,"true",4)) {
 		next=string[4];
+	} else if (!charstring::compareIgnoringCase(string,"on",2)) {
+		next=string[2];
 	} else if (string[0]=='y' || string[0]=='Y' ||
 			string[0]=='t' || string[0]=='T' ||
 			string[0]=='1') {
@@ -1005,6 +1007,8 @@ bool charstring::isNo(const char *string) {
 		next=string[2];
 	} else if (!charstring::compareIgnoringCase(string,"false",5)) {
 		next=string[5];
+	} else if (!charstring::compareIgnoringCase(string,"off",3)) {
+		next=string[3];
 	} else if (string[0]=='n' || string[0]=='N' ||
 			string[0]=='f' || string[0]=='F' ||
 			string[0]=='0') {

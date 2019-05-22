@@ -449,7 +449,7 @@ privateheaders7="codetree.h "+_
 	"websocketincludes.h"
 
 ' version
-RUDIMENTS_VERSION="1.2.0"
+RUDIMENTS_VERSION="1.2.1"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"

@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 1.2.0
+Version: 1.2.1
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -73,6 +73,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Wed May 22 2019 David Muse <david.muse@firstworks.com> - 1.2.1-1
+- Updated to version 1.2.1.
+
 * Wed Feb 20 2019 David Muse <david.muse@firstworks.com> - 1.2.0-1
 - Removed globbing of library major version.
 - Removed calls to /sbin/ldconfig.

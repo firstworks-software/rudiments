@@ -1,3 +1,5 @@
+1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
+
 1.2.0 - spec file tweaks
 	fixed missing [] in bytebuffer = operator
 	fixed json escaping in parse/write
