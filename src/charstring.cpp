@@ -511,7 +511,7 @@ char *charstring::httpEscape(const char *input) {
 			outptr++;
 			outputlen--;
 			char	upper=(*ptr)>>4;
-			if (upper<9) {
+			if (upper<10) {
 				*outptr=upper+'0';
 			} else {
 				*outptr=upper-10+'A';
@@ -519,7 +519,7 @@ char *charstring::httpEscape(const char *input) {
 			outptr++;
 			outputlen--;
 			char	lower=(*ptr)&0x0F;
-			if (lower<9) {
+			if (lower<10) {
 				*outptr=lower+'0';
 			} else {
 				*outptr=lower-10+'A';

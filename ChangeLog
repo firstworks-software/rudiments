@@ -1,4 +1,5 @@
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
+	tabs are url-encoded correctly now
 
 1.2.0 - spec file tweaks
 	fixed missing [] in bytebuffer = operator
