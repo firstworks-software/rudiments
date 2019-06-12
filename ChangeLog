@@ -1,5 +1,7 @@
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
 	tabs are url-encoded correctly now
+	"unsafe" characters are url-encoded now
+	httpEscape uses character::isAlphanumeric now (to improve perforamnce)
 
 1.2.0 - spec file tweaks
 	fixed missing [] in bytebuffer = operator

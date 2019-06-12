@@ -500,11 +500,8 @@ char *charstring::httpEscape(const char *input) {
 	while (*ptr) {
 		if (*ptr==' ') {
 			(*outptr)='+';
-		} else if ((*ptr>='a' && *ptr<='z') || 
-				(*ptr>='A' && *ptr<='Z') ||
-				(*ptr>='0' && *ptr<='9') ||
-				character::inSet(*ptr,
-					"-._~:/?[]@!$&'()*,;=")) {
+		} else if (character::isAlphanumeric(*ptr) ||
+				character::inSet(*ptr,"$-_.!*'(),")) {
 			(*outptr)=*ptr;
 		} else {
 			(*outptr)='%';
