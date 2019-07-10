@@ -566,7 +566,7 @@ bool tlscontext::isPeerCertValid() {
 #if defined(RUDIMENTS_HAS_SSL)
 static int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);
-	buf[size-1]=(char)NULL;
+	buf[size-1]='\0';
 	return charstring::length(buf);
 }
 #endif 
