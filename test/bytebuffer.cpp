@@ -133,7 +133,7 @@ int main(int argc, const char **argv) {
 	// read 4 bytes from position 0 of the buffer
 	stdoutput.printf("read from position 0...\n");
 	unsigned char	buffer[5];
-	buffer[4]=(unsigned char)NULL;
+	buffer[4]='\0';
 	bb.setPosition(0);
 	test("setPosition(), getPosition()",bb.getPosition()==0);
 	ssize_t	sizeread=bb.read(buffer,4);
