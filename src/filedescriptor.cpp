@@ -161,8 +161,12 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
 #ifndef CMSG_ALIGN
-	#define CMSG_ALIGN(len)	(((len) + sizeof(size_t)-1) & \
-					(size_t)~(sizeof(size_t)-1))
+	#ifdef __BSD_VISIBLE
+		#define CMSG_ALIGN(len)	_ALIGN(len)
+	#else
+		#define CMSG_ALIGN(len)	(((len) + sizeof(size_t)-1) & \
+						(size_t)~(sizeof(size_t)-1))
+	#endif
 #endif
 
 #ifndef CMSG_LEN
@@ -1241,7 +1245,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		if (pvt->_secctx) {
 
 			#ifdef DEBUG_READ
-		        debugPrintf(" (SecurityContext) ");
+			debugPrintf(" (SecurityContext) ");
 			#endif
 
 			actualread=pvt->_secctx->read(ptr,sizetoread);
@@ -1491,7 +1495,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		if (pvt->_secctx) {
 
 			#ifdef DEBUG_WRITE
-		        debugPrintf(" (SecurityContext) ");
+			debugPrintf(" (SecurityContext) ");
 			#endif
 
 			actualwrite=pvt->_secctx->write(ptr,sizetowrite);
@@ -2672,10 +2676,9 @@ void filedescriptor::safePrint(unsigned char c) {
 }
 
 void filedescriptor::safePrint(const unsigned char *string, int32_t length) {
-	const unsigned char	*ch=string;
 	for (int32_t i=0; i<length; i++) {
-		safePrint(*ch);
-		ch++;
+		safePrint(*string);
+		string++;
 	}
 }
 

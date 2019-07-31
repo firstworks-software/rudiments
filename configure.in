@@ -869,6 +869,10 @@ fi
 AC_MSG_CHECKING(for locale.h)
 AC_TRY_COMPILE([#include <locale.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_LOCALE_H, 1, Some systems have locale.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/cdefs.h)
+AC_TRY_COMPILE([#include <sys/cdefs.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_CDEFS_H, 1, Some systems have sys/cdefs.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 

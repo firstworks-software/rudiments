@@ -21,7 +21,7 @@
 		#define UN_XOPEN_SOURCE
 	#endif
 	#ifndef RUDIMENTS_SYS_SOCKET_H
-	#define RUDIMENTS_SYS_SOCKET_H
+		#define RUDIMENTS_SYS_SOCKET_H
 		#include <sys/socket.h>
 	#endif
 	#ifdef UN_XOPEN_SOURCE

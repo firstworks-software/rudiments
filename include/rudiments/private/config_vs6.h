@@ -1312,6 +1312,9 @@
 /* Some systems have sys/byteorder.h */
 /* #undef RUDIMENTS_HAVE_SYS_BYTEORDER_H */
 
+/* Some systems have sys/cdefs.h */
+/* #undef RUDIMENTS_HAVE_SYS_CDEFS_H */
+
 /* Some systems have sys/devpoll.h */
 /* #undef RUDIMENTS_HAVE_SYS_DEVPOLL_H */
 
