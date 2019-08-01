@@ -277,5 +277,4 @@ void sax::parseFailed(const char *thing) {
 	pvt->_err.append(thing);
 	pvt->_err.append(" failed at line ");
         pvt->_err.append(pvt->_line);
-stdoutput.printf("%s\n",pvt->_err.getString());
 }
