@@ -247,10 +247,11 @@ bool jsondom::objectEnd() {
 	indent(pvt->_indent);
 	debugPrintf("}\n");
 #endif
-	// unless it's a value in an array?
-	/*if (pvt->_current!=getRootNode()) {
+	domnode		*parent=pvt->_current->getParent();
+	const char	*t=parent->getAttributeValue("t");
+	if (t && t[0]=='a') {
 		pvt->_current=pvt->_current->getParent();
-	}*/
+	}
 	return true;
 }
 
@@ -274,7 +275,9 @@ void jsondom::write(const domnode *dn, output *out,
 		return;
 	}
 
-	if (pvt->_inarray.getLength() && !pvt->_inarray.getLast()->getValue()) {
+	bool	inarray=(pvt->_inarray.getLength() &&
+				pvt->_inarray.getLast()->getValue());
+	if (*indentlevel && !inarray) {
 		if (indent) {
 			writeIndent(out,*indentlevel);
 		}
@@ -295,10 +298,12 @@ void jsondom::write(const domnode *dn, output *out,
 		case 'o':
 			{
 			if (indent) {
-				if (*indentlevel) {
+				if (*indentlevel && !inarray) {
 					out->write('\n');
 				}
-				writeIndent(out,*indentlevel);
+				if (!inarray) {
+					writeIndent(out,*indentlevel);
+				}
 			}
 			out->write('{');
 			if (indent) {

@@ -54,6 +54,28 @@ const struct test tests[]={
 	},
 
 	{
+	"array of objects",
+	"[\n"
+	"  {\n"
+	"    \"one\" : 1,\n"
+	"    \"two\" : 2,\n"
+	"    \"three\" : 3\n"
+	"  },\n"
+	"  {\n"
+	"    \"one\" : 1,\n"
+	"    \"two\" : 2,\n"
+	"    \"three\" : 3\n"
+	"  },\n"
+	"  {\n"
+	"    \"one\" : 1,\n"
+	"    \"two\" : 2,\n"
+	"    \"three\" : 3\n"
+	"  }\n"
+	"]",
+	false
+	},
+
+	{
 	"complex elements",
 	"{\n"
 	"  \"stringval\" : \"string value\",\n"
