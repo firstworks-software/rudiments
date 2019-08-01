@@ -9,6 +9,7 @@
 #include <rudiments/character.h>
 #include <rudiments/url.h>
 #include <rudiments/sys.h>
+#include <rudiments/stdio.h>
 
 class saxprivate {
 	friend class sax;
@@ -276,4 +277,5 @@ void sax::parseFailed(const char *thing) {
 	pvt->_err.append(thing);
 	pvt->_err.append(" failed at line ");
         pvt->_err.append(pvt->_line);
+stdoutput.printf("%s\n",pvt->_err.getString());
 }

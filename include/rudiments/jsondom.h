@@ -58,6 +58,9 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		/** Gets called when a member name is parsed. */
 		virtual	bool	memberName(const char *name);
 
+		/** Gets called when a value start is parsed. */
+		virtual	bool	valueStart();
+
 		/** Gets called when a string value is parsed. */
 		virtual	bool	stringValue(const char *value);
 
@@ -78,6 +81,9 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 
 		/** Gets called when an array end is parsed. */
 		virtual	bool	arrayEnd();
+
+		/** Gets called when an value end is parsed. */
+		virtual	bool	valueEnd();
 
 		/** Gets called when a member end is parsed. */
 		virtual	bool	memberEnd();

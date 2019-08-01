@@ -4,6 +4,7 @@
 	private:
 			bool	parse();
 			bool	parseObject(char current, char *next);
+			bool	parseMember(char current, char *next);
 			bool	parseStr(stringbuffer *str,
 						char current, char *next);
 			bool	parseValue(char current, char *next);

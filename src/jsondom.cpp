@@ -3,16 +3,37 @@
 
 #include <rudiments/jsondom.h>
 #include <rudiments/charstring.h>
+//#define DEBUG_MESSAGES
+#include <rudiments/debugprint.h>
 
 class jsondomprivate {
 	friend class jsondom;
 	private:
 		domnode			*_current;
 		linkedlist<bool>	_inarray;
+
+		#ifdef DEBUG_MESSAGES
+		uint16_t	_indent;
+		#endif
 };
+
+#ifdef DEBUG_MESSAGES
+void indent(uint16_t ind) {
+	if (ind>128) {
+		stdoutput.printf("warning! ind=%d\n",ind);
+		return;
+	}
+	for (uint16_t i=0; i<ind; i++) {
+		stdoutput.write(' ');
+	}
+}
+#endif
 
 jsondom::jsondom() : jsonsax(), dom() {
 	init(true);
+	#ifdef DEBUG_MESSAGES
+	pvt->_indent=0;
+	#endif
 }
 
 jsondom::jsondom(bool stringcacheenabled) : jsonsax(), dom(stringcacheenabled) {
@@ -51,7 +72,13 @@ bool jsondom::parseFile(const char *filename,
 	} else {
 		reset();
 	}
-	return jsonsax::parseFile(filename);
+	bool	retval=jsonsax::parseFile(filename);
+#ifdef DEBUG_MESSAGES
+	stdoutput.write("\ndom:\n");
+	uint16_t	indentlevel=0;
+	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+#endif
+	return retval;
 }
 
 bool jsondom::parseString(const char *string) {
@@ -65,13 +92,13 @@ bool jsondom::parseString(const char *string,
 	} else {
 		reset();
 	}
-#if 0
 	bool	retval=jsonsax::parseString(string);
+#ifdef DEBUG_MESSAGES
+	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
 	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
-	return retval;
 #endif
-	return jsonsax::parseString(string);
+	return retval;
 }
 
 void jsondom::reset() {
@@ -86,25 +113,54 @@ void jsondom::createRootNode() {
 }
 
 bool jsondom::objectStart() {
+#ifdef DEBUG_MESSAGES
+	if (pvt->_indent) {
+		debugPrintf("\n");
+	}
+	indent(pvt->_indent);
+	debugPrintf("objectStart {\n");
+	pvt->_indent+=2;
+#endif
 	if (getRootNode()->isNullNode()) {
 		createRootNode();
+		pvt->_current=getRootNode()->appendTag("r");
 	} else {
 		pvt->_current=whichNode();
-		pvt->_current->setAttributeValue("t","o");
 	}
+	pvt->_current->setAttributeValue("t","o");
 	return true;
 }
 
 bool jsondom::memberStart() {
+#ifdef DEBUG_MESSAGES
+	indent(pvt->_indent);
+	debugPrintf("memberStart {\n");
+	pvt->_indent+=2;
+#endif
 	return true;
 }
 
 bool jsondom::memberName(const char *name) {
+#ifdef DEBUG_MESSAGES
+	indent(pvt->_indent);
+	debugPrintf("\"%s\" : ",name);
+#endif
 	pvt->_current=pvt->_current->appendTag(name);
 	return true;
 }
 
+bool jsondom::valueStart() {
+#ifdef DEBUG_MESSAGES
+	const char	*t=pvt->_current->getAttributeValue("t");
+	if (t && t[0]=='a') {
+		indent(pvt->_indent);
+	}
+#endif
+	return true;
+}
+
 bool jsondom::stringValue(const char *value) {
+	debugPrintf("\"%s\"",value);
 	domnode	*node=whichNode();
 	node->setAttributeValue("t","s");
 	node->setAttributeValue("v",value);
@@ -112,6 +168,7 @@ bool jsondom::stringValue(const char *value) {
 }
 
 bool jsondom::numberValue(const char *value) {
+	debugPrintf("%s",value);
 	domnode	*node=whichNode();
 	node->setAttributeValue("t","n");
 	node->setAttributeValue("v",value);
@@ -119,38 +176,81 @@ bool jsondom::numberValue(const char *value) {
 }
 
 bool jsondom::trueValue() {
+	debugPrintf("true");
 	whichNode()->setAttributeValue("t","t");
 	return true;
 }
 
 bool jsondom::falseValue() {
+	debugPrintf("false");
 	whichNode()->setAttributeValue("t","f");
 	return true;
 }
 
 bool jsondom::nullValue() {
+	debugPrintf("null");
 	whichNode()->setAttributeValue("t","u");
 	return true;
 }
 
 bool jsondom::arrayStart() {
-	whichNode()->setAttributeValue("t","a");
+#ifdef DEBUG_MESSAGES
+	debugPrintf("\n");
+	indent(pvt->_indent);
+	debugPrintf("[\n");
+	pvt->_indent+=2;
+#endif
+	if (getRootNode()->isNullNode()) {
+		createRootNode();
+		pvt->_current=getRootNode()->appendTag("r");
+	} else {
+		pvt->_current=whichNode();
+	}
+	pvt->_current->setAttributeValue("t","a");
 	return true;
 }
 
 bool jsondom::arrayEnd() {
+#ifdef DEBUG_MESSAGES
+	pvt->_indent-=2;
+	indent(pvt->_indent);
+	debugPrintf("]");
+#endif
+	return true;
+}
+
+bool jsondom::valueEnd() {
+#ifdef DEBUG_MESSAGES
+	if (pvt->_current->getAttributeValue("t")[0]!='o') {
+		debugPrintf("\n");
+	}
+#endif
 	return true;
 }
 
 bool jsondom::memberEnd() {
+#ifdef DEBUG_MESSAGES
+	pvt->_indent-=2;
+	indent(pvt->_indent);
+	debugPrintf("} %s->",pvt->_current->getName());
+#endif
 	pvt->_current=pvt->_current->getParent();
+#ifdef DEBUG_MESSAGES
+	stdoutput.printf("%s\n",pvt->_current->getName());
+#endif
 	return true;
 }
 
 bool jsondom::objectEnd() {
-	if (pvt->_current!=getRootNode()) {
+#ifdef DEBUG_MESSAGES
+	pvt->_indent-=2;
+	indent(pvt->_indent);
+	debugPrintf("}\n");
+#endif
+	// unless it's a value in an array?
+	/*if (pvt->_current!=getRootNode()) {
 		pvt->_current=pvt->_current->getParent();
-	}
+	}*/
 	return true;
 }
 
@@ -229,7 +329,9 @@ void jsondom::write(const domnode *dn, output *out,
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
-				out->write('\n');
+				if (!first) {
+					out->write('\n');
+				}
 				*indentlevel=*indentlevel-2;
 				writeIndent(out,*indentlevel);
 			}
@@ -277,8 +379,11 @@ void jsondom::write(const domnode *dn, output *out,
 			out->write("null");
 			break;
 		case 'a':
+			{
 			if (indent) {
-				out->write('\n');
+				if (*indentlevel) {
+					out->write('\n');
+				}
 				writeIndent(out,*indentlevel);
 			}
 			out->write('[');
@@ -313,20 +418,26 @@ void jsondom::write(const domnode *dn, output *out,
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
-				out->write('\n');
+				if (!first) {
+					out->write('\n');
+				}
 				*indentlevel=*indentlevel-2;
 				writeIndent(out,*indentlevel);
 			}
 			out->write(']');
+			}
+			break;
+		case 'r':
+			write(dn->getFirstTagChild(),out,indent,indentlevel);
 			break;
 	}
 }
 
 const char *jsondom::getType(const domnode *dn) const {
 
-	// if this is the root node then it's an object
+	// return nothing for the root node
 	if (dn->getType()==ROOT_DOMNODETYPE) {
-		return "o";
+		return "r";
 	}
 
 	// first try attribute "t"

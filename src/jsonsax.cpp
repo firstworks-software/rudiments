@@ -3,7 +3,7 @@
 
 #include <rudiments/jsonsax.h>
 #include <rudiments/character.h>
-#define DEBUG_MESSAGES
+//#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
 class jsonsaxprivate {
@@ -44,7 +44,7 @@ bool jsonsax::objectStart() {
 	}
 	indent(pvt->_indent);
 	debugPrintf("objectStart {\n");
-	pvt->_indent=pvt->_indent+2;
+	pvt->_indent+=2;
 #endif
 	return true;
 }
@@ -54,7 +54,7 @@ bool jsonsax::memberStart() {
 #ifdef DEBUG_MESSAGES
 	indent(pvt->_indent);
 	debugPrintf("memberStart {\n");
-	pvt->_indent=pvt->_indent+2;
+	pvt->_indent+=2;
 #endif
 	return true;
 }
@@ -64,7 +64,7 @@ bool jsonsax::memberName(const char *name) {
 #ifdef DEBUG_MESSAGES
 	indent(pvt->_indent);
 	debugPrintf("\"%s\" : ",name);
-	pvt->_indent=pvt->_indent+2;
+	pvt->_indent+=2;
 #endif
 	return true;
 }
@@ -109,7 +109,7 @@ bool jsonsax::arrayStart() {
 #ifdef DEBUG_MESSAGES
 	indent(pvt->_indent);
 	debugPrintf("[");
-	pvt->_indent=pvt->_indent+2;
+	pvt->_indent+=2;
 #endif
 	return true;
 }
@@ -117,9 +117,9 @@ bool jsonsax::arrayStart() {
 bool jsonsax::arrayEnd() {
 	// by default, just return success
 #ifdef DEBUG_MESSAGES
-	pvt->_indent=pvt->_indent-2;
+	pvt->_indent-=2;
 	indent(pvt->_indent);
-	debugPrintf("]");
+	debugPrintf("]\n");
 #endif
 	return true;
 }
@@ -127,7 +127,8 @@ bool jsonsax::arrayEnd() {
 bool jsonsax::valueEnd() {
 	// by default, just return success
 #ifdef DEBUG_MESSAGES
-	pvt->_indent=pvt->_indent-2;
+	pvt->_indent-=2;
+	debugPrintf("\n");
 #endif
 	return true;
 }
@@ -135,8 +136,7 @@ bool jsonsax::valueEnd() {
 bool jsonsax::memberEnd() {
 	// by default, just return success
 #ifdef DEBUG_MESSAGES
-	debugPrintf("\n");
-	pvt->_indent=pvt->_indent-2;
+	pvt->_indent-=2;
 	indent(pvt->_indent);
 	debugPrintf("}\n");
 #endif
@@ -146,7 +146,7 @@ bool jsonsax::memberEnd() {
 bool jsonsax::objectEnd() {
 	// by default, just return success
 #ifdef DEBUG_MESSAGES
-	pvt->_indent=pvt->_indent-2;
+	pvt->_indent-=2;
 	indent(pvt->_indent);
 	debugPrintf("}\n");
 #endif
@@ -163,8 +163,14 @@ bool jsonsax::parse() {
 	}
 
 	// parse the document body
-	if (!parseObject(ch,&ch)) {
-		return false;
+	if (ch=='[') {
+		if (!parseArray(ch,&ch)) {
+			return false;
+		}
+	} else {
+		if (!parseObject(ch,&ch)) {
+			return false;
+		}
 	}
 
 	// make sure we're at the end of the input

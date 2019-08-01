@@ -7,19 +7,87 @@
 #include <rudiments/permissions.h>
 #include "test.cpp"
 
-const char normal[]=
+struct test {
+	const char	*name;
+	const char	*test;
+	bool		comparetoprevious;
+};
+
+const struct test tests[]={
+
+	{
+	"empty",
+	"",
+	false
+	},
+
+	{
+	"whitespace",
+	"\n\r\t ",
+	true
+	},
+
+	{
+	"degenerate object",
+	"{\n"
+	"}",
+	false
+	},
+
+	{
+	"degenerate object, unindented",
+	"{}",
+	true
+	},
+
+	{
+	"degenerate array",
+	"[\n"
+	"]",
+	false
+	},
+
+	{
+	"degenerate array, unindented",
+	"[]",
+	true
+	},
+
+	{
+	"complex elements",
 	"{\n"
 	"  \"stringval\" : \"string value\",\n"
 	"  \"numberval\" : -1234.56,\n"
 	"  \"trueval\" : true,\n"
 	"  \"falseval\" : false,\n"
 	"  \"nullval\" : null,\n"
-	"  \"arrayval\" : \n"
+	"  \"stringarrayval\" : \n"
 	"  [\n"
 	"    \"one\",\n"
 	"    \"two\",\n"
 	"    \"three\",\n"
 	"    \"four\"\n"
+	"  ],\n"
+	"  \"numberarrayval\" : \n"
+	"  [\n"
+	"    1,\n"
+	"    2,\n"
+	"    3,\n"
+	"    4\n"
+	"  ],\n"
+	"  \"booleanarrayval\" : \n"
+	"  [\n"
+	"    true,\n"
+	"    false,\n"
+	"    true,\n"
+	"    false\n"
+	"  ],\n"
+	"  \"nullarrayval\" : \n"
+	"  [\n"
+	"    null,\n"
+	"    null,\n"
+	"    null,\n"
+	"    null\n"
 	"  ],\n"
 	"  \"objectval\" : \n"
 	"  {\n"
@@ -28,12 +96,33 @@ const char normal[]=
 	"    \"trueval\" : true,\n"
 	"    \"falseval\" : false,\n"
 	"    \"nullval\" : null,\n"
-	"    \"arrayval\" : \n"
+	"    \"stringarrayval\" : \n"
 	"    [\n"
 	"      \"one\",\n"
 	"      \"two\",\n"
 	"      \"three\",\n"
 	"      \"four\"\n"
+	"    ],\n"
+	"    \"numberarrayval\" : \n"
+	"    [\n"
+	"      1,\n"
+	"      2,\n"
+	"      3,\n"
+	"      4\n"
+	"    ],\n"
+	"    \"booleanarrayval\" : \n"
+	"    [\n"
+	"      true,\n"
+	"      false,\n"
+	"      true,\n"
+	"      false\n"
+	"    ],\n"
+	"    \"nullarrayval\" : \n"
+	"    [\n"
+	"      null,\n"
+	"      null,\n"
+	"      null,\n"
+	"      null\n"
 	"    ],\n"
 	"    \"objectval\" : \n"
 	"    {\n"
@@ -42,86 +131,187 @@ const char normal[]=
 	"      \"trueval\" : true,\n"
 	"      \"falseval\" : false,\n"
 	"      \"nullval\" : null,\n"
-	"      \"arrayval\" : \n"
+	"      \"stringarrayval\" : \n"
 	"      [\n"
 	"        \"one\",\n"
 	"        \"two\",\n"
 	"        \"three\",\n"
 	"        \"four\"\n"
+	"      ],\n"
+	"      \"numberarrayval\" : \n"
+	"      [\n"
+	"        1,\n"
+	"        2,\n"
+	"        3,\n"
+	"        4\n"
+	"      ],\n"
+	"      \"booleanarrayval\" : \n"
+	"      [\n"
+	"        true,\n"
+	"        false,\n"
+	"        true,\n"
+	"        false\n"
+	"      ],\n"
+	"      \"nullarrayval\" : \n"
+	"      [\n"
+	"        null,\n"
+	"        null,\n"
+	"        null,\n"
+	"        null\n"
 	"      ]\n"
-	"    }\n"
-	"  }\n"
-	"}";
+	"    },\n"
+	"    \"anotherstringval\" : \"string after object\"\n"
+	"  },\n"
+	"  \"anotherstringval\" : \"string after object\"\n"
+	"}",
+	false
+	},
 
-const char noindent[]=
+	{
+	"complex elements, unindented",
 	"{"
-	  "\"stringval\":\"string value\","
-	  "\"numberval\":-1234.56,"
-	  "\"trueval\":true,"
-	  "\"falseval\":false,"
-	  "\"nullval\":null,"
-	  "\"arrayval\":"
+	  "\"stringval\" : \"string value\","
+	  "\"numberval\" : -1234.56,"
+	  "\"trueval\" : true,"
+	  "\"falseval\" : false,"
+	  "\"nullval\" : null,"
+	  "\"stringarrayval\" : "
 	  "["
 	    "\"one\","
 	    "\"two\","
 	    "\"three\","
 	    "\"four\""
 	  "],"
-	  "\"objectval\":"
+	  "\"numberarrayval\" : "
+	  "["
+	    "1,"
+	    "2,"
+	    "3,"
+	    "4"
+	  "],"
+	  "\"booleanarrayval\" : "
+	  "["
+	    "true,"
+	    "false,"
+	    "true,"
+	    "false"
+	  "],"
+	  "\"nullarrayval\" : "
+	  "["
+	    "null,"
+	    "null,"
+	    "null,"
+	    "null"
+	  "],"
+	  "\"objectval\" : "
 	  "{"
-	    "\"stringval\":\"string value\","
-	    "\"numberval\":-1234.56,"
-	    "\"trueval\":true,"
-	    "\"falseval\":false,"
-	    "\"nullval\":null,"
-	    "\"arrayval\":"
+	    "\"stringval\" : \"string value\","
+	    "\"numberval\" : -1234.56,"
+	    "\"trueval\" : true,"
+	    "\"falseval\" : false,"
+	    "\"nullval\" : null,"
+	    "\"stringarrayval\" : "
 	    "["
 	      "\"one\","
 	      "\"two\","
 	      "\"three\","
 	      "\"four\""
 	    "],"
-	    "\"objectval\":"
+	    "\"numberarrayval\" : "
+	    "["
+	      "1,"
+	      "2,"
+	      "3,"
+	      "4"
+	    "],"
+	    "\"booleanarrayval\" : "
+	    "["
+	      "true,"
+	      "false,"
+	      "true,"
+	      "false"
+	    "],"
+	    "\"nullarrayval\" : "
+	    "["
+	      "null,"
+	      "null,"
+	      "null,"
+	      "null"
+	    "],"
+	    "\"objectval\" : "
 	    "{"
-	      "\"stringval\":\"string value\","
-	      "\"numberval\":-1234.56,"
-	      "\"trueval\":true,"
-	      "\"falseval\":false,"
-	      "\"nullval\":null,"
-	      "\"arrayval\":"
+	      "\"stringval\" : \"string value\","
+	      "\"numberval\" : -1234.56,"
+	      "\"trueval\" : true,"
+	      "\"falseval\" : false,"
+	      "\"nullval\" : null,"
+	      "\"stringarrayval\" : "
 	      "["
 	        "\"one\","
 	        "\"two\","
 	        "\"three\","
 	        "\"four\""
+	      "],"
+	      "\"numberarrayval\" : "
+	      "["
+	        "1,"
+	        "2,"
+	        "3,"
+	        "4"
+	      "],"
+	      "\"booleanarrayval\" : "
+	      "["
+	        "true,"
+	        "false,"
+	        "true,"
+	        "false"
+	      "],"
+	      "\"nullarrayval\" : "
+	      "["
+	        "null,"
+	        "null,"
+	        "null,"
+	        "null"
 	      "]"
-	    "}"
-	  "}"
-	"}";
+	    "},"
+	    "\"anotherstringval\" : \"string after object\""
+	  "},"
+	  "\"anotherstringval\" : \"string after object\""
+	"}",
+	true
+	},
+
+	{
+	NULL,
+	NULL,
+	true
+	}
+};
 
 int main() {
 
 	header("jsondom");
 
-	jsondom	j;
+	jsondom		j;
+	stringbuffer	filename;
 
-	stdoutput.printf("normal...\n");
-	j.parseString(normal);
-	j.writeFile("normal.json",permissions::evalPermString("rw-r--r--"));
-	char	*normaljson=file::getContents("normal.json");
-	test("file contents",!charstring::compare(normal,normaljson));
-	delete[] normaljson;
-	test("parse file",j.parseFile("normal.json"));
-	file::remove("normal.json");
+	for (const struct test *t=tests; t->name; t++) {
 
-	stdoutput.printf("noindent...\n");
-	j.parseString(noindent);
-	j.writeFile("noindent.json",permissions::evalPermString("rw-r--r--"));
-	char	*noindentjson=file::getContents("noindent.json");
-	test("file contents",!charstring::compare(normal,noindentjson));
-	delete[] noindentjson;
-	test("parse file",j.parseFile("noindent.json"));
-	file::remove("noindent.json");
+		stdoutput.printf("%s...\n",t->name);
+		j.parseString(t->test);
+		filename.clear();
+		filename.append(t->name)->append(".json");
+		j.writeFile(filename.getString(),
+				permissions::evalPermString("rw-r--r--"));
+		char	*contents=file::getContents(filename.getString());
+		test("file contents",
+			!charstring::compare(
+				(t->comparetoprevious)?(t-1)->test:t->test,
+				contents));
+		delete[] contents;
+		test("parse file",j.parseFile(filename.getString()));
+		file::remove(filename.getString());
+	}
 
 	stdoutput.printf("\n");
 }
