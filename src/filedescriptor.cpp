@@ -160,16 +160,13 @@ extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
-#ifndef CMSG_ALIGN
-	#ifdef __BSD_VISIBLE
-		#define CMSG_ALIGN(len)	_ALIGN(len)
-	#else
-		#define CMSG_ALIGN(len)	(((len) + sizeof(size_t)-1) & \
-						(size_t)~(sizeof(size_t)-1))
-	#endif
-#endif
-
 #ifndef CMSG_LEN
+#error apparently this platform doesnt have this?
+	#ifndef CMSG_ALIGN
+		#define CMSG_ALIGN(len)	\
+				(((len) + sizeof(size_t)-1) & \
+				(size_t)~(sizeof(size_t)-1))
+	#endif
 	#define CMSG_LEN(len)	(CMSG_ALIGN(sizeof(struct cmsghdr))+(len))
 #endif
 
