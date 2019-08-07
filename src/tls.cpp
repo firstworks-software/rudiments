@@ -53,7 +53,7 @@ static WCHAR *asciiToUnicode(const CHAR *in) {
 }
 #endif
 
-#define DEBUG_TLS 1
+//#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
@@ -989,7 +989,6 @@ bool tlscontext::reInit(bool isclient) {
 						(pvt->_pk)?pvt->_pk:pvt->_cert,
 						SSL_FILETYPE_PEM)!=1 ||
 				SSL_CTX_check_private_key(pvt->_ctx)!=1) {
-stdoutput.printf("%s\n",ERR_error_string(ERR_get_error(),NULL));
 				retval=false;
 			}
 			#ifdef DEBUG_TLS
