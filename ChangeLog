@@ -4,6 +4,7 @@
 	httpEscape uses character::isAlphanumeric now (to improve perforamnce)
 	some file-descriptor-passing tweaks for modern FreeBSD
 	fixed some json parsing bugs
+	updated default_md=sha256 in ca.cnf to generate ca.pem in tests
 
 1.2.0 - spec file tweaks
 	fixed missing [] in bytebuffer = operator
