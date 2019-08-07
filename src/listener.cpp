@@ -123,12 +123,16 @@ void listener::cleanUp() {
 		}
 		delete[] pvt->_kevs;
 		delete[] pvt->_rkevs;
+		pvt->_kevs=NULL;
+		pvt->_rkevs=NULL;
 	#elif defined(RUDIMENTS_HAVE_EPOLL)
 		if (pvt->_epfd!=-1) {
 			::close(pvt->_epfd);
 		}
 		delete[] pvt->_evs;
 		delete[] pvt->_revs;
+		pvt->_evs=NULL;
+		pvt->_revs=NULL;
 	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
 		if (pvt->_port!=-1) {
 			::close(pvt->_port);
@@ -136,8 +140,10 @@ void listener::cleanUp() {
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 		pvt->_dpfd.close();
 		delete[] pvt->_fds;
+		pvt->_fds=NULL;
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		delete[] pvt->_fds;
+		pvt->_fds=NULL;
 	#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
 		CloseHandle(pvt->_cp);
 	#endif
