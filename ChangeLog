@@ -1,3 +1,5 @@
+1.2.2 - fixed another long-standing charstring::httpEscape bug
+
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
 	tabs are url-encoded correctly now
 	"unsafe" characters are url-encoded now

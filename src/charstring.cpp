@@ -492,12 +492,13 @@ char *charstring::httpEscape(const char *input) {
 		return NULL;
 	}
 
-	size_t		outputlen=length(input)*3+1;
-	char		*output=new char[outputlen];
-	char		*outptr=output;
-	const char	*ptr=input;
+	size_t			outputlen=length(input)*3+1;
+	char			*output=new char[outputlen];
+	char			*outptr=output;
+	const unsigned char	*ptr=(unsigned char *)input;
 	
 	while (*ptr) {
+stdoutput.printf("*ptr=%d\n",*ptr);
 		if (*ptr==' ') {
 			(*outptr)='+';
 		} else if (character::isAlphanumeric(*ptr) ||
@@ -507,7 +508,7 @@ char *charstring::httpEscape(const char *input) {
 			(*outptr)='%';
 			outptr++;
 			outputlen--;
-			char	upper=(*ptr)>>4;
+			unsigned char	upper=(*ptr)>>4;
 			if (upper<10) {
 				*outptr=upper+'0';
 			} else {
@@ -515,12 +516,14 @@ char *charstring::httpEscape(const char *input) {
 			}
 			outptr++;
 			outputlen--;
-			char	lower=(*ptr)&0x0F;
+			unsigned char	lower=(*ptr)&0x0F;
 			if (lower<10) {
 				*outptr=lower+'0';
 			} else {
 				*outptr=lower-10+'A';
 			}
+stdoutput.printf("  upper=%d\n",upper);
+stdoutput.printf("  lower=%d\n",lower);
 		}
 		outptr++;
 		outputlen--;

@@ -391,10 +391,10 @@ int main(int argc, const char **argv) {
 
 	// http escape the buffer
 	stdoutput.printf("http-escape...\n");
-	const char	*original="!@#$%^&*()hello-+";
-	char    *escbuffer=charstring::httpEscape("!@#$%^&*()hello-+");
+	const char	*original="!@#$%^&*()hello-+£";
+	char    *escbuffer=charstring::httpEscape(original);
 	test("escaped",!charstring::compare(escbuffer,
-					"!%40%23$%25%5E%26*()hello-%2B"));
+				"!%40%23$%25%5E%26*()hello-%2B%C2%A3"));
 	char	*unescbuffer=charstring::httpUnescape(escbuffer);
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
