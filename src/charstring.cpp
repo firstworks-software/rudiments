@@ -498,7 +498,6 @@ char *charstring::httpEscape(const char *input) {
 	const unsigned char	*ptr=(unsigned char *)input;
 	
 	while (*ptr) {
-stdoutput.printf("*ptr=%d\n",*ptr);
 		if (*ptr==' ') {
 			(*outptr)='+';
 		} else if (character::isAlphanumeric(*ptr) ||
@@ -522,8 +521,6 @@ stdoutput.printf("*ptr=%d\n",*ptr);
 			} else {
 				*outptr=lower-10+'A';
 			}
-stdoutput.printf("  upper=%d\n",upper);
-stdoutput.printf("  lower=%d\n",lower);
 		}
 		outptr++;
 		outputlen--;
