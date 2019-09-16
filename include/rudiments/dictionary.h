@@ -262,7 +262,7 @@ class dictionary {
 		bool	removeAndDeleteKeyAndArrayDeleteValue(
 				dictionarynode<keytype,valuetype> *node);
 
-		/** Deletes the specified dictionarynode", deleting the key and
+		/** Deletes the specified dictionarynode, deleting the key and
 		 *  value stored in the dictionarynode as well.  The key is
 		 *  presumed to be an array.*/
 		bool	removeAndArrayDeleteKeyAndDeleteValue(
