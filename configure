@@ -669,6 +669,7 @@ GSSINCLUDES
 SERVERPEM
 SSLLIBS
 SSLINCLUDES
+DEFAULT_MD
 PTHREADLIB
 PTHREADINCLUDES
 WNODEPRECATEDDECLARATIONS
@@ -20673,6 +20674,7 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
+		DEFAULT_MD="sha256"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SHA256_CTX" >&5
 $as_echo_n "checking for SHA256_CTX... " >&6; }
 
@@ -20701,7 +20703,7 @@ $as_echo "#define RUDIMENTS_HAS_SHA256_CTX 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+$as_echo "no" >&6; }; DEFAULT_MD="sha1"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -20709,6 +20711,7 @@ CPPFLAGS="$SAVECPPFLAGS"
 LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
+
 
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether platform requires default cipher of PROFILE=SYSTEM" >&5
@@ -35340,7 +35343,7 @@ echo
 echo "***** Output Files ***********"
 ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
 
-ac_config_files="$ac_config_files config.mk src/Makefile include/Makefile bin/rudiments-config rudiments.pc"
+ac_config_files="$ac_config_files config.mk src/Makefile include/Makefile bin/rudiments-config rudiments.pc test/certificates/config/ca.cnf"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -36431,6 +36434,7 @@ do
     "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
     "bin/rudiments-config") CONFIG_FILES="$CONFIG_FILES bin/rudiments-config" ;;
     "rudiments.pc") CONFIG_FILES="$CONFIG_FILES rudiments.pc" ;;
+    "test/certificates/config/ca.cnf") CONFIG_FILES="$CONFIG_FILES test/certificates/config/ca.cnf" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
