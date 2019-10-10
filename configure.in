@@ -870,10 +870,6 @@ fi
 AC_MSG_CHECKING(for locale.h)
 AC_TRY_COMPILE([#include <locale.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_LOCALE_H, 1, Some systems have locale.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for sys/cdefs.h)
-AC_TRY_COMPILE([#include <sys/cdefs.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_SYS_CDEFS_H, 1, Some systems have sys/cdefs.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -3862,6 +3858,24 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 reboot(0,0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_2,1,Some systems have reboot with 2 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for RB_HALT)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+	#include <sys/reboot.h>
+#endif],
+int a=(int)RB_HALT;,AC_DEFINE(RUDIMENTS_HAVE_RB_HALT,1,Some systems have RB_HALT) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for RB_AUTOBOOT)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+	#include <sys/reboot.h>
+#endif],
+int a=(int)RB_AUTOBOOT;,AC_DEFINE(RUDIMENTS_HAVE_RB_AUTOBOOT,1,Some systems have RB_AUTOBOOT) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for uadmin with char * argument)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -3993,7 +4007,7 @@ dnl    (and set MINOR and PATCH to 0)
 dnl 2. MINOR when you add backwards-compatible features
 dnl    (and set PATCH to 0)
 dnl 3. PATCH when you make backwards-compatible fixes
-RUDIMENTS_VERSION="1.2.2"
+RUDIMENTS_VERSION="1.2.1"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 
@@ -4682,20 +4696,6 @@ AC_OUTPUT
 chmod 755 bin/rudiments-config
 echo "******************************"
 echo
-
-
-dnl Some versions of NetBSD create a libtool with -lgcc_s -lgcc in it, but don't
-dnl provide a shared libgcc.
-dnl Also, some versions of NetBSD create a libtool with -lgcc_s_pic in it, but
-dnl don't provide a shraed libgcc_s_pic.
-dnl These cause all kinds of link failures.  Fix them
-if ( test -r "libtool" )
-then
-	sed -e "s|-lgcc_s -lgcc|-lgcc_s|g" \
-		-e "s|-lgcc_s_pic|-lgcc_s|g" \
-		libtool > libtool.new
-	mv libtool.new libtool
-fi
 
 
 dnl Summary.

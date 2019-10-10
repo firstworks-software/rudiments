@@ -1018,6 +1018,12 @@
 /* Some systems have rand_r */
 /* #undef RUDIMENTS_HAVE_RAND_R */
 
+/* Some systems have RB_AUTOBOOT */
+/* #undef RUDIMENTS_HAVE_RB_AUTOBOOT */
+
+/* Some systems have RB_HALT */
+/* #undef RUDIMENTS_HAVE_RB_HALT */
+
 /* Some systems have read */
 /* #undef RUDIMENTS_HAVE_READ */
 

@@ -535,7 +535,7 @@ bool sys::halt() {
 		int32_t	cmd;
 		#if defined(LINUX_REBOOT_CMD_HALT)
 			cmd=LINUX_REBOOT_CMD_HALT;
-		#elif defined(RB_HALT)
+		#elif defined(RB_HALT) || defined(RUDIMENTS_HAVE_RB_HALT)
 			cmd=RB_HALT;
 		#elif defined(RB_HALT_SYSTEM)
 			cmd=RB_HALT_SYSTEM;
@@ -547,7 +547,7 @@ bool sys::halt() {
 		return (::reboot(cmd)!=-1);
 	#elif defined(RUDIMENTS_HAVE_REBOOT_2)
 		int32_t	cmd;
-		#if defined(RB_HALT)
+		#if defined(RB_HALT) || defined(RUDIMENTS_HAVE_RB_HALT)
 			cmd=RB_HALT;
 		#else
 			#error no RB_HALT or anything like it
@@ -591,7 +591,7 @@ bool sys::shutDown() {
 			cmd=LINUX_REBOOT_CMD_POWER_OFF;
 		#elif defined(RB_POWEROFF)
 			cmd=RB_POWEROFF;
-		#elif defined(RB_HALT)
+		#elif defined(RB_HALT) || defined(RUDIMENTS_HAVE_RB_HALT)
 			// OS X doesn't appear to have a power-down option,
 			// just use halt instead
 			cmd=RB_HALT;
@@ -611,7 +611,7 @@ bool sys::shutDown() {
 		int32_t	cmd;
 		#if defined(RB_POWERDOWN)
 			cmd=RB_POWERDOWN;
-		#elif defined(RB_HALT)
+		#elif defined(RB_HALT) || defined(RUDIMENTS_HAVE_RB_HALT)
 			// Solaris doesn't appear to have a power-down option,
 			// just use halt instead
 			cmd=RB_HALT;
@@ -638,6 +638,7 @@ bool sys::shutDown() {
 		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
+
 }
 
 bool sys::reboot() {
@@ -645,7 +646,8 @@ bool sys::reboot() {
 		int32_t	cmd;
 		#if defined(LINUX_REBOOT_CMD_RESTART)
 			cmd=LINUX_REBOOT_CMD_RESTART;
-		#elif defined(RB_AUTOBOOT)
+		#elif defined(RB_AUTOBOOT) || \
+			defined(RUDIMENTS_HAVE_RB_AUTOBOOT)
 			cmd=RB_AUTOBOOT;
 		#elif defined(RBT_REBOOT)
 			cmd=RBT_REBOOT;
@@ -655,7 +657,8 @@ bool sys::reboot() {
 		return (::reboot(cmd)!=-1);
 	#elif defined(RUDIMENTS_HAVE_REBOOT_2)
 		int32_t	cmd;
-		#if defined(RB_AUTOBOOT)
+		#if defined(RB_AUTOBOOT) || \
+			defined(RUDIMENTS_HAVE_RB_AUTOBOOT)
 			cmd=RB_AUTOBOOT;
 		#else
 			#error no RB_AUTOBOOT or anything like it

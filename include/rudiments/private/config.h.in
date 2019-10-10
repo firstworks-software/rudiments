@@ -996,6 +996,12 @@
 /* Some systems have rand_r */
 #undef RUDIMENTS_HAVE_RAND_R
 
+/* Some systems have RB_AUTOBOOT */
+#undef RUDIMENTS_HAVE_RB_AUTOBOOT
+
+/* Some systems have RB_HALT */
+#undef RUDIMENTS_HAVE_RB_HALT
+
 /* Some systems have read */
 #undef RUDIMENTS_HAVE_READ
 
@@ -1271,9 +1277,6 @@
 
 /* Some systems have sys/byteorder.h */
 #undef RUDIMENTS_HAVE_SYS_BYTEORDER_H
-
-/* Some systems have sys/cdefs.h */
-#undef RUDIMENTS_HAVE_SYS_CDEFS_H
 
 /* Some systems have sys/devpoll.h */
 #undef RUDIMENTS_HAVE_SYS_DEVPOLL_H
