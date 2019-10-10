@@ -669,6 +669,7 @@ GSSINCLUDES
 SERVERPEM
 SSLLIBS
 SSLINCLUDES
+OPENSSL
 DEFAULT_MD
 PTHREADLIB
 PTHREADINCLUDES
@@ -20748,6 +20749,17 @@ if ( test -n "$SSLLIBS" )
 then
 	echo "ssl libs... $SSLLIBS"
 fi
+
+
+		OPENSSL="openssl"
+	if ( test -n "$SSLLIBS" )
+	then
+				SSLBIN=`echo "$SSLLIBS" | tr ' ' '\n' | grep "\-L" | sed -e "s|-L||" -e "s|\/lib|\/bin|"`
+		if ( test -x "$SSLBIN/openssl" )
+		then
+			OPENSSL="$SSLBIN/openssl"
+		fi
+	fi
 
 
 else

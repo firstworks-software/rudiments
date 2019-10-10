@@ -1081,6 +1081,19 @@ then
 	FW_INCLUDES(ssl,[$SSLINCLUDES])
 	FW_LIBS(ssl,[$SSLLIBS])
 
+	dnl try to find the openssl program
+	OPENSSL="openssl"
+	if ( test -n "$SSLLIBS" )
+	then
+		dnl try to get the bin directory from the libs
+		SSLBIN=`echo "$SSLLIBS" | tr ' ' '\n' | grep "\-L" | sed -e "s|-L||" -e "s|\/lib|\/bin|"`
+		if ( test -x "$SSLBIN/openssl" )
+		then
+			OPENSSL="$SSLBIN/openssl"
+		fi
+	fi
+	AC_SUBST(OPENSSL)
+
 else
 
 	echo "disabled"

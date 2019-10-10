@@ -59,6 +59,7 @@ RM = cscript /nologo @top_builddir@\rm.vbs
 RMTREE = cscript /nologo @top_builddir@\rmtree.vbs
 
 # ssl library
+OPENSSL = @OPENSSL@
 SSLLIBS = @SSLLIBS@
 
 # test cert target

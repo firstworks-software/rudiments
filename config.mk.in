@@ -63,6 +63,7 @@ RM = rm -f
 RMTREE = rm -rf
 
 # ssl library
+OPENSSL = @OPENSSL@
 SSLLIBS = @SSLLIBS@
 
 # test cert target
