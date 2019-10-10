@@ -364,6 +364,25 @@ AC_SUBST(WNOOVERLOADEDVIRTUAL)
 
 
 
+dnl checks to see if -Wno-deprecated-declarations is permitted
+AC_DEFUN([FW_CHECK_WNODEPRECATEDDECLARATIONS],
+[
+
+WNODEPRECATEDDECLARATIONS=""
+if ( test -n "$WERROR" )
+then
+	OLDCPPFLAGS=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS -Wno-deprecated-declarations"
+	AC_MSG_CHECKING(whether -Wno-deprecated-declarations is permitted)
+	AC_TRY_COMPILE([#include <stdio.h>],[printf("hello");],AC_MSG_RESULT(yes); WNODEPRECATEDDECLARATIONS="-Wno-deprecated-declarations",AC_MSG_RESULT(yes))	
+	CPPFLAGS=$OLDCPPFLAGS
+fi
+
+AC_SUBST(WNODEPRECATEDDECLARATIONS)
+])
+
+
+
 dnl checks to see if c++ allows undefined functions
 AC_DEFUN([FW_CHECK_UNDEFINED_FUNCTIONS],
 [

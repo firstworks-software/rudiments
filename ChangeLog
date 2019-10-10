@@ -1,4 +1,5 @@
 1.2.2 - fixed another long-standing charstring::httpEscape bug
+	-Wno-deprecated-declarations is now included if possible
 
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
 	tabs are url-encoded correctly now
