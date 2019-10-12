@@ -2,6 +2,7 @@
 	-Wno-deprecated-declarations is now included if possible
 	added configure tests for RB_HALT/AUTOBOOT (enums on solaris 11.4)
 	certificate tests use sha1 if sha256 is unavailable
+	filedescriptor::pvt->_lstnr is initialzed to NULL in clone operation now
 
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
 	tabs are url-encoded correctly now

@@ -351,6 +351,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 		pvt->_writebufferend=NULL;
 		pvt->_writebufferptr=NULL;
 	}
+	pvt->_lstnr=NULL;
 }
 
 filedescriptor::~filedescriptor() {
