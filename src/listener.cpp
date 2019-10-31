@@ -316,7 +316,11 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
 
 			// wait for an event
-			result=port_get(pvt->_port,&pvt->_pev,tsptr);
+			pvt->_pev.portev_events=0;
+			do {
+				result=port_get(pvt->_port,&pvt->_pev,tsptr);
+			} while (!(pvt->_pev.portev_events&(POLLIN|POLLOUT)) &&
+					error::getErrorNumber()!=ETIME);
 			if (!result) {
 				result=1;
 			} else if (result==-1 &&

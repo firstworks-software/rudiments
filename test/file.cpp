@@ -80,6 +80,7 @@ int main(int argc, const char **argv) {
 		if (charstring::compare(osname,"syllable")) {
 			// not reliable over cifs
 			#ifndef WIN32
+stdoutput.printf("%s:%s\n",username,groupname);
 			test("chown",fl.changeOwner(username,groupname));
 			#endif
 		}
