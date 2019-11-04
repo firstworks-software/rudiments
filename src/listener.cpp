@@ -302,20 +302,46 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		#if defined(RUDIMENTS_HAVE_KQUEUE)
 
 			// wait for non-blocking io
-			result=kevent(pvt->_kq,pvt->_kevs,fdcount,
+			bool	loop=true;
+			while (loop) {
+				result=kevent(pvt->_kq,
+						pvt->_kevs,fdcount,
 						pvt->_rkevs,fdcount,
 						tsptr);
+				for (int32_t i=0; i<result; i++) {
+					if (pvt->_rkevs[i].filter==
+							EVFILT_READ ||
+						pvt->_rkevs[i].filter==
+							EVFILT_WRITE) {
+						loop=false;
+						break;
+					}
+				}
+			}
 
 		#elif defined(RUDIMENTS_HAVE_EPOLL)
 
 			// wait for non-blocking io
-			result=epoll_wait(pvt->_epfd,
-						pvt->_revs,fdcount,
-						timeout);
+			bool	loop=true;
+			while (loop) {
+				result=epoll_wait(pvt->_epfd,
+							pvt->_revs,fdcount,
+							timeout);
+				if (error::getErrorNumber()==ETIME) {
+					loop=false;
+				}
+				for (int32_t i=0; i<result; i++) {
+					if (pvt->_revs[i].events&
+							(EPOLLIN|EPOLLOUT)) {
+						loop=false;
+						break;
+					}
+				}
+			}
 
 		#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
 
-			// wait for an event
+			// wait for non-blocking io
 			pvt->_pev.portev_events=0;
 			do {
 				result=port_get(pvt->_port,&pvt->_pev,tsptr);
