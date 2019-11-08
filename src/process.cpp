@@ -947,7 +947,6 @@ int64_t process::checkForPidFile(const char *filename) {
 void process::exitOnCrashOrShutDown() {
 	exitOnShutDown();
 	exitOnCrash();
-	waitForChildren();
 }
 
 void process::exitOnShutDown() {
@@ -1033,22 +1032,18 @@ void process::dontWaitForChildren() {
 }
 
 void process::shutDown(int32_t signum) {
-	waitForChildren();
 	(*_shutdownfunc)(signum);
 }
 
 void process::crash(int32_t signum) {
-	waitForChildren();
 	(*_crashfunc)(signum);
 }
 
 void process::defaultShutDown(int32_t signum) {
-	waitForChildren();
 	process::exit(0);
 }
 
 void process::defaultCrash(int32_t signum) {
-	waitForChildren();
 	process::exit(1);
 }
 

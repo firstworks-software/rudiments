@@ -4,6 +4,7 @@
 	certificate tests use sha1 if sha256 is unavailable
 	filedescriptor::pvt->_lstnr is initialzed to NULL in clone operation now
 	listener::listen() safely handles non pollin/out events now
+	removed waitForChildren() from shutdown/crash handlers
 
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
 	tabs are url-encoded correctly now
