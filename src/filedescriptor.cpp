@@ -160,8 +160,8 @@ extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
+// some platforms (solaris <= 9) don't have these macros
 #ifndef CMSG_LEN
-#error apparently this platform doesnt have this?
 	#ifndef CMSG_ALIGN
 		#define CMSG_ALIGN(len)	\
 				(((len) + sizeof(size_t)-1) & \

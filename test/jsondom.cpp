@@ -9,7 +9,7 @@
 
 struct test {
 	const char	*name;
-	const char	*test;
+	const char	*testval;
 	bool		comparetoprevious;
 };
 
@@ -376,7 +376,7 @@ int main() {
 	for (const struct test *t=tests; t->name; t++) {
 
 		stdoutput.printf("%s...\n",t->name);
-		j.parseString(t->test);
+		j.parseString(t->testval);
 		filename.clear();
 		filename.append(t->name)->append(".json");
 		j.writeFile(filename.getString(),
@@ -384,7 +384,8 @@ int main() {
 		char	*contents=file::getContents(filename.getString());
 		test("file contents",
 			!charstring::compare(
-				(t->comparetoprevious)?(t-1)->test:t->test,
+				(t->comparetoprevious)?
+					(t-1)->testval:t->testval,
 				contents));
 		delete[] contents;
 		test("parse file",j.parseFile(filename.getString()));
