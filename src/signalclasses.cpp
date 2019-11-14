@@ -386,12 +386,14 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 
 bool signalmanager::waitForSignals(const signalset *sset) {
 	#ifdef RUDIMENTS_HAVE_KILL
+		error::clearError();
 		if (!sset) {
 			signalset	none;
-			return (sigsuspend(&none.pvt->_sigset)==-1);
+			sigsuspend(&none.pvt->_sigset);
 		} else {
-			return (sigsuspend(&sset->pvt->_sigset)==-1);
+			sigsuspend(&sset->pvt->_sigset);
 		}
+		return error::getErrorNumber()==EINTR;
 	#else
 		// see sendSignal above...
 		RUDIMENTS_SET_ENOSYS
