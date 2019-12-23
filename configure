@@ -37758,6 +37758,18 @@ echo "******************************"
 echo
 
 
+
+if ( test -r "libtool" )
+then
+	sed -e "s|-lgcc_s -lgcc |-lgcc_s |g" \
+		-e "s|-lgcc_s -lgcc\"|-lgcc_s\"|g" \
+		-e "s|-lgcc_s_pic|-lgcc_s|g" \
+		libtool > libtool.new
+	mv libtool.new libtool
+fi
+
+
+
 echo
 echo "***** Summary ****************"
 
