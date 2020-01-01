@@ -1154,13 +1154,22 @@ then
 				dnl Unfortunately this doubles-up libraries
 				dnl on most platforms, but we'll let libtool
 				dnl sort that out.
-
 				GSSLIBS=`$KRB5CONFIG --libs gssapi 2> /dev/null | grep -v Unknown`
 				KRBLIBS=`$KRB5CONFIG --libs krb5 2> /dev/null | grep -v Unknown`
 
 				if ( test -n "$GSSLIBS" )
 				then
 					GSSLIBS="$GSSLIBS $KRBLIBS"
+
+					dnl On some platforms (Ubuntu), the
+					dnl -Wl,-Bsymbolic-functions and
+					dnl -Wl,-z,relro flags end up coming
+					dnl through as well, which can cause
+					dnl problems for apps.
+					dnl (sqlrelay+db2 on Ubuntu 18.04)
+					dnl Filter those out.
+					FILTEREDGSSLIBS=`echo "$GSSLIBS" | sed -e "s|-Wl,-Bsymbolic-functions||g" -e "s|-Wl,-z,relro||g"`
+					GSSLIBS="$FILTEREDGSSLIBS"
 
 					dnl on openbsd, libcom_err is in
 					dnl /usr/local/lib, but this isn't

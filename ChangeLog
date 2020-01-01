@@ -6,6 +6,7 @@
 	listener::listen() safely handles non pollin/out events now
 	removed waitForChildren() from shutdown/crash handlers
 	sigsuspend() fails if errno!=EINTR now instead of whether it returns -1
+	filtered out -Wl,-Bsymbolic-functions -Wl,-z,relro from krb5-config
 
 1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
 	tabs are url-encoded correctly now
