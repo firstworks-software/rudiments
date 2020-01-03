@@ -190,6 +190,25 @@ fi
 ])
 
 
+AC_DEFUN([FW_STRIP_SYMBOLIC_FUNCTIONS],
+[
+dnl On some platforms (Ubuntu), the -Wl,-Bsymbolic-functions and flags end up
+dnl coming through in ldflags, which can cause problems for apps (sqlrelay+db2
+dnl on Ubuntu 18.04).  Filter those out.
+STRIPPED=`echo "$2" | sed -e "s|-Wl,-Bsymbolic-functions||g"`
+eval "$1=\"$STRIPPED\""
+])
+
+
+AC_DEFUN([FW_STRIP_RELRO],
+[
+dnl On some platforms (Ubuntu), superfluous -Wl,-z,relro flags end up coming
+dnl through in ldflags.  Filter those out.
+STRIPPED=`echo "$2" | sed -e "s|-Wl,-z,relro||g"`
+eval "$1=\"$STRIPPED\""
+])
+
+
 
 dnl override libtool if so desired
 dnl a bit crude, but AC_PROG_LIBTOOL sets vital
@@ -1094,6 +1113,9 @@ then
 	fi
 	AC_SUBST(OPENSSL)
 
+	FW_STRIP_SYMBOLIC_FUNCTIONS(OPENSSLLIBS,"$OPENSSLLIBS")
+	FW_STRIP_RELRO(OPENSSLLIBS,"$OPENSSLLIBS")
+
 else
 
 	echo "disabled"
@@ -1160,16 +1182,6 @@ then
 				if ( test -n "$GSSLIBS" )
 				then
 					GSSLIBS="$GSSLIBS $KRBLIBS"
-
-					dnl On some platforms (Ubuntu), the
-					dnl -Wl,-Bsymbolic-functions and
-					dnl -Wl,-z,relro flags end up coming
-					dnl through as well, which can cause
-					dnl problems for apps.
-					dnl (sqlrelay+db2 on Ubuntu 18.04)
-					dnl Filter those out.
-					FILTEREDGSSLIBS=`echo "$GSSLIBS" | sed -e "s|-Wl,-Bsymbolic-functions||g" -e "s|-Wl,-z,relro||g"`
-					GSSLIBS="$FILTEREDGSSLIBS"
 
 					dnl on openbsd, libcom_err is in
 					dnl /usr/local/lib, but this isn't
@@ -1251,6 +1263,9 @@ then
 	then
 		HAVE_GSS="yes"
 		AC_DEFINE(RUDIMENTS_HAS_GSS,1,Rudiments supports GSS)
+
+		FW_STRIP_SYMBOLIC_FUNCTIONS(GSSLIBS,"$GSSLIBS")
+		FW_STRIP_RELRO(GSSLIBS,"$GSSLIBS")
 
 		FW_INCLUDES(GSS,[$GSSINCLUDES])
 		FW_LIBS(GSS,[$GSSLIBS])
@@ -1395,6 +1410,9 @@ then
 		HAVE_LIBCURL="yes"
 		AC_DEFINE(RUDIMENTS_HAS_LIBCURL,1,Rudiments supports libcurl)
 	fi
+
+	FW_STRIP_SYMBOLIC_FUNCTIONS(LIBCURLLIBS,"$LIBCURLLIBS")
+	FW_STRIP_RELRO(LIBCURLLIBS,"$LIBCURLLIBS")
 
 	FW_INCLUDES(curl,[$LIBCURLINCLUDES])
 	FW_LIBS(curl,[$LIBCURLLIBS])

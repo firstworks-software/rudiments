@@ -17,7 +17,11 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+#ifndef _WIN32
+const char	*listenersck="/tmp/listener.sck";
+#else
 const char	*listenersck="listener.sck";
+#endif
 
 void listen() {
 
@@ -133,13 +137,6 @@ void unixclient() {
 }
 
 int main(int argc, const char **argv) {
-
-	// socket must be on a local fs on OSR
-	char	*osname=sys::getOperatingSystemName();
-	if (!charstring::compare(osname,"SCO_SV")) {
-		listenersck="/tmp/listener.sck";
-	}
-	
 
 	if (argc==1) {
 

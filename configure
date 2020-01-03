@@ -20762,6 +20762,15 @@ fi
 	fi
 
 
+
+STRIPPED=`echo ""$OPENSSLLIBS"" | sed -e "s|-Wl,-Bsymbolic-functions||g"`
+eval "OPENSSLLIBS=\"$STRIPPED\""
+
+
+STRIPPED=`echo ""$OPENSSLLIBS"" | sed -e "s|-Wl,-z,relro||g"`
+eval "OPENSSLLIBS=\"$STRIPPED\""
+
+
 else
 
 	echo "disabled"
@@ -20815,9 +20824,6 @@ $as_echo_n "checking for GSS... " >&6; }
 				if ( test -n "$GSSLIBS" )
 				then
 					GSSLIBS="$GSSLIBS $KRBLIBS"
-
-																																								FILTEREDGSSLIBS=`echo "$GSSLIBS" | sed -e "s|-Wl,-Bsymbolic-functions||g" -e "s|-Wl,-z,relro||g"`
-					GSSLIBS="$FILTEREDGSSLIBS"
 
 																				if ( test "$path" = "/usr/local/heimdal/bin" )
 					then
@@ -21214,6 +21220,15 @@ $as_echo "$as_me: WARNING: gss_oid_to_str and gss_release_oid are required for G
 		HAVE_GSS="yes"
 
 $as_echo "#define RUDIMENTS_HAS_GSS 1" >>confdefs.h
+
+
+
+STRIPPED=`echo ""$GSSLIBS"" | sed -e "s|-Wl,-Bsymbolic-functions||g"`
+eval "GSSLIBS=\"$STRIPPED\""
+
+
+STRIPPED=`echo ""$GSSLIBS"" | sed -e "s|-Wl,-z,relro||g"`
+eval "GSSLIBS=\"$STRIPPED\""
 
 
 
@@ -29379,6 +29394,15 @@ export LD_LIBRARY_PATH
 $as_echo "#define RUDIMENTS_HAS_LIBCURL 1" >>confdefs.h
 
 	fi
+
+
+STRIPPED=`echo ""$LIBCURLLIBS"" | sed -e "s|-Wl,-Bsymbolic-functions||g"`
+eval "LIBCURLLIBS=\"$STRIPPED\""
+
+
+STRIPPED=`echo ""$LIBCURLLIBS"" | sed -e "s|-Wl,-z,relro||g"`
+eval "LIBCURLLIBS=\"$STRIPPED\""
+
 
 
 if ( test -n "$LIBCURLINCLUDES" )

@@ -15,17 +15,15 @@
 #include <rudiments/stringbuffer.h>
 #include "test.cpp"
 
+#ifndef WIN32
+const char	*testfiletxt="/tmp/testfile.txt";
+#else
 const char	*testfiletxt="testfile.txt";
+#endif
 
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
-
-	// file must be on a local fs on SCO for lock tests to work
-	if (!charstring::compare(osname,"UnixWare") ||
-		!charstring::compare(osname,"SCO_SV")) {
-		testfiletxt="/tmp/testfile.txt";
-	}
 
 	file	fl;
 
@@ -80,7 +78,6 @@ int main(int argc, const char **argv) {
 		if (charstring::compare(osname,"syllable")) {
 			// not reliable over cifs
 			#ifndef WIN32
-stdoutput.printf("%s:%s\n",username,groupname);
 			test("chown",fl.changeOwner(username,groupname));
 			#endif
 		}

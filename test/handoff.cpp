@@ -17,8 +17,13 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+#ifndef _WIN32
+const char	*handofffile="/tmp/file.txt";
+const char	*handoffsck="/tmp/handoff.sck";
+#else
 const char	*handofffile="file.txt";
 const char	*handoffsck="handoff.sck";
+#endif
 
 void handoff1() {
 
@@ -134,13 +139,7 @@ void handoffclient() {
 
 int main(int argc, const char **argv) {
 
-	// FIXME: this really ought to work on OSR
-        char    *os=sys::getOperatingSystemName();
-	if (!charstring::compare(os,"SCO_SV",6)) {
-		//notsupported=true;
-		handofffile="/tmp/file.txt";
-		handoffsck="/tmp/handoff.sck";
-	}
+	char	*os=sys::getOperatingSystemName();
 
 	if (argc==1) {
 
