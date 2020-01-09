@@ -1,3 +1,5 @@
+1.2.3 - 
+
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible
 	added configure tests for RB_HALT/AUTOBOOT (enums on solaris 11.4)
