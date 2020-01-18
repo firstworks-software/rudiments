@@ -17,6 +17,10 @@ AND = &
 # "this directory" prefix
 THISDIR =
 
+# script extension
+SCRIPTINT = cscript /nologo
+SCRIPTEXT = .vbs
+
 # shell
 SHELL =
 

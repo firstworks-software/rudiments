@@ -18,6 +18,10 @@ AND = ;
 # "this directory" prefix
 THISDIR = ./
 
+# script extension
+SCRIPTINT =
+SCRIPTEXT = .sh
+
 # shell
 SHELL = @SHELL@
 
