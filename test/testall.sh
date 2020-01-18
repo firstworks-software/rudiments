@@ -53,9 +53,9 @@ do
 
 	if ( test "$?" = "0" )
 	then
-		printf "    % 20s success\n" "$program" >> testresults.log
+		printf "    % 20s: success\n" "$program" >> testresults.log
 	else
-		printf "    % 20s failed\n" "$program" >> testresults.log
+		printf "    % 20s: failed\n" "$program" >> testresults.log
 	fi
 done
 
