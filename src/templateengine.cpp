@@ -313,8 +313,8 @@ bool templateengine::parse(
 
 		// handle double-quoted variable replacement
 		} else if (!charstring::compare(buffer,
-					pvt->qvarstart,
-					pvt->qvarstartlen)) {
+					pvt->dqvarstart,
+					pvt->dqvarstartlen)) {
 
 			replaceVariable(out,&buffer,vars,false,true);
 
@@ -373,7 +373,9 @@ void templateengine::replaceVariable(
 
 	// replace the variable with the corresponding value
 	char	*start=*buffer+pvt->varstartlen;
-	char	*end=charstring::findFirst(start,pvt->varend);
+	char	*end=charstring::findFirst(start,
+				(escq)?pvt->qvarend:
+				((escdq)?pvt->dqvarend:pvt->varend));
 	if (end) {
 		char		*var=charstring::duplicate(start,end-start);
 		const char	*repl;
