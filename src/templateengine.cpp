@@ -372,10 +372,31 @@ void templateengine::replaceVariable(
 			bool escq, bool escdq) {
 
 	// replace the variable with the corresponding value
-	char	*start=*buffer+pvt->varstartlen;
-	char	*end=charstring::findFirst(start,
-				(escq)?pvt->qvarend:
-				((escdq)?pvt->dqvarend:pvt->varend));
+	char		*start;
+	const char	*startpattern;
+	uint16_t	startpatternlen;
+	const char	*endpattern;
+	uint16_t	endpatternlen;
+	if (escq) {
+		startpattern=pvt->qvarstart;
+		startpatternlen=pvt->qvarstartlen;
+		endpattern=pvt->qvarend;
+		endpatternlen=pvt->qvarendlen;
+		start=*buffer+pvt->qvarstartlen;
+	} else if (escdq) {
+		startpattern=pvt->dqvarstart;
+		startpatternlen=pvt->dqvarstartlen;
+		endpattern=pvt->dqvarend;
+		endpatternlen=pvt->dqvarendlen;
+		start=*buffer+pvt->dqvarstartlen;
+	} else {
+		startpattern=pvt->varstart;
+		startpatternlen=pvt->varstartlen;
+		endpattern=pvt->varend;
+		endpatternlen=pvt->varendlen;
+		start=*buffer+pvt->varstartlen;
+	}
+	char	*end=charstring::findFirst(start,endpattern);
 	if (end) {
 		char		*var=charstring::duplicate(start,end-start);
 		const char	*repl;
@@ -399,7 +420,7 @@ void templateengine::replaceVariable(
 			} else {
 				out->write(repl);
 			}
-			*buffer=end+pvt->varendlen;
+			*buffer=end+endpatternlen;
 			delete[] var;
 			return;
 		}
@@ -407,8 +428,8 @@ void templateengine::replaceVariable(
 	}
 
 	// if not found, just print out the variable-start marker
-	out->write(pvt->varstart);
-	(*buffer)+=pvt->varstartlen;
+	out->write(startpattern);
+	(*buffer)+=startpatternlen;
 }
 
 bool templateengine::getBlockName(
