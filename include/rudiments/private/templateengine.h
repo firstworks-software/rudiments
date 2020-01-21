@@ -13,7 +13,8 @@
 		void	replaceVariable(output *out,
 					char **buffer,
 					dictionary< const char *,
-							const char * > *vars);
+							const char * > *vars,
+					bool escq, bool escdq);
 		bool	getBlockName(char **buffer,
 					stringbuffer *blockname,
 					dictionary< const char *,

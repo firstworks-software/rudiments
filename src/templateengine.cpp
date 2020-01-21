@@ -16,6 +16,15 @@ class templateengineprivate {
 		uint16_t	varstartlen;
 		const char	*varend;
 		uint16_t	varendlen;
+		const char	*qvarstart;
+		uint16_t	qvarstartlen;
+		const char	*qvarend;
+		uint16_t	qvarendlen;
+		const char	*dqvarstart;
+		uint16_t	dqvarstartlen;
+		const char	*dqvarend;
+		uint16_t	dqvarendlen;
+		char		esc;
 		const char	*blockstartstart;
 		uint16_t	blockstartstartlen;
 		const char	*blockstartend;
@@ -28,6 +37,8 @@ class templateengineprivate {
 		uint16_t	incstartlen;
 		const char	*incend;
 		uint16_t	incendlen;
+		char		qset[3];
+		char		dqset[3];
 };
 
 templateengine::templateengine() {
@@ -36,6 +47,15 @@ templateengine::templateengine() {
 	pvt->varstartlen=2;
 	pvt->varend=")";
 	pvt->varendlen=1;
+	pvt->qvarstart="$q(";
+	pvt->qvarstartlen=3;
+	pvt->qvarend=")";
+	pvt->qvarendlen=1;
+	pvt->dqvarstart="$dq(";
+	pvt->dqvarstartlen=4;
+	pvt->dqvarend=")";
+	pvt->dqvarendlen=1;
+	pvt->esc='\\';
 	pvt->blockstartstart="<!-- start ";
 	pvt->blockstartstartlen=11;
 	pvt->blockstartend=" -->";
@@ -48,6 +68,12 @@ templateengine::templateengine() {
 	pvt->incstartlen=13;
 	pvt->incend=" -->";
 	pvt->incendlen=4;
+	pvt->qset[0]='\'';
+	pvt->qset[1]=pvt->esc;
+	pvt->qset[2]='\0';
+	pvt->dqset[0]='"';
+	pvt->dqset[1]=pvt->esc;
+	pvt->dqset[2]='\0';
 }
 
 templateengine::~templateengine() {
@@ -62,6 +88,32 @@ void templateengine::setVariableStart(const char *delimiter) {
 void templateengine::setVariableEnd(const char *delimiter) {
 	pvt->varend=delimiter;
 	pvt->varendlen=charstring::length(delimiter);
+}
+
+void templateengine::setQuotedVariableStart(const char *delimiter) {
+	pvt->qvarstart=delimiter;
+	pvt->qvarstartlen=charstring::length(delimiter);
+}
+
+void templateengine::setQuotedVariableEnd(const char *delimiter) {
+	pvt->qvarend=delimiter;
+	pvt->qvarendlen=charstring::length(delimiter);
+}
+
+void templateengine::setDoubleQuotedVariableStart(const char *delimiter) {
+	pvt->dqvarstart=delimiter;
+	pvt->dqvarstartlen=charstring::length(delimiter);
+}
+
+void templateengine::setDoubleQuotedVariableEnd(const char *delimiter) {
+	pvt->dqvarend=delimiter;
+	pvt->dqvarendlen=charstring::length(delimiter);
+}
+
+void templateengine::setEscapeCharacter(char esc) {
+	pvt->esc=esc;
+	pvt->qset[1]=esc;
+	pvt->dqset[1]=esc;
 }
 
 void templateengine::setBlockStartStart(const char *delimiter) {
@@ -100,6 +152,26 @@ const char *templateengine::getVariableStart() {
 
 const char *templateengine::getVariableEnd() {
 	return pvt->varend;
+}
+
+const char *templateengine::getQuotedVariableStart() {
+	return pvt->qvarstart;
+}
+
+const char *templateengine::getQuotedVariableEnd() {
+	return pvt->qvarend;
+}
+
+const char *templateengine::getDoubleQuotedVariableStart() {
+	return pvt->dqvarstart;
+}
+
+const char *templateengine::getDoubleQuotedVariableEnd() {
+	return pvt->dqvarend;
+}
+
+char templateengine::getEscapeCharacter() {
+	return pvt->esc;
 }
 
 const char *templateengine::getBlockStartStart() {
@@ -230,7 +302,21 @@ bool templateengine::parse(
 					pvt->varstart,
 					pvt->varstartlen)) {
 
-			replaceVariable(out,&buffer,vars);
+			replaceVariable(out,&buffer,vars,false,false);
+
+		// handle quoted variable replacement
+		} else if (!charstring::compare(buffer,
+					pvt->qvarstart,
+					pvt->qvarstartlen)) {
+
+			replaceVariable(out,&buffer,vars,true,false);
+
+		// handle double-quoted variable replacement
+		} else if (!charstring::compare(buffer,
+					pvt->qvarstart,
+					pvt->qvarstartlen)) {
+
+			replaceVariable(out,&buffer,vars,false,true);
 
 		// handle a block
 		} else if (!justvariables && 
@@ -282,7 +368,8 @@ bool templateengine::parse(
 
 void templateengine::replaceVariable(
 			output *out, char **buffer,
-			dictionary< const char *, const char * > *vars) {
+			dictionary< const char *, const char * > *vars,
+			bool escq, bool escdq) {
 
 	// replace the variable with the corresponding value
 	char	*start=*buffer+pvt->varstartlen;
@@ -291,7 +378,25 @@ void templateengine::replaceVariable(
 		char		*var=charstring::duplicate(start,end-start);
 		const char	*repl;
 		if (vars->getValue(var,&repl)) {
-			out->write(repl);
+			if (escq || escdq) {
+				const char	*set=
+						(escq)?pvt->qset:pvt->dqset;
+				const char	*start=repl;
+				for (;;) {
+					repl=charstring::
+						findFirstOfSetOrEnd(start,set);
+					if (!*repl) {
+						break;
+					}
+					out->write(start,repl-start);
+					out->write(pvt->esc);
+					out->write(*repl);
+					start=repl+1;
+				}
+				out->write(start,repl-start);
+			} else {
+				out->write(repl);
+			}
 			*buffer=end+pvt->varendlen;
 			delete[] var;
 			return;

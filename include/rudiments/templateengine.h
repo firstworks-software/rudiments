@@ -119,6 +119,49 @@ class RUDIMENTS_DLLSPEC templateengine {
 		void	setVariableEnd(const char *delimiter);
 
 		/** Sets the delimiter that the parse() methods look for at
+		 *  the beginning of a variable whos value's single-quotes
+		 *  shall be escaped to "delimiter".
+		 *
+		 *  Defaults to "$q(".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		void	setQuotedVariableStart(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the end of a variable whos value's single-quotes
+		 *  shall be escaped to "delimiter".
+		 *
+		 *  Defaults to ")".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		void	setQuotedVariableEnd(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the beginning of a variable whos value's double-quotes
+		 *  shall be escaped to "delimiter".
+		 *
+		 *  Defaults to "$dq(".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		void	setDoubleQuotedVariableStart(const char *delimiter);
+
+		/** Sets the delimiter that the parse() methods look for at
+		 *  the end of a variable whos value's double-quotes
+		 *  shall be escaped to "delimiter".
+		 *
+		 *  Defaults to ")".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		void	setDoubleQuotedVariableEnd(const char *delimiter);
+
+		/** Sets the escape character.  Defaults to backslash. */
+		void	setEscapeCharacter(char esc);
+
+		/** Sets the delimiter that the parse() methods look for at
 		 *  beginning of a block-start to "delimiter".
 		 *
 		 *  Defaults to "<!-- start ".
@@ -195,7 +238,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		/** Returns the delimiter that the parse() methods look for at
 		 *  the beginning of a variable.
 		 *
-		 *  The defaults is "$(".
+		 *  The default is "$(".
 		 *
 		 *  For example, by defaults, variables are delimited like:
 		 *  $(variable) */
@@ -204,11 +247,54 @@ class RUDIMENTS_DLLSPEC templateengine {
 		/** Returns the delimiter that the parse() methods look for at
 		 *  the end of a variable.
 		 *
-		 *  The defaults is ")".
+		 *  The default is ")".
 		 *
 		 *  For example, by defaults, variables are delimited like:
 		 *  $(variable) */
 		const char	*getVariableEnd();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the beginning of a variable whos value's single-quotes
+		 *  shall be escaped.
+		 *
+		 *  The default is "$q(".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		const char	*getQuotedVariableStart();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the end of a variable whos value's single-quotes shall be
+		 *  escaped.
+		 *
+		 *  The default is ")".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		const char	*getQuotedVariableEnd();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the beginning of a variable whos value's double-quotes
+		 *  shall be escaped.
+		 *
+		 *  The default is "$dq(".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		const char	*getDoubleQuotedVariableStart();
+
+		/** Returns the delimiter that the parse() methods look for at
+		 *  the end of a variable whos value's double-quotes shall be
+		 *  escaped.
+		 *
+		 *  The default is ")".
+		 *
+		 *  For example, by defaults, variables are delimited like:
+		 *  $(variable) */
+		const char	*getDoubleQuotedVariableEnd();
+
+		/** Returns the escape character.  Defaults to backslash. */
+		char	getEscapeCharacter();
 
 		/** Returns the delimiter that the parse() methods look for at
 		 *  beginning of a block-start.
@@ -239,7 +325,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		/** Returns the delimiter that the parse() methods look for at
 		 *  the beginning of a block-end.
 		 *
-		 *  The defaults is "<!-- end ".
+		 *  The default is "<!-- end ".
 		 *
 		 *  For example, by defaults, blocks are delimited like:
 		 *
@@ -252,7 +338,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		/** Returns the delimiter that the parse() methods look for at
 		 *  the end of a block-end.
 		 *
-		 *  The defaults is " -->".
+		 *  The default is " -->".
 		 *
 		 *  For example, by defaults, blocks are delimited like:
 		 *
@@ -265,7 +351,7 @@ class RUDIMENTS_DLLSPEC templateengine {
 		/** Returns the delimiter that the parse() methods look for at
 		 *  the beginning of an include.
 		 *
-		 *  The defaults is "<!-- include ".
+		 *  The default is "<!-- include ".
 		 *
 		 *  For example, by defaults, blocks are delimited like:
 		 *
