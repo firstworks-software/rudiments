@@ -94,7 +94,12 @@ srcs="winsock.cpp "+_
 	"jsonsax.cpp "+_
 	"jsondom.cpp "+_
 	"cursordomnode.cpp "+_
-	"websocket.cpp"
+	"websocket.cpp "+_
+	"httprequest.cpp "+_
+	"stencilhttprequest.cpp "+_
+	"httpresponse.cpp "+_
+	"cgihttpserverapi.cpp "+_
+	"httpserverapi.cpp"
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -168,7 +173,12 @@ lobjs="winsock.obj "+_
 	"csvdom.obj "+_
 	"jsonsax.obj "+_
 	"jsondom.obj "+_
-	"cursordomnode.obj"
+	"cursordomnode.obj "+_
+	"httprequest.cpp "+_
+	"stencilhttprequest.cpp "+_
+	"httpresponse.cpp "+_
+	"cgihttpserverapi.cpp "+_
+	"httpserverapi.cpp"
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
@@ -256,7 +266,13 @@ headers3="sax.h "+_
 	"jsonsax.h "+_
 	"jsondom.h "+_
 	"cursordomnode.h "+_
-	"websocket.h"
+	"websocket.h "+_
+	"httprequest.h "+_
+	"stencilhttprequest.h "+_
+	"httpresponse.h "+_
+	"httpserverapi.h "+_
+	"httpserverapimain.h "+_
+	"cgihttpserverapi.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -446,7 +462,17 @@ privateheaders7="codetree.h "+_
 	"cursordomnode.h "+_
 	"cursordomnodeincludes.h "+_
 	"websocket.h "+_
-	"websocketincludes.h"
+	"websocketincludes.h "+_
+	"httprequest.h "+_
+	"httprequestincludes.h "+_
+	"stencilhttprequest.h "+_
+	"stencilhttprequestincludes.h "+_
+	"httpresponse.h "+_
+	"httpresponseincludes.h "+_
+	"httpserverapi.h "+_
+	"httpserverapiincludes.h "+_
+	"cgihttpserverapi.h "+_
+	"cgihttpserverapiincludes.h"
 
 ' version
 RUDIMENTS_VERSION="1.2.3"

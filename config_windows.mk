@@ -10,6 +10,8 @@ mandir = @mandir@
 datadir = @datadir@
 docdir = $(datadir)\doc\rudiments
 licensedir = $(datadir)\licenses\rudiments
+localstatedir = @localstatedir@
+tmpdir = $(localstatedir)\run\rudiments
 
 # command separator
 AND = &

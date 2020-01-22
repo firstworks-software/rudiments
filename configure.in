@@ -362,6 +362,22 @@ AC_ARG_ENABLE(cursordomnode,
 	[  --disable-cursordomnode Don't build cursordomnode class],
 	INCLUDE_CURSORDOMNODE="0",
 	INCLUDE_CURSORDOMNODE="1")
+AC_ARG_ENABLE(request,
+	[  --disable-request             Don't build request classes],
+	INCLUDE_REQUEST="0",
+	INCLUDE_REQUEST="1")
+AC_ARG_ENABLE(response,
+	[  --disable-response            Don't build response classes],
+	INCLUDE_RESPONSE="0",
+	INCLUDE_RESPONSE="1")
+AC_ARG_ENABLE(apache2,
+	[  --enable-apache2              Enable Apache 2 support],
+	INCLUDE_APACHE2="1",
+	INCLUDE_APACHE2="0")
+AC_ARG_ENABLE(cgi,
+	[  --disable-cgi                 Disable CGI support],
+	INCLUDE_CGI="0",
+	INCLUDE_CGI="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -3999,6 +4015,13 @@ fi
 echo "******************************"
 
 
+dnl Check for Apache module api
+echo
+echo "***** Apache 2 ***************"
+FW_CHECK_APACHE
+echo "******************************"
+
+
 
 dnl Semantic Versioning
 dnl Given a version number MAJOR.MINOR.PATCH, increment the:
@@ -4622,6 +4645,44 @@ then
 	LOBJS="$LOBJS cursordomnode.lo"
 fi
 
+if ( test "$INCLUDE_REQUEST" = "1" )
+then
+	HEADERS3="$HEADERS3 httprequest.h stencilhttprequest.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 httprequest.h httprequestincludes.h stencilhttprequest.h stencilhttprequestincludes.h"
+	SRCS="$SRCS httprequest.cpp stencilhttprequest.cpp"
+	LOBJS="$LOBJS httprequest.lo stencilhttprequest.lo"
+fi
+
+if ( test "$INCLUDE_REQUEST" = "1" )
+then
+	HEADERS3="$HEADERS3 httpresponse.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 httpresponse.h httpresponseincludes.h"
+	SRCS="$SRCS httpresponse.cpp"
+	LOBJS="$LOBJS httpresponse.lo"
+fi
+
+if ( test "$INCLUDE_APACHE2" = "1" )
+then
+	HEADERS3="$HEADERS3 apachehttpserverapi.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
+	SRCS="$SRCS apachehttpserverapi.cpp"
+	LOBJS="$LOBJS apachehttpserverapi.lo"
+fi
+
+if ( test "$INCLUDE_CGI" = "1" )
+then
+	HEADERS3="$HEADERS3 cgihttpserverapi.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 cgihttpserverapi.h cgihttpserverapiincludes.h cgimodule.h"
+	SRCS="$SRCS cgihttpserverapi.cpp"
+	LOBJS="$LOBJS cgihttpserverapi.lo"
+fi
+
+if ( test "$INCLUDE_APACHE2" = "1" -o "$INCLUDE_CGI" = "1" )
+then
+	HEADERS3="$HEADERS3 httpserverapi.h httpserverapimain.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 httpserverapi.h httpserverapiincludes.h"
+fi
+
 
 AC_SUBST(HEADERS0)
 AC_SUBST(HEADERS1)
@@ -4749,13 +4810,25 @@ if ( test -n "$LIBEDITLIBS" )
 then
 	LIBEDITBUILD="yes"
 fi
+CGIBUILD="no"
+if ( test "$INCLUDE_CGI" = "1")
+then
+	CGIBUILD="yes"
+fi
+APACHE2BUILD="no"
+if ( test "$INCLUDE_APACHE2" = "1")
+then
+	APACHE2BUILD="yes"
+fi
 
-echo " Features     : Threads  $HAS_THREADS"
-echo "                PCRE     $PCREBUILD"
-echo "                libcurl  $LIBCURLBUILD"
-echo "                TLS/SSL  $SSLBUILD"
-echo "                GSS      $GSSBUILD"
-echo "                libedit  $LIBEDITBUILD"
+echo " Features     : Threads   $HAS_THREADS"
+echo "                PCRE      $PCREBUILD"
+echo "                libcurl   $LIBCURLBUILD"
+echo "                TLS/SSL   $SSLBUILD"
+echo "                GSS       $GSSBUILD"
+echo "                libedit   $LIBEDITBUILD"
+echo "                CGI       $CGIBUILD"
+echo "                Apache 2  $APACHE2BUILD"
 echo "*******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"

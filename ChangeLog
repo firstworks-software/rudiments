@@ -1,5 +1,6 @@
 1.2.3 - unattended tests
 	added support for escaping single/double-quotes to templateengine
+	migrated in clasess from stencil project
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

@@ -50,6 +50,11 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=%{buildroot}
 
+# create tmpfiles.d directories and config file
+mkdir -p %{buildroot}/run/%{name}
+mkdir -p %{buildroot}%{_tmpfilesdir}
+echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.conf
+
 %files
 %{_libdir}/librudiments.so.6
 %{_libdir}/librudiments.so.6.*
@@ -61,6 +66,8 @@ make install DESTDIR=%{buildroot}
 %else
 %{_datadir}/licenses/rudiments
 %endif
+%{_tmpfilesdir}/%{name}.conf
+%exclude %{_localstatedir}/run
 
 %files devel
 %{_includedir}/rudiments
@@ -73,8 +80,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Thu Jan 09 2020 David Muse <david.muse@firstworks.com> - 1.2.3-1
+* Thu Jan 22 2020 David Muse <david.muse@firstworks.com> - 1.2.3-1
 - Updated to version 1.2.3.
+- Added tmpfiles.d configuration.
 
 * Mon Aug 12 2019 David Muse <david.muse@firstworks.com> - 1.2.2-1
 - Updated to version 1.2.2.
