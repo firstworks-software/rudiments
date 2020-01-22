@@ -7,7 +7,34 @@
 #include <rudiments/private/stencilhttprequestincludes.h>
 
 /** The stencilhttprequest class extends httprequest, providing methods for
- *  accessing components of the url. */
+ *  accessing components of the url.
+ *
+ *  The SCRIPT_NAME part of the url is parsed as follows:
+ *
+ *      DOCUMENT_ROOT/"application"/"program".cgi
+ *
+ *      ("application" may span multiple directories)
+ *
+ *  The PATH_INFO part url is parsed as follows:
+ *
+ *      /"skin"/"module"/"page".html
+ *
+ *      ("module" may span multiple directories)
+ *
+ *  The following directories are presumed to exist:
+ *
+ *      DOCUMENT_ROOT/"application"/"skin"/"module"
+ *
+ *  These directories are searched for XML files with .var extensions,
+ *  formatted as follows:
+ *
+ *  	<skin>
+ * 	 	<var name="...name...">...value...</var>
+ *  	</skin>
+ *
+ *  These are parsed into "skin variables".  Skin variables defined in deeper
+ *  level .var files override skin variables defined in shallower files.
+ */
 
 class RUDIMENTS_DLLSPEC stencilhttprequest : public httprequest {
 	public:
