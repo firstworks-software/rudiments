@@ -58,6 +58,8 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %files
 %{_libdir}/librudiments.so.6
 %{_libdir}/librudiments.so.6.*
+%{_libdir}/librudiments-apache.so.6
+%{_libdir}/librudiments-apache.so.6.*
 %doc AUTHORS ChangeLog
 %exclude %{_libdir}/librudiments.la
 %if 0%{?fedora}
@@ -72,6 +74,7 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %files devel
 %{_includedir}/rudiments
 %{_libdir}/librudiments.so
+%{_libdir}/librudiments-apache.so
 %{_bindir}/rudiments-config
 %{_libdir}/pkgconfig/rudiments.pc
 %{_mandir}/man1/rudiments-config*
@@ -83,6 +86,7 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 * Thu Jan 22 2020 David Muse <david.muse@firstworks.com> - 1.2.3-1
 - Updated to version 1.2.3.
 - Added tmpfiles.d configuration.
+- Added librudiments-apache libraries.
 
 * Mon Aug 12 2019 David Muse <david.muse@firstworks.com> - 1.2.2-1
 - Updated to version 1.2.2.

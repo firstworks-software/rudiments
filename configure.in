@@ -371,9 +371,9 @@ AC_ARG_ENABLE(response,
 	INCLUDE_RESPONSE="0",
 	INCLUDE_RESPONSE="1")
 AC_ARG_ENABLE(apache2,
-	[  --enable-apache2              Enable Apache 2 support],
-	INCLUDE_APACHE2="1",
-	INCLUDE_APACHE2="0")
+	[  --disable-apache2             Disable Apache 2 support],
+	INCLUDE_APACHE2="0",
+	INCLUDE_APACHE2="1")
 AC_ARG_ENABLE(cgi,
 	[  --disable-cgi                 Disable CGI support],
 	INCLUDE_CGI="0",
@@ -4665,8 +4665,10 @@ if ( test "$INCLUDE_APACHE2" = "1" )
 then
 	HEADERS3="$HEADERS3 apachehttpserverapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
-	SRCS="$SRCS apachehttpserverapi.cpp"
-	LOBJS="$LOBJS apachehttpserverapi.lo"
+	APACHESRCS="apachehttpserverapi.cpp"
+	APACHELOBJS="apachehttpserverapi.lo"
+	LIBRUDIMENTSAPACHE="librudiments-apache.la"
+	INSTALLLIBAPACHE="installlibapache"
 fi
 
 if ( test "$INCLUDE_CGI" = "1" )
@@ -4698,6 +4700,10 @@ AC_SUBST(PRIVATEHEADERS6)
 AC_SUBST(PRIVATEHEADERS7)
 AC_SUBST(SRCS)
 AC_SUBST(LOBJS)
+AC_SUBST(APACHESRCS)
+AC_SUBST(APACHELOBJS)
+AC_SUBST(LIBRUDIMENTSAPACHE)
+AC_SUBST(INSTALLLIBAPACHE)
 AC_SUBST(EXTRACPPFLAGS)
 
 

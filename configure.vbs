@@ -787,6 +787,11 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@DLLIB@",DLLIB,1,-1,0)
 	content=replace(content,"@GETPGIDLIB@",GETPGIDLIB,1,-1,0)
 	content=replace(content,"@SDKLIBS@",SDKLIBS,1,-1,0)
+	content=replace(content,"@APACHEINCLUDES@","",1,-1,0)
+	content=replace(content,"@APACHESRCS@","",1,-1,0)
+	content=replace(content,"@APACHELOBJS@","",1,-1,0)
+	content=replace(content,"@LIBRUDIMENTSAPACHE@","",1,-1,0)
+	content=replace(content,"@INSTALLLIBAPACHE@","",1,-1,0)
 
 	' extension
 	content=replace(content,"@EXE@",EXE,1,-1,0)

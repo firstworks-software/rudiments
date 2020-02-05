@@ -633,6 +633,10 @@ ac_default_prefix=/usr/local/firstworks
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 EXTRACPPFLAGS
+INSTALLLIBAPACHE
+LIBRUDIMENTSAPACHE
+APACHELOBJS
+APACHESRCS
 LOBJS
 SRCS
 PRIVATEHEADERS7
@@ -1590,7 +1594,7 @@ Optional Features:
   --disable-cursordomnode Don't build cursordomnode class
   --disable-request             Don't build request classes
   --disable-response            Don't build response classes
-  --enable-apache2              Enable Apache 2 support
+  --disable-apache2             Disable Apache 2 support
   --disable-cgi                 Disable CGI support
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
@@ -3159,9 +3163,9 @@ fi
 
 # Check whether --enable-apache2 was given.
 if test "${enable_apache2+set}" = set; then :
-  enableval=$enable_apache2; INCLUDE_APACHE2="1"
+  enableval=$enable_apache2; INCLUDE_APACHE2="0"
 else
-  INCLUDE_APACHE2="0"
+  INCLUDE_APACHE2="1"
 fi
 
 # Check whether --enable-cgi was given.
@@ -35949,8 +35953,10 @@ if ( test "$INCLUDE_APACHE2" = "1" )
 then
 	HEADERS3="$HEADERS3 apachehttpserverapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
-	SRCS="$SRCS apachehttpserverapi.cpp"
-	LOBJS="$LOBJS apachehttpserverapi.lo"
+	APACHESRCS="apachehttpserverapi.cpp"
+	APACHELOBJS="apachehttpserverapi.lo"
+	LIBRUDIMENTSAPACHE="librudiments-apache.la"
+	INSTALLLIBAPACHE="installlibapache"
 fi
 
 if ( test "$INCLUDE_CGI" = "1" )
@@ -35966,6 +35972,10 @@ then
 	HEADERS3="$HEADERS3 httpserverapi.h httpserverapimain.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 httpserverapi.h httpserverapiincludes.h"
 fi
+
+
+
+
 
 
 

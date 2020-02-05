@@ -8,8 +8,10 @@ exec_prefix=@exec_prefix@
 exec_prefix_set=no
 version=@RUDIMENTS_VERSION@
 
-cflags="@PTHREADINCLUDES@ @LIBEDITINCLUDES@ @SSLINCLUDES@ @GSSINCLUDES@ @PCREINCLUDES@ @LIBCURLINCLUDES@ @APACHEINCLUDES@"
+cflags="@PTHREADINCLUDES@ @LIBEDITINCLUDES@ @SSLINCLUDES@ @GSSINCLUDES@ @PCREINCLUDES@ @LIBCURLINCLUDES@"
+apachecflags="$cflags @APACHEINCLUDES@"
 libs="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @LIBEDITLIBS@ @SSLLIBS@ @GSSLIBS@ @PCRELIBS@ @LIBCURLLIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
+apachelibs="-lrudiments -lrudiments-apache @SOCKETLIBS@ @PTHREADLIB@ @LIBEDITLIBS@ @SSLLIBS@ @GSSLIBS@ @PCRELIBS@ @LIBCURLLIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
 
 # fake out rpmlint
 rp="rp"
@@ -18,14 +20,20 @@ ath="ath"
 if ( test "@libdir@" = "/usr/lib" ); then
 	rudiments_libs="$libs"
 	rudiments_libs_with_rpath="$rudiments_libs"
+	rudiments_apache_libs="$apachelibs"
+	rudiments_apache_libs_with_rpath="$rudiments_apache_libs"
 else
 	rudiments_libs="-L@libdir@ $libs"
 	rudiments_libs_with_rpath="-Wl,-$rp$ath @libdir@ $rudiments_libs"
+	rudiments_apache_libs="-L@libdir@ $apachelibs"
+	rudiments_apache_libs_with_rpath="-Wl,-$rp$ath @libdir@ $rudiments_apache_libs"
 fi
 if ( test "@includedir@" = "/usr/include" ); then
 	rudiments_cflags="$cflags"
+	rudiments_apache_cflags="$cflags -DEAPI @APACHEINCLUDES@"
 else
 	rudiments_cflags="-I@includedir@ $cflags" 
+	rudiments_apache_cflags="-I@includedir@ $cflags -DEAPI @APACHEINCLUDES@"
 fi
 
 usage()
@@ -37,8 +45,10 @@ Options:
 	[--exec-prefix]
 	[--version]
 	[--libs]
+	[--apache-libs]
 	[--with-$rp$ath]
 	[--cflags]
+	[--apache-cflags]
 EOF
 	exit $1
 }
@@ -71,8 +81,14 @@ while ( test "$#" -gt "0" ); do
 		--cflags)
 			echo_cflags=yes
 			;;
+		--apache-cflags)
+			echo_apache_cflags=yes
+			;;
 		--libs)
 			echo_libs=yes
+			;;
+		--apache-libs)
+			echo_apache_libs=yes
 			;;
 		--with-$rp$ath)
 			with_rpath=yes
@@ -96,10 +112,22 @@ if ( test "$echo_cflags" = "yes" ); then
 	echo $rudiments_cflags
 fi
 
+if ( test "$echo_apache_cflags" = "yes" ); then
+	echo $rudiments_apache_cflags
+fi
+
 if ( test "$echo_libs" = "yes" ); then
 	if ( test "$with_rpath" = "yes" ); then
 		echo $rudiments_libs_with_rpath
 	else
 		echo $rudiments_libs
+	fi
+fi      
+
+if ( test "$echo_apache_libs" = "yes" ); then
+	if ( test "$with_rpath" = "yes" ); then
+		echo $rudiments_apache_libs_with_rpath
+	else
+		echo $rudiments_apache_libs
 	fi
 fi      

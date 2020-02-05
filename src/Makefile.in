@@ -8,6 +8,9 @@ LIBS = $(SOCKETLIBS) $(PTHREADLIB) $(LIBEDITLIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELI
 SRCS = @SRCS@
 LOBJS = @LOBJS@
 
+APACHESRCS = @APACHESRCS@
+APACHELOBJS = @APACHELOBJS@
+
 .SUFFIXES: .lo
 
 .cpp.lo:
@@ -16,7 +19,7 @@ LOBJS = @LOBJS@
 .cpp.obj:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
-all: librudiments.$(LIBEXT)
+all: librudiments.$(LIBEXT) @LIBRUDIMENTSAPACHE@
 
 clean:
 	$(LTCLEAN) $(RM) *.lo *.o *.obj *.$(LIBEXT) *.lib *.exp *.idb *.pdb *.manifest *.ii
@@ -24,7 +27,10 @@ clean:
 librudiments.$(LIBEXT): $(SRCS) $(LOBJS)
 	$(LTLINK) $(LINK) $(OUT)$@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
 
-install: $(INSTALLLIB)
+librudiments-apache.$(LIBEXT): $(APACHESRCS) $(APACHELOBJS)
+	$(LTLINK) $(LINK) $(OUT)$@ $(APACHELOBJS) $(LDFLAGS) $(LIBS) $(APACHELIBS) $(LINKFLAGS)
+
+install: $(INSTALLLIB) @INSTALLLIBAPACHE@
 	$(MKINSTALLDIRS) $(tmpdir)
 	$(CHMOD) 777 $(tmpdir)
 
@@ -39,6 +45,11 @@ installlib:
 	$(LTINSTALL) $(CP) librudiments.$(LIBEXT) $(libdir)
 	$(LTFINISH) $(libdir)
 
+installlibapache:
+	$(MKINSTALLDIRS) $(libdir)
+	$(LTINSTALL) $(CP) librudiments-apache.$(LIBEXT) $(libdir)
+	$(LTFINISH) $(libdir)
+
 uninstall: $(UNINSTALLLIB)
 	$(RMTREE) $(tmpdir)
 
@@ -48,3 +59,4 @@ uninstalldll:
 
 uninstalllib:
 	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.$(LIBEXT)
+	$(LTUNINSTALL) $(RM) $(libdir)/librudiments-apache.$(LIBEXT)
