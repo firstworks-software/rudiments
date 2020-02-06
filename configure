@@ -34752,7 +34752,6 @@ echo
 echo "***** Apache 2 ***************"
 
 APACHEINCLUDES=""
-HAVE_APACHE=""
 
 if ( test "$INCLUDE_APACHE2" = "1" )
 then
@@ -35303,10 +35302,9 @@ then
 fi
 
 
-		if ( test -n "$APXS" -a -n "$APR_CONFIG" )
+		if ( test -z "$APXS" -o -z "$APR_CONFIG" )
 	then
-		HAVE_APACHE="yes"
-	else
+		INCLUDE_APACHE2="0"
 		APACHEINCLUDES=""
 	fi
 else
@@ -35947,7 +35945,7 @@ then
 	LOBJS="$LOBJS httpresponse.lo"
 fi
 
-if ( test "$INCLUDE_APACHE2" = "1" -a "$HAVE_APACHE" = "yes" )
+if ( test "$INCLUDE_APACHE2" = "1" )
 then
 	HEADERS3="$HEADERS3 apachehttpserverapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"

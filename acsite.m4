@@ -2540,7 +2540,6 @@ dnl checks for apache module api
 AC_DEFUN([FW_CHECK_APACHE],
 [
 APACHEINCLUDES=""
-HAVE_APACHE=""
 
 if ( test "$INCLUDE_APACHE2" = "1" )
 then
@@ -2549,10 +2548,9 @@ then
 	FW_CHECK_APUCONFIG
 
 	dnl for now, only support apache 2
-	if ( test -n "$APXS" -a -n "$APR_CONFIG" )
+	if ( test -z "$APXS" -o -z "$APR_CONFIG" )
 	then
-		HAVE_APACHE="yes"
-	else
+		INCLUDE_APACHE2="0"
 		APACHEINCLUDES=""
 	fi
 else
