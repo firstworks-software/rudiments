@@ -5,15 +5,23 @@
 #include <rudiments/httpresponse.h>
 #include <rudiments/charstring.h>
 
+class httpresponseprivate {
+	friend class httpresponse;
+	private:
+		httpserverapi	*_sapi;
+};
+
 httpresponse::httpresponse(httpserverapi *sapi) {
-	this->sapi=sapi;
+	pvt=new httpresponseprivate;
+	pvt->_sapi=sapi;
 }
 
 httpresponse::~httpresponse() {
+	delete pvt;
 }
 
 void httpresponse::cr() {
-	sapi->header("\r\n");
+	pvt->_sapi->header("\r\n");
 }
 
 void httpresponse::textHtml() {
@@ -48,7 +56,7 @@ void httpresponse::contentType(const char *type, const char *subtype,
 	if (!charstring::isNullOrEmpty(boundary)) {
 		contenttypestr.append(";boundary=")->append(boundary);
 	}
-	sapi->header("Content-type",contenttypestr.getString());
+	pvt->_sapi->header("Content-type",contenttypestr.getString());
 }
 
 void httpresponse::status(const char *protocol, const char *version,
@@ -56,7 +64,7 @@ void httpresponse::status(const char *protocol, const char *version,
 	stringbuffer	statusline;
 	statusline.append(protocol)->append('/');
 	statusline.append(version)->append(' ')->append(code);
-	sapi->status(statusline.getString());
+	pvt->_sapi->status(statusline.getString());
 }
 
 void httpresponse::setCookie(const char *name, const char *value,
@@ -76,7 +84,7 @@ void httpresponse::setCookie(const char *name, const char *value,
 	if (secure) {
 		cookiestr.append("; secure");
 	}
-	sapi->header("Set-Cookie",cookiestr.getString());
+	pvt->_sapi->header("Set-Cookie",cookiestr.getString());
 }
 
 const char *httpresponse::boundaryString() {
@@ -99,70 +107,70 @@ void httpresponse::multiPartEnd(output *out) {
 }
 
 httpresponse *httpresponse::status(const char *status) {
-	sapi->status(status);
+	pvt->_sapi->status(status);
 	return this;
 }
 
 httpresponse *httpresponse::header(const char *header, const char *value) {
-	sapi->header(header,value);
+	pvt->_sapi->header(header,value);
 	return this;
 }
 
 httpresponse *httpresponse::header(const char *header) {
-	sapi->header(header);
+	pvt->_sapi->header(header);
 	return this;
 }
 
 ssize_t httpresponse::write(const unsigned char *string, size_t size) {
-	return sapi->write(string,size);
+	return pvt->_sapi->write(string,size);
 }
 
 ssize_t httpresponse::write(const char *string) {
-	return sapi->write(string);
+	return pvt->_sapi->write(string);
 }
 
 ssize_t httpresponse::write(const char *string, size_t size) {
-	return sapi->write(string,size);
+	return pvt->_sapi->write(string,size);
 }
 
 ssize_t httpresponse::write(char character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(int16_t character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(int32_t character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(int64_t character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(unsigned char character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(uint16_t character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(uint32_t character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(uint64_t character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(float character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(double character) {
-	return sapi->write(character);
+	return pvt->_sapi->write(character);
 }
 
 ssize_t httpresponse::write(file *filebuffer) {

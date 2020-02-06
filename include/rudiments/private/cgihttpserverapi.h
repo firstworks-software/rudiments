@@ -32,10 +32,4 @@
 		ssize_t	write(float number);
 		ssize_t	write(double number);
 	private:
-
-		void	*apistruct;
-
-		bool		envdirty;
-		uint64_t	envcount;
-		char		**envvars;
-		char		**envvals;
+		cgihttpserverapiprivate	*pvt;

@@ -18,29 +18,48 @@
 
 #include <util_script.h>
 
+class apachehttpserverapiprivate {
+	friend class apachehttpserverapi;
+	private:
+		void		*_apistruct;
+
+		bool		_envdirty;
+		uint64_t	_envcount;
+		char		**_envvars;
+		char		**_envvals;
+
+		uint16_t	_crcount;
+
+		const unsigned char	*_stdinptr;
+		size_t			_stdinpos;
+		bytebuffer		*_standardin;
+};
+
 apachehttpserverapi::apachehttpserverapi(void *apistruct) :
 					httpserverapi(apistruct) {
-	this->apistruct=apistruct;
-	crcount=0;
-	stdinptr=NULL;
-	standardin=new bytebuffer();
+	pvt=new apachehttpserverapiprivate;
+
+	pvt->_apistruct=apistruct;
+	pvt->_crcount=0;
+	pvt->_stdinptr=NULL;
+	pvt->_standardin=new bytebuffer();
 }
 
 apachehttpserverapi::~apachehttpserverapi() {
-	delete standardin;
+	delete pvt->_standardin;
 }
 
 void *apachehttpserverapi::getApiStruct() {
-	return apistruct;
+	return pvt->_apistruct;
 }
 
 bool apachehttpserverapi::getCharacter(char *ch) {
 
 	// FIXME: this is sort of lame, it should be possible to do this
 	// without first buffering the entire string
-	if (!stdinptr) {
+	if (!pvt->_stdinptr) {
 
-		request_rec		*r=(request_rec *)apistruct;
+		request_rec		*r=(request_rec *)pvt->_apistruct;
 		apr_bucket_brigade	*bb=apr_brigade_create(r->pool,
 						r->connection->bucket_alloc);
 		bool	done=false;
@@ -71,37 +90,37 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 				apr_bucket_read(bucket,&data,&len,
 							APR_BLOCK_READ);
 
-				standardin->append(data,
+				pvt->_standardin->append(data,
 					static_cast<size_t>(len));
 			}
 
 			apr_brigade_cleanup(bb);
 		}
 
-		stdinptr=standardin->getBuffer();
-		stdinpos=0;
+		pvt->_stdinptr=pvt->_standardin->getBuffer();
+		pvt->_stdinpos=0;
 	}
-	if (stdinpos<standardin->getSize()) {
-		*ch=static_cast<char>(*stdinptr);
-		stdinptr++;
-		stdinpos++;
+	if (pvt->_stdinpos<pvt->_standardin->getSize()) {
+		*ch=static_cast<char>(*pvt->_stdinptr);
+		pvt->_stdinptr++;
+		pvt->_stdinpos++;
 		return true;
 	}
 	return false;
 }
 
 void apachehttpserverapi::initEnvironmentVariables() {
-	envdirty=false;
-	envcount=0;
-	envvars=NULL;
-	envvals=NULL;
-	ap_add_common_vars((request_rec *)apistruct);
-	ap_add_cgi_vars((request_rec *)apistruct);
+	pvt->_envdirty=false;
+	pvt->_envcount=0;
+	pvt->_envvars=NULL;
+	pvt->_envvals=NULL;
+	ap_add_common_vars((request_rec *)pvt->_apistruct);
+	ap_add_cgi_vars((request_rec *)pvt->_apistruct);
 }
 
 const char *apachehttpserverapi::getEnvironmentVariable(const char *name) {
 	char	*val=(char *)ap_table_get(
-			((request_rec *)apistruct)->subprocess_env,
+			((request_rec *)pvt->_apistruct)->subprocess_env,
 			name);
 	if (val) {
 		return val;
@@ -111,23 +130,24 @@ const char *apachehttpserverapi::getEnvironmentVariable(const char *name) {
 
 uint64_t apachehttpserverapi::getEnvironmentVariableCount() {
 	updateEnvironmentVariables();
-	return envcount;
+	return pvt->_envcount;
 }
 
 const char * const *apachehttpserverapi::getEnvironmentVariables() {
 	updateEnvironmentVariables();
-	return envvars;
+	return pvt->_envvars;
 }
 
 const char * const *apachehttpserverapi::getEnvironmentValues() {
 	updateEnvironmentVariables();
-	return envvals;
+	return pvt->_envvals;
 }
 
 bool apachehttpserverapi::setEnvironmentVariable(const char *name,
 							const char *value) {
-	envdirty=true;
-	ap_table_set(((request_rec *)apistruct)->subprocess_env,name,value);
+	pvt->_envdirty=true;
+	ap_table_set(((request_rec *)pvt->_apistruct)->
+				subprocess_env,name,value);
 	return true;
 }
 
@@ -135,48 +155,48 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 
 	// don't do anything unless an environment variable has been changed
 	// or if they haven't been initialized at all
-	if (!envvars || envdirty) {
+	if (!pvt->_envvars || pvt->_envdirty) {
 
 		// delete old lists
-		delete[] envvars;
-		delete[] envvals;
+		delete[] pvt->_envvars;
+		delete[] pvt->_envvals;
 
 		// update counter
-		envcount=ap_table_elts(((request_rec *)apistruct)->
+		pvt->_envcount=ap_table_elts(((request_rec *)pvt->_apistruct)->
 							subprocess_env)->nelts;
 
 		// create new lists
-		envvars=new char *[envcount+1];
-		envvals=new char *[envcount+1];
-		envvars[envcount]=NULL;
-		envvals[envcount]=NULL;
+		pvt->_envvars=new char *[pvt->_envcount+1];
+		pvt->_envvals=new char *[pvt->_envcount+1];
+		pvt->_envvars[pvt->_envcount]=NULL;
+		pvt->_envvals[pvt->_envcount]=NULL;
 		
 		// insert variables into lists
 		array_header	*arr=ap_table_elts(
-					((request_rec *)apistruct)->
+					((request_rec *)pvt->_apistruct)->
 							subprocess_env);
 		table_entry	*list=(table_entry *)arr->elts;
-		for (uint64_t index=0; index<envcount; index++) {
-			envvars[index]=list[index].key;
-			envvals[index]=list[index].val;
+		for (uint64_t index=0; index<pvt->_envcount; index++) {
+			pvt->_envvars[index]=list[index].key;
+			pvt->_envvals[index]=list[index].val;
 		}
 
-		envdirty=false;
+		pvt->_envdirty=false;
 	}
 }
 
 httpserverapi *apachehttpserverapi::status(const char *string) {
 	charstring::copy((char *)
-			((request_rec *)apistruct)->status_line,string);
+			((request_rec *)pvt->_apistruct)->status_line,string);
 	return this;
 }
 
 httpserverapi *apachehttpserverapi::header(const char *variable,
 							const char *value) {
 	if (!charstring::compare(variable,"Content-type")) {
-		((request_rec *)apistruct)->content_type=value;
+		((request_rec *)pvt->_apistruct)->content_type=value;
 	} else {
-		ap_table_set(((request_rec *)apistruct)->headers_out,
+		ap_table_set(((request_rec *)pvt->_apistruct)->headers_out,
 				variable,value);
 	}
 	return this;
@@ -184,10 +204,10 @@ httpserverapi *apachehttpserverapi::header(const char *variable,
 
 httpserverapi *apachehttpserverapi::header(const char *string) {
 	if (!charstring::compare(string,"\r\n")) {
-		if (crcount==1) {
-			ap_send_http_header((request_rec *)apistruct);
+		if (pvt->_crcount==1) {
+			ap_send_http_header((request_rec *)pvt->_apistruct);
 		} else {
-			crcount++;
+			pvt->_crcount++;
 		}
 	}
 	return this;
@@ -196,7 +216,8 @@ httpserverapi *apachehttpserverapi::header(const char *string) {
 ssize_t	apachehttpserverapi::write(const unsigned char *string, size_t size) {
 	int	count=0;
 	for (uint64_t index=0; index<size; index++) {
-		int	result=ap_rputc(string[index],(request_rec *)apistruct);
+		int	result=ap_rputc(string[index],
+					(request_rec *)pvt->_apistruct);
 		if (result>=0) {
 			count+=result;
 		} else {
@@ -207,13 +228,14 @@ ssize_t	apachehttpserverapi::write(const unsigned char *string, size_t size) {
 }
 
 ssize_t	apachehttpserverapi::write(const char *string) {
-	return ap_rputs(string,(request_rec *)apistruct);
+	return ap_rputs(string,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(const char *string, size_t size) {
 	int	count=0;
 	for (uint64_t index=0; index<size; index++) {
-		int	result=ap_rputc(string[index],(request_rec *)apistruct);
+		int	result=ap_rputc(string[index],
+					(request_rec *)pvt->_apistruct);
 		if (result>=0) {
 			count+=result;
 		} else {
@@ -224,7 +246,7 @@ ssize_t	apachehttpserverapi::write(const char *string, size_t size) {
 }
 
 ssize_t	apachehttpserverapi::write(char character) {
-	return ap_rputc(character,(request_rec *)apistruct);
+	return ap_rputc(character,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(int16_t number) {
@@ -246,7 +268,7 @@ ssize_t	apachehttpserverapi::write(int64_t number) {
 }
 
 ssize_t	apachehttpserverapi::write(unsigned char character) {
-	return ap_rputc((char)character,(request_rec *)apistruct);
+	return ap_rputc((char)character,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(uint16_t number) {

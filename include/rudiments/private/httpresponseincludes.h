@@ -3,3 +3,5 @@
 
 #include <rudiments/httpserverapi.h>
 #include <rudiments/output.h>
+
+class httpresponseprivate;

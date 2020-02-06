@@ -10,16 +10,28 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/process.h>
 
+class cgihttpserverapiprivate {
+	friend class cgihttpserverapi;
+	private:
+		void		*_apistruct;
+		bool		_envdirty;
+		uint64_t	_envcount;
+		char		**_envvars;
+		char		**_envvals;
+};
+
 cgihttpserverapi::cgihttpserverapi(void *apistruct) :
 					httpserverapi(apistruct) {
-	this->apistruct=apistruct;
+	pvt=new cgihttpserverapiprivate;
+	pvt->_apistruct=apistruct;
 }
 
 cgihttpserverapi::~cgihttpserverapi() {
+	delete pvt;
 }
 
 void *cgihttpserverapi::getApiStruct() {
-	return apistruct;
+	return pvt->_apistruct;
 }
 
 bool cgihttpserverapi::getCharacter(char *ch) {
@@ -27,10 +39,10 @@ bool cgihttpserverapi::getCharacter(char *ch) {
 }
 
 void cgihttpserverapi::initEnvironmentVariables() {
-	envdirty=false;
-	envcount=0;
-	envvars=NULL;
-	envvals=NULL;
+	pvt->_envdirty=false;
+	pvt->_envcount=0;
+	pvt->_envvars=NULL;
+	pvt->_envvals=NULL;
 
 	// some web servers don't set DOCUMENT_ROOT, so we'll attempt to
 	// derive it from the current working directory and SCRIPT_NAME,
@@ -97,22 +109,22 @@ const char *cgihttpserverapi::getEnvironmentVariable(const char *name) {
 
 uint64_t cgihttpserverapi::getEnvironmentVariableCount() {
 	updateEnvironmentVariables();
-	return envcount;
+	return pvt->_envcount;
 }
 
 const char * const *cgihttpserverapi::getEnvironmentVariables() {
 	updateEnvironmentVariables();
-	return envvars;
+	return pvt->_envvars;
 }
 
 const char * const *cgihttpserverapi::getEnvironmentValues() {
 	updateEnvironmentVariables();
-	return envvals;
+	return pvt->_envvals;
 }
 
 bool cgihttpserverapi::setEnvironmentVariable(const char *name,
 						const char *value) {
-	envdirty=true;
+	pvt->_envdirty=true;
 	return environment::setValue(name,value);
 }
 
@@ -120,50 +132,52 @@ void cgihttpserverapi::updateEnvironmentVariables() {
 
 	// don't do anything unless an environment variable has been changed
 	// or if they haven't been initialized at all
-	if (envvars && envvals && !envdirty) {
+	if (pvt->_envvars && pvt->_envvals && !pvt->_envdirty) {
 		return;
 	}
 
 	// delete old lists
-	if (envcount) {
-		for (uint64_t index=0; index<envcount; index++) {
-			delete[] envvars[index];
-			delete[] envvals[index];
+	if (pvt->_envcount) {
+		for (uint64_t index=0; index<pvt->_envcount; index++) {
+			delete[] pvt->_envvars[index];
+			delete[] pvt->_envvals[index];
 		}
 	}
-	delete[] envvars;
-	delete[] envvals;
+	delete[] pvt->_envvars;
+	delete[] pvt->_envvals;
 
 	// update counter
-	for (envcount=0; environment::variables()[envcount]; envcount++) {}
+	for (pvt->_envcount=0;
+		environment::variables()[pvt->_envcount];
+		pvt->_envcount++) {}
 
 	// create new lists
-	envvars=new char *[envcount+1];
-	envvals=new char *[envcount+1];
-	envvars[envcount]=NULL;
-	envvals[envcount]=NULL;
+	pvt->_envvars=new char *[pvt->_envcount+1];
+	pvt->_envvals=new char *[pvt->_envcount+1];
+	pvt->_envvars[pvt->_envcount]=NULL;
+	pvt->_envvals[pvt->_envcount]=NULL;
 		
 	// insert variables into lists
-	for (uint64_t index=0; index<envcount; index++) {
+	for (uint64_t index=0; index<pvt->_envcount; index++) {
 
 		const char	*equal=charstring::
 				findFirst(environment::variables()[index],'=');
 		if (equal) {
 			size_t	bytes=equal-
 					environment::variables()[index];
-			envvars[index]=new char[bytes+1];
-			envvars[index][bytes]='\0';
-			charstring::copy(envvars[index],
+			pvt->_envvars[index]=new char[bytes+1];
+			pvt->_envvars[index][bytes]='\0';
+			charstring::copy(pvt->_envvars[index],
 					environment::variables()[index],
 					bytes);
-			envvals[index]=charstring::duplicate(equal+1);
+			pvt->_envvals[index]=charstring::duplicate(equal+1);
 		} else {
-			envvars[index]=NULL;
-			envvals[index]=NULL;
+			pvt->_envvars[index]=NULL;
+			pvt->_envvals[index]=NULL;
 		}
 	}
 
-	envdirty=false;
+	pvt->_envdirty=false;
 }
 
 httpserverapi *cgihttpserverapi::status(const char *string) {
