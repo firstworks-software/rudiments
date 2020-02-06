@@ -1,0 +1,86 @@
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="input1"
+
+value1
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="input2"
+
+value2
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="input3"
+
+value3
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="input4"
+
+value4
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="input5"
+
+value5
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="file"; filename="INSTALL"
+Content-Type: text/plain
+
+BASIC INSTALL:
+
+	To compile stencil type:
+
+		./configure
+		make
+
+	To install stencil become superuser and type:
+
+		make install
+
+	Libraries are installed in /usr/local/firstworks/lib
+	Includes are installed in /usr/local/firstworks/include
+
+	To uninstall stencil become superuser and type:
+
+		make uninstall
+
+
+
+CUSTOM INSTALL:
+
+
+	Some paths may be configured by editing the file pathconfig.h; namely
+	the web-based application base directory and the web-server mapping
+	of that directory.
+
+
+	The default installation prefix is /usr/local/firstworks.
+	The libraries are installed in /usr/local/firstworks/lib and
+	the header files are in /usr/local/firstworks/include.
+
+	The /usr/local/firstworks part of these paths may be changed to any 
+	other directory by invoking configure with the --prefix option.
+
+		For example:
+			./configure --prefix=/usr/local
+
+	This invocation would cause the libraries to be installed in
+	/usr/local/lib and the header files to be installed 
+	in /usr/local/include.
+
+
+
+	As in the basic install instructions, to compile stencil type:
+
+		./configure
+		make
+
+	To install stencil become superuser and type:
+
+		make install
+
+	To uninstall stencil become superuser and type:
+
+		make uninstall
+
+-----------------------------5888635166783692101018350758
+Content-Disposition: form-data; name="submit"
+
+submit
+-----------------------------5888635166783692101018350758--

@@ -1,0 +1,38 @@
+<skin>
+
+<!-- comment -->
+<var name="defaultvar1">defaultval1</var>
+
+<!-- comment -->
+<var name="defaultvar2">defaultval2</var>
+
+<!-- comment -->
+<var name="defaultvar3">defaultval3</var>
+
+<!-- comment -->
+<var name="defaultvar4">defaultval4</var>
+<!-- comment -->
+
+<!-- comment -->
+<var name="globalvar1">globalval1</var>
+<var name="globalvar2">globalval2</var>
+<var name="globalvar3">globalval3</var>
+<var name="globalvar4">globalval4</var>
+
+<!-- comment -->
+<var name="global1var1">global1val1</var>
+<var name="global1var2">global1val2</var>
+<var name="global1var3">global1val3</var>
+<var name="global1var4">global1val4</var>
+
+<!-- ip/referer security -->
+<var name="denied-ips">127.0.0.1</var>
+<var name="denied-ips"></var>
+<var name="denied-referers">http:\/\/www\.firstworks\.com</var>
+<var name="denied-referers"></var>
+<var name="allowed-ips">127.0.0.1</var>
+<var name="allowed-ips"></var>
+<var name="allowed-referers">http:\/\/www\.firstworks\.com</var>
+<var name="allowed-referers"></var>
+
+</skin>

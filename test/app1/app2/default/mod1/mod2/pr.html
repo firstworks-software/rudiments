@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Test Page</title>
+</head>
+<body bgcolor="white">
+
+Environment Variables:
+DOCUMENT_ROOT=$(DOCUMENT_ROOT)
+SCRIPT_NAME=$(SCRIPT_NAME)
+PATH_INFO=$(PATH_INFO)
+
+Form Entries:
+var1=$(var1)
+var2=$(var2)
+var3=$(var3)
+
+Skin Variables:
+defaultvar1=$(defaultvar1)
+defaultvar2=$(defaultvar2)
+defaultvar3=$(defaultvar3)
+
+Reserved Variables:
+application=$(application)
+applicationPath=$(applicationPath)
+applicationUrl=$(applicationUrl)
+program=$(program)
+programPath=$(programPath)
+programUrl=$(programUrl)
+skin=$(skin)
+skinPath=$(skinPath)
+skinUrl=$(skinUrl)
+module=$(module)
+modulePath=$(modulePath)
+moduleUrl=$(moduleUrl)
+page=$(page)
+pagePath=$(pagePath)
+pageUrl=$(pageUrl)
+
+parametersAsGetString=$(parametersAsGetString)
+
+parametersAsHiddenVariables:
+$(parametersAsHiddenVariables)
+
+
+Segments:
+<!-- start segment1 -->start segment1
+	<!-- start segment2 -->start segment2
+		<!-- start segment3 -->start segment3
+			<!-- include $(modulePath)/princlude.html -->
+		end segment3<!-- end segment3 -->
+		<!-- start segment4 -->start segment4
+			<!-- include $(modulePath)/princlude.html -->
+		end segment4<!-- end segment4 -->
+	end segment2<!-- end segment2 -->
+end segment1<!-- end segment1 -->
+
+<!-- start replacements -->
+$(vararray1,1) $(vararray1,2) $(vararray2,1) $(vararray2,2)
+$(var1) $(var2) $(var3) $(var4)
+<a href="$dq(quotedvar)"/>
+<a href="javascript: var a='$q(quotedvar)';"/>
+<!-- end replacements -->
+
+</body>
+</html>

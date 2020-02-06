@@ -1,0 +1,20 @@
+<skin>
+
+<!-- comment 1 -->
+<var name="gw1var1">gw1val1</var>
+
+<!-- comment 2 -->
+<!-- comment 3 -->
+<!-- comment 4 -->
+<var name="gw1var2">gw1val2</var>
+<var name="gw1var3">gw1val3</var>
+<var name="gw1var4">gw1val4</var>
+
+<!-- comment 8 -->
+
+<var name="gw1var5">gw1val5</var>
+
+<!-- override -->
+<var name="mod2var1">gwoverride</var>
+
+</skin>

@@ -1,0 +1,16 @@
+<skin>
+
+<!-- comment -->
+<var name="mod2var1">mod2val1</var>
+<!-- comment -->
+<var name="mod2var2">mod2val2</var>
+<!-- comment -->
+<var name="mod2var3">mod2val3</var>
+<!-- comment -->
+<var name="mod2var4">mod2val4</var>
+<!-- comment -->
+
+<!-- override -->
+<var name="mod1var1">mod2override</var>
+
+</skin>

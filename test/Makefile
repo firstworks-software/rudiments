@@ -63,7 +63,11 @@ PROGS3= handoff \
 	gssclient \
 	md5sum \
 	csvdom \
-	jsondom
+	jsondom \
+	cgi.cgi \
+	headers.cgi \
+	multipart.cgi \
+	pr.cgi
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -87,7 +91,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json handofffile
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json handofffile *.cgi app1/app2/*.cgi
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
@@ -257,6 +261,19 @@ csvdom: csvdom.cpp csvdom.$(OBJ)
 
 jsondom: jsondom.cpp jsondom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) jsondom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+cgi.cgi: cgi.cpp cgi.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) cgi.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+headers.cgi: headers.cpp headers.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) headers.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+multipart.cgi: multipart.cpp multipart.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) multipart.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+pr.cgi: pr.cpp pr.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pr.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+	$(CP) -f $@ app1/app2
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
