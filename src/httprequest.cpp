@@ -134,6 +134,11 @@ class httprequestprivate {
 		bool		_dirtycookies;
 		const char	**_cookievars;
 		const char	**_cookievals;
+
+		bool		_dirtyallvars;
+		uint64_t	_allvariablecount;
+		const char	**_allvars;
+		const char	**_allvals;
 };
 
 httprequest::httprequest(httpserverapi *sapi) {
@@ -152,15 +157,15 @@ httprequest::httprequest(httpserverapi *sapi) {
 	initParameters();
 	initFileNames();
 
-	dirtyallvars=false;
-	allvars=NULL;
-	allvals=NULL;
-	allvariablecount=0;
+	pvt->_dirtyallvars=false;
+	pvt->_allvars=NULL;
+	pvt->_allvals=NULL;
+	pvt->_allvariablecount=0;
 }
 
 httprequest::~httprequest() {
-	delete[] allvals;
-	delete[] allvars;
+	delete[] pvt->_allvals;
+	delete[] pvt->_allvars;
 
 	cleanParameters();
 	cleanFiles();
@@ -440,7 +445,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 
 bool httprequest::setParameter(const char *name, const char *value) {
 	pvt->_dirtyparameters=true;
-	dirtyallvars=true;
+	pvt->_dirtyallvars=true;
 	pvt->_parameters.setValue(charstring::duplicate(name),
 					charstring::duplicate(value));
 	return true;
@@ -948,7 +953,7 @@ void httprequest::initCookies() {
 
 bool httprequest::setCookie(const char *name, const char *value) {
 	pvt->_dirtycookies=true;
-	dirtyallvars=true;
+	pvt->_dirtyallvars=true;
 	pvt->_cookies.setValue(charstring::duplicate(name),
 				charstring::duplicate(value));
 	return true;
@@ -989,66 +994,66 @@ void httprequest::buildCookieList() {
 
 uint64_t httprequest::getAllVariableCount() {
 	buildAllVariables();
-	return allvariablecount;
+	return pvt->_allvariablecount;
 }
 
 const char * const *httprequest::getAllVariables() {
 	buildAllVariables();
-	return allvars;
+	return pvt->_allvars;
 }
 
 const char * const *httprequest::getAllValues() {
 	buildAllVariables();
-	return allvals;
+	return pvt->_allvals;
 }
 
 void httprequest::buildAllVariables() {
 
-	if (allvals && allvars && !dirtyallvars) {
+	if (pvt->_allvals && pvt->_allvars && !pvt->_dirtyallvars) {
 		return;
 	}
 
 	// delete any existing array
-	delete[] allvars;
-	delete[] allvals;
+	delete[] pvt->_allvars;
+	delete[] pvt->_allvals;
 
 	// create a new array
-	allvariablecount=getEnvironmentVariableCount()+
-					getParameterCount()+
-					getCookieCount();
-	allvars=new const char *[allvariablecount+1];
-	allvals=new const char *[allvariablecount+1];
+	pvt->_allvariablecount=getEnvironmentVariableCount()+
+						getParameterCount()+
+						getCookieCount();
+	pvt->_allvars=new const char *[pvt->_allvariablecount+1];
+	pvt->_allvals=new const char *[pvt->_allvariablecount+1];
 
 	uint64_t	index=0;
 
 	// add environment variables
 	for (uint64_t envind=0;
 			envind<getEnvironmentVariableCount(); envind++) {
-		allvars[index]=getEnvironmentVariables()[envind];
-		allvals[index++]=getEnvironmentValues()[envind];
+		pvt->_allvars[index]=getEnvironmentVariables()[envind];
+		pvt->_allvals[index++]=getEnvironmentValues()[envind];
 	}
 
 	// add parameters
 	for (linkedlistnode<namevaluepairsnode *>
 				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
-		allvars[index]=fenode->getValue()->getKey();
-		allvals[index++]=fenode->getValue()->getValue();
+		pvt->_allvars[index]=fenode->getValue()->getKey();
+		pvt->_allvals[index++]=fenode->getValue()->getValue();
 	}
 
 	// add cookies
 	for (linkedlistnode<namevaluepairsnode *>
 				*cknode=pvt->_cookies.getList()->getFirst();
 				cknode; cknode=cknode->getNext()) {
-		allvars[index]=cknode->getValue()->getKey();
-		allvals[index++]=cknode->getValue()->getValue();
+		pvt->_allvars[index]=cknode->getValue()->getKey();
+		pvt->_allvals[index++]=cknode->getValue()->getValue();
 	}
 
 	// terminate the array
-	allvars[index]=NULL;
-	allvals[index]=NULL;
+	pvt->_allvars[index]=NULL;
+	pvt->_allvals[index]=NULL;
 
-	dirtyallvars=false;
+	pvt->_dirtyallvars=false;
 }
 
 bool httprequest::methodAllowed(const char *allowedmethods,
@@ -1144,25 +1149,25 @@ void httprequest::dumpEnvironment() {
 }
 
 bool httprequest::dirtyAllVars() {
-	return dirtyallvars;
+	return pvt->_dirtyallvars;
 }
 
 void httprequest::dirtyAllVars(bool dirtyallvars) {
-	this->dirtyallvars=dirtyallvars;
+	pvt->_dirtyallvars=dirtyallvars;
 }
 
 uint64_t httprequest::allVariableCount() {
-	return allvariablecount;
+	return pvt->_allvariablecount;
 }
 
 void httprequest::allVariableCount(uint64_t allvariablecount) {
-	this->allvariablecount=allvariablecount;
+	pvt->_allvariablecount=allvariablecount;
 }
 
 const char ***httprequest::allVars() {
-	return &allvars;
+	return &(pvt->_allvars);
 }
 
 const char ***httprequest::allVals() {
-	return &allvals;
+	return &(pvt->_allvals);
 }

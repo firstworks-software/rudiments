@@ -50,9 +50,4 @@
 		void	buildCookieList();
 		void	buildFileNameList();
 
-		bool		dirtyallvars;
-		uint64_t	allvariablecount;
-		const char	**allvars;
-		const char	**allvals;
-
 		httprequestprivate	*pvt;
