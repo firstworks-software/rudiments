@@ -6,16 +6,4 @@
 
 #include <rudiments/httpserverapi.h>
 
-class RUDIMENTS_DLLSPEC fileparameter {
-	friend class httprequest;
-	private:
-			fileparameter(const char *name, const char *filename, 
-				const char *tempfilename, const char *mimetype);
-			~fileparameter();
-		char	*name;
-		char	*filename;
-		char	*tempfilename;
-		char	*mimetype;
-	public:
-		void	print() {}
-};
+class httprequestprivate;

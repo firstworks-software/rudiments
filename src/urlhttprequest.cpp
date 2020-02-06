@@ -8,65 +8,99 @@
 #include <rudiments/charstring.h>
 #include <rudiments/sys.h>
 
-urlhttprequest::urlhttprequest(httpserverapi *sapi) :
-						httprequest(sapi) {
+#define URL_VARIABLE_COUNT 15
+
+class urlhttprequestprivate {
+	friend class urlhttprequest;
+	private:
+		httpserverapi	*_sapi;
+		
+		const char	*_urlvars[URL_VARIABLE_COUNT+1];
+		const char	*_urlvals[URL_VARIABLE_COUNT+1];
+
+		uint64_t	_urlvariablecount;
+		stringbuffer	_applicationstr;
+		stringbuffer	_applicationpath;
+		stringbuffer	_applicationurl;
+		stringbuffer	_programstr;
+		stringbuffer	_programpath;
+		stringbuffer	_programurl;
+		stringbuffer	_skinstr;
+		stringbuffer	_skinpath;
+		stringbuffer	_skinurl;
+		stringbuffer	_modulestr;
+		stringbuffer	_modulepath;
+		stringbuffer	_moduleurl;
+		stringbuffer	_pagestr;
+		stringbuffer	_pagepath;
+		stringbuffer	_pageurl;
+
+		namevaluepairs	_skinvars;
+		bool		_dirtyskinvariables;
+		const char	**_skinvariablevars;
+		const char	**_skinvariablevals;
+};
+
+urlhttprequest::urlhttprequest(httpserverapi *sapi) : httprequest(sapi) {
+	pvt=new urlhttprequestprivate;
+	pvt->_sapi=sapi;
 	initUrlVariables();
 	initSkinVariables();
 }
 
 urlhttprequest::~urlhttprequest() {
-
 	cleanSkinVariables();
+	delete pvt;
 }
 
 void urlhttprequest::dumpVariables() {
 
 	httprequest::dumpVariables();
 
-	sapi->write("Skin Variables:\n");
+	pvt->_sapi->write("Skin Variables:\n");
 
 	for (linkedlistnode<namevaluepairsnode *>
-				*svnode=skinvars.getList()->getFirst();
+				*svnode=pvt->_skinvars.getList()->getFirst();
 				svnode; svnode=svnode->getNext()) {
-		sapi->write(svnode->getValue()->getKey());
-		sapi->write("=");
-		sapi->write(svnode->getValue()->getValue());
-		sapi->write("\n");
+		pvt->_sapi->write(svnode->getValue()->getKey());
+		pvt->_sapi->write("=");
+		pvt->_sapi->write(svnode->getValue()->getValue());
+		pvt->_sapi->write("\n");
 	}
 
-	sapi->write("\n");
+	pvt->_sapi->write("\n");
 
-	sapi->write("URL Variables:\n");
+	pvt->_sapi->write("URL Variables:\n");
 
-	for (uint64_t i=0; i<urlvariablecount; i++) {
-		sapi->write(urlvars[i]);
-		sapi->write("=");
-		sapi->write(urlvals[i]);
-		sapi->write("\n");
+	for (uint64_t i=0; i<pvt->_urlvariablecount; i++) {
+		pvt->_sapi->write(pvt->_urlvars[i]);
+		pvt->_sapi->write("=");
+		pvt->_sapi->write(pvt->_urlvals[i]);
+		pvt->_sapi->write("\n");
 	}
-	sapi->write("parametersAsGetString=");
-	getParametersAsGetString(sapi,NULL);
-	sapi->write("\n");
-	sapi->write("parametersAsHiddenVariables=");
-	getParametersAsHiddenVariables(sapi,NULL);
-	sapi->write("\n");
+	pvt->_sapi->write("parametersAsGetString=");
+	getParametersAsGetString(pvt->_sapi,NULL);
+	pvt->_sapi->write("\n");
+	pvt->_sapi->write("parametersAsHiddenVariables=");
+	getParametersAsHiddenVariables(pvt->_sapi,NULL);
+	pvt->_sapi->write("\n");
 }
 
 void urlhttprequest::initSkinVariables() {
 
 	char	slash=sys::getDirectorySeparator();
 
-	dirtyskinvariables=false;
-	skinvariablevars=NULL;
-	skinvariablevals=NULL;
+	pvt->_dirtyskinvariables=false;
+	pvt->_skinvariablevars=NULL;
+	pvt->_skinvariablevals=NULL;
 
 	// build the path from the application to the page
 	stringbuffer	path;
-	path.append(skinstr.getString());
-	if (modulestr.getStringLength()) {
-		path.append(slash)->append(modulestr.getString());
+	path.append(pvt->_skinstr.getString());
+	if (pvt->_modulestr.getStringLength()) {
+		path.append(slash)->append(pvt->_modulestr.getString());
 	}
-	path.append(slash)->append(pagestr.getString());
+	path.append(slash)->append(pvt->_pagestr.getString());
 
 	// iterate over the path, at each slash, try to parse an 
 	// skin file at that level
@@ -77,9 +111,9 @@ void urlhttprequest::initSkinVariables() {
 		if (*ptr1==slash || !*ptr1) {
 			skinvarfilename.clear();
 			skinvarfilename.append(docroot)->append(slash);
-			if (applicationstr.getStringLength()) {
+			if (pvt->_applicationstr.getStringLength()) {
 				skinvarfilename.append(
-						applicationstr.getString());
+					pvt->_applicationstr.getString());
 				skinvarfilename.append(slash);
 			}
 			const char	*ptr2=path.getString();
@@ -135,39 +169,43 @@ void urlhttprequest::parseSkinVariableFile(const char *skinvarfilename) {
 }
 
 bool urlhttprequest::setSkinVariable(const char *name, const char *value) {
-	dirtyskinvariables=true;
-	dirtyallvars=true;
-	skinvars.setValue(charstring::duplicate(name),
+	pvt->_dirtyskinvariables=true;
+	dirtyAllVars(true);
+	pvt->_skinvars.setValue(charstring::duplicate(name),
 				charstring::duplicate(value));
 	return true;
 }
 
 void urlhttprequest::cleanSkinVariables() {
-	cleanUp(&skinvariablevars,&skinvariablevals,&skinvars);
+	cleanUp(&(pvt->_skinvariablevars),
+			&(pvt->_skinvariablevals),
+			&(pvt->_skinvars));
 }
 
 const char *urlhttprequest::getSkinVariable(const char *name) {
-	return skinvars.getValue((char *)name);
+	return pvt->_skinvars.getValue((char *)name);
 }
 
 uint64_t urlhttprequest::getSkinVariableCount() {
-	return skinvars.getList()->getLength();
+	return pvt->_skinvars.getList()->getLength();
 }
 
 const char * const *urlhttprequest::getSkinVariables() {
 	buildSkinVariableList();
-	return skinvariablevars;
+	return pvt->_skinvariablevars;
 }
 
 const char * const *urlhttprequest::getSkinValues() {
 	buildSkinVariableList();
-	return skinvariablevals;
+	return pvt->_skinvariablevals;
 }
 
 void urlhttprequest::buildSkinVariableList() {
-	if (!skinvariablevals || dirtyskinvariables) {
-		buildList(&skinvariablevars,&skinvariablevals,&skinvars);
-		dirtyskinvariables=false;
+	if (!pvt->_skinvariablevals || pvt->_dirtyskinvariables) {
+		buildList(&(pvt->_skinvariablevars),
+				&(pvt->_skinvariablevals),
+				&(pvt->_skinvars));
+		pvt->_dirtyskinvariables=false;
 	}
 }
 
@@ -175,7 +213,7 @@ void urlhttprequest::initUrlVariables() {
 
 	char	slash=sys::getDirectorySeparator();
 
-	urlvariablecount=0;
+	pvt->_urlvariablecount=0;
 
 	// get the document root, script name and pathinfo
 	const char	*docroot=getEnvironmentVariable("DOCUMENT_ROOT");
@@ -189,45 +227,50 @@ void urlhttprequest::initUrlVariables() {
 				&scriptnamelist,&scriptnamelistlength);
 
 	// build the application name
-	applicationpath.append(docroot);
+	pvt->_applicationpath.append(docroot);
 	if (scriptnamelistlength>0) {
 		for (uint64_t index=0;
 			index<scriptnamelistlength-1;
 			index++) {
 			if (index) {
-				applicationstr.append(slash);
+				pvt->_applicationstr.append(slash);
 			}
-			applicationstr.append(scriptnamelist[index]);
-			applicationpath.append(slash);
-			applicationpath.append(scriptnamelist[index]);
-			applicationurl.append("/");
-			applicationurl.append(scriptnamelist[index]);
+			pvt->_applicationstr.append(scriptnamelist[index]);
+			pvt->_applicationpath.append(slash);
+			pvt->_applicationpath.append(scriptnamelist[index]);
+			pvt->_applicationurl.append("/");
+			pvt->_applicationurl.append(scriptnamelist[index]);
 			delete[] scriptnamelist[index];
 		}
 	}
-	urlvars[urlvariablecount]="application";
-	urlvals[urlvariablecount++]=applicationstr.getString();
-	urlvars[urlvariablecount]="applicationPath";
-	urlvals[urlvariablecount++]=applicationpath.getString();
-	urlvars[urlvariablecount]="applicationUrl";
-	urlvals[urlvariablecount++]=applicationurl.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="application";
+	pvt->_urlvals[pvt->_urlvariablecount++]=
+					pvt->_applicationstr.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="applicationPath";
+	pvt->_urlvals[pvt->_urlvariablecount++]=
+					pvt->_applicationpath.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="applicationUrl";
+	pvt->_urlvals[pvt->_urlvariablecount++]=
+					pvt->_applicationurl.getString();
 
 	// build the program name
-	programpath.append(applicationpath.getString());
+	pvt->_programpath.append(pvt->_applicationpath.getString());
 	if (scriptnamelistlength) {
-		programstr.append(scriptnamelist[scriptnamelistlength-1]);
-		programpath.append(slash);
-		programpath.append(scriptnamelist[scriptnamelistlength-1]);
-		programurl.append("/");
-		programurl.append(scriptnamelist[scriptnamelistlength-1]);
+		pvt->_programstr.append(
+				scriptnamelist[scriptnamelistlength-1]);
+		pvt->_programpath.append(slash);
+		pvt->_programpath.append(
+				scriptnamelist[scriptnamelistlength-1]);
+		pvt->_programurl.append("/");
+		pvt->_programurl.append(scriptnamelist[scriptnamelistlength-1]);
 		delete[] scriptnamelist[scriptnamelistlength-1];
 	}
-	urlvars[urlvariablecount]="program";
-	urlvals[urlvariablecount++]=programstr.getString();
-	urlvars[urlvariablecount]="programPath";
-	urlvals[urlvariablecount++]=programpath.getString();
-	urlvars[urlvariablecount]="programUrl";
-	urlvals[urlvariablecount++]=programurl.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="program";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_programstr.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="programPath";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_programpath.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="programUrl";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_programurl.getString();
 
 	// clean up
 	delete[] scriptnamelist;
@@ -238,189 +281,192 @@ void urlhttprequest::initUrlVariables() {
 	charstring::split(pathinfo,"/",true,&pathinfolist,&pathinfolistlength);
 
 	// skin is the first thing in the list (unless the page was)
-	skinpath.append(applicationpath.getString());
-	skinurl.append(applicationurl.getString());
+	pvt->_skinpath.append(pvt->_applicationpath.getString());
+	pvt->_skinurl.append(pvt->_applicationurl.getString());
 	if (pathinfolistlength>1) {
-		skinstr.append(pathinfolist[0]);
-		skinpath.append(slash);
-		skinpath.append(pathinfolist[0]);
-		skinurl.append("/");
-		skinurl.append(pathinfolist[0]);
+		pvt->_skinstr.append(pathinfolist[0]);
+		pvt->_skinpath.append(slash);
+		pvt->_skinpath.append(pathinfolist[0]);
+		pvt->_skinurl.append("/");
+		pvt->_skinurl.append(pathinfolist[0]);
 		delete[] pathinfolist[0];
 	}
-	urlvars[urlvariablecount]="skin";
-	urlvals[urlvariablecount++]=skinstr.getString();
-	urlvars[urlvariablecount]="skinPath";
-	urlvals[urlvariablecount++]=skinpath.getString();
-	urlvars[urlvariablecount]="skinUrl";
-	urlvals[urlvariablecount++]=skinurl.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="skin";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_skinstr.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="skinPath";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_skinpath.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="skinUrl";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_skinurl.getString();
 
 	// module is everything between the skin and page
-	modulepath.append(skinpath.getString());
-	moduleurl.append(skinurl.getString());
+	pvt->_modulepath.append(pvt->_skinpath.getString());
+	pvt->_moduleurl.append(pvt->_skinurl.getString());
 	if (pathinfolistlength>2) {
 		for (uint64_t index=1;
 				index<pathinfolistlength-1;
 				index++) {
 			if (index>1) {
-				modulestr.append(slash);
+				pvt->_modulestr.append(slash);
 			}
-			modulestr.append(pathinfolist[index]);
-			modulepath.append(slash);
-			modulepath.append(pathinfolist[index]);
-			moduleurl.append("/");
-			moduleurl.append(pathinfolist[index]);
+			pvt->_modulestr.append(pathinfolist[index]);
+			pvt->_modulepath.append(slash);
+			pvt->_modulepath.append(pathinfolist[index]);
+			pvt->_moduleurl.append("/");
+			pvt->_moduleurl.append(pathinfolist[index]);
 			delete[] pathinfolist[index];
 		}
 	}
-	urlvars[urlvariablecount]="module";
-	urlvals[urlvariablecount++]=modulestr.getString();
-	urlvars[urlvariablecount]="modulePath";
-	urlvals[urlvariablecount++]=modulepath.getString();
-	urlvars[urlvariablecount]="moduleUrl";
-	urlvals[urlvariablecount++]=moduleurl.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="module";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_modulestr.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="modulePath";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_modulepath.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="moduleUrl";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_moduleurl.getString();
 
 	// page is the last thing in the list
-	pagepath.append(modulepath.getString());
-	pageurl.append(moduleurl.getString());
+	pvt->_pagepath.append(pvt->_modulepath.getString());
+	pvt->_pageurl.append(pvt->_moduleurl.getString());
 	if (pathinfolistlength) {
-		pagestr.append(pathinfolist[pathinfolistlength-1]);
-		pagepath.append(slash);
-		pagepath.append(pathinfolist[pathinfolistlength-1]);
-		pageurl.append("/");
-		pageurl.append(pathinfolist[pathinfolistlength-1]);
+		pvt->_pagestr.append(pathinfolist[pathinfolistlength-1]);
+		pvt->_pagepath.append(slash);
+		pvt->_pagepath.append(pathinfolist[pathinfolistlength-1]);
+		pvt->_pageurl.append("/");
+		pvt->_pageurl.append(pathinfolist[pathinfolistlength-1]);
 		delete[] pathinfolist[pathinfolistlength-1];
 	}
-	urlvars[urlvariablecount]="page";
-	urlvals[urlvariablecount++]=pagestr.getString();
-	urlvars[urlvariablecount]="pagePath";
-	urlvals[urlvariablecount++]=pagepath.getString();
-	urlvars[urlvariablecount]="pageUrl";
-	urlvals[urlvariablecount++]=pageurl.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="page";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_pagestr.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="pagePath";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_pagepath.getString();
+	pvt->_urlvars[pvt->_urlvariablecount]="pageUrl";
+	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_pageurl.getString();
 
-	urlvars[urlvariablecount]=NULL;
-	urlvals[urlvariablecount]=NULL;
+	pvt->_urlvars[pvt->_urlvariablecount]=NULL;
+	pvt->_urlvals[pvt->_urlvariablecount]=NULL;
 
 	// clean up
 	delete[] pathinfolist;
 }
 
 const char *urlhttprequest::application() {
-	return applicationstr.getString();
+	return pvt->_applicationstr.getString();
 }
 
 const char *urlhttprequest::applicationPath() {
-	return applicationpath.getString();
+	return pvt->_applicationpath.getString();
 }
 
 const char *urlhttprequest::applicationUrl() {
-	return applicationurl.getString();
+	return pvt->_applicationurl.getString();
 }
 
 const char *urlhttprequest::program() {
-	return programstr.getString();
+	return pvt->_programstr.getString();
 }
 
 const char *urlhttprequest::programPath() {
-	return programpath.getString();
+	return pvt->_programpath.getString();
 }
 
 const char *urlhttprequest::programUrl() {
-	return programurl.getString();
+	return pvt->_programurl.getString();
 }
 
 const char *urlhttprequest::module() {
-	return modulestr.getString();
+	return pvt->_modulestr.getString();
 }
 
 const char *urlhttprequest::modulePath() {
-	return modulepath.getString();
+	return pvt->_modulepath.getString();
 }
 
 const char *urlhttprequest::moduleUrl() {
-	return moduleurl.getString();
+	return pvt->_moduleurl.getString();
 }
 
 const char *urlhttprequest::skin() {
-	return skinstr.getString();
+	return pvt->_skinstr.getString();
 }
 
 const char *urlhttprequest::skinPath() {
-	return skinpath.getString();
+	return pvt->_skinpath.getString();
 }
 
 const char *urlhttprequest::skinUrl() {
-	return skinurl.getString();
+	return pvt->_skinurl.getString();
 }
 
 const char *urlhttprequest::page() {
-	return pagestr.getString();
+	return pvt->_pagestr.getString();
 }
 
 const char *urlhttprequest::pagePath() {
-	return pagepath.getString();
+	return pvt->_pagepath.getString();
 }
 
 const char *urlhttprequest::pageUrl() {
-	return pageurl.getString();
+	return pvt->_pageurl.getString();
 }
 
 uint64_t urlhttprequest::getUrlVariableCount() {
-	return urlvariablecount;
+	return pvt->_urlvariablecount;
 }
 
 const char * const *urlhttprequest::getUrlVariables() {
-	return urlvars;
+	return pvt->_urlvars;
 }
 
 const char * const *urlhttprequest::getUrlValues() {
-	return urlvals;
+	return pvt->_urlvals;
 }
 
 void urlhttprequest::buildAllVariables() {
 
-	if (allvals && allvars && !dirtyallvars) {
+	const char	***allvars=allVars();
+	const char	***allvals=allVals();
+
+	if (*allvals && *allvars && !dirtyAllVars()) {
 		return;
 	}
 
 	httprequest::buildAllVariables();
 
 	// extend the allvars/allvals array
-	uint64_t	index=allvariablecount;
-	uint64_t	newallvariablecount=allvariablecount+
+	uint64_t	index=allVariableCount();
+	uint64_t	newallvariablecount=allVariableCount()+
 						getSkinVariableCount()+
 						getUrlVariableCount();
 	const char	**newallvars=new const char *[newallvariablecount+1];
 	const char	**newallvals=new const char *[newallvariablecount+1];
-	for (uint64_t i=0; i<allvariablecount; i++) {
-		newallvars[i]=allvars[i];
-		newallvals[i]=allvals[i];
+	for (uint64_t i=0; i<allVariableCount(); i++) {
+		newallvars[i]=(*allvars)[i];
+		newallvals[i]=(*allvals)[i];
 	}
-	delete[] allvars;
-	delete[] allvals;
-	allvars=newallvars;
-	allvals=newallvals;
-	allvariablecount=newallvariablecount;
+	delete[] *allvars;
+	delete[] *allvals;
+	*allvars=newallvars;
+	*allvals=newallvals;
+	allVariableCount(newallvariablecount);
 
 	// add skin variables
 	for (linkedlistnode<namevaluepairsnode *>
-				*sknode=skinvars.getList()->getFirst();
+				*sknode=pvt->_skinvars.getList()->getFirst();
 				sknode; sknode=sknode->getNext()) {
-		allvars[index]=sknode->getValue()->getKey();
-		allvals[index++]=sknode->getValue()->getValue();
+		(*allvars)[index]=sknode->getValue()->getKey();
+		(*allvals)[index++]=sknode->getValue()->getValue();
 	}
 
 	// add url variables
 	for (uint64_t resind=0; resind<getUrlVariableCount(); resind++) {
-		allvars[index]=urlvars[resind];
-		allvals[index++]=urlvals[resind];
+		(*allvars)[index]=pvt->_urlvars[resind];
+		(*allvals)[index++]=pvt->_urlvals[resind];
 	}
 
 	// terminate the array
-	allvars[index]=NULL;
-	allvals[index]=NULL;
+	(*allvars)[index]=NULL;
+	(*allvals)[index]=NULL;
 
-	dirtyallvars=false;
+	dirtyAllVars(false);
 }
 
 bool urlhttprequest::methodAllowed() {

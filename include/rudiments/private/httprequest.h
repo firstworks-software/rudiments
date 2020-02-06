@@ -17,12 +17,12 @@
 
 		virtual void	buildAllVariables();
 
-		bool		dirtyallvars;
-		uint64_t	allvariablecount;
-		const char	**allvars;
-		const char	**allvals;
-
-		httpserverapi	*sapi;
+		bool		dirtyAllVars();
+		void		dirtyAllVars(bool dirtyallvars);
+		uint64_t	allVariableCount();
+		void		allVariableCount(uint64_t allvariablecount);
+		const char	***allVars();
+		const char	***allVals();
 
 	private:
 
@@ -50,19 +50,9 @@
 		void	buildCookieList();
 		void	buildFileNameList();
 
+		bool		dirtyallvars;
+		uint64_t	allvariablecount;
+		const char	**allvars;
+		const char	**allvals;
 
-		namevaluepairs	parameters;
-		bool		dirtyparameters;
-		const char	**parametervars;
-		const char	**parametervals;
-
-		size_t		tmpdirlen;
-		const char	*boundary;
-		dictionary<char *, fileparameter *>	fileparameters;
-		bool		dirtyfilenames;
-		const char	**filenames;
-
-		namevaluepairs	cookies;
-		bool		dirtycookies;
-		const char	**cookievars;
-		const char	**cookievals;
+		httprequestprivate	*pvt;

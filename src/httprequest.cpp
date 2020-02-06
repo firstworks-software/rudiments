@@ -41,6 +41,7 @@ ringbuffer::~ringbuffer() {
 }
 
 bool ringbuffer::compare(const char *string, uint64_t length) {
+	// FIXME: do this with 2 bytestring::compare()s
 	uint64_t	bufferindex=head;
 	for (uint64_t stringindex=0; stringindex<length; stringindex++) {
 		if (buffer[bufferindex]!=string[stringindex]) {
@@ -84,6 +85,20 @@ void ringbuffer::clear() {
 	filledsize=0;
 }
 
+class fileparameter {
+	friend class httprequest;
+	private:
+			fileparameter(const char *name, const char *filename, 
+				const char *tempfilename, const char *mimetype);
+			~fileparameter();
+		char	*name;
+		char	*filename;
+		char	*tempfilename;
+		char	*mimetype;
+	public:
+		void	print() {}
+};
+
 fileparameter::fileparameter(const char *name, const char *filename, 
 			const char *tempfilename, const char *mimetype) {
 	this->name=charstring::duplicate(name);
@@ -99,17 +114,40 @@ fileparameter::~fileparameter() {
 	delete[] mimetype;
 }
 
-httprequest::httprequest(httpserverapi *sapi) {
+class httprequestprivate {
+	friend class httprequest;
+	private:
+		httpserverapi	*_sapi;
 
-	this->sapi=sapi;
+		namevaluepairs	_parameters;
+		bool		_dirtyparameters;
+		const char	**_parametervars;
+		const char	**_parametervals;
+
+		size_t		_tmpdirlen;
+		const char	*_boundary;
+		dictionary<char *, fileparameter *>	_fileparameters;
+		bool		_dirtyfilenames;
+		const char	**_filenames;
+
+		namevaluepairs	_cookies;
+		bool		_dirtycookies;
+		const char	**_cookievars;
+		const char	**_cookievals;
+};
+
+httprequest::httprequest(httpserverapi *sapi) {
+	pvt=new httprequestprivate;
+
+	pvt->_sapi=sapi;
 
 	// tempdir length
-	tmpdirlen=charstring::length(TMPDIR);
+	pvt->_tmpdirlen=charstring::length(TMPDIR);
 
 	// initialize some variables
-	boundary=NULL;
+	pvt->_boundary=NULL;
 
-	sapi->initEnvironmentVariables();
+	pvt->_sapi->initEnvironmentVariables();
 	initCookies();
 	initParameters();
 	initFileNames();
@@ -121,13 +159,14 @@ httprequest::httprequest(httpserverapi *sapi) {
 }
 
 httprequest::~httprequest() {
-
 	delete[] allvals;
 	delete[] allvars;
 
 	cleanParameters();
 	cleanFiles();
 	cleanCookies();
+
+	delete pvt;
 }
 
 void httprequest::cleanUp(const char ***vars, const char ***vals,
@@ -140,66 +179,66 @@ void httprequest::cleanUp(const char ***vars, const char ***vals,
 
 void httprequest::dumpVariables() {
 
-	sapi->write("Environment Variables:\n");
+	pvt->_sapi->write("Environment Variables:\n");
 
 	dumpEnvironment();
 
-	sapi->write("\n");
+	pvt->_sapi->write("\n");
 
-	sapi->write("Multipart Boundary:\n");
+	pvt->_sapi->write("Multipart Boundary:\n");
 
-	if (boundary) {
-		sapi->write("\"");
-		sapi->write(boundary);
-		sapi->write("\"");
-		sapi->write("\n");
+	if (pvt->_boundary) {
+		pvt->_sapi->write("\"");
+		pvt->_sapi->write(pvt->_boundary);
+		pvt->_sapi->write("\"");
+		pvt->_sapi->write("\n");
 	}
 
-	sapi->write("\n");
+	pvt->_sapi->write("\n");
 
-	sapi->write("Parameters:\n");
+	pvt->_sapi->write("Parameters:\n");
 
 	// parameters
 	for (linkedlistnode<namevaluepairsnode *>
-				*fenode=parameters.getList()->getFirst();
+				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
-		sapi->write(fenode->getValue()->getKey());
-		sapi->write("=");
-		sapi->write(fenode->getValue()->getValue());
-		sapi->write("\n");
+		pvt->_sapi->write(fenode->getValue()->getKey());
+		pvt->_sapi->write("=");
+		pvt->_sapi->write(fenode->getValue()->getValue());
+		pvt->_sapi->write("\n");
 	}
 
-	sapi->write("\n");
+	pvt->_sapi->write("\n");
 
-	sapi->write("File Entries:\n");
+	pvt->_sapi->write("File Parameters:\n");
 
-	// file entries
+	// file parameters
 	for (linkedlistnode<dictionarynode< char *, fileparameter *> *>
-				*flnode=fileparameters.getList()->getFirst();
-				flnode; flnode=flnode->getNext()) {
-		sapi->write(flnode->getValue()->getKey());
-		sapi->write("=");
-		sapi->write(flnode->getValue()->getValue()->filename);
-		sapi->write(" : ");
-		sapi->write(flnode->getValue()->getValue()->tempfilename);
-		sapi->write("\n");
+			*flnode=pvt->_fileparameters.getList()->getFirst();
+			flnode; flnode=flnode->getNext()) {
+		pvt->_sapi->write(flnode->getValue()->getKey());
+		pvt->_sapi->write("=");
+		pvt->_sapi->write(flnode->getValue()->getValue()->filename);
+		pvt->_sapi->write(" : ");
+		pvt->_sapi->write(flnode->getValue()->getValue()->tempfilename);
+		pvt->_sapi->write("\n");
 	}
 
-	sapi->write("\n");
+	pvt->_sapi->write("\n");
 
-	sapi->write("Cookies:\n");
+	pvt->_sapi->write("Cookies:\n");
 
-	// cookie entries
+	// cookies
 	for (linkedlistnode<namevaluepairsnode *>
-				*cknode=cookies.getList()->getFirst();
+				*cknode=pvt->_cookies.getList()->getFirst();
 				cknode; cknode=cknode->getNext()) {
-		sapi->write(cknode->getValue()->getKey());
-		sapi->write("=");
-		sapi->write(cknode->getValue()->getValue());
-		sapi->write("\n");
+		pvt->_sapi->write(cknode->getValue()->getKey());
+		pvt->_sapi->write("=");
+		pvt->_sapi->write(cknode->getValue()->getValue());
+		pvt->_sapi->write("\n");
 	}
 
-	sapi->write("\n");
+	pvt->_sapi->write("\n");
 }
 
 void httprequest::buildList(const char ***vars, const char ***vals,
@@ -228,33 +267,35 @@ void httprequest::buildList(const char ***vars, const char ***vals,
 void httprequest::removeTempFiles() {
 
 	for (linkedlistnode<dictionarynode< char *, fileparameter *> *>
-				*flnode=fileparameters.getList()->getFirst();
-				flnode; flnode=flnode->getNext()) {
+			*flnode=pvt->_fileparameters.getList()->getFirst();
+			flnode; flnode=flnode->getNext()) {
 		file::remove(flnode->getValue()->getValue()->tempfilename);
 	}
 }
 
 void httprequest::cleanParameters() {
-	cleanUp(&parametervars,&parametervals,&parameters);
+	cleanUp(&(pvt->_parametervars),
+			&(pvt->_parametervals),
+			&(pvt->_parameters));
 }
 
 void httprequest::cleanFiles() {
 
 	for (linkedlistnode<dictionarynode<char *, fileparameter *> *>
-				*flnode=fileparameters.getList()->getFirst();
-				flnode; flnode=flnode->getNext()) {
+			*flnode=pvt->_fileparameters.getList()->getFirst();
+			flnode; flnode=flnode->getNext()) {
 		delete[] flnode->getValue()->getKey();
 		file::remove(flnode->getValue()->getValue()->filename);
 		delete flnode->getValue()->getValue();
 	}
-	delete[] filenames;
+	delete[] pvt->_filenames;
 }
 
 void httprequest::initParameters() {
 
-	dirtyparameters=false;
-	parametervars=NULL;
-	parametervals=NULL;
+	pvt->_dirtyparameters=false;
+	pvt->_parametervars=NULL;
+	pvt->_parametervals=NULL;
 
 	// handle a get or a head
 	const char	*requestmethod=
@@ -286,8 +327,8 @@ void httprequest::initParameters() {
 }
 
 void httprequest::initFileNames() {
-	dirtyfilenames=false;
-	filenames=NULL;
+	pvt->_dirtyfilenames=false;
+	pvt->_filenames=NULL;
 }
 
 void httprequest::parseQueryString(httprequestmethod method) {
@@ -334,7 +375,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			charbuf=querystring[i];
 		} else { 
 			// for post get from stdin
-			sapi->getCharacter(&charbuf);
+			pvt->_sapi->getCharacter(&charbuf);
 		}
 
 		if (charbuf=='&') {
@@ -360,7 +401,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			if (method==get_request || method==head_request) {
 				charbuf=querystring[i];
 			} else { 
-				sapi->getCharacter(&charbuf);
+				pvt->_sapi->getCharacter(&charbuf);
 			}
 
 			sixteens=character::toUpperCase(charbuf);
@@ -375,7 +416,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			if (method==get_request || method==head_request) {
 				charbuf=querystring[i];
 			} else { 
-				sapi->getCharacter(&charbuf);
+				pvt->_sapi->getCharacter(&charbuf);
 			}
 
 			ones=character::toUpperCase(charbuf);
@@ -398,25 +439,26 @@ void httprequest::parseQueryString(httprequestmethod method) {
 }
 
 bool httprequest::setParameter(const char *name, const char *value) {
-	dirtyparameters=true;
+	pvt->_dirtyparameters=true;
 	dirtyallvars=true;
-	parameters.setValue(charstring::duplicate(name),
-				charstring::duplicate(value));
+	pvt->_parameters.setValue(charstring::duplicate(name),
+					charstring::duplicate(value));
 	return true;
 }
 
 void httprequest::parseMultipart() {
 
 	// get the boundary and its length
-	boundary=charstring::findFirst(getEnvironmentVariable("CONTENT_TYPE"),
-								"boundary=")+9;
-	size_t	boundarylen=charstring::length(boundary);
+	pvt->_boundary=charstring::findFirst(
+				getEnvironmentVariable("CONTENT_TYPE"),
+				"boundary=")+9;
+	size_t	boundarylen=charstring::length(pvt->_boundary);
 
 	// create a buffer and copy the boundary into the buffer,
 	// preceeded by \r\n--
 	char	*altboundary=new char[boundarylen+5];
 	charstring::copy(altboundary,"\r\n--");
-	charstring::append(altboundary,boundary);
+	charstring::append(altboundary,pvt->_boundary);
 	size_t	altboundarylen=boundarylen+4;
 	
 	// create a ring buffer large enough to store the altboundary
@@ -436,28 +478,28 @@ void httprequest::parseMultipart() {
 	for (;;) {
 
 		// get a character
-		if (!sapi->getCharacter(&charbuf)) {
+		if (!pvt->_sapi->getCharacter(&charbuf)) {
 			break;
 		}
 
 		// put it in the ring buffer
 		buffer.append(charbuf);
 
-		// if we found a boundary string, add the form or file entry
-		if (buffer.compare(boundary,boundarylen) ||
+		// if we found a boundary string, add the parameter
+		if (buffer.compare(pvt->_boundary,boundarylen) ||
 			buffer.compare(altboundary,altboundarylen)) {
 
 			// get the next 2 characters, if they're -- then
 			// we're done, otherwise they're \r\n and we need to
 			// add the parameter
 			bool	finalboundary=false;
-			if (!sapi->getCharacter(&(boundaryend[0])) ||
-				!sapi->getCharacter(&(boundaryend[1])) ||
+			if (!pvt->_sapi->getCharacter(&(boundaryend[0])) ||
+				!pvt->_sapi->getCharacter(&(boundaryend[1])) ||
 				!charstring::compare(boundaryend,"--")) {
 				finalboundary=true;
 			}
 
-			// add the form or file entry
+			// add the parameter
 			if (value) {
 				setParameter(name->getString(),
 						value->getString());
@@ -483,7 +525,7 @@ void httprequest::parseMultipart() {
 			// clear the ring buffer
 			buffer.clear();
 
-			// start on the next entry
+			// start on the next parameter
 			getNewNames(&name,&filename,&mimetype);
 			if (filename) {
 				getTempFile(filename->getString(),
@@ -522,11 +564,11 @@ void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename,
 	// get the new name and possibly filename
 	*name=getName();
 	char	charbuf;
-	sapi->getCharacter(&charbuf);
+	pvt->_sapi->getCharacter(&charbuf);
 	if (charbuf==';') {
 
 		*filename=getFileName();
-		sapi->getCharacter(&charbuf);
+		pvt->_sapi->getCharacter(&charbuf);
 
 		*mimetype=getMimeType();
 	} else {
@@ -537,9 +579,9 @@ void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename,
 
 	// get the 2 \r\n's before the content
 	// (we should already have the first \r)
-	sapi->getCharacter(&charbuf);
-	sapi->getCharacter(&charbuf);
-	sapi->getCharacter(&charbuf);
+	pvt->_sapi->getCharacter(&charbuf);
+	pvt->_sapi->getCharacter(&charbuf);
+	pvt->_sapi->getCharacter(&charbuf);
 }
 
 void httprequest::getTempFile(const char *filename, file **tempfile,
@@ -551,7 +593,7 @@ void httprequest::getTempFile(const char *filename, file **tempfile,
 
 	if (charstring::length(filename)) {
 		// generate a unique temporary filename using mkstemp
-		size_t	tempfilenamelen=tmpdirlen+1+
+		size_t	tempfilenamelen=pvt->_tmpdirlen+1+
 					charstring::length(filename)+8;
 		*tempfilename=new char[tempfilenamelen];
 		charstring::copy(*tempfilename,TMPDIR);
@@ -582,7 +624,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// skip to the "n" or "f" in (file)name="...";
 	for (;;) {
-		if (!sapi->getCharacter(&charbuf)) {
+		if (!pvt->_sapi->getCharacter(&charbuf)) {
 			return name;
 		} else if (charbuf==c) {
 			break;
@@ -591,7 +633,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// skip to the first " in (file)name="...";
 	for (;;) {
-		if (!sapi->getCharacter(&charbuf)) {
+		if (!pvt->_sapi->getCharacter(&charbuf)) {
 			return name;
 		} else if (charbuf=='"') {
 			break;
@@ -600,7 +642,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// get everything before the last " in (file)name="...";
 	for (;;) {
-		if (!sapi->getCharacter(&charbuf)) {
+		if (!pvt->_sapi->getCharacter(&charbuf)) {
 			return name;
 		} else if (charbuf=='"') {
 			break;
@@ -619,16 +661,16 @@ stringbuffer *httprequest::getMimeType() {
 	// skip past "Content-type:"
 	char	charbuf;
 	for (;;) {
-		if (!sapi->getCharacter(&charbuf) || charbuf==':') {
+		if (!pvt->_sapi->getCharacter(&charbuf) || charbuf==':') {
 			break;
 		}
 	}
 
 	// skip the space after "Content-type:"
-	sapi->getCharacter(&charbuf);
+	pvt->_sapi->getCharacter(&charbuf);
 
 	// get the mime type
-	while (sapi->getCharacter(&charbuf) && charbuf!='\r') {
+	while (pvt->_sapi->getCharacter(&charbuf) && charbuf!='\r') {
 		mimetype->append(charbuf);
 	}
 
@@ -639,10 +681,10 @@ bool httprequest::setFileParameter(const char *name,
 						const char *filename, 
 						const char *tempfilename,
 						const char *mimetype) {
-	dirtyfilenames=true;
+	pvt->_dirtyfilenames=true;
 	fileparameter	*data;
-	if (!fileparameters.getValue((char *)name,&data)) {
-		fileparameters.setValue(charstring::duplicate(name),
+	if (!pvt->_fileparameters.getValue((char *)name,&data)) {
+		pvt->_fileparameters.setValue(charstring::duplicate(name),
 			new fileparameter(name,filename,tempfilename,mimetype));
 		return true;
 	}
@@ -650,7 +692,7 @@ bool httprequest::setFileParameter(const char *name,
 }
 
 const char *httprequest::getParameter(const char *name) {
-	return parameters.getValue((char *)name);
+	return pvt->_parameters.getValue((char *)name);
 }
 
 void httprequest::getParametersAsGetString(output *out,
@@ -665,7 +707,7 @@ void httprequest::getParametersAsGetString(output *out,
 
 	// run through the paramters queue
 	for (linkedlistnode<namevaluepairsnode *>
-				*fenode=parameters.getList()->getFirst();
+				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 
 		char	*name=fenode->getValue()->getKey();
@@ -719,7 +761,7 @@ void httprequest::getParametersAsHiddenVariables(output *out,
 
 	// run through the parameters queue
 	for (linkedlistnode<namevaluepairsnode *>
-				*fenode=parameters.getList()->getFirst();
+				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 
 		char	*name=fenode->getValue()->getKey();
@@ -755,83 +797,86 @@ void httprequest::getParametersAsHiddenVariables(output *out,
 }
 
 uint64_t httprequest::getParameterCount() {
-	return parameters.getList()->getLength();
+	return pvt->_parameters.getList()->getLength();
 }
 
 const char * const *httprequest::getParameterVariables() {
 	buildParameterList();
-	return parametervars;
+	return pvt->_parametervars;
 }
 
 const char * const *httprequest::getParameterValues() {
 	buildParameterList();
-	return parametervals;
+	return pvt->_parametervals;
 }
 
 void httprequest::buildParameterList() {
-	if (!parametervals || dirtyparameters) {
-		buildList(&parametervars,&parametervals,&parameters);
-		dirtyparameters=false;
+	if (!pvt->_parametervals || pvt->_dirtyparameters) {
+		buildList(&(pvt->_parametervars),
+				&pvt->_parametervals,
+				&(pvt->_parameters));
+		pvt->_dirtyparameters=false;
 	}
 }
 
 const char *httprequest::getFileParameterFilename(const char *name) {
 	fileparameter	*value;
-	return (fileparameters.getValue((char *)name,&value))?
+	return (pvt->_fileparameters.getValue((char *)name,&value))?
 						value->filename:NULL;
 }
 
 const char *httprequest::getFileParameterTempFilename(const char *name) {
 	fileparameter	*value;
-	return (fileparameters.getValue((char *)name,&value))?
+	return (pvt->_fileparameters.getValue((char *)name,&value))?
 						value->tempfilename:NULL;
 }
 
 const char *httprequest::getFileParameterMimeType(const char *name) {
 	fileparameter	*value;
-	return (fileparameters.getValue((char *)name,&value))?
+	return (pvt->_fileparameters.getValue((char *)name,&value))?
 						value->mimetype:NULL;
 }
 
 uint64_t httprequest::getFileCount() {
-	return fileparameters.getList()->getLength();
+	return pvt->_fileparameters.getList()->getLength();
 }
 
 const char * const *httprequest::getFileNames() {
 	buildFileNamesList();
-	return filenames;
+	return pvt->_filenames;
 }
 
 void httprequest::buildFileNamesList() {
 
-	if (!filenames || dirtyfilenames) {
+	if (!pvt->_filenames || pvt->_dirtyfilenames) {
 
-		delete[] filenames;
+		delete[] pvt->_filenames;
 
-		uint64_t	length=fileparameters.getList()->getLength();
+		uint64_t	length=
+				pvt->_fileparameters.getList()->getLength();
 
-		filenames=new const char *[length+1];
+		pvt->_filenames=new const char *[length+1];
 
 		uint64_t	index=0;
 		for (linkedlistnode<dictionarynode<char *, fileparameter *> *>
-				*node=fileparameters.getList()->getFirst();
-				node; node=node->getNext()) {
-			filenames[index]=node->getValue()->getKey();
+			*node=pvt->_fileparameters.getList()->getFirst();
+			node; node=node->getNext()) {
+			pvt->_filenames[index]=node->getValue()->getKey();
 			index++;
 		}
-		filenames[index]=NULL;
+		pvt->_filenames[index]=NULL;
 	
-		dirtyfilenames=false;
+		pvt->_dirtyfilenames=false;
 	}
 }
 
 void httprequest::initCookies() {
 
-	dirtycookies=false;
-	cookievars=NULL;
-	cookievals=NULL;
+	pvt->_dirtycookies=false;
+	pvt->_cookievars=NULL;
+	pvt->_cookievals=NULL;
 
-	// run through string, unescaping as I go, creating cookie entries
+	// run through string, unescaping as I go, creating cookies
 	const char	*httpcookie=getEnvironmentVariable("HTTP_COOKIE");
 	if (!charstring::isNullOrEmpty(httpcookie)) {
 
@@ -850,7 +895,7 @@ void httprequest::initCookies() {
 				// theres always a space or NULL after a ; 
 				index++;
 	
-				// create new cookie entry
+				// create new cookie
 				setCookie(name.getString(),value.getString());
 	
 				// renew stringbuffers
@@ -894,7 +939,7 @@ void httprequest::initCookies() {
 			index++;
 		}
 
-		// create last new cookie entry
+		// create last new cookie
 		if (index>0) {
 			setCookie(name.getString(),value.getString());
 		}
@@ -902,39 +947,43 @@ void httprequest::initCookies() {
 }
 
 bool httprequest::setCookie(const char *name, const char *value) {
-	dirtycookies=true;
+	pvt->_dirtycookies=true;
 	dirtyallvars=true;
-	cookies.setValue(charstring::duplicate(name),
+	pvt->_cookies.setValue(charstring::duplicate(name),
 				charstring::duplicate(value));
 	return true;
 }
 
 void httprequest::cleanCookies() {
-	cleanUp(&cookievars,&cookievals,&cookies);
+	cleanUp(&(pvt->_cookievars),
+			&(pvt->_cookievals),
+			&(pvt->_cookies));
 }
 
 const char *httprequest::getCookie(const char *name) {
-	return cookies.getValue((char *)name);
+	return pvt->_cookies.getValue((char *)name);
 }
 
 uint64_t httprequest::getCookieCount() {
-	return cookies.getList()->getLength();
+	return pvt->_cookies.getList()->getLength();
 }
 
 const char * const *httprequest::getCookieVariables() {
 	buildCookieList();
-	return cookievars;
+	return pvt->_cookievars;
 }
 
 const char * const *httprequest::getCookieValues() {
 	buildCookieList();
-	return cookievars;
+	return pvt->_cookievars;
 }
 
 void httprequest::buildCookieList() {
-	if (!cookievars || dirtycookies) {
-		buildList(&cookievars,&cookievals,&cookies);
-		dirtycookies=false;
+	if (!pvt->_cookievars || pvt->_dirtycookies) {
+		buildList(&(pvt->_cookievars),
+				&(pvt->_cookievals),
+				&(pvt->_cookies));
+		pvt->_dirtycookies=false;
 	}
 }
 
@@ -981,7 +1030,7 @@ void httprequest::buildAllVariables() {
 
 	// add parameters
 	for (linkedlistnode<namevaluepairsnode *>
-				*fenode=parameters.getList()->getFirst();
+				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 		allvars[index]=fenode->getValue()->getKey();
 		allvals[index++]=fenode->getValue()->getValue();
@@ -989,7 +1038,7 @@ void httprequest::buildAllVariables() {
 
 	// add cookies
 	for (linkedlistnode<namevaluepairsnode *>
-				*cknode=cookies.getList()->getFirst();
+				*cknode=pvt->_cookies.getList()->getFirst();
 				cknode; cknode=cknode->getNext()) {
 		allvars[index]=cknode->getValue()->getKey();
 		allvals[index++]=cknode->getValue()->getValue();
@@ -1060,34 +1109,60 @@ bool httprequest::requiredParameters(parameterrequirement **pr) {
 }
 
 const char *httprequest::getEnvironmentVariable(const char *name) {
-	return sapi->getEnvironmentVariable(name);
+	return pvt->_sapi->getEnvironmentVariable(name);
 }
 
 uint64_t httprequest::getEnvironmentVariableCount() {
-	return sapi->getEnvironmentVariableCount();
+	return pvt->_sapi->getEnvironmentVariableCount();
 }
 
 const char * const *httprequest::getEnvironmentVariables() {
-	return sapi->getEnvironmentVariables();
+	return pvt->_sapi->getEnvironmentVariables();
 }
 
 const char * const *httprequest::getEnvironmentValues() {
-	return sapi->getEnvironmentValues();
+	return pvt->_sapi->getEnvironmentValues();
 }
 
 bool httprequest::setEnvironmentVariable(const char *name,
 						const char *value) {
-	return sapi->setEnvironmentVariable(name,value);
+	return pvt->_sapi->setEnvironmentVariable(name,value);
 }
 
 void httprequest::dumpEnvironment() {
 	const char * const	*envvars=getEnvironmentVariables();
 	const char * const	*envvals=getEnvironmentValues();
 	for (uint64_t index=0;
-		index<sapi->getEnvironmentVariableCount(); index++) {
-		sapi->write(envvars[index],charstring::length(envvars[index]));
-		sapi->write("=",1);
-		sapi->write(envvals[index],charstring::length(envvals[index]));
-		sapi->write("\n",1);
+		index<pvt->_sapi->getEnvironmentVariableCount(); index++) {
+		pvt->_sapi->write(envvars[index],
+					charstring::length(envvars[index]));
+		pvt->_sapi->write("=",1);
+		pvt->_sapi->write(envvals[index],
+					charstring::length(envvals[index]));
+		pvt->_sapi->write("\n",1);
 	}
+}
+
+bool httprequest::dirtyAllVars() {
+	return dirtyallvars;
+}
+
+void httprequest::dirtyAllVars(bool dirtyallvars) {
+	this->dirtyallvars=dirtyallvars;
+}
+
+uint64_t httprequest::allVariableCount() {
+	return allvariablecount;
+}
+
+void httprequest::allVariableCount(uint64_t allvariablecount) {
+	this->allvariablecount=allvariablecount;
+}
+
+const char ***httprequest::allVars() {
+	return &allvars;
+}
+
+const char ***httprequest::allVals() {
+	return &allvals;
 }
