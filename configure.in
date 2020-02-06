@@ -4661,7 +4661,7 @@ then
 	LOBJS="$LOBJS httpresponse.lo"
 fi
 
-if ( test "$INCLUDE_APACHE2" = "1" )
+if ( test "$INCLUDE_APACHE2" = "1" -a "$HAVE_APACHE" = "yes" )
 then
 	HEADERS3="$HEADERS3 apachehttpserverapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
