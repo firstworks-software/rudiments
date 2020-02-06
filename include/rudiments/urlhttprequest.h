@@ -1,13 +1,13 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-#ifndef RUDIMENTS_STENCILHTTPREQUEST_H
-#define RUDIMENTS_STENCILHTTPREQUEST_H
+#ifndef RUDIMENTS_URLHTTPREQUEST_H
+#define RUDIMENTS_URLHTTPREQUEST_H
 
-#include <rudiments/private/stencilhttprequestincludes.h>
+#include <rudiments/private/urlhttprequestincludes.h>
 
-/** The stencilhttprequest class extends httprequest, providing methods for
- *  accessing components of the url.
+/** The urlhttprequest class extends httprequest, parsing the url and
+ *  providing methods for accessing its components.
  *
  *  The SCRIPT_NAME part of the url is parsed as follows:
  *
@@ -36,10 +36,10 @@
  *  level .var files override skin variables defined in shallower files.
  */
 
-class RUDIMENTS_DLLSPEC stencilhttprequest : public httprequest {
+class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 	public:
-		stencilhttprequest(httpserverapi *sapi);
-		virtual	~stencilhttprequest();
+		urlhttprequest(httpserverapi *sapi);
+		virtual	~urlhttprequest();
 
 
 
@@ -205,7 +205,7 @@ class RUDIMENTS_DLLSPEC stencilhttprequest : public httprequest {
 		virtual bool	refererAllowed();
 
 
-	#include <rudiments/private/stencilhttprequest.h>
+	#include <rudiments/private/urlhttprequest.h>
 };
 
 

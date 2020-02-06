@@ -4647,10 +4647,10 @@ fi
 
 if ( test "$INCLUDE_REQUEST" = "1" )
 then
-	HEADERS3="$HEADERS3 httprequest.h stencilhttprequest.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS7 httprequest.h httprequestincludes.h stencilhttprequest.h stencilhttprequestincludes.h"
-	SRCS="$SRCS httprequest.cpp stencilhttprequest.cpp"
-	LOBJS="$LOBJS httprequest.lo stencilhttprequest.lo"
+	HEADERS3="$HEADERS3 httprequest.h urlhttprequest.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 httprequest.h httprequestincludes.h urlhttprequest.h urlhttprequestincludes.h"
+	SRCS="$SRCS httprequest.cpp urlhttprequest.cpp"
+	LOBJS="$LOBJS httprequest.lo urlhttprequest.lo"
 fi
 
 if ( test "$INCLUDE_REQUEST" = "1" )

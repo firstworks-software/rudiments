@@ -5,15 +5,15 @@
 #define HTTP_MODULE_CGI
 
 #include <rudiments/httpserverapi.h>
-#include <rudiments/stencilhttprequest.h>
+#include <rudiments/urlhttprequest.h>
 #include <rudiments/httpresponse.h>
 #include <rudiments/httpserverapimain.h>
 #include <rudiments/templateengine.h>
 #include <rudiments/file.h>
 
-stencilhttprequest	*req;
-httpresponse		*resp;
-templateengine		*te;
+urlhttprequest	*req;
+httpresponse	*resp;
+templateengine	*te;
 
 class mod1mod2 {
 	public:
@@ -117,9 +117,9 @@ bool mod1mod2::sthtmlparser::replacements(output *container,
 
 bool httpModuleMain(httpserverapi *sapi) {
 
-	stencilhttprequest	mreq(sapi);
-	httpresponse		mresp(sapi);
-	templateengine		mte;
+	urlhttprequest	mreq(sapi);
+	httpresponse	mresp(sapi);
+	templateengine	mte;
 	te=&mte;
 	req=&mreq;
 	resp=&mresp;

@@ -5,15 +5,15 @@
 #define HTTP_MODULE_CGI
 
 #include <rudiments/httpserverapi.h>
-#include <rudiments/stencilhttprequest.h>
+#include <rudiments/urlhttprequest.h>
 #include <rudiments/httpresponse.h>
 #include <rudiments/httpserverapimain.h>
 #include <rudiments/stdio.h>
 
 static bool httpModuleMain(httpserverapi *sapi) {
 
-	stencilhttprequest	req(sapi);
-	httpresponse		resp(sapi);
+	urlhttprequest	req(sapi);
+	httpresponse	resp(sapi);
 
 
 	// convenience methods

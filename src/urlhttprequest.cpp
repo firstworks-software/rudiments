@@ -2,24 +2,24 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/config.h>
-#include <rudiments/stencilhttprequest.h>
+#include <rudiments/urlhttprequest.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
 #include <rudiments/sys.h>
 
-stencilhttprequest::stencilhttprequest(httpserverapi *sapi) :
+urlhttprequest::urlhttprequest(httpserverapi *sapi) :
 						httprequest(sapi) {
 	initUrlVariables();
 	initSkinVariables();
 }
 
-stencilhttprequest::~stencilhttprequest() {
+urlhttprequest::~urlhttprequest() {
 
 	cleanSkinVariables();
 }
 
-void stencilhttprequest::dumpVariables() {
+void urlhttprequest::dumpVariables() {
 
 	httprequest::dumpVariables();
 
@@ -52,7 +52,7 @@ void stencilhttprequest::dumpVariables() {
 	sapi->write("\n");
 }
 
-void stencilhttprequest::initSkinVariables() {
+void urlhttprequest::initSkinVariables() {
 
 	char	slash=sys::getDirectorySeparator();
 
@@ -97,7 +97,7 @@ void stencilhttprequest::initSkinVariables() {
 	}
 }
 
-void stencilhttprequest::parseSkinVariableFile(const char *skinvarfilename) {
+void urlhttprequest::parseSkinVariableFile(const char *skinvarfilename) {
 
 	// open file
 	xmldom	skinvarfile;
@@ -134,7 +134,7 @@ void stencilhttprequest::parseSkinVariableFile(const char *skinvarfilename) {
 	}
 }
 
-bool stencilhttprequest::setSkinVariable(const char *name, const char *value) {
+bool urlhttprequest::setSkinVariable(const char *name, const char *value) {
 	dirtyskinvariables=true;
 	dirtyallvars=true;
 	skinvars.setValue(charstring::duplicate(name),
@@ -142,36 +142,36 @@ bool stencilhttprequest::setSkinVariable(const char *name, const char *value) {
 	return true;
 }
 
-void stencilhttprequest::cleanSkinVariables() {
+void urlhttprequest::cleanSkinVariables() {
 	cleanUp(&skinvariablevars,&skinvariablevals,&skinvars);
 }
 
-const char *stencilhttprequest::getSkinVariable(const char *name) {
+const char *urlhttprequest::getSkinVariable(const char *name) {
 	return skinvars.getValue((char *)name);
 }
 
-uint64_t stencilhttprequest::getSkinVariableCount() {
+uint64_t urlhttprequest::getSkinVariableCount() {
 	return skinvars.getList()->getLength();
 }
 
-const char * const *stencilhttprequest::getSkinVariables() {
+const char * const *urlhttprequest::getSkinVariables() {
 	buildSkinVariableList();
 	return skinvariablevars;
 }
 
-const char * const *stencilhttprequest::getSkinValues() {
+const char * const *urlhttprequest::getSkinValues() {
 	buildSkinVariableList();
 	return skinvariablevals;
 }
 
-void stencilhttprequest::buildSkinVariableList() {
+void urlhttprequest::buildSkinVariableList() {
 	if (!skinvariablevals || dirtyskinvariables) {
 		buildList(&skinvariablevars,&skinvariablevals,&skinvars);
 		dirtyskinvariables=false;
 	}
 }
 
-void stencilhttprequest::initUrlVariables() {
+void urlhttprequest::initUrlVariables() {
 
 	char	slash=sys::getDirectorySeparator();
 
@@ -305,79 +305,79 @@ void stencilhttprequest::initUrlVariables() {
 	delete[] pathinfolist;
 }
 
-const char *stencilhttprequest::application() {
+const char *urlhttprequest::application() {
 	return applicationstr.getString();
 }
 
-const char *stencilhttprequest::applicationPath() {
+const char *urlhttprequest::applicationPath() {
 	return applicationpath.getString();
 }
 
-const char *stencilhttprequest::applicationUrl() {
+const char *urlhttprequest::applicationUrl() {
 	return applicationurl.getString();
 }
 
-const char *stencilhttprequest::program() {
+const char *urlhttprequest::program() {
 	return programstr.getString();
 }
 
-const char *stencilhttprequest::programPath() {
+const char *urlhttprequest::programPath() {
 	return programpath.getString();
 }
 
-const char *stencilhttprequest::programUrl() {
+const char *urlhttprequest::programUrl() {
 	return programurl.getString();
 }
 
-const char *stencilhttprequest::module() {
+const char *urlhttprequest::module() {
 	return modulestr.getString();
 }
 
-const char *stencilhttprequest::modulePath() {
+const char *urlhttprequest::modulePath() {
 	return modulepath.getString();
 }
 
-const char *stencilhttprequest::moduleUrl() {
+const char *urlhttprequest::moduleUrl() {
 	return moduleurl.getString();
 }
 
-const char *stencilhttprequest::skin() {
+const char *urlhttprequest::skin() {
 	return skinstr.getString();
 }
 
-const char *stencilhttprequest::skinPath() {
+const char *urlhttprequest::skinPath() {
 	return skinpath.getString();
 }
 
-const char *stencilhttprequest::skinUrl() {
+const char *urlhttprequest::skinUrl() {
 	return skinurl.getString();
 }
 
-const char *stencilhttprequest::page() {
+const char *urlhttprequest::page() {
 	return pagestr.getString();
 }
 
-const char *stencilhttprequest::pagePath() {
+const char *urlhttprequest::pagePath() {
 	return pagepath.getString();
 }
 
-const char *stencilhttprequest::pageUrl() {
+const char *urlhttprequest::pageUrl() {
 	return pageurl.getString();
 }
 
-uint64_t stencilhttprequest::getUrlVariableCount() {
+uint64_t urlhttprequest::getUrlVariableCount() {
 	return urlvariablecount;
 }
 
-const char * const *stencilhttprequest::getUrlVariables() {
+const char * const *urlhttprequest::getUrlVariables() {
 	return urlvars;
 }
 
-const char * const *stencilhttprequest::getUrlValues() {
+const char * const *urlhttprequest::getUrlValues() {
 	return urlvals;
 }
 
-void stencilhttprequest::buildAllVariables() {
+void urlhttprequest::buildAllVariables() {
 
 	if (allvals && allvars && !dirtyallvars) {
 		return;
@@ -423,19 +423,19 @@ void stencilhttprequest::buildAllVariables() {
 	dirtyallvars=false;
 }
 
-bool stencilhttprequest::methodAllowed() {
+bool urlhttprequest::methodAllowed() {
 	return httprequest::methodAllowed(
 				getSkinVariable("allowed-methods"),
 				getSkinVariable("denied-methods"));
 }
 
-bool stencilhttprequest::ipAllowed() {
+bool urlhttprequest::ipAllowed() {
 	return httprequest::ipAllowed(
 				getSkinVariable("allowed-ips"),
 				getSkinVariable("denied-ips"));
 }
 
-bool stencilhttprequest::refererAllowed() {
+bool urlhttprequest::refererAllowed() {
 	return httprequest::refererAllowed(
 				getSkinVariable("allowed-ips"),
 				getSkinVariable("denied-ips"));
