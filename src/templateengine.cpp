@@ -12,68 +12,68 @@
 class templateengineprivate {
 	friend class templateengine;
 	private:
-		const char	*varstart;
-		uint16_t	varstartlen;
-		const char	*varend;
-		uint16_t	varendlen;
-		const char	*qvarstart;
-		uint16_t	qvarstartlen;
-		const char	*qvarend;
-		uint16_t	qvarendlen;
-		const char	*dqvarstart;
-		uint16_t	dqvarstartlen;
-		const char	*dqvarend;
-		uint16_t	dqvarendlen;
-		char		esc;
-		const char	*blockstartstart;
-		uint16_t	blockstartstartlen;
-		const char	*blockstartend;
-		uint16_t	blockstartendlen;
-		const char	*blockendstart;
-		uint16_t	blockendstartlen;
-		const char	*blockendend;
-		uint16_t	blockendendlen;
-		const char	*incstart;
-		uint16_t	incstartlen;
-		const char	*incend;
-		uint16_t	incendlen;
-		char		qset[3];
-		char		dqset[3];
+		const char	*_varstart;
+		uint16_t	_varstartlen;
+		const char	*_varend;
+		uint16_t	_varendlen;
+		const char	*_qvarstart;
+		uint16_t	_qvarstartlen;
+		const char	*_qvarend;
+		uint16_t	_qvarendlen;
+		const char	*_dqvarstart;
+		uint16_t	_dqvarstartlen;
+		const char	*_dqvarend;
+		uint16_t	_dqvarendlen;
+		char		_esc;
+		const char	*_blockstartstart;
+		uint16_t	_blockstartstartlen;
+		const char	*_blockstartend;
+		uint16_t	_blockstartendlen;
+		const char	*_blockendstart;
+		uint16_t	_blockendstartlen;
+		const char	*_blockendend;
+		uint16_t	_blockendendlen;
+		const char	*_incstart;
+		uint16_t	_incstartlen;
+		const char	*_incend;
+		uint16_t	_incendlen;
+		char		_qset[3];
+		char		_dqset[3];
 };
 
 templateengine::templateengine() {
 	pvt=new templateengineprivate;
-	pvt->varstart="$(";
-	pvt->varstartlen=2;
-	pvt->varend=")";
-	pvt->varendlen=1;
-	pvt->qvarstart="$q(";
-	pvt->qvarstartlen=3;
-	pvt->qvarend=")";
-	pvt->qvarendlen=1;
-	pvt->dqvarstart="$dq(";
-	pvt->dqvarstartlen=4;
-	pvt->dqvarend=")";
-	pvt->dqvarendlen=1;
-	pvt->esc='\\';
-	pvt->blockstartstart="<!-- start ";
-	pvt->blockstartstartlen=11;
-	pvt->blockstartend=" -->";
-	pvt->blockstartendlen=4;
-	pvt->blockendstart="<!-- end ";
-	pvt->blockendstartlen=9;
-	pvt->blockendend=" -->";
-	pvt->blockendendlen=4;
-	pvt->incstart="<!-- include ";
-	pvt->incstartlen=13;
-	pvt->incend=" -->";
-	pvt->incendlen=4;
-	pvt->qset[0]='\'';
-	pvt->qset[1]=pvt->esc;
-	pvt->qset[2]='\0';
-	pvt->dqset[0]='"';
-	pvt->dqset[1]=pvt->esc;
-	pvt->dqset[2]='\0';
+	pvt->_varstart="$(";
+	pvt->_varstartlen=2;
+	pvt->_varend=")";
+	pvt->_varendlen=1;
+	pvt->_qvarstart="$q(";
+	pvt->_qvarstartlen=3;
+	pvt->_qvarend=")";
+	pvt->_qvarendlen=1;
+	pvt->_dqvarstart="$dq(";
+	pvt->_dqvarstartlen=4;
+	pvt->_dqvarend=")";
+	pvt->_dqvarendlen=1;
+	pvt->_esc='\\';
+	pvt->_blockstartstart="<!-- start ";
+	pvt->_blockstartstartlen=11;
+	pvt->_blockstartend=" -->";
+	pvt->_blockstartendlen=4;
+	pvt->_blockendstart="<!-- end ";
+	pvt->_blockendstartlen=9;
+	pvt->_blockendend=" -->";
+	pvt->_blockendendlen=4;
+	pvt->_incstart="<!-- include ";
+	pvt->_incstartlen=13;
+	pvt->_incend=" -->";
+	pvt->_incendlen=4;
+	pvt->_qset[0]='\'';
+	pvt->_qset[1]=pvt->_esc;
+	pvt->_qset[2]='\0';
+	pvt->_dqset[0]='"';
+	pvt->_dqset[1]=pvt->_esc;
+	pvt->_dqset[2]='\0';
 }
 
 templateengine::~templateengine() {
@@ -81,121 +81,121 @@ templateengine::~templateengine() {
 }
 
 void templateengine::setVariableStart(const char *delimiter) {
-	pvt->varstart=delimiter;
-	pvt->varstartlen=charstring::length(delimiter);
+	pvt->_varstart=delimiter;
+	pvt->_varstartlen=charstring::length(delimiter);
 }
 
 void templateengine::setVariableEnd(const char *delimiter) {
-	pvt->varend=delimiter;
-	pvt->varendlen=charstring::length(delimiter);
+	pvt->_varend=delimiter;
+	pvt->_varendlen=charstring::length(delimiter);
 }
 
 void templateengine::setQuotedVariableStart(const char *delimiter) {
-	pvt->qvarstart=delimiter;
-	pvt->qvarstartlen=charstring::length(delimiter);
+	pvt->_qvarstart=delimiter;
+	pvt->_qvarstartlen=charstring::length(delimiter);
 }
 
 void templateengine::setQuotedVariableEnd(const char *delimiter) {
-	pvt->qvarend=delimiter;
-	pvt->qvarendlen=charstring::length(delimiter);
+	pvt->_qvarend=delimiter;
+	pvt->_qvarendlen=charstring::length(delimiter);
 }
 
 void templateengine::setDoubleQuotedVariableStart(const char *delimiter) {
-	pvt->dqvarstart=delimiter;
-	pvt->dqvarstartlen=charstring::length(delimiter);
+	pvt->_dqvarstart=delimiter;
+	pvt->_dqvarstartlen=charstring::length(delimiter);
 }
 
 void templateengine::setDoubleQuotedVariableEnd(const char *delimiter) {
-	pvt->dqvarend=delimiter;
-	pvt->dqvarendlen=charstring::length(delimiter);
+	pvt->_dqvarend=delimiter;
+	pvt->_dqvarendlen=charstring::length(delimiter);
 }
 
 void templateengine::setEscapeCharacter(char esc) {
-	pvt->esc=esc;
-	pvt->qset[1]=esc;
-	pvt->dqset[1]=esc;
+	pvt->_esc=esc;
+	pvt->_qset[1]=esc;
+	pvt->_dqset[1]=esc;
 }
 
 void templateengine::setBlockStartStart(const char *delimiter) {
-	pvt->blockstartstart=delimiter;
-	pvt->blockstartstartlen=charstring::length(delimiter);
+	pvt->_blockstartstart=delimiter;
+	pvt->_blockstartstartlen=charstring::length(delimiter);
 }
 
 void templateengine::setBlockStartEnd(const char *delimiter) {
-	pvt->blockstartend=delimiter;
-	pvt->blockstartendlen=charstring::length(delimiter);
+	pvt->_blockstartend=delimiter;
+	pvt->_blockstartendlen=charstring::length(delimiter);
 }
 
 void templateengine::setBlockEndStart(const char *delimiter) {
-	pvt->blockendstart=delimiter;
-	pvt->blockendstartlen=charstring::length(delimiter);
+	pvt->_blockendstart=delimiter;
+	pvt->_blockendstartlen=charstring::length(delimiter);
 }
 
 void templateengine::setBlockEndEnd(const char *delimiter) {
-	pvt->blockendend=delimiter;
-	pvt->blockendendlen=charstring::length(delimiter);
+	pvt->_blockendend=delimiter;
+	pvt->_blockendendlen=charstring::length(delimiter);
 }
 
 void templateengine::setIncludeStart(const char *delimiter) {
-	pvt->incstart=delimiter;
-	pvt->incstartlen=charstring::length(delimiter);
+	pvt->_incstart=delimiter;
+	pvt->_incstartlen=charstring::length(delimiter);
 }
 
 void templateengine::setIncludeEnd(const char *delimiter) {
-	pvt->incend=delimiter;
-	pvt->incendlen=charstring::length(delimiter);
+	pvt->_incend=delimiter;
+	pvt->_incendlen=charstring::length(delimiter);
 }
 
 const char *templateengine::getVariableStart() {
-	return pvt->varstart;
+	return pvt->_varstart;
 }
 
 const char *templateengine::getVariableEnd() {
-	return pvt->varend;
+	return pvt->_varend;
 }
 
 const char *templateengine::getQuotedVariableStart() {
-	return pvt->qvarstart;
+	return pvt->_qvarstart;
 }
 
 const char *templateengine::getQuotedVariableEnd() {
-	return pvt->qvarend;
+	return pvt->_qvarend;
 }
 
 const char *templateengine::getDoubleQuotedVariableStart() {
-	return pvt->dqvarstart;
+	return pvt->_dqvarstart;
 }
 
 const char *templateengine::getDoubleQuotedVariableEnd() {
-	return pvt->dqvarend;
+	return pvt->_dqvarend;
 }
 
 char templateengine::getEscapeCharacter() {
-	return pvt->esc;
+	return pvt->_esc;
 }
 
 const char *templateengine::getBlockStartStart() {
-	return pvt->blockstartstart;
+	return pvt->_blockstartstart;
 }
 
 const char *templateengine::getBlockStartEnd() {
-	return pvt->blockstartend;
+	return pvt->_blockstartend;
 }
 
 const char *templateengine::getBlockEndStart() {
-	return pvt->blockendstart;
+	return pvt->_blockendstart;
 }
 
 const char *templateengine::getBlockEndEnd() {
-	return pvt->blockendend;
+	return pvt->_blockendend;
 }
 
 const char *templateengine::getIncludeStart() {
-	return pvt->incstart;
+	return pvt->_incstart;
 }
 
 const char *templateengine::getIncludeEnd() {
-	return pvt->incend;
+	return pvt->_incend;
 }
 
 bool templateengine::parse(
@@ -299,30 +299,30 @@ bool templateengine::parse(
 
 		// handle a variable replacement
 		if (!charstring::compare(buffer,
-					pvt->varstart,
-					pvt->varstartlen)) {
+					pvt->_varstart,
+					pvt->_varstartlen)) {
 
 			replaceVariable(out,&buffer,vars,false,false);
 
 		// handle quoted variable replacement
 		} else if (!charstring::compare(buffer,
-					pvt->qvarstart,
-					pvt->qvarstartlen)) {
+					pvt->_qvarstart,
+					pvt->_qvarstartlen)) {
 
 			replaceVariable(out,&buffer,vars,true,false);
 
 		// handle double-quoted variable replacement
 		} else if (!charstring::compare(buffer,
-					pvt->dqvarstart,
-					pvt->dqvarstartlen)) {
+					pvt->_dqvarstart,
+					pvt->_dqvarstartlen)) {
 
 			replaceVariable(out,&buffer,vars,false,true);
 
 		// handle a block
 		} else if (!justvariables && 
 				!charstring::compare(buffer,
-						pvt->blockstartstart,
-						pvt->blockstartstartlen)) {
+						pvt->_blockstartstart,
+						pvt->_blockstartstartlen)) {
 
 			// get the block name
 			stringbuffer	namestr;
@@ -344,8 +344,8 @@ bool templateengine::parse(
 		// handle an include
 		} else if (!justvariables && 
 				!charstring::compare(buffer,
-						pvt->incstart,
-						pvt->incstartlen)) {
+						pvt->_incstart,
+						pvt->_incstartlen)) {
 
 			// get the filename and parse the file,
 			// return false on failure
@@ -378,23 +378,23 @@ void templateengine::replaceVariable(
 	const char	*endpattern;
 	uint16_t	endpatternlen;
 	if (escq) {
-		startpattern=pvt->qvarstart;
-		startpatternlen=pvt->qvarstartlen;
-		endpattern=pvt->qvarend;
-		endpatternlen=pvt->qvarendlen;
-		start=*buffer+pvt->qvarstartlen;
+		startpattern=pvt->_qvarstart;
+		startpatternlen=pvt->_qvarstartlen;
+		endpattern=pvt->_qvarend;
+		endpatternlen=pvt->_qvarendlen;
+		start=*buffer+pvt->_qvarstartlen;
 	} else if (escdq) {
-		startpattern=pvt->dqvarstart;
-		startpatternlen=pvt->dqvarstartlen;
-		endpattern=pvt->dqvarend;
-		endpatternlen=pvt->dqvarendlen;
-		start=*buffer+pvt->dqvarstartlen;
+		startpattern=pvt->_dqvarstart;
+		startpatternlen=pvt->_dqvarstartlen;
+		endpattern=pvt->_dqvarend;
+		endpatternlen=pvt->_dqvarendlen;
+		start=*buffer+pvt->_dqvarstartlen;
 	} else {
-		startpattern=pvt->varstart;
-		startpatternlen=pvt->varstartlen;
-		endpattern=pvt->varend;
-		endpatternlen=pvt->varendlen;
-		start=*buffer+pvt->varstartlen;
+		startpattern=pvt->_varstart;
+		startpatternlen=pvt->_varstartlen;
+		endpattern=pvt->_varend;
+		endpatternlen=pvt->_varendlen;
+		start=*buffer+pvt->_varstartlen;
 	}
 	char	*end=charstring::findFirst(start,endpattern);
 	if (end) {
@@ -403,7 +403,7 @@ void templateengine::replaceVariable(
 		if (vars->getValue(var,&repl)) {
 			if (escq || escdq) {
 				const char	*set=
-						(escq)?pvt->qset:pvt->dqset;
+						(escq)?pvt->_qset:pvt->_dqset;
 				const char	*start=repl;
 				for (;;) {
 					repl=charstring::
@@ -412,7 +412,7 @@ void templateengine::replaceVariable(
 						break;
 					}
 					out->write(start,repl-start);
-					out->write(pvt->esc);
+					out->write(pvt->_esc);
 					out->write(*repl);
 					start=repl+1;
 				}
@@ -438,17 +438,17 @@ bool templateengine::getBlockName(
 			dictionary< const char *, const char * > *vars) {
 
 	// skip past the start of the block-start marker
-	*buffer=*buffer+pvt->blockstartstartlen;
+	*buffer=*buffer+pvt->_blockstartstartlen;
 
 	// get the block name and perform replacements on it
 	if (!getName(buffer,blockname,vars,
-				pvt->blockstartend,
-				pvt->blockstartendlen)) {
+				pvt->_blockstartend,
+				pvt->_blockstartendlen)) {
 		return false;
 	}
 
 	// skip past the end of the block-start marker
-	*buffer=*buffer+pvt->blockstartendlen;
+	*buffer=*buffer+pvt->_blockstartendlen;
 	return true;
 }
 
@@ -461,24 +461,24 @@ bool templateengine::getBlockLength(char **buffer, uint64_t *blocklength) {
 
 		// look for nested blocks
 		if (!charstring::compare(*buffer,
-					pvt->blockstartstart,
-					pvt->blockstartstartlen)) {
+					pvt->_blockstartstart,
+					pvt->_blockstartstartlen)) {
 
 			// if a nested block-start is found then increment depth
 			depth++;
 
 		} else if (!charstring::compare(*buffer,
-						pvt->blockendstart,
-						pvt->blockendstartlen)) {
+						pvt->_blockendstart,
+						pvt->_blockendstartlen)) {
 
 			if (depth==0) {
 
 				// if this is not a nested block then skip to
 				// the end of it and return success
 				*buffer=charstring::findFirst(
-						*buffer,pvt->blockendend);
+						*buffer,pvt->_blockendend);
 				if (*buffer) {
-					*buffer=*buffer+pvt->blockendendlen;
+					*buffer=*buffer+pvt->_blockendendlen;
 					*blocklength=len;
 					return true;
 				} else {
@@ -512,15 +512,15 @@ bool templateengine::getIncludeFilename(
 			dictionary< const char *, const char * > *vars) {
 
 	// skip past the start of the include marker
-	*buffer=*buffer+pvt->incstartlen;
+	*buffer=*buffer+pvt->_incstartlen;
 
 	// get the filename and perform replacements on it
-	if (!getName(buffer,filename,vars,pvt->incend,pvt->incendlen)) {
+	if (!getName(buffer,filename,vars,pvt->_incend,pvt->_incendlen)) {
 		return false;
 	}
 
 	// skip past the end of the include marker
-	*buffer=*buffer+pvt->incendlen;
+	*buffer=*buffer+pvt->_incendlen;
 	return true;
 }
 
