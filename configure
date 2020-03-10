@@ -880,6 +880,7 @@ enable_request
 enable_response
 enable_apache2
 enable_cgi
+enable_mvc
 enable_shared
 enable_static
 with_pic
@@ -1595,6 +1596,7 @@ Optional Features:
   --disable-response            Don't build response classes
   --disable-apache2             Disable Apache 2 support
   --disable-cgi                 Disable CGI support
+  --disable-mvc                 Disable MVC support
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -3172,6 +3174,13 @@ if test "${enable_cgi+set}" = set; then :
   enableval=$enable_cgi; INCLUDE_CGI="0"
 else
   INCLUDE_CGI="1"
+fi
+
+# Check whether --enable-mvc was given.
+if test "${enable_mvc+set}" = set; then :
+  enableval=$enable_mvc; INCLUDE_MVC="0"
+else
+  INCLUDE_MVC="1"
 fi
 
 
@@ -35967,6 +35976,14 @@ if ( test "$INCLUDE_APACHE2" = "1" -o "$INCLUDE_CGI" = "1" )
 then
 	HEADERS3="$HEADERS3 httpserverapi.h httpserverapimain.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 httpserverapi.h httpserverapiincludes.h"
+fi
+
+if ( test "$INCLUDE_MVC" = "1" )
+then
+	HEADERS3="$HEADERS3 mvctier.h mvcservice.h mvcview.h mvccontroller.h mvcresult.h mvcsecurity.h mvcproperties.h httpbasicsecurity.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 mvcpropertiesincludes.h mvcproperties.h mvcresultincludes.h mvcresult.h mvctierincludes.h mvctier.h mvcviewincludes.h mvcview.h httpbasicsecurityincludes.h httpbasicsecurity.h"
+	SRCS="$SRCS mvctier.cpp mvcview.cpp mvcresult.cpp mvcproperties.cpp httpbasicsecurity.cpp"
+	LOBJS="$LOBJS mvctier.lo mvcview.lo mvcresult.lo mvcproperties.lo httpbasicsecurity.lo"
 fi
 
 
