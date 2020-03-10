@@ -2,6 +2,8 @@
 	added support for escaping single/double-quotes to templateengine
 	migrated in clasess from stencil project
 	added librudiments-apache
+	added \r\n support when parsing CSVs
+	integrated MVC base classes from other projects
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible
