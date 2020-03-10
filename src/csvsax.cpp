@@ -174,7 +174,7 @@ bool csvsax::parse() {
 					ignore=false;
 					pvt->_state=COLUMN_START;
 					continue;
-				} else if (ch=='\n') {
+				} else if (ch=='\r' || ch=='\n') {
 					pvt->_state=COLUMN_END;
 					column(current.getString(),quoted);
 					current.clear();
@@ -195,7 +195,7 @@ bool csvsax::parse() {
 			pvt->_state=ROW_START;
 		}
 		if (pvt->_state==ROW_START) {
-			if (ch=='\r') {
+			if (ch=='\r' || ch=='\n') {
 				continue;
 			}
 			rowStart();
@@ -228,7 +228,7 @@ bool csvsax::parse() {
 					ignore=false;
 					pvt->_state=FIELD_START;
 					continue;
-				} else if (ch=='\n') {
+				} else if (ch=='\r' || ch=='\n') {
 					pvt->_state=FIELD_END;
 					field(current.getString(),quoted);
 					current.clear();
