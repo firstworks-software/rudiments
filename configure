@@ -875,6 +875,8 @@ enable_csvsax
 enable_csvdom
 enable_jsonsax
 enable_jsondom
+enable_inisax
+enable_inidom
 enable_cursordomnode
 enable_request
 enable_response
@@ -1591,6 +1593,8 @@ Optional Features:
   --disable-csvdom        Don't build csvdom class
   --disable-jsonsax       Don't build jsonsax class
   --disable-jsondom       Don't build jsondom class
+  --disable-inisax       Don't build inisax class
+  --disable-inidom       Don't build inidom class
   --disable-cursordomnode Don't build cursordomnode class
   --disable-request             Don't build request classes
   --disable-response            Don't build response classes
@@ -3139,6 +3143,20 @@ if test "${enable_jsondom+set}" = set; then :
   enableval=$enable_jsondom; INCLUDE_JSONDOM="0"
 else
   INCLUDE_JSONDOM="1"
+fi
+
+# Check whether --enable-inisax was given.
+if test "${enable_inisax+set}" = set; then :
+  enableval=$enable_inisax; INCLUDE_INISAX="0"
+else
+  INCLUDE_INISAX="1"
+fi
+
+# Check whether --enable-inidom was given.
+if test "${enable_inidom+set}" = set; then :
+  enableval=$enable_inidom; INCLUDE_INIDOM="0"
+else
+  INCLUDE_INIDOM="1"
 fi
 
 # Check whether --enable-cursordomnode was given.
@@ -35928,6 +35946,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 jsondom.h jsondomincludes.h"
 	SRCS="$SRCS jsondom.cpp"
 	LOBJS="$LOBJS jsondom.lo"
+fi
+
+if ( test "$INCLUDE_INISAX" = "1" )
+then
+	HEADERS3="$HEADERS3 inisax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 inisax.h inisaxincludes.h"
+	SRCS="$SRCS inisax.cpp"
+	LOBJS="$LOBJS inisax.lo"
+fi
+
+if ( test "$INCLUDE_INIDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 inidom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 inidom.h inidomincludes.h"
+	SRCS="$SRCS inidom.cpp"
+	LOBJS="$LOBJS inidom.lo"
 fi
 
 if ( test "$INCLUDE_CURSORDOMNODE" = "1" )

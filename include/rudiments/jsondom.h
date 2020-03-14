@@ -6,7 +6,7 @@
 
 #include <rudiments/private/jsondomincludes.h>
 
-/** The jsondom class implements a minimal XML DOM parser. */
+/** The jsondom class implements a minimal JSON DOM parser. */
 class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 	public:
 

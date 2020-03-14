@@ -358,6 +358,14 @@ AC_ARG_ENABLE(jsondom,
 	[  --disable-jsondom       Don't build jsondom class],
 	INCLUDE_JSONDOM="0",
 	INCLUDE_JSONDOM="1")
+AC_ARG_ENABLE(inisax,
+	[  --disable-inisax       Don't build inisax class],
+	INCLUDE_INISAX="0",
+	INCLUDE_INISAX="1")
+AC_ARG_ENABLE(inidom,
+	[  --disable-inidom       Don't build inidom class],
+	INCLUDE_INIDOM="0",
+	INCLUDE_INIDOM="1")
 AC_ARG_ENABLE(cursordomnode,
 	[  --disable-cursordomnode Don't build cursordomnode class],
 	INCLUDE_CURSORDOMNODE="0",
@@ -4639,6 +4647,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 jsondom.h jsondomincludes.h"
 	SRCS="$SRCS jsondom.cpp"
 	LOBJS="$LOBJS jsondom.lo"
+fi
+
+if ( test "$INCLUDE_INISAX" = "1" )
+then
+	HEADERS3="$HEADERS3 inisax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 inisax.h inisaxincludes.h"
+	SRCS="$SRCS inisax.cpp"
+	LOBJS="$LOBJS inisax.lo"
+fi
+
+if ( test "$INCLUDE_INIDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 inidom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 inidom.h inidomincludes.h"
+	SRCS="$SRCS inidom.cpp"
+	LOBJS="$LOBJS inidom.lo"
 fi
 
 if ( test "$INCLUDE_CURSORDOMNODE" = "1" )
