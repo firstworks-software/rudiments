@@ -366,6 +366,14 @@ AC_ARG_ENABLE(inidom,
 	[  --disable-inidom       Don't build inidom class],
 	INCLUDE_INIDOM="0",
 	INCLUDE_INIDOM="1")
+AC_ARG_ENABLE(propsax,
+	[  --disable-propsax      Don't build propsax class],
+	INCLUDE_PROPSAX="0",
+	INCLUDE_PROPSAX="1")
+AC_ARG_ENABLE(propdom,
+	[  --disable-propdom      Don't build propdom class],
+	INCLUDE_PROPDOM="0",
+	INCLUDE_PROPDOM="1")
 AC_ARG_ENABLE(cursordomnode,
 	[  --disable-cursordomnode Don't build cursordomnode class],
 	INCLUDE_CURSORDOMNODE="0",
@@ -4663,6 +4671,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 inidom.h inidomincludes.h"
 	SRCS="$SRCS inidom.cpp"
 	LOBJS="$LOBJS inidom.lo"
+fi
+
+if ( test "$INCLUDE_PROPSAX" = "1" )
+then
+	HEADERS3="$HEADERS3 propsax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 propsax.h propsaxincludes.h"
+	SRCS="$SRCS propsax.cpp"
+	LOBJS="$LOBJS propsax.lo"
+fi
+
+if ( test "$INCLUDE_PROPDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 propdom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 propdom.h propdomincludes.h"
+	SRCS="$SRCS propdom.cpp"
+	LOBJS="$LOBJS propdom.lo"
 fi
 
 if ( test "$INCLUDE_CURSORDOMNODE" = "1" )

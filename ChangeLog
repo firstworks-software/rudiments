@@ -4,7 +4,7 @@
 	added librudiments-apache
 	added \r\n support when parsing CSVs
 	integrated MVC base classes from other projects
-	added inisax and inidom classes
+	added inisax/inidom and propsax/propdom classes
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

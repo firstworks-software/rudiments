@@ -1,0 +1,229 @@
+// Copyright (c) 1999-2018 David Muse
+// See the COPYING file for more information
+
+#include <rudiments/propsax.h>
+#include <rudiments/character.h>
+//#define DEBUG_MESSAGES
+#include <rudiments/debugprint.h>
+
+class propsaxprivate {
+	friend class propsax;
+	private:
+		// reusing this over and over reduces heap fragmentation
+		stringbuffer	_str;
+};
+
+propsax::propsax() : sax() {
+	pvt=new propsaxprivate;
+}
+
+propsax::~propsax() {
+	delete pvt;
+}
+
+bool propsax::whitespaceStart() {
+	return true;
+}
+
+bool propsax::whitespace(const char *w) {
+	// by default, just return success
+#ifdef DEBUG_MESSAGES
+	debugPrintf("%s",w);
+#endif
+	return true;
+}
+
+bool propsax::whitespaceEnd() {
+	return true;
+}
+
+bool propsax::exclamationCommentStart() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::exclamationComment(const char *c) {
+	// by default, just return success
+#ifdef DEBUG_MESSAGES
+	debugPrintf("!%s",c);
+#endif
+	return true;
+}
+
+bool propsax::exclamationCommentEnd() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::poundCommentStart() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::poundComment(const char *c) {
+	// by default, just return success
+#ifdef DEBUG_MESSAGES
+	debugPrintf("#%s",c);
+#endif
+	return true;
+}
+
+bool propsax::poundCommentEnd() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::keyStart() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::key(const char *k) {
+	// by default, just return success
+#ifdef DEBUG_MESSAGES
+	debugPrintf("%s=",k);
+#endif
+	return true;
+}
+
+bool propsax::keyEnd() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::valueStart() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::value(const char *v) {
+	// by default, just return success
+#ifdef DEBUG_MESSAGES
+	debugPrintf("%s",v);
+#endif
+	return true;
+}
+
+bool propsax::valueEnd() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::parse() {
+
+	// get first character, handle empty file
+	char	ch=getCharacter();
+	if (!ch) {
+		return true;
+	}
+
+	for (;;) {
+		if (character::isWhitespace(ch)) {
+			if (!parseWhitespace(ch,&ch)) {
+				return false;
+			}
+		}
+		switch (ch) {
+			case '!':
+				if (!parseExclamationComment(ch,&ch)) {
+					return false;
+				}
+				break;
+			case '#':
+				if (!parsePoundComment(ch,&ch)) {
+					return false;
+				}
+				break;
+			case '\0':
+				return true;
+			default:
+				if (!parseKey(ch,&ch)) {
+					return false;
+				}
+				break;
+		}
+	}
+}
+
+bool propsax::parseWhitespace(char current, char *next) {
+	if (!whitespaceStart()) {
+		return false;
+	}
+	pvt->_str.clear();
+	pvt->_str.append(current);
+	for (;;) {
+		char	ch=getCharacter();
+		if (character::isWhitespace(ch)) {
+			pvt->_str.append(ch);
+		} else {
+			if (!whitespace(pvt->_str.getString())) {
+				return false;
+			}
+			*next=ch;
+			return whitespaceEnd();
+		}
+	}
+}
+
+bool propsax::parseExclamationComment(char current, char *next) {
+	if (!exclamationCommentStart()) {
+		return false;
+	}
+	parseRestOfLine(next);
+	return exclamationComment(pvt->_str.getString()) &&
+					exclamationCommentEnd();
+}
+
+void propsax::parseRestOfLine(char *next) {
+	pvt->_str.clear();
+	for (;;) {
+		char	ch=getCharacter();
+		if (ch=='\n' || ch=='\r' || ch=='\0') {
+			*next=ch;
+			return;
+		} else {
+			// FIXME: handle \'s
+			pvt->_str.append(ch);
+		}
+	}
+}
+
+bool propsax::parsePoundComment(char current, char *next) {
+	if (!poundCommentStart()) {
+		return false;
+	}
+	parseRestOfLine(next);
+	return poundComment(pvt->_str.getString()) && poundCommentEnd();
+}
+
+bool propsax::parseKey(char current, char *next) {
+	if (!keyStart()) {
+		return false;
+	}
+	pvt->_str.clear();
+	pvt->_str.append(current);
+	for (;;) {
+		char	ch=getCharacter();
+		// FIXME: handle spaces around ='s
+		if (ch=='=') {
+			return key(pvt->_str.getString()) &&
+						keyEnd() &&
+						parseValue(next);
+		} else if (ch=='\n' || ch=='\r' || ch=='\0') {
+			*next=ch;
+			return key(pvt->_str.getString()) &&
+						keyEnd();
+		} else {
+			// FIXME: handle \'s
+			pvt->_str.append(ch);
+		}
+	}
+}
+
+bool propsax::parseValue(char *next) {
+	if (!valueStart()) {
+		return false;
+	}
+	parseRestOfLine(next);
+	return value(pvt->_str.getString()) && valueEnd();
+}

@@ -68,7 +68,8 @@ PROGS3= handoff \
 	headers.cgi \
 	multipart.cgi \
 	pr.cgi \
-	inidom
+	inidom \
+	propdom
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -92,7 +93,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini handofffile *.cgi app1/app2/*.cgi
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
@@ -278,6 +279,9 @@ pr.cgi: pr.cpp pr.$(OBJ)
 
 inidom: inidom.cpp inidom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inidom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+propdom: propdom.cpp propdom.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) propdom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all

@@ -877,6 +877,8 @@ enable_jsonsax
 enable_jsondom
 enable_inisax
 enable_inidom
+enable_propsax
+enable_propdom
 enable_cursordomnode
 enable_request
 enable_response
@@ -1595,6 +1597,8 @@ Optional Features:
   --disable-jsondom       Don't build jsondom class
   --disable-inisax       Don't build inisax class
   --disable-inidom       Don't build inidom class
+  --disable-propsax      Don't build propsax class
+  --disable-propdom      Don't build propdom class
   --disable-cursordomnode Don't build cursordomnode class
   --disable-request             Don't build request classes
   --disable-response            Don't build response classes
@@ -3157,6 +3161,20 @@ if test "${enable_inidom+set}" = set; then :
   enableval=$enable_inidom; INCLUDE_INIDOM="0"
 else
   INCLUDE_INIDOM="1"
+fi
+
+# Check whether --enable-propsax was given.
+if test "${enable_propsax+set}" = set; then :
+  enableval=$enable_propsax; INCLUDE_PROPSAX="0"
+else
+  INCLUDE_PROPSAX="1"
+fi
+
+# Check whether --enable-propdom was given.
+if test "${enable_propdom+set}" = set; then :
+  enableval=$enable_propdom; INCLUDE_PROPDOM="0"
+else
+  INCLUDE_PROPDOM="1"
 fi
 
 # Check whether --enable-cursordomnode was given.
@@ -35962,6 +35980,22 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 inidom.h inidomincludes.h"
 	SRCS="$SRCS inidom.cpp"
 	LOBJS="$LOBJS inidom.lo"
+fi
+
+if ( test "$INCLUDE_PROPSAX" = "1" )
+then
+	HEADERS3="$HEADERS3 propsax.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 propsax.h propsaxincludes.h"
+	SRCS="$SRCS propsax.cpp"
+	LOBJS="$LOBJS propsax.lo"
+fi
+
+if ( test "$INCLUDE_PROPDOM" = "1" )
+then
+	HEADERS3="$HEADERS3 propdom.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 propdom.h propdomincludes.h"
+	SRCS="$SRCS propdom.cpp"
+	LOBJS="$LOBJS propdom.lo"
 fi
 
 if ( test "$INCLUDE_CURSORDOMNODE" = "1" )
