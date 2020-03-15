@@ -6,9 +6,9 @@
 
 #include <rudiments/private/inisaxincludes.h>
 
-/** The inisax class is a base class for an SAX-style parser for INI data.
- *  To use this class, you should create a class that inherits from it and
- *  implements its protected virtual methods. */
+/** The inisax class is a base class for an SAX-style parser for data in
+ *  .ini-file format.  To use this class, you should create a class that
+ *  inherits from it and implements its protected virtual methods. */
 class RUDIMENTS_DLLSPEC inisax : public sax {
 	public:
 

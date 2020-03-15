@@ -6,9 +6,9 @@
 
 #include <rudiments/private/propsaxincludes.h>
 
-/** The propsax class is a base class for an SAX-style parser for properties
- *  file data.  To use this class, you should create a class that inherits from
- *  it and implements its protected virtual methods. */
+/** The propsax class is a base class for an SAX-style parser for data in
+ *  property-file format.  To use this class, you should create a class that
+ *  inherits from it and implements its protected virtual methods. */
 class RUDIMENTS_DLLSPEC propsax : public sax {
 	public:
 

@@ -47,7 +47,9 @@ for program in \
 	userentry \
 	xmldom \
 	csvdom \
-	jsondom
+	jsondom \
+	inidom \
+	propdom
 do
 	./$program
 
