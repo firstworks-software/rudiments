@@ -21,9 +21,9 @@ class RUDIMENTS_DLLSPEC propdom : public propsax, public dom {
 		 *  tag and attribute names and values are stored in a string
 		 *  cache and pointers into the cache are assigned to each node.
 		 *  Reference counters are kept and the string is removed from
-		 *  the cache when no more nodes are using it.  As properties
-		 *  tend to be highly repetitive this conserves memory at the
-		 *  cost of speed.
+		 *  the cache when no more nodes are using it.  If the data is
+		 *  highly repetitive this conserves memory at the cost of
+		 *  speed.
 		 *
 		 *  If the string cache is disabled then memory is allocated in
 		 *  each domnode for names and values and freed when the
@@ -49,26 +49,61 @@ class RUDIMENTS_DLLSPEC propdom : public propsax, public dom {
 
 	protected:
 
+		/** Gets called when the start of whitespace (outside of a
+		 *  comment, section name, key, or value) is encountered. */
 		virtual	bool	whitespaceStart();
+
+		/** Gets called when whitespace (outside of a comment, section
+		 *  name, key, or value) is parsed. */
 		virtual	bool	whitespace(const char *w);
+
+		/** Gets called when the end of whitespace (outside of a
+		 *  comment, section name, key, or value) is encountered. */
 		virtual	bool	whitespaceEnd();
 
+		/** Gets called when the start of an exclamation-delimited
+		 *  comment is encountered. */
 		virtual	bool	exclamationCommentStart();
+
+		/** Gets called when an exclamation-delimited comment is
+		 *  parsed. */
 		virtual	bool	exclamationComment(const char *c);
+
+		/** Gets called when the end of an exclamation-delimited
+		 *  comment is encountered. */
 		virtual	bool	exclamationCommentEnd();
 
+		/** Gets called when the start of a pound-delimited comment
+		 *  is encountered. */
 		virtual	bool	poundCommentStart();
+
+		/** Gets called when a pound-delimited comment is parsed. */
 		virtual	bool	poundComment(const char *c);
+
+		/** Gets called when the end of a pound-delimited comment
+		 *  is encountered. */
 		virtual	bool	poundCommentEnd();
 
+		/** Gets called when the start of a key is encountered. */
 		virtual	bool	keyStart();
+
+		/** Gets called when a key name is parsed. */
 		virtual	bool	key(const char *k);
+
+		/** Gets called when the end of a key is encountered. */
 		virtual	bool	keyEnd();
 
+		/** Gets called when the equality delimiter between a key and
+		 *  value is parsed. */
 		virtual	bool	equals(const char *e);
 
+		/** Gets called when the start of a value is encountered. */
 		virtual	bool	valueStart();
+
+		/** Gets called when a value name is parsed. */
 		virtual	bool	value(const char *v);
+
+		/** Gets called when the end of a value is encountered. */
 		virtual	bool	valueEnd();
 
 	#include <rudiments/private/propdom.h>

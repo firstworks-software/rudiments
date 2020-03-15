@@ -21,8 +21,8 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		 *  tag and attribute names and values are stored in a string
 		 *  cache and pointers into the cache are assigned to each node.
 		 *  Reference counters are kept and the string is removed from
-		 *  the cache when no more nodes are using it.  As xml tends to
-		 *  be highly repetitive this conserves memory at the cost of
+		 *  the cache when no more nodes are using it.  If the data is
+		 *  highly repetitive this conserves memory at the cost of
 		 *  speed.
 		 *
 		 *  If the string cache is disabled then memory is allocated in
