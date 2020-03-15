@@ -94,6 +94,9 @@ bool propsax::keyEnd() {
 
 bool propsax::equals(const char *e) {
 	// by default, just return success
+#ifdef DEBUG_MESSAGES
+	debugPrintf("%s",e);
+#endif
 	return true;
 }
 
@@ -225,15 +228,7 @@ bool propsax::parseKey(char current, char *next) {
 	for (;;) {
 		char	ch=getCharacter();
 
-		// FIXME: the following are equivalent:
-		//
-		// a-key = a-value (currently supported)
-		// a-key : a-value
-		// a-key=a-value (currently supported)
-		// a-key a-value
-		//
-		// support the rest
-
+		// FIXME: this code feels like brute-force
 		if (ch==' ') {
 			ch=getCharacter();
 			if (ch=='=') {
