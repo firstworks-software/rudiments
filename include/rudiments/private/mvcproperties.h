@@ -2,4 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
+		void	buildDictionary();
+
 		mvcpropertiesprivate	*pvt;

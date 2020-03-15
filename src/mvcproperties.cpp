@@ -2,11 +2,14 @@
 // See the COPYING file for more informations.
 
 #include <rudiments/mvcproperties.h>
+#include <rudiments/propdom.h>
+#include <rudiments/dictionary.h>
 
 class mvcpropertiesprivate {
 	friend class mvcproperties;
 	private:
-		dictionary<const char *,const char *>	dict;
+		propdom	_p;
+		dictionary<const char *,const char *>	_dict;
 };
 
 mvcproperties::mvcproperties() {
@@ -18,15 +21,32 @@ mvcproperties::~mvcproperties() {
 }
 
 bool mvcproperties::parseFile(const char *filename) {
-	// FIXME: implement this...
+	pvt->_dict.clear();
+	if (!pvt->_p.parseFile(filename)) {
+		return false;
+	}
+	buildDictionary();
 	return true;
 }
 
 bool mvcproperties::parseString(const char *string) {
-	// FIXME: implement this...
+	pvt->_dict.clear();
+	if (!pvt->_p.parseString(string)) {
+		return false;
+	}
+	buildDictionary();
 	return true;
 }
 
+void mvcproperties::buildDictionary() {
+	for (domnode *node=pvt->_p.getRootNode()->getFirstTagChild("k");
+				!node->isNullNode();
+				node=node->getNextTagSibling("k")) {
+		pvt->_dict.setValue(node->getAttributeValue("k"),
+					node->getAttributeValue("v"));
+	}
+}
+
 const char *mvcproperties::getValue(const char *parameter) {
-	return pvt->dict.getValue(parameter);
+	return pvt->_dict.getValue(parameter);
 }
