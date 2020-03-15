@@ -49,7 +49,8 @@ for program in \
 	csvdom \
 	jsondom \
 	inidom \
-	propdom
+	propdom \
+	mvcproperties
 do
 	./$program
 

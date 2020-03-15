@@ -69,7 +69,8 @@ PROGS3= handoff \
 	multipart.cgi \
 	pr.cgi \
 	inidom \
-	propdom
+	propdom \
+	mvcproperties
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -282,6 +283,9 @@ inidom: inidom.cpp inidom.$(OBJ)
 
 propdom: propdom.cpp propdom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) propdom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+mvcproperties: mvcproperties.cpp mvcproperties.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) mvcproperties.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
