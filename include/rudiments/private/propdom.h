@@ -10,6 +10,8 @@
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;
+			void	writeAndEscape(output *out,
+						const char *value) const;
 
 				propdom(const propdom &x);
 			propdom	&operator=(const propdom &x);

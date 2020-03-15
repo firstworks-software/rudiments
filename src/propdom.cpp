@@ -3,6 +3,7 @@
 
 #include <rudiments/propdom.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 //#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
@@ -218,9 +219,17 @@ bool propdom::keyStart() {
 
 bool propdom::key(const char *k) {
 #ifdef DEBUG_MESSAGES
-	debugPrintf("%s=",k);
+	debugPrintf("%s",k);
 #endif
 	pvt->_current->setAttributeValue("k",k);
+	return true;
+}
+
+bool propdom::equals(const char *e) {
+#ifdef DEBUG_MESSAGES
+	debugPrintf("%s",e);
+#endif
+	pvt->_current->setAttributeValue("e",e);
 	return true;
 }
 
@@ -249,6 +258,15 @@ bool propdom::write(output *out) const {
 	return dom::write(out,true);
 }
 
+void propdom::writeAndEscape(output *out, const char *value) const {
+	for (const char *c=value; *c; c++) {
+		if (character::isWhitespace(*c)) {
+			out->write('\\');
+		}
+		out->write(*c);
+	}
+}
+
 void propdom::write(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
@@ -273,9 +291,12 @@ void propdom::write(const domnode *dn, output *out,
 					out->write(dn->getAttributeValue("v"));
 					break;
 				case 'k':
-					out->write(dn->getAttributeValue("k"));
-					out->write('=');
-					out->write(dn->getAttributeValue("v"));
+					writeAndEscape(out,
+						dn->getAttributeValue("k"));
+					out->write(
+						dn->getAttributeValue("e"));
+					writeAndEscape(out,
+						dn->getAttributeValue("v"));
 					break;
 			}
 			}

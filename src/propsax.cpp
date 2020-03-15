@@ -11,6 +11,7 @@ class propsaxprivate {
 	private:
 		// reusing this over and over reduces heap fragmentation
 		stringbuffer	_str;
+		stringbuffer	_eq;
 };
 
 propsax::propsax() : sax() {
@@ -87,6 +88,11 @@ bool propsax::key(const char *k) {
 }
 
 bool propsax::keyEnd() {
+	// by default, just return success
+	return true;
+}
+
+bool propsax::equals(const char *e) {
 	// by default, just return success
 	return true;
 }
@@ -169,20 +175,34 @@ bool propsax::parseExclamationComment(char current, char *next) {
 	if (!exclamationCommentStart()) {
 		return false;
 	}
-	parseRestOfLine(next);
+	parseRestOfLine('\0',next,false);
 	return exclamationComment(pvt->_str.getString()) &&
 					exclamationCommentEnd();
 }
 
-void propsax::parseRestOfLine(char *next) {
+void propsax::parseRestOfLine(char ch, char *next, bool invalue) {
 	pvt->_str.clear();
+	bool	first=true;
 	for (;;) {
-		char	ch=getCharacter();
+		if (first) {
+			if (ch=='\0') {
+				ch=getCharacter();
+			}
+			first=false;
+		} else {
+			ch=getCharacter();
+		}
 		if (ch=='\n' || ch=='\r' || ch=='\0') {
 			*next=ch;
 			return;
 		} else {
-			// FIXME: handle \'s
+			if (invalue && ch=='\\') {
+				ch=getCharacter();
+				if (ch=='\0') {
+					*next=ch;
+					return;
+				}
+			}
 			pvt->_str.append(ch);
 		}
 	}
@@ -192,7 +212,7 @@ bool propsax::parsePoundComment(char current, char *next) {
 	if (!poundCommentStart()) {
 		return false;
 	}
-	parseRestOfLine(next);
+	parseRestOfLine('\0',next,false);
 	return poundComment(pvt->_str.getString()) && poundCommentEnd();
 }
 
@@ -204,26 +224,112 @@ bool propsax::parseKey(char current, char *next) {
 	pvt->_str.append(current);
 	for (;;) {
 		char	ch=getCharacter();
-		// FIXME: handle spaces around ='s
-		if (ch=='=') {
+
+		// FIXME: the following are equivalent:
+		//
+		// a-key = a-value (currently supported)
+		// a-key : a-value
+		// a-key=a-value (currently supported)
+		// a-key a-value
+		//
+		// support the rest
+
+		if (ch==' ') {
+			ch=getCharacter();
+			if (ch=='=') {
+				ch=getCharacter();
+				if (ch=='\0' || ch=='\n' || ch=='\r') {
+					*next=ch;
+					return key(pvt->_str.getString()) &&
+								keyEnd() &&
+								equals(" =");
+				} else if (ch==' ') {
+					ch=getCharacter();
+					if (ch=='\0' || ch=='\n' || ch=='\r') {
+						*next=ch;
+						return
+						key(pvt->_str.getString()) &&
+						keyEnd() &&
+						equals(" = ");
+					} else {
+						return
+						key(pvt->_str.getString()) &&
+						keyEnd() &&
+						equals(" = ") &&
+						parseValue(ch,next);
+					}
+				} else {
+					return key(pvt->_str.getString()) &&
+							keyEnd() &&
+							equals(" =") &&
+							parseValue(ch,next);
+				}
+			} else if (ch==':') {
+				ch=getCharacter();
+				if (ch=='\0' || ch=='\n' || ch=='\r') {
+					*next=ch;
+					return key(pvt->_str.getString()) &&
+								keyEnd() &&
+								equals(" :");
+				} else if (ch==' ') {
+					ch=getCharacter();
+					if (ch=='\0' || ch=='\n' || ch=='\r') {
+						*next=ch;
+						return
+						key(pvt->_str.getString()) &&
+						keyEnd() &&
+						equals(" : ");
+					} else {
+						return
+						key(pvt->_str.getString()) &&
+						keyEnd() &&
+						equals(" : ") &&
+						parseValue(ch,next);
+					}
+				} else {
+					return key(pvt->_str.getString()) &&
+							keyEnd() &&
+							equals(" :") &&
+							parseValue(ch,next);
+				}
+			} else {
+				return key(pvt->_str.getString()) &&
+							keyEnd() &&
+							equals(" ") &&
+							parseValue(ch,next);
+			}
+		} else if (ch=='=') {
 			return key(pvt->_str.getString()) &&
 						keyEnd() &&
-						parseValue(next);
-		} else if (ch=='\n' || ch=='\r' || ch=='\0') {
+						equals("=") &&
+						parseValue('\0',next);
+		} else if (ch==':') {
+			return key(pvt->_str.getString()) &&
+						keyEnd() &&
+						equals(":") &&
+						parseValue('\0',next);
+		} else if (ch=='\0' || ch=='\n' || ch=='\r') {
 			*next=ch;
 			return key(pvt->_str.getString()) &&
 						keyEnd();
 		} else {
-			// FIXME: handle \'s
+			if (ch=='\\') {
+				ch=getCharacter();
+				if (ch=='\0') {
+					*next=ch;
+					return key(pvt->_str.getString()) &&
+								keyEnd();
+				}
+			}
 			pvt->_str.append(ch);
 		}
 	}
 }
 
-bool propsax::parseValue(char *next) {
+bool propsax::parseValue(char ch, char *next) {
 	if (!valueStart()) {
 		return false;
 	}
-	parseRestOfLine(next);
+	parseRestOfLine(ch,next,true);
 	return value(pvt->_str.getString()) && valueEnd();
 }

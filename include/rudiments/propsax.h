@@ -36,6 +36,8 @@ class RUDIMENTS_DLLSPEC propsax : public sax {
 		virtual	bool	key(const char *k);
 		virtual	bool	keyEnd();
 
+		virtual	bool	equals(const char *e);
+
 		virtual	bool	valueStart();
 		virtual	bool	value(const char *v);
 		virtual	bool	valueEnd();

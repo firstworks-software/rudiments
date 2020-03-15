@@ -59,22 +59,42 @@ const struct test tests[]={
 
 	{
 	"key",
-	"hello=hi\n",
+	"key1=value1\n",
 	false
 	},
 
 	{
 	"keys",
-	"hello=hi\n"
-	"goodbye=bye\n",
+	"key1=value1\n"
+	"key2=value2\n",
 	false
 	},
 
-	// FIXME: various escapes
+	{
+	"multi-line values",
+	"key1=val\\\nue\\\n1\n"
+	"key2=val\\\nue\\\n2\n",
+	false
+	},
 
-	// FIXME: spaces around equals
+	{
+	"various escapes",
+	"key\\ 1=val\\ ue\\ 1\n"
+	"key\\ 2=val\\ ue\\ 2\n",
+	false
+	},
 
-	// FIXME: multi-line values
+	{
+	"various equals",
+	"key1=value1\n"
+	"key2 =value2\n"
+	"key3 = value3\n"
+	"key4:value4\n"
+	"key5 :value5\n"
+	"key6 : value6\n"
+	"key7 value7\n",
+	false
+	},
 
 	{
 	"complex",
@@ -84,9 +104,9 @@ const struct test tests[]={
 	"\n"
 	"! then some keys\n"
 	"key1=value1\n"
-	"key2=value2\n"
+	"key2 = value2\n"
 	"key3=value3\n"
-	"key4=value4\n"
+	"key4 = value4\n"
 	"\n"
 	"# and finally some trailing comments\n",
 	false
