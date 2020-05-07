@@ -128,11 +128,13 @@ class loggerprivate {
 	private:
 		loggerlist	_logdestlist;
 		char		_indent;
+		uint8_t		_level;
 };
 
 logger::logger() {
 	pvt=new loggerprivate;
 	pvt->_indent='	';
+	pvt->_level=0;
 }
 
 logger::~logger() {
@@ -160,6 +162,14 @@ char logger::getIndent() {
 	return pvt->_indent;
 }
 
+void logger::setLogLevel(uint8_t level) {
+	pvt->_level=level;
+}
+
+uint8_t logger::getLogLevel() {
+	return pvt->_level;
+}
+
 char *logger::logHeader(const char *name) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
@@ -170,7 +180,11 @@ char *logger::logHeader(const char *name) {
 	return str.detachString();
 }
 
-void logger::start(const char *header, uint32_t indent, const char *string) {
+void logger::start(uint8_t level, const char *header,
+				uint32_t indent, const char *string) {
+	if (level<=pvt->_level) {
+		return;
+	}
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
@@ -182,8 +196,11 @@ void logger::start(const char *header, uint32_t indent, const char *string) {
 	write(str.getString());
 }
 
-void logger::write(const char *header, uint32_t indent,
-					const char *format, ...) {
+void logger::write(uint8_t level, const char *header,
+				uint32_t indent, const char *format, ...) {
+	if (level<=pvt->_level) {
+		return;
+	}
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
@@ -199,8 +216,12 @@ void logger::write(const char *header, uint32_t indent,
 	write(str.getString());
 }
 
-void logger::write(const char *header, uint32_t indent,
-					const char *format, va_list *argp) {
+void logger::write(uint8_t level, const char *header,
+				uint32_t indent, const char *format,
+				va_list *argp) {
+	if (level<=pvt->_level) {
+		return;
+	}
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
@@ -213,7 +234,10 @@ void logger::write(const char *header, uint32_t indent,
 	write(str.getString());
 }
 
-void logger::end(const char *header, uint32_t indent) {
+void logger::end(uint8_t level, const char *header, uint32_t indent) {
+	if (level<=pvt->_level) {
+		return;
+	}
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");

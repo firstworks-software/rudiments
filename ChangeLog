@@ -10,6 +10,7 @@
 	logger string-write works like printf now
 	logger indent uses uint32_t now
 	removed some unused logger::write() methods
+	added a log level to the logger class
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

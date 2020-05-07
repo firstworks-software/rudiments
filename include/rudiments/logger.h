@@ -123,6 +123,13 @@ class RUDIMENTS_DLLSPEC logger {
 		char	getIndent();
 
 
+		/** Sets the logging level to "level". */
+		void	setLogLevel(uint8_t level);
+
+		/** Returns the logging level. */
+		uint8_t	getLogLevel();
+
+
 		/** Returns a string containing the current date,
 		 *  followed by "name", followed by the process id in
 		 *  brackets.  For example:
@@ -141,28 +148,40 @@ class RUDIMENTS_DLLSPEC logger {
 		static char	*logHeader(const char *name);
 
 
-		/** Writes "header", followed by "indent" indentations,
- 		 *  followed by "string" followed by " {" as a single log
- 		 *  entry. */
-		void	start(const char *header, uint32_t indent,
-							const char *string);
+		/** If the current logging level is equal to or greater than
+		 * "level", then writes "header", followed by "indent"
+		 * indentations, followed by "string" followed by " {" as a
+		 * single log entry. */
+		void	start(uint8_t level,
+				const char *header,
+				uint32_t indent,
+				const char *string);
 
-		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "..." formatted using "format" as a single log
-		 *  entry. */
-		void	write(const char *header, uint32_t indent,
-						const char *format, ...);
+		/** If the current logging level is equal to or greater than
+		 *  "level", then writes "header", followed by "indent"
+		 *  indentations, followed by "..." formatted using "format" as
+		 *  a single log entry. */
+		void	write(uint8_t level,
+				const char *header,
+				uint32_t indent,
+				const char *format, ...);
 
-		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "va_list" formatted using "format" as a single
-		 *  log entry. */
-		void	write(const char *header, uint32_t indent,
-						const char *format,
-						va_list *argp);
+		/** If the current logging level is equal to or greater than
+		 *  "level", then writes "header", followed by "indent"
+		 *  indentations, followed by "va_list" formatted using "format"
+		 *  as a single log entry. */
+		void	write(uint8_t level,
+				const char *header,
+				uint32_t indent,
+				const char *format,
+				va_list *argp);
 
-		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "}" as a single log entry. */
-		void	end(const char *header, uint32_t indent);
+		/** If the current logging level is equal to or greater than
+ 		 *  "level", then writes "header", followed by "indent"
+ 		 *  indentations, followed by "}" as a single log entry. */
+		void	end(uint8_t level,
+				const char *header,
+				uint32_t indent);
 
 	#include <rudiments/private/logger.h>
 };
