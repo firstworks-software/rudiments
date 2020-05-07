@@ -153,6 +153,13 @@ class RUDIMENTS_DLLSPEC logger {
 						const char *format, ...);
 
 		/** Writes "header", followed by "indent" indentations,
+		 *  followed by "va_list" using "format" as a single log
+		 *  entry. */
+		void	write(const char *header, int32_t indent,
+						const char *format,
+						va_list *argp);
+
+		/** Writes "header", followed by "indent" indentations,
 		 *  followed by "character" as a single log entry. */
 		void	write(const char *header, int32_t indent,
 							char character);

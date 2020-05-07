@@ -199,6 +199,20 @@ void logger::write(const char *header, int32_t indent,
 	write(str.getString());
 }
 
+void logger::write(const char *header, int32_t indent,
+					const char *format, va_list *argp) {
+	stringbuffer	str;
+	if (charstring::length(header)) {
+		str.append(header)->append(" : ");
+	}
+	for (int32_t i=0; i<indent; i++) {
+		str.append(pvt->_indent);
+	}
+	str.writeFormatted(format,argp);
+	str.append("\n");
+	write(str.getString());
+}
+
 void logger::write(const char *header, int32_t indent, char character) {
 	stringbuffer	str;
 	if (charstring::length(header)) {
