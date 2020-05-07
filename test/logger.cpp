@@ -92,14 +92,17 @@ int main(int argc, const char **argv) {
 
 
 	// write various log messages (even though no destinations exist)
+	lg.write(header,0,"%d%s%d",1,"test",2);
 	lg.write(header,0,"test");
 	lg.write(header,0,'t');
 	lg.write(header,0,(int32_t)12345);
 	lg.write(header,0,123.45);
+	lg.write("",0,"%d%s%d",1,"test",2);
 	lg.write("",0,"test");
 	lg.write("",0,'t');
 	lg.write("",0,(int32_t)12345);
 	lg.write("",0,123.45);
+	lg.write(NULL,0,"%d%s%d",1,"test",2);
 	lg.write(NULL,0,"test");
 	lg.write(NULL,0,'t');
 	lg.write(NULL,0,(int32_t)12345);
@@ -115,14 +118,17 @@ int main(int argc, const char **argv) {
 
 	// write various log messages, with and without header
 	// (now destinations do exist)
+	lg.write(header,0,"%d%s%d",1,"test",2);
 	lg.write(header,0,"test");
 	lg.write(header,0,'t');
 	lg.write(header,0,(int32_t)12345);
 	lg.write(header,0,123.45);
+	lg.write("",0,"%d%s%d",1,"test",2);
 	lg.write("",0,"test");
 	lg.write("",0,'t');
 	lg.write("",0,(int32_t)12345);
 	lg.write("",0,123.45);
+	lg.write(NULL,0,"%d%s%d",1,"test",2);
 	lg.write(NULL,0,"test");
 	lg.write(NULL,0,'t');
 	lg.write(NULL,0,(int32_t)12345);
@@ -130,14 +136,17 @@ int main(int argc, const char **argv) {
 
 	// verify log file contents
 	stringbuffer	testcontents;
+	testcontents.append(header)->append(" : 1test2\n");
 	testcontents.append(header)->append(" : test\n");
 	testcontents.append(header)->append(" : t\n");
 	testcontents.append(header)->append(" : 12345\n");
 	testcontents.append(header)->append(" : 123.4500\n");
+	testcontents.append("1test2\n");
 	testcontents.append("test\n");
 	testcontents.append("t\n");
 	testcontents.append("12345\n");
 	testcontents.append("123.4500\n");
+	testcontents.append("1test2\n");
 	testcontents.append("test\n");
 	testcontents.append("t\n");
 	testcontents.append("12345\n");

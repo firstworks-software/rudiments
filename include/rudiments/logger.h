@@ -116,6 +116,13 @@ class RUDIMENTS_DLLSPEC logger {
 		void	removeAllLogDestinations();
 
 
+		/** Sets the character to be used when indenting to "ch". */
+		void	setIndent(char ch);
+
+		/** Returns the character currently used when indenting. */
+		char	getIndent();
+
+
 		/** Returns a string containing the current date,
 		 *  followed by "name", followed by the process id in
 		 *  brackets.  For example:
@@ -134,22 +141,35 @@ class RUDIMENTS_DLLSPEC logger {
 		static char	*logHeader(const char *name);
 
 
-		/** Writes "header", followed by "tabs" tabs, followed
-		 *  by "string" as a single log entry. */
-		void	write(const char *header, int32_t tabs,
+		/** Writes "header", followed by "indent" indentations,
+ 		 *  followed by "string" followed by " {" as a single log
+ 		 *  entry. */
+		void	start(const char *header, int32_t indent,
 							const char *string);
 
-		/** Writes "header", followed by "tabs" tabs, followed
-		 *  by "character" as a single log entry. */
-		void	write(const char *header, int32_t tabs, char character);
+		/** Writes "header", followed by "indent" indentations,
+		 *  followed by "..." using "format" as a single log entry. */
+		void	write(const char *header, int32_t indent,
+						const char *format, ...);
 
-		/** Writes "header", followed by "tabs" tabs, followed
-		 *  by "number" as a single log entry. */
-		void	write(const char *header, int32_t tabs, int32_t number);
+		/** Writes "header", followed by "indent" indentations,
+		 *  followed by "character" as a single log entry. */
+		void	write(const char *header, int32_t indent,
+							char character);
 
-		/** Writes "header", followed by "tabs" tabs, followed
-		 *  by "number" as a single log entry. */
-		void	write(const char *header, int32_t tabs, double number);
+		/** Writes "header", followed by "indent" indentations,
+		 *  followed by "number" as a single log entry. */
+		void	write(const char *header, int32_t indent,
+							int32_t number);
+
+		/** Writes "header", followed by "indent" indentations,
+		 *  followed by "number" as a single log entry. */
+		void	write(const char *header, int32_t indent,
+							double number);
+
+		/** Writes "header", followed by "indent" indentations,
+		 *  followed by "}" as a single log entry. */
+		void	end(const char *header, int32_t indent);
 
 	#include <rudiments/private/logger.h>
 };
