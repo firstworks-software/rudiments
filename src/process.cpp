@@ -404,7 +404,9 @@ pid_t process::spawn(const char *command,
 		if (child==-1 || child>0) {
 			return child;
 		}
-		return exec(command,args);
+		exec(command,args);
+		::exit(1);
+		return -1;
 	#elif defined(RUDIMENTS_HAVE_CREATE_PROCESS)
 
 		// get the fully qualified (and then shortened)
