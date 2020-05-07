@@ -170,25 +170,25 @@ char *logger::logHeader(const char *name) {
 	return str.detachString();
 }
 
-void logger::start(const char *header, int32_t indent, const char *string) {
+void logger::start(const char *header, uint32_t indent, const char *string) {
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
 	}
-	for (int32_t i=0; i<indent; i++) {
+	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_indent);
 	}
 	str.append(string)->append(" {\n");
 	write(str.getString());
 }
 
-void logger::write(const char *header, int32_t indent,
+void logger::write(const char *header, uint32_t indent,
 					const char *format, ...) {
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
 	}
-	for (int32_t i=0; i<indent; i++) {
+	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_indent);
 	}
 	va_list	argp;
@@ -199,13 +199,13 @@ void logger::write(const char *header, int32_t indent,
 	write(str.getString());
 }
 
-void logger::write(const char *header, int32_t indent,
+void logger::write(const char *header, uint32_t indent,
 					const char *format, va_list *argp) {
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
 	}
-	for (int32_t i=0; i<indent; i++) {
+	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_indent);
 	}
 	str.writeFormatted(format,argp);
@@ -213,48 +213,12 @@ void logger::write(const char *header, int32_t indent,
 	write(str.getString());
 }
 
-void logger::write(const char *header, int32_t indent, char character) {
+void logger::end(const char *header, uint32_t indent) {
 	stringbuffer	str;
 	if (charstring::length(header)) {
 		str.append(header)->append(" : ");
 	}
-	for (int32_t i=0; i<indent; i++) {
-		str.append(pvt->_indent);
-	}
-	str.append(character)->append("\n");
-	write(str.getString());
-}
-
-void logger::write(const char *header, int32_t indent, int32_t number) {
-	stringbuffer	str;
-	if (charstring::length(header)) {
-		str.append(header)->append(" : ");
-	}
-	for (int32_t i=0; i<indent; i++) {
-		str.append(pvt->_indent);
-	}
-	str.append(number)->append("\n");
-	write(str.getString());
-}
-
-void logger::write(const char *header, int32_t indent, double number) {
-	stringbuffer	str;
-	if (charstring::length(header)) {
-		str.append(header)->append(" : ");
-	}
-	for (int32_t i=0; i<indent; i++) {
-		str.append(pvt->_indent);
-	}
-	str.append(number)->append("\n");
-	write(str.getString());
-}
-
-void logger::end(const char *header, int32_t indent) {
-	stringbuffer	str;
-	if (charstring::length(header)) {
-		str.append(header)->append(" : ");
-	}
-	for (int32_t i=0; i<indent; i++) {
+	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_indent);
 	}
 	str.append("}\n");

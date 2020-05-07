@@ -8,6 +8,7 @@
 	added cronschedule class
 	added logger start/end methods
 	logger string-write works like printf now
+	logger indent uses uint32_t now
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

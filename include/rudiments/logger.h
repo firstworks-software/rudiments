@@ -144,39 +144,25 @@ class RUDIMENTS_DLLSPEC logger {
 		/** Writes "header", followed by "indent" indentations,
  		 *  followed by "string" followed by " {" as a single log
  		 *  entry. */
-		void	start(const char *header, int32_t indent,
+		void	start(const char *header, uint32_t indent,
 							const char *string);
 
 		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "..." using "format" as a single log entry. */
-		void	write(const char *header, int32_t indent,
+		 *  followed by "..." formatted using "format" as a single log
+		 *  entry. */
+		void	write(const char *header, uint32_t indent,
 						const char *format, ...);
 
 		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "va_list" using "format" as a single log
-		 *  entry. */
-		void	write(const char *header, int32_t indent,
+		 *  followed by "va_list" formatted using "format" as a single
+		 *  log entry. */
+		void	write(const char *header, uint32_t indent,
 						const char *format,
 						va_list *argp);
 
 		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "character" as a single log entry. */
-		void	write(const char *header, int32_t indent,
-							char character);
-
-		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "number" as a single log entry. */
-		void	write(const char *header, int32_t indent,
-							int32_t number);
-
-		/** Writes "header", followed by "indent" indentations,
-		 *  followed by "number" as a single log entry. */
-		void	write(const char *header, int32_t indent,
-							double number);
-
-		/** Writes "header", followed by "indent" indentations,
 		 *  followed by "}" as a single log entry. */
-		void	end(const char *header, int32_t indent);
+		void	end(const char *header, uint32_t indent);
 
 	#include <rudiments/private/logger.h>
 };
