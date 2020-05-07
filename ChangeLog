@@ -11,6 +11,7 @@
 	logger indent uses uint32_t now
 	removed some unused logger::write() methods
 	added a log level to the logger class
+	process::spawn()'s forked child exits if exec() fails now
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible
