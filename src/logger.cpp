@@ -182,7 +182,7 @@ char *logger::logHeader(const char *name) {
 
 void logger::start(uint8_t level, const char *header,
 				uint32_t indent, const char *string) {
-	if (level<=pvt->_level) {
+	if (level>pvt->_level) {
 		return;
 	}
 	stringbuffer	str;
@@ -198,7 +198,7 @@ void logger::start(uint8_t level, const char *header,
 
 void logger::write(uint8_t level, const char *header,
 				uint32_t indent, const char *format, ...) {
-	if (level<=pvt->_level) {
+	if (level>pvt->_level) {
 		return;
 	}
 	stringbuffer	str;
@@ -219,7 +219,7 @@ void logger::write(uint8_t level, const char *header,
 void logger::write(uint8_t level, const char *header,
 				uint32_t indent, const char *format,
 				va_list *argp) {
-	if (level<=pvt->_level) {
+	if (level>pvt->_level) {
 		return;
 	}
 	stringbuffer	str;
@@ -235,7 +235,7 @@ void logger::write(uint8_t level, const char *header,
 }
 
 void logger::end(uint8_t level, const char *header, uint32_t indent) {
-	if (level<=pvt->_level) {
+	if (level>pvt->_level) {
 		return;
 	}
 	stringbuffer	str;
