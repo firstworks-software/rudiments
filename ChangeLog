@@ -5,6 +5,7 @@
 	added \r\n support when parsing CSVs
 	integrated MVC base classes from other projects
 	added inisax/inidom and propsax/propdom classes
+	added cronschedule class
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible
