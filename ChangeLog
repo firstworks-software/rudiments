@@ -12,6 +12,7 @@
 	removed some unused logger::write() methods
 	added a log level to the logger class
 	process::spawn()'s forked child exits if exec() fails now
+	charstring::replace() methods are null-safe now
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

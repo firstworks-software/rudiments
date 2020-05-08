@@ -232,23 +232,30 @@ bool charstring::stripSet(char *str, const char *set) {
 }
 
 void charstring::replace(char *str, char oldchar, char newchar) {
-	for (char *ptr=str; *ptr; ptr++) {
-		if (*ptr==oldchar) {
-			*ptr=newchar;
+	if (str) {
+		for (char *ptr=str; *ptr; ptr++) {
+			if (*ptr==oldchar) {
+				*ptr=newchar;
+			}
 		}
 	}
 }
 
 void charstring::replace(char *str, const char *oldchars, char newchar) {
-	for (char *ptr=str; *ptr; ptr++) {
-		if (character::inSet(*ptr,oldchars)) {
-			*ptr=newchar;
+	if (str) {
+		for (char *ptr=str; *ptr; ptr++) {
+			if (character::inSet(*ptr,oldchars)) {
+				*ptr=newchar;
+			}
 		}
 	}
 }
 
 char *charstring::replace(const char *str, const char *oldstr,
 						const char *newstr) {
+	if (!str) {
+		return NULL;
+	}
 	stringbuffer	newstring;
 	ssize_t		oldstrlen=charstring::length(oldstr);
 	const char	*ptr=str;
@@ -270,6 +277,9 @@ char *charstring::replace(const char *str, const char *oldstr,
 char *charstring::replace(const char *str, const char * const *oldstrset,
 						ssize_t *oldstrlen,
 						const char * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
 
 	// search and replace
 	stringbuffer	newstring;
@@ -303,6 +313,9 @@ char *charstring::replace(const char *str,
 				regularexpression *from,
 				const char *to,
 				bool global) {
+	if (!str) {
+		return NULL;
+	}
 	
 	// declare buffer for new string
 	stringbuffer	newstring;
