@@ -267,6 +267,30 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  deleted.) */
 		const char	*getString(bool microseconds);
 
+
+		/** Returns a string of the format: "yyyy-mm-dd hh:mm:ss"
+		 *  for the date/time represented in the instance of the class.
+		 * 
+		 *  (Note that this method returns a pointer to an internal
+		 *  string which will be deleted if the class instance is
+		 *  deleted.) */
+		const char	*getSqlString();
+
+		/** Returns a string representing the date/time in the instance
+		 *  of the class.
+		 *
+		 *  If microseconds is false then the string is of the format:
+		 *  "yyyy-mm-dd hh:mm:ss"
+		 *
+		 *  If microseconds is true then the string is of the format:
+		 *  "yyyy-mm-dd hh:mm:ss.mmm"
+		 * 
+		 *  (Note that this method returns a pointer to an internal
+		 *  string which will be deleted if the class instance is
+		 *  deleted.) */
+		const char	*getSqlString(bool microseconds);
+
+
 		/** Returns the number of seconds since 1970 (the epoch). */
 		time_t		getEpoch() const;
 
@@ -329,6 +353,21 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  be set to valid values.  Otherwise GMT is assumed. */
 		static time_t	getEpoch(const void *tmstruct);
 
+		/** FIXME: document... */
+		static bool	parse(const char *datetime,
+					bool ddmm, bool yyyyddmm,
+					const char *datedelimiters,
+					int16_t *year, int16_t *month,
+					int16_t *day, int16_t *hour,
+					int16_t *minute, int16_t *second,
+					int32_t *microsecond, bool *isnegative);
+
+		/** FIXME: document... */
+		static char	*formatAs(const char *format,
+					int16_t year, int16_t month,
+					int16_t day, int16_t hour,
+					int16_t minute, int16_t second,
+					int32_t microsecond, bool isnegative);
 
 		/** Many of the functions that the datetime class uses
 		 *  internally are not reentrant and thus not thread-safe.

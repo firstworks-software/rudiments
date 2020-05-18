@@ -17,6 +17,10 @@
 
 		const char	*getTzName(uint8_t index);
 
+		static int16_t	adjustHour(int16_t hour,
+						const char *timestring);
+		static int32_t	fractionToMicroseconds(const char *fraction);
+
 		static bool	acquireLock();
 		static bool	releaseLock();
 
