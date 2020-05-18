@@ -1167,6 +1167,8 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 			int16_t *hour, int16_t *minute, int16_t *second,
 			int32_t *microsecond, bool *isnegative) {
 
+	// FIXME: handle timezone...
+
 	bool	supportslashdelimiteddate=
 			charstring::contains(datedelimiters,'/');
 	bool	supportdashdelimiteddate=
