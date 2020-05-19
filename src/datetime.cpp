@@ -1169,15 +1169,6 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 	// FIXME: handle timezone...
 
-	bool	supportslashdelimiteddate=
-			charstring::contains(datedelimiters,'/');
-	bool	supportdashdelimiteddate=
-			charstring::contains(datedelimiters,'-');
-	bool	supportdotdelimiteddate=
-			charstring::contains(datedelimiters,'.');
-	bool	supportcolondelimiteddate=
-			charstring::contains(datedelimiters,':');
-
 	// initialize date/time parts
 	*year=-1;
 	*month=-1;
@@ -1187,6 +1178,20 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 	*second=-1;
 	*microsecond=-1;
 	*isnegative=false;
+
+	// bail if datetime is NULL
+	if (!datetime) {
+		return true;
+	}
+
+	bool	supportslashdelimiteddate=
+			charstring::contains(datedelimiters,'/');
+	bool	supportdashdelimiteddate=
+			charstring::contains(datedelimiters,'-');
+	bool	supportdotdelimiteddate=
+			charstring::contains(datedelimiters,'.');
+	bool	supportcolondelimiteddate=
+			charstring::contains(datedelimiters,':');
 
 	// dates can be formatted very differently
 
