@@ -128,12 +128,20 @@ bool csvsax::parse() {
 		}
 
 		// at the very beginning of the file, skip leading \n or \r
-		// and return an error if the file/string was empty
 		if (pvt->_state==HEADER_START) {
 			if (ch=='\n' || ch=='\r') {
 				continue;
 			} else if (ch=='\0') {
-				return false;
+				// if the file was empty then create an empty
+				// header and empty body
+				headerStart();
+				pvt->_state=HEADER_END;
+				headerEnd();
+				pvt->_state=BODY_START;
+				bodyStart();
+				pvt->_state=BODY_END;
+				bodyEnd();
+				return true;
 			}
 		}
 
