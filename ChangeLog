@@ -15,6 +15,7 @@
 	charstring::replace() methods are null-safe now
 	migrated datetime::parse() and datetime::formatAs() from sqlrelay
 	csvsax accepts empty (or all whitespace) files now
+	logger::write() is null-safe now
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

@@ -208,10 +208,12 @@ void logger::write(uint8_t level, const char *header,
 	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_indent);
 	}
-	va_list	argp;
-	va_start(argp,format);
-	str.writeFormatted(format,&argp);
-	va_end(argp);
+	if (format) {
+		va_list	argp;
+		va_start(argp,format);
+		str.writeFormatted(format,&argp);
+		va_end(argp);
+	}
 	str.append("\n");
 	write(str.getString());
 }
