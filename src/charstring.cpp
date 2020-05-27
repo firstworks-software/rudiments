@@ -1912,6 +1912,12 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	uint64_t	inputindex=0;
 	while (inputindex<inputsize) {
 
+		// ignore whitespace
+		if (character::isWhitespace(input[inputindex])) {
+			inputindex++;
+			continue;
+		}
+
 		data[0]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
 		data[1]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
 		data[2]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
