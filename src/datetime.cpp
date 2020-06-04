@@ -3,6 +3,7 @@
 
 #include <rudiments/datetime.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/error.h>
 #if defined(RUDIMENTS_HAVE_RTC_SET_TIME) || \
@@ -1161,6 +1162,10 @@ int32_t datetime::fractionToMicroseconds(const char *fraction) {
 	return val;
 }
 
+static const char *_dayofweekname[]={
+	"Mon","Tue","Wed","Thu","Fri","Sat","Sun",NULL
+};
+
 bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 			const char *datedelimiters,
 			int16_t *year, int16_t *month, int16_t *day,
@@ -1194,19 +1199,33 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 			charstring::contains(datedelimiters,':');
 
 	// dates can be formatted very differently
-
-	// split on a space
-	char		**parts;
-	uint64_t	partcount;
-	charstring::split(datetime," ",1,true,&parts,&partcount);
-
 	// there should be:
 	// one (date/time only),
 	// two (date and time),
 	// three (eg. Feb 02 2012) parts,
 	// three (eg. 2/2/2012 1:03:04 AM) parts,
 	// or four (eg. Feb 02 2012 01:03:04:000AM)
+	// or five (eg. Fri, Feb 02 2012 01:03:04:000AM)
 	// parts
+
+	// in the case of a five-part date (starting with the day-of-week),
+	// just skip the day-of-week and handle as 4-part
+	for (const char **dow=_dayofweekname; *dow; dow++) {
+		if (!charstring::compare(datetime,*dow,3) &&
+					*(datetime+3)==',') {
+			datetime+=4;
+			while (*datetime &&
+				character::isWhitespace(*datetime)) {
+				datetime++;
+			}
+			break;
+		}
+	}
+
+	// split on a space
+	char		**parts;
+	uint64_t	partcount;
+	charstring::split(datetime," ",1,true,&parts,&partcount);
 	if (!partcount || partcount>4) {
 		for (uint64_t i=0; i<partcount; i++) {
 			delete[] parts[i];
@@ -1234,13 +1253,21 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 	// sybase and ms sql server return these
 	if (partcount==3 || partcount==4) {
 
-		// part 1 is the month
+		// part 1 could be the day or month
+		uint16_t	monthindex=0;
+		uint16_t	dayindex=1;
+		if (charstring::isNumber(parts[0])) {
+			dayindex=0;
+			monthindex=1;
+		}
+
+		// get the month
 		*month=0;
 		for (int i=0; shortmonths[i]; i++) {
 			if (!charstring::compareIgnoringCase(
-						parts[0],shortmonths[i]) ||
+					parts[monthindex],shortmonths[i]) ||
 				!charstring::compareIgnoringCase(
-						parts[0],longmonths[i])) {
+					parts[monthindex],longmonths[i])) {
 				*month=i+1;
 			}
 		}
@@ -1248,8 +1275,8 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 			retval=false;
 		}
 
-		// part 2 is the day
-		*day=charstring::toInteger(parts[1]);
+		// get the day
+		*day=charstring::toInteger(parts[dayindex]);
 
 		// part 3 is the year
 		*year=charstring::toInteger(parts[2]);
