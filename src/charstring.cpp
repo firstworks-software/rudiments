@@ -1929,6 +1929,13 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	}
 	(*output)[outputindex]='\0';
 
+	// reset the outputsize
+	(*outputsize)=outputindex+1;
+
+	// NOTE: The below seemed correct at one point, but doesn't appear to
+	// be now that we're skipping whitespace in the loop above.  Lets keep
+	// it around just in case though.
+
 	// the output could contain some trailing \0's that are artifacts of
 	// the ='s in the encoded data, no big deal if the decoded data is
 	// supposed to be a string, but not ok for binary data.  Reduce
@@ -1936,7 +1943,7 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 
 	// there can be at most 2 trailing ='s, each equal represents an
 	// additional trailing NULL, reduce outputsize accordingly
-	(*outputsize)-=(input[inputsize-1]=='=')+(input[inputsize-2]=='=');
+	//(*outputsize)-=(input[inputsize-1]=='=')+(input[inputsize-2]=='=');
 }
 
 char *charstring::hexEncode(const unsigned char *input) {
