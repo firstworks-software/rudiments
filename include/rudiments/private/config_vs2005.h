@@ -148,6 +148,9 @@
 /* SSL has dNSName */
 /* #undef RUDIMENTS_HAS_SSL_DNSNAME */
 
+/* Some systems have strftime */
+#define RUDIMENTS_HAS_STRFTIME 1
+
 /* Rudiments supports SSPI */
 #define RUDIMENTS_HAS_SSPI 1
 
