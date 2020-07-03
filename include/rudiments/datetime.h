@@ -147,6 +147,11 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  class. */
 		int32_t	getDayOfYear() const;
 
+		/** Returns the week of the year component (1-52) of the
+		 *  date/time currently represented in the instance of the
+		 *  class. */
+		int32_t	getWeekOfYear() const;
+
 		/** Returns the year component (including the century) of
 		 *  the date/time currently represented in the instance of the
 		 *  class. */

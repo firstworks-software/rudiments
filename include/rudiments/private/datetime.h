@@ -6,6 +6,7 @@
 		void	clear();
 
 		bool	getBrokenDownTimeFromEpoch();
+		void	setWeekOfYear(void *tms);
 		bool	normalize();
 		void	processTZ(void *tms);
 

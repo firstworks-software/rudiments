@@ -51,6 +51,7 @@ class datetimeprivate {
 		int32_t	_year;
 		int32_t	_wday;
 		int32_t	_yday;
+		int32_t	_yweek;
 		int32_t	_isdst;
 
 		char	*_zone;
@@ -102,6 +103,7 @@ void datetime::init() {
 	pvt->_year=0;
 	pvt->_wday=0;
 	pvt->_yday=0;
+	pvt->_yweek=0;
 	pvt->_isdst=0;
 	pvt->_zone=NULL;
 	pvt->_gmtoff=0;
@@ -220,6 +222,7 @@ bool datetime::initialize(const void *tmstruct) {
 	pvt->_year=tms->tm_year;
 	pvt->_wday=tms->tm_wday;
 	pvt->_yday=tms->tm_yday;
+	pvt->_yweek=0;
 	pvt->_isdst=tms->tm_isdst;
 
 	#if defined(RUDIMENTS_HAS___TM_ZONE)
@@ -305,6 +308,10 @@ int32_t datetime::getDayOfWeek() const {
 
 int32_t datetime::getDayOfYear() const {
 	return pvt->_yday+1;
+}
+
+int32_t datetime::getWeekOfYear() const {
+	return pvt->_yweek;
 }
 
 int32_t datetime::getYear() const {
@@ -720,7 +727,18 @@ bool datetime::getBrokenDownTimeFromEpoch() {
 	pvt->_wday=tms->tm_wday;
 	pvt->_yday=tms->tm_yday;
 	processTZ((void *)tms);
+
+	setWeekOfYear((void *)tms);
+
 	return (pvt->_epoch!=-1);
+}
+
+void datetime::setWeekOfYear(void *tms) {
+	#ifdef RUDIMENTS_HAS_STRFTIME
+	char	yweek[3];
+	strftime(yweek,sizeof(yweek),"%W",(struct tm *)tms);
+	pvt->_yweek=charstring::toInteger(yweek);
+	#endif
 }
 
 bool datetime::normalize() {
@@ -772,6 +790,8 @@ bool datetime::normalize() {
 	restoreTZ(oldzone);
 
 	releaseLock();
+
+	setWeekOfYear((void *)&tms);
 
 	return retval;
 }

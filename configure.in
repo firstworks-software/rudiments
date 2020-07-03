@@ -1500,6 +1500,13 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #include <time.h>],
 _get_tzname(NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAS__GET_TZNAME,1,Some systems have _get_tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for strftime)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>],
+strftime(NULL,0,"",NULL);,AC_DEFINE(RUDIMENTS_HAS_STRFTIME,1,Some systems have strftime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

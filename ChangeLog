@@ -18,6 +18,7 @@
 	logger::write() is null-safe now
 	base64encode is whitespace-safe now
 	added support for 5-part dates and day-month-year 4-part dates
+	added datetime::getWeekOfYear
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

@@ -147,6 +147,9 @@
 /* SSL has dNSName */
 #undef RUDIMENTS_HAS_SSL_DNSNAME
 
+/* Some systems have strftime */
+#undef RUDIMENTS_HAS_STRFTIME
+
 /* Rudiments supports threads */
 #undef RUDIMENTS_HAS_THREADS
 

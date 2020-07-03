@@ -44,6 +44,7 @@ int main(int argc, const char **argv) {
 	test("day of month",dt.getDayOfMonth()==8);
 	test("day of week",dt.getDayOfWeek()==2);
 	test("day of year",dt.getDayOfYear()==39);
+	test("week of year",dt.getWeekOfYear()==6);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",!dt.isDaylightSavingsTime());
 
@@ -84,6 +85,7 @@ int main(int argc, const char **argv) {
 	test("day of month",dt.getDayOfMonth()==8);
 	test("day of week",dt.getDayOfWeek()==6);
 	test("day of year",dt.getDayOfYear()==99);
+	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",dt.isDaylightSavingsTime());
 	test("time zone",
@@ -112,6 +114,7 @@ int main(int argc, const char **argv) {
 	test("day of month",dt.getDayOfMonth()==8);
 	test("day of week",dt.getDayOfWeek()==6);
 	test("day of year",dt.getDayOfYear()==99);
+	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",dt.isDaylightSavingsTime());
 stdoutput.printf("%s\n",dt.getTimeZoneString());
@@ -142,6 +145,7 @@ stdoutput.printf("%s\n",dt.getTimeZoneString());
 	test("day of month",dt.getDayOfMonth()==8);
 	test("day of week",dt.getDayOfWeek()==6);
 	test("day of year",dt.getDayOfYear()==99);
+	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",dt.isDaylightSavingsTime());
 	test("time zone",
