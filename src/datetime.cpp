@@ -738,6 +738,8 @@ void datetime::setWeekOfYear(void *tms) {
 	char	yweek[3];
 	strftime(yweek,sizeof(yweek),"%W",(struct tm *)tms);
 	pvt->_yweek=charstring::toInteger(yweek);
+	#else
+		#error no strftime or anything like it
 	#endif
 }
 
