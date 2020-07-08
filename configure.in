@@ -3075,6 +3075,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 mkstemp(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for mkdtemp)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+mkdtemp(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKDTEMP,1,Some systems have mkdtemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 HAS_FSYNC=""
 AC_MSG_CHECKING(for fsync)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H

@@ -65,6 +65,18 @@ class RUDIMENTS_DLLSPEC directory {
 		/** Creates a new directory "path" with permissions "perms". */
 		static bool	create(const char *path, mode_t perms);
 
+		/** Creates a (presumably) temporary directory using
+		 *  "templatedirname" as a template.  The permissions of the
+		 *  directory will be set to "perms".
+		 *
+		 *  The last 6 characters of "templatedirname" must be XXXXXX
+		 *  and "templatedirname" will be modified to contain the name
+		 *  of the directory that was actually created.
+		 *
+		 *  Returns true on success and false on failure. */
+		static bool	createTemporaryDirectory(
+					char *templatedirname, mode_t perms);
+
 		/** Removes the directory "path", if it is empty. */
 		static bool	remove(const char *path);
 

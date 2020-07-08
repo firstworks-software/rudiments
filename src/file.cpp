@@ -1733,13 +1733,22 @@ char *file::basename(const char *filename) {
 	return retval;
 }
 
-char *file::basename(const char *filename, const char *suffix) {
+char *file::basename(const char *filename, const char *ext) {
 	char	*retval=basename(filename);
-	char	*ptr=charstring::findLast(retval,suffix);
-	if (!(*(ptr+charstring::length(suffix)))) {
+	char	*ptr=charstring::findLast(retval,ext);
+	if (!(*(ptr+charstring::length(ext)))) {
 		(*ptr)='\0';
 	}
 	return retval;
+}
+
+char *file::extension(const char *filename) {
+	const char	*ext="";
+	const char	*dot=charstring::findLast(filename,'.');
+	if (dot) {
+		ext=dot;
+	}
+	return charstring::duplicate(ext);
 }
 
 char *file::eightDotThree(const char *filename) {

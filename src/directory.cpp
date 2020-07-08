@@ -8,6 +8,9 @@
 #ifdef RUDIMENTS_HAVE_MKDIR_1
 	#include <rudiments/permissions.h>
 #endif
+#if defined(RUDIMENTS_HAVE_MKDTEMP)
+	#include <rudiments/file.h>
+#endif
 
 // for DIR
 #if defined(RUDIMENTS_HAVE_DIRENT_H)
@@ -286,6 +289,60 @@ bool directory::create(const char *path, mode_t perms) {
 		#else
 			#error no mkdir or anything like it
 		#endif
+	#endif
+}
+
+bool directory::createTemporaryDirectory(char *templatedirname, mode_t perms) {
+	#if defined(RUDIMENTS_HAVE_MKDTEMP)
+		bool	result;
+		error::clearError();
+		do {
+			result=mkdtemp(templatedirname);
+		} while (!result && error::getErrorNumber()==EINTR);
+		if (result && !file::setPermissions(templatedirname,perms)) {
+			remove(templatedirname);
+			result=false;
+		}
+		return result;
+	#else
+		// sanity check on templatedirname
+		char	*lastsix=templatedirname+
+				charstring::length(templatedirname)-6;
+		if (charstring::compare(lastsix,"XXXXXX")) {
+			error::setErrorNumber(EINVAL);
+			return false;
+		}
+
+		// replace X's with random characters...
+
+		// seed the random number
+		uint32_t	seed=randomnumber::getSeed();
+
+		// for each of the 6 characters...
+		for (uint8_t i=0; i<6; i++) {
+
+			// get a random number, scale it to 0-60
+			seed=randomnumber::generateNumber(seed);
+			char	ch=(char)randomnumber::scaleNumber(seed,0,59);
+
+			// translate...
+			//  0-9  -> '0' - '9'
+			// 10-34 -> 'A' - 'Z'
+			// 35-59 -> 'a' - 'z'
+			if (ch<10) {
+				ch=ch+'0';
+			} else if (ch<35) {
+				ch=ch-10+'A';
+			} else {
+				ch=ch-35+'a';
+			}
+
+			// set character
+			lastsix[i]=ch;
+		}
+
+		// create the directory
+		return create(templatedirname,perms);
 	#endif
 }
 

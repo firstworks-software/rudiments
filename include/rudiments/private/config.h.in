@@ -822,6 +822,9 @@
 /* Some systems have mkdir */
 #undef RUDIMENTS_HAVE_MKDIR_2
 
+/* Some systems have mkdtemp */
+#undef RUDIMENTS_HAVE_MKDTEMP
+
 /* Some systems have mkfifo */
 #undef RUDIMENTS_HAVE_MKFIFO
 

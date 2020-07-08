@@ -880,8 +880,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns true on success and false on failure. */
 		static bool	createFifo(const char *filename, mode_t perms);
 
-		/** Creates a temporary file using "templatefilename"
-		 *  as a template.  The last 6 characters of
+		/** Creates a (presumably) temporary file using
+		 *  "templatefilename" as a template.  The last 6 characters of
 		 *  "templatefilename" must be XXXXXX and
 		 *  "templatefilename" will be modified to contain the
 		 *  name of the file that was actually created.
@@ -1067,12 +1067,18 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		static char	*basename(const char *filename);
 
 		/** Returns the non-directory portion of
-		 *  "filename", truncating "suffix".
+		 *  "filename", truncating "ext".
 		 *  This method allocates a buffer internally
 		 *  and returns it.  The calling program must
 		 *  deallocate the buffer. */
 		static char	*basename(const char *filename,
-						const char *suffix);
+						const char *ext);
+
+		/** Returns the portion of "filename" after the last dot,
+ 		 *  including the dot, or an empty string if the filename
+ 		 *  contains no dot.  The output should be suitable to be
+ 		 *  passed in as the "ext" parameter when calling basename().*/
+		static char	*extension(const char *filename);
 
 		/** Translates the basename of "filename" to an 8.3 format,
 		 *  performing substitutions in the same way that Windows
