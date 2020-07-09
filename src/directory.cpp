@@ -8,9 +8,8 @@
 #ifdef RUDIMENTS_HAVE_MKDIR_1
 	#include <rudiments/permissions.h>
 #endif
-#if defined(RUDIMENTS_HAVE_MKDTEMP)
-	#include <rudiments/file.h>
-#endif
+#include <rudiments/file.h>
+#include <rudiments/sys.h>
 
 // for DIR
 #if defined(RUDIMENTS_HAVE_DIRENT_H)
@@ -357,6 +356,45 @@ bool directory::remove(const char *path) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#endif
+}
+
+bool directory::removeTree(const char *path) {
+
+	// open the path
+	directory	dir;
+	if (!dir.open(path)) {
+		return false;
+	}
+
+	// Run through the directory.  For each file, try to file::remove()
+	// first.  If that fails, then try to removeTree() it as a directory.
+	// If that fails, move on.  If anything wasn't deletable, then the
+	// final remove will fail because the directory is non-empty.
+	dir.rewind();
+	for (;;) {
+		char	*filename=dir.read();
+		if (!filename) {
+			break;
+		}
+		if (!charstring::compare(filename,".") ||
+			!charstring::compare(filename,"..")) {
+			continue;
+		}
+		char	*p;
+		charstring::printf(&p,"%s%c%s",path,
+					sys::getDirectorySeparator(),
+					filename);
+		if (!file::remove(p)) {
+			removeTree(p);
+		}
+		delete[] p;
+	}
+
+	// close the directory
+	dir.close();
+
+	// remove the directory itself
+	return remove(path);
 }
 
 char *directory::getCurrentWorkingDirectory() {

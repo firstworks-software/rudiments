@@ -21,6 +21,7 @@
 	added datetime::getWeekOfYear
 	added file::extension
 	added directory::createTemporaryDirectory
+	added directory::removeTree
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible

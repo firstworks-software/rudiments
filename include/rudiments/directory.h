@@ -80,6 +80,9 @@ class RUDIMENTS_DLLSPEC directory {
 		/** Removes the directory "path", if it is empty. */
 		static bool	remove(const char *path);
 
+		/** Removes the directory "path", and its contents. */
+		static bool	removeTree(const char *path);
+
 		/** Returns the current working directory.
 		 *
 		 *  This methods allocates a buffer internally
