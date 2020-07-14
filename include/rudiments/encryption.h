@@ -19,32 +19,76 @@ enum encryptionerror_t {
 class RUDIMENTS_DLLSPEC encryption {
 	public:
 		/** Creates an instance of the encryption class. */
-		encryption() {};
+		encryption();
 
 		/** Deletes this instance of the encryption class. */
-		virtual	~encryption() {};
+		virtual	~encryption();
+
+		/** Sets the key used for encryption/decryption to the first
+		 *  "keysize" bytes of "key".  Returns true on success and
+		 *  false on failure.  The most common failure is that "keysize"
+		 *  is not the correct number of bytes.  The method getKeySize()
+		 *  returns the correct number of bytes for the key. */
+		virtual bool	setKey(const unsigned char *key,
+							size_t keysize);
+
+		/** Returns the key currently used for encryption/decryption.
+		 *  If no key has been set, then this will be a block of 0's. */
+		virtual unsigned char	*getKey();
+
+		/** Returns the number of bytes in the key. */
+		virtual uint32_t	getKeySize();
+
+		/** Sets the initialization vector used for
+		 *  encryption/decryption to the first "ivsize" bytes of "iv".
+		 *  Returns true on success and false on failure.  The most
+		 *  common failure is that "keysize" is not the correct number
+		 *  of bytes.  The method getKeySize() returns the correct
+		 *  number of bytes for the key. */
+		virtual bool	setIv(const unsigned char *iv, size_t ivsize);
+
+		/** Returns the initialization vector currently used for
+		 *  encryption/decryption.  If no initialization vector has
+		 *  been set, then this will be a block of 0's. */
+		virtual unsigned char	*getIv();
+
+		/** Returns the number of bytes in the initialization vector. */
+		virtual uint32_t	getIvSize();
 
 		/** Appends "length" bytes of "data" to the data to be
-		 *  encrypted.  Returns true on success or false if an error
-		 *  occurred. */
-		virtual	bool	append(const unsigned char *data,
-							uint32_t length)=0;
+		 *  encrypted/decrypted.  Returns true on success or false if
+		 *  an error occurred. */
+		virtual bool	append(const unsigned char *data,
+							uint32_t length);
 
-		/** Returns the current encrypted on success or NULL if an error
-		 *  occurred.  Note that the current encryption will be an empty
-		 *  string if no data has been appended yet. */
-		virtual	const unsigned char	*getEncryptedData()=0;
+		/** Interprets the current data as unencrypted.  Encrypts the
+		 *  current data.  Returns the encrypted data on success or
+		 *  NULL if an error occurred.  Note that the encrypted data
+		 *  returned will be an empty string if no data has been
+		 *  appended yet. */
+		virtual const unsigned char	*getEncryptedData()=0;
 
-		/** Returns the length of the encrypted data in bytes. */
-		virtual	uint64_t	getEncryptedDataLength()=0;
+		/** Interprets the current data as encrypted.  Decrypts the
+		 *  current data.  Returns the decrypted data on success or
+		 *  NULL if an error occurred.  Note that the decrypted data
+		 *  returned will be an empty string if no data has been
+		 *  appended yet. */
+		virtual const unsigned char	*getDecryptedData()=0;
 
-		/** Clears the current encrypted data and any data that had
- 		 *  previously been appended.  Returns true on success or
+		/** Returns the length of the encrypted/decrypted data in
+		 *  bytes. */
+		virtual	uint64_t	getDataLength();
+
+		/** Clears the current encrypted/decrypted data and any data
+		 *  that had previously been appended.  Does not clear the 
+		 *  key or initialization vector.  Returns true on success or
  		 *  false if an error occurred. */
-		virtual	bool	clear()=0;
+		virtual	bool	clear();
 
 		/** Returns the most recent error. */
-		virtual	encryptionerror_t	getError()=0;
+		virtual	encryptionerror_t	getError();
+	
+	#include <rudiments/private/encryption.h>
 };
 
 #endif

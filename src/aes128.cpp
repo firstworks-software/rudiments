@@ -3,6 +3,7 @@
 
 #include <rudiments/aes128.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/bytebuffer.h>
 
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/evp.h>
@@ -16,172 +17,118 @@ class aes128private {
 	friend class aes128;
 	private:
 		#if defined(RUDIMENTS_HAS_SSL)
-			bool		_first;
 			EVP_CIPHER_CTX	*_context;
-			unsigned char	_key[16];
-			unsigned char	_iv[AES_BLOCK_SIZE];
-			unsigned char	*_out;
-			int		_outlen;
 		#else
-			SHA1Context	_context;
-			uint8_t	_hash[SHA1HashSize];
+			#error implement this...
 		#endif
-		encryptionerror_t	_err;
+		bool	_dirty;
+		bool	_encrypted;
 };
 
 aes128::aes128() : encryption() {
 	pvt=new aes128private;
-	pvt->_first=true;
-	pvt->_context=NULL;
-	bytestring::zero(pvt->_key,sizeof(pvt->_key));
-	pvt->_out=NULL;
-	pvt->_outlen=0;
-	clear();
+	#if defined(RUDIMENTS_HAS_SSL)
+		pvt->_context=NULL;
+	#else
+		#error implement this...
+	#endif
+	pvt->_dirty=true;
+	pvt->_encrypted=true;
 }
 
 aes128::~aes128() {
-	if (pvt->_context) {
-		EVP_CIPHER_CTX_free(pvt->_context);
-	}
-	delete[] pvt->_out;
-	delete pvt;
-}
-
-void aes128::setKey(const unsigned char *key) {
-	bytestring::copy(pvt->_key,key,sizeof(pvt->_key));
-}
-
-unsigned char *aes128::getKey() {
-	return pvt->_key;
-}
-
-uint32_t aes128::getKeySize() {
-	return sizeof(pvt->_key);
-}
-
-void aes128::setIv(const unsigned char *iv) {
-	bytestring::copy(pvt->_iv,iv,sizeof(pvt->_iv));
-}
-
-unsigned char *aes128::getIv() {
-	return pvt->_iv;
-}
-
-uint32_t aes128::getIvSize() {
-	return sizeof(pvt->_iv);
-}
-
-bool aes128::append(const unsigned char *data, uint32_t length) {
-
-	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (pvt->_first) {
+		if (pvt->_context) {
+			EVP_CIPHER_CTX_free(pvt->_context);
+		}
+	#else
+		#error implement this...
+	#endif
+}
 
+const unsigned char *aes128::getEncryptedData() {
+	return getData(true);
+}
+
+const unsigned char *aes128::getDecryptedData() {
+	return getData(false);
+}
+
+const unsigned char *aes128::getData(bool encrypt) {
+
+	// set the dirty flag true if we're doing a different operation
+	// (encryption vs. decryption) than we're currently configured to do
+	pvt->_dirty=(pvt->_encrypted && !encrypt);
+
+	// reset the error
+	setError(ENCRYPTION_ERROR_SUCCESS);
+
+	// re-init if the dirty flag is set
+	if (pvt->_dirty) {
+
+		#if defined(RUDIMENTS_HAS_SSL)
 			pvt->_context=EVP_CIPHER_CTX_new();
 
 			if (!EVP_CipherInit_ex(pvt->_context,
 						EVP_aes_128_cbc(),
 						NULL,
-						pvt->_key,
-						pvt->_iv,
-						1)) {
+						getKey(),
+						getIv(),
+						(encrypt)?1:0)) {
 				EVP_CIPHER_CTX_free(pvt->_context);
 				setError(ERR_GET_REASON(ERR_get_error()));
-				return false;
+				return NULL;
 			}
+		#else
+			#error implement this...
+		#endif
 
-			pvt->_first=false;
-		}
+		pvt->_dirty=false;
+		pvt->_encrypted=encrypt;
+	}
 
-		// grow the output buffer as necessary
-		// FIXME: use a memorypool?
-		if (!pvt->_out) {
-			pvt->_out=new unsigned char
-						[length+EVP_MAX_BLOCK_LENGTH];
-		} else {
-			unsigned char	*temp=new unsigned char
-						[pvt->_outlen+length+
-						EVP_MAX_BLOCK_LENGTH];
-			bytestring::copy(temp,pvt->_out,pvt->_outlen);
-			delete[] pvt->_out;
-			pvt->_out=temp;
-		}
+	// allocate the output buffer as necessary
+	reallocateOut(getIn()->getSize()+
+			#if defined(RUDIMENTS_HAS_SSL)
+				EVP_MAX_BLOCK_LENGTH
+			#else
+				#error implement this...
+			#endif
+			);
+	
 
-		if (!EVP_CipherUpdate(pvt->_context,
-					pvt->_out,&pvt->_outlen,
-					data,length)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
-		return true;
-	#else
-		int	result=SHA1Input(pvt->_context,data,length);
-		setError(result);
-		return (result==shaSuccess);
-	#endif
-}
-
-const unsigned char *aes128::getEncryptedData() {
-	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
+	// encrypt and finalize the data
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!EVP_CipherFinal_ex(pvt->_context,
-					pvt->_out,&pvt->_outlen)) {
+		if (!EVP_CipherUpdate(pvt->_context,
+						getOut(),
+						(int *)getOutLengthPointer(),
+						getIn()->getBuffer(),
+						getIn()->getSize()) ||
+			!EVP_CipherFinal_ex(pvt->_context,
+						getOut(),
+						(int *)getOutLengthPointer())) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return NULL;
 		}
-		return pvt->_out;
+		return getOut();
 	#else
-		int	result=SHA1Result(&pvt->_context,pvt->_hash);
-		setError(result);
-		if (result==shaSuccess) {
-			return pvt->_hash;
-		}
-		return NULL;
-	#endif
-}
-
-uint64_t aes128::getEncryptedDataLength() {
-	#if defined(RUDIMENTS_HAS_SSL)
-		return pvt->_outlen;
-	#else
-		return SHA1HashSize;
+		#error implement this...
 	#endif
 }
 
 bool aes128::clear() {
-	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
-	delete[] pvt->_out;
-	pvt->_out=NULL;
-	pvt->_outlen=0;
-	#if defined(RUDIMENTS_HAS_SSL)
-		return true;
-	#else
-		int	result=SHA1Reset(&pvt->_context);
-		setError(result);
-		return (result==shaSuccess);
-	#endif
-}
-
-encryptionerror_t aes128::getError() {
-	return pvt->_err;
+	encryption::clear();
+	pvt->_dirty=true;
+	return true;
 }
 
 void aes128::setError(int32_t err) {
 	#if defined(RUDIMENTS_HAS_SSL)
+		encryption::setError(ENCRYPTION_ERROR_NULL);
 		// FIXME: implement this...
-		pvt->_err=ENCRYPTION_ERROR_NULL;
-		// clear the queue
+		// (currently just clears the queue)
 		while (ERR_get_error()) {}
 	#else
-		switch (err) {
-			case shaNull:
-				pvt->_err=ENCRYPTION_ERROR_NULL;
-			case shaInputTooLong:
-				pvt->_err=ENCRYPTION_ERROR_INPUT_TOO_LONG;
-			case shaStateError:
-				pvt->_err=ENCRYPTION_ERROR_STATE_ERROR;
-			default:
-				pvt->_err=ENCRYPTION_ERROR_SUCCESS;
-		}
+		#error implement this...
 	#endif
 }
