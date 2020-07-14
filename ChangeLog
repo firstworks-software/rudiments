@@ -22,6 +22,8 @@
 	added file::extension
 	added directory::createTemporaryDirectory
 	added directory::removeTree
+	added encryption interface
+	added aes128 encryption
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible
