@@ -32,20 +32,29 @@ class RUDIMENTS_DLLSPEC encryption {
 		virtual bool	setKey(const unsigned char *key,
 							size_t keysize);
 
+		/** Sets the key used for encryption/decryption to random
+		 *  data.  The data used can be retrived using getKey(). */
+		virtual	void	setRandomKey();
+
 		/** Returns the key currently used for encryption/decryption.
 		 *  If no key has been set, then this will be a block of 0's. */
 		virtual unsigned char	*getKey();
 
 		/** Returns the number of bytes in the key. */
-		virtual uint32_t	getKeySize();
+		virtual uint32_t	getKeySize()=0;
 
 		/** Sets the initialization vector used for
 		 *  encryption/decryption to the first "ivsize" bytes of "iv".
 		 *  Returns true on success and false on failure.  The most
-		 *  common failure is that "keysize" is not the correct number
+		 *  common failure is that "ivsize" is not the correct number
 		 *  of bytes.  The method getKeySize() returns the correct
 		 *  number of bytes for the key. */
 		virtual bool	setIv(const unsigned char *iv, size_t ivsize);
+
+		/** Sets the initialization vector used encryption/decryption
+		 *  to random data.  The data used can be retrived using
+		 *  getKey(). */
+		virtual	void	setRandomIv();
 
 		/** Returns the initialization vector currently used for
 		 *  encryption/decryption.  If no initialization vector has
@@ -53,7 +62,7 @@ class RUDIMENTS_DLLSPEC encryption {
 		virtual unsigned char	*getIv();
 
 		/** Returns the number of bytes in the initialization vector. */
-		virtual uint32_t	getIvSize();
+		virtual uint32_t	getIvSize()=0;
 
 		/** Appends "length" bytes of "data" to the data to be
 		 *  encrypted/decrypted.  Returns true on success or false if

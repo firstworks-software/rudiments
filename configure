@@ -35444,7 +35444,7 @@ PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h dictionar
 PRIVATEHEADERS6="dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h"
 PRIVATEHEADERS7="staticarray.h staticarrayinlines.h outputincludes.h inputincludes.h"
 SRCS="winsock.cpp sha1.cpp sha256.cpp md5.cpp encryption.cpp aes128.cpp output.cpp input.cpp"
-LOBJS="winsock.lo sha1.lo sha256.lo md5.lo aes128.lo output.lo input.lo"
+LOBJS="winsock.lo sha1.lo sha256.lo md5.lo encryption.lo aes128.lo output.lo input.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )

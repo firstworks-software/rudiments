@@ -13,7 +13,13 @@ class RUDIMENTS_DLLSPEC aes128 : public encryption {
 		aes128();
 
 		/** Deletes this instance of the aes128 class. */
-		virtual	~aes128();
+		~aes128();
+
+		/** Returns the number of bytes in the key. */
+		uint32_t	getKeySize();
+
+		/** Returns the number of bytes in the initialization vector. */
+		uint32_t	getIvSize();
 
 		/** Interprets the current data as unencrypted.  Encrypts the
 		 *  current data.  Returns the encrypted data on success or
@@ -28,11 +34,6 @@ class RUDIMENTS_DLLSPEC aes128 : public encryption {
 		 *  returned will be an empty string if no data has been
 		 *  appended yet. */
 		const unsigned char	*getDecryptedData();
-
-		/** Clears the current encrypted data and any data that had
- 		 *  previously been appended.  Returns true on success or
- 		 *  false if an error occurred. */
-		bool	clear();
 
 	#include <rudiments/private/aes128.h>
 };

@@ -70,7 +70,8 @@ PROGS3= handoff \
 	pr.cgi \
 	inidom \
 	propdom \
-	mvcproperties
+	mvcproperties \
+	aes128
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -286,6 +287,9 @@ propdom: propdom.cpp propdom.$(OBJ)
 
 mvcproperties: mvcproperties.cpp mvcproperties.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) mvcproperties.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+aes128: aes128.cpp aes128.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes128.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all

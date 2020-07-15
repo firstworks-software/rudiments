@@ -4,6 +4,7 @@
 #include <rudiments/aes128.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/bytebuffer.h>
+#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/evp.h>
@@ -21,8 +22,6 @@ class aes128private {
 		#else
 			#error implement this...
 		#endif
-		bool	_dirty;
-		bool	_encrypted;
 };
 
 aes128::aes128() : encryption() {
@@ -32,8 +31,6 @@ aes128::aes128() : encryption() {
 	#else
 		#error implement this...
 	#endif
-	pvt->_dirty=true;
-	pvt->_encrypted=true;
 }
 
 aes128::~aes128() {
@@ -41,6 +38,18 @@ aes128::~aes128() {
 		if (pvt->_context) {
 			EVP_CIPHER_CTX_free(pvt->_context);
 		}
+	#else
+		#error implement this...
+	#endif
+}
+
+uint32_t aes128::getKeySize() {
+	return 16;
+}
+
+uint32_t aes128::getIvSize() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		return AES_BLOCK_SIZE;
 	#else
 		#error implement this...
 	#endif
@@ -58,13 +67,15 @@ const unsigned char *aes128::getData(bool encrypt) {
 
 	// set the dirty flag true if we're doing a different operation
 	// (encryption vs. decryption) than we're currently configured to do
-	pvt->_dirty=(pvt->_encrypted && !encrypt);
+	setDirty(getDirty() || (getEncrypted() && !encrypt));
+stdoutput.printf("encrypt=%d\n",encrypt);
+stdoutput.printf("dirty=%d\n",getDirty());
 
 	// reset the error
 	setError(ENCRYPTION_ERROR_SUCCESS);
 
 	// re-init if the dirty flag is set
-	if (pvt->_dirty) {
+	if (getDirty()) {
 
 		#if defined(RUDIMENTS_HAS_SSL)
 			pvt->_context=EVP_CIPHER_CTX_new();
@@ -83,8 +94,8 @@ const unsigned char *aes128::getData(bool encrypt) {
 			#error implement this...
 		#endif
 
-		pvt->_dirty=false;
-		pvt->_encrypted=encrypt;
+		setDirty(false);
+		setEncrypted(encrypt);
 	}
 
 	// allocate the output buffer as necessary
@@ -114,12 +125,6 @@ const unsigned char *aes128::getData(bool encrypt) {
 	#else
 		#error implement this...
 	#endif
-}
-
-bool aes128::clear() {
-	encryption::clear();
-	pvt->_dirty=true;
-	return true;
 }
 
 void aes128::setError(int32_t err) {
