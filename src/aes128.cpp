@@ -14,11 +14,15 @@
 	#include "aes128rfcsomething.cpp"
 #endif
 
+#define BLOCK_SIZE 1024
+
 class aes128private {
 	friend class aes128;
 	private:
 		#if defined(RUDIMENTS_HAS_SSL)
 			EVP_CIPHER_CTX	*_context;
+			unsigned char	_out[BLOCK_SIZE+EVP_MAX_BLOCK_LENGTH];
+			int		_outlen;
 		#else
 			#error implement this...
 		#endif
@@ -68,8 +72,6 @@ const unsigned char *aes128::getData(bool encrypt) {
 	// set the dirty flag true if we're doing a different operation
 	// (encryption vs. decryption) than we're currently configured to do
 	setDirty(getDirty() || (getEncrypted() && !encrypt));
-stdoutput.printf("encrypt=%d\n",encrypt);
-stdoutput.printf("dirty=%d\n",getDirty());
 
 	// reset the error
 	setError(ENCRYPTION_ERROR_SUCCESS);
@@ -99,32 +101,56 @@ stdoutput.printf("dirty=%d\n",getDirty());
 	}
 
 	// allocate the output buffer as necessary
-	reallocateOut(getIn()->getSize()+
-			#if defined(RUDIMENTS_HAS_SSL)
-				EVP_MAX_BLOCK_LENGTH
-			#else
-				#error implement this...
-			#endif
-			);
-	
+	getOut()->clear();
 
-	// encrypt and finalize the data
+	// encrypt/decrypt the data in blocks
+	const unsigned char	*inptr=getIn()->getBuffer();
+	uint32_t		inremaining=getIn()->getSize();
+	do {
+
+		// figure out how much to read from the input
+		uint32_t	readsize=(inremaining>=BLOCK_SIZE)?
+						BLOCK_SIZE:inremaining;
+
+		// encrypt/decrypt a block of data
+		#if defined(RUDIMENTS_HAS_SSL)
+			if (!EVP_CipherUpdate(pvt->_context,
+							pvt->_out,
+							&pvt->_outlen,
+							inptr,
+							readsize)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return NULL;
+			}
+		#else
+			#error implement this...
+		#endif
+
+		// append the encrypted/decrypted data
+		getOut()->append(pvt->_out,pvt->_outlen);
+
+		// advance the input pointer, decrement the input-remaining
+		inptr+=readsize;
+		inremaining-=readsize;
+
+	} while (inremaining);
+
+	// finalize
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!EVP_CipherUpdate(pvt->_context,
-						getOut(),
-						(int *)getOutLengthPointer(),
-						getIn()->getBuffer(),
-						getIn()->getSize()) ||
-			!EVP_CipherFinal_ex(pvt->_context,
-						getOut(),
-						(int *)getOutLengthPointer())) {
+		if (!EVP_CipherFinal_ex(pvt->_context,
+						pvt->_out,
+						&pvt->_outlen)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return NULL;
 		}
-		return getOut();
 	#else
 		#error implement this...
 	#endif
+
+	// append the finalized data
+	getOut()->append(pvt->_out,pvt->_outlen);
+
+	return getOut()->getBuffer();
 }
 
 void aes128::setError(int32_t err) {

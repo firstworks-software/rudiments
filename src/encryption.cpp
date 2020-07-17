@@ -12,8 +12,7 @@ class encryptionprivate {
 		unsigned char		*_key;
 		unsigned char		*_iv;
 		bytebuffer		_in;
-		unsigned char		*_out;
-		uint32_t		_outlen;
+		bytebuffer		_out;
 		bool			_dirty;
 		bool			_encrypted;
 		encryptionerror_t	_err;
@@ -23,8 +22,6 @@ encryption::encryption() {
 	pvt=new encryptionprivate;
 	pvt->_key=NULL;
 	pvt->_iv=NULL;
-	pvt->_out=NULL;
-	pvt->_outlen=0;
 	pvt->_dirty=true;
 	pvt->_encrypted=true;
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
@@ -33,13 +30,13 @@ encryption::encryption() {
 encryption::~encryption() {
 	delete[] pvt->_key;
 	delete[] pvt->_iv;
-	delete[] pvt->_out;
 	delete pvt;
 }
 
 bool encryption::setKey(const unsigned char *key, size_t keysize) {
 	initKey();
-	if (keysize!=sizeof(pvt->_key)) {
+	if (keysize!=getKeySize()) {
+stdoutput.printf("wrong key-size error\n");
 		// FIXME: set wrong key-size error
 		return false;
 	}
@@ -56,17 +53,17 @@ unsigned char *encryption::getKey() {
 void encryption::initKey() {
 	if (!pvt->_key) {
 		pvt->_key=new unsigned char[getKeySize()];
-		bytestring::zero(pvt->_key,sizeof(pvt->_key));
+		bytestring::zero(pvt->_key,getKeySize());
 	}
 }
 
 bool encryption::setIv(const unsigned char *iv, size_t ivsize) {
 	initIv();
-	if (ivsize!=sizeof(pvt->_iv)) {
+	if (ivsize!=getIvSize()) {
 		// FIXME: set wrong iv-size error
 		return false;
 	}
-	bytestring::copy(pvt->_iv,iv,sizeof(pvt->_iv));
+	bytestring::copy(pvt->_iv,iv,ivsize);
 	pvt->_dirty=true;
 	return true;
 }
@@ -112,7 +109,7 @@ unsigned char *encryption::getIv() {
 void encryption::initIv() {
 	if (!pvt->_iv) {
 		pvt->_iv=new unsigned char[getIvSize()];
-		bytestring::zero(pvt->_iv,sizeof(pvt->_iv));
+		bytestring::zero(pvt->_iv,getIvSize());
 	}
 }
 
@@ -125,29 +122,18 @@ bytebuffer *encryption::getIn() {
 	return &pvt->_in;
 }
 
-unsigned char *encryption::getOut() {
-	return pvt->_out;
-}
-
-uint32_t *encryption::getOutLengthPointer() {
-	return &pvt->_outlen;
-}
-
-void encryption::reallocateOut(uint32_t size) {
-	delete[] pvt->_out;
-	pvt->_out=new unsigned char[size];
+bytebuffer *encryption::getOut() {
+	return &pvt->_out;
 }
 
 uint64_t encryption::getDataLength() {
-	return pvt->_outlen;
+	return pvt->_out.getSize();
 }
 
 bool encryption::clear() {
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
 	pvt->_in.clear();
-	delete[] pvt->_out;
-	pvt->_out=NULL;
-	pvt->_outlen=0;
+	pvt->_out.clear();
 	pvt->_dirty=true;
 	return true;
 }

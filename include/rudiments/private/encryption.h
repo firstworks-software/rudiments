@@ -5,9 +5,7 @@
 		void		setRandomBuffer(unsigned char *buffer,
 							size_t buffersize);
 		bytebuffer	*getIn();
-		unsigned char	*getOut();
-		uint32_t	*getOutLengthPointer();
-		void		reallocateOut(uint32_t size);
+		bytebuffer	*getOut();
 		virtual void	setError(encryptionerror_t err);
 		void		setDirty(bool dirty);
 		bool		getDirty();
