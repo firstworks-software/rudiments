@@ -470,4 +470,37 @@ stdoutput.printf("%s\n",dt.getTimeZoneString());
 	test("",datetime::validDateTime(str));
 	str="02/30/1974 12:00:00 EST5EDT";
 	test("",!datetime::validDateTime(str));
+	stdoutput.printf("\n");
+
+	// parse
+	stdoutput.printf("parse:\n");
+	int16_t	year;
+	int16_t	month;
+	int16_t	day;
+	int16_t	hour;
+	int16_t	minute;
+	int16_t	second;
+	int32_t	microsecond;
+	bool	isnegative;
+	const char	*dd="/-.:";
+	const char	*dates[]={
+		"Monday, July 20, 2020",
+		"Mon, July 20, 2020",
+		NULL
+	};
+	for (const char **d=dates; *d; d++) {
+		stdoutput.printf("%s\n",*d);
+		datetime::parse(*d,false,false,dd,
+				&year,&month,&day,
+				&hour,&minute,&second,
+				&microsecond,&isnegative);
+		test("year",year==2020);
+		test("month",month==7);
+		test("day",day==20);
+		test("hour",hour==-1);
+		test("minute",minute==-1);
+		test("second",second==-1);
+		test("microsecond",microsecond==-1);
+		test("isnegative",!isnegative);
+	}
 }

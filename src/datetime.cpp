@@ -1184,8 +1184,17 @@ int32_t datetime::fractionToMicroseconds(const char *fraction) {
 	return val;
 }
 
-static const char *_dayofweekname[]={
+static const char *_dayofweeknameshort[]={
 	"Mon","Tue","Wed","Thu","Fri","Sat","Sun",NULL
+};
+
+static const char *_dayofweeknamelong[]={
+	"Monday","Tuesday","Wednesday",
+	"Thursday","Friday","Saturday","Sunday",NULL
+};
+
+static uint16_t _dayofweeknamelonglen[]={
+	6,7,9,8,6,8,6
 };
 
 bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
@@ -1232,7 +1241,8 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 	// in the case of a five-part date (starting with the day-of-week),
 	// just skip the day-of-week and handle as 4-part
-	for (const char **dow=_dayofweekname; *dow; dow++) {
+	bool	found=false;
+	for (const char **dow=_dayofweeknameshort; *dow; dow++) {
 		if (!charstring::compare(datetime,*dow,3) &&
 					*(datetime+3)==',') {
 			datetime+=4;
@@ -1240,7 +1250,23 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				character::isWhitespace(*datetime)) {
 				datetime++;
 			}
+			found=true;
 			break;
+		}
+	}
+	if (!found) {
+		uint16_t	i=0;
+		for (const char **dow=_dayofweeknamelong; *dow; dow++) {
+			if (!charstring::compare(datetime,*dow,
+						_dayofweeknamelonglen[i]) &&
+				*(datetime+_dayofweeknamelonglen[i])==',') {
+				datetime+=_dayofweeknamelonglen[i]+1;
+				while (*datetime &&
+					character::isWhitespace(*datetime)) {
+					datetime++;
+				}
+				break;
+			}
 		}
 	}
 
