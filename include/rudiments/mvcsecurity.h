@@ -6,6 +6,8 @@
 
 class mvcsecurity {
 	public:
+		mvcsecurity() {};
+		virtual	~mvcsecurity() {};
 		virtual const char	*getUserName()=0;
 };
 
