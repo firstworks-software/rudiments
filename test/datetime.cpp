@@ -486,6 +486,8 @@ stdoutput.printf("%s\n",dt.getTimeZoneString());
 	const char	*dates[]={
 		"Monday, July 20, 2020",
 		"Mon, July 20, 2020",
+		"Tuesday, July 20, 2020",
+		"Tue, July 20, 2020",
 		NULL
 	};
 	for (const char **d=dates; *d; d++) {

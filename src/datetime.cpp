@@ -1267,6 +1267,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				}
 				break;
 			}
+			i++;
 		}
 	}
 
