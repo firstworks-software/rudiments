@@ -36,30 +36,22 @@ int main(int argc, const char **argv) {
 	rn.setSeed(seed);
 
 	// for 2^0 through 2^24...
-	uint64_t	size=0;
-	uint16_t	factor=0;
 	bytebuffer	unenc;
-	while (factor<=24) {
-
-		// special handling for 2^0 and 2^1
-		if (factor==0) {
-			size=0;
-		} else if (factor==1) {
-			size=2;
-		}
+	uint64_t	size=0;
+	while (size<=16777216) {
 
 		stdoutput.printf("size: %lld\n",size);
-
-		// fill a buffer with 2^factor bytes of random data
-		unenc.clear();
-		for (uint64_t i=0; i<size; i++) {
-			unenc.append(rn.generateScaledNumber(0,255,&seed));
-			unenc.append((unsigned char)seed);
-		}
 
 		// reset
 		a.clear();
 		b.clear();
+
+		// fill a buffer with random data
+		unenc.clear();
+		for (uint64_t i=0; i<size; i++) {
+			rn.generateScaledNumber(0,255,&seed);
+			unenc.append((unsigned char)seed);
+		}
 
 		// encrypt
 		test("encrypt append",
@@ -81,9 +73,17 @@ int main(int argc, const char **argv) {
 		test("valid decrypted data",
 			!bytestring::compare(dec,unenc.getBuffer(),declen));
 
-		// bump factor and size
-		factor++;
-		size*=2;
+		// bump size
+		#define GROW_EXP 1
+		#if GROW_EXP==1
+			if (size) {
+				size*=2;
+			} else {
+				size=2;
+			}
+		#else
+			size++;
+		#endif
 	
 		stdoutput.printf("\n");
 	}
