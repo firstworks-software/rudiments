@@ -4,10 +4,8 @@
 #include <rudiments/aes128.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/bytebuffer.h>
-#include <rudiments/stdio.h>
-#include <rudiments/charstring.h>
 
-#undef RUDIMENTS_HAS_SSL
+//#undef RUDIMENTS_HAS_SSL
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/evp.h>
 	#include <openssl/aes.h>

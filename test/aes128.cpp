@@ -37,54 +37,64 @@ int main(int argc, const char **argv) {
 
 	// for 2^0 through 2^24...
 	bytebuffer	unenc;
-	uint64_t	size=0;
-	while (size<=16777216) {
+	for (uint16_t i=0; i<2; i++) {
+		uint64_t	size=0;
+		for (;;) {
 
-		stdoutput.printf("size: %lld\n",size);
+			stdoutput.printf("size: %lld\n",size);
 
-		// reset
-		a.clear();
-		b.clear();
+			// reset
+			a.clear();
+			b.clear();
 
-		// fill a buffer with random data
-		unenc.clear();
-		for (uint64_t i=0; i<size; i++) {
-			rn.generateScaledNumber(0,255,&seed);
-			unenc.append((unsigned char)seed);
-		}
-
-		// encrypt
-		test("encrypt append",
-			a.append(unenc.getBuffer(),unenc.getSize()));
-		const unsigned char	*enc=a.getEncryptedData();
-		uint64_t		enclen=a.getDataLength();
-		test("sane encrypted data",enc!=NULL);
-		test("sane encrypted length",enclen);
-
-		// decrypt
-		test ("decrypt append",b.append(enc,enclen));
-		const unsigned char	*dec=b.getDecryptedData();
-		uint64_t		declen=b.getDataLength();
-		test("sane decrypted data",dec!=NULL);
-		test("sane decrypted length",(size)?declen:!declen);
-
-		test("valid decrypted length",
-			declen==unenc.getSize());
-		test("valid decrypted data",
-			!bytestring::compare(dec,unenc.getBuffer(),declen));
-
-		// bump size
-		#define GROW_EXP 1
-		#if GROW_EXP==1
-			if (size) {
-				size*=2;
-			} else {
-				size=2;
+			// fill a buffer with random data
+			unenc.clear();
+			for (uint64_t i=0; i<size; i++) {
+				rn.generateScaledNumber(0,255,&seed);
+				unenc.append((unsigned char)seed);
 			}
-		#else
-			size++;
-		#endif
-	
-		stdoutput.printf("\n");
+
+			// encrypt
+			test("encrypt append",
+				a.append(unenc.getBuffer(),unenc.getSize()));
+			const unsigned char	*enc=a.getEncryptedData();
+			uint64_t		enclen=a.getDataLength();
+			test("sane encrypted data",enc!=NULL);
+			test("sane encrypted length",enclen);
+
+			// decrypt
+			test ("decrypt append",b.append(enc,enclen));
+			const unsigned char	*dec=b.getDecryptedData();
+			uint64_t		declen=b.getDataLength();
+			test("sane decrypted data",dec!=NULL);
+			test("sane decrypted length",(size)?declen:!declen);
+
+			test("valid decrypted length",
+					declen==unenc.getSize());
+			test("valid decrypted data",
+					!bytestring::compare(dec,
+							unenc.getBuffer(),
+							declen));
+			stdoutput.printf("\n");
+
+			// bump size...
+			// increment during first iteration,
+			// square during second iteration
+			if (!i) {
+				size++;
+				if (size>4096) {
+					break;
+				}
+			} else {
+				if (size) {
+					size*=2;
+				} else {
+					size=2;
+				}
+				if (size>16777216) {
+					break;
+				}
+			}
+		}
 	}
 }
