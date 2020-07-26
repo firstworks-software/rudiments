@@ -36,7 +36,6 @@ encryption::~encryption() {
 bool encryption::setKey(const unsigned char *key, size_t keysize) {
 	initKey();
 	if (keysize!=getKeySize()) {
-stdoutput.printf("wrong key-size error\n");
 		// FIXME: set wrong key-size error
 		return false;
 	}
@@ -115,6 +114,7 @@ void encryption::initIv() {
 
 bool encryption::append(const unsigned char *data, uint32_t length) {
 	pvt->_in.append(data,length);
+	pvt->_dirty=true;
 	return true;
 }
 
@@ -126,7 +126,13 @@ bytebuffer *encryption::getOut() {
 	return &pvt->_out;
 }
 
-uint64_t encryption::getDataLength() {
+uint64_t encryption::getEncryptedDataLength() {
+	getEncryptedData();
+	return pvt->_out.getSize();
+}
+
+uint64_t encryption::getDecryptedDataLength() {
+	getDecryptedData();
 	return pvt->_out.getSize();
 }
 

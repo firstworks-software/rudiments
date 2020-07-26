@@ -4,8 +4,9 @@
 #include <rudiments/aes128.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/bytebuffer.h>
+#include <rudiments/stdio.h>
 
-//#undef RUDIMENTS_HAS_SSL
+#undef RUDIMENTS_HAS_SSL
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/evp.h>
 	#include <openssl/aes.h>
@@ -23,7 +24,6 @@ class aes128private {
 			EVP_CIPHER_CTX	*_context;
 		#else
 			void		*_context;
-			bool		_encrypt;
 			uint8_t		_cbc[AES_BLOCK_SIZE];
 		#endif
 		unsigned char	_out[AES_BLOCK_SIZE+EVP_MAX_BLOCK_LENGTH];
@@ -33,9 +33,6 @@ class aes128private {
 aes128::aes128() : encryption() {
 	pvt=new aes128private;
 	pvt->_context=NULL;
-	#if !defined(RUDIMENTS_HAS_SSL)
-		pvt->_encrypt=true;
-	#endif
 }
 
 aes128::~aes128() {
@@ -45,7 +42,7 @@ aes128::~aes128() {
 		}
 	#else
 		if (pvt->_context) {
-			if (pvt->_encrypt) {
+			if (getEncrypted()) {
 				aes_encrypt_deinit(pvt->_context);
 			} else {
 				aes_decrypt_deinit(pvt->_context);
@@ -74,15 +71,36 @@ const unsigned char *aes128::getData(bool encrypt) {
 
 	// set the dirty flag true if we're doing a different operation
 	// (encryption vs. decryption) than we're currently configured to do
-	setDirty(getDirty() || (getEncrypted() && !encrypt));
+	if (getEncrypted()!=encrypt) {
+		setDirty(true);
+	}
 
-	// reset the error
-	setError(ENCRYPTION_ERROR_SUCCESS);
+	// set the current operation
+	setEncrypted(encrypt);
 
-	// re-init if the dirty flag is set
-	if (getDirty()) {
+	// FIXME: arguably, we need 2 dirty's - one if the key/iv has changed,
+	// and another if data has been appended.  If data has been appended,
+	// we don't need to reinit the context, we just need to
+	// reencrypt/decrypt the data.
+
+	if (!getDirty()) {
+
+		// if the dirty flag isn't set then we can just return the
+		// existing output buffer
+		return getOut()->getBuffer();
+
+	} else {
+
+		// re-init if the dirty flag is set
+
+		// reset the error
+		setError(ENCRYPTION_ERROR_SUCCESS);
 
 		#if defined(RUDIMENTS_HAS_SSL)
+			if (pvt->_context) {
+				EVP_CIPHER_CTX_free(pvt->_context);
+			}
+
 			pvt->_context=EVP_CIPHER_CTX_new();
 
 			if (!EVP_CipherInit_ex(pvt->_context,
@@ -96,22 +114,30 @@ const unsigned char *aes128::getData(bool encrypt) {
 				return NULL;
 			}
 		#else
-			pvt->_encrypt=encrypt;
-			if (pvt->_encrypt) {
+			if (pvt->_context) {
+				if (getEncrypted()) {
+					aes_encrypt_deinit(pvt->_context);
+				} else {
+					aes_decrypt_deinit(pvt->_context);
+				}
+			}
+
+			if (getEncrypted()) {
 				pvt->_context=aes_encrypt_init(
 						getKey(),getKeySize());
 			} else {
 				pvt->_context=aes_decrypt_init(
 						getKey(),getKeySize());
 			}
+
 			if (!pvt->_context) {
 				// FIXME: set error
 				return NULL;
 			}
 		#endif
 
+		// reset the dirty flag
 		setDirty(false);
-		setEncrypted(encrypt);
 	}
 
 	#if !defined(RUDIMENTS_HAS_SSL)
@@ -119,7 +145,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 	bytestring::copy(pvt->_cbc,getIv(),getIvSize());
 	#endif
 
-	// allocate the output buffer as necessary
+	// clear the output buffer
 	getOut()->clear();
 
 
@@ -154,7 +180,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 				return NULL;
 			}
 		#else
-			if (pvt->_encrypt) {
+			if (getEncrypted()) {
 
 				// OpenSSL implements CBC and CMS-padding
 				// internally, but we have to implement it
