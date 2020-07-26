@@ -58,14 +58,16 @@ int main(int argc, const char **argv) {
 			test("encrypt append",
 				a.append(unenc.getBuffer(),unenc.getSize()));
 			const unsigned char	*enc=a.getEncryptedData();
-			uint64_t		enclen=a.getDataLength();
+			uint64_t		enclen=
+						a.getEncryptedDataLength();
 			test("sane encrypted data",enc!=NULL);
 			test("sane encrypted length",enclen);
 
 			// decrypt
 			test ("decrypt append",b.append(enc,enclen));
 			const unsigned char	*dec=b.getDecryptedData();
-			uint64_t		declen=b.getDataLength();
+			uint64_t		declen=
+						b.getDecryptedDataLength();
 			test("sane decrypted data",dec!=NULL);
 			test("sane decrypted length",(size)?declen:!declen);
 
