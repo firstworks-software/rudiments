@@ -67,6 +67,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// startsWith/endsWith
+	stdoutput.printf("startsWith/endsWith...\n");
+	test("startsWith",charstring::startsWith("hello","he"));
+	test("startsWith",charstring::startsWith("hello","hello"));
+	test("startsWith",!charstring::startsWith("hello","el"));
+	test("startsWith",!charstring::startsWith("hello","helloThere"));
+	test("endsWith",charstring::endsWith("hello","lo"));
+	test("endsWith",charstring::endsWith("hello","hello"));
+	test("endsWith",!charstring::endsWith("hello","ll"));
+	test("endsWith",!charstring::endsWith("hello","helloThere"));
+	stdoutput.printf("\n");
+
+
 	// duplicate
 	stdoutput.printf("duplicate/subString...\n");
 	char	*hellothere=charstring::duplicate(s);

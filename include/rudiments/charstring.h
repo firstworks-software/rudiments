@@ -171,6 +171,16 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  false otherwise. */
 		static	bool	contains(const char *haystack, char needle);
 
+		/** Returns true if "haystack" starts with "needle" or
+		 *  false otherwise. */
+		static	bool	startsWith(const char *haystack,
+						const char *needle);
+
+		/** Returns true if "haystack" ends with "needle" or
+		 *  false otherwise. */
+		static	bool	endsWith(const char *haystack,
+						const char *needle);
+
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	const char	*findFirst(const char *haystack,

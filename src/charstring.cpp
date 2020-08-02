@@ -1209,6 +1209,17 @@ bool charstring::contains(const char *haystack, char needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
+bool charstring::startsWith(const char *haystack, const char *needle) {
+	return !charstring::compare(haystack,needle,charstring::length(needle));
+}
+
+bool charstring::endsWith(const char *haystack, const char *needle) {
+	size_t	needlelen=charstring::length(needle);
+	size_t	haystacklen=charstring::length(haystack);
+	return (haystacklen>=needlelen &&
+		!charstring::compare(haystack+haystacklen-needlelen,needle));
+}
+
 const char *charstring::findFirst(const char *haystack, const char *needle) {
 	return (haystack && needle)?strstr(haystack,needle):NULL;
 }
