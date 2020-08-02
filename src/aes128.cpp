@@ -6,7 +6,7 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/stdio.h>
 
-#undef RUDIMENTS_HAS_SSL
+//#undef RUDIMENTS_HAS_SSL
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/evp.h>
 	#include <openssl/aes.h>
@@ -177,6 +177,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 							in,
 							readsize)) {
 				setError(ERR_GET_REASON(ERR_get_error()));
+				getOut()->clear();
 				return NULL;
 			}
 		#else
@@ -268,6 +269,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 						pvt->_out,
 						&pvt->_outlen)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
+			getOut()->clear();
 			return NULL;
 		}
 
@@ -306,8 +308,11 @@ const unsigned char *aes128::getData(bool encrypt) {
 			// bytes from the end and truncate the buffer there.
 			getOut()->setPosition(getOut()->getSize()-1);
 			getOut()->read(&padbytes,sizeof(padbytes));
-			getOut()->setPosition(getOut()->getSize()-padbytes);
-			getOut()->truncate();
+			if (padbytes<=AES_BLOCK_SIZE) {
+				getOut()->setPosition(getOut()->getSize()-
+								padbytes);
+				getOut()->truncate();
+			}
 		}
 	#endif
 
