@@ -1,7 +1,7 @@
 #!/bin/sh
 
-echo "Rudiments test results:" > testresults.log
-echo >> testresults.log
+echo "Rudiments test results:"
+echo
 
 for program in \
 	bytebuffer \
@@ -56,10 +56,8 @@ do
 
 	if ( test "$?" = "0" )
 	then
-		printf "    % 20s: success\n" "$program" >> testresults.log
+		printf "    % 20s: success\n" "$program"
 	else
-		printf "    % 20s: failed\n" "$program" >> testresults.log
+		printf "    % 20s: failed\n" "$program"
 	fi
 done
-
-cat testresults.log
