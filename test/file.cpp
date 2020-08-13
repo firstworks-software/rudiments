@@ -71,19 +71,23 @@ int main(int argc, const char **argv) {
 		test("user",uid==process::getUserId());
 
 		gid_t	gid=fl.getOwnerGroupId();
-		char	*groupname=groupentry::getName(gid);
-		test("group",gid==process::getGroupId());
+		// on bsd systems, the file is created with wheel
+		// group ownership in some cases
+		gid_t	wheelgid=groupentry::getGroupId("wheel");
+		test("group",(gid==process::getGroupId() ||
+				(wheelgid<65500 && gid==wheelgid)));
 
 		// not supported on syllable
 		if (charstring::compare(osname,"syllable")) {
 			// not reliable over cifs
 			#ifndef WIN32
+			char	*groupname=groupentry::getName(gid);
 			test("chown",fl.changeOwner(username,groupname));
+			delete[] groupname;
 			#endif
 		}
 
 		delete[] username;
-		delete[] groupname;
 
 		test("size",fl.getSize()==5);
 
