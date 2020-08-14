@@ -3,6 +3,8 @@
 echo "Rudiments test results:" > testresults.log
 echo >> testresults.log
 
+exitcode=0
+
 for program in \
 	aes128 \
 	avltree \
@@ -62,7 +64,10 @@ do
 		printf "    % 20s: success\n" "$program" >> testresults.log
 	else
 		printf "    % 20s: failed\n" "$program" >> testresults.log
+		exitcode=1
 	fi
 done
 
 cat testresults.log
+
+exit $exitcode
