@@ -6,6 +6,13 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/stdio.h>
 
+// If we don't have ECP_CIPHER_CTX_new then there's a whole different API that
+// we have to use: EVP_CIPHER_CTX_init/cleanup, EVP_Encrypt/Decryipt_init, and
+// EVP_Encrypt/DecryptUpdate/Final.  Maybe later...
+#if !defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
+	#undef RUDIMENTS_HAS_SSL
+#endif
+
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/evp.h>
 	#include <openssl/aes.h>
@@ -301,12 +308,7 @@ void aes128::setError(int32_t err) {
 
 void aes128::newContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
-		#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
-			pvt->_context=EVP_CIPHER_CTX_new();
-		#else
-			pvt->_context=new EVP_CIPHER_CTX;
-			EVP_CIPHER_CTX_init(pvt->_context);
-		#endif
+		pvt->_context=EVP_CIPHER_CTX_new();
 	#else
 		if (getEncrypted()) {
 			pvt->_context=aes_encrypt_init(getKey(),getKeySize());
@@ -319,12 +321,7 @@ void aes128::newContext() {
 void aes128::freeContext() {
 	if (pvt->_context) {
 		#if defined(RUDIMENTS_HAS_SSL)
-			#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
-				EVP_CIPHER_CTX_free(pvt->_context);
-			#else
-				EVP_CIPHER_CTX_cleanup(pvt->_context);
-				delete pvt->_context;
-			#endif
+			EVP_CIPHER_CTX_free(pvt->_context);
 		#else
 			if (getEncrypted()) {
 				aes_encrypt_deinit(pvt->_context);
