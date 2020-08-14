@@ -858,7 +858,12 @@ const char *filesystem::getTypeName() const {
 			(const char *)pvt->_st.f_basetype:NULL;
 #elif defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
-	switch (pvt->_st.f_type) {
+	// NOTE: casting pvt->_st.f_type to uint32_t in the switch below
+	// resolves issues on systems where it's defined as a signed int or
+	// int32_t and comparisons with values like 0xFF534D42 would throw a
+	// "narrowing" warning as those values are larger than a signed int
+	// can hold.
+	switch ((uint32_t)pvt->_st.f_type) {
 		case 0xADF5:
 			return "adfs";
 		case 0xADFF:
