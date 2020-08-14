@@ -35,25 +35,7 @@ aes128::aes128() : encryption() {
 }
 
 aes128::~aes128() {
-	#if defined(RUDIMENTS_HAS_SSL)
-		if (pvt->_context) {
-			#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
-			EVP_CIPHER_CTX_free(pvt->_context);
-			#else
-			EVP_CIPHER_CTX_cleanup(pvt->_context);
-			delete pvt->_context;
-			pvt->_context=NULL;
-			#endif
-		}
-	#else
-		if (pvt->_context) {
-			if (getEncrypted()) {
-				aes_encrypt_deinit(pvt->_context);
-			} else {
-				aes_decrypt_deinit(pvt->_context);
-			}
-		}
-	#endif
+	freeContext();
 }
 
 uint32_t aes128::getKeySize() {
@@ -101,57 +83,20 @@ const unsigned char *aes128::getData(bool encrypt) {
 		// reset the error
 		setError(ENCRYPTION_ERROR_SUCCESS);
 
+		freeContext();
+		newContext();
 		#if defined(RUDIMENTS_HAS_SSL)
-			if (pvt->_context) {
-				#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
-				EVP_CIPHER_CTX_free(pvt->_context);
-				#else
-				EVP_CIPHER_CTX_cleanup(pvt->_context);
-				delete pvt->_context;
-				pvt->_context=NULL;
-				#endif
-			}
-
-			#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
-			pvt->_context=EVP_CIPHER_CTX_new();
-			#else
-			pvt->_context=new EVP_CIPHER_CTX;
-			EVP_CIPHER_CTX_init(pvt->_context);
-			#endif
-
 			if (!EVP_CipherInit_ex(pvt->_context,
 						EVP_aes_128_cbc(),
 						NULL,
 						getKey(),
 						getIv(),
 						(encrypt)?1:0)) {
-				#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
-				EVP_CIPHER_CTX_free(pvt->_context);
-				#else
-				EVP_CIPHER_CTX_cleanup(pvt->_context);
-				delete pvt->_context;
-				pvt->_context=NULL;
-				#endif
+				freeContext();
 				setError(ERR_GET_REASON(ERR_get_error()));
 				return NULL;
 			}
 		#else
-			if (pvt->_context) {
-				if (getEncrypted()) {
-					aes_encrypt_deinit(pvt->_context);
-				} else {
-					aes_decrypt_deinit(pvt->_context);
-				}
-			}
-
-			if (getEncrypted()) {
-				pvt->_context=aes_encrypt_init(
-						getKey(),getKeySize());
-			} else {
-				pvt->_context=aes_decrypt_init(
-						getKey(),getKeySize());
-			}
-
 			if (!pvt->_context) {
 				// FIXME: set error
 				return NULL;
@@ -352,4 +297,41 @@ void aes128::setError(int32_t err) {
 	#else
 		encryption::setError((encryptionerror_t)err);
 	#endif
+}
+
+void aes128::newContext() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
+			pvt->_context=EVP_CIPHER_CTX_new();
+		#else
+			pvt->_context=new EVP_CIPHER_CTX;
+			EVP_CIPHER_CTX_init(pvt->_context);
+		#endif
+	#else
+		if (getEncrypted()) {
+			pvt->_context=aes_encrypt_init(getKey(),getKeySize());
+		} else {
+			pvt->_context=aes_decrypt_init(getKey(),getKeySize());
+		}
+	#endif
+}
+
+void aes128::freeContext() {
+	if (pvt->_context) {
+		#if defined(RUDIMENTS_HAS_SSL)
+			#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
+				EVP_CIPHER_CTX_free(pvt->_context);
+			#else
+				EVP_CIPHER_CTX_cleanup(pvt->_context);
+				delete pvt->_context;
+			#endif
+		#else
+			if (getEncrypted()) {
+				aes_encrypt_deinit(pvt->_context);
+			} else {
+				aes_decrypt_deinit(pvt->_context);
+			}
+		#endif
+	}
+	pvt->_context=NULL;
 }

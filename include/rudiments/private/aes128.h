@@ -4,6 +4,9 @@
 	private:
 		const unsigned char	*getData(bool encrypt);
 
+		void	newContext();
+		void	freeContext();
+
 		void	setError(int32_t err);
 
 		aes128private	*pvt;
