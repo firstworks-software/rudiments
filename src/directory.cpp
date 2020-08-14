@@ -10,6 +10,7 @@
 #endif
 #include <rudiments/file.h>
 #include <rudiments/sys.h>
+#include <rudiments/randomnumber.h>
 
 // for DIR
 #if defined(RUDIMENTS_HAVE_DIRENT_H)
