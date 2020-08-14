@@ -83,7 +83,7 @@ bool mod1mod2::sthtmlparser::block(output *container,
 		{NULL,NULL,NULL,NULL}
 	};
 
-	for (int64_t i=0; i<*((int64_t *)data); i++) {
+	for (uint64_t i=0; i<*((uint64_t *)data); i++) {
 		if (!te->parse(container,block,length,sh,&vars)) {
 			return false;
 		}
