@@ -4,12 +4,15 @@ echo "Rudiments test results:" > testresults.log
 echo >> testresults.log
 
 for program in \
+	aes128 \
+	avltree \
 	bytebuffer \
 	bytestring \
 	character \
 	charstring \
 	commandline \
 	crypt \
+	csvdom \
 	datetime \
 	dictionary \
 	directory \
@@ -21,14 +24,19 @@ for program in \
 	groupentry \
 	handoff \
 	hostentry \
+	inidom \
+	jsondom \
 	linkedlist \
 	listener \
 	logger \
+	md5sum \
 	memorymap \
 	memorypool \
+	mvcproperties \
 	parameterstring \
 	permissions \
 	process \
+	propdom \
 	protocolentry \
 	randomnumber \
 	regularexpression \
@@ -45,12 +53,7 @@ for program in \
 	threadmutex \
 	url \
 	userentry \
-	xmldom \
-	csvdom \
-	jsondom \
-	inidom \
-	propdom \
-	mvcproperties
+	xmldom
 do
 	./$program
 

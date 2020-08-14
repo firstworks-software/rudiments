@@ -37,7 +37,11 @@ aes128::aes128() : encryption() {
 aes128::~aes128() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (pvt->_context) {
+			#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
 			EVP_CIPHER_CTX_free(pvt->_context);
+			#else
+			delete pvt->_context;
+			#endif
 		}
 	#else
 		if (pvt->_context) {
@@ -97,10 +101,18 @@ const unsigned char *aes128::getData(bool encrypt) {
 
 		#if defined(RUDIMENTS_HAS_SSL)
 			if (pvt->_context) {
+				#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
 				EVP_CIPHER_CTX_free(pvt->_context);
+				#else
+				delete pvt->_context;
+				#endif
 			}
 
+			#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
 			pvt->_context=EVP_CIPHER_CTX_new();
+			#else
+			pvt->_context=new EVP_CIPHER_CTX;
+			#endif
 
 			if (!EVP_CipherInit_ex(pvt->_context,
 						EVP_aes_128_cbc(),
@@ -108,7 +120,11 @@ const unsigned char *aes128::getData(bool encrypt) {
 						getKey(),
 						getIv(),
 						(encrypt)?1:0)) {
+				#if defined(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW)
 				EVP_CIPHER_CTX_free(pvt->_context);
+				#else
+				delete pvt->_context;
+				#endif
 				setError(ERR_GET_REASON(ERR_get_error()));
 				return NULL;
 			}
