@@ -137,7 +137,19 @@ const unsigned char *aes128::getData(bool encrypt) {
 	#if !defined(RUDIMENTS_HAS_SSL)
 	unsigned char		padbytes;
 	#endif
-	do {
+	for (;;) {
+
+		#if defined(RUDIMENTS_HAS_SSL)
+		// Bail if there's nothing left to read.  Do this here for
+		// OpenSSL.  Our non-ssl implementation needs to run through
+		// at least one iteration, even for 0-byte cases.  Modern
+		// OpenSSL implementations can handle 0-byte cases, but old
+		// enough versions throw an assertion if EVP_CipherUpdate
+		// is called with readsize==0.
+		if (!inremaining) {
+			break;
+		}
+		#endif
 
 		// figure out how much to read from the input
 		uint32_t	readsize=(inremaining>=AES_BLOCK_SIZE)?
@@ -235,7 +247,17 @@ const unsigned char *aes128::getData(bool encrypt) {
 		in+=readsize;
 		inremaining-=readsize;
 
-	} while (inremaining);
+		#if !defined(RUDIMENTS_HAS_SSL)
+		// Bail if there's nothing left to read.  Do this here for
+		// our non-ssl implementation, which needs to run through
+		// at least one iteration, even for 0-byte cases.  For the
+		// OpenSSL implementation, it's handled at the top of the
+		// loop.
+		if (!inremaining) {
+			break;
+		}
+		#endif
+	}
 
 	#if defined(RUDIMENTS_HAS_SSL)
 		// finalize
