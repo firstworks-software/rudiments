@@ -62,6 +62,7 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %{_libdir}/librudiments-apache.so.6.*
 %doc AUTHORS ChangeLog
 %exclude %{_libdir}/librudiments.la
+%exclude %{_libdir}/librudiments-apache.la
 %if 0%{?fedora}
 %license COPYING
 %exclude %{_datadir}/licenses/rudiments
@@ -83,7 +84,7 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %{_docdir}/%{name}
 
 %changelog
-* Thu Jan 22 2020 David Muse <david.muse@firstworks.com> - 1.2.3-1
+* Mon Aug 17 2020 David Muse <david.muse@firstworks.com> - 1.2.3-1
 - Updated to version 1.2.3.
 - Added tmpfiles.d configuration.
 - Added librudiments-apache libraries.
