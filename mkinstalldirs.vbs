@@ -7,13 +7,7 @@ end if
 set fso=CreateObject("Scripting.FileSystemObject")
 
 ' get the directory to create
-fullpath=""
-for i = 0 to WScript.Arguments.Count-1
-	if i>0 then
-		fullpath=fullpath & " "
-	end if
-	fullpath=fullpath & WScript.Arguments.Item(i)
-next
+fullpath=WScript.Arguments.Item(0)
 
 ' collapse backslashes and convert slashes to backslashes
 fullpath=replace(fullpath,"\\","\",1,-1,0)

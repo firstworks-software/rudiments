@@ -1,17 +1,17 @@
 RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
 
 # installation directories
-prefix = @prefix@
-exec_prefix = @exec_prefix@
-bindir = @bindir@
-includedir = @includedir@
-libdir = @libdir@
-mandir = @mandir@
-datadir = @datadir@
+prefix = "@prefix@"
+exec_prefix = "@exec_prefix@"
+bindir = "@bindir@"
+includedir = "@includedir@"
+libdir = "@libdir@"
+mandir = "@mandir@"
+datadir = "@datadir@"
 docdir = $(datadir)\doc\rudiments
 licensedir = $(datadir)\licenses\rudiments
-localstatedir = @localstatedir@
-tmpdir = @tmpdir@
+localstatedir = "@localstatedir@"
+tmpdir = "@tmpdir@"
 
 # command separator
 AND = &
@@ -34,7 +34,7 @@ LTCOMPILE =
 CXX = cl
 COMPILE = /c
 OUT = -out:
-BASECPPFLAGS = /nologo @OPTCPPFLAGS@ @DEBUGCPPFLAGS@ @WINVER@ @WIN32WINDOWS@ @WIN32WINNT@ @_USE_32BIT_TIME_T@ @SDKINCLUDES@ @GSSINCLUDES@ @LIBCURLINCLUDES@ /D TMPDIR="\"$(tmpdir)\""
+BASECPPFLAGS = /nologo @OPTCPPFLAGS@ @DEBUGCPPFLAGS@ @WINVER@ @WIN32WINDOWS@ @WIN32WINNT@ @_USE_32BIT_TIME_T@ @SDKINCLUDES@ @GSSINCLUDES@ @LIBCURLINCLUDES@ /D TMPDIR=\"$(tmpdir)\"
 EXPORTSCPPFLAGS = /D LIBRUDIMENTS_EXPORTS
 EXTRACPPFLAGS =
 CXXFLAGS =
