@@ -483,6 +483,7 @@ includedir=prefix+"\include"
 libdir=prefix+"\lib"
 mandir=prefix+"\share\man"
 datadir=prefix+"\share"
+localstatedir=prefix+"\var"
 
 ' libraries
 SOCKETLIBS=""
@@ -753,6 +754,7 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@libdir@",libdir,1,-1,0)
 	content=replace(content,"@mandir@",mandir,1,-1,0)
 	content=replace(content,"@datadir@",datadir,1,-1,0)
+	content=replace(content,"@localstatedir@",localstatedir,1,-1,0)
 
 	' flags
 	content=replace(content,"@OPTCPPFLAGS@",OPTCPPFLAGS,1,-1,0)
