@@ -478,7 +478,9 @@ privateheaders7="codetree.h "+_
 	"cgihttpserverapi.h "+_
 	"cgihttpserverapiincludes.h "+_
 	"encryption.h "+_
-	"encryptionincludes.h "
+	"encryptionincludes.h "+_
+	"aes128.h "+_
+	"aes128includes.h "
 
 ' version
 RUDIMENTS_VERSION="1.2.3"
