@@ -11,7 +11,7 @@ datadir = @datadir@
 docdir = $(datadir)\doc\rudiments
 licensedir = $(datadir)\licenses\rudiments
 localstatedir = @localstatedir@
-tmpdir = $(localstatedir)\run\rudiments
+tmpdir = @tmpdir@
 
 # command separator
 AND = &

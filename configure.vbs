@@ -476,14 +476,16 @@ privateheaders7="codetree.h "+_
 RUDIMENTS_VERSION="1.2.3"
 
 ' paths
-prefix="C:\""Program Files""\Firstworks"
-exec_prefix=prefix
-bindir=prefix+"\bin"
-includedir=prefix+"\include"
-libdir=prefix+"\lib"
-mandir=prefix+"\share\man"
-datadir=prefix+"\share"
-localstatedir=prefix+"\var"
+pfix="C:\\Program Files\\Firstworks"
+prefix=pfix
+exec_prefix=pfix
+bindir=pfix+"\\bin"
+includedir=pfix+"\\include"
+libdir=pfix+"\\lib"
+mandir=pfix+"\\share\\man"
+datadir=pfix+"\\share"
+localstatedir=pfix+"\\var"
+tmpdir=localstatedir+"\\run\\rudiments"
 
 ' libraries
 SOCKETLIBS=""
@@ -755,6 +757,7 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@mandir@",mandir,1,-1,0)
 	content=replace(content,"@datadir@",datadir,1,-1,0)
 	content=replace(content,"@localstatedir@",localstatedir,1,-1,0)
+	content=replace(content,"@tmpdir@",tmpdir,1,-1,0)
 
 	' flags
 	content=replace(content,"@OPTCPPFLAGS@",OPTCPPFLAGS,1,-1,0)
