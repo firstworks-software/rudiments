@@ -98,8 +98,7 @@ srcs="winsock.cpp "+_
 	"httprequest.cpp "+_
 	"urlhttprequest.cpp "+_
 	"httpresponse.cpp "+_
-	"cgihttpserverapi.cpp "+_
-	"httpserverapi.cpp"
+	"cgihttpserverapi.cpp "
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -177,8 +176,7 @@ lobjs="winsock.obj "+_
 	"httprequest.cpp "+_
 	"urlhttprequest.cpp "+_
 	"httpresponse.cpp "+_
-	"cgihttpserverapi.cpp "+_
-	"httpserverapi.cpp"
+	"cgihttpserverapi.cpp "
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
