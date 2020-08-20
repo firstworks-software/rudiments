@@ -98,7 +98,9 @@ srcs="winsock.cpp "+_
 	"httprequest.cpp "+_
 	"urlhttprequest.cpp "+_
 	"httpresponse.cpp "+_
-	"cgihttpserverapi.cpp "
+	"cgihttpserverapi.cpp "+_
+	"encryption.cpp "+_
+	"aes128.cpp "
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -176,7 +178,9 @@ lobjs="winsock.obj "+_
 	"httprequest.obj "+_
 	"urlhttprequest.obj "+_
 	"httpresponse.obj "+_
-	"cgihttpserverapi.obj "
+	"cgihttpserverapi.obj "+_
+	"encryption.obj "+_
+	"aes128.obj "
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
@@ -270,7 +274,9 @@ headers3="sax.h "+_
 	"httpresponse.h "+_
 	"httpserverapi.h "+_
 	"httpserverapimain.h "+_
-	"cgihttpserverapi.h"
+	"cgihttpserverapi.h "+_
+	"encryption.h "+_
+	"aes128.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -410,7 +416,7 @@ privateheaders6="signalhandler.h "+_
 	"xmlsax.h "+_
 	"xmlsaxincludes.h "+_
 	"domevents.h "+_
-	"domeventsincludes.h"
+	"domeventsincludes.h "
 privateheaders7="codetree.h "+_
 	"codetreeincludes.h "+_
 	"codetreegrammar.h "+_
@@ -470,7 +476,9 @@ privateheaders7="codetree.h "+_
 	"httpserverapi.h "+_
 	"httpserverapiincludes.h "+_
 	"cgihttpserverapi.h "+_
-	"cgihttpserverapiincludes.h"
+	"cgihttpserverapiincludes.h "+_
+	"encryption.h "+_
+	"encryptionincludes.h "
 
 ' version
 RUDIMENTS_VERSION="1.2.3"
