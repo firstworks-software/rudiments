@@ -173,10 +173,10 @@ lobjs="winsock.obj "+_
 	"jsonsax.obj "+_
 	"jsondom.obj "+_
 	"cursordomnode.obj "+_
-	"httprequest.cpp "+_
-	"urlhttprequest.cpp "+_
-	"httpresponse.cpp "+_
-	"cgihttpserverapi.cpp "
+	"httprequest.obj "+_
+	"urlhttprequest.obj "+_
+	"httpresponse.obj "+_
+	"cgihttpserverapi.obj "
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
