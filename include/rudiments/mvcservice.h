@@ -6,7 +6,7 @@
 
 #include <rudiments/mvctier.h>
 
-class mvcservice : public mvctier {
+class RUDIMENTS_DLLSPEC mvcservice : public mvctier {
 };
 
 #endif

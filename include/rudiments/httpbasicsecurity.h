@@ -6,7 +6,7 @@
 
 #include <rudiments/private/httpbasicsecurityincludes.h>
 
-class httpbasicsecurity : public mvcsecurity {
+class RUDIMENTS_DLLSPEC httpbasicsecurity : public mvcsecurity {
 	public:
 		httpbasicsecurity();
 		virtual ~httpbasicsecurity();
