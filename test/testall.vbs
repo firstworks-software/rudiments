@@ -4,7 +4,7 @@ if instr(lcase(WScript.FullName),"cscript")=0 Then
 	WScript.Quit
 end if
 
-tests=Array(
+tests=Array(_
 	"aes128",_
 	"avltree",_
 	"bytebuffer",_
@@ -62,14 +62,12 @@ set WshShell=WScript.CreateObject("WScript.Shell")
 
 for each test in tests
 
-	WScript.Echo(test)
+	set cmd=WshShell.Exec(test)
+	do until cmd.StdOut.AtEndOfStream
+		WScript.Echo(cmd.StdOut.Readline())
+	loop
 
-	'set cmd=WshShell.Exec(test)
-	'do until cmd.StdOut.AtEndOfStream
-		'WScript.Echo(cmd.StdOut.Readline())
-	'loop
-
-	'if cmd.ExitCode=1 then
-		'WScript.Quit
-	'end if
+	if cmd.ExitCode=1 then
+		WScript.Quit
+	end if
 next

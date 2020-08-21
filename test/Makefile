@@ -95,7 +95,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi semout semkey
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
