@@ -56,10 +56,10 @@ mkdir -p %{buildroot}%{_tmpfilesdir}
 echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
 %files
-%{_libdir}/librudiments.so.6
-%{_libdir}/librudiments.so.6.*
-%{_libdir}/librudiments-apache.so.6
-%{_libdir}/librudiments-apache.so.6.*
+%{_libdir}/librudiments.so.7
+%{_libdir}/librudiments.so.7.*
+%{_libdir}/librudiments-apache.so.7
+%{_libdir}/librudiments-apache.so.7.*
 %doc AUTHORS ChangeLog
 %exclude %{_libdir}/librudiments.la
 %exclude %{_libdir}/librudiments-apache.la
