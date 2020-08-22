@@ -35,7 +35,7 @@ int main(int argc, const char **argv) {
 	int32_t		seed=randomnumber::getSeed();
 	rn.setSeed(seed);
 
-	// for 2^0 through 2^24...
+	// for 2^0 through 2^23...
 	bytebuffer	unenc;
 	for (uint16_t i=0; i<2; i++) {
 		uint64_t	size=0;
@@ -93,7 +93,7 @@ int main(int argc, const char **argv) {
 				} else {
 					size=2;
 				}
-				if (size>16777216) {
+				if (size>8388608) {
 					break;
 				}
 			}
