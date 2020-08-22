@@ -473,7 +473,7 @@ privateheaders7="codetree.h "+_
 	"cgihttpserverapiincludes.h"
 
 ' version
-RUDIMENTS_VERSION="1.2.3"
+RUDIMENTS_VERSION="1.3.0"
 
 ' paths
 pfix="C:\\Program Files\\Firstworks"
