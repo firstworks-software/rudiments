@@ -93,12 +93,24 @@ srcs="winsock.cpp "+_
 	"csvdom.cpp "+_
 	"jsonsax.cpp "+_
 	"jsondom.cpp "+_
+	"inisax.cpp "+_
+	"inidom.cpp "+_
+	"propsax.cpp "+_
+	"propdom.cpp "+_
 	"cursordomnode.cpp "+_
 	"websocket.cpp "+_
 	"httprequest.cpp "+_
 	"urlhttprequest.cpp "+_
 	"httpresponse.cpp "+_
-	"cgihttpserverapi.cpp "
+	"cgihttpserverapi.cpp "+_
+	"encryption.cpp "+_
+	"aes128.cpp "+_
+	"mvctier.cpp "+_
+	"mvcview.cpp "+_
+	"mvcresult.cpp "+_
+	"mvcproperties.cpp "+_
+	"httpbasicsecurity.cpp "+_
+	"cronschedule.cpp "
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -172,11 +184,23 @@ lobjs="winsock.obj "+_
 	"csvdom.obj "+_
 	"jsonsax.obj "+_
 	"jsondom.obj "+_
+	"inisax.obj "+_
+	"inidom.obj "+_
+	"propsax.obj "+_
+	"propdom.obj "+_
 	"cursordomnode.obj "+_
 	"httprequest.obj "+_
 	"urlhttprequest.obj "+_
 	"httpresponse.obj "+_
-	"cgihttpserverapi.obj "
+	"cgihttpserverapi.obj "+_
+	"encryption.obj "+_
+	"aes128.obj "+_
+	"mvctier.obj "+_
+	"mvcview.obj "+_
+	"mvcresult.obj "+_
+	"mvcproperties.obj "+_
+	"httpbasicsecurity.obj "+_
+	"cronschedule.obj "
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
@@ -263,6 +287,10 @@ headers3="sax.h "+_
 	"csvdom.h "+_
 	"jsonsax.h "+_
 	"jsondom.h "+_
+	"inisax.h "+_
+	"inidom.h "+_
+	"propsax.h "+_
+	"propdom.h "+_
 	"cursordomnode.h "+_
 	"websocket.h "+_
 	"httprequest.h "+_
@@ -270,7 +298,15 @@ headers3="sax.h "+_
 	"httpresponse.h "+_
 	"httpserverapi.h "+_
 	"httpserverapimain.h "+_
-	"cgihttpserverapi.h"
+	"cgihttpserverapi.h "+_
+	"encryption.h "+_
+	"aes128.h "+_
+	"mvctier.h "+_
+	"mvcview.h "+_
+	"mvcresult.h "+_
+	"mvcproperties.h "+_
+	"httpbasicsecurity.h "+_
+	"cronschedule.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -410,7 +446,7 @@ privateheaders6="signalhandler.h "+_
 	"xmlsax.h "+_
 	"xmlsaxincludes.h "+_
 	"domevents.h "+_
-	"domeventsincludes.h"
+	"domeventsincludes.h "
 privateheaders7="codetree.h "+_
 	"codetreeincludes.h "+_
 	"codetreegrammar.h "+_
@@ -457,6 +493,14 @@ privateheaders7="codetree.h "+_
 	"jsonsaxincludes.h "+_
 	"jsondom.h "+_
 	"jsondomincludes.h "+_
+	"inisax.h "+_
+	"inisaxincludes.h "+_
+	"inidom.h "+_
+	"inidomincludes.h "+_
+	"propsax.h "+_
+	"propsaxincludes.h "+_
+	"propdom.h "+_
+	"propdomincludes.h "+_
 	"cursordomnode.h "+_
 	"cursordomnodeincludes.h "+_
 	"websocket.h "+_
@@ -470,7 +514,23 @@ privateheaders7="codetree.h "+_
 	"httpserverapi.h "+_
 	"httpserverapiincludes.h "+_
 	"cgihttpserverapi.h "+_
-	"cgihttpserverapiincludes.h"
+	"cgihttpserverapiincludes.h "+_
+	"encryption.h "+_
+	"encryptionincludes.h "+_
+	"aes128.h "+_
+	"aes128includes.h "+_
+	"mvctier.h "+_
+	"mvctierincludes.h "+_
+	"mvcview.h "+_
+	"mvcviewincludes.h "+_
+	"mvcresult.h "+_
+	"mvcresultincludes.h "+_
+	"mvcproperties.h "+_
+	"mvcpropertiesincludes.h "+_
+	"httpbasicsecurity.h "+_
+	"httpbasicsecurityincludes.h "+_
+	"cronschedule.h "+_
+	"cronscheduleincludes.h "
 
 ' version
 RUDIMENTS_VERSION="1.3.0"

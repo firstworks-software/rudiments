@@ -6,7 +6,7 @@
 
 #include <rudiments/private/mvcviewincludes.h>
 
-class mvcview : public mvctier {
+class RUDIMENTS_DLLSPEC mvcview : public mvctier {
 	public:
 		mvcview();
 		virtual ~mvcview();

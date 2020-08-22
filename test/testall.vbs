@@ -4,55 +4,70 @@ if instr(lcase(WScript.FullName),"cscript")=0 Then
 	WScript.Quit
 end if
 
+tests=Array(_
+	"aes128",_
+	"avltree",_
+	"bytebuffer",_
+	"bytestring",_
+	"character",_
+	"charstring",_
+	"commandline",_
+	"crypt",_
+	"csvdom",_
+	"datetime",_
+	"dictionary",_
+	"directory",_
+	"dynamicarray",_
+	"dynamiclib",_
+	"environment",_
+	"error",_
+	"file",_
+	"groupentry",_
+	"handoff",_
+	"hostentry",_
+	"inidom",_
+	"jsondom",_
+	"linkedlist",_
+	"listener",_
+	"logger",_
+	"md5sum",_
+	"memorymap",_
+	"memorypool",_
+	"mvcproperties",_
+	"parameterstring",_
+	"permissions",_
+	"process",_
+	"propdom",_
+	"protocolentry",_
+	"randomnumber",_
+	"regularexpression",_
+	"semaphoreset",_
+	"serviceentry",_
+	"sharedmemory",_
+	"signal",_
+	"singlylinkedlist",_
+	"snooze",_
+	"staticarray",_
+	"stringbuffer",_
+	"sys",_
+	"thread",_
+	"threadmutex",_
+	"url",_
+	"userentry",_
+	"xmldom"_
+)
+
 ' create shell object
 set WshShell=WScript.CreateObject("WScript.Shell")
 
-WshShell.Exec(PREFIX & "aes128")
-WshShell.Exec(PREFIX & "avltree")
-WshShell.Exec(PREFIX & "bytebuffer")
-WshShell.Exec(PREFIX & "bytestring")
-WshShell.Exec(PREFIX & "character")
-WshShell.Exec(PREFIX & "charstring")
-WshShell.Exec(PREFIX & "commandline")
-WshShell.Exec(PREFIX & "crypt")
-WshShell.Exec(PREFIX & "csvdom")
-WshShell.Exec(PREFIX & "datetime")
-WshShell.Exec(PREFIX & "dictionary")
-WshShell.Exec(PREFIX & "directory")
-WshShell.Exec(PREFIX & "dynamicarray")
-WshShell.Exec(PREFIX & "dynamiclib")
-WshShell.Exec(PREFIX & "environment")
-WshShell.Exec(PREFIX & "error")
-WshShell.Exec(PREFIX & "file")
-WshShell.Exec(PREFIX & "groupentry")
-WshShell.Exec(PREFIX & "handoff")
-WshShell.Exec(PREFIX & "hostentry")
-WshShell.Exec(PREFIX & "inidom")
-WshShell.Exec(PREFIX & "jsondom")
-WshShell.Exec(PREFIX & "linkedlist")
-WshShell.Exec(PREFIX & "listener")
-WshShell.Exec(PREFIX & "logger")
-WshShell.Exec(PREFIX & "memorymap")
-WshShell.Exec(PREFIX & "memorypool")
-WshShell.Exec(PREFIX & "mvcproperties")
-WshShell.Exec(PREFIX & "parameterstring")
-WshShell.Exec(PREFIX & "permissions")
-WshShell.Exec(PREFIX & "process")
-WshShell.Exec(PREFIX & "propdom")
-WshShell.Exec(PREFIX & "protocolentry")
-WshShell.Exec(PREFIX & "randomnumber")
-WshShell.Exec(PREFIX & "regularexpression")
-WshShell.Exec(PREFIX & "semaphoreset")
-WshShell.Exec(PREFIX & "serviceentry")
-WshShell.Exec(PREFIX & "sharedmemory")
-WshShell.Exec(PREFIX & "signal")
-WshShell.Exec(PREFIX & "singlylinkedlist")
-WshShell.Exec(PREFIX & "snooze")
-WshShell.Exec(PREFIX & "staticarray")
-WshShell.Exec(PREFIX & "stringbuffer")
-WshShell.Exec(PREFIX & "sys")
-WshShell.Exec(PREFIX & "thread")
-WshShell.Exec(PREFIX & "threadmutex")
-WshShell.Exec(PREFIX & "url")
-WshShell.Exec(PREFIX & "userentry")
-WshShell.Exec(PREFIX & "xmldom")
+for each test in tests
+
+	set cmd=WshShell.Exec(test)
+	do until cmd.StdOut.AtEndOfStream
+		WScript.Echo(cmd.StdOut.Readline())
+	loop
+
+	if cmd.ExitCode=1 then
+		WScript.Quit
+	end if
+next
