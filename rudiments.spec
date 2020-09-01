@@ -23,7 +23,7 @@ libraries, and XML.
 %package devel
 License: LGPLv2
 Summary: Development files for rudiments
-Requires: %{name}%{?_isa} = %{version}-%{release}, libedit-devel, openssl-devel, libcurl-devel, krb5-devel
+Requires: %{name}%{?_isa} = %{version}-%{release}, libedit-devel, openssl-devel, libcurl-devel, krb5-devel, httpd-devel
 
 %description devel
 Development files for rudiments.
