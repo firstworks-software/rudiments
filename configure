@@ -35454,7 +35454,7 @@ fi
 echo "******************************"
 
 
-RUDIMENTS_VERSION="1.3.0"
+RUDIMENTS_VERSION="1.3.1"
 
 
 cat >>confdefs.h <<_ACEOF
