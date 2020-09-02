@@ -9,8 +9,8 @@ then
 	LIBSSL_DEV="libssl-dev"
 
 	# override for ubuntu versions
-	UBUNTU_VERSION=`lsb_release -r | cut -d':' -f2 | sed -e "s|\t||g"`
-	if ( test "$UBUNTU_VERSION" -ge "18.04" )
+	UBUNTU_VERSION=`lsb_release -r | cut -d':' -f2 | sed -e "s|\t||g" -e "s|\.||g"`
+	if ( test "$UBUNTU_VERSION" -ge "1804" )
 	then
 		LIBCURL="libcurl4"
 	fi
