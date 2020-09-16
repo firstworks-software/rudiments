@@ -19,7 +19,9 @@ APACHELOBJS = @APACHELOBJS@
 .cpp.obj:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
-all: librudiments.$(LIBEXT) @LIBRUDIMENTSAPACHE@
+all:
+	$(MAKE) librudiments.$(LIBEXT)
+	$(MAKE) @LIBRUDIMENTSAPACHE@
 
 clean:
 	$(LTCLEAN) $(RM) *.lo *.o *.obj *.$(LIBEXT) *.lib *.exp *.idb *.pdb *.manifest *.ii
