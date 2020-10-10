@@ -431,17 +431,6 @@ class RUDIMENTS_DLLSPEC wcharstring {
 					ssize_t *oldstrlen,
 					const wchar_t * const *newstrset);
 
-		/** Returns a new string which is a copy of "str" in which
-		 *  parts that match "from" have been replaced with "to".
-		 *
-		 *  If "global" is true then all matching parts are
-		 *  replaced.  If "global" is false then only the first
-		 *  matching part is replaced. */
-		static	wchar_t	*replace(const wchar_t *str,
-						regularexpression *from,
-						const wchar_t *to,
-						bool global);
-
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
 		static	uint16_t	integerLength(int16_t number);

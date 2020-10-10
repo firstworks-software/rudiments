@@ -35,6 +35,7 @@ PROGS1= dictionary \
 	signal \
 	kill \
 	stringbuffer \
+	wstringbuffer \
 	bytebuffer \
 	crypt
 
@@ -195,6 +196,9 @@ kill: kill.cpp kill.$(OBJ)
 
 stringbuffer: stringbuffer.cpp stringbuffer.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) stringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+wstringbuffer: wstringbuffer.cpp wstringbuffer.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wstringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 handoff: handoff.cpp handoff.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

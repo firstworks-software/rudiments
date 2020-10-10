@@ -11,7 +11,9 @@ for program in \
 	bytebuffer \
 	bytestring \
 	character \
+	wcharacter \
 	charstring \
+	wcharstring \
 	commandline \
 	crypt \
 	csvdom \
@@ -50,6 +52,7 @@ for program in \
 	snooze \
 	staticarray \
 	stringbuffer \
+	wstringbuffer \
 	sys \
 	thread \
 	threadmutex \

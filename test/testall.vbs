@@ -10,7 +10,9 @@ tests=Array(_
 	"bytebuffer",_
 	"bytestring",_
 	"character",_
+	"wcharacter",_
 	"charstring",_
+	"wcharstring",_
 	"commandline",_
 	"crypt",_
 	"csvdom",_
@@ -49,6 +51,7 @@ tests=Array(_
 	"snooze",_
 	"staticarray",_
 	"stringbuffer",_
+	"wstringbuffer",_
 	"sys",_
 	"thread",_
 	"threadmutex",_

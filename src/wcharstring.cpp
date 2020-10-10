@@ -310,68 +310,6 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	return newstring.detachString();
 }
 
-wchar_t *wcharstring::replace(const wchar_t *str,
-				regularexpression *from,
-				const wchar_t *to,
-				bool global) {
-// FIXME: regularexpression...
-#if 0
-	if (!str) {
-		return NULL;
-	}
-	
-	// declare buffer for new string
-	wstringbuffer	newstring;
-
-	const wchar_t	*start=str;
-	const wchar_t	*ptr=start;
-	for (;;) {
-
-		// look for a matching part
-		// FIXME: regularexpression...
-		if (!*ptr || !from->match(ptr) || !from->getSubstringCount()) {
-
-			// bail if no match is found
-			break;
-		}
-
-		// get the bounds of the matching chunk
-		int32_t		fi=from->getSubstringCount()-1;
-		const wchar_t	*fromstart=from->getSubstringStart(fi);
-		const wchar_t	*fromend=from->getSubstringEnd(fi);
-
-		// move on if they're the same
-		if (fromend==fromstart) {
-			ptr++;
-			continue;
-		}
-
-		// append the previous, non-matching part of the chunk
-		newstring.append(start,fromstart-start);
-
-		// append the replacement part
-		newstring.append(to);
-
-		// move the start forward in the matching chunk
-		start=fromend;
-		ptr=start;
-
-		// bail if we're not replacing globally
-		if (!global) {
-			break;
-		}
-	}
-
-	// append the rest of the chunk
-	newstring.append(start);
-
-	// return the string that contains the replacements
-	return newstring.detachString();
-#else
-	return NULL;
-#endif
-}
-
 bool wcharstring::isInteger(const wchar_t *str) {
 
 	if (isNullOrEmpty(str)) {
