@@ -7,7 +7,7 @@
 #include <rudiments/wcharacter.h>
 #include <rudiments/process.h>
 #include <rudiments/file.h>
-#include <rudiments/stringbuffer.h>
+#include <rudiments/wstringbuffer.h>
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -123,7 +123,7 @@ void wcharstring::rightTrim(wchar_t *str, wchar_t character) {
 		str++;
 
 		// terminate the string there
-		*str=(wchar_t)0;
+		*str=L'\0';
 	}
 }
 
@@ -146,7 +146,7 @@ void wcharstring::leftTrim(wchar_t *str, wchar_t character) {
 			i++;
 		}
 		// store a null to the new end of string
-		str[j]=(wchar_t)0;
+		str[j]=L'\0';
 	}
 }
 
@@ -171,7 +171,7 @@ bool wcharstring::strip(wchar_t *str, wchar_t character) {
 		}
 		index++;
 	}
-	str[index-total]=(wchar_t)0;
+	str[index-total]=L'\0';
 	return retval;
 }
 
@@ -198,7 +198,7 @@ bool wcharstring::strip(wchar_t *str1, const wchar_t *str2) {
 			index++;
 		}
 	}
-	str1[index-total]=(wchar_t)0;
+	str1[index-total]=L'\0';
 	return retval;
 }
 
@@ -223,7 +223,7 @@ bool wcharstring::stripSet(wchar_t *str, const wchar_t *set) {
 		}
 		index++;
 	}
-	str[index-total]=(wchar_t)0;
+	str[index-total]=L'\0';
 	return retval;
 }
 
@@ -252,12 +252,10 @@ void wcharstring::replace(wchar_t *str,
 wchar_t *wcharstring::replace(const wchar_t *str,
 				const wchar_t *oldstr,
 				const wchar_t *newstr) {
-// FIXME: stringbuffer...
-#if 0
 	if (!str) {
 		return NULL;
 	}
-	stringbuffer	newstring;
+	wstringbuffer	newstring;
 	ssize_t		oldstrlen=wcharstring::length(oldstr);
 	const wchar_t	*ptr=str;
 	const wchar_t	*start=ptr;
@@ -273,23 +271,18 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	}
 	newstring.append(start,ptr-start);
 	return newstring.detachString();
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::replace(const wchar_t *str,
 					const wchar_t * const *oldstrset,
 					ssize_t *oldstrlen,
 					const wchar_t * const *newstrset) {
-// FIXME: stringbuffer...
-#if 0
 	if (!str) {
 		return NULL;
 	}
 
 	// search and replace
-	stringbuffer	newstring;
+	wstringbuffer	newstring;
 	const wchar_t	*ptr=str;
 	const wchar_t	*start=ptr;
 	while (*ptr) {
@@ -315,23 +308,20 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	newstring.append(start,ptr-start);
 
 	return newstring.detachString();
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::replace(const wchar_t *str,
 				regularexpression *from,
 				const wchar_t *to,
 				bool global) {
-// FIXME: stringbuffer, regularexpression...
+// FIXME: regularexpression...
 #if 0
 	if (!str) {
 		return NULL;
 	}
 	
 	// declare buffer for new string
-	stringbuffer	newstring;
+	wstringbuffer	newstring;
 
 	const wchar_t	*start=str;
 	const wchar_t	*ptr=start;
@@ -390,14 +380,14 @@ bool wcharstring::isInteger(const wchar_t *str) {
 
 	const wchar_t	*ptr=str;
 	for (; *ptr; ptr++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
-			(ptr>str && *ptr=='-')) {
+		if (((*ptr>L'9' || *ptr<L'0') && *ptr!=L'-') || 
+			(ptr>str && *ptr==L'-')) {
 			return false;
 		}
 	}
 
 	// if the string ended in a - then it's not a number
-	return (*(ptr-1)!='-');
+	return (*(ptr-1)!=L'-');
 }
 
 bool wcharstring::isInteger(const wchar_t *str, int32_t size) {
@@ -408,15 +398,15 @@ bool wcharstring::isInteger(const wchar_t *str, int32_t size) {
 
 	const wchar_t	*ptr=str;
 	for (int32_t index=0; index<size; index++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
-			(ptr>str && *ptr=='-')) {
+		if (((*ptr>L'9' || *ptr<L'0') && *ptr!=L'-') || 
+			(ptr>str && *ptr==L'-')) {
 			return false;
 		}
 		ptr++;
 	}
 
 	// if the string ended in a - then it's not a number
-	return (*(ptr-1)!='-');
+	return (*(ptr-1)!=L'-');
 }
 
 bool wcharstring::isNumber(const wchar_t *str) {
@@ -428,17 +418,17 @@ bool wcharstring::isNumber(const wchar_t *str) {
 	const wchar_t	*ptr=str;
 	int32_t		decimal=0;
 	for (; *ptr; ptr++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
-			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
+		if (((*ptr>L'9' || *ptr<L'0') && *ptr!=L'-' && *ptr!=L'.') || 
+			(ptr>str && *ptr==L'-') || (decimal && *ptr==L'.')) {
 			return false;
 		}
-		if (*ptr=='.') {
+		if (*ptr==L'.') {
 			decimal=1;
 		}
 	}
 
 	// if the string ended in a - or . then it's not a number
-	return (*(ptr-1)!='-' && *(ptr-1)!='.');
+	return (*(ptr-1)!=L'-' && *(ptr-1)!=L'.');
 }
 
 bool wcharstring::isNumber(const wchar_t *str, int32_t size) {
@@ -450,28 +440,28 @@ bool wcharstring::isNumber(const wchar_t *str, int32_t size) {
 	const wchar_t	*ptr=str;
 	int32_t		decimal=0;
 	for (int32_t index=0; index<size; index++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
-			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
+		if (((*ptr>L'9' || *ptr<L'0') && *ptr!=L'-' && *ptr!=L'.') || 
+			(ptr>str && *ptr==L'-') || (decimal && *ptr==L'.')) {
 			return false;
 		}
-		if (*ptr=='.') {
+		if (*ptr==L'.') {
 			decimal=1;
 		}
 		ptr++;
 	}
 
 	// if the string ended in a - or . then it's not a number
-	return (*(ptr-1)!='-' && *(ptr-1)!='.');
+	return (*(ptr-1)!=L'-' && *(ptr-1)!=L'.');
 }
 
 int64_t wcharstring::convertAmount(const wchar_t *amount) {
 	if (!amount) {
 		return 0;
 	}
-	const wchar_t	*dollarsstr=findFirst(amount,'$');
+	const wchar_t	*dollarsstr=findFirst(amount,L'$');
 	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
 	uint64_t	dollars=toUnsignedInteger(dollarsstr);
-	const wchar_t	*centsstr=findFirst(amount,'.');
+	const wchar_t	*centsstr=findFirst(amount,L'.');
 	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
 }
@@ -483,11 +473,11 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 	}
 	wchar_t	negative[2];
 	if (amount<0) {
-		negative[0]='-';
+		negative[0]=L'-';
 	} else {
-		negative[0]=(wchar_t)0;
+		negative[0]=L'\0';
 	}
-	negative[1]=(wchar_t)0;
+	negative[1]=L'\0';
 	wchar_t	*amountstr=new wchar_t[length];
 	int64_t	amt;
 	#ifdef RUDIMENTS_HAVE_LLABS
@@ -506,11 +496,11 @@ wchar_t *wcharstring::convertAmount(int64_t amount, uint16_t spaces) {
 	ssize_t	amtlen=length(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	wchar_t	*buffer=new wchar_t[realspaces+1];
-	buffer[realspaces]=(wchar_t)0;
-	bytestring::set(buffer,' ',realspaces);
+	buffer[realspaces]=L'\0';
+	bytestring::set(buffer,L' ',realspaces);
 	bytestring::copy(buffer+realspaces-amtlen,amt+1,amtlen);
-	if (buffer[0]==' ') {
-		buffer[0]='$';
+	if (buffer[0]==L' ') {
+		buffer[0]=L'$';
 	}
 	delete[] amt;
 	return buffer;
@@ -542,11 +532,11 @@ void wcharstring::escape(const wchar_t *input, uint64_t inputsize,
 				inputindex++) {
 			if (wcharstring::contains(characters,
 						input[inputindex]) ||
-					input[inputindex]=='\\') {
+					input[inputindex]==L'\\') {
 				if (pass==0) {
 					(*outputsize)++;
 				} else {
-					(*output)[outputindex]='\\';
+					(*output)[outputindex]=L'\\';
 					outputindex++;
 				}
 			}
@@ -559,7 +549,7 @@ void wcharstring::escape(const wchar_t *input, uint64_t inputsize,
 		}
 		if (pass==0) {
 			(*output)=new wchar_t[(*outputsize)+1];
-			(*output)[(*outputsize)]=(wchar_t)0;
+			(*output)[(*outputsize)]=L'\0';
 		}
 	}
 }
@@ -588,7 +578,7 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
 		for (uint64_t inputindex=0;
 				inputindex<inputsize;
 				inputindex++) {
-			if (!escaped && input[inputindex]=='\\') {
+			if (!escaped && input[inputindex]==L'\\') {
 				escaped=true;
 				continue;
 			}
@@ -602,7 +592,7 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
 		}
 		if (pass==0) {
 			(*output)=new wchar_t[(*outputsize)+1];
-			(*output)[(*outputsize)]=(wchar_t)0;
+			(*output)[(*outputsize)]=L'\0';
 		}
 	}
 }
@@ -628,7 +618,7 @@ void wcharstring::leftJustify(wchar_t *str, int32_t length) {
 
 	// right-pad with spaces
 	for (; index<length; index++) {
-		str[index]=' ';
+		str[index]=L' ';
 	}
 }
 
@@ -653,7 +643,7 @@ void wcharstring::rightJustify(wchar_t *str, int32_t length) {
 
 	// right-pad with spaces
 	for (; index>-1; index--) {
-		str[index]=' ';
+		str[index]=L' ';
 	}
 }
 
@@ -676,7 +666,7 @@ void wcharstring::center(wchar_t *str, int32_t length) {
 			str[index]=str[index-difference];
 		}
 		for (; index>-1; index--) {
-			str[index]=' ';
+			str[index]=L' ';
 		}
 	} else if (leftpad<leadingspaces) {
 		// shift everything left
@@ -686,7 +676,7 @@ void wcharstring::center(wchar_t *str, int32_t length) {
 			str[index]=str[index+difference];
 		}
 		for (; index<length; index++) {
-			str[index]=' ';
+			str[index]=L' ';
 		}
 	}
 }
@@ -698,7 +688,7 @@ int32_t wcharstring::countLeadingSpaces(const wchar_t *str, int32_t length) {
 	}
 
 	int32_t	leadingspaces=0;
-	for (int32_t index=0; str[index]==' ' && index<length; index++) {
+	for (int32_t index=0; str[index]==L' ' && index<length; index++) {
 		leadingspaces++;
 	}
 	return leadingspaces;
@@ -711,7 +701,7 @@ int32_t wcharstring::countTrailingSpaces(const wchar_t *str, int32_t length) {
 	}
 
 	int32_t	trailingspaces=0;
-	for (int32_t index=length-1; str[index]==' ' && index>-1; index--) {
+	for (int32_t index=length-1; str[index]==L' ' && index>-1; index--) {
 		trailingspaces++;
 	}
 	return trailingspaces;
@@ -761,14 +751,14 @@ wchar_t *wcharstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
 	wchar_t		*ptr=new wchar_t[strlength+1];
-	*ptr='-';
+	*ptr=L'-';
 	ptr+=strlength;
-	*ptr=(wchar_t)0;
+	*ptr=L'\0';
 	number*=-1;
 	strlength--;
 	while (strlength) {
 		ptr--;
-		*ptr='0'+number%10;
+		*ptr=L'0'+number%10;
 		number/=10;
 		strlength--;
 	}
@@ -785,10 +775,10 @@ wchar_t *wcharstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
 	wchar_t		*ptr=new wchar_t[strlength+1];
 	ptr+=strlength;
-	*ptr=(wchar_t)0;
+	*ptr=L'\0';
 	while (strlength) {
 		ptr--;
-		*ptr='0'+number%10;
+		*ptr=L'0'+number%10;
 		number/=10;
 		strlength--;
 	}
@@ -904,35 +894,20 @@ bool wcharstring::isNullOrEmpty(const wchar_t *string) {
 }
 
 bool wcharstring::isYes(const wchar_t *string) {
-	wchar_t	*yes=duplicate("yes");
-	wchar_t	*truestr=duplicate("true");
-	wchar_t	*on=duplicate("on");
-	wchar_t	y=wcharacter::duplicate('y');
-	wchar_t	Y=wcharacter::duplicate('Y');
-	wchar_t	t=wcharacter::duplicate('t');
-	wchar_t	T=wcharacter::duplicate('T');
-	wchar_t	one=wcharacter::duplicate('1');
 	wchar_t	next;
-	bool	retval=true;
 	if (!string) {
-		retval=false;
-	} else if (!wcharstring::compareIgnoringCase(string,yes,3)) {
+		return false;
+	} else if (!wcharstring::compareIgnoringCase(string,L"yes",3)) {
 		next=string[3];
-	} else if (!wcharstring::compareIgnoringCase(string,truestr,4)) {
+	} else if (!wcharstring::compareIgnoringCase(string,L"true",4)) {
 		next=string[4];
-	} else if (!wcharstring::compareIgnoringCase(string,on,2)) {
+	} else if (!wcharstring::compareIgnoringCase(string,L"on",2)) {
 		next=string[2];
-	} else if (string[0]==y || string[0]==Y ||
-			string[0]==t || string[0]==T ||
-			string[0]==one) {
+	} else if (string[0]==L'y' || string[0]==L'Y' ||
+			string[0]==L't' || string[0]==L'T' ||
+			string[0]==L'1') {
 		next=string[1];
 	} else {
-		retval=false;
-	}
-	delete[] yes;
-	delete[] truestr;
-	delete[] on;
-	if (!retval) {
 		return false;
 	}
 	return (!next || (!wcharacter::isAlphanumeric(next) && 
@@ -940,35 +915,20 @@ bool wcharstring::isYes(const wchar_t *string) {
 }
 
 bool wcharstring::isNo(const wchar_t *string) {
-	wchar_t	*no=duplicate("no");
-	wchar_t	*falsestr=duplicate("false");
-	wchar_t	*off=duplicate("off");
-	wchar_t	n=wcharacter::duplicate('n');
-	wchar_t	N=wcharacter::duplicate('N');
-	wchar_t	f=wcharacter::duplicate('f');
-	wchar_t	F=wcharacter::duplicate('F');
-	wchar_t	zero=wcharacter::duplicate('0');
 	wchar_t	next;
-	bool	retval=true;
 	if (!string) {
-		retval=false;
-	} else if (!wcharstring::compareIgnoringCase(string,no,2)) {
+		return false;
+	} else if (!wcharstring::compareIgnoringCase(string,L"no",2)) {
 		next=string[2];
-	} else if (!wcharstring::compareIgnoringCase(string,falsestr,5)) {
+	} else if (!wcharstring::compareIgnoringCase(string,L"false",5)) {
 		next=string[5];
-	} else if (!wcharstring::compareIgnoringCase(string,off,3)) {
+	} else if (!wcharstring::compareIgnoringCase(string,L"off",3)) {
 		next=string[3];
-	} else if (string[0]==n || string[0]==N ||
-			string[0]==f || string[0]==F ||
-			string[0]==zero) {
+	} else if (string[0]==L'n' || string[0]==L'N' ||
+			string[0]==L'f' || string[0]==L'F' ||
+			string[0]==L'0') {
 		next=string[1];
 	} else {
-		retval=false;
-	}
-	delete[] no;
-	delete[] falsestr;
-	delete[] off;
-	if (!retval) {
 		return false;
 	}
 	return (!next || (!wcharacter::isAlphanumeric(next) && 
@@ -976,7 +936,7 @@ bool wcharstring::isNo(const wchar_t *string) {
 }
 
 void wcharstring::zero(wchar_t *str, size_t size) {
-	bytestring::set(str,0,size);
+	bytestring::set(str,0,size*sizeof(wchar_t));
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, const wchar_t *source) {
@@ -1435,7 +1395,7 @@ void wcharstring::rightTrim(wchar_t *str) {
 		str++;
 
 		// terminate the string there
-		*str=(wchar_t)0;
+		*str=L'\0';
 	}
 }
 
@@ -1458,7 +1418,7 @@ void wcharstring::leftTrim(wchar_t *str) {
 			i++;
 		}
 		// store a null to the new end of string
-		str[j]=(wchar_t)0;
+		str[j]=L'\0';
 	}
 }
 
@@ -1533,9 +1493,9 @@ long double wcharstring::toFloatC(const wchar_t *string) {
 	if ((currentlconv!=NULL) &&
 		(currentlconv->decimal_point!=NULL) &&
 		(currentlconv->decimal_point[0]!=0) &&
-		(currentlconv->decimal_point[0]!='.') &&
+		(currentlconv->decimal_point[0]!=L'.') &&
 		(currentlconv->decimal_point[1]==0) &&
-		((decimalpointlocation=findFirst(string,'.'))!=NULL) &&
+		((decimalpointlocation=findFirst(string,L'.'))!=NULL) &&
 		(len<sizeof(stringinlocale))) {
 
 		bytestring::copy(stringinlocale,string,len+1);
@@ -1564,7 +1524,7 @@ wchar_t *wcharstring::duplicate(const wchar_t *str, size_t length) {
 	}
 	wchar_t	*buffer=new wchar_t[length+1];
 	copy(buffer,str,length);
-	buffer[length]=(wchar_t)0;
+	buffer[length]=L'\0';
 	return buffer;
 }
 
@@ -1726,7 +1686,7 @@ wchar_t *wcharstring::insertString(const wchar_t *dest,
 			retval[i++]=dest[j++];
 		}
 	}
-	retval[size-1]=(wchar_t)0;
+	retval[size-1]=L'\0';
 	return retval;
 }
 
@@ -1768,7 +1728,7 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, ...) {
 	va_list	args;
 	va_start(args,format);
-	size_t	result=wprintf(buffer,length,format,&args);
+	size_t	result=printf(buffer,length,format,&args);
 	va_end(args);
 	return result;
 }
@@ -1777,35 +1737,16 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, va_list *argp) {
 
 	// vswprintf should write whatever will fit into "buffer" and
-	// either return the number of bytes that were written or the
-	// number of bytes that would have been written if truncation
-	// hadn't occurred.
-
-	// But, implementations vary widely.
-
-	// Some implementations (like linux libc5) crash if "buffer" is NULL
-	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
-	// of at least two characters in either of those cases.
-	wchar_t	*buf=buffer;
-	size_t	buflen=length;
-	wchar_t	b[2];
-	if (!buf || buflen<2) {
-		buf=b;
-		buflen=sizeof(b);
-	}
-	ssize_t	size=vswprintf(buf,buflen,format,*argp);
-
-	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
-	// -1 if truncation occurred though and don't write anything to
-	// "buffer".
+	// either return the number of bytes that were written or -1
+	// if truncation occurs.
 	//
-	// For systems like those, we'll simulate the expected behavior...
-	buflen=length;
+	// Iterate, expanding the buffer as necessary.
+	size_t	buflen=length;
 	size_t	inc=16;
-	while (size==-1) {
+	ssize_t	size=-1;
+	do {
 
-		buflen=buflen+inc;
-		buf=new wchar_t[buflen];
+		wchar_t	*buf=new wchar_t[buflen];
 
 		size=vswprintf(buf,buflen,format,*argp);
 		if (size>-1) {
@@ -1813,13 +1754,15 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		}
 		delete[] buf;
 
+		buflen=buflen+inc;
+
 		// adjust how quickly the buffer grows
 		// (this can certainly be optimized further)
 		inc=inc*2;
 		if (inc>1024) {
 			inc=1024;
 		}
-	}
+	} while (size==-1);
 	return size;
 }
 

@@ -3,6 +3,7 @@
 
 #include <rudiments/bytebuffer.h>
 #include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
 #include <rudiments/bytestring.h>
 
 #ifdef RUDIMENTS_HAVE_STRING_H
@@ -139,9 +140,24 @@ ssize_t bytebuffer::write(const char *string) {
 					charstring::length(string));
 }
 
+ssize_t bytebuffer::write(const wchar_t *string, size_t size) {
+	return write(reinterpret_cast<const unsigned char *>(string),
+						size*sizeof(wchar_t));
+}
+
+ssize_t bytebuffer::write(const wchar_t *string) {
+	return write(reinterpret_cast<const unsigned char *>(string),
+				wcharstring::length(string)*sizeof(wchar_t));
+}
+
 ssize_t bytebuffer::write(char character) {
 	return write(reinterpret_cast<const unsigned char *>(&character),
 								sizeof(char));
+}
+
+ssize_t bytebuffer::write(wchar_t character) {
+	return write(reinterpret_cast<const unsigned char *>(&character),
+							sizeof(wchar_t));
 }
 
 ssize_t bytebuffer::write(int16_t number) {
@@ -227,6 +243,35 @@ ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 	return size;
 }
 
+ssize_t bytebuffer::writeFormatted(const wchar_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	ssize_t	retval=writeFormatted(format,&argp);
+	va_end(argp);
+	return retval;
+}
+
+ssize_t bytebuffer::writeFormatted(const wchar_t *format, va_list *argp) {
+
+	// write the formatted data to a buffer
+	wchar_t	*buffer=NULL;
+	ssize_t	size=wcharstring::printf(&buffer,format,argp);
+
+	// extend the list of buffers to accommodate
+	// "size" bytes beyond the current position
+	if (pvt->_pos+size>pvt->_actualsize) {
+		extend(pvt->_pos+size);
+	}
+
+	// write the buffer
+	write(buffer,size);
+
+	// clean up
+	delete[] buffer;
+	
+	return size;
+}
+
 void bytebuffer::clear() {
 	pvt->_size=0;
 	pvt->_pos=0;
@@ -308,9 +353,24 @@ bytebuffer *bytebuffer::append(const char *string) {
 						charstring::length(string));
 }
 
+bytebuffer *bytebuffer::append(const wchar_t *string, size_t size) {
+	return append(reinterpret_cast<const unsigned char *>(string),
+						size*sizeof(wchar_t));
+}
+
+bytebuffer *bytebuffer::append(const wchar_t *string) {
+	return append(reinterpret_cast<const unsigned char *>(string),
+				wcharstring::length(string)*sizeof(wchar_t));
+}
+
 bytebuffer *bytebuffer::append(char character) {
 	return append(reinterpret_cast<const unsigned char *>(&character),
 								sizeof(char));
+}
+
+bytebuffer *bytebuffer::append(wchar_t character) {
+	return append(reinterpret_cast<const unsigned char *>(&character),
+							sizeof(wchar_t));
 }
 
 bytebuffer *bytebuffer::append(int16_t number) {
@@ -367,6 +427,20 @@ bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
 }
 
 bytebuffer *bytebuffer::appendFormatted(const char *format, va_list *argp) {
+	pvt->_pos=pvt->_size;
+	writeFormatted(format,argp);
+	return this;
+}
+
+bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	bytebuffer	*retval=appendFormatted(format,&argp);
+	va_end(argp);
+	return retval;
+}
+
+bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, va_list *argp) {
 	pvt->_pos=pvt->_size;
 	writeFormatted(format,argp);
 	return this;

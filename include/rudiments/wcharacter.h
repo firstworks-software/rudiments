@@ -90,6 +90,11 @@ class RUDIMENTS_DLLSPEC wcharacter {
 
 		/** Returns the wide character representation of "c". */
 		static wchar_t	duplicate(char c);
+
+		/** Returns true if the platform supports wide characters and
+		 *  rudiments was build with wide character support and false
+		 *  otherwise. */
+		static bool	supported();
 };
 
 #endif

@@ -18,6 +18,7 @@ PROGS0 = listener \
 	regularexpression \
 	semaphoreset \
 	charstring \
+	wcharstring \
 	datetime
 
 PROGS1= dictionary \
@@ -47,6 +48,7 @@ PROGS2= dynamicarray \
 	snooze \
 	memorymap \
 	character \
+	wcharacter \
 	bytestring \
 	tlsserver \
 	tlsclient
@@ -173,6 +175,9 @@ sharedmemory: sharedmemory.cpp sharedmemory.$(OBJ)
 charstring: charstring.cpp charstring.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) charstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
+wcharstring: wcharstring.cpp wcharstring.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wcharstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
 datetime: datetime.cpp datetime.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) datetime.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
@@ -232,6 +237,9 @@ memorymap: memorymap.cpp memorymap.$(OBJ)
 
 character: character.cpp character.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) character.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+wcharacter: wcharacter.cpp wcharacter.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wcharacter.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 bytestring: bytestring.cpp bytestring.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

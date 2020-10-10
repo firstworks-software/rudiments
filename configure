@@ -862,6 +862,7 @@ enable_sharedmemory
 enable_signalclasses
 enable_snooze
 enable_stringbuffer
+enable_wstringbuffer
 enable_sys
 enable_unixclient
 enable_unixserver
@@ -1584,6 +1585,7 @@ Optional Features:
   --disable-signalclasses Don't build signalclasses
   --disable-snooze        Don't build snooze class
   --disable-stringbuffer  Don't build stringbuffer class
+  --disable-wstringbuffer Don't build wstringbuffer class
   --disable-sys           Don't build sys class
   --disable-unixclient    Don't build unixclient class
   --disable-unixserver    Don't build unixserver class
@@ -3060,6 +3062,13 @@ if test "${enable_stringbuffer+set}" = set; then :
   enableval=$enable_stringbuffer; INCLUDE_STRINGBUFFER="0"
 else
   INCLUDE_STRINGBUFFER="1"
+fi
+
+# Check whether --enable-wstringbuffer was given.
+if test "${enable_wstringbuffer+set}" = set; then :
+  enableval=$enable_wstringbuffer; INCLUDE_WSTRINGBUFFER="0"
+else
+  INCLUDE_WSTRINGBUFFER="1"
 fi
 
 # Check whether --enable-sys was given.
@@ -28965,6 +28974,41 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iswascii" >&5
+$as_echo_n "checking for iswascii... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+iswascii(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_ISWASCII 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 SWAB_DEFINED=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether swab is defined" >&5
 $as_echo_n "checking whether swab is defined... " >&6; }
@@ -35806,7 +35850,7 @@ fi
 if ( test "$INCLUDE_WCHARACTER" = "1" )
 then
 	HEADERS1="$HEADERS1 wcharacter.h"
-	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharacter.h wcharacterincludes.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharacterincludes.h"
 	SRCS="$SRCS wcharacter.cpp"
 	LOBJS="$LOBJS wcharacter.lo"
 fi
@@ -36206,6 +36250,12 @@ if ( test "$INCLUDE_STRINGBUFFER" = "1" )
 then
 	HEADERS2="$HEADERS2 stringbuffer.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 stringbufferincludes.h stringbufferinlines.h"
+fi
+
+if ( test "$INCLUDE_WSTRINGBUFFER" = "1" )
+then
+	HEADERS2="$HEADERS2 wstringbuffer.h"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 wstringbufferincludes.h wstringbufferinlines.h"
 fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )

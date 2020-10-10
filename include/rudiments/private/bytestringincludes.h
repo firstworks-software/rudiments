@@ -8,3 +8,7 @@
 //#define _XOPEN_SOURCE 600
 
 #include <sys/types.h>
+
+#ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#include <wctype.h>
+#endif

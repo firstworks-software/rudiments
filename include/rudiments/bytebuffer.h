@@ -78,6 +78,25 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(const char *string);
 
+		/** Writes the first "size" characters of "string" to the
+		 *  bytebuffer at the current position and increments the
+		 *  current position to the next byte after the data that was
+		 *  written.  If necessary, the internal buffer will grow to
+		 *  accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const wchar_t *string, size_t size);
+
+		/** Writes "string" to the bytebuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const wchar_t *string);
+
 		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
@@ -86,6 +105,15 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(char character);
+
+		/** Writes "character" to the bytebuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(wchar_t character);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -181,6 +209,19 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  va_list. */
 		ssize_t	writeFormatted(const char *format, va_list *argp);
 
+		/** Writes "..." to the byte buffer using "format"
+		 *  which should comply with standard wprintf formatting
+		 *  rules. */
+		ssize_t	writeFormatted(const wchar_t *format, ...);
+
+		/** Writes "argp" to the byte buffer using "format"
+		 *  which should comply with standard wprintf formatting
+		 *  rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list. */
+		ssize_t	writeFormatted(const wchar_t *format, va_list *argp);
+
 
 		/** Appends the first "size" bytes of "data" to the
 		 *  bytebuffer, growing the internal buffer as necessary
@@ -205,12 +246,34 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(const char *string);
 
+		/** Appends the first "size" characters of "string" to the
+		 *  bytebuffer, growing the internal buffer as necessary
+		 *  to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(const wchar_t *string, size_t size);
+
+		/** Appends "string" to the bytebuffer, growing the
+		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(const wchar_t *string);
+
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(char character);
+
+		/** Appends "character" to the bytebuffer, growing the
+		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(wchar_t character);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
@@ -287,6 +350,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
 		bytebuffer	*appendFormatted(const char *format,
+							va_list *argp);
+
+		/** Appends "..." to the byte buffer using "format"
+		 *  which should comply with standard wprintf formatting
+		 *  rules. */
+		bytebuffer	*appendFormatted(const wchar_t *format, ...);
+
+		/** Appends "argp" to the byte buffer using "format"
+		 *  which should comply with standard wprintf formatting
+		 *  rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list. */
+		bytebuffer	*appendFormatted(const wchar_t *format,
 							va_list *argp);
 
 		/** Truncates the bytebuffer at position "pos". */

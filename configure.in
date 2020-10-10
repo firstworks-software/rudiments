@@ -306,6 +306,10 @@ AC_ARG_ENABLE(stringbuffer,
 	[  --disable-stringbuffer  Don't build stringbuffer class],
 	INCLUDE_STRINGBUFFER="0",
 	INCLUDE_STRINGBUFFER="1")
+AC_ARG_ENABLE(wstringbuffer,
+	[  --disable-wstringbuffer Don't build wstringbuffer class],
+	INCLUDE_WSTRINGBUFFER="0",
+	INCLUDE_WSTRINGBUFFER="1")
 AC_ARG_ENABLE(sys,
 	[  --disable-sys           Don't build sys class],
 	INCLUDE_SYSTEM="0",
@@ -2529,6 +2533,21 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 wchar_t *a=NULL; wcschrnul(a,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSCHRNUL,1,Some systems have wcschrnul) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for iswascii)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+iswascii(0);,AC_DEFINE(RUDIMENTS_HAVE_ISWASCII,1,Some systems have iswascii) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -4228,7 +4247,7 @@ fi
 if ( test "$INCLUDE_WCHARACTER" = "1" )
 then
 	HEADERS1="$HEADERS1 wcharacter.h"
-	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharacter.h wcharacterincludes.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharacterincludes.h"
 	SRCS="$SRCS wcharacter.cpp"
 	LOBJS="$LOBJS wcharacter.lo"
 fi
@@ -4628,6 +4647,12 @@ if ( test "$INCLUDE_STRINGBUFFER" = "1" )
 then
 	HEADERS2="$HEADERS2 stringbuffer.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 stringbufferincludes.h stringbufferinlines.h"
+fi
+
+if ( test "$INCLUDE_WSTRINGBUFFER" = "1" )
+then
+	HEADERS2="$HEADERS2 wstringbuffer.h"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 wstringbufferincludes.h wstringbufferinlines.h"
 fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )

@@ -742,6 +742,9 @@
 /* Some systems have io.h */
 #define RUDIMENTS_HAVE_IO_H 1
 
+/* Some systems have iswascii */
+#define RUDIMENTS_HAVE_ISWASCII 1
+
 /* Some systems have kill */
 /* #undef RUDIMENTS_HAVE_KILL */
 

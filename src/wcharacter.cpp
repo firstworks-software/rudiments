@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/wcharacter.h>
+#include <rudiments/character.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
@@ -13,107 +14,195 @@
 #include <stdio.h>
 
 bool wcharacter::isAlphanumeric(int32_t c) {
-	return iswalnum(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswalnum(c)!=0;
+	#else
+		return false;
+	#endif
 }
  
 bool wcharacter::isAlphabetical(int32_t c) {
-	return iswalpha(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswalpha(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isAlphabeticalExtended(int32_t c) {
-	// FIXME...
-	return isAlphabetical(c);
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		// FIXME...
+		return isAlphabetical(c);
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isControlCharacter(int32_t c) {
-	return iswcntrl(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswcntrl(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isDigit(int32_t c) {
-	return iswdigit(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswdigit(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isLowerCase(int32_t c) {
-	return iswlower(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswlower(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isLowerCaseExtended(int32_t c) {
-	// FIXME...
-	return isLowerCase(c);
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		// FIXME...
+		return isLowerCase(c);
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isPrintableNonSpace(int32_t c) {
-	return iswgraph(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswgraph(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isPrintable(int32_t c) {
-	return iswprint(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswprint(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isPunctuation(int32_t c) {
-	return iswpunct(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswpunct(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isUpperCase(int32_t c) {
-	return iswupper(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswupper(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isUpperCaseExtended(int32_t c) {
-	// FIXME...
-	return isUpperCase(c);
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		// FIXME...
+		return isUpperCase(c);
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isHexDigit(int32_t c) {
-	return iswxdigit(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswxdigit(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isBlank(int32_t c) {
-	// don't be tempted to use isblank() here, it's too challenging to get
-	// it to work on every platform without a bunch of confusing #defines
-	// before including ctype.h
-	// FIXME...
-	return (c==' ' || c=='	');
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswblank(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isWhitespace(int32_t c) {
-	return iswspace(c)!=0;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return iswspace(c)!=0;
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::isAscii(int32_t c) {
-	// FIXME...
-	//return isascii(c)!=0;
-	return false;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		#ifdef RUDIMENTS_HAVE_ISWASCII
+			return iswascii(c)!=0;
+		#else
+			return character::isAscii(c);
+		#endif
+	#else
+		return false;
+	#endif
 }
 
 int32_t wcharacter::toUpperCase(int32_t c) {
-	return towupper(c);
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return towupper(c);
+	#else
+		return false;
+	#endif
 }
 
 int32_t wcharacter::toLowerCase(int32_t c) {
-	return towlower(c);
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return towlower(c);
+	#else
+		return false;
+	#endif
 }
 
 int32_t wcharacter::toAscii(int32_t c) {
-	// FIXME...
-	//return toascii(c);
-	return false;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return character::toAscii(c);
+	#else
+		return false;
+	#endif
 }
 
 bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
-	for (uint16_t i=0; set[i]; i++) {
-		if (set[i]==c) {
-			return true;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		for (uint16_t i=0; set[i]; i++) {
+			if (set[i]==c) {
+				return true;
+			}
 		}
-	}
-	return false;
+		return false;
+	#else
+		return false;
+	#endif
 }
 
 wchar_t wcharacter::duplicate(char c) {
-	wchar_t		retval;
-	mbstate_t	st;
-	size_t	s=mbrtowc(&retval,&c,1,&st);
-	if (s==(size_t)-1 || s==(size_t)-2) {
-		return (wchar_t)0;
-	}
-	return retval;
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		wchar_t		retval;
+		mbstate_t	st;
+		size_t	s=mbrtowc(&retval,&c,1,&st);
+		if (s==(size_t)-1 || s==(size_t)-2) {
+			return (wchar_t)0;
+		}
+		return retval;
+	#else
+		return false;
+	#endif
+}
+
+bool wcharacter::supported() {
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		return true;
+	#else
+		return false;
+	#endif
 }
