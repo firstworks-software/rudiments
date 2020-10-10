@@ -1486,6 +1486,33 @@
 /* Some systems have __vsnprintf but its not defined */
 /* #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF */
 
+/* Some systems have wchar.h */
+#define RUDIMENTS_HAVE_WCHAR_H 1
+
+/* Some systems have wcschrnul */
+/* #undef RUDIMENTS_HAVE_WCSCHRNUL */
+
+/* Some systems have wcscspn */
+/* #undef RUDIMENTS_HAVE_WCSCSPN */
+
+/* Some systems have wcspbrk */
+/* #undef RUDIMENTS_HAVE_WCSPBRK */
+
+/* Some systems have wcsspn */
+/* #undef RUDIMENTS_HAVE_WCSSPN */
+
+/* Some systems have wcstold */
+/* #undef RUDIMENTS_HAVE_WCSTOLD */
+
+/* Some systems have wcstoll */
+/* #undef RUDIMENTS_HAVE_WCSTOLL */
+
+/* Some systems have wcstoull */
+/* #undef RUDIMENTS_HAVE_WCSTOULL */
+
+/* Some systems have wctype.h */
+#define RUDIMENTS_HAVE_WCTYPE_H
+
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */
 

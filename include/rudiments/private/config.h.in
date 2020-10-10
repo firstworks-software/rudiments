@@ -1476,6 +1476,33 @@
 /* Some systems have vsnprintf_s */
 #undef RUDIMENTS_HAVE_VSNPRINTF_S
 
+/* Some systems have wchar.h */
+#undef RUDIMENTS_HAVE_WCHAR_H
+
+/* Some systems have wcschrnul */
+#undef RUDIMENTS_HAVE_WCSCHRNUL
+
+/* Some systems have wcscspn */
+#undef RUDIMENTS_HAVE_WCSCSPN
+
+/* Some systems have wcspbrk */
+#undef RUDIMENTS_HAVE_WCSPBRK
+
+/* Some systems have wcsspn */
+#undef RUDIMENTS_HAVE_WCSSPN
+
+/* Some systems have wcstold */
+#undef RUDIMENTS_HAVE_WCSTOLD
+
+/* Some systems have wcstoll */
+#undef RUDIMENTS_HAVE_WCSTOLL
+
+/* Some systems have wcstoull */
+#undef RUDIMENTS_HAVE_WCSTOULL
+
+/* Some systems have wctype.h */
+#undef RUDIMENTS_HAVE_WCTYPE_H
+
 /* GetDiskFreeSpace */
 #undef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 

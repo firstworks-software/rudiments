@@ -1,32 +1,27 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_CHARSTRING_H
-#define RUDIMENTS_CHARSTRING_H
+#ifndef RUDIMENTS_WCHARSTRING_H
+#define RUDIMENTS_WCHARSTRING_H
 
-#include <rudiments/private/charstringincludes.h>
+#include <rudiments/private/wcharstringincludes.h>
 
-/** The charstring class provides static methods for manipulating C-style
- *  character strings.
+/** The wcharstring class provides static methods for manipulating C-style
+ *  wide character strings.
  * 
- *  In addition to some unique methods, analogs for the standard C string
- *  functions are provided.  However, unlike the standard C string functions,
- *  the charstring methods are NULL safe.  Your application will not crash if a
- *  NULL is passed in, and instead, will give intuitive results. */
-class RUDIMENTS_DLLSPEC charstring {
+ *  In addition to some unique methods, analogs for the standard C wide string
+ *  functions are provided.  However, unlike the standard C wide string
+ *  functions, the wcharstring methods are NULL safe.  Your application will
+ *  not crash if a NULL is passed in, and instead, will give intuitive
+ *  results. */
+class RUDIMENTS_DLLSPEC wcharstring {
 	public:
 
 		/** Returns the length of "string". */
-		static	size_t	length(const char *string);
-
-		/** Returns the length of "string". */
-		static	size_t	length(const unsigned char *string);
+		static	size_t	length(const wchar_t *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
-		static	bool	isNullOrEmpty(const char *string);
-
-		/** Returns true if "string" is NULL or the empty string. */
-		static	bool	isNullOrEmpty(const unsigned char *string);
+		static	bool	isNullOrEmpty(const wchar_t *string);
 
 		/** Returns true if "string" starts with the standalone "word":
 		 *  "Yes" (case-insensitive), "True" (case-insensitive), 
@@ -35,7 +30,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  (Eg. returns true for "Yes,", "True ", and "1 2 3" but
 		 *  returns false for "Yesterday", "Truest", and "123") */
-		static	bool	isYes(const char *string);
+		static	bool	isYes(const wchar_t *string);
 
 		/** Returns true if "string" starts with the standalone word:
 		 *  "No" (case-insensitive), "False" (case-insensitive), or
@@ -43,363 +38,387 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  (Eg. returns true for "No,", "False ", and "0 1 2" but
 		 *  returns false for "Nothing", "Falsest", and "012") */
-		static	bool	isNo(const char *string);
+		static	bool	isNo(const wchar_t *string);
 
 		/** Sets "size" bytes of "str" to NULL. */
-		static	void	zero(char *str, size_t size);
+		static	void	zero(wchar_t *str, size_t size);
 
 		/** Appends "source" to "dest".  Assumes that there is
 		 *  enough room remaining in "dest" to accommodate the new
 		 *  string.  Returns a pointer to "dest". */
-		static	char	*append(char *dest, const char *source);
+		static	wchar_t	*append(wchar_t *dest, const wchar_t *source);
 
 		/** Appends "size" bytes of "source" to "dest".  Assumes
 		 *  that there is enough room remaining in "dest" to
 		 *  accommodate the new string.  Returns a pointer to "dest". */
-		static	char	*append(char *dest, const char *source,
+		static	wchar_t	*append(wchar_t *dest, const wchar_t *source,
 								size_t size);
 
 		/** Converts "number" to a string and appends it to "dest".
 		 *  Assumes that there is enough room remaining in "dest" to
 		 *  accommodate the new string.  Returns a pointer to "dest". */
-		static	char	*append(char *dest, int64_t number);
+		static	wchar_t	*append(wchar_t *dest, int64_t number);
 
 		/** Converts "number" to a string and appends it to "dest".
 		 *  Assumes that there is enough room remaining in "dest" to
 		 *  accommodate the new string.  Returns a pointer to "dest". */
-		static	char	*append(char *dest, uint64_t number);
+		static	wchar_t	*append(wchar_t *dest, uint64_t number);
 
 		/** Converts "number" to a string and appends it to "dest".
 		 *  Assumes that there is enough room remaining in "dest" to
 		 *  accommodate the new string.  Returns a pointer to "dest". */
-		static	char	*append(char *dest, double number);
+		static	wchar_t	*append(wchar_t *dest, double number);
 
 		/** Converts "number" to a string using "scale" and appends it
 		 *  to "dest".  Assumes that there is enough room remaining in
 		 *  "dest" to accommodate the new string.  Returns a pointer to
 		 *  "dest". */
-		static	char	*append(char *dest, double number,
+		static	wchar_t	*append(wchar_t *dest, double number,
 							uint16_t scale);
 
 		/** Converts "number" to a string using "precision" and "scale"
 		 *  and appends it to "dest".  Assumes that there is enough
 		 *  room remaining in "dest" to accommodate the new string.
 		 *  Returns a pointer to "dest". */
-		static	char	*append(char *dest, double number,
+		static	wchar_t	*append(wchar_t *dest, double number,
 						uint16_t precision,
 						uint16_t scale);
 
 		/** Replaces "dest" with "source".  Assumes that there is
 		 *  enough room in "dest" to accommodate "source".  Returns a
 		 *  pointer to "dest". */
-		static	char	*copy(char *dest, const char *source);
+		static	wchar_t	*copy(wchar_t *dest, const wchar_t *source);
 
 		/** Replaces the first "size" bytes of "dest" with "source".
 		 *  Assumes that "dest" is at least "size" bytes long.
 		 *  Returns a pointer to "dest". */
-		static	char	*copy(char *dest,
-					const char *source, size_t size);
+		static	wchar_t	*copy(wchar_t *dest,
+					const wchar_t *source, size_t size);
 
 		/** Replaces "dest" with "source", starting "location" bytes
 		 *  into "dest".  Assumes that there is enough room in "dest"
 		 *  (after "location" bytes) to accommodate "source".  Returns
 		 *  a pointer to "dest". */
-		static	char	*copy(char *dest, size_t location,
-						const char *source);
+		static	wchar_t	*copy(wchar_t *dest, size_t location,
+						const wchar_t *source);
 
 		/** Replaces "size" bytes of "dest" with "source", starting
 		 *  "location" bytes into "dest".  Assumes that there are
 		 *  "size" bytes in "dest" (after "location" bytes).  Returns a
 		 *  pointer to "dest". */
-		static	char	*copy(char *dest, size_t location,
-					const char *source, size_t size);
+		static	wchar_t	*copy(wchar_t *dest, size_t location,
+					const wchar_t *source, size_t size);
 
 		/** Replaces "dest" with "source" unless the length of "source"
 		 *  is greater than "destsize", in which case only "destsize"
 		 *  bytes of "dest" will be replaced.  Returns a pointer to
 		 *  "dest". */
-		static char	*safeCopy(char *dest, size_t destsize,
-							const char *source);
+		static wchar_t	*safeCopy(wchar_t *dest, size_t destsize,
+							const wchar_t *source);
 
 		/** Replaces "sourcesize" bytes of "dest" with "source" unless
 		 *  "sourcesize" is greater than "destsize", in which case only
 		 *  "destsize" bytes of "dest" will be replaced.  Returns a
 		 *  pointer to "dest". */
-		static char	*safeCopy(char *dest, size_t destsize,
-					const char *source, size_t sourcesize);
+		static wchar_t	*safeCopy(wchar_t *dest,
+						size_t destsize,
+						const wchar_t *source,
+						size_t sourcesize);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2". */
-		static	int32_t	compare(const char *str1, const char *str2);
+		static	int32_t	compare(const wchar_t *str1,
+						const wchar_t *str2);
 
 		/** Returns -1,0 or 1 if "size" bytes of "str1" are greater
 		 * than, equal to or less than "size" bytes of "str2". */
-		static	int32_t	compare(const char *str1, const char *str2,
-								size_t size);
+		static	int32_t	compare(const wchar_t *str1,
+						const wchar_t *str2,
+						size_t size);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2", ignoring case. */
-		static	int32_t	compareIgnoringCase(const char *str1,
-							const char *str2);
+		static	int32_t	compareIgnoringCase(const wchar_t *str1,
+							const wchar_t *str2);
 
 		/** Returns -1,0 or 1 if "size" bytes of "str1" are greater
 		 *  than, equal to or less than "size" bytes of "str2",
 		 *  ignoring case. */
-		static	int32_t	compareIgnoringCase(const char *str1,
-							const char *str2,
+		static	int32_t	compareIgnoringCase(const wchar_t *str1,
+							const wchar_t *str2,
 							size_t size);
 
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set".  Also returns true if "str"
 		 *  is NULL and set is NULL or contains only a NULL-terminator.
 		 *  Otherwise returns false. */
-		static	bool	inSet(const char *str, const char * const *set);
+		static	bool	inSet(const wchar_t *str,
+					const wchar_t * const *set);
 
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set", ignoring case.  Also returns
 		 *  true if "str" is NULL and set is NULL or contains only a
 		 *  NULL-terminator.  Otherwise returns false. */
-		static	bool	inSetIgnoringCase(const char *str,
-						const char * const *set);
+		static	bool	inSetIgnoringCase(const wchar_t *str,
+						const wchar_t * const *set);
 
 		/** Returns true if "haystack" contains "needle" or
 		 *  false otherwise. */
-		static	bool	contains(const char *haystack,
-							const char *needle);
+		static	bool	contains(const wchar_t *haystack,
+							const wchar_t *needle);
 
 		/** Returns true if "haystack" contains "needle" or
 		 *  false otherwise. */
-		static	bool	contains(const char *haystack, char needle);
+		static	bool	contains(const wchar_t *haystack,
+							wchar_t needle);
 
 		/** Returns true if "haystack" starts with "needle" or
 		 *  false otherwise. */
-		static	bool	startsWith(const char *haystack,
-						const char *needle);
+		static	bool	startsWith(const wchar_t *haystack,
+						const wchar_t *needle);
 
 		/** Returns true if "haystack" ends with "needle" or
 		 *  false otherwise. */
-		static	bool	endsWith(const char *haystack,
-						const char *needle);
+		static	bool	endsWith(const wchar_t *haystack,
+						const wchar_t *needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
-		static	const char	*findFirst(const char *haystack,
-							const char *needle);
+		static	const wchar_t	*findFirst(const wchar_t *haystack,
+							const wchar_t *needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
-		static	const char	*findFirst(const char *haystack,
-							char needle);
-
-		/** Returns a pointer to the first occurrance of "needle"
-		 *  in "haystack" or a pointer to the NULL terminator
-		 *  at the end of the string if not found. */
-		static	const char	*findFirstOrEnd(const char *haystack,
-							char needle);
+		static	const wchar_t	*findFirst(const wchar_t *haystack,
+							wchar_t needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or a pointer to the NULL terminator
 		 *  at the end of the string if not found. */
-		static	const char	*findFirstOrEnd(const char *haystack,
-							const char *needle);
-
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
-		static	const char	*findLast(const char *haystack,
-							const char *needle);
-
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
-		static	const char	*findLast(const char *haystack,
-							char needle);
-
-		/** Returns a pointer to the first occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
-		static	char	*findFirst(char *haystack, const char *needle);
-
-		/** Returns a pointer to the first occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
-		static	char	*findFirst(char *haystack, char needle);
+		static	const wchar_t	*findFirstOrEnd(const wchar_t *haystack,
+							wchar_t needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or a pointer to the NULL terminator
 		 *  at the end of the string if not found. */
-		static	char	*findFirstOrEnd(char *haystack,
-							const char *needle);
+		static	const wchar_t	*findFirstOrEnd(const wchar_t *haystack,
+							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
-		static	char	*findLast(char *haystack, const char *needle);
+		static	const wchar_t	*findLast(const wchar_t *haystack,
+							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
-		static	char	*findLast(char *haystack, char needle);
+		static	const wchar_t	*findLast(const wchar_t *haystack,
+							wchar_t needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack" or NULL if not found. */
+		static	wchar_t	*findFirst(wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack" or NULL if not found. */
+		static	wchar_t	*findFirst(wchar_t *haystack, wchar_t needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack" or a pointer to the NULL terminator
+		 *  at the end of the string if not found. */
+		static	wchar_t	*findFirstOrEnd(wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack" or NULL if not found. */
+		static	wchar_t	*findLast(wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack" or NULL if not found. */
+		static	wchar_t	*findLast(wchar_t *haystack, wchar_t needle);
 
 		/** Returns a pointer to the first occurence in
 		 *  "haystack" of any of the characters in "set"
 		 *  or NULL if not found. */
-		static const char	*findFirstOfSet(const char *haystack,
-							const char *set);
+		static const wchar_t	*findFirstOfSet(const wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the first occurence in
 		 *  "haystack" of any of the characters in "set"
 		 *  or NULL if not found. */
-		static char		*findFirstOfSet(char *haystack,
-							const char *set);
+		static wchar_t		*findFirstOfSet(wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the first occurence in
 		 *  "haystack" of any of the characters in "set"
 		 *  or a pointer to the NULL terminator at the end
 		 *  of the string if not found. */
-		static const char	*findFirstOfSetOrEnd(
-							const char *haystack,
-							const char *set);
+		static const wchar_t	*findFirstOfSetOrEnd(
+							const wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the first occurence in
 		 *  "haystack" of any of the characters in "set".
 		 *  or a pointer to the NULL terminator at the end
 		 *  of the string if not found. */
-		static char		*findFirstOfSetOrEnd(
-							char *haystack,
-							const char *set);
+		static wchar_t		*findFirstOfSetOrEnd(
+							wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the last occurence in
 		 *  "haystack" of any of the characters in "set"
 		 *  or NULL if not found. */
-		static const char	*findLastOfSet(const char *haystack,
-							const char *set);
+		static const wchar_t	*findLastOfSet(const wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the last occurence in
 		 *  "haystack" of any of the characters in "set"
 		 *  or NULL if not found. */
-		static char		*findLastOfSet(char *haystack,
-							const char *set);
+		static wchar_t		*findLastOfSet(wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the last occurence in
 		 *  "haystack" of any of the characters in "set"
 		 *  or a pointer to the NULL terminator at the end
 		 *  of the string if not found. */
-		static const char	*findLastOfSetOrEnd(
-							const char *haystack,
-							const char *set);
+		static const wchar_t	*findLastOfSetOrEnd(
+							const wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns a pointer to the last occurence in
 		 *  "haystack" of any of the characters in "set".
 		 *  or a pointer to the NULL terminator at the end
 		 *  of the string if not found. */
-		static char		*findLastOfSetOrEnd(
-							char *haystack,
-							const char *set);
+		static wchar_t		*findLastOfSetOrEnd(
+							wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns the string from the beginning of "str" until
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static char	*before(const char *str,
-						const char *delimiter);
+		static wchar_t	*before(const wchar_t *str,
+						const wchar_t *delimiter);
 
 		/** Returns the string between "start" and "end".
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static char	*between(const char *str,
-						const char *start,
-						const char *end);
+		static wchar_t	*between(const wchar_t *str,
+						const wchar_t *start,
+						const wchar_t *end);
 
 		/** Returns the string from the "delimiter" until the end
 		 *  of the string.
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static char	*after(const char *str,
-						const char *delimiter);
+		static wchar_t	*after(const wchar_t *str,
+						const wchar_t *delimiter);
 
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters in "set". */
-		static size_t	lengthContainingSet(const char *haystack,
-							const char *set);
+		static size_t	lengthContainingSet(const wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters not in "set". */
-		static size_t	lengthNotContainingSet(const char *haystack,
-							const char *set);
+		static size_t	lengthNotContainingSet(const wchar_t *haystack,
+							const wchar_t *set);
 
 		/** Creates a duplicate of "str" and returns a pointer
 		 *  to it.  Note that this method allocates a buffer for
 		 *  the duplicate string internally and returns it.  The
 		 *  calling program must deallocate this buffer. */
-		static	char	*duplicate(const char *str);
+		static	wchar_t	*duplicate(const wchar_t *str);
+
+		/** Creates a duplicate of the first "length" bytes of
+		 *  "str", converts it to a wide string, and returns a pointer
+		 *  to it.  Note that this method allocates a buffer for the
+		 *  duplicate string internally and returns it.  The calling
+		 *  program must deallocate this buffer. */
+		static	wchar_t	*duplicate(const char *str, size_t length);
+
+		/** Creates a duplicate of "str", converts it to a wide string,
+		 *  and returns a pointer to it.  Note that this method
+		 *  allocates a buffer for the duplicate string internally
+		 *  and returns it.  The calling program must deallocate this
+		 *  buffer. */
+		static	wchar_t	*duplicate(const char *str);
 
 		/** Creates a duplicate of the first "length" bytes of
 		 *  "str" and returns a pointer to it.  Note that this
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	char	*duplicate(const char *str, size_t length);
+		static	wchar_t	*duplicate(const wchar_t *str, size_t length);
 
 		/** Converts "str" to uppercase. */
-		static	void	upper(char *str); 
+		static	void	upper(wchar_t *str); 
 
 		/** Converts "str" to lowercase. */
-		static	void	lower(char *str); 
+		static	void	lower(wchar_t *str); 
 
 		/** Captitalizes "str", converting characters to upper
 		 *  or lower case as necessary. */
-		static void	capitalize(char *str);
+		static void	capitalize(wchar_t *str);
 
 		/** Trims all spaces off of the right hand side of "str". */
-		static	void	rightTrim(char *str);
+		static	void	rightTrim(wchar_t *str);
 
 		/** Trims all "character"'s off of the right hand side
 		 *  of "str". */
-		static	void	rightTrim(char *str, char character);
+		static	void	rightTrim(wchar_t *str, wchar_t character);
 
 		/** Trims all spaces off of the left hand side of "str". */
-		static	void	leftTrim(char *str);
+		static	void	leftTrim(wchar_t *str);
 
 		/** Trims all "character"'s off of the left hand side
 		 *  of "str". */
-		static	void	leftTrim(char *str, char character);
+		static	void	leftTrim(wchar_t *str, wchar_t character);
 
 		/** Trims all spaces off of both sides of "str". */
-		static	void	bothTrim(char *str);
+		static	void	bothTrim(wchar_t *str);
 
 		/** Trims all characters off of both sides of "str". */
-		static	void	bothTrim(char *str, char character);
+		static	void	bothTrim(wchar_t *str, wchar_t character);
 
 		/** Strips all instances of "character" from "str".
 		 *  Returns true if any characters were stripped and
 		 *  false if no characters were stripped. */
-		static	bool	strip(char *str, char character);
+		static	bool	strip(wchar_t *str, wchar_t character);
 
 		/** Strips all instances of "str2" from "str1".
 		 *  Returns true if any characters were stripped and
 		 *  false if no characters were stripped. */
-		static	bool	strip(char *str1, const char *str2);
+		static	bool	strip(wchar_t *str1, const wchar_t *str2);
 
 		/** Strips all instances of any character in "set" from
 		 *  "str1".  Returns true if any characters were stripped
 		 *  and false if no characters were stripped. */
-		static	bool	stripSet(char *str1, const char *set);
+		static	bool	stripSet(wchar_t *str1, const wchar_t *set);
 
 		/** Replaces all instances of "oldchar"
 		 *  in "str" with "newchar" */
-		static	void	replace(char *str,
-					char oldchar, char newchar);
+		static	void	replace(wchar_t *str,
+					wchar_t oldchar,
+					wchar_t newchar);
 
 		/** Replaces all instances of any of the characters in
 		 *  the set "oldchar" in "str" with "newchar" */
-		static	void	replace(char *str,
-					const char *oldchars, char newchar);
+		static	void	replace(wchar_t *str,
+					const wchar_t *oldchars,
+					wchar_t newchar);
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of "oldstr" have been replaced with
 		 *  "newstr" */
-		static	char	*replace(const char *str,
-						const char *oldstr,
-						const char *newstr);
+		static	wchar_t	*replace(const wchar_t *str,
+						const wchar_t *oldstr,
+						const wchar_t *newstr);
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of strings found in the NULL-terminated
@@ -407,10 +426,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  array "oldstrlen", have been replaced with the commensurate
 		 *  string found in the NULL-terminated array "newstrset",
 		 *  which must have the same number of members as "oldstrset" */
-		static	char	*replace(const char *str,
-						const char * const *oldstrset,
-						ssize_t *oldstrlen,
-						const char * const *newstrset);
+		static	wchar_t	*replace(const wchar_t *str,
+					const wchar_t * const *oldstrset,
+					ssize_t *oldstrlen,
+					const wchar_t * const *newstrset);
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  parts that match "from" have been replaced with "to".
@@ -418,9 +437,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  If "global" is true then all matching parts are
 		 *  replaced.  If "global" is false then only the first
 		 *  matching part is replaced. */
-		static	char	*replace(const char *str,
+		static	wchar_t	*replace(const wchar_t *str,
 						regularexpression *from,
-						const char *to,
+						const wchar_t *to,
 						bool global);
 
 		/** Returns the number of characters needed to represent
@@ -449,184 +468,186 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns true if the string "val" is an integer and
 		 *  false if it is not an integer. */
-		static	bool	isInteger(const char *val);
+		static	bool	isInteger(const wchar_t *val);
 
 		/** Returns true if the string "val" is an integer and
 		 *  false if it is not an integer. */
-		static	bool	isInteger(const char *val, int32_t size);
+		static	bool	isInteger(const wchar_t *val, int32_t size);
 
 		/** Returns true the string "val" is a number and false
 		 *  if it is not a number */
-		static	bool	isNumber(const char *val);
+		static	bool	isNumber(const wchar_t *val);
 
 		/** Returns true the string "val" is a number and false
 		 *  if it is not a number */
-		static	bool	isNumber(const char *val, int32_t size);
+		static	bool	isNumber(const wchar_t *val, int32_t size);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(int16_t number);
+		static	wchar_t	*parseNumber(int16_t number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(uint16_t number);
+		static	wchar_t	*parseNumber(uint16_t number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(int16_t number,
+		static	wchar_t	*parseNumber(int16_t number,
 						uint16_t zeropadding);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(uint16_t number,
+		static	wchar_t	*parseNumber(uint16_t number,
 						uint16_t zeropadding);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(int32_t number);
+		static	wchar_t	*parseNumber(int32_t number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(uint32_t number);
+		static	wchar_t	*parseNumber(uint32_t number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(int32_t number,
+		static	wchar_t	*parseNumber(int32_t number,
 						uint16_t zeropadding);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(uint32_t number,
+		static	wchar_t	*parseNumber(uint32_t number,
 						uint16_t zeropadding);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(int64_t number);
+		static	wchar_t	*parseNumber(int64_t number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(uint64_t number);
+		static	wchar_t	*parseNumber(uint64_t number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(int64_t number,
+		static	wchar_t	*parseNumber(int64_t number,
 						uint16_t zeropadding);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(uint64_t number,
+		static	wchar_t	*parseNumber(uint64_t number,
 						uint16_t zeropadding);
 
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(float number);
+		static	wchar_t	*parseNumber(float number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(float number,
+		static	wchar_t	*parseNumber(float number,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(float number,
+		static	wchar_t	*parseNumber(float number,
 						uint16_t precision,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(double number);
+		static	wchar_t	*parseNumber(double number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(double number,
+		static	wchar_t	*parseNumber(double number,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(double number,
+		static	wchar_t	*parseNumber(double number,
 						uint16_t precision,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(long double number);
+		static	wchar_t	*parseNumber(long double number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(long double number,
+		static	wchar_t	*parseNumber(long double number,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
 		 *  by the calling program. */
-		static	char	*parseNumber(long double number,
+		static	wchar_t	*parseNumber(long double number,
 						uint16_t precision,
 						uint16_t scale);
 
 		/** Converts "string" to a 64-bit integer. */
-		static	int64_t	toInteger(const char *string);
+		static	int64_t	toInteger(const wchar_t *string);
 
 		/** Converts "string" to a 64-bit integer.  If non-NULL,
 		 *  endptr will be set to the first character in the
 		 *  string after the number. */
-		static	int64_t	toInteger(const char *string,
-						const char **endptr);
+		static	int64_t	toInteger(const wchar_t *string,
+						const wchar_t **endptr);
 
 		/** Converts "string" to a 64-bit integer of base "base". */
-		static	int64_t	toInteger(const char *string, int32_t base);
+		static	int64_t	toInteger(const wchar_t *string, int32_t base);
 
 		/** Converts "string" to a 64-bit integer of base "base".
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
-		static	int64_t	toInteger(const char *string,
-					const char **endptr, int32_t base);
+		static	int64_t	toInteger(const wchar_t *string,
+						const wchar_t **endptr,
+						int32_t base);
 
 		/** Converts "string" to a 64-bit unsigned integer. */
-		static	uint64_t	toUnsignedInteger(const char *string);
+		static	uint64_t	toUnsignedInteger(
+						const wchar_t *string);
 
 		/** Converts "string" to a 64-bit unsigned integer.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
-		static	uint64_t	toUnsignedInteger(const char *string,
-							const char **endptr);
+		static	uint64_t	toUnsignedInteger(const wchar_t *string,
+							const wchar_t **endptr);
 
 		/** Converts "string" to a 64-bit unsigned integer of
 		 *  base "base". */
-		static	uint64_t	toUnsignedInteger(const char *string,
+		static	uint64_t	toUnsignedInteger(const wchar_t *string,
 								int32_t base);
 
 		/** Converts "string" to a 64-bit unsigned integer of
 		 *  base "base".
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
-		static	uint64_t	toUnsignedInteger(const char *string,
-							const char **endptr,
+		static	uint64_t	toUnsignedInteger(const wchar_t *string,
+							const wchar_t **endptr,
 							int32_t base);
 
 
 		/** Converts "string" to a floating point number. */
-		static	long double	toFloat(const char *string);
+		static	long double	toFloat(const wchar_t *string);
 
 		/** Converts "string" to a floating point number.
 		 *
@@ -638,170 +659,83 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  provide the locale.h header.  On other platforms, it just
 		 *  falls through to toFloat().)
 		 */
-		static	long double	toFloatC(const char *string);
+		static	long double	toFloatC(const wchar_t *string);
 
 		/** Converts "string" to a floating point number.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
-		static	long double	toFloat(const char *string,
-							const char **endptr);
+		static	long double	toFloat(const wchar_t *string,
+							const wchar_t **endptr);
 
 		/** Converts "amount" which is assumed to be a dollar amount
 		 *  into pennies. */
-		static	int64_t	convertAmount(const char *amount);
+		static	int64_t	convertAmount(const wchar_t *amount);
 
 		/** Converts "amount" which is assumed to be a number of
  		 *  pennies into a dollar amount string. */
-		static	char	*convertAmount(int64_t amount);
+		static	wchar_t	*convertAmount(int64_t amount);
 
 		/** Converts "amount" which is assumed to be a number of
  		 *  pennies into a dollar amount string where there
  		 *  are "padding" places between the dollar sign and decimal
  		 *  point.   These will be space padded if the amount is
  		 *  small enough not to fill them.  */
-		static	char	*convertAmount(int64_t amount,
+		static	wchar_t	*convertAmount(int64_t amount,
 						uint16_t padding);
 
-
-		/** http escapes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*httpEscape(const char *input);
-
-		/** http unescapes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*httpUnescape(const char *input);
 
 		/** escapes all characters in "characters" found in
 		 *  "input" using \'s and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	char	*escape(const char *input,
-					const char *characters);
+		static	wchar_t	*escape(const wchar_t *input,
+					const wchar_t *characters);
 
 		/** unescapes all \-escaped characters found in
 		 *  "input" and returns the result in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	char	*unescape(const char *input);
+		static	wchar_t	*unescape(const wchar_t *input);
 
 		/** similar to escape() above, but takes an "inputsize"
 		 *  parameter and returns the result in "output" and
 		 *  "outputsize" rather than in a return value */
-		static	void	escape(const char *input, uint64_t inputsize,
-					char **output, uint64_t *outputsize,
-					const char *characters);
+		static	void	escape(const wchar_t *input, uint64_t inputsize,
+					wchar_t **output, uint64_t *outputsize,
+					const wchar_t *characters);
 
 		/** similar to unescape() above, but takes an "inputsize"
 		 *  parameter and returns the result in "output" and
 		 *  "outputsize" rather than in a return value */
-		static	void	unescape(const char *input, uint64_t inputsize,
-					char **output, uint64_t *outputsize);
-
-		/** base64-encodes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*base64Encode(const unsigned char *input);
-
-		/** similar to base64Encode above but only encodes
-		 *  the first "inputsize" characters of "input" */
-		static	char	*base64Encode(const unsigned char *input,
-							uint64_t inputsize);
-
-		/** similar to base64Encode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
-		static	void	base64Encode(const unsigned char *input,
-							uint64_t inputsize,
-							char **output,
-							uint64_t *outputsize);
-
-		/** base64-decodes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	unsigned char	*base64Decode(const char *input);
-
-		/** similar to base64Decode above but only decodes
-		 *  the first "inputsize" characters of "input" */
-		static	unsigned char	*base64Decode(const char *input,
-							uint64_t inputsize);
-
-		/** similar to base64Decode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
-		static	void	base64Decode(const char *input,
+		static	void	unescape(const wchar_t *input,
 						uint64_t inputsize,
-						unsigned char **output,
+						wchar_t **output,
 						uint64_t *outputsize);
-
-		/** hex-encodes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*hexEncode(const unsigned char *input);
-
-		/** similar to hexEncode above but only encodes
-		 *  the first "inputsize" characters of "input" */
-		static	char	*hexEncode(const unsigned char *input,
-							uint64_t inputsize);
-
-		/** similar to base64Encode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
-		static	void	hexEncode(const unsigned char *input,
-						uint64_t inputsize,
-						char **output,
-						uint64_t *outputsize);
-
-		/** hex-decodes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	unsigned char	*hexDecode(const char *input);
-
-		/** similar to hexDecode above but only decodes
-		 *  the first "inputsize" characters of "input" */
-		static	unsigned char	*hexDecode(const char *input,
-							uint64_t inputsize);
-
-		/** similar to hexDecode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
-		static	void	hexDecode(const char *input,
-						uint64_t inputsize,
-						unsigned char **output,
-						uint64_t *outputsize);
-
-		/** Obfuscates "str" by adding 128 to each character. */
-		static void	obfuscate(char *str);
-
-		/** Deobfuscates "str" which was obfusacted using the
-		 *  obfuscate method of this class. */
-		static void	deobfuscate(char *str);
 
 		/** Moves leading spaces to the end of "str" for
 		 *  "length" characters.
 		 *
 		 *  Example: "   hello   " -> "hello      " */
-		static	void	leftJustify(char *str, int32_t length);
+		static	void	leftJustify(wchar_t *str, int32_t length);
 
 		/** Moves trailing spaces to the beginning of "str" for
 		 *  "length" characters.
 		 *  
 		 *  Example: "   hello   " -> "      hello"  */
-		static	void	rightJustify(char *str, int32_t length);
+		static	void	rightJustify(wchar_t *str, int32_t length);
 
 		/** Centers the text of "str" for "length" characters.
 		 *
 		 *  Example: "hello      " -> "   hello   "  */
-		static	void	center(char *str, int32_t length);
+		static	void	center(wchar_t *str, int32_t length);
 
 		/** Returns a copy of "string", padded with "padchar" to a
 		 *  length of "totallength".  Set "direction" to -1 to
 		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
 		 *  this method allocates a buffer internally and returns it.
 		 *  The calling program must deallocate this buffer. */
-		static char	*pad(const char *string,
-						char padchar,
+		static wchar_t	*pad(const wchar_t *string,
+						wchar_t padchar,
 						int16_t direction,
 						uint64_t totallength);
 
@@ -812,12 +746,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
 		 *  be deallocated by the calling program. */
-		static void	split(const char *string,
+		static void	split(const wchar_t *string,
 					ssize_t stringlength,
-					const char *delimiter,
+					const wchar_t *delimiter,
 					ssize_t delimiterlength,
 					bool collapse,
-					char ***list,
+					wchar_t ***list,
 					uint64_t *listlength);
 
 		/** Parses NULL-terminated "string" delimited by "delimiter" of
@@ -827,11 +761,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  be interpreted as one instance of the delimiter.  Each
 		 *  member of "list" and "list" itseslf must be deallocated by
 		 *  the calling program. */
-		static void	split(const char *string,
-					const char *delimiter,
+		static void	split(const wchar_t *string,
+					const wchar_t *delimiter,
 					ssize_t delimiterlength,
 					bool collapse,
-					char ***list,
+					wchar_t ***list,
 					uint64_t *listlength);
 		/** Parses "string" of "stringlength" delimited by
 		 *  NULL-terminated "delimiter" and allocates "listlength"
@@ -840,11 +774,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  be interpreted as one instance of the delimiter.  Each
 		 *  member of "list" and "list" itseslf must be deallocated by
 		 *  the calling program. */
-		static void	split(const char *string,
+		static void	split(const wchar_t *string,
 					ssize_t stringlength,
-					const char *delimiter,
+					const wchar_t *delimiter,
 					bool collapse,
-					char ***list,
+					wchar_t ***list,
 					uint64_t *listlength);
 
 		/** Parses NULL-terminated "string" delimited by
@@ -854,27 +788,27 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  be interpreted as one instance of the delimiter.  Each
 		 *  member of "list" and "list" itseslf must be deallocated by
 		 *  the calling program. */
-		static void	split(const char *string,
-					const char *delimiter,
+		static void	split(const wchar_t *string,
+					const wchar_t *delimiter,
 					bool collapse,
-					char ***list,
+					wchar_t ***list,
 					uint64_t *listlength);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",
 		 *  inclusive. */
-		static char	*subString(const char *str,
+		static wchar_t	*subString(const wchar_t *str,
 						size_t start, size_t end);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string index "start" and the end
 		 *  of the string, inclusive. */
-		static char	*subString(const char *str, size_t start);
+		static wchar_t	*subString(const wchar_t *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
                  *  "index". */
-		static char	*insertString(const char *dest,
-						const char *src,
+		static wchar_t	*insertString(const wchar_t *dest,
+						const wchar_t *src,
 						uint64_t index);
 
 		/** Appends "..." to "buffer" of length "length" using
@@ -894,8 +828,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(char *buffer, size_t length,
-						const char *format, ...);
+		static ssize_t	printf(wchar_t *buffer, size_t length,
+						const wchar_t *format, ...);
 
 		/** Appends "argp" to "buffer" of length "length" using
 		 *  "format" which should comply with standard printf
@@ -917,8 +851,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(char *buffer, size_t length,
-						const char *format,
+		static ssize_t	printf(wchar_t *buffer, size_t length,
+						const wchar_t *format,
 						va_list *argp);
 
 		/** Allocates "buffer" to sufficient size and writes "..." to
@@ -932,8 +866,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  0 is returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(char **buffer,
-						const char *format, ...);
+		static ssize_t	printf(wchar_t **buffer,
+						const wchar_t *format, ...);
 
 		/** Allocates "buffer" to sufficient size and writes "argp" to
 		 *  it using "format" which should comply with standard printf
@@ -946,11 +880,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  0 is returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(char **buffer,
-						const char *format,
+		static ssize_t	printf(wchar_t **buffer,
+						const wchar_t *format,
 						va_list *argp);
 
-	#include <rudiments/private/charstring.h>
+	#include <rudiments/private/wcharstring.h>
 };
 
 #endif

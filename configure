@@ -815,7 +815,9 @@ with_libcurl_libs
 enable_built_in_regex
 enable_threads
 enable_character
+enable_wcharacter
 enable_charstring
+enable_wcharstring
 enable_chat
 enable_client
 enable_commandline
@@ -1535,7 +1537,9 @@ Optional Features:
   --enable-built-in-regex Use the built-in regex
   --disable-threads       Disable thread support
   --disable-character     Don't build character class
+  --disable-wcharacter    Don't build wcharacter class
   --disable-charstring    Don't build charstring class
+  --disable-wcharstring   Don't build wcharstring class
   --disable-chat           Build chat class
   --disable-client        Don't build client class
   --disable-commandline   Don't build commandline class
@@ -2728,11 +2732,25 @@ else
   INCLUDE_CHARACTER="1"
 fi
 
+# Check whether --enable-wcharacter was given.
+if test "${enable_wcharacter+set}" = set; then :
+  enableval=$enable_wcharacter; INCLUDE_WCHARACTER="0"
+else
+  INCLUDE_WCHARACTER="1"
+fi
+
 # Check whether --enable-charstring was given.
 if test "${enable_charstring+set}" = set; then :
   enableval=$enable_charstring; INCLUDE_CHARSTRING="0"
 else
   INCLUDE_CHARSTRING="1"
+fi
+
+# Check whether --enable-wcharstring was given.
+if test "${enable_wcharstring+set}" = set; then :
+  enableval=$enable_wcharstring; INCLUDE_WCHARSTRING="0"
+else
+  INCLUDE_WCHARSTRING="1"
 fi
 
 # Check whether --enable-chat was given.
@@ -19027,6 +19045,54 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wctype.h" >&5
+$as_echo_n "checking for wctype.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <wctype.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCTYPE_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wchar.h" >&5
+$as_echo_n "checking for wchar.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <wchar.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCHAR_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 echo "******************************"
 
 
@@ -28444,6 +28510,41 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcstold" >&5
+$as_echo_n "checking for wcstold... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wcstold(NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSTOLD 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for strtoll" >&5
 $as_echo_n "checking for strtoll... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -28471,6 +28572,41 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_STRTOLL 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcstoll" >&5
+$as_echo_n "checking for wcstoll... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wcstoll(NULL,NULL,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSTOLL 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -28514,6 +28650,41 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcstoull" >&5
+$as_echo_n "checking for wcstoull... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wcstoull(NULL,NULL,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSTOULL 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for strspn" >&5
 $as_echo_n "checking for strspn... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -28541,6 +28712,41 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_STRSPN 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcsspn" >&5
+$as_echo_n "checking for wcsspn... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wcsspn(NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSSPN 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -28584,6 +28790,41 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcscspn" >&5
+$as_echo_n "checking for wcscspn... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wcscspn(NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSCSPN 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for strpbrk" >&5
 $as_echo_n "checking for strpbrk... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -28619,6 +28860,41 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcspbrk" >&5
+$as_echo_n "checking for wcspbrk... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wchar_t *a=NULL; wcspbrk(a,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSPBRK 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for strchrnul" >&5
 $as_echo_n "checking for strchrnul... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -28646,6 +28922,41 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_STRCHRNUL 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcschrnul" >&5
+$as_echo_n "checking for wcschrnul... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wchar_t *a=NULL; wcschrnul(a,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCSCHRNUL 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -35492,12 +35803,28 @@ then
 	LOBJS="$LOBJS character.lo"
 fi
 
+if ( test "$INCLUDE_WCHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 wcharacter.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharacter.h wcharacterincludes.h"
+	SRCS="$SRCS wcharacter.cpp"
+	LOBJS="$LOBJS wcharacter.lo"
+fi
+
 if ( test "$INCLUDE_CHARSTRING" = "1" )
 then
 	HEADERS1="$HEADERS1 charstring.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 charstring.h charstringincludes.h"
 	SRCS="$SRCS charstring.cpp"
 	LOBJS="$LOBJS charstring.lo"
+fi
+
+if ( test "$INCLUDE_WCHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 wcharstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharstring.h wcharstringincludes.h"
+	SRCS="$SRCS wcharstring.cpp"
+	LOBJS="$LOBJS wcharstring.lo"
 fi
 
 if ( test "$INCLUDE_CHAT" = "1" )
