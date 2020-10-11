@@ -4894,7 +4894,7 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
 	APACHESRCS="apachehttpserverapi.cpp"
 	APACHELOBJS="apachehttpserverapi.lo"
-	LIBRUDIMENTSAPACHE="librudiments-apache.la"
+	MAKELIBRUDIMENTSAPACHE='$(MAKE) librudiments-apache.la'
 	INSTALLLIBAPACHE="installlibapache"
 fi
 
@@ -4937,7 +4937,7 @@ AC_SUBST(SRCS)
 AC_SUBST(LOBJS)
 AC_SUBST(APACHESRCS)
 AC_SUBST(APACHELOBJS)
-AC_SUBST(LIBRUDIMENTSAPACHE)
+AC_SUBST(MAKELIBRUDIMENTSAPACHE)
 AC_SUBST(INSTALLLIBAPACHE)
 AC_SUBST(EXTRACPPFLAGS)
 

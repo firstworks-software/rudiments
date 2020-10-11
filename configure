@@ -634,7 +634,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 EXTRACPPFLAGS
 INSTALLLIBAPACHE
-LIBRUDIMENTSAPACHE
+MAKELIBRUDIMENTSAPACHE
 APACHELOBJS
 APACHESRCS
 LOBJS
@@ -36497,7 +36497,7 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
 	APACHESRCS="apachehttpserverapi.cpp"
 	APACHELOBJS="apachehttpserverapi.lo"
-	LIBRUDIMENTSAPACHE="librudiments-apache.la"
+	MAKELIBRUDIMENTSAPACHE='$(MAKE) librudiments-apache.la'
 	INSTALLLIBAPACHE="installlibapache"
 fi
 
