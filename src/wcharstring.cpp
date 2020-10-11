@@ -930,7 +930,7 @@ wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t size) {
 	if (!dest || !source) {
 		return dest;
 	}
-	return wcpncpy(dest,source,size);
+	return wscncpy(dest,source,size);
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
