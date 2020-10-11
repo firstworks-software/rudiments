@@ -89,7 +89,6 @@ void wcharstring::lower(wchar_t *str) {
 
 void wcharstring::capitalize(wchar_t *str) {
 	if (str) {
-		wchar_t	*set=duplicate(" '\"-(");
 		bool	cap=true;
 		for (wchar_t *ch=str; *ch; ch++) {
 			if (cap) {
@@ -98,11 +97,10 @@ void wcharstring::capitalize(wchar_t *str) {
 			} else {
 				*ch=wcharacter::toLowerCase(*ch);
 			}
-			if (wcharacter::inSet(*ch,set)) {
+			if (wcharacter::inSet(*ch,L" '\"-(")) {
 				cap=true;
 			}
 		}
-		delete[] set;
 	}
 }
 
