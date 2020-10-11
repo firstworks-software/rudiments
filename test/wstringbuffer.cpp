@@ -21,7 +21,7 @@ int main(int argc, const char **argv) {
 
 	// create a new string buffer
 	wstringbuffer	*strb=new wstringbuffer();
-	wchar_t		str[800000];
+	wchar_t		str[300000];
 	wchar_t		buf[64];
 
 	// append...
@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
 			strb->append(L"");
 
 			// strings
-			for (uint16_t k=1; k<=25; k++) {
+			for (uint16_t k=1; k<=5; k++) {
 				strb->append(alphabet,k);
 				wcharstring::append(str,alphabet,k);
 			}
@@ -106,9 +106,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 		for (uint16_t j=0; j<10000; j++) {
-			strb->setPosition(j*(30+i));
+			strb->setPosition(j*(10+i));
 			strb->write(L"66666");
-			wcharstring::copy(str+(j*(30+i)),L"66666",5);
+			wcharstring::copy(str+(j*(10+i)),L"66666",5);
 		}
 		test("contents",!wcharstring::compare(str,strb->getString()));
 	}
