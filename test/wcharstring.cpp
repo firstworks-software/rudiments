@@ -591,6 +591,24 @@ int main(int argc, const char **argv) {
 			L"oneone:-twotwo:-oneone:-threethree:-"
 			L"oneone:-fourfour:-oneone:-fivefive"));
 	delete[] newstr;
+	stdoutput.printf("\n");
 
+
+	// duplicate from char
+	stdoutput.printf("duplicate from char...\n");
+	char	chbuf[128];
+	wchar_t	wchbuf[128];
+	for (uint16_t c=1; c<=127; c++) {
+		chbuf[c-1]=(char)c;
+		wchbuf[c-1]=(wchar_t)c;
+	}
+	chbuf[127]='\0';
+	wchbuf[127]=L'\0';
+	wchar_t	*t=wcharstring::duplicate(chbuf);
+	test("duplicate",!wcharstring::compare(t,wchbuf));
+	delete[] t;
+	t=wcharstring::duplicate(chbuf,20);
+	test("duplicate",!wcharstring::compare(t,wchbuf,20));
+	delete[] t;
 	stdoutput.printf("\n");
 }

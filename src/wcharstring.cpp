@@ -1300,13 +1300,14 @@ wchar_t *wcharstring::duplicate(const wchar_t *str) {
 }
 
 wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
-	wchar_t		*retval=new wchar_t[length+1];
-	mbstate_t	st;
-	size_t	s=mbrtowc(retval,string,length,&st);
-	if (s==(size_t)-1 || s==(size_t)-2) {
-		delete[] retval;
+	if (!string) {
 		return NULL;
 	}
+	wchar_t		*retval=new wchar_t[length+1];
+	for (size_t i=0; i<length; i++) {
+		retval[i]=wcharacter::duplicate(string[i]);
+	}
+	retval[length]=L'\0';
 	return retval;
 }
 

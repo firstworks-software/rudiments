@@ -303,5 +303,7 @@ int main(int argc, const char **argv) {
 			wcharacter::toLowerCase(c)==tolowercase[c]);
 		test("\ttoAscii",
 			wcharacter::toAscii(c)==toascii[c]);
+		test("\tduplicate",
+			wcharacter::duplicate((char)c)==(wchar_t)c);
 	}
 }
