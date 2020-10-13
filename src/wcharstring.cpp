@@ -825,6 +825,10 @@ size_t wcharstring::length(const wchar_t *string) {
 	return (string)?wcslen(string):0;
 }
 
+size_t wcharstring::size(const wchar_t *string) {
+	return (string)?wcslen(string)+sizeof(wchar_t):0;
+}
+
 bool wcharstring::isNullOrEmpty(const wchar_t *string) {
 	return !(string && string[0]);
 }
@@ -871,8 +875,8 @@ bool wcharstring::isNo(const wchar_t *string) {
 				!wcharacter::isAlphabeticalExtended(next)));
 }
 
-void wcharstring::zero(wchar_t *str, size_t size) {
-	bytestring::set(str,0,size*sizeof(wchar_t));
+void wcharstring::zero(wchar_t *str, size_t length) {
+	bytestring::set(str,0,length*sizeof(wchar_t));
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, const wchar_t *source) {

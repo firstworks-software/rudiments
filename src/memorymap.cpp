@@ -41,7 +41,7 @@ class memorymapprivate {
 	friend class memorymap;
 	private:
 		void	*_data;
-		size_t	_length;
+		size_t	_size;
 		#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 			HANDLE	_map;
 		#endif
@@ -50,7 +50,7 @@ class memorymapprivate {
 memorymap::memorymap() {
 	pvt=new memorymapprivate;
 	pvt->_data=NULL;
-	pvt->_length=0;
+	pvt->_size=0;
 	#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 		pvt->_map=NULL;
 	#endif
@@ -61,13 +61,13 @@ memorymap::~memorymap() {
 	delete pvt;
 }
 
-bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
+bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 					int32_t protection, int32_t flags) {
-	pvt->_length=len;
+	pvt->_size=size;
 	#if defined(RUDIMENTS_HAVE_MMAP)
 		error::clearError();
 		do {
-			pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
+			pvt->_data=mmap(NULL,size,protection,flags,fd,offset);
 		} while (pvt->_data==(void *)MAP_FAILED &&
 				error::getErrorNumber()==EINTR);
 		return (pvt->_data!=(void *)MAP_FAILED);
@@ -126,7 +126,7 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 		pvt->_data=MapViewOfFile(pvt->_map,
 						viewprot,
 						offsethigh,offsetlow,
-						len);
+						size);
 		if (!pvt->_data) {
 			CloseHandle(pvt->_map);
 			return false;
@@ -147,7 +147,7 @@ bool memorymap::detach() {
 			do {
 				result=munmap(
 					reinterpret_cast<MUNMAP_ADDRCAST>
-					(pvt->_data),pvt->_length);
+					(pvt->_data),pvt->_size);
 			} while (result==-1 && error::getErrorNumber()==EINTR);
 			bool	retval=!result;
 		#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
@@ -155,7 +155,7 @@ bool memorymap::detach() {
 						CloseHandle(pvt->_map)==TRUE);
 		#endif
 		pvt->_data=NULL;
-		pvt->_length=0;
+		pvt->_size=0;
 		return retval;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -167,15 +167,15 @@ void *memorymap::getData() {
 	return pvt->_data;
 }
 
-size_t memorymap::getLength() {
-	return pvt->_length;
+size_t memorymap::getSize() {
+	return pvt->_size;
 }
 
 bool memorymap::sync(bool immediate, bool invalidate) {
-	return sync(0,pvt->_length,immediate,invalidate);
+	return sync(0,pvt->_size,immediate,invalidate);
 }
 
-bool memorymap::sync(off64_t offset, size_t len,
+bool memorymap::sync(off64_t offset, size_t size,
 			bool immediate, bool invalidate) {
 	#ifdef RUDIMENTS_HAVE_MSYNC
 		unsigned char	*ptr=
@@ -183,7 +183,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 		int32_t	result;
 		error::clearError();
 		do {
-			result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
+			result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),size,
 					((immediate)?MS_SYNC:MS_ASYNC)|
 						((invalidate)?MS_INVALIDATE:0));
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -192,7 +192,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 		unsigned char	*ptr=
 			(static_cast<unsigned char *>(pvt->_data))+offset;
 		return (FlushViewOfFile(
-			reinterpret_cast<void *>(ptr),len)==TRUE);
+			reinterpret_cast<void *>(ptr),size)==TRUE);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;

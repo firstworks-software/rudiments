@@ -460,9 +460,9 @@ int64_t charstring::convertAmount(const char *amount) {
 }
 
 char *charstring::convertAmount(int64_t amount) {
-	uint16_t	length=integerLength(amount)+4;
-	if (length<6) {
-		length=6;
+	uint16_t	len=integerLength(amount)+4;
+	if (len<6) {
+		len=6;
 	}
 	char	negative[2];
 	if (amount<0) {
@@ -471,14 +471,14 @@ char *charstring::convertAmount(int64_t amount) {
 		negative[0]='\0';
 	}
 	negative[1]='\0';
-	char	*amountstr=new char[length];
+	char	*amountstr=new char[len];
 	int64_t	amt;
 	#ifdef RUDIMENTS_HAVE_LLABS
 		amt=llabs((long long)amount);
 	#else
 		amt=abs((long)amount);
 	#endif
-	printf(amountstr,length,
+	printf(amountstr,len,
 			"$%s%lld.%02lld",negative,
 			amt/100,amt-(amt/100*100));
 	return amountstr;
@@ -684,39 +684,39 @@ void charstring::unescape(const char *input, uint64_t inputsize,
 	}
 }
 
-void charstring::leftJustify(char *str, int32_t length) {
+void charstring::leftJustify(char *str, int32_t len) {
 
 	if (!str) {
 		return;
 	}
 
 	// count leading spaces
-	int32_t	spaces=countLeadingSpaces(str,length);
+	int32_t	spaces=countLeadingSpaces(str,len);
 	if (spaces==0){
 		return;
 	}
 
 	// replace characters
 	int32_t	index;
-	int32_t	stop=length-spaces;
+	int32_t	stop=len-spaces;
 	for (index=0; index<stop; index++) {
 		str[index]=str[index+spaces];
 	}
 
 	// right-pad with spaces
-	for (; index<length; index++) {
+	for (; index<len; index++) {
 		str[index]=' ';
 	}
 }
 
-void charstring::rightJustify(char *str, int32_t length) {
+void charstring::rightJustify(char *str, int32_t len) {
 
 	if (!str) {
 		return;
 	}
 	
 	// count trailing spaces
-	int32_t	spaces=countTrailingSpaces(str,length);
+	int32_t	spaces=countTrailingSpaces(str,len);
 	if (spaces==0){
 		return;
 	}
@@ -724,7 +724,7 @@ void charstring::rightJustify(char *str, int32_t length) {
 	// replace characters
 	int32_t	index;
 	int32_t	stop=spaces-1;
-	for (index=length-1; index>stop; index--) {
+	for (index=len-1; index>stop; index--) {
 		str[index]=str[index-spaces];
 	}
 
@@ -734,14 +734,14 @@ void charstring::rightJustify(char *str, int32_t length) {
 	}
 }
 
-void charstring::center(char *str, int32_t length) {
+void charstring::center(char *str, int32_t len) {
 
 	if (!str) {
 		return;
 	}
 
-	int32_t	leadingspaces=countLeadingSpaces(str,length);
-	int32_t	trailingspaces=countTrailingSpaces(str,length);
+	int32_t	leadingspaces=countLeadingSpaces(str,len);
+	int32_t	trailingspaces=countTrailingSpaces(str,len);
 
 	int32_t	leftpad=(leadingspaces+trailingspaces)/2;
 
@@ -749,7 +749,7 @@ void charstring::center(char *str, int32_t length) {
 		// shift everything right
 		int32_t	difference=leftpad-leadingspaces;
 		int32_t	index;
-		for (index=length-1; index>difference-1; index--) {
+		for (index=len-1; index>difference-1; index--) {
 			str[index]=str[index-difference];
 		}
 		for (; index>-1; index--) {
@@ -759,36 +759,36 @@ void charstring::center(char *str, int32_t length) {
 		// shift everything left
 		int32_t	difference=leadingspaces-leftpad;
 		int32_t	index;
-		for (index=0; index<length-difference; index++) {
+		for (index=0; index<len-difference; index++) {
 			str[index]=str[index+difference];
 		}
-		for (; index<length; index++) {
+		for (; index<len; index++) {
 			str[index]=' ';
 		}
 	}
 }
 
-int32_t charstring::countLeadingSpaces(const char *str, int32_t length) {
+int32_t charstring::countLeadingSpaces(const char *str, int32_t len) {
 
 	if (!str) {
 		return 0;
 	}
 
 	int32_t	leadingspaces=0;
-	for (int32_t index=0; str[index]==' ' && index<length; index++) {
+	for (int32_t index=0; str[index]==' ' && index<len; index++) {
 		leadingspaces++;
 	}
 	return leadingspaces;
 }
 
-int32_t charstring::countTrailingSpaces(const char *str, int32_t length) {
+int32_t charstring::countTrailingSpaces(const char *str, int32_t len) {
 
 	if (!str) {
 		return 0;
 	}
 
 	int32_t	trailingspaces=0;
-	for (int32_t index=length-1; str[index]==' ' && index>-1; index--) {
+	for (int32_t index=len-1; str[index]==' ' && index>-1; index--) {
 		trailingspaces++;
 	}
 	return trailingspaces;
@@ -836,18 +836,18 @@ char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 		return parseNumber((uint64_t)number,zeropadding);
 	}
 	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
-	char		*ptr=new char[strlength+1];
+	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
+	char		*ptr=new char[strlen+1];
 	*ptr='-';
-	ptr+=strlength;
+	ptr+=strlen;
 	*ptr='\0';
 	number*=-1;
-	strlength--;
-	while (strlength) {
+	strlen--;
+	while (strlen) {
 		ptr--;
 		*ptr='0'+number%10;
 		number/=10;
-		strlength--;
+		strlen--;
 	}
 	ptr--;
 	return ptr;
@@ -859,15 +859,15 @@ char *charstring::parseNumber(uint64_t number) {
 
 char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
-	char		*ptr=new char[strlength+1];
-	ptr+=strlength;
+	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
+	char		*ptr=new char[strlen+1];
+	ptr+=strlen;
 	*ptr='\0';
-	while (strlength) {
+	while (strlen) {
 		ptr--;
 		*ptr='0'+number%10;
 		number/=10;
-		strlength--;
+		strlen--;
 	}
 	return ptr;
 }
@@ -913,9 +913,9 @@ char *charstring::parseNumber(long double number, uint16_t scale) {
 
 char *charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
-	size_t	strlength=precision+3;
-	char	*str=new char[strlength];
-	printf(str,strlength,"%*.*Lf",precision,scale,number);
+	size_t	strlen=precision+3;
+	char	*str=new char[strlen];
+	printf(str,strlen,"%*.*Lf",precision,scale,number);
 	return str;
 }
 
@@ -925,51 +925,51 @@ void charstring::bothTrim(char *string, char character) {
 }
 
 uint16_t charstring::integerLength(int16_t number) {
-	uint16_t	length=(number>0)?0:1;
+	uint16_t	len=(number>0)?0:1;
 	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
-		length++;
+		len++;
 	}
-	return length;
+	return len;
 }
 
 uint16_t charstring::integerLength(int32_t number) {
-	uint16_t	length=(number>0)?0:1;
+	uint16_t	len=(number>0)?0:1;
 	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
-		length++;
+		len++;
 	}
-	return length;
+	return len;
 }
 
 uint16_t charstring::integerLength(int64_t number) {
-	uint16_t	length=(number>0)?0:1;
+	uint16_t	len=(number>0)?0:1;
 	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
-		length++;
+		len++;
 	}
-	return length;
+	return len;
 }
 
 uint16_t charstring::integerLength(uint16_t number) {
-	uint16_t	length=(number>0)?0:1;
+	uint16_t	len=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
-		length++;
+		len++;
 	}
-	return length;
+	return len;
 }
 
 uint16_t charstring::integerLength(uint32_t number) {
-	uint16_t	length=(number>0)?0:1;
+	uint16_t	len=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
-		length++;
+		len++;
 	}
-	return length;
+	return len;
 }
 
 uint16_t charstring::integerLength(uint64_t number) {
-	uint16_t	length=(number>0)?0:1;
+	uint16_t	len=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
-		length++;
+		len++;
 	}
-	return length;
+	return len;
 }
 
 size_t charstring::length(const char *string) {
@@ -978,6 +978,10 @@ size_t charstring::length(const char *string) {
 
 size_t charstring::length(const unsigned char *string) {
 	return length((const char *)(string));
+}
+
+size_t charstring::size(const char *string) {
+	return (string)?strlen(string)+1:0;
 }
 
 bool charstring::isNullOrEmpty(const char *string) {
@@ -1030,16 +1034,16 @@ bool charstring::isNo(const char *string) {
 				!character::isAlphabeticalExtended(next)));
 }
 
-void charstring::zero(char *str, size_t size) {
-	bytestring::set(str,0,size);
+void charstring::zero(char *str, size_t len) {
+	bytestring::set(str,0,len);
 }
 
 char *charstring::append(char *dest, const char *source) {
 	return append(dest,source,length(source)+1);
 }
 
-char *charstring::append(char *dest, const char *source, size_t size) {
-	return copy(dest+length(dest),source,size);
+char *charstring::append(char *dest, const char *source, size_t len) {
+	return copy(dest+length(dest),source,len);
 }
 
 char *charstring::append(char *dest, int64_t number) {
@@ -1582,13 +1586,13 @@ long double charstring::toFloat(const char *string, const char **endptr) {
 	#endif
 }
 
-char *charstring::duplicate(const char *str, size_t length) {
+char *charstring::duplicate(const char *str, size_t len) {
 	if (!str) {
 		return NULL;
 	}
-	char	*buffer=new char[length+1];
-	copy(buffer,str,length);
-	buffer[length]='\0';
+	char	*buffer=new char[len+1];
+	copy(buffer,str,len);
+	buffer[len]='\0';
 	return buffer;
 }
 
@@ -2129,11 +2133,11 @@ char *charstring::pad(const char *str, char padchar,
 	return newstring;
 }
 
-ssize_t charstring::printf(char *buffer, size_t length,
+ssize_t charstring::printf(char *buffer, size_t len,
 					const char *format, ...) {
 	va_list	args;
 	va_start(args,format);
-	size_t	result=printf(buffer,length,format,&args);
+	size_t	result=printf(buffer,len,format,&args);
 	va_end(args);
 	return result;
 }
@@ -2198,7 +2202,7 @@ static void removeScratch() {
 	}
 }
 
-static ssize_t vsnprintf(char *buffer, size_t length,
+static ssize_t vsnprintf(char *buffer, size_t len,
 				const char *format, va_list argp) {
 
 	// open a scratch file if it's not already open
@@ -2264,8 +2268,8 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 	// figure out how many bytes we can copy back to "buffer"
 	// (the +1 is because vsprintf returns the number of bytes written
 	// minus the NULL terminator)
-	size_t	bytestocopy=((size_t)byteswritten+1<length)?
-					byteswritten+1:length;
+	size_t	bytestocopy=((size_t)byteswritten+1<len)?
+					byteswritten+1:len;
 
 	// copy what we can back to "buffer"
 	charstring::copy(buffer,safebuffer,bytestocopy);
@@ -2283,7 +2287,7 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 
 #endif
 
-ssize_t charstring::printf(char *buffer, size_t length,
+ssize_t charstring::printf(char *buffer, size_t len,
 					const char *format, va_list *argp) {
 
 	// vsnprintf should write whatever will fit into "buffer" and
@@ -2297,7 +2301,7 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
 	// of at least two characters in either of those cases.
 	char	*buf=buffer;
-	size_t	buflen=length;
+	size_t	buflen=len;
 	char	b[2];
 	if (!buf || buflen<2) {
 		buf=b;
@@ -2328,7 +2332,7 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	// "buffer".
 	//
 	// For systems like those, we'll simulate the expected behavior...
-	buflen=length;
+	buflen=len;
 	size_t	inc=16;
 	while (size==-1) {
 
@@ -2355,7 +2359,7 @@ ssize_t charstring::printf(char *buffer, size_t length,
 			#error no vsnprintf or anything like it
 		#endif
 		if (size>-1) {
-			charstring::copy(buffer,buf,length);
+			charstring::copy(buffer,buf,len);
 		}
 		delete[] buf;
 

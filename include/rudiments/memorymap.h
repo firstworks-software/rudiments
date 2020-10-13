@@ -19,7 +19,7 @@ class RUDIMENTS_DLLSPEC memorymap {
 		~memorymap();
 
 		/** Attaches the memorymap to file descriptor "fd" at
-		 *  "offset" for "len" bytes.
+		 *  "offset" for "size" bytes.
 		 * 
 		 *  "protection" may be:
 		 * 	PROT_NONE - pages may not be accessed
@@ -53,7 +53,7 @@ class RUDIMENTS_DLLSPEC memorymap {
 		 *  Note that not all filesystems support all of those options.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	attach(int32_t fd, off64_t offset, size_t len,
+		bool	attach(int32_t fd, off64_t offset, size_t size,
 					int32_t protection, int32_t flags);
 
 		/** detaches the memory map from the file descriptor
@@ -65,9 +65,9 @@ class RUDIMENTS_DLLSPEC memorymap {
 		 *  file is mapped into. */
 		void	*getData();
 
-		/** Returns the length of the region of memory that the
-		 *  file is mapped into. */
-		size_t	getLength();
+		/** Returns the number of bytes in the region of memory that
+		 *  the file is mapped into. */
+		size_t	getSize();
 
 		/** Make sure that changes made to the memory map have
 		 *  been copied to the storage mediam that the mapped
@@ -85,7 +85,7 @@ class RUDIMENTS_DLLSPEC memorymap {
 		bool	sync(bool immediate, bool invalidate);
 
 		/** Make sure that changes made to the memory map for
-		 *  "len" bytes, starting at "offset" have been copied
+		 *  "size" bytes, starting at "offset" have been copied
 		 *  to the storage mediam that the mapped file resides
 		 *  on.
 		 * 
@@ -98,7 +98,7 @@ class RUDIMENTS_DLLSPEC memorymap {
 		 *  file will be invalidated.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	sync(off64_t offset, size_t len,
+		bool	sync(off64_t offset, size_t size,
 				bool immediate, bool invalidate);
 
 

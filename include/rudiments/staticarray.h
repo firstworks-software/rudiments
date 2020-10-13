@@ -58,7 +58,7 @@ class staticarray {
 		 *  staticarray. */
 		valuetype	&operator[](uint64_t index);
 
-		/** Returns the length of the array. */
+		/** Returns the number of elements in the array. */
 		uint64_t	getLength() const;
 
 		/** Clears the array, deleting all of its values. */

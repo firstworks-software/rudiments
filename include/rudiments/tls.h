@@ -334,8 +334,8 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		bool	close();
 
 
-		/** Returns the maximum size that can be written or read in
-		 *  a single call to write() or read(). */
+		/** Returns the maximum number of bytes that can be written or
+		 *  read in a single call to write() or read(). */
 		ssize_t	getSizeMax();
 
 

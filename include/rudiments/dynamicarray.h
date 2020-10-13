@@ -71,7 +71,7 @@ class dynamicarray {
 		/*  Returns the size of each incremental extent. */
 		uint64_t	getIncrementSize() const;
 
-		/** Returns the length of the array. */
+		/** Returns the number of elements in the array. */
 		uint64_t	getLength() const;
 
 		/** Clears the array, deleting all of its values. */

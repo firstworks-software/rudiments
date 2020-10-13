@@ -16,11 +16,15 @@
 class RUDIMENTS_DLLSPEC charstring {
 	public:
 
-		/** Returns the length of "string". */
+		/** Returns the number of characters in "string". */
 		static	size_t	length(const char *string);
 
-		/** Returns the length of "string". */
+		/** Returns the number of characters in "string". */
 		static	size_t	length(const unsigned char *string);
+
+		/** Returns the number of bytes in "string", including the
+		 *  null terminator. */
+		static	size_t	size(const char *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const char *string);
@@ -45,19 +49,19 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  returns false for "Nothing", "Falsest", and "012") */
 		static	bool	isNo(const char *string);
 
-		/** Sets "size" bytes of "str" to NULL. */
-		static	void	zero(char *str, size_t size);
+		/** Sets "len" characters of "str" to NULL. */
+		static	void	zero(char *str, size_t len);
 
 		/** Appends "source" to "dest".  Assumes that there is
 		 *  enough room remaining in "dest" to accommodate the new
 		 *  string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, const char *source);
 
-		/** Appends "size" bytes of "source" to "dest".  Assumes
+		/** Appends "len" characters of "source" to "dest".  Assumes
 		 *  that there is enough room remaining in "dest" to
 		 *  accommodate the new string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, const char *source,
-								size_t size);
+								size_t len);
 
 		/** Converts "number" to a string and appends it to "dest".
 		 *  Assumes that there is enough room remaining in "dest" to
@@ -114,7 +118,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*copy(char *dest, size_t location,
 					const char *source, size_t size);
 
-		/** Replaces "dest" with "source" unless the length of "source"
+		/** Replaces "dest" with "source" unless the size of "source"
 		 *  is greater than "destsize", in which case only "destsize"
 		 *  bytes of "dest" will be replaced.  Returns a pointer to
 		 *  "dest". */
@@ -332,12 +336,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  calling program must deallocate this buffer. */
 		static	char	*duplicate(const char *str);
 
-		/** Creates a duplicate of the first "length" bytes of
+		/** Creates a duplicate of the first "len" characters of
 		 *  "str" and returns a pointer to it.  Note that this
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	char	*duplicate(const char *str, size_t length);
+		static	char	*duplicate(const char *str, size_t len);
 
 		/** Converts "str" to uppercase. */
 		static	void	upper(char *str); 
@@ -779,21 +783,21 @@ class RUDIMENTS_DLLSPEC charstring {
 		static void	deobfuscate(char *str);
 
 		/** Moves leading spaces to the end of "str" for
-		 *  "length" characters.
+		 *  "len" characters.
 		 *
 		 *  Example: "   hello   " -> "hello      " */
-		static	void	leftJustify(char *str, int32_t length);
+		static	void	leftJustify(char *str, int32_t len);
 
 		/** Moves trailing spaces to the beginning of "str" for
-		 *  "length" characters.
+		 *  "len" characters.
 		 *  
 		 *  Example: "   hello   " -> "      hello"  */
-		static	void	rightJustify(char *str, int32_t length);
+		static	void	rightJustify(char *str, int32_t len);
 
-		/** Centers the text of "str" for "length" characters.
+		/** Centers the text of "str" for "len" characters.
 		 *
 		 *  Example: "hello      " -> "   hello   "  */
-		static	void	center(char *str, int32_t length);
+		static	void	center(char *str, int32_t len);
 
 		/** Returns a copy of "string", padded with "padchar" to a
 		 *  length of "totallength".  Set "direction" to -1 to
@@ -877,27 +881,27 @@ class RUDIMENTS_DLLSPEC charstring {
 						const char *src,
 						uint64_t index);
 
-		/** Appends "..." to "buffer" of length "length" using
+		/** Appends "..." to "buffer" of length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
 		 *  Returns the number of characters written to "buffer"
 		 *  excluding the NULL terminator.  If string wasn't large
 		 *  enough to accommodate the data then it only writes
-		 *  "length" bytes to "buffer" but still returns the number
+		 *  "len" bytes to "buffer" but still returns the number
 		 *  of characters that would have been written had "buffer"
 		 *  been large enough.
 		 *
-		 *  If "buffer" is NULL or "length" is 0 then nothing is written
+		 *  If "buffer" is NULL or "len" is 0 then nothing is written
 		 *  to "buffer" but the number of characters that would have
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(char *buffer, size_t length,
+		static ssize_t	printf(char *buffer, size_t len,
 						const char *format, ...);
 
-		/** Appends "argp" to "buffer" of length "length" using
+		/** Appends "argp" to "buffer" of length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
@@ -907,17 +911,17 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Returns the number of characters written to "buffer"
 		 *  excluding the NULL terminator.  If "buffer" wasn't large
 		 *  enough to accommodate the data then it only writes
-		 *  "length" bytes to "buffer" but still returns the number
+		 *  "len" bytes to "buffer" but still returns the number
 		 *  of characters that would have been written had "buffer"
 		 *  been large enough.
 		 *
-		 *  If "buffer" is NULL or "length" is 0 then nothing is written
+		 *  If "buffer" is NULL or "len" is 0 then nothing is written
 		 *  to "buffer" but the number of characters that would have
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(char *buffer, size_t length,
+		static ssize_t	printf(char *buffer, size_t len,
 						const char *format,
 						va_list *argp);
 

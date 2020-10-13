@@ -17,8 +17,12 @@
 class RUDIMENTS_DLLSPEC wcharstring {
 	public:
 
-		/** Returns the length of "string". */
+		/** Returns the number of characters in "string". */
 		static	size_t	length(const wchar_t *string);
+
+		/** Returns the number of bytes in "string", including the
+		 *  null terminator. */
+		static	size_t	size(const wchar_t *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const wchar_t *string);
@@ -40,8 +44,8 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  returns false for "Nothing", "Falsest", and "012") */
 		static	bool	isNo(const wchar_t *string);
 
-		/** Sets "size" bytes of "str" to NULL. */
-		static	void	zero(wchar_t *str, size_t size);
+		/** Sets "length" bytes of "str" to NULL. */
+		static	void	zero(wchar_t *str, size_t len);
 
 		/** Appends "source" to "dest".  Assumes that there is
 		 *  enough room remaining in "dest" to accommodate the new
@@ -340,7 +344,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  to it.  Note that this method allocates a buffer for the
 		 *  duplicate string internally and returns it.  The calling
 		 *  program must deallocate this buffer. */
-		static	wchar_t	*duplicate(const char *str, size_t length);
+		static	wchar_t	*duplicate(const char *str, size_t len);
 
 		/** Creates a duplicate of "str", converts it to a wide string,
 		 *  and returns a pointer to it.  Note that this method
@@ -354,7 +358,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	wchar_t	*duplicate(const wchar_t *str, size_t length);
+		static	wchar_t	*duplicate(const wchar_t *str, size_t len);
 
 		/** Converts "str" to uppercase. */
 		static	void	upper(wchar_t *str); 
@@ -705,18 +709,18 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  "length" characters.
 		 *
 		 *  Example: "   hello   " -> "hello      " */
-		static	void	leftJustify(wchar_t *str, int32_t length);
+		static	void	leftJustify(wchar_t *str, int32_t len);
 
 		/** Moves trailing spaces to the beginning of "str" for
 		 *  "length" characters.
 		 *  
 		 *  Example: "   hello   " -> "      hello"  */
-		static	void	rightJustify(wchar_t *str, int32_t length);
+		static	void	rightJustify(wchar_t *str, int32_t len);
 
 		/** Centers the text of "str" for "length" characters.
 		 *
 		 *  Example: "hello      " -> "   hello   "  */
-		static	void	center(wchar_t *str, int32_t length);
+		static	void	center(wchar_t *str, int32_t len);
 
 		/** Returns a copy of "string", padded with "padchar" to a
 		 *  length of "totallength".  Set "direction" to -1 to
@@ -800,27 +804,27 @@ class RUDIMENTS_DLLSPEC wcharstring {
 						const wchar_t *src,
 						uint64_t index);
 
-		/** Appends "..." to "buffer" of length "length" using
+		/** Appends "..." to "buffer" of length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
 		 *  Returns the number of characters written to "buffer"
 		 *  excluding the NULL terminator.  If string wasn't large
 		 *  enough to accommodate the data then it only writes
-		 *  "length" bytes to "buffer" but still returns the number
+		 *  "len" bytes to "buffer" but still returns the number
 		 *  of characters that would have been written had "buffer"
 		 *  been large enough.
 		 *
-		 *  If "buffer" is NULL or "length" is 0 then nothing is written
+		 *  If "buffer" is NULL or "len" is 0 then nothing is written
 		 *  to "buffer" but the number of characters that would have
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(wchar_t *buffer, size_t length,
+		static ssize_t	printf(wchar_t *buffer, size_t len,
 						const wchar_t *format, ...);
 
-		/** Appends "argp" to "buffer" of length "length" using
+		/** Appends "argp" to "buffer" of length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
@@ -830,17 +834,17 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  Returns the number of characters written to "buffer"
 		 *  excluding the NULL terminator.  If "buffer" wasn't large
 		 *  enough to accommodate the data then it only writes
-		 *  "length" bytes to "buffer" but still returns the number
+		 *  "len" bytes to "buffer" but still returns the number
 		 *  of characters that would have been written had "buffer"
 		 *  been large enough.
 		 *
-		 *  If "buffer" is NULL or "length" is 0 then nothing is written
+		 *  If "buffer" is NULL or "len" is 0 then nothing is written
 		 *  to "buffer" but the number of characters that would have
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
 		 *  Returns -1 if an error occurred. */
-		static ssize_t	printf(wchar_t *buffer, size_t length,
+		static ssize_t	printf(wchar_t *buffer, size_t len,
 						const wchar_t *format,
 						va_list *argp);
 

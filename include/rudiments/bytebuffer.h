@@ -395,16 +395,17 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Returns the current data stored in the bytebuffer. */
 		const unsigned char	*getBuffer();
 
-		/** Returns the amount of data currently stored in the
+		/** Returns the number of bytes currently stored in the
 		 *  bytebuffer. */
 		size_t		getSize();
 
-		/** Returns the actual size of the buffer which
-		 *  may be larger than the value returned by
-		 *  getSize() since the buffer grows in chunks. */
+		/** Returns the actual number of bytes of internal storage
+		 *  used by the bytebuffer, which may be larger than the value
+		 *  returned by getSize() since the buffer grows in extents. */
 		size_t		getActualSize();
 
-		/** Returns the size of the original initial exent. */
+		/** Returns the number of bytes in the original initial
+		 *  exent. */
 		size_t		getInitialSize();
 
 		/** Returns a pointer to the buffer currently
