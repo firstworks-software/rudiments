@@ -77,6 +77,29 @@ const char *charstring::findLast(const char *haystack, const char *needle) {
 	return NULL;
 }
 
+const char *charstring::findLastIgnoringCase(const char *haystack,
+						const char *needle) {
+
+	if (!haystack || !needle) {
+		return NULL;
+	}
+
+	size_t	haystacklen=length(haystack);
+	size_t	needlelen=length(needle);
+	if (needlelen>haystacklen) {
+		return NULL;
+	}
+	
+	const char	*ptr=haystack+haystacklen-needlelen;
+	while (ptr>haystack) {
+		if (!compareIgnoringCase(ptr,needle,needlelen)) {
+			return ptr;
+		}
+		ptr--;
+	}
+	return NULL;
+}
+
 void charstring::upper(char *str) {
 	if (str) {
 		for (char *ch=str; *ch; ch++) {
@@ -1209,8 +1232,17 @@ bool charstring::contains(const char *haystack, const char *needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
+bool charstring::containsIgnoringCase(const char *haystack,
+						const char *needle) {
+	return (findFirstIgnoringCase(haystack,needle)!=NULL);
+}
+
 bool charstring::contains(const char *haystack, char needle) {
 	return (findFirst(haystack,needle)!=NULL);
+}
+
+bool charstring::containsIgnoringCase(const char *haystack, char needle) {
+	return (findFirstIgnoringCase(haystack,needle)!=NULL);
 }
 
 bool charstring::startsWith(const char *haystack, const char *needle) {
@@ -1228,8 +1260,36 @@ const char *charstring::findFirst(const char *haystack, const char *needle) {
 	return (haystack && needle)?strstr(haystack,needle):NULL;
 }
 
+const char *charstring::findFirstIgnoringCase(const char *haystack,
+							const char *needle) {
+	size_t	haystacklen=charstring::length(haystack);
+	size_t	needlelen=charstring::length(needle);
+	for (const char *ptr=haystack;
+			ptr<=haystack+haystacklen-needlelen;
+			ptr++) {
+		if (!charstring::compareIgnoringCase(ptr,needle,needlelen)) {
+			return ptr;
+		}
+	}
+	return NULL;
+}
+
 const char *charstring::findFirst(const char *haystack, char needle) {
 	return (haystack)?strchr(haystack,needle):NULL;
+}
+
+const char *charstring::findFirstIgnoringCase(const char *haystack,
+							char needle) {
+	size_t	haystacklen=charstring::length(haystack);
+	needle=character::toLowerCase(needle);
+	for (const char *ptr=haystack;
+			ptr<haystack+haystacklen;
+			ptr++) {
+		if (character::toLowerCase(*ptr)==needle) {
+			return ptr;
+		}
+	}
+	return NULL;
 }
 
 const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
@@ -1239,15 +1299,24 @@ const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	if (!haystack) {
 		return NULL;
 	}
-	const char	*retval=haystack;
-	while (*retval) {
-		if (*retval==needle) {
-			return retval;
-		}
-		retval++;
+	const char	*retval=findFirst(haystack,needle);
+	if (!retval) {
+		retval=haystack+charstring::length(haystack);
 	}
 	return retval;
 	#endif
+}
+
+const char *charstring::findFirstOrEndIgnoringCase(const char *haystack,
+								char needle) {
+	if (!haystack) {
+		return NULL;
+	}
+	const char	*retval=findFirstIgnoringCase(haystack,needle);
+	if (!retval) {
+		retval=haystack+charstring::length(haystack);
+	}
+	return retval;
 }
 
 const char *charstring::findFirstOrEnd(const char *haystack,
@@ -1255,13 +1324,21 @@ const char *charstring::findFirstOrEnd(const char *haystack,
 	if (!haystack || !needle) {
 		return NULL;
 	}
-	const char	*retval=haystack;
-	size_t	needlelen=length(needle);
-	while (*retval) {
-		if (!compare(retval,needle,needlelen)) {
-			return retval;
-		}
-		retval++;
+	const char	*retval=findFirst(haystack,needle);
+	if (!retval) {
+		retval=haystack+charstring::length(haystack);
+	}
+	return retval;
+}
+
+const char *charstring::findFirstOrEndIgnoringCase(const char *haystack,
+							const char *needle) {
+	if (!haystack || !needle) {
+		return NULL;
+	}
+	const char	*retval=findFirstIgnoringCase(haystack,needle);
+	if (!retval) {
+		retval=haystack+charstring::length(haystack);
 	}
 	return retval;
 }
@@ -1270,24 +1347,52 @@ char *charstring::findFirstOrEnd(char *haystack, const char *needle) {
 	return (char *)(findFirstOrEnd((const char *)(haystack),needle));
 }
 
+char *charstring::findFirstOrEndIgnoringCase(char *haystack,
+						const char *needle) {
+	return (char *)(findFirstOrEndIgnoringCase(
+					(const char *)(haystack),needle));
+}
+
 const char *charstring::findLast(const char *haystack, char needle) {
 	return (haystack)?strrchr(haystack,needle):NULL;
+}
+
+const char *charstring::findLastIgnoringCase(const char *haystack,
+							char needle) {
+	return (char *)(findFirstOrEndIgnoringCase(
+					(const char *)(haystack),needle));
 }
 
 char *charstring::findFirst(char *haystack, const char *needle) {
 	return (char *)(findFirst((const char *)(haystack),needle));
 }
 
+char *charstring::findFirstIgnoringCase(char *haystack, const char *needle) {
+	return (char *)(findFirstIgnoringCase((const char *)(haystack),needle));
+}
+
 char *charstring::findFirst(char *haystack, char needle) {
 	return (char *)(findFirst((const char *)(haystack),needle));
+}
+
+char *charstring::findFirstIgnoringCase(char *haystack, char needle) {
+	return (char *)(findFirstIgnoringCase((const char *)(haystack),needle));
 }
 
 char *charstring::findLast(char *haystack, const char *needle) {
 	return (char *)(findLast((const char *)(haystack),needle));
 }
 
+char *charstring::findLastIgnoringCase(char *haystack, const char *needle) {
+	return (char *)(findLastIgnoringCase((const char *)(haystack),needle));
+}
+
 char *charstring::findLast(char *haystack, char needle) {
 	return (char *)(findLast((const char *)(haystack),needle));
+}
+
+char *charstring::findLastIgnoringCase(char *haystack, char needle) {
+	return (char *)(findLastIgnoringCase((const char *)(haystack),needle));
 }
 
 const char *charstring::findFirstOfSet(const char *haystack, const char *set) {

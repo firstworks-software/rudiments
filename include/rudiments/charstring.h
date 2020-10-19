@@ -171,9 +171,19 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	bool	contains(const char *haystack,
 							const char *needle);
 
+		/** Returns true if "haystack" contains "needle",
+		 *  ignoring case, or false otherwise. */
+		static	bool	containsIgnoringCase(const char *haystack,
+							const char *needle);
+
 		/** Returns true if "haystack" contains "needle" or
 		 *  false otherwise. */
 		static	bool	contains(const char *haystack, char needle);
+
+		/** Returns true if "haystack" contains "needle",
+		 *  ignoring case, or false otherwise. */
+		static	bool	containsIgnoringCase(const char *haystack,
+								char needle);
 
 		/** Returns true if "haystack" starts with "needle" or
 		 *  false otherwise. */
@@ -191,14 +201,20 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const char	*findFirstIgnoringCase(
+							const char *haystack,
+							const char *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	const char	*findFirst(const char *haystack,
 							char needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
-		 *  in "haystack" or a pointer to the NULL terminator
-		 *  at the end of the string if not found. */
-		static	const char	*findFirstOrEnd(const char *haystack,
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const char	*findFirstIgnoringCase(
+							const char *haystack,
 							char needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
@@ -207,14 +223,46 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	const char	*findFirstOrEnd(const char *haystack,
 							const char *needle);
 
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or a pointer to the NULL
+		 *  terminator at the end of the string if not found. */
+		static	const char	*findFirstOrEndIgnoringCase(
+							const char *haystack,
+							const char *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack" or a pointer to the NULL terminator
+		 *  at the end of the string if not found. */
+		static	const char	*findFirstOrEnd(const char *haystack,
+							char needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or a pointer to the NULL
+		 *  terminator at the end of the string if not found. */
+		static	const char	*findFirstOrEndIgnoringCase(
+							const char *haystack,
+							char needle);
+
 		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	const char	*findLast(const char *haystack,
 							const char *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const char	*findLastIgnoringCase(
+							const char *haystack,
+							const char *needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	const char	*findLast(const char *haystack,
+							char needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const char	*findLastIgnoringCase(
+							const char *haystack,
 							char needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
@@ -222,8 +270,18 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*findFirst(char *haystack, const char *needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	char	*findFirstIgnoringCase(char *haystack,
+							const char *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	char	*findFirst(char *haystack, char needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	char	*findFirstIgnoringCase(char *haystack,
+								char needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or a pointer to the NULL terminator
@@ -231,13 +289,29 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*findFirstOrEnd(char *haystack,
 							const char *needle);
 
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or a pointer to the NULL
+		 *  terminator at the end of the string if not found. */
+		static	char	*findFirstOrEndIgnoringCase(char *haystack,
+							const char *needle);
+
 		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	char	*findLast(char *haystack, const char *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	char	*findLastIgnoringCase(char *haystack,
+							const char *needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	char	*findLast(char *haystack, char needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	char	*findLastIgnoringCase(char *haystack,
+								char needle);
 
 		/** Returns a pointer to the first occurence in
 		 *  "haystack" of any of the characters in "set"

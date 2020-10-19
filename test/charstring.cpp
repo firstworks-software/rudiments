@@ -64,6 +64,11 @@ int main(int argc, const char **argv) {
 	test("contains",charstring::contains(s,"llo"));
 	test("findFirst",charstring::findFirst(s,'l'));
 	test("contains",charstring::contains(s,"llo"));
+	test("findFirstIgnoringCase",
+			charstring::findFirstIgnoringCase(s,"LLO"));
+	test("containsIgnoringCase",charstring::containsIgnoringCase(s,"LLO"));
+	test("findFirstIgnoringCase",charstring::findFirstIgnoringCase(s,'L'));
+	test("containsIgnoringCase",charstring::containsIgnoringCase(s,"LLO"));
 	stdoutput.printf("\n");
 
 
