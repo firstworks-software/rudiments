@@ -2124,7 +2124,8 @@ void tlscertificate::setCertificate(void *cert) {
 					size_t	asn1len=
 						ASN1_STRING_length(dnsia5);
 					size_t	strlen=
-						charstring::length(dnsname);
+						charstring::length(
+							(const char *)dnsname);
 					if (asn1len==strlen) {
 						pvt->_san.append(
 							charstring::duplicate(

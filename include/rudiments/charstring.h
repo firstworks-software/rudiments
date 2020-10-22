@@ -19,18 +19,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Returns the number of characters in "string". */
 		static	size_t	length(const char *string);
 
-		/** Returns the number of characters in "string". */
-		static	size_t	length(const unsigned char *string);
-
 		/** Returns the number of bytes in "string", including the
 		 *  null terminator. */
 		static	size_t	size(const char *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const char *string);
-
-		/** Returns true if "string" is NULL or the empty string. */
-		static	bool	isNullOrEmpty(const unsigned char *string);
 
 		/** Returns true if "string" starts with the standalone "word":
 		 *  "Yes" (case-insensitive), "True" (case-insensitive), 

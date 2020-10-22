@@ -999,19 +999,11 @@ size_t charstring::length(const char *string) {
 	return (string)?strlen(string):0;
 }
 
-size_t charstring::length(const unsigned char *string) {
-	return length((const char *)(string));
-}
-
 size_t charstring::size(const char *string) {
 	return (string)?strlen(string)+1:0;
 }
 
 bool charstring::isNullOrEmpty(const char *string) {
-	return !(string && string[0]);
-}
-
-bool charstring::isNullOrEmpty(const unsigned char *string) {
 	return !(string && string[0]);
 }
 
@@ -1840,7 +1832,7 @@ char *charstring::subString(const char *str, size_t start) {
 }
 
 char *charstring::base64Encode(const unsigned char *input) {
-	return base64Encode(input,length(input));
+	return base64Encode(input,length((const char *)input));
 }
 
 char *charstring::base64Encode(const unsigned char *input, uint64_t inputsize) {
@@ -2067,7 +2059,7 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 }
 
 char *charstring::hexEncode(const unsigned char *input) {
-	return hexEncode(input,length(input));
+	return hexEncode(input,length((const char *)input));
 }
 
 char *charstring::hexEncode(const unsigned char *input, uint64_t inputsize) {

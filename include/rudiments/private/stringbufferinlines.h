@@ -79,8 +79,8 @@ void stringbuffer::clear(char *initialcontents, size_t initialsize) {
 
 inline
 stringbuffer *stringbuffer::append(const unsigned char *string) {
-	return (stringbuffer *)bytebuffer::
-				append(string,charstring::length(string));
+	return (stringbuffer *)bytebuffer::append(string,
+				charstring::length((const char *)string));
 }
 
 inline
@@ -209,7 +209,8 @@ stringbuffer *stringbuffer::append(double number, uint16_t precision,
 
 inline
 ssize_t stringbuffer::write(const unsigned char *string) {
-	return bytebuffer::write(string,charstring::length(string));
+	return bytebuffer::write(string,
+				charstring::length((const char *)string));
 }
 
 inline
