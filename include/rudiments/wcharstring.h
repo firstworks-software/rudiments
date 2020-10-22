@@ -171,10 +171,20 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static	bool	contains(const wchar_t *haystack,
 							const wchar_t *needle);
 
+		/** Returns true if "haystack" contains "needle",
+		 *  ignoring case, or false otherwise. */
+		static	bool	containsIgnoringCase(const wchar_t *haystack,
+							const wchar_t *needle);
+
 		/** Returns true if "haystack" contains "needle" or
 		 *  false otherwise. */
 		static	bool	contains(const wchar_t *haystack,
 							wchar_t needle);
+
+		/** Returns true if "haystack" contains "needle",
+		 *  ignoring case, or false otherwise. */
+		static	bool	containsIgnoringCase(const wchar_t *haystack,
+								wchar_t needle);
 
 		/** Returns true if "haystack" starts with "needle" or
 		 *  false otherwise. */
@@ -192,14 +202,20 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							const wchar_t *needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const wchar_t	*findFirstIgnoringCase(
+							const wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	const wchar_t	*findFirst(const wchar_t *haystack,
 							wchar_t needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
-		 *  in "haystack" or a pointer to the NULL terminator
-		 *  at the end of the string if not found. */
-		static	const wchar_t	*findFirstOrEnd(const wchar_t *haystack,
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const wchar_t	*findFirstIgnoringCase(
+							const wchar_t *haystack,
 							wchar_t needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
@@ -207,6 +223,26 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  at the end of the string if not found. */
 		static	const wchar_t	*findFirstOrEnd(const wchar_t *haystack,
 							const wchar_t *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or a pointer to the NULL
+		 *  terminator at the end of the string if not found. */
+		static	const wchar_t	*findFirstOrEndIgnoringCase(
+							const wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack" or a pointer to the NULL terminator
+		 *  at the end of the string if not found. */
+		static	const wchar_t	*findFirstOrEnd(const wchar_t *haystack,
+							wchar_t needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or a pointer to the NULL
+		 *  terminator at the end of the string if not found. */
+		static	const wchar_t	*findFirstOrEndIgnoringCase(
+							const wchar_t *haystack,
+							wchar_t needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
@@ -224,13 +260,29 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							const wchar_t *needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	wchar_t	*findFirstIgnoringCase(wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	wchar_t	*findFirst(wchar_t *haystack, wchar_t needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	wchar_t	*findFirstIgnoringCase(wchar_t *haystack,
+								wchar_t needle);
 
 		/** Returns a pointer to the first occurrance of "needle"
 		 *  in "haystack" or a pointer to the NULL terminator
 		 *  at the end of the string if not found. */
 		static	wchar_t	*findFirstOrEnd(wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the first occurrance of "needle"
+		 *  in "haystack", ignoring case, or a pointer to the NULL
+		 *  terminator at the end of the string if not found. */
+		static	wchar_t	*findFirstOrEndIgnoringCase(wchar_t *haystack,
 							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
@@ -239,8 +291,20 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const wchar_t	*findLastIgnoringCase(
+							const wchar_t *haystack,
+							const wchar_t *needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
 		 *  in "haystack" or NULL if not found. */
 		static	wchar_t	*findLast(wchar_t *haystack, wchar_t needle);
+
+		/** Returns a pointer to the last occurrance of "needle"
+		 *  in "haystack", ignoring case, or NULL if not found. */
+		static	const wchar_t	*findLastIgnoringCase(
+							const wchar_t *haystack,
+							wchar_t needle);
 
 		/** Returns a pointer to the first occurence in
 		 *  "haystack" of any of the characters in "set"

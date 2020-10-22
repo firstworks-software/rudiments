@@ -58,16 +58,43 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
-	// findFirst/contains
-	stdoutput.printf("findFirst/contains...\n");
+	// findFirst
+	stdoutput.printf("findFirst...\n");
 	test("findFirst",charstring::findFirst(s,"llo"));
-	test("contains",charstring::contains(s,"llo"));
-	test("findFirst",charstring::findFirst(s,'l'));
-	test("contains",charstring::contains(s,"llo"));
 	test("findFirstIgnoringCase",
 			charstring::findFirstIgnoringCase(s,"LLO"));
-	test("containsIgnoringCase",charstring::containsIgnoringCase(s,"LLO"));
+	test("findFirstOrEnd",charstring::findFirstOrEnd(s,"llo"));
+	test("findFirstOrEnd",
+		charstring::findFirstOrEnd(s,"blah")==
+						s+charstring::length(s));
+	test("findFirstOrEndIgnoringCase",
+		charstring::findFirstOrEndIgnoringCase(s,"LLO"));
+	test("findFirstOrEndIgnoringCase",
+		charstring::findFirstOrEndIgnoringCase(s,"BLAH")==
+						s+charstring::length(s));
+	test("findFirst",charstring::findFirst(s,'l'));
 	test("findFirstIgnoringCase",charstring::findFirstIgnoringCase(s,'L'));
+	test("findFirstOrEnd",
+		charstring::findFirstOrEnd(s,'z')==s+charstring::length(s));
+	test("findFirstOrEnd",charstring::findFirstOrEnd(s,'l'));
+	test("findFirstOrEndIgnoringCase",
+		charstring::findFirstOrEndIgnoringCase(s,'Z')==
+						s+charstring::length(s));
+	test("findFirstOrEndIgnoringCase",
+			charstring::findFirstOrEndIgnoringCase(s,'l'));
+	stdoutput.printf("\n");
+
+	// findLast
+	test("findLast",charstring::findLast(s,"llo"));
+	test("findLastIgnoringCase",
+			charstring::findLastIgnoringCase(s,"LLO"));
+	test("findLast",charstring::findLast(s,'l'));
+	test("findLastIgnoringCase",charstring::findLastIgnoringCase(s,'L'));
+	stdoutput.printf("\n");
+
+	// contains
+	stdoutput.printf("contains...\n");
+	test("contains",charstring::contains(s,"llo"));
 	test("containsIgnoringCase",charstring::containsIgnoringCase(s,"LLO"));
 	stdoutput.printf("\n");
 

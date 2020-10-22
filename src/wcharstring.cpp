@@ -71,6 +71,29 @@ const wchar_t *wcharstring::findLast(const wchar_t *haystack, const wchar_t *nee
 	return NULL;
 }
 
+const wchar_t *wcharstring::findLastIgnoringCase(const wchar_t *haystack,
+						const wchar_t *needle) {
+
+	if (!haystack || !needle) {
+		return NULL;
+	}
+
+	size_t	haystacklen=length(haystack);
+	size_t	needlelen=length(needle);
+	if (needlelen>haystacklen) {
+		return NULL;
+	}
+	
+	const wchar_t	*ptr=haystack+haystacklen-needlelen;
+	while (ptr>haystack) {
+		if (!compareIgnoringCase(ptr,needle,needlelen)) {
+			return ptr;
+		}
+		ptr--;
+	}
+	return NULL;
+}
+
 void wcharstring::upper(wchar_t *str) {
 	if (str) {
 		for (wchar_t *ch=str; *ch; ch++) {
@@ -1057,12 +1080,23 @@ bool wcharstring::contains(const wchar_t *haystack, const wchar_t *needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
+bool wcharstring::containsIgnoringCase(const wchar_t *haystack,
+						const wchar_t *needle) {
+	return (findFirstIgnoringCase(haystack,needle)!=NULL);
+}
+
 bool wcharstring::contains(const wchar_t *haystack, wchar_t needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
+bool wcharstring::containsIgnoringCase(const wchar_t *haystack,
+							wchar_t needle) {
+	return (findFirstIgnoringCase(haystack,needle)!=NULL);
+}
+
 bool wcharstring::startsWith(const wchar_t *haystack, const wchar_t *needle) {
-	return !wcharstring::compare(haystack,needle,wcharstring::length(needle));
+	return !wcharstring::compare(haystack,needle,
+					wcharstring::length(needle));
 }
 
 bool wcharstring::endsWith(const wchar_t *haystack, const wchar_t *needle) {
@@ -1077,9 +1111,37 @@ const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 	return (haystack && needle)?wcsstr(haystack,needle):NULL;
 }
 
+const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
+							const wchar_t *needle) {
+	size_t	haystacklen=wcharstring::length(haystack);
+	size_t	needlelen=wcharstring::length(needle);
+	for (const wchar_t *ptr=haystack;
+			ptr<=haystack+haystacklen-needlelen;
+			ptr++) {
+		if (!wcharstring::compareIgnoringCase(ptr,needle,needlelen)) {
+			return ptr;
+		}
+	}
+	return NULL;
+}
+
 const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 							wchar_t needle) {
 	return (haystack)?wcschr(haystack,needle):NULL;
+}
+
+const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
+							wchar_t needle) {
+	size_t	haystacklen=wcharstring::length(haystack);
+	needle=wcharacter::toLowerCase(needle);
+	for (const wchar_t *ptr=haystack;
+			ptr<haystack+haystacklen;
+			ptr++) {
+		if (wcharacter::toLowerCase(*ptr)==needle) {
+			return ptr;
+		}
+	}
+	return NULL;
 }
 
 const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
@@ -1090,15 +1152,25 @@ const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
 	if (!haystack) {
 		return NULL;
 	}
-	const wchar_t	*retval=haystack;
-	while (*retval) {
-		if (*retval==needle) {
-			return retval;
-		}
-		retval++;
+	const wchar_t	*retval=findFirst(haystack,needle);
+	if (!retval) {
+		retval=haystack+wcharstring::length(haystack);
 	}
 	return retval;
 	#endif
+}
+
+const wchar_t *wcharstring::findFirstOrEndIgnoringCase(
+						const wchar_t *haystack,
+						wchar_t needle) {
+	if (!haystack) {
+		return NULL;
+	}
+	const wchar_t	*retval=findFirstIgnoringCase(haystack,needle);
+	if (!retval) {
+		retval=haystack+wcharstring::length(haystack);
+	}
+	return retval;
 }
 
 const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
@@ -1106,13 +1178,21 @@ const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
 	if (!haystack || !needle) {
 		return NULL;
 	}
-	const wchar_t	*retval=haystack;
-	size_t	needlelen=length(needle);
-	while (*retval) {
-		if (!compare(retval,needle,needlelen)) {
-			return retval;
-		}
-		retval++;
+	const wchar_t	*retval=findFirst(haystack,needle);
+	if (!retval) {
+		retval=haystack+wcharstring::length(haystack);
+	}
+	return retval;
+}
+
+const wchar_t *wcharstring::findFirstOrEndIgnoringCase(const wchar_t *haystack,
+							const wchar_t *needle) {
+	if (!haystack || !needle) {
+		return NULL;
+	}
+	const wchar_t	*retval=findFirstIgnoringCase(haystack,needle);
+	if (!retval) {
+		retval=haystack+wcharstring::length(haystack);
 	}
 	return retval;
 }
@@ -1121,16 +1201,40 @@ wchar_t *wcharstring::findFirstOrEnd(wchar_t *haystack, const wchar_t *needle) {
 	return (wchar_t *)(findFirstOrEnd((const wchar_t *)(haystack),needle));
 }
 
+wchar_t *wcharstring::findFirstOrEndIgnoringCase(wchar_t *haystack,
+						const wchar_t *needle) {
+	return (wchar_t *)(findFirstOrEndIgnoringCase(
+					(const wchar_t *)(haystack),needle));
+}
+
 const wchar_t *wcharstring::findLast(const wchar_t *haystack, wchar_t needle) {
 	return (haystack)?wcsrchr(haystack,needle):NULL;
+}
+
+const wchar_t *wcharstring::findLastIgnoringCase(const wchar_t *haystack,
+							wchar_t needle) {
+	return (wchar_t *)(findFirstOrEndIgnoringCase(
+					(const wchar_t *)(haystack),needle));
 }
 
 wchar_t *wcharstring::findFirst(wchar_t *haystack, const wchar_t *needle) {
 	return (wchar_t *)(findFirst((const wchar_t *)(haystack),needle));
 }
 
+wchar_t *wcharstring::findFirstIgnoringCase(
+				wchar_t *haystack, const wchar_t *needle) {
+	return (wchar_t *)(findFirstIgnoringCase(
+				(const wchar_t *)(haystack),needle));
+}
+
 wchar_t *wcharstring::findFirst(wchar_t *haystack, wchar_t needle) {
 	return (wchar_t *)(findFirst((const wchar_t *)(haystack),needle));
+}
+
+wchar_t *wcharstring::findFirstIgnoringCase(
+				wchar_t *haystack, wchar_t needle) {
+	return (wchar_t *)(findFirstIgnoringCase(
+				(const wchar_t *)(haystack),needle));
 }
 
 wchar_t *wcharstring::findLast(wchar_t *haystack, const wchar_t *needle) {

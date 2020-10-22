@@ -60,12 +60,48 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
-	// findFirst/contains
-	stdoutput.printf("findFirst/contains...\n");
+	// findFirst
+	stdoutput.printf("findFirst...\n");
 	test("findFirst",wcharstring::findFirst(s,L"llo"));
-	test("contains",wcharstring::contains(s,L"llo"));
+	test("findFirstIgnoringCase",
+			wcharstring::findFirstIgnoringCase(s,L"LLO"));
+	test("findFirstOrEnd",wcharstring::findFirstOrEnd(s,L"llo"));
+	test("findFirstOrEnd",
+		wcharstring::findFirstOrEnd(s,L"blah")==
+						s+wcharstring::length(s));
+	test("findFirstOrEndIgnoringCase",
+		wcharstring::findFirstOrEndIgnoringCase(s,L"LLO"));
+	test("findFirstOrEndIgnoringCase",
+		wcharstring::findFirstOrEndIgnoringCase(s,L"BLAH")==
+						s+wcharstring::length(s));
 	test("findFirst",wcharstring::findFirst(s,L'l'));
+	test("findFirstIgnoringCase",
+		wcharstring::findFirstIgnoringCase(s,L'L'));
+	test("findFirstOrEnd",
+		wcharstring::findFirstOrEnd(s,L'z')==s+wcharstring::length(s));
+	test("findFirstOrEnd",wcharstring::findFirstOrEnd(s,L'l'));
+	test("findFirstOrEndIgnoringCase",
+		wcharstring::findFirstOrEndIgnoringCase(s,L'Z')==
+						s+wcharstring::length(s));
+	test("findFirstOrEndIgnoringCase",
+			wcharstring::findFirstOrEndIgnoringCase(s,L'l'));
+	stdoutput.printf("\n");
+
+
+	// findLast
+	test("findLast",wcharstring::findLast(s,L"llo"));
+	test("findLastIgnoringCase",
+			wcharstring::findLastIgnoringCase(s,L"LLO"));
+	test("findLast",wcharstring::findLast(s,L'l'));
+	test("findLastIgnoringCase",wcharstring::findLastIgnoringCase(s,L'L'));
+	stdoutput.printf("\n");
+
+
+	// contains
+	stdoutput.printf("contains...\n");
 	test("contains",wcharstring::contains(s,L"llo"));
+	test("containsIgnoringCase",
+			wcharstring::containsIgnoringCase(s,L"LLO"));
 	stdoutput.printf("\n");
 
 
