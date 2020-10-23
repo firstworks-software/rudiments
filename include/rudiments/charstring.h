@@ -92,11 +92,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  pointer to "dest". */
 		static	char	*copy(char *dest, const char *source);
 
-		/** Replaces the first "size" bytes of "dest" with "source".
-		 *  Assumes that "dest" is at least "size" bytes long.
-		 *  Returns a pointer to "dest". */
+		/** Replaces the first "length" characters of "dest" with
+		 *  "source".  Assumes that "dest" is at least "size" bytes
+		 *  long.  Returns a pointer to "dest". */
 		static	char	*copy(char *dest,
-					const char *source, size_t size);
+					const char *source, size_t len);
 
 		/** Replaces "dest" with "source", starting "location" bytes
 		 *  into "dest".  Assumes that there is enough room in "dest"
@@ -105,12 +105,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*copy(char *dest, size_t location,
 						const char *source);
 
-		/** Replaces "size" bytes of "dest" with "source", starting
-		 *  "location" bytes into "dest".  Assumes that there are
-		 *  "size" bytes in "dest" (after "location" bytes).  Returns a
-		 *  pointer to "dest". */
+		/** Replaces "len" characters of "dest" with "source",
+		 *  starting "location" bytes into "dest".  Assumes that there
+		 *  are "size" bytes in "dest" (after "location" bytes).
+		 *  Returns a pointer to "dest". */
 		static	char	*copy(char *dest, size_t location,
-					const char *source, size_t size);
+					const char *source, size_t len);
 
 		/** Replaces "dest" with "source" unless the character length
  		 *  of "source" is greater than "destlen", in which case only
@@ -130,22 +130,23 @@ class RUDIMENTS_DLLSPEC charstring {
 		 * less than "str2". */
 		static	int32_t	compare(const char *str1, const char *str2);
 
-		/** Returns -1,0 or 1 if "size" bytes of "str1" are greater
-		 * than, equal to or less than "size" bytes of "str2". */
+		/** Returns -1,0 or 1 if "length" characters of "str1" are
+		 *  greater than, equal to or less than "size" bytes of
+		 *  "str2". */
 		static	int32_t	compare(const char *str1, const char *str2,
-								size_t size);
+								size_t length);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2", ignoring case. */
 		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2);
 
-		/** Returns -1,0 or 1 if "size" bytes of "str1" are greater
+		/** Returns -1,0 or 1 if "len" characters of "str1" are greater
 		 *  than, equal to or less than "size" bytes of "str2",
 		 *  ignoring case. */
 		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2,
-							size_t size);
+							size_t len);
 
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set".  Also returns true if "str"
@@ -526,7 +527,7 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns true if the string "val" is an integer and
 		 *  false if it is not an integer. */
-		static	bool	isInteger(const char *val, int32_t size);
+		static	bool	isInteger(const char *val, int32_t len);
 
 		/** Returns true the string "val" is a number and false
 		 *  if it is not a number */
@@ -534,7 +535,7 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns true the string "val" is a number and false
 		 *  if it is not a number */
-		static	bool	isNumber(const char *val, int32_t size);
+		static	bool	isNumber(const char *val, int32_t len);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
@@ -759,18 +760,22 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deleted by the calling program. */
 		static	char	*unescape(const char *input);
 
-		/** similar to escape() above, but takes an "inputsize"
+		/** similar to escape() above, but takes an "inputlength"
 		 *  parameter and returns the result in "output" and
-		 *  "outputsize" rather than in a return value */
-		static	void	escape(const char *input, uint64_t inputsize,
-					char **output, uint64_t *outputsize,
-					const char *characters);
+		 *  "outputlength" rather than in a return value */
+		static	void	escape(const char *input,
+						uint64_t inputlength,
+						char **output,
+						uint64_t *outputlength,
+						const char *characters);
 
-		/** similar to unescape() above, but takes an "inputsize"
+		/** similar to unescape() above, but takes an "inputlength"
 		 *  parameter and returns the result in "output" and
-		 *  "outputsize" rather than in a return value */
-		static	void	unescape(const char *input, uint64_t inputsize,
-					char **output, uint64_t *outputsize);
+		 *  "outputlength" rather than in a return value */
+		static	void	unescape(const char *input,
+						uint64_t inputlength,
+						char **output,
+						uint64_t *outputlength);
 
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -778,17 +783,17 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*base64Encode(const unsigned char *input);
 
 		/** similar to base64Encode above but only encodes
-		 *  the first "inputsize" characters of "input" */
+		 *  the first "inputsize" bytes of "input" */
 		static	char	*base64Encode(const unsigned char *input,
 							uint64_t inputsize);
 
 		/** similar to base64Encode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
+		 *  result in "output" and "outputlength" (in characters)
+		 *  rather than in a return value */
 		static	void	base64Encode(const unsigned char *input,
 							uint64_t inputsize,
 							char **output,
-							uint64_t *outputsize);
+							uint64_t *outputlength);
 
 		/** base64-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -796,15 +801,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	unsigned char	*base64Decode(const char *input);
 
 		/** similar to base64Decode above but only decodes
-		 *  the first "inputsize" characters of "input" */
+		 *  the first "inputlength" characters of "input" */
 		static	unsigned char	*base64Decode(const char *input,
-							uint64_t inputsize);
+							uint64_t inputlength);
 
 		/** similar to base64Decode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
+		 *  result in "output" and "outputsize" (in bytes) rather than
+		 *  in a return value */
 		static	void	base64Decode(const char *input,
-						uint64_t inputsize,
+						uint64_t inputlength,
 						unsigned char **output,
 						uint64_t *outputsize);
 
@@ -819,12 +824,12 @@ class RUDIMENTS_DLLSPEC charstring {
 							uint64_t inputsize);
 
 		/** similar to base64Encode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
+		 *  result in "output" and "outputsize" (in characters) rather
+		 *  than in a return value */
 		static	void	hexEncode(const unsigned char *input,
 						uint64_t inputsize,
 						char **output,
-						uint64_t *outputsize);
+						uint64_t *outputlength);
 
 		/** hex-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -832,15 +837,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	unsigned char	*hexDecode(const char *input);
 
 		/** similar to hexDecode above but only decodes
-		 *  the first "inputsize" characters of "input" */
+		 *  the first "inputlength" characters of "input" */
 		static	unsigned char	*hexDecode(const char *input,
-							uint64_t inputsize);
+							uint64_t inputlength);
 
 		/** similar to hexDecode() above, but returns the
 		 *  result in "output" and "outputsize" rather than in a
 		 *  return value */
 		static	void	hexDecode(const char *input,
-						uint64_t inputsize,
+						uint64_t inputlength,
 						unsigned char **output,
 						uint64_t *outputsize);
 

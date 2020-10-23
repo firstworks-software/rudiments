@@ -67,8 +67,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const unsigned char *string,
-							size_t size);
+		ssize_t	write(const unsigned char *string, size_t size);
 
 		/** Writes "string" to the stringbuffer at the current position
 		 *  and increments the current position to the next byte after
@@ -79,7 +78,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(const char *string);
 
-		/** Writes the first "size" bytes of "string" to the
+		/** Writes the first "length" characters of "string" to the
 		 *  stringbuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
 		 *  written.  If necessary, the internal buffer will grow to
@@ -87,7 +86,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const char *string, size_t size);
+		ssize_t	write(const char *string, size_t length);
 
 		/** Writes "character" to the stringbuffer at the current
 		 *  position and increments the current position to the next
@@ -255,13 +254,13 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
 		stringbuffer	*append(const char *string);
 
-		/** Appends the first "size" bytes of "string" to the
+		/** Appends the first "length" characters of "string" to the
 		 *  stringbuffer, growing the internal buffer as necessary to
 		 *  accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		stringbuffer	*append(const char *string, size_t size);
+		stringbuffer	*append(const char *string, size_t length);
 
 		/** Appends "character" to the stringbuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data.

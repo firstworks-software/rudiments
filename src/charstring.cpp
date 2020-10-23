@@ -406,14 +406,14 @@ bool charstring::isInteger(const char *str) {
 	return (*(ptr-1)!='-');
 }
 
-bool charstring::isInteger(const char *str, int32_t size) {
+bool charstring::isInteger(const char *str, int32_t len) {
 
-	if (!str || !size) {
+	if (!str || !len) {
 		return false;
 	}
 
 	const char	*ptr=str;
-	for (int32_t index=0; index<size; index++) {
+	for (int32_t index=0; index<len; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
 			return false;
@@ -447,15 +447,15 @@ bool charstring::isNumber(const char *str) {
 	return (*(ptr-1)!='-' && *(ptr-1)!='.');
 }
 
-bool charstring::isNumber(const char *str, int32_t size) {
+bool charstring::isNumber(const char *str, int32_t len) {
 
-	if (!str || !size) {
+	if (!str || !len) {
 		return false;
 	}
 
 	const char	*ptr=str;
 	int32_t		decimal=0;
-	for (int32_t index=0; index<size; index++) {
+	for (int32_t index=0; index<len; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
 			return false;
@@ -618,17 +618,17 @@ char *charstring::httpUnescape(const char *input) {
 
 char *charstring::escape(const char *input, const char *characters) {
 	char		*output;
-	uint64_t	outputsize;
-	escape(input,length(input),&output,&outputsize,characters);
+	uint64_t	outputlength;
+	escape(input,length(input),&output,&outputlength,characters);
 	return output;
 }
 
-void charstring::escape(const char *input, uint64_t inputsize,
-				char **output, uint64_t *outputsize,
+void charstring::escape(const char *input, uint64_t inputlength,
+				char **output, uint64_t *outputlength,
 						const char *characters) {
 
 	(*output)=NULL;
-	(*outputsize)=0;
+	(*outputlength)=0;
 
 	if (!input) {
 		return;
@@ -638,28 +638,28 @@ void charstring::escape(const char *input, uint64_t inputsize,
 
 		uint64_t	outputindex=0;
 		for (uint64_t inputindex=0;
-				inputindex<inputsize;
+				inputindex<inputlength;
 				inputindex++) {
 			if (charstring::contains(characters,
 						input[inputindex]) ||
 					input[inputindex]=='\\') {
 				if (pass==0) {
-					(*outputsize)++;
+					(*outputlength)++;
 				} else {
 					(*output)[outputindex]='\\';
 					outputindex++;
 				}
 			}
 			if (pass==0) {
-				(*outputsize)++;
+				(*outputlength)++;
 			} else {
 				(*output)[outputindex]=input[inputindex];
 			}
 			outputindex++;
 		}
 		if (pass==0) {
-			(*output)=new char[(*outputsize)+1];
-			(*output)[(*outputsize)]='\0';
+			(*output)=new char[(*outputlength)+1];
+			(*output)[(*outputlength)]='\0';
 		}
 	}
 }
@@ -671,11 +671,11 @@ char *charstring::unescape(const char *input) {
 	return output;
 }
 
-void charstring::unescape(const char *input, uint64_t inputsize,
-				char **output, uint64_t *outputsize) {
+void charstring::unescape(const char *input, uint64_t inputlength,
+				char **output, uint64_t *outputlength) {
 
 	(*output)=NULL;
-	(*outputsize)=0;
+	(*outputlength)=0;
 
 	if (!input) {
 		return;
@@ -686,14 +686,14 @@ void charstring::unescape(const char *input, uint64_t inputsize,
 		bool		escaped=false;
 		uint64_t	outputindex=0;
 		for (uint64_t inputindex=0;
-				inputindex<inputsize;
+				inputindex<inputlength;
 				inputindex++) {
 			if (!escaped && input[inputindex]=='\\') {
 				escaped=true;
 				continue;
 			}
 			if (pass==0) {
-				(*outputsize)++;
+				(*outputlength)++;
 			} else {
 				(*output)[outputindex]=input[inputindex];
 			}
@@ -701,8 +701,8 @@ void charstring::unescape(const char *input, uint64_t inputsize,
 			escaped=false;
 		}
 		if (pass==0) {
-			(*output)=new char[(*outputsize)+1];
-			(*output)[(*outputsize)]='\0';
+			(*output)=new char[(*outputlength)+1];
+			(*output)[(*outputlength)]='\0';
 		}
 	}
 }
@@ -1101,11 +1101,11 @@ char *charstring::copy(char *dest, const char *source) {
 	return copy(dest,source,length(source)+1);
 }
 
-char *charstring::copy(char *dest, const char *source, size_t size) {
+char *charstring::copy(char *dest, const char *source, size_t len) {
 	if (!dest || !source) {
 		return dest;
 	}
-	return strncpy(dest,source,size);
+	return strncpy(dest,source,len);
 }
 
 char *charstring::copy(char *dest, size_t location, const char *source) {
@@ -1113,8 +1113,8 @@ char *charstring::copy(char *dest, size_t location, const char *source) {
 }
 
 char *charstring::copy(char *dest, size_t location,
-					const char *source, size_t size) {
-	return copy(dest+location,source,size);
+					const char *source, size_t len) {
+	return copy(dest+location,source,len);
 }
 
 char *charstring::safeCopy(char *dest, size_t destlen, const char *source) {
@@ -1131,8 +1131,8 @@ int32_t charstring::compare(const char *str1, const char *str2) {
 	return (str1 && str2)?strcmp(str1,str2):(str1!=str2);
 }
 
-int32_t charstring::compare(const char *str1, const char *str2, size_t size) {
-	return (str1 && str2)?strncmp(str1,str2,size):(str1!=str2);
+int32_t charstring::compare(const char *str1, const char *str2, size_t len) {
+	return (str1 && str2)?strncmp(str1,str2,len):(str1!=str2);
 }
 
 int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
@@ -1164,9 +1164,9 @@ int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
 }
 
 int32_t charstring::compareIgnoringCase(const char *str1,
-						const char *str2, size_t size) {
+						const char *str2, size_t len) {
 	#ifdef RUDIMENTS_HAVE_STRNCASECMP
-		return (str1 && str2)?strncasecmp(str1,str2,size):(str1!=str2);
+		return (str1 && str2)?strncasecmp(str1,str2,len):(str1!=str2);
 	#else
 		if (!str1 || !str2) {
 			return (str1!=str2);
@@ -1175,7 +1175,7 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 		const char	*ptr1=str1;
 		const char	*ptr2=str2;
 		int32_t		diff=0;
-		while (*ptr1 && *ptr2 && count<size) {
+		while (*ptr1 && *ptr2 && count<len) {
 			diff=character::toUpperCase(*ptr1)-
 				character::toUpperCase(*ptr2);
 			if (diff) {
@@ -1185,7 +1185,7 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 			ptr2++;
 			count++;
 		}
-		if (count<size) {
+		if (count<len) {
 			if (*ptr1 && !*ptr2) {
 				return *ptr1;
 			} else if (*ptr2 && !*ptr1) {
@@ -1863,28 +1863,28 @@ static signed char	b64dcode[]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 0-9
 					49,50,51,-1,-1,-1,-1,-1};
 
 void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
-					char **output, uint64_t *outputsize) {
+					char **output, uint64_t *outputlength) {
 
 	// handle null input
 	if (!input) {
 		*output=NULL;
-		*outputsize=0;
+		*outputlength=0;
 		return;
 	}
 
 	// handle 0-length input
 	if (!inputsize) {
 		*output=charstring::duplicate("");
-		*outputsize=0;
+		*outputlength=0;
 		return;
 	}
 
 	// handle real input...
 
-	// figure out the output size:
+	// figure out the output length:
 	//
 	// let x = inputsize
-	// let y = outputsize
+	// let y = outputlength
 	//
 	// (I know this sequence is true by
 	//  observation of input vs output sizes)
@@ -1952,9 +1952,9 @@ void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
 	// y=((x*4/3)+((((x+2)/3)*3)-x+(1-((x+2)%3/2))))
 	//
 	// yay!
-	*outputsize=((inputsize*4/3)+((((inputsize+2)/3)*3)-
+	*outputlength=((inputsize*4/3)+((((inputsize+2)/3)*3)-
 				inputsize+(1-((inputsize+2)%3/2))));
-	*output=new char [(*outputsize)+1];
+	*output=new char [(*outputlength)+1];
 
 	uint64_t	outputindex=0;
 	unsigned char	data[3];
@@ -1992,14 +1992,14 @@ unsigned char *charstring::base64Decode(const char *input) {
 }
 
 unsigned char *charstring::base64Decode(const char *input,
-						uint64_t inputsize) {
+						uint64_t inputlength) {
 	unsigned char	*retval=NULL;
 	uint64_t	retvalsize=0;
-	base64Decode(input,inputsize,&retval,&retvalsize);
+	base64Decode(input,inputlength,&retval,&retvalsize);
 	return retval;
 }
 
-void charstring::base64Decode(const char *input, uint64_t inputsize,
+void charstring::base64Decode(const char *input, uint64_t inputlength,
 				unsigned char **output, uint64_t *outputsize) {
 
 	// handle null input
@@ -2010,19 +2010,19 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	}
 
 	// handle 0-length input
-	if (!inputsize) {
+	if (!inputlength) {
 		*output=(unsigned char *)charstring::duplicate("");
 		*outputsize=0;
 		return;
 	}
 
 	// handle real input...
-	*outputsize=inputsize*3/4;
+	*outputsize=inputlength*3/4;
 	*output=new unsigned char [(*outputsize)+1];
 	uint64_t	outputindex=0;
 	unsigned char	data[4];
 	uint64_t	inputindex=0;
-	while (inputindex<inputsize) {
+	while (inputindex<inputlength) {
 
 		// ignore whitespace
 		if (character::isWhitespace(input[inputindex])) {
@@ -2055,7 +2055,8 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 
 	// there can be at most 2 trailing ='s, each equal represents an
 	// additional trailing NULL, reduce outputsize accordingly
-	//(*outputsize)-=(input[inputsize-1]=='=')+(input[inputsize-2]=='=');
+	/*(*outputsize)-=(input[inputlength-1]=='=')+
+				(input[inputlength-2]=='=');*/
 }
 
 char *charstring::hexEncode(const unsigned char *input) {
@@ -2070,24 +2071,24 @@ char *charstring::hexEncode(const unsigned char *input, uint64_t inputsize) {
 }
 
 void charstring::hexEncode(const unsigned char *input, uint64_t inputsize,
-					char **output, uint64_t *outputsize) {
+					char **output, uint64_t *outputlength) {
 
 	// handle null input
 	if (!input) {
 		*output=NULL;
-		*outputsize=0;
+		*outputlength=0;
 		return;
 	}
 
 	// handle 0-length input
 	if (!inputsize) {
 		*output=charstring::duplicate("");
-		*outputsize=0;
+		*outputlength=0;
 		return;
 	}
 
-	*outputsize=inputsize*2;
-	*output=new char[*outputsize+1];
+	*outputlength=inputsize*2;
+	*output=new char[*outputlength+1];
 	char	*oi=*output;
 	for (uint16_t ii=0; ii<inputsize; ii++) {
 		printf(oi,3,"%02x",input[ii]);
@@ -2101,14 +2102,14 @@ unsigned char *charstring::hexDecode(const char *input) {
 }
 
 unsigned char *charstring::hexDecode(const char *input,
-						uint64_t inputsize) {
+						uint64_t inputlength) {
 	unsigned char	*retval=NULL;
 	uint64_t	retvalsize=0;
-	hexDecode(input,inputsize,&retval,&retvalsize);
+	hexDecode(input,inputlength,&retval,&retvalsize);
 	return retval;
 }
 
-void charstring::hexDecode(const char *input, uint64_t inputsize,
+void charstring::hexDecode(const char *input, uint64_t inputlength,
 				unsigned char **output, uint64_t *outputsize) {
 
 	// handle null input
@@ -2119,23 +2120,23 @@ void charstring::hexDecode(const char *input, uint64_t inputsize,
 	}
 
 	// handle 0-length input
-	if (!inputsize) {
+	if (!inputlength) {
 		*output=(unsigned char *)charstring::duplicate("");
 		*outputsize=0;
 		return;
 	}
 
-	// deal with invalid input sizes
-	if (inputsize%2) {
-		inputsize--;
+	// deal with invalid input lengths
+	if (inputlength%2) {
+		inputlength--;
 	}
 
 	// create output buffer and init output size
-	*output=new unsigned char[inputsize/2+1];
+	*output=new unsigned char[inputlength/2+1];
 	*outputsize=0;
 
 	// convert...
-	const char	*end=input+inputsize;
+	const char	*end=input+inputlength;
 	while (input!=end) {
 		unsigned char	sixteens=*input;
 		if (sixteens>='A' && sixteens<='F') {

@@ -95,8 +95,8 @@ stringbuffer *stringbuffer::append(const char *string) {
 }
 
 inline
-stringbuffer *stringbuffer::append(const char *string, size_t size) {
-	return (stringbuffer *)bytebuffer::append(string,size);
+stringbuffer *stringbuffer::append(const char *string, size_t length) {
+	return (stringbuffer *)bytebuffer::append(string,length);
 }
 
 inline
@@ -224,8 +224,8 @@ ssize_t stringbuffer::write(const char *string) {
 }
 
 inline
-ssize_t stringbuffer::write(const char *string, size_t size) {
-	return bytebuffer::write(string,size);
+ssize_t stringbuffer::write(const char *string, size_t length) {
+	return bytebuffer::write(string,length);
 }
 
 inline

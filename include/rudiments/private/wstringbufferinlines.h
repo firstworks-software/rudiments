@@ -85,8 +85,8 @@ wstringbuffer *wstringbuffer::append(const wchar_t *string) {
 }
 
 inline
-wstringbuffer *wstringbuffer::append(const wchar_t *string, size_t size) {
-	return (wstringbuffer *)bytebuffer::append(string,size);
+wstringbuffer *wstringbuffer::append(const wchar_t *string, size_t length) {
+	return (wstringbuffer *)bytebuffer::append(string,length);
 }
 
 inline
@@ -201,8 +201,8 @@ ssize_t wstringbuffer::write(const wchar_t *string) {
 }
 
 inline
-ssize_t wstringbuffer::write(const wchar_t *string, size_t size) {
-	return bytebuffer::write(string,size);
+ssize_t wstringbuffer::write(const wchar_t *string, size_t length) {
+	return bytebuffer::write(string,length);
 }
 
 inline

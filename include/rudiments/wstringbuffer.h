@@ -60,7 +60,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(const wchar_t *string);
 
-		/** Writes the first "size" bytes of "string" to the
+		/** Writes the first "length" characters of "string" to the
 		 *  wstringbuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
 		 *  written.  If necessary, the internal buffer will grow to
@@ -68,7 +68,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const wchar_t *string, size_t size);
+		ssize_t	write(const wchar_t *string, size_t length);
 
 		/** Writes "character" to the wstringbuffer at the current
 		 *  position and increments the current position to the next
@@ -211,13 +211,13 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
 		wstringbuffer	*append(const wchar_t *string);
 
-		/** Appends the first "size" bytes of "string" to the
+		/** Appends the first "length" characters of "string" to the
 		 *  wstringbuffer, growing the internal buffer as necessary to
 		 *  accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		wstringbuffer	*append(const wchar_t *string, size_t size);
+		wstringbuffer	*append(const wchar_t *string, size_t length);
 
 		/** Appends "character" to the wstringbuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data.

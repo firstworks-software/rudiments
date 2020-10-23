@@ -749,8 +749,8 @@ ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
 	return read(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::read(char *buffer, size_t size) {
-	return read(buffer,size,-1,-1);
+ssize_t filedescriptor::read(char *buffer, size_t length) {
+	return read(buffer,length,-1,-1);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size) {
