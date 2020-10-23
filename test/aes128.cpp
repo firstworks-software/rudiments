@@ -58,25 +58,25 @@ int main(int argc, const char **argv) {
 			test("encrypt append",
 				a.append(unenc.getBuffer(),unenc.getSize()));
 			const unsigned char	*enc=a.getEncryptedData();
-			uint64_t		enclen=
-						a.getEncryptedDataLength();
+			uint64_t		encsize=
+						a.getEncryptedDataSize();
 			test("sane encrypted data",enc!=NULL);
-			test("sane encrypted length",enclen);
+			test("sane encrypted size",encsize);
 
 			// decrypt
-			test ("decrypt append",b.append(enc,enclen));
+			test ("decrypt append",b.append(enc,encsize));
 			const unsigned char	*dec=b.getDecryptedData();
-			uint64_t		declen=
-						b.getDecryptedDataLength();
+			uint64_t		decsize=
+						b.getDecryptedDataSize();
 			test("sane decrypted data",dec!=NULL);
-			test("sane decrypted length",(size)?declen:!declen);
+			test("sane decrypted size",(size)?decsize:!decsize);
 
-			test("valid decrypted length",
-					declen==unenc.getSize());
+			test("valid decrypted size",
+					decsize==unenc.getSize());
 			test("valid decrypted data",
 					!bytestring::compare(dec,
 							unenc.getBuffer(),
-							declen));
+							decsize));
 			stdoutput.printf("\n");
 
 			// bump size...

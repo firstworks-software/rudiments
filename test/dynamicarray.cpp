@@ -43,11 +43,11 @@ int main(int argc, const char **argv) {
 	dynamicarray<struct test>	da1;
 	stdoutput.printf("create <test>...\n");
 	test("create, getLength()",da1.getLength()==0);
-	test("create, getInitialSize()",da1.getInitialSize()==128);
-	test("create, getIncrementSize()",da1.getIncrementSize()==32);
+	test("create, getInitialLength()",da1.getInitialLength()==128);
+	test("create, getIncrementLength()",da1.getIncrementLength()==32);
 	da1.clear(25,10);
-	test("clear, getInitialSize()",da1.getInitialSize()==25);
-	test("clear, getIncrementSize()",da1.getIncrementSize()==10);
+	test("clear, getInitialLength()",da1.getInitialLength()==25);
+	test("clear, getIncrementLength()",da1.getIncrementLength()==10);
 	stdoutput.printf("\n");
 
 	// set/check values

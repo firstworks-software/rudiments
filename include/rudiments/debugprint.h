@@ -16,7 +16,7 @@
  debugPrintf(formatstring, ...);
 
 
- ** Prints "length" bytes of "str", printing hex values for non-printable
+ ** Prints "length" characters of "str", printing hex values for non-printable
  *  characters.  Similar to filedescriptor::safePrint(). *
  debugSafePrint(str,length);
 

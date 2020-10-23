@@ -24,19 +24,19 @@ class RUDIMENTS_DLLSPEC hash {
 		/** Deletes this instance of the hash class. */
 		virtual	~hash() {};
 
-		/** Appends "length" bytes of "data" to the data to be
+		/** Appends "size" bytes of "data" to the data to be
 		 *  hashed.  Returns true on success or false if an error
 		 *  occurred. */
 		virtual	bool	append(const unsigned char *data,
-							uint32_t length)=0;
+							uint32_t size)=0;
 
 		/** Returns the current hash on success or NULL if an error
 		 *  occurred.  Note that the current hash will be an empty
 		 *  string if no data has been appended yet. */
 		virtual	const unsigned char	*getHash()=0;
 
-		/** Returns the length of the hash in bytes. */
-		virtual	uint64_t	getHashLength()=0;
+		/** Returns the number of bytes in the hash. */
+		virtual	uint64_t	getHashSize()=0;
 
 		/** Clears the current hash and any data that had
  		 *  previously been appended.  Returns true on success or

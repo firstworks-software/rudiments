@@ -112,19 +112,19 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*copy(char *dest, size_t location,
 					const char *source, size_t size);
 
-		/** Replaces "dest" with "source" unless the size of "source"
-		 *  is greater than "destsize", in which case only "destsize"
-		 *  bytes of "dest" will be replaced.  Returns a pointer to
-		 *  "dest". */
-		static char	*safeCopy(char *dest, size_t destsize,
+		/** Replaces "dest" with "source" unless the character length
+ 		 *  of "source" is greater than "destlen", in which case only
+ 		 *  "destlen" characters of "dest" will be replaced.  Returns a
+ 		 *  pointer to "dest". */
+		static char	*safeCopy(char *dest, size_t destlen,
 							const char *source);
 
-		/** Replaces "sourcesize" bytes of "dest" with "source" unless
-		 *  "sourcesize" is greater than "destsize", in which case only
-		 *  "destsize" bytes of "dest" will be replaced.  Returns a
-		 *  pointer to "dest". */
-		static char	*safeCopy(char *dest, size_t destsize,
-					const char *source, size_t sourcesize);
+		/** Replaces "sourcelen" characters of "dest" with "source"
+		 *  unless "sourcelen" is greater than "destlen", in which case
+		 *  only "destlen" characters of "dest" will be replaced.
+		 *  Returns a pointer to "dest". */
+		static char	*safeCopy(char *dest, size_t destlen,
+					const char *source, size_t sourcelen);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2". */
@@ -475,10 +475,11 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of strings found in the NULL-terminated
-		 *  array "oldstrset", the lengths of which are given by the
-		 *  array "oldstrlen", have been replaced with the commensurate
-		 *  string found in the NULL-terminated array "newstrset",
-		 *  which must have the same number of members as "oldstrset" */
+		 *  array "oldstrset", the number of characters of which are
+		 *  given by the array "oldstrlen", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset" */
 		static	char	*replace(const char *str,
 						const char * const *oldstrset,
 						ssize_t *oldstrlen,
@@ -868,22 +869,24 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	void	center(char *str, int32_t len);
 
 		/** Returns a copy of "string", padded with "padchar" to a
-		 *  length of "totallength".  Set "direction" to -1 to
-		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
-		 *  this method allocates a buffer internally and returns it.
-		 *  The calling program must deallocate this buffer. */
+		 *  character length of "totallength".  Set "direction"
+		 *  to -1 to left-pad, 0 to center-pad and 1 to right-pad.
+		 *  Note that this method allocates a buffer internally and
+		 *  returns it.  The calling program must deallocate this
+		 *  buffer. */
 		static char	*pad(const char *string,
 						char padchar,
 						int16_t direction,
 						uint64_t totallength);
 
-		/** Parses "string" of length "stringlength" delimited by
-		 *  "delimiter" of length "delimiterlength" and allocates
-		 *  "listlength" elements of "list" to return the parts.  If
-		 *  "collapse" is true then multiple instances of the delimiter
-		 *  in a row will be interpreted as one instance of the
-		 *  delimiter.  Each member of "list" and "list" itseslf must
-		 *  be deallocated by the calling program. */
+		/** Parses "string" of character length "stringlength"
+		 *  delimited by "delimiter" of character length
+		 *  "delimiterlength" and allocates "listlength" elements of
+		 *  "list" to return the parts.  If "collapse" is true then
+		 *  multiple instances of the delimiter in a row will be
+		 *  interpreted as one instance of the delimiter.  Each member
+		 *  of "list" and "list" itseslf must be deallocated by the
+		 *  calling program. */
 		static void	split(const char *string,
 					ssize_t stringlength,
 					const char *delimiter,
@@ -893,25 +896,26 @@ class RUDIMENTS_DLLSPEC charstring {
 					uint64_t *listlength);
 
 		/** Parses NULL-terminated "string" delimited by "delimiter" of
-		 *  length "delimiterlength" and allocates "listlength"
-		 *  elements of "list" to return the parts.  If "collapse" is
-		 *  true then multiple instances of the delimiter in a row will
-		 *  be interpreted as one instance of the delimiter.  Each
-		 *  member of "list" and "list" itseslf must be deallocated by
-		 *  the calling program. */
+		 *  character length "delimiterlength" and allocates
+		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "collapse" is true then multiple instances of the delimiter
+		 *  in a row will be interpreted as one instance of the
+		 *  delimiter.  Each member of "list" and "list" itseslf must
+		 *  be deallocated by the calling program. */
 		static void	split(const char *string,
 					const char *delimiter,
 					ssize_t delimiterlength,
 					bool collapse,
 					char ***list,
 					uint64_t *listlength);
-		/** Parses "string" of "stringlength" delimited by
-		 *  NULL-terminated "delimiter" and allocates "listlength"
-		 *  elements of "list" to return the parts.  If "collapse" is
-		 *  true then multiple instances of the delimiter in a row will
-		 *  be interpreted as one instance of the delimiter.  Each
-		 *  member of "list" and "list" itseslf must be deallocated by
-		 *  the calling program. */
+
+		/** Parses "string" of character length "stringlength"
+		 *  delimited by NULL-terminated "delimiter" and allocates
+		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "collapse" is true then multiple instances of the delimiter
+		 *  in a row will be interpreted as one instance of the
+		 *  delimiter.  Each member of "list" and "list" itseslf must
+		 *  be deallocated by the calling program. */
 		static void	split(const char *string,
 					ssize_t stringlength,
 					const char *delimiter,
@@ -949,7 +953,7 @@ class RUDIMENTS_DLLSPEC charstring {
 						const char *src,
 						uint64_t index);
 
-		/** Appends "..." to "buffer" of length "len" using
+		/** Appends "..." to "buffer" of character length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
@@ -969,7 +973,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		static ssize_t	printf(char *buffer, size_t len,
 						const char *format, ...);
 
-		/** Appends "argp" to "buffer" of length "len" using
+		/** Appends "argp" to "buffer" of character length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *

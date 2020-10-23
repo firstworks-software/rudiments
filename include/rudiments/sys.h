@@ -77,8 +77,8 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  the restart, while others do not. */
 		static	bool	reboot();
 
-		/** Returns the maximum length of each command line argument.
-		 *  Returns -1 if not supported by the system. */
+		/** Returns the maximum character length of each command line
+		 *  argument.  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxCommandLineArgumentLength();
 
 		/** Returns the maximum number of processes that may run
@@ -86,13 +86,13 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxProcessesPerUser();
 
-		/** Returns the maximum length allowed for the host name, not
-		 *  including the null terminator.
-		 *  Returns -1 if not supported by the system. */
+		/** Returns the maximum character length allowed for the host
+		 *  name, not including the null terminator.  Returns -1 if not
+		 *  supported by the system. */
 		static	int64_t	getMaxHostNameLength();
 
-		/** Returns the maximum length allowed for a login name, not
-		 *  including the null terminator.
+		/** Returns the maximum character length allowed for a login
+		 *  name, not including the null terminator.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxLoginNameLength();
 
@@ -148,18 +148,18 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxSymlinkLoops();
 
-		/** Returns the maximum length of a terminal device name,
-		 *  including the null terminator.
+		/** Returns the maximum character length of a terminal device
+		 *  name, including the null terminator.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxTerminalDeviceNameLength();
 
-		/** Returns the maximum length of a timezone name.
+		/** Returns the maximum character length of a timezone name.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxTimezoneNameLength();
 
-		/** Returns the maximum length of a utility's input line length,
-		 *  either from standard input or from a file, including the
-		 *  trailing newline.
+		/** Returns the maximum character length of a utility's input
+		 *  line length, either from standard input or from a file,
+		 *  including the trailing newline.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxLineLength();
 
@@ -221,21 +221,22 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxTimersPerProcess();
 
-		/** Returns a recommended buffer size for use by the
+		/** Returns a recommended buffer size, in bytes, for use by the
 		 *  getgrnam_r and getgrgid_r functions.  This is used
 		 *  internally in the groupentry class if the system
 		 *  supports those functions.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getSuggestedGroupEntryBufferSize();
 
-		/** Returns a recommended buffer size for use by the
+		/** Returns a recommended buffer size, in bytes, for use by the
 		 *  getpwnam_r and getpwgid_r functions.  This is used
 		 *  internally in the userentry class if the system
 		 *  supports those functions.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getSuggestedPasswordEntryBufferSize();
 
-		/** Returns the minimum size of the stack for each thread.
+		/** Returns the minimum size, in bytes, of the stack for each
+ 		 *  thread.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMinThreadStackSize();
 
@@ -263,15 +264,16 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getCpuSetSize();
 
-		/** Returns the maximum length that a password can be.
+		/** Returns the maximum character length that a password can be.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxPasswordLength();
 
-		/** Returns the maximum length that a password can be.
+		/** Returns the maximum character length that a password can be.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxLogNameLength();
 
-		/** Returns the maximum length that a login name can be.
+		/** Returns the maximum character length that a login name can
+		 *  be.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getMaxProcessId();
 
@@ -289,7 +291,7 @@ class RUDIMENTS_DLLSPEC sys {
 		static	char	getDirectorySeparator();
 
 		/** Sets the protection of the memory map to "protection"
-		 *  for "len" bytes, starting at "ptr".
+		 *  for "size" bytes, starting at "ptr".
 		 * 
 		 *  "protection" may be:
 		 * 	PROT_NONE - pages may not be accessed
@@ -305,11 +307,11 @@ class RUDIMENTS_DLLSPEC sys {
 		 * 
 		 *  Returns true on success and false on failure. */
 		static	bool	setProtection(unsigned char *ptr,
-							size_t len,
+							size_t size,
 							int32_t protection);
 
 		/** Advises the kernel that you are going to access the region
-		 *  of memory begining at byte "ptr", for "len" bytes,
+		 *  of memory begining at byte "ptr", for "size" bytes,
 		 *  sequentially so the kernel can perform some optimizations.
 		 *
 		 *  Returns true on success and false on failure.
@@ -317,10 +319,10 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
 		static	bool	sequentialAccess(unsigned char *ptr,
-							size_t len);
+							size_t size);
 
 		/** Advises the kernel that you are going to access the region
-		 *  of memory begining at byte "ptr", for "len" bytes, randomly
+		 *  of memory begining at byte "ptr", for "size" bytes, randomly
 		 *  so the kernel can perform some optimizations.
 		 *
 		 *  Returns true on success and false on failure.
@@ -328,20 +330,20 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
 		static	bool	randomAccess(unsigned char *ptr,
-							size_t len);
+							size_t size);
 
 		/** Advises the kernel that you are going to access the region
-		 *  of memory begining at byte "ptr", for "len" bytes, in the
+		 *  of memory begining at byte "ptr", for "size" bytes, in the
 		 *  near future so the kernel can perform some optimizations.
 		 *
 		 *  Returns true on success and false on failure.
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	willNeed(unsigned char *ptr, size_t len);
+		static	bool	willNeed(unsigned char *ptr, size_t size);
 
 		/** Advises the kernel that you are not going to access the
-		 *  region of memory begining at byte "ptr", for "len"
+		 *  region of memory begining at byte "ptr", for "size"
 		 *  bytes, in the near future so the kernel can perform some
 		 *  optimizations.
 		 *
@@ -349,10 +351,10 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	wontNeed(unsigned char *ptr, size_t len);
+		static	bool	wontNeed(unsigned char *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the
-		 *  region of memory begining at byte "ptr", for "len" bytes,
+		 *  region of memory begining at byte "ptr", for "size" bytes,
 		 *  normally so the kernel can undo any previously applied
 		 *  optimizations.
 		 *
@@ -360,35 +362,35 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	normalAccess(unsigned char *ptr, size_t len);
+		static	bool	normalAccess(unsigned char *ptr, size_t size);
 
-		/** Disables paging of memory, starting at "ptr", for "len"
+		/** Disables paging of memory, starting at "ptr", for "size"
 		 *  bytes.
 		 *
 		 *  Returns true on success and false on failure.
 		 * 
 		 *  On systems that don't support locking, this method
 		 *  returns false. */
-		static	bool	lock(unsigned char *ptr, size_t len);
+		static	bool	lock(unsigned char *ptr, size_t size);
 
-		/** Enables paging of memory, starting at "ptr", for "len"
+		/** Enables paging of memory, starting at "ptr", for "size"
 		 *  bytes.
 		 *
 		 *  Returns true on success and false on failure.
 		 * 
 		 *  On systems that don't support locking, this method
 		 *  returns false. */
-		static	bool	unlock(unsigned char *ptr, size_t len);
+		static	bool	unlock(unsigned char *ptr, size_t size);
 
 		/** Returns true if all pages of memory starting at "ptr",
-		 *  for "len" bytes are not paged out.
+		 *  for "size" bytes are not paged out.
 		 *
 		 *  Returns true on success and false on failure.
 		 * 
 		 *  On systems that don't support checking whether
 		 *  pages of the memory map are currently cached
 		 *  in system ram, this method returns false. */
-		static	bool	notPagedOut(unsigned char *ptr, size_t len);
+		static	bool	notPagedOut(unsigned char *ptr, size_t size);
 
 
 		/** Disables paging of the entire address space of the process,

@@ -139,14 +139,14 @@ int main(int argc, const char **argv) {
 				stdoutput.printf("  public key: ");
 				stdoutput.safePrint(
 					pcert->getPublicKey(),
-					(pcert->getPublicKeyByteLength()<5)?
-					pcert->getPublicKeyByteLength():5);
+					(pcert->getPublicKeyByteSize()<5)?
+					pcert->getPublicKeyByteSize():5);
 				stdoutput.printf("...\n");
 				stdoutput.printf(
-					"  public key length: %lld\n",
-					pcert->getPublicKeyByteLength());
+					"  public key size: %lld\n",
+					pcert->getPublicKeyByteSize());
 				stdoutput.printf("  public key bits: %lld\n",
-					pcert->getPublicKeyBitLength());
+					pcert->getPublicKeyBitSize());
 				stdoutput.printf("  common name: %s\n",
 					pcert->getCommonName());
 				for (linkedlistnode< char * > *node=

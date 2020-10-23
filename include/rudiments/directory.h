@@ -48,18 +48,19 @@ class RUDIMENTS_DLLSPEC directory {
 		 *  buffer. */
 		char	*getChildName(uint64_t index);
 
-		/** Returns the length of the longest file name that can be
-		 *  created in the currently open directory . */
+		/** Returns the character length of the longest file name that
+		 *  can be created in the currently open directory . */
 		int64_t	maxFileNameLength();
 
-		/** Returns the length of the longest relative path name that
-		 *  can be created in the currently open directory . */
+		/** Returns the character length of the longest relative path
+		 *  name that can be created in the currently open
+		 *  directory . */
 		int64_t	maxPathLength();
 
-		/** Returns true if an attempt to access a
-		 *  file in directory "pathname" longer than the
-		 *  length returned by maxFileNameLength() will
-		 *  succeed and false if it will fail. */
+		/** Returns true if an attempt to access a file in directory
+		 *  "pathname" longer than the character length returned by
+		 *  maxFileNameLength() will succeed and false if it will
+		 *  fail. */
 		bool	canExceedMaxFileNameLength();
 
 		/** Creates a new directory "path" with permissions "perms". */
@@ -96,19 +97,18 @@ class RUDIMENTS_DLLSPEC directory {
 		/** Changes root to "path". */
 		static bool	changeRoot(const char *path);
 
-		/** Returns the length of the longest file name
-		 *  that can be created in directory "pathname". */
+		/** Returns the character length of the longest file name that
+		 *  can be created in directory "pathname". */
 		static int64_t	maxFileNameLength(const char *pathname);
 
-		/** Returns the length of the longest relative
-		 *  path name that can be created under the
-		 *  directory "pathname". */
+		/** Returns the character length of the longest relative path
+		 *  name that can be created under the directory "pathname". */
 		static int64_t	maxPathLength(const char *pathname);
 
-		/** Returns true if an attempt to access a
-		 *  file in directory "pathname" longer than the
-		 *  length returned by maxFileNameLength() will
-		 *  succeed and false if it will fail. */
+		/** Returns true if an attempt to access a file in directory
+		 *  "pathname" longer than the character length returned by
+		 *  maxFileNameLength() will succeed and false if it will
+		 *  fail. */
 		static bool	canExceedMaxFileNameLength(
 						const char *pathname);
 

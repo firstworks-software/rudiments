@@ -110,13 +110,12 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Note: The contents returned by this method are as-is.
 		 *  No end-of-line translation is performed.
 		 * 
-		 *  If the file contains no data, then a string of length
-		 *  zero is returned.  If an error occurs then a NULL
-		 *  is returned. */
+		 *  If the file contains no data, then an empty string is
+		 *  returned.  If an error occurs then a NULL is returned. */
 		virtual char	*getContents();
 
 		/** Reads the contents of the currently open file into
-		 *  "buffer" of length "buffersize".  If the file is
+		 *  "buffer" of size "buffersize".  If the file is
 		 *  larger than "buffersize" then only "buffersize" bytes
 		 *  of the file will be read into "buffer".
 		 *
@@ -130,14 +129,14 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 
 		/** Truncates all data in the file, resulting in a file of
-		 * zero length.  Returns true on success and false on
+		 * zero bytes.  Returns true on success and false on
 		 * failure. */
 		virtual bool	truncate() const;
 
-		/** Truncates all data beyond the first "length" bytes,
-		 *  resulting in a file of "length" bytes.  Returns true on
+		/** Truncates all data beyond the first "size" bytes,
+		 *  resulting in a file of "size" bytes.  Returns true on
 		 *  success and false on failure. */
-		virtual bool	truncate(off64_t length) const;
+		virtual bool	truncate(off64_t size) const;
 
 
 		/** Returns the position (relative to the beginning of the file)
@@ -939,9 +938,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  on failure. */
 		static	bool	truncate(const char *filename);
 
-		/** Truncates the file after the first "length" bytes.
+		/** Truncates the file after the first "size" bytes.
 		 *  Returns true on success and false on failure. */
-		static	bool	truncate(const char *filename, off64_t length);
+		static	bool	truncate(const char *filename, off64_t size);
 
 
 		/** Allocates a string large enough to accommodate the
@@ -953,13 +952,13 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Note: The contents returned by this method are as-is.
 		 *  No end-of-line translation is performed.
 		 * 
-		 *  If the file contains no data, then a string of length
-		 *  zero is returned.  If an error occurs then a NULL
+		 *  If the file contains no data, then an empty string is
+		 *  returned.  If an error occurs then a NULL
 		 *  is returned. */
 		static	char	*getContents(const char *name);
 
 		/** Reads the contents of the file "name" into
-		 *  "buffer" of length "buffersize".  If the file is
+		 *  "buffer" of size "buffersize".  If the file is
 		 *  larger than "buffersize" then only "buffersize" bytes
 		 *  of the file will be read into "buffer".
 		 *

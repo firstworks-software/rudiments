@@ -44,7 +44,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  returns false for "Nothing", "Falsest", and "012") */
 		static	bool	isNo(const wchar_t *string);
 
-		/** Sets "length" bytes of "str" to NULL. */
+		/** Sets "len" characters of "str" to NULL. */
 		static	void	zero(wchar_t *str, size_t len);
 
 		/** Appends "source" to "dest".  Assumes that there is
@@ -113,19 +113,19 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static	wchar_t	*copy(wchar_t *dest, size_t location,
 					const wchar_t *source, size_t size);
 
-		/** Replaces "dest" with "source" unless the length of "source"
-		 *  is greater than "destsize", in which case only "destsize"
-		 *  bytes of "dest" will be replaced.  Returns a pointer to
-		 *  "dest". */
-		static wchar_t	*safeCopy(wchar_t *dest, size_t destsize,
+		/** Replaces "dest" with "source" unless the character length
+		 *  of "source" is greater than "destlen", in which case only
+		 *  "destlen" bytes of "dest" will be replaced.  Returns a
+		 *  pointer to "dest". */
+		static wchar_t	*safeCopy(wchar_t *dest, size_t destlen,
 							const wchar_t *source);
 
-		/** Replaces "sourcesize" bytes of "dest" with "source" unless
-		 *  "sourcesize" is greater than "destsize", in which case only
-		 *  "destsize" bytes of "dest" will be replaced.  Returns a
-		 *  pointer to "dest". */
+		/** Replaces "sourcesize" characters of "dest" with "source"
+		 *  unless "sourcesize" is greater than "destlen", in which
+		 *  case only "destlen" characters of "dest" will be replaced.
+		 *  Returns a pointer to "dest". */
 		static wchar_t	*safeCopy(wchar_t *dest,
-						size_t destsize,
+						size_t destlen,
 						const wchar_t *source,
 						size_t sourcesize);
 
@@ -403,7 +403,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  calling program must deallocate this buffer. */
 		static	wchar_t	*duplicate(const wchar_t *str);
 
-		/** Creates a duplicate of the first "length" bytes of
+		/** Creates a duplicate of the first "len" characters of
 		 *  "str", converts it to a wide string, and returns a pointer
 		 *  to it.  Note that this method allocates a buffer for the
 		 *  duplicate string internally and returns it.  The calling
@@ -417,7 +417,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  buffer. */
 		static	wchar_t	*duplicate(const char *str);
 
-		/** Creates a duplicate of the first "length" bytes of
+		/** Creates a duplicate of the first "len" characters of
 		 *  "str" and returns a pointer to it.  Note that this
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
@@ -490,10 +490,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of strings found in the NULL-terminated
-		 *  array "oldstrset", the lengths of which are given by the
-		 *  array "oldstrlen", have been replaced with the commensurate
-		 *  string found in the NULL-terminated array "newstrset",
-		 *  which must have the same number of members as "oldstrset" */
+		 *  array "oldstrset", the number of characters of which are
+		 *  given by the array "oldstrlen", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset" */
 		static	wchar_t	*replace(const wchar_t *str,
 					const wchar_t * const *oldstrset,
 					ssize_t *oldstrlen,
@@ -770,39 +771,41 @@ class RUDIMENTS_DLLSPEC wcharstring {
 						uint64_t *outputsize);
 
 		/** Moves leading spaces to the end of "str" for
-		 *  "length" characters.
+		 *  "len" characters.
 		 *
 		 *  Example: "   hello   " -> "hello      " */
 		static	void	leftJustify(wchar_t *str, int32_t len);
 
 		/** Moves trailing spaces to the beginning of "str" for
-		 *  "length" characters.
+		 *  "len" characters.
 		 *  
 		 *  Example: "   hello   " -> "      hello"  */
 		static	void	rightJustify(wchar_t *str, int32_t len);
 
-		/** Centers the text of "str" for "length" characters.
+		/** Centers the text of "str" for "len" characters.
 		 *
 		 *  Example: "hello      " -> "   hello   "  */
 		static	void	center(wchar_t *str, int32_t len);
 
 		/** Returns a copy of "string", padded with "padchar" to a
-		 *  length of "totallength".  Set "direction" to -1 to
-		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
-		 *  this method allocates a buffer internally and returns it.
-		 *  The calling program must deallocate this buffer. */
+		 *  character length of "totallength".  Set "direction"
+		 *  to -1 to left-pad, 0 to center-pad and 1 to right-pad.
+		 *  Note that this method allocates a buffer internally and
+		 *  returns it.  The calling program must deallocate this
+		 *  buffer. */
 		static wchar_t	*pad(const wchar_t *string,
 						wchar_t padchar,
 						int16_t direction,
 						uint64_t totallength);
 
-		/** Parses "string" of length "stringlength" delimited by
-		 *  "delimiter" of length "delimiterlength" and allocates
-		 *  "listlength" elements of "list" to return the parts.  If
-		 *  "collapse" is true then multiple instances of the delimiter
-		 *  in a row will be interpreted as one instance of the
-		 *  delimiter.  Each member of "list" and "list" itseslf must
-		 *  be deallocated by the calling program. */
+		/** Parses "string" of character length "stringlength"
+		 *  delimited by "delimiter" of character length
+		 *  "delimiterlength" and allocates "listlength" elements of
+		 *  "list" to return the parts.  If "collapse" is true then
+		 *  multiple instances of the delimiter in a row will be
+		 *  interpreted as one instance of the delimiter.  Each member
+		 *  of "list" and "list" itseslf must be deallocated by the
+		 *  calling program. */
 		static void	split(const wchar_t *string,
 					ssize_t stringlength,
 					const wchar_t *delimiter,
@@ -812,25 +815,26 @@ class RUDIMENTS_DLLSPEC wcharstring {
 					uint64_t *listlength);
 
 		/** Parses NULL-terminated "string" delimited by "delimiter" of
-		 *  length "delimiterlength" and allocates "listlength"
-		 *  elements of "list" to return the parts.  If "collapse" is
-		 *  true then multiple instances of the delimiter in a row will
-		 *  be interpreted as one instance of the delimiter.  Each
-		 *  member of "list" and "list" itseslf must be deallocated by
-		 *  the calling program. */
+		 *  character length "delimiterlength" and allocates
+		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "collapse" is true then multiple instances of the delimiter
+		 *  in a row will be interpreted as one instance of the
+		 *  delimiter.  Each member of "list" and "list" itseslf must
+		 *  be deallocated by the calling program. */
 		static void	split(const wchar_t *string,
 					const wchar_t *delimiter,
 					ssize_t delimiterlength,
 					bool collapse,
 					wchar_t ***list,
 					uint64_t *listlength);
-		/** Parses "string" of "stringlength" delimited by
-		 *  NULL-terminated "delimiter" and allocates "listlength"
-		 *  elements of "list" to return the parts.  If "collapse" is
-		 *  true then multiple instances of the delimiter in a row will
-		 *  be interpreted as one instance of the delimiter.  Each
-		 *  member of "list" and "list" itseslf must be deallocated by
-		 *  the calling program. */
+
+		/** Parses "string" of character length "stringlength"
+		 *  delimited by NULL-terminated "delimiter" and allocates
+		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "collapse" is true then multiple instances of the delimiter
+		 *  in a row will be interpreted as one instance of the
+		 *  delimiter.  Each member of "list" and "list" itseslf must
+		 *  be deallocated by the calling program. */
 		static void	split(const wchar_t *string,
 					ssize_t stringlength,
 					const wchar_t *delimiter,
@@ -868,7 +872,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 						const wchar_t *src,
 						uint64_t index);
 
-		/** Appends "..." to "buffer" of length "len" using
+		/** Appends "..." to "buffer" of character length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
@@ -888,7 +892,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static ssize_t	printf(wchar_t *buffer, size_t len,
 						const wchar_t *format, ...);
 
-		/** Appends "argp" to "buffer" of length "len" using
+		/** Appends "argp" to "buffer" of character length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *

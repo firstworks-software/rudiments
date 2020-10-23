@@ -63,11 +63,11 @@ class RUDIMENTS_DLLSPEC encryption {
 		/** Returns the number of bytes in the initialization vector. */
 		virtual uint32_t	getIvSize()=0;
 
-		/** Appends "length" bytes of "data" to the data to be
+		/** Appends "size" bytes of "data" to the data to be
 		 *  encrypted/decrypted.  Returns true on success or false if
 		 *  an error occurred. */
 		virtual bool	append(const unsigned char *data,
-							uint32_t length);
+							uint32_t size);
 
 		/** Interprets the current data as unencrypted.  Encrypts the
 		 *  current data.  Returns the encrypted data on success or
@@ -76,8 +76,8 @@ class RUDIMENTS_DLLSPEC encryption {
 		 *  appended yet. */
 		virtual const unsigned char	*getEncryptedData()=0;
 
-		/** Returns the length of the encrypted data in bytes. */
-		virtual	uint64_t	getEncryptedDataLength();
+		/** Returns the number of bytes of encrypted data. */
+		virtual	uint64_t	getEncryptedDataSize();
 
 		/** Interprets the current data as encrypted.  Decrypts the
 		 *  current data.  Returns the decrypted data on success or
@@ -86,8 +86,8 @@ class RUDIMENTS_DLLSPEC encryption {
 		 *  appended yet. */
 		virtual const unsigned char	*getDecryptedData()=0;
 
-		/** Returns the length of the decrypted data in bytes. */
-		virtual	uint64_t	getDecryptedDataLength();
+		/** Returns the number of bytes of decrypted data. */
+		virtual	uint64_t	getDecryptedDataSize();
 
 		/** Clears the current encrypted/decrypted data and any data
 		 *  that had previously been appended.  Does not clear the 

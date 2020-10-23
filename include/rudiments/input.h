@@ -10,8 +10,7 @@ class RUDIMENTS_DLLSPEC input {
 	public:
 		virtual	~input();
 
-		virtual	ssize_t	read(unsigned char *buffer,
-							size_t size)=0;
+		virtual	ssize_t	read(unsigned char *buffer, size_t size)=0;
 		virtual	ssize_t	read(char *buffer, size_t size)=0;
 		virtual	ssize_t	read(char *character)=0;
 		virtual	ssize_t	read(int16_t *number)=0;

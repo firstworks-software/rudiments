@@ -69,7 +69,7 @@ class RUDIMENTS_DLLSPEC userentry {
 		 *  returned by getUserId(). */
 		const void	*getSid() const;
 
-		/** Returns the length of the binary representation of the SID
+		/** Returns the size of the binary representation of the SID
 		 *  (security id) of this user, returned by getSid(). */
 		uint64_t	getSidSize() const;
 

@@ -352,7 +352,7 @@ bool websocket::acceptInternal() {
 	sha1		s;
 	s.append(fullkey.getBuffer(),fullkey.getSize());
 	char	*encodedkey=charstring::base64Encode(s.getHash(),
-							s.getHashLength());
+							s.getHashSize());
 
 	// build response
 	stringbuffer	response;

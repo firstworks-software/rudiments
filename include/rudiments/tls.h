@@ -387,13 +387,13 @@ class RUDIMENTS_DLLSPEC tlscertificate {
 		/** Returns the public key from the certificate. */
 		const unsigned char	*getPublicKey();
 
-		/** Returns the length of the public key, in bytes,
+		/** Returns the size of the public key, in bytes,
 		 *  from the certificate. */
-		uint64_t	getPublicKeyByteLength();
+		uint64_t	getPublicKeyByteSize();
 
-		/** Returns the length of the public key, in bits,
+		/** Returns the size of the public key, in bits,
 		 *  from the certificate. */
-		uint64_t	getPublicKeyBitLength();
+		uint64_t	getPublicKeyBitSize();
 
 		/** Returns the subject alternate names from the certificate. */
 		linkedlist< char * >	*getSubjectAlternateNames();

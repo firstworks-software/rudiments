@@ -373,20 +373,20 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		bool	getIsOpen();
 
 
-		/** Wraps "input" data of size "inputsize", allocates a buffer
+		/** Wraps "input" data of "inputsize" bytes, allocates a buffer
 		 *  internally to store the wrapped data, returns a pointer the
-		 *  buffer in "output", and returns the size of the buffer in
-		 *  "outputsize".
+		 *  buffer in "output", and returns the number of bytes of the
+		 *  buffer in "outputsize".
 		 *  Returns true on success and false on failure. */
 		bool	wrap(const unsigned char *input,
 					size_t inputsize,
 					unsigned char **output,
 					size_t *outputsize);
 
-		/** Wraps "input" data of size "inputsize", allocates a buffer
+		/** Wraps "input" data of "inputsize" bytes, allocates a buffer
 		 *  internally to store the wrapped data, returns a pointer the
-		 *  buffer in "output", and returns the size of the buffer in
-		 *  "outputsize".  Attempts to encrypt the data if
+		 *  buffer in "output", and returns the number of bytes of the
+		 *  buffer in "outputsize".  Attempts to encrypt the data if
 		 *  "useencryption" is set to true.  Returns whether encryption
 		 *  was performed or not in "encryptionused".
 		 *  Returns true on success and false on failure. */
@@ -398,21 +398,21 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 					bool *encryptionused);
 
 
-		/** Unwraps "input" data of size "inputsize", allocates a buffer
-		 *  internally to store the unwrapped data, returns a pointer
-		 *  the buffer in "output", and returns the size of the buffer
-		 *  in "outputsize".
+		/** Unwraps "input" data of "inputsize" bytes, allocates a
+		 *  buffer internally to store the unwrapped data, returns a
+		 *  pointer the buffer in "output", and returns the number of
+		 *  bytes of the buffer in "outputsize".
 		 *  Returns true on success and false on failure. */
 		bool	unwrap(const unsigned char *input,
 					size_t inputsize,
 					unsigned char **output,
 					size_t *outputsize);
 
-		/** Unwraps "input" data of size "inputsize", allocates a buffer
-		 *  internally to store the unwrapped data, returns a pointer
-		 *  the buffer in "output", and returns the size of the buffer
-		 *  in "outputsize".  Returns whether decryption was performed
-		 *  or not in "decryptionused".
+		/** Unwraps "input" data of "inputsize" bytes, allocates a
+		 *  buffer internally to store the unwrapped data, returns a
+		 *  pointer the buffer in "output", and returns the number of
+		 *  bytes of the buffer in "outputsize".  Returns whether
+		 *  decryption was performed or not in "decryptionused".
 		 *  Returns true on success and false on failure. */
 		bool	unwrap(const unsigned char *input,
 					size_t inputsize,
@@ -422,9 +422,9 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 
 
 		/** Generates a mechanism integrity code for "message" of
-		 *  size "messagesize", allocates a buffer internally to store
+		 *  "messagesize" bytes, allocates a buffer internally to store
 		 *  the code, returns a pointer the buffer in "mic", and
-		 *  returns the size of the buffer in "micsize".
+		 *  returns the number of bytes of the buffer in "micsize".
 		 *  Returns true on success and false on failure. */
 		bool	getMic(const unsigned char *message,
 					size_t messagesize,
@@ -432,8 +432,8 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 					size_t *micsize);
 
 		/** Performs a mechanism integrity code for "message" of
-		 *  size "messagesize" and compares it to the data in "mic"
-		 *  of size "micsize".  Returns true if they match and false
+		 *  "messagesize" bytes and compares it to the data in "mic"
+		 *  of "micsize" bytes.  Returns true if they match and false
 		 *  otherwise. */
 		bool	verifyMic(const unsigned char *message,
 					size_t messagesize,

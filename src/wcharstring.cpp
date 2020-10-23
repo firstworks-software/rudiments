@@ -968,14 +968,14 @@ wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 	return copy(dest+location,source,size);
 }
 
-wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destsize,
+wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 						const wchar_t *source) {
-	return safeCopy(dest,destsize,source,length(source)+1);
+	return safeCopy(dest,destlen,source,length(source)+1);
 }
 
-wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destsize,
-				const wchar_t *source, size_t sourcesize) {
-	return copy(dest,source,(sourcesize>destsize)?destsize:sourcesize);
+wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
+				const wchar_t *source, size_t sourcelen) {
+	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
 }
 
 int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2) {

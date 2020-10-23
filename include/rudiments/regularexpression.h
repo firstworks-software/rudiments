@@ -14,8 +14,8 @@
 class RUDIMENTS_DLLSPEC regularexpression {
 	public:
 
-		/** Returns true if the first "length" bytes of "str" matches
-		 *  "pattern" and false otherwise. */
+		/** Returns true if the first "length" characters of "str"
+		 *  matches "pattern" and false otherwise. */
 		static	bool	match(const char *str, size_t length,
 							const char *pattern);
 
@@ -61,7 +61,7 @@ class RUDIMENTS_DLLSPEC regularexpression {
 		 *  false if it was not. */
 		bool	match(const char *str);
 
-		/** Matches the first "length" bytes of "str" against the
+		/** Matches the first "length" character of "str" against the
 		 *  regular expression compiled earlier using the compile
 		 *  method.
 		 * 

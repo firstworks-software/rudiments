@@ -1938,11 +1938,11 @@ const unsigned char *tlscertificate::getPublicKey() {
 	return pvt->_pk;
 }
 
-uint64_t tlscertificate::getPublicKeyByteLength() {
+uint64_t tlscertificate::getPublicKeyByteSize() {
 	return pvt->_pklen;
 }
 
-uint64_t tlscertificate::getPublicKeyBitLength() {
+uint64_t tlscertificate::getPublicKeyBitSize() {
 	return pvt->_pkbits;
 }
 

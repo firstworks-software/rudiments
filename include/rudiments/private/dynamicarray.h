@@ -2,7 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
-		void		init(uint64_t initialsize, uint64_t increment);
+		void		init(uint64_t initiallength,
+						uint64_t increment);
 		void		dynamicarrayClone(
 					const dynamicarray<valuetype> &v);
 		void		extend(uint64_t len);
@@ -13,6 +14,6 @@
 		linkedlistnode< valuetype *>	*curext;
 		uint64_t	curind;
 		uint64_t	initial;
-		uint64_t	extsize;
+		uint64_t	extlength;
 		uint64_t	len;
-		uint64_t	size;
+		uint64_t	length;

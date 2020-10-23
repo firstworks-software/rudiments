@@ -11,15 +11,16 @@ dynamicarray<valuetype>::dynamicarray() {
 
 template< class valuetype >
 inline
-dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
-					uint64_t incrementsize) {
-	init((initialsize)?initialsize:128,(incrementsize)?incrementsize:32);
+dynamicarray<valuetype>::dynamicarray(uint64_t initiallength,
+					uint64_t incrementlength) {
+	init((initiallength)?initiallength:128,
+				(incrementlength)?incrementlength:32);
 }
 
 template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) {
-	init(v.initial,v.extsize);
+	init(v.initial,v.extlength);
 	dynamicarrayClone(v);
 }
 
@@ -29,7 +30,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 					const dynamicarray<valuetype> &v) {
 	if (this!=&v) {
 		clearExtentList();
-		init(v.initial,v.extsize);
+		init(v.initial,v.extlength);
 		dynamicarrayClone(v);
 	}
 	return *this;
@@ -37,13 +38,13 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::init(uint64_t initialsize,
-					uint64_t incrementsize) {
-	size=0;
+void dynamicarray<valuetype>::init(uint64_t initiallength,
+					uint64_t incrementlength) {
+	length=0;
 	len=0;
-	initial=initialsize;
-	extsize=incrementsize;
-	extend(initialsize);
+	initial=initiallength;
+	extlength=incrementlength;
+	extend(initiallength);
 	curext=extents.getFirst();
 	curind=0;
 }
@@ -53,14 +54,14 @@ inline
 void dynamicarray<valuetype>::dynamicarrayClone(
 				const dynamicarray<valuetype> &v) {
 
-	// extend storage to fit (do this before setting size)
+	// extend storage to fit (do this before setting length)
 	extend(v.len);
 
-	// clone sizes and positions
-	size=v.size;
+	// clone lengths and positions
+	length=v.length;
 	len=v.len;
 	initial=v.initial;
-	extsize=v.extsize;
+	extlength=v.extlength;
 
 	// clone the data
 	for (uint64_t i=0; i<v.getLength(); i++) {
@@ -107,14 +108,14 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getInitialSize() const {
+uint64_t dynamicarray<valuetype>::getInitialLength() const {
 	return initial;
 }
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getIncrementSize() const {
-	return extsize;
+uint64_t dynamicarray<valuetype>::getIncrementLength() const {
+	return extlength;
 }
 
 template< class valuetype >
@@ -125,13 +126,13 @@ uint64_t dynamicarray<valuetype>::getLength() const {
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::extend(uint64_t size) {
-	uint64_t	inc=(extents.getLength())?extsize:initial;
-	while (this->size<size) {
+void dynamicarray<valuetype>::extend(uint64_t length) {
+	uint64_t	inc=(extents.getLength())?extlength:initial;
+	while (this->length<length) {
 		valuetype	*newext=new valuetype[inc];
 		extents.append(newext);
-		this->size=this->size+inc;
-		inc=extsize;
+		this->length=this->length+inc;
+		inc=extlength;
 	}
 }
 
@@ -147,7 +148,7 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 		curind=0;
 		eind=0;
 	} else {
-		uint64_t	targetind=(index-initial+extsize)/extsize;
+		uint64_t	targetind=(index-initial+extlength)/extlength;
 		while (curind>targetind) {
 			curext=curext->getPrevious();
 			curind--;
@@ -156,7 +157,7 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 			curext=curext->getNext();
 			curind++;
 		}
-		eind=initial+extsize*(curind-1);
+		eind=initial+extlength*(curind-1);
 	}
 
 	// return the value
@@ -179,13 +180,13 @@ void dynamicarray<valuetype>::clearExtentList() {
 template< class valuetype >
 inline
 void dynamicarray<valuetype>::clear() {
-	clear(initial,extsize);
+	clear(initial,extlength);
 }
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clear(uint64_t initialsize,
-					uint64_t incrementsize) {
+void dynamicarray<valuetype>::clear(uint64_t initiallength,
+					uint64_t incrementlength) {
 
 	// remove all but the first extent
 	curext=extents.getLast();
@@ -197,9 +198,9 @@ void dynamicarray<valuetype>::clear(uint64_t initialsize,
  		curext=prev;
 	}
 
-	// reset the initial/incremental sizes
-	initial=initialsize;
-	extsize=incrementsize;
+	// reset the initial/incremental lengths
+	initial=initiallength;
+	extlength=incrementlength;
 
 	// reinit first extent
 	valuetype	*ext=curext->getValue();
@@ -208,8 +209,8 @@ void dynamicarray<valuetype>::clear(uint64_t initialsize,
 		new(&(ext[i])) valuetype;
 	}
 
-	// reset sizes and positions
-	size=0;
+	// reset lengths and positions
+	length=0;
 	len=0;
 	curind=0;
 }

@@ -712,16 +712,16 @@ bool file::truncate(const char *filename) {
 	return truncate(filename,0);
 }
 
-bool file::truncate(const char *filename, off64_t length) {
+bool file::truncate(const char *filename, off64_t size) {
 	#ifdef RUDIMENTS_HAVE_TRUNCATE
 		int32_t	result;
 		do {
-			result=::truncate(filename,length);
+			result=::truncate(filename,size);
 		} while (result==-1 && error::getErrorNumber()==-1);
 		return !result;
 	#else
 		file	f;
-		return f.open(filename,O_WRONLY) && f.truncate(length);
+		return f.open(filename,O_WRONLY) && f.truncate(size);
 	#endif
 }
 
@@ -729,14 +729,14 @@ bool file::truncate() const {
 	return truncate((off64_t)0);
 }
 
-bool file::truncate(off64_t length) const {
+bool file::truncate(off64_t size) const {
 	int32_t	result;
 	do {
 		#if defined(RUDIMENTS_HAVE_FTRUNCATE) || \
 			defined(RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE)
-			result=::ftruncate(fd(),length);
+			result=::ftruncate(fd(),size);
 		#elif defined(RUDIMENTS_HAVE__CHSIZE_S)
-			result=_chsize_s(fd(),length);
+			result=_chsize_s(fd(),size);
 		#elif defined(RUDIMENTS_HAVE_SETENDOFFILE)
 			return (setPositionRelativeToBeginning(0)!=-1 &&
 				SetEndOfFile((HANDLE)

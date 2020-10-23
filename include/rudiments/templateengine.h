@@ -67,8 +67,8 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 *  block is looked up in "blockparsers" and the
 		 *  appropriate block parser method is called.  The block
 		 *  parser method is passed "req", "resp", "out", the
-		 *  name, data and length of the block and "data" from the
-		 *  blockparser entry.
+		 *  name, data and character length of the block and "data"
+		 *  from the blockparser entry.
 		 * 
 		 *  If a block is encountered but no block parser method
 		 *  is registered for it, it is parsed using "vars".
@@ -80,14 +80,14 @@ class RUDIMENTS_DLLSPEC templateengine {
 				blockparser *blockparsers,
 				dictionary< const char *, const char * > *vars);
 
-		/** Parses "length" bytes of "block" and writes the out to
+		/** Parses "length" characters of "block" and writes the out to
 		 *  "out".  For each variable encountered, values from
 		 *  "vars" are substituted.  For each nested block
 		 *  encountered, the block is looked up in "blockparsers"
 		 *  and the appropriate block parser method is called.  The
 		 *  block parser method is passed "req", "resp", the name,
-		 *  data and length of the block, "out" and "data" from
-		 *  the blockparser entry.
+		 *  data and character length of the block, "out" and "data"
+		 *  from the blockparser entry.
 		 *
 		 *  If a block is encountered but no block parser method is
 		 *  registered for it, it is parsed using "vars".

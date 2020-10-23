@@ -15,18 +15,18 @@ class RUDIMENTS_DLLSPEC sha1 : public hash {
 		/** Deletes this instance of the sha1 class. */
 		virtual	~sha1();
 
-		/** Appends "length" bytes of "data" to the data to be
+		/** Appends "size" bytes of "data" to the data to be
 		 *  hashed.  Returns true on success or false if an error
 		 *  occurred. */
-		bool	append(const unsigned char *data, uint32_t length);
+		bool	append(const unsigned char *data, uint32_t size);
 
 		/** Returns the current hash on success or NULL if an error
 		 *  occurred.  Note that the current hash will be an empty
 		 *  string if no data has been appended yet. */
 		const unsigned char	*getHash();
 
-		/** Returns the length of the hash in bytes. */
-		uint64_t	getHashLength();
+		/** Returns the number of bytes in the hash. */
+		uint64_t	getHashSize();
 
 		/** Clears the current hash and any data that had
  		 *  previously been appended.  Returns true on success or

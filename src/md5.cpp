@@ -35,16 +35,16 @@ md5::~md5() {
 	delete pvt;
 }
 
-bool md5::append(const unsigned char *data, uint32_t length) {
+bool md5::append(const unsigned char *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!MD5_Update(&pvt->_context,data,length)) {
+		if (!MD5_Update(&pvt->_context,data,size)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 		return true;
 	#else
-		pvt->_md5.MD5Update(&pvt->_context,data,length);
+		pvt->_md5.MD5Update(&pvt->_context,data,size);
 		return true;
 	#endif
 }
@@ -62,7 +62,7 @@ const unsigned char *md5::getHash() {
 	return pvt->_hash;
 }
 
-uint64_t md5::getHashLength() {
+uint64_t md5::getHashSize() {
 	return sizeof(pvt->_hash);
 }
 

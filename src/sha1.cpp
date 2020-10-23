@@ -33,16 +33,16 @@ sha1::~sha1() {
 	delete pvt;
 }
 
-bool sha1::append(const unsigned char *data, uint32_t length) {
+bool sha1::append(const unsigned char *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!SHA1_Update(&pvt->_context,data,length)) {
+		if (!SHA1_Update(&pvt->_context,data,size)) {
 			setError(ERR_GET_REASON(ERR_get_error()));
 			return false;
 		}
 		return true;
 	#else
-		int	result=SHA1Input(&pvt->_context,data,length);
+		int	result=SHA1Input(&pvt->_context,data,size);
 		setError(result);
 		return (result==shaSuccess);
 	#endif
@@ -66,7 +66,7 @@ const unsigned char *sha1::getHash() {
 	#endif
 }
 
-uint64_t sha1::getHashLength() {
+uint64_t sha1::getHashSize() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		return SHA_DIGEST_LENGTH;
 	#else

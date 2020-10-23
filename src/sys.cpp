@@ -1219,14 +1219,14 @@ char sys::getDirectorySeparator() {
 	#endif
 }
 
-bool sys::setProtection(unsigned char *ptr, size_t len, int32_t protection) {
+bool sys::setProtection(unsigned char *ptr, size_t size, int32_t protection) {
 	#ifdef RUDIMENTS_HAVE_MPROTECT
 		int32_t	result;
 		error::clearError();
 		do {
 			result=mprotect(
 				reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
-				len,protection);
+				size,protection);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
@@ -1235,57 +1235,59 @@ bool sys::setProtection(unsigned char *ptr, size_t len, int32_t protection) {
 	#endif
 }
 
-bool sys::sequentialAccess(unsigned char *ptr, size_t len) {
+bool sys::sequentialAccess(unsigned char *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
-		return mAdvise(ptr,len,MADV_SEQUENTIAL);
+		return mAdvise(ptr,size,MADV_SEQUENTIAL);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;
 	#endif
 }
 
-bool sys::randomAccess(unsigned char *ptr, size_t len) {
+bool sys::randomAccess(unsigned char *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_RANDOM)
-		return mAdvise(ptr,len,MADV_RANDOM);
+		return mAdvise(ptr,size,MADV_RANDOM);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;
 	#endif
 }
 
-bool sys::willNeed(unsigned char *ptr, size_t len) {
+bool sys::willNeed(unsigned char *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_WILLNEED)
-		return mAdvise(ptr,len,MADV_WILLNEED);
+		return mAdvise(ptr,size,MADV_WILLNEED);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;
 	#endif
 }
 
-bool sys::wontNeed(unsigned char *ptr, size_t len) {
+bool sys::wontNeed(unsigned char *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_DONTNEED)
-		return mAdvise(ptr,len,MADV_DONTNEED);
+		return mAdvise(ptr,size,MADV_DONTNEED);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;
 	#endif
 }
 
-bool sys::normalAccess(unsigned char *ptr, size_t len) {
+bool sys::normalAccess(unsigned char *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_NORMAL)
-		return mAdvise(ptr,len,MADV_NORMAL);
+		return mAdvise(ptr,size,MADV_NORMAL);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;
 	#endif
 }
 
-bool sys::lock(unsigned char *ptr, size_t len) {
+bool sys::lock(unsigned char *ptr, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MLOCK
 		int32_t	result;
 		error::clearError();
 		do {
-			result=mlock(reinterpret_cast<MLOCK_ADDRCAST>(ptr),len);
+			result=mlock(
+				reinterpret_cast<MLOCK_ADDRCAST>(ptr),
+				size);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
@@ -1294,14 +1296,14 @@ bool sys::lock(unsigned char *ptr, size_t len) {
 	#endif
 }
 
-bool sys::unlock(unsigned char *ptr, size_t len) {
+bool sys::unlock(unsigned char *ptr, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MUNLOCK
 		int32_t	result;
 		error::clearError();
 		do {
 			result=munlock(
 				reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),
-				len);
+				size);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
@@ -1310,16 +1312,16 @@ bool sys::unlock(unsigned char *ptr, size_t len) {
 	#endif
 }
 
-bool sys::notPagedOut(unsigned char *ptr, size_t len) {
+bool sys::notPagedOut(unsigned char *ptr, size_t size) {
 
 	#ifdef RUDIMENTS_HAVE_MINCORE
 		// create an array of char's, 1 for each page
 		int32_t		pagesize=sys::getAllocationGranularity();
-		int32_t		tmplen=(len+pagesize-1)/pagesize;
+		int32_t		tmpsize=(size+pagesize-1)/pagesize;
 		#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
-			char		*tmp=new char[tmplen];
+			char		*tmp=new char[tmpsize];
 		#else
-			unsigned char	*tmp=new unsigned char[tmplen];
+			unsigned char	*tmp=new unsigned char[tmpsize];
 		#endif
 
 		// call mincore to fill the array
@@ -1328,7 +1330,7 @@ bool sys::notPagedOut(unsigned char *ptr, size_t len) {
 		do {
 			result=mincore(
 				reinterpret_cast<MINCORE_ADDRCAST>(ptr),
-				len,tmp);
+				size,tmp);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		if (result) {
 			delete[] tmp;
@@ -1337,7 +1339,7 @@ bool sys::notPagedOut(unsigned char *ptr, size_t len) {
 
 		// look through the array, if any of the
 		// pages aren't in memory, return false
-		for (int32_t i=0; i<tmplen; i++) {
+		for (int32_t i=0; i<tmpsize; i++) {
 			if (tmp[i]) {
 				delete[] tmp;
 				return false;
@@ -1392,14 +1394,14 @@ bool sys::enablePaging() {
 	#endif
 }
 
-bool sys::mAdvise(unsigned char *start, size_t length, int32_t advice) {
+bool sys::mAdvise(unsigned char *start, size_t size, int32_t advice) {
 	#if defined(RUDIMENTS_HAVE_MADVISE)
 		int32_t	result;
 		error::clearError();
 		do {
 			result=madvise(
 				reinterpret_cast<MADVISE_ADDRCAST>(start),
-				length,advice);
+				size,advice);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else

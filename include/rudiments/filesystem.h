@@ -91,7 +91,7 @@ class RUDIMENTS_DLLSPEC filesystem {
 		/** Returns the file system id. */
 		int64_t		getFileSystemId() const;
 
-		/** Returns the maximum length of filenames on the
+		/** Returns the maximum character length of filenames on the
 		 *  filesystem. */
 		int64_t		getMaximumFileNameLength() const;
 

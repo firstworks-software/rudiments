@@ -1117,13 +1117,13 @@ char *charstring::copy(char *dest, size_t location,
 	return copy(dest+location,source,size);
 }
 
-char *charstring::safeCopy(char *dest, size_t destsize, const char *source) {
-	return safeCopy(dest,destsize,source,length(source)+1);
+char *charstring::safeCopy(char *dest, size_t destlen, const char *source) {
+	return safeCopy(dest,destlen,source,length(source)+1);
 }
 
-char *charstring::safeCopy(char *dest, size_t destsize,
-				const char *source, size_t sourcesize) {
-	return copy(dest,source,(sourcesize>destsize)?destsize:sourcesize);
+char *charstring::safeCopy(char *dest, size_t destlen,
+				const char *source, size_t sourcelen) {
+	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
 }
 
 int32_t charstring::compare(const char *str1, const char *str2) {

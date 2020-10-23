@@ -28,21 +28,18 @@ class RUDIMENTS_DLLSPEC sharedmemory {
 		~sharedmemory();
 
 		/** Creates a shared memory segment of "size" bytes, 
-		 *  identified by "key".
-		 *  "key" should be generated using the ftok
-		 * 	function.
-		 *  "permissions" sets the access permissions
-		 * 	for the segment. */
+		 *  identified by "key".  "key" should be generated using the
+		 *  ftok function.  "permissions" sets the access permissions
+		 *  for the segment. */
 		bool	create(key_t key, size_t size, mode_t permissions);
 
 		/** Attaches to a shared memory segment of "size" bytes,
 		 *  identified by "key". */
 		bool	attach(key_t key, size_t size);
 
-		/** Attempts to create the shared memory segment 
-		 *  identified by "key".  If this fails, it attempts
-		 *  to attach to a shared memory segment identified by
-		 *  "key". */
+		/** Attempts to create a shared memory segment of "size" bytes,
+		 *  identified by "key".  If this fails, it attempts to attach
+		 *  to a shared memory segment identified by "key". */
 		bool	createOrAttach(key_t key, size_t size,
 						mode_t permissions);
 

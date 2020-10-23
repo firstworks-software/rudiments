@@ -112,8 +112,8 @@ void encryption::initIv() {
 	}
 }
 
-bool encryption::append(const unsigned char *data, uint32_t length) {
-	pvt->_in.append(data,length);
+bool encryption::append(const unsigned char *data, uint32_t size) {
+	pvt->_in.append(data,size);
 	pvt->_dirty=true;
 	return true;
 }
@@ -126,12 +126,12 @@ bytebuffer *encryption::getOut() {
 	return &pvt->_out;
 }
 
-uint64_t encryption::getEncryptedDataLength() {
+uint64_t encryption::getEncryptedDataSize() {
 	getEncryptedData();
 	return pvt->_out.getSize();
 }
 
-uint64_t encryption::getDecryptedDataLength() {
+uint64_t encryption::getDecryptedDataSize() {
 	getDecryptedData();
 	return pvt->_out.getSize();
 }
