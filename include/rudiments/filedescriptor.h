@@ -156,12 +156,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
  		 *  using this method.  */
 		ssize_t	write(const unsigned char *string, size_t size);
 
-		/** Writes "size" bytes of "string" to the file descriptor.
- 		 *  Returns the number of bytes that were successfully written
- 		 *  or RESULT_ERROR if an error occurred.  Note that it is
- 		 *  possible to write beyond the string's NULL terminator
- 		 *  using this method.  */
-		ssize_t	write(const char *string, size_t size);
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.  */
+		ssize_t	write(const char *string, size_t length);
 
 		/** Writes "size" bytes of "buffer" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
@@ -432,15 +432,15 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  successfully read or RESULT_ERROR if an error occurred. */
 		ssize_t	read(bool *buffer);
 
-		/** Reads "size" unsigned characters from the file descriptor
-		 *  into "buffer".  Returns the number of bytes that were
-		 *  successfully read or RESULT_ERROR if an error occurred. */
+		/** Reads "size" bytes from the file descriptor into "buffer".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(unsigned char *buffer, size_t size);
 
-		/** Reads "size" characters from the file descriptor into
+		/** Reads "length" characters from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(char *buffer, size_t size);
+		ssize_t	read(char *buffer, size_t length);
 
 		/** Reads "size" bytes from the file descriptor into "buf".
 		 *  Returns the number of bytes that were successfully read or

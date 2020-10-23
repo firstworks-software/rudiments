@@ -131,8 +131,8 @@ void bytebuffer::extend(size_t requiredsize) {
 	pvt->_buffer=newbuffer;
 }
 
-ssize_t bytebuffer::write(const char *string, size_t size) {
-	return write(reinterpret_cast<const unsigned char *>(string),size);
+ssize_t bytebuffer::write(const char *string, size_t length) {
+	return write(reinterpret_cast<const unsigned char *>(string),length);
 }
 
 ssize_t bytebuffer::write(const char *string) {
@@ -140,9 +140,9 @@ ssize_t bytebuffer::write(const char *string) {
 					charstring::length(string));
 }
 
-ssize_t bytebuffer::write(const wchar_t *string, size_t size) {
+ssize_t bytebuffer::write(const wchar_t *string, size_t length) {
 	return write(reinterpret_cast<const unsigned char *>(string),
-						size*sizeof(wchar_t));
+						length*sizeof(wchar_t));
 }
 
 ssize_t bytebuffer::write(const wchar_t *string) {
@@ -338,12 +338,12 @@ bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
 	return this;
 }
 
-bytebuffer *bytebuffer::append(const char *data, size_t size) {
-	if (pvt->_size+size>pvt->_actualsize) {
-		extend(pvt->_size+size);
+bytebuffer *bytebuffer::append(const char *data, size_t length) {
+	if (pvt->_size+length>pvt->_actualsize) {
+		extend(pvt->_size+length);
 	}
-	memcpy(pvt->_buffer+pvt->_size,data,size);
-	pvt->_size+=size;
+	memcpy(pvt->_buffer+pvt->_size,data,length);
+	pvt->_size+=length;
 	pvt->_pos=pvt->_size;
 	return this;
 }
@@ -353,9 +353,9 @@ bytebuffer *bytebuffer::append(const char *string) {
 						charstring::length(string));
 }
 
-bytebuffer *bytebuffer::append(const wchar_t *string, size_t size) {
+bytebuffer *bytebuffer::append(const wchar_t *string, size_t length) {
 	return append(reinterpret_cast<const unsigned char *>(string),
-						size*sizeof(wchar_t));
+						length*sizeof(wchar_t));
 }
 
 bytebuffer *bytebuffer::append(const wchar_t *string) {
