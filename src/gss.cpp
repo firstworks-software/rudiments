@@ -3439,10 +3439,10 @@ bool gsscontext::verifyMic(const unsigned char *message,
 	return false;
 }
 
-ssize_t gsscontext::read(void *buf, ssize_t count) {
+ssize_t gsscontext::read(void *buf, ssize_t size) {
 
 	// first, return any buffered data
-	ssize_t bytestoread=count;
+	ssize_t bytestoread=size;
 	ssize_t	bytesread=0;
 	size_t	pendingbytes=pending();
 	if (pendingbytes) {
@@ -3472,7 +3472,7 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 	//
 	// This should be a low-level read, and it should allow short reads.
 	// I.e. it should't try to receive multiple tokens until it's read
-	// "count" bytes.  It should just return "what's currently available",
+	// "size" bytes.  It should just return "what's currently available",
 	// and in this case that should come from whatever was already buffered,
 	// and/or the next token.  The filedescriptor class's read-buffering
 	// depends on this method having short-read behavior.  We'll leave it
@@ -3685,12 +3685,12 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	return *tokensize;
 }
 
-ssize_t gsscontext::write(const void *buf, ssize_t count) {
+ssize_t gsscontext::write(const void *buf, ssize_t size) {
 
 	// create token
 	unsigned char	*tokendata=NULL;
 	size_t		tokensize=0;
-	if (!wrap((const unsigned char *)buf,count,&tokendata,&tokensize)) {
+	if (!wrap((const unsigned char *)buf,size,&tokendata,&tokensize)) {
 		delete[] tokendata;
 		return RESULT_ERROR;
 	}
@@ -3701,7 +3701,7 @@ ssize_t gsscontext::write(const void *buf, ssize_t count) {
 	if (result!=(ssize_t)tokensize) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
-	return count;
+	return size;
 }
 
 ssize_t gsscontext::sendToken(uint32_t tokenflags,

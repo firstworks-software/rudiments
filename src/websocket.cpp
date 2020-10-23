@@ -426,16 +426,16 @@ bool websocket::acceptInternal() {
 	return true;
 }
 
-ssize_t websocket::read(void *buf, ssize_t count) {
+ssize_t websocket::read(void *buf, ssize_t size) {
 
 	// copy out any existing buffered data
-	ssize_t	bytescopiedout=copyOut(buf,count);
-	if (bytescopiedout==count) {
-		return count;
+	ssize_t	bytescopiedout=copyOut(buf,size);
+	if (bytescopiedout==size) {
+		return size;
 	}
 
-	// decrement count by whatever we got from the buffer
-	count-=bytescopiedout;
+	// decrement size by whatever we got from the buffer
+	size-=bytescopiedout;
 
 	// temporarily disable the security context so
 	// local reads don't use websocket::read();
@@ -446,7 +446,7 @@ ssize_t websocket::read(void *buf, ssize_t count) {
 	pvt->_fd->setSecurityContext(NULL);
 
 	// read...
-	ssize_t	retval=readInternal(buf,count);
+	ssize_t	retval=readInternal(buf,size);
 
 	// reset security context
 	pvt->_fd->setSecurityContext(this);
@@ -454,7 +454,7 @@ ssize_t websocket::read(void *buf, ssize_t count) {
 	return retval;
 }
 
-ssize_t websocket::readInternal(void *buf, ssize_t count) {
+ssize_t websocket::readInternal(void *buf, ssize_t size) {
 
 	#ifdef DEBUG_READ
 		stdoutput.write("websocket::read() {\n");
@@ -660,12 +660,12 @@ ssize_t websocket::readInternal(void *buf, ssize_t count) {
 	#endif
 
 	// copy out what we can
-	return copyOut(buf,count);
+	return copyOut(buf,size);
 }
 
-ssize_t websocket::copyOut(void *buf, ssize_t count) {
+ssize_t websocket::copyOut(void *buf, ssize_t size) {
 
-	ssize_t	bytestocopy=count;
+	ssize_t	bytestocopy=size;
 	if (bytestocopy>(ssize_t)(pvt->_buffersize-pvt->_bufferpos)) {
 		bytestocopy=pvt->_buffersize-pvt->_bufferpos;
 	}
@@ -680,12 +680,12 @@ ssize_t websocket::copyOut(void *buf, ssize_t count) {
 	return bytestocopy;
 }
 
-ssize_t websocket::write(const void *buf, ssize_t count) {
+ssize_t websocket::write(const void *buf, ssize_t size) {
 	// FIXME: Select text/binary somehow...
-	return write(buf,count,OPCODE_TEXT_FRAME);
+	return write(buf,size,OPCODE_TEXT_FRAME);
 }
 
-ssize_t websocket::write(const void *buf, ssize_t count,
+ssize_t websocket::write(const void *buf, ssize_t size,
 						unsigned char opcode) {
 
 	// temporarily disable the security context so
@@ -697,7 +697,7 @@ ssize_t websocket::write(const void *buf, ssize_t count,
 	pvt->_fd->setSecurityContext(NULL);
 
 	// write...
-	ssize_t	retval=writeInternal(buf,count,opcode);
+	ssize_t	retval=writeInternal(buf,size,opcode);
 
 	// reset security context
 	pvt->_fd->setSecurityContext(this);
@@ -705,7 +705,7 @@ ssize_t websocket::write(const void *buf, ssize_t count,
 	return retval;
 }
 
-ssize_t websocket::writeInternal(const void *buf, ssize_t count,
+ssize_t websocket::writeInternal(const void *buf, ssize_t size,
 							unsigned char opcode) {
 
 	#ifdef DEBUG_WRITE
@@ -753,14 +753,14 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t count,
 	unsigned char	payloadlen1=0;
 	uint16_t	payloadlen2=0;
 	uint64_t	payloadlen3=0;
-	if (count<126) {
-		payloadlen1=count;
-	} else if (count<65536) {
+	if (size<126) {
+		payloadlen1=size;
+	} else if (size<65536) {
 		payloadlen1=126;
-		payloadlen2=count;
+		payloadlen2=size;
 	} else {
 		payloadlen1=127;
-		payloadlen3=count;
+		payloadlen3=size;
 	}
 	#ifdef DEBUG_WRITE
 		stdoutput.printf("	payload length 1: %d\n",payloadlen1);
@@ -832,24 +832,24 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t count,
 		}
 
 		// mask payload
-		payload=(unsigned char *)bytestring::duplicate(buf,count);
-		for (ssize_t i=0; i<count; i++) {
+		payload=(unsigned char *)bytestring::duplicate(buf,size);
+		for (ssize_t i=0; i<size; i++) {
 			payload[i]=payload[i]^maskingkey[i%4];
 		}
 	}
 
 	#ifdef DEBUG_READ
 		stdoutput.write("	payload:\n");
-		stdoutput.safePrint((const unsigned char *)buf,count);
+		stdoutput.safePrint((const unsigned char *)buf,size);
 		stdoutput.write("\n");
 	#endif
 
 	// write payload
-	ssize_t	retval=pvt->_fd->write(payload,count);
+	ssize_t	retval=pvt->_fd->write(payload,size);
 	if (mask) {
 		delete[] payload;
 	}
-	if (retval!=count) {
+	if (retval!=size) {
 		#ifdef DEBUG_WRITE
 			stdoutput.write("	payload error\n}\n");
 		#endif
@@ -877,10 +877,10 @@ ssize_t websocket::getSizeMax() {
 	return SSIZE_MAX;
 }
 
-bool websocket::ping(const unsigned char *buf, ssize_t count) {
+bool websocket::ping(const unsigned char *buf, ssize_t size) {
 	delete[] pvt->_pingbuffer;
-	pvt->_pingbuffer=(unsigned char *)bytestring::duplicate(buf,count);
-	pvt->_pingbuffersize=count;
+	pvt->_pingbuffer=(unsigned char *)bytestring::duplicate(buf,size);
+	pvt->_pingbuffersize=size;
 	return false;
 }
 

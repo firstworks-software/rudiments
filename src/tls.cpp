@@ -1624,7 +1624,7 @@ bool tlscontext::loadPeerCert() {
 	#endif
 }
 
-ssize_t tlscontext::read(void *buf, ssize_t count) {
+ssize_t tlscontext::read(void *buf, ssize_t size) {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
@@ -1636,12 +1636,12 @@ ssize_t tlscontext::read(void *buf, ssize_t count) {
 					#else
 					(char *)buf,
 					#endif
-					count);
+					size);
 		setError(ret);
 		return ret;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		ssize_t	ret=pvt->_gctx.read(buf,count);
-		if (ret!=count) {
+		ssize_t	ret=pvt->_gctx.read(buf,size);
+		if (ret!=size) {
 			setError(ret);
 		}
 		return ret;
@@ -1651,7 +1651,7 @@ ssize_t tlscontext::read(void *buf, ssize_t count) {
 	#endif
 }
 
-ssize_t tlscontext::write(const void *buf, ssize_t count) {
+ssize_t tlscontext::write(const void *buf, ssize_t size) {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
@@ -1663,12 +1663,12 @@ ssize_t tlscontext::write(const void *buf, ssize_t count) {
 					#else
 					(const char *)buf,
 					#endif
-					count);
+					size);
 		setError(ret);
 		return ret;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		ssize_t	ret=pvt->_gctx.write(buf,count);
-		if (ret!=count) {
+		ssize_t	ret=pvt->_gctx.write(buf,size);
+		if (ret!=size) {
 			setError(ret);
 		}
 		return ret;

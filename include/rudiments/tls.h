@@ -314,16 +314,16 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		tlscertificate	*getPeerCertificate();
 
 		/** Reads from the file descriptor previously configured by
-		 *  setFileDescriptor() into "buf" until "count" bytes have
+		 *  setFileDescriptor() into "buf" until "size" bytes have
 		 *  been read.  Returns the number of bytes that were written
 		 *  to "buf" or RESULT_ERROR if an error occurred. */
-		ssize_t	read(void *buf, ssize_t count);
+		ssize_t	read(void *buf, ssize_t size);
 
-		/** Writes "count" bytes from "buf" to the file descriptor
+		/** Writes "size" bytes from "buf" to the file descriptor
 		 *  previously configured by setFileDescriptor().
 		 *  Returns the number of bytes that were written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(const void *buf, ssize_t count);
+		ssize_t	write(const void *buf, ssize_t size);
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */

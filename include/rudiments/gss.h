@@ -443,17 +443,17 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 
 		/** Reads tokens from the file descriptor previously configured
 		 *  by setFileDescriptor(), unwraps them, and writes the
-		 *  unwrapped data to "buf" until "count" bytes have been read.
+		 *  unwrapped data to "buf" until "size" bytes have been read.
 		 *  Returns the number of unwrapped bytes that were written
 		 *  to "buf" or RESULT_ERROR if an error occurred. */
-		ssize_t	read(void *buf, ssize_t count);
+		ssize_t	read(void *buf, ssize_t size);
 
-		/** Wraps "count" bytes from "buf" and writes them to the
+		/** Wraps "size" bytes from "buf" and writes them to the
 		 *  file descriptor previously configured by
 		 *  setFileDescriptor().
 		 *  Returns the number of unwrapped bytes that were written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(const void *buf, ssize_t count);
+		ssize_t	write(const void *buf, ssize_t size);
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */
