@@ -152,10 +152,19 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  class. */
 		int32_t	getWeekOfYear() const;
 
-		/** Returns the year component (including the century) of
+		/** Returns the year component, including the century, of
 		 *  the date/time currently represented in the instance of the
 		 *  class. */
 		int32_t	getYear() const;
+
+		/** Returns the year component, not including the century, of
+		 *  the date/time currently represented in the instance of the
+		 *  class. */
+		int32_t	getShortYear() const;
+
+		/** Returns the (one-based) century component of the date/time
+ 		 *  currently represented in the instance of the class. */
+		int32_t	getCentury() const;
 
 		/** Returns true if daylight savings time is currently
 		 *  in effect and false if it isn't */

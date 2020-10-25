@@ -4,6 +4,8 @@
 	removed length()/isNullOrEmpty() with const unsigned char * arguments
 	now size="number of bytes" and length="number of characters/elements",
 		updated comments, parameters, and some method names
+	added datetime::getCentury()
+	added datetime::getShortYear()
 
 1.3.1 - added apache-related items to spec file BuildRequries
 

@@ -318,6 +318,14 @@ int32_t datetime::getYear() const {
 	return pvt->_year+1900;
 }
 
+int32_t datetime::getShortYear() const {
+	return pvt->_year%100;
+}
+
+int32_t datetime::getCentury() const {
+	return (pvt->_year<100)?20:((pvt->_year/100)+20);
+}
+
 bool datetime::isDaylightSavingsTime() const {
 	return pvt->_isdst!=0;
 }
