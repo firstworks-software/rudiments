@@ -8,7 +8,6 @@ class mvcresultprivate {
 	friend class mvcresult;
 	private:
 		jsondom		d;
-		domnode		*rootnode;
 		domnode		*statusnode;
 		domnode		*successnode;
 		domnode		*codenode;
@@ -19,14 +18,14 @@ class mvcresultprivate {
 mvcresult::mvcresult() {
 	pvt=new mvcresultprivate;
 	pvt->d.createRootNode();
-	pvt->rootnode=pvt->d.getRootNode();
-	pvt->statusnode=pvt->rootnode->appendTag("status");
+	domnode		*rootnode=pvt->d.getRootNode()->appendTag("r");
+	pvt->statusnode=rootnode->appendTag("status");
 	pvt->successnode=pvt->statusnode->appendTag("success");
 	pvt->codenode=pvt->statusnode->appendTag("code");
 	pvt->codenode->setAttributeValue("t","n");
 	pvt->messagenode=pvt->statusnode->appendTag("message");
 	pvt->messagenode->setAttributeValue("t","s");
-	pvt->datanode=pvt->rootnode->appendTag("data");
+	pvt->datanode=rootnode->appendTag("data");
 }
 
 mvcresult::~mvcresult() {
