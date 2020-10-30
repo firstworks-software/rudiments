@@ -347,23 +347,25 @@ void jsondom::write(const domnode *dn, output *out,
 			{
 			out->write('"');
 			const char *val=getValue(dn);
-			for (;;) {
-				if (*val=='\0') {
-					break;
-				} else if (*val=='\b') {
-					out->write("\\b");
-				} else if (*val=='\f') {
-					out->write("\\f");
-				} else if (*val=='\n') {
-					out->write("\\n");
-				} else if (*val=='\r') {
-					out->write("\\r");
-				} else if (*val=='\t') {
-					out->write("\\t");
-				} else {
-					out->write(*val);
+			if (val) {
+				for (;;) {
+					if (*val=='\0') {
+						break;
+					} else if (*val=='\b') {
+						out->write("\\b");
+					} else if (*val=='\f') {
+						out->write("\\f");
+					} else if (*val=='\n') {
+						out->write("\\n");
+					} else if (*val=='\r') {
+						out->write("\\r");
+					} else if (*val=='\t') {
+						out->write("\\t");
+					} else {
+						out->write(*val);
+					}
+					val++;
 				}
-				val++;
 			}
 			out->write('"');
 			}
