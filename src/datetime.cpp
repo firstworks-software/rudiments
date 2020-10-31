@@ -1213,6 +1213,35 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 	// FIXME: handle timezone...
 
+	// handle unprovided parameters
+	int16_t	junkint16;
+	int32_t	junkint32;
+	bool	junkbool;
+	if (!year) {
+		year=&junkint16;
+	}
+	if (!month) {
+		month=&junkint16;
+	}
+	if (!day) {
+		day=&junkint16;
+	}
+	if (!hour) {
+		hour=&junkint16;
+	}
+	if (!minute) {
+		minute=&junkint16;
+	}
+	if (!second) {
+		second=&junkint16;
+	}
+	if (!microsecond) {
+		microsecond=&junkint32;
+	}
+	if (!isnegative) {
+		isnegative=&junkbool;
+	}
+
 	// initialize date/time parts
 	*year=-1;
 	*month=-1;
