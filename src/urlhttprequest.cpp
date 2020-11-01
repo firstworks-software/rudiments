@@ -255,6 +255,7 @@ void urlhttprequest::initUrlVariables() {
 
 	// build the program name
 	pvt->_programpath.append(pvt->_applicationpath.getString());
+	pvt->_programurl.append(pvt->_applicationurl.getString());
 	if (scriptnamelistlength) {
 		pvt->_programstr.append(
 				scriptnamelist[scriptnamelistlength-1]);
