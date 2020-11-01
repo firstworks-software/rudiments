@@ -277,7 +277,7 @@ void jsondom::write(const domnode *dn, output *out,
 
 	bool	inarray=(pvt->_inarray.getLength() &&
 				pvt->_inarray.getLast()->getValue());
-	if (*indentlevel && !inarray) {
+	if (indentlevel && *indentlevel && !inarray) {
 		if (indent) {
 			writeIndent(out,*indentlevel);
 		}
