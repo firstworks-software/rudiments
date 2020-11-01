@@ -6,8 +6,8 @@
 class parameterstringprivate {
 	friend class parameterstring;
 	private:
-		namevaluepairs	_nvp;
-		char		_delim;
+		dictionary<char *,char *>	_nvp;
+		char				_delim;
 };
 
 parameterstring::parameterstring() {
@@ -17,7 +17,7 @@ parameterstring::parameterstring() {
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
-	for (linkedlistnode< namevaluepairsnode *>
+	for (linkedlistnode< dictionarynode<char *,char *> *>
 			*node=pvt->_nvp.getList()->getFirst();
 			node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
@@ -201,4 +201,8 @@ int32_t parameterstring::parseNameLength(const char *data) {
 
 int32_t parameterstring::parseValueLength(const char *data) {
 	return parsePartLength(data,pvt->_delim,1,1);
+}
+
+dictionary<char *,char *> *parameterstring::getDictionary() {
+	return &(pvt->_nvp);
 }

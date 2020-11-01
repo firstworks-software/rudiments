@@ -38,6 +38,10 @@ class RUDIMENTS_DLLSPEC parameterstring {
 		 *  called again. */
 		void		clear();
 
+		/** Returns the dictionary used internally by this instance of
+		 *  the parameterstring class. */
+		dictionary<char *,char *>	*getDictionary();
+
 	#include <rudiments/private/parameterstring.h>
 };
 

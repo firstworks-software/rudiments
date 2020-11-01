@@ -138,3 +138,43 @@ bool commandline::found(const char *arg) const {
 bool commandline::found(const char *arg, const char *abbr) const {
 	return (found(arg) || found(abbr));
 }
+
+void commandline::toDictionary(dictionary<char *,char *> *dict) {
+
+	for (int32_t i=1; i<pvt->_argc; i++) {
+
+		// look for "--arg=value"
+		if (!charstring::compare(pvt->_argv[i],"--",2)) {
+
+			const char	*kv=pvt->_argv[i]+2;
+			const char	*eq=charstring::findFirst(kv,'=');
+			if (eq) {
+				dict->setValue(
+					charstring::duplicate(kv,eq-kv),
+					charstring::duplicate(eq+1));
+			} else {
+				dict->setValue(
+					charstring::duplicate(kv),
+					charstring::duplicate(""));
+			}
+		} else
+
+		// ...or "-arg value"
+		if (pvt->_argv[i][0]=='-') {
+
+			const char	*key=pvt->_argv[i]+1;
+			const char	*value="";
+
+			// return the next arg unless it
+			// also starts with a -
+			if (i<pvt->_argc-1 &&
+				pvt->_argv[i+1] &&
+				pvt->_argv[i+1][0]!='-') {
+				value=pvt->_argv[i+1];
+			}
+
+			dict->setValue(charstring::duplicate(key),
+					charstring::duplicate(value));
+		}
+	}
+}

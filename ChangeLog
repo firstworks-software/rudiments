@@ -8,6 +8,8 @@
 	added datetime::getShortYear()
 	fixed jsondom::write() of non-existent string values
 	fixed datetime::parse() crash when NULL parameters are passed in
+	added commandline::toDictionary()
+	added parameterstring::getDictionary()
 
 1.3.1 - added apache-related items to spec file BuildRequries
 

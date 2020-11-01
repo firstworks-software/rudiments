@@ -74,7 +74,29 @@ int main(int argc, const char **argv) {
 	test("getValue(), -f",
 		!charstring::compare(cmdline.getValue("f"),"five"));
 	test("getValue(), --five/-f",
-		!charstring::compare(cmdline.getValue("five"),"5"));
+		!charstring::compare(cmdline.getValue("five","f"),"5"));
+	stdoutput.printf("\n");
+
+	// toDictionary
+	stdoutput.printf("toDictionary...\n");
+	dictionary<char *,char *>	d;
+	cmdline.toDictionary(&d);
+	test("getValue(), -one",
+		!charstring::compare(d.getValue((char *)"one"),"1"));
+	test("getValue(), -two",
+		!charstring::compare(d.getValue((char *)"two"),""));
+	test("getValue(), --three",
+		!charstring::compare(d.getValue((char *)"three"),"3"));
+	test("getValue(), --four",
+		!charstring::compare(d.getValue((char *)"four"),""));
+	test("getValue(), --five",
+		!charstring::compare(d.getValue((char *)"five"),"5"));
+	test("getValue(), -f",
+		!charstring::compare(d.getValue((char *)"f"),"five"));
+	test("getValue(), --six",
+		!charstring::compare(d.getValue((char *)"six"),""));
+	test("getValue(), -s",
+		!charstring::compare(d.getValue((char *)"s"),""));
 	stdoutput.printf("\n");
 
 	process::exit(0);

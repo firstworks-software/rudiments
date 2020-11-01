@@ -29,7 +29,10 @@ class RUDIMENTS_DLLSPEC commandline {
 		 * 	-arg value
 		 *  or
 		 * 	--arg=value
-		 *  on the command line and returns value. */
+		 *  on the command line and returns value.
+		 *
+		 *  Returns an empty string if just -arg or --arg is found, or
+		 *  NULL if neither are found. */
 		const char	*getValue(const char *arg) const;
 
 		/** Looks for the argument or an abbreviated version of it on
@@ -49,7 +52,10 @@ class RUDIMENTS_DLLSPEC commandline {
 		 *  on the command line and returns value.
 		 *
 		 *  If both "arg" and "abbr" are found then the value for
-		 *  "arg" is returned. */
+		 *  "arg" is returned.
+		 * 
+		 *  Returns an empty string if just -name, --name, -n, or --n
+		 *  is found, or NULL if none are found. */
 		const char	*getValue(const char *arg,
 						const char *abbr) const;
 
@@ -69,6 +75,12 @@ class RUDIMENTS_DLLSPEC commandline {
 		 *
 		 *  This is useful for processing command line switches. */
 		bool	found(const char *arg, const char *abbr) const;
+
+		/** Parses the command line into the supplied dictionary.
+		 *
+		 *  If an argument has no value, then the value for that
+		 *  key in the dictionary is set to an empty string. */
+		void	toDictionary(dictionary<char *,char *> *dict);
 
 	#include <rudiments/private/commandline.h>
 

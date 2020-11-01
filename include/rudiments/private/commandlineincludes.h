@@ -3,5 +3,6 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
+#include <rudiments/dictionary.h>
 
 class commandlineprivate;
