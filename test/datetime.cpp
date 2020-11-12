@@ -117,7 +117,6 @@ int main(int argc, const char **argv) {
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",dt.isDaylightSavingsTime());
-stdoutput.printf("%s\n",dt.getTimeZoneString());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);
@@ -160,7 +159,7 @@ stdoutput.printf("%s\n",dt.getTimeZoneString());
 
 
 	// add/subtract time
-	stdoutput.printf("add/subtract time:");
+	stdoutput.printf("add/subtract time:\n");
 	dt.addMicroseconds(1);
 	test("addSeconds(1) hour",dt.getHour()==21);
 	test("addSeconds(1) minutes",dt.getMinutes()==54);
