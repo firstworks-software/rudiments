@@ -656,3 +656,7 @@ bool templateengine::parseBlock(
 	// just parse it using variables from the parent block
 	return parse(false,out,block,blocklength,NULL,vars);
 }
+
+const char *templateengine::getError() {
+	return pvt->_err.getString();
+}
