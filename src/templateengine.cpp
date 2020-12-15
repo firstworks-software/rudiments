@@ -397,7 +397,7 @@ void templateengine::replaceVariable(
 		start=*buffer+pvt->_varstartlen;
 	}
 	char	*end=charstring::findFirst(start,endpattern);
-	if (end) {
+	if (vars && end) {
 		char		*var=charstring::duplicate(start,end-start);
 		const char	*repl;
 		if (vars->getValue(var,&repl)) {
