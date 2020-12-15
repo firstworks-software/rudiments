@@ -19,7 +19,8 @@
 					stringbuffer *blockname,
 					dictionary< const char *,
 							const char * > *vars);
-		bool	getBlockLength(char **buffer,
+		bool	getBlockLength(const char *blockname,
+					char **buffer,
 					uint64_t *blocklength);
 		bool	getIncludeFilename(char **buffer,
 					stringbuffer *filename,

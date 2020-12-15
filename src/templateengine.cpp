@@ -5,6 +5,7 @@
 #include <rudiments/templateengine.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <rudiments/memorymap.h>
 
@@ -38,6 +39,7 @@ class templateengineprivate {
 		uint16_t	_incendlen;
 		char		_qset[3];
 		char		_dqset[3];
+		stringbuffer	_err;
 };
 
 templateengine::templateengine() {
@@ -203,6 +205,9 @@ bool templateengine::parse(
 			fileparser *fileparsers,
 			dictionary< const char *, const char * > *vars) {
 
+	// clear any lingering error
+	pvt->_err.clear();
+
 	// for each fileparser...
 	for (uint32_t index=0; fileparsers[index].parser; index++) {
 
@@ -212,16 +217,36 @@ bool templateengine::parse(
 				fileparsers[index].file,
 				charstring::length(fileparsers[index].file),
 				NULL,vars)) {
+			if (!pvt->_err.getSize()) {
+				pvt->_err.appendFormatted(
+					"parse(%s) failed: "
+					"filename replacements failed\n",
+					filename);
+			}
 			return false;
 		}
 
 		// if the filename matches the fileparser
 		// then use it to parse the file
 		if (regularexpression::match(filename,file.getString())) {
-			return (fileparsers[index].parser)(
+			if ((fileparsers[index].parser)(
 						out,filename,
-						fileparsers[index].data);
+						fileparsers[index].data)) {
+				return true;
+			} else {
+				if (!pvt->_err.getSize()) {
+					pvt->_err.appendFormatted(
+						"parse(%s) failed: "
+						"file handler returned false\n",
+						filename);
+				}
+				return false;
+			}
 		}
+	}
+	if (!pvt->_err.getSize()) {
+		pvt->_err.appendFormatted(
+			"parse(%s) failed: no matching file parser\n",filename);
 	}
 	return false;
 }
@@ -231,6 +256,9 @@ bool templateengine::parse(
 			const char *filename,
 			blockparser *blockparsers,
 			dictionary< const char *, const char * > *vars) {
+
+	// clear any lingering error
+	pvt->_err.clear();
 
 	// initialize the return value
 	bool	retval=false;
@@ -265,6 +293,13 @@ bool templateengine::parse(
 			mm.detach();
 		}
 
+	} else {
+		char	*err=error::getErrorString();
+		if (!pvt->_err.getSize()) {
+			pvt->_err.appendFormatted(
+				"parse(%s) failed: %s\n",filename,err);
+		}
+		delete[] err;
 	}
 	return retval;
 }
@@ -275,6 +310,11 @@ bool templateengine::parse(
 			uint64_t blocklength,
 			blockparser *blockparsers,
 			dictionary< const char *, const char * > *vars) {
+
+	// clear any lingering error
+	pvt->_err.clear();
+
+	// parse the block
 	return parse(false,out,block,blocklength,blockparsers,vars);
 }
 
@@ -332,9 +372,9 @@ bool templateengine::parse(
 			// get the length of the block and parse the block
 			char		*blockbodyptr=buffer;
 			uint64_t	blockbodylen;
-			if (!getBlockLength(&buffer,&blockbodylen) ||
-				!parseBlock(out,
-						namestr.getString(),
+			if (!getBlockLength(namestr.getString(),
+						&buffer,&blockbodylen) ||
+				!parseBlock(out,namestr.getString(),
 						blockbodyptr,blockbodylen,
 						blockparsers,vars)) {
 				return false;
@@ -443,6 +483,11 @@ bool templateengine::getBlockName(
 	if (!getName(buffer,blockname,vars,
 				pvt->_blockstartend,
 				pvt->_blockstartendlen)) {
+		if (!pvt->_err.getSize()) {
+			pvt->_err.appendFormatted(
+				"getBlockName(%s) failed: getName() failed\n",
+				blockname);
+		}
 		return false;
 	}
 
@@ -451,7 +496,9 @@ bool templateengine::getBlockName(
 	return true;
 }
 
-bool templateengine::getBlockLength(char **buffer, uint64_t *blocklength) {
+bool templateengine::getBlockLength(const char *blockname,
+					char **buffer,
+					uint64_t *blocklength) {
 
 	// get the length between the block-start and block-end markers
 	uint16_t	depth=0;
@@ -483,6 +530,13 @@ bool templateengine::getBlockLength(char **buffer, uint64_t *blocklength) {
 				} else {
 					// someone forgot the end of the
 					// block-end marker then return failure
+					if (!pvt->_err.getSize()) {
+						pvt->_err.appendFormatted(
+							"getBlockLength(%s) "
+							"failed: no "
+							"end-of-block marker\n",
+							blockname);
+					}
 					return false;
 				}
 
@@ -496,6 +550,11 @@ bool templateengine::getBlockLength(char **buffer, uint64_t *blocklength) {
 		// if we hit the end of the buffer then somebody forgot the
 		// end-block marker, so return false
 		if (!**buffer) {
+			if (!pvt->_err.getSize()) {
+				pvt->_err.appendFormatted(
+					"getBlockLength(%s) failed: "
+					"no end-of-block marker\n",blockname);
+			}
 			return false;
 		}
 
@@ -515,6 +574,12 @@ bool templateengine::getIncludeFilename(
 
 	// get the filename and perform replacements on it
 	if (!getName(buffer,filename,vars,pvt->_incend,pvt->_incendlen)) {
+		if (!pvt->_err.getSize()) {
+			pvt->_err.appendFormatted(
+				"getIncludeFilename(%s) failed: "
+				"getName() failed\n",
+				filename);
+		}
 		return false;
 	}
 
@@ -536,6 +601,10 @@ bool templateengine::getName(
 		// if we hit the end of the buffer, someone
 		// forgot the end of the block-end marker,  return false
 		if (!*(*buffer+endlen)) {
+			if (!pvt->_err.getSize()) {
+				pvt->_err.append("getName() failed: "
+						"no end-of-block marker\n");
+			}
 			return false;
 		}
 
@@ -565,10 +634,20 @@ bool templateengine::parseBlock(
 		for (uint64_t index=0; blockparsers[index].parser; index++) {
 			blockparser	*sh=&blockparsers[index];
 			if (!charstring::compare(blockname,sh->blockname)) {
-				return sh->parser(sh->out,
-							sh->blockname,
+				if (sh->parser(sh->out,sh->blockname,
 							block,blocklength,
-							sh->data);
+							sh->data)) {
+					return true;
+				} else {
+					if (!pvt->_err.getSize()) {
+						pvt->_err.appendFormatted(
+							"parse(%s) failed: "
+							"block handler "
+							"returned false\n",
+							blockname);
+					}
+					return false;
+				}
 			}
 		}
 	}

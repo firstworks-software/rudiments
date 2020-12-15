@@ -370,6 +370,10 @@ class RUDIMENTS_DLLSPEC templateengine {
 		 */
 		const char	*getIncludeEnd();
 
+		/** Returns the error that occurred if a parse() method
+		 *  returned false. */
+		const char	*getError();
+
 	#include <rudiments/private/templateengine.h>
 };
 
