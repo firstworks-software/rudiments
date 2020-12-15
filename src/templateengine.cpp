@@ -5,7 +5,6 @@
 #include <rudiments/templateengine.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
-#include <rudiments/error.h>
 
 #include <rudiments/memorymap.h>
 
