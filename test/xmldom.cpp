@@ -223,7 +223,10 @@ int main(int argc, const char **argv) {
 
 	header("xmldom");
 
-	xmldom	x;
+	xmldom	x(false);
+#if 1
+x.parseFile("/home/dmuse/sharedStrings.xml");
+#else
 
 	stdoutput.printf("normal...\n");
 	test("parse string",x.parseString(normal));
@@ -312,4 +315,5 @@ int main(int argc, const char **argv) {
 
 	file::remove("normal.xml");
 	delete[] normaldotxml;
+#endif
 }

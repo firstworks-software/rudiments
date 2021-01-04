@@ -129,6 +129,7 @@ bool xmldom::attributeValue(const char *value) {
 
 bool xmldom::text(const char *string) {
 	pvt->_currentattribute=NULL;
+stdoutput.printf("%s\n",string);
 	insertChild(new domnode(this,getNullNode(),
 					TEXT_DOMNODETYPE,
 					NULL,"text",string));

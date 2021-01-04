@@ -84,12 +84,10 @@ bool sax::parseLocalFile(const char *filename) {
 
 		// Get the optimum transfer size for the filesystem
 		// the file is found on, if possible.
+		pvt->_optblocksize=1024;
 		filesystem	fs;
 		if (fs.open(filename)) {
 			pvt->_optblocksize=fs.getOptimumTransferBlockSize();
-			if (!pvt->_optblocksize) {
-				pvt->_optblocksize=1024;
-			}
 		}
 
 		// If we're memory mapping, since we'll use this for the
