@@ -14,6 +14,7 @@
 	fixed potential null dereference in templateengine::replaceVariable()
 	added error reporting to templateengine class
 	fixed potentially uninitialized optimum block size in sax class
+	optimized domnode::insertNode() for empty, append, and prepend cases
 
 1.3.1 - added apache-related items to spec file BuildRequries
 

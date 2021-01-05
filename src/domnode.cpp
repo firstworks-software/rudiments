@@ -717,28 +717,48 @@ domnode *domnode::getNode(domnode *first,
 bool domnode::insertNode(domnode *node,
 				uint64_t position,
 				domnodetype type,
-				domnode **first, domnode **last,
+				domnode **first,
+				domnode **last,
 				uint64_t *count) {
 	if (position>(*count)) {
 		return false;
 	}
 	node->setParent(this);
 	node->setType(type);
-	domnode	*atpos=getNode(*first,position,NULL,NULL,false,*count);
-	domnode	*beforepos=getNode(*first,position-1,NULL,NULL,false,*count);
-	if (atpos) {
-		node->setNextSibling(atpos);
-		atpos->setPreviousSibling(node);
-	}
-	if (beforepos) {
-		node->setPreviousSibling(beforepos);
-		beforepos->setNextSibling(node);
-	}
-	if (position==0) {
-		(*first)=node;
-	}
-	if (position==(*count)) {
-		(*last)=node;
+	if (*count==0) {
+		// optimize for empty
+		node->setNextSibling(pvt->_nullnode);
+		node->setPreviousSibling(pvt->_nullnode);
+		*first=node;
+		*last=node;
+	} else if (position==*count) {
+		// optimize for append
+		node->setNextSibling(pvt->_nullnode);
+		node->setPreviousSibling(*last);
+		(*last)->setNextSibling(node);
+		*last=node;
+	} else if (position==0) {
+		// optimize for prepend
+		node->setNextSibling(*first);
+		node->setPreviousSibling(pvt->_nullnode);
+		(*first)->setPreviousSibling(node);
+		*first=node;
+	} else {
+		// This is really inefficient when there are lots of children.
+		// It does a sequential search for the specified position,
+		// twice.
+		domnode	*atpos=
+			getNode(*first,position,NULL,NULL,false,*count);
+		domnode	*beforepos=
+			getNode(*first,position-1,NULL,NULL,false,*count);
+		if (atpos) {
+			node->setNextSibling(atpos);
+			atpos->setPreviousSibling(node);
+		}
+		if (beforepos) {
+			node->setPreviousSibling(beforepos);
+			beforepos->setNextSibling(node);
+		}
 	}
 	if (type==TAG_DOMNODETYPE) {
 		domnode	*prevtag=node->getPreviousTagSibling();
