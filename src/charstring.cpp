@@ -2059,6 +2059,201 @@ void charstring::base64Decode(const char *input, uint64_t inputlength,
 				(input[inputlength-2]=='=');*/
 }
 
+char *charstring::quotedPrintableEncode(const unsigned char *input) {
+	return quotedPrintableEncode(input,length((const char *)input));
+}
+
+char *charstring::quotedPrintableEncode(const unsigned char *input,
+						uint64_t inputsize) {
+	char		*retval=NULL;
+	uint64_t	retvalsize=0;
+	quotedPrintableEncode(input,inputsize,&retval,&retvalsize);
+	return retval;
+}
+
+void charstring::quotedPrintableEncode(const unsigned char *input,
+						uint64_t inputsize,
+						char **output,
+						uint64_t *outputlength) {
+
+	// handle null input
+	if (!input) {
+		*output=NULL;
+		*outputlength=0;
+		return;
+	}
+
+	// handle 0-length input
+	if (!inputsize) {
+		*output=charstring::duplicate("");
+		*outputlength=0;
+		return;
+	}
+
+	// handle real input...
+	stringbuffer	out;
+	uint16_t	index=0;
+	const unsigned char	*end=input+inputsize;
+	for (const unsigned char *c=input; c<end; c++) {
+
+		if (index>=77) {
+			// append soft-eol
+			out.append("=\r\n");
+			index=0;
+		}
+
+		if (*c<' ' || *c>'~' || *c=='=') {
+			// hex encode
+			out.appendFormatted("=%02x",*c);
+			index+=3;
+		} else {
+			out.append(*c);
+			index++;
+		}
+	}
+
+	*outputlength=out.getStringLength();
+	*output=out.detachString();
+}
+
+unsigned char *charstring::quotedPrintableDecode(const char *input) {
+	return quotedPrintableDecode(input,length(input));
+}
+
+unsigned char *charstring::quotedPrintableDecode(const char *input,
+						uint64_t inputlength) {
+	unsigned char	*retval=NULL;
+	uint64_t	retvalsize=0;
+	quotedPrintableDecode(input,inputlength,&retval,&retvalsize);
+	return retval;
+}
+
+void charstring::quotedPrintableDecode(const char *input,
+					uint64_t inputlength,
+					unsigned char **output,
+					uint64_t *outputsize) {
+
+	// handle null input
+	if (!input) {
+		*output=NULL;
+		*outputsize=0;
+		return;
+	}
+
+	// handle 0-length input
+	if (!inputlength) {
+		*output=(unsigned char *)charstring::duplicate("");
+		*outputsize=0;
+		return;
+	}
+
+	// handle real input...
+	bytebuffer	out;
+	const char	*end=input+inputlength;
+	const char *c=input;
+	while (*c && c!=end) {
+
+		if (*c=='=') {
+
+			char	char1='\0';
+			char	char2='\0';
+
+			// move on
+			c++;
+
+			// bail if we hit the EOL
+			if (c==end || *c=='\0') {
+				break;
+			}
+
+			// get the char
+			char1=*c;
+
+			// move on
+			c++;
+
+			// if we hit EOL..
+			if (c==end || *c=='\0') {
+ 
+				// The only potentially valid case where the
+				// second character past the = is the end of
+				// line is a soft-eol.  Bail if we don't find
+				// that.
+				if (char1!='\r' && char1!='\n') {
+					break;
+				}
+
+			} else {
+
+				// get the char
+				char2=*c;
+			}
+
+			// handle soft eol
+			if (char1=='\n') {
+				if (char2=='\r') {
+					c++;
+				} else {
+					// don't increment c
+				}
+
+			} else if (char1=='\r') {
+				if (char2=='\n') {
+					c++;
+				} else {
+					// don't increment c
+				}
+
+			// handle hex chars
+			} else {
+
+				bool	good=true;
+
+				unsigned char	sixteens=
+						character::toUpperCase(char1);
+				if (sixteens>='A' && sixteens<='F') {
+					sixteens=sixteens-'A'+10;
+				} else if (sixteens>='0' && sixteens<='9') {
+					sixteens-='0';
+				} else {
+					good=false;
+				}
+
+				unsigned char	ones=
+						character::toUpperCase(char2);
+				if (ones>='A' && ones<='F') {
+					ones=ones-'A'+10;
+				} else if (ones>='0' && ones<='9') {
+					ones-='0';
+				} else {
+					good=false;
+				}
+
+				// if both were valid hex chars then
+				// append the hex value, otherwise ignore
+				// the encoding altogether
+				if (good) {
+					out.append((unsigned char)
+							(sixteens*16+ones));
+				}
+
+				c++;
+			}
+
+		} else {
+			out.append(*c);
+ 			c++;
+		}
+	}
+
+	// null-terminate, in case it's a string, but don't include the
+	// null-terminator in the output size
+	out.append('\0');
+
+	*outputsize=out.getSize()-1;
+	*output=out.detachBuffer();
+}
+
 char *charstring::hexEncode(const unsigned char *input) {
 	return hexEncode(input,length((const char *)input));
 }

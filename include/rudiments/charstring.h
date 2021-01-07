@@ -813,6 +813,48 @@ class RUDIMENTS_DLLSPEC charstring {
 						unsigned char **output,
 						uint64_t *outputsize);
 
+		/** Quoted-printable-encodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program. */
+		static	char	*quotedPrintableEncode(
+						const unsigned char *input);
+
+		/** similar to quotedPrintableEncode above but only encodes
+		 *  the first "inputsize" bytes of "input" */
+		static	char	*quotedPrintableEncode(
+						const unsigned char *input,
+						uint64_t inputsize);
+
+		/** similar to quotedPrintableEncode() above, but returns the
+		 *  result in "output" and "outputlength" (in characters)
+		 *  rather than in a return value */
+		static	void	quotedPrintableEncode(
+						const unsigned char *input,
+						uint64_t inputsize,
+						char **output,
+						uint64_t *outputlength);
+
+		/** Quoted-printable-decodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program. */
+		static	unsigned char	*quotedPrintableDecode(
+							const char *input);
+
+		/** similar to quotedPrintableDecode above but only decodes
+		 *  the first "inputlength" characters of "input" */
+		static	unsigned char	*quotedPrintableDecode(
+							const char *input,
+							uint64_t inputlength);
+
+		/** similar to quotedPrintableDecode() above, but returns the
+		 *  result in "output" and "outputsize" (in bytes) rather than
+		 *  in a return value */
+		static	void	quotedPrintableDecode(const char *input,
+							uint64_t inputlength,
+							unsigned char **output,
+							uint64_t *outputsize);
+
+
 		/** hex-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
@@ -823,7 +865,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*hexEncode(const unsigned char *input,
 							uint64_t inputsize);
 
-		/** similar to base64Encode() above, but returns the
+		/** similar to hexEncode() above, but returns the
 		 *  result in "output" and "outputsize" (in characters) rather
 		 *  than in a return value */
 		static	void	hexEncode(const unsigned char *input,

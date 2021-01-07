@@ -3,6 +3,7 @@
 
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/stdio.h>
 #include <limits.h>
@@ -444,6 +445,45 @@ int main(int argc, const char **argv) {
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
 	delete[] unescbuffer;
+	stdoutput.printf("\n");
+
+
+	// quoted printable
+	stdoutput.printf("quoted printable...\n");
+	bytebuffer	bb;
+	stringbuffer	sb;
+	uint16_t 	index=0;
+	for (uint16_t i=0; i<256; i++) {
+		bb.append((unsigned char )i);
+		if (index>=77) {
+			sb.append("=\r\n");
+			index=0;
+		}
+		if ((unsigned char)i<' ' ||
+			(unsigned char)i>'~' ||
+			(unsigned char)i=='=') {
+			sb.appendFormatted("=%02x",(unsigned char)i);
+			index+=3;
+		} else {
+			sb.append((unsigned char)i);
+			index++;
+		}
+	}
+	char		*encoded=NULL;
+	uint64_t	encodedlength=0;
+	charstring::quotedPrintableEncode(bb.getBuffer(),bb.getSize(),
+						&encoded,&encodedlength);
+	test("encoded length",encodedlength==sb.getStringLength());
+	test("encoded",!charstring::compare(encoded,sb.getString()));
+	unsigned char	*decoded=NULL;
+	uint64_t	decodedlength=0;
+	charstring::quotedPrintableDecode(encoded,encodedlength,
+						&decoded,&decodedlength);
+	test("decoded length",decodedlength==bb.getSize());
+	test("decoded",!bytestring::compare(decoded,
+					bb.getBuffer(),bb.getSize()));
+	delete[] encoded;
+	delete[] decoded;
 	stdoutput.printf("\n");
 
 
