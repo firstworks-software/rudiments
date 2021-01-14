@@ -12,6 +12,9 @@
 			bool	caseColumn(domnode *c, bool upper);
 			bool	caseColumns(bool upper);
 
+			bool	trimNode(domnode *node, bool left, bool right);
+			bool	trimColumns(bool left, bool right);
+
 			void	setValue(domnode *node,
 					const char *name, bool quoted);
 
@@ -23,6 +26,11 @@
 						const char *name, bool quoted);
 
 			bool	insertRowAt(uint64_t position);
+
+			bool	trimField(uint64_t row, uint64_t column,
+							bool left, bool right);
+
+			void	trimFields(bool left, bool right);
 
 			void	writeValue(output *out, domnode *value) const;
 

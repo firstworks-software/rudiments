@@ -78,6 +78,41 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Lower-cases all column names. */
 		bool	lowerCaseColumns();
 
+		/** Right-trims the name of the column at "position".  Returns
+		 *  true on success and false if "position" doesn't exist. */
+		bool	rightTrimColumn(uint64_t position);
+
+		/** Right-trims the name of the column "name".  Returns true on
+		 *  success and false if "name" doesn't exist. */
+		bool	rightTrimColumn(const char *name);
+
+		/** Right-trims all column names. */
+		bool	rightTrimColumns();
+
+		/** Left-trims the name of the column at "position".  Returns
+		 *  true on success and false if "position" doesn't exist. */
+		bool	leftTrimColumn(uint64_t position);
+
+		/** Left-trims the name of the column "name".  Returns true on
+		 *  success and false if "name" doesn't exist. */
+		bool	leftTrimColumn(const char *name);
+
+		/** Left-trims all column names. */
+		bool	leftTrimColumns();
+
+		/** Right-trims and left-trims the name of the column at
+		 *  "position".  Returns true on success and false if
+		 *  "position" doesn't exist. */
+		bool	bothTrimColumn(uint64_t position);
+
+		/** Right-trims and left-trims the name of the column "name".
+		 *  Returns true on success and false if "name" doesn't
+		 *  exist. */
+		bool	bothTrimColumn(const char *name);
+
+		/** Right-trims and left-trims all column names. */
+		bool	bothTrimColumns();
+
 		/** Renames the column at "position" to "name".  Sets the
 		 *  column name to be quoted if "quoted" is true, or false
 		 *  otherwise.  Returns true on success and false if
@@ -206,6 +241,41 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		 *  row/column exists. */
 		bool	setField(uint64_t row, const char *column,
 					const char *value, bool quoted);
+
+		/** Right-trims the value at "row","column".  Returns true on
+		 *  success and false if no such row/column exists. */
+		bool	rightTrimField(uint64_t row, uint64_t column);
+
+		/** Right-trims the value at "row","column".  Returns true on
+		 *  success and false if no such row/column exists. */
+		bool	rightTrimField(uint64_t row, const char *column);
+
+		/** Left-trims the value at "row","column".  Returns true on
+		 *  success and false if no such row/column exists. */
+		bool	leftTrimField(uint64_t row, uint64_t column);
+
+		/** Left-trims the value at "row","column".  Returns true on
+		 *  success and false if no such row/column exists. */
+		bool	leftTrimField(uint64_t row, const char *column);
+
+		/** Right-trims and left-trims the value at "row","column".
+		 *  Returns true on success and false if no such row/column
+		 *  exists. */
+		bool	bothTrimField(uint64_t row, uint64_t column);
+
+		/** Right-trims and left-trims the value at "row","column".
+		 *  Returns true on success and false if no such row/column
+		 *  exists. */
+		bool	bothTrimField(uint64_t row, const char *column);
+
+		/** Right-trims all values. */
+		void	rightTrimFields();
+
+		/** Left-trims all values. */
+		void	leftTrimFields();
+
+		/** Right-trims and left-trims all values. */
+		void	bothTrimFields();
 
 		/** Inserts a row before "position".  Returns true on success
 		 *  and false if "position" doesn't exist. */

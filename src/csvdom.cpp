@@ -161,6 +161,72 @@ bool csvdom::lowerCaseColumns() {
 	return caseColumns(false);
 }
 
+bool csvdom::trimNode(domnode *node, bool left, bool right) {
+	if (node->isNullNode()) {
+		return false;
+	}
+	char	*v=charstring::duplicate(node->getAttributeValue("v"));
+stdoutput.printf("trim(\"%s\")->",v);
+	if (left) {
+		charstring::leftTrim(v);
+	}
+	if (right) {
+		charstring::rightTrim(v);
+	}
+stdoutput.printf("\"%s\"\n",v);
+	node->setAttributeValue("v",v);
+	delete[] v;
+	return true;
+}
+
+bool csvdom::rightTrimColumn(uint64_t position) {
+	return trimNode(getColumn(position),false,true);
+}
+
+bool csvdom::rightTrimColumn(const char *name) {
+	return trimNode(getColumn(name),false,true);
+}
+
+bool csvdom::leftTrimColumn(uint64_t position) {
+	return trimNode(getColumn(position),true,false);
+}
+
+bool csvdom::leftTrimColumn(const char *name) {
+	return trimNode(getColumn(name),true,false);
+}
+
+bool csvdom::bothTrimColumn(uint64_t position) {
+	return trimNode(getColumn(position),true,true);
+}
+
+bool csvdom::bothTrimColumn(const char *name) {
+	return trimNode(getColumn(name),true,true);
+}
+
+bool csvdom::trimColumns(bool left, bool right) {
+	for (domnode *c=getRootNode()->
+				getFirstTagChild("h")->
+				getFirstTagChild("c");
+			!c->isNullNode(); c=c->getNextTagSibling("c")) {
+		if (!trimNode(c,left,right)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool csvdom::rightTrimColumns() {
+	return trimColumns(false,true);
+}
+
+bool csvdom::leftTrimColumns() {
+	return trimColumns(true,false);
+}
+
+bool csvdom::bothTrimColumns() {
+	return trimColumns(true,true);
+}
+
 void csvdom::setValue(domnode *node, const char *name, bool quoted) {
 	node->setAttributeValue("v",name);
 	node->setAttributeValue("q",(quoted)?"y":"n");
@@ -419,6 +485,72 @@ bool csvdom::setField(uint64_t row, const char *column,
 	return setField(row,pos,value,quoted);
 }
 
+bool csvdom::trimField(uint64_t row, uint64_t column, bool left, bool right) {
+	domnode	*f=getRootNode()->getChild(row+1)->getChild(column);
+	if (f->isNullNode()) {
+		return false;
+	}
+	return trimNode(f,left,right);
+}
+
+bool csvdom::leftTrimField(uint64_t row, uint64_t column) {
+	return trimField(row,column,true,false);
+}
+
+bool csvdom::leftTrimField(uint64_t row, const char *column) {
+	uint64_t	pos;
+	if (!getColumnPosition(column,&pos)) {
+		return false;
+	}
+	return trimField(row,pos,true,false);
+}
+
+bool csvdom::rightTrimField(uint64_t row, uint64_t column) {
+	return trimField(row,column,false,true);
+}
+
+bool csvdom::rightTrimField(uint64_t row, const char *column) {
+	uint64_t	pos;
+	if (!getColumnPosition(column,&pos)) {
+		return false;
+	}
+	return trimField(row,pos,false,true);
+}
+
+bool csvdom::bothTrimField(uint64_t row, uint64_t column) {
+	return trimField(row,column,true,true);
+}
+
+bool csvdom::bothTrimField(uint64_t row, const char *column) {
+	uint64_t	pos;
+	if (!getColumnPosition(column,&pos)) {
+		return false;
+	}
+	return trimField(row,pos,true,true);
+}
+
+void csvdom::trimFields(bool left, bool right) {
+	for (domnode *r=getRootNode()->getFirstTagChild("r");
+			!r->isNullNode(); r=r->getNextTagSibling("r")) {
+		for (domnode *f=r->getFirstTagChild("f");
+				!f->isNullNode(); f=f->getNextTagSibling("f")) {
+			trimNode(f,left,right);
+		}
+	}
+}
+
+void csvdom::leftTrimFields() {
+	trimFields(true,false);
+}
+
+void csvdom::rightTrimFields() {
+	trimFields(false,true);
+}
+
+void csvdom::bothTrimFields() {
+	trimFields(true,true);
+}
+
 bool csvdom::insertRowAt(uint64_t position) {
 	domnode	*rownode=new domnode(this,getNullNode(),
 						TAG_DOMNODETYPE,
@@ -461,23 +593,30 @@ bool csvdom::getRowIsEmpty(uint64_t position) {
 	}
 	for (domnode *f=r->getFirstTagChild("f");
 			!f->isNullNode(); f=f->getNextTagSibling("f")) {
+stdoutput.printf("\"%s\",",f->getAttributeValue("v"));
 		if (f->getAttributeValue("v")[0]) {
+stdoutput.printf(" not empty...\n");
 			return false;
 		}
 	}
+stdoutput.printf(" empty...\n");
 	return true;
 }
 
 bool csvdom::deleteEmptyRows() {
+stdoutput.printf("deleteEmptyRows...\n");
 	uint64_t	i=0;
 	uint64_t	count=getRowCount();
 	while (i<count) {
+stdoutput.printf("	row %lld\n",i);
 		if (getRowIsEmpty(i)) {
+stdoutput.printf("		empty!\n");
 			if (!deleteRow(i)) {
 				return false;
 			}
 			count--;
 		} else {
+stdoutput.printf("		not empty\n");
 			i++;
 		}
 	}
