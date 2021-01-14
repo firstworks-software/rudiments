@@ -166,14 +166,12 @@ bool csvdom::trimNode(domnode *node, bool left, bool right) {
 		return false;
 	}
 	char	*v=charstring::duplicate(node->getAttributeValue("v"));
-stdoutput.printf("trim(\"%s\")->",v);
 	if (left) {
 		charstring::leftTrim(v);
 	}
 	if (right) {
 		charstring::rightTrim(v);
 	}
-stdoutput.printf("\"%s\"\n",v);
 	node->setAttributeValue("v",v);
 	delete[] v;
 	return true;
@@ -593,30 +591,23 @@ bool csvdom::getRowIsEmpty(uint64_t position) {
 	}
 	for (domnode *f=r->getFirstTagChild("f");
 			!f->isNullNode(); f=f->getNextTagSibling("f")) {
-stdoutput.printf("\"%s\",",f->getAttributeValue("v"));
 		if (f->getAttributeValue("v")[0]) {
-stdoutput.printf(" not empty...\n");
 			return false;
 		}
 	}
-stdoutput.printf(" empty...\n");
 	return true;
 }
 
 bool csvdom::deleteEmptyRows() {
-stdoutput.printf("deleteEmptyRows...\n");
 	uint64_t	i=0;
 	uint64_t	count=getRowCount();
 	while (i<count) {
-stdoutput.printf("	row %lld\n",i);
 		if (getRowIsEmpty(i)) {
-stdoutput.printf("		empty!\n");
 			if (!deleteRow(i)) {
 				return false;
 			}
 			count--;
 		} else {
-stdoutput.printf("		not empty\n");
 			i++;
 		}
 	}
