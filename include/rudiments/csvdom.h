@@ -195,6 +195,18 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		 *  row/column exists. */
 		const char	*getField(uint64_t row, const char *column);
 
+		/** Sets the value at "row","column" to "value" and marks
+		 *  it "quoted".  Returns true on success and false if no such
+		 *  row/column exists. */
+		bool	setField(uint64_t row, uint64_t column,
+					const char *value, bool quoted);
+
+		/** Sets the value at "row","column" to "value" and marks
+		 *  it "quoted".  Returns true on success and false if no such
+		 *  row/column exists. */
+		bool	setField(uint64_t row, const char *column,
+					const char *value, bool quoted);
+
 		/** Inserts a row before "position".  Returns true on success
 		 *  and false if "position" doesn't exist. */
 		bool	insertRowBefore(uint64_t position);

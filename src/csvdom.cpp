@@ -243,7 +243,7 @@ bool csvdom::insertColumnAt(uint64_t position, const char *name, bool quoted) {
 	for (domnode *r=getRootNode()->getFirstTagChild("r");
 			!r->isNullNode(); r=r->getNextTagSibling("r")) {
 		domnode	*f=new domnode(this,getNullNode(),
-					TAG_DOMNODETYPE,NULL,"c",NULL);
+					TAG_DOMNODETYPE,NULL,"f",NULL);
 		setValue(f,"",false);
 		r->insertChild(f,position);
 	}
@@ -398,6 +398,25 @@ const char *csvdom::getField(uint64_t row, const char *column) {
 		return NULL;
 	}
 	return getField(row,pos);
+}
+
+bool csvdom::setField(uint64_t row, uint64_t column,
+					const char *value, bool quoted) {
+	domnode	*r=getRootNode()->getChild(row+1);
+	if (r->isNullNode()) {
+		return false;
+	}
+	setValue(r->getChild(column),value,quoted);
+	return true;
+}
+
+bool csvdom::setField(uint64_t row, const char *column,
+					const char *value, bool quoted) {
+	uint64_t	pos;
+	if (!getColumnPosition(column,&pos)) {
+		return false;
+	}
+	return setField(row,pos,value,quoted);
 }
 
 bool csvdom::insertRowAt(uint64_t position) {
