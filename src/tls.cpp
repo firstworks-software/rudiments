@@ -54,6 +54,7 @@ static WCHAR *asciiToUnicode(const CHAR *in) {
 #endif
 
 //#define DEBUG_TLS 1
+#define DEBUG_CIPHERS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
@@ -1797,6 +1798,7 @@ void tlscontext::setError(int32_t ret) {
 			pvt->_errorstr.append(
 				ERR_error_string(pvt->_error,NULL));
 
+#ifdef DEBUG_CIPHERS
 			// if the error was "no shared cipher" then include
 			// the protocol and ciphers that were offered...
 			if (pvt->_ssl && charstring::contains(
@@ -1805,7 +1807,7 @@ void tlscontext::setError(int32_t ret) {
 
 				// get the protocol from the session and
 				// include it...
-				pvt->_errorstr.append(":protocol=");
+				pvt->_errorstr.append("\nprotocol: ");
 				SSL_SESSION	*sess=
 						SSL_get_session(pvt->_ssl);
 				if (sess) {
@@ -1815,9 +1817,10 @@ void tlscontext::setError(int32_t ret) {
 				} else {
 					pvt->_errorstr.append("unknown");
 				}
+				pvt->_errorstr.append('\n');
 
-				// get the ciphers and include them...
-				pvt->_errorstr.append(":ciphers offered:");
+				// get the offered ciphers and include them...
+				pvt->_errorstr.append("ciphers offered:\n");
 				STACK_OF(SSL_CIPHER)	*cs=
 					(STACK_OF(SSL_CIPHER) *)
 					SSL_get_client_ciphers(pvt->_ssl);
@@ -1827,7 +1830,27 @@ void tlscontext::setError(int32_t ret) {
 						i++) {
 						if (i) {
 							pvt->_errorstr.
-								append(',');
+								append(':');
+						}
+						pvt->_errorstr.append(
+							SSL_CIPHER_get_name(
+							sk_SSL_CIPHER_value(
+							cs,i)));
+					}
+				}
+				pvt->_errorstr.append('\n');
+
+				// get the available ciphers and include them...
+				pvt->_errorstr.append("ciphers available:\n");
+				cs=(STACK_OF(SSL_CIPHER) *)
+					SSL_CTX_get_ciphers(pvt->_ctx);
+				if (cs) {
+					for (int i=0;
+						i<sk_SSL_CIPHER_num(cs);
+						i++) {
+						if (i) {
+							pvt->_errorstr.
+								append(':');
 						}
 						pvt->_errorstr.append(
 							SSL_CIPHER_get_name(
@@ -1836,6 +1859,7 @@ void tlscontext::setError(int32_t ret) {
 					}
 				}
 			}
+#endif
 		}
 
 		// if that failed then try to get the error from SSL...
