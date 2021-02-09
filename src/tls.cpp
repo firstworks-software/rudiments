@@ -989,6 +989,7 @@ bool tlscontext::reInit(bool isclient) {
 						(pvt->_pk)?pvt->_pk:pvt->_cert,
 						SSL_FILETYPE_PEM)!=1 ||
 				SSL_CTX_check_private_key(pvt->_ctx)!=1) {
+				setError(0);
 				retval=false;
 			}
 			#ifdef DEBUG_TLS
@@ -1001,6 +1002,7 @@ bool tlscontext::reInit(bool isclient) {
 			if (SSL_CTX_set_cipher_list(
 					pvt->_ctx,
 					pvt->_ciphers)!=1) {
+				setError(0);
 				retval=false;
 			}
 		}
@@ -1020,6 +1022,7 @@ bool tlscontext::reInit(bool isclient) {
 					pvt->_ctx,
 					(ispath)?NULL:pvt->_ca,
 					(ispath)?pvt->_ca:NULL)!=1) {
+				setError(0);
 				retval=false;
 			}
 		}
@@ -1739,26 +1742,65 @@ void tlscontext::clearError() {
 
 void tlscontext::setError(int32_t ret) {
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!pvt->_ssl || ret==1) {
+
+		if (ret==1) {
 			return;
 		}
+
 		pvt->_errorstr.clear();
+
+		// try to get the error from ERR...
+		// (there may be multiple errors)
 		bool	first=true;
 		for (;;) {
+
+			unsigned long	err=ERR_get_error();
+			if (!err) {
+				break;
+			}
+
 			if (first) {
 				first=false;
 			} else {
 				pvt->_errorstr.append('\n');
 			}
-			unsigned long	err=ERR_get_error();
-			if (!err) {
-				break;
-			}
+
 			pvt->_error=err;
 			pvt->_errorstr.append(
 				ERR_error_string(pvt->_error,NULL));
+
+			// if the error was "no shared cipher" then include
+			// the ciphers that were offered
+			if (pvt->_ssl && charstring::contains(
+						pvt->_errorstr.getString(),
+						"no shared cipher")) {
+
+				pvt->_errorstr.append(":ciphers offered:");
+
+				STACK_OF(SSL_CIPHER)	*cs=
+					(STACK_OF(SSL_CIPHER) *)
+					SSL_get_client_ciphers(pvt->_ssl);
+
+				if (cs) {
+					for (int i=0;
+						i<sk_SSL_CIPHER_num(cs);
+						i++) {
+
+						if (i) {
+							pvt->_errorstr.
+								append(',');
+						}
+						pvt->_errorstr.append(
+							SSL_CIPHER_get_name(
+							sk_SSL_CIPHER_value(
+							cs,i)));
+					}
+				}
+			}
 		}
-		if (!pvt->_errorstr.getStringLength()) {
+
+		// if that failed then try to get the error from SSL...
+		if (!pvt->_errorstr.getStringLength() && pvt->_ssl) {
 			const char	*str="";
 			switch (SSL_get_error(pvt->_ssl,ret)) {
 				case SSL_ERROR_NONE:
