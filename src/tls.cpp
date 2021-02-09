@@ -896,7 +896,9 @@ bool tlscontext::reInit(bool isclient) {
 		// decide on the protocol version
 		const SSL_METHOD	*method=NULL;
 		if (!charstring::compareIgnoringCase(
-					pvt->_version,"SSL2")) {
+					pvt->_version,"SSL2") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"SSLv2")) {
 			#if defined(RUDIMENTS_HAS_SSLV2_METHOD)
 			if (isclient) {
 				method=SSLv2_client_method();
@@ -905,7 +907,9 @@ bool tlscontext::reInit(bool isclient) {
 			}
 			#endif
 		} else if (!charstring::compareIgnoringCase(
-					pvt->_version,"SSL3")) {
+					pvt->_version,"SSL3") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"SSLv3")) {
 			#if defined(RUDIMENTS_HAS_SSLV3_METHOD)
 			if (isclient) {
 				method=SSLv3_client_method();
@@ -914,7 +918,9 @@ bool tlscontext::reInit(bool isclient) {
 			}
 			#endif
 		} else if (!charstring::compareIgnoringCase(
-					pvt->_version,"TLS1")) {
+					pvt->_version,"TLS1") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"TLSv1")) {
 			#if defined(RUDIMENTS_HAS_TLSV1_METHOD)
 			if (isclient) {
 				method=TLSv1_client_method();
@@ -923,7 +929,9 @@ bool tlscontext::reInit(bool isclient) {
 			}
 			#endif
 		} else if (!charstring::compareIgnoringCase(
-					pvt->_version,"TLS1.1")) {
+					pvt->_version,"TLS1.1") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"TLSv1.1")) {
 			#if defined(RUDIMENTS_HAS_TLSV1_1_METHOD)
 			if (isclient) {
 				method=TLSv1_1_client_method();
@@ -932,7 +940,9 @@ bool tlscontext::reInit(bool isclient) {
 			}
 			#endif
 		} else if (!charstring::compareIgnoringCase(
-					pvt->_version,"TLS1.2")) {
+					pvt->_version,"TLS1.2") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"TLSv1.2")) {
 			#if defined(RUDIMENTS_HAS_TLSV1_2_METHOD)
 			if (isclient) {
 				method=TLSv1_2_client_method();
@@ -941,6 +951,24 @@ bool tlscontext::reInit(bool isclient) {
 			}
 			#endif
 		}
+
+		// NOTE: the above XXX_client/server_method calls are
+		// deprecated.  Eg. TLSv1_3_xxx_method() doesn't exist at all.
+		//
+		// OpenSSL wants you to call whichever of the methods below
+		// exist, and let both sides negotiate the highest supported
+		// version.
+		//
+		// However, this can lead to odd behavior with different
+		// versions of OpenSSL.  Eg. if you have an app that requests
+		// SSL3 on a platform that supports TLS and SSL3, and has
+		// SSLv3_xxx_method() then it will use SSL3.  But, on a
+		// platform that supports TLS and SSL3 but doesn't have
+		// SSLv3_xxx_method(), the same app will end up using the
+		// highest TLS method available, despite specifically
+		// requesting SSL3, and working as expected on the older
+		// platform.
+
 		if (!method) {
 			if (isclient) {
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
@@ -1770,22 +1798,33 @@ void tlscontext::setError(int32_t ret) {
 				ERR_error_string(pvt->_error,NULL));
 
 			// if the error was "no shared cipher" then include
-			// the ciphers that were offered
+			// the protocol and ciphers that were offered...
 			if (pvt->_ssl && charstring::contains(
 						pvt->_errorstr.getString(),
 						"no shared cipher")) {
 
-				pvt->_errorstr.append(":ciphers offered:");
+				// get the protocol from the session and
+				// include it...
+				pvt->_errorstr.append(":protocol=");
+				SSL_SESSION	*sess=
+						SSL_get_session(pvt->_ssl);
+				if (sess) {
+					pvt->_errorstr.writeFormatted(
+					"0x%04x",
+					SSL_SESSION_get_protocol_version(sess));
+				} else {
+					pvt->_errorstr.append("unknown");
+				}
 
+				// get the ciphers and include them...
+				pvt->_errorstr.append(":ciphers offered:");
 				STACK_OF(SSL_CIPHER)	*cs=
 					(STACK_OF(SSL_CIPHER) *)
 					SSL_get_client_ciphers(pvt->_ssl);
-
 				if (cs) {
 					for (int i=0;
 						i<sk_SSL_CIPHER_num(cs);
 						i++) {
-
 						if (i) {
 							pvt->_errorstr.
 								append(',');
