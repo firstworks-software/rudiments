@@ -54,7 +54,7 @@ static WCHAR *asciiToUnicode(const CHAR *in) {
 #endif
 
 //#define DEBUG_TLS 1
-#define DEBUG_CIPHERS 1
+//#define DEBUG_CIPHERS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
