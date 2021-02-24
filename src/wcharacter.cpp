@@ -152,7 +152,7 @@ int32_t wcharacter::toUpperCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towupper(c);
 	#else
-		return false;
+		return 0;
 	#endif
 }
 
@@ -160,7 +160,7 @@ int32_t wcharacter::toLowerCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towlower(c);
 	#else
-		return false;
+		return 0;
 	#endif
 }
 
@@ -168,7 +168,7 @@ int32_t wcharacter::toAscii(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return character::toAscii(c);
 	#else
-		return false;
+		return 0;
 	#endif
 }
 
@@ -200,7 +200,7 @@ wchar_t wcharacter::duplicate(char c) {
 		}
 		return retval;
 	#else
-		return false;
+		return (wchar_t)0;
 	#endif
 }
 
