@@ -3,7 +3,7 @@
 
 #include <rudiments/wcharacter.h>
 #include <rudiments/character.h>
-#include <rudiments/stdio.h>
+#include <rudiments/bytestring.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
@@ -189,7 +189,9 @@ bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
 wchar_t wcharacter::duplicate(char c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		wchar_t		retval;
-		size_t	s=mbrtowc(&retval,&c,1,NULL);
+		mbstate_t	st;
+		bytestring::zero(&st,sizeof(st));
+		size_t	s=mbrtowc(&retval,&c,1,&st);
 		if (s==(size_t)-1 || s==(size_t)-2) {
 			return (wchar_t)0;
 		}
