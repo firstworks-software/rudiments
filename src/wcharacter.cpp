@@ -189,8 +189,8 @@ wchar_t wcharacter::duplicate(char c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		// some (most?) implementations of mbrtowc
 		// don't like being passed 0
-		if (!c) {
-			return (wchar_t)0;
+		if (c<' ' || c>'~') {
+			return (wchar_t)c;
 		}
 		wchar_t		retval;
 		mbstate_t	st;
