@@ -3,6 +3,7 @@
 
 #include <rudiments/wcharacter.h>
 #include <rudiments/character.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
@@ -189,12 +190,11 @@ wchar_t wcharacter::duplicate(char c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		// some (most?) implementations of mbrtowc
 		// don't like being passed 0
-		if (c<' ' || c>'~') {
+		if (!c) {
 			return (wchar_t)c;
 		}
 		wchar_t		retval;
-		mbstate_t	st;
-		size_t	s=mbrtowc(&retval,&c,1,&st);
+		size_t	s=mbrtowc(&retval,&c,1,NULL);
 		if (s==(size_t)-1 || s==(size_t)-2) {
 			return (wchar_t)0;
 		}
