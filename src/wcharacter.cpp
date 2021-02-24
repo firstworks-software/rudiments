@@ -188,11 +188,6 @@ bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
 
 wchar_t wcharacter::duplicate(char c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		// some (most?) implementations of mbrtowc
-		// don't like being passed 0
-		if (!c) {
-			return (wchar_t)c;
-		}
 		wchar_t		retval;
 		size_t	s=mbrtowc(&retval,&c,1,NULL);
 		if (s==(size_t)-1 || s==(size_t)-2) {
