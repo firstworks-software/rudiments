@@ -888,6 +888,7 @@ enable_response
 enable_apache2
 enable_cgi
 enable_mvc
+enable_slow_system
 enable_shared
 enable_static
 with_pic
@@ -1611,6 +1612,7 @@ Optional Features:
   --disable-apache2             Disable Apache 2 support
   --disable-cgi                 Disable CGI support
   --disable-mvc                 Disable MVC support
+  --enable-slow-system    This is a slow system, affects tests
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -3246,6 +3248,13 @@ else
   INCLUDE_MVC="1"
 fi
 
+# Check whether --enable-slow-system was given.
+if test "${enable_slow_system+set}" = set; then :
+  enableval=$enable_slow_system; SLOWSYSTEM="-DSLOWSYSTEM"
+else
+  SLOWSYSTEM=""
+fi
+
 
 if ( test -n "$SMALLCODE" ); then
 
@@ -4631,7 +4640,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 echo "******************************"
 
-CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $CPPFLAGS"
+CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $SLOWSYSTEM $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 EXTRALIBS=""
 

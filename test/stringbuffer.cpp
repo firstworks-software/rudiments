@@ -8,7 +8,11 @@
 #include "test.cpp"
 
 uint32_t	iterations=5;
+#ifdef SLOWSYSTEM
+uint32_t	members=128;
+#else
 uint32_t	members=1024;
+#endif
 
 char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
 
