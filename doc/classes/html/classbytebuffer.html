@@ -48,7 +48,7 @@ $(function() {
 
 <p>Inherits <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Inherited by <a class="el" href="classstringbuffer.html">stringbuffer</a>.</p>
+<p>Inherited by <a class="el" href="classstringbuffer.html">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html">wstringbuffer</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -70,12 +70,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afe74cbd9f026e4dd708f446e43778376"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a940a2ad6148528a560c7ac7e8e5b54b1"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a> (const unsigned char *data, size_t size)</td></tr>
 <tr class="separator:a940a2ad6148528a560c7ac7e8e5b54b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad033364527b1a2da651a47616e4fa1c8"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#ad033364527b1a2da651a47616e4fa1c8">write</a> (const char *string, size_t size)</td></tr>
-<tr class="separator:ad033364527b1a2da651a47616e4fa1c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f147cb8a0b94d3bf2fa1e2dd005ddd8"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a8f147cb8a0b94d3bf2fa1e2dd005ddd8">write</a> (const char *string, size_t length)</td></tr>
+<tr class="separator:a8f147cb8a0b94d3bf2fa1e2dd005ddd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a246423f5bf867958718a276cc758f316"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a246423f5bf867958718a276cc758f316">write</a> (const char *string)</td></tr>
 <tr class="separator:a246423f5bf867958718a276cc758f316"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0daf12d831905c2ec5e28d4aaa8e4fe5"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a0daf12d831905c2ec5e28d4aaa8e4fe5">write</a> (const wchar_t *string, size_t length)</td></tr>
+<tr class="separator:a0daf12d831905c2ec5e28d4aaa8e4fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a888abeafa1c68920eda5701ab4636951"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a888abeafa1c68920eda5701ab4636951">write</a> (const wchar_t *string)</td></tr>
+<tr class="separator:a888abeafa1c68920eda5701ab4636951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bc1358acd707a4e7a9351433bba816a"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a7bc1358acd707a4e7a9351433bba816a">write</a> (char <a class="el" href="classcharacter.html">character</a>)</td></tr>
 <tr class="separator:a7bc1358acd707a4e7a9351433bba816a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa85f1b7822f9415683e886457eeeda9a"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#aa85f1b7822f9415683e886457eeeda9a">write</a> (wchar_t <a class="el" href="classcharacter.html">character</a>)</td></tr>
+<tr class="separator:aa85f1b7822f9415683e886457eeeda9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2c3a930bddfe5093250037ae7aeac3"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a3d2c3a930bddfe5093250037ae7aeac3">write</a> (int16_t number)</td></tr>
 <tr class="separator:a3d2c3a930bddfe5093250037ae7aeac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0d0dc4a46a5b2413b0e51cff65c3985"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#aa0d0dc4a46a5b2413b0e51cff65c3985">write</a> (int32_t number)</td></tr>
@@ -98,14 +104,24 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adfd41706c1d27229b4f569bd87cc5725"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dad64d8491bf404015af92fb5eec2dc"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a0dad64d8491bf404015af92fb5eec2dc">writeFormatted</a> (const char *format, va_list *argp)</td></tr>
 <tr class="separator:a0dad64d8491bf404015af92fb5eec2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9862632f6b0b870b819c324de08f49c"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#aa9862632f6b0b870b819c324de08f49c">writeFormatted</a> (const wchar_t *format,...)</td></tr>
+<tr class="separator:aa9862632f6b0b870b819c324de08f49c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d367957d127d5dfcfc55062bb67813f"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a7d367957d127d5dfcfc55062bb67813f">writeFormatted</a> (const wchar_t *format, va_list *argp)</td></tr>
+<tr class="separator:a7d367957d127d5dfcfc55062bb67813f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c716a75785adf6e558f075f5e79bc4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a> (const unsigned char *data, size_t size)</td></tr>
 <tr class="separator:a2c716a75785adf6e558f075f5e79bc4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1834813971c6aa414638463655c69db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#ad1834813971c6aa414638463655c69db">append</a> (const char *string, size_t size)</td></tr>
-<tr class="separator:ad1834813971c6aa414638463655c69db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a1e5921ccf5c89d8f894d79bf437c26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a2a1e5921ccf5c89d8f894d79bf437c26">append</a> (const char *string, size_t length)</td></tr>
+<tr class="separator:a2a1e5921ccf5c89d8f894d79bf437c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a119ef85d13123d9e2ce9fd008e0ee9db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a119ef85d13123d9e2ce9fd008e0ee9db">append</a> (const char *string)</td></tr>
 <tr class="separator:a119ef85d13123d9e2ce9fd008e0ee9db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a114c632417d4b27c1e1f93bc6cd89cb3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a114c632417d4b27c1e1f93bc6cd89cb3">append</a> (const wchar_t *string, size_t length)</td></tr>
+<tr class="separator:a114c632417d4b27c1e1f93bc6cd89cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c7a121c1f61307c0da48eb0a28ecb90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a7c7a121c1f61307c0da48eb0a28ecb90">append</a> (const wchar_t *string)</td></tr>
+<tr class="separator:a7c7a121c1f61307c0da48eb0a28ecb90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f77f4f46f72cb3ccf0bf62f5dc1d156"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a3f77f4f46f72cb3ccf0bf62f5dc1d156">append</a> (char <a class="el" href="classcharacter.html">character</a>)</td></tr>
 <tr class="separator:a3f77f4f46f72cb3ccf0bf62f5dc1d156"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7726fa99dd5c1ee28bfc22005ddcb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a1d7726fa99dd5c1ee28bfc22005ddcb6">append</a> (wchar_t <a class="el" href="classcharacter.html">character</a>)</td></tr>
+<tr class="separator:a1d7726fa99dd5c1ee28bfc22005ddcb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eeeaa509cd6b263d8fe994e28bf504f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a5eeeaa509cd6b263d8fe994e28bf504f">append</a> (int16_t number)</td></tr>
 <tr class="separator:a5eeeaa509cd6b263d8fe994e28bf504f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a579509c1e79293a3886400a38de0606a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a579509c1e79293a3886400a38de0606a">append</a> (int32_t number)</td></tr>
@@ -128,6 +144,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a747b27dacab69d6ac763522a82afef99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae29eb1a1dd71af512019c54000ec3c57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#ae29eb1a1dd71af512019c54000ec3c57">appendFormatted</a> (const char *format, va_list *argp)</td></tr>
 <tr class="separator:ae29eb1a1dd71af512019c54000ec3c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fe9b62852a1f1a0f54103962932a0af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a7fe9b62852a1f1a0f54103962932a0af">appendFormatted</a> (const wchar_t *format,...)</td></tr>
+<tr class="separator:a7fe9b62852a1f1a0f54103962932a0af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d43020e59e9437d6926d92f6754c310"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbytebuffer.html">bytebuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a8d43020e59e9437d6926d92f6754c310">appendFormatted</a> (const wchar_t *format, va_list *argp)</td></tr>
+<tr class="separator:a8d43020e59e9437d6926d92f6754c310"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8978725d2515f4494938cb1d675cbbbd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a8978725d2515f4494938cb1d675cbbbd">truncate</a> (size_t pos)</td></tr>
 <tr class="separator:a8978725d2515f4494938cb1d675cbbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6686eb75cabf0b1a9549905f4a10cbcb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a6686eb75cabf0b1a9549905f4a10cbcb">truncate</a> ()</td></tr>
@@ -157,9 +177,9 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 <tr class="memitem:a18468e2390e31624bfa2ec2f4039c8a8 inherit pub_methods_classoutput"><td class="memItemLeft" align="right" valign="top"><a id="a18468e2390e31624bfa2ec2f4039c8a8"></a>
 virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const char *string, int32_t sec, int32_t usec)</td></tr>
 <tr class="separator:a18468e2390e31624bfa2ec2f4039c8a8 inherit pub_methods_classoutput"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a043a03c5bb8cfbb900cc9203fc6a4b06 inherit pub_methods_classoutput"><td class="memItemLeft" align="right" valign="top"><a id="a043a03c5bb8cfbb900cc9203fc6a4b06"></a>
-virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const char *string, size_t size, int32_t sec, int32_t usec)</td></tr>
-<tr class="separator:a043a03c5bb8cfbb900cc9203fc6a4b06 inherit pub_methods_classoutput"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb40b97d574ec1ef9b2c4975d117aca0 inherit pub_methods_classoutput"><td class="memItemLeft" align="right" valign="top"><a id="aeb40b97d574ec1ef9b2c4975d117aca0"></a>
+virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const char *string, size_t length, int32_t sec, int32_t usec)</td></tr>
+<tr class="separator:aeb40b97d574ec1ef9b2c4975d117aca0 inherit pub_methods_classoutput"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bb1bf510960eaf7ec4cb4a73ac26a7a inherit pub_methods_classoutput"><td class="memItemLeft" align="right" valign="top"><a id="a3bb1bf510960eaf7ec4cb4a73ac26a7a"></a>
 virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (char <a class="el" href="classcharacter.html">character</a>, int32_t sec, int32_t usec)</td></tr>
 <tr class="separator:a3bb1bf510960eaf7ec4cb4a73ac26a7a inherit pub_methods_classoutput"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -308,7 +328,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2c716a75785adf6e558f075f5e79bc4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c716a75785adf6e558f075f5e79bc4f">&#9670;&nbsp;</a></span>append() <span class="overload">[1/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c716a75785adf6e558f075f5e79bc4f">&#9670;&nbsp;</a></span>append() <span class="overload">[1/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -337,8 +357,8 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 
 </div>
 </div>
-<a id="ad1834813971c6aa414638463655c69db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1834813971c6aa414638463655c69db">&#9670;&nbsp;</a></span>append() <span class="overload">[2/13]</span></h2>
+<a id="a2a1e5921ccf5c89d8f894d79bf437c26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a1e5921ccf5c89d8f894d79bf437c26">&#9670;&nbsp;</a></span>append() <span class="overload">[2/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -353,7 +373,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -362,13 +382,13 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Appends the first "size" bytes of "string" to the bytebuffer, growing the internal buffer as necessary to accommodate the new data.</p>
+<p>Appends the first "length" characters of "string" to the bytebuffer, growing the internal buffer as necessary to accommodate the new data.</p>
 <p>Returns a pointer to "this" to enable chaining such as: vb-&gt;append("numbers: ")-&gt;append(5)-&gt;append(5.5); </p>
 
 </div>
 </div>
 <a id="a119ef85d13123d9e2ce9fd008e0ee9db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a119ef85d13123d9e2ce9fd008e0ee9db">&#9670;&nbsp;</a></span>append() <span class="overload">[3/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a119ef85d13123d9e2ce9fd008e0ee9db">&#9670;&nbsp;</a></span>append() <span class="overload">[3/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -387,8 +407,58 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 
 </div>
 </div>
+<a id="a114c632417d4b27c1e1f93bc6cd89cb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a114c632417d4b27c1e1f93bc6cd89cb3">&#9670;&nbsp;</a></span>append() <span class="overload">[4/16]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbytebuffer.html">bytebuffer</a>* bytebuffer::append </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Appends the first "length" characters of "string" to the bytebuffer, growing the internal buffer as necessary to accommodate the new data.</p>
+<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;append("numbers: ")-&gt;append(5)-&gt;append(5.5); </p>
+
+</div>
+</div>
+<a id="a7c7a121c1f61307c0da48eb0a28ecb90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c7a121c1f61307c0da48eb0a28ecb90">&#9670;&nbsp;</a></span>append() <span class="overload">[5/16]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbytebuffer.html">bytebuffer</a>* bytebuffer::append </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Appends "string" to the bytebuffer, growing the internal buffer as necessary to accommodate the new data.</p>
+<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;append("numbers: ")-&gt;append(5)-&gt;append(5.5); </p>
+
+</div>
+</div>
 <a id="a3f77f4f46f72cb3ccf0bf62f5dc1d156"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f77f4f46f72cb3ccf0bf62f5dc1d156">&#9670;&nbsp;</a></span>append() <span class="overload">[4/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f77f4f46f72cb3ccf0bf62f5dc1d156">&#9670;&nbsp;</a></span>append() <span class="overload">[6/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -407,8 +477,28 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 
 </div>
 </div>
+<a id="a1d7726fa99dd5c1ee28bfc22005ddcb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d7726fa99dd5c1ee28bfc22005ddcb6">&#9670;&nbsp;</a></span>append() <span class="overload">[7/16]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbytebuffer.html">bytebuffer</a>* bytebuffer::append </td>
+          <td>(</td>
+          <td class="paramtype">wchar_t&#160;</td>
+          <td class="paramname"><em>character</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Appends "character" to the bytebuffer, growing the internal buffer as necessary to accommodate the new data.</p>
+<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;append("numbers: ")-&gt;append(5)-&gt;append(5.5); </p>
+
+</div>
+</div>
 <a id="a5eeeaa509cd6b263d8fe994e28bf504f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5eeeaa509cd6b263d8fe994e28bf504f">&#9670;&nbsp;</a></span>append() <span class="overload">[5/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eeeaa509cd6b263d8fe994e28bf504f">&#9670;&nbsp;</a></span>append() <span class="overload">[8/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -428,7 +518,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a579509c1e79293a3886400a38de0606a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a579509c1e79293a3886400a38de0606a">&#9670;&nbsp;</a></span>append() <span class="overload">[6/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a579509c1e79293a3886400a38de0606a">&#9670;&nbsp;</a></span>append() <span class="overload">[9/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -448,7 +538,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a39d47dda1b1e3bf9331d1b3e02ab5ebf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39d47dda1b1e3bf9331d1b3e02ab5ebf">&#9670;&nbsp;</a></span>append() <span class="overload">[7/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a39d47dda1b1e3bf9331d1b3e02ab5ebf">&#9670;&nbsp;</a></span>append() <span class="overload">[10/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -468,7 +558,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="ac15dbaa0b4c8d2e32f34c82a36b3603a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac15dbaa0b4c8d2e32f34c82a36b3603a">&#9670;&nbsp;</a></span>append() <span class="overload">[8/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac15dbaa0b4c8d2e32f34c82a36b3603a">&#9670;&nbsp;</a></span>append() <span class="overload">[11/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -488,7 +578,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a2f8ec874ebb6f9a4cf850b373d6600be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f8ec874ebb6f9a4cf850b373d6600be">&#9670;&nbsp;</a></span>append() <span class="overload">[9/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f8ec874ebb6f9a4cf850b373d6600be">&#9670;&nbsp;</a></span>append() <span class="overload">[12/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -508,7 +598,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a8689186727419b820e111b9c0abcc258"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8689186727419b820e111b9c0abcc258">&#9670;&nbsp;</a></span>append() <span class="overload">[10/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8689186727419b820e111b9c0abcc258">&#9670;&nbsp;</a></span>append() <span class="overload">[13/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -528,7 +618,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a118ff8cd1dbca8d00cc2e7ac778447e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a118ff8cd1dbca8d00cc2e7ac778447e5">&#9670;&nbsp;</a></span>append() <span class="overload">[11/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a118ff8cd1dbca8d00cc2e7ac778447e5">&#9670;&nbsp;</a></span>append() <span class="overload">[14/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -548,7 +638,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a3eda38922bdbc5e78c6aff42295b03b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3eda38922bdbc5e78c6aff42295b03b8">&#9670;&nbsp;</a></span>append() <span class="overload">[12/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eda38922bdbc5e78c6aff42295b03b8">&#9670;&nbsp;</a></span>append() <span class="overload">[15/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -568,7 +658,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a339920523941ace0f37d71ff3618c471"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a339920523941ace0f37d71ff3618c471">&#9670;&nbsp;</a></span>append() <span class="overload">[13/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a339920523941ace0f37d71ff3618c471">&#9670;&nbsp;</a></span>append() <span class="overload">[16/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -588,7 +678,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a747b27dacab69d6ac763522a82afef99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a747b27dacab69d6ac763522a82afef99">&#9670;&nbsp;</a></span>appendFormatted() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a747b27dacab69d6ac763522a82afef99">&#9670;&nbsp;</a></span>appendFormatted() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -617,7 +707,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="ae29eb1a1dd71af512019c54000ec3c57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae29eb1a1dd71af512019c54000ec3c57">&#9670;&nbsp;</a></span>appendFormatted() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae29eb1a1dd71af512019c54000ec3c57">&#9670;&nbsp;</a></span>appendFormatted() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -642,6 +732,65 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
       </table>
 </div><div class="memdoc">
 <p>Appends "argp" to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
+<p>Note that argp is a pointer to a va_list, not just a va_list. </p>
+
+</div>
+</div>
+<a id="a7fe9b62852a1f1a0f54103962932a0af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fe9b62852a1f1a0f54103962932a0af">&#9670;&nbsp;</a></span>appendFormatted() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbytebuffer.html">bytebuffer</a>* bytebuffer::appendFormatted </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Appends "..." to the byte buffer using "format" which should comply with standard wprintf formatting rules. </p>
+
+</div>
+</div>
+<a id="a8d43020e59e9437d6926d92f6754c310"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d43020e59e9437d6926d92f6754c310">&#9670;&nbsp;</a></span>appendFormatted() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbytebuffer.html">bytebuffer</a>* bytebuffer::appendFormatted </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>argp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Appends "argp" to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
 <p>Note that argp is a pointer to a va_list, not just a va_list. </p>
 
 </div>
@@ -745,7 +894,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the actual size of the buffer which may be larger than the value returned by <a class="el" href="classbytebuffer.html#af5c0079117a583d646e349278f6924e8">getSize()</a> since the buffer grows in chunks. </p>
+<p>Returns the actual number of bytes of internal storage used by the bytebuffer, which may be larger than the value returned by <a class="el" href="classbytebuffer.html#af5c0079117a583d646e349278f6924e8">getSize()</a> since the buffer grows in extents. </p>
 
 </div>
 </div>
@@ -781,7 +930,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the size of the original initial exent. </p>
+<p>Returns the number of bytes in the original initial exent. </p>
 
 </div>
 </div>
@@ -817,7 +966,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the amount of data currently stored in the bytebuffer. </p>
+<p>Returns the number of bytes currently stored in the bytebuffer. </p>
 
 </div>
 </div>
@@ -865,7 +1014,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Reads "size" bytes from the bytebuffer at the current position into "data". Also increments the current position by "size" bytes. </p>
+<p>Reads "size" bytes from the bytebuffer at the current position into "data". Also increments the current position by "size" bytes. Returns the number of bytes read. </p>
 
 </div>
 </div>
@@ -913,7 +1062,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div><div class="memdoc">
 <p>Truncates the bytebuffer at position "pos". </p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#af8633cbb8ad08da4c7d386e5705685c9">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#af8633cbb8ad08da4c7d386e5705685c9">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a1a135c0a4e585615cad66432e89fe72e">wstringbuffer</a>.</p>
 
 </div>
 </div>
@@ -941,12 +1090,12 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div><div class="memdoc">
 <p>Truncates the bytebuffer at the current position. </p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#ac1be71eb259d489de8345d33db1bf512">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#ac1be71eb259d489de8345d33db1bf512">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a3432c7ab696afc055824aa4935ec8a0e">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a940a2ad6148528a560c7ac7e8e5b54b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a940a2ad6148528a560c7ac7e8e5b54b1">&#9670;&nbsp;</a></span>write() <span class="overload">[1/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a940a2ad6148528a560c7ac7e8e5b54b1">&#9670;&nbsp;</a></span>write() <span class="overload">[1/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -979,7 +1128,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes the first "size" bytes of "data" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
@@ -987,8 +1136,8 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 
 </div>
 </div>
-<a id="ad033364527b1a2da651a47616e4fa1c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad033364527b1a2da651a47616e4fa1c8">&#9670;&nbsp;</a></span>write() <span class="overload">[2/13]</span></h2>
+<a id="a8f147cb8a0b94d3bf2fa1e2dd005ddd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f147cb8a0b94d3bf2fa1e2dd005ddd8">&#9670;&nbsp;</a></span>write() <span class="overload">[2/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1006,7 +1155,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1020,17 +1169,17 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Writes the first "size" bytes of "string" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Writes the first "length" characters of "string" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a54ccff81b95384bc9fed50b3fd7faa6b">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a6748859b9ba86169b3ff7a5968171a7d">stringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a246423f5bf867958718a276cc758f316"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a246423f5bf867958718a276cc758f316">&#9670;&nbsp;</a></span>write() <span class="overload">[3/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a246423f5bf867958718a276cc758f316">&#9670;&nbsp;</a></span>write() <span class="overload">[3/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1053,7 +1202,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "string" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
@@ -1061,8 +1210,58 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 
 </div>
 </div>
+<a id="a0daf12d831905c2ec5e28d4aaa8e4fe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0daf12d831905c2ec5e28d4aaa8e4fe5">&#9670;&nbsp;</a></span>write() <span class="overload">[4/16]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t bytebuffer::write </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Writes the first "length" characters of "string" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
+<p>Returns the number of bytes written. </p>
+
+</div>
+</div>
+<a id="a888abeafa1c68920eda5701ab4636951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a888abeafa1c68920eda5701ab4636951">&#9670;&nbsp;</a></span>write() <span class="overload">[5/16]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t bytebuffer::write </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Writes "string" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
+<p>Returns the number of bytes written. </p>
+
+</div>
+</div>
 <a id="a7bc1358acd707a4e7a9351433bba816a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7bc1358acd707a4e7a9351433bba816a">&#9670;&nbsp;</a></span>write() <span class="overload">[4/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bc1358acd707a4e7a9351433bba816a">&#9670;&nbsp;</a></span>write() <span class="overload">[6/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1085,7 +1284,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "character" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
@@ -1093,8 +1292,28 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 
 </div>
 </div>
+<a id="aa85f1b7822f9415683e886457eeeda9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa85f1b7822f9415683e886457eeeda9a">&#9670;&nbsp;</a></span>write() <span class="overload">[7/16]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t bytebuffer::write </td>
+          <td>(</td>
+          <td class="paramtype">wchar_t&#160;</td>
+          <td class="paramname"><em>character</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Writes "character" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
+<p>Returns the number of bytes written. </p>
+
+</div>
+</div>
 <a id="a3d2c3a930bddfe5093250037ae7aeac3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d2c3a930bddfe5093250037ae7aeac3">&#9670;&nbsp;</a></span>write() <span class="overload">[5/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d2c3a930bddfe5093250037ae7aeac3">&#9670;&nbsp;</a></span>write() <span class="overload">[8/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1117,16 +1336,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#ade1e1e857fd67211782b2caa0d9149c0">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#ade1e1e857fd67211782b2caa0d9149c0">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#ae5d36aa2a22a8c3187e13296943ba9f7">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="aa0d0dc4a46a5b2413b0e51cff65c3985"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0d0dc4a46a5b2413b0e51cff65c3985">&#9670;&nbsp;</a></span>write() <span class="overload">[6/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0d0dc4a46a5b2413b0e51cff65c3985">&#9670;&nbsp;</a></span>write() <span class="overload">[9/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1149,16 +1368,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a498ca6e3c1769d13241bd93528d60b20">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a498ca6e3c1769d13241bd93528d60b20">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#ae995931026c47780e1650f5f3940beae">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a3c33d3947726cc11afd2daf3aa005e1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c33d3947726cc11afd2daf3aa005e1a">&#9670;&nbsp;</a></span>write() <span class="overload">[7/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c33d3947726cc11afd2daf3aa005e1a">&#9670;&nbsp;</a></span>write() <span class="overload">[10/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1181,16 +1400,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#ad81ef0416c50745a988e1c54b671c292">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#ad81ef0416c50745a988e1c54b671c292">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#aab734433ceb279cd7b5c378a35e1d3a2">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="af05add383ac15a4828bae65e5a4b100c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af05add383ac15a4828bae65e5a4b100c">&#9670;&nbsp;</a></span>write() <span class="overload">[8/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af05add383ac15a4828bae65e5a4b100c">&#9670;&nbsp;</a></span>write() <span class="overload">[11/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1213,7 +1432,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "character" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
@@ -1222,7 +1441,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div>
 </div>
 <a id="a001e00abedcef7765f9dcec5207ac374"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a001e00abedcef7765f9dcec5207ac374">&#9670;&nbsp;</a></span>write() <span class="overload">[9/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a001e00abedcef7765f9dcec5207ac374">&#9670;&nbsp;</a></span>write() <span class="overload">[12/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1245,16 +1464,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a7a3d7b884a2da4d495ae254aae42baa7">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a7a3d7b884a2da4d495ae254aae42baa7">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a4cca1862b64c7cf15350e7d18a336073">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a93c640f2c02d3807e2a0c4a1d16f326b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93c640f2c02d3807e2a0c4a1d16f326b">&#9670;&nbsp;</a></span>write() <span class="overload">[10/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a93c640f2c02d3807e2a0c4a1d16f326b">&#9670;&nbsp;</a></span>write() <span class="overload">[13/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1277,16 +1496,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a264a206f06d344bb93a6a0ee6d49aa46">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a264a206f06d344bb93a6a0ee6d49aa46">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a5e65fc68986e9832c0cf487ac19e7935">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a95348bd15c813333c599102ca931cd96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95348bd15c813333c599102ca931cd96">&#9670;&nbsp;</a></span>write() <span class="overload">[11/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a95348bd15c813333c599102ca931cd96">&#9670;&nbsp;</a></span>write() <span class="overload">[14/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1309,16 +1528,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a4617b19877d61fc4e717b9aa07bca6a1">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a4617b19877d61fc4e717b9aa07bca6a1">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a244bfffabf8d155cddef9c680da41729">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a4124f90346654d6f3208cc9d2c83290f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4124f90346654d6f3208cc9d2c83290f">&#9670;&nbsp;</a></span>write() <span class="overload">[12/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4124f90346654d6f3208cc9d2c83290f">&#9670;&nbsp;</a></span>write() <span class="overload">[15/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1341,16 +1560,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a54ca15fda461b5f7628c1e40c35b6b9b">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a54ca15fda461b5f7628c1e40c35b6b9b">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a212b08f050928b59ec4254c9d03d7dd6">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="a500b34d01419662c4d0ff90464a7a6c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a500b34d01419662c4d0ff90464a7a6c6">&#9670;&nbsp;</a></span>write() <span class="overload">[13/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a500b34d01419662c4d0ff90464a7a6c6">&#9670;&nbsp;</a></span>write() <span class="overload">[16/16]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1373,16 +1592,16 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </table>
 </div><div class="memdoc">
 <p>Writes "number" to the bytebuffer at the current position and increments the current position to the next byte after the data that was written. If necessary, the internal buffer will grow to accommodate the new data.</p>
-<p>Returns a pointer to "this" to enable chaining such as: vb-&gt;write("numbers: ")-&gt;write(5)-&gt;write(5.5); </p>
+<p>Returns the number of bytes written. </p>
 
 <p>Implements <a class="el" href="classoutput.html">output</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classstringbuffer.html#a6f0ec31874fdda48c6f6c89aff1b7f91">stringbuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="classstringbuffer.html#a6f0ec31874fdda48c6f6c89aff1b7f91">stringbuffer</a>, and <a class="el" href="classwstringbuffer.html#a93ef8c508f474aa7415c5d198c78cdeb">wstringbuffer</a>.</p>
 
 </div>
 </div>
 <a id="adfd41706c1d27229b4f569bd87cc5725"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfd41706c1d27229b4f569bd87cc5725">&#9670;&nbsp;</a></span>writeFormatted() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd41706c1d27229b4f569bd87cc5725">&#9670;&nbsp;</a></span>writeFormatted() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1406,12 +1625,13 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes "..." to the byte buffer using "format" which should comply with standard printf formatting rules. </p>
+<p>Writes "..." to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
+<p>Returns the number of bytes written. </p>
 
 </div>
 </div>
 <a id="a0dad64d8491bf404015af92fb5eec2dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0dad64d8491bf404015af92fb5eec2dc">&#9670;&nbsp;</a></span>writeFormatted() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dad64d8491bf404015af92fb5eec2dc">&#9670;&nbsp;</a></span>writeFormatted() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1436,14 +1656,76 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
       </table>
 </div><div class="memdoc">
 <p>Writes "argp" to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
-<p>Note that argp is a pointer to a va_list, not just a va_list. </p>
+<p>Note that argp is a pointer to a va_list, not just a va_list.</p>
+<p>Returns the number of bytes written. </p>
+
+</div>
+</div>
+<a id="aa9862632f6b0b870b819c324de08f49c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9862632f6b0b870b819c324de08f49c">&#9670;&nbsp;</a></span>writeFormatted() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t bytebuffer::writeFormatted </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Writes "..." to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
+<p>Returns the number of bytes written. </p>
+
+</div>
+</div>
+<a id="a7d367957d127d5dfcfc55062bb67813f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d367957d127d5dfcfc55062bb67813f">&#9670;&nbsp;</a></span>writeFormatted() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t bytebuffer::writeFormatted </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>argp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Writes "argp" to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
+<p>Note that argp is a pointer to a va_list, not just a va_list.</p>
+<p>Returns the number of bytes written. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:17 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:34 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

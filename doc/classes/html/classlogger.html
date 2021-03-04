@@ -59,14 +59,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaf79b362d245754b7940ef7c26cb8c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a330db2be566d5898fa173b3fdc29648b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a330db2be566d5898fa173b3fdc29648b">removeAllLogDestinations</a> ()</td></tr>
 <tr class="separator:a330db2be566d5898fa173b3fdc29648b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66d262ba087b7bc0b0976536ed1ba674"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a66d262ba087b7bc0b0976536ed1ba674">write</a> (const char *header, int32_t tabs, const char *string)</td></tr>
-<tr class="separator:a66d262ba087b7bc0b0976536ed1ba674"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a846dd5ad4ba6a767dbef7ff4357f986c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a846dd5ad4ba6a767dbef7ff4357f986c">write</a> (const char *header, int32_t tabs, char <a class="el" href="classcharacter.html">character</a>)</td></tr>
-<tr class="separator:a846dd5ad4ba6a767dbef7ff4357f986c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab4995c01fd57da8b9d9e3ee6bb6ead9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#aab4995c01fd57da8b9d9e3ee6bb6ead9">write</a> (const char *header, int32_t tabs, int32_t number)</td></tr>
-<tr class="separator:aab4995c01fd57da8b9d9e3ee6bb6ead9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23207aaa9eef0e2bd15386a994e94e10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a23207aaa9eef0e2bd15386a994e94e10">write</a> (const char *header, int32_t tabs, double number)</td></tr>
-<tr class="separator:a23207aaa9eef0e2bd15386a994e94e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a655c25c0731d1574af23878223c014c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a655c25c0731d1574af23878223c014c9">setIndent</a> (char ch)</td></tr>
+<tr class="separator:a655c25c0731d1574af23878223c014c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2a213d7fe8c058534aa86dc93c3935"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#acb2a213d7fe8c058534aa86dc93c3935">getIndent</a> ()</td></tr>
+<tr class="separator:acb2a213d7fe8c058534aa86dc93c3935"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa55a10f2718eb580a695585101b7b26e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#aa55a10f2718eb580a695585101b7b26e">setLogLevel</a> (uint8_t level)</td></tr>
+<tr class="separator:aa55a10f2718eb580a695585101b7b26e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aaaaab333172496225cc5bb22017fb5"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a9aaaaab333172496225cc5bb22017fb5">getLogLevel</a> ()</td></tr>
+<tr class="separator:a9aaaaab333172496225cc5bb22017fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5112fe527edfff39b50bcab9e4a0e36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#ad5112fe527edfff39b50bcab9e4a0e36">start</a> (uint8_t level, const char *header, uint32_t indent, const char *string)</td></tr>
+<tr class="separator:ad5112fe527edfff39b50bcab9e4a0e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af63237e62f4d5a0fc358a2915e27c860"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#af63237e62f4d5a0fc358a2915e27c860">write</a> (uint8_t level, const char *header, uint32_t indent, const char *format,...)</td></tr>
+<tr class="separator:af63237e62f4d5a0fc358a2915e27c860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a990c230bd47f267622246e5fe3af433e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a990c230bd47f267622246e5fe3af433e">write</a> (uint8_t level, const char *header, uint32_t indent, const char *format, va_list *argp)</td></tr>
+<tr class="separator:a990c230bd47f267622246e5fe3af433e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80a3f931ccad4e5caaa6bb2713ab164e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a80a3f931ccad4e5caaa6bb2713ab164e">end</a> (uint8_t level, const char *header, uint32_t indent)</td></tr>
+<tr class="separator:a80a3f931ccad4e5caaa6bb2713ab164e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -130,6 +138,77 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Add "logdest" to the list of destinations that log entries will be written to. </p>
+
+</div>
+</div>
+<a id="a80a3f931ccad4e5caaa6bb2713ab164e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80a3f931ccad4e5caaa6bb2713ab164e">&#9670;&nbsp;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logger::end </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>header</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>indent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If the current logging level is equal to or greater than "level", then writes "header", followed by "indent" indentations, followed by "}" as a single log entry. </p>
+
+</div>
+</div>
+<a id="acb2a213d7fe8c058534aa86dc93c3935"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb2a213d7fe8c058534aa86dc93c3935">&#9670;&nbsp;</a></span>getIndent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char logger::getIndent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the character currently used when indenting. </p>
+
+</div>
+</div>
+<a id="a9aaaaab333172496225cc5bb22017fb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aaaaab333172496225cc5bb22017fb5">&#9670;&nbsp;</a></span>getLogLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t logger::getLogLevel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the logging level. </p>
 
 </div>
 </div>
@@ -200,23 +279,67 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a66d262ba087b7bc0b0976536ed1ba674"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66d262ba087b7bc0b0976536ed1ba674">&#9670;&nbsp;</a></span>write() <span class="overload">[1/4]</span></h2>
+<a id="a655c25c0731d1574af23878223c014c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a655c25c0731d1574af23878223c014c9">&#9670;&nbsp;</a></span>setIndent()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void logger::write </td>
+          <td class="memname">void logger::setIndent </td>
           <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>ch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the character to be used when indenting to "ch". </p>
+
+</div>
+</div>
+<a id="aa55a10f2718eb580a695585101b7b26e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa55a10f2718eb580a695585101b7b26e">&#9670;&nbsp;</a></span>setLogLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logger::setLogLevel </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the logging level to "level". </p>
+
+</div>
+</div>
+<a id="ad5112fe527edfff39b50bcab9e4a0e36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5112fe527edfff39b50bcab9e4a0e36">&#9670;&nbsp;</a></span>start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logger::start </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>header</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>tabs</em>, </td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>indent</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -231,12 +354,12 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes "header", followed by "tabs" tabs, followed by "string" as a single log entry. </p>
+<p>If the current logging level is equal to or greater than "level", then writes "header", followed by "indent" indentations, followed by "string" followed by " {" as a single log entry. </p>
 
 </div>
 </div>
-<a id="a846dd5ad4ba6a767dbef7ff4357f986c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a846dd5ad4ba6a767dbef7ff4357f986c">&#9670;&nbsp;</a></span>write() <span class="overload">[2/4]</span></h2>
+<a id="af63237e62f4d5a0fc358a2915e27c860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af63237e62f4d5a0fc358a2915e27c860">&#9670;&nbsp;</a></span>write() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -244,20 +367,32 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void logger::write </td>
           <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>header</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>tabs</em>, </td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>indent</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>character</em>&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -266,12 +401,12 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes "header", followed by "tabs" tabs, followed by "character" as a single log entry. </p>
+<p>If the current logging level is equal to or greater than "level", then writes "header", followed by "indent" indentations, followed by "..." formatted using "format" as a single log entry. </p>
 
 </div>
 </div>
-<a id="aab4995c01fd57da8b9d9e3ee6bb6ead9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab4995c01fd57da8b9d9e3ee6bb6ead9">&#9670;&nbsp;</a></span>write() <span class="overload">[3/4]</span></h2>
+<a id="a990c230bd47f267622246e5fe3af433e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a990c230bd47f267622246e5fe3af433e">&#9670;&nbsp;</a></span>write() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,20 +414,32 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void logger::write </td>
           <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>header</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>tabs</em>, </td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>indent</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>number</em>&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>argp</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -301,49 +448,14 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes "header", followed by "tabs" tabs, followed by "number" as a single log entry. </p>
-
-</div>
-</div>
-<a id="a23207aaa9eef0e2bd15386a994e94e10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23207aaa9eef0e2bd15386a994e94e10">&#9670;&nbsp;</a></span>write() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void logger::write </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>header</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>tabs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>number</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Writes "header", followed by "tabs" tabs, followed by "number" as a single log entry. </p>
+<p>If the current logging level is equal to or greater than "level", then writes "header", followed by "indent" indentations, followed by "va_list" formatted using "format" as a single log entry. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:35 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

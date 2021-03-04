@@ -54,12 +54,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8275ad003a96033afe793714971d2a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c26e03e5ee50d4abb553ffb9734bb8f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#a6c26e03e5ee50d4abb553ffb9734bb8f">~sha256</a> ()</td></tr>
 <tr class="separator:a6c26e03e5ee50d4abb553ffb9734bb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cad0969ee7657b20f559aaf6824d40b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#a4cad0969ee7657b20f559aaf6824d40b">append</a> (const unsigned char *data, uint32_t length)</td></tr>
-<tr class="separator:a4cad0969ee7657b20f559aaf6824d40b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a807001856c7c95cd424c9a1abacc87b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#a807001856c7c95cd424c9a1abacc87b7">append</a> (const unsigned char *data, uint32_t size)</td></tr>
+<tr class="separator:a807001856c7c95cd424c9a1abacc87b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d11f529e47bce994a533c6256e5df3e"><td class="memItemLeft" align="right" valign="top">const unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#a2d11f529e47bce994a533c6256e5df3e">getHash</a> ()</td></tr>
 <tr class="separator:a2d11f529e47bce994a533c6256e5df3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfc43018fc3919b838732b07caf97968"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#abfc43018fc3919b838732b07caf97968">getHashLength</a> ()</td></tr>
-<tr class="separator:abfc43018fc3919b838732b07caf97968"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f1ed78a9ef09954e593dc623e23ac6b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#a5f1ed78a9ef09954e593dc623e23ac6b">getHashSize</a> ()</td></tr>
+<tr class="separator:a5f1ed78a9ef09954e593dc623e23ac6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4e751c146f1ed2f47c65f50a1ee47bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#ae4e751c146f1ed2f47c65f50a1ee47bd">clear</a> ()</td></tr>
 <tr class="separator:ae4e751c146f1ed2f47c65f50a1ee47bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af224452f4b8d210b3d067cd1d261bbdf"><td class="memItemLeft" align="right" valign="top">hasherror_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsha256.html#af224452f4b8d210b3d067cd1d261bbdf">getError</a> ()</td></tr>
@@ -118,8 +118,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4cad0969ee7657b20f559aaf6824d40b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cad0969ee7657b20f559aaf6824d40b">&#9670;&nbsp;</a></span>append()</h2>
+<a id="a807001856c7c95cd424c9a1abacc87b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a807001856c7c95cd424c9a1abacc87b7">&#9670;&nbsp;</a></span>append()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,7 +137,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -151,9 +151,9 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Appends "length" bytes of "data" to the data to be hashed. Returns true on success or false if an error occurred. </p>
+<p>Appends "size" bytes of "data" to the data to be hashed. Returns true on success or false if an error occurred. </p>
 
-<p>Implements <a class="el" href="classhash.html#a0d1cc678fbc9a40d40627ee02114c692">hash</a>.</p>
+<p>Implements <a class="el" href="classhash.html#a18a1f83ea4a1ad98179682ea72d1a954">hash</a>.</p>
 
 </div>
 </div>
@@ -241,8 +241,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abfc43018fc3919b838732b07caf97968"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfc43018fc3919b838732b07caf97968">&#9670;&nbsp;</a></span>getHashLength()</h2>
+<a id="a5f1ed78a9ef09954e593dc623e23ac6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f1ed78a9ef09954e593dc623e23ac6b">&#9670;&nbsp;</a></span>getHashSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -251,7 +251,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t sha256::getHashLength </td>
+          <td class="memname">uint64_t sha256::getHashSize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -263,16 +263,16 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the length of the hash in bytes. </p>
+<p>Returns the number of bytes in the hash. </p>
 
-<p>Implements <a class="el" href="classhash.html#ab57270acda873c68913f0e9493eae084">hash</a>.</p>
+<p>Implements <a class="el" href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">hash</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:35 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

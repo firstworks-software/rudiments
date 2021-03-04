@@ -60,6 +60,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a890e452c327ceed76e04174ce7ac6f19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2ea98882c3f3342a61af4a736850cbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classparameterstring.html#ac2ea98882c3f3342a61af4a736850cbb">clear</a> ()</td></tr>
 <tr class="separator:ac2ea98882c3f3342a61af4a736850cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43ef702d6bdb741846f72061f17082be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdictionary.html">dictionary</a>&lt; char *, char * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classparameterstring.html#a43ef702d6bdb741846f72061f17082be">getDictionary</a> ()</td></tr>
+<tr class="separator:a43ef702d6bdb741846f72061f17082be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The parameterstring class provides methods for parsing and accessing name/value pairs in so-called "parameter strings" formatted like this:</p>
@@ -118,6 +120,24 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Clears the stored set of names and values. After a call to <a class="el" href="classparameterstring.html#ac2ea98882c3f3342a61af4a736850cbb">clear()</a>, <a class="el" href="classparameterstring.html#a890e452c327ceed76e04174ce7ac6f19">getValue()</a> will return NULL until <a class="el" href="classparameterstring.html#ad743f3b1985e125ca8888655d3f1e833">parse()</a> is called again. </p>
+
+</div>
+</div>
+<a id="a43ef702d6bdb741846f72061f17082be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43ef702d6bdb741846f72061f17082be">&#9670;&nbsp;</a></span>getDictionary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdictionary.html">dictionary</a>&lt;char *,char *&gt;* parameterstring::getDictionary </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the dictionary used internally by this instance of the parameterstring class. </p>
 
 </div>
 </div>
@@ -181,7 +201,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:35 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

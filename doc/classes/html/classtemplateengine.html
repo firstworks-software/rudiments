@@ -110,6 +110,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a80e4d53059917d722bf3486b455943e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a257a9b754a513f22e8c3e8db369cce5c"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtemplateengine.html#a257a9b754a513f22e8c3e8db369cce5c">getIncludeEnd</a> ()</td></tr>
 <tr class="separator:a257a9b754a513f22e8c3e8db369cce5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6b7a7f1a15c18fa378e8b56a66770f6"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtemplateengine.html#ae6b7a7f1a15c18fa378e8b56a66770f6">getError</a> ()</td></tr>
+<tr class="separator:ae6b7a7f1a15c18fa378e8b56a66770f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The templateengine class provides a framework for registering user-defined methods to parse and perform replacements in marked-up files or strings. </p>
@@ -280,6 +282,24 @@ Public Member Functions</h2></td></tr>
 <p>Returns the delimiter that the <a class="el" href="classtemplateengine.html#ac55d21e4bb6268f3d62f11f338f1622a">parse()</a> methods look for at the beginning of a variable whos value's double-quotes shall be escaped.</p>
 <p>The default is "$dq(".</p>
 <p>For example, by defaults, variables are delimited like:  </p>
+
+</div>
+</div>
+<a id="ae6b7a7f1a15c18fa378e8b56a66770f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6b7a7f1a15c18fa378e8b56a66770f6">&#9670;&nbsp;</a></span>getError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* templateengine::getError </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the error that occurred if a <a class="el" href="classtemplateengine.html#ac55d21e4bb6268f3d62f11f338f1622a">parse()</a> method returned false. </p>
 
 </div>
 </div>
@@ -501,7 +521,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the file at "filename" and writes the out to "out". For each variable encountered, values from "vars" are substituted. For each block encountered, the block is looked up in "blockparsers" and the appropriate block parser method is called. The block parser method is passed "req", "resp", "out", the name, data and length of the block and "data" from the blockparser entry.</p>
+<p>Parses the file at "filename" and writes the out to "out". For each variable encountered, values from "vars" are substituted. For each block encountered, the block is looked up in "blockparsers" and the appropriate block parser method is called. The block parser method is passed "req", "resp", "out", the name, data and character length of the block and "data" from the blockparser entry.</p>
 <p>If a block is encountered but no block parser method is registered for it, it is parsed using "vars".</p>
 <p>Returns false if a block parser method returns false and true otherwise. </p>
 
@@ -550,7 +570,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses "length" bytes of "block" and writes the out to "out". For each variable encountered, values from "vars" are substituted. For each nested block encountered, the block is looked up in "blockparsers" and the appropriate block parser method is called. The block parser method is passed "req", "resp", the name, data and length of the block, "out" and "data" from the blockparser entry.</p>
+<p>Parses "length" characters of "block" and writes the out to "out". For each variable encountered, values from "vars" are substituted. For each nested block encountered, the block is looked up in "blockparsers" and the appropriate block parser method is called. The block parser method is passed "req", "resp", the name, data and character length of the block, "out" and "data" from the blockparser entry.</p>
 <p>If a block is encountered but no block parser method is registered for it, it is parsed using "vars".</p>
 <p>Returns false if a block parser method returns false and true otherwise. </p>
 
@@ -834,7 +854,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:35 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

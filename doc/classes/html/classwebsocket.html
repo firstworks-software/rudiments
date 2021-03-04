@@ -62,12 +62,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aff0852ca46a10214b1c39cef9f3cd3f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a469a6e0954f8ff8af4c15f2e83e1ae50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a469a6e0954f8ff8af4c15f2e83e1ae50">accept</a> ()</td></tr>
 <tr class="separator:a469a6e0954f8ff8af4c15f2e83e1ae50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31873f514389d8aff53c9bcb862efa37"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a31873f514389d8aff53c9bcb862efa37">read</a> (void *buf, ssize_t count)</td></tr>
-<tr class="separator:a31873f514389d8aff53c9bcb862efa37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a87911044a8dbe0c9f60a0769867e1c"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a9a87911044a8dbe0c9f60a0769867e1c">write</a> (const void *buf, ssize_t count)</td></tr>
-<tr class="separator:a9a87911044a8dbe0c9f60a0769867e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc351770b05b4c653a07607fd42c8ee3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#afc351770b05b4c653a07607fd42c8ee3">ping</a> (const unsigned char *buf, ssize_t count)</td></tr>
-<tr class="separator:afc351770b05b4c653a07607fd42c8ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1c0c6c1ff600a625c4babdf81dfe8e"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a6c1c0c6c1ff600a625c4babdf81dfe8e">read</a> (void *buf, ssize_t size)</td></tr>
+<tr class="separator:a6c1c0c6c1ff600a625c4babdf81dfe8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3d3a3d07f7e568cfb8dd7776d8f49da"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#ae3d3a3d07f7e568cfb8dd7776d8f49da">write</a> (const void *buf, ssize_t size)</td></tr>
+<tr class="separator:ae3d3a3d07f7e568cfb8dd7776d8f49da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269cf48797b40e2c2510febe3c8f2524"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a269cf48797b40e2c2510febe3c8f2524">ping</a> (const unsigned char *buf, ssize_t size)</td></tr>
+<tr class="separator:a269cf48797b40e2c2510febe3c8f2524"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a195267c3304ca95972800dbcc5e2f410"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a195267c3304ca95972800dbcc5e2f410">pending</a> ()</td></tr>
 <tr class="separator:a195267c3304ca95972800dbcc5e2f410"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d3cecb00cd0e68d9fb1deb7e0dffbb2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwebsocket.html#a6d3cecb00cd0e68d9fb1deb7e0dffbb2">close</a> ()</td></tr>
@@ -259,7 +259,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the maximum size that can be written or read in a single call to <a class="el" href="classwebsocket.html#a9a87911044a8dbe0c9f60a0769867e1c">write()</a> or <a class="el" href="classwebsocket.html#a31873f514389d8aff53c9bcb862efa37">read()</a>. </p>
+<p>Returns the maximum number of bytes that can be written or read in a single call to <a class="el" href="classwebsocket.html#ae3d3a3d07f7e568cfb8dd7776d8f49da">write()</a> or <a class="el" href="classwebsocket.html#a6c1c0c6c1ff600a625c4babdf81dfe8e">read()</a>. </p>
 
 <p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
 
@@ -293,8 +293,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afc351770b05b4c653a07607fd42c8ee3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc351770b05b4c653a07607fd42c8ee3">&#9670;&nbsp;</a></span>ping()</h2>
+<a id="a269cf48797b40e2c2510febe3c8f2524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a269cf48797b40e2c2510febe3c8f2524">&#9670;&nbsp;</a></span>ping()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -309,7 +309,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ssize_t&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -318,12 +318,12 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pings the peer with "count" bytes of "buf" data. Returns true if the peer responds with the same data or false if the peer doesn't respond or responds with different data. </p>
+<p>Pings the peer with "size" bytes of "buf" data. Returns true if the peer responds with the same data or false if the peer doesn't respond or responds with different data. </p>
 
 </div>
 </div>
-<a id="a31873f514389d8aff53c9bcb862efa37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31873f514389d8aff53c9bcb862efa37">&#9670;&nbsp;</a></span>read()</h2>
+<a id="a6c1c0c6c1ff600a625c4babdf81dfe8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c1c0c6c1ff600a625c4babdf81dfe8e">&#9670;&nbsp;</a></span>read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -341,7 +341,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ssize_t&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -355,7 +355,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Reads from the file descriptor previously configured by <a class="el" href="classwebsocket.html#a4c031e6d84b827ef58c611e1613c550a">setFileDescriptor()</a> into "buf" until "count" bytes have been read. Returns the number of bytes that were written to "buf" or RESULT_ERROR if an error occurred. </p>
+<p>Reads from the file descriptor previously configured by <a class="el" href="classwebsocket.html#a4c031e6d84b827ef58c611e1613c550a">setFileDescriptor()</a> into "buf" until "size" bytes have been read. Returns the number of bytes that were written to "buf" or RESULT_ERROR if an error occurred. </p>
 
 <p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
 
@@ -390,8 +390,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9a87911044a8dbe0c9f60a0769867e1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a87911044a8dbe0c9f60a0769867e1c">&#9670;&nbsp;</a></span>write()</h2>
+<a id="ae3d3a3d07f7e568cfb8dd7776d8f49da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3d3a3d07f7e568cfb8dd7776d8f49da">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -409,7 +409,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ssize_t&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -423,7 +423,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Writes "count" bytes from "buf" to the file descriptor previously configured by <a class="el" href="classwebsocket.html#a4c031e6d84b827ef58c611e1613c550a">setFileDescriptor()</a>. Returns the number of bytes that were written or RESULT_ERROR if an error occurred. </p>
+<p>Writes "size" bytes from "buf" to the file descriptor previously configured by <a class="el" href="classwebsocket.html#a4c031e6d84b827ef58c611e1613c550a">setFileDescriptor()</a>. Returns the number of bytes that were written or RESULT_ERROR if an error occurred. </p>
 
 <p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
 
@@ -432,7 +432,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:35 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

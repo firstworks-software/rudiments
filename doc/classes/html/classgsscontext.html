@@ -112,10 +112,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8581eb33bd695d881ae0d17431473ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c4e8b3ad86569bea334c7ceccd9244f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a1c4e8b3ad86569bea334c7ceccd9244f">verifyMic</a> (const unsigned char *message, size_t messagesize, const unsigned char *mic, size_t micsize)</td></tr>
 <tr class="separator:a1c4e8b3ad86569bea334c7ceccd9244f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d93005ac37e637c0db01b4ec07da419"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a0d93005ac37e637c0db01b4ec07da419">read</a> (void *buf, ssize_t count)</td></tr>
-<tr class="separator:a0d93005ac37e637c0db01b4ec07da419"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb772d5885f50ddf994bfaf4fcc34f16"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#afb772d5885f50ddf994bfaf4fcc34f16">write</a> (const void *buf, ssize_t count)</td></tr>
-<tr class="separator:afb772d5885f50ddf994bfaf4fcc34f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9384e6898577924feed53a51a33dc88d"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a9384e6898577924feed53a51a33dc88d">read</a> (void *buf, ssize_t size)</td></tr>
+<tr class="separator:a9384e6898577924feed53a51a33dc88d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d66b3e9c4dcf62b719f7109f527c4d4"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a0d66b3e9c4dcf62b719f7109f527c4d4">write</a> (const void *buf, ssize_t size)</td></tr>
+<tr class="separator:a0d66b3e9c4dcf62b719f7109f527c4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34fd388285e5b82413c5e0035fdd004f"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a34fd388285e5b82413c5e0035fdd004f">pending</a> ()</td></tr>
 <tr class="separator:a34fd388285e5b82413c5e0035fdd004f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ba98ce6908ff8ec130f948173d43d7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a3ba98ce6908ff8ec130f948173d43d7d">close</a> ()</td></tr>
@@ -624,7 +624,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Generates a mechanism integrity code for "message" of size "messagesize", allocates a buffer internally to store the code, returns a pointer the buffer in "mic", and returns the size of the buffer in "micsize". Returns true on success and false on failure. </p>
+<p>Generates a mechanism integrity code for "message" of "messagesize" bytes, allocates a buffer internally to store the code, returns a pointer the buffer in "mic", and returns the number of bytes of the buffer in "micsize". Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -704,7 +704,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the maximum size that can be written or read in a single call to <a class="el" href="classgsscontext.html#afb772d5885f50ddf994bfaf4fcc34f16">write()</a> or <a class="el" href="classgsscontext.html#a0d93005ac37e637c0db01b4ec07da419">read()</a>. </p>
+<p>Returns the maximum number of bytes that can be written or read in a single call to <a class="el" href="classgsscontext.html#a0d66b3e9c4dcf62b719f7109f527c4d4">write()</a> or <a class="el" href="classgsscontext.html#a9384e6898577924feed53a51a33dc88d">read()</a>. </p>
 
 <p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
 
@@ -756,8 +756,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0d93005ac37e637c0db01b4ec07da419"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d93005ac37e637c0db01b4ec07da419">&#9670;&nbsp;</a></span>read()</h2>
+<a id="a9384e6898577924feed53a51a33dc88d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9384e6898577924feed53a51a33dc88d">&#9670;&nbsp;</a></span>read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -775,7 +775,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ssize_t&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -789,7 +789,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Reads tokens from the file descriptor previously configured by <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a>, unwraps them, and writes the unwrapped data to "buf" until "count" bytes have been read. Returns the number of unwrapped bytes that were written to "buf" or RESULT_ERROR if an error occurred. </p>
+<p>Reads tokens from the file descriptor previously configured by <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a>, unwraps them, and writes the unwrapped data to "buf" until "size" bytes have been read. Returns the number of unwrapped bytes that were written to "buf" or RESULT_ERROR if an error occurred. </p>
 
 <p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
 
@@ -977,7 +977,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Unwraps "input" data of size "inputsize", allocates a buffer internally to store the unwrapped data, returns a pointer the buffer in "output", and returns the size of the buffer in "outputsize". Returns true on success and false on failure. </p>
+<p>Unwraps "input" data of "inputsize" bytes, allocates a buffer internally to store the unwrapped data, returns a pointer the buffer in "output", and returns the number of bytes of the buffer in "outputsize". Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -1024,7 +1024,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Unwraps "input" data of size "inputsize", allocates a buffer internally to store the unwrapped data, returns a pointer the buffer in "output", and returns the size of the buffer in "outputsize". Returns whether decryption was performed or not in "decryptionused". Returns true on success and false on failure. </p>
+<p>Unwraps "input" data of "inputsize" bytes, allocates a buffer internally to store the unwrapped data, returns a pointer the buffer in "output", and returns the number of bytes of the buffer in "outputsize". Returns whether decryption was performed or not in "decryptionused". Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -1065,7 +1065,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Performs a mechanism integrity code for "message" of size "messagesize" and compares it to the data in "mic" of size "micsize". Returns true if they match and false otherwise. </p>
+<p>Performs a mechanism integrity code for "message" of "messagesize" bytes and compares it to the data in "mic" of "micsize" bytes. Returns true if they match and false otherwise. </p>
 
 </div>
 </div>
@@ -1106,7 +1106,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Wraps "input" data of size "inputsize", allocates a buffer internally to store the wrapped data, returns a pointer the buffer in "output", and returns the size of the buffer in "outputsize". Returns true on success and false on failure. </p>
+<p>Wraps "input" data of "inputsize" bytes, allocates a buffer internally to store the wrapped data, returns a pointer the buffer in "output", and returns the number of bytes of the buffer in "outputsize". Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -1159,12 +1159,12 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Wraps "input" data of size "inputsize", allocates a buffer internally to store the wrapped data, returns a pointer the buffer in "output", and returns the size of the buffer in "outputsize". Attempts to encrypt the data if "useencryption" is set to true. Returns whether encryption was performed or not in "encryptionused". Returns true on success and false on failure. </p>
+<p>Wraps "input" data of "inputsize" bytes, allocates a buffer internally to store the wrapped data, returns a pointer the buffer in "output", and returns the number of bytes of the buffer in "outputsize". Attempts to encrypt the data if "useencryption" is set to true. Returns whether encryption was performed or not in "encryptionused". Returns true on success and false on failure. </p>
 
 </div>
 </div>
-<a id="afb772d5885f50ddf994bfaf4fcc34f16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb772d5885f50ddf994bfaf4fcc34f16">&#9670;&nbsp;</a></span>write()</h2>
+<a id="a0d66b3e9c4dcf62b719f7109f527c4d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d66b3e9c4dcf62b719f7109f527c4d4">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1182,7 +1182,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ssize_t&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1196,7 +1196,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Wraps "count" bytes from "buf" and writes them to the file descriptor previously configured by <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a>. Returns the number of unwrapped bytes that were written or RESULT_ERROR if an error occurred. </p>
+<p>Wraps "size" bytes from "buf" and writes them to the file descriptor previously configured by <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a>. Returns the number of unwrapped bytes that were written or RESULT_ERROR if an error occurred. </p>
 
 <p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
 
@@ -1205,7 +1205,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:35 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

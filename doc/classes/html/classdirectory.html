@@ -78,8 +78,12 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2f9e4c93c108225c1c5b597618c664d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#ae2f9e4c93c108225c1c5b597618c664d">create</a> (const char *path, mode_t perms)</td></tr>
 <tr class="separator:ae2f9e4c93c108225c1c5b597618c664d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1a21e8473dbdb808111ec96f0cc17f2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#ae1a21e8473dbdb808111ec96f0cc17f2">createTemporaryDirectory</a> (char *templatedirname, mode_t perms)</td></tr>
+<tr class="separator:ae1a21e8473dbdb808111ec96f0cc17f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7eaa2facb284892dd443ed16e3515632"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a7eaa2facb284892dd443ed16e3515632">remove</a> (const char *path)</td></tr>
 <tr class="separator:a7eaa2facb284892dd443ed16e3515632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ef0f92a17eda1d0141cfa76a4a3fbe3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a3ef0f92a17eda1d0141cfa76a4a3fbe3">removeTree</a> (const char *path)</td></tr>
+<tr class="separator:a3ef0f92a17eda1d0141cfa76a4a3fbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3082b914097658157c68c833c5f48a9"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#af3082b914097658157c68c833c5f48a9">getCurrentWorkingDirectory</a> ()</td></tr>
 <tr class="separator:af3082b914097658157c68c833c5f48a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0aaaf84225312954b5f953ea62616e19"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a0aaaf84225312954b5f953ea62616e19">changeDirectory</a> (const char *path)</td></tr>
@@ -147,7 +151,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns true if an attempt to access a file in directory "pathname" longer than the length returned by <a class="el" href="classdirectory.html#a61445f5b1f981791999191b2914735fe">maxFileNameLength()</a> will succeed and false if it will fail. </p>
+<p>Returns true if an attempt to access a file in directory "pathname" longer than the character length returned by <a class="el" href="classdirectory.html#a61445f5b1f981791999191b2914735fe">maxFileNameLength()</a> will succeed and false if it will fail. </p>
 
 </div>
 </div>
@@ -174,7 +178,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if an attempt to access a file in directory "pathname" longer than the length returned by <a class="el" href="classdirectory.html#a61445f5b1f981791999191b2914735fe">maxFileNameLength()</a> will succeed and false if it will fail. </p>
+<p>Returns true if an attempt to access a file in directory "pathname" longer than the character length returned by <a class="el" href="classdirectory.html#a61445f5b1f981791999191b2914735fe">maxFileNameLength()</a> will succeed and false if it will fail. </p>
 
 </div>
 </div>
@@ -287,6 +291,45 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ae1a21e8473dbdb808111ec96f0cc17f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1a21e8473dbdb808111ec96f0cc17f2">&#9670;&nbsp;</a></span>createTemporaryDirectory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> directory::createTemporaryDirectory </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>templatedirname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mode_t&#160;</td>
+          <td class="paramname"><em>perms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a (presumably) temporary directory using "templatedirname" as a template. The permissions of the directory will be set to "perms".</p>
+<p>The last 6 characters of "templatedirname" must be XXXXXX and "templatedirname" will be modified to contain the name of the directory that was actually created.</p>
+<p>Returns true on success and false on failure. </p>
+
+</div>
+</div>
 <a id="a5c621dd8ffaf790586fc2511c6409b14"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5c621dd8ffaf790586fc2511c6409b14">&#9670;&nbsp;</a></span>getChildCount()</h2>
 
@@ -366,7 +409,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the length of the longest file name that can be created in the currently open directory . </p>
+<p>Returns the character length of the longest file name that can be created in the currently open directory . </p>
 
 </div>
 </div>
@@ -393,7 +436,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the length of the longest file name that can be created in directory "pathname". </p>
+<p>Returns the character length of the longest file name that can be created in directory "pathname". </p>
 
 </div>
 </div>
@@ -411,7 +454,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the length of the longest relative path name that can be created in the currently open directory . </p>
+<p>Returns the character length of the longest relative path name that can be created in the currently open directory . </p>
 
 </div>
 </div>
@@ -438,7 +481,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the length of the longest relative path name that can be created under the directory "pathname". </p>
+<p>Returns the character length of the longest relative path name that can be created under the directory "pathname". </p>
 
 </div>
 </div>
@@ -506,6 +549,33 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a3ef0f92a17eda1d0141cfa76a4a3fbe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ef0f92a17eda1d0141cfa76a4a3fbe3">&#9670;&nbsp;</a></span>removeTree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> directory::removeTree </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Removes the directory "path", and its contents. </p>
+
+</div>
+</div>
 <a id="a4c39e4e983fa8c3345fc07b0dcb03e82"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4c39e4e983fa8c3345fc07b0dcb03e82">&#9670;&nbsp;</a></span>rewind()</h2>
 
@@ -545,7 +615,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 14 2020 21:50:18 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 02:45:34 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>
