@@ -37,7 +37,12 @@ int main(int argc, const char **argv) {
 
 	// for 2^0 through 2^23...
 	bytebuffer	unenc;
+#ifdef SLOWSYSTEM
+	// skip the first iteration on slow systems
+	for (uint16_t i=1; i<2; i++) {
+#else
 	for (uint16_t i=0; i<2; i++) {
+#endif
 		uint64_t	size=0;
 		for (;;) {
 

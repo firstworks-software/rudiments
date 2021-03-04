@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 	char	*arch=sys::getOperatingSystemArchitecture();
 	char	*hostname=sys::getHostName();
 
-#if 0
+#if 1
 	stdoutput.printf("OS Name	: %s\n",osname);
 	stdoutput.printf("OS Release	: %s\n",release);
 	stdoutput.printf("OS Version	: %s\n",version);

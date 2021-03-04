@@ -12,7 +12,11 @@
 
 const int32_t	randomlow=10000;
 const int32_t	randomhigh=99999;
+#ifdef SLOWSYSTEM
+const uint16_t	nodecount=512;
+#else
 const uint16_t	nodecount=4096;
+#endif
 
 
 // generates a random number

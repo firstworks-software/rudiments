@@ -9,7 +9,7 @@
 
 uint32_t	iterations=5;
 #ifdef SLOWSYSTEM
-uint32_t	members=128;
+uint32_t	members=64;
 #else
 uint32_t	members=1024;
 #endif

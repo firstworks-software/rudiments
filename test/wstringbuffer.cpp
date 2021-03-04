@@ -10,7 +10,11 @@
 #include <wchar.h>
 
 uint32_t	iterations=5;
+#ifdef SLOWSYSTEM
+uint32_t	members=64;
+#else
 uint32_t	members=1024;
+#endif
 
 wchar_t	alphabet[]=L"abcdefghijklmnopqrstuvwxyz";
 
