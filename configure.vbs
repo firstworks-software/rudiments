@@ -23,7 +23,9 @@ next
 ' source, object and header files
 srcs="winsock.cpp "+_
 	"character.cpp "+_
+	"wcharacter.cpp "+_
 	"charstring.cpp "+_
+	"wcharstring.cpp "+_
 	"chat.cpp "+_
 	"client.cpp "+_
 	"commandline.cpp "+_
@@ -114,7 +116,9 @@ srcs="winsock.cpp "+_
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
+	"wcharacter.obj "+_
 	"charstring.obj "+_
+	"wcharstring.obj "+_
 	"chat.obj "+_
 	"client.obj "+_
 	"commandline.obj "+_
@@ -211,7 +215,9 @@ headers0="resultcodes.h "+_
 	"dynamicarray.h "+_
 	"staticarray.h "+_
 	"character.h "+_
+	"wcharacter.h "+_
 	"charstring.h "+_
+	"wcharstring.h "+_
 	"chat.h "+_
 	"client.h "+_
 	"commandline.h "+_
@@ -337,8 +343,11 @@ privateheaders1="dynamicarray.h "+_
 	"staticarray.h "+_
 	"staticarrayinlines.h "+_
 	"characterincludes.h "+_
+	"wcharacterincludes.h "+_
 	"charstring.h "+_
 	"charstringincludes.h "+_
+	"wcharstring.h "+_
+	"wcharstringincludes.h "+_
 	"chat.h "+_
 	"chatincludes.h "+_
 	"client.h "+_
