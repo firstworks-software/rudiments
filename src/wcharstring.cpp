@@ -1791,7 +1791,12 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 	ssize_t	size=-1;
 	do {
 
-		wchar_t	*buf=new wchar_t[buflen];
+		// Windows doesn't like it if you delete[] a buffer that
+		// was allocated with 0 size, but doesn't mind delete[]ing a
+		// NULL.  vswprintf doesn't seem to mind being passed a NULL
+		// instead of a 0-sized buffer.  So, we'll set buf=NULL if
+		// buflen is 0.
+		wchar_t	*buf=(buflen)?new wchar_t[buflen]:NULL;
 
 		size=vswprintf(buf,buflen,format,*argp);
 		if (size>-1) {

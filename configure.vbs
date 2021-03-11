@@ -864,6 +864,7 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@APACHELOBJS@","",1,-1,0)
 	content=replace(content,"@LIBRUDIMENTSAPACHE@","",1,-1,0)
 	content=replace(content,"@INSTALLLIBAPACHE@","",1,-1,0)
+	content=replace(content,"@MAKELIBRUDIMENTSAPACHE@","",1,-1,0)
 
 	' extension
 	content=replace(content,"@EXE@",EXE,1,-1,0)
