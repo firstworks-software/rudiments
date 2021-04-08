@@ -1492,11 +1492,17 @@
 /* Some systems have wchar.h */
 #define RUDIMENTS_HAVE_WCHAR_H 1
 
+/* Some systems have wcscasecmp */
+/* #undef RUDIMENTS_HAVE_WCSCASECMP */
+
 /* Some systems have wcschrnul */
 /* #undef RUDIMENTS_HAVE_WCSCHRNUL */
 
 /* Some systems have wcscspn */
 /* #undef RUDIMENTS_HAVE_WCSCSPN */
+
+/* Some systems have wcsncasecmp */
+/* #undef RUDIMENTS_HAVE_WCSNCASECMP */
 
 /* Some systems have wcspbrk */
 /* #undef RUDIMENTS_HAVE_WCSPBRK */

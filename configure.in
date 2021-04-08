@@ -2317,6 +2317,21 @@ AC_TRY_COMPILE([
 #endif],
 strcasecmp(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCASECMP,1,Some systems have strcasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for wcscasecmp)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+wcscasecmp(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSCASECMP,1,Some systems have wcscasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strncasecmp)
 AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -2326,6 +2341,21 @@ AC_TRY_COMPILE([
 	#include <string.h>
 #endif],
 strncasecmp(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRNCASECMP,1,Some systems have strncasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcsncasecmp)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+wcsncasecmp(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSNCASECMP,1,Some systems have wcsncasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strtold)
 AC_TRY_COMPILE([#ifndef __USE_GNU

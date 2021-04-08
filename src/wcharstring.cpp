@@ -990,7 +990,7 @@ int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2,
 
 int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 						const wchar_t *str2) {
-	#ifdef RUDIMENTS_HAVE_STRCASECMP
+	#ifdef RUDIMENTS_HAVE_WCSCASECMP
 		return (str1 && str2)?wcscasecmp(str1,str2):(str1!=str2);
 	#else
 		if (!str1 || !str2) {
@@ -1020,7 +1020,7 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 						const wchar_t *str2,
 						size_t size) {
-	#ifdef RUDIMENTS_HAVE_STRNCASECMP
+	#ifdef RUDIMENTS_HAVE_WCSNCASECMP
 		return (str1 && str2)?wcsncasecmp(str1,str2,size):(str1!=str2);
 	#else
 		if (!str1 || !str2) {
