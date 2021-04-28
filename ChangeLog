@@ -18,6 +18,8 @@
 	added quoted-printable encodings to charstring
 	added lots of row/column manipulation methods to csvdom class
 	tls::setProtocolVersion() supports "v" format: SSLv3, TLSv1.3, etc.
+	applied patch from Igor to fix configure.vbs VC++ version detection
+		for non-US versions
 
 1.3.1 - added apache-related items to spec file BuildRequries
 
