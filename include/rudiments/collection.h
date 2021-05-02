@@ -6,8 +6,7 @@
 
 #include <rudiments/object.h>
 
-/** The collection class is the parent class for all rudiments collections
- *  (lists, trees, etc.) */
+/** The collection class is the parent class for all rudiments collections. */
 class RUDIMENTS_DLLSPEC collection : public object {
 	public:
 

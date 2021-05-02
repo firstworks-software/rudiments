@@ -12,7 +12,7 @@
 
 DICTIONARY_TEMPLATE
 inline
-DICTIONARY_CLASS::dictionary() : collection() {
+DICTIONARY_CLASS::dictionary() : dictionarycollection() {
 	trackinsertionorder=true;
 }
 

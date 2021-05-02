@@ -9,7 +9,7 @@
 /** The singlylinkedlistnode class stores the values that compose a
  *  singlylinkedlist. */
 template <class valuetype>
-class singlylinkedlistnode : public object {
+class singlylinkedlistnode : public nodecollectionnode {
 	public:
 		/** Creates an instance of the singlylinkedlistnode class that
 		 *  stores value "value". */
@@ -61,7 +61,7 @@ class singlylinkedlistnode : public object {
  *  application must run these operations regularly, you should consider using
  *  the linkedlist class instead.  */
 template < class valuetype >
-class singlylinkedlist : public nodecollection {
+class singlylinkedlist : public listcollection {
 	public:
 		/** Creates an empty instance of the singlylinkedlist class. */
 		singlylinkedlist();

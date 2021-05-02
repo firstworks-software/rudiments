@@ -8,7 +8,7 @@
 
 /** The avltreenode class stores the values that compose a avltree. */
 template <class valuetype>
-class avltreenode : public object {
+class avltreenode : public nodecollectionnode {
 	public:
 		/** Creates an instance of the avltreenode class that
 		 *  stores value "value". */
@@ -74,7 +74,7 @@ class avltreenode : public object {
  *  Each avltree is composed of a set of avltreenodes.  Each avltreenode
  *  contains a value. */
 template < class valuetype >
-class avltree : public nodecollection {
+class avltree : public treecollection {
 	public:
 		/** Creates an empty instance of the avltree class. */
 		avltree();

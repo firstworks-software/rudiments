@@ -60,7 +60,7 @@ class dictionarynode : public object {
  *  though this is potentially inefficient though, and may change in a future
  *  version. */
 template <class keytype, class valuetype>
-class dictionary : public collection {
+class dictionary : public dictionarycollection {
 	public:
 		/** Creates an empty instance of the dictionary class. */
 		dictionary();
