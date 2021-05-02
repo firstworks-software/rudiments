@@ -57,7 +57,7 @@ class linkedlistnode : public object {
  *  Each linkedlist is composed of a series of linkedlistnodes.  Each
  *  linkedlistnode contains a value. */
 template < class valuetype >
-class linkedlist : public collection {
+class linkedlist : public nodecollection {
 	public:
 		/** Creates an empty instance of the linkedlist class. */
 		linkedlist();

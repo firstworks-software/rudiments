@@ -61,7 +61,7 @@ class singlylinkedlistnode : public object {
  *  application must run these operations regularly, you should consider using
  *  the linkedlist class instead.  */
 template < class valuetype >
-class singlylinkedlist : public collection {
+class singlylinkedlist : public nodecollection {
 	public:
 		/** Creates an empty instance of the singlylinkedlist class. */
 		singlylinkedlist();

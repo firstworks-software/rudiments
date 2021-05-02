@@ -10,7 +10,7 @@
 
 SINGLYLINKEDLIST_TEMPLATE
 inline
-SINGLYLINKEDLIST_CLASS::singlylinkedlist() : collection() {
+SINGLYLINKEDLIST_CLASS::singlylinkedlist() : nodecollection() {
 	first=NULL;
 	last=NULL;
 	length=0;

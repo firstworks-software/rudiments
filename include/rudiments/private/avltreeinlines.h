@@ -16,7 +16,7 @@
 
 AVLTREE_TEMPLATE
 inline
-AVLTREE_CLASS::avltree() : collection() {
+AVLTREE_CLASS::avltree() : nodecollection() {
 	top=NULL;
 	first=NULL;
 	last=NULL;

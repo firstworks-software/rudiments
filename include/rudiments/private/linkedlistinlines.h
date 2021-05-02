@@ -10,7 +10,7 @@
 
 LINKEDLIST_TEMPLATE
 inline
-LINKEDLIST_CLASS::linkedlist() : collection() {
+LINKEDLIST_CLASS::linkedlist() : nodecollection() {
 	first=NULL;
 	last=NULL;
 	length=0;
