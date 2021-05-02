@@ -10,7 +10,7 @@
 
 SINGLYLINKEDLIST_TEMPLATE
 inline
-SINGLYLINKEDLIST_CLASS::singlylinkedlist() {
+SINGLYLINKEDLIST_CLASS::singlylinkedlist() : collection() {
 	first=NULL;
 	last=NULL;
 	length=0;
@@ -852,7 +852,7 @@ void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
 
 SINGLYLINKEDLISTNODE_TEMPLATE
 inline
-SINGLYLINKEDLISTNODE_CLASS::singlylinkedlistnode(valuetype value) {
+SINGLYLINKEDLISTNODE_CLASS::singlylinkedlistnode(valuetype value) : object() {
 	this->value=value;
 	next=NULL;
 }

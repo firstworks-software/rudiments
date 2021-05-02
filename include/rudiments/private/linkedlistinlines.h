@@ -10,7 +10,7 @@
 
 LINKEDLIST_TEMPLATE
 inline
-LINKEDLIST_CLASS::linkedlist() {
+LINKEDLIST_CLASS::linkedlist() : collection() {
 	first=NULL;
 	last=NULL;
 	length=0;
@@ -691,7 +691,7 @@ void LINKEDLIST_CLASS::print(uint64_t count) const {
 
 LINKEDLISTNODE_TEMPLATE
 inline
-LINKEDLISTNODE_CLASS::linkedlistnode(valuetype value) {
+LINKEDLISTNODE_CLASS::linkedlistnode(valuetype value) : object() {
 	this->value=value;
 	previous=NULL;
 	next=NULL;

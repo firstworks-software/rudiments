@@ -74,7 +74,7 @@ class avltreenode : public object {
  *  Each avltree is composed of a set of avltreenodes.  Each avltreenode
  *  contains a value. */
 template < class valuetype >
-class avltree : public object {
+class avltree : public collection {
 	public:
 		/** Creates an empty instance of the avltree class. */
 		avltree();

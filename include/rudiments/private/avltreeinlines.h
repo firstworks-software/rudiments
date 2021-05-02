@@ -16,7 +16,7 @@
 
 AVLTREE_TEMPLATE
 inline
-AVLTREE_CLASS::avltree() {
+AVLTREE_CLASS::avltree() : collection() {
 	top=NULL;
 	first=NULL;
 	last=NULL;
@@ -464,7 +464,7 @@ void AVLTREE_CLASS::print() const {
 
 AVLTREENODE_TEMPLATE
 inline
-AVLTREENODE_CLASS::avltreenode(valuetype value) {
+AVLTREENODE_CLASS::avltreenode(valuetype value) : object() {
 	this->value=value;
 	parent=NULL;
 	left=NULL;

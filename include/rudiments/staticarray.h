@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_STATICARRAY_H
 #define RUDIMENTS_STATICARRAY_H
 
-#include <rudiments/object.h>
+#include <rudiments/collection.h>
 
 /** The staticarray class allows you to store a pre-defined number of values
  *  and access them with array-like syntax.
@@ -34,7 +34,7 @@
  * 	staticarray< dynamicarray< myclass * >, 10 > d;
  */
 template < class valuetype, uint64_t length >
-class staticarray : public object {
+class staticarray : public collection {
 	public:
 		/** Creates an empty instance of the staticarray class with
 		 *  "length" elements.  "length" is given in the template

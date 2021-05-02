@@ -12,7 +12,7 @@
 
 DICTIONARY_TEMPLATE
 inline
-DICTIONARY_CLASS::dictionary() {
+DICTIONARY_CLASS::dictionary() : collection() {
 	trackinsertionorder=true;
 }
 
@@ -613,7 +613,7 @@ avltreenode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
 
 DICTIONARYNODE_TEMPLATE
 inline
-DICTIONARYNODE_CLASS::dictionarynode(keytype key, valuetype value) {
+DICTIONARYNODE_CLASS::dictionarynode(keytype key, valuetype value) : object() {
 	this->key=key;
 	this->value=value;
 }

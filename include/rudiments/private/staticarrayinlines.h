@@ -5,7 +5,7 @@
 
 template< class valuetype, uint64_t length >
 inline
-staticarray<valuetype,length>::staticarray() {
+staticarray<valuetype,length>::staticarray() : collection() {
 	len=length;
 	data=new valuetype[len];
 }
@@ -13,7 +13,8 @@ staticarray<valuetype,length>::staticarray() {
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length>::staticarray(
-				const staticarray<valuetype,length> &v) {
+				const staticarray<valuetype,length> &v) :
+								collection(v) {
 	len=v.len;
 	data=new valuetype[len];
 	for (uint64_t i=0; i<len; i++) {
