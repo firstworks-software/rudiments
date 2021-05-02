@@ -69,13 +69,13 @@ class memorypoolprivate {
 // that don't require it though, to conserve memory.
 #define MEMORYPOOLPAD(a) ((8-(a%8))%8)
 
-memorypool::memorypool() {
+memorypool::memorypool() : object() {
 	init(DEFAULT_INITIALSIZE,DEFAULT_INCREMENTSIZE,DEFAULT_RESIZEINTERVAL);
 }
 
 memorypool::memorypool(size_t initialsize,
 			size_t incrementsize,
-			size_t resizeinterval) {
+			size_t resizeinterval) : object() {
 	init(initialsize,incrementsize,resizeinterval);
 }
 

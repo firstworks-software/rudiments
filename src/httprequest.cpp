@@ -141,7 +141,7 @@ class httprequestprivate {
 		const char	**_allvals;
 };
 
-httprequest::httprequest(httpserverapi *sapi) {
+httprequest::httprequest(httpserverapi *sapi) : object() {
 	pvt=new httprequestprivate;
 
 	pvt->_sapi=sapi;

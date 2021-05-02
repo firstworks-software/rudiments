@@ -8,7 +8,7 @@
 
 /** The groupentry class provides methods for retrieving information about
  *  user groups. */
-class RUDIMENTS_DLLSPEC groupentry {
+class RUDIMENTS_DLLSPEC groupentry : public object {
 	public:
 
 		/** Creates an instance of the groupentry class. */

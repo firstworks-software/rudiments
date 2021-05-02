@@ -36,7 +36,7 @@ class domnodeprivate {
 		void		*_privatedata;
 };
 
-domnode::domnode(dom *dom, domnode *nullnode) {
+domnode::domnode(dom *dom, domnode *nullnode) : object() {
 	init(dom,nullnode);
 	setType(NULL_DOMNODETYPE);
 }
@@ -44,7 +44,7 @@ domnode::domnode(dom *dom, domnode *nullnode) {
 domnode::domnode(dom *dom, domnode *nullnode,
 				domnodetype type,
 				const char *name,
-				const char *value) {
+				const char *value) : object() {
 	init(dom,nullnode);
 	setType(type);
 	setName(name);
@@ -55,7 +55,7 @@ domnode::domnode(dom *dom, domnode *nullnode,
 				domnodetype type,
 				const char *ns,
 				const char *name,
-				const char *value) {
+				const char *value) : object() {
 	init(dom,nullnode);
 	setType(type);
 	setNamespace(ns);

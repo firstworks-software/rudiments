@@ -9,7 +9,7 @@
 /** The dictionarynode class stores the key/value pairs that compose a
  *  dictionary. */
 template <class keytype, class valuetype>
-class dictionarynode {
+class dictionarynode : public object {
 	public:
 		/** Creates an instance of the dictionary node class 
 		 *  with key "key" and value "value". */
@@ -60,7 +60,7 @@ class dictionarynode {
  *  though this is potentially inefficient though, and may change in a future
  *  version. */
 template <class keytype, class valuetype>
-class dictionary {
+class dictionary : public object {
 	public:
 		/** Creates an empty instance of the dictionary class. */
 		dictionary();

@@ -6,7 +6,7 @@
 
 #include <rudiments/private/mvcresultincludes.h>
 
-class RUDIMENTS_DLLSPEC mvcresult {
+class RUDIMENTS_DLLSPEC mvcresult : public object {
 	public:
 		mvcresult();
 		virtual ~mvcresult();

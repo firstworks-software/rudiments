@@ -28,7 +28,7 @@ class threadmutexprivate {
 };
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
-threadmutex::threadmutex() {
+threadmutex::threadmutex() : object() {
 
 	pvt=new threadmutexprivate;
 	pvt->_mut=new pthread_mutex_t;
@@ -38,7 +38,7 @@ threadmutex::threadmutex() {
 	pvt->_destroy=true;
 }
 
-threadmutex::threadmutex(void *mut) {
+threadmutex::threadmutex(void *mut) : object() {
 	pvt=new threadmutexprivate;
 	pvt->_mut=(pthread_mutex_t *)mut;
 	pvt->_destroy=false;

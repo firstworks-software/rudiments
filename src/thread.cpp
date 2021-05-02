@@ -35,7 +35,7 @@ class threadprivate {
 		bool		_retry;
 };
 
-thread::thread() {
+thread::thread() : object() {
 	pvt=new threadprivate;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pvt->_thr=0;

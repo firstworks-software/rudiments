@@ -25,21 +25,21 @@ class chatprivate {
 		singlylinkedlist< char * >	_aborts;
 };
 
-chat::chat() {
+chat::chat() : object() {
 	pvt=new chatprivate;
 	pvt->_readfd=NULL;
 	pvt->_writefd=NULL;
 	pvt->_timeout=45;
 }
 
-chat::chat(filedescriptor *fd) {
+chat::chat(filedescriptor *fd) : object() {
 	pvt=new chatprivate;
 	pvt->_readfd=fd;
 	pvt->_writefd=fd;
 	pvt->_timeout=45;
 }
 
-chat::chat(filedescriptor *rfd, filedescriptor *wfd) {
+chat::chat(filedescriptor *rfd, filedescriptor *wfd) : object() {
 	pvt=new chatprivate;
 	pvt->_readfd=rfd;
 	pvt->_writefd=wfd;

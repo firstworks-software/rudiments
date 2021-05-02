@@ -28,7 +28,7 @@
  *  Calls to generateScaledNumber() may return the same value before all
  *  numbers in the range have been returned because it just scales the result
  *  of generateNumber() which operates on a larger range. */
-class RUDIMENTS_DLLSPEC randomnumber {
+class RUDIMENTS_DLLSPEC randomnumber : public object {
 	public:
 
 		/** Creates a new instance of the randomnumber class. */

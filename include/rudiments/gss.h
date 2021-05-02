@@ -6,7 +6,7 @@
 
 #include <rudiments/private/gssincludes.h>
 
-class RUDIMENTS_DLLSPEC gss {
+class RUDIMENTS_DLLSPEC gss : public object {
 	public:
 		/** Creates a new instance of the gss framework. */
 		gss();
@@ -38,7 +38,7 @@ class RUDIMENTS_DLLSPEC gss {
 };
 
 
-class RUDIMENTS_DLLSPEC gssmechanism {
+class RUDIMENTS_DLLSPEC gssmechanism : public object {
 	public:
 		/** Creates a new instance of the gssmechanism class. */
 		gssmechanism();
@@ -77,7 +77,7 @@ class RUDIMENTS_DLLSPEC gssmechanism {
 };
 
 
-class RUDIMENTS_DLLSPEC gsscredentials {
+class RUDIMENTS_DLLSPEC gsscredentials : public object {
 	public:
 		/** Creates an instance of the gsscredentials class. */
 		gsscredentials();

@@ -18,7 +18,7 @@
  *  values.  These days serial ports are more often used for talking to
  *  peripherals on embedded systems but many of the same concepts still
  *  apply. */
-class RUDIMENTS_DLLSPEC serialportprofile {
+class RUDIMENTS_DLLSPEC serialportprofile : public object {
 	public:
 
 		enum	inputmode_t {

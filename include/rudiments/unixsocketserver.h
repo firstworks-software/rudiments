@@ -28,7 +28,8 @@
  *  If you need to listen on more than 1 socket at a time, you should use the 
  *  unixsocketserver class (and possibly the unixsocketserver class) in
  *  conjunction with the listener class. */
-class RUDIMENTS_DLLSPEC unixsocketserver : public socketserver, private unixsocketutil {
+class RUDIMENTS_DLLSPEC unixsocketserver :
+			public socketserver, private unixsocketutil {
 	public:
 
 		/** Creates an instance of the unixsocketserver class. */

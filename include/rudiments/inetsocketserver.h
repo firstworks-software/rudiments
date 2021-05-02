@@ -16,7 +16,8 @@
  *  If you need to listen on more than one socket at a time or a combination
  *  of sockets and other file descriptors, then you should use the
  *  inetsocketserver class in conjunction with the listener class. */
-class RUDIMENTS_DLLSPEC inetsocketserver : public socketserver, private inetsocketutil {
+class RUDIMENTS_DLLSPEC inetsocketserver :
+			public socketserver, private inetsocketutil {
 	public:
 
 		/** Creates an instance of the inetsocketserver class. */

@@ -27,7 +27,7 @@ class saxprivate {
 		stringbuffer	_err;
 };
 
-sax::sax() {
+sax::sax() : object() {
 	pvt=new saxprivate;
 	reset();
 }

@@ -11,7 +11,7 @@
  * 
  *  Regular expressions are complex, powerful, used in command line
  *  programs like grep, sed and find, and extensively in Perl. */
-class RUDIMENTS_DLLSPEC regularexpression {
+class RUDIMENTS_DLLSPEC regularexpression : public object {
 	public:
 
 		/** Returns true if the first "length" characters of "str"

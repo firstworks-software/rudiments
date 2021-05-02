@@ -60,7 +60,7 @@ class signalhandlerprivate {
 };
 
 // signalset methods
-signalset::signalset() {
+signalset::signalset() : object() {
 	pvt=new signalsetprivate;
 	removeAllSignals();
 }
@@ -417,7 +417,7 @@ bool signalmanager::examineBlockedSignals(signalset *sset) {
 }
 
 // signalhandler methods
-signalhandler::signalhandler() {
+signalhandler::signalhandler() : object() {
 	pvt=new signalhandlerprivate;
 	pvt->_sset=NULL;
 	pvt->_flags=0;

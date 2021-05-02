@@ -8,7 +8,7 @@
 
 /** The dynamiclib class provides methods for loading, unloading and calling
  *  functions from dynamically linked libraries. */
-class RUDIMENTS_DLLSPEC dynamiclib {
+class RUDIMENTS_DLLSPEC dynamiclib : public object {
 	public:
 
 		/** Creates an instance of the dynamiclib class. */

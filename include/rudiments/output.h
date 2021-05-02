@@ -6,7 +6,7 @@
 
 #include <rudiments/private/outputincludes.h>
 
-class RUDIMENTS_DLLSPEC output {
+class RUDIMENTS_DLLSPEC output : virtual public object {
 	public:
 		virtual ~output();
 

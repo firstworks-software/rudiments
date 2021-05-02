@@ -26,7 +26,7 @@ class md5private {
 		hasherror_t	_err;
 };
 
-md5::md5() {
+md5::md5() : hash() {
 	pvt=new md5private;
 	clear();
 }

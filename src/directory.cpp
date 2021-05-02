@@ -69,7 +69,7 @@ class directoryprivate {
 };
 
 
-directory::directory() {
+directory::directory() : object() {
 	pvt=new directoryprivate;
 	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 		pvt->_filespec=NULL;

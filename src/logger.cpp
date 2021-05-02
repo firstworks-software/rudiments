@@ -131,7 +131,7 @@ class loggerprivate {
 		uint8_t		_level;
 };
 
-logger::logger() {
+logger::logger() : object() {
 	pvt=new loggerprivate;
 	pvt->_indent='	';
 	pvt->_level=0;

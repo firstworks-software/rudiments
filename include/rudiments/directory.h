@@ -8,7 +8,7 @@
 
 /** The directory class provides methods for opening/closing a directory and
  *  traversing it's files and subdirectories. */
-class RUDIMENTS_DLLSPEC directory {
+class RUDIMENTS_DLLSPEC directory : public object {
 	public:
 		/** Creates an instance of the directory class. */
 		directory();

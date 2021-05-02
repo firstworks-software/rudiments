@@ -166,7 +166,7 @@ static uid_t addUidMapping(const char *name,
 #endif
 
 
-userentry::userentry() {
+userentry::userentry() : object() {
 	pvt=new userentryprivate;
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	pvt->_pwd=NULL;
@@ -196,14 +196,14 @@ userentry::userentry() {
 	pvt->_sidsize=0;
 }
 
-userentry::userentry(const userentry &p) {
+userentry::userentry(const userentry &u) : object(u) {
 	pvt=new userentryprivate;
-	initialize(p.getName());
+	initialize(u.getName());
 }
 
-userentry &userentry::operator=(const userentry &p) {
-	if (this!=&p) {
-		initialize(p.getName());
+userentry &userentry::operator=(const userentry &u) {
+	if (this!=&u) {
+		initialize(u.getName());
 	}
 	return *this;
 }

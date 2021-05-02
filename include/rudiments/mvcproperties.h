@@ -6,7 +6,7 @@
 
 #include <rudiments/private/mvcpropertiesincludes.h>
 
-class RUDIMENTS_DLLSPEC mvcproperties {
+class RUDIMENTS_DLLSPEC mvcproperties : public object {
 	public:
 		mvcproperties();
 		virtual	~mvcproperties();

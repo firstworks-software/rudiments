@@ -12,7 +12,7 @@ class mvcpropertiesprivate {
 		dictionary<const char *,const char *>	_dict;
 };
 
-mvcproperties::mvcproperties() {
+mvcproperties::mvcproperties() : object() {
 	pvt=new mvcpropertiesprivate;
 }
 

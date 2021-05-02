@@ -8,7 +8,7 @@
 
 /** The hostentry class provides methods for retrieving entries from the host
  *  file (/etc/hosts on unix). */
-class RUDIMENTS_DLLSPEC hostentry {
+class RUDIMENTS_DLLSPEC hostentry : public object {
 	public:
 
 		/** Creates an instance of the hostentry class. */

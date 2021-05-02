@@ -65,7 +65,7 @@ class semaphoresetprivate {
 		bool	_supportstimedops;
 };
 
-semaphoreset::semaphoreset() {
+semaphoreset::semaphoreset() : object() {
 	pvt=new semaphoresetprivate;
 	pvt->_semid=-1;
 	pvt->_created=false;

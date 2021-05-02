@@ -41,7 +41,7 @@
  * 
  *  A semaphoreset is owned by a user and group and has access permissions
  *  just like a file. */
-class RUDIMENTS_DLLSPEC semaphoreset {
+class RUDIMENTS_DLLSPEC semaphoreset : public object {
 	public:
 
 		/** Creates an instance of the semaphoreset class. */

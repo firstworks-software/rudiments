@@ -8,7 +8,7 @@
 
 /** The userentry class provides methods for retrieving information about
  *  users. */
-class RUDIMENTS_DLLSPEC userentry {
+class RUDIMENTS_DLLSPEC userentry : public object {
 	public:
 
 		/** Creates an instance of the userentry class. */

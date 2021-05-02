@@ -36,7 +36,7 @@ class randomnumberprivate {
 		#endif
 };
 
-randomnumber::randomnumber() {
+randomnumber::randomnumber() : object() {
 	pvt=new randomnumberprivate;
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)

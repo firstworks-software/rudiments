@@ -53,7 +53,7 @@ class compilerprivate {
 		stringbuffer	_errorstr;
 };
 
-compiler::compiler() {
+compiler::compiler() : object() {
 	pvt=new compilerprivate;
 
 	pvt->_inputgrammar=NULL;

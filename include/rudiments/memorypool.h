@@ -13,7 +13,7 @@
  *  memory on-demand and consume less memory than allocating static buffers
  *  that are large enough to accommodate the maximum amount of data you may
  *  have to store. */
-class RUDIMENTS_DLLSPEC memorypool {
+class RUDIMENTS_DLLSPEC memorypool : public object {
 	public:
 		/** Creates a memory pool of initial size 512 bytes.
 		 * 

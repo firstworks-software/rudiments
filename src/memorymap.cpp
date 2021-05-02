@@ -47,7 +47,7 @@ class memorymapprivate {
 		#endif
 };
 
-memorymap::memorymap() {
+memorymap::memorymap() : object() {
 	pvt=new memorymapprivate;
 	pvt->_data=NULL;
 	pvt->_size=0;

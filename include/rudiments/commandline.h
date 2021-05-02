@@ -8,7 +8,7 @@
 
 /** The commandline class provides methods for parsing command line
  *  arguments. */
-class RUDIMENTS_DLLSPEC commandline {
+class RUDIMENTS_DLLSPEC commandline : public object {
 	public:
 
 		/** Creates an instance of the commandline class. */

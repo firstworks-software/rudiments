@@ -37,7 +37,7 @@ unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
 }
 
 unixsocketserver::unixsocketserver(const unixsocketserver &u) :
-				socketserver(u), unixsocketutil(u) {
+					socketserver(u), unixsocketutil(u) {
 	pvt=new unixsocketserverprivate;
 	pvt->_mask=u.pvt->_mask;
 	type("unixsocketserver");

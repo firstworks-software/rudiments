@@ -9,7 +9,7 @@
 /** The cronschedule class provides methods for parsing a cron-style schedule
  *  string and determining whether a given date/time is in the schedule.  */
 
-class RUDIMENTS_DLLSPEC cronschedule {
+class RUDIMENTS_DLLSPEC cronschedule : public object {
 	public:
 		cronschedule();
 

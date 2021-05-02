@@ -12,7 +12,7 @@
  *  Input history and tab-completion are supported if the underlying system
  *  supports them.  On Unix-like systems, this is enabled by the libedit
  *  library.  On many Windows systems, this is provided by the OS. */
-class RUDIMENTS_DLLSPEC prompt {
+class RUDIMENTS_DLLSPEC prompt : public object {
 	public:
 
 		/** Creates an instance of the prompt class. */

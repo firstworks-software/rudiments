@@ -83,7 +83,7 @@ class gssprivate {
 		char	**_mechs;
 };
 
-gss::gss() {
+gss::gss() : object() {
 	pvt=new gssprivate;
 	pvt->_mechs=NULL;
 }
@@ -478,7 +478,7 @@ class gssmechanismprivate {
 		#endif
 };
 
-gssmechanism::gssmechanism() {
+gssmechanism::gssmechanism() : object() {
 	pvt=new gssmechanismprivate;
 	pvt->_str=NULL;
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -638,7 +638,7 @@ class gsscredentialsprivate {
 		linkedlist< gssmechanism * >	_amlist;
 };
 
-gsscredentials::gsscredentials() {
+gsscredentials::gsscredentials() : object() {
 	pvt=new gsscredentialsprivate;
 
 	#if defined(RUDIMENTS_HAS_SSPI)

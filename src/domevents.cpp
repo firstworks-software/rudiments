@@ -38,7 +38,7 @@ class domeventsprivate {
 		uint8_t		_debuglevel;
 };
 
-domevents::domevents() {
+domevents::domevents() : object() {
 	pvt=new domeventsprivate;
 	pvt->_eventsnode=NULL;
 	pvt->_data=NULL;

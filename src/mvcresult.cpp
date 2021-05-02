@@ -15,7 +15,7 @@ class mvcresultprivate {
 		domnode		*datanode;
 };
 
-mvcresult::mvcresult() {
+mvcresult::mvcresult() : object() {
 	pvt=new mvcresultprivate;
 	pvt->d.createRootNode();
 	domnode		*rootnode=pvt->d.getRootNode()->appendTag("r");

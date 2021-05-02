@@ -16,7 +16,7 @@ enum hasherror_t {
 };
 
 /** The hash class provides a simple hash interface. */
-class RUDIMENTS_DLLSPEC hash {
+class RUDIMENTS_DLLSPEC hash : public object {
 	public:
 		/** Creates an instance of the hash class. */
 		hash() {};

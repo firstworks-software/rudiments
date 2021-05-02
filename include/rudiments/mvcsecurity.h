@@ -4,9 +4,9 @@
 #ifndef RUDIMENTS_MVCSECURITY_H
 #define RUDIMENTS_MVCSECURITY_H 1
 
-#include <rudiments/private/dll.h>
+#include <rudiments/object.h>
 
-class RUDIMENTS_DLLSPEC mvcsecurity {
+class RUDIMENTS_DLLSPEC mvcsecurity : public object {
 	public:
 		mvcsecurity() {};
 		virtual	~mvcsecurity() {};

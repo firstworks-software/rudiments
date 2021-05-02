@@ -262,7 +262,7 @@ class codetreeprivate {
 
 
 // ok, now finally the class itself...
-codetree::codetree() {
+codetree::codetree() : object() {
 	pvt=new codetreeprivate;
 	pvt->_error=false;
 	pvt->_depth=0;

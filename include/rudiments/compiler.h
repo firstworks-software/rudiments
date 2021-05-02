@@ -60,7 +60,7 @@ class compilerpostprocessor;
  *  input and output formats.
  */
 
-class RUDIMENTS_DLLSPEC compiler {
+class RUDIMENTS_DLLSPEC compiler : public object {
 	public:
 
 		/** Creates a new instance of the compiler class. */
@@ -259,7 +259,7 @@ class RUDIMENTS_DLLSPEC compiler {
 /** The compilermodule class is a the base class for compilerpreprocessor,
  *  compilreprocessor and compilerpostprocessor modules.  It just stores the
  *  module id and parameters. */
-class RUDIMENTS_DLLSPEC compilermodule {
+class RUDIMENTS_DLLSPEC compilermodule : public object {
 	public:
 		/** Creates a new instance of the compilermodule class. */
 		compilermodule();

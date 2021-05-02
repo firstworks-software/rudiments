@@ -39,7 +39,7 @@ static threadmutex	*_hemutex;
 #endif
 
 
-hostentry::hostentry() {
+hostentry::hostentry() : object() {
 	pvt=new hostentryprivate;
 	winsock::initWinsock();
 	pvt->_he=NULL;
@@ -50,7 +50,7 @@ hostentry::hostentry() {
 	#endif
 }
 
-hostentry::hostentry(const hostentry &h) {
+hostentry::hostentry(const hostentry &h) : object(h) {
 	pvt=new hostentryprivate;
 	winsock::initWinsock();
 	initialize(h.getName());

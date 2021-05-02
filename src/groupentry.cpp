@@ -144,7 +144,7 @@ static gid_t addGidMapping(const char *name,
 }
 #endif
 
-groupentry::groupentry() {
+groupentry::groupentry() : object() {
 	pvt=new groupentryprivate;
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	pvt->_grp=NULL;
@@ -164,7 +164,7 @@ groupentry::groupentry() {
 	pvt->_sidsize=0;
 }
 
-groupentry::groupentry(const groupentry &g) {
+groupentry::groupentry(const groupentry &g) : object(g) {
 	pvt=new groupentryprivate;
 	initialize(g.getName());
 }

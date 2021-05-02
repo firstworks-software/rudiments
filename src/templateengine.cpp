@@ -42,7 +42,7 @@ class templateengineprivate {
 		stringbuffer	_err;
 };
 
-templateengine::templateengine() {
+templateengine::templateengine() : object() {
 	pvt=new templateengineprivate;
 	pvt->_varstart="$(";
 	pvt->_varstartlen=2;

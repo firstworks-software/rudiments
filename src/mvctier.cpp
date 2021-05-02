@@ -11,7 +11,7 @@ class mvctierprivate {
 		mvcsecurity	*sec;
 };
 
-mvctier::mvctier() {
+mvctier::mvctier() : object() {
 	pvt=new mvctierprivate;
 	pvt->prop=NULL;
 	pvt->sec=NULL;

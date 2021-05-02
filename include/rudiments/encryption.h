@@ -15,7 +15,7 @@ enum encryptionerror_t {
 };
 
 /** The encryption class provides a simple encryption interface. */
-class RUDIMENTS_DLLSPEC encryption {
+class RUDIMENTS_DLLSPEC encryption : public object {
 	public:
 		/** Creates an instance of the encryption class. */
 		encryption();

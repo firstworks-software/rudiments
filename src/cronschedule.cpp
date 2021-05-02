@@ -14,7 +14,7 @@ class cronscheduleprivate {
 		linkedlist< cronscheduledaypart * >	_dayparts;
 };
 
-cronschedule::cronschedule() {
+cronschedule::cronschedule() : object() {
 	pvt=new cronscheduleprivate;
 }
 

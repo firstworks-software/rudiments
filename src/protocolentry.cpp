@@ -37,7 +37,7 @@ class protocolentryprivate {
 static threadmutex	*_pemutex;
 #endif
 
-protocolentry::protocolentry() {
+protocolentry::protocolentry() : object() {
 	pvt=new protocolentryprivate;
 	winsock::initWinsock();
 	pvt->_pe=NULL;
@@ -48,7 +48,7 @@ protocolentry::protocolentry() {
 	#endif
 }
 
-protocolentry::protocolentry(const protocolentry &p) {
+protocolentry::protocolentry(const protocolentry &p) : object(p) {
 	pvt=new protocolentryprivate;
 	winsock::initWinsock();
 	initialize(p.getName());

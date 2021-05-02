@@ -8,7 +8,7 @@
 
 /** The threadmutex class provides mutual exclusion locks between separate
  *  threads of a single process. */
-class RUDIMENTS_DLLSPEC threadmutex {
+class RUDIMENTS_DLLSPEC threadmutex : public object {
 	public:
 
 		/** Creates an instance of the threadmutex class. */

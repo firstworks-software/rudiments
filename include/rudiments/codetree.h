@@ -333,7 +333,7 @@ class codetreegrammar;
  *     </grammar>
  */
 
-class RUDIMENTS_DLLSPEC codetree {
+class RUDIMENTS_DLLSPEC codetree : public object {
 	public:
 
 		/** Creates a new instance of the codetree class. */

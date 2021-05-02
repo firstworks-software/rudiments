@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_SECURITY_H
 #define RUDIMENTS_SECURITY_H
 
-#include <rudiments/private/dll.h>
-#include <rudiments/private/inttypes.h>
+#include <rudiments/object.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -13,7 +12,7 @@
 
 class	filedescriptor;
 
-class RUDIMENTS_DLLSPEC securitycontext {
+class RUDIMENTS_DLLSPEC securitycontext : public object {
 	public:
 		securitycontext() {};
 		virtual ~securitycontext() {};

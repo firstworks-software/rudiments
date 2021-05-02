@@ -37,7 +37,7 @@
  * 	dynamicarray< staticarray< myclass * > > d;
  */
 template < class valuetype >
-class dynamicarray {
+class dynamicarray : public object {
 	public:
 		/** Creates an empty instance of the dynamicarray class. */
 		dynamicarray();

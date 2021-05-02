@@ -271,18 +271,18 @@ class filedescriptorprivate {
 		ssize_t		_asynccount;
 };
 
-filedescriptor::filedescriptor() {
+filedescriptor::filedescriptor() : input(), output() {
 	pvt=new filedescriptorprivate;
 	filedescriptorInit();
 }
 
-filedescriptor::filedescriptor(int32_t fd) {
+filedescriptor::filedescriptor(int32_t fd) : input(), output() {
 	pvt=new filedescriptorprivate;
 	filedescriptorInit();
 	setFileDescriptor(fd);
 }
 
-filedescriptor::filedescriptor(const filedescriptor &f) {
+filedescriptor::filedescriptor(const filedescriptor &f) : input(f), output(f) {
 	pvt=new filedescriptorprivate;
 	filedescriptorClone(f);
 }

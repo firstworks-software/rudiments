@@ -11,7 +11,7 @@ class httpresponseprivate {
 		httpserverapi	*_sapi;
 };
 
-httpresponse::httpresponse(httpserverapi *sapi) {
+httpresponse::httpresponse(httpserverapi *sapi) : object() {
 	pvt=new httpresponseprivate;
 	pvt->_sapi=sapi;
 }

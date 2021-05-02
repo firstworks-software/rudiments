@@ -55,11 +55,11 @@ class regularexpressionprivate {
 		#endif
 };
 
-regularexpression::regularexpression() {
+regularexpression::regularexpression() : object() {
 	init();
 }
 
-regularexpression::regularexpression(const char *pattern) {
+regularexpression::regularexpression(const char *pattern) : object() {
 	init();
 	setPattern(pattern);
 }

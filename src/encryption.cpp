@@ -18,7 +18,7 @@ class encryptionprivate {
 		encryptionerror_t	_err;
 };
 
-encryption::encryption() {
+encryption::encryption() : object() {
 	pvt=new encryptionprivate;
 	pvt->_key=NULL;
 	pvt->_iv=NULL;

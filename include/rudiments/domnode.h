@@ -119,7 +119,7 @@ class dom;
  *  				or another segment of cdata
  *  		a list of attribute nodes - unused
  *  		a list of child nodes - unused */
-class RUDIMENTS_DLLSPEC domnode {
+class RUDIMENTS_DLLSPEC domnode : public object {
 	public:
 			/** Creates a new node and intializes its
 			 *  member variables to NULL.

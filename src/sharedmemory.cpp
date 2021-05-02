@@ -78,7 +78,7 @@ class sharedmemoryprivate {
 		#endif
 };
 
-sharedmemory::sharedmemory() {
+sharedmemory::sharedmemory() : object() {
 	pvt=new sharedmemoryprivate;
 	pvt->_shmid=-1;
 	pvt->_created=false;

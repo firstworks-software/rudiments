@@ -8,7 +8,7 @@
 
 /** The serviceentry class provides methods for retrieving entries from the
  *  service file (/etc/services on unix). */
-class RUDIMENTS_DLLSPEC serviceentry {
+class RUDIMENTS_DLLSPEC serviceentry : public object {
 	public:
 
 		/** Creates an instance of the serviceentry class. */

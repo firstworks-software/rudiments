@@ -6,7 +6,7 @@
 
 #include <rudiments/private/inputincludes.h>
 
-class RUDIMENTS_DLLSPEC input {
+class RUDIMENTS_DLLSPEC input : virtual public object {
 	public:
 		virtual	~input();
 

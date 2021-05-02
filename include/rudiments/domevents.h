@@ -4,14 +4,13 @@
 #ifndef RUDIMENTS_DOMEVENTS_H
 #define RUDIMENTS_DOMEVENTS_H
 
-#include <rudiments/dom.h>
 #include <rudiments/private/domeventsincludes.h>
 
 typedef domnode *(*domeventhandler_t)(domnode *codetreenode,
 						domnode *eventtreenode,
 						void *data);
 
-class RUDIMENTS_DLLSPEC domevents {
+class RUDIMENTS_DLLSPEC domevents : public object {
 	public:
 		domevents();
 		~domevents();

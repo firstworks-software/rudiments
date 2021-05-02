@@ -30,7 +30,7 @@ class dynamiclibprivate {
 // LAME: not in the class
 static	threadmutex	*_errormutex=NULL;
 
-dynamiclib::dynamiclib() {
+dynamiclib::dynamiclib() : object() {
 	pvt=new dynamiclibprivate;
 	pvt->_handle=NULL;
 }

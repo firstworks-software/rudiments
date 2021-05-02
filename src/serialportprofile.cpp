@@ -18,7 +18,7 @@ class serialportprofileprivate {
 		termios	_tio;
 };
 
-serialportprofile::serialportprofile() {
+serialportprofile::serialportprofile() : object() {
 	pvt=new serialportprofileprivate;
 	defaultOptions();
 }

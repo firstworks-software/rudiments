@@ -349,7 +349,7 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 	#include <rudiments/private/tlscontext.h>
 };
 
-class RUDIMENTS_DLLSPEC tlscertificate {
+class RUDIMENTS_DLLSPEC tlscertificate : public object {
 	public:
 		/** Creates a new instance of the tlscertificate class. */
 		tlscertificate();

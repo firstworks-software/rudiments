@@ -83,7 +83,7 @@ static const char _monthabbr[][4]={
 	"Oct","Nov","Dec"
 };
 
-datetime::datetime() {
+datetime::datetime() : object() {
 	pvt=new datetimeprivate;
 	init();
 }

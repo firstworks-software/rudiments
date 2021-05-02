@@ -28,7 +28,7 @@ class promptprivate {
 		char		*_prompt;
 };
 
-prompt::prompt() {
+prompt::prompt() : object() {
 	pvt=new promptprivate;
 	pvt->_historyfilename=NULL;
 	pvt->_historyread=false;

@@ -42,7 +42,7 @@ static threadmutex	*_semutex;
 #endif
 
 
-serviceentry::serviceentry() {
+serviceentry::serviceentry() : object() {
 	pvt=new serviceentryprivate;
 	winsock::initWinsock();
 	pvt->_se=NULL;
@@ -53,7 +53,7 @@ serviceentry::serviceentry() {
 	#endif
 }
 
-serviceentry::serviceentry(const serviceentry &s) {
+serviceentry::serviceentry(const serviceentry &s) : object(s) {
 	pvt=new serviceentryprivate;
 	winsock::initWinsock();
 	initialize(s.getName(),s.getProtocol());

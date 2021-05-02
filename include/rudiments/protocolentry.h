@@ -8,7 +8,7 @@
 
 /** The protocolentry class provides methods for retrieving entries from the
  *  protocol file (/etc/protocols on unix). */
-class RUDIMENTS_DLLSPEC protocolentry {
+class RUDIMENTS_DLLSPEC protocolentry : public object {
 	public:
 
 		/** Creates an instance of the protocolentry class. */

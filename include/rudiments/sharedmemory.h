@@ -16,7 +16,7 @@
  * 
  *  A shared memory segment is owned by a user and group and has access 
  *  permissions just like a file. */
-class RUDIMENTS_DLLSPEC sharedmemory {
+class RUDIMENTS_DLLSPEC sharedmemory : public object {
 	public:
 		/** Creates an instance of the sharedmemory class. */
 		sharedmemory();

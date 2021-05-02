@@ -10,7 +10,7 @@ class parameterstringprivate {
 		char				_delim;
 };
 
-parameterstring::parameterstring() {
+parameterstring::parameterstring() : object() {
 	pvt=new parameterstringprivate;
 	pvt->_delim=';';
 }

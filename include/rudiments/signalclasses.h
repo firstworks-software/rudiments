@@ -9,7 +9,7 @@
 /** A signalset it just a collection of signals.  Many signal-related functions
  *  take signalsets for arguments.  The signalset class makes signalsets
  *  easy to manage. */
-class RUDIMENTS_DLLSPEC signalset {
+class RUDIMENTS_DLLSPEC signalset : public object {
 	friend class signalmanager;
 	friend class signalhandler;
 	public:
@@ -87,7 +87,7 @@ class RUDIMENTS_DLLSPEC signalmanager {
 
 /** The signalhandler class provides methods for catching and handling
  *  signals. */
-class RUDIMENTS_DLLSPEC signalhandler {
+class RUDIMENTS_DLLSPEC signalhandler : public object {
 	public:
 
 		/** Creates an instance of the signalhandler class. */

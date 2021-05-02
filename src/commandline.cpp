@@ -13,13 +13,13 @@ class commandlineprivate {
 		char	**_argv;
 };
 
-commandline::commandline() {
+commandline::commandline() : object() {
 	pvt=new commandlineprivate;
 	pvt->_argc=0;
 	pvt->_argv=NULL;
 }
 
-commandline::commandline(int32_t argc, const char **argv) {
+commandline::commandline(int32_t argc, const char **argv) : object() {
 	pvt=new commandlineprivate;
 	pvt->_argc=argc;
 	pvt->_argv=(char **)argv;

@@ -8,7 +8,7 @@
 
 /** The chat class implements methods for chatting with something
  * (such as a modem) over a file descriptor or set of file descriptors. */
-class RUDIMENTS_DLLSPEC chat {
+class RUDIMENTS_DLLSPEC chat : public object {
 	public:
 		/** Creates an instance of the chat class. */
 		chat();

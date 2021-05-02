@@ -13,7 +13,7 @@
  * 
  *  Parameter strings are often used to define connections to servers, databases
  *  or for other similar things. */
-class RUDIMENTS_DLLSPEC parameterstring {
+class RUDIMENTS_DLLSPEC parameterstring : public object {
 	public:
 
 		/** Creates an instance of the parameterstring class. */

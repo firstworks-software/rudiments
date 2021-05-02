@@ -8,7 +8,7 @@
 
 /** The logdestination class is a virtual base class that just defines methods
  *  that the real logdestination classes must implement. */
-class RUDIMENTS_DLLSPEC logdestination {
+class RUDIMENTS_DLLSPEC logdestination : public object {
 	#include <rudiments/private/logdestination.h>
 };
 
@@ -94,7 +94,7 @@ typedef linkedlist<logdestination *>		loggerlist;
  *  logger class instance using addLogDestination().  Then, each call to a
  *  logger class method will output logging information to each of the
  *  logdestinations in seqence. */
-class RUDIMENTS_DLLSPEC logger {
+class RUDIMENTS_DLLSPEC logger : public object {
 	public:
 
 		/** Creates an instance of the logger class. */

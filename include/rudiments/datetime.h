@@ -9,7 +9,7 @@
 /** The datetime class represents a date/time combination and provides methods
  *  for getting and setting dates and times, converting date/time formats and
  *  accessing various date/time values. */
-class RUDIMENTS_DLLSPEC datetime {
+class RUDIMENTS_DLLSPEC datetime : public object {
 	public:
 
 		/** Creates an instance of the datetime class. */

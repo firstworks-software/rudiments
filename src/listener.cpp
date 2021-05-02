@@ -87,7 +87,7 @@ class listenerprivate {
 		#endif
 };
 
-listener::listener() {
+listener::listener() : object() {
 	pvt=new listenerprivate;
 	pvt->_retryinterruptedwaits=true;
 	pvt->_dirty=true;

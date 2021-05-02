@@ -6,7 +6,7 @@
 
 #include <rudiments/private/mvctierincludes.h>
 
-class RUDIMENTS_DLLSPEC mvctier {
+class RUDIMENTS_DLLSPEC mvctier : public object {
 	public:
 		mvctier();
 		virtual ~mvctier();

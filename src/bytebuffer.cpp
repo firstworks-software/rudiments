@@ -29,15 +29,16 @@ class bytebufferprivate {
 		size_t		_initialsize;
 };
 
-bytebuffer::bytebuffer() {
+bytebuffer::bytebuffer() : object() {
 	init(NULL,DEFAULT_INITIALSIZE);
 }
 
-bytebuffer::bytebuffer(size_t initialsize) {
+bytebuffer::bytebuffer(size_t initialsize) : object() {
 	init(NULL,initialsize);
 }
 
-bytebuffer::bytebuffer(unsigned char *initialcontents, size_t initialsize) {
+bytebuffer::bytebuffer(unsigned char *initialcontents, size_t initialsize) :
+								object() {
 	init(initialcontents,initialsize);
 }
 

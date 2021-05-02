@@ -88,7 +88,7 @@ class filesystemprivate {
 		#endif
 };
 
-filesystem::filesystem() {
+filesystem::filesystem() : object() {
 	pvt=new filesystemprivate;
 	pvt->_fd=-1;
 	pvt->_closeflag=false;
@@ -98,7 +98,7 @@ filesystem::filesystem() {
 	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 }
 
-filesystem::filesystem(const filesystem &f) {
+filesystem::filesystem(const filesystem &f) : object(f) {
 	pvt=new filesystemprivate;
 	filesystemClone(f);
 }
