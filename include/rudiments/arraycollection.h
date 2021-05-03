@@ -8,6 +8,7 @@
 
 /** The arraycollection class is the parent class for all rudiments array
  *  collections. */
+template <class valuetype>
 class RUDIMENTS_DLLSPEC arraycollection : public collection {
 	public:
 

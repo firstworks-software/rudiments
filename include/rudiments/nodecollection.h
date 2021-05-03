@@ -5,7 +5,24 @@
 #define RUDIMENTS_NODECOLLECTION_H
 
 #include <rudiments/collection.h>
-#include <rudiments/nodecollectionnode.h>
+
+/** The collection class is the parent class for the node contained by all
+ *  rudiments node-based collections. */
+template <class valuetype>
+class RUDIMENTS_DLLSPEC nodecollectionnode : public object {
+	public:
+
+		/** Creates an instance of the nodecollectionnode class. */
+		nodecollectionnode() : object() {};
+
+		/** Creates an instance of the nodecollectionnode class. */
+		nodecollectionnode(const collection &c) : object(c) {};
+
+		/** Deletes this instance of the nodecollectionnode class. */
+		virtual	~nodecollectionnode() {};
+
+		virtual	valuetype	getValue() const=0;
+};
 
 /** The collection class is the parent class for all rudiments node-based
  *  collections. */

@@ -4,33 +4,30 @@
 #include <rudiments/stdio.h>
 #include <rudiments/private/nodeinlines.h>
 
-#define SINGLYLINKEDLIST_TEMPLATE template <class valuetype>
-
-#define SINGLYLINKEDLIST_CLASS singlylinkedlist<valuetype>
-
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-SINGLYLINKEDLIST_CLASS::singlylinkedlist() : listcollection() {
+singlylinkedlist<valuetype>::singlylinkedlist() : listcollection<valuetype>() {
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-SINGLYLINKEDLIST_CLASS::~singlylinkedlist() {
+singlylinkedlist<valuetype>::~singlylinkedlist() {
 	clear();
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::prepend(valuetype value) {
+void singlylinkedlist<valuetype>::prepend(valuetype value) {
 	prepend(new singlylinkedlistnode<valuetype>(value));
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::prepend(singlylinkedlistnode<valuetype> *node) {
+void singlylinkedlist<valuetype>::prepend(
+				singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return;
 	} else if (first) {
@@ -43,15 +40,16 @@ void SINGLYLINKEDLIST_CLASS::prepend(singlylinkedlistnode<valuetype> *node) {
 	length++;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::append(valuetype value) {
+void singlylinkedlist<valuetype>::append(valuetype value) {
 	append(new singlylinkedlistnode<valuetype>(value));
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::append(singlylinkedlistnode<valuetype> *node) {
+void singlylinkedlist<valuetype>::append(
+				singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return;
 	} else if (last) {
@@ -64,17 +62,17 @@ void SINGLYLINKEDLIST_CLASS::append(singlylinkedlistnode<valuetype> *node) {
 	length++;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::insertAfter(
+void singlylinkedlist<valuetype>::insertAfter(
 				singlylinkedlistnode<valuetype> *node,
 				valuetype value) {
 	insertAfter(node,new singlylinkedlistnode<valuetype>(value));
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::insertAfter(
+void singlylinkedlist<valuetype>::insertAfter(
 				singlylinkedlistnode<valuetype> *node,
 				singlylinkedlistnode<valuetype> *newnode) {
 	if (!node) {
@@ -88,9 +86,9 @@ void SINGLYLINKEDLIST_CLASS::insertAfter(
 	}
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::moveAfter(
+void singlylinkedlist<valuetype>::moveAfter(
 				singlylinkedlistnode<valuetype> *node,
 				singlylinkedlistnode<valuetype> *nodetomove) {
 
@@ -122,9 +120,10 @@ void SINGLYLINKEDLIST_CLASS::moveAfter(
 	}
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::detach(singlylinkedlistnode<valuetype> *node) {
+void singlylinkedlist<valuetype>::detach(
+				singlylinkedlistnode<valuetype> *node) {
 
 	if (node==first && node==last) {
 		first=NULL;
@@ -149,9 +148,9 @@ void SINGLYLINKEDLIST_CLASS::detach(singlylinkedlistnode<valuetype> *node) {
 	length--;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
+bool singlylinkedlist<valuetype>::remove(valuetype value) {
 	singlylinkedlistnode<valuetype> *current=first;
 	if (!current->compare(value)) {
 		if (first==last) {
@@ -183,9 +182,9 @@ bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
 	return false;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAndDelete(valuetype value) {
+bool singlylinkedlist<valuetype>::removeAndDelete(valuetype value) {
 	singlylinkedlistnode<valuetype> *current=first;
 	if (!current->compare(value)) {
 		if (first==last) {
@@ -218,9 +217,9 @@ bool SINGLYLINKEDLIST_CLASS::removeAndDelete(valuetype value) {
 	return false;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAndArrayDelete(valuetype value) {
+bool singlylinkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
 	singlylinkedlistnode<valuetype> *current=first;
 	if (!current->compare(value)) {
 		if (first==last) {
@@ -253,9 +252,9 @@ bool SINGLYLINKEDLIST_CLASS::removeAndArrayDelete(valuetype value) {
 	return false;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
+bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 	if (!first) {
 		return true;
 	}
@@ -298,9 +297,9 @@ bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
 	return retval;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAllAndDelete(valuetype value) {
+bool singlylinkedlist<valuetype>::removeAllAndDelete(valuetype value) {
 	if (!first) {
 		return true;
 	}
@@ -346,9 +345,9 @@ bool SINGLYLINKEDLIST_CLASS::removeAllAndDelete(valuetype value) {
 	return retval;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAllAndArrayDelete(valuetype value) {
+bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 	if (!first) {
 		return true;
 	}
@@ -394,9 +393,10 @@ bool SINGLYLINKEDLIST_CLASS::removeAllAndArrayDelete(valuetype value) {
 	return retval;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::remove(singlylinkedlistnode<valuetype> *node) {
+bool singlylinkedlist<valuetype>::remove(
+				singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
@@ -431,9 +431,9 @@ bool SINGLYLINKEDLIST_CLASS::remove(singlylinkedlistnode<valuetype> *node) {
 	return false;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAndDelete(
+bool singlylinkedlist<valuetype>::removeAndDelete(
 				singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return false;
@@ -470,9 +470,9 @@ bool SINGLYLINKEDLIST_CLASS::removeAndDelete(
 	return false;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-bool SINGLYLINKEDLIST_CLASS::removeAndArrayDelete(
+bool singlylinkedlist<valuetype>::removeAndArrayDelete(
 				singlylinkedlistnode<valuetype> *node) {
 	if (!node) {
 		return false;
@@ -509,40 +509,41 @@ bool SINGLYLINKEDLIST_CLASS::removeAndArrayDelete(
 	return false;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-uint64_t SINGLYLINKEDLIST_CLASS::getLength() const {
+uint64_t singlylinkedlist<valuetype>::getLength() const {
 	return length;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::getFirst() {
+singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::getFirst() {
 	return first;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::getLast() {
+singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::getLast() {
 	return last;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::getNext(
+singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::getNext(
 					singlylinkedlistnode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(valuetype value) {
+singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::
+							find(valuetype value) {
 	return find((singlylinkedlistnode<valuetype> *)first,value);
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(
+singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::find(
 				singlylinkedlistnode<valuetype> *startnode,
 				valuetype value) {
 	for (singlylinkedlistnode<valuetype> *current=startnode;
@@ -554,9 +555,9 @@ singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(
 	return NULL;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::insertionSort() {
+void singlylinkedlist<valuetype>::insertionSort() {
 
 	// insertion sort with a few optimization...
 
@@ -634,9 +635,9 @@ void SINGLYLINKEDLIST_CLASS::insertionSort() {
 	last=newlast;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::heapSort() {
+void singlylinkedlist<valuetype>::heapSort() {
 
 	// if there are 0 or 1 items in the list then it's already sorted
 	if (length<2) {
@@ -776,9 +777,9 @@ void SINGLYLINKEDLIST_CLASS::heapSort() {
 // even if the app just calls clear().  This will fail for primitive types or
 // when the type has a private destructor.
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::clear() {
+void singlylinkedlist<valuetype>::clear() {
 	singlylinkedlistnode<valuetype>	*next;
 	singlylinkedlistnode<valuetype>	*current=first;
 	while (current) {
@@ -791,9 +792,9 @@ void SINGLYLINKEDLIST_CLASS::clear() {
 	length=0;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::clearAndDelete() {
+void singlylinkedlist<valuetype>::clearAndDelete() {
 	singlylinkedlistnode<valuetype>	*next;
 	singlylinkedlistnode<valuetype>	*current=first;
 	while (current) {
@@ -807,9 +808,9 @@ void SINGLYLINKEDLIST_CLASS::clearAndDelete() {
 	length=0;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::clearAndArrayDelete() {
+void singlylinkedlist<valuetype>::clearAndArrayDelete() {
 	singlylinkedlistnode<valuetype>	*next;
 	singlylinkedlistnode<valuetype>	*current=first;
 	while (current) {
@@ -823,15 +824,15 @@ void SINGLYLINKEDLIST_CLASS::clearAndArrayDelete() {
 	length=0;
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::print() const {
+void singlylinkedlist<valuetype>::print() const {
 	print(length);
 }
 
-SINGLYLINKEDLIST_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
+void singlylinkedlist<valuetype>::print(uint64_t count) const {
 	uint64_t	i=0;
 	for (singlylinkedlistnode<valuetype> *current=first;
 			current && i<count; current=current->getNext()) {
@@ -846,62 +847,59 @@ void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
 	}
 }
 
-#define SINGLYLINKEDLISTNODE_TEMPLATE template <class valuetype>
-
-#define SINGLYLINKEDLISTNODE_CLASS singlylinkedlistnode<valuetype>
-
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-SINGLYLINKEDLISTNODE_CLASS::singlylinkedlistnode(valuetype value) :
-							nodecollectionnode() {
+singlylinkedlistnode<valuetype>::singlylinkedlistnode(valuetype value) :
+					nodecollectionnode<valuetype>() {
 	this->value=value;
 	next=NULL;
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-SINGLYLINKEDLISTNODE_CLASS::~singlylinkedlistnode() {
+singlylinkedlistnode<valuetype>::~singlylinkedlistnode() {
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLISTNODE_CLASS::setValue(valuetype value) {
+void singlylinkedlistnode<valuetype>::setValue(valuetype value) {
 	this->value=value;
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-valuetype SINGLYLINKEDLISTNODE_CLASS::getValue() const {
+valuetype singlylinkedlistnode<valuetype>::getValue() const {
 	return value;
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-SINGLYLINKEDLISTNODE_CLASS *SINGLYLINKEDLISTNODE_CLASS::getNext() {
+singlylinkedlistnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() {
 	return next;
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-int32_t SINGLYLINKEDLISTNODE_CLASS::compare(valuetype value) const {
+int32_t singlylinkedlistnode<valuetype>::compare(valuetype value) const {
 	return node_compare(this->value,value);
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-int32_t SINGLYLINKEDLISTNODE_CLASS::compare(
+int32_t singlylinkedlistnode<valuetype>::compare(
 				singlylinkedlistnode<valuetype> *peer) const {
 	return node_compare(this->value,peer->value);
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLISTNODE_CLASS::print() const {
+void singlylinkedlistnode<valuetype>::print() const {
 	node_print(value);
 }
 
-SINGLYLINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 inline
-void SINGLYLINKEDLISTNODE_CLASS::setNext(SINGLYLINKEDLISTNODE_CLASS *next) {
+void singlylinkedlistnode<valuetype>::setNext(
+				singlylinkedlistnode<valuetype> *next) {
 	this->next=next;
 }

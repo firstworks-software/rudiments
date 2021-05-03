@@ -396,7 +396,7 @@ class RUDIMENTS_DLLSPEC tlscertificate : public object {
 		uint64_t	getPublicKeyBitSize();
 
 		/** Returns the subject alternate names from the certificate. */
-		linkedlist< char * >	*getSubjectAlternateNames();
+		linkedlist<char *>	*getSubjectAlternateNames();
 
 	#include <rudiments/private/tlscertificate.h>
 };

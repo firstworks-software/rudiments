@@ -6,38 +6,30 @@
 #include <rudiments/stdio.h>
 #include <rudiments/private/nodeinlines.h>
 
-#define AVLTREE_TEMPLATE template <class valuetype>
-
-#define AVLTREE_CLASS avltree<valuetype>
-
-#define AVLTREENODE_TEMPLATE template <class valuetype>
-
-#define AVLTREENODE_CLASS avltreenode<valuetype>
-
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREE_CLASS::avltree() : treecollection() {
+avltree<valuetype>::avltree() : treecollection<valuetype>() {
 	top=NULL;
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREE_CLASS::~avltree() {
+avltree<valuetype>::~avltree() {
 	clear();
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREE_CLASS::insert(valuetype value) {
+void avltree<valuetype>::insert(valuetype value) {
 	insert(new avltreenode<valuetype>(value));
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREE_CLASS::insert(avltreenode<valuetype> *node) {
+void avltree<valuetype>::insert(avltreenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
@@ -76,9 +68,10 @@ void AVLTREE_CLASS::insert(avltreenode<valuetype> *node) {
 	length++;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::detach(avltreenode<valuetype> *node) {
+avltreenode<valuetype> *avltree<valuetype>::detach(
+						avltreenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
@@ -109,30 +102,30 @@ avltreenode<valuetype> *AVLTREE_CLASS::detach(avltreenode<valuetype> *node) {
 	return node;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::remove(valuetype value) {
+bool avltree<valuetype>::remove(valuetype value) {
 	avltreenode<valuetype>	*current=find(value);
 	return (current)?remove(current):false;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAndDelete(valuetype value) {
+bool avltree<valuetype>::removeAndDelete(valuetype value) {
 	avltreenode<valuetype>	*current=find(value);
 	return (current)?removeAndDelete(current):false;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAndArrayDelete(valuetype value) {
+bool avltree<valuetype>::removeAndArrayDelete(valuetype value) {
 	avltreenode<valuetype>	*current=find(value);
 	return (current)?removeAndArrayDelete(current):false;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAll(valuetype value) {
+bool avltree<valuetype>::removeAll(valuetype value) {
 	bool	removed=false;
 	while (remove(value)) {
 		removed=true;
@@ -140,9 +133,9 @@ bool AVLTREE_CLASS::removeAll(valuetype value) {
 	return removed;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAllAndDelete(valuetype value) {
+bool avltree<valuetype>::removeAllAndDelete(valuetype value) {
 	bool	removed=false;
 	while (removeAndDelete(value)) {
 		removed=true;
@@ -150,9 +143,9 @@ bool AVLTREE_CLASS::removeAllAndDelete(valuetype value) {
 	return removed;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAllAndArrayDelete(valuetype value) {
+bool avltree<valuetype>::removeAllAndArrayDelete(valuetype value) {
 	bool	removed=false;
 	while (removeAndArrayDelete(value)) {
 		removed=true;
@@ -160,78 +153,78 @@ bool AVLTREE_CLASS::removeAllAndArrayDelete(valuetype value) {
 	return removed;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::remove(avltreenode<valuetype> *node) {
+bool avltree<valuetype>::remove(avltreenode<valuetype> *node) {
 	delete detach(node);
 	return true;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAndDelete(avltreenode<valuetype> *node) {
+bool avltree<valuetype>::removeAndDelete(avltreenode<valuetype> *node) {
 	avltreenode<valuetype> *detachednode=detach(node);
 	delete detachednode->getValue();
 	delete detachednode;
 	return true;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-bool AVLTREE_CLASS::removeAndArrayDelete(avltreenode<valuetype> *node) {
+bool avltree<valuetype>::removeAndArrayDelete(avltreenode<valuetype> *node) {
 	avltreenode<valuetype> *detachednode=detach(node);
 	delete[] detachednode->getValue();
 	delete detachednode;
 	return true;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-uint64_t AVLTREE_CLASS::getLength() const {
+uint64_t avltree<valuetype>::getLength() const {
 	return length;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::getTop() {
+avltreenode<valuetype> *avltree<valuetype>::getTop() {
 	return top;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::getFirst() {
+avltreenode<valuetype> *avltree<valuetype>::getFirst() {
 	return first;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::getLast() {
+avltreenode<valuetype> *avltree<valuetype>::getLast() {
 	return last;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::getPrevious(
+avltreenode<valuetype> *avltree<valuetype>::getPrevious(
 					avltreenode<valuetype> *node) {
 	return (node)?node->getPrevious():NULL;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::getNext(
+avltreenode<valuetype> *avltree<valuetype>::getNext(
 					avltreenode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::find(valuetype value) {
+avltreenode<valuetype> *avltree<valuetype>::find(valuetype value) {
 	return find((avltreenode<valuetype> *)top,value);
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREE_CLASS::find(
+avltreenode<valuetype> *avltree<valuetype>::find(
 					avltreenode<valuetype> *startnode,
 					valuetype value) {
 
@@ -288,9 +281,9 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 // even if the app just calls clear().  This will fail for primitive types or
 // when the type has a private destructor.
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREE_CLASS::clear() {
+void avltree<valuetype>::clear() {
 
 	#ifdef DEBUG_AVLTREE
 	uint64_t	i=0;
@@ -298,7 +291,7 @@ void AVLTREE_CLASS::clear() {
 	#endif
 
 	// start at the top
-	AVLTREENODE_CLASS	*node=top;
+	avltreenode<valuetype>	*node=top;
 	while (node) {
 
 		// go right one, then go left as far as possible
@@ -310,7 +303,7 @@ void AVLTREE_CLASS::clear() {
 		}
 
 		// get the parent
-		AVLTREENODE_CLASS	*p=node->getParent();
+		avltreenode<valuetype>	*p=node->getParent();
 		if (p) {
 			if (p->getLeftChild()==node) {
 				p->setLeftChild(NULL);
@@ -346,9 +339,9 @@ void AVLTREE_CLASS::clear() {
 	length=0;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREE_CLASS::clearAndDelete() {
+void avltree<valuetype>::clearAndDelete() {
 
 	#ifdef DEBUG_AVLTREE
 	uint64_t	i=0;
@@ -356,7 +349,7 @@ void AVLTREE_CLASS::clearAndDelete() {
 	#endif
 
 	// start at the top
-	AVLTREENODE_CLASS	*node=top;
+	avltreenode<valuetype>	*node=top;
 	while (node) {
 
 		// go right one, then go left as far as possible
@@ -368,7 +361,7 @@ void AVLTREE_CLASS::clearAndDelete() {
 		}
 
 		// get the parent
-		AVLTREENODE_CLASS	*p=node->getParent();
+		avltreenode<valuetype>	*p=node->getParent();
 		if (p) {
 			if (p->getLeftChild()==node) {
 				p->setLeftChild(NULL);
@@ -400,9 +393,9 @@ void AVLTREE_CLASS::clearAndDelete() {
 	length=0;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREE_CLASS::clearAndArrayDelete() {
+void avltree<valuetype>::clearAndArrayDelete() {
 
 	#ifdef DEBUG_AVLTREE
 	uint64_t	i=0;
@@ -410,7 +403,7 @@ void AVLTREE_CLASS::clearAndArrayDelete() {
 	#endif
 
 	// start at the top
-	AVLTREENODE_CLASS	*node=top;
+	avltreenode<valuetype>	*node=top;
 	while (node) {
 
 		// go right one, then go left as far as possible
@@ -422,7 +415,7 @@ void AVLTREE_CLASS::clearAndArrayDelete() {
 		}
 
 		// get the parent
-		AVLTREENODE_CLASS	*p=node->getParent();
+		avltreenode<valuetype>	*p=node->getParent();
 		if (p) {
 			if (p->getLeftChild()==node) {
 				p->setLeftChild(NULL);
@@ -454,17 +447,18 @@ void AVLTREE_CLASS::clearAndArrayDelete() {
 	length=0;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREE_CLASS::print() const {
+void avltree<valuetype>::print() const {
 	if (top) {
 		top->print();
 	}
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS::avltreenode(valuetype value) : nodecollectionnode() {
+avltreenode<valuetype>::avltreenode(valuetype value) :
+				nodecollectionnode<valuetype>() {
 	this->value=value;
 	parent=NULL;
 	left=NULL;
@@ -473,56 +467,56 @@ AVLTREENODE_CLASS::avltreenode(valuetype value) : nodecollectionnode() {
 	rightheight=0;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS::~avltreenode() {
+avltreenode<valuetype>::~avltreenode() {
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::setValue(valuetype value) {
+void avltreenode<valuetype>::setValue(valuetype value) {
 	this->value=value;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-valuetype AVLTREENODE_CLASS::getValue() const {
+valuetype avltreenode<valuetype>::getValue() const {
 	return value;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS *AVLTREENODE_CLASS::getParent() {
+avltreenode<valuetype> *avltreenode<valuetype>::getParent() {
 	return parent;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS *AVLTREENODE_CLASS::getLeftChild() {
+avltreenode<valuetype> *avltreenode<valuetype>::getLeftChild() {
 	return left;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS *AVLTREENODE_CLASS::getRightChild() {
+avltreenode<valuetype> *avltreenode<valuetype>::getRightChild() {
 	return right;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-uint8_t AVLTREENODE_CLASS::getLeftHeight() {
+uint8_t avltreenode<valuetype>::getLeftHeight() {
 	return leftheight;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-uint8_t AVLTREENODE_CLASS::getRightHeight() {
+uint8_t avltreenode<valuetype>::getRightHeight() {
 	return rightheight;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
+avltreenode<valuetype> *avltreenode<valuetype>::getPrevious() {
 
 	// reverse in-order, depth-first traversal...
 
@@ -532,7 +526,7 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 		// contains the next lowest value...
 
 		// go left
-		AVLTREENODE_CLASS	*node=left;
+		avltreenode<valuetype>	*node=left;
 
 		// go as far right as possible
 		while (node->right) {
@@ -551,7 +545,7 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 		// If we're the left child of our parent, then we have to
 		// move up until we find an acestor that's the right child of
 		// its parent.  That node contains the next lowest value.
-		AVLTREENODE_CLASS	*node=parent;
+		avltreenode<valuetype>	*node=parent;
 		while (node) {
 			if (!node->parent) {
 				break;
@@ -565,9 +559,9 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 	return NULL;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
+avltreenode<valuetype> *avltreenode<valuetype>::getNext() {
 
 	// in-order, depth-first traversal...
 
@@ -577,7 +571,7 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 		// contains the next highest value...
 
 		// go right
-		AVLTREENODE_CLASS	*node=right;
+		avltreenode<valuetype>	*node=right;
 
 		// go as far left as possible
 		while (node->left) {
@@ -596,7 +590,7 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 		// If we're the right child of our parent, then we have to
 		// move up until we find an acestor that's the left child of
 		// its parent.  That node contains the next highest value.
-		AVLTREENODE_CLASS	*node=parent;
+		avltreenode<valuetype>	*node=parent;
 		while (node) {
 			if (!node->parent) {
 				break;
@@ -610,28 +604,29 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 	return NULL;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-int32_t AVLTREENODE_CLASS::compare(valuetype value) const {
+int32_t avltreenode<valuetype>::compare(valuetype value) const {
 	return node_compare(this->value,value);
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-int32_t AVLTREENODE_CLASS::compare(avltreenode<valuetype> *peer) const {
+int32_t avltreenode<valuetype>::compare(avltreenode<valuetype> *peer) const {
 	return node_compare(this->value,peer->value);
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::print() const {
+void avltreenode<valuetype>::print() const {
 	uint16_t	indentlevel=0;
 	print("top",&indentlevel);
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
+void avltreenode<valuetype>::print(const char *name,
+					uint16_t *indentlevel) const {
 	// print an xml-style representation of the node and its descendents
 	for (uint16_t i=0; i<*indentlevel; i++) {
 		stdoutput.printf(" ");
@@ -659,27 +654,27 @@ void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
 	}
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::setParent(AVLTREENODE_CLASS *node) {
+void avltreenode<valuetype>::setParent(avltreenode<valuetype> *node) {
 	parent=node;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::setLeftChild(AVLTREENODE_CLASS *node) {
+void avltreenode<valuetype>::setLeftChild(avltreenode<valuetype> *node) {
 	left=node;
 }
 
-AVLTREENODE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::setRightChild(AVLTREENODE_CLASS *node) {
+void avltreenode<valuetype>::setRightChild(avltreenode<valuetype> *node) {
 	right=node;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::insert(avltreenode<valuetype> *node,
+void avltreenode<valuetype>::insert(avltreenode<valuetype> *node,
 				avltreenode<valuetype> **treetop) {
 
 	// degenerate case
@@ -742,9 +737,9 @@ void AVLTREENODE_CLASS::insert(avltreenode<valuetype> *node,
 	#endif
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::detach(avltreenode<valuetype> **treetop) {
+void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("detach ");
@@ -938,9 +933,9 @@ void AVLTREENODE_CLASS::detach(avltreenode<valuetype> **treetop) {
 	#endif
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
+void avltreenode<valuetype>::adjustParentHeights(avltreenode<valuetype> *node) {
 
 	// move up the tree, starting with the parent of "node"...
 	while (node->parent) {
@@ -973,9 +968,9 @@ void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 	}
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-void AVLTREENODE_CLASS::balance(avltreenode<valuetype> **treetop) {
+void avltreenode<valuetype>::balance(avltreenode<valuetype> **treetop) {
 
 	// AVL balance...
 
@@ -1059,9 +1054,9 @@ void AVLTREENODE_CLASS::balance(avltreenode<valuetype> **treetop) {
 	#endif
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate(
+avltreenode<valuetype> *avltreenode<valuetype>::leftRotate(
 					avltreenode<valuetype> **treetop) {
 
 	/* one of these: (eg: insert order a,b,c)
@@ -1124,9 +1119,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate(
 	return a;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate(
+avltreenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
 					avltreenode<valuetype> **treetop) {
 
 	/* one of these: (eg: insert order a,c,b)
@@ -1195,9 +1190,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate(
 	return c;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate(
+avltreenode<valuetype> *avltreenode<valuetype>::rightRotate(
 					avltreenode<valuetype> **treetop) {
 
 	/* one of these: (insert order c,b,a)
@@ -1260,9 +1255,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate(
 	return c;
 }
 
-AVLTREE_TEMPLATE
+template <class valuetype>
 inline
-avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate(
+avltreenode<valuetype> *avltreenode<valuetype>::leftRightRotate(
 					avltreenode<valuetype> **treetop) {
 
 	/* one of these: (insert order c,a,b)

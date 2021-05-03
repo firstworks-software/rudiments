@@ -16,28 +16,28 @@
  *  an array.
  *
  *  Ie. these are legal:
- * 	dynamicarray< int > d;
- * 	dynamicarray< myclass > d;
- * 	dynamicarray< myclass * > d;
+ * 	dynamicarray<int> d;
+ * 	dynamicarray<myclass> d;
+ * 	dynamicarray<myclass *> d;
  *
  *  These are not legal and whether they work or even compile would be
  *  platform-dependent:
- * 	dynamicarray< int[100] > d;
- * 	dynamicarray< myclass[100] > d;
- * 	dynamicarray< myclass *[100] > d;
+ * 	dynamicarray<int[100]> d;
+ * 	dynamicarray<myclass[100]> d;
+ * 	dynamicarray<myclass *[100]> d;
  *
  *  However, it is possible to create an array of arrays by nesting
  *  dynamicarrays and/or staticarrays, like:
  *
- * 	dynamicarray< dynamicarray< int > > d;
- * 	dynamicarray< dynamicarray< myclass > > d;
- * 	dynamicarray< dynamicarray< myclass * > > d;
- * 	dynamicarray< staticarray< int > > d;
- * 	dynamicarray< staticarray< myclass > > d;
- * 	dynamicarray< staticarray< myclass * > > d;
+ * 	dynamicarray<dynamicarray<int> > d;
+ * 	dynamicarray<dynamicarray<myclass> > d;
+ * 	dynamicarray<dynamicarray<myclass *> > d;
+ * 	dynamicarray<staticarray<int> > d;
+ * 	dynamicarray<staticarray<myclass> > d;
+ * 	dynamicarray<staticarray<myclass *> > d;
  */
-template < class valuetype >
-class dynamicarray : public arraycollection {
+template <class valuetype>
+class dynamicarray : public arraycollection<valuetype> {
 	public:
 		/** Creates an empty instance of the dynamicarray class. */
 		dynamicarray();

@@ -8,7 +8,7 @@
 
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class valuetype>
-class linkedlistnode : public nodecollectionnode {
+class linkedlistnode : public nodecollectionnode<valuetype> {
 	public:
 		/** Creates an instance of the linkedlistnode class that
 		 *  stores value "value". */
@@ -56,8 +56,8 @@ class linkedlistnode : public nodecollectionnode {
  * 
  *  Each linkedlist is composed of a series of linkedlistnodes.  Each
  *  linkedlistnode contains a value. */
-template < class valuetype >
-class linkedlist : public listcollection {
+template <class valuetype>
+class linkedlist : public listcollection<valuetype> {
 	public:
 		/** Creates an empty instance of the linkedlist class. */
 		linkedlist();

@@ -5,7 +5,7 @@
 
 template< class valuetype >
 inline
-dynamicarray<valuetype>::dynamicarray() : arraycollection() {
+dynamicarray<valuetype>::dynamicarray() : arraycollection<valuetype>() {
 	init(128,32);
 }
 
@@ -13,7 +13,7 @@ template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray(uint64_t initiallength,
 					uint64_t incrementlength) :
-							arraycollection() {
+						arraycollection<valuetype>() {
 	init((initiallength)?initiallength:128,
 				(incrementlength)?incrementlength:32);
 }
@@ -21,7 +21,7 @@ dynamicarray<valuetype>::dynamicarray(uint64_t initiallength,
 template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) :
-							arraycollection(v) {
+						arraycollection<valuetype>(v) {
 	init(v.initial,v.extlength);
 	dynamicarrayClone(v);
 }

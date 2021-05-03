@@ -13,28 +13,28 @@
  *  an array.
  *
  *  Ie. these are legal:
- * 	staticarray< int, 10 > d;
- * 	staticarray< myclass, 10 > d;
- * 	staticarray< myclass *, 10 > d;
+ * 	staticarray<int,10> d;
+ * 	staticarray<myclass,10> d;
+ * 	staticarray<myclass *,10> d;
  *
  *  These are not legal and whether they work or even compile would be
  *  platform-dependent:
- * 	staticarray< int[100], 10 > d;
- * 	staticarray< myclass[100], 10 > d;
- * 	staticarray< myclass *[100], 10 > d;
+ * 	staticarray<int[100],10> d;
+ * 	staticarray<myclass[100],10> d;
+ * 	staticarray<myclass *[100],10> d;
  *
  *  However, it is possible to create an array of arrays by nesting
  *  staticarrays or dynamicarrays, like:
  *
- * 	staticarray< staticarray< int >, 10 > d;
- * 	staticarray< staticarray< myclass >, 10 > d;
- * 	staticarray< staticarray< myclass * >, 10 > d;
- * 	staticarray< dynamicarray< int >, 10 > d;
- * 	staticarray< dynamicarray< myclass >, 10 > d;
- * 	staticarray< dynamicarray< myclass * >, 10 > d;
+ * 	staticarray<staticarray<in >,10> d;
+ * 	staticarray<staticarray<myclass>,10> d;
+ * 	staticarray<staticarray<myclass *>,10> d;
+ * 	staticarray<dynamicarray<int>,10> d;
+ * 	staticarray<dynamicarray<myclass>,10> d;
+ * 	staticarray<dynamicarray<myclass *>,10> d;
  */
-template < class valuetype, uint64_t length >
-class staticarray : public arraycollection {
+template <class valuetype, uint64_t length>
+class staticarray : public arraycollection<valuetype> {
 	public:
 		/** Creates an empty instance of the staticarray class with
 		 *  "length" elements.  "length" is given in the template

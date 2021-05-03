@@ -59,7 +59,7 @@ class RUDIMENTS_DLLSPEC templateengine : public object {
 		bool	parse(output *out,
 				const char *filename,
 				fileparser *fileparsers,
-				dictionary< const char *, const char * > *vars);
+				dictionary<const char *, const char *> *vars);
 
 		/** Parses the file at "filename" and writes the out to
 		 *  "out".  For each variable encountered, values from
@@ -78,7 +78,7 @@ class RUDIMENTS_DLLSPEC templateengine : public object {
 		bool	parse(output *out,
 				const char *filename,
 				blockparser *blockparsers,
-				dictionary< const char *, const char * > *vars);
+				dictionary<const char *, const char *> *vars);
 
 		/** Parses "length" characters of "block" and writes the out to
 		 *  "out".  For each variable encountered, values from
@@ -98,7 +98,7 @@ class RUDIMENTS_DLLSPEC templateengine : public object {
 				const char *block,
 				uint64_t blocklength,
 				blockparser *blockparsers,
-				dictionary< const char *, const char * > *vars);
+				dictionary<const char *, const char *> *vars);
 
 		/** Sets the delimiter that the parse() methods look for at
 		 *  the beginning of a variable to "delimiter".

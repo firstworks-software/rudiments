@@ -8,6 +8,7 @@
 
 /** The collection class is the parent class for all rudiments scalar
  *  collections. */
+template <class valuetype>
 class RUDIMENTS_DLLSPEC scalarcollection : public collection {
 	public:
 

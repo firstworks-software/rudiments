@@ -78,7 +78,7 @@ class RUDIMENTS_DLLSPEC compiler : public object {
 		void	clearModulePaths();
 
 		/** Returns the list of loaded module paths. */
-		linkedlist< char * >	*getModulePaths();
+		linkedlist<char *>	*getModulePaths();
 
 
 		/** Appends preprocessor "module" to the list of
@@ -111,7 +111,7 @@ class RUDIMENTS_DLLSPEC compiler : public object {
 		void	clearPreProcessors();
 
 		/** Returns the list of loaded preprocessor modules. */
-		linkedlist< compilermodule * >	*getPreProcessors();
+		linkedlist<compilermodule *>	*getPreProcessors();
 
 
 
@@ -145,7 +145,7 @@ class RUDIMENTS_DLLSPEC compiler : public object {
 		void	clearProcessors();
 
 		/** Returns the list of loaded processor modules. */
-		linkedlist< compilermodule * >	*getProcessors();
+		linkedlist<compilermodule *>	*getProcessors();
 
 
 
@@ -179,7 +179,7 @@ class RUDIMENTS_DLLSPEC compiler : public object {
 		void	clearPostProcessors();
 
 		/** Returns the list of loaded postprocessor modules. */
-		linkedlist< compilermodule * >	*getPostProcessors();
+		linkedlist<compilermodule *>	*getPostProcessors();
 
 
 

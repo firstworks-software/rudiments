@@ -8,6 +8,7 @@
 
 /** The treecollection class is the parent class for all rudiments tree
  *  collections. */
+template <class valuetype>
 class RUDIMENTS_DLLSPEC treecollection : public nodecollection {
 	public:
 

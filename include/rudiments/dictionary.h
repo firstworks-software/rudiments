@@ -60,7 +60,7 @@ class dictionarynode : public object {
  *  though this is potentially inefficient though, and may change in a future
  *  version. */
 template <class keytype, class valuetype>
-class dictionary : public dictionarycollection {
+class dictionary : public dictionarycollection<keytype,valuetype> {
 	public:
 		/** Creates an empty instance of the dictionary class. */
 		dictionary();
@@ -136,7 +136,7 @@ class dictionary : public dictionarycollection {
 		 *  corresponding value from "dict".
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value". */
-		void	setValues(dictionary< keytype, valuetype > *dict);
+		void	setValues(dictionary<keytype, valuetype> *dict);
 
 		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
@@ -276,10 +276,10 @@ class dictionary : public dictionarycollection {
 		linkedlist<keytype>	*getKeys();
 
 		/** Returns the tree used internally. */
-		avltree< dictionarynode<keytype,valuetype> *> *getTree();
+		avltree<dictionarynode<keytype,valuetype> *> *getTree();
 
 		/** Returns the list used internally. */
-		linkedlist< dictionarynode<keytype,valuetype> *> *getList();
+		linkedlist<dictionarynode<keytype,valuetype> *> *getList();
 
 		/** Deletes all dictionarynodes currently in the dictionary.
 		 *  Note however, that the key and value stored in each
@@ -334,10 +334,10 @@ class dictionary : public dictionarycollection {
 
 
 // ideally I'd use typdefs for these but older compilers can't handle them
-#define namevaluepairsnode	dictionarynode< char *, char * >
-#define namevaluepairs		dictionary< char *, char * >
-#define constnamevaluepairsnode	dictionarynode< const char *, const char * >
-#define constnamevaluepairs	dictionary< const char *, const char * >
+#define namevaluepairsnode	dictionarynode<char *,char *>
+#define namevaluepairs		dictionary<char *,char *>
+#define constnamevaluepairsnode	dictionarynode<const char *,const char *>
+#define constnamevaluepairs	dictionary<const char *,const char *>
 
 #include <rudiments/private/dictionaryinlines.h>
 

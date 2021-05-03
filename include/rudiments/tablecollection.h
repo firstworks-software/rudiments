@@ -8,6 +8,7 @@
 
 /** The tablecollection class is the parent class for all rudiments table
  *  collections. */
+template <class valuetype>
 class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 	public:
 

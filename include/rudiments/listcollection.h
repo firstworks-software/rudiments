@@ -8,6 +8,7 @@
 
 /** The listcollection class is the parent class for all rudiments list
  *  collections. */
+template <class valuetype>
 class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
 	public:
 
