@@ -530,7 +530,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// send the rest of the headers...
 	linkedlist<char *>	*keys=headerdict.getKeys();
-	for (linkedlistnode<char *> *node=keys->getFirst();
+	for (listnode<char *> *node=keys->getFirst();
 					node; node=node->getNext()) {
 		pvt->_request->append(node->getValue());
 		pvt->_request->append(": ");

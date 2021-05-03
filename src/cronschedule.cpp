@@ -64,27 +64,27 @@ void cronschedule::init(const char *years,
 }
 
 void cronschedule::clear() {
-	for (linkedlistnode< cronscheduleperiod * > *n=
+	for (listnode< cronscheduleperiod * > *n=
 						pvt->_years.getFirst();
 						n; n=n->getNext()) {
 		delete n->getValue();
 	}
-	for (linkedlistnode< cronscheduleperiod * > *n=
+	for (listnode< cronscheduleperiod * > *n=
 						pvt->_months.getFirst();
 						n; n=n->getNext()) {
 		delete n->getValue();
 	}
-	for (linkedlistnode< cronscheduleperiod * > *n=
+	for (listnode< cronscheduleperiod * > *n=
 						pvt->_daysofmonth.getFirst();
 						n; n=n->getNext()) {
 		delete n->getValue();
 	}
-	for (linkedlistnode< cronscheduleperiod * > *n=
+	for (listnode< cronscheduleperiod * > *n=
 						pvt->_daysofweek.getFirst();
 						n; n=n->getNext()) {
 		delete n->getValue();
 	}
-	for (linkedlistnode< cronscheduledaypart * > *n=
+	for (listnode< cronscheduledaypart * > *n=
 						pvt->_dayparts.getFirst();
 						n; n=n->getNext()) {
 		delete n->getValue();
@@ -257,7 +257,7 @@ bool cronschedule::inPeriods(
 		}
 	#endif
 	
-	for (linkedlistnode< cronscheduleperiod * > *pn=periods->getFirst();
+	for (listnode< cronscheduleperiod * > *pn=periods->getFirst();
 							pn; pn=pn->getNext()) {
 
 		cronscheduleperiod	*p=pn->getValue();
@@ -279,7 +279,7 @@ bool cronschedule::inDayParts(int32_t hour, int32_t minute) {
 
 	debugPrintf("dayparts...\n");
 
-	for (linkedlistnode< cronscheduledaypart * >
+	for (listnode< cronscheduledaypart * >
 				*dpn=pvt->_dayparts.getFirst();
 				dpn; dpn=dpn->getNext()) {
 

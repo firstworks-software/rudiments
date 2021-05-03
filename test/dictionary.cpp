@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
 	test("getNode() 5,NULL",!strstrdict.getNode("5"));
 
 	// keys
-	linkedlistnode< const char * > *strkey=strstrdict.getKeys()->getFirst();
+	listnode< const char * > *strkey=strstrdict.getKeys()->getFirst();
 	test("before start key",!strkey->getPrevious());
 	test("key 1",!charstring::compare(strkey->getValue(),"1"));
 	strkey=strkey->getNext();
@@ -289,7 +289,7 @@ int main(int argc, const char **argv) {
 	test("getNode() 5,NULL",!intstrdict.getNode(5));
 
 	// keys
-	linkedlistnode< int64_t > *intkey=intstrdict.getKeys()->getFirst();
+	listnode< int64_t > *intkey=intstrdict.getKeys()->getFirst();
 	test("before start key",!intkey->getPrevious());
 	test("key 1",intkey->getValue()==1);
 	intkey=intkey->getNext();

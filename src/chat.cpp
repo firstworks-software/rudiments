@@ -162,7 +162,7 @@ void chat::appendAbortString(const char *string) {
 }
 
 void chat::clearAbortStrings() {
-	for (singlylinkedlistnode< char * > *sln=pvt->_aborts.getFirst();
+	for (listnode< char * > *sln=pvt->_aborts.getFirst();
 						sln; sln=sln->getNext()) {
 		char	*abortstring=sln->getValue();
 		delete[] abortstring;
@@ -260,8 +260,7 @@ int32_t chat::expect(const char *string, char **abort) {
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
 		int32_t	index=2;
-		for (singlylinkedlistnode< char * >
-					*sln=pvt->_aborts.getFirst();
+		for (listnode< char * > *sln=pvt->_aborts.getFirst();
 						sln; sln=sln->getNext()) {
 
 			char	*abortstring=sln->getValue();
@@ -367,7 +366,7 @@ int32_t chat::substituteVariables(const char **ch,
 	const char	*str=*ch;
 	if (charstring::compare(str,"$(") && *(str+2)) {
 
-		for (linkedlistnode<constnamevaluepairsnode *>
+		for (listnode<constnamevaluepairsnode *>
 				*nln=variables->getList()->getFirst();
 				nln; nln=nln->getNext()) {
 

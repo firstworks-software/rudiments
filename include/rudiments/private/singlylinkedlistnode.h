@@ -1,8 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-		void	setNext(singlylinkedlistnode<valuetype> *next);
+		void	setNext(listnode<valuetype> *next);
+		void	setPrevious(listnode<valuetype> *previous);
 
 	protected:
-		valuetype			value;
-		singlylinkedlistnode<valuetype>	*next;
+		valuetype		value;
+		listnode<valuetype>	*next;

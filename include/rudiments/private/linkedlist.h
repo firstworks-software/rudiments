@@ -2,10 +2,10 @@
 // See the COPYING file for more information
 
 	protected:
-		void	move(linkedlistnode<valuetype> *node,
-				linkedlistnode<valuetype> *nodetomove,
+		void	move(listnode<valuetype> *node,
+				listnode<valuetype> *nodetomove,
 				bool before);
 
-		linkedlistnode<valuetype>	*first;
-		linkedlistnode<valuetype>	*last;
-		uint64_t			length;
+		listnode<valuetype>	*first;
+		listnode<valuetype>	*last;
+		uint64_t		length;

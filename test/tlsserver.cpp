@@ -149,7 +149,7 @@ int main(int argc, const char **argv) {
 					pcert->getPublicKeyBitSize());
 				stdoutput.printf("  common name: %s\n",
 					pcert->getCommonName());
-				for (linkedlistnode< char * > *node=
+				for (listnode< char * > *node=
 					pcert->getSubjectAlternateNames()->
 					getFirst();
 					node; node=node->getNext()) {

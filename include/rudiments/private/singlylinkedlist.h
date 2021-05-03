@@ -2,6 +2,6 @@
 // See the COPYING file for more information
 
 	protected:
-		singlylinkedlistnode<valuetype>	*first;
-		singlylinkedlistnode<valuetype>	*last;
-		uint64_t			length;
+		listnode<valuetype>	*first;
+		listnode<valuetype>	*last;
+		uint64_t		length;

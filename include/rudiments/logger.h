@@ -82,8 +82,8 @@ class RUDIMENTS_DLLSPEC stderrdestination : public logdestination {
 };
 
 
-typedef linkedlistnode<logdestination *>	loggerlistnode;
-typedef linkedlist<logdestination *>		loggerlist;
+typedef listnode<logdestination *>	loggerlistnode;
+typedef linkedlist<logdestination *>	loggerlist;
 
 /** The logger class and associated logdestination classes provide methods for
  *  logging data from an application.  The following destinations are supported:

@@ -26,8 +26,7 @@ void singlylinkedlist<valuetype>::prepend(valuetype value) {
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::prepend(
-				singlylinkedlistnode<valuetype> *node) {
+void singlylinkedlist<valuetype>::prepend(listnode<valuetype> *node) {
 	if (!node) {
 		return;
 	} else if (first) {
@@ -48,8 +47,7 @@ void singlylinkedlist<valuetype>::append(valuetype value) {
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::append(
-				singlylinkedlistnode<valuetype> *node) {
+void singlylinkedlist<valuetype>::append(listnode<valuetype> *node) {
 	if (!node) {
 		return;
 	} else if (last) {
@@ -65,16 +63,16 @@ void singlylinkedlist<valuetype>::append(
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::insertAfter(
-				singlylinkedlistnode<valuetype> *node,
-				valuetype value) {
+					listnode<valuetype> *node,
+					valuetype value) {
 	insertAfter(node,new singlylinkedlistnode<valuetype>(value));
 }
 
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::insertAfter(
-				singlylinkedlistnode<valuetype> *node,
-				singlylinkedlistnode<valuetype> *newnode) {
+					listnode<valuetype> *node,
+					listnode<valuetype> *newnode) {
 	if (!node) {
 		return;
 	} else if (node==last) {
@@ -89,8 +87,8 @@ void singlylinkedlist<valuetype>::insertAfter(
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::moveAfter(
-				singlylinkedlistnode<valuetype> *node,
-				singlylinkedlistnode<valuetype> *nodetomove) {
+					listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove) {
 
 	if (!node || !nodetomove || node==nodetomove) {
 		return;
@@ -99,14 +97,14 @@ void singlylinkedlist<valuetype>::moveAfter(
 	if (nodetomove==first) {
 		first=nodetomove->getNext();
 	} else if (nodetomove==last) {
-		singlylinkedlistnode<valuetype> *secondtolast=first;
+		listnode<valuetype> *secondtolast=first;
 		while (secondtolast->getNext()!=last) {
 			secondtolast=secondtolast->getNext();
 		}
 		last=secondtolast;
 		secondtolast->setNext(NULL);
 	} else {
-		singlylinkedlistnode<valuetype> *previous=first;
+		listnode<valuetype> *previous=first;
 		while (previous->getNext()!=nodetomove) {
 			previous=previous->getNext();
 		}
@@ -122,8 +120,7 @@ void singlylinkedlist<valuetype>::moveAfter(
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::detach(
-				singlylinkedlistnode<valuetype> *node) {
+void singlylinkedlist<valuetype>::detach(listnode<valuetype> *node) {
 
 	if (node==first && node==last) {
 		first=NULL;
@@ -131,14 +128,14 @@ void singlylinkedlist<valuetype>::detach(
 	} else if (node==first) {
 		first=node->getNext();
 	} else if (node==last) {
-		singlylinkedlistnode<valuetype> *secondtolast=first;
+		listnode<valuetype> *secondtolast=first;
 		while (secondtolast->getNext()!=last) {
 			secondtolast=secondtolast->getNext();
 		}
 		last=secondtolast;
 		secondtolast->setNext(NULL);
 	} else {
-		singlylinkedlistnode<valuetype> *previous=first;
+		listnode<valuetype> *previous=first;
 		while (previous->getNext()!=node) {
 			previous=previous->getNext();
 		}
@@ -151,7 +148,7 @@ void singlylinkedlist<valuetype>::detach(
 template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::remove(valuetype value) {
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	if (!current->compare(value)) {
 		if (first==last) {
 			first=NULL;
@@ -160,7 +157,7 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 			first=first->getNext();
 		}
 	} else {
-		singlylinkedlistnode<valuetype> *prev=first;
+		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
 			if (!current->compare(value)) {
@@ -185,7 +182,7 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::removeAndDelete(valuetype value) {
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	if (!current->compare(value)) {
 		if (first==last) {
 			first=NULL;
@@ -194,7 +191,7 @@ bool singlylinkedlist<valuetype>::removeAndDelete(valuetype value) {
 			first=first->getNext();
 		}
 	} else {
-		singlylinkedlistnode<valuetype> *prev=first;
+		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
 			if (!current->compare(value)) {
@@ -220,7 +217,7 @@ bool singlylinkedlist<valuetype>::removeAndDelete(valuetype value) {
 template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	if (!current->compare(value)) {
 		if (first==last) {
 			first=NULL;
@@ -229,7 +226,7 @@ bool singlylinkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
 			first=first->getNext();
 		}
 	} else {
-		singlylinkedlistnode<valuetype> *prev=first;
+		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
 			if (!current->compare(value)) {
@@ -259,7 +256,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 		return true;
 	}
 	bool	retval=false;
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	while (!current->compare(value)) {
 		retval=true;
 		if (first==last) {
@@ -275,13 +272,12 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			current=first;
 		}
 	}
-	singlylinkedlistnode<valuetype> *prev=first;
+	listnode<valuetype> *prev=first;
 	current=current->getNext();
 	while (current) {
 		if (!current->compare(value)) {
 			retval=true;
-			singlylinkedlistnode<valuetype> *temp=
-							current->getNext();
+			listnode<valuetype> *temp=current->getNext();
 			prev->setNext(temp);
 			if (last==current) {
 				last=prev;
@@ -304,7 +300,7 @@ bool singlylinkedlist<valuetype>::removeAllAndDelete(valuetype value) {
 		return true;
 	}
 	bool	retval=false;
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	while (!current->compare(value)) {
 		retval=true;
 		if (first==last) {
@@ -322,13 +318,12 @@ bool singlylinkedlist<valuetype>::removeAllAndDelete(valuetype value) {
 			current=first;
 		}
 	}
-	singlylinkedlistnode<valuetype> *prev=first;
+	listnode<valuetype> *prev=first;
 	current=current->getNext();
 	while (current) {
 		if (!current->compare(value)) {
 			retval=true;
-			singlylinkedlistnode<valuetype> *temp=
-							current->getNext();
+			listnode<valuetype> *temp=current->getNext();
 			prev->setNext(temp);
 			if (last==current) {
 				last=prev;
@@ -352,7 +347,7 @@ bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 		return true;
 	}
 	bool	retval=false;
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	while (!current->compare(value)) {
 		retval=true;
 		if (first==last) {
@@ -370,13 +365,12 @@ bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 			current=first;
 		}
 	}
-	singlylinkedlistnode<valuetype> *prev=first;
+	listnode<valuetype> *prev=first;
 	current=current->getNext();
 	while (current) {
 		if (!current->compare(value)) {
 			retval=true;
-			singlylinkedlistnode<valuetype> *temp=
-							current->getNext();
+			listnode<valuetype> *temp=current->getNext();
 			prev->setNext(temp);
 			if (last==current) {
 				last=prev;
@@ -395,12 +389,11 @@ bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 
 template <class valuetype>
 inline
-bool singlylinkedlist<valuetype>::remove(
-				singlylinkedlistnode<valuetype> *node) {
+bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	if (current==node) {
 		if (first==last) {
 			first=NULL;
@@ -409,7 +402,7 @@ bool singlylinkedlist<valuetype>::remove(
 			first=first->getNext();
 		}
 	} else {
-		singlylinkedlistnode<valuetype> *prev=first;
+		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
 			if (current==node) {
@@ -433,12 +426,11 @@ bool singlylinkedlist<valuetype>::remove(
 
 template <class valuetype>
 inline
-bool singlylinkedlist<valuetype>::removeAndDelete(
-				singlylinkedlistnode<valuetype> *node) {
+bool singlylinkedlist<valuetype>::removeAndDelete(listnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	if (current==node) {
 		if (first==last) {
 			first=NULL;
@@ -447,7 +439,7 @@ bool singlylinkedlist<valuetype>::removeAndDelete(
 			first=first->getNext();
 		}
 	} else {
-		singlylinkedlistnode<valuetype> *prev=first;
+		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
 			if (current==node) {
@@ -473,11 +465,11 @@ bool singlylinkedlist<valuetype>::removeAndDelete(
 template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::removeAndArrayDelete(
-				singlylinkedlistnode<valuetype> *node) {
+					listnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
-	singlylinkedlistnode<valuetype> *current=first;
+	listnode<valuetype> *current=first;
 	if (current==node) {
 		if (first==last) {
 			first=NULL;
@@ -486,7 +478,7 @@ bool singlylinkedlist<valuetype>::removeAndArrayDelete(
 			first=first->getNext();
 		}
 	} else {
-		singlylinkedlistnode<valuetype> *prev=first;
+		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
 			if (current==node) {
@@ -517,36 +509,35 @@ uint64_t singlylinkedlist<valuetype>::getLength() const {
 
 template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::getFirst() {
+listnode<valuetype> *singlylinkedlist<valuetype>::getFirst() {
 	return first;
 }
 
 template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::getLast() {
+listnode<valuetype> *singlylinkedlist<valuetype>::getLast() {
 	return last;
 }
 
 template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::getNext(
-					singlylinkedlistnode<valuetype> *node) {
+listnode<valuetype> *singlylinkedlist<valuetype>::getNext(
+					listnode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::
-							find(valuetype value) {
-	return find((singlylinkedlistnode<valuetype> *)first,value);
+listnode<valuetype> *singlylinkedlist<valuetype>::find(valuetype value) {
+	return find(first,value);
 }
 
 template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *singlylinkedlist<valuetype>::find(
-				singlylinkedlistnode<valuetype> *startnode,
+listnode<valuetype> *singlylinkedlist<valuetype>::find(
+				listnode<valuetype> *startnode,
 				valuetype value) {
-	for (singlylinkedlistnode<valuetype> *current=startnode;
+	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
 		if (!current->compare(value)) {
 			return current;
@@ -567,16 +558,16 @@ void singlylinkedlist<valuetype>::insertionSort() {
 	}
 
 	// first and last pointers for the new list
-	singlylinkedlistnode<valuetype>	*newfirst=NULL;
-	singlylinkedlistnode<valuetype>	*newlast=NULL;
+	listnode<valuetype>	*newfirst=NULL;
+	listnode<valuetype>	*newlast=NULL;
 
 	// pointers for iterating through the new list
-	singlylinkedlistnode<valuetype> *current=NULL;
-	singlylinkedlistnode<valuetype> *previous=NULL;
+	listnode<valuetype> *current=NULL;
+	listnode<valuetype> *previous=NULL;
 
 	// iterate through the current list, building a new one as we go
-	singlylinkedlistnode<valuetype>	*node=first;
-	singlylinkedlistnode<valuetype>	*next=NULL;
+	listnode<valuetype>	*node=first;
+	listnode<valuetype>	*next=NULL;
 	while (node) {
 
 		// get the next node so we can move on later
@@ -648,11 +639,10 @@ void singlylinkedlist<valuetype>::heapSort() {
 	//	parentindex = floor((childindex-1)/2)
 	//	leftchildindex = parent*2+1
 	//	rightchildindex = parent*2+2
-	singlylinkedlistnode<valuetype>	**heap=
-				new singlylinkedlistnode<valuetype> *[length];
-	singlylinkedlistnode<valuetype>	*temp=NULL;
-	uint64_t			heapend=0;
-	for (singlylinkedlistnode<valuetype> *node=first;
+	listnode<valuetype>	**heap=new listnode<valuetype> *[length];
+	listnode<valuetype>	*temp=NULL;
+	uint64_t		heapend=0;
+	for (listnode<valuetype> *node=first;
 					node; node=node->getNext()) {
 
 		// insert node into heap
@@ -692,8 +682,8 @@ void singlylinkedlist<valuetype>::heapSort() {
 	// bit...
 
 	// first and last pointers for the new list
-	singlylinkedlistnode<valuetype>	*newfirst=NULL;
-	singlylinkedlistnode<valuetype>	*newlast=NULL;
+	listnode<valuetype>	*newfirst=NULL;
+	listnode<valuetype>	*newlast=NULL;
 
 	// extract values from the heap...
 	for (;;) {
@@ -701,7 +691,7 @@ void singlylinkedlist<valuetype>::heapSort() {
 		// pull off the highest value (which is always at the root
 		// of the tree, index 0 in the array) and prepend it to the
 		// new array
-		singlylinkedlistnode<valuetype>	*node=heap[0];
+		listnode<valuetype>	*node=heap[0];
 		if (!newfirst) {
 			node->setNext(NULL);
 			newfirst=node;
@@ -780,8 +770,8 @@ void singlylinkedlist<valuetype>::heapSort() {
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::clear() {
-	singlylinkedlistnode<valuetype>	*next;
-	singlylinkedlistnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
 		delete current;
@@ -795,8 +785,8 @@ void singlylinkedlist<valuetype>::clear() {
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::clearAndDelete() {
-	singlylinkedlistnode<valuetype>	*next;
-	singlylinkedlistnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
 		delete current->getValue();
@@ -811,8 +801,8 @@ void singlylinkedlist<valuetype>::clearAndDelete() {
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::clearAndArrayDelete() {
-	singlylinkedlistnode<valuetype>	*next;
-	singlylinkedlistnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
 		delete[] current->getValue();
@@ -834,7 +824,7 @@ template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::print(uint64_t count) const {
 	uint64_t	i=0;
-	for (singlylinkedlistnode<valuetype> *current=first;
+	for (listnode<valuetype> *current=first;
 			current && i<count; current=current->getNext()) {
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
 			stdoutput.printf("index %lld: ",(long long)i);
@@ -850,7 +840,7 @@ void singlylinkedlist<valuetype>::print(uint64_t count) const {
 template <class valuetype>
 inline
 singlylinkedlistnode<valuetype>::singlylinkedlistnode(valuetype value) :
-					nodecollectionnode<valuetype>() {
+							listnode<valuetype>() {
 	this->value=value;
 	next=NULL;
 }
@@ -874,7 +864,13 @@ valuetype singlylinkedlistnode<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-singlylinkedlistnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() {
+listnode<valuetype> *singlylinkedlistnode<valuetype>::getPrevious() {
+	return next;
+}
+
+template <class valuetype>
+inline
+listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() {
 	return next;
 }
 
@@ -887,8 +883,8 @@ int32_t singlylinkedlistnode<valuetype>::compare(valuetype value) const {
 template <class valuetype>
 inline
 int32_t singlylinkedlistnode<valuetype>::compare(
-				singlylinkedlistnode<valuetype> *peer) const {
-	return node_compare(this->value,peer->value);
+					listnode<valuetype> *peer) const {
+	return node_compare(this->value,peer->getValue());
 }
 
 template <class valuetype>
@@ -899,7 +895,11 @@ void singlylinkedlistnode<valuetype>::print() const {
 
 template <class valuetype>
 inline
-void singlylinkedlistnode<valuetype>::setNext(
-				singlylinkedlistnode<valuetype> *next) {
+void singlylinkedlistnode<valuetype>::setNext(listnode<valuetype> *next) {
 	this->next=next;
+}
+
+template <class valuetype>
+inline
+void singlylinkedlistnode<valuetype>::setPrevious(listnode<valuetype> *next) {
 }

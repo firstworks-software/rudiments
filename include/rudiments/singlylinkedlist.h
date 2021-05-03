@@ -9,7 +9,7 @@
 /** The singlylinkedlistnode class stores the values that compose a
  *  singlylinkedlist. */
 template <class valuetype>
-class singlylinkedlistnode : public nodecollectionnode<valuetype> {
+class singlylinkedlistnode : public listnode<valuetype> {
 	public:
 		/** Creates an instance of the singlylinkedlistnode class that
 		 *  stores value "value". */
@@ -35,11 +35,14 @@ class singlylinkedlistnode : public nodecollectionnode<valuetype> {
 		 *  on whether the value stored in the node is respectively
 		 *  less than, equal to or greater than the value stored in
 		 *  "peer". */
-		int32_t	compare(singlylinkedlistnode<valuetype> *peer) const;
+		int32_t	compare(listnode<valuetype> *peer) const;
+
+		/** Always returns NULL. */
+		listnode<valuetype>	*getPrevious();
 
 		/** Returns the next node in the singlylinkedlist or NULL
 		 * if this node is the last node in the list. */
-		singlylinkedlistnode<valuetype>	*getNext();
+		listnode<valuetype>	*getNext();
 
 		/** Prints the value stored in the node. */
 		void	print() const;
@@ -78,7 +81,7 @@ class singlylinkedlist : public listcollection<valuetype> {
 
 		/** Prepends already created singlylinkedlistnode "node" to the
 		 *  singlylinkedlist. */
-		void	prepend(singlylinkedlistnode<valuetype> *node);
+		void	prepend(listnode<valuetype> *node);
 
 		/** Creates a new singlylinkedlistnode containing "value" and
 		 *  appends it to the singlylinkedlist. */
@@ -86,17 +89,16 @@ class singlylinkedlist : public listcollection<valuetype> {
 
 		/** Appends already created singlylinkedlistnode "node" to the
 		 *  singlylinkedlist. */
-		void	append(singlylinkedlistnode<valuetype> *node);
+		void	append(listnode<valuetype> *node);
 
 		/** Creates a new singlylinkedlistnode containing "value" and
 		 *  inserts it into the singlylinkedlist after "node". */
-		void	insertAfter(singlylinkedlistnode<valuetype> *node,
-							valuetype value);
+		void	insertAfter(listnode<valuetype> *node, valuetype value);
 
 		/** Inserts already created singlylinkedlistnode "node" into the
 		 *  singlylinkedlist after "node". */
-		void	insertAfter(singlylinkedlistnode<valuetype> *node,
-				singlylinkedlistnode<valuetype> *newnode);
+		void	insertAfter(listnode<valuetype> *node,
+					listnode<valuetype> *newnode);
 
 		/** Moves node "nodetomove" to the position after "node" in
 		 *  the singlylinkedlist.
@@ -104,15 +106,15 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.  Consider using the
 		 *  linkedlist class. */
-		void	moveAfter(singlylinkedlistnode<valuetype> *node,
-				singlylinkedlistnode<valuetype> *nodetomove);
+		void	moveAfter(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove);
 
 		/** Detaches "node" from the list.
 		 *
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.  Consider using the
 		 *  linkedlist class. */
-		void	detach(singlylinkedlistnode<valuetype> *node);
+		void	detach(listnode<valuetype> *node);
 
 		/** Deletes the first singlylinkedlistnode containing "value".
 		 *
@@ -179,7 +181,7 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  linkedlist class.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	remove(singlylinkedlistnode<valuetype> *node);
+		bool	remove(listnode<valuetype> *node);
 
 		/** Removed singlylinkedlistnode "node" from the
 		 *  singlylinkedlist, deleting the value stored in the
@@ -190,8 +192,7 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  removeAll().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	removeAndDelete(
-				singlylinkedlistnode<valuetype> *node);
+		bool	removeAndDelete(listnode<valuetype> *node);
 
 		/** Removed singlylinkedlistnode "node" from the
 		 *  singlylinkedlist, deleting the value stored in the
@@ -203,33 +204,30 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  removeAll().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	removeAndArrayDelete(
-				singlylinkedlistnode<valuetype> *node);
+		bool	removeAndArrayDelete(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the singlylinkedlist. */
 		uint64_t	getLength() const;
 
 		/** Returns the first node in the singlylinkedlist. */
-		singlylinkedlistnode<valuetype>	*getFirst();
+		listnode<valuetype>	*getFirst();
 
 		/** Returns the last node in the singlylinkedlist. */
-		singlylinkedlistnode<valuetype>	*getLast();
+		listnode<valuetype>	*getLast();
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
-		singlylinkedlistnode<valuetype>	*getNext(
-					singlylinkedlistnode<valuetype> *node);
+		listnode<valuetype>	*getNext(listnode<valuetype> *node);
 
 		/** Returns a pointer to the first singlylinkedlistnode
 		 *  containing "value" or NULL if "value" was not found. */
-		singlylinkedlistnode<valuetype>	*find(valuetype value);
+		listnode<valuetype>	*find(valuetype value);
 
 		/** Returns a pointer to the first singlylinkedlistnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
-		singlylinkedlistnode<valuetype>
-			*find(singlylinkedlistnode<valuetype> *startnode,
+		listnode<valuetype> *find(listnode<valuetype> *startnode,
 							valuetype value);
 
 		/** Sorts the singlylinkedlist in ascending order using a

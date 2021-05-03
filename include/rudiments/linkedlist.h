@@ -8,7 +8,7 @@
 
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class valuetype>
-class linkedlistnode : public nodecollectionnode<valuetype> {
+class linkedlistnode : public listnode<valuetype> {
 	public:
 		/** Creates an instance of the linkedlistnode class that
 		 *  stores value "value". */
@@ -34,15 +34,15 @@ class linkedlistnode : public nodecollectionnode<valuetype> {
 		 *  on whether the value stored in the node is respectively
 		 *  less than, equal to or greater than the value stored in
 		 *  "peer". */
-		int32_t	compare(linkedlistnode<valuetype> *peer) const;
+		int32_t	compare(listnode<valuetype> *peer) const;
 
 		/** Returns the previous node in the linkedlist or NULL
 		 *  if this node is the first node in the list. */
-		linkedlistnode<valuetype>	*getPrevious();
+		listnode<valuetype>	*getPrevious();
 
 		/** Returns the next node in the linkedlist or NULL
 		 * if this node is the last node in the list. */
-		linkedlistnode<valuetype>	*getNext();
+		listnode<valuetype>	*getNext();
 
 		/** Prints the value stored in the node. */
 		void	print() const;
@@ -73,7 +73,7 @@ class linkedlist : public listcollection<valuetype> {
 
 		/** Prepends already created linkedlistnode "node" to the
 		 *  linkedlist. */
-		void	prepend(linkedlistnode<valuetype> *node);
+		void	prepend(listnode<valuetype> *node);
 
 		/** Creates a new linkedlistnode containing "value" and
 		 *  appends it to the linkedlist. */
@@ -81,40 +81,40 @@ class linkedlist : public listcollection<valuetype> {
 
 		/** Appends already created linkedlistnode "node" to the
 		 *  linkedlist. */
-		void	append(linkedlistnode<valuetype> *node);
+		void	append(listnode<valuetype> *node);
 
 		/** Creates a new linkedlistnode containing "value" and
 		 *  inserts it into the linkedlist before "node". */
-		void	insertBefore(linkedlistnode<valuetype> *node,
+		void	insertBefore(listnode<valuetype> *node,
 							valuetype value);
 
 		/** Inserts already created linkedlistnode "newnode" into the
 		 *  linkedlist before "node". */
-		void	insertBefore(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *newnode);
+		void	insertBefore(listnode<valuetype> *node,
+					listnode<valuetype> *newnode);
 
 		/** Creates a new linkedlistnode containing "value" and
 		 *  inserts it into the linkedlist after "node". */
-		void	insertAfter(linkedlistnode<valuetype> *node,
+		void	insertAfter(listnode<valuetype> *node,
 							valuetype value);
 
 		/** Inserts already created linkedlistnode "newnode" into the
 		 *  linkedlist after "node". */
-		void	insertAfter(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *newnode);
+		void	insertAfter(listnode<valuetype> *node,
+					listnode<valuetype> *newnode);
 
 		/** Moves node "nodetomove" to the position before "node" in
 		 *  the linkedlist. */
-		void	moveBefore(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *nodetomove);
+		void	moveBefore(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove);
 
 		/** Moves node "nodetomove" to the position after "node" in
 		 *  the linkedlist. */
-		void	moveAfter(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *nodetomove);
+		void	moveAfter(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove);
 
 		/** Detaches "node" from the list. */
-		void	detach(linkedlistnode<valuetype> *node);
+		void	detach(listnode<valuetype> *node);
 
 		/** Deletes the first linkedlistnode containing "value".
 		 * 
@@ -177,7 +177,7 @@ class linkedlist : public listcollection<valuetype> {
 		 *  removeAll().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	remove(linkedlistnode<valuetype> *node);
+		bool	remove(listnode<valuetype> *node);
 
 		/** Removed linkedlistnode "node" from the linkedlist,
 		 *  deleting the value stored in the linkedlistnode as well.
@@ -187,7 +187,7 @@ class linkedlist : public listcollection<valuetype> {
 		 *  removeAll().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	removeAndDelete(linkedlistnode<valuetype> *node);
+		bool	removeAndDelete(listnode<valuetype> *node);
 
 		/** Removed linkedlistnode "node" from the linkedlist,
 		 *  deleting the value stored in the linkedlistnode as well,
@@ -198,38 +198,35 @@ class linkedlist : public listcollection<valuetype> {
 		 *  removeAll().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	removeAndArrayDelete(linkedlistnode<valuetype> *node);
+		bool	removeAndArrayDelete(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the linkedlist. */
 		uint64_t	getLength() const;
 
 		/** Returns the first node in the linkedlist. */
-		linkedlistnode<valuetype>	*getFirst();
+		listnode<valuetype>	*getFirst();
 
 		/** Returns the last node in the linkedlist. */
-		linkedlistnode<valuetype>	*getLast();
+		listnode<valuetype>	*getLast();
 
 		/** Returns the node prior to "node" or NULL if this node is
 		 *  the first node in the list.  "node" is presumed to be in
 		 *  the list. */
-		linkedlistnode<valuetype>	*getPrevious(
-					linkedlistnode<valuetype> *node);
+		listnode<valuetype>	*getPrevious(listnode<valuetype> *node);
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
-		linkedlistnode<valuetype>	*getNext(
-					linkedlistnode<valuetype> *node);
+		listnode<valuetype>	*getNext(listnode<valuetype> *node);
 
 		/** Returns a pointer to the first linkedlistnode
 		 *  containing "value" or NULL if "value" was not found. */
-		linkedlistnode<valuetype>	*find(valuetype value);
+		listnode<valuetype>	*find(valuetype value);
 
 		/** Returns a pointer to the first linkedlistnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
-		linkedlistnode<valuetype>
-			*find(linkedlistnode<valuetype> *startnode,
+		listnode<valuetype>	*find(listnode<valuetype> *startnode,
 							valuetype value);
 
 		/** Sorts the linkedlist in ascending order using a modified

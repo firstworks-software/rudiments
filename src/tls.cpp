@@ -1996,7 +1996,7 @@ void tlscertificate::freeCertificate() {
 	delete[] pvt->_sigalg;
 	delete[] pvt->_pkalg;
 	delete[] pvt->_pk;
-	for (linkedlistnode< char * > *node=pvt->_san.getFirst();
+	for (listnode< char * > *node=pvt->_san.getFirst();
 					node; node=node->getNext()) {
 		delete[] node->getValue();
 	}
@@ -2411,7 +2411,7 @@ void tlscertificate::setCertificate(void *cert) {
 		stdoutput.printf("    public key bits: %lld\n",pvt->_pkbits);
 		stdoutput.printf("    common name: %s\n",pvt->_commonname);
 		stdoutput.printf("    subject alternate names:\n");
-		for (linkedlistnode< char * > *node=pvt->_san.getFirst();
+		for (listnode< char * > *node=pvt->_san.getFirst();
 						node; node=node->getNext()) {
 			stdoutput.printf("        %s\n",node->getValue());
 		}

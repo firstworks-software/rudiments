@@ -1172,11 +1172,11 @@ void codetree::popBreakStack() {
 	if (!pvt->_grammar.hasRecursiveBreak()) {
 		return;
 	}
-	linkedlistnode< linkedlist< break_t * > * >
+	listnode< linkedlist< break_t * > * >
 			*stacknode=pvt->_breakstack.getLast();
 	pvt->_breakstack.detach(stacknode);
 	pvt->_breakcount=pvt->_breakcount-stacknode->getValue()->getLength();
-	for (linkedlistnode< break_t * > *listnode=
+	for (listnode< break_t * > *listnode=
 			stacknode->getValue()->getFirst();
 			listnode; listnode=listnode->getNext()) {
 		delete[] listnode->getValue();
@@ -1192,12 +1192,12 @@ bool codetree::parseBreakStack(const char **codeposition) {
 	}
 
 	// for each set of breaks...
-	for (linkedlistnode< linkedlist< break_t * > * >
+	for (listnode< linkedlist< break_t * > * >
 			*stacknode=pvt->_breakstack.getLast();
 			stacknode; stacknode=stacknode->getPrevious()) {
 
 		// for each break in the set...
-		for (linkedlistnode< break_t * >
+		for (listnode< break_t * >
 				*listnode=stacknode->getValue()->getLast();
 				listnode; listnode=listnode->getPrevious()) {
 

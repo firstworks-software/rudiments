@@ -204,7 +204,7 @@ void httprequest::dumpVariables() {
 	pvt->_sapi->write("Parameters:\n");
 
 	// parameters
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 		pvt->_sapi->write(fenode->getValue()->getKey());
@@ -218,7 +218,7 @@ void httprequest::dumpVariables() {
 	pvt->_sapi->write("File Parameters:\n");
 
 	// file parameters
-	for (linkedlistnode<dictionarynode< char *, fileparameter *> *>
+	for (listnode<dictionarynode< char *, fileparameter *> *>
 			*flnode=pvt->_fileparameters.getList()->getFirst();
 			flnode; flnode=flnode->getNext()) {
 		pvt->_sapi->write(flnode->getValue()->getKey());
@@ -234,7 +234,7 @@ void httprequest::dumpVariables() {
 	pvt->_sapi->write("Cookies:\n");
 
 	// cookies
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*cknode=pvt->_cookies.getList()->getFirst();
 				cknode; cknode=cknode->getNext()) {
 		pvt->_sapi->write(cknode->getValue()->getKey());
@@ -258,7 +258,7 @@ void httprequest::buildList(const char ***vars, const char ***vals,
 	(*vals)=new const char *[length+1];
 
 	uint64_t	index=0;
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*node=nvp->getList()->getFirst();
 				node; node=node->getNext()) {
 		(*vars)[index]=node->getValue()->getKey();
@@ -271,7 +271,7 @@ void httprequest::buildList(const char ***vars, const char ***vals,
 
 void httprequest::removeTempFiles() {
 
-	for (linkedlistnode<dictionarynode< char *, fileparameter *> *>
+	for (listnode<dictionarynode< char *, fileparameter *> *>
 			*flnode=pvt->_fileparameters.getList()->getFirst();
 			flnode; flnode=flnode->getNext()) {
 		file::remove(flnode->getValue()->getValue()->tempfilename);
@@ -286,7 +286,7 @@ void httprequest::cleanParameters() {
 
 void httprequest::cleanFiles() {
 
-	for (linkedlistnode<dictionarynode<char *, fileparameter *> *>
+	for (listnode<dictionarynode<char *, fileparameter *> *>
 			*flnode=pvt->_fileparameters.getList()->getFirst();
 			flnode; flnode=flnode->getNext()) {
 		delete[] flnode->getValue()->getKey();
@@ -711,7 +711,7 @@ void httprequest::getParametersAsGetString(output *out,
 	bool	first=true;
 
 	// run through the paramters queue
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 
@@ -765,7 +765,7 @@ void httprequest::getParametersAsHiddenVariables(output *out,
 	bool	writeentry;
 
 	// run through the parameters queue
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 
@@ -863,7 +863,7 @@ void httprequest::buildFileNamesList() {
 		pvt->_filenames=new const char *[length+1];
 
 		uint64_t	index=0;
-		for (linkedlistnode<dictionarynode<char *, fileparameter *> *>
+		for (listnode<dictionarynode<char *, fileparameter *> *>
 			*node=pvt->_fileparameters.getList()->getFirst();
 			node; node=node->getNext()) {
 			pvt->_filenames[index]=node->getValue()->getKey();
@@ -1034,7 +1034,7 @@ void httprequest::buildAllVariables() {
 	}
 
 	// add parameters
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*fenode=pvt->_parameters.getList()->getFirst();
 				fenode; fenode=fenode->getNext()) {
 		pvt->_allvars[index]=fenode->getValue()->getKey();
@@ -1042,7 +1042,7 @@ void httprequest::buildAllVariables() {
 	}
 
 	// add cookies
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*cknode=pvt->_cookies.getList()->getFirst();
 				cknode; cknode=cknode->getNext()) {
 		pvt->_allvars[index]=cknode->getValue()->getKey();

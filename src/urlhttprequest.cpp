@@ -59,7 +59,7 @@ void urlhttprequest::dumpVariables() {
 
 	pvt->_sapi->write("Skin Variables:\n");
 
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*svnode=pvt->_skinvars.getList()->getFirst();
 				svnode; svnode=svnode->getNext()) {
 		pvt->_sapi->write(svnode->getValue()->getKey());
@@ -450,7 +450,7 @@ void urlhttprequest::buildAllVariables() {
 	allVariableCount(newallvariablecount);
 
 	// add skin variables
-	for (linkedlistnode<namevaluepairsnode *>
+	for (listnode<namevaluepairsnode *>
 				*sknode=pvt->_skinvars.getList()->getFirst();
 				sknode; sknode=sknode->getNext()) {
 		(*allvars)[index]=sknode->getValue()->getKey();

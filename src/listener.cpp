@@ -179,9 +179,9 @@ void listener::addWriteFileDescriptor(filedescriptor *fd) {
 }
 
 void listener::removeFileDescriptor(filedescriptor *fd) {
-	linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst();
+	listnode< fddata_t * > *node=pvt->_fdlist.getFirst();
 	while (node) {
-		linkedlistnode< fddata_t * >	*next=node->getNext();
+		listnode< fddata_t * >	*next=node->getNext();
 		if (node->getValue()->fd==fd) {
 			delete node->getValue();
 			pvt->_fdlist.remove(node);
@@ -219,7 +219,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 	// return immediately if any of the filedescriptors
 	// have data pending from the security context
-	for (linkedlistnode< fddata_t * >	*node=
+	for (listnode< fddata_t * >	*node=
 					pvt->_fdlist.getFirst();
 					node; node=node->getNext()) {
 		securitycontext	*sctx=
@@ -397,7 +397,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 			int32_t	largest=-1;
 			FD_ZERO(&readlist);
 			FD_ZERO(&writelist);
-			for (linkedlistnode< fddata_t * >	*node=
+			for (listnode< fddata_t * >	*node=
 						pvt->_fdlist.getFirst();
 						node; node=node->getNext()) {
 
@@ -515,7 +515,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 						defined(RUDIMENTS_HAVE_POLL)
 				for (uint64_t i=0; i<fdcount; i++) {
 					if (pvt->_fds[i].revents) {
-						for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst(); node; node=node->getNext()) {
+						for (listnode< fddata_t * > *node=pvt->_fdlist.getFirst(); node; node=node->getNext()) {
 							if (node->getValue()->fd->getFileDescriptor()==pvt->_fds[i].fd) {
 								if (pvt->_fds[i].revents&POLLIN) {
 									pvt->_readreadylist.append(node->getValue()->fd);
@@ -541,7 +541,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 				}
 
 			#else
-				for (linkedlistnode< fddata_t * > *node=
+				for (listnode< fddata_t * > *node=
 						pvt->_fdlist.getFirst();
 						node; node=node->getNext()) {
 					if (FD_ISSET(node->getValue()->fd->
@@ -618,7 +618,7 @@ bool listener::rebuildMonitorList() {
 
 	// set up the fd's to be monitored and how to monitor them
 	fdcount=0;
-	for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst();
+	for (listnode< fddata_t * > *node=pvt->_fdlist.getFirst();
 						node; node=node->getNext()) {
 
 		#if defined(RUDIMENTS_HAVE_KQUEUE)

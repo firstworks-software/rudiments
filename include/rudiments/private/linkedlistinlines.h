@@ -26,7 +26,7 @@ void linkedlist<valuetype>::prepend(valuetype value) {
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::prepend(linkedlistnode<valuetype> *node) {
+void linkedlist<valuetype>::prepend(listnode<valuetype> *node) {
 	if (!node) {
 		return;
 	} else if (first) {
@@ -48,7 +48,7 @@ void linkedlist<valuetype>::append(valuetype value) {
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::append(linkedlistnode<valuetype> *node) {
+void linkedlist<valuetype>::append(listnode<valuetype> *node) {
 	if (!node) {
 		return;
 	} else if (last) {
@@ -64,15 +64,15 @@ void linkedlist<valuetype>::append(linkedlistnode<valuetype> *node) {
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::insertBefore(linkedlistnode<valuetype> *node,
+void linkedlist<valuetype>::insertBefore(listnode<valuetype> *node,
 							valuetype value) {
 	insertBefore(node,new linkedlistnode<valuetype>(value));
 }
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::insertBefore(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *newnode) {
+void linkedlist<valuetype>::insertBefore(listnode<valuetype> *node,
+						listnode<valuetype> *newnode) {
 	if (!node) {
 		return;
 	} else if (node==first) {
@@ -88,15 +88,15 @@ void linkedlist<valuetype>::insertBefore(linkedlistnode<valuetype> *node,
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::insertAfter(linkedlistnode<valuetype> *node,
+void linkedlist<valuetype>::insertAfter(listnode<valuetype> *node,
 							valuetype value) {
 	insertAfter(node,new linkedlistnode<valuetype>(value));
 }
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::insertAfter(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *newnode) {
+void linkedlist<valuetype>::insertAfter(listnode<valuetype> *node,
+					listnode<valuetype> *newnode) {
 	if (!node) {
 		return;
 	} else if (node==last) {
@@ -112,22 +112,22 @@ void linkedlist<valuetype>::insertAfter(linkedlistnode<valuetype> *node,
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::moveBefore(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *nodetomove) {
+void linkedlist<valuetype>::moveBefore(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove) {
 	move(node,nodetomove,true);
 }
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::moveAfter(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *nodetomove) {
+void linkedlist<valuetype>::moveAfter(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove) {
 	move(node,nodetomove,false);
 }
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::move(linkedlistnode<valuetype> *node,
-					linkedlistnode<valuetype> *nodetomove,
+void linkedlist<valuetype>::move(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove,
 					bool before) {
 
 	if (!node || !nodetomove || node==nodetomove) {
@@ -144,7 +144,7 @@ void linkedlist<valuetype>::move(linkedlistnode<valuetype> *node,
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::detach(linkedlistnode<valuetype> *node) {
+void linkedlist<valuetype>::detach(listnode<valuetype> *node) {
 
 	if (node==first) {
 		first=node->getNext();
@@ -166,21 +166,21 @@ void linkedlist<valuetype>::detach(linkedlistnode<valuetype> *node) {
 template <class valuetype>
 inline
 bool linkedlist<valuetype>::remove(valuetype value) {
-	linkedlistnode<valuetype>	*current=find(value);
+	listnode<valuetype>	*current=find(value);
 	return (current)?remove(current):false;
 }
 
 template <class valuetype>
 inline
 bool linkedlist<valuetype>::removeAndDelete(valuetype value) {
-	linkedlistnode<valuetype>	*current=find(value);
+	listnode<valuetype>	*current=find(value);
 	return (current)?removeAndDelete(current):false;
 }
 
 template <class valuetype>
 inline
 bool linkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
-	linkedlistnode<valuetype>	*current=find(value);
+	listnode<valuetype>	*current=find(value);
 	return (current)?removeAndArrayDelete(current):false;
 }
 
@@ -188,8 +188,8 @@ template <class valuetype>
 inline
 bool linkedlist<valuetype>::removeAll(valuetype value) {
 
-	linkedlistnode<valuetype>	*current=first;
-	linkedlistnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
 	while (current) {
 		next=current->getNext();
 		if (!current->compare(value) &&
@@ -205,8 +205,8 @@ template <class valuetype>
 inline
 bool linkedlist<valuetype>::removeAllAndDelete(valuetype value) {
 
-	linkedlistnode<valuetype>	*current=first;
-	linkedlistnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
 	while (current) {
 		next=current->getNext();
 		if (!current->compare(value) &&
@@ -222,8 +222,8 @@ template <class valuetype>
 inline
 bool linkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 
-	linkedlistnode<valuetype>	*current=first;
-	linkedlistnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
 	while (current) {
 		next=current->getNext();
 		if (!current->compare(value) &&
@@ -237,7 +237,7 @@ bool linkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 
 template <class valuetype>
 inline
-bool linkedlist<valuetype>::remove(linkedlistnode<valuetype> *node) {
+bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
@@ -260,8 +260,7 @@ bool linkedlist<valuetype>::remove(linkedlistnode<valuetype> *node) {
 
 template <class valuetype>
 inline
-bool linkedlist<valuetype>::removeAndDelete(
-					linkedlistnode<valuetype> *node) {
+bool linkedlist<valuetype>::removeAndDelete(listnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
@@ -285,8 +284,7 @@ bool linkedlist<valuetype>::removeAndDelete(
 
 template <class valuetype>
 inline
-bool linkedlist<valuetype>::removeAndArrayDelete(
-					linkedlistnode<valuetype> *node) {
+bool linkedlist<valuetype>::removeAndArrayDelete(listnode<valuetype> *node) {
 	if (!node) {
 		return false;
 	}
@@ -316,42 +314,42 @@ uint64_t linkedlist<valuetype>::getLength() const {
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlist<valuetype>::getFirst() {
+listnode<valuetype> *linkedlist<valuetype>::getFirst() {
 	return first;
 }
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlist<valuetype>::getLast() {
+listnode<valuetype> *linkedlist<valuetype>::getLast() {
 	return last;
 }
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlist<valuetype>::getPrevious(
-					linkedlistnode<valuetype> *node) {
+listnode<valuetype> *linkedlist<valuetype>::getPrevious(
+						listnode<valuetype> *node) {
 	return (node)?node->getPrevious():NULL;
 }
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlist<valuetype>::getNext(
-					linkedlistnode<valuetype> *node) {
+listnode<valuetype> *linkedlist<valuetype>::getNext(
+						listnode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlist<valuetype>::find(valuetype value) {
-	return find((linkedlistnode<valuetype> *)first,value);
+listnode<valuetype> *linkedlist<valuetype>::find(valuetype value) {
+	return find(first,value);
 }
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlist<valuetype>::find(
-					linkedlistnode<valuetype> *startnode,
+listnode<valuetype> *linkedlist<valuetype>::find(
+					listnode<valuetype> *startnode,
 					valuetype value) {
-	for (linkedlistnode<valuetype> *current=startnode;
+	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
 		if (!current->compare(value)) {
 			return current;
@@ -372,16 +370,16 @@ void linkedlist<valuetype>::insertionSort() {
 	}
 
 	// first and last pointers for the new list
-	linkedlistnode<valuetype>	*newfirst=NULL;
-	linkedlistnode<valuetype>	*newlast=NULL;
+	listnode<valuetype>	*newfirst=NULL;
+	listnode<valuetype>	*newlast=NULL;
 
 	// pointer for iterating through the new list
-	linkedlistnode<valuetype>	*currentfromfirst=NULL;
-	linkedlistnode<valuetype>	*currentfromlast=NULL;
+	listnode<valuetype>	*currentfromfirst=NULL;
+	listnode<valuetype>	*currentfromlast=NULL;
 
 	// iterate through the current list, building a new one as we go
-	linkedlistnode<valuetype>	*node=first;
-	linkedlistnode<valuetype>	*next=NULL;
+	listnode<valuetype>	*node=first;
+	listnode<valuetype>	*next=NULL;
 	while (node) {
 
 		// get the next node so we can move on later
@@ -481,12 +479,10 @@ void linkedlist<valuetype>::heapSort() {
 	//	parentindex = floor((childindex-1)/2)
 	//	leftchildindex = parent*2+1
 	//	rightchildindex = parent*2+2
-	linkedlistnode<valuetype>	**heap=
-					new linkedlistnode<valuetype> *[length];
-	linkedlistnode<valuetype>	*temp=NULL;
-	uint64_t			heapend=0;
-	for (linkedlistnode<valuetype> *node=first;
-					node; node=node->getNext()) {
+	listnode<valuetype>	**heap=new listnode<valuetype> *[length];
+	listnode<valuetype>	*temp=NULL;
+	uint64_t		heapend=0;
+	for (listnode<valuetype> *node=first; node; node=node->getNext()) {
 
 		// insert node into heap
 		heap[heapend]=node;
@@ -525,8 +521,8 @@ void linkedlist<valuetype>::heapSort() {
 	// bit...
 
 	// first and last pointers for the new list
-	linkedlistnode<valuetype>	*newfirst=NULL;
-	linkedlistnode<valuetype>	*newlast=NULL;
+	listnode<valuetype>	*newfirst=NULL;
+	listnode<valuetype>	*newlast=NULL;
 
 	// extract values from the heap...
 	for (;;) {
@@ -534,7 +530,7 @@ void linkedlist<valuetype>::heapSort() {
 		// pull off the highest value (which is always at the root
 		// of the tree, index 0 in the array) and prepend it to the
 		// new array
-		linkedlistnode<valuetype>	*node=heap[0];
+		listnode<valuetype>	*node=heap[0];
 		if (!newfirst) {
 			node->setPrevious(NULL);
 			node->setNext(NULL);
@@ -616,8 +612,8 @@ void linkedlist<valuetype>::heapSort() {
 template <class valuetype>
 inline
 void linkedlist<valuetype>::clear() {
-	linkedlistnode<valuetype>	*next;
-	linkedlistnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
 		delete current;
@@ -631,8 +627,8 @@ void linkedlist<valuetype>::clear() {
 template <class valuetype>
 inline
 void linkedlist<valuetype>::clearAndDelete() {
-	linkedlistnode<valuetype>	*next;
-	linkedlistnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
 		delete current->getValue();
@@ -647,8 +643,8 @@ void linkedlist<valuetype>::clearAndDelete() {
 template <class valuetype>
 inline
 void linkedlist<valuetype>::clearAndArrayDelete() {
-	linkedlistnode<valuetype>	*next;
-	linkedlistnode<valuetype>	*current=first;
+	listnode<valuetype>	*next;
+	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
 		delete[] current->getValue();
@@ -670,7 +666,7 @@ template <class valuetype>
 inline
 void linkedlist<valuetype>::print(uint64_t count) const {
 	uint64_t	i=0;
-	for (linkedlistnode<valuetype> *current=first;
+	for (listnode<valuetype> *current=first;
 			current && i<count; current=current->getNext()) {
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
 			stdoutput.printf("index %lld: ",(long long)i);
@@ -686,7 +682,7 @@ void linkedlist<valuetype>::print(uint64_t count) const {
 template <class valuetype>
 inline
 linkedlistnode<valuetype>::linkedlistnode(valuetype value) :
-					nodecollectionnode<valuetype>() {
+						listnode<valuetype>() {
 	this->value=value;
 	previous=NULL;
 	next=NULL;
@@ -711,13 +707,13 @@ valuetype linkedlistnode<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlistnode<valuetype>::getPrevious() {
+listnode<valuetype> *linkedlistnode<valuetype>::getPrevious() {
 	return previous;
 }
 
 template <class valuetype>
 inline
-linkedlistnode<valuetype> *linkedlistnode<valuetype>::getNext() {
+listnode<valuetype> *linkedlistnode<valuetype>::getNext() {
 	return next;
 }
 
@@ -729,9 +725,8 @@ int32_t linkedlistnode<valuetype>::compare(valuetype value) const {
 
 template <class valuetype>
 inline
-int32_t linkedlistnode<valuetype>::compare(
-				linkedlistnode<valuetype> *peer) const {
-	return node_compare(this->value,peer->value);
+int32_t linkedlistnode<valuetype>::compare(listnode<valuetype> *peer) const {
+	return node_compare(this->value,peer->getValue());
 }
 
 template <class valuetype>
@@ -742,14 +737,12 @@ void linkedlistnode<valuetype>::print() const {
 
 template <class valuetype>
 inline
-void linkedlistnode<valuetype>::setPrevious(
-				linkedlistnode<valuetype> *previous) {
+void linkedlistnode<valuetype>::setPrevious(listnode<valuetype> *previous) {
 	this->previous=previous;
 }
 
 template <class valuetype>
 inline
-void linkedlistnode<valuetype>::setNext(
-				linkedlistnode<valuetype> *next) {
+void linkedlistnode<valuetype>::setNext(listnode<valuetype> *next) {
 	this->next=next;
 }

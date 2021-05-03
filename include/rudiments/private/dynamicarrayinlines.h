@@ -171,8 +171,8 @@ inline
 void dynamicarray<valuetype>::clearExtentList() {
 	curext=extents.getFirst();
 	while (curext) {
-		linkedlistnode<valuetype *>	*next=curext->getNext();
-		valuetype			*ext=curext->getValue();
+		listnode<valuetype *>	*next=curext->getNext();
+		valuetype		*ext=curext->getValue();
 		delete[] ext;
 		extents.remove(curext);
  		curext=next;
@@ -193,8 +193,8 @@ void dynamicarray<valuetype>::clear(uint64_t initiallength,
 	// remove all but the first extent
 	curext=extents.getLast();
 	while (curext!=extents.getFirst()) {
-		linkedlistnode<valuetype *>	*prev=curext->getPrevious();
-		valuetype			*ext=curext->getValue();
+		listnode<valuetype *>	*prev=curext->getPrevious();
+		valuetype		*ext=curext->getValue();
 		delete[] ext;
 		extents.remove(curext);
  		curext=prev;

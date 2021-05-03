@@ -114,7 +114,7 @@ inline
 void dictionary<keytype,valuetype>::setValues(
 					dictionary<keytype,valuetype> *dict) {
 	if (dict) {
-		for (linkedlistnode<dictionarynode<keytype,valuetype> *>
+		for (listnode<dictionarynode<keytype,valuetype> *>
 					*node=dict->getList()->getFirst();
 					node; node=node->getNext()) {
 			setValue(node->getValue()->getKey(),
@@ -445,7 +445,7 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteKeyAndDeleteValue(
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clear() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete node->getValue();
 	}
@@ -456,7 +456,7 @@ void dictionary<keytype,valuetype>::clear() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDelete() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getKey();
 		delete node->getValue()->getValue();
@@ -469,7 +469,7 @@ void dictionary<keytype,valuetype>::clearAndDelete() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDelete() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
@@ -482,7 +482,7 @@ void dictionary<keytype,valuetype>::clearAndArrayDelete() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDeleteKeys() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getKey();
 		delete node->getValue();
@@ -494,7 +494,7 @@ void dictionary<keytype,valuetype>::clearAndDeleteKeys() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteKeys() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete node->getValue();
@@ -506,7 +506,7 @@ void dictionary<keytype,valuetype>::clearAndArrayDeleteKeys() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDeleteValues() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getValue();
 		delete node->getValue();
@@ -518,7 +518,7 @@ void dictionary<keytype,valuetype>::clearAndDeleteValues() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteValues() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getValue();
 		delete node->getValue();
@@ -530,7 +530,7 @@ void dictionary<keytype,valuetype>::clearAndArrayDeleteValues() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDeleteKeysAndArrayDeleteValues() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
@@ -543,7 +543,7 @@ void dictionary<keytype,valuetype>::clearAndDeleteKeysAndArrayDeleteValues() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteKeysAndDeleteValues() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete node->getValue()->getValue();
@@ -557,7 +557,7 @@ template <class keytype, class valuetype>
 inline
 linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
 	linkedlist<keytype>	*keys=new linkedlist<keytype>();
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *>
+	for (listnode<dictionarynode<keytype,valuetype> *>
 		*node=getList()->getFirst(); node; node=node->getNext()) {
 		keys->append(node->getValue()->getKey());
 	}
@@ -588,7 +588,7 @@ linkedlist<dictionarynode<keytype,valuetype> *>
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::print() {
-	for (linkedlistnode<dictionarynode<keytype,valuetype> *> *node=
+	for (listnode<dictionarynode<keytype,valuetype> *> *node=
 				list.getFirst(); node; node=node->getNext()) {
 		node->getValue()->print();
 		stdoutput.printf("\n");

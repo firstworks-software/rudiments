@@ -458,7 +458,7 @@ void avltree<valuetype>::print() const {
 template <class valuetype>
 inline
 avltreenode<valuetype>::avltreenode(valuetype value) :
-				nodecollectionnode<valuetype>() {
+					nodecollectionnode<valuetype>() {
 	this->value=value;
 	parent=NULL;
 	left=NULL;

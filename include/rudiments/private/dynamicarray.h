@@ -11,7 +11,7 @@
 		void		clearExtentList();
 
 		linkedlist< valuetype *>	extents;
-		linkedlistnode< valuetype *>	*curext;
+		listnode< valuetype *>		*curext;
 		uint64_t	curind;
 		uint64_t	initial;
 		uint64_t	extlength;

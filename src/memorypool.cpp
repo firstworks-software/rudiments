@@ -45,8 +45,8 @@ memorypoolbuffer::~memorypoolbuffer() {
 	delete[] _buffer;
 }
 
-typedef	linkedlistnode<memorypoolbuffer *>	memorypoollistnode;
-typedef	linkedlist<memorypoolbuffer *>		memorypoollist;
+typedef	listnode<memorypoolbuffer *>	memorypoollistnode;
+typedef	linkedlist<memorypoolbuffer *>	memorypoollist;
 
 class memorypoolprivate {
 	friend class memorypool;

@@ -17,7 +17,7 @@ parameterstring::parameterstring() : object() {
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
-	for (linkedlistnode< dictionarynode<char *,char *> *>
+	for (listnode< dictionarynode<char *,char *> *>
 			*node=pvt->_nvp.getList()->getFirst();
 			node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();

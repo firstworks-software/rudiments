@@ -754,7 +754,7 @@ bool gsscredentials::inDesiredMechanisms(gssmechanism *mech) {
 	}
 
 	// look for the mech in the list
-	for (linkedlistnode< gssmechanism * > *node=
+	for (listnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
 		if (!charstring::compare(
@@ -776,7 +776,7 @@ uint64_t gsscredentials::getDesiredMechanismCount() {
 
 gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 	uint64_t	i=0;
-	for (linkedlistnode< gssmechanism * > *node=
+	for (listnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
 		if (i==index) {
@@ -890,7 +890,7 @@ bool gsscredentials::acquire(const char *name,
 		}
 
 		// populate the set from the list of mechs
-		for (linkedlistnode< gssmechanism * > *node=
+		for (listnode< gssmechanism * > *node=
 						pvt->_dmlist.getFirst();
 						node; node=node->getNext()) {
 
@@ -976,7 +976,7 @@ bool gsscredentials::acquire(const char *name,
 		// try each desired mechanism...
 		bool		first=true;
 		const char	*mechname=NULL;
-		linkedlistnode< gssmechanism * > *node=pvt->_dmlist.getFirst();
+		listnode< gssmechanism * > *node=pvt->_dmlist.getFirst();
 		for (;;) {
 
 			// break at the end of the list of desired mechanisms
@@ -1067,14 +1067,14 @@ bool gsscredentials::acquire(const char *name,
 						pvt->_actuallifetime);
 		#endif
 		stdoutput.write("  desired mechanisms:\n");
-		for (linkedlistnode< gssmechanism * > *node=
+		for (listnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
 			stdoutput.printf("    %s\n",
 				node->getValue()->getString());
 		}
 		stdoutput.write("  actual mechanisms:\n");
-		for (linkedlistnode< gssmechanism * > *node=
+		for (listnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
 					node; node=node->getNext()) {
 			stdoutput.printf("    %s\n",
@@ -1182,7 +1182,7 @@ bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 	}
 
 	// look for the mech in the list
-	for (linkedlistnode< gssmechanism * > *node=
+	for (listnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
 					node; node=node->getNext()) {
 		if (!charstring::compare(
@@ -1200,7 +1200,7 @@ uint64_t gsscredentials::getActualMechanismCount() {
 
 gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {
 	uint64_t	i=0;
-	for (linkedlistnode< gssmechanism * > *node=
+	for (listnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
 					node; node=node->getNext()) {
 		if (i==index) {

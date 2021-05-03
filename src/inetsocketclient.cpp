@@ -221,7 +221,7 @@ int32_t inetsocketclient::connect() {
 			while (addrlist.getLength()) {
 
 				// figure out which addrinfo to try
-				linkedlistnode< addrinfo * >
+				listnode< addrinfo * >
 					*addrlistnode=addrlist.getFirst();
 				if (pvt->_randomize && addrlist.getLength()>1) {
 					if (!pvt->_seeded) {
@@ -328,7 +328,7 @@ int32_t inetsocketclient::connect() {
 			while (addrlist.getLength()) {
 
 				// figure out which addrinfo to try
-				linkedlistnode< const char * >
+				listnode< const char * >
 					*addrlistnode=addrlist.getFirst();
 				if (pvt->_randomize && addrlist.getLength()>1) {
 					if (!pvt->_seeded) {

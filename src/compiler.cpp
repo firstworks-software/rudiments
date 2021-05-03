@@ -98,7 +98,7 @@ bool compiler::appendModule(const char *filename,
 	// find the module
 	stringbuffer	modulefilename;
 	if (pvt->_modulepaths.getLength()) {
-		for (linkedlistnode< char * >
+		for (listnode< char * >
 				*mpnode=pvt->_modulepaths.getFirst();
 				mpnode; mpnode=mpnode->getNext()) {
 
@@ -282,7 +282,7 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 	stringbuffer	*outbufptr=&buffer1;
 
 	// pre-process...
-	for (linkedlistnode< compilermodule *>
+	for (listnode< compilermodule *>
 				*prenode=pvt->_preprocessors.getFirst();
 				prenode; prenode=prenode->getNext()) {
 
@@ -376,7 +376,7 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 	}
 	
 	// post-process...
-	for (linkedlistnode< compilermodule *>
+	for (listnode< compilermodule *>
 			*postnode=pvt->_postprocessors.getFirst();
 			postnode; postnode=postnode->getNext()) {
 
@@ -429,7 +429,7 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 bool compiler::process(domnode *root) {
 
 	// process...
-	for (linkedlistnode< compilermodule *>
+	for (listnode< compilermodule *>
 				*node=pvt->_processors.getFirst();
 				node; node=node->getNext()) {
 
