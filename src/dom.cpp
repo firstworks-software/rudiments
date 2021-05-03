@@ -18,15 +18,15 @@ class domprivate {
 		dictionary< char *, uint64_t >	_strcache;
 };
 
-dom::dom() : object() {
+dom::dom() : collection() {
 	init(true);
 }
 
-dom::dom(bool stringcacheenabled) : object() {
+dom::dom(bool stringcacheenabled) : collection() {
 	init(stringcacheenabled);
 }
 
-dom::dom(const dom &x) : object(x) {
+dom::dom(const dom &x) : collection(x) {
 	init(x.pvt->_stringcacheenabled);
 	pvt->_rootnode=x.pvt->_rootnode->clone(this);
 }

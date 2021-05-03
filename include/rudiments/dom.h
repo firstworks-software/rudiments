@@ -7,7 +7,7 @@
 #include <rudiments/private/domincludes.h>
 
 /** The dom class implements a minimal DOM-style parser. */
-class RUDIMENTS_DLLSPEC dom : virtual public object {
+class RUDIMENTS_DLLSPEC dom : virtual public collection {
 	public:
 
 		/** Creates a new instance of the dom class. */

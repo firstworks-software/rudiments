@@ -2,33 +2,29 @@
 // See the COPYING file for more informations.
 
 #include <rudiments/mvcresult.h>
-#include <rudiments/jsondom.h>
+#include <rudiments/dictionary.h>
 
 class mvcresultprivate {
 	friend class mvcresult;
 	private:
-		jsondom		d;
-		domnode		*statusnode;
-		domnode		*successnode;
-		domnode		*codenode;
-		domnode		*messagenode;
-		domnode		*datanode;
+		bool		success;
+		uint32_t	code;
+		char		*message;
+
+		dictionary<char *, char *>		types;
+		dictionary<char *, collection *>	data;
+		
 };
 
 mvcresult::mvcresult() : object() {
 	pvt=new mvcresultprivate;
-	pvt->d.createRootNode();
-	domnode		*rootnode=pvt->d.getRootNode()->appendTag("r");
-	pvt->statusnode=rootnode->appendTag("status");
-	pvt->successnode=pvt->statusnode->appendTag("success");
-	pvt->codenode=pvt->statusnode->appendTag("code");
-	pvt->codenode->setAttributeValue("t","n");
-	pvt->messagenode=pvt->statusnode->appendTag("message");
-	pvt->messagenode->setAttributeValue("t","s");
-	pvt->datanode=rootnode->appendTag("data");
+	pvt->success=false;
+	pvt->code=0;
+	pvt->message=NULL;
 }
 
 mvcresult::~mvcresult() {
+	delete[] pvt->message;
 	delete pvt;
 }
 
@@ -71,35 +67,68 @@ void mvcresult::setFailed(uint32_t code, const char *message) {
 }
 
 void mvcresult::setSuccess(bool success) {
-	pvt->successnode->setAttributeValue("value",(success)?"true":"false");
+	pvt->success=success;
 }
 
 bool mvcresult::getSuccess() {
-	return !charstring::compare(
-			pvt->successnode->getAttributeValue("value"),"true");
+	return pvt->success;
 }
 
 void mvcresult::setCode(uint32_t code) {
-	pvt->codenode->setAttributeValue("value",(uint64_t)code);
+	pvt->code=code;
 }
 
 uint32_t mvcresult::getCode() {
-	return charstring::toUnsignedInteger(
-				pvt->codenode->getAttributeValue("value"));
+	return pvt->code;
 }
 
 void mvcresult::setMessage(const char *message) {
-	pvt->messagenode->setAttributeValue("value",message);
+	delete[] pvt->message;
+	pvt->message=charstring::duplicate(message);
 }
 
 const char *mvcresult::getMessage() {
-	return pvt->messagenode->getAttributeValue("value");
+	return pvt->message;
 }
 
-domnode *mvcresult::getDataNode() {
-	return pvt->datanode;
+void mvcresult::attachData(const char *name,
+				const char *type,
+				collection *data) {
+
+	// remove any existing type for this name
+	dictionarynode<char *, char *>	*typenode=
+					pvt->types.getNode((char *)name);
+	if (typenode) {
+		// FIXME: apparently there's no
+		// removeAndArrayDeleteKeyAndArrayDeleteValue()...
+		delete[] typenode->getKey();
+		delete[] typenode->getValue();
+		pvt->types.remove(typenode);
+	}
+
+	// remove any existing data for this name
+	dictionarynode<char *, collection *>	*datanode=
+					pvt->data.getNode((char *)name);
+	if (datanode) {
+		pvt->data.removeAndArrayDeleteKeyAndDeleteValue(datanode);
+	}
+	
+	// set type
+	pvt->types.setValue(charstring::duplicate(name),
+				charstring::duplicate(type));
+
+	// attach data
+	pvt->data.setValue(charstring::duplicate(name),data);
 }
 
-dom *mvcresult::getDom() {
-	return &pvt->d;
+linkedlist<char *> *mvcresult::getKeys() {
+	return pvt->data.getKeys();
+}
+
+const char *mvcresult::getType(const char *name) {
+	return pvt->types.getValue((char *)name);
+}
+
+collection *mvcresult::getData(const char *name) {
+	return pvt->data.getValue((char *)name);
 }

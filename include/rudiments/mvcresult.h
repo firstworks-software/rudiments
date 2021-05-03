@@ -33,9 +33,13 @@ class RUDIMENTS_DLLSPEC mvcresult : public object {
 		void		setMessage(const char *message);
 		const char	*getMessage();
 
-		dom 		*getDom();
+		void	attachData(const char *key,
+					const char *type,
+					collection *data);
 
-		domnode		*getDataNode();
+		linkedlist<char *>	*getKeys();
+		const char		*getType(const char *key);
+		collection		*getData(const char *key);
 
 	#include <rudiments/private/mvcresult.h>
 };
