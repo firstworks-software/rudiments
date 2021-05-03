@@ -74,7 +74,9 @@ PROGS3= handoff \
 	inidom \
 	propdom \
 	mvcproperties \
-	aes128
+	aes128 \
+	dynamictable \
+	sparsedynamictable
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -302,6 +304,12 @@ mvcproperties: mvcproperties.cpp mvcproperties.$(OBJ)
 
 aes128: aes128.cpp aes128.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes128.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+dynamictable: dynamictable.cpp dynamictable.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dynamictable.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+sparsedynamictable: sparsedynamictable.cpp sparsedynamictable.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sparsedynamictable.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all

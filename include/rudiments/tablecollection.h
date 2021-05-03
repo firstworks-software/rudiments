@@ -20,6 +20,18 @@ class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 
 		/** Deletes this instance of the tablecollection class. */
 		virtual	~tablecollection() {};
+
+		virtual	uint64_t	getRowCount()=0;
+		virtual	uint64_t	getColCount()=0;
+		virtual	void		setValue(uint64_t row,
+							uint64_t col,
+							valuetype value)=0;
+		virtual	valuetype	getValue(uint64_t row, uint64_t col)=0;
+
+		virtual	void		setColumnName(uint64_t col,
+							const char *name)=0;
+		virtual	const char	*getColumnName(uint64_t col)=0;
+		virtual	void		clear()=0;
 };
 
 #endif

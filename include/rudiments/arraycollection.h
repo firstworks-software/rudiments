@@ -20,6 +20,10 @@ class RUDIMENTS_DLLSPEC arraycollection : public collection {
 
 		/** Deletes this instance of the listcollection class. */
 		virtual	~arraycollection() {};
+
+		virtual	valuetype	&operator[](uint64_t index)=0;
+		virtual	uint64_t	getLength() const=0;
+		virtual	void		clear()=0;
 };
 
 #endif
