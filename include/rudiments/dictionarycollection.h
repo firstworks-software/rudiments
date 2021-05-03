@@ -20,6 +20,22 @@ class RUDIMENTS_DLLSPEC dictionarycollection : public collection {
 
 		/** Deletes this instance of the listcollection class. */
 		virtual	~dictionarycollection() {};
+
+		virtual	void	setValue(keytype key, valuetype value)=0;
+		virtual	void	setValues(keytype *key, valuetype *value)=0;
+		virtual	void	setValues(keytype const *key,
+						valuetype const *value)=0;
+
+		virtual	void	setValues(keytype *key,
+						valuetype *value,
+						uint64_t count)=0;
+		virtual	void	setValues(keytype const *key,
+						valuetype const *value,
+						uint64_t count)=0;
+		virtual	valuetype	getValue(keytype key)=0;
+		virtual	bool		remove(keytype key)=0;
+		virtual	void		clear()=0;
+		virtual	void		print()=0;
 };
 
 #endif

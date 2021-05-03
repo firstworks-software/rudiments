@@ -56,7 +56,8 @@ class sparsedynamicarray : public arraycollection<valuetype> {
 		~dynamicarray();
 
 		/** Provides access to the "index"th element of the
-		 *  dynamicarray. */
+		 *  dynamicarray.  Returns 0 if the "index"th element
+		 *  hasn't been populated. */
 		valuetype	&operator[](uint64_t index);
 
 		/** Returns the number of elements in the array. */
