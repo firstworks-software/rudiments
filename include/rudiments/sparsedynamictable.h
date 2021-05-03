@@ -16,14 +16,16 @@ class RUDIMENTS_DLLSPEC sparsedynamictable : public tablecollection<valuetype> {
 		/** Deletes this instance of the sparsedynamictable class. */
 		~sparsedynamictable();
 
-		uint64_t	getRowCount();
+		void		setColumnName(uint64_t col, const char *name);
+		const char	*getColumnName(uint64_t col);
 		uint64_t	getColCount();
+
 		void		setValue(uint64_t row, uint64_t col,
 							valuetype value);
 		valuetype	getValue(uint64_t row, uint64_t col);
+		uint64_t	getRowCount();
+		bool		allRowsAvailable();
 
-		void		setColumnName(uint64_t col, const char *name);
-		const char	*getColumnName(uint64_t col);
 		void		clear();
 
 	#include <rudiments/private/sparsedynamictable.h>

@@ -21,8 +21,20 @@ dynamictable<valuetype>::~dynamictable() {
 
 template <class valuetype>
 inline
-uint64_t dynamictable<valuetype>::getRowCount() {
-	return rows;
+void dynamictable<valuetype>::setColumnName(uint64_t col, const char *name) {
+	if (cols && col<cols-1) {
+		delete[] columnnames[col];
+	}
+	columnnames[col]=charstring::duplicate(name);
+	if (col>=cols) {
+		cols=col+1;
+	}
+}
+
+template <class valuetype>
+inline
+const char *dynamictable<valuetype>::getColumnName(uint64_t col) {
+	return (col<cols)?columnnames[col]:NULL;
 }
 
 template <class valuetype>
@@ -51,20 +63,14 @@ valuetype dynamictable<valuetype>::getValue(uint64_t row, uint64_t col) {
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::setColumnName(uint64_t col, const char *name) {
-	if (cols && col<cols-1) {
-		delete[] columnnames[col];
-	}
-	columnnames[col]=charstring::duplicate(name);
-	if (col>=cols) {
-		cols=col+1;
-	}
+uint64_t dynamictable<valuetype>::getRowCount() {
+	return rows;
 }
 
 template <class valuetype>
 inline
-const char *dynamictable<valuetype>::getColumnName(uint64_t col) {
-	return (col<cols)?columnnames[col]:NULL;
+bool dynamictable<valuetype>::allRowsAvailable() {
+	return true;
 }
 
 template <class valuetype>

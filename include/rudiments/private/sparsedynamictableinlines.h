@@ -22,8 +22,19 @@ sparsedynamictable<valuetype>::~sparsedynamictable() {
 
 template <class valuetype>
 inline
-uint64_t sparsedynamictable<valuetype>::getRowCount() {
-	return rows;
+void sparsedynamictable<valuetype>::setColumnName(uint64_t col,
+							const char *name) {
+	delete[] columnnames[col];
+	columnnames[col]=charstring::duplicate(name);
+	if (col>=cols) {
+		cols=col+1;
+	}
+}
+
+template <class valuetype>
+inline
+const char *sparsedynamictable<valuetype>::getColumnName(uint64_t col) {
+	return columnnames[col];
 }
 
 template <class valuetype>
@@ -54,19 +65,14 @@ valuetype sparsedynamictable<valuetype>::getValue(uint64_t row, uint64_t col) {
 
 template <class valuetype>
 inline
-void sparsedynamictable<valuetype>::setColumnName(uint64_t col,
-							const char *name) {
-	delete[] columnnames[col];
-	columnnames[col]=charstring::duplicate(name);
-	if (col>=cols) {
-		cols=col+1;
-	}
+uint64_t sparsedynamictable<valuetype>::getRowCount() {
+	return rows;
 }
 
 template <class valuetype>
 inline
-const char *sparsedynamictable<valuetype>::getColumnName(uint64_t col) {
-	return columnnames[col];
+bool sparsedynamictable<valuetype>::allRowsAvailable() {
+	return true;
 }
 
 template <class valuetype>

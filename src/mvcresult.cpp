@@ -13,6 +13,8 @@ class mvcresultprivate {
 
 		dictionary<char *, char *>		types;
 		dictionary<char *, collection *>	data;
+
+		linkedlist<object *>	objects;
 		
 };
 
@@ -24,6 +26,7 @@ mvcresult::mvcresult() : object() {
 }
 
 mvcresult::~mvcresult() {
+	pvt->objects.clearAndDelete();
 	delete[] pvt->message;
 	delete pvt;
 }
@@ -131,4 +134,8 @@ const char *mvcresult::getType(const char *name) {
 
 collection *mvcresult::getData(const char *name) {
 	return pvt->data.getValue((char *)name);
+}
+
+void mvcresult::attachObject(object *obj) {
+	pvt->objects.append(obj);
 }
