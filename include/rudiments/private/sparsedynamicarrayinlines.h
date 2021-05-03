@@ -17,7 +17,6 @@ sparsedynamicarray<valuetype>::~sparsedynamicarray() {
 template< class valuetype >
 inline
 valuetype &sparsedynamicarray<valuetype>::operator[](uint64_t index) {
-	// FIXME: return a default value if not found
 	return values.getValue(index);
 }
 

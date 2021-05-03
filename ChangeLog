@@ -1,4 +1,6 @@
 2.0.0 - added object, collection class heirarchy
+	added sparsedynamicarray class
+	added dynamictable/sparsedynamictable classes
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
