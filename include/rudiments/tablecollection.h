@@ -30,7 +30,10 @@ class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 		virtual	void		setValue(uint64_t row,
 							uint64_t col,
 							valuetype value)=0;
-		virtual	valuetype	getValue(uint64_t row, uint64_t col)=0;
+		virtual	valuetype	getValue(uint64_t row,
+							uint64_t col)=0;
+		virtual	valuetype	getValue(uint64_t row,
+							const char * colname)=0;
 		virtual	uint64_t	getRowCount()=0;
 		virtual	bool		allRowsAvailable()=0;
 

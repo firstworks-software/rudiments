@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
 		title.append(",");
 		title.append(0);
 		title.append(")(out of range)");
-		test(title.getString(),!intt.getValue(rows+i,0));
+		test(title.getString(),!intt.getValue(rows+i,(uint64_t)0));
 	}
 
 	// clear
@@ -111,6 +111,6 @@ int main(int argc, char **argv) {
 		title.append(",");
 		title.append(0);
 		title.append(")(out of range after clear)");
-		test(title.getString(),!intt.getValue(i,0));
+		test(title.getString(),!intt.getValue(i,(uint64_t)0));
 	}
 }

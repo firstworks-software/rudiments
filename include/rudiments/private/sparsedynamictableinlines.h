@@ -65,6 +65,14 @@ valuetype sparsedynamictable<valuetype>::getValue(uint64_t row, uint64_t col) {
 
 template <class valuetype>
 inline
+valuetype sparsedynamictable<valuetype>::getValue(uint64_t row,
+							const char *colname) {
+	// FIXME: implement this
+	return (valuetype)0;
+}
+
+template <class valuetype>
+inline
 uint64_t sparsedynamictable<valuetype>::getRowCount() {
 	return rows;
 }

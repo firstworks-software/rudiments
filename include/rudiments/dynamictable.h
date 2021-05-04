@@ -23,6 +23,7 @@ class RUDIMENTS_DLLSPEC dynamictable : public tablecollection<valuetype> {
 		void		setValue(uint64_t row, uint64_t col,
 							valuetype value);
 		valuetype	getValue(uint64_t row, uint64_t col);
+		valuetype	getValue(uint64_t row, const char *colname);
 		uint64_t	getRowCount();
 		bool		allRowsAvailable();
 
