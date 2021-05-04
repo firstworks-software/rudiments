@@ -26,6 +26,8 @@ mvcresult::mvcresult() : object() {
 }
 
 mvcresult::~mvcresult() {
+	pvt->types.clearAndArrayDelete();
+	pvt->types.clearAndArrayDeleteKeysAndDeleteValues();
 	pvt->objects.clearAndDelete();
 	delete[] pvt->message;
 	delete pvt;
@@ -102,11 +104,7 @@ void mvcresult::attachData(const char *name,
 	dictionarynode<char *, char *>	*typenode=
 					pvt->types.getNode((char *)name);
 	if (typenode) {
-		// FIXME: apparently there's no
-		// removeAndArrayDeleteKeyAndArrayDeleteValue()...
-		delete[] typenode->getKey();
-		delete[] typenode->getValue();
-		pvt->types.remove(typenode);
+		pvt->types.removeAndArrayDelete(typenode);
 	}
 
 	// remove any existing data for this name
