@@ -24,6 +24,7 @@
 
 class memorypoolbuffer {
 	friend class memorypool;
+	friend class linkedlist<memorypoolbuffer *>;
 	private:
 			memorypoolbuffer(size_t size);
 			~memorypoolbuffer();
@@ -80,9 +81,7 @@ memorypool::memorypool(size_t initialsize,
 }
 
 memorypool::~memorypool() {
-	for (memorypoollistnode	*node=pvt->_first; node; node=node->getNext()) {
-		delete node->getValue();
-	}
+	pvt->_bufferlist.clearAndDelete();
 	delete pvt;
 }
 

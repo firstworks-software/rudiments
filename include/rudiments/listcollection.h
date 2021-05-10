@@ -22,6 +22,9 @@ class RUDIMENTS_DLLSPEC listnode : public nodecollectionnode<valuetype> {
 		/** Deletes this instance of the listnode class. */
 		virtual	~listnode() {};
 
+		virtual	void		setValue(valuetype value)=0;
+		virtual	valuetype	getValue() const=0;
+
 		virtual	int32_t	compare(valuetype value) const=0;
 		virtual	int32_t	compare(listnode<valuetype> *peer) const=0;
 		virtual	listnode<valuetype>	*getPrevious()=0;
@@ -44,6 +47,23 @@ class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
 
 		/** Deletes this instance of the listcollection class. */
 		virtual	~listcollection() {};
+
+		virtual	uint64_t	getLength() const=0;
+
+		virtual	listnode<valuetype>	*getFirst()=0;
+
+		virtual	listnode<valuetype>	*getNext(
+						listnode<valuetype> *node)=0;
+
+		virtual	listnode<valuetype>	*find(valuetype value)=0;
+		virtual	listnode<valuetype>	*find(
+						listnode<valuetype> *startnode,
+						valuetype value)=0;
+
+		virtual	void	clear()=0;
+
+		virtual	void	print() const=0;
+		virtual	void	print(uint64_t count) const=0;
 };
 
 #endif
