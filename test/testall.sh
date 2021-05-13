@@ -21,6 +21,7 @@ for program in \
 	dictionary \
 	directory \
 	dynamicarray \
+	dynamictable \
 	dynamiclib \
 	environment \
 	error \
@@ -44,12 +45,14 @@ for program in \
 	protocolentry \
 	randomnumber \
 	regularexpression \
+	scalar \
 	semaphoreset \
 	serviceentry \
 	sharedmemory \
 	signal \
 	singlylinkedlist \
 	snooze \
+	sparsedynamictable \
 	staticarray \
 	stringbuffer \
 	wstringbuffer \

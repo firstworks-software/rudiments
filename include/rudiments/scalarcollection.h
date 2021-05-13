@@ -20,6 +20,9 @@ class RUDIMENTS_DLLSPEC scalarcollection : public collection {
 
 		/** Deletes this instance of the scalarcollection class. */
 		virtual	~scalarcollection() {};
+
+		virtual	void		setValue(valuetype v)=0;
+		virtual	valuetype	getValue() const=0;
 };
 
 #endif

@@ -20,6 +20,7 @@ tests=Array(_
 	"dictionary",_
 	"directory",_
 	"dynamicarray",_
+	"dynamictable",_
 	"dynamiclib",_
 	"environment",_
 	"error",_
@@ -43,12 +44,13 @@ tests=Array(_
 	"protocolentry",_
 	"randomnumber",_
 	"regularexpression",_
-	"semaphoreset",_
+	"scalar",_
 	"serviceentry",_
 	"sharedmemory",_
 	"signal",_
 	"singlylinkedlist",_
 	"snooze",_
+	"sparsedynamictable",_
 	"staticarray",_
 	"stringbuffer",_
 	"wstringbuffer",_
