@@ -5,11 +5,11 @@
 		void	appendAbortString(const char *string);
 		void	clearAbortStrings();
 		int32_t	send(const char *string,
-				constnamevaluepairs *variables);
+			dictionary<const char *, const char *> *variables);
 		void	flush();
 		int32_t	expect(const char *string, char **abort);
 		int32_t	substituteVariables(const char **ch,
-						constnamevaluepairs *variables);
+			dictionary<const char *, const char *> *variables);
 		void	charUnescape(const char *str,
 					char **newstr, bool second);
 

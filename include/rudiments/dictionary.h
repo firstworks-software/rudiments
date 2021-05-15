@@ -6,7 +6,7 @@
 
 #include <rudiments/private/dictionaryincludes.h>
 
-/** The dictionary class allows you to store arbitrary numbers of key/value
+/** The dictionary class allows you to store arbitrary numbers of key-value
  *  pairs. */
 template <class keytype, class valuetype>
 class dictionary : public dictionarycollection<keytype,valuetype> {
@@ -45,12 +45,12 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *
 		 *  Defaults to "true".
 		 *
-		 *  Note, this can only be changed when there are no nodes
-		 *  in the dictionary.  Eg. before the first call to setValue()
-		 *  or after a call to clear().
+		 *  Note, this can only be changed when there are no key-value
+		 *  pairs in the dictionary.  Eg. before the first call to
+		 *  setValue() or after a call to clear().
 		 *
 		 *  Returns true if the call succeeded and false if it failed
-		 *  (eg. because the dictionary contained nodes). */
+		 *  (eg. because the dictionary contained key-value pairs). */
 		bool	setTrackInsertionOrder(bool trackinsertionorder);
 
 		/** Returns "true" if insertion order tracking is enabled and
@@ -123,166 +123,105 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		/** Returns a list of the keys in the dictionary. */
 		linkedlist<keytype>	*getKeys();
 
-		/** Returns the number of key/value pairs in the dictionary. */
+		/** Returns the number of key-value pairs in the dictionary. */
 		uint64_t	getLength();
 
-		/** Removes the dictionarynode associated with "key".
+		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	remove(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the key and value stored in the dictionarynode as well.
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the key and value stored in the key-value pair as well.
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	removeAndDelete(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the key and value stored in the dictionarynode as well,
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the key and value stored in the key-value pair as well,
 		 *  which are both presumed to be arrays.
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	removeAndArrayDelete(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the key stored in the dictionarynode as well.
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the key stored in the key-value pair as well.
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	removeAndDeleteKey(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the key stored in the dictionarynode as well, which is
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the key stored in the key-value pair as well, which is
 		 *  presumed to be an array.
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	removeAndArrayDeleteKey(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the value stored in the dictionarynode as well.
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the value stored in the key-value pair as well.
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	removeAndDeleteValue(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the value stored in the dictionarynode as well, which is
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the value stored in the key-value pair as well, which is
 		 *  presumed to be an array.
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	removeAndArrayDeleteValue(keytype key);
 
-		/** Removes the dictionarynode associated with "key", deleting
-		 *  the key and value stored in the dictionarynode as well.
+		/** Removes the key-value pair associated with "key", deleting
+		 *  the key and value stored in the key-value pair as well.
 		 *  The value is presumed to be an array.*/
 		bool	removeAndDeleteKeyAndArrayDeleteValue(keytype key);
 
-		/** Deletes the dictionarynodes associated with "key",
-		 *  deleting the key and value stored in the dictionarynode
+		/** Deletes the key-value pairs associated with "key",
+		 *  deleting the key and value stored in the key-value pair
 		 *  as well.  The key is presumed to be an array.*/
 		bool	removeAndArrayDeleteKeyAndDeleteValue(keytype key);
 
-		/** Removes the specified dictionarynode.
-		 *  Returns true on success or false if "node" was NULL. */
-		bool	remove(dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the key and
-		 *  value stored in the dictionarynode as well.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndDelete(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the key and
-		 *  value stored in the dictionarynode as well, which are both
-		 *  presumed to be arrays.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndArrayDelete(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the key
-		 *  stored in the dictionarynode as well.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndDeleteKey(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the key
-		 *  stored in the dictionarynode as well, which is presumed to
-		 *  be an array.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndArrayDeleteKey(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the value
-		 *  stored in the dictionarynode as well.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndDeleteValue(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the value
-		 *  stored in the dictionarynode as well, which is presumed to
-		 *  be an array.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndArrayDeleteValue(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Removes the specified dictionarynode, deleting the key and
-		 *  value stored in the dictionarynode as well.
-		 *  The value is presumed to be an array.*/
-		bool	removeAndDeleteKeyAndArrayDeleteValue(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Deletes the specified dictionarynode, deleting the key and
-		 *  value stored in the dictionarynode as well.  The key is
-		 *  presumed to be an array.*/
-		bool	removeAndArrayDeleteKeyAndDeleteValue(
-				dictionarynode<keytype,valuetype> *node);
-
-		/** Deletes all dictionarynodes currently in the dictionary.
+		/** Deletes all key-value pairs currently in the dictionary.
 		 *  Note however, that the key and value stored in each
-		 *  dictionarynode are not deleted by this call. */
+		 *  key-value pair are not deleted by this call. */
 		void	clear();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
-		 *  deleting the key and value stored in each dictionarynode
+		/** Deletes all key-value pairs currently in the dictionary,
+		 *  deleting the key and value stored in each key-value pair
 		 *  as well. */
 		void	clearAndDelete();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
-		 *  deleting the key and value stored in each dictionarynode
+		/** Deletes all key-value pairs currently in the dictionary,
+		 *  deleting the key and value stored in each key-value pair
 		 *  as well, which are both presumed to be arrays. */
 		void	clearAndArrayDelete();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
+		/** Deletes all key-value pairs currently in the dictionary,
 		 *  deleting the key (but not the value) stored in each
-		 *  dictionarynode as well. */
+		 *  key-value pair as well. */
 		void	clearAndDeleteKeys();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
+		/** Deletes all key-value pairs currently in the dictionary,
 		 *  deleting the key (but not the value) stored in each
-		 *  dictionarynode as well, which is presumed to be an array. */
+		 *  key-value pair as well, which is presumed to be an array. */
 		void	clearAndArrayDeleteKeys();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
+		/** Deletes all key-value pairs currently in the dictionary,
 		 *  deleting the value (but not the key) stored in each
-		 *  dictionarynode as well. */
+		 *  key-value pair as well. */
 		void	clearAndDeleteValues();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
+		/** Deletes all key-value pairs currently in the dictionary,
 		 *  deleting the value (but not the key) stored in each
-		 *  dictionarynode as well, which is presumed to be an array. */
+		 *  key-value pair as well, which is presumed to be an array. */
 		void	clearAndArrayDeleteValues();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
-		 *  deleting the key and value stored in each dictionarynode
+		/** Deletes all key-value pairs currently in the dictionary,
+		 *  deleting the key and value stored in each key-value pair
 		 *  as well.  Each value is presumed to be an array.*/
 		void	clearAndDeleteKeysAndArrayDeleteValues();
 
-		/** Deletes all dictionarynodes currently in the dictionary,
-		 *  deleting the key and value stored in each dictionarynode
+		/** Deletes all key-value pairs currently in the dictionary,
+		 *  deleting the key and value stored in each key-value pair
 		 *  as well.  Each key is presumed to be an array.*/
 		void	clearAndArrayDeleteKeysAndDeleteValues();
 
@@ -294,9 +233,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 
 
 // ideally I'd use typdefs for these but older compilers can't handle them
-#define namevaluepairsnode	dictionarynode<char *,char *>
 #define namevaluepairs		dictionary<char *,char *>
-#define constnamevaluepairsnode	dictionarynode<const char *,const char *>
 #define constnamevaluepairs	dictionary<const char *,const char *>
 
 #include <rudiments/private/dictionaryinlines.h>

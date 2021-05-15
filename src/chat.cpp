@@ -76,7 +76,7 @@ int32_t chat::runScript(const char *script, char **abort) {
 }
 
 int32_t chat::runScript(const char *script, char **abort,
-				constnamevaluepairs *variables) {
+			dictionary<const char *, const char *> *variables) {
 
 	#ifdef DEBUG_CHAT
 	stdoutput.printf("runScript(readfd=%d,writefd=%d,i\n\"%s\")\n",
@@ -296,7 +296,8 @@ int32_t chat::expect(const char *string, char **abort) {
 	}
 }
 
-int32_t chat::send(const char *string, constnamevaluepairs *variables) {
+int32_t chat::send(const char *string,
+			dictionary<const char *, const char *> *variables) {
 
 	#ifdef DEBUG_CHAT
 	stdoutput.printf("sending:\n");
@@ -360,7 +361,7 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 
 
 int32_t chat::substituteVariables(const char **ch,
-					constnamevaluepairs *variables) {
+			dictionary<const char *, const char *> *variables) {
 			
 	// look for $(variable), make sure we don't just have $(\0
 	const char	*str=*ch;
