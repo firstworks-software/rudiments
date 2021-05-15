@@ -50,8 +50,7 @@ class staticarray : public arraycollection<valuetype> {
 		staticarray<valuetype,length>	&operator=(
 					const staticarray<valuetype,length> &v);
 
-		/** Deletes this instance of the staticarray class and all of
-		 *  its values. */
+		/** Deletes this instance of the staticarray class. */
 		~staticarray();
 
 		/** Provides access to the "index"th element of the

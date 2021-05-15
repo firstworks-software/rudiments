@@ -16,13 +16,7 @@ parameterstring::parameterstring() : object() {
 }
 
 parameterstring::~parameterstring() {
-	// delete each name and value in the list
-	for (listnode< dictionarynode<char *,char *> *>
-			*node=pvt->_nvp.getList()->getFirst();
-			node; node=node->getNext()) {
-		delete[] node->getValue()->getKey();
-		delete[] node->getValue()->getValue();
-	}
+	pvt->_nvp.clearAndArrayDelete();
 	delete pvt;
 }
 

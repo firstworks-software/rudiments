@@ -101,18 +101,10 @@ void mvcresult::attachData(const char *name,
 				collection *data) {
 
 	// remove any existing type for this name
-	dictionarynode<char *, char *>	*typenode=
-					pvt->types.getNode((char *)name);
-	if (typenode) {
-		pvt->types.removeAndArrayDelete(typenode);
-	}
+	pvt->types.removeAndArrayDelete((char *)name);
 
 	// remove any existing data for this name
-	dictionarynode<char *, collection *>	*datanode=
-					pvt->data.getNode((char *)name);
-	if (datanode) {
-		pvt->data.removeAndArrayDeleteKeyAndDeleteValue(datanode);
-	}
+	pvt->data.removeAndArrayDeleteKeyAndDeleteValue((char *)name);
 	
 	// set type
 	pvt->types.setValue(charstring::duplicate(name),

@@ -265,11 +265,10 @@ const char *dom::cacheString(const char *string) {
 	if (!string) {
 		return NULL;
 	}
-	dictionarynode< char *, uint64_t > 	*node=
-				pvt->_strcache.getNode((char *)string);
-	if (node) {
-		node->setValue(node->getValue()+1);
-		return node->getKey();
+	uint64_t	refcount;
+	if (pvt->_strcache.getValue((char *)string,&refcount)) {
+		pvt->_strcache.setValue((char *)string,refcount+1);
+		return pvt->_strcache.getKey((char *)string);
 	}
 	char	*copy=charstring::duplicate(string);
 	pvt->_strcache.setValue(copy,1);
@@ -280,14 +279,13 @@ void dom::unCacheString(const char *string) {
 	if (!string) {
 		return;
 	}
-	dictionarynode< char *, uint64_t > 	*node=
-				pvt->_strcache.getNode((char *)string);
-	if (node) {
-		node->setValue(node->getValue()-1);
-		if (!node->getValue()) {
-			char	*data=node->getKey();
-			pvt->_strcache.remove(node);
-			delete[] data;
+	uint64_t	refcount;
+	if (pvt->_strcache.getValue((char *)string,&refcount)) {
+		refcount--;
+		if (refcount) {
+			pvt->_strcache.setValue((char *)string,refcount);
+		} else {
+			pvt->_strcache.removeAndArrayDeleteKey((char *)string);
 		}
 	}
 }

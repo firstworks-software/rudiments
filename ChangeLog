@@ -2,6 +2,7 @@
 	added sparsedynamicarray class
 	added dynamictable/sparsedynamictable classes
 	added scalar class
+	various semi-obscure internal fixes to dictionary class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

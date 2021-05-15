@@ -366,15 +366,17 @@ int32_t chat::substituteVariables(const char **ch,
 	const char	*str=*ch;
 	if (charstring::compare(str,"$(") && *(str+2)) {
 
-		for (listnode<constnamevaluepairsnode *>
-				*nln=variables->getList()->getFirst();
+		for (listnode<const char *>
+				*nln=variables->getKeys()->getFirst();
 				nln; nln=nln->getNext()) {
 
-			const char	*variable=nln->getValue()->getKey();
-			ssize_t	varlen=charstring::length(variable);
-			const char	*value=nln->getValue()->getValue();
+			const char	*variable=nln->getValue();
+			ssize_t		varlen=charstring::length(variable);
 			if (!charstring::compare(variable,str+2,varlen) &&
 							*(str+2+varlen)==')') {
+
+				const char	*value=
+						variables->getValue(variable);
 				ssize_t	result=pvt->_writefd->write(value);
 				#ifdef DEBUG_CHAT
 				stdoutput.printf("%s",value);

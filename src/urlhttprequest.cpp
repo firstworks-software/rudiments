@@ -59,12 +59,12 @@ void urlhttprequest::dumpVariables() {
 
 	pvt->_sapi->write("Skin Variables:\n");
 
-	for (listnode<namevaluepairsnode *>
-				*svnode=pvt->_skinvars.getList()->getFirst();
-				svnode; svnode=svnode->getNext()) {
-		pvt->_sapi->write(svnode->getValue()->getKey());
+	for (listnode<char *> *svnode=pvt->_skinvars.getKeys()->getFirst();
+					svnode; svnode=svnode->getNext()) {
+		char	*key=svnode->getValue();
+		pvt->_sapi->write(key);
 		pvt->_sapi->write("=");
-		pvt->_sapi->write(svnode->getValue()->getValue());
+		pvt->_sapi->write(pvt->_skinvars.getValue(key));
 		pvt->_sapi->write("\n");
 	}
 
@@ -187,7 +187,7 @@ const char *urlhttprequest::getSkinVariable(const char *name) {
 }
 
 uint64_t urlhttprequest::getSkinVariableCount() {
-	return pvt->_skinvars.getList()->getLength();
+	return pvt->_skinvars.getLength();
 }
 
 const char * const *urlhttprequest::getSkinVariables() {
@@ -450,11 +450,11 @@ void urlhttprequest::buildAllVariables() {
 	allVariableCount(newallvariablecount);
 
 	// add skin variables
-	for (listnode<namevaluepairsnode *>
-				*sknode=pvt->_skinvars.getList()->getFirst();
-				sknode; sknode=sknode->getNext()) {
-		(*allvars)[index]=sknode->getValue()->getKey();
-		(*allvals)[index++]=sknode->getValue()->getValue();
+	for (listnode<char *> *sknode=pvt->_skinvars.getKeys()->getFirst();
+					sknode; sknode=sknode->getNext()) {
+		char	*key=sknode->getValue();
+		(*allvars)[index]=key;
+		(*allvals)[index++]=pvt->_skinvars.getValue(key);
 	}
 
 	// add url variables

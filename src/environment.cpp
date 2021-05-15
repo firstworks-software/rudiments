@@ -43,11 +43,10 @@ void environment::init() {
 }
 
 void environment::exit() {
-	for (listnode< namevaluepairsnode *> *node=
-				_envstrings->getList()->getFirst();
-				node; node=node->getNext()) {
-		free((void *)node->getValue()->getValue());
-		node->getValue()->setValue(NULL);
+	for (listnode< char *> *node=_envstrings->getKeys()->getFirst();
+						node; node=node->getNext()) {
+		free((void *)_envstrings->getValue(node->getValue()));
+		_envstrings->setValue(node->getValue(),NULL);
 	}
 	delete _envstrings;
 }

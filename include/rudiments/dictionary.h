@@ -120,6 +120,12 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value". */
 		void	setValues(keytype *keys, valuetype *values);
+
+		/** Sets the value associated with each key in the "keys"
+		 *  array to the corresponding value in the "values" array.
+		 *  Assumes that keys is NULL terminated.
+		 *  If "key" already exists, the value currently
+		 *  accociated with it is replaced with "value". */
 		void	setValues(keytype const *keys, valuetype const *values);
 
 		/** Sets the value associated with each of "count" keys
@@ -129,6 +135,12 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  accociated with it is replaced with "value". */
 		void	setValues(keytype *keys, valuetype *values,
 							uint64_t count);
+
+		/** Sets the value associated with each of "count" keys
+		 *  in the "keys" array to the corresponding value in the
+		 *  "values" array.
+		 *  If "key" already exists, the value currently
+		 *  accociated with it is replaced with "value". */
 		void	setValues(keytype const *keys, valuetype const *values,
 								uint64_t count);
 
@@ -143,15 +155,28 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  found. */
 		bool	getValue(keytype key, valuetype *value);
 
-		/** Returns the node associated with "key" or NULL
-		 *  if "key" wasn't found. */
-		dictionarynode<keytype,valuetype>	*getNode(keytype key);
-
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid value of NULL associated with "key". */
 		valuetype getValue(keytype key);
+
+		/** Sets "k" to the key associated with "key".
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
+		bool	getKey(keytype key, keytype *k);
+
+		/** Returns the value associated with "key" or NULL
+		 *  if "key" wasn't found.  Note that there is no
+		 *  way to distinguish between failure to find "key"
+		 *  and a valid value of NULL associated with "key". */
+		keytype getKey(keytype key);
+
+		/** Returns a list of the keys in the dictionary. */
+		linkedlist<keytype>	*getKeys();
+
+		/** Returns the number of key/value pairs in the dictionary. */
+		uint64_t	getLength();
 
 		/** Removes the dictionarynode associated with "key".
 		 *  Returns true on success or false if "key" wasn't
@@ -268,22 +293,9 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		bool	removeAndArrayDeleteKeyAndDeleteValue(
 				dictionarynode<keytype,valuetype> *node);
 
-		/** Returns a list of the keys in the dictionary.
-		 *
- 		 *  Note that the linkedlist returned is allocated internally
- 		 *  and returned.  The calling program must delete the
- 		 *  linkedlist. */
-		linkedlist<keytype>	*getKeys();
-
-		/** Returns the tree used internally. */
-		avltree<dictionarynode<keytype,valuetype> *> *getTree();
-
-		/** Returns the list used internally. */
-		linkedlist<dictionarynode<keytype,valuetype> *> *getList();
-
 		/** Deletes all dictionarynodes currently in the dictionary.
 		 *  Note however, that the key and value stored in each
-		 *  dictionarynode is not deleted by this call. */
+		 *  dictionarynode are not deleted by this call. */
 		void	clear();
 
 		/** Deletes all dictionarynodes currently in the dictionary,

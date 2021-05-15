@@ -15,14 +15,20 @@ class RUDIMENTS_DLLSPEC arraycollection : public collection {
 		/** Creates an instance of the arraycollection class. */
 		arraycollection() : collection() {};
 
-		/** Creates an instance of the arraycollection class. */
+		/** Creates an instance of the arraycollection class that is
+		 *  a copy of "c". */
 		arraycollection(const collection &c) : collection(c) {};
 
 		/** Deletes this instance of the listcollection class. */
 		virtual	~arraycollection() {};
 
+		/** Provides access ot the "index"th element of the array. */
 		virtual	valuetype	&operator[](uint64_t index)=0;
+
+		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength() const=0;
+
+		/** Clears the array, deleting all of its values. */
 		virtual	void		clear()=0;
 };
 

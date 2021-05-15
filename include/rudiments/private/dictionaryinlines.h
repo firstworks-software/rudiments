@@ -9,6 +9,7 @@ inline
 dictionary<keytype,valuetype>::dictionary() :
 				dictionarycollection<keytype,valuetype>() {
 	trackinsertionorder=true;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
@@ -114,18 +115,27 @@ inline
 void dictionary<keytype,valuetype>::setValues(
 					dictionary<keytype,valuetype> *dict) {
 	if (dict) {
-		for (listnode<dictionarynode<keytype,valuetype> *>
-					*node=dict->getList()->getFirst();
-					node; node=node->getNext()) {
-			setValue(node->getValue()->getKey(),
-					node->getValue()->getValue());
+		if (dict->trackinsertionorder) {
+			for (listnode<dictionarynode<keytype,valuetype> *>
+						*node=dict->list.getFirst();
+						node; node=node->getNext()) {
+				setValue(node->getValue()->getKey(),
+						node->getValue()->getValue());
+			}
+		} else {
+			for (avltreenode<dictionarynode<keytype,valuetype> *>
+						*node=dict->tree.getFirst();
+						node; node=node->getNext()) {
+				setValue(node->getValue()->getKey(),
+						node->getValue()->getValue());
+			}
 		}
 	}
 }
 
 template <class keytype, class valuetype>
 inline
-bool dictionary<keytype,valuetype>::getValue(keytype key,valuetype *value) {
+bool dictionary<keytype,valuetype>::getValue(keytype key, valuetype *value) {
 	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
 		*value=dnode->getValue();
@@ -146,6 +156,27 @@ valuetype dictionary<keytype,valuetype>::getValue(keytype key) {
 
 template <class keytype, class valuetype>
 inline
+bool dictionary<keytype,valuetype>::getKey(keytype key, keytype *k) {
+	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
+	if (dnode) {
+		*k=dnode->getKey();
+		return true;
+	}
+	return false;
+}
+
+template <class keytype, class valuetype>
+inline
+keytype dictionary<keytype,valuetype>::getKey(keytype key) {
+	keytype	k;
+	if (getKey(key,&k)) {
+		return k;
+	}
+	return (keytype)0;
+}
+
+template <class keytype, class valuetype>
+inline
 dictionarynode<keytype,valuetype> *dictionary<keytype,valuetype>::
 							getNode(keytype key) {
 	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
@@ -153,6 +184,31 @@ dictionarynode<keytype,valuetype> *dictionary<keytype,valuetype>::
 		return tnode->getValue();
 	}
 	return NULL;
+}
+
+template <class keytype, class valuetype>
+inline
+linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
+	delete keylist;
+	keylist=new linkedlist<keytype>();
+	if (trackinsertionorder) {
+		for (listnode<dictionarynode<keytype,valuetype> *>
+			*node=list.getFirst(); node; node=node->getNext()) {
+			keylist->append(node->getValue()->getKey());
+		}
+	} else {
+		for (avltreenode<dictionarynode<keytype,valuetype> *>
+			*node=tree.getFirst(); node; node=node->getNext()) {
+			keylist->append(node->getValue()->getKey());
+		}
+	}
+	return keylist;
+}
+
+template <class keytype, class valuetype>
+inline
+uint64_t dictionary<keytype,valuetype>::getLength() {
+	return tree.getLength();
 }
 
 template <class keytype, class valuetype>
@@ -445,151 +501,137 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteKeyAndDeleteValue(
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clear() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDelete() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getKey();
 		delete node->getValue()->getValue();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDelete() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDeleteKeys() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getKey();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteKeys() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDeleteValues() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getValue();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteValues() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getValue();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndDeleteKeysAndArrayDeleteValues() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteKeysAndDeleteValues() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete node->getValue()->getValue();
 		delete node->getValue();
 	}
 	tree.clear();
 	list.clear();
-}
-
-template <class keytype, class valuetype>
-inline
-linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
-	linkedlist<keytype>	*keys=new linkedlist<keytype>();
-	for (listnode<dictionarynode<keytype,valuetype> *>
-		*node=getList()->getFirst(); node; node=node->getNext()) {
-		keys->append(node->getValue()->getKey());
-	}
-	return keys;
-}
-
-template <class keytype, class valuetype>
-inline
-avltree<dictionarynode<keytype,valuetype> *>
-			*dictionary<keytype,valuetype>::getTree() {
-	return &tree;
-}
-
-template <class keytype, class valuetype>
-inline
-linkedlist<dictionarynode<keytype,valuetype> *>
-			*dictionary<keytype,valuetype>::getList() {
-	if (!trackinsertionorder) {
-		list.clear();
-		for (avltreenode<dictionarynode<keytype,valuetype> *>
-			*node=tree.getFirst(); node; node=node->getNext()) {
-			list.append(node->getValue());
-		}
-	}
-	return &list;
+	delete keylist;
+	keylist=NULL;
 }
 
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::print() {
-	for (listnode<dictionarynode<keytype,valuetype> *> *node=
-				list.getFirst(); node; node=node->getNext()) {
+	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+				tree.getFirst(); node; node=node->getNext()) {
 		node->getValue()->print();
 		stdoutput.printf("\n");
 	}
@@ -670,6 +712,6 @@ int32_t node_compare(dictionarynode<keytype,valuetype> *value1,
 
 template <class keytype, class valuetype>
 inline
-void node_compare(dictionarynode<keytype,valuetype> *value) {
+void node_print(dictionarynode<keytype,valuetype> *value) {
 	node_print(value);
 }

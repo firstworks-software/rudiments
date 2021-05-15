@@ -529,15 +529,13 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 	}
 
 	// send the rest of the headers...
-	linkedlist<char *>	*keys=headerdict.getKeys();
-	for (listnode<char *> *node=keys->getFirst();
-					node; node=node->getNext()) {
+	for (listnode<char *> *node=headerdict.getKeys()->getFirst();
+						node; node=node->getNext()) {
 		pvt->_request->append(node->getValue());
 		pvt->_request->append(": ");
 		pvt->_request->append(headerdict.getValue(node->getValue()));
 		pvt->_request->append("\r\n");
 	}
-	delete keys;
 	headerdict.clearAndArrayDeleteKeys();
 
 	// for http post, add an additional line break

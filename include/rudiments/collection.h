@@ -13,7 +13,8 @@ class RUDIMENTS_DLLSPEC collection : public object {
 		/** Creates an instance of the collection class. */
 		collection() : object() {};
 
-		/** Creates an instance of the collection class. */
+		/** Creates an instance of the collection class that is a copy
+		 *  of "c". */
 		collection(const collection &c) : object(c) {};
 
 		/** Deletes this instance of the collection class. */
