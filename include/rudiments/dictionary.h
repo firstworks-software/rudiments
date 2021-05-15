@@ -6,59 +6,8 @@
 
 #include <rudiments/private/dictionaryincludes.h>
 
-/** The dictionarynode class stores the key/value pairs that compose a
- *  dictionary. */
-template <class keytype, class valuetype>
-class dictionarynode : public object {
-	public:
-		/** Creates an instance of the dictionary node class 
-		 *  with key "key" and value "value". */
-		dictionarynode(keytype key, valuetype value);
-
-		/** Deletes this instance of the dictionarynode class.
-		 *  Note however, that neither the key nor value stored in the
-		 *  dictionarynode are deleted by this call. */
-		virtual	~dictionarynode();
-
-		/** Sets the key stored in the node to "key". */
-		void	setKey(keytype key);
-
-		/** Sets the value stored in the node to "value". */
-		void	setValue(valuetype value);
-
-		/** Returns the key stored in the node. */
-		keytype		getKey() const;
-
-		/** Returns the value stored in the node. */
-		valuetype	getValue() const;
-
-		/** Returns a negative number,0 or a positive number depending
-		 *  on whether the key stored in the node is respectively
-		 *  less than, equal to or greater than "testkey". */
-		int32_t	compare(keytype testkey) const;
-
-		/** Returns a negative number,0 or a positive number depending
-		 *  on whether the key stored in the node is respectively
-		 *  less than, equal to or greater than "testkey". */
-		int32_t	compare(
-			dictionarynode<keytype,valuetype> *testnode) const;
-
-		/** Prints a representation of the key and
-		 *  value stored in the node. */
-		void	print() const;
-
-	#include <rudiments/private/dictionarynode.h>
-};
-
 /** The dictionary class allows you to store arbitrary numbers of key/value
- *  pairs.
- * 
- *  Each dictionary is composed of a set of dictionarynodes.  Each
- *  dictionarynode contains the key and value.
- *
- *  Internally, the dictionary class uses a linkedlist to store the values
- *  though this is potentially inefficient though, and may change in a future
- *  version. */
+ *  pairs. */
 template <class keytype, class valuetype>
 class dictionary : public dictionarycollection<keytype,valuetype> {
 	public:
@@ -77,10 +26,9 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  below return alist of key-value pairs in ascending order. */
 		dictionary(bool trackinsertionorder);
 
-		/** Deletes this instance of the dictionary class and all
-		 *  of its dictionarynodes.  Note however, that neither the
-		 *  key nor value stored in each dictionarynode are deleted
-		 *  by this call. */
+		/** Deletes this instance of the dictionary class.  Note
+		 *  however, that neither the keys nor values stored in the
+		 *  dictionary are deleted by this call. */
 		virtual ~dictionary();
 
 		/** Sets whether tracking of the order of key insertion is

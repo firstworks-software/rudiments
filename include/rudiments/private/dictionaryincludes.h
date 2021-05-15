@@ -5,3 +5,6 @@
 
 #include <rudiments/avltree.h>
 #include <rudiments/linkedlist.h>
+
+template <class keytype, class valuetype>
+class dictionarynode;

@@ -5,6 +5,26 @@
 #include <rudiments/private/nodeinlines.h>
 
 template <class keytype, class valuetype>
+class dictionarynode : public object {
+	public:
+		dictionarynode(keytype key, valuetype value);
+		virtual	~dictionarynode();
+
+		void	setKey(keytype key);
+		void	setValue(valuetype value);
+		keytype		getKey() const;
+		valuetype	getValue() const;
+		int32_t	compare(keytype testkey) const;
+		int32_t	compare(
+			dictionarynode<keytype,valuetype> *testnode) const;
+		void	print() const;
+
+	private:
+		keytype		key;
+		valuetype	value;
+};
+
+template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::dictionary() :
 				dictionarycollection<keytype,valuetype>() {
