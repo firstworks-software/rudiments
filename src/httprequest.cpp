@@ -119,7 +119,7 @@ class httprequestprivate {
 	private:
 		httpserverapi	*_sapi;
 
-		namevaluepairs	_parameters;
+		dictionary<char *, char *>	_parameters;
 		bool		_dirtyparameters;
 		const char	**_parametervars;
 		const char	**_parametervals;
@@ -130,7 +130,7 @@ class httprequestprivate {
 		bool		_dirtyfilenames;
 		const char	**_filenames;
 
-		namevaluepairs	_cookies;
+		dictionary<char *, char *>	_cookies;
 		bool		_dirtycookies;
 		const char	**_cookievars;
 		const char	**_cookievals;
@@ -175,7 +175,7 @@ httprequest::~httprequest() {
 }
 
 void httprequest::cleanUp(const char ***vars, const char ***vals,
-						namevaluepairs *nvp) {
+					dictionary<char *, char *> *nvp) {
 
 	nvp->clearAndArrayDelete();
 	delete[] (*vars);
@@ -249,7 +249,7 @@ void httprequest::dumpVariables() {
 }
 
 void httprequest::buildList(const char ***vars, const char ***vals,
-						namevaluepairs *nvp) {
+					dictionary<char *, char *> *nvp) {
 
 	delete[] (*vars);
 	delete[] (*vals);

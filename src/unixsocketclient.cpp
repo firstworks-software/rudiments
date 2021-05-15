@@ -87,7 +87,7 @@ void unixsocketclient::initialize(const char *filename,
 	#endif
 }
 
-void unixsocketclient::initialize(constnamevaluepairs *cd) {
+void unixsocketclient::initialize(dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
 		const char	*filename=NULL;

@@ -231,11 +231,6 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 	#include <rudiments/private/dictionary.h>
 };
 
-
-// ideally I'd use typdefs for these but older compilers can't handle them
-#define namevaluepairs		dictionary<char *,char *>
-#define constnamevaluepairs	dictionary<const char *,const char *>
-
 #include <rudiments/private/dictionaryinlines.h>
 
 #endif

@@ -29,7 +29,8 @@ class RUDIMENTS_DLLSPEC client : public filedescriptor {
 		 *  "cd".
 		 *
 		 *  This implementation does nothing. */
-		virtual void	initialize(constnamevaluepairs *cd);
+		virtual void	initialize(
+				dictionary<const char *, const char *> *cd);
 
 		/** This method may be implemnted by a child class to open a
 		 *  connection to a server, presumably specified in the "cd"

@@ -886,13 +886,14 @@ bool domnode::appendAttribute(const char *name, const char *value) {
 	return insertAttribute(name,value,getAttributeCount());
 }
 
-constnamevaluepairs *domnode::getAttributes() const {
+dictionary<const char *, const char *> *domnode::getAttributes() const {
 
 	if (pvt->_isnullnode) {
 		return NULL;
 	}
 
-	constnamevaluepairs	*nvp=new constnamevaluepairs();
+	dictionary<const char *, const char *> *nvp=
+				new dictionary<const char *, const char *>();
 	for (uint64_t i=0; i<getAttributeCount(); i++) {
 		nvp->setValue(getAttribute(i)->getName(),
 				getAttribute(i)->getValue());

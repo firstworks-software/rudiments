@@ -56,7 +56,7 @@ void client::clientClone(const client &c) {
 	pvt->_connecterror=charstring::duplicate(c.pvt->_connecterror);
 }
 
-void client::initialize(constnamevaluepairs *cd) {
+void client::initialize(dictionary<const char *, const char *> *cd) {
 	// by default, do nothing
 }
 

@@ -3,9 +3,9 @@
 
 	protected:
 		void	buildList(const char ***vars, const char ***vals,
-							namevaluepairs *nvp);
+					dictionary<char *, char *> *nvp);
 		void	cleanUp(const char ***vars, const char ***vals,
-							namevaluepairs *nvp);
+					dictionary<char *, char *> *nvp);
 
 		typedef enum {
 			get_request,

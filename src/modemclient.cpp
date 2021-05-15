@@ -72,7 +72,7 @@ modemclient::~modemclient() {
 	delete pvt;
 }
 
-void modemclient::initialize(constnamevaluepairs *cd) {
+void modemclient::initialize(dictionary<const char *, const char *> *cd) {
 	if (cd) {
 		const char	*devicename=NULL;
 		cd->getValue("device",&devicename);
@@ -118,7 +118,7 @@ void modemclient::initialize(const char *devicename,
 
 int32_t modemclient::connect() {
 
-	constnamevaluepairs	phnvp;
+	dictionary<const char *, const char *>	phnvp;
 	phnvp.setValue("customatcommands",pvt->_customatcommands);
 	phnvp.setValue("phonenumber",pvt->_phonenumber);
 

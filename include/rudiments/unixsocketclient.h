@@ -52,11 +52,10 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 
 
 
-		/** Queries namevaluepairs "cd" for "filename",
-		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "tries".  Initializes the class to use the
+		/** Queries "cd" for "filename", "timeoutsec", "timeoutusec",
+		 *  "retrywait" and "tries".  Initializes the class to use the
 		 *  result when connect() is called. */
-		void	initialize(constnamevaluepairs *cd);
+		void	initialize(dictionary<const char *, const char *> *cd);
 
 		/** Initializes the class to use "filename",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and

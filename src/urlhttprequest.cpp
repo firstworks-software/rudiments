@@ -35,7 +35,7 @@ class urlhttprequestprivate {
 		stringbuffer	_pagepath;
 		stringbuffer	_pageurl;
 
-		namevaluepairs	_skinvars;
+		dictionary<char *, char *>	_skinvars;
 		bool		_dirtyskinvariables;
 		const char	**_skinvariablevars;
 		const char	**_skinvariablevals;
