@@ -21,9 +21,18 @@ class RUDIMENTS_DLLSPEC nodecollectionnode : public object {
 		/** Deletes this instance of the node class. */
 		virtual	~nodecollectionnode() {};
 
+		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
+
+		/** Return the value stored in the node. */
 		virtual	valuetype	getValue() const=0;
+
+		/** Returns a negative number, 0, or a positive number depending
+		 *  on whether the value stored in the node is respectively
+		 *  less than, equal to or greater than "value". */
 		virtual	int32_t	compare(valuetype value) const=0;
+
+		/** Prints out a representation of the node. */
 		virtual	void	print() const=0;
 };
 
