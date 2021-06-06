@@ -5,7 +5,7 @@
 
 		sparsedynamicarray<char *>	columnnames;
 
-		sparsedynamicarray<sparsedynamicarray<valuetype>>	values;
+		sparsedynamicarray<sparsedynamicarray<valuetype> >	values;
 
 		uint64_t	cols;
 		uint64_t	rows;
