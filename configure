@@ -39101,6 +39101,12 @@ then
 fi
 
 
+if ( test -r "libtool" -a -n "$DARWIN" )
+then
+	sed -e "s|print -r --|printf %s\\\\n|g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+
 
 echo
 echo "***** Summary ****************"

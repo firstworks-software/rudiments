@@ -5050,6 +5050,14 @@ then
 fi
 
 
+dnl Some versions of OS X don't have "print", but libtool wants to use
+dnl "print -r --".  Replace it with "printf %s\\n"
+if ( test -r "libtool" -a -n "$DARWIN" )
+then
+	sed -e "s|print -r --|printf %s\\\\n|g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+
 
 dnl Summary.
 echo
