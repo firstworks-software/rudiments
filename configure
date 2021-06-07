@@ -16411,6 +16411,13 @@ $as_echo "no" >&6; }
 fi
 
 
+
+								BASH=`which bash`
+		if ( test -n "$BASH" )
+		then
+			SHELL="$BASH"
+
+		fi
 		;;
 	* )
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -39105,14 +39112,6 @@ if ( test -r "libtool" -a -n "$DARWIN" )
 then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
 	mv libtool.new libtool
-
-	BASH=`which bash`
-	if ( test -n "$BASH" )
-	then
-		echo "#! $BASH" > libtool.new
-		tail -n+2 libtool >> libtool.new
-		mv libtool.new libtool
-	fi
 fi
 
 
