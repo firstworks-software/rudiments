@@ -5051,11 +5051,21 @@ fi
 
 
 dnl Some versions of OS X don't have "print", but libtool wants to use
-dnl "print -r --".  Replace it with "printf %s\\n"
+dnl "print -r --".  Replace it with "printf %s\\n".  Also, on OS X, if bash
+dnl exists, then use it instead of /bin/sh, as on older versions, /bin/sh is
+dnl actually tcsh or zsh, and doesn't run libtool very well.
 if ( test -r "libtool" -a -n "$DARWIN" )
 then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
 	mv libtool.new libtool
+
+	BASH=`which bash`
+	if ( test -n "$BASH" )
+	then
+		echo "#! $BASH" > libtool.new
+		tail -n+2 libtool >> libtool.new
+		mv libtool.new libtool
+	fi
 fi
 
 
