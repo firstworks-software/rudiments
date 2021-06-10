@@ -14,6 +14,11 @@ int main(int argc, const char **argv) {
 
 	header("wcharstring");
 
+	if (!wcharstring::supported()) {
+		stdoutput.printf("	not supported\n\n");
+		return 0;
+	}
+
 	// zero
 	stdoutput.printf("zero...\n");
 	wchar_t	s[50];

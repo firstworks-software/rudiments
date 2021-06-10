@@ -9,6 +9,11 @@ int main(int argc, const char **argv) {
 
 	header("wcharacter");
 
+	if (!wcharacter::supported()) {
+		stdoutput.printf("	not supported\n\n");
+		return 0;
+	}
+
 	bool	isalphanumeric[]={
 		false,false,false,false,false,false,false,false,false,false,
 		false,false,false,false,false,false,false,false,false,false,
