@@ -943,6 +943,15 @@ AC_DEFUN([FW_CHECK_THREAD],
 		AC_MSG_CHECKING(for pthread_t)
 		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		dnl check for pthread_kill
+		AC_MSG_CHECKING(for pthread_kill)
+		FW_TRY_LINK([#include <signal.h>
+#ifdef RUDIMENTS_HAVE_SYS_SIGNAL_H
+	#include <sys/signal.h>
+#endif
+#include <pthread.h>],[pthread_kill(NULL,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_KILL,1,Some systems have pthread_kill) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+
 		dnl check for CreateThread
 		AC_MSG_CHECKING(for CreateThread)
 		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H

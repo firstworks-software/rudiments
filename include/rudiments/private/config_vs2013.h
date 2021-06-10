@@ -1000,6 +1000,9 @@
 /* Some systems have pthread_attr_setstacksize */
 /* #undef RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE */
 
+/* Some systems have pthread_kill */
+/* #undef RUDIMENTS_HAVE_PTHREAD_KILL */
+
 /* pthread_mutex_t type exists */
 /* #undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T */
 
