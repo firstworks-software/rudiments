@@ -13,6 +13,10 @@
 #endif
 #ifdef RUDIMENTS_HAVE_G_CONFIG_H
 	#include <_G_config.h>
+	// _G_config.h undefs NULL for some reason
+	#ifndef NULL
+		#define NULL	0
+	#endif
 #endif
 
 #ifdef RUDIMENTS_MUST_DEFINE_SWAB

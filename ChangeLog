@@ -7,6 +7,7 @@
 	implemented degenerate wcharstring for systems that don't support
 		wide characters, and added a supported() method
 	configure test for dirent.h includes sys/types.h too now
+	in bytestring.cpp, NULL is redefined if _G_config.h undef'ed it
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
