@@ -6,6 +6,7 @@
 	removed namevaluepairs/constnamevaluepairs typedefs
 	implemented degenerate wcharstring for systems that don't support
 		wide characters, and added a supported() method
+	configure test for dirent.h includes sys/types.h too now
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

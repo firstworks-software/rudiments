@@ -583,7 +583,11 @@ AC_TRY_COMPILE([#include <sys/wait.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_WAIT_H, 1, Some systems have sys/wait.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dirent.h)
-AC_TRY_COMPILE([#include <dirent.h>],
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
+#include <dirent.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DIRENT_H, 1, Some systems have dirent.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for direct.h)
