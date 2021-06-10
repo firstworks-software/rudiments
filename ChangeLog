@@ -4,6 +4,8 @@
 	added scalar class
 	various semi-obscure internal fixes to dictionary class
 	removed namevaluepairs/constnamevaluepairs typedefs
+	implemented degenerate wcharstring for systems that don't support
+		wide characters, and added a supported() method
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
