@@ -16,7 +16,7 @@
 		const char	*lookupCombinedTimeZone(const char *zone) const;
 		bool		daylightZone(const char *zone) const;
 
-		const char	*getTzName(uint8_t index);
+		const char	*getTzName(uint8_t index, void *tms);
 
 		static int16_t	adjustHour(int16_t hour,
 						const char *timestring);
