@@ -753,6 +753,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #include <sys/sem.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_SEM_H, 1, Some systems have sys/sem.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for semaphore.h)
+AC_TRY_COMPILE([#include <semaphore.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SEMAPHORE_H, 1, Some systems have semaphore.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for syslog.h)
 AC_TRY_LINK([#include <syslog.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYSLOG_H,1,Some systems have syslog.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -2112,7 +2116,9 @@ then
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif
-#include <sys/sem.h>],
+#ifdef RUDIMENTS_HAVE_SYS_SEM_H
+	#include <sys/sem.h>
+#endif],
 semget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMGET,1,Some systems have semget) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for semtimedop)
@@ -2125,8 +2131,17 @@ semget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMGET,1,Some systems have semget) AC_MS
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif
-#include <sys/sem.h>],
+#ifdef RUDIMENTS_HAVE_SYS_SEM_H
+	#include <sys/sem.h>
+#endif],
 semtimedop(0,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for sem_init)
+	AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_SEMAPHORE_H
+	#include <semaphore.h>
+#endif],
+sem_init(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEM_INIT,1,Some systems have sem_init) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 fi
 

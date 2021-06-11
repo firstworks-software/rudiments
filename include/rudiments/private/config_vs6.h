@@ -1090,6 +1090,9 @@
 /* Some systems have sddl.h */
 #define RUDIMENTS_HAVE_SDDL_H 1
 
+/* Some systems have semaphore.h */
+/* #undef RUDIMENTS_HAVE_SEMAPHORE_H */
+
 /* Some systems have semget */
 /* #undef RUDIMENTS_HAVE_SEMGET */
 
@@ -1098,6 +1101,9 @@
 
 /* Some systems define union semun */
 /* #undef RUDIMENTS_HAVE_SEMUN */
+
+/* Some systems have sem_init */
+/* #undef RUDIMENTS_HAVE_SEM_INIT */
 
 /* Some systems have sendmsg */
 #define RUDIMENTS_HAVE_SENDMSG 1
