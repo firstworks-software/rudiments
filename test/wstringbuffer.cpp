@@ -7,8 +7,6 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-#include <wchar.h>
-
 uint32_t	iterations=5;
 #ifdef SLOWSYSTEM
 uint32_t	members=64;
