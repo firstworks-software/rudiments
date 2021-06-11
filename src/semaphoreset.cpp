@@ -163,7 +163,8 @@ semaphoreset::~semaphoreset() {
 	delete[] pvt->_username;
 	delete[] pvt->_groupname;
 
-	#ifndef RUDIMENTS_HAVE_SEM_INIT
+	#if defined(RUDIMENTS_HAVE_SEMGET) || \
+		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 	// For sem_init() implementations, this is handled by the sem_unlink()
 	// above, before destroying the semaphore name.  For other
 	// implementations, we can do it here.
