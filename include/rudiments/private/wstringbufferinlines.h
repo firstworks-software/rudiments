@@ -279,3 +279,12 @@ inline
 void wstringbuffer::truncate() {
 	bytebuffer::truncate();
 }
+
+inline
+bool wstringbuffer::supported() {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	return true;
+#else
+	return false;
+#endif
+}

@@ -20,6 +20,10 @@ int main(int argc, const char **argv) {
 
 	header("wstringbuffer");
 
+	if (!wstringbuffer::supported()) {
+		stdoutput.printf("	not supported\n\n");
+		return 0;
+	}
 
 	// create a new string buffer
 	wstringbuffer	*strb=new wstringbuffer();
