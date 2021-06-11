@@ -595,6 +595,17 @@ case $host_os in
 			SHELL="$BASH"
 			AC_SUBST(SHELL)
 		fi
+
+		dnl detect gcc 2.95.2 and enable some hacks
+		AC_MSG_CHECKING(for gcc 2.95.2)
+		CXX_VERSION=`$CXX --version`
+		if ( test "$CXX_VERSION" = "2.95.2" )
+		then
+			AC_MSG_RESULT(yes)
+			AC_DEFINE_UNQUOTED(DARWIN_GCC_2952_HACKS,1,Enable some hacks on Darwin with gcc 2.95.2)
+		else
+			AC_MSG_RESULT(no)
+		fi
 		;;
 	* )
 		AC_MSG_RESULT(no)

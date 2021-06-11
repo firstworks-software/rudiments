@@ -3,6 +3,9 @@
 /* On some platforms */
 #undef ADD_NEWLINE_AFTER_READ_FROM_STDIN
 
+/* Enable some hacks on Darwin with gcc 2.95.2 */
+#undef DARWIN_GCC_2952_HACKS
+
 /* Use inline functions or not */
 #undef ENABLE_RUDIMENTS_INLINES
 
