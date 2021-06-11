@@ -23,7 +23,11 @@ int main(int argc, const char **argv) {
 
 	// create a new string buffer
 	stringbuffer	*strb=new stringbuffer();
+	#ifdef SLOWSYSTEM
+	char		str[40000];
+	#else
 	char		str[800000];
+	#endif
 	char		buf[64];
 
 	// append...
@@ -101,10 +105,10 @@ int main(int argc, const char **argv) {
 	// setPosition and write...
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
-		for (uint16_t j=0; j<10000; j++) {
-			strb->setPosition(j*(30+i));
+		for (uint16_t j=0; j<sizeof(str)-5-1; j=j+30+i) {
+			strb->setPosition(j);
 			strb->write("66666");
-			charstring::copy(str+(j*(30+i)),"66666",5);
+			charstring::copy(str+j,"66666",5);
 		}
 		test("contents",!charstring::compare(str,strb->getString()));
 	}
