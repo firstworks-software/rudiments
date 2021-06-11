@@ -27,7 +27,11 @@ int main(int argc, const char **argv) {
 
 	// create a new string buffer
 	wstringbuffer	*strb=new wstringbuffer();
+	#ifdef SLOWSYSTEM
+	wchar_t		str[20000];
+	#else
 	wchar_t		str[300000];
+	#endif
 	wchar_t		buf[64];
 
 	// append...
@@ -111,10 +115,11 @@ int main(int argc, const char **argv) {
 	// setPosition and write...
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
-		for (uint16_t j=0; j<10000; j++) {
-			strb->setPosition(j*(10+i));
+		for (uint32_t j=0;
+			j<(sizeof(str)/sizeof(wchar_t))-5-1; j=j+10+i) {
+			strb->setPosition(j);
 			strb->write(L"66666");
-			wcharstring::copy(str+(j*(10+i)),L"66666",5);
+			wcharstring::copy(str+j,L"66666",5);
 		}
 		test("contents",!wcharstring::compare(str,strb->getString()));
 	}

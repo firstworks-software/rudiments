@@ -26,7 +26,7 @@ int main(int argc, const char **argv) {
 	#ifdef SLOWSYSTEM
 	char		str[40000];
 	#else
-	char		str[800000];
+	char		str[700000];
 	#endif
 	char		buf[64];
 
@@ -105,7 +105,7 @@ int main(int argc, const char **argv) {
 	// setPosition and write...
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
-		for (uint16_t j=0; j<sizeof(str)-5-1; j=j+30+i) {
+		for (uint32_t j=0; j<sizeof(str)-5-1; j=j+30+i) {
 			strb->setPosition(j);
 			strb->write("66666");
 			charstring::copy(str+j,"66666",5);
