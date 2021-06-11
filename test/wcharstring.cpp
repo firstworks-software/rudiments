@@ -8,8 +8,6 @@
 #include <limits.h>
 #include "test.cpp"
 
-#include <wchar.h>
-
 int main(int argc, const char **argv) {
 
 	header("wcharstring");

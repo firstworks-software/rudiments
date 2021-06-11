@@ -10,13 +10,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef DARWIN_GCC_2952_HACKS
-static void dummy() {
-	dictionary<const char *, const char *> d;
-	d.getKeys();
-}
-#endif
-
 class domnodeprivate {
 	friend class domnode;
 	private:

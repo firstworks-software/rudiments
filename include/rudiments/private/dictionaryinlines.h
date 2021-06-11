@@ -30,6 +30,22 @@ dictionary<keytype,valuetype>::dictionary() :
 				dictionarycollection<keytype,valuetype>() {
 	trackinsertionorder=true;
 	keylist=NULL;
+
+#ifdef DARWIN_GCC_2952_HACKS
+	return;
+
+	// Various methods here use linkedlist and linkedlistnode, but if the
+	// calling app doens't happen to call one of them, then they get
+	// declared but the code that defines them never gets pulled in.
+	// On Darwin platforms, when using gcc 2.95.2 (and possibly other
+	// versions) this results in various undefined symbols.  Adding some
+	// calls here, after the return causes the code to be included and the
+	// symbols to be defined.  It's called her/ after the return so that
+	// it never actually gets executed.  The old compiler doesn't complain
+	// about that.
+	getKeys();
+	setValues(NULL);
+#endif
 }
 
 template <class keytype, class valuetype>
