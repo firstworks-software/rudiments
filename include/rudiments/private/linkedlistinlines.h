@@ -276,7 +276,11 @@ bool linkedlist<valuetype>::removeAndDelete(listnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
+#ifndef NODE_DELETE
 	delete node->getValue();
+#else
+	node_delete(node->getValue());
+#endif
 	delete node;
 	length--;
 	return true;
@@ -300,7 +304,11 @@ bool linkedlist<valuetype>::removeAndArrayDelete(listnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
+#ifndef NODE_DELETE
 	delete[] node->getValue();
+#else
+	node_array_delete(node->getValue());
+#endif
 	delete node;
 	length--;
 	return true;
@@ -631,7 +639,11 @@ void linkedlist<valuetype>::clearAndDelete() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
+#ifndef NODE_DELETE
 		delete current->getValue();
+#else
+		node_delete(current->getValue());
+#endif
 		delete current;
 		current=next;
 	}
@@ -647,7 +659,11 @@ void linkedlist<valuetype>::clearAndArrayDelete() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
+#ifndef NODE_DELETE
 		delete[] current->getValue();
+#else
+		node_array_delete(current->getValue());
+#endif
 		delete current;
 		current=next;
 	}

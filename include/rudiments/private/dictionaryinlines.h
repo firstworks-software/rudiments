@@ -253,8 +253,13 @@ bool dictionary<keytype,valuetype>::removeAndDelete(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getKey();
 		delete tnode->getValue()->getValue();
+#else
+		node_delete(tnode->getValue()->getKey());
+		node_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -269,8 +274,13 @@ bool dictionary<keytype,valuetype>::removeAndArrayDelete(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getKey();
 		delete[] tnode->getValue()->getValue();
+#else
+		node_array_delete(tnode->getValue()->getKey());
+		node_array_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -285,7 +295,11 @@ bool dictionary<keytype,valuetype>::removeAndDeleteKey(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getKey();
+#else
+		node_delete(tnode->getValue()->getKey());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -300,7 +314,11 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteKey(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getKey();
+#else
+		node_array_delete(tnode->getValue()->getKey());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -315,7 +333,11 @@ bool dictionary<keytype,valuetype>::removeAndDeleteValue(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getValue();
+#else
+		node_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -330,7 +352,11 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteValue(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getValue();
+#else
+		node_array_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -346,8 +372,13 @@ bool dictionary<keytype,valuetype>::
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getKey();
 		delete[] tnode->getValue()->getValue();
+#else
+		node_delete(tnode->getValue()->getKey());
+		node_array_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -363,8 +394,13 @@ bool dictionary<keytype,valuetype>::
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getKey();
 		delete tnode->getValue()->getValue();
+#else
+		node_array_delete(tnode->getValue()->getKey());
+		node_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -395,8 +431,13 @@ bool dictionary<keytype,valuetype>::removeAndDelete(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getKey();
 		delete tnode->getValue()->getValue();
+#else
+		node_delete(tnode->getValue()->getKey());
+		node_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -412,8 +453,13 @@ bool dictionary<keytype,valuetype>::removeAndArrayDelete(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getKey();
 		delete[] tnode->getValue()->getValue();
+#else
+		node_array_delete(tnode->getValue()->getKey());
+		node_array_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -429,7 +475,11 @@ bool dictionary<keytype,valuetype>::removeAndDeleteKey(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getKey();
+#else
+		node_delete(tnode->getValue()->getKey());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -445,7 +495,11 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteKey(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getKey();
+#else
+		node_array_delete(tnode->getValue()->getKey());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -461,7 +515,11 @@ bool dictionary<keytype,valuetype>::removeAndDeleteValue(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getValue();
+#else
+		node_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -477,7 +535,11 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteValue(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getValue();
+#else
+		node_array_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -493,8 +555,13 @@ bool dictionary<keytype,valuetype>::removeAndDeleteKeyAndArrayDeleteValue(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete tnode->getValue()->getKey();
 		delete[] tnode->getValue()->getValue();
+#else
+		node_delete(tnode->getValue()->getKey());
+		node_array_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -510,8 +577,13 @@ bool dictionary<keytype,valuetype>::removeAndArrayDeleteKeyAndDeleteValue(
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
+#ifndef NODE_DELETE
 		delete[] tnode->getValue()->getKey();
 		delete tnode->getValue()->getValue();
+#else
+		node_array_delete(tnode->getValue()->getKey());
+		node_delete(tnode->getValue()->getValue());
+#endif
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -536,8 +608,13 @@ inline
 void dictionary<keytype,valuetype>::clearAndDelete() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete node->getValue()->getKey();
 		delete node->getValue()->getValue();
+#else
+		node_delete(node->getValue()->getKey());
+		node_delete(node->getValue()->getValue());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -551,8 +628,13 @@ inline
 void dictionary<keytype,valuetype>::clearAndArrayDelete() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete[] node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
+#else
+		node_array_delete(node->getValue()->getKey());
+		node_array_delete(node->getValue()->getValue());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -566,7 +648,11 @@ inline
 void dictionary<keytype,valuetype>::clearAndDeleteKeys() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete node->getValue()->getKey();
+#else
+		node_delete(node->getValue()->getKey());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -580,7 +666,11 @@ inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteKeys() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete[] node->getValue()->getKey();
+#else
+		node_array_delete(node->getValue()->getKey());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -594,7 +684,11 @@ inline
 void dictionary<keytype,valuetype>::clearAndDeleteValues() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete node->getValue()->getValue();
+#else
+		node_delete(node->getValue()->getValue());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -608,7 +702,11 @@ inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteValues() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete[] node->getValue()->getValue();
+#else
+		node_array_delete(node->getValue()->getValue());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -622,8 +720,13 @@ inline
 void dictionary<keytype,valuetype>::clearAndDeleteKeysAndArrayDeleteValues() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
+#else
+		node_delete(node->getValue()->getKey());
+		node_array_delete(node->getValue()->getValue());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();
@@ -637,8 +740,13 @@ inline
 void dictionary<keytype,valuetype>::clearAndArrayDeleteKeysAndDeleteValues() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
+#ifndef NODE_DELETE
 		delete[] node->getValue()->getKey();
 		delete node->getValue()->getValue();
+#else
+		node_array_delete(node->getValue()->getKey());
+		node_delete(node->getValue()->getValue());
+#endif
 		delete node->getValue();
 	}
 	tree.clear();

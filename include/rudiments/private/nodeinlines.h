@@ -250,4 +250,152 @@ void node_print(void *value) {
 	stdoutput.printf("%08x",value);
 }
 
+#ifdef NODE_DELETE
+
+inline
+void node_delete(const char *value) {
+}
+
+inline
+void node_delete(char *value) {
+}
+
+inline
+void node_delete(char value) {
+}
+
+inline
+void node_delete(int16_t value) {
+}
+
+inline
+void node_delete(int32_t value) {
+}
+
+inline
+void node_delete(int64_t value) {
+}
+
+inline
+void node_delete(unsigned const char *value) {
+}
+
+inline
+void node_delete(unsigned char *value) {
+}
+
+inline
+void node_delete(unsigned char value) {
+}
+
+inline
+void node_delete(uint16_t value) {
+}
+
+inline
+void node_delete(uint32_t value) {
+}
+
+inline
+void node_delete(uint64_t value) {
+}
+
+inline
+void node_delete(float value) {
+}
+
+inline
+void node_delete(double value) {
+}
+
+inline
+void node_delete(long double value) {
+}
+
+inline
+void node_delete(void *value) {
+	delete value;
+}
+
+inline
+void node_delete(object *value) {
+	delete value;
+}
+
+inline
+void node_array_delete(const char *value) {
+	delete[] (char *)value;
+}
+
+inline
+void node_array_delete(char *value) {
+	delete[] value;
+}
+
+inline
+void node_array_delete(char value) {
+}
+
+inline
+void node_array_delete(int16_t value) {
+}
+
+inline
+void node_array_delete(int32_t value) {
+}
+
+inline
+void node_array_delete(int64_t value) {
+}
+
+inline
+void node_array_delete(unsigned const char *value) {
+	delete[] (unsigned char *)value;
+}
+
+inline
+void node_array_delete(unsigned char *value) {
+	delete[] value;
+}
+
+inline
+void node_array_delete(unsigned char value) {
+}
+
+inline
+void node_array_delete(uint16_t value) {
+}
+
+inline
+void node_array_delete(uint32_t value) {
+}
+
+inline
+void node_array_delete(uint64_t value) {
+}
+
+inline
+void node_array_delete(float value) {
+}
+
+inline
+void node_array_delete(double value) {
+}
+
+inline
+void node_array_delete(long double value) {
+}
+
+inline
+void node_array_delete(void *value) {
+	delete[] value;
+}
+
+inline
+void node_array_delete(object *value) {
+	delete[] value;
+}
+
+#endif
+
 #endif
