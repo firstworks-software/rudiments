@@ -227,7 +227,7 @@ bool thread::detach() {
 }
 
 bool thread::raiseSignal(int32_t signum) {
-	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+	#if defined(RUDIMENTS_HAVE_PTHREAD_KILL)
 		if (pvt->_thr) {
 			return !pthread_kill(pvt->_thr,signum);
 		}

@@ -3,6 +3,9 @@
 /* On some platforms */
 /* #undef ADD_NEWLINE_AFTER_READ_FROM_STDIN */
 
+/* Enable some hacks on Darwin with gcc 2.95.2 */
+/* #undef DARWIN_GCC_2952_HACKS */
+
 /* Use inline functions or not */
 /* #undef ENABLE_RUDIMENTS_INLINES */
 
@@ -1000,6 +1003,9 @@
 /* Some systems have pthread_attr_setstacksize */
 /* #undef RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE */
 
+/* Some systems have pthread_kill */
+/* #undef RUDIMENTS_HAVE_PTHREAD_KILL */
+
 /* pthread_mutex_t type exists */
 /* #undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T */
 
@@ -1081,6 +1087,9 @@
 /* Some systems have sddl.h */
 #define RUDIMENTS_HAVE_SDDL_H 1
 
+/* Some systems have semaphore.h */
+/* #undef RUDIMENTS_HAVE_SEMAPHORE_H */
+
 /* Some systems have semget */
 /* #undef RUDIMENTS_HAVE_SEMGET */
 
@@ -1089,6 +1098,9 @@
 
 /* Some systems define union semun */
 /* #undef RUDIMENTS_HAVE_SEMUN */
+
+/* Some systems have sem_init */
+/* #undef RUDIMENTS_HAVE_SEM_INIT */
 
 /* Some systems have sendmsg */
 #define RUDIMENTS_HAVE_SENDMSG 1

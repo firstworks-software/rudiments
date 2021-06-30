@@ -105,7 +105,7 @@ int main(int argc, const char **argv) {
 		#endif
 
 		// set an alarm
-		signalmanager::alarm(3);
+		signalmanager::alarm(5);
 
 		// wait for signals
 		if (!signalmanager::waitForSignals(&ignoreset)) {

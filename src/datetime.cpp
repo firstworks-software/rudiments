@@ -65,6 +65,13 @@ class datetimeprivate {
 		#if defined(RUDIMENTS_HAS__GET_TZNAME)
 			char	_timezonename[16];
 		#endif
+
+		#if !defined(RUDIMENTS_HAS__GET_TZNAME) && \
+				!defined(RUDIMENTS_HAS__TZNAME) && \
+				!defined(RUDIMENTS_HAS_TZNAME) && \
+				defined(RUDIMENTS_HAS_STRFTIME)
+			char	tzname[32];
+		#endif
 };
 
 static threadmutex	*_timemutex=NULL;
@@ -243,7 +250,7 @@ bool datetime::initialize(const void *tmstruct) {
 		#else
 			#error no tzset or anything like it
 		#endif
-		const char	*tzn=getTzName(pvt->_isdst);
+		const char	*tzn=getTzName(pvt->_isdst,(void *)tms);
 		pvt->_zone=charstring::duplicate((tzn && tzn[0])?tzn:"UCT");
 		#if defined(RUDIMENTS_HAS__GET_TIMEZONE)
 			long	seconds;
@@ -819,7 +826,7 @@ void datetime::processTZ(void *tms) {
 	#endif
 
 	delete[] pvt->_zone;
-	pvt->_zone=charstring::duplicate(getTzName(pvt->_isdst));
+	pvt->_zone=charstring::duplicate(getTzName(pvt->_isdst,tms));
 
 	// Get the offset from the struct tm if we can, otherwise get
 	// it from the value set by tzset()
@@ -850,7 +857,7 @@ void datetime::processTZ(void *tms) {
 	#endif
 }
 
-const char *datetime::getTzName(uint8_t index) {
+const char *datetime::getTzName(uint8_t index, void *tms) {
 	#if defined(RUDIMENTS_HAS__GET_TZNAME)
 		size_t	timezonenamelen;
 		_get_tzname(&timezonenamelen,
@@ -862,6 +869,8 @@ const char *datetime::getTzName(uint8_t index) {
 		return _tzname[index];
 	#elif defined(RUDIMENTS_HAS_TZNAME)
 		return tzname[index];
+	#elif defined(RUDIMENTS_HAS_TM_ZONE)
+		return ((struct tm *)tms)->tm_zone;
 	#else
 		#error no tzname or anything like it
 	#endif

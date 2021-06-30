@@ -585,6 +585,27 @@ case $host_os in
 		DARWIN="yes"
 		AC_MSG_RESULT(yes)
 		FW_CHECK_WNOLONGDOUBLE
+
+		dnl prefer bash to the default shell, which could be tcsh or
+		dnl zsh on older versions, and which doesn't run libtool very
+		dnl well
+		BASH=`which bash`
+		if ( test -n "$BASH" )
+		then
+			SHELL="$BASH"
+			AC_SUBST(SHELL)
+		fi
+
+		dnl detect gcc 2.95.2 and enable some hacks
+		AC_MSG_CHECKING(for gcc 2.95.2)
+		CXX_VERSION=`$CXX --version`
+		if ( test "$CXX_VERSION" = "2.95.2" )
+		then
+			AC_MSG_RESULT(yes)
+			AC_DEFINE_UNQUOTED(DARWIN_GCC_2952_HACKS,1,Enable some hacks on Darwin with gcc 2.95.2)
+		else
+			AC_MSG_RESULT(no)
+		fi
 		;;
 	* )
 		AC_MSG_RESULT(no)
@@ -932,6 +953,15 @@ AC_DEFUN([FW_CHECK_THREAD],
 		dnl check for pthread_t
 		AC_MSG_CHECKING(for pthread_t)
 		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		dnl check for pthread_kill
+		AC_MSG_CHECKING(for pthread_kill)
+		FW_TRY_LINK([#include <signal.h>
+#ifdef RUDIMENTS_HAVE_SYS_SIGNAL_H
+	#include <sys/signal.h>
+#endif
+#include <pthread.h>],[pthread_kill(NULL,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_KILL,1,Some systems have pthread_kill) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 
 		dnl check for CreateThread
 		AC_MSG_CHECKING(for CreateThread)

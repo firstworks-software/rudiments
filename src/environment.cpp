@@ -28,10 +28,10 @@ static threadmutex	*_envmutex;
 
 #if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 // LAME: not in the class
-static namevaluepairs	*_envstrings;
+static dictionary<char *, char *>	*_envstrings;
 
 void environment::init() {
-	_envstrings=new namevaluepairs;
+	_envstrings=new dictionary<char *, char *>();
 
 	// On windows, the entire rudiments dll appears to have been unloaded
 	// before atexit functions are called, and it leads to all kinds of

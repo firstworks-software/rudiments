@@ -171,7 +171,7 @@ class RUDIMENTS_DLLSPEC chat : public object {
 		 *  If runScript() successfully processes all tags then it
 		 *  returns RESULT_SUCCESS. */
 		int32_t	runScript(const char *script, char **abort,
-						constnamevaluepairs *variables);
+			dictionary<const char *, const char *> *variables);
 
 	#include <rudiments/private/chat.h>
 };

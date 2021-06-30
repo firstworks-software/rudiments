@@ -30,6 +30,22 @@ dictionary<keytype,valuetype>::dictionary() :
 				dictionarycollection<keytype,valuetype>() {
 	trackinsertionorder=true;
 	keylist=NULL;
+
+#ifdef DARWIN_GCC_2952_HACKS
+	return;
+
+	// Various methods here use linkedlist and linkedlistnode, but if the
+	// calling app doens't happen to call one of them, then they get
+	// declared but the code that defines them never gets pulled in.
+	// On Darwin platforms, when using gcc 2.95.2 (and possibly other
+	// versions) this results in various undefined symbols.  Adding some
+	// calls here, after the return causes the code to be included and the
+	// symbols to be defined.  It's called her/ after the return so that
+	// it never actually gets executed.  The old compiler doesn't complain
+	// about that.
+	getKeys();
+	setValues(NULL);
+#endif
 }
 
 template <class keytype, class valuetype>
@@ -390,189 +406,6 @@ inline
 bool dictionary<keytype,valuetype>::
 			removeAndArrayDeleteKeyAndDeleteValue(keytype key) {
 	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete[] tnode->getValue()->getKey();
-		delete tnode->getValue()->getValue();
-#else
-		node_array_delete(tnode->getValue()->getKey());
-		node_delete(tnode->getValue()->getValue());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::remove(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDelete(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete tnode->getValue()->getKey();
-		delete tnode->getValue()->getValue();
-#else
-		node_delete(tnode->getValue()->getKey());
-		node_delete(tnode->getValue()->getValue());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDelete(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete[] tnode->getValue()->getKey();
-		delete[] tnode->getValue()->getValue();
-#else
-		node_array_delete(tnode->getValue()->getKey());
-		node_array_delete(tnode->getValue()->getValue());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDeleteKey(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete tnode->getValue()->getKey();
-#else
-		node_delete(tnode->getValue()->getKey());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDeleteKey(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete[] tnode->getValue()->getKey();
-#else
-		node_array_delete(tnode->getValue()->getKey());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDeleteValue(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete tnode->getValue()->getValue();
-#else
-		node_delete(tnode->getValue()->getValue());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDeleteValue(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete[] tnode->getValue()->getValue();
-#else
-		node_array_delete(tnode->getValue()->getValue());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDeleteKeyAndArrayDeleteValue(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-#ifndef NODE_DELETE
-		delete tnode->getValue()->getKey();
-		delete[] tnode->getValue()->getValue();
-#else
-		node_delete(tnode->getValue()->getKey());
-		node_array_delete(tnode->getValue()->getValue());
-#endif
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDeleteKeyAndDeleteValue(
-				dictionarynode<keytype,valuetype> *node) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=tree.find(node);
 	if (tnode) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());

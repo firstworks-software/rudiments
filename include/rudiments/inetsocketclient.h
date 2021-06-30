@@ -47,11 +47,10 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 
 
 
-		/** Queries constnamevaluepairs "cd" for "host", "port",
-		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "tries".  Initializes the class to use the
-		 *  result when connect() is called. */
-		void	initialize(constnamevaluepairs *cd);
+		/** Queries "cd" for "host", "port", "timeoutsec",
+		 *  "timeoutusec", "retrywait" and "tries".  Initializes the
+		 *  class to use the result when connect() is called. */
+		void	initialize(dictionary<const char *, const char *> *cd);
 
 		/** Initializes the class to use "host", "port",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and

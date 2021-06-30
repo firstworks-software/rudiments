@@ -945,6 +945,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 						const wchar_t *format,
 						va_list *argp);
 
+		/** Returns true if the platform supports wide characters and
+		 *  rudiments was build with wide character support and false
+		 *  otherwise. */
+		static bool	supported();
+
 	#include <rudiments/private/wcharstring.h>
 };
 

@@ -16,6 +16,8 @@ int main(int argc, const char **argv) {
 		username="Guest";
 	} else if (!charstring::compare(osname,"Haiku")) {
 		username="user";
+	} else if (!charstring::compare(osname,"Darwin")) {
+		username="daemon";
 	}
 
 
@@ -47,7 +49,7 @@ int main(int argc, const char **argv) {
 	test("sid",!uent.getSidString());
 	stdoutput.printf("\n");
 
-	// get the user entry for "bin"
+	// get the user entry for a system user
 	stdoutput.printf("username: %s...\n",username);
 	uent.initialize(username);
 	test("name",!charstring::compare(uent.getName(),username));

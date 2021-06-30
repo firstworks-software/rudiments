@@ -736,13 +736,12 @@ class RUDIMENTS_DLLSPEC domnode : public object {
 		const char	*getAttributeValue(uint64_t position) const;
 
 		/** Returns the attribute names and values in
-		 *  a constnamevaluepairs dictionary.  The
-		 *  instance of constnamevaluepairs is allocated
+		 *  a dictionary.  The dictionary is allocated
 		 *  internally and must be deleted by the
 		 *  calling program.  Returns NULL if the node
 		 *  is a nullNode and an empty dictionary if the
 		 *  node has no attributes. */
-		constnamevaluepairs	*getAttributes() const;
+		dictionary<const char *, const char *> *getAttributes() const;
 
 		/** Sets the value of the attribute named
 		 *  "name" to "value".  Creates attribute

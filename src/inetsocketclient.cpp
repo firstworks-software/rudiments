@@ -108,7 +108,7 @@ void inetsocketclient::initialize(const char *host,
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
 }
 
-void inetsocketclient::initialize(constnamevaluepairs *cd) {
+void inetsocketclient::initialize(dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
 
