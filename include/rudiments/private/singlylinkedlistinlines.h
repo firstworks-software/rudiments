@@ -206,7 +206,7 @@ bool singlylinkedlist<valuetype>::removeAndDelete(valuetype value) {
 		}
 	}
 	if (current) {
-		delete current->getValue();
+		node_delete_value(current->getValue());
 		delete current;
 		length--;
 		return true;
@@ -241,7 +241,7 @@ bool singlylinkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
 		}
 	}
 	if (current) {
-		delete[] current->getValue();
+		node_delete_array_value(current->getValue());
 		delete current;
 		length--;
 		return true;
@@ -306,13 +306,13 @@ bool singlylinkedlist<valuetype>::removeAllAndDelete(valuetype value) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
-			delete current->getValue();
+			node_delete_value(current->getValue());
 			delete current;
 			length--;
 			return true;
 		} else {
 			first=first->getNext();
-			delete current->getValue();
+			node_delete_value(current->getValue());
 			delete current;
 			length--;
 			current=first;
@@ -328,7 +328,7 @@ bool singlylinkedlist<valuetype>::removeAllAndDelete(valuetype value) {
 			if (last==current) {
 				last=prev;
 			}
-			delete current->getValue();
+			node_delete_value(current->getValue());
 			delete current;
 			length--;
 			current=temp;
@@ -353,13 +353,13 @@ bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
-			delete[] current->getValue();
+			node_delete_array_value(current->getValue());
 			delete current;
 			length--;
 			return true;
 		} else {
 			first=first->getNext();
-			delete[] current->getValue();
+			node_delete_array_value(current->getValue());
 			delete current;
 			length--;
 			current=first;
@@ -375,7 +375,7 @@ bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
 			if (last==current) {
 				last=prev;
 			}
-			delete[] current->getValue();
+			node_delete_array_value(current->getValue());
 			delete current;
 			length--;
 			current=temp;
@@ -454,7 +454,7 @@ bool singlylinkedlist<valuetype>::removeAndDelete(listnode<valuetype> *node) {
 		}
 	}
 	if (current) {
-		delete current->getValue();
+		node_delete_value(current->getValue());
 		delete current;
 		length--;
 		return true;
@@ -493,7 +493,7 @@ bool singlylinkedlist<valuetype>::removeAndArrayDelete(
 		}
 	}
 	if (current) {
-		delete[] current->getValue();
+		node_delete_array_value(current->getValue());
 		delete current;
 		length--;
 		return true;
@@ -759,14 +759,6 @@ void singlylinkedlist<valuetype>::heapSort() {
 	}
 }
 
-// NOTE: Don't collapse the clear methods into a single method, or the compiler
-// will attempt to compile calls to:
-// 	delete current->getValue();
-// 	and
-// 	delete[] current->getValue();
-// even if the app just calls clear().  This will fail for primitive types or
-// when the type has a private destructor.
-
 template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::clear() {
@@ -789,7 +781,7 @@ void singlylinkedlist<valuetype>::clearAndDelete() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		delete current->getValue();
+		node_delete_value(current->getValue());
 		delete current;
 		current=next;
 	}
@@ -805,7 +797,7 @@ void singlylinkedlist<valuetype>::clearAndArrayDelete() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		delete[] current->getValue();
+		node_delete_array_value(current->getValue());
 		delete current;
 		current=next;
 	}
