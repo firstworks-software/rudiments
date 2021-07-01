@@ -11,14 +11,27 @@ class RUDIMENTS_DLLSPEC collection : public object {
 	public:
 
 		/** Creates an instance of the collection class. */
-		collection() : object() {};
+		collection();
 
 		/** Creates an instance of the collection class that is a copy
 		 *  of "c". */
-		collection(const collection &c) : object(c) {};
+		collection(const collection &c);
 
 		/** Deletes this instance of the collection class. */
-		virtual	~collection() {};
+		virtual	~collection();
+
+		virtual	void	setManageValues(bool manage);
+		virtual	bool	getManageValues();
+
+		virtual	void	setManageArrayValues(bool manage);
+		virtual	bool	getManageArrayValues();
+
+		virtual	void	setManageKeys(bool manage);
+		virtual	bool	getManageKeys();
+
+		virtual	void	setManageArrayKeys(bool manage);
+		virtual	bool	getManageArrayKeys();
+		
 
 		virtual	void	clear() {};
 		virtual	void	clearAndDelete() {};
@@ -32,6 +45,10 @@ class RUDIMENTS_DLLSPEC collection : public object {
 
 		virtual	void	clearAndDeleteKeysAndArrayDeleteValues() {};
 		virtual	void	clearAndArrayDeleteKeysAndDeleteValues() {};
+
+	#include <rudiments/private/collection.h>
 };
+
+#include <rudiments/private/collectioninlines.h>
 
 #endif
