@@ -251,138 +251,138 @@ void node_print(void *value) {
 }
 
 inline
-void node_delete(const char *value) {
+void node_delete_value(const char *value) {
 }
 
 inline
-void node_delete(char *value) {
+void node_delete_value(char *value) {
 }
 
 inline
-void node_delete(char value) {
+void node_delete_value(char value) {
 }
 
 inline
-void node_delete(int16_t value) {
+void node_delete_value(int16_t value) {
 }
 
 inline
-void node_delete(int32_t value) {
+void node_delete_value(int32_t value) {
 }
 
 inline
-void node_delete(int64_t value) {
+void node_delete_value(int64_t value) {
 }
 
 inline
-void node_delete(unsigned const char *value) {
+void node_delete_value(unsigned const char *value) {
 }
 
 inline
-void node_delete(unsigned char *value) {
+void node_delete_value(unsigned char *value) {
 }
 
 inline
-void node_delete(unsigned char value) {
+void node_delete_value(unsigned char value) {
 }
 
 inline
-void node_delete(uint16_t value) {
+void node_delete_value(uint16_t value) {
 }
 
 inline
-void node_delete(uint32_t value) {
+void node_delete_value(uint32_t value) {
 }
 
 inline
-void node_delete(uint64_t value) {
+void node_delete_value(uint64_t value) {
 }
 
 inline
-void node_delete(float value) {
+void node_delete_value(float value) {
 }
 
 inline
-void node_delete(double value) {
+void node_delete_value(double value) {
 }
 
 inline
-void node_delete(long double value) {
+void node_delete_value(long double value) {
 }
 
 template <class valuetype>
 inline
-void node_delete(valuetype *value) {
+void node_delete_value(valuetype *value) {
 	delete value;
 }
 
 inline
-void node_array_delete(const char *value) {
+void node_delete_array_value(const char *value) {
 	delete[] (char *)value;
 }
 
 inline
-void node_array_delete(char *value) {
+void node_delete_array_value(char *value) {
 	delete[] value;
 }
 
 inline
-void node_array_delete(char value) {
+void node_delete_array_value(char value) {
 }
 
 inline
-void node_array_delete(int16_t value) {
+void node_delete_array_value(int16_t value) {
 }
 
 inline
-void node_array_delete(int32_t value) {
+void node_delete_array_value(int32_t value) {
 }
 
 inline
-void node_array_delete(int64_t value) {
+void node_delete_array_value(int64_t value) {
 }
 
 inline
-void node_array_delete(unsigned const char *value) {
+void node_delete_array_value(unsigned const char *value) {
 	delete[] (unsigned char *)value;
 }
 
 inline
-void node_array_delete(unsigned char *value) {
+void node_delete_array_value(unsigned char *value) {
 	delete[] value;
 }
 
 inline
-void node_array_delete(unsigned char value) {
+void node_delete_array_value(unsigned char value) {
 }
 
 inline
-void node_array_delete(uint16_t value) {
+void node_delete_array_value(uint16_t value) {
 }
 
 inline
-void node_array_delete(uint32_t value) {
+void node_delete_array_value(uint32_t value) {
 }
 
 inline
-void node_array_delete(uint64_t value) {
+void node_delete_array_value(uint64_t value) {
 }
 
 inline
-void node_array_delete(float value) {
+void node_delete_array_value(float value) {
 }
 
 inline
-void node_array_delete(double value) {
+void node_delete_array_value(double value) {
 }
 
 inline
-void node_array_delete(long double value) {
+void node_delete_array_value(long double value) {
 }
 
 template <class valuetype>
 inline
-void node_array_delete(valuetype *value) {
+void node_delete_array_value(valuetype *value) {
 	delete[] value;
 }
 
