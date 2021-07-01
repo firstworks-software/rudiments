@@ -164,11 +164,7 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::removeAndDelete(avltreenode<valuetype> *node) {
 	avltreenode<valuetype> *detachednode=detach(node);
-#ifndef NODE_DELETE
-	delete detachednode->getValue();
-#else
 	node_delete(detachednode->getValue());
-#endif
 	delete detachednode;
 	return true;
 }
@@ -177,11 +173,7 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::removeAndArrayDelete(avltreenode<valuetype> *node) {
 	avltreenode<valuetype> *detachednode=detach(node);
-#ifndef NODE_DELETE
-	delete[] detachednode->getValue();
-#else
 	node_array_delete(detachednode->getValue());
-#endif
 	delete detachednode;
 	return true;
 }
@@ -383,11 +375,7 @@ void avltree<valuetype>::clearAndDelete() {
 		stdoutput.printf("	clearing %lld\n",i);
 		i++;
 		#endif
-#ifndef NODE_DELETE
-		delete node->getValue();
-#else
 		node_delete(node->getValue());
-#endif
 		delete node;
 
 		// continue with parent...
@@ -441,11 +429,7 @@ void avltree<valuetype>::clearAndArrayDelete() {
 		stdoutput.printf("	clearing %lld\n",i);
 		i++;
 		#endif
-#ifndef NODE_DELETE
-		delete[] node->getValue();
-#else
 		node_array_delete(node->getValue());
-#endif
 		delete node;
 
 		// continue with parent...

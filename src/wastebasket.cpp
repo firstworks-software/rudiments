@@ -48,9 +48,7 @@ void wastebasket::empty() {
 		for (listnode<collection *> *node=
 				pvt->_deletecollections->getFirst();
 				node; node=node->getNext()) {
-#ifdef NODE_DELETE
 			node->getValue()->clearAndDelete();
-#endif
 		}
 		pvt->_deletecollections->clearAndDelete();
 		delete pvt->_deletecollections;

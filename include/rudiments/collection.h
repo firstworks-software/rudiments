@@ -5,7 +5,6 @@
 #define RUDIMENTS_COLLECTION_H
 
 #include <rudiments/object.h>
-//#define NODE_DELETE
 
 /** The collection class is the parent class for all rudiments collections. */
 class RUDIMENTS_DLLSPEC collection : public object {
@@ -21,11 +20,9 @@ class RUDIMENTS_DLLSPEC collection : public object {
 		/** Deletes this instance of the collection class. */
 		virtual	~collection() {};
 
-#ifdef NODE_DELETE
 		virtual	void	clear() {};
 		virtual	void	clearAndDelete() {};
 		virtual	void	clearAndArrayDelete() {};
-#endif
 };
 
 #endif

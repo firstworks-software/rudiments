@@ -6,6 +6,11 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+class testclass {
+	public:
+		uint64_t	val;
+};
+
 int main(int argc, char **argv) {
 
 	header("linkedlist");

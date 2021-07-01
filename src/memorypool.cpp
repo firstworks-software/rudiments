@@ -24,10 +24,11 @@
 
 class memorypoolbuffer {
 	friend class memorypool;
-	friend class linkedlist<memorypoolbuffer *>;
 	private:
 			memorypoolbuffer(size_t size);
+	public:
 			~memorypoolbuffer();
+	private:
 
 		unsigned char	*_buffer;
 		size_t		_size;

@@ -4,6 +4,9 @@
 /* On some platforms */
 /* #undef ADD_NEWLINE_AFTER_READ_FROM_STDIN */
 
+/* Enable some hacks on Darwin with gcc 2.95.2 */
+/* #undef DARWIN_GCC_2952_HACKS */
+
 /* Use inline functions or not */
 /* #undef ENABLE_RUDIMENTS_INLINES */
 
@@ -62,7 +65,7 @@
 #define PACKAGE_VERSION ""
 
 /* Platform requires default TLS ciper of PROFILE=SYSTEM */
-/* #undef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM */
+#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1
 
 /* ioctl/FIONBIO doesn't work on some systems */
 /* #undef RUDIMENTS_DISABLE_FIONBIO */
@@ -982,6 +985,9 @@
 /* Some systems have pthread_attr_setstacksize */
 #define RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
+/* Some systems have pthread_kill */
+#define RUDIMENTS_HAVE_PTHREAD_KILL 1
+
 /* pthread_mutex_t type exists */
 #define RUDIMENTS_HAVE_PTHREAD_MUTEX_T 1
 
@@ -1057,6 +1063,9 @@
 /* Some systems have sddl.h */
 /* #undef RUDIMENTS_HAVE_SDDL_H */
 
+/* Some systems have semaphore.h */
+#define RUDIMENTS_HAVE_SEMAPHORE_H 1
+
 /* Some systems have semget */
 #define RUDIMENTS_HAVE_SEMGET 1
 
@@ -1065,6 +1074,9 @@
 
 /* Some systems define union semun */
 /* #undef RUDIMENTS_HAVE_SEMUN */
+
+/* Some systems have sem_init */
+#define RUDIMENTS_HAVE_SEM_INIT 1
 
 /* Some systems have sendmsg */
 #define RUDIMENTS_HAVE_SENDMSG 1

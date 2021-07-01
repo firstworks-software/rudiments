@@ -250,8 +250,6 @@ void node_print(void *value) {
 	stdoutput.printf("%08x",value);
 }
 
-#ifdef NODE_DELETE
-
 inline
 void node_delete(const char *value) {
 }
@@ -312,13 +310,9 @@ inline
 void node_delete(long double value) {
 }
 
+template <class valuetype>
 inline
-void node_delete(void *value) {
-	delete value;
-}
-
-inline
-void node_delete(object *value) {
+void node_delete(valuetype *value) {
 	delete value;
 }
 
@@ -386,16 +380,10 @@ inline
 void node_array_delete(long double value) {
 }
 
+template <class valuetype>
 inline
-void node_array_delete(void *value) {
+void node_array_delete(valuetype *value) {
 	delete[] value;
 }
-
-inline
-void node_array_delete(object *value) {
-	delete[] value;
-}
-
-#endif
 
 #endif

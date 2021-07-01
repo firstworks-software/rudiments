@@ -90,7 +90,9 @@ class fileparameter {
 	private:
 			fileparameter(const char *name, const char *filename, 
 				const char *tempfilename, const char *mimetype);
+	public:
 			~fileparameter();
+	private:
 		char	*name;
 		char	*filename;
 		char	*tempfilename;
