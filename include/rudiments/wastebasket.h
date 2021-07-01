@@ -17,7 +17,12 @@ class RUDIMENTS_DLLSPEC wastebasket : public object {
 		virtual	~wastebasket();
 
 		void	attachObject(object *o);
-		void	attachDeleteCollection(collection *c);
+		void	attachCollectionWithValues(collection *c);
+		void	attachCollectionWithArrayValues(collection *c);
+		void	attachCollectionWithKeys(collection *c);
+		void	attachCollectionWithArrayKeys(collection *c);
+		void	attachCollectionWithArrayKeysAndValues(collection *c);
+		void	attachCollectionWithKeysAndArrayValues(collection *c);
 
 		void	empty();
 

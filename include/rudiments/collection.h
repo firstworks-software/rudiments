@@ -23,6 +23,15 @@ class RUDIMENTS_DLLSPEC collection : public object {
 		virtual	void	clear() {};
 		virtual	void	clearAndDelete() {};
 		virtual	void	clearAndArrayDelete() {};
+
+		virtual	void	clearAndDeleteKeys() {};
+		virtual	void	clearAndArrayDeleteKeys() {};
+
+		virtual	void	clearAndDeleteValues() {};
+		virtual	void	clearAndArrayDeleteValues() {};
+
+		virtual	void	clearAndDeleteKeysAndArrayDeleteValues() {};
+		virtual	void	clearAndDeleteKeysAndDeleteValues() {};
 };
 
 #endif
