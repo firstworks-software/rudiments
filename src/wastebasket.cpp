@@ -101,9 +101,9 @@ void wastebasket::empty() {
 		for (listnode<collection *> *node=
 				pvt->_cwitharrayvalues->getFirst();
 				node; node=node->getNext()) {
-			node->getValue()->clearAndDelete();
+			node->getValue()->clearAndArrayDelete();
 		}
-		pvt->_cwitharrayvalues->clearAndArrayDelete();
+		pvt->_cwitharrayvalues->clearAndDelete();
 		delete pvt->_cwitharrayvalues;
 		pvt->_cwitharrayvalues=NULL;
 	}
@@ -111,7 +111,7 @@ void wastebasket::empty() {
 		for (listnode<collection *> *node=
 				pvt->_cwithkeys->getFirst();
 				node; node=node->getNext()) {
-			node->getValue()->clearAndDelete();
+			node->getValue()->clearAndDeleteKeys();
 		}
 		pvt->_cwithkeys->clearAndDelete();
 		delete pvt->_cwithkeys;
@@ -121,9 +121,9 @@ void wastebasket::empty() {
 		for (listnode<collection *> *node=
 				pvt->_cwitharraykeys->getFirst();
 				node; node=node->getNext()) {
-			node->getValue()->clearAndDelete();
+			node->getValue()->clearAndArrayDeleteKeys();
 		}
-		pvt->_cwitharraykeys->clearAndArrayDelete();
+		pvt->_cwitharraykeys->clearAndDelete();
 		delete pvt->_cwitharraykeys;
 		pvt->_cwitharrayvalues=NULL;
 	}
@@ -131,7 +131,8 @@ void wastebasket::empty() {
 		for (listnode<collection *> *node=
 				pvt->_cwitharraykeysandvalues->getFirst();
 				node; node=node->getNext()) {
-			node->getValue()->clearAndDelete();
+			node->getValue()->
+				clearAndArrayDeleteKeysAndDeleteValues();
 		}
 		pvt->_cwitharraykeysandvalues->clearAndDelete();
 		delete pvt->_cwitharraykeysandvalues;
@@ -141,7 +142,8 @@ void wastebasket::empty() {
 		for (listnode<collection *> *node=
 				pvt->_cwithkeysandarrayvalues->getFirst();
 				node; node=node->getNext()) {
-			node->getValue()->clearAndDelete();
+			node->getValue()->
+				clearAndDeleteKeysAndArrayDeleteValues();
 		}
 		pvt->_cwithkeysandarrayvalues->clearAndDelete();
 		delete pvt->_cwithkeysandarrayvalues;
