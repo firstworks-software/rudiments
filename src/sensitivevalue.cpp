@@ -2,10 +2,12 @@
 // See the COPYING file for more information.
 
 #include <rudiments/sensitivevalue.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/sys.h>
 #include <rudiments/file.h>
+#include <rudiments/stdio.h>
 
 class sensitivevalueprivate {
 	friend class sensitivevalue;
@@ -14,28 +16,38 @@ class sensitivevalueprivate {
 		uint64_t	_redirectstartlen;
 		const char	*_redirectend;
 		uint64_t	_redirectendlen;
-		bool		_verbatimishex;
-		bool		_fileishex;
+		sensitivevalue_format_t	_verbatimformat;
+		sensitivevalue_format_t	_fileformat;
 		const char	*_path;
 		uint64_t	_pathlen;
+		const char	*_textext;
+		uint64_t	_textextlen;
 		const char	*_binaryext;
 		uint64_t	_binaryextlen;
 		const char	*_hexext;
 		uint64_t	_hexextlen;
+		bool		_chomptextfile;
 		unsigned char	*_value;
 		uint64_t	_valuesize;
 };
 
 sensitivevalue::sensitivevalue() {
 	pvt=new sensitivevalueprivate;
+	init();
+}
+
+sensitivevalue::~sensitivevalue() {
+	delete[] pvt->_value;
+	delete pvt;
+}
+
+void sensitivevalue::init() {
+	bytestring::zero(pvt,sizeof(sensitivevalueprivate));
 	pvt->_redirectstart="[";
 	pvt->_redirectstartlen=1;
 	pvt->_redirectend="]";
 	pvt->_redirectendlen=1;
-}
-
-sensitivevalue::~sensitivevalue() {
-	delete pvt;
+	pvt->_chomptextfile=true;
 }
 
 void sensitivevalue::setRedirectStart(const char *delimiter) {
@@ -56,12 +68,16 @@ void sensitivevalue::setRedirectEnd(const char *delimiter, uint64_t len) {
 	pvt->_redirectendlen=len;
 }
 
-void sensitivevalue::setVerbatimIsHex(bool verbatimishex) {
-	pvt->_verbatimishex=verbatimishex;
+void sensitivevalue::setVerbatimFormat(sensitivevalue_format_t verbatimformat) {
+	pvt->_verbatimformat=verbatimformat;
 }
 
-void sensitivevalue::setFileIsHex(bool fileishex) {
-	pvt->_fileishex=fileishex;
+void sensitivevalue::setFileFormat(sensitivevalue_format_t fileformat) {
+	pvt->_fileformat=fileformat;
+}
+
+void sensitivevalue::setChompTextFile(bool chomptextfile) {
+	pvt->_chomptextfile=chomptextfile;
 }
 
 void sensitivevalue::setPath(const char *path) {
@@ -71,6 +87,15 @@ void sensitivevalue::setPath(const char *path) {
 void sensitivevalue::setPath(const char *path, uint64_t len) {
 	pvt->_path=path;
 	pvt->_pathlen=len;
+}
+
+void sensitivevalue::setTextExtension(const char *ext) {
+	setTextExtension(ext,charstring::length(ext));
+}
+
+void sensitivevalue::setTextExtension(const char *ext, uint64_t len) {
+	pvt->_textext=ext;
+	pvt->_textextlen=len;
 }
 
 void sensitivevalue::setBinaryExtension(const char *ext) {
@@ -107,12 +132,16 @@ uint64_t sensitivevalue::getRedirectEndLength() {
 	return pvt->_redirectendlen;
 }
 
-bool sensitivevalue::getVerbatimIsHex() {
-	return pvt->_verbatimishex;
+sensitivevalue_format_t sensitivevalue::getVerbatimFormat() {
+	return pvt->_verbatimformat;
 }
 
-bool sensitivevalue::getFileIsHex() {
-	return pvt->_fileishex;
+sensitivevalue_format_t sensitivevalue::getFileFormat() {
+	return pvt->_fileformat;
+}
+
+bool sensitivevalue::getChompTextFile() {
+	return pvt->_chomptextfile;
 }
 
 const char *sensitivevalue::getPath() {
@@ -121,6 +150,14 @@ const char *sensitivevalue::getPath() {
 
 uint64_t sensitivevalue::getPathLength() {
 	return pvt->_pathlen;
+}
+
+const char *sensitivevalue::getTextExtension() {
+	return pvt->_textext;
+}
+
+uint64_t sensitivevalue::getTextExtensionLength() {
+	return pvt->_textextlen;
 }
 
 const char *sensitivevalue::getBinaryExtension() {
@@ -162,7 +199,10 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 		// try the filename as-is
 		fn.clear();
 		fn.append(in+1,inlen-2);
-		if (getValueFromFile(fn.getString(),pvt->_fileishex)) {
+		if (getValueFromFile(fn.getString(),
+					pvt->_fileformat==HEX_FORMAT,
+					pvt->_fileformat==TEXT_FORMAT &&
+					pvt->_chomptextfile)) {
 			return;
 		}
 
@@ -172,8 +212,38 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 			fn.append(pvt->_path,pvt->_pathlen);
 			fn.append(sys::getDirectorySeparator());
 			fn.append(in+1,inlen-2);
-			if (getValueFromFile(fn.getString(),pvt->_fileishex)) {
+			if (getValueFromFile(fn.getString(),
+					pvt->_fileformat==HEX_FORMAT,
+					pvt->_fileformat==TEXT_FORMAT &&
+					pvt->_chomptextfile)) {
 				return;
+			}
+		}
+
+		if (!charstring::isNullOrEmpty(pvt->_textext)) {
+
+			// try appending the text extension
+			fn.clear();
+			fn.append(in+1,inlen-2);
+			fn.append('.');
+			fn.append(pvt->_textext,pvt->_textextlen);
+			if (getValueFromFile(fn.getString(),
+					false,pvt->_chomptextfile)) {
+				return;
+			}
+
+			// try path + text extension
+			if (!charstring::isNullOrEmpty(pvt->_path)) {
+				fn.clear();
+				fn.append(pvt->_path,pvt->_pathlen);
+				fn.append(sys::getDirectorySeparator());
+				fn.append(in+1,inlen-2);
+				fn.append('.');
+				fn.append(pvt->_textext,pvt->_textextlen);
+				if (getValueFromFile(fn.getString(),
+						false,pvt->_chomptextfile)) {
+					return;
+				}
 			}
 		}
 
@@ -184,7 +254,8 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 			fn.append(in+1,inlen-2);
 			fn.append('.');
 			fn.append(pvt->_binaryext,pvt->_binaryextlen);
-			if (getValueFromFile(fn.getString(),false)) {
+			if (getValueFromFile(
+				fn.getString(),false,false)) {
 				return;
 			}
 
@@ -196,7 +267,8 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 				fn.append(in+1,inlen-2);
 				fn.append('.');
 				fn.append(pvt->_binaryext,pvt->_binaryextlen);
-				if (getValueFromFile(fn.getString(),false)) {
+				if (getValueFromFile(
+					fn.getString(),false,false)) {
 					return;
 				}
 			}
@@ -209,7 +281,8 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 			fn.append(in+1,inlen-2);
 			fn.append('.');
 			fn.append(pvt->_hexext,pvt->_hexextlen);
-			if (getValueFromFile(fn.getString(),true)) {
+			if (getValueFromFile(
+				fn.getString(),true,false)) {
 				return;
 			}
 
@@ -221,7 +294,8 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 				fn.append(in+1,inlen-2);
 				fn.append('.');
 				fn.append(pvt->_hexext,pvt->_hexextlen);
-				if (getValueFromFile(fn.getString(),true)) {
+				if (getValueFromFile(
+					fn.getString(),true,false)) {
 					return;
 				}
 			}
@@ -229,7 +303,7 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 	}
 
 	// just return the in verbatim
-	if (pvt->_verbatimishex) {
+	if (pvt->_verbatimformat==HEX_FORMAT) {
 		charstring::hexDecode(in,inlen,
 				&(pvt->_value),&(pvt->_valuesize));
 	} else {
@@ -239,7 +313,7 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 }
 
 bool sensitivevalue::getValueFromFile(const char *filename,
-						bool hexdecode) {
+						bool hexdecode, bool chomp) {
 	file	f;
 	if (f.open(filename,O_RDONLY)) {
 		if (hexdecode) {
@@ -251,6 +325,36 @@ bool sensitivevalue::getValueFromFile(const char *filename,
 			pvt->_valuesize=f.getSize();
 			pvt->_value=(unsigned char *)f.getContents();
 		}
+		if (chomp) {
+			if (pvt->_valuesize>=2) {
+				if (!bytestring::compare(
+						pvt->_value+
+						pvt->_valuesize-2,
+						"\r\n",2) ||
+					!bytestring::compare(
+						pvt->_value+
+						pvt->_valuesize-2,
+						"\n\r",2)) {
+					*(pvt->_value+pvt->_valuesize-2)='\0';
+					pvt->_valuesize-=2;
+				} else if (
+					*(pvt->_value+
+						pvt->_valuesize-1)=='\r' ||
+					*(pvt->_value+
+						pvt->_valuesize-1)=='\n') {
+					*(pvt->_value+pvt->_valuesize-1)='\0';
+					pvt->_valuesize-=1;
+				}
+			} else if (pvt->_valuesize>=1) {
+				if (*(pvt->_value+
+						pvt->_valuesize-1)=='\r' ||
+					*(pvt->_value+
+						pvt->_valuesize-1)=='\n') {
+					*(pvt->_value+pvt->_valuesize-1)='\0';
+					pvt->_valuesize-=1;
+				}
+			}
+		}
 		return true;
 	}
 	return false;
@@ -258,6 +362,12 @@ bool sensitivevalue::getValueFromFile(const char *filename,
  
 const unsigned char *sensitivevalue::getValue() {
 	return pvt->_value;
+}
+
+unsigned char *sensitivevalue::detachValue() {
+	unsigned char	*retval=pvt->_value;
+	pvt->_value=NULL;
+	return retval;
 }
 
 uint64_t sensitivevalue::getValueSize() {
@@ -268,6 +378,17 @@ const char *sensitivevalue::getTextValue() {
 	return (const char *)pvt->_value;
 }
 
+char *sensitivevalue::detachTextValue() {
+	char	*retval=(char *)pvt->_value;
+	pvt->_value=NULL;
+	return retval;
+}
+
 uint64_t sensitivevalue::getTextValueLength() {
 	return charstring::length(getTextValue());
+}
+
+void sensitivevalue::clear() {
+	delete[] pvt->_value;
+	init();
 }

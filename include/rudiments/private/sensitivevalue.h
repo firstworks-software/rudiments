@@ -3,6 +3,8 @@
 
 	private:
 		bool	getValueFromFile(const char *filename,
-						bool hexdecode);
+						bool hexdecode,
+						bool chomp);
+		void	init();
 
 		sensitivevalueprivate	*pvt;

@@ -14,6 +14,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/datetime.h>
+#include <rudiments/sensitivevalue.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
@@ -286,17 +287,11 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		userpwd=charstring::duplicate(protodelim+3,at-protodelim-3);
 
 		// handle password files
-		if (userpwd[0]=='[' &&
-			userpwd[charstring::length(userpwd)-1]==']') {
-
-			charstring::rightTrim(userpwd,']');
-
-			char	*temp=file::getContents(userpwd+1);
-			charstring::bothTrim(temp);
-
-			delete[] userpwd;
-			userpwd=temp;
-		}
+		sensitivevalue	sv;
+		sv.setChompTextFile(true);
+		sv.parse(userpwd);
+		delete[] userpwd;
+		userpwd=sv.detachTextValue();
 
 		// build a clean url, without the user/password in it
 		cleanurl=new char[charstring::length(name)+1];
