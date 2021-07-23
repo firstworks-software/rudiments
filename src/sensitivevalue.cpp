@@ -3,6 +3,9 @@
 
 #include <rudiments/sensitivevalue.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/sys.h>
+#include <rudiments/file.h>
 
 class sensitivevalueprivate {
 	friend class sensitivevalue;
@@ -25,6 +28,10 @@ class sensitivevalueprivate {
 
 sensitivevalue::sensitivevalue() {
 	pvt=new sensitivevalueprivate;
+	pvt->_redirectstart="[";
+	pvt->_redirectstartlen=1;
+	pvt->_redirectend="]";
+	pvt->_redirectendlen=1;
 }
 
 sensitivevalue::~sensitivevalue() {
@@ -137,13 +144,109 @@ void sensitivevalue::parse(const char *in) {
 }
 
 void sensitivevalue::parse(const char *in, uint64_t inlen) {
-	// FIXME: implement this
+
+	delete[] pvt->_value;
+	pvt->_value=NULL;
+	pvt->_valuesize=0;
+
+	// if the input is [...file...] then attempt to get the
+	// contents of the specified file
+	if (!charstring::compare(in,pvt->_redirectstart,
+					pvt->_redirectstartlen) &&
+		!charstring::compare(in+inlen-pvt->_redirectendlen,
+							pvt->_redirectend,
+							pvt->_redirectendlen)) {
+
+		stringbuffer	fn;
+
+		// try the filename as-is
+		fn.clear();
+		fn.append(in+1,inlen-2);
+		if (getValueFromFile(fn.getString(),pvt->_fileishex)) {
+			return;
+		}
+
+		// try prepending a path
+		fn.clear();
+		fn.append(pvt->_path,pvt->_pathlen);
+		fn.append(sys::getDirectorySeparator());
+		fn.append(in+1,inlen-2);
+		if (getValueFromFile(fn.getString(),pvt->_fileishex)) {
+			return;
+		}
+
+		if (!charstring::isNullOrEmpty(pvt->_binaryext)) {
+
+			// try appending the binary extension
+			fn.clear();
+			fn.append(in+1,inlen-2);
+			fn.append('.');
+			fn.append(pvt->_binaryext,pvt->_binaryextlen);
+			if (getValueFromFile(fn.getString(),false)) {
+				return;
+			}
+
+			// try path + binary extension
+			fn.clear();
+			fn.append(pvt->_path,pvt->_pathlen);
+			fn.append(sys::getDirectorySeparator());
+			fn.append(in+1,inlen-2);
+			fn.append('.');
+			fn.append(pvt->_binaryext,pvt->_binaryextlen);
+			if (getValueFromFile(fn.getString(),false)) {
+				return;
+			}
+		}
+
+		if (!charstring::isNullOrEmpty(pvt->_hexext)) {
+
+			// try appending the hex extension
+			fn.clear();
+			fn.append(in+1,inlen-2);
+			fn.append('.');
+			fn.append(pvt->_hexext,pvt->_hexextlen);
+			if (getValueFromFile(fn.getString(),true)) {
+				return;
+			}
+
+			// try path + hex extension
+			fn.clear();
+			fn.append(pvt->_path,pvt->_pathlen);
+			fn.append(sys::getDirectorySeparator());
+			fn.append(in+1,inlen-2);
+			fn.append('.');
+			fn.append(pvt->_hexext,pvt->_hexextlen);
+			if (getValueFromFile(fn.getString(),true)) {
+				return;
+			}
+		}
+	}
+
+	// just return the in verbatim
+	if (pvt->_verbatimishex) {
+		charstring::hexDecode(in,inlen,&pvt->_value,&pvt->_valuesize);
+	} else {
+		pvt->_value=(unsigned char *)charstring::duplicate(in,inlen);
+		pvt->_valuesize=inlen;
+	}
 }
 
 bool sensitivevalue::getValueFromFile(const char *filename,
 						bool hexdecode) {
-	// FIXME: implement this
-	return true;
+	file	f;
+	if (f.open(filename,O_RDONLY)) {
+		if (hexdecode) {
+			charstring::hexDecode(f.getContents(),
+							f.getSize(),
+							&pvt->_value,
+							&pvt->_valuesize);
+		} else {
+			pvt->_valuesize=f.getSize();
+			pvt->_value=(unsigned char *)f.getContents();
+		}
+		return true;
+	}
+	return false;
 }
  
 const unsigned char *sensitivevalue::getValue() {
