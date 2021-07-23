@@ -4276,7 +4276,7 @@ dnl perform substitutions for disable options
 HEADERS0="object.h collection.h nodecollection.h listcollection.h treecollection.h tablecollection.h scalarcollection.h arraycollection.h dictionarycollection.h resultcodes.h debugprint.h"
 HEADERS1="dynamictable.h sparsedynamictable.h linkedlist.h singlylinkedlist.h avltree.h scalar.h"
 HEADERS2="dictionary.h hash.h sha1.h sha256.h md5.h encryption.h aes128.h"
-HEADERS3="dynamicarray.h sparsedynamicarray.h staticarray.h output.h input.h wastebasket.h"
+HEADERS3="dynamicarray.h sparsedynamicarray.h staticarray.h output.h input.h wastebasket.h sensitivevalue.h"
 PRIVATEHEADERS0="config.h debugprint.h collection.h collectioninlines.h"
 PRIVATEHEADERS1="inttypes.h new.h"
 PRIVATEHEADERS2="winsock.h dll.h"
@@ -4284,9 +4284,9 @@ PRIVATEHEADERS3="dynamictable.h dynamictableincludes.h dynamictableinlines.h spa
 PRIVATEHEADERS4="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlistinlines.h singlylinkedlistnode.h"
 PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h hashincludes.h encryption.h encryptionincludes.h sha1.h sha1includes.h sha256.h sha256includes.h md5.h md5includes.h aes128.h aes128includes.h"
 PRIVATEHEADERS6="dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h sparsedynamicarray.h sparsedynamicarrayincludes.h sparsedynamicarrayinlines.h"
-PRIVATEHEADERS7="staticarray.h staticarrayinlines.h outputincludes.h inputincludes.h wastebasketincludes.h wastebasket.h"
-SRCS="winsock.cpp sha1.cpp sha256.cpp md5.cpp encryption.cpp aes128.cpp output.cpp input.cpp wastebasket.cpp"
-LOBJS="winsock.lo sha1.lo sha256.lo md5.lo encryption.lo aes128.lo output.lo input.lo wastebasket.lo"
+PRIVATEHEADERS7="staticarray.h staticarrayinlines.h outputincludes.h inputincludes.h wastebasketincludes.h wastebasket.h sensitivevalueincludes.h sensitivevalue.h"
+SRCS="winsock.cpp sha1.cpp sha256.cpp md5.cpp encryption.cpp aes128.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
+LOBJS="winsock.lo sha1.lo sha256.lo md5.lo encryption.lo aes128.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )

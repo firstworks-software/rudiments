@@ -172,20 +172,6 @@ bool linkedlist<valuetype>::remove(valuetype value) {
 
 template <class valuetype>
 inline
-bool linkedlist<valuetype>::removeAndDelete(valuetype value) {
-	listnode<valuetype>	*current=find(value);
-	return (current)?removeAndDelete(current):false;
-}
-
-template <class valuetype>
-inline
-bool linkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
-	listnode<valuetype>	*current=find(value);
-	return (current)?removeAndArrayDelete(current):false;
-}
-
-template <class valuetype>
-inline
 bool linkedlist<valuetype>::removeAll(valuetype value) {
 
 	listnode<valuetype>	*current=first;
@@ -194,40 +180,6 @@ bool linkedlist<valuetype>::removeAll(valuetype value) {
 		next=current->getNext();
 		if (!current->compare(value) &&
 				!remove(current)) {
-			return false;
-		}
-		current=next;
-	}
-	return true;
-}
-
-template <class valuetype>
-inline
-bool linkedlist<valuetype>::removeAllAndDelete(valuetype value) {
-
-	listnode<valuetype>	*current=first;
-	listnode<valuetype>	*next;
-	while (current) {
-		next=current->getNext();
-		if (!current->compare(value) &&
-				!removeAndDelete(current)) {
-			return false;
-		}
-		current=next;
-	}
-	return true;
-}
-
-template <class valuetype>
-inline
-bool linkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
-
-	listnode<valuetype>	*current=first;
-	listnode<valuetype>	*next;
-	while (current) {
-		next=current->getNext();
-		if (!current->compare(value) &&
-				!removeAndArrayDelete(current)) {
 			return false;
 		}
 		current=next;
@@ -253,54 +205,11 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
-	delete node;
-	length--;
-	return true;
-}
-
-template <class valuetype>
-inline
-bool linkedlist<valuetype>::removeAndDelete(listnode<valuetype> *node) {
-	if (!node) {
-		return false;
+	if (collection::managevalues) {
+		node_delete_value(node->getValue());
+	} else if (collection::managearrayvalues) {
+		node_delete_array_value(node->getValue());
 	}
-	if (node->getNext()) {
-		node->getNext()->setPrevious(node->getPrevious());
-	}
-	if (node->getPrevious()) {
-		node->getPrevious()->setNext(node->getNext());
-	}
-	if (node==first) {
-		first=node->getNext();
-	}
-	if (node==last) {
-		last=node->getPrevious();
-	}
-	node_delete_value(node->getValue());
-	delete node;
-	length--;
-	return true;
-}
-
-template <class valuetype>
-inline
-bool linkedlist<valuetype>::removeAndArrayDelete(listnode<valuetype> *node) {
-	if (!node) {
-		return false;
-	}
-	if (node->getNext()) {
-		node->getNext()->setPrevious(node->getPrevious());
-	}
-	if (node->getPrevious()) {
-		node->getPrevious()->setNext(node->getNext());
-	}
-	if (node==first) {
-		first=node->getNext();
-	}
-	if (node==last) {
-		last=node->getPrevious();
-	}
-	node_delete_array_value(node->getValue());
 	delete node;
 	length--;
 	return true;
@@ -616,38 +525,11 @@ void linkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		delete current;
-		current=next;
-	}
-	first=NULL;
-	last=NULL;
-	length=0;
-}
-
-template <class valuetype>
-inline
-void linkedlist<valuetype>::clearAndDelete() {
-	listnode<valuetype>	*next;
-	listnode<valuetype>	*current=first;
-	while (current) {
-		next=current->getNext();
-		node_delete_value(current->getValue());
-		delete current;
-		current=next;
-	}
-	first=NULL;
-	last=NULL;
-	length=0;
-}
-
-template <class valuetype>
-inline
-void linkedlist<valuetype>::clearAndArrayDelete() {
-	listnode<valuetype>	*next;
-	listnode<valuetype>	*current=first;
-	while (current) {
-		next=current->getNext();
-		node_delete_array_value(current->getValue());
+		if (collection::managevalues) {
+			node_delete_value(current->getValue());
+		} else if (collection::managearrayvalues) {
+			node_delete_array_value(current->getValue());
+		}
 		delete current;
 		current=next;
 	}

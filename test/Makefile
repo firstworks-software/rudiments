@@ -77,7 +77,8 @@ PROGS3= handoff \
 	aes128 \
 	dynamictable \
 	sparsedynamictable \
-	scalar
+	scalar \
+	sensitivevalue
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -314,6 +315,9 @@ sparsedynamictable: sparsedynamictable.cpp sparsedynamictable.$(OBJ)
 
 scalar: scalar.cpp scalar.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) scalar.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+sensitivevalue: sensitivevalue.cpp sensitivevalue.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sensitivevalue.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all

@@ -124,25 +124,6 @@ class linkedlist : public listcollection<valuetype> {
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
 
-		/** Deletes the first linkedlistnode containing "value",
-		 *  deleting the value stored in the linkedlistnode as well.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndDelete(valuetype value);
-
-		/** Deletes the first linkedlistnode containing "value",
-		 *  deleting the value stored in the linkedlistnode as well,
-		 *  which is presumed to be an array.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndArrayDelete(valuetype value);
-
 		/** Deletes all linkedlistnodes containing "value".
 		 * 
 		 *  Note that this operation requires a search and is expensive
@@ -158,7 +139,7 @@ class linkedlist : public listcollection<valuetype> {
 		 *  in both execution time and code size.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	removeAllAndDelete(valuetype value);
+		//bool	removeAllAndDelete(valuetype value);
 
 		/** Deletes all linkedlistnodes containing "value",
 		 *  deleting the values stored in the linkedlistnodes as well,
@@ -168,7 +149,7 @@ class linkedlist : public listcollection<valuetype> {
 		 *  in both execution time and code size.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	removeAllAndArrayDelete(valuetype value);
+		//bool	removeAllAndArrayDelete(valuetype value);
 
 		/** Removed linkedlistnode "node" from the linkedlist.
 		 * 
@@ -178,27 +159,6 @@ class linkedlist : public listcollection<valuetype> {
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(listnode<valuetype> *node);
-
-		/** Removed linkedlistnode "node" from the linkedlist,
-		 *  deleting the value stored in the linkedlistnode as well.
-		 * 
-		 *  Note that this operation does not require a search and is
-		 *  far less expensive than the remove(value) operation and
-		 *  removeAll().
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndDelete(listnode<valuetype> *node);
-
-		/** Removed linkedlistnode "node" from the linkedlist,
-		 *  deleting the value stored in the linkedlistnode as well,
-		 *  which is presumed to be an array.
-		 * 
-		 *  Note that this operation does not require a search and is
-		 *  far less expensive than the remove(value) operation and
-		 *  removeAll().
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndArrayDelete(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the linkedlist. */
 		uint64_t	getLength() const;
@@ -244,16 +204,6 @@ class linkedlist : public listcollection<valuetype> {
 		 *  Note however, that the value stored in each linkedlistnode
 		 *  is not deleted by this call. */
 		void	clear();
-
-		/** Deletes all linkedlistnodes currently in the linkedlist,
-		 *  deleting the value stored in each linkedlistnode as
-		 *  well. */
-		void	clearAndDelete();
-
-		/** Deletes all linkedlistnodes currently in the linkedlist,
-		 *  deleting the value stored in each linkedlistnode as well,
-		 *  which is presumed to be an array. */
-		void	clearAndArrayDelete();
 
 		/** Prints out a representation of the linkedlist. */
 		void	print() const;
