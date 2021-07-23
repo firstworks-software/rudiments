@@ -167,12 +167,14 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 		}
 
 		// try prepending a path
-		fn.clear();
-		fn.append(pvt->_path,pvt->_pathlen);
-		fn.append(sys::getDirectorySeparator());
-		fn.append(in+1,inlen-2);
-		if (getValueFromFile(fn.getString(),pvt->_fileishex)) {
-			return;
+		if (!charstring::isNullOrEmpty(pvt->_path)) {
+			fn.clear();
+			fn.append(pvt->_path,pvt->_pathlen);
+			fn.append(sys::getDirectorySeparator());
+			fn.append(in+1,inlen-2);
+			if (getValueFromFile(fn.getString(),pvt->_fileishex)) {
+				return;
+			}
 		}
 
 		if (!charstring::isNullOrEmpty(pvt->_binaryext)) {
@@ -187,14 +189,16 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 			}
 
 			// try path + binary extension
-			fn.clear();
-			fn.append(pvt->_path,pvt->_pathlen);
-			fn.append(sys::getDirectorySeparator());
-			fn.append(in+1,inlen-2);
-			fn.append('.');
-			fn.append(pvt->_binaryext,pvt->_binaryextlen);
-			if (getValueFromFile(fn.getString(),false)) {
-				return;
+			if (!charstring::isNullOrEmpty(pvt->_path)) {
+				fn.clear();
+				fn.append(pvt->_path,pvt->_pathlen);
+				fn.append(sys::getDirectorySeparator());
+				fn.append(in+1,inlen-2);
+				fn.append('.');
+				fn.append(pvt->_binaryext,pvt->_binaryextlen);
+				if (getValueFromFile(fn.getString(),false)) {
+					return;
+				}
 			}
 		}
 
@@ -210,21 +214,24 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 			}
 
 			// try path + hex extension
-			fn.clear();
-			fn.append(pvt->_path,pvt->_pathlen);
-			fn.append(sys::getDirectorySeparator());
-			fn.append(in+1,inlen-2);
-			fn.append('.');
-			fn.append(pvt->_hexext,pvt->_hexextlen);
-			if (getValueFromFile(fn.getString(),true)) {
-				return;
+			if (!charstring::isNullOrEmpty(pvt->_path)) {
+				fn.clear();
+				fn.append(pvt->_path,pvt->_pathlen);
+				fn.append(sys::getDirectorySeparator());
+				fn.append(in+1,inlen-2);
+				fn.append('.');
+				fn.append(pvt->_hexext,pvt->_hexextlen);
+				if (getValueFromFile(fn.getString(),true)) {
+					return;
+				}
 			}
 		}
 	}
 
 	// just return the in verbatim
 	if (pvt->_verbatimishex) {
-		charstring::hexDecode(in,inlen,&pvt->_value,&pvt->_valuesize);
+		charstring::hexDecode(in,inlen,
+				&(pvt->_value),&(pvt->_valuesize));
 	} else {
 		pvt->_value=(unsigned char *)charstring::duplicate(in,inlen);
 		pvt->_valuesize=inlen;
@@ -238,8 +245,8 @@ bool sensitivevalue::getValueFromFile(const char *filename,
 		if (hexdecode) {
 			charstring::hexDecode(f.getContents(),
 							f.getSize(),
-							&pvt->_value,
-							&pvt->_valuesize);
+							&(pvt->_value),
+							&(pvt->_valuesize));
 		} else {
 			pvt->_valuesize=f.getSize();
 			pvt->_value=(unsigned char *)f.getContents();
