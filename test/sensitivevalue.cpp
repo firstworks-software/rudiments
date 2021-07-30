@@ -74,8 +74,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n\n");
 
 	stdoutput.printf("verbatim - hex\n");
-	sv.setVerbatimFormat(HEX_FORMAT);
-	test("getVerbatimFormat()",sv.getVerbatimFormat()==HEX_FORMAT);
+	sv.setVerbatimFormat(FORMAT_HEX);
+	test("getVerbatimFormat()",sv.getVerbatimFormat()==FORMAT_HEX);
 	sv.parse(svhex);
 	test("getValue()",!bytestring::compare(sv.getValue(),
 							svstring,
@@ -120,8 +120,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n\n");
 
 	stdoutput.printf("file - hex\n");
-	sv.setFileFormat(HEX_FORMAT);
-	test("getFileFormat()",sv.getFileFormat()==HEX_FORMAT);
+	sv.setFileFormat(FORMAT_HEX);
+	test("getFileFormat()",sv.getFileFormat()==FORMAT_HEX);
 	sv.parse(svhexfile);
 	test("getValue()",!bytestring::compare(sv.getValue(),
 							svstring,

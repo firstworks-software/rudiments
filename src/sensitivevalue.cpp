@@ -200,8 +200,8 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 		fn.clear();
 		fn.append(in+1,inlen-2);
 		if (getValueFromFile(fn.getString(),
-					pvt->_fileformat==HEX_FORMAT,
-					pvt->_fileformat==TEXT_FORMAT &&
+					pvt->_fileformat==FORMAT_HEX,
+					pvt->_fileformat==FORMAT_TEXT &&
 					pvt->_chomptextfile)) {
 			return;
 		}
@@ -213,8 +213,8 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 			fn.append(sys::getDirectorySeparator());
 			fn.append(in+1,inlen-2);
 			if (getValueFromFile(fn.getString(),
-					pvt->_fileformat==HEX_FORMAT,
-					pvt->_fileformat==TEXT_FORMAT &&
+					pvt->_fileformat==FORMAT_HEX,
+					pvt->_fileformat==FORMAT_TEXT &&
 					pvt->_chomptextfile)) {
 				return;
 			}
@@ -303,7 +303,7 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 	}
 
 	// just return the in verbatim
-	if (pvt->_verbatimformat==HEX_FORMAT) {
+	if (pvt->_verbatimformat==FORMAT_HEX) {
 		charstring::hexDecode(in,inlen,
 				&(pvt->_value),&(pvt->_valuesize));
 	} else {

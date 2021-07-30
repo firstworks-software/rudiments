@@ -10,9 +10,9 @@
  *  a string, which may optionally redirect to a file. */
 
 enum sensitivevalue_format_t {
-	TEXT_FORMAT=0,
-	BINARY_FORMAT,
-	HEX_FORMAT
+	FORMAT_TEXT=0,
+	FORMAT_BINARY,
+	FORMAT_HEX
 };
 
 class RUDIMENTS_DLLSPEC sensitivevalue {
