@@ -10,6 +10,9 @@
 	in bytestring.cpp, NULL is redefined if _G_config.h undef'ed it
 	added a posix semaphores implementation of semaphoreset
 	added sensitivevalue class
+	changed collection paradigm from multiple remove/clearAndDelete...()
+		methods to setManage...Values() methods and single
+		clear()/remove()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
