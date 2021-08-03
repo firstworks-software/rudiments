@@ -82,7 +82,7 @@ memorypool::memorypool(size_t initialsize,
 }
 
 memorypool::~memorypool() {
-	pvt->_bufferlist.clearAndDelete();
+	pvt->_bufferlist.setManageValues(true);
 	delete pvt;
 }
 

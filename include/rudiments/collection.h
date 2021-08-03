@@ -31,20 +31,6 @@ class RUDIMENTS_DLLSPEC collection : public object {
 
 		virtual	void	setManageArrayKeys(bool manage);
 		virtual	bool	getManageArrayKeys();
-		
-
-		virtual	void	clear() {};
-		virtual	void	clearAndDelete() {};
-		virtual	void	clearAndArrayDelete() {};
-
-		virtual	void	clearAndDeleteKeys() {};
-		virtual	void	clearAndArrayDeleteKeys() {};
-
-		virtual	void	clearAndDeleteValues() {};
-		virtual	void	clearAndArrayDeleteValues() {};
-
-		virtual	void	clearAndDeleteKeysAndArrayDeleteValues() {};
-		virtual	void	clearAndArrayDeleteKeysAndDeleteValues() {};
 
 	#include <rudiments/private/collection.h>
 };

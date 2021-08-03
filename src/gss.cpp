@@ -673,6 +673,8 @@ gsscredentials::gsscredentials() : object() {
 	#endif
 	pvt->_acquired=false;
 	pvt->_psd=NULL;
+
+	pvt->_amlist.setManageValues(true);
 }
 
 gsscredentials::~gsscredentials() {
@@ -1132,7 +1134,7 @@ void gsscredentials::close() {
 			pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 		}
 	#endif
-	pvt->_amlist.clearAndDelete();
+	pvt->_amlist.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)

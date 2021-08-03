@@ -93,7 +93,6 @@ void handoff2() {
 	test("handoff2 - connect",
 		clnt.connect(handoffsck,-1,-1,0,1)==RESULT_SUCCESS);
 
-
 	// receive the file
 	int32_t	fd;
 	test("handoff2 - receive fd",clnt.receiveFileDescriptor(&fd));

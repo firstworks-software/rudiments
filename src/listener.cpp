@@ -59,11 +59,11 @@ struct fddata_t {
 class listenerprivate {
 	friend class listener;
 	private:
-		linkedlist< fddata_t * >	_fdlist;
-		listenerlist			_readreadylist;
-		listenerlist			_writereadylist;
-		bool				_retryinterruptedwaits;
-		bool				_dirty;
+		linkedlist< fddata_t * >		_fdlist;
+		singlylinkedlist<filedescriptor *>	_readreadylist;
+		singlylinkedlist<filedescriptor *>	_writereadylist;
+		bool					_retryinterruptedwaits;
+		bool					_dirty;
 
 		#if defined(RUDIMENTS_HAVE_KQUEUE)
 			int32_t			_kq;
@@ -89,6 +89,7 @@ class listenerprivate {
 
 listener::listener() : object() {
 	pvt=new listenerprivate;
+	pvt->_fdlist.setManageValues(true);
 	pvt->_retryinterruptedwaits=true;
 	pvt->_dirty=true;
 	#if defined(RUDIMENTS_HAVE_KQUEUE)
@@ -183,7 +184,6 @@ void listener::removeFileDescriptor(filedescriptor *fd) {
 	while (node) {
 		listnode< fddata_t * >	*next=node->getNext();
 		if (node->getValue()->fd==fd) {
-			delete node->getValue();
 			pvt->_fdlist.remove(node);
 		}
 		node=next;
@@ -193,15 +193,15 @@ void listener::removeFileDescriptor(filedescriptor *fd) {
 }
 
 void listener::removeAllFileDescriptors() {
-	pvt->_fdlist.clearAndDelete();
+	pvt->_fdlist.clear();
 	pvt->_dirty=true;
 }
 
-listenerlist *listener::getReadReadyList() {
+singlylinkedlist<filedescriptor *> *listener::getReadReadyList() {
 	return &pvt->_readreadylist;
 }
 
-listenerlist *listener::getWriteReadyList() {
+singlylinkedlist<filedescriptor *> *listener::getWriteReadyList() {
 	return &pvt->_writereadylist;
 }
 

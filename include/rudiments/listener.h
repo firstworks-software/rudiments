@@ -6,9 +6,6 @@
 
 #include <rudiments/private/listenerincludes.h>
 
-typedef singlylinkedlistnode<filedescriptor *>	listenerlistnode;
-typedef singlylinkedlist<filedescriptor *>	listenerlist;
-
 /** The listener class listens for activity on a pool of filedescriptors
  *  or children of the filedescriptor class. */
 class RUDIMENTS_DLLSPEC listener : public object {
@@ -73,11 +70,11 @@ class RUDIMENTS_DLLSPEC listener : public object {
 
 		/** Returns the list of file descriptors that were ready for
 		 *  read operations after the last call to listen(). */
-		listenerlist	*getReadReadyList();
+		singlylinkedlist<filedescriptor *>	*getReadReadyList();
 
 		/** Returns the list of file descriptors that were ready for
 		 *  write operations after the last call to listen(). */
-		listenerlist	*getWriteReadyList();
+		singlylinkedlist<filedescriptor *>	*getWriteReadyList();
 
 
 		/** Causes waits to automatically retry if interrupted by a

@@ -56,6 +56,12 @@ class compilerprivate {
 compiler::compiler() : object() {
 	pvt=new compilerprivate;
 
+	pvt->_modulepaths.setManageArrayValues(true);
+	pvt->_plugins.setManageValues(true);
+	pvt->_preprocessors.setManageValues(true);
+	pvt->_processors.setManageValues(true);
+	pvt->_postprocessors.setManageValues(true);
+
 	pvt->_inputgrammar=NULL;
 	pvt->_startsymbol=NULL;
 	pvt->_outputgrammar=NULL;
@@ -66,11 +72,6 @@ compiler::compiler() : object() {
 }
 
 compiler::~compiler() {
-	pvt->_preprocessors.clearAndDelete();
-	pvt->_processors.clearAndDelete();
-	pvt->_postprocessors.clearAndDelete();
-	pvt->_plugins.clearAndDelete();
-	pvt->_modulepaths.clearAndArrayDelete();
 	delete pvt;
 }
 
@@ -79,7 +80,7 @@ void compiler::appendModulePath(const char *path) {
 }
 
 void compiler::clearModulePaths() {
-	pvt->_modulepaths.clearAndArrayDelete();
+	pvt->_modulepaths.clear();
 }
 
 linkedlist< char * >	*compiler::getModulePaths() {
@@ -189,7 +190,7 @@ bool compiler::appendPreProcessor(const char *filename,
 }
 
 void compiler::clearPreProcessors() {
-	pvt->_preprocessors.clearAndDelete();
+	pvt->_preprocessors.clear();
 }
 
 linkedlist< compilermodule * > *compiler::getPreProcessors() {
@@ -217,7 +218,7 @@ bool compiler::appendProcessor(const char *filename,
 }
 
 void compiler::clearProcessors() {
-	pvt->_processors.clearAndDelete();
+	pvt->_processors.clear();
 }
 
 linkedlist< compilermodule * > *compiler::getProcessors() {
@@ -245,7 +246,7 @@ bool compiler::appendPostProcessor(const char *filename,
 }
 
 void compiler::clearPostProcessors() {
-	pvt->_postprocessors.clearAndDelete();
+	pvt->_postprocessors.clear();
 }
 
 linkedlist< compilermodule * > *compiler::getPostProcessors() {

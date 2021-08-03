@@ -510,14 +510,6 @@ void linkedlist<valuetype>::heapSort() {
 	}
 }
 
-// NOTE: Don't collapse the clear methods into a single method, or the compiler
-// will attempt to compile calls to:
-// 	delete current->getValue();
-// 	and
-// 	delete[] current->getValue();
-// even if the app just calls clear().  This will fail for primitive types or
-// when the type has a private destructor.
-
 template <class valuetype>
 inline
 void linkedlist<valuetype>::clear() {

@@ -23,12 +23,12 @@ mvcresult::mvcresult() : object() {
 	pvt->success=false;
 	pvt->code=0;
 	pvt->message=NULL;
+	pvt->objects.setManageValues(true);
 }
 
 mvcresult::~mvcresult() {
 	pvt->types.clearAndArrayDelete();
 	pvt->types.clearAndArrayDeleteKeysAndDeleteValues();
-	pvt->objects.clearAndDelete();
 	delete[] pvt->message;
 	delete pvt;
 }

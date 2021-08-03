@@ -132,25 +132,6 @@ class linkedlist : public listcollection<valuetype> {
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
 
-		/** Deletes all linkedlistnodes containing "value",
-		 *  deleting the values stored in the linkedlistnodes as well.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 * 
-		 *  Returns true on success and false on failure. */
-		//bool	removeAllAndDelete(valuetype value);
-
-		/** Deletes all linkedlistnodes containing "value",
-		 *  deleting the values stored in the linkedlistnodes as well,
-		 *  which are presumed to be arrays.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 * 
-		 *  Returns true on success and false on failure. */
-		//bool	removeAllAndArrayDelete(valuetype value);
-
 		/** Removed linkedlistnode "node" from the linkedlist.
 		 * 
 		 *  Note that this operation does not require a search and is
