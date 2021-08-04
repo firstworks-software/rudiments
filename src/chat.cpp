@@ -30,6 +30,7 @@ chat::chat() : object() {
 	pvt->_readfd=NULL;
 	pvt->_writefd=NULL;
 	pvt->_timeout=45;
+	pvt->_aborts.setManageArrayValues(true);
 }
 
 chat::chat(filedescriptor *fd) : object() {
@@ -37,6 +38,7 @@ chat::chat(filedescriptor *fd) : object() {
 	pvt->_readfd=fd;
 	pvt->_writefd=fd;
 	pvt->_timeout=45;
+	pvt->_aborts.setManageArrayValues(true);
 }
 
 chat::chat(filedescriptor *rfd, filedescriptor *wfd) : object() {
@@ -44,6 +46,7 @@ chat::chat(filedescriptor *rfd, filedescriptor *wfd) : object() {
 	pvt->_readfd=rfd;
 	pvt->_writefd=wfd;
 	pvt->_timeout=45;
+	pvt->_aborts.setManageArrayValues(true);
 }
 
 chat::~chat() {
@@ -162,11 +165,6 @@ void chat::appendAbortString(const char *string) {
 }
 
 void chat::clearAbortStrings() {
-	for (listnode< char * > *sln=pvt->_aborts.getFirst();
-						sln; sln=sln->getNext()) {
-		char	*abortstring=sln->getValue();
-		delete[] abortstring;
-	}
 	pvt->_aborts.clear();
 }
 

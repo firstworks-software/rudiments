@@ -275,6 +275,7 @@ int main(int argc, char **argv) {
 	// remove/clear and delete
 	stdoutput.printf("remove/clear and delete...\n");
 	singlylinkedlist<stringbuffer *>	strbl;
+	strbl.setManageValues(true);
 	stringbuffer	*strb1=new stringbuffer();
 	strb1->append("1");
 	strbl.append(strb1);
@@ -287,26 +288,27 @@ int main(int argc, char **argv) {
 	stringbuffer	*strb4=new stringbuffer();
 	strb4->append("4");
 	strbl.append(strb4);
-	strbl.removeAndDelete(strb3);
+	strbl.remove(strb3);
 	test("remove, getLength(): ",strbl.getLength()==3);
-	strbl.removeAndDelete(strb4);
+	strbl.remove(strb4);
 	test("remove, getLength(): ",strbl.getLength()==2);
-	strbl.clearAndDelete();
+	strbl.clear();
 	test("clear, getLength(): ",!strbl.getLength());
 	stdoutput.printf("\n");
 
 	// remove/clear and array delete
 	stdoutput.printf("remove/clear and array delete...\n");
 	singlylinkedlist<char *>	charl;
+	charl.setManageArrayValues(true);
 	charl.append(charstring::duplicate("1"));
 	charl.append(charstring::duplicate("2"));
 	charl.append(charstring::duplicate("3"));
 	charl.append(charstring::duplicate("4"));
-	charl.removeAndArrayDelete((char *)"1");
+	charl.remove((char *)"1");
 	test("remove, getLength(): ",charl.getLength()==3);
-	charl.removeAndArrayDelete((char *)"2");
+	charl.remove((char *)"2");
 	test("remove, getLength(): ",charl.getLength()==2);
-	charl.clearAndArrayDelete();
+	charl.clear();
 	test("clear, getLength(): ",!charl.getLength());
 	stdoutput.printf("\n");
 }

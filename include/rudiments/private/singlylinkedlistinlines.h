@@ -172,76 +172,11 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 		}
 	}
 	if (current) {
-		delete current;
-		length--;
-		return true;
-	}
-	return false;
-}
-
-template <class valuetype>
-inline
-bool singlylinkedlist<valuetype>::removeAndDelete(valuetype value) {
-	listnode<valuetype> *current=first;
-	if (!current->compare(value)) {
-		if (first==last) {
-			first=NULL;
-			last=NULL;
-		} else {
-			first=first->getNext();
+		if (collection::managevalues) {
+			node_delete_value(current->getValue());
+		} else if (collection::managearrayvalues) {
+			node_delete_array_value(current->getValue());
 		}
-	} else {
-		listnode<valuetype> *prev=first;
-		current=current->getNext();
-		while (current) {
-			if (!current->compare(value)) {
-				prev->setNext(current->getNext());
-				break;
-			}
-			prev=current;
-			current=current->getNext();
-		}
-		if (last==current) {
-			last=prev;
-		}
-	}
-	if (current) {
-		node_delete_value(current->getValue());
-		delete current;
-		length--;
-		return true;
-	}
-	return false;
-}
-
-template <class valuetype>
-inline
-bool singlylinkedlist<valuetype>::removeAndArrayDelete(valuetype value) {
-	listnode<valuetype> *current=first;
-	if (!current->compare(value)) {
-		if (first==last) {
-			first=NULL;
-			last=NULL;
-		} else {
-			first=first->getNext();
-		}
-	} else {
-		listnode<valuetype> *prev=first;
-		current=current->getNext();
-		while (current) {
-			if (!current->compare(value)) {
-				prev->setNext(current->getNext());
-				break;
-			}
-			prev=current;
-			current=current->getNext();
-		}
-		if (last==current) {
-			last=prev;
-		}
-	}
-	if (current) {
-		node_delete_array_value(current->getValue());
 		delete current;
 		length--;
 		return true;
@@ -262,11 +197,21 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
+			if (collection::managevalues) {
+				node_delete_value(current->getValue());
+			} else if (collection::managearrayvalues) {
+				node_delete_array_value(current->getValue());
+			}
 			delete current;
 			length--;
 			return true;
 		} else {
 			first=first->getNext();
+			if (collection::managevalues) {
+				node_delete_value(current->getValue());
+			} else if (collection::managearrayvalues) {
+				node_delete_array_value(current->getValue());
+			}
 			delete current;
 			length--;
 			current=first;
@@ -282,100 +227,11 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			if (last==current) {
 				last=prev;
 			}
-			delete current;
-			length--;
-			current=temp;
-		} else {
-			prev=current;
-			current=current->getNext();
-		}
-	}
-	return retval;
-}
-
-template <class valuetype>
-inline
-bool singlylinkedlist<valuetype>::removeAllAndDelete(valuetype value) {
-	if (!first) {
-		return true;
-	}
-	bool	retval=false;
-	listnode<valuetype> *current=first;
-	while (!current->compare(value)) {
-		retval=true;
-		if (first==last) {
-			first=NULL;
-			last=NULL;
-			node_delete_value(current->getValue());
-			delete current;
-			length--;
-			return true;
-		} else {
-			first=first->getNext();
-			node_delete_value(current->getValue());
-			delete current;
-			length--;
-			current=first;
-		}
-	}
-	listnode<valuetype> *prev=first;
-	current=current->getNext();
-	while (current) {
-		if (!current->compare(value)) {
-			retval=true;
-			listnode<valuetype> *temp=current->getNext();
-			prev->setNext(temp);
-			if (last==current) {
-				last=prev;
+			if (collection::managevalues) {
+				node_delete_value(current->getValue());
+			} else if (collection::managearrayvalues) {
+				node_delete_array_value(current->getValue());
 			}
-			node_delete_value(current->getValue());
-			delete current;
-			length--;
-			current=temp;
-		} else {
-			prev=current;
-			current=current->getNext();
-		}
-	}
-	return retval;
-}
-
-template <class valuetype>
-inline
-bool singlylinkedlist<valuetype>::removeAllAndArrayDelete(valuetype value) {
-	if (!first) {
-		return true;
-	}
-	bool	retval=false;
-	listnode<valuetype> *current=first;
-	while (!current->compare(value)) {
-		retval=true;
-		if (first==last) {
-			first=NULL;
-			last=NULL;
-			node_delete_array_value(current->getValue());
-			delete current;
-			length--;
-			return true;
-		} else {
-			first=first->getNext();
-			node_delete_array_value(current->getValue());
-			delete current;
-			length--;
-			current=first;
-		}
-	}
-	listnode<valuetype> *prev=first;
-	current=current->getNext();
-	while (current) {
-		if (!current->compare(value)) {
-			retval=true;
-			listnode<valuetype> *temp=current->getNext();
-			prev->setNext(temp);
-			if (last==current) {
-				last=prev;
-			}
-			node_delete_array_value(current->getValue());
 			delete current;
 			length--;
 			current=temp;
@@ -417,83 +273,11 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 		}
 	}
 	if (current) {
-		delete current;
-		length--;
-		return true;
-	}
-	return false;
-}
-
-template <class valuetype>
-inline
-bool singlylinkedlist<valuetype>::removeAndDelete(listnode<valuetype> *node) {
-	if (!node) {
-		return false;
-	}
-	listnode<valuetype> *current=first;
-	if (current==node) {
-		if (first==last) {
-			first=NULL;
-			last=NULL;
-		} else {
-			first=first->getNext();
+		if (collection::managevalues) {
+			node_delete_value(current->getValue());
+		} else if (collection::managearrayvalues) {
+			node_delete_array_value(current->getValue());
 		}
-	} else {
-		listnode<valuetype> *prev=first;
-		current=current->getNext();
-		while (current) {
-			if (current==node) {
-				prev->setNext(current->getNext());
-				break;
-			}
-			prev=current;
-			current=current->getNext();
-		}
-		if (last==current) {
-			last=prev;
-		}
-	}
-	if (current) {
-		node_delete_value(current->getValue());
-		delete current;
-		length--;
-		return true;
-	}
-	return false;
-}
-
-template <class valuetype>
-inline
-bool singlylinkedlist<valuetype>::removeAndArrayDelete(
-					listnode<valuetype> *node) {
-	if (!node) {
-		return false;
-	}
-	listnode<valuetype> *current=first;
-	if (current==node) {
-		if (first==last) {
-			first=NULL;
-			last=NULL;
-		} else {
-			first=first->getNext();
-		}
-	} else {
-		listnode<valuetype> *prev=first;
-		current=current->getNext();
-		while (current) {
-			if (current==node) {
-				prev->setNext(current->getNext());
-				break;
-			}
-			prev=current;
-			current=current->getNext();
-		}
-		if (last==current) {
-			last=prev;
-		}
-	}
-	if (current) {
-		node_delete_array_value(current->getValue());
 		delete current;
 		length--;
 		return true;
@@ -766,38 +550,11 @@ void singlylinkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		delete current;
-		current=next;
-	}
-	first=NULL;
-	last=NULL;
-	length=0;
-}
-
-template <class valuetype>
-inline
-void singlylinkedlist<valuetype>::clearAndDelete() {
-	listnode<valuetype>	*next;
-	listnode<valuetype>	*current=first;
-	while (current) {
-		next=current->getNext();
-		node_delete_value(current->getValue());
-		delete current;
-		current=next;
-	}
-	first=NULL;
-	last=NULL;
-	length=0;
-}
-
-template <class valuetype>
-inline
-void singlylinkedlist<valuetype>::clearAndArrayDelete() {
-	listnode<valuetype>	*next;
-	listnode<valuetype>	*current=first;
-	while (current) {
-		next=current->getNext();
-		node_delete_array_value(current->getValue());
+		if (collection::managevalues) {
+			node_delete_value(current->getValue());
+		} else if (collection::managearrayvalues) {
+			node_delete_array_value(current->getValue());
+		}
 		delete current;
 		current=next;
 	}
