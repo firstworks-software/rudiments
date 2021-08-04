@@ -104,25 +104,6 @@ class avltree : public treecollection<valuetype> {
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
 
-		/** Deletes the first avltreenode containing "value",
-		 *  deleting the value stored in the avltreenode as well.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndDelete(valuetype value);
-
-		/** Deletes the first avltreenode containing "value",
-		 *  deleting the value stored in the avltreenode as well,
-		 *  which is presuemd to be an array.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndArrayDelete(valuetype value);
-
 		/** Deletes all avltreenodes containing "value".
 		 * 
 		 *  Note that this operation requires a search and is expensive
@@ -130,25 +111,6 @@ class avltree : public treecollection<valuetype> {
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
-
-		/** Deletes all avltreenodes containing "value",
-		 *  deleting the value stored in each avltreenode as well.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	removeAllAndDelete(valuetype value);
-
-		/** Deletes all avltreenodes containing "value",
-		 *  deleting the value stored in each avltreenode as well,
-		 *  which is presuemd to be an array.
-		 * 
-		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	removeAllAndArrayDelete(valuetype value);
 
 		/** Removed avltreenode "node" from the avltree.
 		 * 
@@ -158,27 +120,6 @@ class avltree : public treecollection<valuetype> {
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(avltreenode<valuetype> *node);
-
-		/** Removed avltreenode "node" from the avltree,
-		 *  deleting the value stored in the avltreenode as well.
-		 * 
-		 *  Note that this operation does not require a search and is
-		 *  far less expensive than the remove(value) operation and
-		 *  removeAll().
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndDelete(avltreenode<valuetype> *node);
-
-		/** Removed avltreenode "node" from the avltree,
-		 *  deleting the value stored in the avltreenode as well,
-		 *  which is presuemd to be an array.
-		 * 
-		 *  Note that this operation does not require a search and is
-		 *  far less expensive than the remove(value) operation and
-		 *  removeAll().
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	removeAndArrayDelete(avltreenode<valuetype> *node);
 
 		/** Returns the number of nodes in the avltree. */
 		uint64_t	getLength() const;
@@ -221,15 +162,6 @@ class avltree : public treecollection<valuetype> {
 		 *  Note however, that the value stored in each avltreenode
 		 *  is not deleted by this call. */
 		void	clear();
-
-		/** Deletes all avltreenodes currently in the avltree,
-		 *  deleting the value stored in each avltreenode as well. */
-		void	clearAndDelete();
-
-		/** Deletes all avltreenodes currently in the avltree,
-		 *  deleting the value stored in each avltreenode as well,
-		 *  which is presuemd to be an array. */
-		void	clearAndArrayDelete();
 
 		/** Prints out an xml-style representation of the avltree. */
 		void	print() const;

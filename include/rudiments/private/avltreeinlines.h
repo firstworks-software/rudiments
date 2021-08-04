@@ -111,20 +111,6 @@ bool avltree<valuetype>::remove(valuetype value) {
 
 template <class valuetype>
 inline
-bool avltree<valuetype>::removeAndDelete(valuetype value) {
-	avltreenode<valuetype>	*current=find(value);
-	return (current)?removeAndDelete(current):false;
-}
-
-template <class valuetype>
-inline
-bool avltree<valuetype>::removeAndArrayDelete(valuetype value) {
-	avltreenode<valuetype>	*current=find(value);
-	return (current)?removeAndArrayDelete(current):false;
-}
-
-template <class valuetype>
-inline
 bool avltree<valuetype>::removeAll(valuetype value) {
 	bool	removed=false;
 	while (remove(value)) {
@@ -135,45 +121,13 @@ bool avltree<valuetype>::removeAll(valuetype value) {
 
 template <class valuetype>
 inline
-bool avltree<valuetype>::removeAllAndDelete(valuetype value) {
-	bool	removed=false;
-	while (removeAndDelete(value)) {
-		removed=true;
-	}
-	return removed;
-}
-
-template <class valuetype>
-inline
-bool avltree<valuetype>::removeAllAndArrayDelete(valuetype value) {
-	bool	removed=false;
-	while (removeAndArrayDelete(value)) {
-		removed=true;
-	}
-	return removed;
-}
-
-template <class valuetype>
-inline
 bool avltree<valuetype>::remove(avltreenode<valuetype> *node) {
-	delete detach(node);
-	return true;
-}
-
-template <class valuetype>
-inline
-bool avltree<valuetype>::removeAndDelete(avltreenode<valuetype> *node) {
 	avltreenode<valuetype> *detachednode=detach(node);
-	node_delete_value(detachednode->getValue());
-	delete detachednode;
-	return true;
-}
-
-template <class valuetype>
-inline
-bool avltree<valuetype>::removeAndArrayDelete(avltreenode<valuetype> *node) {
-	avltreenode<valuetype> *detachednode=detach(node);
-	node_delete_array_value(detachednode->getValue());
+	if (collection::managevalues) {
+		node_delete_value(detachednode->getValue());
+	} else if (collection::managevalues) {
+		node_delete_array_value(detachednode->getValue());
+	}
 	delete detachednode;
 	return true;
 }
@@ -322,114 +276,11 @@ void avltree<valuetype>::clear() {
 		// on the tree itself.
 		i++;
 		#endif
-		delete node;
-
-		// continue with parent...
-		node=p;
-	}
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} cleared %d nodes\n\n",i);
-	#endif
-
-	// clear pointers and length
-	top=NULL;
-	first=NULL;
-	last=NULL;
-	length=0;
-}
-
-template <class valuetype>
-inline
-void avltree<valuetype>::clearAndDelete() {
-
-	#ifdef DEBUG_AVLTREE
-	uint64_t	i=0;
-	stdoutput.printf("clearing %d nodes {\n",length);
-	#endif
-
-	// start at the top
-	avltreenode<valuetype>	*node=top;
-	while (node) {
-
-		// go right one, then go left as far as possible
-		if (node->getRightChild()) {
-			node=node->getRightChild();
+		if (collection::managevalues) {
+			node_delete_value(node->getValue());
+		} else if (collection::managevalues) {
+			node_delete_array_value(node->getValue());
 		}
-		while (node->getLeftChild()) {
-			node=node->getLeftChild();
-		}
-
-		// get the parent
-		avltreenode<valuetype>	*p=node->getParent();
-		if (p) {
-			if (p->getLeftChild()==node) {
-				p->setLeftChild(NULL);
-			} else {
-				p->setRightChild(NULL);
-			}
-		}
-
-		// delete the node
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("	clearing %lld\n",i);
-		i++;
-		#endif
-		node_delete_value(node->getValue());
-		delete node;
-
-		// continue with parent...
-		node=p;
-	}
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} cleared %d nodes\n\n",i);
-	#endif
-
-	// clear pointers and length
-	top=NULL;
-	first=NULL;
-	last=NULL;
-	length=0;
-}
-
-template <class valuetype>
-inline
-void avltree<valuetype>::clearAndArrayDelete() {
-
-	#ifdef DEBUG_AVLTREE
-	uint64_t	i=0;
-	stdoutput.printf("clearing %d nodes {\n",length);
-	#endif
-
-	// start at the top
-	avltreenode<valuetype>	*node=top;
-	while (node) {
-
-		// go right one, then go left as far as possible
-		if (node->getRightChild()) {
-			node=node->getRightChild();
-		}
-		while (node->getLeftChild()) {
-			node=node->getLeftChild();
-		}
-
-		// get the parent
-		avltreenode<valuetype>	*p=node->getParent();
-		if (p) {
-			if (p->getLeftChild()==node) {
-				p->setLeftChild(NULL);
-			} else {
-				p->setRightChild(NULL);
-			}
-		}
-
-		// delete the node
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("	clearing %lld\n",i);
-		i++;
-		#endif
-		node_delete_array_value(node->getValue());
 		delete node;
 
 		// continue with parent...
