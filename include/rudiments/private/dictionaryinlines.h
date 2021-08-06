@@ -255,132 +255,16 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDelete(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
+		if (collection::managekeys) {
+			node_delete_value(tnode->getValue()->getKey());
+		} else if (collection::managearraykeys) {
+			node_delete_array_value(tnode->getValue()->getKey());
 		}
-		node_delete_value(tnode->getValue()->getKey());
-		node_delete_value(tnode->getValue()->getValue());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDelete(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
+		if (collection::managevalues) {
+			node_delete_value(tnode->getValue()->getValue());
+		} else if (collection::managearrayvalues) {
+			node_delete_array_value(tnode->getValue()->getValue());
 		}
-		node_delete_array_value(tnode->getValue()->getKey());
-		node_delete_array_value(tnode->getValue()->getValue());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDeleteKey(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		node_delete_value(tnode->getValue()->getKey());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDeleteKey(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		node_delete_array_value(tnode->getValue()->getKey());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndDeleteValue(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		node_delete_value(tnode->getValue()->getValue());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::removeAndArrayDeleteValue(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		node_delete_array_value(tnode->getValue()->getValue());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::
-			removeAndDeleteKeyAndArrayDeleteValue(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		node_delete_value(tnode->getValue()->getKey());
-		node_delete_array_value(tnode->getValue()->getValue());
-		delete tnode->getValue();
-		return tree.remove(tnode);
-	}
-	return false;
-}
-
-template <class keytype, class valuetype>
-inline
-bool dictionary<keytype,valuetype>::
-			removeAndArrayDeleteKeyAndDeleteValue(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
-	if (tnode) {
-		if (trackinsertionorder) {
-			list.remove(tnode->getValue());
-		}
-		node_delete_array_value(tnode->getValue()->getKey());
-		node_delete_value(tnode->getValue()->getValue());
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -392,122 +276,16 @@ inline
 void dictionary<keytype,valuetype>::clear() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndDelete() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_value(node->getValue()->getKey());
-		node_delete_value(node->getValue()->getValue());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndArrayDelete() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_array_value(node->getValue()->getKey());
-		node_delete_array_value(node->getValue()->getValue());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndDeleteKeys() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_value(node->getValue()->getKey());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndArrayDeleteKeys() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_array_value(node->getValue()->getKey());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndDeleteValues() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_value(node->getValue()->getValue());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndArrayDeleteValues() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_array_value(node->getValue()->getValue());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndDeleteKeysAndArrayDeleteValues() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_value(node->getValue()->getKey());
-		node_delete_array_value(node->getValue()->getValue());
-		delete node->getValue();
-	}
-	tree.clear();
-	list.clear();
-	delete keylist;
-	keylist=NULL;
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionary<keytype,valuetype>::clearAndArrayDeleteKeysAndDeleteValues() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_array_value(node->getValue()->getKey());
-		node_delete_value(node->getValue()->getValue());
+		if (collection::managekeys) {
+			node_delete_value(node->getValue()->getKey());
+		} else if (collection::managearraykeys) {
+			node_delete_array_value(node->getValue()->getKey());
+		}
+		if (collection::managevalues) {
+			node_delete_value(node->getValue()->getValue());
+		} else if (collection::managearrayvalues) {
+			node_delete_array_value(node->getValue()->getValue());
+		}
 		delete node->getValue();
 	}
 	tree.clear();

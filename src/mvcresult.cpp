@@ -23,12 +23,14 @@ mvcresult::mvcresult() : object() {
 	pvt->success=false;
 	pvt->code=0;
 	pvt->message=NULL;
+	pvt->types.setManageArrayKeys(true);
+	pvt->types.setManageArrayValues(true);
+	pvt->data.setManageArrayKeys(true);
+	pvt->data.setManageValues(true);
 	pvt->objects.setManageValues(true);
 }
 
 mvcresult::~mvcresult() {
-	pvt->types.clearAndArrayDelete();
-	pvt->types.clearAndArrayDeleteKeysAndDeleteValues();
 	delete[] pvt->message;
 	delete pvt;
 }
@@ -101,10 +103,10 @@ void mvcresult::attachData(const char *name,
 				collection *data) {
 
 	// remove any existing type for this name
-	pvt->types.removeAndArrayDelete((char *)name);
+	pvt->types.remove((char *)name);
 
 	// remove any existing data for this name
-	pvt->data.removeAndArrayDeleteKeyAndDeleteValue((char *)name);
+	pvt->data.remove((char *)name);
 	
 	// set type
 	pvt->types.setValue(charstring::duplicate(name),

@@ -97,6 +97,10 @@ class avltree : public treecollection<valuetype> {
 			*detach(avltreenode<valuetype> *node);
 
 		/** Deletes the first avltreenode containing "value".
+		 *
+		 *  The value stored in the avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
 		 * 
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.
@@ -105,6 +109,10 @@ class avltree : public treecollection<valuetype> {
 		bool	remove(valuetype value);
 
 		/** Deletes all avltreenodes containing "value".
+		 *
+		 *  The value stored in each avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
 		 * 
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.
@@ -113,6 +121,10 @@ class avltree : public treecollection<valuetype> {
 		bool	removeAll(valuetype value);
 
 		/** Removed avltreenode "node" from the avltree.
+		 *
+		 *  The value stored in the avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
 		 * 
 		 *  Note that this operation does not require a search and is
 		 *  far less expensive than the remove(value) operation and
@@ -159,8 +171,10 @@ class avltree : public treecollection<valuetype> {
 							valuetype value);
 
 		/** Deletes all avltreenodes currently in the avltree.
-		 *  Note however, that the value stored in each avltreenode
-		 *  is not deleted by this call. */
+		 *
+		 *  The value stored in each avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called. */
 		void	clear();
 
 		/** Prints out an xml-style representation of the avltree. */

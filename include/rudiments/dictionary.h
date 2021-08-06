@@ -131,99 +131,10 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  found. */
 		bool	remove(keytype key);
 
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the key and value stored in the key-value pair as well.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndDelete(keytype key);
-
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the key and value stored in the key-value pair as well,
-		 *  which are both presumed to be arrays.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndArrayDelete(keytype key);
-
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the key stored in the key-value pair as well.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndDeleteKey(keytype key);
-
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the key stored in the key-value pair as well, which is
-		 *  presumed to be an array.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndArrayDeleteKey(keytype key);
-
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the value stored in the key-value pair as well.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndDeleteValue(keytype key);
-
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the value stored in the key-value pair as well, which is
-		 *  presumed to be an array.
-		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
-		bool	removeAndArrayDeleteValue(keytype key);
-
-		/** Removes the key-value pair associated with "key", deleting
-		 *  the key and value stored in the key-value pair as well.
-		 *  The value is presumed to be an array.*/
-		bool	removeAndDeleteKeyAndArrayDeleteValue(keytype key);
-
-		/** Deletes the key-value pairs associated with "key",
-		 *  deleting the key and value stored in the key-value pair
-		 *  as well.  The key is presumed to be an array.*/
-		bool	removeAndArrayDeleteKeyAndDeleteValue(keytype key);
-
 		/** Deletes all key-value pairs currently in the dictionary.
 		 *  Note however, that the key and value stored in each
 		 *  key-value pair are not deleted by this call. */
 		void	clear();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the key and value stored in each key-value pair
-		 *  as well. */
-		void	clearAndDelete();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the key and value stored in each key-value pair
-		 *  as well, which are both presumed to be arrays. */
-		void	clearAndArrayDelete();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the key (but not the value) stored in each
-		 *  key-value pair as well. */
-		void	clearAndDeleteKeys();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the key (but not the value) stored in each
-		 *  key-value pair as well, which is presumed to be an array. */
-		void	clearAndArrayDeleteKeys();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the value (but not the key) stored in each
-		 *  key-value pair as well. */
-		void	clearAndDeleteValues();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the value (but not the key) stored in each
-		 *  key-value pair as well, which is presumed to be an array. */
-		void	clearAndArrayDeleteValues();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the key and value stored in each key-value pair
-		 *  as well.  Each value is presumed to be an array.*/
-		void	clearAndDeleteKeysAndArrayDeleteValues();
-
-		/** Deletes all key-value pairs currently in the dictionary,
-		 *  deleting the key and value stored in each key-value pair
-		 *  as well.  Each key is presumed to be an array.*/
-		void	clearAndArrayDeleteKeysAndDeleteValues();
 
 		/** Prints out a representation of the dictionary. */
 		void	print();

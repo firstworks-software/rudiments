@@ -155,8 +155,15 @@ httprequest::httprequest(httpserverapi *sapi) : object() {
 	pvt->_boundary=NULL;
 
 	pvt->_sapi->initEnvironmentVariables();
+
+	pvt->_cookies.setManageArrayKeys(true);
+	pvt->_cookies.setManageArrayValues(true);
 	initCookies();
+
+	pvt->_parameters.setManageArrayKeys(true);
+	pvt->_parameters.setManageArrayValues(true);
 	initParameters();
+
 	initFileNames();
 
 	pvt->_dirtyallvars=false;
@@ -179,7 +186,7 @@ httprequest::~httprequest() {
 void httprequest::cleanUp(const char ***vars, const char ***vals,
 					dictionary<char *, char *> *nvp) {
 
-	nvp->clearAndArrayDelete();
+	nvp->clear();
 	delete[] (*vars);
 	delete[] (*vals);
 }

@@ -29,6 +29,7 @@ dom::dom(bool stringcacheenabled) : collection() {
 dom::dom(const dom &x) : collection(x) {
 	init(x.pvt->_stringcacheenabled);
 	pvt->_rootnode=x.pvt->_rootnode->clone(this);
+	pvt->_strcache.setManageArrayKeys(true);
 }
 
 dom &dom::operator=(const dom &x) {
@@ -51,7 +52,7 @@ dom::~dom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
-	pvt->_strcache.clearAndArrayDeleteKeys();
+	pvt->_strcache.clear();
 	delete pvt;
 }
 
@@ -61,7 +62,7 @@ void dom::reset() {
 		delete pvt->_rootnode;
 		pvt->_rootnode=pvt->_nullnode;
 	}
-	pvt->_strcache.clearAndArrayDeleteKeys();
+	pvt->_strcache.clear();
 }
 
 void dom::createRootNode() {
@@ -285,7 +286,7 @@ void dom::unCacheString(const char *string) {
 		if (refcount) {
 			pvt->_strcache.setValue((char *)string,refcount);
 		} else {
-			pvt->_strcache.removeAndArrayDeleteKey((char *)string);
+			pvt->_strcache.remove((char *)string);
 		}
 	}
 }

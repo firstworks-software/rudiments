@@ -12,11 +12,13 @@ class parameterstringprivate {
 
 parameterstring::parameterstring() : object() {
 	pvt=new parameterstringprivate;
+	pvt->_nvp.setManageArrayKeys(true);
+	pvt->_nvp.setManageArrayValues(true);
 	pvt->_delim=';';
 }
 
 parameterstring::~parameterstring() {
-	pvt->_nvp.clearAndArrayDelete();
+	pvt->_nvp.clear();
 	delete pvt;
 }
 

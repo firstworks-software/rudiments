@@ -345,6 +345,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// split headers
 	dictionary<char *,const char *>	headerdict;
+	headerdict.setManageArrayKeys(true);
 	#ifdef DEBUG_HTTP
 	stdoutput.printf("headers:\n");
 	#endif
@@ -444,7 +445,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		pvt->_request->append("User-Agent: ");
 		pvt->_request->append(useragent);
 		pvt->_request->append("\r\n");
-		headerdict.removeAndArrayDeleteKey((char *)"User-Agent");
+		headerdict.remove((char *)"User-Agent");
 	} else {
 		pvt->_request->append("User-Agent: ");
 		pvt->_request->append(pvt->_httpuseragent);
@@ -457,7 +458,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		pvt->_request->append("Host: ");
 		pvt->_request->append(hostval);
 		pvt->_request->append("\r\n");
-		headerdict.removeAndArrayDeleteKey((char *)"Host");
+		headerdict.remove((char *)"Host");
 	} else {
 		pvt->_request->append("Host: ");
 		pvt->_request->append(host);
@@ -470,7 +471,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		pvt->_request->append("Authorization: Basic ");
 		pvt->_request->append(auth);
 		pvt->_request->append("\r\n");
-		headerdict.removeAndArrayDeleteKey((char *)"Authorization");
+		headerdict.remove((char *)"Authorization");
 	} else if (userpwd) {
 		pvt->_request->append("Authorization: Basic ");
 		char	*userpwd64=charstring::base64Encode(
@@ -486,7 +487,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		pvt->_request->append("Accept: ");
 		pvt->_request->append(accept);
 		pvt->_request->append("\r\n");
-		headerdict.removeAndArrayDeleteKey((char *)"Accept");
+		headerdict.remove((char *)"Accept");
 	} else {
 		pvt->_request->append("Accept: */*\r\n");
 	}
@@ -499,7 +500,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 			pvt->_request->append(ctype);
 			pvt->_request->append("\r\n");
 		}
-		headerdict.removeAndArrayDeleteKey((char *)"Content-Type");
+		headerdict.remove((char *)"Content-Type");
 	}
 
 	// content-length (allow httppost data to override)
@@ -510,7 +511,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 			pvt->_request->append(clen);
 			pvt->_request->append("\r\n");
 		}
-		headerdict.removeAndArrayDeleteKey((char *)"Content-Length");
+		headerdict.remove((char *)"Content-Length");
 	}
 
 	// content-type/length from httppost data
@@ -531,7 +532,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		pvt->_request->append(headerdict.getValue(node->getValue()));
 		pvt->_request->append("\r\n");
 	}
-	headerdict.clearAndArrayDeleteKeys();
+	headerdict.clear();
 
 	// for http post, add an additional line break
 	// to divide headers and post data

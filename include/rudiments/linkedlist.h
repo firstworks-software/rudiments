@@ -117,6 +117,10 @@ class linkedlist : public listcollection<valuetype> {
 		void	detach(listnode<valuetype> *node);
 
 		/** Deletes the first linkedlistnode containing "value".
+		 *
+		 *  The value stored in the linkedlistnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
 		 * 
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.
@@ -125,6 +129,10 @@ class linkedlist : public listcollection<valuetype> {
 		bool	remove(valuetype value);
 
 		/** Deletes all linkedlistnodes containing "value".
+		 *
+		 *  The value stored in each linkedlistnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
 		 * 
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.
@@ -132,7 +140,11 @@ class linkedlist : public listcollection<valuetype> {
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
 
-		/** Removed linkedlistnode "node" from the linkedlist.
+		/** Removes linkedlistnode "node" from the linkedlist.
+		 *
+		 *  The value stored in the linkedlistnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
 		 * 
 		 *  Note that this operation does not require a search and is
 		 *  far less expensive than the remove(value) operation and
@@ -182,8 +194,10 @@ class linkedlist : public listcollection<valuetype> {
 		void	heapSort();
 
 		/** Deletes all linkedlistnodes currently in the linkedlist.
-		 *  Note however, that the value stored in each linkedlistnode
-		 *  is not deleted by this call. */
+		 *
+		 *  The value stored in each linkedlistnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called. */
 		void	clear();
 
 		/** Prints out a representation of the linkedlist. */
