@@ -35900,7 +35900,7 @@ fi
 echo "******************************"
 
 
-RUDIMENTS_VERSION="1.4.0"
+RUDIMENTS_VERSION="1.4.1"
 
 
 cat >>confdefs.h <<_ACEOF
@@ -35908,7 +35908,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-SONAME_VERSION_INFO="8:0:0"
+SONAME_VERSION_INFO="8:0:1"
 
 
 
