@@ -542,7 +542,7 @@ privateheaders7="codetree.h "+_
 	"cronscheduleincludes.h "
 
 ' version
-RUDIMENTS_VERSION="1.4.0"
+RUDIMENTS_VERSION="1.4.1"
 
 ' paths
 pfix="C:\\Program Files\\Firstworks"
