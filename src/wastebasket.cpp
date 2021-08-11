@@ -7,30 +7,28 @@
 class wastebasketprivate {
 	friend class wastebasket;
 	private:
-		linkedlist<object *>		*_objects;
+		linkedlist<object *>		_objects;
+		linkedlist<object **>		_objectarrays;
 };
 
 wastebasket::wastebasket() : object() {
-	pvt=new wastebasketprivate;
-	pvt->_objects=NULL;
+	pvt->_objects.setManageValues(true);
+	pvt->_objectarrays.setManageArrayValues(true);
 }
 
 wastebasket::~wastebasket() {
-	empty();
 	delete pvt;
 }
 
 void wastebasket::attachObject(object *o) {
-	if (!pvt->_objects) {
-		pvt->_objects=new linkedlist<object *>();
-		pvt->_objects->setManageValues(true);
-	}
-	pvt->_objects->append(o);
+	pvt->_objects.append(o);
+}
+
+void wastebasket::attachObjectArray(object **o) {
+	pvt->_objectarrays.append(o);
 }
 
 void wastebasket::empty() {
-	if (pvt->_objects) {
-		delete pvt->_objects;
-		pvt->_objects=NULL;
-	}
+	pvt->_objects.clear();
+	pvt->_objectarrays.clear();
 }
