@@ -6,7 +6,7 @@
 
 #include <rudiments/collection.h>
 
-/** The collection class is the parent class for all rudiments scalar
+/** The scalarcollection class is the parent class for all rudiments scalar
  *  collections. */
 template <class valuetype>
 class RUDIMENTS_DLLSPEC scalarcollection : public collection {
@@ -21,8 +21,19 @@ class RUDIMENTS_DLLSPEC scalarcollection : public collection {
 		/** Deletes this instance of the scalarcollection class. */
 		virtual	~scalarcollection() {};
 
+		/** Sets the value stored in this instance to "v". */
 		virtual	void		setValue(valuetype v)=0;
+
+		/** Returns the value stored in this intance.  Returns NULL or
+		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue() const=0;
+
+		/** Removes the value currently stored in this instance, such
+		 *  that getValue() will return NULL or 0.
+		 *
+		 *  The value is only deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called. */
+		virtual	void		clear()=0;
 };
 
 #endif

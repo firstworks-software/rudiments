@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/scalar.h>
+#include <rudiments/private/nodeinlines.h>
 
 template <class valuetype>
 inline
@@ -23,5 +24,5 @@ void scalar<valuetype>::clear() {
 	} else if (collection::managearrayvalues) {
 		node_delete_array_value(v);
 	}
-	v=NULL;
+	v=0;
 }

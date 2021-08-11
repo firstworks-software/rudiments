@@ -94,14 +94,10 @@ class RUDIMENTS_DLLSPEC dictionarycollection : public collection {
 		 *  found. */
 		virtual	bool		remove(keytype key)=0;
 
-		// FIXME: other remove methods
-
 		/** Deletes all dictionarynodes currently in the dictionary.
 		 *  Note however, that the key and value stored in each
 		 *  dictionarynode are not deleted by this call. */
 		virtual	void		clear()=0;
-
-		// FIXME: other clear methods
 
 		/** Prints out a representation of the dictionary. */
 		virtual	void		print()=0;

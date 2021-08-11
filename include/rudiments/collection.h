@@ -20,16 +20,112 @@ class RUDIMENTS_DLLSPEC collection : public object {
 		/** Deletes this instance of the collection class. */
 		virtual	~collection();
 
+		/** Indicates whether or not this instance of the collection
+		 *  class should delete the values that are stored at each
+		 *  location in the collection when a clear()/remove() method
+		 *  is called.
+		 *
+		 *  Setting "manage" to true causes the instance to delete the
+		 *  values that are stored at each location in the collection
+		 *  when a clear() or remove() method is called.
+		 *
+		 *  Setting "manage" to false causes the instance not to delete
+		 *  the values that are stored at each location in the
+		 *  collection when a clear() or remove() method is called.
+		 *
+		 *  Defaults to "false".
+		 *
+		 *  Note that setting this true implies
+		 *  setManageArrayValues(false); */
 		virtual	void	setManageValues(bool manage);
+
+		/** Returns whether or not this instance of the collection class
+		 *  is configured to delete the values that are stored at each
+		 *  location in the collection when a clear()/remove() method
+		 *  is called.
+		 *
+		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageValues();
 
+		/** Indicates whether or not this instance of the collection
+		 *  class should array-delete the values that are stored at each
+		 *  location in the collection when a clear()/remove() method
+		 *  is called.
+		 *
+		 *  Setting "manage" to true causes the instance to
+		 *  array-delete the values that are stored at each location in
+		 *  the collection when a clear() or remove() method is called.
+		 *
+		 *  Setting "manage" to false causes the instance not to
+		 *  array-delete the values that are stored at each location in
+		 *  the collection when a clear() or remove() method is called.
+		 *
+		 *  Defaults to "false".
+		 *
+		 *  Note that setting this true implies
+		 *  setManageValues(false); */
 		virtual	void	setManageArrayValues(bool manage);
+
+		/** Returns whether or not this instance of the collection class
+		 *  is configured to array-delete the values that are stored at
+		 *  each location in the collection when a clear()/remove()
+		 *  method is called.
+		 *
+		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayValues();
 
+		/** Indicates whether or not this instance of the collection
+		 *  class should delete the keys that are stored at each
+		 *  location in the collection when a clear()/remove() method
+		 *  is called.
+		 *
+		 *  Setting "manage" to true causes the instance to delete the
+		 *  keys that are stored at each location in the collection
+		 *  when a clear() or remove() method is called.
+		 *
+		 *  Setting "manage" to false causes the instance not to delete
+		 *  the keys that are stored at each location in the
+		 *  collection when a clear() or remove() method is called.
+		 *
+		 *  Defaults to "false".
+		 *
+		 *  Note that setting this true implies
+		 *  setManageArrayValues(false); */
 		virtual	void	setManageKeys(bool manage);
+
+		/** Returns whether or not this instance of the collection class
+		 *  is configured to delete the keys that are stored at each
+		 *  location in the collection when a clear()/remove() method
+		 *  is called.
+		 *
+		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageKeys();
 
+		/** Indicates whether or not this instance of the collection
+		 *  class should array-delete the keys that are stored at each
+		 *  location in the collection when a clear()/remove() method
+		 *  is called.
+		 *
+		 *  Setting "manage" to true causes the instance to
+		 *  array-delete the keys that are stored at each location in
+		 *  the collection when a clear() or remove() method is called.
+		 *
+		 *  Setting "manage" to false causes the instance not to
+		 *  array-delete the keys that are stored at each location in
+		 *  the collection when a clear() or remove() method is called.
+		 *
+		 *  Defaults to "false".
+		 *
+		 *  Note that setting this true implies
+		 *  setManageValues(false); */
 		virtual	void	setManageArrayKeys(bool manage);
+
+		/** Returns whether or not this instance of the collection class
+		 *  is configured to array-delete the keys that are stored at
+		 *  each location in the collection when a clear()/remove()
+		 *  method is called.
+		 *
+		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayKeys();
 
 	#include <rudiments/private/collection.h>

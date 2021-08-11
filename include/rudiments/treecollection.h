@@ -20,6 +20,8 @@ class RUDIMENTS_DLLSPEC treecollection : public nodecollection {
 
 		/** Deletes this instance of the treecollection class. */
 		virtual	~treecollection() {};
+
+		// FIXME: virtual methods...
 };
 
 #endif

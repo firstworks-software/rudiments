@@ -19,7 +19,7 @@ class RUDIMENTS_DLLSPEC arraycollection : public collection {
 		 *  a copy of "c". */
 		arraycollection(const collection &c) : collection(c) {};
 
-		/** Deletes this instance of the listcollection class. */
+		/** Deletes this instance of the arraycollection class. */
 		virtual	~arraycollection() {};
 
 		/** Provides access ot the "index"th element of the array. */
