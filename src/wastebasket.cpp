@@ -12,6 +12,7 @@ class wastebasketprivate {
 };
 
 wastebasket::wastebasket() : object() {
+	pvt=new wastebasketprivate;
 	pvt->_dict.setManageValues(true);
 }
 
