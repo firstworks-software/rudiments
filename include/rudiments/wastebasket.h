@@ -16,8 +16,19 @@ class RUDIMENTS_DLLSPEC wastebasket : public object {
 		/** Deletes this instance of the wastebasket class. */
 		virtual	~wastebasket();
 
-		void	attachObject(object *o);
-		void	attachObjectArray(object **o);
+		void	attach(char *value);
+		void	attach(unsigned char *value);
+		void	attach(int16_t *value);
+		void	attach(int32_t *value);
+		void	attach(int64_t *value);
+		void	attach(uint16_t *value);
+		void	attach(uint32_t *value);
+		void	attach(uint64_t *value);
+		void	attach(float *value);
+		void	attach(double *value);
+		void	attach(long double *value);
+		void	attach(object *o);
+		void	attachArray(object **o);
 
 		void	empty();
 

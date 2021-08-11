@@ -11,6 +11,7 @@ class RUDIMENTS_DLLSPEC scalar : public scalarcollection<valuetype> {
 	public:
 		void		setValue(valuetype v);
 		valuetype	getValue() const;
+		void		clear();
 
 	#include <rudiments/private/scalar.h>
 };

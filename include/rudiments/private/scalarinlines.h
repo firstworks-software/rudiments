@@ -14,3 +14,14 @@ inline
 valuetype scalar<valuetype>::getValue() const {
 	return v;
 }
+
+template <class valuetype>
+inline
+void scalar<valuetype>::clear() {
+	if (collection::managevalues) {
+		node_delete_value(v);
+	} else if (collection::managearrayvalues) {
+		node_delete_array_value(v);
+	}
+	v=NULL;
+}
