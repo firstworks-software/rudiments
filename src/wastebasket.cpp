@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/wastebasket.h>
-#include <rudiments/linkedlist.h>
+#include <rudiments/singlylinkedlist.h>
 #include <rudiments/dictionary.h>
 
 class wastebasketprivate {
@@ -22,23 +22,23 @@ wastebasket::~wastebasket() {
 #define ATTACH(type,typestring,value) \
 	collection	*c=pvt->_dict.getValue(typestring); \
 	if (!c) { \
-		linkedlist<type>	*l=new linkedlist<type>(); \
+		singlylinkedlist<type>	*l=new singlylinkedlist<type>(); \
 		l->setManageValues(true); \
 		l->append(value); \
 		pvt->_dict.setValue(typestring,l); \
 	} else { \
-		((linkedlist<type> *)c)->append(value); \
+		((singlylinkedlist<type> *)c)->append(value); \
 	}
 
 #define ATTACHARRAY(type,typestring,value) \
 	collection	*c=pvt->_dict.getValue(typestring); \
 	if (!c) { \
-		linkedlist<type>	*l=new linkedlist<type>(); \
+		singlylinkedlist<type>	*l=new singlylinkedlist<type>(); \
 		l->setManageArrayValues(true); \
 		l->append(value); \
 		pvt->_dict.setValue(typestring,l); \
 	} else { \
-		((linkedlist<type> *)c)->append(value); \
+		((singlylinkedlist<type> *)c)->append(value); \
 	}
 
 void wastebasket::attach(char *value) {
@@ -89,7 +89,7 @@ void wastebasket::attach(object *o) {
 	ATTACH(object *,"object *",o);
 }
 
-void wastebasket::attachArray(object **o) {
+void wastebasket::attach(object **o) {
 	ATTACHARRAY(object **,"object **",o);
 }
 

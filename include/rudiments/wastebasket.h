@@ -28,7 +28,7 @@ class RUDIMENTS_DLLSPEC wastebasket : public object {
 		void	attach(double *value);
 		void	attach(long double *value);
 		void	attach(object *o);
-		void	attachArray(object **o);
+		void	attach(object **o);
 
 		void	empty();
 
