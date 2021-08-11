@@ -41,7 +41,7 @@ class RUDIMENTS_DLLSPEC mvcresult : public object {
 		const char		*getType(const char *key);
 		collection		*getData(const char *key);
 
-		void	attachObject(object *obj);
+		wastebasket	*getWastebasket();
 
 	#include <rudiments/private/mvcresult.h>
 };

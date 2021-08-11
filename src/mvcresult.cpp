@@ -7,31 +7,30 @@
 class mvcresultprivate {
 	friend class mvcresult;
 	private:
-		bool		success;
-		uint32_t	code;
-		char		*message;
+		bool		_success;
+		uint32_t	_code;
+		char		*_message;
 
-		dictionary<char *, char *>		types;
-		dictionary<char *, collection *>	data;
+		dictionary<char *, char *>		_types;
+		dictionary<char *, collection *>	_data;
 
-		linkedlist<object *>	objects;
+		wastebasket	_wb;
 		
 };
 
 mvcresult::mvcresult() : object() {
 	pvt=new mvcresultprivate;
-	pvt->success=false;
-	pvt->code=0;
-	pvt->message=NULL;
-	pvt->types.setManageArrayKeys(true);
-	pvt->types.setManageArrayValues(true);
-	pvt->data.setManageArrayKeys(true);
-	pvt->data.setManageValues(true);
-	pvt->objects.setManageValues(true);
+	pvt->_success=false;
+	pvt->_code=0;
+	pvt->_message=NULL;
+	pvt->_types.setManageArrayKeys(true);
+	pvt->_types.setManageArrayValues(true);
+	pvt->_data.setManageArrayKeys(true);
+	pvt->_data.setManageValues(true);
 }
 
 mvcresult::~mvcresult() {
-	delete[] pvt->message;
+	delete[] pvt->_message;
 	delete pvt;
 }
 
@@ -74,28 +73,28 @@ void mvcresult::setFailed(uint32_t code, const char *message) {
 }
 
 void mvcresult::setSuccess(bool success) {
-	pvt->success=success;
+	pvt->_success=success;
 }
 
 bool mvcresult::getSuccess() {
-	return pvt->success;
+	return pvt->_success;
 }
 
 void mvcresult::setCode(uint32_t code) {
-	pvt->code=code;
+	pvt->_code=code;
 }
 
 uint32_t mvcresult::getCode() {
-	return pvt->code;
+	return pvt->_code;
 }
 
 void mvcresult::setMessage(const char *message) {
-	delete[] pvt->message;
-	pvt->message=charstring::duplicate(message);
+	delete[] pvt->_message;
+	pvt->_message=charstring::duplicate(message);
 }
 
 const char *mvcresult::getMessage() {
-	return pvt->message;
+	return pvt->_message;
 }
 
 void mvcresult::attachData(const char *name,
@@ -103,31 +102,31 @@ void mvcresult::attachData(const char *name,
 				collection *data) {
 
 	// remove any existing type for this name
-	pvt->types.remove((char *)name);
+	pvt->_types.remove((char *)name);
 
 	// remove any existing data for this name
-	pvt->data.remove((char *)name);
+	pvt->_data.remove((char *)name);
 	
 	// set type
-	pvt->types.setValue(charstring::duplicate(name),
+	pvt->_types.setValue(charstring::duplicate(name),
 				charstring::duplicate(type));
 
 	// attach data
-	pvt->data.setValue(charstring::duplicate(name),data);
+	pvt->_data.setValue(charstring::duplicate(name),data);
 }
 
 linkedlist<char *> *mvcresult::getKeys() {
-	return pvt->data.getKeys();
+	return pvt->_data.getKeys();
 }
 
 const char *mvcresult::getType(const char *name) {
-	return pvt->types.getValue((char *)name);
+	return pvt->_types.getValue((char *)name);
 }
 
 collection *mvcresult::getData(const char *name) {
-	return pvt->data.getValue((char *)name);
+	return pvt->_data.getValue((char *)name);
 }
 
-void mvcresult::attachObject(object *obj) {
-	pvt->objects.append(obj);
+wastebasket *mvcresult::getWastebasket() {
+	return &pvt->_wb;
 }

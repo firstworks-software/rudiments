@@ -5,5 +5,6 @@
 
 #include <rudiments/dom.h>
 #include <rudiments/linkedlist.h>
+#include <rudiments/wastebasket.h>
 
 class mvcresultprivate;
