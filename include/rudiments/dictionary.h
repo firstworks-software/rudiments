@@ -128,12 +128,26 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 
 		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't
-		 *  found. */
+		 *  found.
+		 *
+		 *  The key stored in the pair is only deleted if
+		 *  setManageKeys(true) or setManageArrayKeys(true) has
+		 *  been called.
+		 *
+		 *  The value stored in the pair is only deleted if
+		 *  setManageValues(true) or setManageArrayValues(true) has
+		 *  been called. */
 		bool	remove(keytype key);
 
 		/** Deletes all key-value pairs currently in the dictionary.
-		 *  Note however, that the key and value stored in each
-		 *  key-value pair are not deleted by this call. */
+		 *
+		 *  The key stored in each pair is only deleted if
+		 *  setManageValues(true) or setManageArrayValues(true) has
+		 *  been called.
+		 *
+		 *  The value stored in each pair is only deleted if
+		 *  setManageValues(true) or setManageArrayValues(true) has
+		 *  been called. */
 		void	clear();
 
 		/** Prints out a representation of the dictionary. */
