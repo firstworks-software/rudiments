@@ -181,8 +181,7 @@ void cgihttpserverapi::updateEnvironmentVariables() {
 }
 
 httpserverapi *cgihttpserverapi::status(const char *string) {
-	stdoutput.write(string,charstring::length(string));
-	stdoutput.write("\n",1);
+	header("Status",string);
 	return this;
 }
 

@@ -59,14 +59,6 @@ void httpresponse::contentType(const char *type, const char *subtype,
 	pvt->_sapi->header("Content-type",contenttypestr.getString());
 }
 
-void httpresponse::status(const char *protocol, const char *version,
-						const char *code) {
-	stringbuffer	statusline;
-	statusline.append(protocol)->append('/');
-	statusline.append(version)->append(' ')->append(code);
-	pvt->_sapi->status(statusline.getString());
-}
-
 void httpresponse::setCookie(const char *name, const char *value,
 				const char *domain, const char *path,
 				const char *expires, bool secure) {

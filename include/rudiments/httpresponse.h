@@ -54,11 +54,6 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		/** Send carriage-return. */
 		void	cr();
 		
-		/** Send status header. */
-		void	status(const char *protocol,
-					const char *protocolversion,
-					const char *code);
-
 		/** Send Set-Cookie header. */
 		void	setCookie(const char *name, const char *value,
 					const char *domain, const char *path,

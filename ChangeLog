@@ -13,6 +13,7 @@
 	changed collection paradigm from multiple remove/clearAndDelete...()
 		methods to setManage...Values/Keys() methods and single
 		clear()/remove()
+	cleaned up httpresponse::status()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
