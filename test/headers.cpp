@@ -13,7 +13,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	httpresponse	resp(sapi);
 		
 	// status line
-	resp.status("HTTP","1.1","OK");
+	resp.header("HTTP/1.1 200 OK");
 
 	// content types
 	resp.textPlain();
