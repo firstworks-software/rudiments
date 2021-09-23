@@ -345,6 +345,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_261355BB6E8143E895C3B9ED12169754"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_26CFCE53B0A745FAA336E3E58DD3C84C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -934,6 +940,12 @@
         "Entry"
         {
         "MsmKey" = "8:_70AC5EBE9D1747979D3E2D9B42D78B9B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_716E734C952540E6BD7B481E66BCC8F9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1954,6 +1966,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E0A5869A332F43959C0EF202DF100849"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E27A12CDC802417C9836A7ACE29F8D2E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3356,6 +3374,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\clientincludes.h"
             "TargetName" = "8:clientincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_261355BB6E8143E895C3B9ED12169754"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\sensitivevalueincludes.h"
+            "TargetName" = "8:sensitivevalueincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
             "Condition" = "8:"
@@ -5256,6 +5294,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\unixsocketserver.h"
             "TargetName" = "8:unixsocketserver.h"
+            "Tag" = "8:"
+            "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_716E734C952540E6BD7B481E66BCC8F9"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\sensitivevalue.h"
+            "TargetName" = "8:sensitivevalue.h"
             "Tag" = "8:"
             "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
             "Condition" = "8:"
@@ -8498,6 +8556,26 @@
             "TargetName" = "8:unixsocketutil.h"
             "Tag" = "8:"
             "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E27A12CDC802417C9836A7ACE29F8D2E"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\sensitivevalue.h"
+            "TargetName" = "8:sensitivevalue.h"
+            "Tag" = "8:"
+            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
