@@ -1719,6 +1719,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C2AF5C41A0C8490DB0AC9CE949700811"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C36C17C022194E3482555EFA747714BE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1732,6 +1738,12 @@
         "Entry"
         {
         "MsmKey" = "8:_C5425FBBC1C9452F80C9F254E1F95EA3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C6019965D548427B8AB1EA722CD9C6D1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2194,6 +2206,12 @@
         "Entry"
         {
         "MsmKey" = "8:_FAFC9E6957FC4607837097FB425D3E06"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FB1017AF51BE435EB83290B0B40A5C6F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -7778,6 +7796,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2AF5C41A0C8490DB0AC9CE949700811"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\sensitivevalue.h"
+            "TargetName" = "8:sensitivevalue.h"
+            "Tag" = "8:"
+            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C36C17C022194E3482555EFA747714BE"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\outputincludes.h"
@@ -7824,6 +7862,26 @@
             "TargetName" = "8:math.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C6019965D548427B8AB1EA722CD9C6D1"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\sensitivevalue.h"
+            "TargetName" = "8:sensitivevalue.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9262,6 +9320,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\jsonsaxincludes.h"
             "TargetName" = "8:jsonsaxincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB1017AF51BE435EB83290B0B40A5C6F"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\sensitivevalueincludes.h"
+            "TargetName" = "8:sensitivevalueincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
