@@ -315,7 +315,7 @@ headers3="sax.h "+_
 	"mvcproperties.h "+_
 	"httpbasicsecurity.h "+_
 	"cronschedule.h " +_
-	"sensitivevalue.h " +_
+	"sensitivevalue.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
