@@ -112,7 +112,9 @@ srcs="winsock.cpp "+_
 	"mvcresult.cpp "+_
 	"mvcproperties.cpp "+_
 	"httpbasicsecurity.cpp "+_
-	"cronschedule.cpp "
+	"cronschedule.cpp " +_
+	"wastebasket.cpp" +_
+	"sensitivevalue.cpp"
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -204,7 +206,9 @@ lobjs="winsock.obj "+_
 	"mvcresult.obj "+_
 	"mvcproperties.obj "+_
 	"httpbasicsecurity.obj "+_
-	"cronschedule.obj "
+	"cronschedule.obj " +_
+	"wastebasket.obj" +_
+	"sensitivevalue.obj"
 
 headers0="resultcodes.h "+_
 	"debugprint.h "+_
@@ -312,7 +316,9 @@ headers3="sax.h "+_
 	"mvcresult.h "+_
 	"mvcproperties.h "+_
 	"httpbasicsecurity.h "+_
-	"cronschedule.h "
+	"cronschedule.h " +_
+	"wastebasket.h" +_
+	"sensitivevalue.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -540,6 +546,10 @@ privateheaders7="codetree.h "+_
 	"httpbasicsecurityincludes.h "+_
 	"cronschedule.h "+_
 	"cronscheduleincludes.h "
+	"wastebasket.h" +_
+	"wastebasketincludes.h" +_
+	"sensitivevalue.h" +_
+	"sensitivevalueincludes.h"
 
 ' version
 RUDIMENTS_VERSION="1.4.0"
