@@ -308,6 +308,9 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 						pvt->_kevs,fdcount,
 						pvt->_rkevs,fdcount,
 						tsptr);
+				if (!result) {
+					loop=false;
+				}
 				for (int32_t i=0; i<result; i++) {
 					if (pvt->_rkevs[i].filter==
 							EVFILT_READ ||
@@ -327,7 +330,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 				result=epoll_wait(pvt->_epfd,
 							pvt->_revs,fdcount,
 							timeout);
-				if (error::getErrorNumber()==ETIME) {
+				if (!result) {
 					loop=false;
 				}
 				for (int32_t i=0; i<result; i++) {

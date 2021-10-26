@@ -14,6 +14,7 @@
 		methods to setManage...Values/Keys() methods and single
 		clear()/remove()
 	cleaned up httpresponse::status()
+	fixed epoll_wait() and kevent() timeout detection
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
