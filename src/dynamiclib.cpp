@@ -85,8 +85,11 @@ bool dynamiclib::close() {
 		do {
 			dlerror();
 			result=dlclose(pvt->_handle);
-		} while (result!=0 && error::getErrorNumber()==EINTR);
-		retval=!result;
+			// dlclose() should return 0 on success or -1 on error.
+			// Some platforms (MacOS X 10.3) also return 1 on
+			// success.  So, we'll catch -1 below, rather than 0.
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		retval=(result!=-1);
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		retval=(FreeLibrary(pvt->_handle)==TRUE);
 	#else
