@@ -19068,6 +19068,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+
 HADWERROR="yes"
 if ( test -z "`echo $CPPFLAGS | grep Werror`" )
 then
@@ -19075,6 +19076,7 @@ then
 	CXXFLAGS="$CXXFLAGS $WERROR"
 	HADWERROR="no"
 fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _G_config.h" >&5
 $as_echo_n "checking for _G_config.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19098,11 +19100,13 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 if ( test "$HADWERROR" = "no" )
 then
 	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
 	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
 fi
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for locale.h" >&5
 $as_echo_n "checking for locale.h... " >&6; }
@@ -22135,6 +22139,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+
 HADWERROR="yes"
 if ( test -z "`echo $CPPFLAGS | grep Werror`" )
 then
@@ -22142,6 +22147,7 @@ then
 	CXXFLAGS="$CXXFLAGS $WERROR"
 	HADWERROR="no"
 fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking type of iovec.iov_base" >&5
 $as_echo_n "checking type of iovec.iov_base... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -22180,6 +22186,13 @@ then
 	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
 	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
 fi
+
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
+
 
 
 
@@ -25165,6 +25178,15 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for socklen_t vs size_t" >&5
 $as_echo_n "checking for socklen_t vs size_t... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -25202,6 +25224,13 @@ $as_echo "#define RUDIMENTS_SOCKLEN_OR_SIZE_T socklen_t" >>confdefs.h
 $as_echo "socklen_t" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
+
 
 HAVE_INET_ATON="no"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_aton" >&5

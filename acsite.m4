@@ -302,6 +302,32 @@ AC_SUBST(WERROR)
 
 
 
+dnl enable -Werror
+AC_DEFUN([FW_ENABLE_WERROR],
+[
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
+])
+
+
+
+dnl restore -Werror
+AC_DEFUN([FW_RESTORE_WERROR],
+[
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
+fi
+])
+
+
+
 dnl checks to see if -Wall option works or not
 AC_DEFUN([FW_CHECK_WALL],
 [

@@ -911,21 +911,11 @@ AC_TRY_COMPILE([#include <dbghelp.h>],
 
 dnl reenable -Werror (if we don't already have it) because _G_config.h is
 dnl deprecated on some systems and we want to exclude it on those systems
-HADWERROR="yes"
-if ( test -z "`echo $CPPFLAGS | grep Werror`" )
-then
-	CPPFLAGS="$CPPFLAGS $WERROR"
-	CXXFLAGS="$CXXFLAGS $WERROR"
-	HADWERROR="no"
-fi
+FW_ENABLE_WERROR
 AC_MSG_CHECKING(for _G_config.h)
 AC_TRY_COMPILE([#include <_G_config.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_G_CONFIG_H, 1, Some systems have _G_config.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-if ( test "$HADWERROR" = "no" )
-then
-	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
-	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
-fi
+FW_RESTORE_WERROR
 
 AC_MSG_CHECKING(for locale.h)
 AC_TRY_COMPILE([#include <locale.h>],
@@ -1095,13 +1085,7 @@ S_ISBLK(0);,AC_DEFINE(RUDIMENTS_HAVE_S_ISBLK,1,Some systems dont have S_ISBLK) A
 
 dnl reenable -Werror (if we don't already have it) because we need to catch
 dnl warnings for this one
-HADWERROR="yes"
-if ( test -z "`echo $CPPFLAGS | grep Werror`" )
-then
-	CPPFLAGS="$CPPFLAGS $WERROR"
-	CXXFLAGS="$CXXFLAGS $WERROR"
-	HADWERROR="no"
-fi
+FW_ENABLE_WERROR
 AC_MSG_CHECKING(type of iovec.iov_base)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1118,6 +1102,7 @@ then
 	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
 	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
 fi
+FW_RESTORE_WERROR
 
 FW_STATFS
 
@@ -1764,6 +1749,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt has a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt has a void * on most systems ) AC_MSG_RESULT(no))
 
+dnl reenable -Werror (if we don't already have it) because we need to catch
+dnl warnings for this one
+FW_ENABLE_WERROR
 AC_MSG_CHECKING(for socklen_t vs size_t)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -1779,6 +1767,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#endif
 #endif],
 size_t *ptr; getsockopt(0,0,0,0,ptr);,AC_DEFINE(RUDIMENTS_SOCKLEN_OR_SIZE_T, size_t, getsockopt has a socklen_t * on most systems ) AC_MSG_RESULT(size_t), AC_DEFINE(RUDIMENTS_SOCKLEN_OR_SIZE_T, socklen_t, getsockopt has a socklen_t * on most systems ) AC_MSG_RESULT(socklen_t))
+FW_RESTORE_WERROR
 
 HAVE_INET_ATON="no"
 AC_MSG_CHECKING(for inet_aton)
