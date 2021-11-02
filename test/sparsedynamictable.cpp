@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
 	uint64_t	rows=10;
 	uint64_t	cols=5;
-	uint64_t	start=-100;
+	int32_t		start=-100;
 
 	// integers
 	stdoutput.printf("integers, fully populated:\n");
