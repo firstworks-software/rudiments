@@ -117,6 +117,7 @@ int main(int argc, const char **argv) {
 		test("SIGFPE",gotsigfpe);
 		#endif
 		#ifdef SIGALRM
+snooze::macrosnooze(1);
 		signalmanager::waitForSignals(&ignoreset);
 		test("SIGALRM",gotsigalrm);
 		#endif
