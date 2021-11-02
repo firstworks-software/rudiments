@@ -22135,6 +22135,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking type of iovec.iov_base" >&5
 $as_echo_n "checking type of iovec.iov_base... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -22168,6 +22175,11 @@ $as_echo "#define RUDIMENTS_IOV_BASE_TYPE char *" >>confdefs.h
 $as_echo "char *" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
 
 
 

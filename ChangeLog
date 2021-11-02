@@ -15,6 +15,7 @@
 		clear()/remove()
 	cleaned up httpresponse::status()
 	fixed epoll_wait() and kevent() timeout detection
+	configure script uses -Werror when detecting iov_base now
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
