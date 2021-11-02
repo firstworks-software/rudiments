@@ -123,9 +123,9 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::remove(avltreenode<valuetype> *node) {
 	avltreenode<valuetype> *detachednode=detach(node);
-	if (collection::managevalues) {
+	if (this->collection::managevalues) {
 		node_delete_value(detachednode->getValue());
-	} else if (collection::managevalues) {
+	} else if (this->collection::managevalues) {
 		node_delete_array_value(detachednode->getValue());
 	}
 	delete detachednode;
@@ -276,9 +276,9 @@ void avltree<valuetype>::clear() {
 		// on the tree itself.
 		i++;
 		#endif
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(node->getValue());
-		} else if (collection::managevalues) {
+		} else if (this->collection::managevalues) {
 			node_delete_array_value(node->getValue());
 		}
 		delete node;

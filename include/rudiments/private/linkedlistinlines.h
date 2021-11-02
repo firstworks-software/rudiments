@@ -205,9 +205,9 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
-	if (collection::managevalues) {
+	if (this->collection::managevalues) {
 		node_delete_value(node->getValue());
-	} else if (collection::managearrayvalues) {
+	} else if (this->collection::managearrayvalues) {
 		node_delete_array_value(node->getValue());
 	}
 	delete node;
@@ -517,9 +517,9 @@ void linkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(current->getValue());
-		} else if (collection::managearrayvalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(current->getValue());
 		}
 		delete current;

@@ -172,9 +172,9 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 		}
 	}
 	if (current) {
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(current->getValue());
-		} else if (collection::managearrayvalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(current->getValue());
 		}
 		delete current;
@@ -197,9 +197,9 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
-			if (collection::managevalues) {
+			if (this->collection::managevalues) {
 				node_delete_value(current->getValue());
-			} else if (collection::managearrayvalues) {
+			} else if (this->collection::managearrayvalues) {
 				node_delete_array_value(current->getValue());
 			}
 			delete current;
@@ -207,9 +207,9 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			return true;
 		} else {
 			first=first->getNext();
-			if (collection::managevalues) {
+			if (this->collection::managevalues) {
 				node_delete_value(current->getValue());
-			} else if (collection::managearrayvalues) {
+			} else if (this->collection::managearrayvalues) {
 				node_delete_array_value(current->getValue());
 			}
 			delete current;
@@ -227,9 +227,9 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			if (last==current) {
 				last=prev;
 			}
-			if (collection::managevalues) {
+			if (this->collection::managevalues) {
 				node_delete_value(current->getValue());
-			} else if (collection::managearrayvalues) {
+			} else if (this->collection::managearrayvalues) {
 				node_delete_array_value(current->getValue());
 			}
 			delete current;
@@ -273,9 +273,9 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 		}
 	}
 	if (current) {
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(current->getValue());
-		} else if (collection::managearrayvalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(current->getValue());
 		}
 		delete current;
@@ -550,9 +550,9 @@ void singlylinkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(current->getValue());
-		} else if (collection::managearrayvalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(current->getValue());
 		}
 		delete current;

@@ -255,14 +255,14 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
-		if (collection::managekeys) {
+		if (this->collection::managekeys) {
 			node_delete_value(tnode->getValue()->getKey());
-		} else if (collection::managearraykeys) {
+		} else if (this->collection::managearraykeys) {
 			node_delete_array_value(tnode->getValue()->getKey());
 		}
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(tnode->getValue()->getValue());
-		} else if (collection::managearrayvalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(tnode->getValue()->getValue());
 		}
 		delete tnode->getValue();
@@ -276,14 +276,14 @@ inline
 void dictionary<keytype,valuetype>::clear() {
 	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		if (collection::managekeys) {
+		if (this->collection::managekeys) {
 			node_delete_value(node->getValue()->getKey());
-		} else if (collection::managearraykeys) {
+		} else if (this->collection::managearraykeys) {
 			node_delete_array_value(node->getValue()->getKey());
 		}
-		if (collection::managevalues) {
+		if (this->collection::managevalues) {
 			node_delete_value(node->getValue()->getValue());
-		} else if (collection::managearrayvalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(node->getValue()->getValue());
 		}
 		delete node->getValue();

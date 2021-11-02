@@ -19,9 +19,9 @@ valuetype scalar<valuetype>::getValue() const {
 template <class valuetype>
 inline
 void scalar<valuetype>::clear() {
-	if (collection::managevalues) {
+	if (this->collection::managevalues) {
 		node_delete_value(v);
-	} else if (collection::managearrayvalues) {
+	} else if (this->collection::managearrayvalues) {
 		node_delete_array_value(v);
 	}
 	v=0;
