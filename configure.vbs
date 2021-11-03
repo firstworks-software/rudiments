@@ -547,7 +547,7 @@ privateheaders7="codetree.h "+_
 	"sensitivevalueincludes.h "
 
 ' version
-RUDIMENTS_VERSION="1.4.1"
+RUDIMENTS_VERSION="1.4.2"
 
 ' paths
 pfix="C:\\Program Files\\Firstworks"

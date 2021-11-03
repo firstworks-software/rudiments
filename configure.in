@@ -4237,7 +4237,7 @@ dnl 2. MINOR when you make backwards-incompatible changes
 dnl    or add significant new features
 dnl    (and set PATCH to 0)
 dnl 3. PATCH when you make backwards-compatible changes
-RUDIMENTS_VERSION="1.4.1"
+RUDIMENTS_VERSION="1.4.2"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 
@@ -4247,7 +4247,7 @@ dnl if library source changed at all,         c:r:a -> c:r+1:a
 dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
 dnl if interfaces added,                      c:r:a -> c:r:a+1
 dnl if interfaces removed,                    c:r:a -> c:r:0
-SONAME_VERSION_INFO="9:0:1"
+SONAME_VERSION_INFO="9:1:1"
 AC_SUBST(SONAME_VERSION_INFO)
 
 
