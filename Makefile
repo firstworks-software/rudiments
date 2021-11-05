@@ -35,7 +35,7 @@ uninstall:
 	$(RMTREE) $(licensedir)
 
 distclean: clean
-	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/setupx86/rudiments.opensdf msvc/setupx86/rudiments.sdf msvc/setupx86/rudiments.suo msvc/setupx86/setupx86.vdproj msvc/setupx64/rudiments.opensdf msvc/setupx64/rudiments.sdf msvc/setupx64/rudiments.suo msvc/setupx64/setupx64.vdproj configure.lineno test/certificates/config/ca.cnf test/testresults.log
+	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/setupx86/rudiments.opensdf msvc/setupx86/rudiments.sdf msvc/setupx86/rudiments.suo msvc/setupx86/setupx86.vdproj msvc/setupx64/rudiments.opensdf msvc/setupx64/rudiments.sdf msvc/setupx64/rudiments.suo msvc/setupx64/setupx64.vdproj configure.lineno test/certificates/config/ca.cnf test/testresults.log so_locations
 	$(RMTREE) autom4te.cache
 
 cppcheck:

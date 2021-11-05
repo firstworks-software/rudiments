@@ -765,6 +765,21 @@ fi
 AC_SUBST(CRTLIB)
 ])
 
+dnl Checks for irix and adds some macros if it is
+AC_DEFUN([FW_CHECK_MINIX],
+[
+AC_MSG_CHECKING(for irix)
+case $host_os in
+	*irix* )
+		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE"
+		AC_MSG_RESULT(yes)
+		;;
+	* )
+		AC_MSG_RESULT(no)
+		;;
+esac
+])
+
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
