@@ -766,7 +766,7 @@ AC_SUBST(CRTLIB)
 ])
 
 dnl Checks for irix and adds some macros if it is
-AC_DEFUN([FW_CHECK_MINIX],
+AC_DEFUN([FW_CHECK_IRIX],
 [
 AC_MSG_CHECKING(for irix)
 case $host_os in

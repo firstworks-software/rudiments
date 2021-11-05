@@ -16443,11 +16443,14 @@ $as_echo "no" >&6; }
 esac
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for irix" >&5
-$as_echo_n "checking for irix... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for minix" >&5
+$as_echo_n "checking for minix... " >&6; }
 case $host_os in
-	*irix* )
-		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE"
+	*minix* )
+		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE -D_NETBSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED"
+
+$as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 		;;
@@ -16564,7 +16567,21 @@ fi
 
 
 
-FW_CHECK_IRIX
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for irix" >&5
+$as_echo_n "checking for irix... " >&6; }
+case $host_os in
+	*irix* )
+		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		;;
+	* )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		;;
+esac
+
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dynamic library extension" >&5
