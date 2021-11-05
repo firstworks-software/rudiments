@@ -84,7 +84,7 @@ PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
 #ALLSTATIC=-all-static 
 
-.SUFFIXES: .lo .obj
+.SUFFIXES: .lo .obj .cpp
 
 .cpp.lo:
 	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@

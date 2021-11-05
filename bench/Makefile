@@ -24,7 +24,7 @@ PROGS = dictionary \
 	charstring \
 	socket
 
-.SUFFIXES: .lo .obj
+.SUFFIXES: .lo .obj .cpp
 
 .cpp.lo:
 	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@

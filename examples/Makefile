@@ -138,7 +138,7 @@ PROGS2 = \
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2)
 
-.SUFFIXES: .lo .obj
+.SUFFIXES: .lo .obj .cpp
 
 .cpp.lo:
 	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
