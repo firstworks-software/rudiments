@@ -510,10 +510,12 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 	#endif
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
 		swprintf(amountstr,length,
-			"$%s%lld.%02lld",negative,
+			L"$%s%lld.%02lld",negative,
 			amt/100,amt-(amt/100*100));
 	#else
-		#error FIXME: implement this
+		char	*temp=charstring::convertAmount(amount);
+		copy(amountstr,temp,length);
+		delete[] temp;
 	#endif
 	return amountstr;
 #else
@@ -948,9 +950,11 @@ wchar_t *wcharstring::parseNumber(long double number) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=new wchar_t[22];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,22,"%Lf",number);
+		swprintf(str,22,L"%Lf",number);
 	#else
-		#error FIXME: implement this
+		char	*temp=charstring::parseNumber(number);
+		copy(amountstr,temp,22);
+		delete[] temp;
 	#endif
 	return str;
 #else
@@ -962,9 +966,11 @@ wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=new wchar_t[22];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,22,"%.*Lf",scale,number);
+		swprintf(str,22,L"%.*Lf",scale,number);
 	#else
-		#error FIXME: implement this
+		char	*temp=charstring::parseNumber(number,scale);
+		copy(amountstr,temp,22);
+		delete[] temp;
 	#endif
 	return str;
 #else
@@ -978,9 +984,11 @@ wchar_t *wcharstring::parseNumber(long double number,
 	size_t	strlength=precision+3;
 	wchar_t	*str=new wchar_t[strlength];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,strlength,"%*.*Lf",precision,scale,number);
+		swprintf(str,strlength,L"%*.*Lf",precision,scale,number);
 	#else
-		#error FIXME: implement this
+		char	*temp=charstring::parseNumber(number,precision,scale);
+		copy(amountstr,temp,strlength);
+		delete[] temp;
 	#endif
 	return str;
 #else
@@ -1228,12 +1236,41 @@ wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source) {
 #endif
 }
 
+wchar_t *wcharstring::copy(wchar_t *dest, const char *source) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	wchar_t	*d=dest;
+	for (const char *s=source; *s; s++) {
+		*d=wcharacter::duplicate(*s);
+		d++;
+	}
+	*d=L'\0';
+	return d;
+#else
+	return NULL;
+#endif
+}
+
 wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t size) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!dest || !source) {
 		return dest;
 	}
 	return wcsncpy(dest,source,size);
+#else
+	return NULL;
+#endif
+}
+
+wchar_t *wcharstring::copy(wchar_t *dest, const char *source, size_t size) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	wchar_t		*d=dest;
+	const char	*s=source;
+	for (size_t c=0; c<size && *s; c++) {
+		*d=wcharacter::duplicate(*s);
+		d++;
+		s++;
+	}
+	return d;
 #else
 	return NULL;
 #endif
@@ -1249,7 +1286,25 @@ wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
+						const char *source) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	return copy(dest+location,source);
+#else
+	return NULL;
+#endif
+}
+
+wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 					const wchar_t *source, size_t size) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	return copy(dest+location,source,size);
+#else
+	return NULL;
+#endif
+}
+
+wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
+					const char *source, size_t size) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest+location,source,size);
 #else
@@ -1267,7 +1322,25 @@ wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
+						const char *source) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	return safeCopy(dest,destlen,source,charstring::length(source)+1);
+#else
+	return NULL;
+#endif
+}
+
+wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 				const wchar_t *source, size_t sourcelen) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
+#else
+	return NULL;
+#endif
+}
+
+wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
+				const char *source, size_t sourcelen) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
 #else
@@ -2368,7 +2441,7 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		#ifdef RUDIMENTS_HAVE_VSWPRINTF
 			size=vswprintf(buf,buflen,format,*argp);
 		#else
-			#error FIXME: implement this
+			#error no vswprintf or anything like it
 		#endif
 		if (size>-1) {
 			wcharstring::copy(buffer,buf,length);

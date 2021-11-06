@@ -93,11 +93,22 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  pointer to "dest". */
 		static	wchar_t	*copy(wchar_t *dest, const wchar_t *source);
 
+		/** Replaces "dest" with "source".  Assumes that there is
+		 *  enough room in "dest" to accommodate "source".  Returns a
+		 *  pointer to "dest". */
+		static	wchar_t	*copy(wchar_t *dest, const char *source);
+
 		/** Replaces the first "size" bytes of "dest" with "source".
 		 *  Assumes that "dest" is at least "size" bytes long.
 		 *  Returns a pointer to "dest". */
 		static	wchar_t	*copy(wchar_t *dest,
 					const wchar_t *source, size_t size);
+
+		/** Replaces the first "size" bytes of "dest" with "source".
+		 *  Assumes that "dest" is at least "size" bytes long.
+		 *  Returns a pointer to "dest". */
+		static	wchar_t	*copy(wchar_t *dest,
+					const char *source, size_t size);
 
 		/** Replaces "dest" with "source", starting "location" bytes
 		 *  into "dest".  Assumes that there is enough room in "dest"
@@ -106,12 +117,26 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static	wchar_t	*copy(wchar_t *dest, size_t location,
 						const wchar_t *source);
 
+		/** Replaces "dest" with "source", starting "location" bytes
+		 *  into "dest".  Assumes that there is enough room in "dest"
+		 *  (after "location" bytes) to accommodate "source".  Returns
+		 *  a pointer to "dest". */
+		static	wchar_t	*copy(wchar_t *dest, size_t location,
+						const char *source);
+
 		/** Replaces "size" bytes of "dest" with "source", starting
 		 *  "location" bytes into "dest".  Assumes that there are
 		 *  "size" bytes in "dest" (after "location" bytes).  Returns a
 		 *  pointer to "dest". */
 		static	wchar_t	*copy(wchar_t *dest, size_t location,
 					const wchar_t *source, size_t size);
+
+		/** Replaces "size" bytes of "dest" with "source", starting
+		 *  "location" bytes into "dest".  Assumes that there are
+		 *  "size" bytes in "dest" (after "location" bytes).  Returns a
+		 *  pointer to "dest". */
+		static	wchar_t	*copy(wchar_t *dest, size_t location,
+					const char *source, size_t size);
 
 		/** Replaces "dest" with "source" unless the character length
 		 *  of "source" is greater than "destlen", in which case only
@@ -120,6 +145,13 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static wchar_t	*safeCopy(wchar_t *dest, size_t destlen,
 							const wchar_t *source);
 
+		/** Replaces "dest" with "source" unless the character length
+		 *  of "source" is greater than "destlen", in which case only
+		 *  "destlen" bytes of "dest" will be replaced.  Returns a
+		 *  pointer to "dest". */
+		static wchar_t	*safeCopy(wchar_t *dest, size_t destlen,
+							const char *source);
+
 		/** Replaces "sourcesize" characters of "dest" with "source"
 		 *  unless "sourcesize" is greater than "destlen", in which
 		 *  case only "destlen" characters of "dest" will be replaced.
@@ -127,6 +159,15 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static wchar_t	*safeCopy(wchar_t *dest,
 						size_t destlen,
 						const wchar_t *source,
+						size_t sourcesize);
+
+		/** Replaces "sourcesize" characters of "dest" with "source"
+		 *  unless "sourcesize" is greater than "destlen", in which
+		 *  case only "destlen" characters of "dest" will be replaced.
+		 *  Returns a pointer to "dest". */
+		static wchar_t	*safeCopy(wchar_t *dest,
+						size_t destlen,
+						const char *source,
 						size_t sourcesize);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or

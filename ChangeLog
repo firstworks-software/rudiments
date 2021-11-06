@@ -20,6 +20,8 @@
 	added configure test for iswblank() and alternative implementation
 	added configure test for mbrtowc()/mbtowc() and implementations for
 		each
+	fixed wprintf() -> swprintf() calls in wcharstring class
+	added wcharstring::copy(...const char *...) methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
