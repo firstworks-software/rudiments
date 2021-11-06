@@ -2650,6 +2650,43 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 mbtowc(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBTOWC,1,Some systems have mbtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for swprintf)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDIO_H
+	#include <stdio.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+swprintf(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SWPRINTF,1,Some systems have swprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for vswprintf)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDIO_H
+	#include <stdio.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+vswprintf(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_VSWPRINTF,1,Some systems have vswprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H

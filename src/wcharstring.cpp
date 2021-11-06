@@ -508,9 +508,13 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 	#else
 		amt=abs((long)amount);
 	#endif
-	wprintf(amountstr,length,
+	#ifdef RUDIMENTS_HAVE_SWPRINTF
+		swprintf(amountstr,length,
 			"$%s%lld.%02lld",negative,
 			amt/100,amt-(amt/100*100));
+	#else
+		#error FIXME: implement this
+	#endif
 	return amountstr;
 #else
 	return NULL;
@@ -943,7 +947,11 @@ wchar_t *wcharstring::parseNumber(double number,
 wchar_t *wcharstring::parseNumber(long double number) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=new wchar_t[22];
-	wprintf(str,22,"%Lf",number);
+	#ifdef RUDIMENTS_HAVE_SWPRINTF
+		swprintf(str,22,"%Lf",number);
+	#else
+		#error FIXME: implement this
+	#endif
 	return str;
 #else
 	return NULL;
@@ -953,7 +961,11 @@ wchar_t *wcharstring::parseNumber(long double number) {
 wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=new wchar_t[22];
-	wprintf(str,22,"%.*Lf",scale,number);
+	#ifdef RUDIMENTS_HAVE_SWPRINTF
+		swprintf(str,22,"%.*Lf",scale,number);
+	#else
+		#error FIXME: implement this
+	#endif
 	return str;
 #else
 	return NULL;
@@ -965,7 +977,11 @@ wchar_t *wcharstring::parseNumber(long double number,
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	size_t	strlength=precision+3;
 	wchar_t	*str=new wchar_t[strlength];
-	wprintf(str,strlength,"%*.*Lf",precision,scale,number);
+	#ifdef RUDIMENTS_HAVE_SWPRINTF
+		swprintf(str,strlength,"%*.*Lf",precision,scale,number);
+	#else
+		#error FIXME: implement this
+	#endif
 	return str;
 #else
 	return NULL;
@@ -2349,7 +2365,11 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		// buflen is 0.
 		wchar_t	*buf=(buflen)?new wchar_t[buflen]:NULL;
 
-		size=vswprintf(buf,buflen,format,*argp);
+		#ifdef RUDIMENTS_HAVE_VSWPRINTF
+			size=vswprintf(buf,buflen,format,*argp);
+		#else
+			#error FIXME: implement this
+		#endif
 		if (size>-1) {
 			wcharstring::copy(buffer,buf,length);
 		}

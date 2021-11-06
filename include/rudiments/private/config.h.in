@@ -1293,6 +1293,9 @@
 /* Some systems have __swap_int64 */
 #undef RUDIMENTS_HAVE_SWAP_INT64
 
+/* Some systems have swprintf */
+#undef RUDIMENTS_HAVE_SWPRINTF
+
 /* Some systems have symlink */
 #undef RUDIMENTS_HAVE_SYMLINK
 
@@ -1499,6 +1502,9 @@
 
 /* Some systems have vsnprintf_s */
 #undef RUDIMENTS_HAVE_VSNPRINTF_S
+
+/* Some systems have vswprintf */
+#undef RUDIMENTS_HAVE_VSWPRINTF
 
 /* Some systems have wchar.h */
 #undef RUDIMENTS_HAVE_WCHAR_H

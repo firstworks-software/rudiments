@@ -204,7 +204,7 @@ wchar_t wcharacter::duplicate(char c) {
 				return (wchar_t)0;
 			}
 			return retval;
-		#elif defined(RUDIMENTS_HAVE_MBRTOWC)
+		#elif defined(RUDIMENTS_HAVE_MBTOWC)
 			wchar_t		retval;
 			size_t	s=mbtowc(&retval,&c,1);
 			if (s==(size_t)-1) {

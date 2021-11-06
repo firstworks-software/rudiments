@@ -1330,6 +1330,9 @@
 /* Some systems have __swap_int64 */
 /* #undef RUDIMENTS_HAVE_SWAP_INT64 */
 
+/* Some systems have swprintf */
+#define RUDIMENTS_HAVE_SWPRINTF 1
+
 /* Some systems have symlink */
 /* #undef RUDIMENTS_HAVE_SYMLINK */
 
@@ -1578,6 +1581,9 @@
 
 /* Some systems have vsnprintf_s */
 /* #undef RUDIMENTS_HAVE_VSNPRINTF_S */
+
+/* Some systems have vswprintf */
+#define RUDIMENTS_HAVE_VSWPRINTF 1
 
 /* GetDiskFreeSpace */
 #define RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE 1
