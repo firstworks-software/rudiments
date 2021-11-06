@@ -494,21 +494,21 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 	if (length<6) {
 		length=6;
 	}
-	wchar_t	negative[2];
-	if (amount<0) {
-		negative[0]=L'-';
-	} else {
-		negative[0]=L'\0';
-	}
-	negative[1]=L'\0';
 	wchar_t	*amountstr=new wchar_t[length];
-	int64_t	amt;
-	#ifdef RUDIMENTS_HAVE_LLABS
-		amt=llabs((long long)amount);
-	#else
-		amt=abs((long)amount);
-	#endif
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
+		wchar_t	negative[2];
+		if (amount<0) {
+			negative[0]=L'-';
+		} else {
+			negative[0]=L'\0';
+		}
+		negative[1]=L'\0';
+		int64_t	amt;
+		#ifdef RUDIMENTS_HAVE_LLABS
+			amt=llabs((long long)amount);
+		#else
+			amt=abs((long)amount);
+		#endif
 		swprintf(amountstr,length,
 			L"$%s%lld.%02lld",negative,
 			amt/100,amt-(amt/100*100));
@@ -953,7 +953,7 @@ wchar_t *wcharstring::parseNumber(long double number) {
 		swprintf(str,22,L"%Lf",number);
 	#else
 		char	*temp=charstring::parseNumber(number);
-		copy(amountstr,temp,22);
+		copy(str,temp,22);
 		delete[] temp;
 	#endif
 	return str;
@@ -969,7 +969,7 @@ wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
 		swprintf(str,22,L"%.*Lf",scale,number);
 	#else
 		char	*temp=charstring::parseNumber(number,scale);
-		copy(amountstr,temp,22);
+		copy(str,temp,22);
 		delete[] temp;
 	#endif
 	return str;
@@ -987,7 +987,7 @@ wchar_t *wcharstring::parseNumber(long double number,
 		swprintf(str,strlength,L"%*.*Lf",precision,scale,number);
 	#else
 		char	*temp=charstring::parseNumber(number,precision,scale);
-		copy(amountstr,temp,strlength);
+		copy(str,temp,strlength);
 		delete[] temp;
 	#endif
 	return str;

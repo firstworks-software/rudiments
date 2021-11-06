@@ -14,16 +14,13 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	// IRIX appears to need this but OpenBSD can't
+	// IRIX needs _XOPEN_SOURCE but OpenBSD can't
 	// find select() if it's still defined later
 	#ifndef _XOPEN_SOURCE
 		#define _XOPEN_SOURCE
 		#define UN_XOPEN_SOURCE
 	#endif
-	#ifndef RUDIMENTS_SYS_SOCKET_H
-		#define RUDIMENTS_SYS_SOCKET_H
-		#include <sys/socket.h>
-	#endif
+	#include <sys/socket.h>
 	#ifdef UN_XOPEN_SOURCE
 		#undef _XOPEN_SOURCE
 	#endif
