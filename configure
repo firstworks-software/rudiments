@@ -16573,6 +16573,10 @@ $as_echo_n "checking for irix... " >&6; }
 case $host_os in
 	*irix* )
 		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE"
+		if ( test "$CXX" = "CC" )
+		then
+			CPPFLAGS="$CPPFLAGS -D__SGICXX"
+		fi
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 		;;
