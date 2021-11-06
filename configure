@@ -29343,7 +29343,7 @@ mbrtowc(0,0,0,0);
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_MBRWTOC 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_MBRTOWC 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else

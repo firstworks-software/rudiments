@@ -2633,7 +2633,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
 #endif],
-mbrtowc(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBRWTOC,1,Some systems have mbrtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+mbrtowc(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBRTOWC,1,Some systems have mbrtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for mbtowc)
 AC_TRY_COMPILE([#ifndef __USE_GNU

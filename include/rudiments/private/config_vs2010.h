@@ -827,7 +827,7 @@
 #define RUDIMENTS_HAVE_MADVISE_CADDR_T 1
 
 /* Some systems have mbrtowc */
-#define RUDIMENTS_HAVE_MBRWTOC 1
+#define RUDIMENTS_HAVE_MBRTOWC 1
 
 /* Some systems have mbtowc */
 /* #undef RUDIMENTS_HAVE_MBTOWC */

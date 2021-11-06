@@ -802,7 +802,7 @@
 #undef RUDIMENTS_HAVE_MADVISE_CADDR_T
 
 /* Some systems have mbrtowc */
-#undef RUDIMENTS_HAVE_MBRWTOC
+#undef RUDIMENTS_HAVE_MBRTOWC
 
 /* Some systems have mbtowc */
 #undef RUDIMENTS_HAVE_MBTOWC
