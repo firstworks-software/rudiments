@@ -32,7 +32,8 @@ install:
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS5) $(includedir)/rudiments/private
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS6) $(includedir)/rudiments/private
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS7) $(includedir)/rudiments/private
-	$(CHMOD) 644 $(includedir)/rudiments/*.h $(includedir)/rudiments/private/*.h
+	$(CHMOD) 644 $(includedir)/rudiments/*.h
+	$(CHMOD) 644 $(includedir)/rudiments/private/*.h
 
 uninstall:
 	$(RMTREE) $(includedir)/rudiments
