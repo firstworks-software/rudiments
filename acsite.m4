@@ -771,7 +771,7 @@ AC_DEFUN([FW_CHECK_IRIX],
 AC_MSG_CHECKING(for irix)
 case $host_os in
 	*irix* )
-		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE"
+		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
 		AC_MSG_RESULT(yes)
 		;;
 	* )
