@@ -829,6 +829,12 @@
 /* Some systems use caddr_t argument for madvise */
 #define RUDIMENTS_HAVE_MADVISE_CADDR_T 1
 
+/* Some systems have mbrtowc */
+#define RUDIMENTS_HAVE_MBRWTOC 1
+
+/* Some systems have mbtowc */
+/* #undef RUDIMENTS_HAVE_MBTOWC */
+
 /* Some systems have memccpy with char argument */
 #define RUDIMENTS_HAVE_MEMCCPY_CHAR 1
 

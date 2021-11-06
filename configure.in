@@ -2620,6 +2620,36 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 iswblank(0);,AC_DEFINE(RUDIMENTS_HAVE_ISWBLANK,1,Some systems have iswblank) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for mbrtowc)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+mbrtowc(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBRWTOC,1,Some systems have mbrtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for mbtowc)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+mbtowc(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBTOWC,1,Some systems have mbtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
