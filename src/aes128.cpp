@@ -210,9 +210,9 @@ const unsigned char *aes128::getData(bool encrypt) {
 				// and XOR the remaining bytes of the CBC buffer
 				// against that number.
 				padbytes=AES_BLOCK_SIZE-readsize;
-				for (unsigned char i=readsize;
-							i<AES_BLOCK_SIZE; i++) {
-					pvt->_cbc[i]^=padbytes;
+				for (unsigned char j=readsize;
+							j<AES_BLOCK_SIZE; j++) {
+					pvt->_cbc[j]^=padbytes;
 				}
 
 				// encrypt the CBC'ed data into the out buffer
