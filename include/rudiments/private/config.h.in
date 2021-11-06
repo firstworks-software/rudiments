@@ -723,6 +723,9 @@
 /* Some systems have iswascii */
 #undef RUDIMENTS_HAVE_ISWASCII
 
+/* Some systems have iswblank */
+#undef RUDIMENTS_HAVE_ISWBLANK
+
 /* Some systems have kill */
 #undef RUDIMENTS_HAVE_KILL
 

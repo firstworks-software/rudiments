@@ -11,6 +11,9 @@
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
 #endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #include <stdio.h>
 
@@ -123,7 +126,11 @@ bool wcharacter::isHexDigit(int32_t c) {
 
 bool wcharacter::isBlank(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		return iswblank(c)!=0;
+		#ifdef RUDIMENTS_HAVE_ISWBLANK
+			return iswblank(c)!=0;
+		#else
+			return character::isBlank(c);
+		#endif
 	#else
 		return false;
 	#endif
