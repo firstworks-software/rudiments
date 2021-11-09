@@ -929,7 +929,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(wchar_t *buffer, size_t len,
 						const wchar_t *format, ...);
 
@@ -952,7 +956,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(wchar_t *buffer, size_t len,
 						const wchar_t *format,
 						va_list *argp);
@@ -967,7 +975,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  If "buffer" is NULL then nothing is written to "buffer" and
 		 *  0 is returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(wchar_t **buffer,
 						const wchar_t *format, ...);
 
@@ -981,7 +993,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  If "buffer" is NULL then nothing is written to "buffer" and
 		 *  0 is returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(wchar_t **buffer,
 						const wchar_t *format,
 						va_list *argp);
@@ -990,6 +1006,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  rudiments was build with wide character support and false
 		 *  otherwise. */
 		static bool	supported();
+
+		/** Returns true if the platform supports wide characters and
+		 *  rudiments was build with wide character support and false
+		 *  otherwise. */
+		static bool	supportsPrintf();
 
 	#include <rudiments/private/wcharstring.h>
 };

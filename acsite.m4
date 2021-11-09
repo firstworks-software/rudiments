@@ -774,7 +774,8 @@ case $host_os in
 		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
 		if ( test "$CXX" = "CC" )
 		then
-			CPPFLAGS="$CPPFLAGS -D__SGICXX"
+			# define __SGICXX and interpret #error as an error
+			CPPFLAGS="$CPPFLAGS -D__SGICXX -diag_error 1035"
 		fi
 		AC_MSG_RESULT(yes)
 		;;

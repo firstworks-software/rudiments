@@ -8,6 +8,7 @@
 #include <rudiments/process.h>
 #include <rudiments/file.h>
 #include <rudiments/wstringbuffer.h>
+#include <rudiments/error.h>
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -25,13 +26,8 @@
 // include this after the above defines or Haiku can't find strchrnul
 #include <rudiments/stdio.h>
 
-// for vsnprintf/vsnprintf_s
+// for vswprintf
 #include <stdio.h>
-
-#ifdef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
-extern "C" int __vsnprintf(char *str, size_t size,
-				const char *format, va_list ap);
-#endif
 
 // MSVC 2010- doesn't define va_copy
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
@@ -2420,44 +2416,45 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, va_list *argp) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 
-	// vswprintf should write whatever will fit into "buffer" and
-	// either return the number of bytes that were written or -1
-	// if truncation occurs.
-	//
-	// Iterate, expanding the buffer as necessary.
-	size_t	buflen=length;
-	size_t	inc=16;
-	ssize_t	size=-1;
-	do {
+		// vswprintf should write whatever will fit into "buffer" and
+		// either return the number of bytes that were written or -1
+		// if truncation occurs.
+		//
+		// Iterate, expanding the buffer as necessary.
+		size_t	buflen=length;
+		size_t	inc=16;
+		ssize_t	size=-1;
+		do {
 
-		// Windows doesn't like it if you delete[] a buffer that
-		// was allocated with 0 size, but doesn't mind delete[]ing a
-		// NULL.  vswprintf doesn't seem to mind being passed a NULL
-		// instead of a 0-sized buffer.  So, we'll set buf=NULL if
-		// buflen is 0.
-		wchar_t	*buf=(buflen)?new wchar_t[buflen]:NULL;
+			// Windows doesn't like it if you delete[] a buffer
+			// that was allocated with 0 size, but doesn't mind
+			// delete[]ing a NULL.  vswprintf doesn't seem to mind
+			// being passed a NULL instead of a 0-sized buffer.
+			// So, we'll set buf=NULL if buflen is 0.
+			wchar_t	*buf=(buflen)?new wchar_t[buflen]:NULL;
 
-		#ifdef RUDIMENTS_HAVE_VSWPRINTF
 			size=vswprintf(buf,buflen,format,*argp);
-		#else
-			#error no vswprintf or anything like it
-		#endif
-		if (size>-1) {
-			wcharstring::copy(buffer,buf,length);
-		}
-		delete[] buf;
+			if (size>-1) {
+				wcharstring::copy(buffer,buf,length);
+			}
+			delete[] buf;
 
-		buflen=buflen+inc;
+			buflen=buflen+inc;
 
-		// adjust how quickly the buffer grows
-		// (this can certainly be optimized further)
-		inc=inc*2;
-		if (inc>1024) {
-			inc=1024;
-		}
-	} while (size==-1);
-	return size;
+			// adjust how quickly the buffer grows
+			// (this can certainly be optimized further)
+			inc=inc*2;
+			if (inc>1024) {
+				inc=1024;
+			}
+		} while (size==-1);
+		return size;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return -1;
+	#endif
 #else
 	return 0;
 #endif
@@ -2497,8 +2494,10 @@ ssize_t wcharstring::printf(wchar_t **buffer,
 	va_copy(argp1,*argp);
 	ssize_t	size=wcharstring::printf(*buffer,0,format,argp);
 	va_end(*argp);
-	*buffer=new wchar_t[size+1];
-	size=wcharstring::printf(*buffer,size+1,format,&argp1);
+	if (size!=-1) {
+		*buffer=new wchar_t[size+1];
+		size=wcharstring::printf(*buffer,size+1,format,&argp1);
+	}
 	va_end(argp1);
 	return size;
 #else
@@ -2508,6 +2507,14 @@ ssize_t wcharstring::printf(wchar_t **buffer,
 
 bool wcharstring::supported() {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool wcharstring::supportsPrintf() {
+#if defined(RUDIMENTS_HAVE_WCHAR_H) && defined(RUDIMENTS_HAVE_VSWPRINTF)
 	return true;
 #else
 	return false;

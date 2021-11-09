@@ -2694,8 +2694,10 @@ ssize_t charstring::printf(char **buffer, const char *format, va_list *argp) {
 	va_copy(argp1,*argp);
 	ssize_t	size=charstring::printf(*buffer,0,format,argp);
 	va_end(*argp);
-	*buffer=new char[size+1];
-	size=charstring::printf(*buffer,size+1,format,&argp1);
+	if (size!=-1) {
+		*buffer=new char[size+1];
+		size=charstring::printf(*buffer,size+1,format,&argp1);
+	}
 	va_end(argp1);
 	return size;
 }

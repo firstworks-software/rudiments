@@ -184,7 +184,8 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  which should comply with standard printf formatting
 		 *  rules.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written or -1 if an error
+		 *  occurred. */
 		ssize_t	writeFormatted(const char *format, ...);
 
 		/** Writes "argp" to the byte buffer using "format"
@@ -194,14 +195,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written or -1 if an error
+		 *  occurred. */
 		ssize_t	writeFormatted(const char *format, va_list *argp);
 
 		/** Writes "..." to the byte buffer using "format"
 		 *  which should comply with standard wprintf formatting
 		 *  rules.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written or -1 if an error
+		 *  occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  wcharstring::supportsPrintf() returns false.  On those
+		 *  platforms this method returns -1 and sets ENOSYS. */
 		ssize_t	writeFormatted(const wchar_t *format, ...);
 
 		/** Writes "argp" to the byte buffer using "format"
@@ -211,7 +218,11 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  wcharstring::supportsPrintf() returns false.  On those
+		 *  platforms this method returns -1 and sets ENOSYS. */
 		ssize_t	writeFormatted(const wchar_t *format, va_list *argp);
 
 
@@ -332,7 +343,9 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 
 		/** Appends "..." to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
-		 *  rules. */
+		 *  rules.
+		 *
+		 *  Returns NULL if an error occurred. */
 		bytebuffer	*appendFormatted(const char *format, ...);
 
 		/** Appends "argp" to the byte buffer using "format"
@@ -340,13 +353,21 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list. */
+		 *  va_list.
+		 *
+		 *  Returns NULL if an error occurred. */
 		bytebuffer	*appendFormatted(const char *format,
 							va_list *argp);
 
 		/** Appends "..." to the byte buffer using "format"
 		 *  which should comply with standard wprintf formatting
-		 *  rules. */
+		 *  rules.
+		 *
+		 *  Returns NULL if an error occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  wcharstring::supportsPrintf() returns false.  On those
+		 *  platforms this method returns -1 and sets ENOSYS. */
 		bytebuffer	*appendFormatted(const wchar_t *format, ...);
 
 		/** Appends "argp" to the byte buffer using "format"
@@ -354,7 +375,13 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list. */
+		 *  va_list.
+		 *
+		 *  Returns NULL if an error occurred.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  wcharstring::supportsPrintf() returns false.  On those
+		 *  platforms this method returns -1 and sets ENOSYS. */
 		bytebuffer	*appendFormatted(const wchar_t *format,
 							va_list *argp);
 

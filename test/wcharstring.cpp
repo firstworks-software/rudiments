@@ -140,14 +140,18 @@ int main(int argc, const char **argv) {
 	wchar_t	buffer[100];
 	ssize_t	size=wcharstring::printf(buffer,20,
 					L"%lc%d%ls",L'a',123,L"hello");
-	test("size",size==9);
-	test("contents",!wcharstring::compare(buffer,L"a123hello"));
-	wchar_t	*buf=NULL;
-	size=wcharstring::printf(&buf,L"%lc%d%ls",L'a',123,L"hello");
-	//size=wcharstring::printf(&buf,L"%lc%d",L'a',123);
-	test("size",size==9);
-	test("contents",!wcharstring::compare(buffer,L"a123hello"));
-	delete[] buf;
+	if (size==-1) {
+		stdoutput.printf("not supported\n");
+	} else {
+		test("size",size==9);
+		test("contents",!wcharstring::compare(buffer,L"a123hello"));
+		wchar_t	*buf=NULL;
+		size=wcharstring::printf(&buf,L"%lc%d%ls",L'a',123,L"hello");
+		//size=wcharstring::printf(&buf,L"%lc%d",L'a',123);
+		test("size",size==9);
+		test("contents",!wcharstring::compare(buffer,L"a123hello"));
+		delete[] buf;
+	}
 	stdoutput.printf("\n");
 
 

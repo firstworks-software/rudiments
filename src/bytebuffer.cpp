@@ -224,15 +224,17 @@ ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 	#else
 		size=charstring::printf(&buffer,format,argp);
 	#endif
+	if (size!=-1) {
 
-	// extend the list of buffers to accommodate
-	// "size" bytes beyond the current position
-	if (pvt->_pos+size>pvt->_actualsize) {
-		extend(pvt->_pos+size);
+		// extend the list of buffers to accommodate
+		// "size" bytes beyond the current position
+		if (pvt->_pos+size>pvt->_actualsize) {
+			extend(pvt->_pos+size);
+		}
+
+		// write the buffer
+		write(buffer,size);
 	}
-
-	// write the buffer
-	write(buffer,size);
 
 	// clean up
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
@@ -257,15 +259,17 @@ ssize_t bytebuffer::writeFormatted(const wchar_t *format, va_list *argp) {
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
 	ssize_t	size=wcharstring::printf(&buffer,format,argp);
+	if (size!=-1) {
 
-	// extend the list of buffers to accommodate
-	// "size" bytes beyond the current position
-	if (pvt->_pos+size>pvt->_actualsize) {
-		extend(pvt->_pos+size);
+		// extend the list of buffers to accommodate
+		// "size" bytes beyond the current position
+		if (pvt->_pos+size>pvt->_actualsize) {
+			extend(pvt->_pos+size);
+		}
+
+		// write the buffer
+		write(buffer,size);
 	}
-
-	// write the buffer
-	write(buffer,size);
 
 	// clean up
 	delete[] buffer;
@@ -429,8 +433,7 @@ bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
 
 bytebuffer *bytebuffer::appendFormatted(const char *format, va_list *argp) {
 	pvt->_pos=pvt->_size;
-	writeFormatted(format,argp);
-	return this;
+	return (writeFormatted(format,argp)!=-1)?this:NULL;
 }
 
 bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, ...) {
@@ -443,8 +446,7 @@ bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, ...) {
 
 bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, va_list *argp) {
 	pvt->_pos=pvt->_size;
-	writeFormatted(format,argp);
-	return this;
+	return (writeFormatted(format,argp)!=-1)?this:NULL;
 }
 
 void bytebuffer::truncate(size_t pos) {
