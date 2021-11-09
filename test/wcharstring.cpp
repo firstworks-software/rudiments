@@ -137,8 +137,8 @@ int main(int argc, const char **argv) {
 
 	// printf
 	stdoutput.printf("printf...\n");
+	wchar_t	buffer[100];
 	if (wcharstring::supportsPrintf()) {
-		wchar_t	buffer[100];
 		ssize_t	size=wcharstring::printf(buffer,20,
 					L"%lc%d%ls",L'a',123,L"hello");
 		test("size",size==9);
