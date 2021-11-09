@@ -20,7 +20,8 @@ int main(int argc, const char **argv) {
 
 	header("wstringbuffer");
 
-	if (!wstringbuffer::supported()) {
+	if (!wstringbuffer::supported() ||
+			!wcharstring::supportsPrintf()) {
 		stdoutput.printf("	not supported\n\n");
 		return 0;
 	}

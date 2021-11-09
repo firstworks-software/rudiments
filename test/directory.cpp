@@ -163,21 +163,22 @@ int main(int argc, const char **argv) {
 			directory::maxPathLength(cwd)>0);*/
 	d.open(cwd);
 
-	// Syllable has bugs
+	// Syllable and Irix have bugs
 	char	*osname=sys::getOperatingSystemName();
-	if (charstring::compare(osname,"syllable")) {
-		test("maxFileNameLength cross-check",
-			directory::maxFileNameLength(cwd)==
-			d.maxFileNameLength());
+	if (charstring::compare(osname,"IRIX")) {
+		if (charstring::compare(osname,"syllable")) {
+			test("maxFileNameLength cross-check",
+				directory::maxFileNameLength(cwd)==
+				d.maxFileNameLength());
+		}
+		test("maxPathLength cross-check",
+				directory::maxPathLength(cwd)==
+				d.maxPathLength());
+		test("canExceedMaxFileNameLength cross-check",
+				directory::canExceedMaxFileNameLength(cwd)==
+				d.canExceedMaxFileNameLength());
 	}
 	delete[] osname;
-
-	test("maxPathLength cross-check",
-			directory::maxPathLength(cwd)==
-			d.maxPathLength());
-	test("canExceedMaxFileNameLength cross-check",
-			directory::canExceedMaxFileNameLength(cwd)==
-			d.canExceedMaxFileNameLength());
 	d.close();
 	delete[] cwd;
 

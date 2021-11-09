@@ -13,18 +13,17 @@ int main(int argc, const char **argv) {
 
 	error::setErrorNumber(EINTR);
 	test("getErrorNumber()",error::getErrorNumber()==EINTR);
+	const char	*intr[]={
+		"Interrupted function call",
+		"Interrupted system call",
+		NULL
+	};
 	test("getErrorString()",
-		!charstring::compare(error::getErrorString(),
-				#ifdef _WIN32
-					"Interrupted function call"
-				#else
-					"Interrupted system call"
-				#endif
-				));
+		charstring::inSet(error::getErrorString(),intr));
+
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
 
-	//stdoutput.printf("\"%s\"\n",error::getErrorString());
 	const char	*success[]={
 		"Success",
 		"No error",
