@@ -17,6 +17,7 @@
 	fixed epoll_wait() and kevent() timeout detection
 	configure script uses -Werror when detecting iov_base now
 	code checks dlclose() for not -1 rather than for 0 now
+	added configure test for Irix
 	added configure test for iswblank() and alternative implementation
 	added configure test for mbrtowc()/mbtowc() and implementations for
 		each
