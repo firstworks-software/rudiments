@@ -64,23 +64,25 @@ void cronschedule::init(const char *years,
 }
 
 void cronschedule::clear() {
-	listnode< cronscheduleperiod * > *np;
-	for (np=pvt->_years.getFirst(); np; np=np->getNext()) {
-		delete np->getValue();
+	for (listnode< cronscheduleperiod * > *n=pvt->_years.getFirst();
+							n; n=n->getNext()) {
+		delete n->getValue();
 	}
-	for (np=pvt->_months.getFirst(); np; np=np->getNext()) {
-		delete np->getValue();
+	for (listnode< cronscheduleperiod * > *n=pvt->_months.getFirst();
+							n; n=n->getNext()) {
+		delete n->getValue();
 	}
-	for (np=pvt->_daysofmonth.getFirst(); np; np=np->getNext()) {
-		delete np->getValue();
+	for (listnode< cronscheduleperiod * > *n=pvt->_daysofmonth.getFirst();
+							n; n=n->getNext()) {
+		delete n->getValue();
 	}
-	for (np=pvt->_daysofweek.getFirst(); np; np=np->getNext()) {
-		delete np->getValue();
+	for (listnode< cronscheduleperiod * > *n=pvt->_daysofweek.getFirst();
+							n; n=n->getNext()) {
+		delete n->getValue();
 	}
-	for (listnode< cronscheduledaypart * > *ndp=
-						pvt->_dayparts.getFirst();
-						ndp; ndp=ndp->getNext()) {
-		delete ndp->getValue();
+	for (listnode< cronscheduledaypart * > *n=pvt->_dayparts.getFirst();
+							n; n=n->getNext()) {
+		delete n->getValue();
 	}
 }
 

@@ -775,7 +775,7 @@ case $host_os in
 		if ( test "$CXX" = "CC" )
 		then
 			# define __SGICXX and interpret #error as an error
-			CPPFLAGS="$CPPFLAGS -D__SGICXX -diag_error 1035"
+			CPPFLAGS="$CPPFLAGS -D__SGICXX -diag_error 1035 -LANG:ansi-for-init-scope=on"
 		fi
 		AC_MSG_RESULT(yes)
 		;;

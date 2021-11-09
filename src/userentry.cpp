@@ -496,19 +496,19 @@ bool userentry::initialize(const char *username, uid_t userid) {
 		// just make the buffer bigger and try again.
 		int64_t	inc=sys::getSuggestedPasswordEntryBufferSize();
 		int64_t	max=inc*32;
-		for (int64_t pbsize=inc; pbsize<max; pbsize=pbsize+inc) {
+		for (int64_t size=inc; size<max; size=size+inc) {
 
-			pvt->_pwdcharbuffer=new char[pbsize];
+			pvt->_pwdcharbuffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETPWNAM_R_5) && \
 				defined(RUDIMENTS_HAVE_GETPWUID_R_5)
 			if (!((username)
 				?(getpwnam_r(username,
 						&pvt->_pwdbuffer,
-						pvt->_pwdcharbuffer,pbsize,
+						pvt->_pwdcharbuffer,size,
 						&pvt->_pwd))
 				:(getpwuid_r(userid,
 						&pvt->_pwdbuffer,
-						pvt->_pwdcharbuffer,pbsize,
+						pvt->_pwdcharbuffer,size,
 						&pvt->_pwd)))) {
 				success=(pvt->_pwd!=NULL);
 				break;
@@ -519,11 +519,11 @@ bool userentry::initialize(const char *username, uid_t userid) {
 				?(pvt->_pwd=getpwnam_r(username,
 							&pvt->_pwdbuffer,
 							pvt->_pwdcharbuffer,
-							pbsize))
+							size))
 				:(pvt->_pwd=getpwuid_r(userid,
 							&pvt->_pwdbuffer,
 							pvt->_pwdcharbuffer,
-							pbsize))) {
+							size))) {
 				success=true;
 				break;
 			}
@@ -554,18 +554,17 @@ bool userentry::initialize(const char *username, uid_t userid) {
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int32_t sbsize=1024; sbsize<MAXBUFFER;
-						sbsize=sbsize+1024) {
-			pvt->_spcharbuffer=new char[sbsize];
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
+			pvt->_spcharbuffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETSPNAM_R_5)
 			if (!getspnam_r(getName(),&pvt->_spbuffer,
-					pvt->_spcharbuffer,sbsize,&pvt->_sp)) {
+					pvt->_spcharbuffer,size,&pvt->_sp)) {
 				break;
 			}
 			#elif defined(RUDIMENTS_HAVE_GETSPNAM_R_4)
 			if ((pvt->_sp=getspnam_r(getName(),
 					&pvt->_spbuffer,
-					pvt->_spcharbuffer,sbsize))) {
+					pvt->_spcharbuffer,size))) {
 				break;
 			}
 			#endif
