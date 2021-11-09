@@ -130,9 +130,10 @@ int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
 
-	// solaris and darwin regex can't handle this, apparently
+	// solaris, darwin, and irix regex can't handle this, apparently
 	if (charstring::compare(osname,"SunOS") &&
-		charstring::compare(osname,"Darwin")) {
+		charstring::compare(osname,"Darwin") &&
+		charstring::compare(osname,"IRIX")) {
 
         	stdoutput.printf("wildcard word match\n");
 		test("setPattern",re.setPattern("(\\w+) (\\w+)"));
