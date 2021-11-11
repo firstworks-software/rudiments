@@ -79,14 +79,16 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %{_bindir}/rudiments-config
 %{_libdir}/pkgconfig/rudiments.pc
 %{_mandir}/man1/rudiments-config*
+%{_datadir}/rudiments
 
 %files doc
 %{_docdir}/%{name}
 
 %changelog
-* Thu Sep 23 2021 David Muse <david.muse@firstworks.com> - 2.0.0-1
+* Thu Nov 11 2021 David Muse <david.muse@firstworks.com> - 2.0.0-1
 - Updated to version 2.0.0.
 - Updated library versions to 8.
+- Added datadir/rudiments to devel files.
 
 * Thu Mar 04 2021 David Muse <david.muse@firstworks.com> - 1.4.0-1
 - Updated to version 1.4.0.
