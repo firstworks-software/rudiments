@@ -10,6 +10,7 @@ mandir = "@mandir@"
 datadir = "@datadir@"
 docdir = $(datadir)\doc\rudiments
 licensedir = $(datadir)\licenses\rudiments
+acdir = $(datadir)\rudiments\autoconf
 localstatedir = "@localstatedir@"
 tmpdir = "@tmpdir@"
 

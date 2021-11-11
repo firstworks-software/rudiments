@@ -19702,11 +19702,10 @@ fi
 
 
 
+if ( test $HAS_THREADS = "yes")
+then
 
-	if ( test $HAS_THREADS = "yes")
-	then
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_t" >&5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_t" >&5
 $as_echo_n "checking for pthread_t... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -19744,7 +19743,7 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_kill" >&5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_kill" >&5
 $as_echo_n "checking for pthread_kill... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -19786,8 +19785,7 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateThread" >&5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateThread" >&5
 $as_echo_n "checking for CreateThread... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -19826,13 +19824,8 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-	fi
 
-
-	if ( test $HAS_THREADS = "yes")
-	then
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_t" >&5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_t" >&5
 $as_echo_n "checking for pthread_mutex_t... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -19870,7 +19863,7 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateMutex" >&5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateMutex" >&5
 $as_echo_n "checking for CreateMutex... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -19909,12 +19902,8 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-	fi
 
-
-	if ( test $HAS_THREADS = "yes")
-	then
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_sigmask" >&5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_sigmask" >&5
 $as_echo_n "checking for pthread_sigmask... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -19951,8 +19940,7 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-	fi
-
+fi
 echo "******************************"
 
 

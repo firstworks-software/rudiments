@@ -936,9 +936,41 @@ dnl Checks for thread library.
 echo
 echo "***** Threads ****************"
 FW_CHECK_PTHREAD
-FW_CHECK_THREAD
-FW_CHECK_MUTEX
-FW_CHECK_PTHREAD_SIGMASK
+if ( test $HAS_THREADS = "yes")
+then
+
+	dnl check for pthread_t
+	AC_MSG_CHECKING(for pthread_t)
+	FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	dnl check for pthread_kill
+	AC_MSG_CHECKING(for pthread_kill)
+	FW_TRY_LINK([#include <signal.h>
+#ifdef RUDIMENTS_HAVE_SYS_SIGNAL_H
+	#include <sys/signal.h>
+#endif
+#include <pthread.h>],[pthread_kill(NULL,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_KILL,1,Some systems have pthread_kill) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	dnl check for CreateThread
+	AC_MSG_CHECKING(for CreateThread)
+	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],[HANDLE mut=CreateThread(NULL,0,NULL,NULL,0,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATETHREAD,1,CreateThread function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	dnl check for pthread_mutex_t
+	AC_MSG_CHECKING(for pthread_mutex_t)
+	FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	dnl check for CreateMutex
+	AC_MSG_CHECKING(for CreateMutex)
+	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	dnl check for pthread_sigmask
+	AC_MSG_CHECKING(for pthread_sigmask)
+	FW_TRY_LINK([#include <signal.h>],[pthread_sigmask(1,0,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_SIGMASK,1,pthread_sigmask exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+fi
 echo "******************************"
 
 

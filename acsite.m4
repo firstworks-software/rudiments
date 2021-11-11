@@ -174,62 +174,6 @@ AC_SUBST(PTHREADLIB)
 ])
 
 
-AC_DEFUN([FW_CHECK_THREAD],
-[
-	if ( test $HAS_THREADS = "yes")
-	then
-
-		dnl check for pthread_t
-		AC_MSG_CHECKING(for pthread_t)
-		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
-		dnl check for pthread_kill
-		AC_MSG_CHECKING(for pthread_kill)
-		FW_TRY_LINK([#include <signal.h>
-#ifdef RUDIMENTS_HAVE_SYS_SIGNAL_H
-	#include <sys/signal.h>
-#endif
-#include <pthread.h>],[pthread_kill(NULL,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_KILL,1,Some systems have pthread_kill) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
-
-		dnl check for CreateThread
-		AC_MSG_CHECKING(for CreateThread)
-		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif],[HANDLE mut=CreateThread(NULL,0,NULL,NULL,0,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATETHREAD,1,CreateThread function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-	fi
-])
-
-
-AC_DEFUN([FW_CHECK_MUTEX],
-[
-	if ( test $HAS_THREADS = "yes")
-	then
-
-		dnl check for pthread_mutex_t
-		AC_MSG_CHECKING(for pthread_mutex_t)
-		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
-		dnl check for CreateMutex
-		AC_MSG_CHECKING(for CreateMutex)
-		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-	fi
-])
-
-
-AC_DEFUN([FW_CHECK_PTHREAD_SIGMASK],
-[
-	if ( test $HAS_THREADS = "yes")
-	then
-		dnl check for pthread_sigmask
-		AC_MSG_CHECKING(for pthread_sigmask)
-		FW_TRY_LINK([#include <signal.h>],[pthread_sigmask(1,0,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_SIGMASK,1,pthread_sigmask exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-	fi
-])
-
-
 
 dnl checks for the ssl library
 dnl requires:  SSLPATH, RPATHFLAG, cross_compiling
@@ -393,7 +337,6 @@ AC_SUBST(SERVERPEM)
 
 
 
-
 dnl checks for the a library providing GSS
 dnl requires:  cross_compiling
 dnl sets the substitution variable GSSLIBS
@@ -546,6 +489,7 @@ AC_SUBST(GSSLIBS)
 ])
 
 
+
 dnl checks for the pcre library
 dnl requires:  cross_compiling
 dnl sets the substitution variable PCRELIBS
@@ -692,6 +636,7 @@ AC_SUBST(LIBCURLLIBS)
 ])
 
 
+
 dnl checks for shadow entry functions and header files
 AC_DEFUN([FW_CHECK_SHADOW],
 [
@@ -762,6 +707,8 @@ struct spwd sp; sp.sp_flag=0;,AC_DEFINE(RUDIMENTS_HAVE_SP_FLAG,1,struct spwd has
 
 fi
 ])
+
+
 
 dnl checks for password entry functions and header files
 AC_DEFUN([FW_CHECK_PWD],
@@ -874,6 +821,7 @@ AC_SUBST(NETAPI32LIB)
 ])
 
 
+
 dnl checks for host entry functions and header files
 AC_DEFUN([FW_CHECK_HOST],
 [
@@ -938,6 +886,7 @@ getnameinfo(NULL,0,NULL,0,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETNAMEINFO,1,Some
 ])
 
 
+
 dnl checks for proto entry functions and header files
 AC_DEFUN([FW_CHECK_PROTO],
 [
@@ -981,6 +930,7 @@ getprotobynumber_r(0,NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_4
 fi
 
 ])
+
 
 
 dnl checks for service entry functions and header files
@@ -1029,6 +979,7 @@ getservbyport_r(0,NULL,NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GETSERVBYPORT_R_5,
 fi
 
 ])
+
 
 
 dnl checks for mmap-related functions and header files
@@ -1261,6 +1212,7 @@ _memccpy(NULL,NULL,1,1);,AC_DEFINE(RUDIMENTS_HAVE__MEMCCPY,1,Some systems have _
 fi
 
 ])
+
 
 
 dnl checks for statfs/statvfs capibilities
@@ -1575,6 +1527,8 @@ fi
 AC_MSG_RESULT($STATFS_STYLE)
 ])
 
+
+
 dnl checks for __xnet_*
 AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
 [
@@ -1590,6 +1544,8 @@ AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
 sendmsg(0,NULL,0);,AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_NEED_XNET_PROTOTYPES, 1, Solaris 2.6 has a few missing function prototypes) AC_MSG_RESULT(no))
 	fi
 ])
+
+
 
 dnl check to see if nanosleep is available
 AC_DEFUN([FW_CHECK_NANOSLEEP],
@@ -1621,6 +1577,8 @@ AC_DEFUN([FW_CHECK_NANOSLEEP],
 	AC_SUBST(NANOSLEEPLIB)
 ])
 
+
+
 dnl check to see if clock_nanosleep is available
 AC_DEFUN([FW_CHECK_CLOCK_NANOSLEEP],
 [
@@ -1650,6 +1608,8 @@ AC_DEFUN([FW_CHECK_CLOCK_NANOSLEEP],
 
 	AC_SUBST(CLOCKNANOSLEEPLIB)
 ])
+
+
 
 dnl check to see which should be used of -lsocket, -lnsl and -lxnet
 AC_DEFUN([FW_CHECK_SOCKET_LIBS],
@@ -1706,38 +1666,7 @@ sendto(0,NULL,0,0,NULL,0);
 	AC_SUBST(SOCKETLIBS)
 ])
 
-AC_DEFUN([FW_CHECK_SCO_CFRONT_HACK],
-[
-	AC_MSG_CHECKING(whether SCO _CFRONT_3_0 hack is needed)
-	LINKOK=""
-	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif],exit(0);,LINKOK="yes")
-	if ( test -z "$LINKOK" )
-	then
-		OLDCPPFLAGS="$CPPFLAGS"
-		CPPFLAGS="-D_CFRONT_3_0 $CPPFLAGS"
-		AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
-		#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif],exit(0);,LINKOK="yes")
-		CPPFLAGS="$OLDCPPFLAGS"
-		if ( test -z "$LINKOK" )
-		then
-			AC_MSG_RESULT(no)
-		else
-			AC_DEFINE(_CFRONT_3_0, 1, Hack for gcc on SCO OSR6)
-			AC_MSG_RESULT(yes)
-		fi
-	else
-		AC_MSG_RESULT(no)
-	fi
-])
+
 
 AC_DEFUN([FW_CHECK_CRYPT_R],
 [
@@ -1800,6 +1729,43 @@ AC_SUBST(CRYPTLIB)
 
 
 
+dnl checks to see whether -D_CFRONT_3_0 is required and
+dnl defines _CFRONT_3_0 if it is
+AC_DEFUN([FW_CHECK_SCO_CFRONT_HACK],
+[
+	AC_MSG_CHECKING(whether SCO _CFRONT_3_0 hack is needed)
+	LINKOK=""
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],exit(0);,LINKOK="yes")
+	if ( test -z "$LINKOK" )
+	then
+		OLDCPPFLAGS="$CPPFLAGS"
+		CPPFLAGS="-D_CFRONT_3_0 $CPPFLAGS"
+		AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+		#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],exit(0);,LINKOK="yes")
+		CPPFLAGS="$OLDCPPFLAGS"
+		if ( test -z "$LINKOK" )
+		then
+			AC_MSG_RESULT(no)
+		else
+			AC_DEFINE(_CFRONT_3_0, 1, Hack for gcc on SCO OSR6)
+			AC_MSG_RESULT(yes)
+		fi
+	else
+		AC_MSG_RESULT(no)
+	fi
+])
+
+
+
 dnl checks for apache module api
 AC_DEFUN([FW_CHECK_APACHE],
 [
@@ -1823,6 +1789,7 @@ fi
 
 AC_SUBST(APACHEINCLUDES)
 ])
+
 
 
 dnl checks for apache2's apr-1-mt-config, apr-1-config or apr-config
@@ -1864,6 +1831,7 @@ fi
 ])
 
 
+
 dnl checks for apache2's apr-1-mt-config, apr-1-config or apr-config
 AC_DEFUN([FW_CHECK_APUCONFIG],
 [
@@ -1901,6 +1869,7 @@ then
 	APACHEINCLUDES="$APACHEINCLUDES `$APU_CONFIG --includes | sed -e 's|-mt ||'`"
 fi
 ])
+
 
 
 dnl checks for apache's apxs2
