@@ -692,6 +692,9 @@ WNOFORMAT
 WALL
 WERROR
 PIPE
+JNISUFFIX
+MODULESUFFIX
+SOSUFFIX
 CRTLIB
 GNULIB
 BELIB
@@ -16307,20 +16310,28 @@ $as_echo_n "checking for microsoft platform... " >&6; }
 CYGWIN=""
 MINGW32=""
 UWIN=""
+MICROSOFT=""
+EXE=""
 case $host_os in
 	*cygwin* )
 		CYGWIN="yes"
+		MICROSOFT="yes"
+		EXE=".exe"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: cygwin" >&5
 $as_echo "cygwin" >&6; }
 		;;
 	*mingw32* )
 		MINGW32="yes"
-		CPPFLAGS="$CPPFLAGS -DLIBRUDIMENTS_EXPORTS"
+		MICROSOFT="yes"
+		EXE=".exe"
+		cross_compiling="yes"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: mingw32" >&5
 $as_echo "mingw32" >&6; }
 		;;
 	*uwin* )
 		UWIN="yes"
+		MICROSOFT="yes"
+		EXE=".exe"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: uwin" >&5
 $as_echo "uwin" >&6; }
 		;;
@@ -16329,25 +16340,7 @@ $as_echo "uwin" >&6; }
 $as_echo "no" >&6; }
 		;;
 esac
-EXE=""
 
-MICROSOFT=""
-if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
-then
-	MICROSOFT="yes"
-	EXE=".exe"
-fi
-
-
-
-if ( test "$MINGW32" )
-then
-
-$as_echo "#define MINGW32 1" >>confdefs.h
-
-
-		cross_compiling="yes"
-fi
 
 
 if ( test -n "$MINGW32" )
@@ -16356,6 +16349,7 @@ then
 	INCLUDE_SERIALPORTPROFILE="0"
 	INCLUDE_MODEMCLIENT="0"
 	INCLUDE_MODEMSERVER="0"
+	CPPFLAGS="$CPPFLAGS -DLIBRUDIMENTS_EXPORTS"
 fi
 
 
@@ -16590,9 +16584,11 @@ esac
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dynamic library extension" >&5
-$as_echo_n "checking for dynamic library extension... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dynamic library extensions" >&5
+$as_echo_n "checking for dynamic library extensions... " >&6; }
 SOSUFFIX="so"
+MODULESUFFIX="so"
+JNISUFFIX="so"
 if ( test -n "$CYGWIN" )
 then
 	SOSUFFIX="dll.a"
@@ -16600,9 +16596,14 @@ fi
 if ( test -n "$DARWIN" )
 then
 	SOSUFFIX="dylib"
+	MODULESUFFIX="bundle"
+	JNISUFFIX="jnilib"
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOSUFFIX" >&5
-$as_echo "$SOSUFFIX" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: so=>$SOSUFFIX module=>$MODULESUFFIX jni=>$JNISUFFIX" >&5
+$as_echo "so=>$SOSUFFIX module=>$MODULESUFFIX jni=>$JNISUFFIX" >&6; }
+
+
+
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library directory" >&5

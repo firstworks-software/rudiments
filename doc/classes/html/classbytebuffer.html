@@ -710,7 +710,8 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
       </table>
 </div><div class="memdoc">
 <p>Appends "argp" to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
-<p>Note that argp is a pointer to a va_list, not just a va_list. </p>
+<p>Note that argp is a pointer to a va_list, not just a va_list.</p>
+<p>Returns NULL if an error occurred. </p>
 
 </div>
 </div>
@@ -739,7 +740,8 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Appends "..." to the byte buffer using "format" which should comply with standard printf formatting rules. </p>
+<p>Appends "..." to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
+<p>Returns NULL if an error occurred. </p>
 
 </div>
 </div>
@@ -769,7 +771,9 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
       </table>
 </div><div class="memdoc">
 <p>Appends "argp" to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
-<p>Note that argp is a pointer to a va_list, not just a va_list. </p>
+<p>Note that argp is a pointer to a va_list, not just a va_list.</p>
+<p>Returns NULL if an error occurred.</p>
+<p>NOTE: This method is unsupported on platforms where <a class="el" href="classwcharstring.html#a1878616299bc7feb3f518e927a8228dd">wcharstring::supportsPrintf()</a> returns false. On those platforms this method returns -1 and sets ENOSYS. </p>
 
 </div>
 </div>
@@ -798,7 +802,9 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Appends "..." to the byte buffer using "format" which should comply with standard wprintf formatting rules. </p>
+<p>Appends "..." to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
+<p>Returns NULL if an error occurred.</p>
+<p>NOTE: This method is unsupported on platforms where <a class="el" href="classwcharstring.html#a1878616299bc7feb3f518e927a8228dd">wcharstring::supportsPrintf()</a> returns false. On those platforms this method returns -1 and sets ENOSYS. </p>
 
 </div>
 </div>
@@ -1634,7 +1640,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div><div class="memdoc">
 <p>Writes "argp" to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
 <p>Note that argp is a pointer to a va_list, not just a va_list.</p>
-<p>Returns the number of bytes written. </p>
+<p>Returns the number of bytes written or -1 if an error occurred. </p>
 
 </div>
 </div>
@@ -1664,7 +1670,7 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
       </table>
 </div><div class="memdoc">
 <p>Writes "..." to the byte buffer using "format" which should comply with standard printf formatting rules.</p>
-<p>Returns the number of bytes written. </p>
+<p>Returns the number of bytes written or -1 if an error occurred. </p>
 
 </div>
 </div>
@@ -1695,7 +1701,8 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
 </div><div class="memdoc">
 <p>Writes "argp" to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
 <p>Note that argp is a pointer to a va_list, not just a va_list.</p>
-<p>Returns the number of bytes written. </p>
+<p>Returns the number of bytes written.</p>
+<p>NOTE: This method is unsupported on platforms where <a class="el" href="classwcharstring.html#a1878616299bc7feb3f518e927a8228dd">wcharstring::supportsPrintf()</a> returns false. On those platforms this method returns -1 and sets ENOSYS. </p>
 
 </div>
 </div>
@@ -1725,14 +1732,15 @@ virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> 
       </table>
 </div><div class="memdoc">
 <p>Writes "..." to the byte buffer using "format" which should comply with standard wprintf formatting rules.</p>
-<p>Returns the number of bytes written. </p>
+<p>Returns the number of bytes written or -1 if an error occurred.</p>
+<p>NOTE: This method is unsupported on platforms where <a class="el" href="classwcharstring.html#a1878616299bc7feb3f518e927a8228dd">wcharstring::supportsPrintf()</a> returns false. On those platforms this method returns -1 and sets ENOSYS. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 22 2021 18:17:31 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Nov 11 2021 18:54:22 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

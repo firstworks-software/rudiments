@@ -1,3 +1,15 @@
+dnl Some environments define NULL as ((void *)0) but the compiler can't handle
+dnl that when the NULL is used in a conditional.  On those platforms we'll
+dnl set a flag to redefine NULL as 0.
+AC_DEFUN([FW_CHECK_NULL_REDEFINE],
+[
+AC_MSG_CHECKING(whether NULL needs to be redefined)
+AC_TRY_COMPILE([#include <stddef.h>
+const char *f() { return (1)?"":NULL; }],[f();],AC_MSG_RESULT(no),AC_DEFINE(RUDIMENTS_REDEFINE_NULL,1,Redfine NULL as 0) AC_MSG_RESULT(yes))
+])
+
+
+
 dnl checks for the pthreads library
 dnl requires:  PTHREADPATH, RPATHFLAG, cross_compiling
 dnl sets the substitution variable PTHREADLIB

@@ -171,9 +171,9 @@ $(function() {
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classavltree.html#aa1c64568c005751f24cbfbf81a102138">  124</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classavltree.html#a4f99f3fea026bee51a33d1ef8f2c95b3">avltree&lt;valuetype&gt;::remove</a>(<a class="code" href="classavltreenode.html">avltreenode&lt;valuetype&gt;</a> *node) {</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <a class="code" href="classavltreenode.html">avltreenode&lt;valuetype&gt;</a> *detachednode=detach(node);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordflow">if</span> (collection::managevalues) {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordflow">if</span> (this-&gt;collection::managevalues) {</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                node_delete_value(detachednode-&gt;<a class="code" href="classavltreenode.html#a2efb09aa1cdf158b6f1693c5c689b29f">getValue</a>());</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (collection::managevalues) {</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (this-&gt;collection::managevalues) {</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                node_delete_array_value(detachednode-&gt;<a class="code" href="classavltreenode.html#a2efb09aa1cdf158b6f1693c5c689b29f">getValue</a>());</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        }</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keyword">delete</span> detachednode;</div>
@@ -324,9 +324,9 @@ $(function() {
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                <span class="comment">// on the tree itself.</span></div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                i++;</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="preprocessor">                #endif</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                <span class="keywordflow">if</span> (collection::managevalues) {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                <span class="keywordflow">if</span> (this-&gt;collection::managevalues) {</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                        node_delete_value(node-&gt;<a class="code" href="classavltreenode.html#a2efb09aa1cdf158b6f1693c5c689b29f">getValue</a>());</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (collection::managevalues) {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (this-&gt;collection::managevalues) {</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                        node_delete_array_value(node-&gt;<a class="code" href="classavltreenode.html#a2efb09aa1cdf158b6f1693c5c689b29f">getValue</a>());</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                }</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                <span class="keyword">delete</span> node;</div>
@@ -1259,7 +1259,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 22 2021 18:17:31 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Nov 11 2021 18:54:21 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

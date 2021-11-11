@@ -544,17 +544,6 @@ fi
 ])
 
 
-dnl Some environments define NULL as ((void *)0) but the compiler can't handle
-dnl that when the NULL is used in a conditional.  On those platforms we'll
-dnl set a flag to redefine NULL as 0.
-AC_DEFUN([FW_CHECK_NULL_REDEFINE],
-[
-AC_MSG_CHECKING(whether NULL needs to be redefined)
-AC_TRY_COMPILE([#include <stddef.h>
-const char *f() { return (1)?"":NULL; }],[f();],AC_MSG_RESULT(no),AC_DEFINE(RUDIMENTS_REDEFINE_NULL,1,Redfine NULL as 0) AC_MSG_RESULT(yes))
-])
-
-
 dnl Some environments throw warnings if stdlib is used because it redefines
 dnl built-in functions abort() exit().  On those platforms we'll include the
 dnl -fno-builtin flag in CPPFLAGS
@@ -587,11 +576,14 @@ fi
 ])
 
 
-dnl Determines what extension shared object files have and sets SOSUFFIX to it
+dnl Determines what extension shared object files have
+dnl sets SOSUFFIX, MODULESUFFIX, and JNISUFFIX accordingly
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
-AC_MSG_CHECKING(for dynamic library extension)
+AC_MSG_CHECKING(for dynamic library extensions)
 SOSUFFIX="so"
+MODULESUFFIX="so"
+JNISUFFIX="so"
 if ( test -n "$CYGWIN" )
 then
 	SOSUFFIX="dll.a"
@@ -599,8 +591,13 @@ fi
 if ( test -n "$DARWIN" )
 then
 	SOSUFFIX="dylib"
+	MODULESUFFIX="bundle"
+	JNISUFFIX="jnilib"
 fi
-AC_MSG_RESULT($SOSUFFIX)
+AC_MSG_RESULT(so=>$SOSUFFIX module=>$MODULESUFFIX jni=>$JNISUFFIX)
+AC_SUBST(SOSUFFIX)
+AC_SUBST(MODULESUFFIX)
+AC_SUBST(JNISUFFIX)
 ])
 
 
@@ -658,42 +655,33 @@ AC_MSG_CHECKING(for microsoft platform)
 CYGWIN=""
 MINGW32=""
 UWIN=""
+MICROSOFT=""
+EXE=""
 case $host_os in
 	*cygwin* )
 		CYGWIN="yes"
+		MICROSOFT="yes"
+		EXE=".exe"
 		AC_MSG_RESULT(cygwin)
 		;;
 	*mingw32* )
 		MINGW32="yes"
-		CPPFLAGS="$CPPFLAGS -DLIBRUDIMENTS_EXPORTS"
+		MICROSOFT="yes"
+		EXE=".exe"
+		cross_compiling="yes"
 		AC_MSG_RESULT(mingw32)
 		;;
 	*uwin* )
 		UWIN="yes"
+		MICROSOFT="yes"
+		EXE=".exe"
 		AC_MSG_RESULT(uwin)
 		;;
 	* )
 		AC_MSG_RESULT(no)
 		;;
 esac
-EXE=""
-
-MICROSOFT=""
-if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
-then
-	MICROSOFT="yes"
-	EXE=".exe"
-fi
-
 AC_SUBST(EXE)
-
-if ( test "$MINGW32" )
-then
-	AC_DEFINE(MINGW32,1,Mingw32 environment)
-
-	dnl if we're building mingw32, we're cross-compiling by definition
-	cross_compiling="yes"
-fi
 ])
 
 
