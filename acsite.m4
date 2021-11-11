@@ -1,3 +1,4 @@
+dnl displays a message indicating that the include flags for $1 are $2
 AC_DEFUN([FW_INCLUDES],
 [
 if ( test -n "$2" )
@@ -6,6 +7,8 @@ then
 fi
 ])
 
+
+dnl displays a message indicating that the lib flags for $1 are $2
 AC_DEFUN([FW_LIBS],
 [
 if ( test -n "$2" )
@@ -14,6 +17,8 @@ then
 fi
 ])
 
+
+dnl if $1 is a readable file (full path name) then expression $2 is evaluated
 AC_DEFUN([FW_CHECK_FILE],
 [
 if ( test -r "$1" )
@@ -22,6 +27,15 @@ then
 fi
 ])
 
+
+dnl attmepts to compile and link a program
+dnl	$1 - includes and other statements to go before main()
+dnl	$2 - body of main()
+dnl	$3 - CPPFLAGS
+dnl	$4 - LIBS
+dnl	$5 - LD_LIBRARY_PATH
+dnl	$6 - statement to evaluate if link succeeds
+dnl	$7 - statement to evaluate if link fails
 AC_DEFUN([FW_TRY_LINK],
 [
 SAVECPPFLAGS="$CPPFLAGS"
@@ -38,6 +52,13 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 ])
 
+
+dnl attmepts to compile and link a program
+dnl	$1 - includes and other statements to go before main()
+dnl	$2 - body of main()
+dnl	$3 - CPPFLAGS
+dnl	$4 - statement to evaluate if link succeeds
+dnl	$5 - statement to evaluate if link fails
 AC_DEFUN([FW_TRY_COMPILE],
 [
 SAVECPPFLAGS="$CPPFLAGS"
@@ -47,6 +68,11 @@ CPPFLAGS="$SAVECPPFLAGS"
 ])
 
 
+dnl checks for a library file
+dnl	$1 - library file to check for (full path name)
+dnl	$2 - statement to evaluate if library file is found
+dnl	$3 - alternative library file to check for
+dnl	$2 - statement to evaluate if alternative library file is found
 AC_DEFUN([FW_CHECK_LIB],
 [
 FOUNDLIB=""
@@ -67,6 +93,13 @@ fi
 ])
 
 
+dnl checks for a header and library pair
+dnl	$1 - header file to check for (full path name)
+dnl	$2 - statement to evaluate if header and library are found
+dnl	$3 - library file to check for (full path name)
+dnl	$4 - statement to evaluate if header and library are found
+dnl	$5 - alternative library file to check for (full path name)
+dnl	$6 - statement to evaluate if header and alternative library are found
 AC_DEFUN([FW_CHECK_HEADER_LIB],
 [
 FOUNDHEADER=""
@@ -94,6 +127,40 @@ fi
 ])
 
 
+dnl checks the specified search path and also various build-in paths for a
+dnl header and library pair
+dnl	$1 - search path
+dnl	$2 - generic name of api or package, will be appended to various
+dnl		partial paths in an attempt to search more exhaustively
+dnl		eg. ssl, mysql, openssl, etc.
+dnl	$3 - header file to check for (relative path name)
+dnl		eg. api.h  not  /usr/include/api.h
+dnl	$4 - library basename (excluding "lib" and suffix) to check for
+dnl		eg. api  not  lbiapi, libapi.so, /usr/lib/libapi.so, etc.
+dnl	$5 - flag to set $10 to if a static version of the library was found
+dnl	$6 - ??? rpath related, but unused
+dnl	$7 - variable that will be set to the include flags that were found
+dnl		eg. -I/usr/local/include
+dnl	$8 - variable that will be set to the lib flags that were found
+dnl		eg. -L/usr/local/lib -lsomelib
+dnl	$9 - variable that will be set to the path that the library was found in
+dnl		eg. /usr/local/lib
+dnl	$10 - variable that will be set to the value passed in $5 if a static
+dnl		version of the library was found
+dnl	$11 - variable that will be set to the base directory that the headers
+dnl		and libs were found in
+dnl		eg. /usr/local
+dnl	$12 - whether or not to use the full library path when building the lib
+dnl		flags - can be yes or no
+dnl		eg. if yes, then $8 set to: -L/usr/local/lib -lsomelib
+dnl		    if no, then $8 set to:  -Wl,/usr/local/lib/libsomelib.so
+dnl
+dnl If LIBDIR and/or LIBARCHDIR are set, then they are appended, as
+dnl appropriate, to the various paths when searching for libraries
+dnl	eg. if LIBDIR=lib and LIBARCHDIR=lib32 then /opt/sfw/lib and
+dnl		/usr/freeware/lib32 are searched
+dnl If either is not set, then "lib" is appended
+dnl	eg. /opt/sfw/lib and /usr/freeware/lib are searched
 AC_DEFUN([FW_CHECK_HEADERS_AND_LIBS],
 [
 
@@ -119,58 +186,49 @@ then
 	eval "$11=\"\""
 fi
 
-
 for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
 
-		if ( test "$path" = "/" )
-		then
-			dnl look in /usr/include and /$LIBDIR
-			if ( test "$USEFULLLIBPATH" = "yes" )
-			then
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-Wl,/$LIBDIR/lib$LIBNAME.$SOSUFFIX\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-l$LIBNAME\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-			fi
-
-			dnl set path to "" so we won't get //'s from here on
-			path=""
-		fi
-
+		TEMPLIBDIR=$LIBDIR
 		if ( test "$path" = "/usr/freeware" )
 		then
-			dnl look in /usr/freeware/include and
-			dnl /usr/freeware/$FREEWARELIBDIR
+			TEMPLIBDIR=$LIBARCHDIR
+		fi
+		if ( test -z "$TEMPLIBDIR" )
+		then
+			TEMPLIBDIR=lib
+		fi
+
+		if ( test "$path" = "/" )
+		then
 			if ( test "$USEFULLLIBPATH" = "yes" )
 			then
-				FW_CHECK_HEADER_LIB([$path/include/$HEADER],[],[$path/$FREEWARELIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$path/$FREEWARELIBDIR\"; LIBSTRING=\"-Wl,$path/$FREEWARELIBDIR/lib$LIBNAME.$SOSUFFIX\"],[$path/$FREEWARELIBDIR/lib$LIBNAME.a],[LIBSTRING=\"$path/$FREEWARELIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\"],[/$TEMPLIBDIR/lib$LIBNAME.a],[LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
 			else
-				FW_CHECK_HEADER_LIB([$path/include/$HEADER],[],[$path/$FREEWARELIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$path/$FREEWARELIBDIR\"; LIBSTRING=\"-l$LIBNAME\"],[$path/$FREEWARELIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\"],[/$TEMPLIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
 			fi
-
 			dnl set path to "" so we won't get //'s from here on
 			path=""
 		fi
-
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
+		if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
-
 			if ( test -n "$LIBSTRING" )
 			then
 				break
 			fi
-
 			for includepath in "$path/include" "$path/include/$NAME"
 			do
-
 				if ( test -n "$LIBSTRING" )
 				then
 					break
 				fi
-
-				dnl look in $path/$LIBDIR
 				if ( test "$USEFULLLIBPATH" = "yes" )
 				then
 					FW_CHECK_HEADER_LIB([$includepath/$HEADER],[INCLUDESTRING=\"-I$includepath\"],[$libpath/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\"],[$libpath/lib$LIBNAME.a],[LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
@@ -179,7 +237,6 @@ do
 				fi
 			done
 		done
-
 		if ( test -n "$LIBSTRING" )
 		then
 			HEADERSANDLIBSPATH="$path"
@@ -204,6 +261,7 @@ fi
 ])
 
 
+dnl removes -Wl,-Bsymbolic-functions from $2 and sets variable $1 to the result
 AC_DEFUN([FW_STRIP_SYMBOLIC_FUNCTIONS],
 [
 dnl On some platforms (Ubuntu), the -Wl,-Bsymbolic-functions and flags end up
@@ -214,6 +272,7 @@ eval "$1=\"$STRIPPED\""
 ])
 
 
+dnl removes -Wl,-z,relro from $2 and sets variable $1 to the result
 AC_DEFUN([FW_STRIP_RELRO],
 [
 dnl On some platforms (Ubuntu), superfluous -Wl,-z,relro flags end up coming
@@ -223,21 +282,22 @@ eval "$1=\"$STRIPPED\""
 ])
 
 
-
-dnl override libtool if so desired
-dnl a bit crude, but AC_PROG_LIBTOOL sets vital
-dnl environment variables, it seems
+dnl if the variable USE_SYSTEM_LIBTOOL = "yes" then the variable LIBTOOL is
+dnl overridden and set to "libtool" rather than its current value
+dnl (likely "$(top_builddir)/libtool" so that the system-supplied libtool is
+dnl used rather than the local version
 AC_DEFUN([FW_CHECK_USE_SYSTEM_LIBTOOL],
 [
 if ( test "$USE_SYSTEM_LIBTOOL" = "yes" )
 then
-  LIBTOOL="libtool"
+	LIBTOOL="libtool"
 fi
 ])
 
 
-
-dnl checks to see if -pipe option to gcc works or not
+dnl checks to see if -pipe compiler option works or not
+dnl if it does, then it sets the variable PIPE="-pipe"
+dnl if it doesnot , then it sets the variable PIPE=""
 AC_DEFUN([FW_CHECK_PIPE],
 [
 AC_MSG_CHECKING(for -pipe option)
@@ -252,8 +312,9 @@ AC_SUBST(PIPE)
 ])
 
 
-
-dnl checks to see if -Werror option works or not
+dnl checks to see if -Werror compiler option works or not
+dnl if it does, then WERROR="-Werror" is set
+dnl if it does not, then WERROR="" is set
 AC_DEFUN([FW_CHECK_WERROR],
 [
 WERROR=""
@@ -315,8 +376,9 @@ AC_SUBST(WERROR)
 ])
 
 
-
-dnl enable -Werror
+dnl enables -Werror (if supported) in CPPFLAGS/CXXFLAGS if it wasn't previously
+dnl enabled and sets HADWERROR to yes if it was previously enabled or to no if
+dnl it wasn't
 AC_DEFUN([FW_ENABLE_WERROR],
 [
 HADWERROR="yes"
@@ -329,8 +391,9 @@ fi
 ])
 
 
-
-dnl restore -Werror
+dnl evaluates HADWERROR and removes instances of -Werror from CPPFLAGS and
+dnl CXXFLAGS if it wasn't previously enabled (see FW_ENABLE_WERROR)
+dnl FIXME: also removes Wall, though that isn't enabled by FW_ENABLE_WERROR
 AC_DEFUN([FW_RESTORE_WERROR],
 [
 if ( test "$HADWERROR" = "no" )
@@ -341,8 +404,14 @@ fi
 ])
 
 
-
-dnl checks to see if -Wall option works or not
+dnl checks to see if -Wall compiler option works or not
+dnl if it does, then WALL="-Wall" is set
+dnl if it does not, then WALL="" is set
+dnl
+dnl also checks to see if -Wall includes -Wunused-variables and sets WALL="" if
+dnl it does
+dnl
+dnl FIXME: that second bit should be split out into its own macro
 AC_DEFUN([FW_CHECK_WALL],
 [
 WALL=""
@@ -373,8 +442,10 @@ AC_SUBST(WALL)
 ])
 
 
-
-dnl checks to see if -Wno-format option is needed
+dnl checks to see if -Wno-format option is necessary to compile class methods
+dnl named printf()
+dnl if it is, then WNOFORMAT="-Wno-format" is set
+dnl if it is not, then WNOFORMAT="" is set
 AC_DEFUN([FW_CHECK_WNOFORMAT],
 [
 
@@ -401,8 +472,9 @@ AC_SUBST(WNOFORMAT)
 ])
 
 
-
-dnl checks to see if -Wno-overloaded-virtual option is needed
+dnl checks to see if -Wall includes -Woverloaded-virtual
+dnl if it does, then WNOOVERLOADEDVIRTUAL="-Wno-overloaded-virtual" is set
+dnl if it does not, then WNOOVERLOADEDVIRTUAL="" is set
 AC_DEFUN([FW_CHECK_WNOOVERLOADEDVIRTUAL],
 [
 
@@ -422,8 +494,10 @@ AC_SUBST(WNOOVERLOADEDVIRTUAL)
 ])
 
 
-
 dnl checks to see if -Wno-deprecated-declarations is permitted
+dnl if it is, then WNODEPRECATEDDECLARATIONS="-Wno-deprecated-declarations"
+dnl is set
+dnl if it is not, then WNODEPRECATEDDECLARATIONS="" is set
 AC_DEFUN([FW_CHECK_WNODEPRECATEDDECLARATIONS],
 [
 
@@ -441,19 +515,18 @@ AC_SUBST(WNODEPRECATEDDECLARATIONS)
 ])
 
 
-
-dnl checks to see if c++ allows undefined functions
+dnl checks to see if the C++ compiler allows undefined functions
+dnl if it does, then WERROR is added to CPPFLAGS then sets WERROR to "" so it
+dnl won't be put back in again later
 AC_DEFUN([FW_CHECK_UNDEFINED_FUNCTIONS],
 [
 AC_MSG_CHECKING(for whether undefined functions are allowed)
-dnl  if undefined functions are allowed, add WERROR to the CPPFLAGS, but then
-dnl  define WERROR to "" so it won't be put back in again later
 AC_TRY_COMPILE([],[printf("hello");],CPPFLAGS="$WERROR $CPPFLAGS"; WERROR=""; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 ])
 
 
-
 dnl checks to see if -g3 option works or not
+dnl adds it to CXXFLAGS if it does
 AC_DEFUN([FW_CHECK_DEBUG],
 [
 if ( test "$DEBUG" = "yes" )
@@ -471,22 +544,22 @@ fi
 ])
 
 
-AC_DEFUN([FW_CHECK_NULL_REDEFINE],
-[
 dnl Some environments define NULL as ((void *)0) but the compiler can't handle
 dnl that when the NULL is used in a conditional.  On those platforms we'll
-dnl redefine NULL as 0.
+dnl set a flag to redefine NULL as 0.
+AC_DEFUN([FW_CHECK_NULL_REDEFINE],
+[
 AC_MSG_CHECKING(whether NULL needs to be redefined)
 AC_TRY_COMPILE([#include <stddef.h>
 const char *f() { return (1)?"":NULL; }],[f();],AC_MSG_RESULT(no),AC_DEFINE(RUDIMENTS_REDEFINE_NULL,1,Redfine NULL as 0) AC_MSG_RESULT(yes))
 ])
 
 
-AC_DEFUN([FW_CHECK_F_NO_BUILTIN],
-[
 dnl Some environments throw warnings if stdlib is used because it redefines
 dnl built-in functions abort() exit().  On those platforms we'll include the
-dnl -fno-builtin flag.
+dnl -fno-builtin flag in CPPFLAGS
+AC_DEFUN([FW_CHECK_F_NO_BUILTIN],
+[
 AC_MSG_CHECKING(whether -fno-builtin needs to be used)
 
 STDLIB_TEST="no"
@@ -514,7 +587,7 @@ fi
 ])
 
 
-dnl Determines what extension shared object files have
+dnl Determines what extension shared object files have and sets SOSUFFIX to it
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
 AC_MSG_CHECKING(for dynamic library extension)
@@ -530,24 +603,28 @@ fi
 AC_MSG_RESULT($SOSUFFIX)
 ])
 
+
+dnl determines the directory that libraries are usually found in (eg. lib or
+dnl lib64) and the arch-spcific directory (eg. lib or lib32) for odd multiarch
+dnl systems (eg. Irix)
 AC_DEFUN([FW_CHECK_LIBDIR],
 [
 AC_MSG_CHECKING(for library directory)
 LIBDIR="lib"
-FREEWARELIBDIR="lib"
+LIBARCHDIR="lib"
 if ( test -z "$MULTIARCHDIR" )
 then
 	case $host_cpu in
 		x86_64 )
 			LIBDIR="lib64"
-			FREEWARELIBDIR="lib64"
+			LIBARCHDIR="lib64"
 			;;
 		mips64 )
 			LIBDIR="lib64"
-			FREEWARELIBDIR="lib64"
+			LIBARCHDIR="lib64"
 			;;
 		mips )
-			FREEWARELIBDIR="lib32"
+			LIBARCHDIR="lib32"
 			;;
 	esac
 fi
@@ -559,7 +636,7 @@ AC_MSG_RESULT($LIBDIR)
 ])
 
 
-dnl Checks for multiarch platform
+dnl checks for multiarch platform and sets MULTIARCHDIR to the multiarch name
 AC_DEFUN([FW_CHECK_MULTIARCH],
 [
 AC_MSG_CHECKING(for multiarch platform)
@@ -573,9 +650,8 @@ fi
 ])
 
 
-dnl Checks for microsoft platform.
-dnl sets the substitution variables MINGW32, CYGWIN and UWIN as appropriate
-dnl sets the enviroment variable MICROSOFT
+dnl checks for microsoft platform.
+dnl sets MINGW32, CYGWIN, UWIN, and MICROSOFT to "yes" as appropriate
 AC_DEFUN([FW_CHECK_MICROSOFT],
 [
 AC_MSG_CHECKING(for microsoft platform)
@@ -621,6 +697,10 @@ fi
 ])
 
 
+dnl checks for Mac OS X platform
+dnl sets DARWIN to "yes" as appropriate
+dnl sets SHELL="...path to bash shell..." if the bash shell is available
+dnl sets a flag to enable some gcc 2.95.2 hacks if we're using it
 AC_DEFUN([FW_CHECK_OSX],
 [
 DARWIN=""
@@ -659,7 +739,9 @@ esac
 ])
 
 
-dnl checks to see if -Wno-long-double option to gcc works or not
+dnl checks to see if the compiler allows the -Wno-long-double option
+dnl if it does, then WNOLONGDOUBLE="-Wno-long-double" is set
+dnl if it does not, then WNOLONGDOUBLE="" is set
 AC_DEFUN([FW_CHECK_WNOLONGDOUBLE],
 [
 AC_MSG_CHECKING(for -Wno-long-double option)
@@ -673,7 +755,8 @@ fi
 AC_SUBST(WNOLONGDOUBLE)
 ])
 
-dnl Checks for minix and adds some macros if it is
+
+dnl checks for minix platform and adds some defines to CPPFLAGS if it is
 AC_DEFUN([FW_CHECK_MINIX],
 [
 AC_MSG_CHECKING(for minix)
@@ -689,7 +772,10 @@ case $host_os in
 esac
 ])
 
-dnl Checks for haiku and adds some macros if it is
+
+dnl checks for haiku platform
+dnl if it is, then prefix="/boot/common" is set unless it was already set,
+dnl BELIB="-lbe", and GNULIB="-lgnu" are also set
 AC_DEFUN([FW_CHECK_HAIKU],
 [
 AC_MSG_CHECKING(for haiku)
@@ -713,7 +799,10 @@ AC_SUBST(BELIB)
 AC_SUBST(GNULIB)
 ])
 
-dnl Checks for syllable and adds some macros if it is
+
+dnl checks for syllable platform
+dnl if it is, then prefix="/resources/firstworks" is set unless it was already
+dnl set, RUDIMENTS_DISABLE_FIONBIO=1 is defined, and _SYLLABLE=1 is defined
 AC_DEFUN([FW_CHECK_SYLLABLE],
 [
 AC_MSG_CHECKING(for syllable)
@@ -733,49 +822,63 @@ case $host_os in
 esac
 ])
 
+
+dnl checks for SCO OpenServer platform
+dnl if it is then:
+dnl 	sets RUDIMENTS_HAVE_SCO="yes"
+dnl	sets RUDIMENTS_HAVE_SCO_OSR5="yes"
+dnl	sets ENABLE_RUDIMENTS_THREADS="no"
+dnl	defines RUDIMENTS_HAVE_SCO_AVENRUN=1
+dnl if it's 6.0.0 then:
+dnl 	adds -D__STDC__=0 to CPPFLAGS
+dnl 	sets CRTLIB="-lcrt"
+dnl if it's < 6.0.0 then:
+dnl	defines RUDIMENTS_HAVE_BAD_SCO_MSGHDR=1
+dnl if it's 5.0.0 then:
+dnl 	adds -D_SVID3 to CPPFLAGS
 AC_DEFUN([FW_CHECK_SCO_OSR],
 [
 RUDIMENTS_HAVE_SCO=""
 RUDIMENTS_HAVE_SCO_OSR5=""
 CRTLIB=""
 
-AC_MSG_CHECKING(for SCO OSR < 6.0.0)
+AC_MSG_CHECKING(for SCO OSR)
 if ( test "`uname -s`" = "SCO_SV" )
 then
+	AC_MSG_RESULT(yes)
+
 	RUDIMENTS_HAVE_SCO="yes"
 	RUDIMENTS_HAVE_SCO_OSR5="yes"
 
-  	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
-	if ( test "`uname -v | tr -d '.'`" -lt "600" )
-	then
-  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
-
-	dnl OSR 5.0.0 needs -D_SVID3
-	if ( test "`uname -v`" = "2" )
-	then
-		CPPFLAGS="$CPPFLAGS -D_SVID3"
-	fi
-
 	dnl you can add FSU Pthreads to OSR5 but they cause odd problems
 	ENABLE_RUDIMENTS_THREADS="no"
-else
-	AC_MSG_RESULT(no)
-fi
 
-AC_MSG_CHECKING(for SCO OSR = 6.0.0)
-if ( test "`uname -s`" = "SCO_SV" )
-then
-	if ( test "`uname -v | tr -d '.'`" -eq "600" )
+  	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
+
+	AC_MSG_CHECKING(for SCO OSR < 6.0.0)
+	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
-		CPPFLAGS="$CPPFLAGS -D__STDC__=0"
-		CRTLIB="-lcrt"
 		AC_MSG_RESULT(yes)
+
+  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
+
+		dnl OSR 5.0.0 needs -D_SVID3
+		if ( test "`uname -v`" = "2" )
+		then
+			CPPFLAGS="$CPPFLAGS -D_SVID3"
+		fi
 	else
 		AC_MSG_RESULT(no)
+
+		AC_MSG_CHECKING(for SCO OSR = 6.0.0)
+		if ( test "`uname -v | tr -d '.'`" -eq "600" )
+		then
+			CPPFLAGS="$CPPFLAGS -D__STDC__=0"
+			CRTLIB="-lcrt"
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+		fi
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -784,7 +887,13 @@ fi
 AC_SUBST(CRTLIB)
 ])
 
-dnl Checks for irix and adds some macros if it is
+
+dnl checks for Irix platform
+dnl if it is then:
+dnl 	adds -D_XOPEN_SOURCE=500 to CPPFLAGS
+dnl if also using the native compiler then:
+dnl 	adds -D__SGICXX -diag_error 1035 -LANG:ansi-for-init-scope=on to
+dnl 	CPPFLAGS
 AC_DEFUN([FW_CHECK_IRIX],
 [
 AC_MSG_CHECKING(for irix)
@@ -806,7 +915,8 @@ esac
 
 
 dnl checks if the compiler supports the inline keyword
-dnl defines the macro INLINE
+dnl if it does, then INLINE="inline" is set
+dnl if it does not, then INLINE="" is set
 AC_DEFUN([FW_CHECK_INLINE],
 [
 AC_MSG_CHECKING(for inline)
@@ -832,6 +942,10 @@ else
 fi
 AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers dont support the inline keyword)
 ])
+
+
+
+
 
 
 dnl checks for the pthreads library
