@@ -3,3 +3,4 @@ usr/lib/*/librudiments.so
 usr/bin/rudiments-config
 usr/lib/*/pkgconfig/rudiments.pc
 usr/share/man/man1/rudiments-config.1
+usr/share/rudiments
