@@ -796,8 +796,6 @@ case $host_os in
 			# define __SGICXX and interpret #error as an error
 			CPPFLAGS="$CPPFLAGS -D__SGICXX -diag_error 1035 -LANG:ansi-for-init-scope=on"
 		fi
-		dnl FIXME: determine 32 or 64 bit platform
-		IRIXLIB=lib32
 		AC_MSG_RESULT(yes)
 		;;
 	* )

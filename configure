@@ -16578,7 +16578,6 @@ case $host_os in
 			# define __SGICXX and interpret #error as an error
 			CPPFLAGS="$CPPFLAGS -D__SGICXX -diag_error 1035 -LANG:ansi-for-init-scope=on"
 		fi
-				IRIXLIB=lib32
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 		;;
