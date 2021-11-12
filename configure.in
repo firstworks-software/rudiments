@@ -477,10 +477,25 @@ then
 fi
 
 FW_CHECK_OSX
+
+dnl for osx, detect gcc 2.95.2 and enable some hacks
+if ( test -n "$DARWIN" )
+then
+	AC_MSG_CHECKING(for gcc 2.95.2 on OS X)
+	CXX_VERSION=`$CXX --version`
+	if ( test "$CXX_VERSION" = "2.95.2" )
+	then
+		AC_MSG_RESULT(yes)
+		AC_DEFINE_UNQUOTED(DARWIN_GCC_2952_HACKS,1,Enable some hacks on Darwin with gcc 2.95.2)
+	else
+		AC_MSG_RESULT(no)
+	fi
+fi
+
 FW_CHECK_MINIX
 FW_CHECK_HAIKU
 FW_CHECK_SYLLABLE
-FW_CHECK_SCO_OSR
+FW_CHECK_SCO
 FW_CHECK_IRIX
 
 FW_CHECK_SO_EXT
@@ -490,7 +505,9 @@ FW_CHECK_PIPE
 FW_CHECK_DEBUG
 
 FW_CHECK_WERROR
+FW_CHECK_OVERRIDE_WERROR
 FW_CHECK_WALL
+FW_CHECK_WALL_WUNUSED
 
 FW_CHECK_WNOFORMAT
 FW_CHECK_WNOOVERLOADEDVIRTUAL
@@ -1284,7 +1301,7 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 dnl SCO CC doesn't support long long but throws a warning rather than an error
-if ( test "$RUDIMENTS_HAVE_SCO" = "yes" -a "$CXX" = "CC" )
+if ( test "$SCO" = "yes" -a "$CXX" = "CC" )
 then
 AC_MSG_CHECKING(for long long type)
 AC_MSG_RESULT(no)
@@ -1459,7 +1476,7 @@ AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_NAME,1,Some 
 
 dnl OSR5 has this, but it's broken
 AC_MSG_CHECKING(for tm_tzadj)
-if ( test -z "$RUDIMENTS_HAVE_SCO_OSR5" )
+if ( test -z "SCO_OSR5" )
 then
 	AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 else

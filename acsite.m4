@@ -1,3 +1,40 @@
+dnl checks to see if -Werror compiler option works or not
+dnl if it does, then WERROR="-Werror" is set
+dnl if it does not, then WERROR="" is set
+AC_DEFUN([FW_CHECK_OVERRIDE_WERROR],
+[
+dnl disable -Werror on Haiku, Minix, and Ultrix as their header files throw
+dnl warnings and on mingw32 as the regex.cpp file has unused variables that
+dnl are hard to fix
+if ( test -n "$WERROR" )
+then
+	AC_MSG_CHECKING(whether to override -Werror)
+	case $host_os in
+		*haiku* )
+			WERROR=""
+			AC_MSG_RESULT(yes)
+			;;
+		*minix* )
+			AC_MSG_RESULT(yes)
+			WERROR=""
+			;;
+		*ultrix* )
+			AC_MSG_RESULT(yes)
+			WERROR=""
+			;;
+		*mingw32* )
+			AC_MSG_RESULT(yes)
+			WERROR=""
+			;;
+		*)
+			AC_MSG_RESULT(no)
+			;;
+	esac
+fi
+])
+
+
+
 dnl Some environments define NULL as ((void *)0) but the compiler can't handle
 dnl that when the NULL is used in a conditional.  On those platforms we'll
 dnl set a flag to redefine NULL as 0.

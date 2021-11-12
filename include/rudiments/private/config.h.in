@@ -1653,6 +1653,27 @@
 /* Hack for gcc on SCO OSR6 */
 #undef _CFRONT_3_0
 
+/* Haiku OS */
+#undef _HAIKU
+
+/* Irix OS */
+#undef _IRIX
+
+/* Minix */
+#undef _MINIX
+
+/* SCO OS */
+#undef _SCO
+
+/* SCO OSR5 OS */
+#undef _SCO_OSR5
+
+/* SCO OSR6 OS */
+#undef _SCO_OSR6
+
+/* SCO UnixWare OS */
+#undef _SCO_UW
+
 /* Syllable OS */
 #undef _SYLLABLE
 

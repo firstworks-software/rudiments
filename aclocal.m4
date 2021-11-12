@@ -9053,6 +9053,47 @@ m4_ifndef([_LT_PROG_ECHO_BACKSLASH],	[AC_DEFUN([_LT_PROG_ECHO_BACKSLASH])])
 m4_ifndef([_LT_PROG_F77],		[AC_DEFUN([_LT_PROG_F77])])
 m4_ifndef([_LT_PROG_FC],		[AC_DEFUN([_LT_PROG_FC])])
 m4_ifndef([_LT_PROG_CXX],		[AC_DEFUN([_LT_PROG_CXX])])
+dnl sets UNAME to the uname of the machine
+AC_DEFUN([FW_CHECK_UNAME],
+[
+UNAME=`uname -s`
+AC_SUBST(UNAME)
+])
+
+
+dnl sets MAKE="make" if "make" is GNU make
+dnl sets MAKE="gmake" if "gmake" is GNU make
+dnl otherwise leaves MAKE unchanged
+AC_DEFUN([FW_GMAKE],
+[
+AC_MSG_CHECKING(for GNU Make)
+if ( test -n "make -v | grep 'GNU Make'" )
+then
+	MAKE="make"
+	AC_MSG_RESULT(yes)
+else
+	if ( test -n "gmake -v | grep 'GNU Make'" )
+	then
+		MAKE="gmake"
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+		AC_MSG_ERROR(GNU make not found.  SQL-Relay requires GNU make.)
+	fi
+fi
+])
+
+
+dnl displays a message indicating that the version of $1 is $2
+AC_DEFUN([FW_VERSION],
+[
+if ( test -n "$2" )
+then
+	echo "$1 version... $2"
+fi
+])
+
+
 dnl displays a message indicating that the include flags for $1 are $2
 AC_DEFUN([FW_INCLUDES],
 [
@@ -9076,10 +9117,26 @@ fi
 dnl if $1 is a readable file (full path name) then expression $2 is evaluated
 AC_DEFUN([FW_CHECK_FILE],
 [
+dnl echo "check: $1"
 if ( test -r "$1" )
 then
 	eval "$2"
 fi
+])
+
+
+dnl attmepts to compile, but not link, a program
+dnl	$1 - includes and other statements to go before main()
+dnl	$2 - body of main()
+dnl	$3 - CPPFLAGS
+dnl	$4 - statement to evaluate if link succeeds
+dnl	$5 - statement to evaluate if link fails
+AC_DEFUN([FW_TRY_COMPILE],
+[
+SAVECPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$3"
+AC_TRY_COMPILE([$1],[$2],[$4],[$5])
+CPPFLAGS="$SAVECPPFLAGS"
 ])
 
 
@@ -9105,21 +9162,6 @@ CPPFLAGS="$SAVECPPFLAGS"
 LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
-])
-
-
-dnl attmepts to compile and link a program
-dnl	$1 - includes and other statements to go before main()
-dnl	$2 - body of main()
-dnl	$3 - CPPFLAGS
-dnl	$4 - statement to evaluate if link succeeds
-dnl	$5 - statement to evaluate if link fails
-AC_DEFUN([FW_TRY_COMPILE],
-[
-SAVECPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$3"
-AC_TRY_COMPILE([$1],[$2],[$4],[$5])
-CPPFLAGS="$SAVECPPFLAGS"
 ])
 
 
@@ -9350,9 +9392,29 @@ fi
 ])
 
 
-dnl checks to see if -pipe compiler option works or not
+dnl checks if the linker supports -rpath
+dnl if it does, then it sets the enviroment variable RPATHFLAG="yes"
+dnl if it does not, then it sets the enviroment variable RPATHFLAG=""
+AC_DEFUN([FW_CHECK_LD_RPATH],
+[
+AC_MSG_CHECKING(whether ld -rpath works)
+ld -rpath /usr/lib 2> conftest
+INVALID="`grep 'no input files' conftest`"
+if ( test -n "$INVALID" )
+then
+	RPATHFLAG="yes"
+	AC_MSG_RESULT(yes)
+else
+	RPATHFLAG=""
+	AC_MSG_RESULT(no)
+fi
+rm conftest
+])
+
+
+dnl checks to see if the -pipe compiler option works or not
 dnl if it does, then it sets the variable PIPE="-pipe"
-dnl if it doesnot , then it sets the variable PIPE=""
+dnl if it does not , then it sets the variable PIPE=""
 AC_DEFUN([FW_CHECK_PIPE],
 [
 AC_MSG_CHECKING(for -pipe option)
@@ -9367,7 +9429,24 @@ AC_SUBST(PIPE)
 ])
 
 
-dnl checks to see if -Werror compiler option works or not
+dnl checks to see if -fPIC compiler option works or not
+dnl if it does, then it sets the variable FPIC="-fPIC"
+dnl if it does not , then it sets the variable FPIC=""
+AC_DEFUN([FW_CHECK_FPIC],
+[
+AC_MSG_CHECKING(for -fPIC option)
+FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-fPIC],[],[],[FPIC="-fPIC"],[FPIC=""])
+if ( test -n "$FPIC" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(FPIC)
+])
+
+
+dnl checks to see if the -Werror compiler option works or not
 dnl if it does, then WERROR="-Werror" is set
 dnl if it does not, then WERROR="" is set
 AC_DEFUN([FW_CHECK_WERROR],
@@ -9377,26 +9456,6 @@ if ( test "$ENABLE_WERROR" = "yes" )
 then
 	AC_MSG_CHECKING(for -Werror)
 	FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Werror],[],[],[WERROR="-Werror"])
-
-	dnl disable -Werror on Haiku, Minix, and Ultrix as their header files throw warnings
-	dnl disable -Werror on mingw32 as the regex.cpp file has unused variables that
-	dnl are hard to fix
-	case $host_os in
-		*haiku* )
-			WERROR=""
-			;;
-		*minix* )
-			WERROR=""
-			;;
-		*ultrix* )
-			WERROR=""
-			;;
-		*mingw32* )
-			WERROR=""
-			;;
-		*)
-			;;
-	esac
 
 	dnl if -Werror appers to be supported...
 	if ( test -n "$WERROR" )
@@ -9459,14 +9518,9 @@ fi
 ])
 
 
-dnl checks to see if -Wall compiler option works or not
+dnl checks to see if the -Wall compiler option works or not
 dnl if it does, then WALL="-Wall" is set
 dnl if it does not, then WALL="" is set
-dnl
-dnl also checks to see if -Wall includes -Wunused-variables and sets WALL="" if
-dnl it does
-dnl
-dnl FIXME: that second bit should be split out into its own macro
 AC_DEFUN([FW_CHECK_WALL],
 [
 WALL=""
@@ -9480,25 +9534,32 @@ then
 	else
 		AC_MSG_RESULT(no)
 	fi
-
-	if ( test -n "$WALL" )
-	then
-		dnl Sometimes -Wall includes -Wunused-variables and
-		dnl -Wunused-parameters which we don't care about.
-		dnl Disable it if it does.
-		OLDCPPFLAGS=$CPPFLAGS
-		CPPFLAGS="$WALL $WERROR $CPPFLAGS"
-		AC_MSG_CHECKING(whether -Wall includes -Wunused-*)
-		AC_TRY_COMPILE([void f(int a) { return; }],[f(1);],AC_MSG_RESULT(no),WALL=""; AC_MSG_RESULT(yes))	
-		CPPFLAGS=$OLDCPPFLAGS
-	fi
 fi
 AC_SUBST(WALL)
 ])
 
 
-dnl checks to see if -Wno-format option is necessary to compile class methods
-dnl named printf()
+dnl checks to see if -Wall includes -Wunused-variables
+dnl if it does, then WALL="" is set
+dnl if it does not, then WALL is unchanged
+AC_DEFUN([FW_CHECK_WALL_WUNUSED],
+[
+if ( test -n "$WALL" )
+then
+	dnl Sometimes -Wall includes -Wunused-variables and
+	dnl -Wunused-parameters which we don't care about.
+	dnl Disable it if it does.
+	OLDCPPFLAGS=$CPPFLAGS
+	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
+	AC_MSG_CHECKING(whether -Wall includes -Wunused-*)
+	AC_TRY_COMPILE([void f(int a) { return; }],[f(1);],AC_MSG_RESULT(no),WALL=""; AC_MSG_RESULT(yes))	
+	CPPFLAGS=$OLDCPPFLAGS
+fi
+])
+
+
+dnl checks to see if the -Wno-format compiler option is necessary to compile
+dnl class methods named printf()
 dnl if it is, then WNOFORMAT="-Wno-format" is set
 dnl if it is not, then WNOFORMAT="" is set
 AC_DEFUN([FW_CHECK_WNOFORMAT],
@@ -9549,10 +9610,33 @@ AC_SUBST(WNOOVERLOADEDVIRTUAL)
 ])
 
 
-dnl checks to see if -Wno-deprecated-declarations is permitted
-dnl if it is, then WNODEPRECATEDDECLARATIONS="-Wno-deprecated-declarations"
+dnl checks to see if -Wall includes -Wmismatched-tags
+dnl if it is, then WNOMISMATCHEDTAGS="-Wno-mismatched-tags" is set
+dnl if it is not, then WNOMISMATCHEDTAGS="" is set
+AC_DEFUN([FW_CHECK_WNOMISMATCHEDTAGS],
+[
+
+WNOMISMATCHEDTAGS=""
+AC_MSG_CHECKING(whether -Wno-mismatched-tags is needed)
+
+# clang's -Wall includes -Wmismatched-tags, which we don't want
+if ( test -n "`$CC --version 2> /dev/null | grep clang`" )
+then
+	WNOMISMATCHEDTAGS="-Wno-mismatched-tags"
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+
+AC_SUBST(WNOMISMATCHEDTAGS)
+])
+
+
+dnl checks to see if the -Wno-deprecated-declarations compiler option works or
+dnl not
+dnl if it does, then WNODEPRECATEDDECLARATIONS="-Wno-deprecated-declarations"
 dnl is set
-dnl if it is not, then WNODEPRECATEDDECLARATIONS="" is set
+dnl if it does not, then WNODEPRECATEDDECLARATIONS="" is set
 AC_DEFUN([FW_CHECK_WNODEPRECATEDDECLARATIONS],
 [
 
@@ -9580,8 +9664,8 @@ AC_TRY_COMPILE([],[printf("hello");],CPPFLAGS="$WERROR $CPPFLAGS"; WERROR=""; AC
 ])
 
 
-dnl checks to see if -g3 option works or not
-dnl adds it to CXXFLAGS if it does
+dnl checks to see if the -g3 compiler option works or not
+dnl adds it to CFLAGS and CXXFLAGS if it does
 AC_DEFUN([FW_CHECK_DEBUG],
 [
 if ( test "$DEBUG" = "yes" )
@@ -9594,8 +9678,26 @@ then
 	else
 		AC_MSG_RESULT(no)
 	fi
+	CFLAGS="$CLAGS $DBG"
 	CXXFLAGS="$CXXFLAGS $DBG"
 fi
+])
+
+
+dnl checks to see if the --disable-new-dtags linker option works or not
+dnl if it does, then DISABLE_NEW_DTAGS="-Wl,--disable-new-dtags" is set
+dnl if it does not, then DISABLE_NEW_DTAGS="" is set
+AC_DEFUN([FW_CHECK_NEW_DTAGS],
+[
+	AC_MSG_CHECKING(for -disable-new-dtags)
+	FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Wl,--disable-new-dtags],[],[],[DISABLE_NEW_DTAGS="-Wl,--disable-new-dtags"],[DISABLE_NEW_DTAGS=""])
+	if ( test "$DISABLE_NEW_DTAGS" = "-Wl,--disable-new-dtags" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+	AC_SUBST(DISABLE_NEW_DTAGS)
 ])
 
 
@@ -9606,14 +9708,17 @@ AC_DEFUN([FW_CHECK_F_NO_BUILTIN],
 [
 AC_MSG_CHECKING(whether -fno-builtin needs to be used)
 
+OLDCPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$WALL $WERROR $CPPFLAGS"
 STDLIB_TEST="no"
 AC_TRY_COMPILE([#include <stdlib.h>],[],STDLIB_TEST="yes")
+CPPFLAGS="$OLDCPPFLAGS"
 
 dnl If that failed, try again with -fno-builtin
 if ( test "$STDLIB_TEST" = "no" )
 then
 	OLDCPPFLAGS="$CPPFLAGS"
-	CPPFLAGS="-fno-builtin $CPPFLAGS"
+	CPPFLAGS="-fno-builtin $WALL $WERROR $CPPFLAGS"
 	AC_TRY_COMPILE([#include <stdlib.h>],[],STDLIB_TEST="yes")
 
 	dnl if that also failed then restore CPPFLAGS,
@@ -9659,6 +9764,7 @@ AC_SUBST(JNISUFFIX)
 dnl determines the directory that libraries are usually found in (eg. lib or
 dnl lib64) and the arch-spcific directory (eg. lib or lib32) for odd multiarch
 dnl systems (eg. Irix)
+dnl sets LIBDIR and LIBARCHDIR as appropriate
 AC_DEFUN([FW_CHECK_LIBDIR],
 [
 AC_MSG_CHECKING(for library directory)
@@ -9684,7 +9790,7 @@ if ( test "$LIBDIR" = "lib64" -a ! -d "/lib64" )
 then
 	LIBDIR="lib"
 fi
-AC_MSG_RESULT($LIBDIR)
+AC_MSG_RESULT($LIBDIR and $LIBARCHDIR)
 ])
 
 
@@ -9698,6 +9804,31 @@ then
 	AC_MSG_RESULT($MULTIARCHDIR)
 else
 	AC_MSG_RESULT(no)
+fi
+])
+
+
+dnl $CC -print-multiarch doesn't return anything on most platforms,
+dnl but sometimes we need the multiarch dir anyway (eg. to find python on
+dnl fedora 26) so, we'll attempt to finagle it...
+AC_DEFUN([FW_CHECK_OVERRIDE_MULTIARCH],
+[
+if ( test -z "$MULTIARCHDIR" )
+then
+	AC_MSG_CHECKING(for whether to override multiarch)
+	MAARCH=`uname -m 2> /dev/null`
+	MAOS=`uname -o 2> /dev/null`
+	if ( test "$MAOS" = "GNU/Linux" )
+	then
+		MAOS="linux-gnu"
+	fi
+	if ( test -n "$MAARCH" -a -n "$MAOS" )
+	then
+		MULTIARCHDIR="$MAARCH-$MAOS"
+		AC_MSG_RESULT($MULTIARCHDIR)
+	else
+		AC_MSG_RESULT(no)
+	fi
 fi
 ])
 
@@ -9736,6 +9867,10 @@ case $host_os in
 		AC_MSG_RESULT(no)
 		;;
 esac
+AC_SUBST(CYGWIN)
+AC_SUBST(MINGW32)
+AC_SUBST(UWIN)
+AC_SUBST(MICROSOFT)
 AC_SUBST(EXE)
 ])
 
@@ -9743,7 +9878,6 @@ AC_SUBST(EXE)
 dnl checks for Mac OS X platform
 dnl sets DARWIN to "yes" as appropriate
 dnl sets SHELL="...path to bash shell..." if the bash shell is available
-dnl sets a flag to enable some gcc 2.95.2 hacks if we're using it
 AC_DEFUN([FW_CHECK_OSX],
 [
 DARWIN=""
@@ -9763,17 +9897,6 @@ case $host_os in
 			SHELL="$BASH"
 			AC_SUBST(SHELL)
 		fi
-
-		dnl detect gcc 2.95.2 and enable some hacks
-		AC_MSG_CHECKING(for gcc 2.95.2)
-		CXX_VERSION=`$CXX --version`
-		if ( test "$CXX_VERSION" = "2.95.2" )
-		then
-			AC_MSG_RESULT(yes)
-			AC_DEFINE_UNQUOTED(DARWIN_GCC_2952_HACKS,1,Enable some hacks on Darwin with gcc 2.95.2)
-		else
-			AC_MSG_RESULT(no)
-		fi
 		;;
 	* )
 		AC_MSG_RESULT(no)
@@ -9782,7 +9905,7 @@ esac
 ])
 
 
-dnl checks to see if the compiler allows the -Wno-long-double option
+dnl checks to see if the -Wno-long-double option compiler works or not
 dnl if it does, then WNOLONGDOUBLE="-Wno-long-double" is set
 dnl if it does not, then WNOLONGDOUBLE="" is set
 AC_DEFUN([FW_CHECK_WNOLONGDOUBLE],
@@ -9799,20 +9922,67 @@ AC_SUBST(WNOLONGDOUBLE)
 ])
 
 
+dnl checks to see if the -Wno-unknown-pragmas compiler option works or not
+dnl (old versions of gcc with old versions of java might need this)
+dnl if it does, then WNOUNKNOWNPRAGMAS="-Wno-unknown-pragmas" is set
+dnl if it does not, then WNOUNKNOWNPRAGMAS="" is set
+AC_DEFUN([FW_CHECK_WNOUNKNOWNPRAGMAS],
+[
+AC_MSG_CHECKING(for -Wno-unknown-pragmas option)
+FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Wno-unknown-pragmas],[],[],[WNOUNKNOWNPRAGMAS="-Wno-unknown-pragmas"],[WNOUNKNOWNPRAGMAS=""])
+if ( test -n "$WNOUNKNOWNPRAGMAS" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(WNOUNKNOWNPRAGMAS)
+])
+
+
+dnl checks to see if the -Wno-error=date-time compiler option works or not
+dnl if it does, then WNOERRORDATETIME="-Wno-error=date-time" is set
+dnl if it does not, then WNOERRORDATETIME="" is set
+AC_DEFUN([FW_CHECK_WNOERRORDATETIME],
+[
+AC_MSG_CHECKING(for -Wno-error=date-time)
+FW_TRY_LINK([#include <stdio.h>],[printf("%s %s\n",__DATE__,__TIME__);],[-Wall -Werror -Wno-error=date-time],[],[],[WNOERRORDATETIME="-Wno-error=date-time"],[WNOERRORDATETIME=""])
+if ( test -n "$WNOERRORDATETIME" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(WNOERRORDATETIME)
+])
+
+
+dnl FIXME: for the os-checks below, set an OS ENV variable and a _OS variable,
+dnl eg.
+dnl HAIKU="yes" 
+dnl AC_SUBST(HAIKU)
+dnl AC_DEFINE(_HAIKU,1,Haiku OS)
+
+
 dnl checks for minix platform and adds some defines to CPPFLAGS if it is
 AC_DEFUN([FW_CHECK_MINIX],
 [
 AC_MSG_CHECKING(for minix)
+MINIX=""
 case $host_os in
 	*minix* )
+		MINIX="yes"
 		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE -D_NETBSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED"
+		dnl FIXME: split this out
 		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
+		AC_DEFINE(_MINIX,1,Minix)
 		AC_MSG_RESULT(yes)
 		;;
 	* )
 		AC_MSG_RESULT(no)
 		;;
 esac
+AC_SUBST(MINIX)
 ])
 
 
@@ -9822,16 +9992,19 @@ dnl BELIB="-lbe", and GNULIB="-lgnu" are also set
 AC_DEFUN([FW_CHECK_HAIKU],
 [
 AC_MSG_CHECKING(for haiku)
+HAIKU=""
 BELIB=""
 GNULIB=""
 case $host_os in
 	*haiku* )
+		HAIKU="yes"
 		if ( test "$prefix" = "NONE" )
 		then
 			prefix="/boot/common"
 		fi
 		BELIB="-lbe"
 		GNULIB="-lgnu"
+		AC_DEFINE(_HAIKU,1,Haiku OS)
 		AC_MSG_RESULT(yes)
 		;;
 	* )
@@ -9840,6 +10013,7 @@ case $host_os in
 esac
 AC_SUBST(BELIB)
 AC_SUBST(GNULIB)
+AC_SUBST(HAIKU)
 ])
 
 
@@ -9849,12 +10023,15 @@ dnl set, RUDIMENTS_DISABLE_FIONBIO=1 is defined, and _SYLLABLE=1 is defined
 AC_DEFUN([FW_CHECK_SYLLABLE],
 [
 AC_MSG_CHECKING(for syllable)
+SYLLABLE=""
 case $host_os in
 	*syllable* )
+		SYLLABLE="yes"
 		if ( test "$prefix" = "NONE" )
 		then
 			prefix="/resources/firstworks"
 		fi
+		dnl FIXME: split this out
 		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
 		AC_DEFINE(_SYLLABLE,1,Syllable OS)
 		AC_MSG_RESULT(yes)
@@ -9863,70 +10040,89 @@ case $host_os in
 		AC_MSG_RESULT(no)
 		;;
 esac
+AC_SUBST(SYLLABLE)
 ])
 
 
-dnl checks for SCO OpenServer platform
+dnl checks for SCO platform
 dnl if it is then:
-dnl 	sets RUDIMENTS_HAVE_SCO="yes"
-dnl	sets RUDIMENTS_HAVE_SCO_OSR5="yes"
+dnl 	sets SCO="yes"
+dnl 	sets SCO_OSR="yes"
 dnl	sets ENABLE_RUDIMENTS_THREADS="no"
 dnl	defines RUDIMENTS_HAVE_SCO_AVENRUN=1
 dnl if it's 6.0.0 then:
+dnl 	sets SCO_OSR6="yes"
 dnl 	adds -D__STDC__=0 to CPPFLAGS
 dnl 	sets CRTLIB="-lcrt"
 dnl if it's < 6.0.0 then:
+dnl 	sets SCO_OSR5="yes"
 dnl	defines RUDIMENTS_HAVE_BAD_SCO_MSGHDR=1
-dnl if it's 5.0.0 then:
-dnl 	adds -D_SVID3 to CPPFLAGS
-AC_DEFUN([FW_CHECK_SCO_OSR],
+dnl	if it's 5.0.0 then:
+dnl 		adds -D_SVID3 to CPPFLAGS
+AC_DEFUN([FW_CHECK_SCO],
 [
-RUDIMENTS_HAVE_SCO=""
-RUDIMENTS_HAVE_SCO_OSR5=""
+SCO=""
+SCO_OSR5=""
+SCO_OSR6=""
+SCO_UW="yes"
 CRTLIB=""
 
-AC_MSG_CHECKING(for SCO OSR)
-if ( test "`uname -s`" = "SCO_SV" )
+AC_MSG_CHECKING(for SCO)
+if ( test "`uname -s 2> /dev/null`" = "SCO_SV" )
 then
-	AC_MSG_RESULT(yes)
+	SCO="yes"
+	AC_DEFINE(_SCO,1,SCO OS)
 
-	RUDIMENTS_HAVE_SCO="yes"
-	RUDIMENTS_HAVE_SCO_OSR5="yes"
-
+	dnl FIXME: split this out
 	dnl you can add FSU Pthreads to OSR5 but they cause odd problems
 	ENABLE_RUDIMENTS_THREADS="no"
 
+	dnl FIXME: split this out
   	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
 
-	AC_MSG_CHECKING(for SCO OSR < 6.0.0)
-	if ( test "`uname -v | tr -d '.'`" -lt "600" )
+	dnl check for OSR6
+	if ( test "`uname -v | tr -d '.'`" -eq "600" )
 	then
-		AC_MSG_RESULT(yes)
+		SCO_OSR6="yes"
+		CPPFLAGS="$CPPFLAGS -D__STDC__=0"
+		CRTLIB="-lcrt"
+		AC_DEFINE(_SCO_OSR6,1,SCO OSR6 OS)
+		AC_MSG_RESULT(OSR6)
 
-  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
+	dnl check for OSR5
+	dnl FIXME: detect versions older than OSR5
+	else
+		SCO_OSR5="yes"
 
 		dnl OSR 5.0.0 needs -D_SVID3
 		if ( test "`uname -v`" = "2" )
 		then
 			CPPFLAGS="$CPPFLAGS -D_SVID3"
 		fi
-	else
-		AC_MSG_RESULT(no)
 
-		AC_MSG_CHECKING(for SCO OSR = 6.0.0)
-		if ( test "`uname -v | tr -d '.'`" -eq "600" )
-		then
-			CPPFLAGS="$CPPFLAGS -D__STDC__=0"
-			CRTLIB="-lcrt"
-			AC_MSG_RESULT(yes)
-		else
-			AC_MSG_RESULT(no)
-		fi
+		dnl FIXME: split this out
+  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
+
+		AC_DEFINE(_SCO_OSR5,1,SCO OSR5 OS)
+		AC_MSG_RESULT(OSR5)
 	fi
+
+elif ( test "`uname -s 2> /dev/null`" = "UnixWare" -a "`uname os_provider 2> /dev/null`" = "SCO" )
+then
+	SCO="yes"
+	AC_DEFINE(_SCO,1,SCO OS)
+
+	SCO_UW="yes"
+	AC_DEFINE(_SCO_UW,1,SCO UnixWare OS)
+	AC_MSG_RESULT(UnixWare)
 else
 	AC_MSG_RESULT(no)
 fi
 
+AC_SUBST(SCO)
+AC_SUBST(SCO_OSR)
+AC_SUBST(SCO_OSR6)
+AC_SUBST(SCO_UW)
 AC_SUBST(CRTLIB)
 ])
 
@@ -9939,9 +10135,12 @@ dnl 	adds -D__SGICXX -diag_error 1035 -LANG:ansi-for-init-scope=on to
 dnl 	CPPFLAGS
 AC_DEFUN([FW_CHECK_IRIX],
 [
+IRIX=""
 AC_MSG_CHECKING(for irix)
 case $host_os in
 	*irix* )
+		IRIX="yes"
+		AC_DEFINE(_IRIX,1,Irix OS)
 		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
 		if ( test "$CXX" = "CC" )
 		then
@@ -9954,6 +10153,7 @@ case $host_os in
 		AC_MSG_RESULT(no)
 		;;
 esac
+AC_SUBST(IRIX)
 ])
 
 
