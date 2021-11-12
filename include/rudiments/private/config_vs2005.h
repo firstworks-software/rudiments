@@ -610,30 +610,6 @@
 /* Some systems have getpwuid_r */
 /* #undef RUDIMENTS_HAVE_GETPWUID_R_5 */
 
-/* Some systems have getrpcbyname */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNAME */
-
-/* Some systems have getrpcbyname_r */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNAME_R */
-
-/* Some systems have getrpcbyname_r */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNAME_R_4 */
-
-/* Some systems have getrpcbyname_r */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNAME_R_5 */
-
-/* Some systems have getrpcbynumber */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNUMBER */
-
-/* Some systems have getrpcbynumber_r */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R */
-
-/* Some systems have getrpcbynumber_r */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4 */
-
-/* Some systems have getrpcbynumber_r */
-/* #undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5 */
-
 /* Some systems have GetSecurityInfo */
 #define RUDIMENTS_HAVE_GETSECURITYINFO 1
 
@@ -693,6 +669,9 @@
 
 /* Some systems have GlobalMemoryStatusEx */
 #define RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX 1
+
+/* Some systems have GNU strerror_r */
+/* #undef RUDIMENTS_HAVE_GNU_STRERROR_R */
 
 /* Some systems have grp.h */
 /* #undef RUDIMENTS_HAVE_GRP_H */
@@ -985,6 +964,12 @@
 /* Some systems have poll.h */
 /* #undef RUDIMENTS_HAVE_POLL_H */
 
+/* Some systems have port_create */
+/* #undef RUDIMENTS_HAVE_PORT_CREATE */
+
+/* Some systems have port.h */
+/* #undef RUDIMENTS_HAVE_PORT_H */
+
 /* Some systems have posix_fadvise */
 /* #undef RUDIMENTS_HAVE_POSIX_FADVISE */
 
@@ -1071,12 +1056,6 @@
 
 /* Some systems have Roster.h */
 /* #undef RUDIMENTS_HAVE_ROSTER_H */
-
-/* Some systems have rpc/rpcent.h */
-/* #undef RUDIMENTS_HAVE_RPCENT_H */
-
-/* Some systems have rpc/rpc.h */
-/* #undef RUDIMENTS_HAVE_RPC_H */
 
 /* Do we have real-time-clock RTC_RD_TIME support */
 /* #undef RUDIMENTS_HAVE_RTC_RD_TIME */
@@ -1228,12 +1207,6 @@
 /* struct spwd has sp_warn */
 /* #undef RUDIMENTS_HAVE_SP_WARN */
 
-/* Some systems have srand */
-#define RUDIMENTS_HAVE_SRAND 1
-
-/* Some systems have srand48 */
-/* #undef RUDIMENTS_HAVE_SRAND48 */
-
 /* statvfs */
 /* #undef RUDIMENTS_HAVE_STATVFS */
 
@@ -1260,12 +1233,6 @@
 
 /* Some systems have strerror */
 #define RUDIMENTS_HAVE_STRERROR 1
-
-/* Some systems have GNU strerror_r */
-/* #undef RUDIMENTS_HAVE_GNU_STRERROR_R */
-
-/* Some systems have XSI strerror_r */
-/* #undef RUDIMENTS_HAVE_XSI_STRERROR_R */
 
 /* Some systems have strerror_s */
 #define RUDIMENTS_HAVE_STRERROR_S 1
@@ -1348,9 +1315,6 @@
 /* Some systems have sys/byteorder.h */
 /* #undef RUDIMENTS_HAVE_SYS_BYTEORDER_H */
 
-/* Some systems have sys/cdefs.h */
-/* #undef RUDIMENTS_HAVE_SYS_CDEFS_H */
-
 /* Some systems have sys/devpoll.h */
 /* #undef RUDIMENTS_HAVE_SYS_DEVPOLL_H */
 
@@ -1380,12 +1344,6 @@
 
 /* Some systems have sys/poll.h */
 /* #undef RUDIMENTS_HAVE_SYS_POLL_H */
-
-/* Some systems have port_create */
-/* #undef RUDIMENTS_HAVE_PORT_CREATE */
-
-/* Some systems have port.h */
-/* #undef RUDIMENTS_HAVE_PORT_H */
 
 /* Some systems have sys/reboot.h */
 /* #undef RUDIMENTS_HAVE_SYS_REBOOT_H */
@@ -1510,39 +1468,6 @@
 /* Some systems have __vsnprintf but its not defined */
 /* #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF */
 
-/* Some systems have wchar.h */
-#define RUDIMENTS_HAVE_WCHAR_H 1
-
-/* Some systems have wcscasecmp */
-/* #undef RUDIMENTS_HAVE_WCSCASECMP */
-
-/* Some systems have wcschrnul */
-/* #undef RUDIMENTS_HAVE_WCSCHRNUL */
-
-/* Some systems have wcscspn */
-/* #undef RUDIMENTS_HAVE_WCSCSPN */
-
-/* Some systems have wcsncasecmp */
-/* #undef RUDIMENTS_HAVE_WCSNCASECMP */
-
-/* Some systems have wcspbrk */
-/* #undef RUDIMENTS_HAVE_WCSPBRK */
-
-/* Some systems have wcsspn */
-/* #undef RUDIMENTS_HAVE_WCSSPN */
-
-/* Some systems have wcstold */
-/* #undef RUDIMENTS_HAVE_WCSTOLD */
-
-/* Some systems have wcstoll */
-/* #undef RUDIMENTS_HAVE_WCSTOLL */
-
-/* Some systems have wcstoull */
-/* #undef RUDIMENTS_HAVE_WCSTOULL */
-
-/* Some systems have wctype.h */
-#define RUDIMENTS_HAVE_WCTYPE_H
-
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */
 
@@ -1582,6 +1507,39 @@
 /* Some systems have vswprintf */
 #define RUDIMENTS_HAVE_VSWPRINTF 1
 
+/* Some systems have wchar.h */
+#define RUDIMENTS_HAVE_WCHAR_H 1
+
+/* Some systems have wcscasecmp */
+/* #undef RUDIMENTS_HAVE_WCSCASECMP */
+
+/* Some systems have wcschrnul */
+/* #undef RUDIMENTS_HAVE_WCSCHRNUL */
+
+/* Some systems have wcscspn */
+/* #undef RUDIMENTS_HAVE_WCSCSPN */
+
+/* Some systems have wcsncasecmp */
+/* #undef RUDIMENTS_HAVE_WCSNCASECMP */
+
+/* Some systems have wcspbrk */
+/* #undef RUDIMENTS_HAVE_WCSPBRK */
+
+/* Some systems have wcsspn */
+/* #undef RUDIMENTS_HAVE_WCSSPN */
+
+/* Some systems have wcstold */
+/* #undef RUDIMENTS_HAVE_WCSTOLD */
+
+/* Some systems have wcstoll */
+/* #undef RUDIMENTS_HAVE_WCSTOLL */
+
+/* Some systems have wcstoull */
+/* #undef RUDIMENTS_HAVE_WCSTOULL */
+
+/* Some systems have wctype.h */
+#define RUDIMENTS_HAVE_WCTYPE_H
+
 /* GetDiskFreeSpace */
 #define RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE 1
 
@@ -1602,6 +1560,9 @@
 
 /* Some systems have WSADuplicateSocket */
 #define RUDIMENTS_HAVE_WSADUPLICATESOCKET 1
+
+/* Some systems have XSI strerror_r */
+/* #undef RUDIMENTS_HAVE_XSI_STRERROR_R */
 
 /* Some systems have _access_s() */
 #define RUDIMENTS_HAVE__ACCESS_S 1
@@ -1695,6 +1656,24 @@
 
 /* Hack for gcc on SCO OSR6 */
 /* #undef _CFRONT_3_0 */
+
+/* Haiku OS */
+/* #undef _HAIKU */
+
+/* Irix OS */
+/* #undef _IRIX */
+
+/* Minix */
+/* #undef _MINIX */
+
+/* SCO OSR5 OS */
+/* #undef _SCO_OSR5 */
+
+/* SCO OSR6 OS */
+/* #undef _SCO_OSR6 */
+
+/* SCO UnixWare OS */
+/* #undef _SCO_UW */
 
 /* Syllable OS */
 /* #undef _SYLLABLE */

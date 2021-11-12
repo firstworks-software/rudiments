@@ -6,10 +6,6 @@
 
 #include <rudiments/private/config.h>
 
-#ifdef RUDIMENTS_HAVE_SYS_CDEFS_H
-	#include <sys/cdefs.h>
-#endif
-
 // define NULL...
 
 // NULL is typically defined in stddef.h
