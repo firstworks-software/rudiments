@@ -699,8 +699,7 @@ IRIX
 CRTLIB
 SCO_UW
 SCO_OSR6
-SCO_OSR
-SCO
+SCO_OSR5
 SYLLABLE
 HAIKU
 GNULIB
@@ -16465,9 +16464,6 @@ case $host_os in
 		MINIX="yes"
 		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE -D_NETBSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED"
 
-$as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
-
-
 $as_echo "#define _MINIX 1" >>confdefs.h
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -16522,9 +16518,6 @@ case $host_os in
 			prefix="/resources/firstworks"
 		fi
 
-$as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
-
-
 $as_echo "#define _SYLLABLE 1" >>confdefs.h
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -16538,7 +16531,6 @@ esac
 
 
 
-SCO=""
 SCO_OSR5=""
 SCO_OSR6=""
 SCO_UW="yes"
@@ -16548,17 +16540,6 @@ CRTLIB=""
 $as_echo_n "checking for SCO... " >&6; }
 if ( test "`uname -s 2> /dev/null`" = "SCO_SV" )
 then
-	SCO="yes"
-
-$as_echo "#define _SCO 1" >>confdefs.h
-
-
-			ENABLE_RUDIMENTS_THREADS="no"
-
-
-$as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
-
-
 		if ( test "`uname -v | tr -d '.'`" -eq "600" )
 	then
 		SCO_OSR6="yes"
@@ -16579,10 +16560,6 @@ $as_echo "OSR6" >&6; }
 		fi
 
 
-$as_echo "#define RUDIMENTS_HAVE_BAD_SCO_MSGHDR 1" >>confdefs.h
-
-
-
 $as_echo "#define _SCO_OSR5 1" >>confdefs.h
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OSR5" >&5
@@ -16591,11 +16568,6 @@ $as_echo "OSR5" >&6; }
 
 elif ( test "`uname -s 2> /dev/null`" = "UnixWare" -a "`uname os_provider 2> /dev/null`" = "SCO" )
 then
-	SCO="yes"
-
-$as_echo "#define _SCO 1" >>confdefs.h
-
-
 	SCO_UW="yes"
 
 $as_echo "#define _SCO_UW 1" >>confdefs.h
@@ -16606,7 +16578,6 @@ else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-
 
 
 
@@ -16639,6 +16610,26 @@ $as_echo "no" >&6; }
 esac
 
 
+if ( test -n "$MINIX" -o -n "$SYLLABLE" )
+then
+
+$as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
+
+fi
+if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
+then
+		ENABLE_RUDIMENTS_THREADS="no"
+
+
+$as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
+
+	if ( test -n "$SCO_OSR5" )
+	then
+
+$as_echo "#define RUDIMENTS_HAVE_BAD_SCO_MSGHDR 1" >>confdefs.h
+
+	fi
+fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dynamic library extensions" >&5
@@ -23279,16 +23270,14 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test "$SCO" = "yes" -a "$CXX" = "CC" )
-then
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for long long type" >&5
 $as_echo_n "checking for long long type... " >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" -a "$CXX" = "CC" )
+then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 else
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for long long type" >&5
-$as_echo_n "checking for long long type... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int

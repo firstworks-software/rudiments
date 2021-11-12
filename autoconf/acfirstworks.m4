@@ -902,13 +902,6 @@ AC_SUBST(WNOERRORDATETIME)
 ])
 
 
-dnl FIXME: for the os-checks below, set an OS ENV variable and a _OS variable,
-dnl eg.
-dnl HAIKU="yes" 
-dnl AC_SUBST(HAIKU)
-dnl AC_DEFINE(_HAIKU,1,Haiku OS)
-
-
 dnl checks for minix platform and adds some defines to CPPFLAGS if it is
 AC_DEFUN([FW_CHECK_MINIX],
 [
@@ -918,8 +911,6 @@ case $host_os in
 	*minix* )
 		MINIX="yes"
 		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE -D_NETBSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED"
-		dnl FIXME: split this out
-		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
 		AC_DEFINE(_MINIX,1,Minix)
 		AC_MSG_RESULT(yes)
 		;;
@@ -976,8 +967,6 @@ case $host_os in
 		then
 			prefix="/resources/firstworks"
 		fi
-		dnl FIXME: split this out
-		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
 		AC_DEFINE(_SYLLABLE,1,Syllable OS)
 		AC_MSG_RESULT(yes)
 		;;
@@ -1006,7 +995,6 @@ dnl	if it's 5.0.0 then:
 dnl 		adds -D_SVID3 to CPPFLAGS
 AC_DEFUN([FW_CHECK_SCO],
 [
-SCO=""
 SCO_OSR5=""
 SCO_OSR6=""
 SCO_UW="yes"
@@ -1015,16 +1003,6 @@ CRTLIB=""
 AC_MSG_CHECKING(for SCO)
 if ( test "`uname -s 2> /dev/null`" = "SCO_SV" )
 then
-	SCO="yes"
-	AC_DEFINE(_SCO,1,SCO OS)
-
-	dnl FIXME: split this out
-	dnl you can add FSU Pthreads to OSR5 but they cause odd problems
-	ENABLE_RUDIMENTS_THREADS="no"
-
-	dnl FIXME: split this out
-  	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
-
 	dnl check for OSR6
 	if ( test "`uname -v | tr -d '.'`" -eq "600" )
 	then
@@ -1045,18 +1023,12 @@ then
 			CPPFLAGS="$CPPFLAGS -D_SVID3"
 		fi
 
-		dnl FIXME: split this out
-  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
-
 		AC_DEFINE(_SCO_OSR5,1,SCO OSR5 OS)
 		AC_MSG_RESULT(OSR5)
 	fi
 
 elif ( test "`uname -s 2> /dev/null`" = "UnixWare" -a "`uname os_provider 2> /dev/null`" = "SCO" )
 then
-	SCO="yes"
-	AC_DEFINE(_SCO,1,SCO OS)
-
 	SCO_UW="yes"
 	AC_DEFINE(_SCO_UW,1,SCO UnixWare OS)
 	AC_MSG_RESULT(UnixWare)
@@ -1064,8 +1036,7 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-AC_SUBST(SCO)
-AC_SUBST(SCO_OSR)
+AC_SUBST(SCO_OSR5)
 AC_SUBST(SCO_OSR6)
 AC_SUBST(SCO_UW)
 AC_SUBST(CRTLIB)

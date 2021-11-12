@@ -1662,9 +1662,6 @@
 /* Minix */
 #undef _MINIX
 
-/* SCO OS */
-#undef _SCO
-
 /* SCO OSR5 OS */
 #undef _SCO_OSR5
 

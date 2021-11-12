@@ -497,6 +497,21 @@ FW_CHECK_HAIKU
 FW_CHECK_SYLLABLE
 FW_CHECK_SCO
 FW_CHECK_IRIX
+if ( test -n "$MINIX" -o -n "$SYLLABLE" )
+then
+	AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
+fi
+if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
+then
+	dnl you can add FSU Pthreads to OSR5 but they cause odd problems
+	ENABLE_RUDIMENTS_THREADS="no"
+
+  	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
+	if ( test -n "$SCO_OSR5" )
+	then
+  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
+	fi
+fi
 
 FW_CHECK_SO_EXT
 FW_CHECK_LIBDIR
@@ -1300,14 +1315,14 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #endif],
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-dnl SCO CC doesn't support long long but throws a warning rather than an error
-if ( test "$SCO" = "yes" -a "$CXX" = "CC" )
+AC_MSG_CHECKING(for long long type)
+if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" -a "$CXX" = "CC" )
 then
-AC_MSG_CHECKING(for long long type)
-AC_MSG_RESULT(no)
+	dnl SCO CC doesn't support long long but throws a warning
+	dnl rather than an error
+	AC_MSG_RESULT(no)
 else
-AC_MSG_CHECKING(for long long type)
-AC_TRY_COMPILE([],
+	AC_TRY_COMPILE([],
 [long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
