@@ -9201,20 +9201,22 @@ AC_DEFUN([FW_CHECK_HEADER_LIB],
 [
 FOUNDHEADER=""
 FOUNDLIB=""
-FW_CHECK_FILE([$1],[FOUNDHEADER=\"yes\"])
 FW_CHECK_FILE([$3],[FOUNDLIB=\"yes\"])
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	FW_CHECK_FILE([$1],[FOUNDHEADER=\"yes\"])
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "$2"
 		eval "$4"
 	fi
-else
-	if ( test -n "$5" -a -n "$6" )
+elif ( test -n "$5" )
+then
+	FW_CHECK_FILE([$5],[FOUNDLIB=\"yes\"])
+	if ( test -n "$FOUNDLIB" )
 	then
-		FW_CHECK_FILE([$5],[FOUNDLIB=\"yes\"])
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		FW_CHECK_FILE([$1],[FOUNDHEADER=\"yes\"])
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "$2"
 			eval "$6"
@@ -9283,7 +9285,28 @@ then
 	eval "$11=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -9314,7 +9337,11 @@ do
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -10125,6 +10152,19 @@ case $host_os in
 		;;
 esac
 AC_SUBST(IRIX)
+])
+
+
+dnl check for x64 platform
+dnl if it is, then X64="x64" is set
+dnl if it is not, then X64="" is set
+AC_DEFUN([FW_CHECK_X64],
+[
+X64=""
+if ( test "$host_cpu" = "ia64" -o "$host_cpu" = "x86_64" -o "$host_cpu" = "amd64" )
+then
+	X64="x64"
+fi
 ])
 
 

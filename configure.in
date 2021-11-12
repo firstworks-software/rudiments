@@ -464,6 +464,7 @@ dnl Checks for platform-specific stuff
 echo
 echo "***** Platform ***************"
 FW_CHECK_MULTIARCH
+FW_CHECK_LIBDIR
 FW_CHECK_MICROSOFT
 
 dnl for mingw32, disable serial-related classes and add an exports flag
@@ -514,7 +515,6 @@ then
 fi
 
 FW_CHECK_SO_EXT
-FW_CHECK_LIBDIR
 
 FW_CHECK_PIPE
 FW_CHECK_DEBUG

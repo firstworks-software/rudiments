@@ -16316,6 +16316,34 @@ $as_echo "no" >&6; }
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library directory" >&5
+$as_echo_n "checking for library directory... " >&6; }
+LIBDIR="lib"
+LIBARCHDIR="lib"
+if ( test -z "$MULTIARCHDIR" )
+then
+	case $host_cpu in
+		x86_64 )
+			LIBDIR="lib64"
+			LIBARCHDIR="lib64"
+			;;
+		mips64 )
+			LIBDIR="lib64"
+			LIBARCHDIR="lib64"
+			;;
+		mips )
+			LIBARCHDIR="lib32"
+			;;
+	esac
+fi
+if ( test "$LIBDIR" = "lib64" -a ! -d "/lib64" )
+then
+	LIBDIR="lib"
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBDIR and $LIBARCHDIR" >&5
+$as_echo "$LIBDIR and $LIBARCHDIR" >&6; }
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for microsoft platform" >&5
 $as_echo_n "checking for microsoft platform... " >&6; }
 CYGWIN=""
@@ -16652,34 +16680,6 @@ $as_echo "so=>$SOSUFFIX module=>$MODULESUFFIX jni=>$JNISUFFIX" >&6; }
 
 
 
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library directory" >&5
-$as_echo_n "checking for library directory... " >&6; }
-LIBDIR="lib"
-LIBARCHDIR="lib"
-if ( test -z "$MULTIARCHDIR" )
-then
-	case $host_cpu in
-		x86_64 )
-			LIBDIR="lib64"
-			LIBARCHDIR="lib64"
-			;;
-		mips64 )
-			LIBDIR="lib64"
-			LIBARCHDIR="lib64"
-			;;
-		mips )
-			LIBARCHDIR="lib32"
-			;;
-	esac
-fi
-if ( test "$LIBDIR" = "lib64" -a ! -d "/lib64" )
-then
-	LIBDIR="lib"
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBDIR and $LIBARCHDIR" >&5
-$as_echo "$LIBDIR and $LIBARCHDIR" >&6; }
 
 
 
@@ -19371,7 +19371,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -19394,12 +19415,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -19407,21 +19422,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -19434,12 +19462,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -19447,21 +19469,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -19477,7 +19512,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -19495,12 +19534,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -19508,21 +19541,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -19535,12 +19581,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -19548,21 +19588,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -20073,7 +20126,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -20096,12 +20170,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20109,21 +20177,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -20136,12 +20217,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20149,21 +20224,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -20179,7 +20267,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -20197,12 +20289,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20210,21 +20296,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -20237,12 +20336,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20250,21 +20343,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -20320,7 +20426,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -20343,12 +20470,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20356,21 +20477,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -20383,12 +20517,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20396,21 +20524,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -20426,7 +20567,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -20444,12 +20589,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20457,21 +20596,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -20484,12 +20636,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -20497,21 +20643,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -24686,7 +24845,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -24709,12 +24889,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -24722,21 +24896,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -24749,12 +24936,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -24762,21 +24943,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -24792,7 +24986,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -24810,12 +25008,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -24823,21 +25015,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -24850,12 +25055,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -24863,21 +25062,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -30049,7 +30261,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -30072,12 +30305,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -30085,21 +30312,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -30112,12 +30352,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -30125,21 +30359,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -30155,7 +30402,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -30173,12 +30424,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -30186,21 +30431,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -30213,12 +30471,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -30226,21 +30478,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -35216,7 +35481,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -35239,12 +35525,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35252,21 +35532,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -35279,12 +35572,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35292,21 +35579,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -35322,7 +35622,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -35340,12 +35644,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35353,21 +35651,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -35380,12 +35691,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35393,21 +35698,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -35474,7 +35792,28 @@ then
 	eval "=\"\""
 fi
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/freeware" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+for path in \
+	"$SEARCHPATH" \
+	"/" \
+	"/usr" \
+	"/usr/local/$NAME" \
+	"/opt/$NAME" \
+	"/usr/$NAME" \
+	"/usr/local" \
+	"/usr/pkg" \
+	"/usr/pkg/$NAME" \
+	"/opt/sfw" \
+	"/opt/sfw/$NAME" \
+	"/usr/sfw" \
+	"/usr/sfw/$NAME" \
+	"/opt/csw" \
+	"/sw" \
+	"/usr/freeware" \
+	"/boot/common" \
+	"/resources/index" \
+	"/resources/firstworks" \
+	"/Library/$NAME" \
+	"/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -35497,12 +35836,6 @@ do
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35510,21 +35843,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-Wl,/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"/$TEMPLIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -35537,12 +35883,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35550,21 +35890,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval ""
 		eval "LIBPATH=\"/$TEMPLIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
 	fi
-else
-	if ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "/$TEMPLIBDIR/lib$LIBNAME.a" )
+then
 
 if ( test -r "/$TEMPLIBDIR/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval ""
 			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
@@ -35580,7 +35933,11 @@ fi
 			HEADERSANDLIBSPATH="$path"
 			break
 		fi
-		for libpath in "$path/$TEMPLIBDIR" "$path/$TEMPLIBDIR/$NAME" "$path/$TEMPLIBDIR/opt" "$path/$TEMPLIBDIR/$MULTIARCHDIR"
+		for libpath in \
+			"$path/$TEMPLIBDIR" \
+			"$path/$TEMPLIBDIR/$NAME" \
+			"$path/$TEMPLIBDIR/opt" \
+			"$path/$TEMPLIBDIR/$MULTIARCHDIR"
 		do
 			if ( test -n "$LIBSTRING" )
 			then
@@ -35598,12 +35955,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35611,21 +35962,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
@@ -35638,12 +36002,6 @@ fi
 FOUNDHEADER=""
 FOUNDLIB=""
 
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
 if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
 then
 	eval "FOUNDLIB=\"yes\""
@@ -35651,21 +36009,34 @@ fi
 
 if ( test -n "$FOUNDLIB" )
 then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
 	then
 		eval "INCLUDESTRING=\"-I$includepath\""
 		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
 	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
 
 if ( test -r "$libpath/lib$LIBNAME.a" )
 then
 	eval "FOUNDLIB=\"yes\""
 fi
 
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
 		then
 			eval "INCLUDESTRING=\"-I$includepath\""
 			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
