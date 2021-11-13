@@ -6,9 +6,6 @@
 /* Enable some hacks on Darwin with gcc 2.95.2 */
 /* #undef DARWIN_GCC_2952_HACKS */
 
-/* Use inline functions or not */
-/* #undef ENABLE_RUDIMENTS_INLINES */
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
 

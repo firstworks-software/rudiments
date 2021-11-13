@@ -810,7 +810,6 @@ enable_wall
 enable_werror
 enable_enosys_notify
 with_system_libtool
-enable_inlines
 with_pthread_prefix
 enable_libedit
 with_libedit_includes
@@ -1556,7 +1555,6 @@ Optional Features:
   --disable-wall          compile without -Wall, even if supported
   --disable-werror        compile without -Werror, even if supported
   --enable-enosys-notify  enable runtime notification of methods that set ENOSYS
-  --enable-inlines        use inline methods
   --disable-libedit       Disable libedit support
   --disable-ssl           Disable TLS/SSL support
   --disable-gss           Disable GSS support
@@ -2610,13 +2608,6 @@ else
   USE_SYSTEM_LIBTOOL="no"
 fi
 
-# Check whether --enable-inlines was given.
-if test "${enable_inlines+set}" = set; then :
-  enableval=$enable_inlines; ENABLE_RUDIMENTS_INLINES="yes"
-else
-  ENABLE_RUDIMENTS_INLINES="no"
-fi
-
 
 # Check whether --with-pthread-prefix was given.
 if test "${with_pthread_prefix+set}" = set; then :
@@ -3290,15 +3281,6 @@ _ACEOF
 
 fi
 
-
-
-if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
-
-cat >>confdefs.h <<_ACEOF
-#define ENABLE_RUDIMENTS_INLINES 1
-_ACEOF
-
-fi
 
 if ( test "$RUDIMENTS_ENOSYS_NOTIFY" = "yes" ); then
 
@@ -25819,30 +25801,26 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	#include <sys/socket.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
+
+void connect(int,void *,int);
+void listen(int,int);
+void bind(int,void *,int);
+void accept(int,void *,int);
+void send(int,void *,int,int);
+void sendto(int,void *,int,int,void *,int);
+void gethostbyname(void *);
+
 int
 main ()
 {
-connect(0,NULL,0);
+
+connect(0,0,0);
 listen(0,0);
-bind(0,NULL,0);
-accept(0,NULL,0);
-send(0,NULL,0,0);
-sendto(0,NULL,0,0,NULL,0);
+bind(0,0,0);
+accept(0,0,0);
+send(0,0,0,0);
+sendto(0,0,0,0,0,0);
+gethostbyname(0);
 
   ;
   return 0;
@@ -37207,8 +37185,6 @@ if ( test "$INCLUDE_MATH" = "1" )
 then
 	HEADERS1="$HEADERS1 math.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 mathincludes.h mathinlines.h"
-	SRCS="$SRCS math.cpp"
-	LOBJS="$LOBJS math.lo"
 fi
 
 if ( test "$INCLUDE_MEMORYMAP" = "1" )

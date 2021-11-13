@@ -1483,63 +1483,6 @@ AC_DEFUN([FW_CHECK_CLOCK_NANOSLEEP],
 
 
 
-dnl check to see which should be used of -lsocket, -lnsl and -lxnet
-AC_DEFUN([FW_CHECK_SOCKET_LIBS],
-[
-
-	AC_MSG_CHECKING(for socket libraries)
-
-	AC_LANG_SAVE
-	AC_LANG(C)
-	SOCKETLIBS=""
-	DONE=""
-	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lws2_32 -lnetapi32" "-lnetwork"
-	do
-		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	#include <sys/socket.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif],[connect(0,NULL,0);
-listen(0,0);
-bind(0,NULL,0);
-accept(0,NULL,0);
-send(0,NULL,0,0);
-sendto(0,NULL,0,0,NULL,0);
-],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
-		if ( test -n "$DONE" )
-		then
-			break
-		fi
-	done
-	AC_LANG_RESTORE
-
-	if ( test -z "$DONE" )
-	then
-		AC_MSG_ERROR(no combination of networking libraries was found.)
-	fi
-
-	if ( test -z "$SOCKETLIBS" )
-	then
-		AC_MSG_RESULT(none)
-	else
-		AC_MSG_RESULT($SOCKETLIBS)
-	fi
-
-	AC_SUBST(SOCKETLIBS)
-])
-
-
-
 AC_DEFUN([FW_CHECK_CRYPT_R],
 [
 if ( test "$INCLUDE_CRYPT" = 1 )

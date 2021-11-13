@@ -10399,3 +10399,56 @@ FW_LIBS(pthreads,[$PTHREADLIB])
 AC_SUBST(PTHREADINCLUDES)
 AC_SUBST(PTHREADLIB)
 ])
+
+
+dnl check to see what socket library combination is required
+dnl sets: SOCKETLIBS
+AC_DEFUN([FW_CHECK_SOCKET_LIBS],
+[
+
+	AC_MSG_CHECKING(for socket libraries)
+
+	AC_LANG_SAVE
+	AC_LANG(C)
+	SOCKETLIBS=""
+	DONE=""
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lws2_32 -lnetapi32" "-lnetwork"
+	do
+		FW_TRY_LINK([
+void connect(int,void *,int);
+void listen(int,int);
+void bind(int,void *,int);
+void accept(int,void *,int);
+void send(int,void *,int,int);
+void sendto(int,void *,int,int,void *,int);
+void gethostbyname(void *);
+],[
+connect(0,0,0);
+listen(0,0);
+bind(0,0,0);
+accept(0,0,0);
+send(0,0,0,0);
+sendto(0,0,0,0,0,0);
+gethostbyname(0);
+],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
+		if ( test -n "$DONE" )
+		then
+			break
+		fi
+	done
+	AC_LANG_RESTORE
+
+	if ( test -z "$DONE" )
+	then
+		AC_MSG_ERROR(no combination of networking libraries was found.)
+	fi
+
+	if ( test -z "$SOCKETLIBS" )
+	then
+		AC_MSG_RESULT(none)
+	else
+		AC_MSG_RESULT($SOCKETLIBS)
+	fi
+
+	AC_SUBST(SOCKETLIBS)
+])

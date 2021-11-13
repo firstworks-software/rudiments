@@ -34,10 +34,6 @@ AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],
 	USE_SYSTEM_LIBTOOL=$withval,
 	USE_SYSTEM_LIBTOOL="no")
-AC_ARG_ENABLE(inlines,
-	[  --enable-inlines        use inline methods],
-	ENABLE_RUDIMENTS_INLINES="yes",
-	ENABLE_RUDIMENTS_INLINES="no")
 AC_ARG_WITH(pthread-prefix,
 	[  --with-pthread-prefix   Location of pthread library],
 	PTHREADPATH="$withval",
@@ -420,12 +416,7 @@ if ( test -n "$SMALLCODE" ); then
 fi
 
 
-
 dnl Additional defines.
-if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
-	AC_DEFINE_UNQUOTED(ENABLE_RUDIMENTS_INLINES,1,Use inline functions or not)
-fi
-
 if ( test "$RUDIMENTS_ENOSYS_NOTIFY" = "yes" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_ENOSYS_NOTIFY,1,Enable runtime notification of methods that set ENOSYS)
 fi
@@ -4672,8 +4663,6 @@ if ( test "$INCLUDE_MATH" = "1" )
 then
 	HEADERS1="$HEADERS1 math.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 mathincludes.h mathinlines.h"
-	SRCS="$SRCS math.cpp"
-	LOBJS="$LOBJS math.lo"
 fi
 
 if ( test "$INCLUDE_MEMORYMAP" = "1" )

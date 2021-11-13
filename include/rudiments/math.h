@@ -348,8 +348,6 @@ class RUDIMENTS_DLLSPEC math {
 
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/mathinlines.h>
-#endif
+#include <rudiments/private/mathinlines.h>
 
 #endif
