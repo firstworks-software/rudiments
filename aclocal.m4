@@ -9053,6 +9053,75 @@ m4_ifndef([_LT_PROG_ECHO_BACKSLASH],	[AC_DEFUN([_LT_PROG_ECHO_BACKSLASH])])
 m4_ifndef([_LT_PROG_F77],		[AC_DEFUN([_LT_PROG_F77])])
 m4_ifndef([_LT_PROG_FC],		[AC_DEFUN([_LT_PROG_FC])])
 m4_ifndef([_LT_PROG_CXX],		[AC_DEFUN([_LT_PROG_CXX])])
+dnl prefixes to search for software packages
+dnl	$1 - an specific prefix to also search in addition to standard prefixes
+dnl		(may be left empty)
+dnl		(should not contain spaces)
+dnl	$2 - generic name of api or package, will be appended to various
+dnl		partial prefixes in an attempt to search more exhaustively
+dnl		eg. ssl, mysql, openssl, etc.
+dnl		(may be left empty)
+dnl		(should not contain spaces)
+dnl	$3 - path to append to the prefix
+dnl		eg. include, lib, bin, etc.
+dnl		(may be left empty)
+dnl		(should not contain spaces)
+dnl	$4 - variable that will be set to the set of paths
+AC_DEFUN([FW_SEARCH_PATHS],
+[
+EXTRAPATH="$1"
+NAME="$2"
+SUFFIX="$3"
+
+SWPREFIXES="$EXTRAPATH / /usr"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/local/$NAME /opt/$NAME /usr/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/local /usr/pkg"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/pkg/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /opt/sfw"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /opt/sfw/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/sfw"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/sfw/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /opt/csw /sw /usr/freeware /boot/common /resources/index"
+SWPREFIXES="$SWPREFIXES /resources/firstworks"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /Library/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/local/firstworks"
+
+if ( test -n "$SUFFIX" )
+then
+	SWPATHS=""
+	for p in $SWPREFIXES
+	do
+		if ( test "$p" = "/" )
+		then
+			SWPATHS="$SWPATHS /$SUFFIX"
+		else
+			SWPATHS="$SWPATHS $p/$SUFFIX"
+		fi
+	done
+	eval "$4=\"$SWPATHS\""
+else
+	eval "$4=\"$SWPREFIXES\""
+fi
+])
+
+
+
+
 dnl sets UNAME to the uname of the machine
 AC_DEFUN([FW_CHECK_UNAME],
 [
@@ -9285,28 +9354,8 @@ then
 	eval "$11=\"\""
 fi
 
-for path in \
-	"$SEARCHPATH" \
-	"/" \
-	"/usr" \
-	"/usr/local/$NAME" \
-	"/opt/$NAME" \
-	"/usr/$NAME" \
-	"/usr/local" \
-	"/usr/pkg" \
-	"/usr/pkg/$NAME" \
-	"/opt/sfw" \
-	"/opt/sfw/$NAME" \
-	"/usr/sfw" \
-	"/usr/sfw/$NAME" \
-	"/opt/csw" \
-	"/sw" \
-	"/usr/freeware" \
-	"/boot/common" \
-	"/resources/index" \
-	"/resources/firstworks" \
-	"/Library/$NAME" \
-	"/usr/local/firstworks"
+FW_SEARCH_PATHS([$SEARCHPATH],[$NAME],[],[SEARCHPATHS])
+for path in $SEARCHPATHS
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
