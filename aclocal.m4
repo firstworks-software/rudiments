@@ -10221,35 +10221,6 @@ fi
 ])
 
 
-dnl checks if the compiler supports the inline keyword
-dnl if it does, then INLINE="inline" is set
-dnl if it does not, then INLINE="" is set
-AC_DEFUN([FW_CHECK_INLINE],
-[
-AC_MSG_CHECKING(for inline)
-INLINE="inline"
-dnl intel optimizing compiler doesn't have inlines, assume that CC doesn't
-dnl either even though it might, this test needs to be more robust
-if ( test "$CXX" = "icc" -o "$CXX" = "CC" )
-then
-	INLINE=""
-else 
-	dnl redhat's gcc 2.96 has problems with inlines
-	CXX_VERSION=`$CXX --version`
-	if ( test "$CXX_VERSION" = "2.96" )
-	then
-		INLINE=""
-	fi
-fi
-if ( test "$INLINE" = "inline" )
-then
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers dont support the inline keyword)
-])
-
 
 dnl checks for the pthreads library
 dnl requires:  PTHREADPATH, RPATHFLAG, cross_compiling
