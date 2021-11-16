@@ -98,6 +98,55 @@ fi
 ])
 
 
+dnl verifies that a version number is greater than the specified version
+dnl	$1 - generic name of api or package
+dnl	$2 - version of the api or package
+dnl	$3 - version to test against
+AC_DEFUN([FW_CHECK_VERSION],
+[
+
+NAME=$1
+VERSION=$2
+TESTVERSION=$3
+
+AC_MSG_CHECKING(for $NAME >= $TESTVERSION)
+
+V1=`echo $VERSION | cut -d. -f1`
+V2=`echo $VERSION | cut -d. -f2`
+V3=`echo $VERSION | cut -d. -f3`
+
+TV1=`echo $TESTVERSION | cut -d. -f1`
+TV2=`echo $TESTVERSION | cut -d. -f2`
+TV3=`echo $TESTVERSION | cut -d. -f3`
+
+if ( test "$V1" -gt "$TV1")
+then
+	AC_MSG_RESULT(yes - $VERSION found)
+elif ( test "$V1" -eq "$TV1")
+then
+	if ( test "$V2" -gt "$TV2")
+	then
+		AC_MSG_RESULT(yes - $VERSION found)
+	elif ( test "$V2" -eq "$TV2")
+	then
+		if ( test "$V3" -ge "$TV3")
+		then
+			AC_MSG_RESULT(yes - $VERSION found)
+		else
+			AC_MSG_RESULT(no - $VERSION found)
+			exit
+		fi
+	else
+		AC_MSG_RESULT(no - $VERSION found)
+		exit
+	fi
+else
+	AC_MSG_RESULT(no - $VERSION found)
+	exit
+fi
+])
+
+
 dnl displays a message indicating that the version of $1 is $2
 AC_DEFUN([FW_VERSION],
 [
