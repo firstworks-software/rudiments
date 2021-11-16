@@ -9133,7 +9133,7 @@ AC_SUBST(UNAME)
 dnl sets MAKE="make" if "make" is GNU make
 dnl sets MAKE="gmake" if "gmake" is GNU make
 dnl otherwise leaves MAKE unchanged
-AC_DEFUN([FW_GMAKE],
+AC_DEFUN([FW_CHECK_GMAKE],
 [
 AC_MSG_CHECKING(for GNU Make)
 if ( test -n "make -v | grep 'GNU Make'" )
@@ -9149,6 +9149,52 @@ else
 		AC_MSG_RESULT(no)
 		AC_MSG_ERROR(GNU make not found.  SQL-Relay requires GNU make.)
 	fi
+fi
+])
+
+
+dnl verifies that a version number is greater than the specified version
+dnl	$1 - generic name of api or package
+dnl	$2 - version of the api or package
+dnl	$3 - version to test against
+AC_DEFUN([FW_CHECK_VERSION],
+[
+
+NAME=$1
+VERSION=$2
+TESTVERSION=$3
+
+AC_MSG_CHECKING(for $NAME >= $TESTVERSION)
+
+V1=`echo $VERSION | cut -d. -f1`
+V2=`echo $VERSION | cut -d. -f2`
+V3=`echo $VERSION | cut -d. -f3`
+
+TV1=`echo $TESTVERSION | cut -d. -f1`
+TV2=`echo $TESTVERSION | cut -d. -f2`
+TV3=`echo $TESTVERSION | cut -d. -f3`
+
+if ( test "$V1" -gt "$TV1")
+then
+	AC_MSG_RESULT(yes - $VERSION found)
+elif ( test "$V1" -eq "$TV1")
+then
+	if ( test "$V2" -gt "$TV2")
+	then
+		AC_MSG_RESULT(yes - $VERSION found)
+	elif ( test "$V2" -eq "$TV2")
+	then
+		if ( test "$V3" -ge "$TV3")
+		then
+			AC_MSG_RESULT(yes - $VERSION found)
+		else
+			AC_MSG_ERROR(no - $VERSION found)
+		fi
+	else
+		AC_MSG_ERROR(no - $VERSION found)
+	fi
+else
+	AC_MSG_ERROR(no - $VERSION found)
 fi
 ])
 
@@ -10503,7 +10549,7 @@ AC_SUBST(UNAME)
 dnl sets MAKE="make" if "make" is GNU make
 dnl sets MAKE="gmake" if "gmake" is GNU make
 dnl otherwise leaves MAKE unchanged
-AC_DEFUN([FW_GMAKE],
+AC_DEFUN([FW_CHECK_GMAKE],
 [
 AC_MSG_CHECKING(for GNU Make)
 if ( test -n "make -v | grep 'GNU Make'" )
@@ -10519,6 +10565,52 @@ else
 		AC_MSG_RESULT(no)
 		AC_MSG_ERROR(GNU make not found.  SQL-Relay requires GNU make.)
 	fi
+fi
+])
+
+
+dnl verifies that a version number is greater than the specified version
+dnl	$1 - generic name of api or package
+dnl	$2 - version of the api or package
+dnl	$3 - version to test against
+AC_DEFUN([FW_CHECK_VERSION],
+[
+
+NAME=$1
+VERSION=$2
+TESTVERSION=$3
+
+AC_MSG_CHECKING(for $NAME >= $TESTVERSION)
+
+V1=`echo $VERSION | cut -d. -f1`
+V2=`echo $VERSION | cut -d. -f2`
+V3=`echo $VERSION | cut -d. -f3`
+
+TV1=`echo $TESTVERSION | cut -d. -f1`
+TV2=`echo $TESTVERSION | cut -d. -f2`
+TV3=`echo $TESTVERSION | cut -d. -f3`
+
+if ( test "$V1" -gt "$TV1")
+then
+	AC_MSG_RESULT(yes - $VERSION found)
+elif ( test "$V1" -eq "$TV1")
+then
+	if ( test "$V2" -gt "$TV2")
+	then
+		AC_MSG_RESULT(yes - $VERSION found)
+	elif ( test "$V2" -eq "$TV2")
+	then
+		if ( test "$V3" -ge "$TV3")
+		then
+			AC_MSG_RESULT(yes - $VERSION found)
+		else
+			AC_MSG_ERROR(no - $VERSION found)
+		fi
+	else
+		AC_MSG_ERROR(no - $VERSION found)
+	fi
+else
+	AC_MSG_ERROR(no - $VERSION found)
 fi
 ])
 
