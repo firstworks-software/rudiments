@@ -1479,5 +1479,5 @@ AC_DEFUN([FW_SET_VERSION],
 
 	eval "$1=\"$2\""
 	AC_SUBST([$1])
-	AC_DEFINE_UNQUOTED([$1],[$2],Version)
+	AC_DEFINE([$1],["$2"],Version)
 ])

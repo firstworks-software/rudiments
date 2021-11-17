@@ -36943,9 +36943,7 @@ echo "******************************"
 	eval "RUDIMENTS_VERSION=\"2.0.0\""
 
 
-cat >>confdefs.h <<_ACEOF
-#define RUDIMENTS_VERSION 2.0.0
-_ACEOF
+$as_echo "#define RUDIMENTS_VERSION \"2.0.0\"" >>confdefs.h
 
 
 
@@ -36954,9 +36952,7 @@ _ACEOF
 	eval "SONAME_VERSION_INFO=\"8:0:0\""
 
 
-cat >>confdefs.h <<_ACEOF
-#define SONAME_VERSION_INFO 8:0:0
-_ACEOF
+$as_echo "#define SONAME_VERSION_INFO \"8:0:0\"" >>confdefs.h
 
 
 
