@@ -40125,6 +40125,8 @@ echo
 
 
 
+
+
 if ( test -r "libtool" )
 then
 	sed -e "s|-lgcc_s -lgcc |-lgcc_s |g" \
@@ -40139,6 +40141,7 @@ then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
 	mv libtool.new libtool
 fi
+
 
 
 
