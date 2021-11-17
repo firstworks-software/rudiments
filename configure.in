@@ -534,13 +534,7 @@ AC_SUBST(CXXFLAGS)
 FW_CHECK_NULL_REDEFINE
 FW_CHECK_F_NO_BUILTIN
 
-dnl if LDFLAGS contains -Wl,-z,relro the CPPFLAGS requires -fPIC
-dnl libtool adds it at compile time but we need it for configure tests too
-if ( test -n "`echo $LDFLAGS | grep '\-Wl,\-z,relro'`" )
-then
-	CPPFLAGS="-fPIC $CPPFLAGS"
-fi
-
+FW_CHECK_RELRO_FPIC
 echo "******************************"
 
 dnl Checks for header files.
@@ -4403,26 +4397,8 @@ FW_CHECK_APACHE
 echo "******************************"
 
 
-dnl intuitive versioning
-dnl Given a version number MAJOR.MINOR.PATCH, increment the:
-dnl 1. MAJOR when you make very significant changes
-dnl    (and set MINOR and PATCH to 0)
-dnl 2. MINOR when you make backwards-incompatible changes
-dnl    or add significant new features
-dnl    (and set PATCH to 0)
-dnl 3. PATCH when you make backwards-compatible changes
-RUDIMENTS_VERSION="2.0.0"
-AC_SUBST(RUDIMENTS_VERSION)
-AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
-
-dnl Libtool Versioning
-dnl For CURRENT:REVISION:AGE version info, apply the following rules in order:
-dnl if library source changed at all,         c:r:a -> c:r+1:a
-dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
-dnl if interfaces added,                      c:r:a -> c:r:a+1
-dnl if interfaces removed,                    c:r:a -> c:r:0
-SONAME_VERSION_INFO="8:0:0"
-AC_SUBST(SONAME_VERSION_INFO)
+FW_SET_VERSION([RUDIMENTS_VERSION],[2.0.0])
+FW_SET_VERSION([SONAME_VERSION_INFO],[8:0:0])
 
 
 AC_PREFIX_DEFAULT(/usr/local/firstworks)

@@ -1648,6 +1648,9 @@
 /* Version */
 #define RUDIMENTS_VERSION "@RUDIMENTS_VERSION@"
 
+/* Version */
+/* #undef SONAME_VERSION_INFO */
+
 /* Define to 1 if you have the ANSI C header files. */
 /* #undef STDC_HEADERS */
 

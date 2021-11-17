@@ -9501,6 +9501,17 @@ eval "$1=\"$STRIPPED\""
 ])
 
 
+dnl if LDFLAGS contains -Wl,-z,relro the CPPFLAGS requires -fPIC
+dnl libtool adds it at compile time but we need it for configure tests too
+AC_DEFUN([FW_CHECK_RELRO_FPIC],
+[
+if ( test -n "`echo $LDFLAGS | grep '\-Wl,\-z,relro'`" )
+then
+	CPPFLAGS="-fPIC $CPPFLAGS"
+fi
+])
+
+
 dnl if the variable USE_SYSTEM_LIBTOOL = "yes" then the variable LIBTOOL is
 dnl overridden and set to "libtool" rather than its current value
 dnl (likely "$(top_builddir)/libtool" so that the system-supplied libtool is
@@ -10496,6 +10507,34 @@ then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
 	mv libtool.new libtool
 fi
+])
+
+
+dnl set project, soname, or other version
+dnl	$1 - variable that will be set to the project version
+dnl	$2 - project version
+AC_DEFUN([FW_SET_VERSION],
+[
+	dnl intuitive versioning
+	dnl Given a version number MAJOR.MINOR.PATCH, increment the:
+	dnl 1. MAJOR when you make very significant changes
+	dnl    (and set MINOR and PATCH to 0)
+	dnl 2. MINOR when you make backwards-incompatible changes
+	dnl    or add significant new features
+	dnl    (and set PATCH to 0)
+	dnl 3. PATCH when you make backwards-compatible changes
+
+	dnl Libtool Versioning
+	dnl For CURRENT:REVISION:AGE version info,
+	dnl apply the following rules in order:
+	dnl if library source changed at all,         c:r:a -> c:r+1:a
+	dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
+	dnl if interfaces added,                      c:r:a -> c:r:a+1
+	dnl if interfaces removed,                    c:r:a -> c:r:0
+
+	eval "$1=\"$2\""
+	AC_SUBST([$1])
+	AC_DEFINE_UNQUOTED([$1],[$2],Version)
 ])
 dnl prefixes to search for software packages
 dnl	$1 - an specific prefix to also search in addition to standard prefixes
@@ -10945,6 +10984,17 @@ eval "$1=\"$STRIPPED\""
 ])
 
 
+dnl if LDFLAGS contains -Wl,-z,relro the CPPFLAGS requires -fPIC
+dnl libtool adds it at compile time but we need it for configure tests too
+AC_DEFUN([FW_CHECK_RELRO_FPIC],
+[
+if ( test -n "`echo $LDFLAGS | grep '\-Wl,\-z,relro'`" )
+then
+	CPPFLAGS="-fPIC $CPPFLAGS"
+fi
+])
+
+
 dnl if the variable USE_SYSTEM_LIBTOOL = "yes" then the variable LIBTOOL is
 dnl overridden and set to "libtool" rather than its current value
 dnl (likely "$(top_builddir)/libtool" so that the system-supplied libtool is
@@ -11940,6 +11990,34 @@ then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
 	mv libtool.new libtool
 fi
+])
+
+
+dnl set project, soname, or other version
+dnl	$1 - variable that will be set to the project version
+dnl	$2 - project version
+AC_DEFUN([FW_SET_VERSION],
+[
+	dnl intuitive versioning
+	dnl Given a version number MAJOR.MINOR.PATCH, increment the:
+	dnl 1. MAJOR when you make very significant changes
+	dnl    (and set MINOR and PATCH to 0)
+	dnl 2. MINOR when you make backwards-incompatible changes
+	dnl    or add significant new features
+	dnl    (and set PATCH to 0)
+	dnl 3. PATCH when you make backwards-compatible changes
+
+	dnl Libtool Versioning
+	dnl For CURRENT:REVISION:AGE version info,
+	dnl apply the following rules in order:
+	dnl if library source changed at all,         c:r:a -> c:r+1:a
+	dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
+	dnl if interfaces added,                      c:r:a -> c:r:a+1
+	dnl if interfaces removed,                    c:r:a -> c:r:0
+
+	eval "$1=\"$2\""
+	AC_SUBST([$1])
+	AC_DEFINE_UNQUOTED([$1],[$2],Version)
 ])
 dnl checks for the rudiments library
 dnl requires:
