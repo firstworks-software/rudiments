@@ -27,29 +27,29 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("delimiters\n");
 	const char	*rs="[[[";
-	sv.setRedirectStart(rs);
-	test("getRedirectStart()",
-		!charstring::compare(sv.getRedirectStart(),rs));
-	test("getRedirectStartLength()",
-		sv.getRedirectStartLength()==charstring::length(rs));
+	sv.setIncludeStart(rs);
+	test("getIncludeStart()",
+		!charstring::compare(sv.getIncludeStart(),rs));
+	test("getIncludeStartLength()",
+		sv.getIncludeStartLength()==charstring::length(rs));
 	const char	*re="]]]";
-	sv.setRedirectEnd(re);
-	test("getRedirectEnd()",
-		!charstring::compare(sv.getRedirectEnd(),re));
-	test("getRedirectEndLength()",
-		sv.getRedirectEndLength()==charstring::length(rs));
+	sv.setIncludeEnd(re);
+	test("getIncludeEnd()",
+		!charstring::compare(sv.getIncludeEnd(),re));
+	test("getIncludeEndLength()",
+		sv.getIncludeEndLength()==charstring::length(rs));
 	rs="[";
-	sv.setRedirectStart(rs);
-	test("getRedirectStart()",
-		!charstring::compare(sv.getRedirectStart(),rs));
-	test("getRedirectStartLength()",
-		sv.getRedirectStartLength()==charstring::length(rs));
+	sv.setIncludeStart(rs);
+	test("getIncludeStart()",
+		!charstring::compare(sv.getIncludeStart(),rs));
+	test("getIncludeStartLength()",
+		sv.getIncludeStartLength()==charstring::length(rs));
 	re="]";
-	sv.setRedirectEnd(re);
-	test("getRedirectEnd()",
-		!charstring::compare(sv.getRedirectEnd(),re));
-	test("getRedirectEndLength()",
-		sv.getRedirectEndLength()==charstring::length(rs));
+	sv.setIncludeEnd(re);
+	test("getIncludeEnd()",
+		!charstring::compare(sv.getIncludeEnd(),re));
+	test("getIncludeEndLength()",
+		sv.getIncludeEndLength()==charstring::length(rs));
 	stdoutput.printf("\n\n");
 
 	

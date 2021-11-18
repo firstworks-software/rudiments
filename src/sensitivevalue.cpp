@@ -12,10 +12,10 @@
 class sensitivevalueprivate {
 	friend class sensitivevalue;
 	private:
-		const char	*_redirectstart;
-		uint64_t	_redirectstartlen;
-		const char	*_redirectend;
-		uint64_t	_redirectendlen;
+		const char	*_includestart;
+		uint64_t	_includestartlen;
+		const char	*_includeend;
+		uint64_t	_includeendlen;
 		sensitivevalue_format_t	_verbatimformat;
 		sensitivevalue_format_t	_fileformat;
 		const char	*_path;
@@ -43,29 +43,29 @@ sensitivevalue::~sensitivevalue() {
 
 void sensitivevalue::init() {
 	bytestring::zero(pvt,sizeof(sensitivevalueprivate));
-	pvt->_redirectstart="[";
-	pvt->_redirectstartlen=1;
-	pvt->_redirectend="]";
-	pvt->_redirectendlen=1;
+	pvt->_includestart="[";
+	pvt->_includestartlen=1;
+	pvt->_includeend="]";
+	pvt->_includeendlen=1;
 	pvt->_chomptextfile=true;
 }
 
-void sensitivevalue::setRedirectStart(const char *delimiter) {
-	setRedirectStart(delimiter,charstring::length(delimiter));
+void sensitivevalue::setIncludeStart(const char *delimiter) {
+	setIncludeStart(delimiter,charstring::length(delimiter));
 }
 
-void sensitivevalue::setRedirectStart(const char *delimiter, uint64_t len) {
-	pvt->_redirectstart=delimiter;
-	pvt->_redirectstartlen=len;
+void sensitivevalue::setIncludeStart(const char *delimiter, uint64_t len) {
+	pvt->_includestart=delimiter;
+	pvt->_includestartlen=len;
 }
 
-void sensitivevalue::setRedirectEnd(const char *delimiter) {
-	setRedirectEnd(delimiter,charstring::length(delimiter));
+void sensitivevalue::setIncludeEnd(const char *delimiter) {
+	setIncludeEnd(delimiter,charstring::length(delimiter));
 }
 
-void sensitivevalue::setRedirectEnd(const char *delimiter, uint64_t len) {
-	pvt->_redirectend=delimiter;
-	pvt->_redirectendlen=len;
+void sensitivevalue::setIncludeEnd(const char *delimiter, uint64_t len) {
+	pvt->_includeend=delimiter;
+	pvt->_includeendlen=len;
 }
 
 void sensitivevalue::setVerbatimFormat(sensitivevalue_format_t verbatimformat) {
@@ -116,20 +116,20 @@ void sensitivevalue::setHexExtension(const char *ext, uint64_t len) {
 	pvt->_hexextlen=len;
 }
 
-const char *sensitivevalue::getRedirectStart() {
-	return pvt->_redirectstart;
+const char *sensitivevalue::getIncludeStart() {
+	return pvt->_includestart;
 }
 
-uint64_t sensitivevalue::getRedirectStartLength() {
-	return pvt->_redirectstartlen;
+uint64_t sensitivevalue::getIncludeStartLength() {
+	return pvt->_includestartlen;
 }
 
-const char *sensitivevalue::getRedirectEnd() {
-	return pvt->_redirectend;
+const char *sensitivevalue::getIncludeEnd() {
+	return pvt->_includeend;
 }
 
-uint64_t sensitivevalue::getRedirectEndLength() {
-	return pvt->_redirectendlen;
+uint64_t sensitivevalue::getIncludeEndLength() {
+	return pvt->_includeendlen;
 }
 
 sensitivevalue_format_t sensitivevalue::getVerbatimFormat() {
@@ -186,11 +186,11 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 
 	// if the input is [...file...] then attempt to get the
 	// contents of the specified file
-	if (!charstring::compare(in,pvt->_redirectstart,
-					pvt->_redirectstartlen) &&
-		!charstring::compare(in+inlen-pvt->_redirectendlen,
-							pvt->_redirectend,
-							pvt->_redirectendlen)) {
+	if (!charstring::compare(in,pvt->_includestart,
+					pvt->_includestartlen) &&
+		!charstring::compare(in+inlen-pvt->_includeendlen,
+							pvt->_includeend,
+							pvt->_includeendlen)) {
 
 		stringbuffer	fn;
 

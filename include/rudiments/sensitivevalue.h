@@ -7,7 +7,7 @@
 #include <rudiments/private/sensitivevalueincludes.h>
 
 /** The sensitivevalue class provides methods for reading sensitive values from
- *  a string, which may optionally redirect to a file. */
+ *  a string, which may optionally include the contents of a file. */
 
 enum sensitivevalue_format_t {
 	FORMAT_TEXT=0,
@@ -24,25 +24,25 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		/** Deletes this instance of the sensitivevalue class. */
 		~sensitivevalue();
 
-		/** Sets the delimiter that starts a file redirection to
+		/** Sets the delimiter that starts a file include to
 		 *  "delimiter".  Defaults to a left square bracket - "[".
 		 *  See parse() for details. */
-		void	setRedirectStart(const char *delimiter);
+		void	setIncludeStart(const char *delimiter);
 
-		/** Sets the delimiter that starts a file redirection to
+		/** Sets the delimiter that starts a file include to
 		 *  "delimiter" of length "len".  Defaults to a left square
 		 *  bracket - "[".  See parse() for details. */
-		void	setRedirectStart(const char *delimiter, uint64_t len);
+		void	setIncludeStart(const char *delimiter, uint64_t len);
 
-		/** Sets the delimiter that ends a file redirection to
+		/** Sets the delimiter that ends a file include to
 		 *  "delimiter".  Defaults to a right square bracket - "]".
 		 *  See parse() for details. */
-		void	setRedirectEnd(const char *delimiter);
+		void	setIncludeEnd(const char *delimiter);
 
-		/** Sets the delimiter that ends a file redirection to
+		/** Sets the delimiter that ends a file include to
 		 *  "delimiter" of length "len".  Defaults to a right square
 		 *  bracket - "]".  See parse() for details. */
-		void	setRedirectEnd(const char *delimiter, uint64_t len);
+		void	setIncludeEnd(const char *delimiter, uint64_t len);
 
 		/** Sets whether values passed directly into parse() will be
 		 *  interpreted as text, binary, or hex data.  Defaults to
@@ -91,27 +91,27 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *  Defaults to NULL, 0.  See parse() for details. */
 		void	setHexExtension(const char *ext, uint64_t len);
 
-		/** Returns the delimiter that starts a file redirection,
- 		 *  either the delimiter set by setRedirectStart() or the
+		/** Returns the delimiter that starts a file include,
+ 		 *  either the delimiter set by setIncludeStart() or the
  		 *  default if no delimiter was set. */
-		const char	*getRedirectStart();
+		const char	*getIncludeStart();
 
 		/** Returns the length of the delimiter that starts a file
-		 *  redirection, either the length of the delimiter set by
-		 *  setRedirectStart() or the length of the default if no
+		 *  include, either the length of the delimiter set by
+		 *  setIncludeStart() or the length of the default if no
 		 *  delimiter was set. */
-		uint64_t	getRedirectStartLength();
+		uint64_t	getIncludeStartLength();
 
-		/** Returns the delimiter that ends a file redirection,
- 		 *  either the delimiter set by setRedirectEnd() or the
+		/** Returns the delimiter that ends a file include,
+ 		 *  either the delimiter set by setIncludeEnd() or the
  		 *  default if no delimiter was set. */
-		const char	*getRedirectEnd();
+		const char	*getIncludeEnd();
 
 		/** Returns the length of the delimiter that ends a file
-		 *  redirection, either the length of the delimiter set by
-		 *  setRedirectEnd() or the length of the default if no
+		 *  include, either the length of the delimiter set by
+		 *  setIncludeEnd() or the length of the default if no
 		 *  delimiter was set. */
-		uint64_t	getRedirectEndLength();
+		uint64_t	getIncludeEndLength();
 
 		/** Returns whether values passed directly into parse() will be
 		 *  interpreted as text, binary, or hex data. */
@@ -159,7 +159,7 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		/** Parses "in".
 		 *  
 		 *  If "in" does not begin and end with the delimiters set by
-		 *  setRedirectStart()/setRedirectEnd() (or square brackets by
+		 *  setIncludeStart()/setIncludeEnd() (or square brackets by
 		 *  default) then:
 		 *
 		 *   * Subsequent calls to getValue()/detachValue() or
@@ -201,7 +201,7 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *     interpreted as string terminators.
 		 *
 		 *  If "in" begins and ends with the delimiters set by 
-		 *  setRedirectStart()/setRedirectEnd() (or square brackets by
+		 *  setIncludeStart()/setIncludeEnd() (or square brackets by
 		 *  default) then:
 		 *
 		 *    * The string between the delimiters will be interpreted
@@ -340,11 +340,11 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *  until parse() is called again.
 		 *
 		 *  Note that clear() does not reset properties such as
-		 *  redirect delimiters, chomp behavior, etc. to defaults. */
+		 *  include delimiters, chomp behavior, etc. to defaults. */
 		void	clear();
 
 		/** Empties the internal buffer containing the value and
-		 *  resets properties such as redirect delimiters, chomp
+		 *  resets properties such as include delimiters, chomp
 		 *  behavior, etc. to defaults. */
 		void	reset();
 
