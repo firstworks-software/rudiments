@@ -9525,6 +9525,15 @@ fi
 ])
 
 
+dnl have to set ar here because libtool (currently) fails
+dnl to use the correct one when cross-compiling
+AC_DEFUN([FW_FIX_AR],
+[
+	AC_CHECK_PROG(AR,$host_alias-ar,$host_alias-ar,ar)
+	AC_SUBST(AR)
+])
+
+
 dnl checks if the linker supports -rpath
 dnl if it does, then it sets the enviroment variable RPATHFLAG="yes"
 dnl if it does not, then it sets the enviroment variable RPATHFLAG=""
@@ -11008,6 +11017,15 @@ if ( test "$USE_SYSTEM_LIBTOOL" = "yes" )
 then
 	LIBTOOL="libtool"
 fi
+])
+
+
+dnl have to set ar here because libtool (currently) fails
+dnl to use the correct one when cross-compiling
+AC_DEFUN([FW_FIX_AR],
+[
+	AC_CHECK_PROG(AR,$host_alias-ar,$host_alias-ar,ar)
+	AC_SUBST(AR)
 ])
 
 
