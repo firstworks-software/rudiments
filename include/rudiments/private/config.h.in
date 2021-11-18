@@ -129,6 +129,9 @@
 /* Rudiments supports PCRE */
 #undef RUDIMENTS_HAS_PCRE
 
+/* SSL has SHA1_Init/Update/Final returning int */
+#undef RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT
+
 /* SSL has SHA256_CTX */
 #undef RUDIMENTS_HAS_SHA256_CTX
 

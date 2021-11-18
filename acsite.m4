@@ -160,6 +160,11 @@ then
 		AC_MSG_CHECKING(for EVP_CIPHER_CTX_new)
 		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_CIPHER_CTX_new();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW,1,SSL has EVP_CIPHER_CTX_NEW) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		FW_ENABLE_WERROR
+		AC_MSG_CHECKING(whether SHA1_Init/Update/Final return int)
+		FW_TRY_LINK([#include <openssl/sha.h>],[int a=SHA1_Init(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT,1,SSL has SHA1_Init/Update/Final returning int) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no);])
+		FW_RESTORE_WERROR
+
 		AC_MSG_CHECKING(whether platform requires default cipher of PROFILE=SYSTEM)
 		if ( test -r "/etc/os-release" )
 		then

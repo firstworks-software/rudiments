@@ -36,10 +36,14 @@ sha1::~sha1() {
 bool sha1::append(const unsigned char *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!SHA1_Update(&pvt->_context,data,size)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
+		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
+			if (!SHA1_Update(&pvt->_context,data,size)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return false;
+			}
+		#else
+			SHA1_Update(&pvt->_context,data,size);
+		#endif
 		return true;
 	#else
 		int	result=SHA1Input(&pvt->_context,data,size);
@@ -51,10 +55,14 @@ bool sha1::append(const unsigned char *data, uint32_t size) {
 const unsigned char *sha1::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!SHA1_Final(pvt->_hash,&pvt->_context)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return NULL;
-		}
+		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
+			if (!SHA1_Final(pvt->_hash,&pvt->_context)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return NULL;
+			}
+		#else
+			SHA1_Final(pvt->_hash,&pvt->_context);
+		#endif
 		return pvt->_hash;
 	#else
 		int	result=SHA1Result(&pvt->_context,pvt->_hash);
@@ -78,10 +86,14 @@ bool sha1::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!SHA1_Init(&pvt->_context)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
+		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
+			if (!SHA1_Init(&pvt->_context)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return false;
+			}
+		#else
+			SHA1_Init(&pvt->_context);
+		#endif
 		return true;
 	#else
 		int	result=SHA1Reset(&pvt->_context);

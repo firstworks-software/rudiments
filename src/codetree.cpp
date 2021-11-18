@@ -252,7 +252,7 @@ class codetreeprivate {
 		const char		*_finalcodeposition;
 		uint8_t			_debuglevel;
 		stringbuffer		_excbuffer;
-		domnode		*_excnode;
+		domnode			*_excnode;
 		bool			_endofstring;
 
 		bool					_break;
