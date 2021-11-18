@@ -38,10 +38,14 @@ md5::~md5() {
 bool md5::append(const unsigned char *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!MD5_Update(&pvt->_context,data,size)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
+		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
+			if (!MD5_Update(&pvt->_context,data,size)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return false;
+			}
+		#else
+			MD5_Update(&pvt->_context,data,size);
+		#endif
 		return true;
 	#else
 		pvt->_md5.MD5Update(&pvt->_context,data,size);
@@ -52,10 +56,14 @@ bool md5::append(const unsigned char *data, uint32_t size) {
 const unsigned char *md5::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!MD5_Final(pvt->_hash,&pvt->_context)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return (const unsigned char *)"";
-		}
+		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
+			if (!MD5_Final(pvt->_hash,&pvt->_context)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return (const unsigned char *)"";
+			}
+		#else
+			MD5_Final(pvt->_hash,&pvt->_context);
+		#endif
 	#else
 		pvt->_md5.MD5Final(pvt->_hash,&pvt->_context);
 	#endif
@@ -70,10 +78,14 @@ bool md5::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (!MD5_Init(&pvt->_context)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
+		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
+			if (!MD5_Init(&pvt->_context)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return false;
+			}
+		#else
+			MD5_Init(&pvt->_context);
+		#endif
 	#else
 		pvt->_md5.MD5Init(&pvt->_context);
 	#endif

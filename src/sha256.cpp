@@ -38,10 +38,14 @@ sha256::~sha256() {
 bool sha256::append(const unsigned char *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
-		if (!SHA256_Update(&pvt->_context,data,size)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
+		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
+			if (!SHA256_Update(&pvt->_context,data,size)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return false;
+			}
+		#else
+			SHA256_Update(&pvt->_context,data,size);
+		#endif
 		return true;
 	#else
 		sha256_update(&pvt->_context,data,size);
@@ -52,10 +56,14 @@ bool sha256::append(const unsigned char *data, uint32_t size) {
 const unsigned char *sha256::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
-		if (!SHA256_Final(pvt->_hash,&pvt->_context)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return NULL;
-		}
+		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
+			if (!SHA256_Final(pvt->_hash,&pvt->_context)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return NULL;
+			}
+		#else
+			SHA256_Final(pvt->_hash,&pvt->_context);
+		#endif
 		return pvt->_hash;
 	#else
 		sha256_done(&pvt->_context,&pvt->_hash);
@@ -75,10 +83,14 @@ bool sha256::clear() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
-		if (!SHA256_Init(&pvt->_context)) {
-			setError(ERR_GET_REASON(ERR_get_error()));
-			return false;
-		}
+		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
+			if (!SHA256_Init(&pvt->_context)) {
+				setError(ERR_GET_REASON(ERR_get_error()));
+				return false;
+			}
+		#else
+			SHA256_Init(&pvt->_context);
+		#endif
 		return true;
 	#else
 		bytestring::zero(pvt->_hash.u.u8,sizeof(pvt->_hash.u.u8));

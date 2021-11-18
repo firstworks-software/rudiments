@@ -161,8 +161,15 @@ then
 		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_CIPHER_CTX_new();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW,1,SSL has EVP_CIPHER_CTX_NEW) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		FW_ENABLE_WERROR
+		AC_MSG_CHECKING(whether MD5_Init/Update/Final return int)
+		FW_TRY_LINK([#include <openssl/md5.h>],[int a=MD5_Init(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT,1,SSL has MD5_Init/Update/Final returning int) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no);])
 		AC_MSG_CHECKING(whether SHA1_Init/Update/Final return int)
 		FW_TRY_LINK([#include <openssl/sha.h>],[int a=SHA1_Init(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT,1,SSL has SHA1_Init/Update/Final returning int) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no);])
+		if ( test "$DEFAULT_MD" = "sha256" )
+		then
+			AC_MSG_CHECKING(whether SHA256_Init/Update/Final return int)
+			FW_TRY_LINK([#include <openssl/sha.h>],[int a=SHA256_Init(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT,1,SSL has SHA256_Init/Update/Final returning int) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no);])
+		fi
 		FW_RESTORE_WERROR
 
 		AC_MSG_CHECKING(whether platform requires default cipher of PROFILE=SYSTEM)

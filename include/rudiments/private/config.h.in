@@ -126,6 +126,9 @@
 /* Rudiments supports libcurl */
 #undef RUDIMENTS_HAS_LIBCURL
 
+/* SSL has MD5_Init/Update/Final returning int */
+#undef RUDIMENTS_HAS_MD5_INIT_RETURNING_INT
+
 /* Rudiments supports PCRE */
 #undef RUDIMENTS_HAS_PCRE
 
@@ -134,6 +137,9 @@
 
 /* SSL has SHA256_CTX */
 #undef RUDIMENTS_HAS_SHA256_CTX
+
+/* SSL has SHA256_Init/Update/Final returning int */
+#undef RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT
 
 /* Rudiments supports SSL */
 #undef RUDIMENTS_HAS_SSL
