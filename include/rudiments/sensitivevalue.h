@@ -339,9 +339,14 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *  to getValueSize() and getTextValueLength() will return 0
 		 *  until parse() is called again.
 		 *
-		 *  Note that clear() does not reset class properties such as
+		 *  Note that clear() does not reset properties such as
 		 *  redirect delimiters, chomp behavior, etc. to defaults. */
 		void	clear();
+
+		/** Empties the internal buffer containing the value and
+		 *  resets properties such as redirect delimiters, chomp
+		 *  behavior, etc. to defaults. */
+		void	reset();
 
 	#include <rudiments/private/sensitivevalue.h>
 };

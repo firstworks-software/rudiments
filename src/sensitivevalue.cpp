@@ -182,9 +182,7 @@ void sensitivevalue::parse(const char *in) {
 
 void sensitivevalue::parse(const char *in, uint64_t inlen) {
 
-	delete[] pvt->_value;
-	pvt->_value=NULL;
-	pvt->_valuesize=0;
+	clear();
 
 	// if the input is [...file...] then attempt to get the
 	// contents of the specified file
@@ -367,6 +365,7 @@ const unsigned char *sensitivevalue::getValue() {
 unsigned char *sensitivevalue::detachValue() {
 	unsigned char	*retval=pvt->_value;
 	pvt->_value=NULL;
+	pvt->_valuesize=0;
 	return retval;
 }
 
@@ -381,6 +380,7 @@ const char *sensitivevalue::getTextValue() {
 char *sensitivevalue::detachTextValue() {
 	char	*retval=(char *)pvt->_value;
 	pvt->_value=NULL;
+	pvt->_valuesize=0;
 	return retval;
 }
 
@@ -389,6 +389,12 @@ uint64_t sensitivevalue::getTextValueLength() {
 }
 
 void sensitivevalue::clear() {
+	delete[] pvt->_value;
+	pvt->_value=NULL;
+	pvt->_valuesize=0;
+}
+
+void sensitivevalue::reset() {
 	delete[] pvt->_value;
 	init();
 }
