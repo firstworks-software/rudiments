@@ -66,10 +66,10 @@ class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
 		/** Deletes this instance of the listcollection class. */
 		virtual	~listcollection() {};
 
-		/** Returns the number of nodes in the linkedlist. */
+		/** Returns the number of nodes in the listcollection. */
 		virtual	uint64_t	getLength() const=0;
 
-		/** Returns the first node in the linkedlist. */
+		/** Returns the first node in the listcollection. */
 		virtual	listnode<valuetype>	*getFirst()=0;
 
 		/** Returns the node after "node" or NULL if this node is the
@@ -78,27 +78,27 @@ class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
 		virtual	listnode<valuetype>	*getNext(
 						listnode<valuetype> *node)=0;
 
-		/** Returns a pointer to the first linkedlistnode
+		/** Returns a pointer to the first listnode
 		 *  containing "value" or NULL if "value" was not found. */
 		virtual	listnode<valuetype>	*find(valuetype value)=0;
 
-		/** Returns a pointer to the first linkedlistnode
+		/** Returns a pointer to the first listnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
 		virtual	listnode<valuetype>	*find(
 						listnode<valuetype> *startnode,
 						valuetype value)=0;
 
-		/** Deletes all linkedlistnodes currently in the linkedlist.
-		 *  Note however, that the value stored in each linkedlistnode
+		/** Deletes all listnodes currently in the listcollection.
+		 *  Note however, that the value stored in each listnode
 		 *  is not deleted by this call. */
 		virtual	void	clear()=0;
 
-		/** Prints out a representation of the linkedlist. */
+		/** Prints out a representation of the listcollection. */
 		virtual	void	print() const=0;
 
 		/** Prints out a representation of the first "count"
-		 *  nodes of the linkedlist. */
+		 *  nodes of the listcollection. */
 		virtual	void	print(uint64_t count) const=0;
 };
 
