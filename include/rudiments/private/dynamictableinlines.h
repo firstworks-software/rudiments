@@ -21,6 +21,24 @@ dynamictable<valuetype>::~dynamictable() {
 
 template <class valuetype>
 inline
+bool dynamictable<valuetype>::getIsReadOnly() {
+	return false;
+}
+
+template <class valuetype>
+inline
+bool dynamictable<valuetype>::getIsBlockBased() {
+	return false;
+}
+
+template <class valuetype>
+inline
+bool dynamictable<valuetype>::getIsSequentialAccess() {
+	return false;
+}
+
+template <class valuetype>
+inline
 void dynamictable<valuetype>::setColumnName(uint64_t col, const char *name) {
 	if (cols && col<cols-1) {
 		delete[] columnnames[col];
@@ -64,8 +82,19 @@ valuetype dynamictable<valuetype>::getValue(uint64_t row, uint64_t col) {
 template <class valuetype>
 inline
 valuetype dynamictable<valuetype>::getValue(uint64_t row, const char *colname) {
-	// FIXME: implement this
+	// FIXME: inefficient
+	for (uint64_t i=0; i<cols; i++) {
+		if (!charstring::compare(colname,columnnames[i])) {
+			return getValue(row,i);
+		}
+	}
 	return (valuetype)0;
+}
+
+template <class valuetype>
+inline
+uint64_t dynamictable<valuetype>::getRowBlockSize() {
+	return 0;
 }
 
 template <class valuetype>
@@ -76,7 +105,7 @@ uint64_t dynamictable<valuetype>::getRowCount() {
 
 template <class valuetype>
 inline
-bool dynamictable<valuetype>::allRowsAvailable() {
+bool dynamictable<valuetype>::getAllRowsAvailable() {
 	return true;
 }
 

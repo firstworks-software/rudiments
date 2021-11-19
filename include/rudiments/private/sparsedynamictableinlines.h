@@ -22,6 +22,24 @@ sparsedynamictable<valuetype>::~sparsedynamictable() {
 
 template <class valuetype>
 inline
+bool sparsedynamictable<valuetype>::getIsReadOnly() {
+	return false;
+}
+
+template <class valuetype>
+inline
+bool sparsedynamictable<valuetype>::getIsBlockBased() {
+	return false;
+}
+
+template <class valuetype>
+inline
+bool sparsedynamictable<valuetype>::getIsSequentialAccess() {
+	return false;
+}
+
+template <class valuetype>
+inline
 void sparsedynamictable<valuetype>::setColumnName(uint64_t col,
 							const char *name) {
 	delete[] columnnames[col];
@@ -67,8 +85,19 @@ template <class valuetype>
 inline
 valuetype sparsedynamictable<valuetype>::getValue(uint64_t row,
 							const char *colname) {
-	// FIXME: implement this
+	// FIXME: inefficient
+	for (uint64_t i=0; i<cols; i++) {
+		if (!charstring::compare(colname,columnnames[i])) {
+			return getValue(row,i);
+		}
+	}
 	return (valuetype)0;
+}
+
+template <class valuetype>
+inline
+uint64_t sparsedynamictable<valuetype>::getRowBlockSize() {
+	return 0;
 }
 
 template <class valuetype>
@@ -79,7 +108,7 @@ uint64_t sparsedynamictable<valuetype>::getRowCount() {
 
 template <class valuetype>
 inline
-bool sparsedynamictable<valuetype>::allRowsAvailable() {
+bool sparsedynamictable<valuetype>::getAllRowsAvailable() {
 	return true;
 }
 

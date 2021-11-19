@@ -7,7 +7,30 @@
 #include <rudiments/nodecollection.h>
 
 /** The tablecollection class is the parent class for all rudiments table
- *  collections. */
+ *  collections.
+ *
+ *  Tables have rows and columns.  Columns may have names.
+ *
+ *  Tables may be read-write or read-only, monolithic or block-based,
+ *  and random-access or sequential-access.
+ *
+ *  In a monolithic implemenatation, all rows are immediately available at all
+ *  times.
+ *
+ *  In a block-based implementation, rows are only immediately available in
+ *  blocks.  Eg. If the table has a block size of 10, then getting a value in
+ *  row 6 would cause rows 0-9 to be loaded.  Getting a value in row 22 would
+ *  cause rows 20-29 to be loaded.
+ *
+ *  In a random implementation, values from any row may be accessed at any
+ *  time.  If the implementation is also block-based, then it may be more
+ *  efficient to access values from adjacent rows within the current block than
+ *  to access values from rows outside of the current block.
+ *
+ *  In a sequential implementation, values may only be accessed from rows within
+ *  the current block or subsequent blocks.  Eg. If the table has a block size
+ *  of 10, then getting a value in row 6, followed by a value in row 22 would
+ *  succeed, but a subsequent attempt to get a value from row 7 would fail. */
 template <class valuetype>
 class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 	public:
@@ -21,17 +44,40 @@ class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 		/** Deletes this instance of the tablecollection class. */
 		virtual	~tablecollection() {};
 
-		/** Sets the name of column "col" to "name" */
+		/** Returns true for read-only implementations and false for
+		 *  read-write implementations. */
+		virtual bool		getIsReadOnly()=0;
+
+		/** Returns true for block-based implementations and false for
+		 *  monolithic implementations. */
+		virtual bool		getIsBlockBased()=0;
+
+		/** Returns true for sequential-access implementations and
+		 *  false for random-access implementations. */
+		virtual bool		getIsSequentialAccess()=0;
+
+		/** In a read-write implementation, sets the name of column
+		 *  "col" to "name".
+		 *
+		 *  In a read-only implementation, has no effect. */
 		virtual	void		setColumnName(uint64_t col,
 							const char *name)=0;
 
-		/** Returns the name of column "col". */
+		/** Returns the name of column "col" or NULL if column "col"
+		 *  has no name. */
 		virtual	const char	*getColumnName(uint64_t col)=0;
 
-		/** Returns the number of columns in the table. */
+		/** Returns the current number of columns in the table.
+		 *
+		 *  In a read-write implementation, returns larger and larger
+		 *  values as calls to setColumnName() or setValue() extend the
+		 *  table. */
 		virtual	uint64_t	getColCount()=0;
 		
-		/** Sets the value at "row", "col" to "value". */
+		/** In a read-write implementation, sets the value at "row",
+		 *  "col" to "value".
+		 *
+		 *  In a read-only implementation, has no effect. */
 		virtual	void		setValue(uint64_t row,
 							uint64_t col,
 							valuetype value)=0;
@@ -48,19 +94,29 @@ class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 
 		/** Returns the current number of rows in the table.
 		 *
-		 *  Note that some implementations may not load all rows
-		 *  immediately.  getRowCount() only returns the total number
-		 *  of rows in the table when allRowsAvailable() returns
-		 *  true. */
+		 *  In a read-write implementation, returns larger and larger
+		 *  values as calls to setValue() extend the table.
+		 *
+		 *  In a block-based implementation, returns the total number
+		 *  of rows through the end of the current block, which is only
+		 *  the total number of rows in the table when
+		 *  getAllRowsAvailable() returns true. */
 		virtual	uint64_t	getRowCount()=0;
 
-		/** Returns true of getRowCount() will return the total number
-		 *  of rows in the table or false if getRowCount() will only
-		 *  return the current number of rows in the table. */
-		virtual	bool		allRowsAvailable()=0;
+		/** Returns the block size for block-based implementations and
+		 *  0 for monolithic implementations. */
+		virtual uint64_t	getRowBlockSize()=0;
 
-		/** Removes all values currently stored in the table, such that
-		 *  getValue() will return NULL or 0. */
+		/** Always returns true for monolithic implementations.  Only
+		 *  returns true in a block-based implementation if the current
+		 *  block contains the last row in the table. */
+		virtual	bool		getAllRowsAvailable()=0;
+
+		/** In a read-write implementation, removes all values
+		 *  currently stored in the table, such that getValue() will
+		 *  return NULL or 0.
+		 *
+		 *  In a read-only implementation, has no effect. */
 		virtual	void		clear()=0;
 };
 

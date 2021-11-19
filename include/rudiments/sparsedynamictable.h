@@ -15,7 +15,9 @@
  *
  *  However, it performs more poorly than dynamictable for general purpose
  *  tables.  Unless your application intends to sparsely populate the table,
- *  then you should consider using the dynamictable class instead. */
+ *  then you should consider using the dynamictable class instead.
+ *
+ *  Read-write, monolithic, random-access. */
 template <class valuetype>
 class RUDIMENTS_DLLSPEC sparsedynamictable : public tablecollection<valuetype> {
 	public:
@@ -26,13 +28,25 @@ class RUDIMENTS_DLLSPEC sparsedynamictable : public tablecollection<valuetype> {
 		/** Deletes this instance of the sparsedynamictable class. */
 		~sparsedynamictable();
 
+		/** Returns false. */
+		virtual bool		getIsReadOnly();
+
+		/** Returns false. */
+		virtual bool		getIsBlockBased();
+
+		/** Returns false. */
+		virtual bool		getIsSequentialAccess();
+
 		/** Sets the name of column "col" to "name" */
 		void		setColumnName(uint64_t col, const char *name);
 
-		/** Returns the number of columns in the table. */
+		/** Returns the name of column "col". */
 		const char	*getColumnName(uint64_t col);
 
-		/** Returns the number of columns in the table. */
+		/** Returns the current number of columns in the table.
+		 *  
+		 *  Returns larger and larger values as calls to setColumnName()
+		 *  or setValue() extend the table. */
 		uint64_t	getColCount();
 
 		/** Sets the value at "row", "col" to "value". */
@@ -47,13 +61,17 @@ class RUDIMENTS_DLLSPEC sparsedynamictable : public tablecollection<valuetype> {
 		 *  if there is no value at that address. */
 		valuetype	getValue(uint64_t row, const char *colname);
 
-		/** Returns the current number of rows in the table. */
+		/** Returns 0 as this is a monolithic implementation. */
+		uint64_t	getRowBlockSize();
+
+		/** Returns the current number of rows in the table.
+		 *
+		 *  Returns larger and larger values as calls to setValue()
+		 *  extend the table. */
 		uint64_t	getRowCount();
 
-		/** Returns true if getRowCount() will return the total number
-		 *  of rows in the table or false if getRowCount() will only
-		 *  return the current number of rows in the table. */
-		bool		allRowsAvailable();
+		/** Returns true. */
+		bool		getAllRowsAvailable();
 
 		/** Removes all values currently stored in the table, such that
 		 *  getValue() will return NULL or 0. */
