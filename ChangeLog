@@ -25,6 +25,7 @@
 	added wcharstring::copy(...const char *...) methods
 	wcharstring class handles platforms that don't support vswprintf()
 	added fixes for older OpenSSL
+	added mvcdao class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

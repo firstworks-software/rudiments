@@ -312,8 +312,12 @@ headers3="sax.h "+_
 	"encryption.h "+_
 	"aes128.h "+_
 	"mvctier.h "+_
+	"mvcservice.h "+_
+	"mvcdao.h "+_
 	"mvcview.h "+_
+	"mvccontroller.h "+_
 	"mvcresult.h "+_
+	"mvcsecurity.h "+_
 	"mvcproperties.h "+_
 	"httpbasicsecurity.h "+_
 	"cronschedule.h " +_
