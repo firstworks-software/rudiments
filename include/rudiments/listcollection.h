@@ -65,6 +65,92 @@ class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
 		/** Deletes this instance of the listcollection class. */
 		virtual	~listcollection() {};
 
+		/** Creates a new listnode containing "value" and
+		 *  prepends it to the linkedlist. */
+		virtual void	prepend(valuetype value)=0;
+
+		/** Prepends already created listnode "node" to the
+		 *  linkedlist. */
+		virtual void	prepend(listnode<valuetype> *node)=0;
+
+		/** Creates a new listnode containing "value" and
+		 *  appends it to the linkedlist. */
+		virtual void	append(valuetype value)=0;
+
+		/** Appends already created listnode "node" to the
+		 *  linkedlist. */
+		virtual void	append(listnode<valuetype> *node)=0;
+
+		/** Creates a new listnode containing "value" and
+		 *  inserts it into the linkedlist before "node". */
+		virtual void	insertBefore(listnode<valuetype> *node,
+							valuetype value)=0;
+
+		/** Inserts already created listnode "newnode" into the
+		 *  linkedlist before "node". */
+		virtual void	insertBefore(listnode<valuetype> *node,
+					listnode<valuetype> *newnode)=0;
+
+		/** Creates a new listnode containing "value" and
+		 *  inserts it into the linkedlist after "node". */
+		virtual void	insertAfter(listnode<valuetype> *node,
+							valuetype value)=0;
+
+		/** Inserts already created listnode "newnode" into the
+		 *  linkedlist after "node". */
+		virtual void	insertAfter(listnode<valuetype> *node,
+					listnode<valuetype> *newnode)=0;
+
+		/** Moves node "nodetomove" to the position before "node" in
+		 *  the linkedlist. */
+		virtual void	moveBefore(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove)=0;
+
+		/** Moves node "nodetomove" to the position after "node" in
+		 *  the linkedlist. */
+		virtual void	moveAfter(listnode<valuetype> *node,
+					listnode<valuetype> *nodetomove)=0;
+
+		/** Detaches "node" from the list. */
+		virtual void	detach(listnode<valuetype> *node)=0;
+
+		/** Deletes the first listnode containing "value".
+		 *
+		 *  The value stored in the listnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	remove(valuetype value)=0;
+
+		/** Deletes all listnodes containing "value".
+		 *
+		 *  The value stored in each listnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 * 
+		 *  Returns true on success and false on failure. */
+		virtual bool	removeAll(valuetype value)=0;
+
+		/** Removes listnode "node" from the linkedlist.
+		 *
+		 *  The value stored in the listnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
+		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	remove(listnode<valuetype> *node)=0;
+
 		/** Returns the number of nodes in the listcollection. */
 		virtual	uint64_t	getLength() const=0;
 
@@ -87,6 +173,17 @@ class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
 		virtual	listnode<valuetype>	*find(
 						listnode<valuetype> *startnode,
 						valuetype value)=0;
+
+		/** Sorts the linkedlist in ascending order using a modified
+		 *  insertion sort algorithm.  This sort is slower than
+		 *  heapSort() but uses no additional memory. */
+		virtual void	insertionSort()=0;
+
+		/** Sorts the linkedlist in ascending order using a heap
+		 *  sort algorithm.  This sort is faster than heapSort() but
+		 *  uses additional memory in proportion to the size of the
+		 *  list. */
+		virtual void	heapSort()=0;
 
 		/** Deletes all listnodes currently in the listcollection.
 		 *  Note however, that the value stored in each listnode
