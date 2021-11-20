@@ -6,8 +6,70 @@
 
 #include <rudiments/nodecollection.h>
 
-// FIXME: add a treenode class and use it here instead of nodecollectionnode,
-// and in avltree too, instead of avltreenode
+/** The treenode class is the parent class for the node contained by all
+ *  rudiments treenode-based collections. */
+template <class valuetype>
+class RUDIMENTS_DLLSPEC treenode : public nodecollectionnode<valuetype> {
+	public:
+		/** Creates an instance of the treenode class that
+		 *  stores value "value". */
+		treenode() : nodecollectionnode<valuetype>() {};
+
+		/** Deletes this instance of the treenode class.
+		 *  Note however, that the value stored in the treenode
+		 *  is not deleted by this call. */
+		virtual ~treenode() {};
+
+		/** Sets the value stored in the node to "value". */
+		virtual void	setValue(valuetype value)=0;
+
+		/** Return the value stored in the node. */
+		virtual valuetype	getValue() const=0;
+
+		/** Returns a negative number, 0, or a positive number depending
+		 *  on whether the value stored in the node is respectively
+		 *  less than, equal to or greater than "value". */
+		virtual int32_t	compare(valuetype value) const=0;
+
+		/** Returns a negative number, 0, or a positive number depending
+		 *  on whether the value stored in the node is respectively
+		 *  less than, equal to or greater than the value stored in
+		 *  "peer". */
+		virtual int32_t	compare(treenode<valuetype> *peer) const=0;
+
+		/** Returns the parent node in the tree or NULL
+		 *  if this node is the top-most node in the tree. */
+		virtual treenode<valuetype>	*getParent()=0;
+
+		/** Returns the left child of this node in the tree
+		 *  or NULL if this node has no left child. */
+		virtual treenode<valuetype>	*getLeftChild()=0;
+
+		/** Returns the right child of this node in the tree
+		 *  or NULL if this node has no right child. */
+		virtual treenode<valuetype>	*getRightChild()=0;
+
+		/** Returns the left height of this node in the tree. */
+		virtual uint8_t	getLeftHeight()=0;
+
+		/** Returns the right height of this node in the tree. */
+		virtual uint8_t	getRightHeight()=0;
+
+		/** Returns the previous node in the tree (in an in-order,
+ 		 *  depth-first traversal) or NULL if this node is the first
+ 		 *  node in the tree. */
+		virtual treenode<valuetype>	*getPrevious()=0;
+
+		/** Returns the next node in the tree (in an in-order,
+		 *  depth-first traversal) or NULL if this node is the last
+		 *  node in the tree. */
+		virtual treenode<valuetype>	*getNext()=0;
+
+		/** Prints the value stored in the node. */
+		virtual void	print() const=0;
+
+	#include <rudiments/private/treenode.h>
+};
 
 /** The treecollection class is the parent class for all rudiments tree
  *  collections. */
@@ -28,48 +90,43 @@ class RUDIMENTS_DLLSPEC treecollection : public nodecollection {
 		virtual uint64_t	getLength() const=0;
 
 		/** Returns the top-most node in the treecollection. */
-		virtual nodecollectionnode<valuetype>	*getTop()=0;
+		virtual treenode<valuetype>	*getTop()=0;
 
 		/** Returns the first node in the treecollection (in an
 		 *  in-order, depth-first traversal). */
-		virtual nodecollectionnode<valuetype>	*getFirst()=0;
+		virtual treenode<valuetype>	*getFirst()=0;
 
 		/** Returns the last node in the treecollection (in an in-order,
 		 *  depth-first traversal). */
-		virtual nodecollectionnode<valuetype>	*getLast()=0;
+		virtual treenode<valuetype>	*getLast()=0;
 
-#if 0
 		/** Returns the node prior to "node" or NULL if this node is
 		 *  the first node in the tree (in an in-order, depth-first
 		 *  traversal).  "node" is presumed to be in the tree. */
-		virtual nodecollectionnode<valuetype>	*getPrevious(
-					nodecollectionnode<valuetype> *node)=0;
+		virtual treenode<valuetype>	*getPrevious(
+					treenode<valuetype> *node)=0;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the tree (in an in-order, depth-first
 		 *  traversal). "node" is presumed to be in the tree. */
-		virtual nodecollectionnode<valuetype>	*getNext(
-					nodecollectionnode<valuetype> *node)=0;
-#endif
+		virtual treenode<valuetype>	*getNext(
+					treenode<valuetype> *node)=0;
 
-		/** Returns a pointer to the first nodecollectionnode containing
+		/** Returns a pointer to the first treenode containing
 		 *  "value" or NULL if "value" was not found. */
-		virtual nodecollectionnode<valuetype>	*find(
-							valuetype value)=0;
+		virtual treenode<valuetype>	*find(valuetype value)=0;
 
-#if 0
-		/** Returns a pointer to the first nodecollectionnode below
+		/** Returns a pointer to the first treenode below
 		 *  "startnode" containing "value" or NULL if "value" was not
 		 *  found. */
-		virtual nodecollectionnode<valuetype>
-			*find(nodecollectionnode<valuetype> *startnode,
+		virtual treenode<valuetype>
+			*find(treenode<valuetype> *startnode,
 							valuetype value)=0;
-#endif
 
-		/** Deletes all nodecollectionnodes currently in the
+		/** Deletes all treenodes currently in the
 		 *  treecollection.
 		 *
-		 *  The value stored in each nodecollectionnode is only
+		 *  The value stored in each treenode is only
 		 *  deleted if setManageValues(true) or
 		 *  setManageArrayValues(true) has been called. */
 		virtual void	clear()=0;

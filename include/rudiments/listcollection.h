@@ -47,8 +47,7 @@ class RUDIMENTS_DLLSPEC listnode : public nodecollectionnode<valuetype> {
 		 * if this node is the last node in the list. */
 		virtual	listnode<valuetype>	*getNext()=0;
 
-		virtual	void	setNext(listnode<valuetype> *next)=0;
-		virtual	void	setPrevious(listnode<valuetype> *previous)=0;
+	#include <rudiments/private/listnode.h>
 };
 
 /** The listcollection class is the parent class for all rudiments list

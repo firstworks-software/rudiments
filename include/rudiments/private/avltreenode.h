@@ -1,35 +1,34 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-		void	insert(avltreenode<valuetype> *node,
-				avltreenode<valuetype> **treetop);
-		void	detach(avltreenode<valuetype> **treetop);
+		void	insert(treenode<valuetype> *node,
+				treenode<valuetype> **treetop);
+		void	detach(treenode<valuetype> **treetop);
 
-		void	adjustParentHeights(avltreenode<valuetype> *node);
+		void	adjustParentHeights(treenode<valuetype> *node);
 
-		void	balance(avltreenode<valuetype> **treetop);
+		void	balance(treenode<valuetype> **treetop);
 
-		avltreenode<valuetype> *leftRightRotate(
-					avltreenode<valuetype> **treetop);
-		avltreenode<valuetype> *rightLeftRotate(
-					avltreenode<valuetype> **treetop);
-		avltreenode<valuetype> *leftRotate(
-					avltreenode<valuetype> **treetop);
-		avltreenode<valuetype> *rightRotate(
-					avltreenode<valuetype> **treetop);
+		treenode<valuetype> *leftRightRotate(
+					treenode<valuetype> **treetop);
+		treenode<valuetype> *rightLeftRotate(
+					treenode<valuetype> **treetop);
+		treenode<valuetype> *leftRotate(
+					treenode<valuetype> **treetop);
+		treenode<valuetype> *rightRotate(
+					treenode<valuetype> **treetop);
 
-		void	sort();
-
-		void	setValue(valuetype value);
-		void	setParent(avltreenode<valuetype> *node);
-		void	setLeftChild(avltreenode<valuetype> *node);
-		void	setRightChild(avltreenode<valuetype> *node);
+		void	setParent(treenode<valuetype> *node);
+		void	setLeftChild(treenode<valuetype> *node);
+		void	setRightChild(treenode<valuetype> *node);
+		void	setLeftHeight(uint8_t height);
+		void	setRightHeight(uint8_t height);
 
 	protected:
 		valuetype		value;
-		avltreenode<valuetype>	*parent;
-		avltreenode<valuetype>	*left;
-		avltreenode<valuetype>	*right;
+		treenode<valuetype>	*parent;
+		treenode<valuetype>	*left;
+		treenode<valuetype>	*right;
 		uint8_t			leftheight;
 		uint8_t			rightheight;
 

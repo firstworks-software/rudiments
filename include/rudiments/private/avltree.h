@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		avltreenode<valuetype>	*top;
-		avltreenode<valuetype>	*first;
-		avltreenode<valuetype>	*last;
+		treenode<valuetype>	*top;
+		treenode<valuetype>	*first;
+		treenode<valuetype>	*last;
 		uint64_t		length;

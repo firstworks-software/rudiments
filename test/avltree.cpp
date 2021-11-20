@@ -44,7 +44,7 @@ void walk(bool forwards, avltree<type> *t,
 	uint64_t	length=0;
 	type		prev;
 
-	avltreenode<type> *node=(forwards)?t->getFirst():t->getLast();
+	treenode<type> *node=(forwards)?t->getFirst():t->getLast();
 	while (node) {
 
 		if (length &&
@@ -80,7 +80,7 @@ template<class type>
 inline
 void find(avltree<type> *t, bool *finderror) {
 
-	for (avltreenode<type> *n=t->getFirst(); n; n=n->getNext()) {
+	for (treenode<type> *n=t->getFirst(); n; n=n->getNext()) {
 		if (t->find(n->getValue())!=n) {
 			*finderror=true;
 			break;
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 	// remove
-	for (avltreenode<int32_t> *node=intt.getTop();
+	for (treenode<int32_t> *node=intt.getTop();
 					node; node=intt.getTop()) {
 
 		// go left a random amount
@@ -250,7 +250,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 	// remove
-	for (avltreenode<double> *node=dblt.getTop();
+	for (treenode<double> *node=dblt.getTop();
 					node; node=dblt.getTop()) {
 
 		// go left a random amount
@@ -331,7 +331,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 	// remove
-	for (avltreenode<char *> *node=strt.getTop();
+	for (treenode<char *> *node=strt.getTop();
 					node; node=strt.getTop()) {
 
 		// go left a random amount

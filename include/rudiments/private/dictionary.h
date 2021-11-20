@@ -3,7 +3,7 @@
 
 	protected:
 		dictionarynode<keytype,valuetype>	*getNode(keytype key);
-		avltreenode< dictionarynode<keytype,valuetype> *>
+		treenode< dictionarynode<keytype,valuetype> *>
 							*find(keytype key);
 
 		avltree<dictionarynode<keytype,valuetype> *>	tree;

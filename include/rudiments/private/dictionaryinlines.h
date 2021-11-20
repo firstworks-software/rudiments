@@ -159,7 +159,7 @@ void dictionary<keytype,valuetype>::setValues(
 						node->getValue()->getValue());
 			}
 		} else {
-			for (avltreenode<dictionarynode<keytype,valuetype> *>
+			for (treenode<dictionarynode<keytype,valuetype> *>
 						*node=dict->tree.getFirst();
 						node; node=node->getNext()) {
 				setValue(node->getValue()->getKey(),
@@ -215,7 +215,7 @@ template <class keytype, class valuetype>
 inline
 dictionarynode<keytype,valuetype> *dictionary<keytype,valuetype>::
 							getNode(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
+	treenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
 		return tnode->getValue();
 	}
@@ -233,7 +233,7 @@ linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
 			keylist->append(node->getValue()->getKey());
 		}
 	} else {
-		for (avltreenode<dictionarynode<keytype,valuetype> *>
+		for (treenode<dictionarynode<keytype,valuetype> *>
 			*node=tree.getFirst(); node; node=node->getNext()) {
 			keylist->append(node->getValue()->getKey());
 		}
@@ -250,7 +250,7 @@ uint64_t dictionary<keytype,valuetype>::getLength() {
 template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::remove(keytype key) {
-	avltreenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
+	treenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
@@ -274,7 +274,7 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clear() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+	for (treenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		if (this->collection::managekeys) {
 			node_delete_value(node->getValue()->getKey());
@@ -297,7 +297,7 @@ void dictionary<keytype,valuetype>::clear() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::print() {
-	for (avltreenode<dictionarynode<keytype,valuetype> *> *node=
+	for (treenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		node->getValue()->print();
 		stdoutput.printf("\n");
@@ -306,7 +306,7 @@ void dictionary<keytype,valuetype>::print() {
 
 template <class keytype, class valuetype>
 inline
-avltreenode<dictionarynode<keytype,valuetype> *>
+treenode<dictionarynode<keytype,valuetype> *>
 			*dictionary<keytype,valuetype>::find(keytype key) {
 	dictionarynode<keytype,valuetype>	fnode(key,(valuetype)0);
 	return tree.find(&fnode);

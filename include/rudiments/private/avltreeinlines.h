@@ -29,7 +29,7 @@ void avltree<valuetype>::insert(valuetype value) {
 
 template <class valuetype>
 inline
-void avltree<valuetype>::insert(avltreenode<valuetype> *node) {
+void avltree<valuetype>::insert(treenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
@@ -70,8 +70,7 @@ void avltree<valuetype>::insert(avltreenode<valuetype> *node) {
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::detach(
-						avltreenode<valuetype> *node) {
+treenode<valuetype> *avltree<valuetype>::detach(treenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
@@ -105,7 +104,7 @@ avltreenode<valuetype> *avltree<valuetype>::detach(
 template <class valuetype>
 inline
 bool avltree<valuetype>::remove(valuetype value) {
-	avltreenode<valuetype>	*current=find(value);
+	treenode<valuetype>	*current=find(value);
 	return (current)?remove(current):false;
 }
 
@@ -121,8 +120,8 @@ bool avltree<valuetype>::removeAll(valuetype value) {
 
 template <class valuetype>
 inline
-bool avltree<valuetype>::remove(avltreenode<valuetype> *node) {
-	avltreenode<valuetype> *detachednode=detach(node);
+bool avltree<valuetype>::remove(treenode<valuetype> *node) {
+	treenode<valuetype> *detachednode=detach(node);
 	if (this->collection::managevalues) {
 		node_delete_value(detachednode->getValue());
 	} else if (this->collection::managevalues) {
@@ -140,46 +139,46 @@ uint64_t avltree<valuetype>::getLength() const {
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::getTop() {
+treenode<valuetype> *avltree<valuetype>::getTop() {
 	return top;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::getFirst() {
+treenode<valuetype> *avltree<valuetype>::getFirst() {
 	return first;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::getLast() {
+treenode<valuetype> *avltree<valuetype>::getLast() {
 	return last;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::getPrevious(
-					avltreenode<valuetype> *node) {
+treenode<valuetype> *avltree<valuetype>::getPrevious(
+					treenode<valuetype> *node) {
 	return (node)?node->getPrevious():NULL;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::getNext(
-					avltreenode<valuetype> *node) {
+treenode<valuetype> *avltree<valuetype>::getNext(
+					treenode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::find(valuetype value) {
-	return find((avltreenode<valuetype> *)top,value);
+treenode<valuetype> *avltree<valuetype>::find(valuetype value) {
+	return find((treenode<valuetype> *)top,value);
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltree<valuetype>::find(
-					avltreenode<valuetype> *startnode,
+treenode<valuetype> *avltree<valuetype>::find(
+					treenode<valuetype> *startnode,
 					valuetype value) {
 
 	#ifdef DEBUG_AVLTREE
@@ -195,7 +194,7 @@ avltreenode<valuetype> *avltree<valuetype>::find(
 	#endif
 
 	// descend the tree until we find the value or run off of the bottom
-	avltreenode<valuetype> *current=startnode;
+	treenode<valuetype> *current=startnode;
 	while (current) {
 
 		int32_t	result=current->compare(value);
@@ -245,7 +244,7 @@ void avltree<valuetype>::clear() {
 	#endif
 
 	// start at the top
-	avltreenode<valuetype>	*node=top;
+	treenode<valuetype>	*node=top;
 	while (node) {
 
 		// go right one, then go left as far as possible
@@ -257,7 +256,7 @@ void avltree<valuetype>::clear() {
 		}
 
 		// get the parent
-		avltreenode<valuetype>	*p=node->getParent();
+		treenode<valuetype>	*p=node->getParent();
 		if (p) {
 			if (p->getLeftChild()==node) {
 				p->setLeftChild(NULL);
@@ -308,8 +307,7 @@ void avltree<valuetype>::print() const {
 
 template <class valuetype>
 inline
-avltreenode<valuetype>::avltreenode(valuetype value) :
-					nodecollectionnode<valuetype>() {
+avltreenode<valuetype>::avltreenode(valuetype value) : treenode<valuetype>() {
 	this->value=value;
 	parent=NULL;
 	left=NULL;
@@ -337,19 +335,19 @@ valuetype avltreenode<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::getParent() {
+treenode<valuetype> *avltreenode<valuetype>::getParent() {
 	return parent;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::getLeftChild() {
+treenode<valuetype> *avltreenode<valuetype>::getLeftChild() {
 	return left;
 }
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::getRightChild() {
+treenode<valuetype> *avltreenode<valuetype>::getRightChild() {
 	return right;
 }
 
@@ -367,7 +365,7 @@ uint8_t avltreenode<valuetype>::getRightHeight() {
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::getPrevious() {
+treenode<valuetype> *avltreenode<valuetype>::getPrevious() {
 
 	// reverse in-order, depth-first traversal...
 
@@ -377,11 +375,11 @@ avltreenode<valuetype> *avltreenode<valuetype>::getPrevious() {
 		// contains the next lowest value...
 
 		// go left
-		avltreenode<valuetype>	*node=left;
+		treenode<valuetype>	*node=left;
 
 		// go as far right as possible
-		while (node->right) {
-			node=node->right;
+		while (node->getRightChild()) {
+			node=node->getRightChild();
 		}
 		return node;
 
@@ -389,22 +387,22 @@ avltreenode<valuetype> *avltreenode<valuetype>::getPrevious() {
 
 		// if we're the right child of our parent,
 		// then our parent contains the next lowest value
-		if (parent->right==this) {
+		if (parent->getRightChild()==this) {
 			return parent;
 		}
 
 		// If we're the left child of our parent, then we have to
 		// move up until we find an acestor that's the right child of
 		// its parent.  That node contains the next lowest value.
-		avltreenode<valuetype>	*node=parent;
+		treenode<valuetype>	*node=parent;
 		while (node) {
-			if (!node->parent) {
+			if (!node->getParent()) {
 				break;
 			}
-			if (node->parent->right==node) {
-				return node->parent;
+			if (node->getParent()->getRightChild()==node) {
+				return node->getParent();
 			}
-			node=node->parent;
+			node=node->getParent();
 		}
 	}
 	return NULL;
@@ -412,7 +410,7 @@ avltreenode<valuetype> *avltreenode<valuetype>::getPrevious() {
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::getNext() {
+treenode<valuetype> *avltreenode<valuetype>::getNext() {
 
 	// in-order, depth-first traversal...
 
@@ -422,11 +420,11 @@ avltreenode<valuetype> *avltreenode<valuetype>::getNext() {
 		// contains the next highest value...
 
 		// go right
-		avltreenode<valuetype>	*node=right;
+		treenode<valuetype>	*node=right;
 
 		// go as far left as possible
-		while (node->left) {
-			node=node->left;
+		while (node->getLeftChild()) {
+			node=node->getLeftChild();
 		}
 		return node;
 
@@ -434,22 +432,22 @@ avltreenode<valuetype> *avltreenode<valuetype>::getNext() {
 
 		// if we're the left child of our parent,
 		// then our parent contains the next highest value
-		if (parent->left==this) {
+		if (parent->getLeftChild()==this) {
 			return parent;
 		}
 
 		// If we're the right child of our parent, then we have to
 		// move up until we find an acestor that's the left child of
 		// its parent.  That node contains the next highest value.
-		avltreenode<valuetype>	*node=parent;
+		treenode<valuetype>	*node=parent;
 		while (node) {
-			if (!node->parent) {
+			if (!node->getParent()) {
 				break;
 			}
-			if (node->parent->left==node) {
-				return node->parent;
+			if (node->getParent()->getLeftChild()==node) {
+				return node->getParent();
 			}
-			node=node->parent;
+			node=node->getParent();
 		}
 	}
 	return NULL;
@@ -463,8 +461,8 @@ int32_t avltreenode<valuetype>::compare(valuetype value) const {
 
 template <class valuetype>
 inline
-int32_t avltreenode<valuetype>::compare(avltreenode<valuetype> *peer) const {
-	return node_compare(this->value,peer->value);
+int32_t avltreenode<valuetype>::compare(treenode<valuetype> *peer) const {
+	return node_compare(this->value,peer->getValue());
 }
 
 template <class valuetype>
@@ -492,10 +490,12 @@ void avltreenode<valuetype>::print(const char *name,
 		stdoutput.printf(">\n");
 		(*indentlevel)++;
 		if (left) {
-			left->print("left ",indentlevel);
+			((avltreenode<valuetype> *)left)->
+					print("left ",indentlevel);
 		}
 		if (right) {
-			right->print("right",indentlevel);
+			((avltreenode<valuetype> *)right)->
+					print("right",indentlevel);
 		}
 		(*indentlevel)--;
 		for (uint16_t i=0; i<*indentlevel; i++) {
@@ -507,26 +507,38 @@ void avltreenode<valuetype>::print(const char *name,
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::setParent(avltreenode<valuetype> *node) {
+void avltreenode<valuetype>::setParent(treenode<valuetype> *node) {
 	parent=node;
 }
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::setLeftChild(avltreenode<valuetype> *node) {
+void avltreenode<valuetype>::setLeftChild(treenode<valuetype> *node) {
 	left=node;
 }
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::setRightChild(avltreenode<valuetype> *node) {
+void avltreenode<valuetype>::setRightChild(treenode<valuetype> *node) {
 	right=node;
 }
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::insert(avltreenode<valuetype> *node,
-				avltreenode<valuetype> **treetop) {
+void avltreenode<valuetype>::setLeftHeight(uint8_t height) {
+	leftheight=height;
+}
+
+template <class valuetype>
+inline
+void avltreenode<valuetype>::setRightHeight(uint8_t height) {
+	rightheight=height;
+}
+
+template <class valuetype>
+inline
+void avltreenode<valuetype>::insert(treenode<valuetype> *node,
+				treenode<valuetype> **treetop) {
 
 	// degenerate case
 	if (!node) {
@@ -534,20 +546,20 @@ void avltreenode<valuetype>::insert(avltreenode<valuetype> *node,
 	}
 
 	// find a location to insert the node (should always be a leaf node)
-	avltreenode<valuetype>	*location=this;
+	treenode<valuetype>	*location=this;
 	for (;;) {
 
-		if (node->compare(location->value)<=0) {
+		if (node->compare(location->getValue())<=0) {
 
-			if (location->left) {
-				location=location->left;
+			if (location->getLeftChild()) {
+				location=location->getLeftChild();
 			} else {
 
 				#ifdef DEBUG_AVLTREE
 				stdoutput.printf("insert ");
-				node_print(node->value);
+				node_print(node->getValue());
 				stdoutput.printf(" to left of ");
-				node_print(location->value);
+				node_print(location->getValue());
 				stdoutput.printf(" {\n\n");
 				#endif
 
@@ -555,17 +567,17 @@ void avltreenode<valuetype>::insert(avltreenode<valuetype> *node,
 				break;
 			}
 
-		} else if (node->compare(location->value)>0) {
+		} else if (node->compare(location->getValue())>0) {
 
-			if (location->right) {
-				location=location->right;
+			if (location->getRightChild()) {
+				location=location->getRightChild();
 			} else {
 
 				#ifdef DEBUG_AVLTREE
 				stdoutput.printf("insert ");
-				node_print(node->value);
+				node_print(node->getValue());
 				stdoutput.printf(" to right of ");
-				node_print(location->value);
+				node_print(location->getValue());
 				stdoutput.printf(" {\n\n");
 				#endif
 
@@ -581,7 +593,7 @@ void avltreenode<valuetype>::insert(avltreenode<valuetype> *node,
 	adjustParentHeights(node);
 
 	// balance the tree
-	node->parent->balance(treetop);
+	node->getParent()->balance(treetop);
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} insert\n\n");
@@ -590,15 +602,15 @@ void avltreenode<valuetype>::insert(avltreenode<valuetype> *node,
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
+void avltreenode<valuetype>::detach(treenode<valuetype> **treetop) {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("detach ");
 	node_print(value);
 	stdoutput.printf(" {\n\n");
 
-	avltreenode<valuetype>	*top=this;
-	while (top->parent) { top=top->parent; }
+	treenode<valuetype>	*top=this;
+	while (top->getParent()) { top=top->getParent(); }
 	top->print(); stdoutput.printf("\n");
 	#endif
 
@@ -618,16 +630,16 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 		// following the rules from our in-order, depth-first traversal
 		// above, since we have a right child, we must go right one,
 		// then go left as far as possible
-		avltreenode<valuetype>	*successor=right;
-		while (successor->left) {
-			successor=successor->left;
+		treenode<valuetype>	*successor=right;
+		while (successor->getLeftChild()) {
+			successor=successor->getLeftChild();
 		}
 
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("swap ");
 		node_print(value);
 		stdoutput.printf(" and ");
-		node_print(successor->value);
+		node_print(successor->getValue());
 		stdoutput.printf("\n\n");
 		#endif
 
@@ -640,15 +652,18 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 		// swap this node with the successor...
 
 		// get a copy of the successor
-		avltreenode<valuetype>	temp(*successor);
+		avltreenode<valuetype>	temp(
+				*((avltreenode<valuetype> *)successor));
 
 		// re-parent the successor
-		successor->parent=parent;
-		if (successor->parent) {
-			if (successor->parent->left==this) {
-				successor->parent->left=successor;
+		successor->setParent(parent);
+		if (successor->getParent()) {
+			if (successor->getParent()->getLeftChild()==this) {
+				successor->getParent()->
+						setLeftChild(successor);
 			} else {
-				successor->parent->right=successor;
+				successor->getParent()->
+						setRightChild(successor);
 			}
 		} else {
 			*treetop=successor;
@@ -656,53 +671,54 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 
 		// replace the successor's children
 		// with those of this node
-		successor->left=left;
-		if (successor->left) {
-			successor->left->parent=successor;
+		successor->setLeftChild(left);
+		if (successor->getLeftChild()) {
+			successor->getLeftChild()->setParent(successor);
 		}
 		if (successorwasimmediaterightchild) {
-			successor->right=this;
-			successor->right->parent=successor;
+			successor->setRightChild(this);
+			successor->getRightChild()->setParent(successor);
 		} else {
-			successor->right=right;
-			if (successor->right) {
-				successor->right->parent=successor;
+			successor->setRightChild(right);
+			if (successor->getRightChild()) {
+				successor->getRightChild()->
+						setParent(successor);
 			}
 
 			// re-parent this node
 			parent=temp.parent;
-			if (parent->left==successor) {
-				parent->left=this;
+			if (parent->getLeftChild()==successor) {
+				parent->setLeftChild(this);
 			} else {
-				parent->right=this;
+				parent->setRightChild(this);
 			}
 		}
 
 		// replace the successor's heights
 		// with those of this node
-		successor->leftheight=leftheight;
-		successor->rightheight=rightheight;
+		successor->setLeftHeight(leftheight);
+		successor->setRightHeight(rightheight);
 
 
 		// replace this node's children
 		// with those of the successor
 		left=temp.left;
 		if (left) {
-			left->parent=this;
+			left->setParent(this);
 		}
 		right=temp.right;
 		if (right) {
-			right->parent=this;
+			right->setParent(this);
 		}
 
 		// replace this node's heights
 		// with those of the successor
-		leftheight=temp.leftheight;
-		rightheight=temp.rightheight;
+		leftheight=temp.getLeftHeight();
+		rightheight=temp.getRightHeight();
 
 		#ifdef DEBUG_AVLTREE
-		avltreenode<valuetype>	*top=this;
-		while (top->parent) { top=top->parent; }
+		treenode<valuetype>	*top=this;
+		while (top->getParent()) { top=top->getParent(); }
 		top->print(); stdoutput.printf("\n");
 		#endif
 
@@ -720,7 +736,7 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 	// NOTE: If the node has no children then this will implicitly
 	// set child=NULL (which is what we want in that case) because
 	// right=NULL.
-	avltreenode<valuetype>	*child=(left)?left:right;
+	treenode<valuetype>	*child=(left)?left:right;
 
 	if (parent) {
 
@@ -731,23 +747,23 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 		// connect the parent to the child
 		// (or to NULL if the node has no children)
 		// decrement the appropriate height of parent
-		if (parent->left==this) {
-			parent->left=child;
-			parent->leftheight--;
+		if (parent->getLeftChild()==this) {
+			parent->setLeftChild(child);
+			parent->setLeftHeight(parent->getLeftHeight()-1);
 		} else {
-			parent->right=child;
-			parent->rightheight--;
+			parent->setRightChild(child);
+			parent->setRightHeight(parent->getRightHeight()-1);
 		}
 
 		// connect the child to the parent
 		if (child) {
-			child->parent=parent;
+			child->setParent(parent);
 		}
 
 		// disconnect this node from its parent
 		// (but keep track of the parent so we
 		// can use it to balance)
-		avltreenode<valuetype>	*p=parent;
+		treenode<valuetype>	*p=parent;
 		parent=NULL;
 
 		// update heights up the tree
@@ -760,7 +776,7 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 
 		// disconnect this node's child from it
 		if (child) {
-			child->parent=NULL;
+			child->setParent(NULL);
 		}
 
 		// disconnect this node from its children
@@ -773,8 +789,8 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 		*treetop=child;
 
 		#ifdef DEBUG_AVLTREE
-		avltreenode<valuetype>	*top=this;
-		while (top->parent) { top=top->parent; }
+		treenode<valuetype>	*top=this;
+		while (top->getParent()) { top=top->getParent(); }
 		top->print(); stdoutput.printf("\n");
 		#endif
 	}
@@ -786,15 +802,16 @@ void avltreenode<valuetype>::detach(avltreenode<valuetype> **treetop) {
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::adjustParentHeights(avltreenode<valuetype> *node) {
+void avltreenode<valuetype>::adjustParentHeights(treenode<valuetype> *node) {
 
 	// move up the tree, starting with the parent of "node"...
-	while (node->parent) {
+	while (node->getParent()) {
 
 		// calculate the new height of the parent
-		uint8_t	height=((node->leftheight>node->rightheight)?
-							node->leftheight:
-							node->rightheight)+1;
+		uint8_t	height=((node->getLeftHeight()>
+					node->getRightHeight())?
+						node->getLeftHeight():
+						node->getRightHeight())+1;
 
 		// If "node" is the left child of the parent, then adjust the
 		// parent's left height.  
@@ -802,26 +819,26 @@ void avltreenode<valuetype>::adjustParentHeights(avltreenode<valuetype> *node) {
 		// parent's right height.  
 		// In either case, bail if the height is already the same as we
 		// calculated.
-		if (node->parent->left==node) {
-			if (node->parent->leftheight==height) {
+		if (node->getParent()->getLeftChild()==node) {
+			if (node->getParent()->getLeftHeight()==height) {
 				return;
 			}
-			node->parent->leftheight=height;
+			node->getParent()->setLeftHeight(height);
 		} else {
-			if (node->parent->rightheight==height) {
+			if (node->getParent()->getRightHeight()==height) {
 				return;
 			}
-			node->parent->rightheight=height;
+			node->getParent()->setRightHeight(height);
 		}
 
 		// move up
-		node=node->parent;
+		node=node->getParent();
 	}
 }
 
 template <class valuetype>
 inline
-void avltreenode<valuetype>::balance(avltreenode<valuetype> **treetop) {
+void avltreenode<valuetype>::balance(treenode<valuetype> **treetop) {
 
 	// AVL balance...
 
@@ -830,41 +847,43 @@ void avltreenode<valuetype>::balance(avltreenode<valuetype> **treetop) {
 	node_print(value);
 	stdoutput.printf(" {\n\n");
 
-	avltreenode<valuetype>	*top=this;
-	while (top->parent) { top=top->parent; }
+	treenode<valuetype>	*top=this;
+	while (top->getParent()) { top=top->getParent(); }
 	top->print(); stdoutput.printf("\n");
 	#endif
 
 	// start balancing with the current node
-	avltreenode<valuetype> *node=this;
+	treenode<valuetype> *node=this;
 	while (node) {
 
 		// there's an imbalance if the left and right
 		// tree heights differ by more than 1
-		if ((node->leftheight>node->rightheight &&
-				node->leftheight-node->rightheight>1) ||
-			(node->rightheight>node->leftheight &&
-				node->rightheight-node->leftheight>1)) {
+		if ((node->getLeftHeight()>node->getRightHeight() &&
+			node->getLeftHeight()-node->getRightHeight()>1) ||
+			(node->getRightHeight()>node->getLeftHeight() &&
+			node->getRightHeight()-node->getLeftHeight()>1)) {
 
 			#ifdef DEBUG_AVLTREE
 			stdoutput.printf("imbalance at ");
-			node_print(node->value);
+			node_print(node->getValue());
 			stdoutput.printf("\n\n");
 			#endif
 
 			// apply the appropriate rotation to restore balance
 			// and let the rotation method tell us whch node to
 			// process next
-			if (node->rightheight>node->leftheight) {
-				if (node->right->rightheight>
-						node->right->leftheight) {
+			if (node->getRightHeight()>node->getLeftHeight()) {
+				if (node->getRightChild()->getRightHeight()>
+					node->getRightChild()->getLeftHeight()) {
 					node=node->leftRotate(treetop);
 				} else {
 					node=node->rightLeftRotate(treetop);
 				}
-			} else if (node->leftheight>node->rightheight) {
-				if (node->left->leftheight>
-						node->left->rightheight) {
+			} else if (node->getLeftHeight()>
+						node->getRightHeight()) {
+				if (node->getLeftChild()->getLeftHeight()>
+						node->getLeftChild()->
+							getRightHeight()) {
 					node=node->rightRotate(treetop);
 				} else {
 					node=node->leftRightRotate(treetop);
@@ -872,8 +891,8 @@ void avltreenode<valuetype>::balance(avltreenode<valuetype> **treetop) {
 			}
 
 			#ifdef DEBUG_AVLTREE
-			avltreenode<valuetype>	*top=this;
-			while (top->parent) { top=top->parent; }
+			treenode<valuetype>	*top=this;
+			while (top->getParent()) { top=top->getParent(); }
 			top->print(); stdoutput.printf("\n");
 			#endif
 
@@ -881,19 +900,19 @@ void avltreenode<valuetype>::balance(avltreenode<valuetype> **treetop) {
 
 			#ifdef DEBUG_AVLTREE
 			stdoutput.printf("no imbalance at ");
-			node_print(node->value);
+			node_print(node->getValue());
 			stdoutput.printf("\n\n");
 			#endif
 
 			// if there's no imbalance then the next node we need
 			// to process is the parent of the current node
-			node=node->parent;
+			node=node->getParent();
 		}
 
 		#ifdef DEBUG_AVLTREE
 		if (node) {
 			stdoutput.printf("continuing at ");
-			node_print(node->value);
+			node_print(node->getValue());
 			stdoutput.printf("\n\n");
 		}
 		#endif
@@ -907,8 +926,8 @@ void avltreenode<valuetype>::balance(avltreenode<valuetype> **treetop) {
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::leftRotate(
-					avltreenode<valuetype> **treetop) {
+treenode<valuetype> *avltreenode<valuetype>::leftRotate(
+					treenode<valuetype> **treetop) {
 
 	/* one of these: (eg: insert order a,b,c)
  	 *
@@ -929,18 +948,18 @@ avltreenode<valuetype> *avltreenode<valuetype>::leftRotate(
 	#endif
 
 	// get a, b, and "star"
-	avltreenode<valuetype>	*a=this;
-	avltreenode<valuetype>	*b=a->right;
-	avltreenode<valuetype>	*star=b->left;
-	uint8_t			starheight=b->leftheight;
+	treenode<valuetype>	*a=this;
+	treenode<valuetype>	*b=a->getRightChild();
+	treenode<valuetype>	*star=b->getLeftChild();
+	uint8_t			starheight=b->getLeftHeight();
 
 	// move b
-	avltreenode<valuetype>	*p=a->parent;
+	treenode<valuetype>	*p=a->getParent();
 	if (p) {
-		if (p->right==a) {
-			p->right=b;
+		if (p->getRightChild()==a) {
+			p->setRightChild(b);
 		} else {
-			p->left=b;
+			p->setLeftChild(b);
 		}
 	} else {
 		#ifdef DEBUG_AVLTREE
@@ -948,17 +967,17 @@ avltreenode<valuetype> *avltreenode<valuetype>::leftRotate(
 		#endif
 		*treetop=b;
 	}
-	b->parent=a->parent;
-	b->left=a;
+	b->setParent(a->getParent());
+	b->setLeftChild(a);
 
 	// move a
-	a->parent=b;
-	a->right=star;
-	a->rightheight=starheight;
+	a->setParent(b);
+	a->setRightChild(star);
+	a->setRightHeight(starheight);
 
 	// move "star"
 	if (star) {
-		star->parent=a;
+		star->setParent(a);
 	}
 
 	// update heights up the tree
@@ -972,8 +991,8 @@ avltreenode<valuetype> *avltreenode<valuetype>::leftRotate(
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
-					avltreenode<valuetype> **treetop) {
+treenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
+					treenode<valuetype> **treetop) {
 
 	/* one of these: (eg: insert order a,c,b)
 	 *
@@ -998,33 +1017,33 @@ avltreenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
 	// do the right part of the right-left rotation...
 
 	// get a, c, b, and "star"
-	avltreenode<valuetype>	*a=this;
-	avltreenode<valuetype>	*c=a->right;
-	avltreenode<valuetype>	*b=c->left;
-	avltreenode<valuetype>	*star=b->right;
-	uint8_t			starheight=b->rightheight;
+	treenode<valuetype>	*a=this;
+	treenode<valuetype>	*c=a->getRightChild();
+	treenode<valuetype>	*b=c->getLeftChild();
+	treenode<valuetype>	*star=b->getRightChild();
+	uint8_t			starheight=b->getRightHeight();
 
 	// move b
-	a->right=b;
-	b->parent=a;
-	b->right=c;
+	a->setRightChild(b);
+	b->setParent(a);
+	b->setRightChild(c);
 
 	// move c
-	c->parent=b;
-	c->left=star;
-	c->leftheight=starheight;
+	c->setParent(b);
+	c->setLeftChild(star);
+	c->setLeftHeight(starheight);
 
 	// move "star"
 	if (star) {
-		star->parent=c;
+		star->setParent(c);
 	}
 
 	// update heights up the tree
 	adjustParentHeights(c);
 
 	#ifdef DEBUG_AVLTREE
-	avltreenode<valuetype>	*top=this;
-	while (top->parent) { top=top->parent; }
+	treenode<valuetype>	*top=this;
+	while (top->getParent()) { top=top->getParent(); }
 	top->print(); stdoutput.printf("\n");
 	#endif
 
@@ -1043,8 +1062,8 @@ avltreenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::rightRotate(
-					avltreenode<valuetype> **treetop) {
+treenode<valuetype> *avltreenode<valuetype>::rightRotate(
+					treenode<valuetype> **treetop) {
 
 	/* one of these: (insert order c,b,a)
 	 *
@@ -1065,18 +1084,18 @@ avltreenode<valuetype> *avltreenode<valuetype>::rightRotate(
 	#endif
 
 	// get c, b, and "star"
-	avltreenode<valuetype>	*c=this;
-	avltreenode<valuetype>	*b=c->left;
-	avltreenode<valuetype>	*star=b->right;
-	uint8_t			starheight=b->rightheight;
+	treenode<valuetype>	*c=this;
+	treenode<valuetype>	*b=c->getLeftChild();
+	treenode<valuetype>	*star=b->getRightChild();
+	uint8_t			starheight=b->getRightHeight();
 
 	// move b
-	avltreenode<valuetype>	*p=c->parent;
+	treenode<valuetype>	*p=c->getParent();
 	if (p) {
-		if (p->right==c) {
-			p->right=b;
+		if (p->getRightChild()==c) {
+			p->setRightChild(b);
 		} else {
-			p->left=b;
+			p->setLeftChild(b);
 		}
 	} else {
 		#ifdef DEBUG_AVLTREE
@@ -1084,17 +1103,17 @@ avltreenode<valuetype> *avltreenode<valuetype>::rightRotate(
 		#endif
 		*treetop=b;
 	}
-	b->parent=c->parent;
-	b->right=c;
+	b->setParent(c->getParent());
+	b->setRightChild(c);
 
 	// move c
-	c->parent=b;
-	c->left=star;
-	c->leftheight=starheight;
+	c->setParent(b);
+	c->setLeftChild(star);
+	c->setLeftHeight(starheight);
 
 	// move "star"
 	if (star) {
-		star->parent=c;
+		star->setParent(c);
 	}
 
 	// update heights up the tree
@@ -1108,8 +1127,8 @@ avltreenode<valuetype> *avltreenode<valuetype>::rightRotate(
 
 template <class valuetype>
 inline
-avltreenode<valuetype> *avltreenode<valuetype>::leftRightRotate(
-					avltreenode<valuetype> **treetop) {
+treenode<valuetype> *avltreenode<valuetype>::leftRightRotate(
+					treenode<valuetype> **treetop) {
 
 	/* one of these: (insert order c,a,b)
 	 *
@@ -1134,33 +1153,33 @@ avltreenode<valuetype> *avltreenode<valuetype>::leftRightRotate(
 	// do the left part of the left-right rotation...
 
 	// get c, a, b, and "star"
-	avltreenode<valuetype>	*c=this;
-	avltreenode<valuetype>	*a=c->left;
-	avltreenode<valuetype>	*b=a->right;
-	avltreenode<valuetype>	*star=b->left;
-	uint8_t			starheight=b->leftheight;
+	treenode<valuetype>	*c=this;
+	treenode<valuetype>	*a=c->getLeftChild();
+	treenode<valuetype>	*b=a->getRightChild();
+	treenode<valuetype>	*star=b->getLeftChild();
+	uint8_t			starheight=b->getLeftHeight();
 
 	// move b
-	c->left=b;
-	b->parent=c;
-	b->left=a;
+	c->setLeftChild(b);
+	b->setParent(c);
+	b->setLeftChild(a);
 
 	// move a
-	a->parent=b;
-	a->right=star;
-	a->rightheight=starheight;
+	a->setParent(b);
+	a->setRightChild(star);
+	a->setRightHeight(starheight);
 
 	// move "star"
 	if (star) {
-		star->parent=a;
+		star->setParent(a);
 	}
 
 	// update heights up the tree
 	adjustParentHeights(a);
 
 	#ifdef DEBUG_AVLTREE
-	avltreenode<valuetype>	*top=this;
-	while (top->parent) { top=top->parent; }
+	treenode<valuetype>	*top=this;
+	while (top->getParent()) { top=top->getParent(); }
 	top->print(); stdoutput.printf("\n");
 	#endif
 
