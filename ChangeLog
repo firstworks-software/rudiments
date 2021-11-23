@@ -26,6 +26,8 @@
 	wcharstring class handles platforms that don't support vswprintf()
 	added fixes for older OpenSSL
 	added mvcdao class
+	added acfirstworks.m4 and acrudiments.m4 for other projects to use in
+		their configure scripts
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
