@@ -5,8 +5,14 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_HAVE_DLFCN_H
+#if defined(RUDIMENTS_HAVE_DLFCN_H)
 	#include <dlfcn.h>
+#elif defined(RUDIMENTS_HAVE_MACH_O_DYLD_H)
+	#include <rudiments/environment.h>
+	#include <rudiments/stringbuffer.h>
+	#include <rudiments/singlylinkedlist.h>
+	#include <rudiments/file.h>
+	#include <mach-o/dyld.h>
 #endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -20,10 +26,14 @@
 class dynamiclibprivate {
 	friend class dynamiclib;
 	private:
-		#if defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
-			HMODULE	_handle;
-		#else
+		#if defined(RUDIMENTS_HAVE_DLOPEN)
 			void	*_handle;
+		#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
+			HMODULE	_handle;
+		#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
+			NSObjectFileImage	_nsofi;
+			void			*_handle;
+			char			*_error;
 		#endif
 };
 
@@ -33,6 +43,11 @@ static	threadmutex	*_errormutex=NULL;
 dynamiclib::dynamiclib() : object() {
 	pvt=new dynamiclibprivate;
 	pvt->_handle=NULL;
+	#if !defined(RUDIMENTS_HAVE_DLOPEN) && \
+		defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		pvt->_nsofi=NULL;
+		pvt->_error=NULL;
+	#endif
 }
 
 dynamiclib::~dynamiclib() {
@@ -45,6 +60,13 @@ dynamiclib::~dynamiclib() {
 
 	close();
 
+	#if !defined(RUDIMENTS_HAVE_DLOPEN) && \
+		defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		char	*tmperror=pvt->_error;
+		pvt->_error=NULL;
+		delete[] tmperror;
+	#endif
+
 	dynamiclibprivate	*tmppvt=pvt;
 	pvt=NULL;
 	delete tmppvt;
@@ -52,6 +74,7 @@ dynamiclib::~dynamiclib() {
 
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
+
 		int32_t	flag=(loaddependencies)?RTLD_NOW:RTLD_LAZY;
 		#ifdef RTLD_GLOBAL
 		if (global) {
@@ -64,11 +87,158 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			pvt->_handle=dlopen(library,flag);
 		} while (!pvt->_handle && error::getErrorNumber()==EINTR);
 		return (pvt->_handle!=NULL);
+
+	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
+
+		// clear any previous error
+		error::clearError();
+		delete[] pvt->_error;
+		pvt->_error=NULL;
+
+		// If the library contains a slash then assume that it's a
+		// full or relative path.  Otherwise assume it's just a file
+		// name that we need to search for in the usual places.
+		singlylinkedlist<char *>	paths;
+		if (charstring::contains(library,'/')) {
+
+			// stub out the paths list
+			paths.append("");
+
+		} else {
+
+			paths.setManageArrayValues(true);
+
+			// build list of paths to search,
+			// including DYLD_LIBRARY_PATH, LD_LIBRARY_PATH,
+			// /lib, and /usr/lib
+			char				**list;
+			uint64_t			listlength;
+			const char *envs[]={
+				"DYLD_LIBRARY_PATH",
+				"LD_LIBRARY_PATH",
+				NULL
+			};
+			for (const char **env=envs; *env; env++) {
+				const char	*val=
+						environment::getValue(*env);
+				charstring::split(val,":",true,
+							&list,&listlength);
+				for (uint64_t i=0; i<listlength; i++) {
+					if (!charstring::isNullOrEmpty(
+								list[i])) {
+						paths.append(list[i]);
+					}
+				}
+				delete[] list;
+			}
+			paths.append(charstring::duplicate("/lib"));
+			paths.append(charstring::duplicate("/usr/lib"));
+		}
+		
+
+		// search for the file...
+		// assume that the file doesn't exist
+		// then, for each search path...
+		//	* if the file exists but there is some permissions
+		//		error or file format error, then that becomes
+		//		the current result and we keep looking
+		// 	* if the file exists and is a good file, then that
+		// 		becomes	the current result and we stop looking
+		// 	* if we don't find the file in subsequent paths then
+		// 		that doesn't override the current result
+		// 	* but, if we don't find the file in any search path,
+		// 		and didn't run into any other errors, then
+		// 		the final result is file-not-found
+		stringbuffer			fullpath;
+		NSObjectFileImageReturnCode	result=NSObjectFileImageFailure;
+		for (listnode<char *> *node=paths.getFirst();
+						node; node=node->getNext()) {
+
+			// get the path
+			const char	*path=node->getValue();
+
+			// build the fully qualified path name of the library
+			if (path[0]) {
+				fullpath.append(path)->append('/');
+			}
+			fullpath.append(library);
+
+			// fully resolve any symbolic links
+			const char	*fp=NULL;
+			char		*f=NULL;
+			for (;;) {
+				fp=fullpath.getString();
+				f=file::resolveSymbolicLink(fp);
+				if (!f) {
+					break;
+				} else {
+					fullpath.clear();
+					if (!charstring::contains(f,'/')) {
+						fullpath.append(path);
+						fullpath.append('/');
+					}
+					fullpath.append(f);
+					delete[] f;
+				}
+			}
+
+			// create the object file image
+			NSObjectFileImageReturnCode	res=
+					NSCreateObjectFileImageFromFile(fp,
+								&pvt->_nsofi);
+			if (res==NSObjectFileImageSuccess) {
+				result=res;
+				break;
+			} else if (res!=NSObjectFileImageFailure) {
+				result=res;
+			}
+
+			// clean up
+			fullpath.clear();
+		}
+
+		// set the error appropriately (if one occurred)
+		switch (result) {
+			case NSObjectFileImageSuccess:
+				break;
+			case NSObjectFileImageFailure:
+				pvt->_error=charstring::duplicate(
+						"No such file or directory");
+				return false;
+			case NSObjectFileImageAccess:
+				pvt->_error=charstring::duplicate(
+       						"Permission denied");
+				return false;
+			default:
+				pvt->_error=charstring::duplicate(
+       						"Exec format error");
+				return false;
+		}
+
+		// determine options
+		unsigned long	options=NSLINKMODULE_OPTION_RETURN_ON_ERROR;
+		if (loaddependencies) {
+			options|=NSLINKMODULE_OPTION_BINDNOW;
+		}
+
+		// link the module
+		pvt->_handle=NSLinkModule(&pvt->_nsofi,library,options);
+		if (!pvt->_handle) {
+
+			// destroy the object file image
+			NSDestroyObjectFileImage(pvt->_nsofi);
+			return false;
+		}
+		return true;
+
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
+
 		pvt->_handle=LoadLibraryEx(library,NULL,
 			(loaddependencies)?0:DONT_RESOLVE_DLL_REFERENCES);
 		return (pvt->_handle)?true:false;
+
 	#else
+
 		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
@@ -90,6 +260,20 @@ bool dynamiclib::close() {
 			// success.  So, we'll catch -1 below, rather than 0.
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		retval=(result!=-1);
+	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
+
+		// clear any previous error
+		error::clearError();
+		delete[] pvt->_error;
+		pvt->_error=NULL;
+
+		// unlink the module
+		retval=(NSUnLinkModule(pvt->_handle,
+					NSUNLINKMODULE_OPTION_NONE)==TRUE);
+
+		// destroy the object file image
+		NSDestroyObjectFileImage(pvt->_nsofi);
+
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		retval=(FreeLibrary(pvt->_handle)==TRUE);
 	#else
@@ -112,6 +296,9 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 			symhandle=dlsym(pvt->_handle,(char *)symbol);
 		} while (!symhandle && error::getErrorNumber()==EINTR);
 		return (pvt->_handle)?symhandle:NULL;
+	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		RUDIMENTS_SET_ENOSYS
+		return false;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		return (void *)GetProcAddress(pvt->_handle,symbol);
 	#else
@@ -136,6 +323,25 @@ char *dynamiclib::getError() const {
 		}
 		if (_errormutex) {
 			_errormutex->unlock();
+		}
+		return retval;
+	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		char	*retval=NULL;
+		if (pvt->_error) {
+			retval=charstring::duplicate(pvt->_error);
+		} else {
+			if (_errormutex && !_errormutex->lock()) {
+				return NULL;
+			}
+			NSLinkEditErrors	c;
+			int			errornumber;
+			const char		*filename;
+			const char		*errorstring;
+			NSLinkEditError(&c,&errornumber,&filename,&errorstring);
+			retval=charstring::duplicate(errorstring);
+			if (_errormutex) {
+				_errormutex->unlock();
+			}
 		}
 		return retval;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)

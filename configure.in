@@ -553,6 +553,10 @@ AC_MSG_CHECKING(for dlfcn.h)
 AC_TRY_COMPILE([#include <dlfcn.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DLFCN_H, 1, Some systems have dlfcn.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for mach-o/dyld.h)
+AC_TRY_COMPILE([#include <mach-o/dyld.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_MACH_O_DYLD_H, 1, Some systems have mach-o/dyld.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for poll.h)
 AC_TRY_COMPILE([#include <poll.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_POLL_H, 1, Some systems have poll.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -3634,6 +3638,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif],
 LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for NSLinkModule)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_MACH_O_DYLD_H
+	#include <mach-o/dyld.h>
+#endif],
+NSLinkModule(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_NSLINKMODULE,1,Some systems have NSLinkModule) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
 

@@ -798,6 +798,9 @@
 /* Some systems have machine/endian.h */
 #undef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
 
+/* Some systems have mach-o/dyld.h */
+#undef RUDIMENTS_HAVE_MACH_O_DYLD_H
+
 /* Some systems have madvise */
 #undef RUDIMENTS_HAVE_MADVISE
 
@@ -932,6 +935,9 @@
 
 /* Some systems define _NSGetEnviron in crt_externs.h */
 #undef RUDIMENTS_HAVE_NSGETENVIRON
+
+/* Some systems have NSLinkModule */
+#undef RUDIMENTS_HAVE_NSLINKMODULE
 
 /* Some systems have ntohll */
 #undef RUDIMENTS_HAVE_NTOHLL

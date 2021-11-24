@@ -10033,7 +10033,7 @@ case $host_os in
 		DARWIN="yes"
 
 		dnl get the actual mac os version
-		PRODUCTVERSION="`sw_vers -productVersion`"
+		PRODUCTVERSION="`sw_vers | grep ProductVersion | cut -d':' -f2 | tr -d '\t'`"
 		AC_MSG_RESULT($PRODUCTVERSION)
 
 		FW_CHECK_WNOLONGDOUBLE
@@ -11548,7 +11548,7 @@ case $host_os in
 		DARWIN="yes"
 
 		dnl get the actual mac os version
-		PRODUCTVERSION="`sw_vers -productVersion`"
+		PRODUCTVERSION="`sw_vers | grep ProductVersion | cut -d':' -f2 | tr -d '\t'`"
 		AC_MSG_RESULT($PRODUCTVERSION)
 
 		FW_CHECK_WNOLONGDOUBLE

@@ -14,7 +14,17 @@ int main(int argc, const char **argv) {
 #ifndef RUDIMENTS_HAVE_G_CONFIG_H
 
 #ifdef _WIN32
-	char	*f=charstring::duplicate("C:\\Windows\\System32\\msvcrt.dll");
+	// windows
+	char	*f=charstring::duplicate(
+		"C:\\Windows\\System32\\msvcrt.dll");
+	const char	*validsymbol="strcmp";
+	const char	*invalidsymbol="strcmpbad";
+#elif defined(RUDIMENTS_HAVE_NSLINKMODULE) && !defined(RUDIMENTS_HAVE_DLOPEN)
+	// early mac os x
+	char	*f=charstring::duplicate(
+		"/Library/Perl/darwin/auto/Foundation/Foundation.bundle");
+	const char	*validsymbol="strcmp";
+	const char	*invalidsymbol="strcmpbad";
 #else
 	// decide on a file to use
 	const char	*dirs[]={
@@ -57,17 +67,22 @@ int main(int argc, const char **argv) {
 			break;
 		}
 	}
+	const char	*validsymbol="strcmp";
+	const char	*invalidsymbol="strcmpbad";
 #endif
 	test("file exists",f);
 
 	// open valid file and get a symbol
 	dynamiclib	d;
-	test("open: valid file",d.open(f,false,false));
-	void	*strcmp=d.getSymbol("strcmp");
-	test("getSymbol: valid symbol",strcmp);
+	//test("open: valid file",d.open(f,false,false));
+stdoutput.printf("open: valid file...\n");
+d.open(f,false,false);
+stdoutput.printf("%s\n",d.getError());
+	void	*valid=d.getSymbol(validsymbol);
+	test("getSymbol: valid symbol",valid);
 	test("getError: valid symbol",!d.getError());
-	strcmp=d.getSymbol("strcmpbad");
-	test("getSymbol: invalid symbol",!strcmp);
+	valid=d.getSymbol(invalidsymbol);
+	test("getSymbol: invalid symbol",!valid);
 	test("getError: invalid symbol",d.getError());
 	test("close",d.close());
 

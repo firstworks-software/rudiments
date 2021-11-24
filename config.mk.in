@@ -44,7 +44,7 @@ INC = -I
 OBJ = lo
 
 # linker flags
-LTLINK = $(LIBTOOL) --mode=link
+LTLINK = @MACOSXDEPLOYMENTTARGET@ $(LIBTOOL) --mode=link
 LINK = @CXX@
 AR = @AR@
 LDFLAGS = @LDFLAGS@
