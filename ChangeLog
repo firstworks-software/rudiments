@@ -28,6 +28,7 @@
 	added mvcdao class
 	added acfirstworks.m4 and acrudiments.m4 for other projects to use in
 		their configure scripts
+	added NSModule/NSObjectFileImage-based implementation of dynamiclib
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

@@ -33,7 +33,8 @@ class dynamiclibprivate {
 		#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
 			NSObjectFileImage	_nsofi;
 			void			*_handle;
-			char			*_error;
+			const char		*_error;
+			bool			_linkerror;
 		#endif
 };
 
@@ -47,6 +48,7 @@ dynamiclib::dynamiclib() : object() {
 		defined(RUDIMENTS_HAVE_NSLINKMODULE)
 		pvt->_nsofi=NULL;
 		pvt->_error=NULL;
+		pvt->_linkerror=false;
 	#endif
 }
 
@@ -59,13 +61,6 @@ dynamiclib::~dynamiclib() {
 	}
 
 	close();
-
-	#if !defined(RUDIMENTS_HAVE_DLOPEN) && \
-		defined(RUDIMENTS_HAVE_NSLINKMODULE)
-		char	*tmperror=pvt->_error;
-		pvt->_error=NULL;
-		delete[] tmperror;
-	#endif
 
 	dynamiclibprivate	*tmppvt=pvt;
 	pvt=NULL;
@@ -92,8 +87,11 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 
 		// clear any previous error
 		error::clearError();
-		delete[] pvt->_error;
 		pvt->_error=NULL;
+		pvt->_linkerror=false;
+
+		// reset nsofi
+		pvt->_nsofi=0;
 
 		// If the library contains a slash then assume that it's a
 		// full or relative path.  Otherwise assume it's just a file
@@ -135,7 +133,6 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			paths.append(charstring::duplicate("/usr/lib"));
 		}
 		
-
 		// search for the file...
 		// assume that the file doesn't exist
 		// then, for each search path...
@@ -186,7 +183,19 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			NSObjectFileImageReturnCode	res=
 					NSCreateObjectFileImageFromFile(fp,
 								&pvt->_nsofi);
-			if (res==NSObjectFileImageSuccess) {
+
+			// if we got this specific error then try to add the
+			// file as an image directly, this appears to be
+			// necessary if the file is a dylib, and not a bundle
+			if (res==NSObjectFileImageInappropriateFile) {
+				pvt->_handle=(void *)NSAddImage(
+					fp,NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+				if (pvt->_handle) {
+					return true;
+				} else {
+					break;
+				}
+			} else if (res==NSObjectFileImageSuccess) {
 				result=res;
 				break;
 			} else if (res!=NSObjectFileImageFailure) {
@@ -202,28 +211,28 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			case NSObjectFileImageSuccess:
 				break;
 			case NSObjectFileImageFailure:
-				pvt->_error=charstring::duplicate(
-						"No such file or directory");
+				pvt->_error="No such file or directory";
 				return false;
 			case NSObjectFileImageAccess:
-				pvt->_error=charstring::duplicate(
-       						"Permission denied");
+				pvt->_error="Permission denied";
 				return false;
 			default:
-				pvt->_error=charstring::duplicate(
-       						"Exec format error");
+				pvt->_error="Exec format error";
 				return false;
 		}
 
-		// determine options
+		// determine link options
 		unsigned long	options=NSLINKMODULE_OPTION_RETURN_ON_ERROR;
 		if (loaddependencies) {
 			options|=NSLINKMODULE_OPTION_BINDNOW;
 		}
+		// FIXME: what to do if global is specified?
 
 		// link the module
 		pvt->_handle=NSLinkModule(&pvt->_nsofi,library,options);
 		if (!pvt->_handle) {
+
+			pvt->_linkerror=true;
 
 			// destroy the object file image
 			NSDestroyObjectFileImage(pvt->_nsofi);
@@ -264,15 +273,21 @@ bool dynamiclib::close() {
 
 		// clear any previous error
 		error::clearError();
-		delete[] pvt->_error;
 		pvt->_error=NULL;
+		pvt->_linkerror=false;
 
-		// unlink the module
-		retval=(NSUnLinkModule(pvt->_handle,
+		if (pvt->_nsofi) {
+
+			// unlink the module
+			retval=(NSUnLinkModule(pvt->_handle,
 					NSUNLINKMODULE_OPTION_NONE)==TRUE);
 
-		// destroy the object file image
-		NSDestroyObjectFileImage(pvt->_nsofi);
+			// destroy the object file image
+			NSDestroyObjectFileImage(pvt->_nsofi);
+
+		} else {
+			retval=true;
+		}
 
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		retval=(FreeLibrary(pvt->_handle)==TRUE);
@@ -297,8 +312,35 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 		} while (!symhandle && error::getErrorNumber()==EINTR);
 		return (pvt->_handle)?symhandle:NULL;
 	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
-		RUDIMENTS_SET_ENOSYS
-		return false;
+
+		// clear any previous error
+		error::clearError();
+		pvt->_error=NULL;
+		pvt->_linkerror=false;
+
+		// prepend a _ to the symbol name
+		stringbuffer	temp;
+		temp.append('_')->append(symbol);
+		symbol=temp.getString();
+
+		// first check the global namespace
+		if (NSIsSymbolNameDefined(symbol)) {
+			return NSLookupAndBindSymbol(symbol);
+		}
+
+		// if that fails then check the module directly
+		NSSymbol	symhandle=NSLookupSymbolInModule(
+							pvt->_handle,symbol);
+		if (!symhandle) {
+			pvt->_error="Undefined symbol";
+			return NULL;
+		}
+		void	*address=NSAddressOfSymbol(symhandle);
+		if (!address) {
+			pvt->_error="Bad address";
+			return NULL;
+		}
+		return address;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		return (void *)GetProcAddress(pvt->_handle,symbol);
 	#else
@@ -329,7 +371,7 @@ char *dynamiclib::getError() const {
 		char	*retval=NULL;
 		if (pvt->_error) {
 			retval=charstring::duplicate(pvt->_error);
-		} else {
+		} else if (pvt->_linkerror) {
 			if (_errormutex && !_errormutex->lock()) {
 				return NULL;
 			}
