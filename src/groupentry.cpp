@@ -108,7 +108,7 @@ static gid_t addGidMapping(const char *name,
 				const char *sidstr, PSID sid, DWORD sidsize) {
 
 	// check for existing mapping (by name only)
-	for (linkedlistnode< dictionarynode< gid_t, namesid * > *>
+	for (listnode< dictionarynode< gid_t, namesid * > *>
 				*node=gidmap.getList()->getFirst(); 
 				node; node=node->getNext()) {
 		namesid	*ns=node->getValue()->getValue();

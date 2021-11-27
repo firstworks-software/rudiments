@@ -129,7 +129,7 @@ static uid_t addUidMapping(const char *name,
 				const char *sidstr, PSID sid, DWORD sidsize) {
 
 	// check for existing mapping (by name only)
-	for (linkedlistnode< dictionarynode< uid_t, namesid * > *>
+	for (listnode< dictionarynode< uid_t, namesid * > *>
 				*node=uidmap.getList()->getFirst(); 
 				node; node=node->getNext()) {
 		namesid	*ns=node->getValue()->getValue();

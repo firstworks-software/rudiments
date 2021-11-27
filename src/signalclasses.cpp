@@ -333,7 +333,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER) || \
 		defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 		bool	result=true;
-		for (linkedlistnode< int32_t > *node=
+		for (listnode< int32_t > *node=
 				sset->pvt->_siglist.getFirst();
 				node; node=node->getNext()) {
 
@@ -371,7 +371,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SIGNAL)
 		bool	result=true;
-		for (linkedlistnode< int32_t > *node=
+		for (listnode< int32_t > *node=
 				sset->pvt->_siglist.getFirst();
 				node; node=node->getNext()) {
 			result=(result &&
