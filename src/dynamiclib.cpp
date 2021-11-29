@@ -185,21 +185,29 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 								&pvt->_nsofi);
 
 			// if we got this specific error then try to add the
-			// file as an image directly, this appears to be
-			// necessary if the file is a dylib, and not a bundle
+			// file as a library directly, this appears to be
+			// necessary if the file is a dylib, rather than a
+			// bundle, and works for dylibs with flat namespaces
 			if (res==NSObjectFileImageInappropriateFile) {
+
 				pvt->_handle=(void *)NSAddLibrary(fp);
+
 				#ifdef NSADDIMAGE_OPTION_RETURN_ON_ERROR
+				// if that failed, then try to add it as an
+				// image, this appears to be necessary for
+				// dylibs with two-level namespaces
 				if (!pvt->_handle) {
 					pvt->_handle=(void *)NSAddImage(fp,
 					NSADDIMAGE_OPTION_RETURN_ON_ERROR);
 				}
 				#endif
+
 				if (pvt->_handle) {
 					return true;
 				} else {
 					break;
 				}
+
 			} else if (res==NSObjectFileImageSuccess) {
 				result=res;
 				break;
