@@ -4,6 +4,7 @@
 #include <rudiments/datetime.h>
 #include <rudiments/environment.h>
 #include <rudiments/stdio.h>
+#include <rudiments/sys.h>
 #include <rudiments/private/config.h>
 #include "test.cpp"
 
@@ -442,21 +443,29 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
-// FIXME: doesn't work with linux libc
-#ifndef RUDIMENTS_HAVE_G_CONFIG_H
 	// switch time zones
-	stdoutput.printf("switch time zones:\n");
-	dt.initialize(datestring);
-	dt.adjustTimeZone("CST6CDT");
-	test("CST",!charstring::compare(dt.getString(),cstdatestring));
-	dt.adjustTimeZone("MST7MDT");
-	test("MST",!charstring::compare(dt.getString(),mstdatestring));
-	dt.adjustTimeZone("PST8PDT");
-	test("PST",!charstring::compare(dt.getString(),pstdatestring));
-	dt.adjustTimeZone("EST5EDT");
-	test("EST",!charstring::compare(dt.getString(),estdatestring));
-	stdoutput.printf("\n");
-#endif
+	char	*os=sys::getOperatingSystemName();
+	char	*rel=sys::getOperatingSystemRelease();
+	double	ver=charstring::toFloat(rel);
+	// FIXME: not supported on linux libc, however it's possible that
+	// there's a distro with a pre 2.0 kernel that doesn't use libc
+	bool	notsupported=(!charstring::compare(os,"Linux",5) && ver<2.0);
+	delete[] os;
+	delete[] rel;
+			
+	if (!notsupported) {
+		stdoutput.printf("switch time zones:\n");
+		dt.initialize(datestring);
+		dt.adjustTimeZone("CST6CDT");
+		test("CST",!charstring::compare(dt.getString(),cstdatestring));
+		dt.adjustTimeZone("MST7MDT");
+		test("MST",!charstring::compare(dt.getString(),mstdatestring));
+		dt.adjustTimeZone("PST8PDT");
+		test("PST",!charstring::compare(dt.getString(),pstdatestring));
+		dt.adjustTimeZone("EST5EDT");
+		test("EST",!charstring::compare(dt.getString(),estdatestring));
+		stdoutput.printf("\n");
+	}
 
 
 	// valid/invalid dates
