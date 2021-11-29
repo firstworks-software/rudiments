@@ -184,21 +184,23 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 					NSCreateObjectFileImageFromFile(fp,
 								&pvt->_nsofi);
 
-#ifdef NSADDIMAGE_OPTION_RETURN_ON_ERROR
 			// if we got this specific error then try to add the
 			// file as an image directly, this appears to be
 			// necessary if the file is a dylib, and not a bundle
 			if (res==NSObjectFileImageInappropriateFile) {
-				pvt->_handle=(void *)NSAddImage(
-					fp,NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+				pvt->_handle=(void *)NSAddLibrary(fp);
+				#ifdef NSADDIMAGE_OPTION_RETURN_ON_ERROR
+				if (!pvt->_handle) {
+					pvt->_handle=(void *)NSAddImage(fp,
+					NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+				}
+				#endif
 				if (pvt->_handle) {
 					return true;
 				} else {
 					break;
 				}
-			} else
-#endif
-			if (res==NSObjectFileImageSuccess) {
+			} else if (res==NSObjectFileImageSuccess) {
 				result=res;
 				break;
 			} else if (res!=NSObjectFileImageFailure) {
