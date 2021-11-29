@@ -10,6 +10,21 @@ linkedlist<valuetype>::linkedlist() : listcollection<valuetype>() {
 	first=NULL;
 	last=NULL;
 	length=0;
+
+#ifdef DARWIN_GCC_2952_HACKS
+	return;
+
+	// On Darwin platforms, when using gcc 2.95.2 (and possibly other
+	// versions), if the calling app uses linkedlist, but doesn't happen to
+	// directly use linkedlistnode, even if it uses listnode, then the code
+	// for linkedlistnode doesn't get pulled in, and various undefined
+	// symbols result.  Adding a call here, after the return causes the
+	// code to be included and the symbols to be defined.  It's called
+	// here, after the return so that it never actually gets executed.
+	// The old compiler doesn't complain about that.
+	linkedlistnode<valuetype>	*a=
+		(linkedlistnode<valuetype> *)getFirst();
+#endif
 }
 
 template <class valuetype>

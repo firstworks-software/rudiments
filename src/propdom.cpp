@@ -10,8 +10,7 @@
 class propdomprivate {
 	friend class propdom;
 	private:
-		domnode			*_current;
-		linkedlist<bool>	_inarray;
+		domnode		*_current;
 		#ifdef DEBUG_MESSAGES
 		uint16_t	_indent;
 		#endif

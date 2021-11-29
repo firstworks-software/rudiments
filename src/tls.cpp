@@ -1965,6 +1965,7 @@ class tlscertificateprivate {
 tlscertificate::tlscertificate() {
 	pvt=new tlscertificateprivate;
 	initCertificate();
+	pvt->_san.setManageArrayValues(true);
 }
 
 tlscertificate::~tlscertificate() {
@@ -1996,10 +1997,6 @@ void tlscertificate::freeCertificate() {
 	delete[] pvt->_sigalg;
 	delete[] pvt->_pkalg;
 	delete[] pvt->_pk;
-	for (listnode< char * > *node=pvt->_san.getFirst();
-					node; node=node->getNext()) {
-		delete[] node->getValue();
-	}
 	pvt->_san.clear();
 }
 

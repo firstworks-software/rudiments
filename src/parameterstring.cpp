@@ -61,18 +61,6 @@ bool parameterstring::parse(const char *paramstring) {
 	}
 
 	return true;
-
-/*#ifdef DARWIN_GCC_2952_HACKS
-	// linkedlist<const char *> gets defined in dictionary.h as the return
-	// value for dictionary::getKeys().  But, since we don't call getKeys()
-	// then the code to implement it never gets included.  On Darwin
-	// platforms, when using gcc 2.95.2 (and possibly other versions) this
-	// results in various undefined symbols.  Adding a call here, after
-	// the return causes the code to be included and the symbols to be
-	// defined.  It's called here after the return so that it never gets
-	// executed.  The old compiler doesn't complain about that.
-	pvt->_nvp.getKeys();
-#endif*/
 }
 
 const char *parameterstring::getValue(const char *name) {

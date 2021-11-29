@@ -9,9 +9,7 @@
 class inidomprivate {
 	friend class inidom;
 	private:
-		domnode			*_current;
-		linkedlist<bool>	_inarray;
-
+		domnode		*_current;
 		#ifdef DEBUG_MESSAGES
 		uint16_t	_indent;
 		#endif
