@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 	delete[] rel;
 			
 	if (notsupported) {
-		stdoutput.printf("\n");
+		stdoutput.printf("	not supported\n\n");
 		process::exit(0);
 	}
 

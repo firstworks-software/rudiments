@@ -144,7 +144,8 @@ int main(int argc, const char **argv) {
 
 		header("handoff");
 
-        	// not supported on Cygwin, Linux < 2.2, syllable, IRIX...
+        	// not supported on Cygwin, Linux < 2.2, syllable, IRIX,
+        	// mac os 10.0...
         	char    *rel=sys::getOperatingSystemRelease();
         	double  ver=charstring::toFloat(rel);
         	bool	notsupported=
@@ -152,7 +153,9 @@ int main(int argc, const char **argv) {
                			(!charstring::compare(os,"Linux",5) &&
 				ver<2.2) ||
 				!charstring::compare(os,"syllable",8) ||
-				!charstring::compare(os,"IRIX",4));
+				!charstring::compare(os,"IRIX",4) ||
+               			(!charstring::compare(os,"Darwin",6) &&
+				ver<1.4));
 		delete[] rel;
 		if (notsupported) {
 			stdoutput.printf("	not supported\n\n");
