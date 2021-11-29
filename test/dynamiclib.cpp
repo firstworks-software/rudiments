@@ -29,7 +29,7 @@ int main(int argc, const char **argv) {
 
 	char	*f=NULL;
 	if (!charstring::compare(os,"Windows")) {
-		char	*f=charstring::duplicate(
+		f=charstring::duplicate(
 				"C:\\Windows\\System32\\msvcrt.dll");
 	} else {
 		// decide on a file to use
