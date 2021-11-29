@@ -449,7 +449,10 @@ int main(int argc, const char **argv) {
 	double	ver=charstring::toFloat(rel);
 	// FIXME: not supported on linux libc, however it's possible that
 	// there's a distro with a pre 2.0 kernel that doesn't use libc
-	bool	notsupported=(!charstring::compare(os,"Linux",5) && ver<2.0);
+	// Also doesn't appear to work on Mac OS X <= 10.1
+	bool	notsupported=
+			((!charstring::compare(os,"Linux",5) && ver<2.0) ||
+			(!charstring::compare(os,"Darwin",6) && ver<6.0));
 	delete[] os;
 	delete[] rel;
 			
