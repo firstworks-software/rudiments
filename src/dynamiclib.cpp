@@ -341,19 +341,15 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 		temp.append('_')->append(symbol);
 		symbol=temp.getString();
 
-		void	*address=NULL;
+		NSSymbol	sym=NULL;
 		if (pvt->_isbundle) {
 
 			// if we loaded a bundle, then get the symbol this way
-			NSSymbol	symhandle=NSLookupSymbolInModule(
-							pvt->_handle,symbol);
-			if (!symhandle) {
+			sym=NSLookupSymbolInModule(pvt->_handle,symbol);
+			if (!sym) {
 				pvt->_error="Undefined symbol";
 				return NULL;
 			}
-
-			// get the address of the symbol
-			address=NSAddressOfSymbol(symhandle);
 
 		} else {
 
@@ -363,9 +359,16 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 				return NULL;
 			}
 
-			// bind the symbol and get its address
-			address=NSLookupAndBindSymbol(symbol);
+			// bind the symbol
+			sym=NSLookupAndBindSymbol(symbol);
+			if (!sym) {
+				pvt->_error="Undefined symbol";
+				return NULL;
+			}
 		}
+
+		// get the address of the symbol
+		void	*address=NSAddressOfSymbol(sym);
 		if (!address) {
 			pvt->_error="Bad address";
 		}

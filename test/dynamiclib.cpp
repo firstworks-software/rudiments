@@ -84,7 +84,7 @@ int main(int argc, const char **argv) {
 	test("getError: valid symbol",!d.getError());
 	int (*strcmp)(const char *, const char *)=
 		(int (*)(const char *, const char *))valid;
-	test("strcmp(): ",(*strcmp)("",""));
+	test("strcmp(): ",!(*strcmp)("",""));
 	valid=d.getSymbol("strcmpbad");
 	test("getSymbol: invalid symbol",!valid);
 	test("getError: invalid symbol",d.getError());
