@@ -104,20 +104,21 @@ int main(int argc, const char **argv) {
 		alarmhandler.handleSignal(SIGALRM);
 		#endif
 
-		// set an alarm
-		signalmanager::alarm(5);
-
 		// wait for signals
-		if (!signalmanager::waitForSignals(&ignoreset)) {
-			snooze::macrosnooze(5);
-		}
+		//stdoutput.printf("waiting for sigterm\n");
+		signalmanager::waitForSignals(&ignoreset);
 		test("SIGTERM",gotsigterm);
+
 		#ifdef SIGFPE
+		//stdoutput.printf("waiting for sigfpe\n");
 		signalmanager::waitForSignals(&ignoreset);
 		test("SIGFPE",gotsigfpe);
 		#endif
+
 		#ifdef SIGALRM
-snooze::macrosnooze(1);
+		// set an alarm
+		signalmanager::alarm(5);
+		//stdoutput.printf("waiting for sigalrm\n");
 		signalmanager::waitForSignals(&ignoreset);
 		test("SIGALRM",gotsigalrm);
 		#endif
@@ -130,12 +131,22 @@ snooze::macrosnooze(1);
 		pid_t	pid=charstring::toInteger(argv[1]);
 
 		// send it a SIGTERM
-		snooze::macrosnooze(1);
+		#ifdef SLOWSYSTEM
+			snooze::macrosnooze(3);
+		#else
+			snooze::macrosnooze(1);
+		#endif
+		//stdoutput.printf("sending sigterm\n");
 		process::sendSignal(pid,SIGTERM);
 
 		// send it a SIGFPE
 		#ifdef SIGFPE
-		snooze::macrosnooze(1);
+		#ifdef SLOWSYSTEM
+			snooze::macrosnooze(3);
+		#else
+			snooze::macrosnooze(1);
+		#endif
+		//stdoutput.printf("sending sigfpe\n");
 		process::sendSignal(pid,SIGFPE);
 		#endif
 	}
