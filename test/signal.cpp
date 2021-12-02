@@ -118,6 +118,10 @@ int main(int argc, const char **argv) {
 		#ifdef SIGALRM
 		// set an alarm
 		signalmanager::alarm(5);
+		// snooze a sec, it appears that the actual alarm() system
+		// call can be asynchronous, or something, and interrupt the
+		// wait() below
+		snooze::macrosnooze(1);
 		//stdoutput.printf("waiting for sigalrm\n");
 		signalmanager::waitForSignals(&ignoreset);
 		test("SIGALRM",gotsigalrm);
