@@ -32,6 +32,7 @@ class dynamiclibprivate {
 			HMODULE	_handle;
 		#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
 			NSObjectFileImage	_nsofi;
+			bool			_isbundle;
 			void			*_handle;
 			const char		*_error;
 			bool			_linkerror;
@@ -47,6 +48,7 @@ dynamiclib::dynamiclib() : object() {
 	#if !defined(RUDIMENTS_HAVE_DLOPEN) && \
 		defined(RUDIMENTS_HAVE_NSLINKMODULE)
 		pvt->_nsofi=NULL;
+		pvt->_isbundle=false;
 		pvt->_error=NULL;
 		pvt->_linkerror=false;
 	#endif
@@ -90,8 +92,9 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		pvt->_error=NULL;
 		pvt->_linkerror=false;
 
-		// reset nsofi
-		pvt->_nsofi=0;
+		// reset nsofi and isbundle
+		pvt->_nsofi=NULL;
+		pvt->_isbundle=false;
 
 		// If the library contains a slash then assume that it's a
 		// full or relative path.  Otherwise assume it's just a file
@@ -239,10 +242,11 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		if (loaddependencies) {
 			options|=NSLINKMODULE_OPTION_BINDNOW;
 		}
-		// FIXME: what to do if global is specified?
+		// FIXME: if global is not specified then include
+		// NSLINKMODULE_OPTION_PRIVATE?
 
 		// link the module
-		pvt->_handle=NSLinkModule(&pvt->_nsofi,library,options);
+		pvt->_handle=NSLinkModule(pvt->_nsofi,library,options);
 		if (!pvt->_handle) {
 
 			pvt->_linkerror=true;
@@ -251,6 +255,7 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			NSDestroyObjectFileImage(pvt->_nsofi);
 			return false;
 		}
+		pvt->_isbundle=true;
 		return true;
 
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
@@ -336,24 +341,39 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 		temp.append('_')->append(symbol);
 		symbol=temp.getString();
 
-		// first check the global namespace
-		if (NSIsSymbolNameDefined(symbol)) {
-			return NSLookupAndBindSymbol(symbol);
+		NSSymbol	sym=NULL;
+		if (pvt->_isbundle) {
+
+			// if we loaded a bundle, then get the symbol this way
+			sym=NSLookupSymbolInModule(pvt->_handle,symbol);
+			if (!sym) {
+				pvt->_error="Undefined symbol";
+				return NULL;
+			}
+
+		} else {
+
+			// if we loaded a dylib, then get the symbol this way
+			if (!NSIsSymbolNameDefined(symbol)) {
+				pvt->_error="Undefined symbol";
+				return NULL;
+			}
+
+			// bind the symbol
+			sym=NSLookupAndBindSymbol(symbol);
+			if (!sym) {
+				pvt->_error="Undefined symbol";
+				return NULL;
+			}
 		}
 
-		// if that fails then check the module directly
-		NSSymbol	symhandle=NSLookupSymbolInModule(
-							pvt->_handle,symbol);
-		if (!symhandle) {
-			pvt->_error="Undefined symbol";
-			return NULL;
-		}
-		void	*address=NSAddressOfSymbol(symhandle);
+		// get the address of the symbol
+		void	*address=NSAddressOfSymbol(sym);
 		if (!address) {
 			pvt->_error="Bad address";
-			return NULL;
 		}
 		return address;
+
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		return (void *)GetProcAddress(pvt->_handle,symbol);
 	#else
