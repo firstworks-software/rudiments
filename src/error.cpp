@@ -7,8 +7,11 @@
 
 #include <stdio.h>
 
-// to get the more portable XSI-compliant strerror_r rather than the GNU version
-#undef __USE_GNU
+// to make sure we get the more portable XSI-compliant strerror_r rather than
+// the GNU version, if we ahve it
+#ifdef RUDIMENTS_HAVE_XSI_STRERROR_R
+	#undef __USE_GNU
+#endif
 
 // to avoid __THROW errors on some systems (fedora 2)
 #undef __REDIRECT
@@ -80,11 +83,11 @@ char *error::getErrorString() {
 			}
 			setErrorNumber(errornumber);
 			#elif defined(RUDIMENTS_HAVE_GNU_STRERROR_R)
-			char	*result=strerror_r(errornumber,buffer,size);
+			strerror_r(errornumber,buffer,size);
 			if (getErrorNumber()==ERANGE) {
 				setErrorNumber(errornumber);
 			} else {
-				return result;
+				return buffer;
 			}
 			#endif
 
