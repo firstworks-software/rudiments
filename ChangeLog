@@ -31,6 +31,9 @@
 	added NSModule/NSObjectFileImage-based implementation of dynamiclib
 	updated call to GNU stderror_r to use the buffer it fills rather than
 		the return value
+	also updated the error class to prefer strerror() to GNU strerror_r()
+		if XSI strerror_r() isn't present, as GNU strerror_r() appears
+		to be flaky
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

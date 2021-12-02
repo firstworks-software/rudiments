@@ -7,8 +7,20 @@
 
 #include <stdio.h>
 
+// If we have GNU strerror_r and strerror, but not strerror_s or XSI strerror_r,
+// then prefer strerror to strerror_r, as it appears to be flaky on some
+// platforms (mklinux with glibc-2.1.3).  For now, we'll keep the code.
+// Hopefully I can narrow down exactly which platforms it doesn't work on and
+// use it on other ones.
+#if !defined(RUDIMENTS_HAVE_STRERROR_S) && \
+	!defined(RUDIMENTS_HAVE_XSI_STRERROR_R) && \
+	defined(RUDIMENTS_HAVE_GNU_STRERROR_R) && \
+	defined(RUDIMENTS_HAVE_STRERROR)
+	#undef RUDIMENTS_HAVE_GNU_STRERROR_R
+#endif
+
 // to make sure we get the more portable XSI-compliant strerror_r rather than
-// the GNU version, if we ahve it
+// the GNU version, if we have it
 #ifdef RUDIMENTS_HAVE_XSI_STRERROR_R
 	#undef __USE_GNU
 #endif
