@@ -44,18 +44,6 @@ class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 		/** Deletes this instance of the tablecollection class. */
 		virtual	~tablecollection() {};
 
-		/** Returns true for read-only implementations and false for
-		 *  read-write implementations. */
-		virtual bool		getIsReadOnly()=0;
-
-		/** Returns true for block-based implementations and false for
-		 *  monolithic implementations. */
-		virtual bool		getIsBlockBased()=0;
-
-		/** Returns true for sequential-access implementations and
-		 *  false for random-access implementations. */
-		virtual bool		getIsSequentialAccess()=0;
-
 		/** In a read-write implementation, sets the name of column
 		 *  "col" to "name".
 		 *
@@ -102,10 +90,6 @@ class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
 		 *  the total number of rows in the table when
 		 *  getAllRowsAvailable() returns true. */
 		virtual	uint64_t	getRowCount()=0;
-
-		/** Returns the block size for block-based implementations and
-		 *  0 for monolithic implementations. */
-		virtual uint64_t	getRowBlockSize()=0;
 
 		/** Always returns true for monolithic implementations.  Only
 		 *  returns true in a block-based implementation if the current

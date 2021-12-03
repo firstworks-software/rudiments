@@ -28,6 +28,26 @@ void collection::setManageValues(bool manage) {
 }
 
 inline
+bool collection::getIsReadOnly() {
+	return false;
+}
+
+inline
+bool collection::getIsBlockBased() {
+	return false;
+}
+
+inline
+uint64_t collection::getBlockSize() {
+	return 0;
+}
+
+inline
+bool collection::getIsSequentialAccess() {
+	return false;
+}
+
+inline
 bool collection::getManageValues() {
 	return managevalues;
 }

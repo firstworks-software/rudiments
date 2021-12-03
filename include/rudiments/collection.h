@@ -20,6 +20,30 @@ class RUDIMENTS_DLLSPEC collection : public object {
 		/** Deletes this instance of the collection class. */
 		virtual	~collection();
 
+		/** Returns true for read-only implementations and false for
+		 *  read-write implementations.
+		 *
+		 *  Returns false by default. */
+		virtual bool		getIsReadOnly();
+
+		/** Returns true for block-based implementations and false for
+		 *  monolithic implementations.
+		 *
+		 *  Returns false by default. */
+		virtual bool		getIsBlockBased();
+
+		/** Returns the block size for block-based implementations and
+		 *  0 for monolithic implementations.
+		 *
+		 *  Returns 0 by default. */
+		virtual uint64_t	getBlockSize();
+
+		/** Returns true for sequential-access implementations and
+		 *  false for random-access implementations.
+		 *
+		 *  Returns false by default. */
+		virtual bool		getIsSequentialAccess();
+
 		/** Indicates whether or not this instance of the collection
 		 *  class should delete the values that are stored at each
 		 *  location in the collection when a clear()/remove() method

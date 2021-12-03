@@ -21,15 +21,6 @@ class RUDIMENTS_DLLSPEC dynamictable : public tablecollection<valuetype> {
 		/** Deletes this instance of the dynamictable class. */
 		~dynamictable();
 
-		/** Returns false. */
-		virtual bool		getIsReadOnly();
-
-		/** Returns false. */
-		virtual bool		getIsBlockBased();
-
-		/** Returns false. */
-		virtual bool		getIsSequentialAccess();
-
 		/** Sets the name of column "col" to "name" */
 		void		setColumnName(uint64_t col, const char *name);
 
@@ -53,9 +44,6 @@ class RUDIMENTS_DLLSPEC dynamictable : public tablecollection<valuetype> {
 		/** Returns the value at "row", "colname".  Returns NULL or 0
 		 *  if there is no value at that address. */
 		valuetype	getValue(uint64_t row, const char *colname);
-
-		/** Returns 0 as this is a monolithic implementation. */
-		uint64_t	getRowBlockSize();
 
 		/** Returns the current number of rows in the table.
 		 *
