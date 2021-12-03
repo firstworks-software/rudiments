@@ -22,7 +22,7 @@ linkedlist<valuetype>::linkedlist() : listcollection<valuetype>() {
 	// code to be included and the symbols to be defined.  It's called
 	// here, after the return so that it never actually gets executed.
 	// The old compiler doesn't complain about that.
-	(linkedlistnode<valuetype> *)getFirst();
+	first=(linkedlistnode<valuetype> *)getFirst();
 #endif
 }
 

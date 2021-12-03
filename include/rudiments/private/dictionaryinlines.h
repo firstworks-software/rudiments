@@ -43,7 +43,7 @@ dictionary<keytype,valuetype>::dictionary() :
 	// symbols to be defined.  It's called her/ after the return so that
 	// it never actually gets executed.  The old compiler doesn't complain
 	// about that.
-	getKeys();
+	keylist=getKeys();
 	setValues(NULL);
 #endif
 }
