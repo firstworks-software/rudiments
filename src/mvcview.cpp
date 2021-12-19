@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more informations.
 
-#include <rudiments/mvcview.h>
+#include <rudiments/mvc.h>
 
 class mvcviewprivate {
 	friend class mvcview;

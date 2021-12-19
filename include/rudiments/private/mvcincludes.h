@@ -3,9 +3,6 @@
 
 #include <rudiments/object.h>
 
-#include <rudiments/mvctier.h>
-#include <rudiments/mvcproperties.h>
-#include <rudiments/mvcsecurity.h>
 #include <rudiments/httprequest.h>
 #include <rudiments/httpresponse.h>
 #include <rudiments/dom.h>
@@ -13,6 +10,7 @@
 #include <rudiments/dictionary.h>
 #include <rudiments/wastebasket.h>
 
+class httpbasicsecurityprivate;
 class mvcpropertiesprivate;
 class mvcresultprivate;
 class mvctierprivate;

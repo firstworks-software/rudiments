@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more informations.
 
-#include <rudiments/mvcproperties.h>
+#include <rudiments/mvc.h>
 #include <rudiments/propdom.h>
 #include <rudiments/dictionary.h>
 

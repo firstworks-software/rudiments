@@ -13,6 +13,18 @@ class RUDIMENTS_DLLSPEC mvcsecurity : public object {
 		virtual const char	*getUserName()=0;
 };
 
+class RUDIMENTS_DLLSPEC httpbasicsecurity : public mvcsecurity {
+	public:
+		httpbasicsecurity();
+		virtual ~httpbasicsecurity();
+
+		void	setRequest(httprequest *req);
+		httprequest	*getRequest();
+		const char	*getUserName();
+
+	#include <rudiments/private/httpbasicsecurity.h>
+};
+
 class RUDIMENTS_DLLSPEC mvcproperties : public object {
 	public:
 		mvcproperties();

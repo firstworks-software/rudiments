@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more informations.
 
-#include <rudiments/httpbasicsecurity.h>
+#include <rudiments/mvc.h>
 
 class httpbasicsecurityprivate {
 	friend class httpbasicsecurity;
