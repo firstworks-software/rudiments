@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the file COPYING for more information
 
-#include <rudiments/mvcproperties.h>
+#include <rudiments/mvc.h>
 #include <rudiments/stdio.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
