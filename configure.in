@@ -5102,8 +5102,8 @@ fi
 
 if ( test "$INCLUDE_MVC" = "1" )
 then
-	HEADERS3="$HEADERS3 mvctier.h mvcservice.h mvcdao.h mvcview.h mvccontroller.h mvcresult.h mvcsecurity.h mvcproperties.h httpbasicsecurity.h cronschedule.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS7 mvcpropertiesincludes.h mvcproperties.h mvcresultincludes.h mvcresult.h mvctierincludes.h mvctier.h mvcviewincludes.h mvcview.h httpbasicsecurityincludes.h httpbasicsecurity.h cronscheduleincludes.h cronschedule.h"
+	HEADERS3="$HEADERS3 mvc.h httpbasicsecurity.h cronschedule.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 mvcincludes.h mvcproperties.h mvcresult.h mvctier.h mvcview.h httpbasicsecurityincludes.h httpbasicsecurity.h cronscheduleincludes.h cronschedule.h"
 	SRCS="$SRCS mvctier.cpp mvcview.cpp mvcresult.cpp mvcproperties.cpp httpbasicsecurity.cpp cronschedule.cpp"
 	LOBJS="$LOBJS mvctier.lo mvcview.lo mvcresult.lo mvcproperties.lo httpbasicsecurity.lo cronschedule.lo"
 fi
