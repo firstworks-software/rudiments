@@ -947,6 +947,10 @@ AC_TRY_COMPILE([#include <wctype.h>],
 AC_MSG_CHECKING(for wchar.h)
 AC_TRY_COMPILE([#include <wchar.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WCHAR_H, 1, Some systems have wchar.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for glob.h)
+AC_TRY_COMPILE([#include <glob.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_GLOB_H, 1, Some systems have glob.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -3581,6 +3585,12 @@ FILE f; f.__filedes=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE_FILEDES,
 AC_MSG_CHECKING(for FILE->_fd)
 AC_TRY_LINK([#include <stdio.h>],
 FILE f; f._fd=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE__FD,1,Some systems have FILE->_fd), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for glob)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_GLOB_H
+	#include <glob.h>
+#endif],
+glob(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GLOB,1,Some systems have glob) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
 

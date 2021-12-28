@@ -3,6 +3,7 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/filedescriptor.h>
+#include <rudiments/linkedlist.h>
 
 #include <sys/types.h>
 

@@ -1098,6 +1098,49 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  can be created to "filename". */
 		static int64_t	maxLinks(const char *filename);
 
+		/** Populates "matches" with the set of files whos names match
+ 		 *  "pattern".
+ 		 *
+ 		 *  Storage for the strings appended to "matches" is allocated
+ 		 *  internally and must be deleted by the calling program.
+ 		 *
+ 		 *  Returns true on success or false on failure.
+ 		 *
+ 		 *  Note that on failure, "matches" may be partially
+ 		 *  populated. */
+		static bool	getMatchingFileNames(
+					const char *pattern,
+					linkedlist<char *> *matches);
+
+		/** Populates "matches" with the set of files whos names match
+ 		 *  any of the patterns provided in the NULL-terminated array
+ 		 *  "pattern".
+ 		 *
+ 		 *  Storage for the strings appended to "matches" is allocated
+ 		 *  internally and must be deleted by the calling program.
+ 		 *
+ 		 *  Returns true on success or false on failure.
+ 		 *
+ 		 *  Note that on failure, "matches" may be partially
+ 		 *  populated. */
+		static bool	getMatchingFileNames(
+					const char * const *patterns,
+					linkedlist<char *> *matches);
+
+		/** Populates "matches" with the set of files whos names match
+ 		 *  any of the patterns provided in the linked list "pattern".
+ 		 *
+ 		 *  Storage for the strings appended to "matches" is allocated
+ 		 *  internally and must be deleted by the calling program.
+ 		 *
+ 		 *  Returns true on success or false on failure.
+ 		 *
+ 		 *  Note that on failure, "matches" may be partially
+ 		 *  populated. */
+		static bool	getMatchingFileNames(
+					linkedlist<const char *> *patterns,
+					linkedlist<char *> *matches);
+
 	#include <rudiments/private/file.h>
 };
 

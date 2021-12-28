@@ -58,6 +58,9 @@
 #ifdef RUDIMENTS_HAVE_ACCCTRL_H
 	#include <accctrl.h>
 #endif
+#ifdef RUDIMENTS_HAVE_GLOB_H
+	#include <glob.h>
+#endif
 
 // windows doesn't define these, but we need them
 // internally to this file
@@ -1927,4 +1930,126 @@ int64_t file::fpathConf(int32_t name) const {
 		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
+}
+
+bool file::getMatchingFileNames(const char *pattern,
+					linkedlist<char *> *matches) {
+	#if defined(RUDIMENTS_HAVE_GLOB)
+
+		glob_t	g;
+		bytestring::zero(&g,sizeof(g));
+
+		// build flags
+		int	flags=0
+
+			// bail on error rather than continuing
+			//|GLOB_ERR
+
+			// append a slash to matching directories
+			|GLOB_MARK
+
+			// don't sort the returned pathnames
+			|GLOB_NOSORT
+
+			// reserve g.gl_offs entries in the results array
+			//|GLOB_DOOFFS
+
+			// return the original pattern if there are no matches
+			//|GLOB_NOCHECK
+
+			// append the results of this call to the results
+			// of a previous call
+			//|GLOB_APPEND
+
+			// don't allow \'s to be used as escape characters
+			//|GLOB_NOESCAPE
+
+			// allow a leading period to be matched by
+			// metacharacters
+			#ifdef GLOB_PERIOD
+				//|GLOB_PERIOD
+			#endif
+
+			// use alternative (presumably faster) functions for
+			// accessing the filesystem
+			#ifdef GLOB_ALTDIRFUNC
+				|GLOB_ALTDIRFUNC
+			#endif
+
+			// expand csh style brace expressions like {a,b}
+			#ifdef GLOB_BRACE
+				//|GLOB_BRACE
+			#endif
+
+			// return the original pattern if there are no matches,
+			// if the pattern doesn't contain metacharacters
+			#ifdef GLOB_NOMAGIC
+				//|GLOB_NOMAGIC
+			#endif
+
+			// expand various tilde expressions into home
+			// directory names
+			#ifdef GLOB_TILDE
+				//|GLOB_TILDE
+			#endif
+
+			// expand various tilde expressions into home
+			// directory names but return error if the home
+			// directory is not found
+			#ifdef GLOB_TILDE_CHECK
+				//|GLOB_TILDE_CHECK
+			#endif
+
+			// only match directories, ignore files
+			#ifdef GLOB_ONLYDIR
+				//|GLOB_ONLYDIR
+			#endif
+			;
+
+		// match
+		if (glob(pattern,flags,NULL,&g)) {
+			globfree(&g);
+			return false;
+		}
+
+		// populate "matches"
+		for (const char * const *p=
+			(const char * const *)g.gl_pathv; *p; p++) {
+			matches->append(charstring::duplicate(*p));
+		}
+
+		// clean up
+		globfree(&g);
+
+		return true;
+
+	#elif defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+		// FIXME: implement this using FindFirstFile/FindNextFile
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool file::getMatchingFileNames(const char * const *patterns,
+					linkedlist<char *> *matches) {
+	for (const char * const *pattern=patterns; *pattern; pattern++) {
+		if (!getMatchingFileNames(*pattern,matches)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool file::getMatchingFileNames(linkedlist<const char *> *pattern,
+					linkedlist<char *> *matches) {
+	for (listnode<const char *> *patternnode=pattern->getFirst();
+			patternnode; patternnode=patternnode->getNext()) {
+		if (!getMatchingFileNames(patternnode->getValue(),matches)) {
+			return false;
+		}
+	}
+	return true;
 }

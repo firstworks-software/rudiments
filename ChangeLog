@@ -34,6 +34,7 @@
 	also updated the error class to prefer strerror() to GNU strerror_r()
 		if XSI strerror_r() isn't present, as GNU strerror_r() appears
 		to be flaky
+	added file::getMatchingFileNames() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

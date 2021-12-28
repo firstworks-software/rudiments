@@ -667,8 +667,14 @@
 /* Some systems have GetVersionEx */
 #define RUDIMENTS_HAVE_GETVERSIONEX 1
 
+/* Some systems have glob */
+/* #undef RUDIMENTS_HAVE_GLOB */
+
 /* Some systems have GlobalMemoryStatusEx */
 #define RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX 1
+
+/* Some systems have glob.h */
+/* #undef RUDIMENTS_HAVE_GLOB_H */
 
 /* Some systems have GNU strerror_r */
 /* #undef RUDIMENTS_HAVE_GNU_STRERROR_R */
