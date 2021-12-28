@@ -1265,9 +1265,11 @@ bool charstring::compareWithWildcards(const char *string,
 
 				// move on...
 				string++;
+				if (string==stringend) {
+					return false;
+				}
 				stringlength--;
 			}
-			return false;
 		}
 
 		// bail if the characters don't match

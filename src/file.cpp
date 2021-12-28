@@ -35,6 +35,12 @@
 	#include <rudiments/permissions.h>
 #endif
 
+//#undef RUDIMENTS_HAVE_GLOB
+//#undef RUDIMENTS_HAVE_FINDFIRSTFILE
+#if !defined(RUDIMENTS_HAVE_GLOB) && !defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+	#include <rudiments/sys.h>
+#endif
+
 #include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -1932,83 +1938,117 @@ int64_t file::fpathConf(int32_t name) const {
 	#endif
 }
 
+#if !defined(RUDIMENTS_HAVE_GLOB) && !defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+static void getMatchingFileNames(const char *root,
+					const char * const *patternparts,
+					uint64_t patternpartindex,
+					uint64_t patternpartcount,
+					linkedlist<char *> *matches) {
+
+	// get the current part of the pattern that we're working with
+	const char	*pattern=patternparts[patternpartindex];
+
+	// open the root directory that was passed in
+	directory	d;
+	if (!d.open(root)) {
+		// we're emulating glob() without GLOB_ERR, so there's
+		// no need to set an error if this fails, just return
+		return;
+	}
+	d.rewind();
+
+	// run through the directory...
+	for (;;) {
+
+		// get the file name
+		char	*f=d.read();
+
+		// bail if we hit the end of the directory
+		if (!f) {
+			return;
+		}
+
+		// skip . and ..
+		if (!charstring::compare(f,".") ||
+			!charstring::compare(f,"..")) {
+			delete[] f;
+			continue;
+		}
+
+		// if the file name matches the pattern...
+		if (charstring::compareWithWildcards(f,pattern,'?','*')) {
+
+			// build the full path name of the file
+			// (root is presumed to already have a
+			// trailing directory separator)
+			stringbuffer	fpn;
+			fpn.append(root)->append(f);
+
+			// is this a directory?
+			struct	stat	st;
+			int32_t		result;
+			error::clearError();
+			do {
+				result=::stat(fpn.getString(),&st);
+			} while (result==-1 && error::getErrorNumber()==EINTR);
+			if (result==-1) {
+				// we're emulating glob() without GLOB_ERR, so
+				// there's no need to set an error if this
+				// fails, just return
+				return;
+			}
+			bool	isdir=false;
+			#if defined(_S_IFDIR)
+				isdir=((st.st_mode&_S_IFDIR)==_S_IFDIR);
+			#elif defined(S_IFDIR)
+				isdir=((st.st_mode&S_IFDIR)==S_IFDIR);
+			#else
+				isdir=S_ISDIR(pvt->_st.st_mode);
+			#endif
+
+			// appenda directory separator (if necessary)
+			if (isdir) {
+				fpn.append(sys::getDirectorySeparator());
+			}
+
+			// if we're at the end of the set
+			// of patterns to match...
+			if (patternpartindex==patternpartcount-1) {
+
+				// append full pathname to "matches"
+				matches->append(fpn.detachString());
+
+			} else
+
+			// otherwise, if this is a directory, recurse...
+			if (isdir) {
+				getMatchingFileNames(
+						fpn.getString(),
+						patternparts,
+						patternpartindex+1,
+						patternpartcount,
+						matches);
+			}
+		}
+	}
+}
+#endif
+
 bool file::getMatchingFileNames(const char *pattern,
 					linkedlist<char *> *matches) {
+
+	// handle degenerate case
+	if (charstring::isNullOrEmpty(pattern)) {
+		return true;
+	}
+
 	#if defined(RUDIMENTS_HAVE_GLOB)
 
+		// match, also append a slash to matching directories
+		// and don't sort the returned pathnames
 		glob_t	g;
 		bytestring::zero(&g,sizeof(g));
-
-		// build flags
-		int	flags=0
-
-			// bail on error rather than continuing
-			//|GLOB_ERR
-
-			// append a slash to matching directories
-			|GLOB_MARK
-
-			// don't sort the returned pathnames
-			|GLOB_NOSORT
-
-			// reserve g.gl_offs entries in the results array
-			//|GLOB_DOOFFS
-
-			// return the original pattern if there are no matches
-			//|GLOB_NOCHECK
-
-			// append the results of this call to the results
-			// of a previous call
-			//|GLOB_APPEND
-
-			// don't allow \'s to be used as escape characters
-			//|GLOB_NOESCAPE
-
-			// allow a leading period to be matched by
-			// metacharacters
-			#ifdef GLOB_PERIOD
-				//|GLOB_PERIOD
-			#endif
-
-			// use alternative (presumably faster) functions for
-			// accessing the filesystem
-			// (tends to crash on linux on an NFS filesystem)
-			#ifdef GLOB_ALTDIRFUNC
-				//|GLOB_ALTDIRFUNC
-			#endif
-
-			// expand csh style brace expressions like {a,b}
-			#ifdef GLOB_BRACE
-				//|GLOB_BRACE
-			#endif
-
-			// return the original pattern if there are no matches,
-			// if the pattern doesn't contain metacharacters
-			#ifdef GLOB_NOMAGIC
-				//|GLOB_NOMAGIC
-			#endif
-
-			// expand various tilde expressions into home
-			// directory names
-			#ifdef GLOB_TILDE
-				//|GLOB_TILDE
-			#endif
-
-			// expand various tilde expressions into home
-			// directory names but return error if the home
-			// directory is not found
-			#ifdef GLOB_TILDE_CHECK
-				//|GLOB_TILDE_CHECK
-			#endif
-
-			// only match directories, ignore files
-			#ifdef GLOB_ONLYDIR
-				//|GLOB_ONLYDIR
-			#endif
-			;
-
-		// match
-		if (glob(pattern,flags,NULL,&g)) {
+		if (glob(pattern,GLOB_MARK|GLOB_NOSORT,NULL,&g)) {
 			globfree(&g);
 			return false;
 		}
@@ -2022,16 +2062,60 @@ bool file::getMatchingFileNames(const char *pattern,
 		// clean up
 		globfree(&g);
 
-		return true;
-
 	#elif defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
-		// FIXME: implement this using FindFirstFile/FindNextFile
-		RUDIMENTS_SET_ENOSYS
-		return false;
+
+		// initiate a find
+		WIN32_FIND_DATA	fd;
+		HANDLE		fh=FindFirstFile(pattern,&fd);
+
+		// bail if nothing was found
+		if (fh==INVALID_HANDLE_VALUE) {
+			return true;
+		}
+
+		// iterate over all subsequent matches
+		do {
+			matches->append(charstring::duplicate(fd.cFileName));
+		} while (FindFileNext(fh,&fd));
+
+		// clean up
+		FindClose(fh);
+
 	#else
-		RUDIMENTS_SET_ENOSYS
-		return false;
+
+		// get whether to start at root or current directory
+		// FIXME: implement this for windows...
+		stringbuffer	root;
+		if (pattern[0]!=sys::getDirectorySeparator()) {
+			char	*c=directory::getCurrentWorkingDirectory();
+			root.append(c);
+			delete[] c;
+		}
+		root.append(sys::getDirectorySeparator());
+
+		// split pattern on directory separator
+		char		delim[2];
+		delim[0]=sys::getDirectorySeparator();
+		delim[1]='\0';
+		char		**parts;
+		uint64_t	partcount;
+		charstring::split(pattern,delim,true,&parts,&partcount);
+
+		// get matching file names
+		::getMatchingFileNames(root.getString(),
+					parts,0,partcount,matches);
+
+		// clear any errors that may have been set by the above
+		error::clearError();
+
+		// clean up
+		for (uint64_t i=0; i<partcount; i++) {
+			delete[] parts[i];
+		}
+		delete[] parts;
+
 	#endif
+	return true;
 }
 
 bool file::getMatchingFileNames(const char * const *patterns,
