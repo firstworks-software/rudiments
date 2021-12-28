@@ -1196,6 +1196,124 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 	#endif
 }
 
+bool charstring::compareWithWildcards(const char *string,
+					size_t stringlength,
+					const char *pattern,
+					size_t patternlength,
+					char singlewildcard,
+					char multiwildcard) {
+
+	// handle degenerate case
+	if (!string && !pattern) {
+		return true;
+	}
+
+	const char	*stringend=string+stringlength;
+	const char	*patternend=pattern+patternlength;
+
+	for (;;) {
+
+		// if we encountered the end of the string...
+		if (string==stringend) {
+
+			// if we're also at the end of the pattern,
+			// then they match
+			if (pattern==patternend) {
+				return true;
+			}
+
+			// if we're not also at the end of the pattern,
+			// then they don't match
+			return false;
+		}
+
+		// if we encountered the end of the pattern
+		// (but not the end of the string) then they don't match
+		if (pattern==patternend) {
+			return false;
+		}
+
+		// if we encountered a multi-char wildcard...
+		if (multiwildcard && *pattern==multiwildcard) {
+
+			// skip to the next non-multi-character wildcarad
+			// in the pattern
+			while (*pattern==multiwildcard) {
+
+				pattern++;
+				patternlength--;
+
+				// if we hit the end of the pattern then
+				// we have a match
+				if (pattern==patternend) {
+					return true;
+				}
+			}
+
+			// Compare the rest of the string to the rest of the
+			// pattern.  If that fails, move to the next character
+			// of the string and try again.  If any of these
+			// succeed, then we have a match.  If they all fail
+			// then the string and pattern don't match.
+			for (;;) {
+				if (compareWithWildcards(string,stringlength,
+							pattern,patternlength,
+							singlewildcard,
+							multiwildcard)) {
+					return true;
+				}
+
+				// move on...
+				string++;
+				stringlength--;
+			}
+			return false;
+		}
+
+		// bail if the characters don't match
+		// (unless we encountered a single-character wildcard)
+		if (*string!=*pattern &&
+			(!singlewildcard || *pattern!=singlewildcard)) {
+			return false;
+		}
+
+		// move on...
+		string++;
+		stringlength--;
+		pattern++;
+		patternlength--;
+	}
+}
+
+bool charstring::compareWithWildcards(const char *string,
+					const char *pattern,
+					size_t patternlength,
+					char singlewildcard,
+					char multiwildcard) {
+	return compareWithWildcards(string,charstring::length(string),
+					pattern,patternlength,
+					singlewildcard,multiwildcard);
+}
+
+bool charstring::compareWithWildcards(const char *string,
+					size_t stringlength,
+					const char *pattern,
+					char singlewildcard,
+					char multiwildcard) {
+	return compareWithWildcards(string,stringlength,
+					pattern,charstring::length(pattern),
+					singlewildcard,multiwildcard);
+}
+
+bool charstring::compareWithWildcards(const char *string,
+					const char *pattern,
+					char singlewildcard,
+					char multiwildcard) {
+	return compareWithWildcards(string,charstring::length(string),
+					pattern,charstring::length(pattern),
+					singlewildcard,multiwildcard);
+}
+
 bool charstring::inSet(const char *str, const char * const *set) {
 	if (!set || !set[0]) {
 		return !str;

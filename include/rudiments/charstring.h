@@ -148,6 +148,66 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *str2,
 							size_t len);
 
+		/** Compares the first "stringlength" characters of "string"
+		 *  to the first "patternlength" characters of "pattern" which
+		 *  may contain instances of single-character wildcard markers
+		 *  "singlewildcard" or multi-character wildcard markers
+		 *  "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const char *string,
+							size_t stringlength,
+							const char *pattern,
+							size_t patternlength,
+							char singlewildcard,
+							char multiwildcard);
+
+		/** Compares "string" to the first "patternlength" characters
+		 *  of "pattern" which may contain instances of single-character
+		 *  wildcard markers "singlewildcard" or multi-character
+		 *  wildcard markers "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const char *string,
+							const char *pattern,
+							size_t patternlength,
+							char singlewildcard,
+							char multiwildcard);
+
+		/** Compares the first "stringlength" characters of "string"
+		 *  to "pattern" which may contain instances of
+		 *  single-character wildcard markers "singlewildcard" or
+		 *  multi-character wildcard markers "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const char *string,
+							size_t stringlength,
+							const char *pattern,
+							char singlewildcard,
+							char multiwildcard);
+
+		/** Compares "string" to "pattern" which may contain instances
+		 *  of single-character wildcard markers "singlewildcard" or
+		 *  multi-character wildcard markers "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const char *string,
+							const char *pattern,
+							char singlewildcard,
+							char multiwildcard);
+
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set".  Also returns true if "str"
 		 *  is NULL and set is NULL or contains only a NULL-terminator.

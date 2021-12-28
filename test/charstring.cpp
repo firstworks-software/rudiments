@@ -860,6 +860,136 @@ int main(int argc, const char **argv) {
 	delete[] newstr;
 
 	stdoutput.printf("\n");
+	
+
+	// compare with wildcard
+	stdoutput.printf("compareWithWildcard...\n");
+	test("degenerate",
+		charstring::compareWithWildcards(NULL,NULL,'\0','\0'));
+	test("string==string (no wildcards)",
+		charstring::compareWithWildcards("string","string",'\0','\0'));
+	test("str?ng==str?ng (no wildcards)",
+		charstring::compareWithWildcards("str?ng","str?ng",'\0','\0'));
+	test("str*ng==str*ng (no wildcards)",
+		charstring::compareWithWildcards("str*ng","str*ng",'\0','\0'));
+	char	string[17];
+	charstring::copy(string,"0123456789abcdef");
+	char	pattern[17];
+	stringbuffer	title;
+	for (uint16_t iter=0; iter<10; iter++) {
+
+		switch (iter) {
+			case 0:
+				stdoutput.printf("single ?...\n");
+				break;
+			case 1:
+				stdoutput.printf("single *...\n");
+				break;
+			case 2:
+				stdoutput.printf("multiple ?...\n");
+				break;
+			case 3:
+				stdoutput.printf("multiple *...\n");
+				break;
+			case 4:
+				stdoutput.printf("interleaved ?...\n");
+				break;
+			case 5:
+				stdoutput.printf("interleaved *...\n");
+				break;
+			case 6:
+				stdoutput.printf("alternating */?...\n");
+				break;
+			case 7:
+				stdoutput.printf("alternating ?/*...\n");
+				break;
+			case 8:
+				stdoutput.printf("trailing *...\n");
+				break;
+			case 9:
+				stdoutput.printf("leading *...\n");
+				break;
+		}
+
+		for (uint16_t i=0; i<sizeof(pattern)-1; i++) {
+
+			// initialize pattern
+			charstring::copy(pattern,"0123456789abcdef");
+
+			// swap in some set of wildcards
+			switch (iter) {
+				case 0:
+					pattern[i]='?';
+					break;
+				case 1:
+					pattern[i]='*';
+					break;
+				case 2:
+					for (uint16_t j=i;
+						j<sizeof(pattern)-1; j++) {
+						pattern[j]='?';
+					}
+					break;
+				case 3:
+					for (uint16_t j=i;
+						j<sizeof(pattern)-1; j++) {
+						pattern[j]='*';
+					}
+					break;
+				case 4:
+					for (uint16_t j=i;
+						j<sizeof(pattern)-1; j=j+2) {
+						pattern[j]='?';
+					}
+					break;
+				case 5:
+					for (uint16_t j=i;
+						j<sizeof(pattern)-1; j=j+2) {
+						pattern[j]='*';
+					}
+					break;
+				case 6:
+					for (uint16_t j=i;
+						j<sizeof(pattern)-1; j++) {
+						if (j%2) {
+							pattern[j]='?';
+						} else {
+							pattern[j]='*';
+						}
+					}
+					break;
+				case 7:
+					for (uint16_t j=i;
+						j<sizeof(pattern)-1; j++) {
+						if (j%2) {
+							pattern[j]='*';
+						} else {
+							pattern[j]='?';
+						}
+					}
+					break;
+				case 8:
+					pattern[i]='*';
+					pattern[i+1]='\0';
+					break;
+				case 9:
+					pattern[0]='*';
+					charstring::copy(pattern+1,
+						"0123456789abcdef"+i+1);
+					break;
+			}
+
+			// build the title
+			title.clear();
+			title.append(string)->append('=')->append(pattern);
+
+			// run the test
+			test(title.getString(),
+				charstring::compareWithWildcards(
+						string,pattern,'?','*'));
+		}
+	}
+	stdoutput.printf("\n");
 
 
 	// hosttonet/nettohost (why are these here?)
