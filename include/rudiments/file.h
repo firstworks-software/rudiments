@@ -1141,6 +1141,20 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 					linkedlist<const char *> *patterns,
 					linkedlist<char *> *matches);
 
+		/** Populates "matches" with the set of files whos names match
+ 		 *  any of the patterns provided in the linked list "pattern".
+ 		 *
+ 		 *  Storage for the strings appended to "matches" is allocated
+ 		 *  internally and must be deleted by the calling program.
+ 		 *
+ 		 *  Returns true on success or false on failure.
+ 		 *
+ 		 *  Note that on failure, "matches" may be partially
+ 		 *  populated. */
+		static bool	getMatchingFileNames(
+					linkedlist<char *> *patterns,
+					linkedlist<char *> *matches);
+
 	#include <rudiments/private/file.h>
 };
 

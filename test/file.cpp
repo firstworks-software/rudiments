@@ -142,6 +142,39 @@ int main(int argc, const char **argv) {
 
 		test("key",file::generateKey(testfiletxt,1)!=0);
 
+		char	*pwd=directory::getCurrentWorkingDirectory();
+		linkedlist<char *>	patterns;
+		patterns.setManageArrayValues(true);
+		stringbuffer	fn;
+		fn.append(pwd);
+		fn.append(sys::getDirectorySeparator());
+		fn.append("**?ile*.cpp");
+		patterns.append(fn.detachString());
+		fn.append(pwd);
+		fn.append(sys::getDirectorySeparator());
+		fn.append("*a?ra**.cpp");
+		patterns.append(fn.detachString());
+		linkedlist<char *>	matches;
+		matches.setManageArrayValues(true);
+		test("getMatchingFileNames",
+			file::getMatchingFileNames(&patterns,&matches));
+		matches.heapSort();
+		listnode<char *>	*node=matches.getFirst();
+		test("getMatchingFileNames: match 1",
+			charstring::endsWith(node->getValue(),
+						"dynamicarray.cpp"));
+		node=node->getNext();
+		test("getMatchingFileNames: match 2",
+			charstring::endsWith(node->getValue(),
+						"file.cpp"));
+		node=node->getNext();
+		test("getMatchingFileNames: match 3",
+			charstring::endsWith(node->getValue(),
+						"filesystem.cpp"));
+		node=node->getNext();
+		test("getMatchingFileNames: match 4",
+			charstring::endsWith(node->getValue(),
+						"staticarray.cpp"));
 
 		fl.open(testfiletxt,O_RDWR);
 		test("lock 1",fl.lockFile(
@@ -153,7 +186,6 @@ int main(int argc, const char **argv) {
 					));
 
 		stringbuffer	cmd;
-		char	*pwd=directory::getCurrentWorkingDirectory();
 		cmd.append(pwd)->append("/file");
 		#ifdef _WIN32
 			cmd.append(".exe");

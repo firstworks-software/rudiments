@@ -1972,8 +1972,9 @@ bool file::getMatchingFileNames(const char *pattern,
 
 			// use alternative (presumably faster) functions for
 			// accessing the filesystem
+			// (tends to crash on linux on an NFS filesystem)
 			#ifdef GLOB_ALTDIRFUNC
-				|GLOB_ALTDIRFUNC
+				//|GLOB_ALTDIRFUNC
 			#endif
 
 			// expand csh style brace expressions like {a,b}
@@ -2046,6 +2047,17 @@ bool file::getMatchingFileNames(const char * const *patterns,
 bool file::getMatchingFileNames(linkedlist<const char *> *pattern,
 					linkedlist<char *> *matches) {
 	for (listnode<const char *> *patternnode=pattern->getFirst();
+			patternnode; patternnode=patternnode->getNext()) {
+		if (!getMatchingFileNames(patternnode->getValue(),matches)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool file::getMatchingFileNames(linkedlist<char *> *pattern,
+					linkedlist<char *> *matches) {
+	for (listnode<char *> *patternnode=pattern->getFirst();
 			patternnode; patternnode=patternnode->getNext()) {
 		if (!getMatchingFileNames(patternnode->getValue(),matches)) {
 			return false;

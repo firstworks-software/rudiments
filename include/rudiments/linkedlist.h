@@ -28,7 +28,7 @@ class linkedlistnode : public listnode<valuetype> {
 		/** Returns a negative number, 0, or a positive number depending
 		 *  on whether the value stored in the node is respectively
 		 *  less than, equal to or greater than "value". */
-		int32_t	compare(valuetype value) const;
+		virtual int32_t	compare(valuetype value) const;
 
 		/** Returns a negative number, 0, or a positive number depending
 		 *  on whether the value stored in the node is respectively
