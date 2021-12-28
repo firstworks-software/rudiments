@@ -35,8 +35,6 @@
 	#include <rudiments/permissions.h>
 #endif
 
-//#undef RUDIMENTS_HAVE_GLOB
-//#undef RUDIMENTS_HAVE_FINDFIRSTFILE
 #if !defined(RUDIMENTS_HAVE_GLOB) && !defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 	#include <rudiments/sys.h>
 #endif
