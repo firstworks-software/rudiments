@@ -149,7 +149,7 @@ template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::remove(valuetype value) {
 	listnode<valuetype> *current=first;
-	if (!current->compare(value)) {
+	if (!this->getComparator()->compare(current->getValue(),value)) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
@@ -160,7 +160,8 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 		listnode<valuetype> *prev=first;
 		current=current->getNext();
 		while (current) {
-			if (!current->compare(value)) {
+			if (!this->getComparator()->compare(
+					current->getValue(),value)) {
 				prev->setNext(current->getNext());
 				break;
 			}
@@ -192,7 +193,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 	}
 	bool	retval=false;
 	listnode<valuetype> *current=first;
-	while (!current->compare(value)) {
+	while (!this->getComparator()->compare(current->getValue(),value)) {
 		retval=true;
 		if (first==last) {
 			first=NULL;
@@ -220,7 +221,8 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 	listnode<valuetype> *prev=first;
 	current=current->getNext();
 	while (current) {
-		if (!current->compare(value)) {
+		if (!this->getComparator()->compare(
+					current->getValue(),value)) {
 			retval=true;
 			listnode<valuetype> *temp=current->getNext();
 			prev->setNext(temp);
@@ -323,7 +325,8 @@ listnode<valuetype> *singlylinkedlist<valuetype>::find(
 				valuetype value) {
 	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
-		if (!current->compare(value)) {
+		if (!this->getComparator()->compare(
+					current->getValue(),value)) {
 			return current;
 		}
 	}
@@ -366,14 +369,16 @@ void singlylinkedlist<valuetype>::insertionSort() {
 
 		// if the node belongs at the beginning of the new list
 		// (optimization for lists that are already largely forwards)
-		if (newfirst->compare(node)>0) {
+		if (this->getComparator()->compare(newfirst->getValue(),
+							node->getValue())>0) {
 			node->setNext(newfirst);
 			newfirst=node;
 		} else
 
 		// if the node belongs at the end of the new list
 		// (optimization for lists that are already largely backwards)
-		if (newlast->compare(node)<=0) {
+		if (this->getComparator()->compare(newlast->getValue(),
+							node->getValue())<=0) {
 			node->setNext(NULL);
 			newlast->setNext(node);
 			newlast=node;
@@ -387,7 +392,9 @@ void singlylinkedlist<valuetype>::insertionSort() {
 			while (current) {
 
 				// if the current node is greater than...
-				if (current->compare(node)>0) {
+				if (this->getComparator()->compare(
+							current->getValue(),
+							node->getValue())>0) {
 
 					// insert before
 					node->setNext(current);
@@ -441,7 +448,9 @@ void singlylinkedlist<valuetype>::heapSort() {
 			uint64_t	parent=(child-1)/2;
 
 			// swap nodes if necessary
-			if (heap[parent]->compare(heap[child])<0) {
+			if (this->getComparator()->compare(
+						heap[parent]->getValue(),
+						heap[child]->getValue())<0) {
 				temp=heap[parent];
 				heap[parent]=heap[child];
 				heap[child]=temp;
@@ -515,14 +524,18 @@ void singlylinkedlist<valuetype>::heapSort() {
 
 			// is the left child greater?
 			uint64_t	greater=parent;
-			if (heap[parent]->compare(heap[leftchild])<0) {
+			if (this->getComparator()->compare(
+					heap[parent]->getValue(),
+					heap[leftchild]->getValue())<0) {
 				greater=leftchild;
 			}
 
 			// is the right child greater?
 			uint64_t	rightchild=leftchild+1;
 			if (rightchild<=heapend &&
-				heap[rightchild]->compare(heap[greater])>0) {
+				this->getComparator()->compare(
+						heap[rightchild]->getValue(),
+						heap[greater]->getValue())>0) {
 				greater=rightchild;
 			}
 
@@ -580,7 +593,7 @@ void singlylinkedlist<valuetype>::print(uint64_t count) const {
 		#else
 			stdoutput.printf("index %ld: ",(long)i);
 		#endif
-		current->print();
+		node_print(current->getValue());
 		stdoutput.printf("\n");
 		i++;
 	}
@@ -621,19 +634,6 @@ template <class valuetype>
 inline
 listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() {
 	return next;
-}
-
-template <class valuetype>
-inline
-int32_t singlylinkedlistnode<valuetype>::compare(valuetype value) const {
-	return node_compare(this->value,value);
-}
-
-template <class valuetype>
-inline
-int32_t singlylinkedlistnode<valuetype>::compare(
-					listnode<valuetype> *peer) const {
-	return node_compare(this->value,peer->getValue());
 }
 
 template <class valuetype>

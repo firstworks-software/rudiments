@@ -89,14 +89,14 @@ class RUDIMENTS_DLLSPEC dictionarycollection : public collection {
 		/** Returns the number of key/value pairs in the dictionary. */
 		virtual	uint64_t	getLength()=0;
 
-		/** Removes the dictionarynode associated with "key".
+		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		virtual	bool		remove(keytype key)=0;
 
-		/** Deletes all dictionarynodes currently in the dictionary.
+		/** Deletes all key-value pairs currently in the dictionary.
 		 *  Note however, that the key and value stored in each
-		 *  dictionarynode are not deleted by this call. */
+		 *  key-value pair are not deleted by this call. */
 		virtual	void		clear()=0;
 
 		/** Prints out a representation of the dictionary. */

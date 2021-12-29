@@ -192,8 +192,9 @@ bool linkedlist<valuetype>::removeAll(valuetype value) {
 	listnode<valuetype>	*next;
 	while (current) {
 		next=current->getNext();
-		if (!current->compare(value) &&
-				!remove(current)) {
+		if (!this->getComparator()->compare(
+					current->getValue(),value) &&
+					!remove(current)) {
 			return false;
 		}
 		current=next;
@@ -274,7 +275,8 @@ listnode<valuetype> *linkedlist<valuetype>::find(
 					valuetype value) {
 	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
-		if (!current->compare(value)) {
+		if (!this->getComparator()->compare(
+					current->getValue(),value)) {
 			return current;
 		}
 	}
@@ -318,7 +320,8 @@ void linkedlist<valuetype>::insertionSort() {
 
 		// if the node belongs at the beginning of the new list
 		// (optimization for lists that are already largely forwards)
-		if (newfirst->compare(node)>0) {
+		if (this->getComparator()->compare(newfirst->getValue(),
+							node->getValue())>0) {
 			node->setNext(newfirst);
 			node->setPrevious(NULL);
 			newfirst->setPrevious(node);
@@ -327,7 +330,8 @@ void linkedlist<valuetype>::insertionSort() {
 
 		// if the node belongs at the end of the new list
 		// (optimization for lists that are already largely backwards)
-		if (newlast->compare(node)<=0) {
+		if (this->getComparator()->compare(newlast->getValue(),
+							node->getValue())<=0) {
 			node->setPrevious(newlast);
 			node->setNext(NULL);
 			newlast->setNext(node);
@@ -345,7 +349,9 @@ void linkedlist<valuetype>::insertionSort() {
 
 				// if the current node (from the left)
 				// is greater than...
-				if (currentfromfirst->compare(node)>0) {
+				if (this->getComparator()->compare(
+						currentfromfirst->getValue(),
+						node->getValue())>0) {
 
 					// insert before
 					node->setNext(currentfromfirst);
@@ -361,7 +367,9 @@ void linkedlist<valuetype>::insertionSort() {
 
 				// if the current node (from the right)
 				// is less than or equal to...
-				if (currentfromlast->compare(node)<=0) {
+				if (this->getComparator()->compare(
+						currentfromlast->getValue(),
+						node->getValue())<=0) {
 
 					// insert after
 					node->setPrevious(currentfromlast);
@@ -419,7 +427,9 @@ void linkedlist<valuetype>::heapSort() {
 			uint64_t	parent=(child-1)/2;
 
 			// swap nodes if necessary
-			if (heap[parent]->compare(heap[child])<0) {
+			if (this->getComparator()->compare(
+						heap[parent]->getValue(),
+						heap[child]->getValue())<0) {
 				temp=heap[parent];
 				heap[parent]=heap[child];
 				heap[child]=temp;
@@ -496,14 +506,18 @@ void linkedlist<valuetype>::heapSort() {
 
 			// is the left child greater?
 			uint64_t	greater=parent;
-			if (heap[parent]->compare(heap[leftchild])<0) {
+			if (this->getComparator()->compare(
+					heap[parent]->getValue(),
+					heap[leftchild]->getValue())<0) {
 				greater=leftchild;
 			}
 
 			// is the right child greater?
 			uint64_t	rightchild=leftchild+1;
 			if (rightchild<=heapend &&
-				heap[rightchild]->compare(heap[greater])>0) {
+				this->getComparator()->compare(
+						heap[rightchild]->getValue(),
+						heap[greater]->getValue())>0) {
 				greater=rightchild;
 			}
 
@@ -561,7 +575,7 @@ void linkedlist<valuetype>::print(uint64_t count) const {
 		#else
 			stdoutput.printf("index %ld: ",(long)i);
 		#endif
-		current->print();
+		node_print(current->getValue());
 		stdoutput.printf("\n");
 		i++;
 	}
@@ -603,18 +617,6 @@ template <class valuetype>
 inline
 listnode<valuetype> *linkedlistnode<valuetype>::getNext() {
 	return next;
-}
-
-template <class valuetype>
-inline
-int32_t linkedlistnode<valuetype>::compare(valuetype value) const {
-	return node_compare(this->value,value);
-}
-
-template <class valuetype>
-inline
-int32_t linkedlistnode<valuetype>::compare(listnode<valuetype> *peer) const {
-	return node_compare(this->value,peer->getValue());
 }
 
 template <class valuetype>

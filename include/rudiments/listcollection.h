@@ -28,17 +28,6 @@ class RUDIMENTS_DLLSPEC listnode : public nodecollectionnode<valuetype> {
 		/** Return the value stored in the node. */
 		virtual	valuetype	getValue() const=0;
 
-		/** Returns a negative number, 0, or a positive number depending
-		 *  on whether the value stored in the node is respectively
-		 *  less than, equal to or greater than "value". */
-		virtual	int32_t	compare(valuetype value) const=0;
-
-		/** Returns a negative number, 0, or a positive number depending
-		 *  on whether the value stored in the node is respectively
-		 *  less than, equal to or greater than the value stored in
-		 *  "peer". */
-		virtual	int32_t	compare(listnode<valuetype> *peer) const=0;
-
 		/** Returns the previous node in the linkedlist or NULL
 		 *  if this node is the first node in the list. */
 		virtual	listnode<valuetype>	*getPrevious()=0;

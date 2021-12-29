@@ -5,6 +5,7 @@
 #define RUDIMENTS_COLLECTION_H
 
 #include <rudiments/object.h>
+#include <rudiments/comparator.h>
 
 /** The collection class is the parent class for all rudiments collections. */
 class RUDIMENTS_DLLSPEC collection : public object {
@@ -19,6 +20,15 @@ class RUDIMENTS_DLLSPEC collection : public object {
 
 		/** Deletes this instance of the collection class. */
 		virtual	~collection();
+
+		/** Returns the comparator used internally by the class.
+		 *  Returns whatever was previously set by setComparator() or
+		 *  an instance of the comparator class by default. */
+		comparator	*getComparator();
+
+		/** Sets the comparator used by the class.  Reverts to the
+		 *  default comparator if "newcomp" is NULL. */
+		void	setComparator(comparator *newcomp);
 
 		/** Returns true for read-only implementations and false for
 		 *  read-write implementations.

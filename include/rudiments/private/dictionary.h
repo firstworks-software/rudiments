@@ -9,5 +9,6 @@
 		avltree<dictionarynode<keytype,valuetype> *>	tree;
 		linkedlist<dictionarynode<keytype,valuetype> *>	list;
 		linkedlist<keytype>				*keylist;
+		dictionarynodecomparator<keytype,valuetype>	*comp;
 
 		bool	trackinsertionorder;

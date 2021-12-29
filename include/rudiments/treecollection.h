@@ -26,17 +26,6 @@ class RUDIMENTS_DLLSPEC treenode : public nodecollectionnode<valuetype> {
 		/** Return the value stored in the node. */
 		virtual valuetype	getValue() const=0;
 
-		/** Returns a negative number, 0, or a positive number depending
-		 *  on whether the value stored in the node is respectively
-		 *  less than, equal to or greater than "value". */
-		virtual int32_t	compare(valuetype value) const=0;
-
-		/** Returns a negative number, 0, or a positive number depending
-		 *  on whether the value stored in the node is respectively
-		 *  less than, equal to or greater than the value stored in
-		 *  "peer". */
-		virtual int32_t	compare(treenode<valuetype> *peer) const=0;
-
 		/** Returns the parent node in the tree or NULL
 		 *  if this node is the top-most node in the tree. */
 		virtual treenode<valuetype>	*getParent()=0;

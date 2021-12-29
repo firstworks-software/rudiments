@@ -6,3 +6,6 @@
 		bool	managearrayvalues;
 		bool	managekeys;
 		bool	managearraykeys;
+
+		comparator	comp;
+		comparator	*compptr;

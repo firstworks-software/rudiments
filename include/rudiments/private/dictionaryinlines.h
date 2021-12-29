@@ -14,9 +14,6 @@ class dictionarynode : public object {
 		void	setValue(valuetype value);
 		keytype		getKey() const;
 		valuetype	getValue() const;
-		int32_t	compare(keytype testkey) const;
-		int32_t	compare(
-			dictionarynode<keytype,valuetype> *testnode) const;
 		void	print() const;
 
 	private:
@@ -25,11 +22,19 @@ class dictionarynode : public object {
 };
 
 template <class keytype, class valuetype>
+class dictionarynodecomparator : public comparator {
+	public:
+		int32_t compare(object *value1, object *value2);
+};
+
+template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::dictionary() :
 				dictionarycollection<keytype,valuetype>() {
 	trackinsertionorder=true;
 	keylist=NULL;
+	comp=new dictionarynodecomparator<keytype,valuetype>();
+	tree.setComparator(comp);
 
 #ifdef DARWIN_GCC_2952_HACKS
 	return;
@@ -40,7 +45,7 @@ dictionary<keytype,valuetype>::dictionary() :
 	// On Darwin platforms, when using gcc 2.95.2 (and possibly other
 	// versions) this results in various undefined symbols.  Adding some
 	// calls here, after the return causes the code to be included and the
-	// symbols to be defined.  It's called her/ after the return so that
+	// symbols to be defined.  It's called here, after the return so that
 	// it never actually gets executed.  The old compiler doesn't complain
 	// about that.
 	keylist=getKeys();
@@ -52,6 +57,7 @@ template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::~dictionary() {
 	clear();
+	delete comp;
 }
 
 template <class keytype, class valuetype>
@@ -299,7 +305,7 @@ inline
 void dictionary<keytype,valuetype>::print() {
 	for (treenode<dictionarynode<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		node->getValue()->print();
+		node_print(node->getValue());
 		stdoutput.printf("\n");
 	}
 }
@@ -350,31 +356,22 @@ valuetype dictionarynode<keytype,valuetype>::getValue() const {
 
 template <class keytype, class valuetype>
 inline
-int32_t dictionarynode<keytype,valuetype>::compare(keytype testkey) const {
-	return node_compare(key,testkey);
-}
-
-template <class keytype, class valuetype>
-inline
-int32_t dictionarynode<keytype,valuetype>::compare(
-		dictionarynode<keytype,valuetype> *testnode) const {
-	return node_compare(key,testnode->key);
-}
-
-template <class keytype, class valuetype>
-inline
 void dictionarynode<keytype,valuetype>::print() const {
 	node_print(key);
 	stdoutput.printf(":");
 	node_print(value);
 }
 
-
 template <class keytype, class valuetype>
 inline
-int32_t node_compare(dictionarynode<keytype,valuetype> *value1,
-			dictionarynode<keytype,valuetype> *value2) {
-	return node_compare(value1->getKey(),value2->getKey());
+int32_t dictionarynodecomparator<keytype,valuetype>::compare(
+							object *value1,
+							object *value2) {
+	dictionarynode<keytype,valuetype> *v1=
+		(dictionarynode<keytype,valuetype> *)value1;
+	dictionarynode<keytype,valuetype> *v2=
+		(dictionarynode<keytype,valuetype> *)value2;
+	return comparator::compare(v1->getKey(),v2->getKey());
 }
 
 template <class keytype, class valuetype>

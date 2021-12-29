@@ -48,8 +48,12 @@ void walk(bool forwards, avltree<type> *t,
 	while (node) {
 
 		if (length &&
-			((forwards && node->compare(prev)==-1) ||
-			(!forwards && node->compare(prev)==1))) {
+			((forwards &&
+				t->getComparator()->compare(
+					node->getValue(),prev)==-1) ||
+			(!forwards &&
+				t->getComparator()->compare(
+					node->getValue(),prev)==1))) {
 			*ordererror=true;
 		}
 		prev=node->getValue();

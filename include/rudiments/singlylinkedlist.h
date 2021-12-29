@@ -26,17 +26,6 @@ class singlylinkedlistnode : public listnode<valuetype> {
 		/** Return the value stored in the node. */
 		valuetype	getValue() const;
 
-		/** Returns a negative number, 0, or a positive number depending
-		 *  on whether the value stored in the node is respectively
-		 *  less than, equal to or greater than "value". */
-		virtual int32_t	compare(valuetype value) const;
-
-		/** Returns a negative number, 0, or a positive number depending
-		 *  on whether the value stored in the node is respectively
-		 *  less than, equal to or greater than the value stored in
-		 *  "peer". */
-		int32_t	compare(listnode<valuetype> *peer) const;
-
 		/** Always returns NULL. */
 		listnode<valuetype>	*getPrevious();
 

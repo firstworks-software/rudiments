@@ -2,6 +2,10 @@
 // See the COPYING file for more information
 
 	protected:
+		void	insert(treenode<valuetype> *top,
+				treenode<valuetype> *node,
+				treenode<valuetype> **treetop);
+
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;
 		treenode<valuetype>	*last;

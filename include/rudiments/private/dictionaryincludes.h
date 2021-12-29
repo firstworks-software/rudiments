@@ -8,3 +8,6 @@
 
 template <class keytype, class valuetype>
 class dictionarynode;
+
+template <class keytype, class valuetype>
+class dictionarynodecomparator;

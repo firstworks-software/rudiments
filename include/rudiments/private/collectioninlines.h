@@ -7,6 +7,7 @@ collection::collection() : object() {
 	managearrayvalues=false;
 	managekeys=false;
 	managearraykeys=false;
+	compptr=&comp;
 }
 
 inline
@@ -15,10 +16,25 @@ collection::collection(const collection &c) : object(c) {
 	managearrayvalues=false;
 	managekeys=false;
 	managearraykeys=false;
+	compptr=&comp;
 }
 
 inline
 collection::~collection() {
+}
+
+inline
+comparator *collection::getComparator() {
+	return compptr;
+}
+
+inline
+void collection::setComparator(comparator *newcomp) {
+	if (newcomp) {
+		compptr=newcomp;
+	} else {
+		compptr=&comp;
+	}
 }
 
 inline
