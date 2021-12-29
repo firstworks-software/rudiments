@@ -436,6 +436,9 @@ int main(int argc, char **argv) {
 		"/u01/app/oracle/product/19.0/client_2/",
 		"/u01/app/oracle/product/19.0.0/client_1/",
 		"/u01/app/oracle/product/19.0.0/client_2/",
+		"/u01/app/oracle/product/19.0.0/client_2/libclntsh.so",
+		"/u01/app/oracle/product/19.0.0/client_2/libclntsh.so.19",
+		"/u01/app/oracle/product/19.0.0/client_2/libclntsh.so.19.1",
 		NULL
 	};
 	const char * const *d;

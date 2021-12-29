@@ -1211,15 +1211,19 @@ int32_t charstring::compareNatural(const char *str1,
 	char		*num2=NULL;
 	for (;;) {
 
-		// handle end-of-string cases
+		// handle end-of-string cases...
 		if (!*str1 && !*str2) {
 			return difference;
 		}
-		if (!*str1 && *str2) {
+
+		// str1 has more chars than str2 - str1 > str2
+		if (*str1 && !*str2) {
 			difference++;
 			return difference;
 		}
-		if (*str1 && !*str2) {
+
+		// str2 has more chars than str1 - str2 > str1
+		if (!*str1 && *str2) {
 			difference--;
 			return difference;
 		}
