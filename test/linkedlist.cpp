@@ -394,6 +394,65 @@ int main(int argc, char **argv) {
 					getNext()->getNext()->getNext()->
 					getValue(),
 				"5"));
+
+	stdoutput.printf("heapSort() (natural, reverse, delimiters)\n");
+	strl.clear();
+	const char *dirs[]={
+		"/u01/app/oracle/product/10/client_1/",
+		"/u01/app/oracle/product/10/client_2/",
+		"/u01/app/oracle/product/10.0/client_1/",
+		"/u01/app/oracle/product/10.0/client_2/",
+		"/u01/app/oracle/product/10.1/client_1/",
+		"/u01/app/oracle/product/10.1/client_2/",
+		"/u01/app/oracle/product/10.2/client_1/",
+		"/u01/app/oracle/product/10.2/client_2/",
+		"/u01/app/oracle/product/11/client_1/",
+		"/u01/app/oracle/product/11/client_2/",
+		"/u01/app/oracle/product/11.0/client_1/",
+		"/u01/app/oracle/product/11.0/client_2/",
+		"/u01/app/oracle/product/11.1/client_1/",
+		"/u01/app/oracle/product/11.1/client_2/",
+		"/u01/app/oracle/product/11.2/client_1/",
+		"/u01/app/oracle/product/11.2/client_2/",
+		"/u01/app/oracle/product/12/client_1/",
+		"/u01/app/oracle/product/12/client_2/",
+		"/u01/app/oracle/product/12.0/client_1/",
+		"/u01/app/oracle/product/12.0/client_2/",
+		"/u01/app/oracle/product/12.1/client_1/",
+		"/u01/app/oracle/product/12.1/client_2/",
+		"/u01/app/oracle/product/12.2/client_1/",
+		"/u01/app/oracle/product/12.2/client_2/",
+		"/u01/app/oracle/product/18/client_1/",
+		"/u01/app/oracle/product/18/client_2/",
+		"/u01/app/oracle/product/18.1/client_1/",
+		"/u01/app/oracle/product/18.1/client_2/",
+		"/u01/app/oracle/product/18.2/client_1/",
+		"/u01/app/oracle/product/18.2/client_2/",
+		"/u01/app/oracle/product/18.3.0/client_1/",
+		"/u01/app/oracle/product/18.3.0/client_2/",
+		"/u01/app/oracle/product/19/client_1/",
+		"/u01/app/oracle/product/19/client_2/",
+		"/u01/app/oracle/product/19.0/client_1/",
+		"/u01/app/oracle/product/19.0/client_2/",
+		"/u01/app/oracle/product/19.0.0/client_1/",
+		"/u01/app/oracle/product/19.0.0/client_2/",
+		NULL
+	};
+	const char * const *d;
+	for (d=dirs; *d; d++) {
+		strl.append(*d);
+	}
+	strl.getComparator()->setReverse(true);
+	strl.getComparator()->setNatural(true);
+	strl.getComparator()->setNumberDelimiters("._");
+	strl.heapSort();
+	stringbuffer	title;
+	for (listnode<const char *> *node=strl.getFirst();
+					node; node=node->getNext()) {
+		title.clear();
+		d--;
+		test(*d,!charstring::compare(node->getValue(),*d));
+	}
 	stdoutput.printf("\n");
 
 

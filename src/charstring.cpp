@@ -1321,12 +1321,13 @@ int32_t charstring::compareVersions(const char *str1,
 			return difference;
 		}
 
-		// handle cases where str1 and str2 have
-		// different numbers of parts
+		// str1 has more parts than str2 - str1 > str2
 		if (str1 && *str1 && (!str2 || !*str2)) {
 			difference++;
 			return difference;
 		}
+
+		// str2 has more parts than str1 - str2 > str1
 		if (str2 && *str2 && (!str1 || !*str1)) {
 			difference--;
 			return difference;

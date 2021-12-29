@@ -48,36 +48,40 @@ const char *comparator::getNumberDelimiters() {
 inline
 int32_t comparator::compare(char *value1, char *value2) {
 	return ((natural)?
-		charstring::compare(value1,value2):
-		charstring::compareNatural(value1,value2,delimiters))*
+		charstring::compareNatural(value1,value2,delimiters):
+		charstring::compare(value1,value2))*
 		multiplier;
 }
 
 inline
 int32_t comparator::compare(const char *value1, const char *value2) {
 	return ((natural)?
-		charstring::compare(value1,value2):
-		charstring::compareNatural(value1,value2,delimiters))*
+		charstring::compareNatural(value1,value2,delimiters):
+		charstring::compare(value1,value2))*
 		multiplier;
 }
 
 inline
 int32_t comparator::compare(unsigned char *value1, unsigned char *value2) {
 	return ((natural)?
-		charstring::compare((const char *)value1,
-					(const char *)value2):
 		charstring::compareNatural((const char *)value1,
-					(const char *)value2))*multiplier;
+						(const char *)value2,
+						delimiters):
+		charstring::compare((const char *)value1,
+						(const char *)value2))*
+		multiplier;
 }
 
 inline
 int32_t comparator::compare(const unsigned char *value1,
 				const unsigned char *value2) {
 	return ((natural)?
+		charstring::compareNatural((const char *)value1,
+						(const char *)value2,
+						delimiters):
 		charstring::compare((const char *)value1,
-					(const char *)value2):
-		charstring::compare((const char *)value1,
-					(const char *)value2))*multiplier;
+						(const char *)value2))*
+		multiplier;
 }
 
 inline
