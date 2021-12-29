@@ -107,11 +107,9 @@ static dictionary< gid_t, namesid * >	gidmap;
 static gid_t addGidMapping(const char *name,
 				const char *sidstr, PSID sid, DWORD sidsize) {
 
-	// check for existing mapping (by name only)
-	for (listnode< dictionarynode< gid_t, namesid * > *>
-				*node=gidmap.getList()->getFirst(); 
-				node; node=node->getNext()) {
-		namesid	*ns=node->getValue()->getValue();
+	for (listnode<gid_t> *node=gidmap.getKeys()->getFirst(); 
+					node; node=node->getNext()) {
+		namesid	*ns=gidmap.getValue(node->getValue());
 		if (!charstring::compare(name,ns->name)) {
 			// reset the sid
 			delete[] ns->sidstr;
@@ -119,7 +117,7 @@ static gid_t addGidMapping(const char *name,
 			delete[] (BYTE *)ns->sid;
 			ns->sid=bytestring::duplicate(sid,sidsize);
 			ns->sidsize=sidsize;
-			return node->getValue()->getKey();
+			return node->getValue();
 		}
 	}
 

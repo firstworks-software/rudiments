@@ -129,10 +129,9 @@ static uid_t addUidMapping(const char *name,
 				const char *sidstr, PSID sid, DWORD sidsize) {
 
 	// check for existing mapping (by name only)
-	for (listnode< dictionarynode< uid_t, namesid * > *>
-				*node=uidmap.getList()->getFirst(); 
-				node; node=node->getNext()) {
-		namesid	*ns=node->getValue()->getValue();
+	for (listnode<uid_t> *node=uidmap.getKeys()->getFirst(); 
+					node; node=node->getNext()) {
+		namesid	*ns=uidmap.getValue(node->getValue());
 		if (!charstring::compare(name,ns->name)) {
 			// reset the sid
 			delete[] ns->sidstr;
@@ -140,7 +139,7 @@ static uid_t addUidMapping(const char *name,
 			delete[] (BYTE *)ns->sid;
 			ns->sid=bytestring::duplicate(sid,sidsize);
 			ns->sidsize=sidsize;
-			return node->getValue()->getKey();
+			return node->getValue();
 		}
 	}
 

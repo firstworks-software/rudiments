@@ -2074,7 +2074,7 @@ bool file::getMatchingFileNames(const char *pattern,
 		// iterate over all subsequent matches
 		do {
 			matches->append(charstring::duplicate(fd.cFileName));
-		} while (FindFileNext(fh,&fd));
+		} while (FindNextFile(fh,&fd));
 
 		// clean up
 		FindClose(fh);

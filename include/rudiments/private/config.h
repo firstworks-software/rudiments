@@ -1,4 +1,3 @@
-/* include/rudiments/private/config.h.  Generated from config.h.in by configure.  */
 /* include/rudiments/private/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* On some platforms */
@@ -8,10 +7,10 @@
 /* #undef DARWIN_GCC_2952_HACKS */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
+/* #undef HAVE_DLFCN_H */
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#define HAVE_INTTYPES_H 1
+/* #undef HAVE_INTTYPES_H */
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
@@ -23,7 +22,7 @@
 #define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
+/* #undef HAVE_STRINGS_H */
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
@@ -35,9 +34,10 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 1
+/* #undef HAVE_UNISTD_H */
 
-/* Define to the sub-directory where libtool stores uninstalled libraries. */
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
 #define LT_OBJDIR ".libs/"
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -59,7 +59,7 @@
 #define PACKAGE_VERSION ""
 
 /* Platform requires default TLS ciper of PROFILE=SYSTEM */
-#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1
+/* #undef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM */
 
 /* ioctl/FIONBIO doesn't work on some systems */
 /* #undef RUDIMENTS_DISABLE_FIONBIO */
@@ -68,85 +68,76 @@
 /* #undef RUDIMENTS_ENOSYS_NOTIFY */
 
 /* getsockopt has a void * on most systems */
-#define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE void *
+#define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 
 /* SSL has ASN1_STRING_get0_data */
-#define RUDIMENTS_HAS_ASN1_STRING_GET0_DATA 1
+/* #undef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA */
 
 /* libcurl has CURLOPT_SSH_AUTH_TYPES */
-#define RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES 1
+/* #undef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES */
 
 /* libcurl has CURLOPT_USERNAME */
-#define RUDIMENTS_HAS_CURLOPT_USERNAME 1
+/* #undef RUDIMENTS_HAS_CURLOPT_USERNAME */
 
 /* libcurl has CURLOPT_USERPWD */
-#define RUDIMENTS_HAS_CURLOPT_USERPWD 1
+/* #undef RUDIMENTS_HAS_CURLOPT_USERPWD */
 
 /* libcurl has curl_multi_timeout */
-#define RUDIMENTS_HAS_CURL_MULTI_TIMEOUT 1
+/* #undef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT */
 
 /* SSL has EVP_CIPHER_CTX_NEW */
-#define RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW 1
+/* #undef RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW */
 
 /* SSL has EVP_PKEY_base_id */
-#define RUDIMENTS_HAS_EVP_PKEY_BASE_ID 1
+/* #undef RUDIMENTS_HAS_EVP_PKEY_BASE_ID */
 
 /* SSL has EVP_PKEY_get0 */
-#define RUDIMENTS_HAS_EVP_PKEY_GET0 1
+/* #undef RUDIMENTS_HAS_EVP_PKEY_GET0 */
 
 /* Rudiments supports GSS */
-#define RUDIMENTS_HAS_GSS 1
+/* #undef RUDIMENTS_HAS_GSS */
 
 /* GSS has gssapi/gssapi_ext.h */
-#define RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H 1
+/* #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H */
 
 /* GSS has gssapi/gssapi_generic.h */
-#define RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H 1
+/* #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H */
 
 /* GSS has gssapi/gssapi.h */
-#define RUDIMENTS_HAS_GSSAPI_GSSAPI_H 1
+/* #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_H */
 
 /* GSS has gssapi.h */
-#define RUDIMENTS_HAS_GSSAPI_H 1
+/* #undef RUDIMENTS_HAS_GSSAPI_H */
 
 /* GSS has GSS_C_NT_ANONYMOUS */
-#define RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS 1
+/* #undef RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS */
 
 /* GSS has gss name types */
-#define RUDIMENTS_HAS_GSS_NAME_TYPES 1
+/* #undef RUDIMENTS_HAS_GSS_NAME_TYPES */
 
 /* GSS has gss_oid_to_str */
-#define RUDIMENTS_HAS_GSS_OID_TO_STR 1
+/* #undef RUDIMENTS_HAS_GSS_OID_TO_STR */
 
 /* GSS has gss_release_oid */
-#define RUDIMENTS_HAS_GSS_RELEASE_OID 1
+/* #undef RUDIMENTS_HAS_GSS_RELEASE_OID */
 
 /* GSS has gss_str_to_oid */
-#define RUDIMENTS_HAS_GSS_STR_TO_OID 1
+/* #undef RUDIMENTS_HAS_GSS_STR_TO_OID */
 
 /* Rudiments supports libcurl */
-#define RUDIMENTS_HAS_LIBCURL 1
-
-/* SSL has MD5_Init/Update/Final returning int */
-#define RUDIMENTS_HAS_MD5_INIT_RETURNING_INT 1
+/* #undef RUDIMENTS_HAS_LIBCURL */
 
 /* Rudiments supports PCRE */
-#define RUDIMENTS_HAS_PCRE 1
-
-/* SSL has SHA1_Init/Update/Final returning int */
-#define RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT 1
+/* #undef RUDIMENTS_HAS_PCRE */
 
 /* SSL has SHA256_CTX */
-#define RUDIMENTS_HAS_SHA256_CTX 1
-
-/* SSL has SHA256_Init/Update/Final returning int */
-#define RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT 1
+/* #undef RUDIMENTS_HAS_SHA256_CTX */
 
 /* Rudiments supports SSL */
-#define RUDIMENTS_HAS_SSL 1
+/* #undef RUDIMENTS_HAS_SSL */
 
 /* SSL has SSLv23_method */
-#define RUDIMENTS_HAS_SSLV23_METHOD 1
+/* #undef RUDIMENTS_HAS_SSLV23_METHOD */
 
 /* SSL has SSLv2_method */
 /* #undef RUDIMENTS_HAS_SSLV2_METHOD */
@@ -155,10 +146,13 @@
 /* #undef RUDIMENTS_HAS_SSLV3_METHOD */
 
 /* SSL has dNSName */
-#define RUDIMENTS_HAS_SSL_DNSNAME 1
+/* #undef RUDIMENTS_HAS_SSL_DNSNAME */
 
 /* Some systems have strftime */
 #define RUDIMENTS_HAS_STRFTIME 1
+
+/* Rudiments supports SSPI */
+#define RUDIMENTS_HAS_SSPI 1
 
 /* Rudiments supports threads */
 #define RUDIMENTS_HAS_THREADS 1
@@ -176,10 +170,10 @@
 /* #undef RUDIMENTS_HAS_TLSV1_METHOD */
 
 /* SSL has TLS_method */
-#define RUDIMENTS_HAS_TLS_METHOD 1
+/* #undef RUDIMENTS_HAS_TLS_METHOD */
 
 /* Some systems define tm_gmtoff in their struct tm */
-#define RUDIMENTS_HAS_TM_GMTOFF 1
+/* #undef RUDIMENTS_HAS_TM_GMTOFF */
 
 /* Some systems define tm_name in their struct tm */
 /* #undef RUDIMENTS_HAS_TM_NAME */
@@ -188,25 +182,25 @@
 /* #undef RUDIMENTS_HAS_TM_TZADJ */
 
 /* Some systems define tm_zone in their struct tm */
-#define RUDIMENTS_HAS_TM_ZONE 1
+/* #undef RUDIMENTS_HAS_TM_ZONE */
 
 /* Some systems have tzname */
-#define RUDIMENTS_HAS_TZNAME 1
+/* #undef RUDIMENTS_HAS_TZNAME */
 
 /* Some systems have tzset */
-#define RUDIMENTS_HAS_TZSET 1
+/* #undef RUDIMENTS_HAS_TZSET */
 
 /* Some systems have tzset but dont define it */
 /* #undef RUDIMENTS_HAS_UNDEFINED_TZSET */
 
 /* SSL has X509_get_signature_nid */
-#define RUDIMENTS_HAS_X509_GET_SIGNATURE_NID 1
+/* #undef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID */
 
 /* Some systems have _get_timezone */
-/* #undef RUDIMENTS_HAS__GET_TIMEZONE */
+#define RUDIMENTS_HAS__GET_TIMEZONE 1
 
 /* Some systems have _get_tzname */
-/* #undef RUDIMENTS_HAS__GET_TZNAME */
+#define RUDIMENTS_HAS__GET_TZNAME 1
 
 /* Some systems have _timezone */
 /* #undef RUDIMENTS_HAS__TIMEZONE */
@@ -215,7 +209,7 @@
 /* #undef RUDIMENTS_HAS__TZNAME */
 
 /* Some systems have _tzset */
-/* #undef RUDIMENTS_HAS__TZSET */
+#define RUDIMENTS_HAS__TZSET 1
 
 /* Some systems define __tm_gmtoff in their struct tm */
 /* #undef RUDIMENTS_HAS___TM_GMTOFF */
@@ -223,38 +217,38 @@
 /* Some systems define __tm_zone in their struct tm */
 /* #undef RUDIMENTS_HAS___TM_ZONE */
 
-/* Some systems have accctrl.h */
-/* #undef RUDIMENTS_HAVE_ACCCTRL_H */
+/* Some systems have AccCtrl.h */
+#define RUDIMENTS_HAVE_ACCCTRL_H 1
 
 /* Most systems have access() */
-#define RUDIMENTS_HAVE_ACCESS 1
+/* #undef RUDIMENTS_HAVE_ACCESS */
 
-/* Some systems have aclapi.h */
-/* #undef RUDIMENTS_HAVE_ACLAPI_H */
+/* Some systems have Aclapi.h */
+#define RUDIMENTS_HAVE_ACLAPI_H 1
 
 /* Some systems have alarm */
-#define RUDIMENTS_HAVE_ALARM 1
+/* #undef RUDIMENTS_HAVE_ALARM */
 
 /* Some systems have arc4random */
 /* #undef RUDIMENTS_HAVE_ARC4RANDOM */
 
 /* Some systems have arpa/inet.h */
-#define RUDIMENTS_HAVE_ARPA_INET_H 1
+/* #undef RUDIMENTS_HAVE_ARPA_INET_H */
 
 /* Some systems have atexit */
 #define RUDIMENTS_HAVE_ATEXIT 1
 
 /* Some systems have backtrace */
-#define RUDIMENTS_HAVE_BACKTRACE 1
+/* #undef RUDIMENTS_HAVE_BACKTRACE */
 
-/* SCO OSR5 has an incorrect struct msghdr definition */
+/* SCO OSR < 5.0.7 has an incorrect struct msghdr definition */
 /* #undef RUDIMENTS_HAVE_BAD_SCO_MSGHDR */
 
 /* Some systems dont have st_blocks in struct stat */
-#define RUDIMENTS_HAVE_BLKCNT_T 1
+/* #undef RUDIMENTS_HAVE_BLKCNT_T */
 
 /* Some systems dont have st_blksize in struct stat */
-#define RUDIMENTS_HAVE_BLKSIZE_T 1
+/* #undef RUDIMENTS_HAVE_BLKSIZE_T */
 
 /* Most systems have bool */
 #define RUDIMENTS_HAVE_BOOL 1
@@ -266,91 +260,91 @@
 /* #undef RUDIMENTS_HAVE_BSWAP64 */
 
 /* Some systems have bswap_64 */
-#define RUDIMENTS_HAVE_BSWAP_64 1
+/* #undef RUDIMENTS_HAVE_BSWAP_64 */
 
 /* Some systems have byteswap.h */
-#define RUDIMENTS_HAVE_BYTESWAP_H 1
+/* #undef RUDIMENTS_HAVE_BYTESWAP_H */
 
 /* Some systems have CaptureStackBackTrace */
-/* #undef RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE */
+#define RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE 1
 
 /* Some systems have char16_t */
-#define RUDIMENTS_HAVE_CHAR16_T 1
+/* #undef RUDIMENTS_HAVE_CHAR16_T */
 
 /* Some systems have chmod */
-#define RUDIMENTS_HAVE_CHMOD 1
+/* #undef RUDIMENTS_HAVE_CHMOD */
 
 /* Some systems have chroot */
-#define RUDIMENTS_HAVE_CHROOT 1
+/* #undef RUDIMENTS_HAVE_CHROOT */
 
 /* Some systems have clearenv */
-#define RUDIMENTS_HAVE_CLEARENV 1
+/* #undef RUDIMENTS_HAVE_CLEARENV */
 
 /* Some systems have clock_nanosleep */
-#define RUDIMENTS_HAVE_CLOCK_NANOSLEEP 1
+/* #undef RUDIMENTS_HAVE_CLOCK_NANOSLEEP */
 
 /* Some systems have clock_settime */
-#define RUDIMENTS_HAVE_CLOCK_SETTIME 1
+/* #undef RUDIMENTS_HAVE_CLOCK_SETTIME */
 
 /* Some systems have close */
-#define RUDIMENTS_HAVE_CLOSE 1
+/* #undef RUDIMENTS_HAVE_CLOSE */
 
 /* some systems have closesocket */
-/* #undef RUDIMENTS_HAVE_CLOSESOCKET */
+#define RUDIMENTS_HAVE_CLOSESOCKET 1
 
 /* Some systems have cmsghdr */
-#define RUDIMENTS_HAVE_CMSGHDR 1
+/* #undef RUDIMENTS_HAVE_CMSGHDR */
 
 /* Some systems have _commit */
-/* #undef RUDIMENTS_HAVE_COMMIT */
+#define RUDIMENTS_HAVE_COMMIT 1
 
 /* connect has a const sockaddr * on most systems */
 /* #undef RUDIMENTS_HAVE_CONNECT_WITH_NON_CONST_SOCKADDR */
 
 /* Most systems have ftok(const char *, int) */
-#define RUDIMENTS_HAVE_CONST_CHAR_FTOK 1
+/* #undef RUDIMENTS_HAVE_CONST_CHAR_FTOK */
 
 /* Some systems have CreateDirectory */
-/* #undef RUDIMENTS_HAVE_CREATEDIRECTORY */
+#define RUDIMENTS_HAVE_CREATEDIRECTORY 1
 
 /* Some systems have CreateFile */
-/* #undef RUDIMENTS_HAVE_CREATEFILE */
+#define RUDIMENTS_HAVE_CREATEFILE 1
 
 /* Some systems have CreateNamedPipe */
-/* #undef RUDIMENTS_HAVE_CREATENAMEDPIPE */
+#define RUDIMENTS_HAVE_CREATENAMEDPIPE 1
 
 /* Some systems have CreateSemaphore */
-/* #undef RUDIMENTS_HAVE_CREATESEMAPHORE */
+#define RUDIMENTS_HAVE_CREATESEMAPHORE 1
 
 /* CreateThread function exists */
-/* #undef RUDIMENTS_HAVE_CREATETHREAD */
+#define RUDIMENTS_HAVE_CREATETHREAD 1
 
 /* Some systems have CreateTimerQueueTimer */
-/* #undef RUDIMENTS_HAVE_CREATETIMERQUEUETIMER */
+#define RUDIMENTS_HAVE_CREATETIMERQUEUETIMER 1
 
 /* Some systems have CreateFileMapping */
-/* #undef RUDIMENTS_HAVE_CREATE_FILE_MAPPING */
+#define RUDIMENTS_HAVE_CREATE_FILE_MAPPING 1
 
 /* Some systems have CreateIoCompletionPort */
-/* #undef RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT */
+#define RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT 1
 
 /* CreateMutex function exists */
-/* #undef RUDIMENTS_HAVE_CREATE_MUTEX */
+#define RUDIMENTS_HAVE_CREATE_MUTEX 1
 
 /* Some systems have CreateProcess */
-/* #undef RUDIMENTS_HAVE_CREATE_PROCESS */
+#define RUDIMENTS_HAVE_CREATE_PROCESS 1
 
 /* Some systems have crypt */
-#define RUDIMENTS_HAVE_CRYPT 1
+/* #undef RUDIMENTS_HAVE_CRYPT */
 
 /* Some systems have CryptGenRandom */
-/* #undef RUDIMENTS_HAVE_CRYPTGENRANDOM */
+#define RUDIMENTS_HAVE_CRYPTGENRANDOM 1
 
 /* Some systems have crypt.h */
-#define RUDIMENTS_HAVE_CRYPT_H 1
+/* #undef RUDIMENTS_HAVE_CRYPT_H */
 
 /* Some systems have crypt_r */
-#define RUDIMENTS_HAVE_CRYPT_R 1
+/* #undef RUDIMENTS_HAVE_CRYPT_R */
 
 /* Some systems have ctype.h */
 #define RUDIMENTS_HAVE_CTYPE_H 1
@@ -362,16 +356,16 @@
 /* #undef RUDIMENTS_HAVE_DARWIN_STATFS */
 
 /* Some systems have dbghelp.h */
-/* #undef RUDIMENTS_HAVE_DBGHELP_H */
+#define RUDIMENTS_HAVE_DBGHELP_H 1
 
 /* Some systems have direct.h */
-/* #undef RUDIMENTS_HAVE_DIRECT_H */
+#define RUDIMENTS_HAVE_DIRECT_H 1
 
 /* Some systems have dirent.h */
-#define RUDIMENTS_HAVE_DIRENT_H 1
+/* #undef RUDIMENTS_HAVE_DIRENT_H */
 
 /* Some systems have dirfd */
-#define RUDIMENTS_HAVE_DIRFD 1
+/* #undef RUDIMENTS_HAVE_DIRFD */
 
 /* Some systems have DIR.dd_fd */
 /* #undef RUDIMENTS_HAVE_DIR_DD_FD */
@@ -380,67 +374,67 @@
 /* #undef RUDIMENTS_HAVE_DIR_D_FD */
 
 /* Some systems have dlfcn.h */
-#define RUDIMENTS_HAVE_DLFCN_H 1
+/* #undef RUDIMENTS_HAVE_DLFCN_H */
 
 /* Some systems have dlopen */
-#define RUDIMENTS_HAVE_DLOPEN 1
+/* #undef RUDIMENTS_HAVE_DLOPEN */
 
 /* Some systems have dup */
-#define RUDIMENTS_HAVE_DUP 1
+/* #undef RUDIMENTS_HAVE_DUP */
 
 /* Some systems have dup2 */
-#define RUDIMENTS_HAVE_DUP2 1
+/* #undef RUDIMENTS_HAVE_DUP2 */
 
 /* Some systems have DuplicateHandle */
-/* #undef RUDIMENTS_HAVE_DUPLICATEHANDLE */
+#define RUDIMENTS_HAVE_DUPLICATEHANDLE 1
 
 /* Some systems define environ in unistd.h */
 #define RUDIMENTS_HAVE_ENVIRON 1
 
 /* Some systems have epoll */
-#define RUDIMENTS_HAVE_EPOLL 1
+/* #undef RUDIMENTS_HAVE_EPOLL */
 
 /* Some systems have errno.h */
 #define RUDIMENTS_HAVE_ERRNO_H 1
 
 /* Some systems have execinfo.h */
-#define RUDIMENTS_HAVE_EXECINFO_H 1
+/* #undef RUDIMENTS_HAVE_EXECINFO_H */
 
 /* Some systems have execvp */
-#define RUDIMENTS_HAVE_EXECVP 1
+/* #undef RUDIMENTS_HAVE_EXECVP */
 
 /* Some systems have ExitWindowsEx */
-/* #undef RUDIMENTS_HAVE_EXITWINDOWSEX */
+#define RUDIMENTS_HAVE_EXITWINDOWSEX 1
 
 /* Some systems have fchmod */
-#define RUDIMENTS_HAVE_FCHMOD 1
+/* #undef RUDIMENTS_HAVE_FCHMOD */
 
 /* Some systems have fchown */
-#define RUDIMENTS_HAVE_FCHOWN 1
+/* #undef RUDIMENTS_HAVE_FCHOWN */
 
 /* Some systems have fcntl */
-#define RUDIMENTS_HAVE_FCNTL 1
+/* #undef RUDIMENTS_HAVE_FCNTL */
 
 /* Some systems have fcntl.h */
 #define RUDIMENTS_HAVE_FCNTL_H 1
 
 /* Some systems have fdatasync */
-#define RUDIMENTS_HAVE_FDATASYNC 1
+/* #undef RUDIMENTS_HAVE_FDATASYNC */
 
 /* Some systems have fdopen */
-#define RUDIMENTS_HAVE_FDOPEN 1
+/* #undef RUDIMENTS_HAVE_FDOPEN */
 
 /* Some systems have FD_CLOEXEC */
-#define RUDIMENTS_HAVE_FD_CLOEXEC 1
+/* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
 
 /* Some systems have FILE->_file */
-/* #undef RUDIMENTS_HAVE_FILE_FILE */
+#define RUDIMENTS_HAVE_FILE_FILE 1
 
 /* Some systems have FILE->__filedes */
 /* #undef RUDIMENTS_HAVE_FILE_FILEDES */
 
 /* Some systems have FILE->_fileno */
-#define RUDIMENTS_HAVE_FILE_FILENO 1
+/* #undef RUDIMENTS_HAVE_FILE_FILENO */
 
 /* Some systems have FILE->_fd */
 /* #undef RUDIMENTS_HAVE_FILE__FD */
@@ -449,193 +443,193 @@
 /* #undef RUDIMENTS_HAVE_FILE__FILE */
 
 /* Some systems have FindFirstFile */
-/* #undef RUDIMENTS_HAVE_FINDFIRSTFILE */
+#define RUDIMENTS_HAVE_FINDFIRSTFILE 1
 
 /* Some systems have FlushFileBuffers */
-/* #undef RUDIMENTS_HAVE_FLUSHFILEBUFFERS */
+#define RUDIMENTS_HAVE_FLUSHFILEBUFFERS 1
 
 /* Some systems have fork */
-#define RUDIMENTS_HAVE_FORK 1
+/* #undef RUDIMENTS_HAVE_FORK */
 
 /* Some systems have fpathconf */
-#define RUDIMENTS_HAVE_FPATHCONF 1
+/* #undef RUDIMENTS_HAVE_FPATHCONF */
 
 /* FreeBSD style statfs */
 /* #undef RUDIMENTS_HAVE_FREEBSD_STATFS */
 
 /* Some systems have FreeConsole */
-/* #undef RUDIMENTS_HAVE_FREECONSOLE */
+#define RUDIMENTS_HAVE_FREECONSOLE 1
 
 /* Some systems have fsync */
-#define RUDIMENTS_HAVE_FSYNC 1
+/* #undef RUDIMENTS_HAVE_FSYNC */
 
 /* Most systems have ftok() */
-#define RUDIMENTS_HAVE_FTOK 1
+/* #undef RUDIMENTS_HAVE_FTOK */
 
 /* Some systems have ftruncate */
-#define RUDIMENTS_HAVE_FTRUNCATE 1
+/* #undef RUDIMENTS_HAVE_FTRUNCATE */
 
 /* Some systems have GenerateConsoleCtrlEvent */
-/* #undef RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT */
+#define RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT 1
 
 /* Some systems have GetAce */
-/* #undef RUDIMENTS_HAVE_GETACE */
+#define RUDIMENTS_HAVE_GETACE 1
 
 /* Some systems have getaddrinfo */
-#define RUDIMENTS_HAVE_GETADDRINFO 1
+/* #undef RUDIMENTS_HAVE_GETADDRINFO */
 
 /* Some systems have GetCurrentDirectory */
-/* #undef RUDIMENTS_HAVE_GETCURRENTDIRECTORY */
+#define RUDIMENTS_HAVE_GETCURRENTDIRECTORY 1
 
 /* Some systems have GetCurrentProcessId */
-/* #undef RUDIMENTS_HAVE_GETCURRENTPROCESSID */
+#define RUDIMENTS_HAVE_GETCURRENTPROCESSID 1
 
 /* Some systems have getegid */
-#define RUDIMENTS_HAVE_GETEGID 1
+/* #undef RUDIMENTS_HAVE_GETEGID */
 
 /* Some systems have getenv */
-#define RUDIMENTS_HAVE_GETENV 1
+/* #undef RUDIMENTS_HAVE_GETENV */
 
 /* Some systems have geteuid */
-#define RUDIMENTS_HAVE_GETEUID 1
+/* #undef RUDIMENTS_HAVE_GETEUID */
 
 /* Some systems have GetFileInformationByHandle */
-/* #undef RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE */
+#define RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE 1
 
 /* Some systems have GetFileType */
-/* #undef RUDIMENTS_HAVE_GETFILETYPE */
+#define RUDIMENTS_HAVE_GETFILETYPE 1
 
 /* Some systems have getgid */
-#define RUDIMENTS_HAVE_GETGID 1
+/* #undef RUDIMENTS_HAVE_GETGID */
 
 /* Some systems have getgrgid_r */
-#define RUDIMENTS_HAVE_GETGRGID_R 1
+/* #undef RUDIMENTS_HAVE_GETGRGID_R */
 
 /* Some systems have getgrgid_r */
 /* #undef RUDIMENTS_HAVE_GETGRGID_R_4 */
 
 /* Some systems have getgrgid_r */
-#define RUDIMENTS_HAVE_GETGRGID_R_5 1
+/* #undef RUDIMENTS_HAVE_GETGRGID_R_5 */
 
 /* Some systems have getgrnam_r */
-#define RUDIMENTS_HAVE_GETGRNAM_R 1
+/* #undef RUDIMENTS_HAVE_GETGRNAM_R */
 
 /* Some systems have getgrnam_r */
 /* #undef RUDIMENTS_HAVE_GETGRNAM_R_4 */
 
 /* Some systems have getgrnam_r */
-#define RUDIMENTS_HAVE_GETGRNAM_R_5 1
+/* #undef RUDIMENTS_HAVE_GETGRNAM_R_5 */
 
 /* Some systems have gethostbyaddr_r */
-#define RUDIMENTS_HAVE_GETHOSTBYADDR_R 1
+/* #undef RUDIMENTS_HAVE_GETHOSTBYADDR_R */
 
 /* Some systems have gethostbyaddr_r */
 /* #undef RUDIMENTS_HAVE_GETHOSTBYADDR_R_7 */
 
 /* Some systems have gethostbyaddr_r */
-#define RUDIMENTS_HAVE_GETHOSTBYADDR_R_8 1
+/* #undef RUDIMENTS_HAVE_GETHOSTBYADDR_R_8 */
 
 /* Some systems have gethostbyname_r */
-#define RUDIMENTS_HAVE_GETHOSTBYNAME_R 1
+/* #undef RUDIMENTS_HAVE_GETHOSTBYNAME_R */
 
 /* Some systems have gethostbyname_r */
 /* #undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_5 */
 
 /* Some systems have gethostbyname_r */
-#define RUDIMENTS_HAVE_GETHOSTBYNAME_R_6 1
+/* #undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_6 */
 
 /* Some systems have gethostname */
 #define RUDIMENTS_HAVE_GETHOSTNAME 1
 
 /* Some systems have GetLastError */
-/* #undef RUDIMENTS_HAVE_GETLASTERROR */
+#define RUDIMENTS_HAVE_GETLASTERROR 1
 
 /* Some systems have getloadavg */
-#define RUDIMENTS_HAVE_GETLOADAVG 1
+/* #undef RUDIMENTS_HAVE_GETLOADAVG */
 
 /* Some systems have GetLogicalProcessorInformation */
-/* #undef RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION */
+#define RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION 1
 
 /* Some systems have getnameinfo */
 #define RUDIMENTS_HAVE_GETNAMEINFO 1
 
 /* Some systems have GetNativeSystemInfo */
-/* #undef RUDIMENTS_HAVE_GETNATIVESYSTEMINFO */
+#define RUDIMENTS_HAVE_GETNATIVESYSTEMINFO 1
 
 /* Some systems have getpagesize */
-#define RUDIMENTS_HAVE_GETPAGESIZE 1
+/* #undef RUDIMENTS_HAVE_GETPAGESIZE */
 
 /* Some systems have getpeername */
 #define RUDIMENTS_HAVE_GETPEERNAME 1
 
 /* Some systems have getpgid */
-#define RUDIMENTS_HAVE_GETPGID 1
+/* #undef RUDIMENTS_HAVE_GETPGID */
 
 /* Some systems have getpid */
-#define RUDIMENTS_HAVE_GETPID 1
+/* #undef RUDIMENTS_HAVE_GETPID */
 
 /* Some systems have getppid */
-#define RUDIMENTS_HAVE_GETPPID 1
+/* #undef RUDIMENTS_HAVE_GETPPID */
 
 /* Some systems have getprotobyname_r */
-#define RUDIMENTS_HAVE_GETPROTOBYNAME_R 1
+/* #undef RUDIMENTS_HAVE_GETPROTOBYNAME_R */
 
 /* Some systems have getprotobyname_r */
 /* #undef RUDIMENTS_HAVE_GETPROTOBYNAME_R_4 */
 
 /* Some systems have getprotobyname_r */
-#define RUDIMENTS_HAVE_GETPROTOBYNAME_R_5 1
+/* #undef RUDIMENTS_HAVE_GETPROTOBYNAME_R_5 */
 
 /* Some systems have getprotobynumber_r */
-#define RUDIMENTS_HAVE_GETPROTOBYNUMBER_R 1
+/* #undef RUDIMENTS_HAVE_GETPROTOBYNUMBER_R */
 
 /* Some systems have getprotobynumber_r */
 /* #undef RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_4 */
 
 /* Some systems have getprotobynumber_r */
-#define RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_5 1
+/* #undef RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_5 */
 
 /* Some systems have getpwnam_r */
-#define RUDIMENTS_HAVE_GETPWNAM_R 1
+/* #undef RUDIMENTS_HAVE_GETPWNAM_R */
 
 /* Some systems have getpwnam_r */
 /* #undef RUDIMENTS_HAVE_GETPWNAM_R_4 */
 
 /* Some systems have getpwnam_r */
-#define RUDIMENTS_HAVE_GETPWNAM_R_5 1
+/* #undef RUDIMENTS_HAVE_GETPWNAM_R_5 */
 
 /* Some systems have getpwuid_r */
-#define RUDIMENTS_HAVE_GETPWUID_R 1
+/* #undef RUDIMENTS_HAVE_GETPWUID_R */
 
 /* Some systems have getpwuid_r */
 /* #undef RUDIMENTS_HAVE_GETPWUID_R_4 */
 
 /* Some systems have getpwuid_r */
-#define RUDIMENTS_HAVE_GETPWUID_R_5 1
+/* #undef RUDIMENTS_HAVE_GETPWUID_R_5 */
 
 /* Some systems have GetSecurityInfo */
-/* #undef RUDIMENTS_HAVE_GETSECURITYINFO */
+#define RUDIMENTS_HAVE_GETSECURITYINFO 1
 
 /* Some systems have getservbyname_r */
-#define RUDIMENTS_HAVE_GETSERVBYNAME_R 1
+/* #undef RUDIMENTS_HAVE_GETSERVBYNAME_R */
 
 /* Some systems have getservbyname_r */
 /* #undef RUDIMENTS_HAVE_GETSERVBYNAME_R_5 */
 
 /* Some systems have getservbyname_r */
-#define RUDIMENTS_HAVE_GETSERVBYNAME_R_6 1
+/* #undef RUDIMENTS_HAVE_GETSERVBYNAME_R_6 */
 
 /* Some systems have getservbyport_r */
-#define RUDIMENTS_HAVE_GETSERVBYPORT_R 1
+/* #undef RUDIMENTS_HAVE_GETSERVBYPORT_R */
 
 /* Some systems have getservbyport_r */
 /* #undef RUDIMENTS_HAVE_GETSERVBYPORT_R_5 */
 
 /* Some systems have getservbyport_r */
-#define RUDIMENTS_HAVE_GETSERVBYPORT_R_6 1
+/* #undef RUDIMENTS_HAVE_GETSERVBYPORT_R_6 */
 
 /* Some systems have getsid */
-#define RUDIMENTS_HAVE_GETSID 1
+/* #undef RUDIMENTS_HAVE_GETSID */
 
 /* Some systems have getsockopt */
 #define RUDIMENTS_HAVE_GETSOCKOPT 1
@@ -644,52 +638,52 @@
 /* #undef RUDIMENTS_HAVE_GETSPNAM */
 
 /* Some systems have getspnam_r */
-#define RUDIMENTS_HAVE_GETSPNAM_R 1
+/* #undef RUDIMENTS_HAVE_GETSPNAM_R */
 
 /* Some systems have getspnam_r */
 /* #undef RUDIMENTS_HAVE_GETSPNAM_R_4 */
 
 /* Some systems have getspnam_r */
-#define RUDIMENTS_HAVE_GETSPNAM_R_5 1
+/* #undef RUDIMENTS_HAVE_GETSPNAM_R_5 */
 
 /* Some systems have GetSystemInfo */
-/* #undef RUDIMENTS_HAVE_GETSYSTEMINFO */
+#define RUDIMENTS_HAVE_GETSYSTEMINFO 1
 
 /* Some systems have GetSystemTimeAsFileTime */
-/* #undef RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME */
-
+#define RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME 1
+ 
 /* Some systems have gettimeofday */
-#define RUDIMENTS_HAVE_GETTIMEOFDAY 1
+/* #undef RUDIMENTS_HAVE_GETTIMEOFDAY */
 
 /* Some systems have getuid */
-#define RUDIMENTS_HAVE_GETUID 1
+/* #undef RUDIMENTS_HAVE_GETUID */
 
 /* Some systems have GetUserName */
-/* #undef RUDIMENTS_HAVE_GETUSERNAME */
+#define RUDIMENTS_HAVE_GETUSERNAME 1
 
 /* Some systems have GetVersionEx */
-/* #undef RUDIMENTS_HAVE_GETVERSIONEX */
+#define RUDIMENTS_HAVE_GETVERSIONEX 1
 
 /* Some systems have glob */
-#define RUDIMENTS_HAVE_GLOB 1
+/* #undef RUDIMENTS_HAVE_GLOB */
 
 /* Some systems have GlobalMemoryStatusEx */
-/* #undef RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX */
+#define RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX 1
 
 /* Some systems have glob.h */
-#define RUDIMENTS_HAVE_GLOB_H 1
+/* #undef RUDIMENTS_HAVE_GLOB_H */
 
 /* Some systems have GNU strerror_r */
-#define RUDIMENTS_HAVE_GNU_STRERROR_R 1
+/* #undef RUDIMENTS_HAVE_GNU_STRERROR_R */
 
 /* Some systems have grp.h */
-#define RUDIMENTS_HAVE_GRP_H 1
+/* #undef RUDIMENTS_HAVE_GRP_H */
 
 /* Some systems have _G_config.h */
-/* #undef RUDIMENTS_HAVE_G_CONFIG_H */
+#undef RUDIMENTS_HAVE_G_CONFIG_H
 
 /* Some systems have HANDLE_FLAG_INHERIT */
-/* #undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT */
+#define RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT 1
 
 /* Some systems have htonll */
 /* #undef RUDIMENTS_HAVE_HTONLL */
@@ -698,10 +692,10 @@
 #define RUDIMENTS_HAVE_INET_ADDR 1
 
 /* Some systems have inet_aton */
-#define RUDIMENTS_HAVE_INET_ATON 1
+/* #undef RUDIMENTS_HAVE_INET_ATON */
 
 /* Some systems have InitiateSystemShutdownEx */
-/* #undef RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX */
+#define RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX 1
 
 /* Some systems have int16_t */
 #define RUDIMENTS_HAVE_INT16_T 1
@@ -719,25 +713,25 @@
 #define RUDIMENTS_HAVE_INTTYPES_H 1
 
 /* Some systems have in_addr_t type */
-#define RUDIMENTS_HAVE_IN_ADDR_T 1
+/* #undef RUDIMENTS_HAVE_IN_ADDR_T */
 
 /* Some systems have ioctl */
-#define RUDIMENTS_HAVE_IOCTL 1
+/* #undef RUDIMENTS_HAVE_IOCTL */
 
 /* Some systems have ioctlsocket */
-/* #undef RUDIMENTS_HAVE_IOCTLSOCKET */
+#define RUDIMENTS_HAVE_IOCTLSOCKET 1
 
 /* Some systems have io.h */
-/* #undef RUDIMENTS_HAVE_IO_H */
+#define RUDIMENTS_HAVE_IO_H 1
 
 /* Some systems have iswascii */
-/* #undef RUDIMENTS_HAVE_ISWASCII */
+#define RUDIMENTS_HAVE_ISWASCII 1
 
 /* Some systems have iswblank */
-/* #undef RUDIMENTS_HAVE_ISWBLANK */
+#define RUDIMENTS_HAVE_ISWBLANK 1
 
 /* Some systems have kill */
-#define RUDIMENTS_HAVE_KILL 1
+/* #undef RUDIMENTS_HAVE_KILL */
 
 /* Some systems have kqueue */
 /* #undef RUDIMENTS_HAVE_KQUEUE */
@@ -746,100 +740,97 @@
 /* #undef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA */
 
 /* Do we have libedit */
-#define RUDIMENTS_HAVE_LIBEDIT 1
+/* #undef RUDIMENTS_HAVE_LIBEDIT */
 
 /* Some systems have limits.h */
 #define RUDIMENTS_HAVE_LIMITS_H 1
 
 /* Some systems have link */
-#define RUDIMENTS_HAVE_LINK 1
+/* #undef RUDIMENTS_HAVE_LINK */
 
 /* Linux libc4 style statfs */
 /* #undef RUDIMENTS_HAVE_LINUX_LIBC4_STATFS */
 
 /* Some systems have linux/reboot.h */
-#define RUDIMENTS_HAVE_LINUX_REBOOT_H 1
+/* #undef RUDIMENTS_HAVE_LINUX_REBOOT_H */
 
 /* Some systems have linux/rtc.h */
-#define RUDIMENTS_HAVE_LINUX_RTC_H 1
+/* #undef RUDIMENTS_HAVE_LINUX_RTC_H */
 
 /* Linux style statfs */
-#define RUDIMENTS_HAVE_LINUX_STATFS 1
+/* #undef RUDIMENTS_HAVE_LINUX_STATFS */
 
 /* Some systems have llabs */
-#define RUDIMENTS_HAVE_LLABS 1
+/* #undef RUDIMENTS_HAVE_LLABS */
 
 /* Some systems have lm.h */
-/* #undef RUDIMENTS_HAVE_LM_H */
+#define RUDIMENTS_HAVE_LM_H 1
 
 /* Some systems have LoadLibrary */
-/* #undef RUDIMENTS_HAVE_LOADLIBRARY */
+#define RUDIMENTS_HAVE_LOADLIBRARY 1
 
 /* Some systems have LoadLibraryEx */
-/* #undef RUDIMENTS_HAVE_LOADLIBRARYEX */
+#define RUDIMENTS_HAVE_LOADLIBRARYEX 1
 
 /* Some systems have locale.h */
-#define RUDIMENTS_HAVE_LOCALE_H 1
+/* #undef RUDIMENTS_HAVE_LOCALE_H */
 
 /* Some systems have localtime_r */
-#define RUDIMENTS_HAVE_LOCALTIME_R 1
+/* #undef RUDIMENTS_HAVE_LOCALTIME_R */
 
 /* Some systems have localtime_s */
-/* #undef RUDIMENTS_HAVE_LOCALTIME_S */
+#define RUDIMENTS_HAVE_LOCALTIME_S 1
 
 /* Some systems have LockFileEx */
-/* #undef RUDIMENTS_HAVE_LOCKFILEEX */
+#define RUDIMENTS_HAVE_LOCKFILEEX 1
 
 /* Most systems have long long */
 #define RUDIMENTS_HAVE_LONG_LONG 1
 
 /* Some systems have lrand48 */
-#define RUDIMENTS_HAVE_LRAND48 1
+/* #undef RUDIMENTS_HAVE_LRAND48 */
 
 /* Some systems have lrand48_r */
-#define RUDIMENTS_HAVE_LRAND48_R 1
+/* #undef RUDIMENTS_HAVE_LRAND48_R */
 
 /* Some systems have lseek */
-#define RUDIMENTS_HAVE_LSEEK 1
+/* #undef RUDIMENTS_HAVE_LSEEK */
 
 /* Some systems have machine/endian.h */
 /* #undef RUDIMENTS_HAVE_MACHINE_ENDIAN_H */
 
-/* Some systems have mach-o/dyld.h */
-/* #undef RUDIMENTS_HAVE_MACH_O_DYLD_H */
-
 /* Some systems have madvise */
-#define RUDIMENTS_HAVE_MADVISE 1
+/* #undef RUDIMENTS_HAVE_MADVISE */
 
 /* Some systems use caddr_t argument for madvise */
-/* #undef RUDIMENTS_HAVE_MADVISE_CADDR_T */
+#define RUDIMENTS_HAVE_MADVISE_CADDR_T 1
 
 /* Some systems have mbrtowc */
 #define RUDIMENTS_HAVE_MBRTOWC 1
 
 /* Some systems have mbtowc */
-#define RUDIMENTS_HAVE_MBTOWC 1
+/* #undef RUDIMENTS_HAVE_MBTOWC */
 
 /* Some systems have memccpy with char argument */
 #define RUDIMENTS_HAVE_MEMCCPY_CHAR 1
 
 /* Some systems have memmem */
-#define RUDIMENTS_HAVE_MEMMEM 1
+/* #undef RUDIMENTS_HAVE_MEMMEM */
 
 /* Some systems have memrchr */
-#define RUDIMENTS_HAVE_MEMRCHR 1
+/* #undef RUDIMENTS_HAVE_MEMRCHR */
 
 /* Some systems have mincore */
-#define RUDIMENTS_HAVE_MINCORE 1
+/* #undef RUDIMENTS_HAVE_MINCORE */
 
 /* Some systems use caddr_t argument for mincore */
-/* #undef RUDIMENTS_HAVE_MINCORE_CADDR_T */
+#define RUDIMENTS_HAVE_MINCORE_CADDR_T 1
 
 /* Some systems have mincore with char argument */
 /* #undef RUDIMENTS_HAVE_MINCORE_CHAR */
 
 /* Some systems have mincore with unsigned char argument */
-#define RUDIMENTS_HAVE_MINCORE_UCHAR 1
+/* #undef RUDIMENTS_HAVE_MINCORE_UCHAR */
 
 /* statvfs */
 /* #undef RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS */
@@ -848,70 +839,70 @@
 /* #undef RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION */
 
 /* Some systems have mkdir */
-/* #undef RUDIMENTS_HAVE_MKDIR_1 */
+#define RUDIMENTS_HAVE_MKDIR_1 1
 
 /* Some systems have mkdir */
-#define RUDIMENTS_HAVE_MKDIR_2 1
+/* #undef RUDIMENTS_HAVE_MKDIR_2 */
 
 /* Some systems have mkdtemp */
-#define RUDIMENTS_HAVE_MKDTEMP 1
+/* #undef RUDIMENTS_HAVE_MKDTEMP */
 
 /* Some systems have mkfifo */
-#define RUDIMENTS_HAVE_MKFIFO 1
+/* #undef RUDIMENTS_HAVE_MKFIFO */
 
 /* Some systems have mknod */
-#define RUDIMENTS_HAVE_MKNOD 1
+/* #undef RUDIMENTS_HAVE_MKNOD */
 
 /* Some systems have mkstemp */
-#define RUDIMENTS_HAVE_MKSTEMP 1
+/* #undef RUDIMENTS_HAVE_MKSTEMP */
 
 /* Some systems have mlock */
-#define RUDIMENTS_HAVE_MLOCK 1
+/* #undef RUDIMENTS_HAVE_MLOCK */
 
 /* Some systems have mlockall */
-#define RUDIMENTS_HAVE_MLOCKALL 1
+/* #undef RUDIMENTS_HAVE_MLOCKALL */
 
 /* Some systems use caddr_t argument for mlock */
-/* #undef RUDIMENTS_HAVE_MLOCK_CADDR_T */
+#define RUDIMENTS_HAVE_MLOCK_CADDR_T 1
 
 /* Some systems have mmap */
-#define RUDIMENTS_HAVE_MMAP 1
+/* #undef RUDIMENTS_HAVE_MMAP */
 
 /* Some systems have mprotect */
-#define RUDIMENTS_HAVE_MPROTECT 1
+/* #undef RUDIMENTS_HAVE_MPROTECT */
 
 /* Some systems use caddr_t argument for mprotect */
-/* #undef RUDIMENTS_HAVE_MPROTECT_CADDR_T */
+#define RUDIMENTS_HAVE_MPROTECT_CADDR_T 1
 
 /* Some msghdr structs have a msg_accrights member */
-/* #undef RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS */
+/* #define RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS */
 
 /* Some msghdr structs have a msg_controllen member */
-#define RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN 1
+/* #undef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN */
 
 /* Some msghdr structs have a msg_flags member */
-#define RUDIMENTS_HAVE_MSGHDR_MSG_FLAGS 1
+/* #undef RUDIMENTS_HAVE_MSGHDR_MSG_FLAGS */
 
 /* Some systems have msync */
-#define RUDIMENTS_HAVE_MSYNC 1
+/* #undef RUDIMENTS_HAVE_MSYNC */
 
 /* Some systems use caddr_t argument for msync */
-/* #undef RUDIMENTS_HAVE_MSYNC_CADDR_T */
+#define RUDIMENTS_HAVE_MSYNC_CADDR_T 1
 
 /* Some systems have munlock */
-#define RUDIMENTS_HAVE_MUNLOCK 1
+/* #undef RUDIMENTS_HAVE_MUNLOCK */
 
 /* Some systems have munlockall */
-#define RUDIMENTS_HAVE_MUNLOCKALL 1
+/* #undef RUDIMENTS_HAVE_MUNLOCKALL */
 
 /* Some systems use caddr_t argument for munlock */
-/* #undef RUDIMENTS_HAVE_MUNLOCK_CADDR_T */
+#define RUDIMENTS_HAVE_MUNLOCK_CADDR_T 1
 
 /* Some systems use caddr_t argument for munmap */
-/* #undef RUDIMENTS_HAVE_MUNMAP_CADDR_T */
+#define RUDIMENTS_HAVE_MUNMAP_CADDR_T 1
 
 /* Some systems have nanosleep */
-#define RUDIMENTS_HAVE_NANOSLEEP 1
+/* #undef RUDIMENTS_HAVE_NANOSLEEP */
 
 /* NetBSD style statfs */
 /* #undef RUDIMENTS_HAVE_NETBSD_STATFS */
@@ -920,19 +911,19 @@
 /* #undef RUDIMENTS_HAVE_NETBSD_STATVFS */
 
 /* Some systems have netdb.h */
-#define RUDIMENTS_HAVE_NETDB_H 1
+/* #undef RUDIMENTS_HAVE_NETDB_H */
 
 /* Some systems have NetGroupGetInfo */
-/* #undef RUDIMENTS_HAVE_NETGROUPGETINFO */
+#define RUDIMENTS_HAVE_NETGROUPGETINFO 1
 
 /* Some systems have netinet/in.h */
-#define RUDIMENTS_HAVE_NETINET_IN_H 1
+/* #undef RUDIMENTS_HAVE_NETINET_IN_H */
 
 /* Some systems have netinet/tcp.h */
-#define RUDIMENTS_HAVE_NETINET_TCP_H 1
+/* #undef RUDIMENTS_HAVE_NETINET_TCP_H */
 
 /* Some systems have NetUserGetInfo */
-/* #undef RUDIMENTS_HAVE_NETUSERGETINFO */
+#define RUDIMENTS_HAVE_NETUSERGETINFO 1
 
 /* Some systems have new */
 #define RUDIMENTS_HAVE_NEW 1
@@ -943,14 +934,11 @@
 /* Some systems define _NSGetEnviron in crt_externs.h */
 /* #undef RUDIMENTS_HAVE_NSGETENVIRON */
 
-/* Some systems have NSLinkModule */
-/* #undef RUDIMENTS_HAVE_NSLINKMODULE */
-
 /* Some systems have ntohll */
 /* #undef RUDIMENTS_HAVE_NTOHLL */
 
 /* Some systems have open */
-#define RUDIMENTS_HAVE_OPEN 1
+/* #undef RUDIMENTS_HAVE_OPEN */
 
 /* OpenBSD style statfs */
 /* #undef RUDIMENTS_HAVE_OPENBSD_STATFS */
@@ -968,16 +956,16 @@
 /* #undef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H */
 
 /* Some systems have pathconf */
-#define RUDIMENTS_HAVE_PATHCONF 1
+/* #undef RUDIMENTS_HAVE_PATHCONF */
 
 /* Some systems have pipe */
-#define RUDIMENTS_HAVE_PIPE 1
+/* #undef RUDIMENTS_HAVE_PIPE */
 
 /* Some systems have poll */
-#define RUDIMENTS_HAVE_POLL 1
+/* #undef RUDIMENTS_HAVE_POLL */
 
 /* Some systems have poll.h */
-#define RUDIMENTS_HAVE_POLL_H 1
+/* #undef RUDIMENTS_HAVE_POLL_H */
 
 /* Some systems have port_create */
 /* #undef RUDIMENTS_HAVE_PORT_CREATE */
@@ -986,40 +974,40 @@
 /* #undef RUDIMENTS_HAVE_PORT_H */
 
 /* Some systems have posix_fadvise */
-#define RUDIMENTS_HAVE_POSIX_FADVISE 1
+/* #undef RUDIMENTS_HAVE_POSIX_FADVISE */
 
 /* Some systems have posix_fallocate */
-#define RUDIMENTS_HAVE_POSIX_FALLOCATE 1
+/* #undef RUDIMENTS_HAVE_POSIX_FALLOCATE */
 
 /* Some systems have Process32First */
-/* #undef RUDIMENTS_HAVE_PROCESS32FIRST */
+#define RUDIMENTS_HAVE_PROCESS32FIRST 1
 
 /* Some systems have process.h */
-/* #undef RUDIMENTS_HAVE_PROCESS_H */
+#define RUDIMENTS_HAVE_PROCESS_H 1
 
 /* Some systems have prototypes.h */
 /* #undef RUDIMENTS_HAVE_PROTOTYPES_H */
 
 /* Some systems have psapi.h */
-/* #undef RUDIMENTS_HAVE_PSAPI_H */
+#define RUDIMENTS_HAVE_PSAPI_H 1
 
 /* Some systems have pselect */
-#define RUDIMENTS_HAVE_PSELECT 1
+/* #undef RUDIMENTS_HAVE_PSELECT */
 
 /* Some systems have pthread_attr_setstacksize */
-#define RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
+/* #undef RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE */
 
 /* Some systems have pthread_kill */
-#define RUDIMENTS_HAVE_PTHREAD_KILL 1
+/* #undef RUDIMENTS_HAVE_PTHREAD_KILL */
 
 /* pthread_mutex_t type exists */
-#define RUDIMENTS_HAVE_PTHREAD_MUTEX_T 1
+/* #undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T */
 
 /* pthread_sigmask exists */
-#define RUDIMENTS_HAVE_PTHREAD_SIGMASK 1
+/* #undef RUDIMENTS_HAVE_PTHREAD_SIGMASK */
 
 /* pthread_t type exists */
-#define RUDIMENTS_HAVE_PTHREAD_T 1
+/* #undef RUDIMENTS_HAVE_PTHREAD_T */
 
 /* Some systems have putenv */
 #define RUDIMENTS_HAVE_PUTENV 1
@@ -1031,28 +1019,28 @@
 #define RUDIMENTS_HAVE_RAND 1
 
 /* Some systems have random */
-#define RUDIMENTS_HAVE_RANDOM 1
+/* #undef RUDIMENTS_HAVE_RANDOM */
 
 /* Some systems have random_r */
-#define RUDIMENTS_HAVE_RANDOM_R 1
+/* #undef RUDIMENTS_HAVE_RANDOM_R */
 
 /* Some systems have rand_r */
-#define RUDIMENTS_HAVE_RAND_R 1
+/* #undef RUDIMENTS_HAVE_RAND_R */
 
 /* Some systems have RB_AUTOBOOT */
-#define RUDIMENTS_HAVE_RB_AUTOBOOT 1
+/* #undef RUDIMENTS_HAVE_RB_AUTOBOOT */
 
 /* Some systems have RB_HALT */
 /* #undef RUDIMENTS_HAVE_RB_HALT */
 
 /* Some systems have read */
-#define RUDIMENTS_HAVE_READ 1
+/* #undef RUDIMENTS_HAVE_READ */
 
 /* Some systems have readlink */
-#define RUDIMENTS_HAVE_READLINK 1
+/* #undef RUDIMENTS_HAVE_READLINK */
 
 /* Some systems have reboot with 1 argument */
-#define RUDIMENTS_HAVE_REBOOT_1 1
+/* #undef RUDIMENTS_HAVE_REBOOT_1 */
 
 /* Some systems have reboot with 2 argument */
 /* #undef RUDIMENTS_HAVE_REBOOT_2 */
@@ -1061,22 +1049,22 @@
 #define RUDIMENTS_HAVE_RECVMSG 1
 
 /* recv has a void * on most systems */
-#define RUDIMENTS_HAVE_RECV_WITH_VOID 1
+/* #undef RUDIMENTS_HAVE_RECV_WITH_VOID */
 
 /* some systems have regcomp */
 /* #undef RUDIMENTS_HAVE_REGCOMP */
 
 /* Some systems have RemoveDirectory */
-/* #undef RUDIMENTS_HAVE_REMOVEDIRECTORY */
+#define RUDIMENTS_HAVE_REMOVEDIRECTORY 1
 
 /* Some systems have Roster.h */
 /* #undef RUDIMENTS_HAVE_ROSTER_H */
 
 /* Do we have real-time-clock RTC_RD_TIME support */
-#define RUDIMENTS_HAVE_RTC_RD_TIME 1
+/* #undef RUDIMENTS_HAVE_RTC_RD_TIME */
 
 /* Do we have real-time-clock RTC_SET_TIME support */
-#define RUDIMENTS_HAVE_RTC_SET_TIME 1
+/* #undef RUDIMENTS_HAVE_RTC_SET_TIME */
 
 /* On some systems you cant include byteswap.h after netinet/in.h */
 #define RUDIMENTS_HAVE_SAFE_BYTESWAP_H_AFTER_NETINET_IN_H 1
@@ -1085,142 +1073,142 @@
 /* #undef RUDIMENTS_HAVE_SCO_AVENRUN */
 
 /* Some systems have sddl.h */
-/* #undef RUDIMENTS_HAVE_SDDL_H */
+#define RUDIMENTS_HAVE_SDDL_H 1
 
 /* Some systems have semaphore.h */
-#define RUDIMENTS_HAVE_SEMAPHORE_H 1
+/* #undef RUDIMENTS_HAVE_SEMAPHORE_H */
 
 /* Some systems have semget */
-#define RUDIMENTS_HAVE_SEMGET 1
+/* #undef RUDIMENTS_HAVE_SEMGET */
 
 /* Some systems have semtimedop */
-#define RUDIMENTS_HAVE_SEMTIMEDOP 1
+/* #undef RUDIMENTS_HAVE_SEMTIMEDOP */
 
 /* Some systems define union semun */
 /* #undef RUDIMENTS_HAVE_SEMUN */
 
 /* Some systems have sem_init */
-#define RUDIMENTS_HAVE_SEM_INIT 1
+/* #undef RUDIMENTS_HAVE_SEM_INIT */
 
 /* Some systems have sendmsg */
 #define RUDIMENTS_HAVE_SENDMSG 1
 
 /* send has a const void * on most systems */
-#define RUDIMENTS_HAVE_SEND_WITH_VOID 1
+/* #undef RUDIMENTS_HAVE_SEND_WITH_VOID */
 
 /* Some systems have SetConsoleCtrlHandler */
-/* #undef RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER */
+#define RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER 1
 
 /* Some systems have SetCurrentDirectory */
-/* #undef RUDIMENTS_HAVE_SETCURRENTDIRECTORY */
+#define RUDIMENTS_HAVE_SETCURRENTDIRECTORY 1
 
 /* Some systems have setegid */
-#define RUDIMENTS_HAVE_SETEGID 1
+/* #undef RUDIMENTS_HAVE_SETEGID */
 
 /* Some systems have setegid but dont define it in a header file */
 /* #undef RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED */
 
 /* Some systems have SetEndOfFile */
-/* #undef RUDIMENTS_HAVE_SETENDOFFILE */
+#define RUDIMENTS_HAVE_SETENDOFFILE 1
 
 /* Some systems have SetEntriesInAcl */
-/* #undef RUDIMENTS_HAVE_SETENTRIESINACL */
+#define RUDIMENTS_HAVE_SETENTRIESINACL 1
 
 /* Some systems have setenv */
-#define RUDIMENTS_HAVE_SETENV 1
+/* #undef RUDIMENTS_HAVE_SETENV */
 
 /* Some systems have seteuid */
-#define RUDIMENTS_HAVE_SETEUID 1
+/* #undef RUDIMENTS_HAVE_SETEUID */
 
 /* Some systems have seteuid but dont define it in a header file */
 /* #undef RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED */
 
 /* Some systems have SetFileTime */
-/* #undef RUDIMENTS_HAVE_SETFILETIME */
+#define RUDIMENTS_HAVE_SETFILETIME 1
 
 /* Some systems have setgid */
-#define RUDIMENTS_HAVE_SETGID 1
+/* #undef RUDIMENTS_HAVE_SETGID */
 
 /* Some systems have setgroups */
-#define RUDIMENTS_HAVE_SETGROUPS 1
+/* #undef RUDIMENTS_HAVE_SETGROUPS */
 
 /* Some systems have sethostname */
-#define RUDIMENTS_HAVE_SETHOSTNAME 1
+/* #undef RUDIMENTS_HAVE_SETHOSTNAME */
 
 /* Some systems have setitimer */
 /* #undef RUDIMENTS_HAVE_SETITIMER */
 
 /* Some systems have setpgid */
-#define RUDIMENTS_HAVE_SETPGID 1
+/* #undef RUDIMENTS_HAVE_SETPGID */
 
 /* Some systems have setregid */
-#define RUDIMENTS_HAVE_SETREGID 1
-
-/* Some systems have setreuid */
-#define RUDIMENTS_HAVE_SETREUID 1
+/* #undef RUDIMENTS_HAVE_SETREGID */
 
 /* Some systems have SetSecurityInfo */
-/* #undef RUDIMENTS_HAVE_SETSECURITYINFO */
+#define RUDIMENTS_HAVE_SETSECURITYINFO 1
+
+/* Some systems have setreuid */
+/* #undef RUDIMENTS_HAVE_SETREUID */
 
 /* Some systems have setsid */
-#define RUDIMENTS_HAVE_SETSID 1
+/* #undef RUDIMENTS_HAVE_SETSID */
 
 /* Some systems have setsockopt */
 #define RUDIMENTS_HAVE_SETSOCKOPT 1
 
 /* Some systems have SetSystemTime */
-/* #undef RUDIMENTS_HAVE_SETSYSTEMTIME */
+#define RUDIMENTS_HAVE_SETSYSTEMTIME 1
 
 /* Some systems have settimeofday */
-#define RUDIMENTS_HAVE_SETTIMEOFDAY 1
+/* #undef RUDIMENTS_HAVE_SETTIMEOFDAY */
 
 /* Some systems have setuid */
-#define RUDIMENTS_HAVE_SETUID 1
+/* #undef RUDIMENTS_HAVE_SETUID */
 
 /* Some systems have SetUnhandledExceptionFilter */
-/* #undef RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER */
+#define RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER 1
 
 /* Some systems have set_real_time_clock */
 /* #undef RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK */
 
 /* Some systems have shmget */
-#define RUDIMENTS_HAVE_SHMGET 1
+/* #undef RUDIMENTS_HAVE_SHMGET */
 
 /* Some systems have sigaction */
-#define RUDIMENTS_HAVE_SIGACTION 1
+/* #undef RUDIMENTS_HAVE_SIGACTION */
 
 /* Some systems have signal */
 #define RUDIMENTS_HAVE_SIGNAL 1
 
 /* Some systems have sigpending */
-#define RUDIMENTS_HAVE_SIGPENDING 1
+/* #undef RUDIMENTS_HAVE_SIGPENDING */
 
 /* Some systems have sigsuspend */
-#define RUDIMENTS_HAVE_SIGSUSPEND 1
+/* #undef RUDIMENTS_HAVE_SIGSUSPEND */
 
 /* Some systems have sockaddr_un */
-#define RUDIMENTS_HAVE_SOCKADDR_UN 1
+/* #undef RUDIMENTS_HAVE_SOCKADDR_UN */
 
 /* Some systems have socket */
 #define RUDIMENTS_HAVE_SOCKET 1
 
 /* some type of statfs */
-#define RUDIMENTS_HAVE_SOME_KIND_OF_STATFS 1
+/* #undef RUDIMENTS_HAVE_SOME_KIND_OF_STATFS */
 
 /* some type of statvfs */
 /* #undef RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS */
 
 /* struct spwd has sp_expire */
-#define RUDIMENTS_HAVE_SP_EXPIRE 1
+/* #undef RUDIMENTS_HAVE_SP_EXPIRE */
 
 /* struct spwd has sp_flag */
-#define RUDIMENTS_HAVE_SP_FLAG 1
+/* #undef RUDIMENTS_HAVE_SP_FLAG */
 
 /* struct spwd has sp_inact */
-#define RUDIMENTS_HAVE_SP_INACT 1
+/* #undef RUDIMENTS_HAVE_SP_INACT */
 
 /* struct spwd has sp_warn */
-#define RUDIMENTS_HAVE_SP_WARN 1
+/* #undef RUDIMENTS_HAVE_SP_WARN */
 
 /* statvfs */
 /* #undef RUDIMENTS_HAVE_STATVFS */
@@ -1238,10 +1226,10 @@
 #define RUDIMENTS_HAVE_STDLIB_H 1
 
 /* Some systems have strcasecmp */
-#define RUDIMENTS_HAVE_STRCASECMP 1
+/* #undef RUDIMENTS_HAVE_STRCASECMP */
 
 /* Some systems have strchrnul */
-#define RUDIMENTS_HAVE_STRCHRNUL 1
+/* #undef RUDIMENTS_HAVE_STRCHRNUL */
 
 /* Some systems have strcspn */
 #define RUDIMENTS_HAVE_STRCSPN 1
@@ -1250,16 +1238,16 @@
 #define RUDIMENTS_HAVE_STRERROR 1
 
 /* Some systems have strerror_s */
-/* #undef RUDIMENTS_HAVE_STRERROR_S */
+#define RUDIMENTS_HAVE_STRERROR_S 1
 
 /* Some systems have strings.h */
-#define RUDIMENTS_HAVE_STRINGS_H 1
+/* #undef RUDIMENTS_HAVE_STRINGS_H */
 
 /* Some systems have string.h */
 #define RUDIMENTS_HAVE_STRING_H 1
 
 /* Some systems have strncasecmp */
-#define RUDIMENTS_HAVE_STRNCASECMP 1
+/* #undef RUDIMENTS_HAVE_STRNCASECMP */
 
 /* Some systems have strpbrk */
 #define RUDIMENTS_HAVE_STRPBRK 1
@@ -1268,28 +1256,28 @@
 #define RUDIMENTS_HAVE_STRSPN 1
 
 /* Some systems have strtold */
-#define RUDIMENTS_HAVE_STRTOLD 1
+/* #undef RUDIMENTS_HAVE_STRTOLD */
 
 /* Some systems have strtoll */
-#define RUDIMENTS_HAVE_STRTOLL 1
+/* #undef RUDIMENTS_HAVE_STRTOLL */
 
 /* Some systems have strtoull */
-#define RUDIMENTS_HAVE_STRTOULL 1
+/* #undef RUDIMENTS_HAVE_STRTOULL */
 
 /* Some systems have struct itimerval */
 /* #undef RUDIMENTS_HAVE_STRUCT_ITIMERVAL */
 
 /* Some systems have struct timespec in pthread.h */
-#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD 1
+/* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD */
 
 /* Some systems have struct timespec in sys/siginfo.h */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO */
 
 /* Some systems have struct timespec in sys/time.h */
-#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H 1
+/* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H */
 
 /* Some systems have struct timespec in time.h */
-#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H 1
+/* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H */
 
 /* Some systems have struct timeval */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMEVAL */
@@ -1298,10 +1286,10 @@
 #define RUDIMENTS_HAVE_SWAB_CHAR 1
 
 /* Some systems have swab with a const char * argument */
-#define RUDIMENTS_HAVE_SWAB_CONST_CHAR 1
+/* #undef RUDIMENTS_HAVE_SWAB_CONST_CHAR */
 
 /* Some systems have swab with a const void * argument */
-#define RUDIMENTS_HAVE_SWAB_CONST_VOID 1
+/* #undef RUDIMENTS_HAVE_SWAB_CONST_VOID */
 
 /* Some systems have swap64 */
 /* #undef RUDIMENTS_HAVE_SWAP64 */
@@ -1313,19 +1301,19 @@
 #define RUDIMENTS_HAVE_SWPRINTF 1
 
 /* Some systems have symlink */
-#define RUDIMENTS_HAVE_SYMLINK 1
+/* #undef RUDIMENTS_HAVE_SYMLINK */
 
 /* Some systems have sync */
-#define RUDIMENTS_HAVE_SYNC 1
+/* #undef RUDIMENTS_HAVE_SYNC */
 
 /* Some systems have sysconf */
-#define RUDIMENTS_HAVE_SYSCONF 1
+/* #undef RUDIMENTS_HAVE_SYSCONF */
 
 /* Some systems have syslog.h */
-#define RUDIMENTS_HAVE_SYSLOG_H 1
+/* #undef RUDIMENTS_HAVE_SYSLOG_H */
 
 /* Some systems have sys/bitypes.h */
-#define RUDIMENTS_HAVE_SYS_BITYPES_H 1
+/* #undef RUDIMENTS_HAVE_SYS_BITYPES_H */
 
 /* Some systems have sys/byteorder.h */
 /* #undef RUDIMENTS_HAVE_SYS_BYTEORDER_H */
@@ -1334,97 +1322,97 @@
 /* #undef RUDIMENTS_HAVE_SYS_DEVPOLL_H */
 
 /* Some systems have sys/epoll.h */
-#define RUDIMENTS_HAVE_SYS_EPOLL_H 1
+/* #undef RUDIMENTS_HAVE_SYS_EPOLL_H */
 
 /* Some systems have sys/event.h */
 /* #undef RUDIMENTS_HAVE_SYS_EVENT_H */
 
 /* Some systems have sys/fcntl.h */
-#define RUDIMENTS_HAVE_SYS_FCNTL_H 1
+/* #undef RUDIMENTS_HAVE_SYS_FCNTL_H */
 
 /* Some systems have sys/ioctl.h */
-#define RUDIMENTS_HAVE_SYS_IOCTL_H 1
+/* #undef RUDIMENTS_HAVE_SYS_IOCTL_H */
 
 /* Some systems have sys/ipc.h */
-#define RUDIMENTS_HAVE_SYS_IPC_H 1
+/* #undef RUDIMENTS_HAVE_SYS_IPC_H */
 
 /* Some systems have sys/loadavg.h */
 /* #undef RUDIMENTS_HAVE_SYS_LOADAVG_H */
 
 /* Some systems have sys/mman.h */
-#define RUDIMENTS_HAVE_SYS_MMAN_H 1
+/* #undef RUDIMENTS_HAVE_SYS_MMAN_H */
 
 /* Some systems have sys/param.h */
-#define RUDIMENTS_HAVE_SYS_PARAM_H 1
+/* #undef RUDIMENTS_HAVE_SYS_PARAM_H */
 
 /* Some systems have sys/poll.h */
-#define RUDIMENTS_HAVE_SYS_POLL_H 1
+/* #undef RUDIMENTS_HAVE_SYS_POLL_H */
 
 /* Some systems have sys/reboot.h */
-#define RUDIMENTS_HAVE_SYS_REBOOT_H 1
+/* #undef RUDIMENTS_HAVE_SYS_REBOOT_H */
 
 /* Some systems have sys/select.h */
-#define RUDIMENTS_HAVE_SYS_SELECT_H 1
+/* #undef RUDIMENTS_HAVE_SYS_SELECT_H */
 
 /* Some systems have sys/sem.h */
-#define RUDIMENTS_HAVE_SYS_SEM_H 1
+/* #undef RUDIMENTS_HAVE_SYS_SEM_H */
 
 /* Some systems have sys/signal.h */
-#define RUDIMENTS_HAVE_SYS_SIGNAL_H 1
+/* #undef RUDIMENTS_HAVE_SYS_SIGNAL_H */
 
 /* Some systems have sys/socket.h */
-#define RUDIMENTS_HAVE_SYS_SOCKET_H 1
+/* #undef RUDIMENTS_HAVE_SYS_SOCKET_H */
 
 /* Some systems have sys/stat.h */
 #define RUDIMENTS_HAVE_SYS_STAT_H 1
 
 /* Some systems have sys/time.h */
-#define RUDIMENTS_HAVE_SYS_TIME_H 1
+/* #undef RUDIMENTS_HAVE_SYS_TIME_H */
 
 /* Some systems have sys/types.h */
 #define RUDIMENTS_HAVE_SYS_TYPES_H 1
 
 /* Some systems have sys/uadmin.h */
-/* #undef RUDIMENTS_HAVE_SYS_UADMIN_H */
+/* #undef RUDIMENTS_HAVE_SYS_REBOOT_H */
 
 /* Some systems have sys/uio.h */
-#define RUDIMENTS_HAVE_SYS_UIO_H 1
+/* #undef RUDIMENTS_HAVE_SYS_UIO_H */
 
 /* Some systems have sys/un.h */
-#define RUDIMENTS_HAVE_SYS_UN_H 1
+/* #undef RUDIMENTS_HAVE_SYS_UN_H */
 
 /* Some systems have sys/utsname.h */
-#define RUDIMENTS_HAVE_SYS_UTSNAME_H 1
+/* #undef RUDIMENTS_HAVE_SYS_UTSNAME_H */
 
 /* Some systems have sys/wait.h */
-#define RUDIMENTS_HAVE_SYS_WAIT_H 1
+/* #undef RUDIMENTS_HAVE_SYS_WAIT_H */
 
 /* Some systems dont have S_ISBLK */
-#define RUDIMENTS_HAVE_S_ISBLK 1
+/* #undef RUDIMENTS_HAVE_S_ISBLK */
 
 /* Some systems dont have S_ISLNK */
-#define RUDIMENTS_HAVE_S_ISLNK 1
+/* #undef RUDIMENTS_HAVE_S_ISLNK */
 
 /* Some systems dont have S_ISSOCK */
-#define RUDIMENTS_HAVE_S_ISSOCK 1
+/* #undef RUDIMENTS_HAVE_S_ISSOCK */
 
 /* Some systems have tcsetattr */
 /* #undef RUDIMENTS_HAVE_TCSETATTR */
 
 /* Some systems have termios.h */
-#define RUDIMENTS_HAVE_TERMIOS_H 1
+/* #undef RUDIMENTS_HAVE_TERMIOS_H */
 
 /* Some systems have time.h */
 #define RUDIMENTS_HAVE_TIME_H 1
 
 /* Some systems have tlhelp32.h */
-/* #undef RUDIMENTS_HAVE_TLHELP32_H */
+#define RUDIMENTS_HAVE_TLHELP32_H 1
 
 /* Most systems have true/false */
 #define RUDIMENTS_HAVE_TRUE_FALSE 1
 
 /* Some systems have truncate */
-#define RUDIMENTS_HAVE_TRUNCATE 1
+/* #undef RUDIMENTS_HAVE_TRUNCATE */
 
 /* Some systems have uadmin with a char * argument */
 /* #undef RUDIMENTS_HAVE_UADMIN_CHAR */
@@ -1433,7 +1421,7 @@
 /* #undef RUDIMENTS_HAVE_UADMIN_INT */
 
 /* Some systems have uchar.h */
-#define RUDIMENTS_HAVE_UCHAR_H 1
+/* #undef RUDIMENTS_HAVE_UCHAR_H */
 
 /* Some systems have uint16_t */
 #define RUDIMENTS_HAVE_UINT16_T 1
@@ -1451,10 +1439,10 @@
 /* #undef RUDIMENTS_HAVE_ULTRIX_STATFS */
 
 /* Some systems have umask */
-#define RUDIMENTS_HAVE_UMASK 1
+/* #undef RUDIMENTS_HAVE_UMASK */
 
 /* Some systems have uname */
-#define RUDIMENTS_HAVE_UNAME 1
+/* #undef RUDIMENTS_HAVE_UNAME */
 
 /* Some systems have fsync but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_FSYNC */
@@ -1481,43 +1469,43 @@
 /* #undef RUDIMENTS_HAVE_UNDEFINED_SOCKET */
 
 /* Some systems have __vsnprintf but its not defined */
-#define RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF 1
+/* #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF */
 
 /* Some systems have unistd.h */
-#define RUDIMENTS_HAVE_UNISTD_H 1
+/* #undef RUDIMENTS_HAVE_UNISTD_H */
 
 /* Some systems have unlink */
 #define RUDIMENTS_HAVE_UNLINK 1
 
 /* Some systems have unsetenv */
-#define RUDIMENTS_HAVE_UNSETENV 1
+/* #undef RUDIMENTS_HAVE_UNSETENV */
 
 /* Some systems have utime */
-#define RUDIMENTS_HAVE_UTIME 1
+/* #undef RUDIMENTS_HAVE_UTIME */
 
 /* Some systems have utimes with char * argument */
-#define RUDIMENTS_HAVE_UTIMES_CHAR 1
+/* #undef RUDIMENTS_HAVE_UTIMES_CHAR */
 
 /* Some systems have utimes with const char * argument */
-#define RUDIMENTS_HAVE_UTIMES_CONST_CHAR 1
+/* #undef RUDIMENTS_HAVE_UTIMES_CONST_CHAR */
 
 /* Some systems have utime.h */
-#define RUDIMENTS_HAVE_UTIME_H 1
+/* #undef RUDIMENTS_HAVE_UTIME_H */
 
 /* Some systems have vasprintf */
-#define RUDIMENTS_HAVE_VASPRINTF 1
+/* #undef RUDIMENTS_HAVE_VASPRINTF */
 
 /* Some systems have va_copy */
 #define RUDIMENTS_HAVE_VA_COPY 1
 
 /* Some systems have vdprintf */
-#define RUDIMENTS_HAVE_VDPRINTF 1
+/* #undef RUDIMENTS_HAVE_VDPRINTF */
 
 /* Most systems have vsnprintf */
-#define RUDIMENTS_HAVE_VSNPRINTF 1
+/* #undef RUDIMENTS_HAVE_VSNPRINTF */
 
 /* Some systems have vsnprintf_s */
-/* #undef RUDIMENTS_HAVE_VSNPRINTF_S */
+#define RUDIMENTS_HAVE_VSNPRINTF_S 1
 
 /* Some systems have vswprintf */
 #define RUDIMENTS_HAVE_VSWPRINTF 1
@@ -1526,106 +1514,106 @@
 #define RUDIMENTS_HAVE_WCHAR_H 1
 
 /* Some systems have wcscasecmp */
-#define RUDIMENTS_HAVE_WCSCASECMP 1
+/* #undef RUDIMENTS_HAVE_WCSCASECMP */
 
 /* Some systems have wcschrnul */
-#define RUDIMENTS_HAVE_WCSCHRNUL 1
+/* #undef RUDIMENTS_HAVE_WCSCHRNUL */
 
 /* Some systems have wcscspn */
-#define RUDIMENTS_HAVE_WCSCSPN 1
+/* #undef RUDIMENTS_HAVE_WCSCSPN */
 
 /* Some systems have wcsncasecmp */
-#define RUDIMENTS_HAVE_WCSNCASECMP 1
+/* #undef RUDIMENTS_HAVE_WCSNCASECMP */
 
 /* Some systems have wcspbrk */
-#define RUDIMENTS_HAVE_WCSPBRK 1
+/* #undef RUDIMENTS_HAVE_WCSPBRK */
 
 /* Some systems have wcsspn */
-#define RUDIMENTS_HAVE_WCSSPN 1
+/* #undef RUDIMENTS_HAVE_WCSSPN */
 
 /* Some systems have wcstold */
-#define RUDIMENTS_HAVE_WCSTOLD 1
+/* #undef RUDIMENTS_HAVE_WCSTOLD */
 
 /* Some systems have wcstoll */
-#define RUDIMENTS_HAVE_WCSTOLL 1
+/* #undef RUDIMENTS_HAVE_WCSTOLL */
 
 /* Some systems have wcstoull */
-#define RUDIMENTS_HAVE_WCSTOULL 1
+/* #undef RUDIMENTS_HAVE_WCSTOULL */
 
 /* Some systems have wctype.h */
 #define RUDIMENTS_HAVE_WCTYPE_H 1
 
 /* GetDiskFreeSpace */
-/* #undef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE */
+#define RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE 1
 
 /* Some systems have windows.h */
-/* #undef RUDIMENTS_HAVE_WINDOWS_H */
+#define RUDIMENTS_HAVE_WINDOWS_H 1
 
 /* Some systems have Sleep */
-/* #undef RUDIMENTS_HAVE_WINDOWS_SLEEP */
+#define RUDIMENTS_HAVE_WINDOWS_SLEEP 1
 
 /* Some systems have winsock2.h */
-/* #undef RUDIMENTS_HAVE_WINSOCK2_H */
+#define RUDIMENTS_HAVE_WINSOCK2_H 1
 
 /* Some systems have write */
 #define RUDIMENTS_HAVE_WRITE 1
 
 /* Some systems have WSAConnect */
-/* #undef RUDIMENTS_HAVE_WSACONNECT */
+#define RUDIMENTS_HAVE_WSACONNECT 1
 
 /* Some systems have WSADuplicateSocket */
-/* #undef RUDIMENTS_HAVE_WSADUPLICATESOCKET */
+#define RUDIMENTS_HAVE_WSADUPLICATESOCKET 1
 
 /* Some systems have XSI strerror_r */
-#define RUDIMENTS_HAVE_XSI_STRERROR_R 1
+/* #undef RUDIMENTS_HAVE_XSI_STRERROR_R */
 
 /* Some systems have _access_s() */
-/* #undef RUDIMENTS_HAVE__ACCESS_S */
+#define RUDIMENTS_HAVE__ACCESS_S 1
 
 /* Some systems have _chsize_s */
-/* #undef RUDIMENTS_HAVE__CHSIZE_S */
+#define RUDIMENTS_HAVE__CHSIZE_S 1
 
 /* Some systems have _close */
-/* #undef RUDIMENTS_HAVE__CLOSE */
+#define RUDIMENTS_HAVE__CLOSE 1
 
 /* Some systems have _dup */
-/* #undef RUDIMENTS_HAVE__DUP */
+#define RUDIMENTS_HAVE__DUP 1
 
 /* Some systems have _dup2 */
-/* #undef RUDIMENTS_HAVE__DUP2 */
+#define RUDIMENTS_HAVE__DUP2 1
 
 /* Some systems have _dupenv_s */
-/* #undef RUDIMENTS_HAVE__DUPENV_S */
+#define RUDIMENTS_HAVE__DUPENV_S 1
 
 /* Some systems have _lseek */
-/* #undef RUDIMENTS_HAVE__LSEEK */
+#define RUDIMENTS_HAVE__LSEEK 1
 
 /* Some systems have _memccpy */
-/* #undef RUDIMENTS_HAVE__MEMCCPY */
+#define RUDIMENTS_HAVE__MEMCCPY 1
 
 /* Some systems have _open */
-/* #undef RUDIMENTS_HAVE__OPEN */
+#define RUDIMENTS_HAVE__OPEN 1
 
 /* Some systems have _pipe */
-/* #undef RUDIMENTS_HAVE__PIPE */
+#define RUDIMENTS_HAVE__PIPE 1
 
 /* Some systems have _putenv */
-/* #undef RUDIMENTS_HAVE__PUTENV */
+#define RUDIMENTS_HAVE__PUTENV 1
 
 /* Some systems have _read */
-/* #undef RUDIMENTS_HAVE__READ */
+#define RUDIMENTS_HAVE__READ 1
 
 /* Some systems have _swab */
-/* #undef RUDIMENTS_HAVE__SWAB */
+#define RUDIMENTS_HAVE__SWAB 1
 
 /* Some systems have _unlink */
-/* #undef RUDIMENTS_HAVE__UNLINK */
+#define RUDIMENTS_HAVE__UNLINK 1
 
 /* Some systems have _vsnprintf */
-/* #undef RUDIMENTS_HAVE__VSNPRINTF */
+#define RUDIMENTS_HAVE__VSNPRINTF 1
 
 /* Some systems have _write */
-/* #undef RUDIMENTS_HAVE__WRITE */
+#define RUDIMENTS_HAVE__WRITE 1
 
 /* Some systems have __bswap64 */
 /* #undef RUDIMENTS_HAVE___BSWAP64 */
@@ -1634,10 +1622,10 @@
 /* #undef RUDIMENTS_HAVE___VSNPRINTF */
 
 /* iov_base is char * */
-#define RUDIMENTS_IOV_BASE_TYPE void *
+#define RUDIMENTS_IOV_BASE_TYPE char *
 
-/* Modern versions of libedit provide history_truncate_file */
-#define RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE 1
+/* Some versions of libedit provide history_truncate_file */
+/* #undef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE */
 
 /* Some systems have swab but dont define it */
 /* #undef RUDIMENTS_MUST_DEFINE_SWAB */
@@ -1649,7 +1637,7 @@
 /* #undef RUDIMENTS_REDEFINE_NULL */
 
 /* setsockopt has a const void * on most systems */
-#define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const void *
+#define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const char *
 
 /* Most systems define signal handlers with an integer parameter */
 #define RUDIMENTS_SIGNAL_HANDLER_INT 1
@@ -1661,7 +1649,7 @@
 #define RUDIMENTS_SOCKLEN_OR_SIZE_T socklen_t
 
 /* SSL_read/write can use a void * parameter instead of char * */
-#define RUDIMENTS_SSL_VOID_PTR 1
+/* #undef RUDIMENTS_SSL_VOID_PTR */
 
 /* Version */
 #define RUDIMENTS_VERSION "2.0.0"
@@ -1700,7 +1688,7 @@
 /* #undef const */
 
 /* Define to `int' if <sys/types.h> doesn't define. */
-/* #undef gid_t */
+#define gid_t int
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
@@ -1709,28 +1697,28 @@
 #endif
 
 /* Some systems dont have key_t */
-/* #undef key_t */
+#define key_t int
 
 /* Define to `int' if <sys/types.h> does not define. */
-/* #undef mode_t */
+#define mode_t int
 
 /* Some systems dont have nlink_t */
-/* #undef nlink_t */
+#define nlink_t short
 
 /* Some systems dont have off64_t */
-/* #undef off64_t */
+#define off64_t int64_t
 
 /* Define to `int' if <sys/types.h> does not define. */
-/* #undef pid_t */
+#define pid_t int
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
 
 /* Some systems dont define socklen_t */
-/* #undef socklen_t */
+#define socklen_t int
 
 /* Define to `int' if <sys/types.h> does not define. */
-/* #undef ssize_t */
+#define ssize_t int
 
 /* Define to `int' if <sys/types.h> doesn't define. */
-/* #undef uid_t */
+#define uid_t int
