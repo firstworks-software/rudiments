@@ -22,6 +22,15 @@ next
 
 ' source, object and header files
 srcs="winsock.cpp "+_
+	"sha1.cpp "+_
+	"sha256.cpp "+_
+	"md5.cpp "+_
+	"encryption.cpp "+_
+	"aes128.cpp "+_
+	"output.cpp "+_
+	"input.cpp "+_
+	"wastebasket.cpp "+_
+	"sensitivevalue.cpp "+_
 	"character.cpp "+_
 	"wcharacter.cpp "+_
 	"charstring.cpp "+_
@@ -37,10 +46,12 @@ srcs="winsock.cpp "+_
 	"environment.cpp "+_
 	"error.cpp "+_
 	"file.cpp "+_
+	"url.cpp "+_
 	"filedescriptor.cpp "+_
+	"stdio.cpp "+_
 	"gss.cpp "+_
 	"tls.cpp "+_
-	"stdio.cpp "+_
+	"websocket.cpp "+_
 	"filesystem.cpp "+_
 	"groupentry.cpp "+_
 	"hostentry.cpp "+_
@@ -59,7 +70,6 @@ srcs="winsock.cpp "+_
 	"protocolentry.cpp "+_
 	"randomnumber.cpp "+_
 	"bytestring.cpp "+_
-	"regex.cpp "+_
 	"regularexpression.cpp "+_
 	"semaphoreset.cpp "+_
 	"server.cpp "+_
@@ -71,11 +81,11 @@ srcs="winsock.cpp "+_
 	"unixsocketclient.cpp "+_
 	"unixsocketserver.cpp "+_
 	"bytebuffer.cpp "+_
-	"sax.cpp "+_
 	"dom.cpp "+_
 	"domnode.cpp "+_
-	"xmlsax.cpp "+_
 	"xmldom.cpp "+_
+	"sax.cpp "+_
+	"xmlsax.cpp "+_
 	"domevents.cpp "+_
 	"codetree.cpp "+_
 	"compiler.cpp "+_
@@ -83,14 +93,8 @@ srcs="winsock.cpp "+_
 	"unixsocketutil.cpp "+_
 	"socketserver.cpp "+_
 	"socketclient.cpp "+_
-	"url.cpp "+_
-	"sha1.cpp "+_
-	"sha256.cpp "+_
-	"md5.cpp "+_
 	"prompt.cpp "+_
 	"templateengine.cpp "+_
-	"output.cpp "+_
-	"input.cpp "+_
 	"csvsax.cpp "+_
 	"csvdom.cpp "+_
 	"jsonsax.cpp "+_
@@ -100,23 +104,27 @@ srcs="winsock.cpp "+_
 	"propsax.cpp "+_
 	"propdom.cpp "+_
 	"cursordomnode.cpp "+_
-	"websocket.cpp "+_
 	"httprequest.cpp "+_
 	"urlhttprequest.cpp "+_
 	"httpresponse.cpp "+_
 	"cgihttpserverapi.cpp "+_
-	"encryption.cpp "+_
-	"aes128.cpp "+_
 	"mvctier.cpp "+_
 	"mvcview.cpp "+_
 	"mvcresult.cpp "+_
 	"mvcproperties.cpp "+_
 	"httpbasicsecurity.cpp "+_
-	"cronschedule.cpp " +_
-	"wastebasket.cpp" +_
-	"sensitivevalue.cpp"
+	"cronschedule.cpp"
 
 lobjs="winsock.obj "+_
+	"sha1.obj "+_
+	"sha256.obj "+_
+	"md5.obj "+_
+	"encryption.obj "+_
+	"aes128.obj "+_
+	"output.obj "+_
+	"input.obj "+_
+	"wastebasket.obj "+_
+	"sensitivevalue.obj "+_
 	"character.obj "+_
 	"wcharacter.obj "+_
 	"charstring.obj "+_
@@ -132,17 +140,20 @@ lobjs="winsock.obj "+_
 	"environment.obj "+_
 	"error.obj "+_
 	"file.obj "+_
+	"url.obj "+_
 	"filedescriptor.obj "+_
+	"stdio.obj "+_
 	"gss.obj "+_
 	"tls.obj "+_
-	"stdio.obj "+_
+	"websocket.obj "+_
 	"filesystem.obj "+_
 	"groupentry.obj "+_
 	"hostentry.obj "+_
 	"inetsocketclient.obj "+_
 	"inetsocketserver.obj "+_
 	"listener.obj "+_
-	"logger.obj "+_
+	"obj "+_
+	"ger.obj "+_
 	"memorymap.obj "+_
 	"memorypool.obj "+_
 	"thread.obj "+_
@@ -154,7 +165,6 @@ lobjs="winsock.obj "+_
 	"protocolentry.obj "+_
 	"randomnumber.obj "+_
 	"bytestring.obj "+_
-	"regex.obj "+_
 	"regularexpression.obj "+_
 	"semaphoreset.obj "+_
 	"server.obj "+_
@@ -166,10 +176,10 @@ lobjs="winsock.obj "+_
 	"unixsocketclient.obj "+_
 	"unixsocketserver.obj "+_
 	"bytebuffer.obj "+_
-	"sax.obj "+_
 	"dom.obj "+_
 	"domnode.obj "+_
 	"xmldom.obj "+_
+	"sax.obj "+_
 	"xmlsax.obj "+_
 	"domevents.obj "+_
 	"codetree.obj "+_
@@ -178,14 +188,8 @@ lobjs="winsock.obj "+_
 	"unixsocketutil.obj "+_
 	"socketserver.obj "+_
 	"socketclient.obj "+_
-	"url.obj "+_
-	"sha1.obj "+_
-	"sha256.obj "+_
-	"md5.obj "+_
 	"prompt.obj "+_
 	"templateengine.obj "+_
-	"output.obj "+_
-	"input.obj "+_
 	"csvsax.obj "+_
 	"csvdom.obj "+_
 	"jsonsax.obj "+_
@@ -199,25 +203,31 @@ lobjs="winsock.obj "+_
 	"urlhttprequest.obj "+_
 	"httpresponse.obj "+_
 	"cgihttpserverapi.obj "+_
-	"encryption.obj "+_
-	"aes128.obj "+_
 	"mvctier.obj "+_
 	"mvcview.obj "+_
 	"mvcresult.obj "+_
 	"mvcproperties.obj "+_
 	"httpbasicsecurity.obj "+_
-	"cronschedule.obj " +_
-	"wastebasket.obj" +_
-	"sensitivevalue.obj"
+	"cronschedule.obj"
 
-headers0="resultcodes.h "+_
-	"debugprint.h "+_
+headers0="object.h "+_
+	"collection.h "+_
+	"comparator.h "+_
+	"nodecollection.h "+_
+	"listcollection.h "+_
+	"treecollection.h "+_
+	"tablecollection.h "+_
+	"scalarcollection.h "+_
+	"arraycollection.h "+_
+	"dictionarycollection.h "+_
+	"resultcodes.h "+_
+	"debugprint.h"
+headers1="dynamictable.h "+_
+	"sparsedynamictable.h "+_
 	"linkedlist.h "+_
 	"singlylinkedlist.h "+_
 	"avltree.h "+_
-	"dictionary.h "+_
-	"dynamicarray.h "+_
-	"staticarray.h "+_
+	"scalar.h "+_
 	"character.h "+_
 	"wcharacter.h "+_
 	"charstring.h "+_
@@ -232,8 +242,9 @@ headers0="resultcodes.h "+_
 	"dynamiclib.h "+_
 	"environment.h "+_
 	"error.h "+_
-	"file.h "
-headers1="filedescriptor.h "+_
+	"file.h "+_
+	"url.h "+_
+	"filedescriptor.h "+_
 	"stdio.h "+_
 	"filesystem.h "+_
 	"groupentry.h "+_
@@ -244,36 +255,51 @@ headers1="filedescriptor.h "+_
 	"logger.h "+_
 	"memorymap.h "+_
 	"memorypool.h "+_
-	"modemclient.h "+_
-	"modemserver.h "+_
 	"thread.h "+_
-	"threadmutex.h "+_
+	"threadmutex.h"
+headers2="dictionary.h "+_
+	"hash.h "+_
+	"sha1.h "+_
+	"sha256.h "+_
+	"md5.h "+_
+	"encryption.h "+_
+	"aes128.h "+_
 	"parameterstring.h "+_
 	"userentry.h "+_
 	"permissions.h "+_
-	"process.h "
-headers2="protocolentry.h "+_
+	"process.h "+_
+	"protocolentry.h "+_
 	"randomnumber.h "+_
 	"bytestring.h "+_
 	"regularexpression.h "+_
 	"semaphoreset.h "+_
-	"serialport.h "+_
-	"serialportprofile.h "+_
 	"server.h "+_
 	"serviceentry.h "+_
 	"sharedmemory.h "+_
 	"signalclasses.h "+_
 	"snooze.h "+_
 	"stringbuffer.h "+_
-	"sys.h "+_
+	"wstringbuffer.h "+_
+	"sys.h"
+headers3="dynamicarray.h "+_
+	"sparsedynamicarray.h "+_
+	"staticarray.h "+_
+	"output.h "+_
+	"input.h "+_
+	"wastebasket.h "+_
+	"sensitivevalue.h "+_
+	"security.h "+_
+	"gss.h "+_
+	"tls.h "+_
+	"websocket.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketserver.h "+_
-	"bytebuffer.h "
-headers3="sax.h "+_
+	"bytebuffer.h "+_
 	"dom.h "+_
 	"domnode.h "+_
-	"xmlsax.h "+_
 	"xmldom.h "+_
+	"sax.h "+_
+	"xmlsax.h "+_
 	"domevents.h "+_
 	"codetree.h "+_
 	"compiler.h "+_
@@ -281,18 +307,8 @@ headers3="sax.h "+_
 	"unixsocketutil.h "+_
 	"socketserver.h "+_
 	"socketclient.h "+_
-	"url.h "+_
-	"gss.h "+_
-	"tls.h "+_
-	"security.h "+_
-	"hash.h "+_
-	"sha1.h "+_
-	"sha256.h "+_
-	"md5.h "+_
 	"prompt.h "+_
 	"templateengine.h "+_
-	"output.h "+_
-	"input.h "+_
 	"csvsax.h "+_
 	"csvdom.h "+_
 	"jsonsax.h "+_
@@ -302,56 +318,26 @@ headers3="sax.h "+_
 	"propsax.h "+_
 	"propdom.h "+_
 	"cursordomnode.h "+_
-	"websocket.h "+_
 	"httprequest.h "+_
 	"urlhttprequest.h "+_
 	"httpresponse.h "+_
+	"apachehttpserverapi.h "+_
+	"cgihttpserverapi.h "+_
 	"httpserverapi.h "+_
 	"httpserverapimain.h "+_
-	"cgihttpserverapi.h "+_
-	"encryption.h "+_
-	"aes128.h "+_
-	"mvctier.h "+_
-	"mvcservice.h "+_
-	"mvcdao.h "+_
-	"mvcview.h "+_
-	"mvccontroller.h "+_
-	"mvcresult.h "+_
-	"mvcsecurity.h "+_
-	"mvcproperties.h "+_
-	"httpbasicsecurity.h "+_
-	"cronschedule.h " +_
-	"wastebasket.h" +_
-	"sensitivevalue.h"
+	"mvc.h "+_
+	"cronschedule.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
-	"inttypes.h "+_
+	"collection.h "+_
+	"collectioninlines.h "+_
+	"comparator.h "+_
+	"comparatorinlines.h "+_
+	"listnode.h "+_
+	"treenode.h"
+privateheaders1="inttypes.h "+_
 	"new.h "+_
-	"winsock.h "+_
-	"dll.h "+_
-	"linkedlist.h "+_
-	"linkedlistincludes.h "+_
-	"linkedlistinlines.h "+_
-	"linkedlistnode.h "+_
-	"nodeinlines.h "+_
-	"avltree.h "+_
-	"avltreeincludes.h "+_
-	"avltreeinlines.h "+_
-	"avltreenode.h "+_
-	"singlylinkedlist.h "+_
-	"singlylinkedlistincludes.h "+_
-	"singlylinkedlistinlines.h "+_
-	"singlylinkedlistnode.h "+_
-	"dictionary.h "+_
-	"dictionaryincludes.h "+_
-	"dictionaryinlines.h "+_
-	"dictionarynode.h "
-privateheaders1="dynamicarray.h "+_
-	"dynamicarrayincludes.h "+_
-	"dynamicarrayinlines.h "+_
-	"staticarray.h "+_
-	"staticarrayinlines.h "+_
 	"characterincludes.h "+_
 	"wcharacterincludes.h "+_
 	"charstring.h "+_
@@ -368,9 +354,11 @@ privateheaders1="dynamicarray.h "+_
 	"datetime.h "+_
 	"datetimeincludes.h "+_
 	"device.h "+_
-	"deviceincludes.h "
-privateheaders2="directory.h "+_
-	"directoryincludes.h "+_
+	"deviceincludes.h "+_
+	"directory.h "+_
+	"directoryincludes.h"
+privateheaders2="winsock.h "+_
+	"dll.h "+_
 	"dynamiclib.h "+_
 	"dynamiclibincludes.h "+_
 	"environment.h "+_
@@ -378,6 +366,8 @@ privateheaders2="directory.h "+_
 	"errorincludes.h "+_
 	"file.h "+_
 	"fileincludes.h "+_
+	"url.h "+_
+	"urlincludes.h "+_
 	"filedescriptor.h "+_
 	"filedescriptorincludes.h "+_
 	"stdio.h "+_
@@ -386,11 +376,29 @@ privateheaders2="directory.h "+_
 	"groupentry.h "+_
 	"groupentryincludes.h "+_
 	"hostentry.h "+_
-	"hostentryincludes.h "
-privateheaders3="inetsocketclient.h "+_
+	"hostentryincludes.h "+_
+	"inetsocketclient.h "+_
 	"inetsocketclientincludes.h "+_
 	"inetsocketserver.h "+_
-	"inetsocketserverincludes.h "+_
+	"inetsocketserverincludes.h"
+privateheaders3="dynamictable.h "+_
+	"dynamictableincludes.h "+_
+	"dynamictableinlines.h "+_
+	"sparsedynamictable.h "+_
+	"sparsedynamictableincludes.h "+_
+	"sparsedynamictableinlines.h "+_
+	"linkedlist.h "+_
+	"linkedlistincludes.h "+_
+	"linkedlistinlines.h "+_
+	"linkedlistnode.h "+_
+	"nodeinlines.h "+_
+	"avltree.h "+_
+	"avltreeincludes.h "+_
+	"avltreeinlines.h "+_
+	"avltreenode.h "+_
+	"scalar.h "+_
+	"scalarincludes.h "+_
+	"scalarinlines.h "+_
 	"listener.h "+_
 	"listenerincludes.h "+_
 	"filedestination.h "+_
@@ -403,15 +411,15 @@ privateheaders3="inetsocketclient.h "+_
 	"memorymap.h "+_
 	"memorymapincludes.h "+_
 	"memorypool.h "+_
-	"memorypoolincludes.h "
-privateheaders4="modemclient.h "+_
-	"modemclientincludes.h "+_
-	"modemserver.h "+_
-	"modemserverincludes.h "+_
+	"memorypoolincludes.h "+_
 	"thread.h "+_
 	"threadincludes.h "+_
 	"threadmutex.h "+_
-	"threadmutexincludes.h "+_
+	"threadmutexincludes.h"
+privateheaders4="singlylinkedlist.h "+_
+	"singlylinkedlistincludes.h "+_
+	"singlylinkedlistinlines.h "+_
+	"singlylinkedlistnode.h "+_
 	"parameterstring.h "+_
 	"parameterstringincludes.h "+_
 	"userentry.h "+_
@@ -423,50 +431,68 @@ privateheaders4="modemclient.h "+_
 	"protocolentry.h "+_
 	"protocolentryincludes.h "+_
 	"randomnumber.h "+_
-	"randomnumberincludes.h "
-privateheaders5="bytestringincludes.h "+_
+	"randomnumberincludes.h "+_
+	"bytestringincludes.h "+_
 	"regularexpression.h "+_
 	"regularexpressionincludes.h "+_
 	"semaphoreset.h "+_
-	"semaphoresetincludes.h "+_
-	"serialport.h "+_
-	"serialportincludes.h "+_
-	"serialportprofile.h "+_
-	"serialportprofileincludes.h "+_
+	"semaphoresetincludes.h"
+privateheaders5="dictionary.h "+_
+	"dictionaryincludes.h "+_
+	"dictionaryinlines.h "+_
+	"hashincludes.h "+_
+	"encryption.h "+_
+	"encryptionincludes.h "+_
+	"sha1.h "+_
+	"sha1includes.h "+_
+	"sha256.h "+_
+	"sha256includes.h "+_
+	"md5.h "+_
+	"md5includes.h "+_
+	"aes128.h "+_
+	"aes128includes.h "+_
 	"server.h "+_
 	"serverincludes.h "+_
 	"serviceentry.h "+_
 	"serviceentryincludes.h "+_
 	"sharedmemory.h "+_
-	"sharedmemoryincludes.h "
-privateheaders6="signalhandler.h "+_
+	"sharedmemoryincludes.h "+_
+	"signalhandler.h "+_
 	"signalset.h "+_
 	"signalclassesincludes.h "+_
 	"snooze.h "+_
 	"snoozeincludes.h "+_
 	"stringbufferincludes.h "+_
 	"stringbufferinlines.h "+_
+	"wstringbufferincludes.h "+_
+	"wstringbufferinlines.h "+_
 	"sys.h "+_
-	"sysincludes.h "+_
+	"sysincludes.h"
+privateheaders6="dynamicarray.h "+_
+	"dynamicarrayincludes.h "+_
+	"dynamicarrayinlines.h "+_
+	"sparsedynamicarray.h "+_
+	"sparsedynamicarrayincludes.h "+_
+	"sparsedynamicarrayinlines.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketclientincludes.h "+_
 	"unixsocketserver.h "+_
 	"unixsocketserverincludes.h "+_
 	"bytebuffer.h "+_
 	"bytebufferincludes.h "+_
-	"sax.h "+_
-	"saxincludes.h "+_
 	"dom.h "+_
 	"domincludes.h "+_
 	"domnode.h "+_
 	"domnodeincludes.h "+_
 	"xmldom.h "+_
 	"xmldomincludes.h "+_
+	"sax.h "+_
+	"saxincludes.h "+_
 	"xmlsax.h "+_
 	"xmlsaxincludes.h "+_
 	"domevents.h "+_
-	"domeventsincludes.h "
-privateheaders7="codetree.h "+_
+	"domeventsincludes.h "+_
+	"codetree.h "+_
 	"codetreeincludes.h "+_
 	"codetreegrammar.h "+_
 	"compiler.h "+_
@@ -479,31 +505,31 @@ privateheaders7="codetree.h "+_
 	"socketserverincludes.h "+_
 	"socketclient.h "+_
 	"socketclientincludes.h "+_
-	"modemutil.h "+_
-	"url.h "+_
-	"urlincludes.h "+_
+	"prompt.h "+_
+	"promptincludes.h "+_
+	"cursordomnode.h "+_
+	"cursordomnodeincludes.h"
+privateheaders7="staticarray.h "+_
+	"staticarrayinlines.h "+_
+	"outputincludes.h "+_
+	"inputincludes.h "+_
+	"wastebasketincludes.h "+_
+	"wastebasket.h "+_
+	"sensitivevalueincludes.h "+_
+	"sensitivevalue.h "+_
 	"gss.h "+_
-	"gssincludes.h "+_
 	"gssmechanism.h "+_
 	"gsscredentials.h "+_
 	"gsscontext.h "+_
+	"gssincludes.h "+_
 	"tls.h "+_
-	"tlsincludes.h "+_
 	"tlscontext.h "+_
 	"tlscertificate.h "+_
-	"hashincludes.h "+_
-	"sha1.h "+_
-	"sha1includes.h "+_
-	"sha256.h "+_
-	"sha256includes.h "+_
-	"md5.h "+_
-	"md5includes.h "+_
-	"prompt.h "+_
-	"promptincludes.h "+_
+	"tlsincludes.h "+_
+	"websocket.h "+_
+	"websocketincludes.h "+_
 	"templateengine.h "+_
 	"templateengineincludes.h "+_
-	"outputincludes.h "+_
-	"inputincludes.h "+_
 	"csvsax.h "+_
 	"csvsaxincludes.h "+_
 	"csvdom.h "+_
@@ -520,43 +546,32 @@ privateheaders7="codetree.h "+_
 	"propsaxincludes.h "+_
 	"propdom.h "+_
 	"propdomincludes.h "+_
-	"cursordomnode.h "+_
-	"cursordomnodeincludes.h "+_
-	"websocket.h "+_
-	"websocketincludes.h "+_
 	"httprequest.h "+_
 	"httprequestincludes.h "+_
 	"urlhttprequest.h "+_
 	"urlhttprequestincludes.h "+_
 	"httpresponse.h "+_
 	"httpresponseincludes.h "+_
-	"httpserverapi.h "+_
-	"httpserverapiincludes.h "+_
+	"apachehttpserverapi.h "+_
+	"apachehttpserverapiincludes.h "+_
+	"apacheincludes.h "+_
+	"apachemodule.h "+_
 	"cgihttpserverapi.h "+_
 	"cgihttpserverapiincludes.h "+_
-	"encryption.h "+_
-	"encryptionincludes.h "+_
-	"aes128.h "+_
-	"aes128includes.h "+_
-	"mvctier.h "+_
-	"mvctierincludes.h "+_
-	"mvcview.h "+_
-	"mvcviewincludes.h "+_
-	"mvcresult.h "+_
-	"mvcresultincludes.h "+_
+	"cgimodule.h "+_
+	"httpserverapi.h "+_
+	"httpserverapiincludes.h "+_
+	"mvcincludes.h "+_
 	"mvcproperties.h "+_
-	"mvcpropertiesincludes.h "+_
+	"mvcresult.h "+_
+	"mvctier.h "+_
+	"mvcview.h "+_
 	"httpbasicsecurity.h "+_
-	"httpbasicsecurityincludes.h "+_
-	"cronschedule.h "+_
-	"cronscheduleincludes.h "
-	"wastebasket.h" +_
-	"wastebasketincludes.h" +_
-	"sensitivevalue.h" +_
-	"sensitivevalueincludes.h"
+	"cronscheduleincludes.h "+_
+	"cronschedule.h"
 
 ' version
-RUDIMENTS_VERSION="1.4.0"
+RUDIMENTS_VERSION="2.0.0"
 
 ' paths
 pfix="C:\\Program Files\\Firstworks"
