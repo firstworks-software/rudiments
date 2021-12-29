@@ -1196,6 +1196,144 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 	#endif
 }
 
+int32_t charstring::compareNatural(const char *str1, const char *str2) {
+	return compareNatural(str1,str2,".");
+}
+
+int32_t charstring::compareNatural(const char *str1,
+					const char *str2,
+					const char *delimiters) {
+
+	int64_t	difference=0;
+	const char	*start1=NULL;
+	const char	*start2=NULL;
+	char		*num1=NULL;
+	char		*num2=NULL;
+	for (;;) {
+
+		// handle end-of-string cases
+		if (!*str1 && !*str2) {
+			return difference;
+		}
+		if (!*str1 && *str2) {
+			difference++;
+			return difference;
+		}
+		if (*str1 && !*str2) {
+			difference--;
+			return difference;
+		}
+
+		// subtract the "is a digit" status of the next character of
+		// str1 from the "is a digit" status of the next character of
+		// str2 and add the result to the running difference
+		//
+		// (if str1 contains a non-number and str2 contains a number
+		// then the difference will be positive, indicating that
+		// str1 > str2, which is what we want)
+		bool	isdigit1=character::isDigit(*str1);
+		bool	isdigit2=character::isDigit(*str2);
+		difference+=isdigit2-isdigit1;
+
+		// if the difference is non-zero then return it
+		if (difference) {
+			return difference;
+		}
+
+		if (isdigit1 && isdigit2) {
+
+			// move to after the number in both strings
+			start1=str1;
+			while (*str1 && (character::isDigit(*str1) ||
+					character::inSet(*str1,delimiters))) {
+				str1++;
+			}
+			start2=str2;
+			while (*str2 && (character::isDigit(*str2) ||
+					character::inSet(*str2,delimiters))) {
+				str2++;
+			}
+
+			// copy out the numbers
+			num1=charstring::duplicate(start1,str1-start1);
+			num2=charstring::duplicate(start2,str2-start2);
+
+			// version-compare the numbers and add that
+			// to the running difference
+			difference+=charstring::compareVersions(
+						num1,num2,delimiters);
+
+			// clean up
+			delete[] num1;
+			delete[] num2;
+
+		} else {
+
+			// subtract the next character of str2 from the next
+			// character of str1 and add the result to the running
+			// difference
+			difference+=(*str1)-(*str2);
+
+			// move on
+			str1++;
+			str2++;
+		}
+
+		// if the running difference is non-zero then return it
+		if (difference) {
+			return difference;
+		}
+	}
+}
+
+int32_t charstring::compareVersions(const char *str1, const char *str2) {
+	return compareVersions(str1,str2,".");
+}
+
+int32_t charstring::compareVersions(const char *str1,
+					const char *str2,
+					const char *delimiters) {
+
+	int64_t	difference=0;
+	for (;;) {
+
+		// get the next integers from the strings, subtract them, and
+		// add the result to the running difference
+		difference+=(toInteger(str1)-toInteger(str2));
+
+		// if the difference is non-zero then return it
+		if (difference) {
+			return difference;
+		}
+
+		// skip past the next .
+		str1=findFirstOfSet(str1,delimiters);
+		if (str1) {
+			str1++;
+		}
+		str2=findFirstOfSet(str2,delimiters);
+		if (str2) {
+			str2++;
+		}
+
+		// bail if we're at the end of both strings
+		if ((!str1 || !*str1) && (!str2 || !*str2)) {
+			return difference;
+		}
+
+		// handle cases where str1 and str2 have
+		// different numbers of parts
+		if (str1 && *str1 && (!str2 || !*str2)) {
+			difference++;
+			return difference;
+		}
+		if (str2 && *str2 && (!str1 || !*str1)) {
+			difference--;
+			return difference;
+		}
+	}
+}
+
 bool charstring::compareWithWildcards(const char *string,
 					size_t stringlength,
 					const char *pattern,

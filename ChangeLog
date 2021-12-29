@@ -35,11 +35,12 @@
 		if XSI strerror_r() isn't present, as GNU strerror_r() appears
 		to be flaky
 	added file::getMatchingFileNames() methods
-	added charstring::compareWithWildcard() methods
-	added comparator class and updated various collections to use its
-		methods instead of node_compare(), also added
-		get/setComparator() methods to collection class
-	added reversecomparator class
+	added charstring compareWithWildcard(), compareVersions(), and
+		compareNatural() methods
+	added comparator class with reverse and natural options, and updated
+		various collections to use its methods instead of
+		node_compare(), also added get/setComparator() methods to
+		collection class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

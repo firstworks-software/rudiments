@@ -2,7 +2,6 @@
 // See the file COPYING for more information
 
 #include <rudiments/singlylinkedlist.h>
-#include <rudiments/reversecomparator.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -272,8 +271,7 @@ int main(int argc, char **argv) {
 				"5"));
 
 	stdoutput.printf("heapSort() (reverse comparator)\n");
-	reversecomparator	rc;
-	strl.setComparator(&rc);
+	strl.getComparator()->setReverse(true);
 	strl.heapSort();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
@@ -300,7 +298,7 @@ int main(int argc, char **argv) {
 				"2"));
 
 	stdoutput.printf("heapSort() (forward comparator)\n");
-	strl.setComparator(NULL);
+	strl.getComparator()->setReverse(false);
 	strl.heapSort();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),

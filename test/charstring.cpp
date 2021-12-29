@@ -990,6 +990,68 @@ int main(int argc, const char **argv) {
 		}
 	}
 	stdoutput.printf("\n");
+	
+
+	// compare versions
+	stdoutput.printf("compareVersions...\n");
+	test("1 vs. 2",charstring::compareVersions("1","2")<0);
+	test("2 vs. 1",charstring::compareVersions("2","1")>0);
+	test("1.1 vs. 1.2",charstring::compareVersions("1.1","1.2")<0);
+	test("1.2 vs. 1.1",charstring::compareVersions("1.2","1.1")>0);
+	test("1.1.1 vs. 1.1.2",charstring::compareVersions("1.1.1","1.1.2")<0);
+	test("1.1.2 vs. 1.1.1",charstring::compareVersions("1.1.2","1.1.1")>0);
+	test("1.1.2 vs. 1.1.12",
+			charstring::compareVersions("1.1.2","1.1.12")<0);
+	test("1.1.12 vs. 1.1.2",
+			charstring::compareVersions("1.1.12","1.1.2")>0);
+	test("1.1 vs. 1.1.1",charstring::compareVersions("1.1","1.1.1")<0);
+	test("1.1.1 vs. 1.1",charstring::compareVersions("1.1.1","1.1")>0);
+	test("1.1. vs. 1.1.1",charstring::compareVersions("1.1.","1.1.1")<0);
+	test("1.1.1 vs. 1.1.",charstring::compareVersions("1.1.1","1.1.")>0);
+	stdoutput.printf("\n");
+	
+
+	// compare natural
+	stdoutput.printf("compareNatural...\n");
+	test("rudiments-1 vs. rudiments-2",
+		charstring::compareNatural("rudiments-1",
+						"rudiments-2")<0);
+	test("rudiments-2 vs. rudiments-1",
+		charstring::compareNatural("rudiments-2",
+						"rudiments-1")>0);
+	test("rudiments-1.1 vs. rudiments-1.2",
+		charstring::compareNatural("rudiments-1.1",
+						"rudiments-1.2")<0);
+	test("rudiments-1.2 vs. rudiments-1.1",
+		charstring::compareNatural("rudiments-1.2",
+						"rudiments-1.1")>0);
+	test("rudiments-1.1.1 vs. rudiments-1.1.2",
+		charstring::compareNatural("rudiments-1.1.1",
+						"rudiments-1.1.2")<0);
+	test("rudiments-1.1.2 vs. rudiments-1.1.1",
+		charstring::compareNatural("rudiments-1.1.2",
+						"rudiments-1.1.1")>0);
+	test("rudiments-1.1.2 vs. rudiments-1.1.12",
+		charstring::compareNatural("rudiments-1.1.2",
+						"rudiments-1.1.12")<0);
+	test("rudiments-1.1.12 vs. rudiments-1.1.2",
+		charstring::compareNatural("rudiments-1.1.12",
+						"rudiments-1.1.2")>0);
+	test("rudiments-1.1 vs. rudiments-1.1.1",
+		charstring::compareNatural("rudiments-1.1",
+						"rudiments-1.1.1")<0);
+	test("rudiments-1.1.1 vs. rudiments-1.1",
+		charstring::compareNatural("rudiments-1.1.1",
+						"rudiments-1.1")>0);
+	test("rudiments-1.1. vs. rudiments-1.1.1",
+		charstring::compareNatural("rudiments-1.1.",
+						"rudiments-1.1.1")<0);
+	test("rudiments-1.1.1 vs. rudiments-1.1.",
+		charstring::compareNatural("rudiments-1.1.1",
+						"rudiments-1.1.")>0);
+	stdoutput.printf("\n");
+
+	
 
 
 	// hosttonet/nettohost (why are these here?)

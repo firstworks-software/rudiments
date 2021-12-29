@@ -148,6 +148,46 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *str2,
 							size_t len);
 
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2".
+		 *
+		 * Embedded (version) numbers will be interpreted "naturally"
+		 * (eg. 12 > 8) */
+		static	int32_t	compareNatural(const char *str1,
+						const char *str2);
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2".
+		 *
+		 * Embedded (version) numbers will be interpreted "naturally"
+		 * (eg. 12 > 8)
+		 *
+		 * "delimiters" should be set to the set of characters that
+		 * will be interpreted as equivalent delimiters.  Eg. "._"
+		 * means that either .'s or _'s may be used to delimit
+		 * numbers. */
+		static	int32_t	compareNatural(const char *str1,
+						const char *str2,
+						const char *delimiters);
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2", where "str1" and "str2" are version
+		 * numbers with arbitrary numbers of decimal delimiters. */
+		static	int32_t	compareVersions(const char *str1,
+						const char *str2);
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2", where "str1" and "str2" are version
+		 * numbers with arbitrary numbers of delimiters.
+		 *
+		 * "delimiters" should be set to the set of characters that
+		 * will be interpreted as equivalent delimiters.  Eg. "._"
+		 * means that either .'s or _'s may be used to delimiters
+		 * numbers. */
+		static	int32_t	compareVersions(const char *str1,
+						const char *str2,
+						const char *delimiters);
+
 		/** Compares the first "stringlength" characters of "string"
 		 *  to the first "patternlength" characters of "pattern" which
 		 *  may contain instances of single-character wildcard markers

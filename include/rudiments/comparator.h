@@ -10,8 +10,37 @@
  *  collections to find and sort nodes. */
 class comparator {
 	public:
+		/** Creates an instance of the comparator class. */
+		comparator();
+
 		/** Deletes this instance of the comparator class. */
 		virtual	~comparator();
+
+		/** Set whether comparisons should sort items in reverse. */
+		void	setReverse(bool reverse);
+
+		/** Returns true if comparisons should sort items in reverse
+		 *  and false otherwise. */
+		bool	getReverse();
+
+		/** Set whether to interpret (version) numbers embedded in
+		 *  strings "naturally" (eg. 12 > 8) or not. */
+		void	setNatural(bool natural);
+
+		/** Returns true if comparisons should interpret numbers
+		 *  embedded in strings "naturally" (eg. 12 > 8) and false
+		 *  otherwise. */
+		bool	getNatural();
+
+		/** Sets the set of characters to be used as number delimiters
+		 *  when strings are compared "naturally".
+		 *
+		 *  Defaults to "." */
+		void	setNumberDelimiters(const char *delimiters);
+
+		/** Returns the set of characters that will be used as number
+		 *  delimiters when strings are compared "naturally". */
+		const char	*getNumberDelimiters();
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
@@ -100,6 +129,8 @@ class comparator {
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
 		virtual	int32_t compare(void *value1, void *value2);
+
+	#include <rudiments/private/comparator.h>
 };
 
 #include <rudiments/private/comparatorinlines.h>
