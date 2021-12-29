@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/singlylinkedlist.h>
+#include <rudiments/reversecomparator.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -245,6 +246,61 @@ int main(int argc, char **argv) {
 				"5"));
 
 	stdoutput.printf("heapSort() (after sorted from random order)\n");
+	strl.heapSort();
+	test("0",!charstring::compare(
+				strl.getFirst()->getValue(),
+				"0"));
+	test("1",!charstring::compare(
+				strl.getFirst()->getNext()->getValue(),
+				"1"));
+	test("2",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getValue(),
+				"2"));
+	test("3",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getNext()->getValue(),
+				"3"));
+	test("4",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getNext()->getNext()->getValue(),
+				"4"));
+	test("5",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getNext()->getNext()->getNext()->
+					getValue(),
+				"5"));
+
+	stdoutput.printf("heapSort() (reverse comparator)\n");
+	reversecomparator	rc;
+	strl.setComparator(&rc);
+	strl.heapSort();
+	test("0",!charstring::compare(
+				strl.getFirst()->getValue(),
+				"7"));
+	test("1",!charstring::compare(
+				strl.getFirst()->getNext()->getValue(),
+				"6"));
+	test("2",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getValue(),
+				"5"));
+	test("3",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getNext()->getValue(),
+				"4"));
+	test("4",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getNext()->getNext()->getValue(),
+				"3"));
+	test("5",!charstring::compare(
+				strl.getFirst()->getNext()->getNext()->
+					getNext()->getNext()->getNext()->
+					getValue(),
+				"2"));
+
+	stdoutput.printf("heapSort() (forward comparator)\n");
+	strl.setComparator(NULL);
 	strl.heapSort();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),

@@ -9,10 +9,10 @@
 /** The comparator class provides a set of compare() methods which override the
  *  standard set of methods provided by the comparator class, which return the
  *  opposite of those methods. */
-class reversecomparator {
+class reversecomparator : public comparator {
 	public:
 		/** Deletes this instance of the comparator class. */
-		virtual	~comparator();
+		virtual	~reversecomparator();
 
 		/** Returns an integer greater than, equal to, or less than 0
 		 *  if value1 is, respectively, less than, equal to, or greater

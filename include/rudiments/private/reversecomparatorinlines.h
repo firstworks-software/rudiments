@@ -19,13 +19,14 @@ int32_t reversecomparator::compare(const char *value1, const char *value2) {
 }
 
 inline
-int32_t reversecomparator::compare(unsigned char *value1, unsigned char *value2) {
+int32_t reversecomparator::compare(unsigned char *value1,
+					unsigned char *value2) {
 	return comparator::compare(value1,value2)*-1;
 }
 
 inline
 int32_t reversecomparator::compare(const unsigned char *value1,
-				const unsigned char *value2) {
+					const unsigned char *value2) {
 	return comparator::compare(value1,value2)*-1;
 }
 
