@@ -638,7 +638,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  "oldstrset" */
 		static	wchar_t	*replace(const wchar_t *str,
 					const wchar_t * const *oldstrset,
-					ssize_t *oldstrlen,
+					size_t *oldstrlen,
 					const wchar_t * const *newstrset);
 
 		/** Returns the number of characters needed to represent
@@ -948,9 +948,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  of "list" and "list" itseslf must be deallocated by the
 		 *  calling program. */
 		static void	split(const wchar_t *string,
-					ssize_t stringlength,
+					size_t stringlength,
 					const wchar_t *delimiter,
-					ssize_t delimiterlength,
+					size_t delimiterlength,
 					bool collapse,
 					wchar_t ***list,
 					uint64_t *listlength);
@@ -964,7 +964,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  be deallocated by the calling program. */
 		static void	split(const wchar_t *string,
 					const wchar_t *delimiter,
-					ssize_t delimiterlength,
+					size_t delimiterlength,
 					bool collapse,
 					wchar_t ***list,
 					uint64_t *listlength);
@@ -977,7 +977,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  delimiter.  Each member of "list" and "list" itseslf must
 		 *  be deallocated by the calling program. */
 		static void	split(const wchar_t *string,
-					ssize_t stringlength,
+					size_t stringlength,
 					const wchar_t *delimiter,
 					bool collapse,
 					wchar_t ***list,

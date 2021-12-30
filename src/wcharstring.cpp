@@ -309,7 +309,7 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 		return NULL;
 	}
 	wstringbuffer	newstring;
-	ssize_t		oldstrlen=wcharstring::length(oldstr);
+	size_t		oldstrlen=wcharstring::length(oldstr);
 	const wchar_t	*ptr=str;
 	const wchar_t	*start=ptr;
 	while (*ptr) {
@@ -331,7 +331,7 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 
 wchar_t *wcharstring::replace(const wchar_t *str,
 					const wchar_t * const *oldstrset,
-					ssize_t *oldstrlen,
+					size_t *oldstrlen,
 					const wchar_t * const *newstrset) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!str) {
@@ -522,7 +522,7 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 wchar_t *wcharstring::convertAmount(int64_t amount, uint16_t spaces) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*amt=convertAmount(amount);
-	ssize_t	amtlen=length(amt+1);
+	size_t	amtlen=length(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	wchar_t	*buffer=new wchar_t[realspaces+1];
 	buffer[realspaces]=L'\0';
@@ -2451,7 +2451,7 @@ void wcharstring::split(const wchar_t *string, const wchar_t *delimiter,
 #endif
 }
 
-void wcharstring::split(const wchar_t *string, ssize_t stringlength,
+void wcharstring::split(const wchar_t *string, size_t stringlength,
 				const wchar_t *delimiter, bool collapse,
 				wchar_t ***list, uint64_t *listlength) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
@@ -2463,7 +2463,7 @@ void wcharstring::split(const wchar_t *string, ssize_t stringlength,
 
 void wcharstring::split(const wchar_t *string, 
 				const wchar_t *delimiter,
-				ssize_t delimiterlength,
+				size_t delimiterlength,
 				bool collapse,
 				wchar_t ***list,
 				uint64_t *listlength) {
@@ -2475,9 +2475,9 @@ void wcharstring::split(const wchar_t *string,
 }
 
 void wcharstring::split(const wchar_t *string,
-				ssize_t stringlength,
+				size_t stringlength,
 				const wchar_t *delimiter,
-				ssize_t delimiterlength,
+				size_t delimiterlength,
 				bool collapse,
 				wchar_t ***list,
 				uint64_t *listlength) {
@@ -2520,7 +2520,7 @@ void wcharstring::split(const wchar_t *string,
 			// if there's not enough room left in the string for
 			// another delimiter, then move the current position
 			// to the end
-			if (end-current<delimiterlength) {
+			if (((size_t)(end-current))<delimiterlength) {
 				current=end;
 			}
 

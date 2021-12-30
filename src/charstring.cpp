@@ -281,7 +281,7 @@ char *charstring::replace(const char *str, const char *oldstr,
 		return NULL;
 	}
 	stringbuffer	newstring;
-	ssize_t		oldstrlen=charstring::length(oldstr);
+	size_t		oldstrlen=charstring::length(oldstr);
 	const char	*ptr=str;
 	const char	*start=ptr;
 	while (*ptr) {
@@ -299,7 +299,7 @@ char *charstring::replace(const char *str, const char *oldstr,
 }
 
 char *charstring::replace(const char *str, const char * const *oldstrset,
-						ssize_t *oldstrlen,
+						size_t *oldstrlen,
 						const char * const *newstrset) {
 	if (!str) {
 		return NULL;
@@ -1990,7 +1990,7 @@ void charstring::split(const char *string, const char *delimiter,
 			collapse,list,listlength);
 }
 
-void charstring::split(const char *string, ssize_t stringlength,
+void charstring::split(const char *string, size_t stringlength,
 				const char *delimiter, bool collapse,
 				char ***list, uint64_t *listlength) {
 	split(string,stringlength,
@@ -1999,7 +1999,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 }
 
 void charstring::split(const char *string, 
-				const char *delimiter, ssize_t delimiterlength,
+				const char *delimiter, size_t delimiterlength,
 				bool collapse,
 				char ***list, uint64_t *listlength) {
 	split(string,length(string),
@@ -2007,8 +2007,8 @@ void charstring::split(const char *string,
 			collapse,list,listlength);
 }
 
-void charstring::split(const char *string, ssize_t stringlength,
-				const char *delimiter, ssize_t delimiterlength,
+void charstring::split(const char *string, size_t stringlength,
+				const char *delimiter, size_t delimiterlength,
 				bool collapse,
 				char ***list, uint64_t *listlength) {
 
@@ -2049,7 +2049,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 			// if there's not enough room left in the string for
 			// another delimiter, then move the current position
 			// to the end
-			if (end-current<delimiterlength) {
+			if (((size_t)(end-current))<delimiterlength) {
 				current=end;
 			}
 

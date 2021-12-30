@@ -615,7 +615,7 @@ int main(int argc, const char **argv) {
 	const wchar_t * const oldset[]={
 		L"one",L"two",L"three",L"four",L"five",NULL
 	};
-	ssize_t	oldlen[]={
+	size_t	oldlen[]={
 		3,3,5,4,4
 	};
 	const wchar_t * const newset1[]={

@@ -613,7 +613,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "oldstrset" */
 		static	char	*replace(const char *str,
 						const char * const *oldstrset,
-						ssize_t *oldstrlen,
+						size_t *oldstrlen,
 						const char * const *newstrset);
 
 		/** Returns a new string which is a copy of "str" in which
@@ -1065,9 +1065,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  of "list" and "list" itseslf must be deallocated by the
 		 *  calling program. */
 		static void	split(const char *string,
-					ssize_t stringlength,
+					size_t stringlength,
 					const char *delimiter,
-					ssize_t delimiterlength,
+					size_t delimiterlength,
 					bool collapse,
 					char ***list,
 					uint64_t *listlength);
@@ -1081,7 +1081,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  be deallocated by the calling program. */
 		static void	split(const char *string,
 					const char *delimiter,
-					ssize_t delimiterlength,
+					size_t delimiterlength,
 					bool collapse,
 					char ***list,
 					uint64_t *listlength);
@@ -1094,7 +1094,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  delimiter.  Each member of "list" and "list" itseslf must
 		 *  be deallocated by the calling program. */
 		static void	split(const char *string,
-					ssize_t stringlength,
+					size_t stringlength,
 					const char *delimiter,
 					bool collapse,
 					char ***list,

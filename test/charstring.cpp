@@ -823,7 +823,7 @@ int main(int argc, const char **argv) {
 	const char * const oldset[]={
 		"one","two","three","four","five",NULL
 	};
-	ssize_t	oldlen[]={
+	size_t	oldlen[]={
 		3,3,5,4,4
 	};
 	const char * const newset1[]={
