@@ -8,7 +8,7 @@
 #include <rudiments/comparator.h>
 
 /** The collection class is the parent class for all rudiments collections. */
-class RUDIMENTS_DLLSPEC collection : public object {
+class collection : virtual public object {
 	public:
 
 		/** Creates an instance of the collection class. */

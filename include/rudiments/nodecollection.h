@@ -9,7 +9,7 @@
 /** The node class is the parent class for the node contained by all rudiments
  *  node-based collections. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC nodecollectionnode : public object {
+class nodecollectionnode : public object {
 	public:
 
 		/** Creates an instance of the node class. */
@@ -33,7 +33,7 @@ class RUDIMENTS_DLLSPEC nodecollectionnode : public object {
 
 /** The collection class is the parent class for all rudiments node-based
  *  collections. */
-class RUDIMENTS_DLLSPEC nodecollection : public collection {
+class nodecollection : public collection {
 	public:
 
 		/** Creates an instance of the nodecollection class. */

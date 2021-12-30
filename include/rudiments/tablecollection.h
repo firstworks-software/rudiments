@@ -32,7 +32,7 @@
  *  of 10, then getting a value in row 6, followed by a value in row 22 would
  *  succeed, but a subsequent attempt to get a value from row 7 would fail. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC tablecollection : public nodecollection {
+class tablecollection : public nodecollection {
 	public:
 
 		/** Creates an instance of the tablecollection class. */

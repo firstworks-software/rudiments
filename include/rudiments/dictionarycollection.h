@@ -10,7 +10,7 @@
 /** The dictionarycollection class is the parent class for all rudiments
  *  dictionary collections. */
 template<class keytype, class valuetype>
-class RUDIMENTS_DLLSPEC dictionarycollection : public collection {
+class dictionarycollection : public collection {
 	public:
 
 		/** Creates an instance of the dictionarycollection class. */

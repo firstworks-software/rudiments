@@ -8,7 +8,7 @@
 
 /** The scalar class allows you to store a single value. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC scalar : public scalarcollection<valuetype> {
+class scalar : public scalarcollection<valuetype> {
 	public:
 
 		/** Sets the value stored in this instance to "v". */

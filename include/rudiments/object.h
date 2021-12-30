@@ -8,7 +8,7 @@
 #include <rudiments/private/inttypes.h>
 
 /** The object class is the parent class for all rudiments classes. */
-class RUDIMENTS_DLLSPEC object {
+class object {
 	public:
 
 		/** Creates an instance of the object class. */
