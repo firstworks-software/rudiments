@@ -4,3 +4,4 @@
 	friend class logger;
 	private:
 		void	write(const char *string);
+		void	write(const wchar_t *string);

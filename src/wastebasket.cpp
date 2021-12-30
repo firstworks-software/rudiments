@@ -46,6 +46,10 @@ void wastebasket::attach(char *value) {
 	ATTACHARRAY(char *,"char *",value);
 }
 
+void wastebasket::attach(wchar_t *value) {
+	ATTACHARRAY(wchar_t *,"wchar_t *",value);
+}
+
 void wastebasket::attach(unsigned char *value) {
 	ATTACHARRAY(unsigned char *,"unsigned char *",value);
 }

@@ -3,6 +3,7 @@
 
 	private:
 		void	write(const char *logentry);
+		void	write(const wchar_t *logentry);
 
 		// FIXME: should be possible to copy a logger
 			logger(const logger &l);

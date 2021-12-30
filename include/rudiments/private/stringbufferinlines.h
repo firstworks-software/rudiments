@@ -2,6 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
+#include <rudiments/character.h>
 
 inline
 stringbuffer::stringbuffer() : bytebuffer() {
@@ -102,6 +104,43 @@ stringbuffer *stringbuffer::append(const char *string, size_t length) {
 inline
 stringbuffer *stringbuffer::append(char character) {
 	return (stringbuffer *)bytebuffer::append(character);
+}
+
+inline
+stringbuffer *stringbuffer::append(const wchar_t *string) {
+	return append(string,wcharstring::length(string));
+}
+
+inline
+stringbuffer *stringbuffer::append(const wchar_t *string, char replacement) {
+	return append(string,wcharstring::length(string),replacement);
+}
+
+inline
+stringbuffer *stringbuffer::append(const wchar_t *string, size_t length) {
+	char	*s=charstring::duplicate(string,length);
+	stringbuffer	*retval=append(s,length);
+	delete[] s;
+	return retval;
+}
+
+inline
+stringbuffer *stringbuffer::append(const wchar_t *string, size_t length,
+							char replacement) {
+	char	*s=charstring::duplicate(string,length,replacement);
+	stringbuffer	*retval=append(s,length);
+	delete[] s;
+	return retval;
+}
+
+inline
+stringbuffer *stringbuffer::append(wchar_t character) {
+	return append(character::duplicate(character));
+}
+
+inline
+stringbuffer *stringbuffer::append(wchar_t character, char replacement) {
+	return append(character::duplicate(character,replacement));
 }
 
 inline
@@ -231,6 +270,43 @@ ssize_t stringbuffer::write(const char *string, size_t length) {
 inline
 ssize_t stringbuffer::write(char character) {
 	return bytebuffer::write(character);
+}
+
+inline
+ssize_t stringbuffer::write(const wchar_t *string) {
+	return write(string,wcharstring::length(string));
+}
+
+inline
+ssize_t stringbuffer::write(const wchar_t *string, char replacement) {
+	return write(string,wcharstring::length(string),replacement);
+}
+
+inline
+ssize_t stringbuffer::write(const wchar_t *string, size_t length) {
+	char	*s=charstring::duplicate(string,length);
+	ssize_t	retval=write(s,length);
+	delete[] s;
+	return retval;
+}
+
+inline
+ssize_t stringbuffer::write(const wchar_t *string, size_t length,
+							char replacement) {
+	char	*s=charstring::duplicate(string,length,replacement);
+	ssize_t	retval=write(s,length);
+	delete[] s;
+	return retval;
+}
+
+inline
+ssize_t stringbuffer::write(wchar_t character) {
+	return bytebuffer::write(character::duplicate(character));
+}
+
+inline
+ssize_t stringbuffer::write(wchar_t character, char replacement) {
+	return bytebuffer::write(character::duplicate(character,replacement));
 }
 
 inline

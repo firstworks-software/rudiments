@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/wcharstring.h>
+#include <rudiments/wcharacter.h>
 
 inline
 wstringbuffer::wstringbuffer() : bytebuffer() {
@@ -77,6 +78,25 @@ inline
 void wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
 	bytebuffer::clear((unsigned char *)initialcontents,
 					initialsize*sizeof(wchar_t));
+}
+
+inline
+wstringbuffer *wstringbuffer::append(const char *string) {
+	return append(string,charstring::length(string));
+}
+
+inline
+wstringbuffer *wstringbuffer::append(const char *string, size_t length) {
+	wchar_t	*s=wcharstring::duplicate(string,length);
+	wstringbuffer	*retval=append(s,length);
+	delete[] s;
+	return retval;
+}
+
+inline
+wstringbuffer *wstringbuffer::append(char character) {
+	return (wstringbuffer *)bytebuffer::append(
+				wcharacter::duplicate(character));
 }
 
 inline
@@ -193,6 +213,24 @@ wstringbuffer *wstringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
 	return (wstringbuffer *)appendFormatted(L"%*.*f",
 						precision,scale,number);
+}
+
+inline
+ssize_t wstringbuffer::write(const char *string) {
+	return write(string,charstring::length(string));
+}
+
+inline
+ssize_t wstringbuffer::write(const char *string, size_t length) {
+	wchar_t	*s=wcharstring::duplicate(string,length);
+	ssize_t	retval=write(s,length);
+	delete[] s;
+	return retval;
+}
+
+inline
+ssize_t wstringbuffer::write(char character) {
+	return bytebuffer::write(wcharacter::duplicate(character));
 }
 
 inline

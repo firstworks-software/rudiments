@@ -6,3 +6,4 @@
 		virtual	~logdestination();
 	protected:
 		virtual void	write(const char *string)=0;
+		virtual void	write(const wchar_t *string)=0;

@@ -45,6 +45,7 @@
 		strings to normal strings
 	replaced ssize_t paramters with size_t in charstring::split()/replace()
 	fixed a few size -> length parameters
+	added wchar_t/wchar_t * methods to a bunch of classes
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

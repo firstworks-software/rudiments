@@ -67,6 +67,10 @@ class RUDIMENTS_DLLSPEC wastebasket : public object {
 
 		/** Attaches "value" such that it will be array-deleted when
 		 *  empty() is called. */
+		void	attach(wchar_t *value);
+
+		/** Attaches "value" such that it will be array-deleted when
+		 *  empty() is called. */
 		void	attach(unsigned char *value);
 
 		/** Attaches "value" such that it will be array-deleted when

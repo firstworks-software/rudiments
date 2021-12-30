@@ -122,6 +122,13 @@ class RUDIMENTS_DLLSPEC logger : public object {
 		/** Returns the character currently used when indenting. */
 		char	getIndent();
 
+		/** Sets the wide character to be used when indenting
+		 *  to "ch". */
+		void	setWideIndent(wchar_t ch);
+
+		/** Returns the wide character currently used when indenting. */
+		char	getWideIndent();
+
 
 		/** Sets the logging level to "level". */
 		void	setLogLevel(uint8_t level);
@@ -147,6 +154,23 @@ class RUDIMENTS_DLLSPEC logger : public object {
 		 *  setTimeMutex() method. */
 		static char	*logHeader(const char *name);
 
+		/** Returns a string containing the current date,
+		 *  followed by "name", followed by the process id in
+		 *  brackets.  For example:
+		 * 
+		 *  01/05/2002 12:54:23 myprogram [2421]
+		 * 
+		 *  Note that this method allocates a string internally
+		 *  and returns it.  This string must be deleted by the
+		 *  calling program.
+		 * 
+		 *  Note that this method uses getSystemDateAndTime()
+		 *  from the datetime class.  If you are using
+		 *  logHeader() in a multi-threaded application, you
+		 *  must supply a mutex to the datetime class using it's
+		 *  setTimeMutex() method. */
+		static wchar_t	*logHeader(const wchar_t *name);
+
 
 		/** If the current logging level is equal to or greater than
 		 * "level", then writes "header", followed by "indent"
@@ -156,6 +180,15 @@ class RUDIMENTS_DLLSPEC logger : public object {
 				const char *header,
 				uint32_t indent,
 				const char *string);
+
+		/** If the current logging level is equal to or greater than
+		 * "level", then writes "header", followed by "indent"
+		 * indentations, followed by "string" followed by " {" as a
+		 * single log entry. */
+		void	start(uint8_t level,
+				const wchar_t *header,
+				uint32_t indent,
+				const wchar_t *string);
 
 		/** If the current logging level is equal to or greater than
 		 *  "level", then writes "header", followed by "indent"
@@ -168,6 +201,15 @@ class RUDIMENTS_DLLSPEC logger : public object {
 
 		/** If the current logging level is equal to or greater than
 		 *  "level", then writes "header", followed by "indent"
+		 *  indentations, followed by "..." formatted using "format" as
+		 *  a single log entry. */
+		void	write(uint8_t level,
+				const wchar_t *header,
+				uint32_t indent,
+				const wchar_t *format, ...);
+
+		/** If the current logging level is equal to or greater than
+		 *  "level", then writes "header", followed by "indent"
 		 *  indentations, followed by "va_list" formatted using "format"
 		 *  as a single log entry. */
 		void	write(uint8_t level,
@@ -177,10 +219,27 @@ class RUDIMENTS_DLLSPEC logger : public object {
 				va_list *argp);
 
 		/** If the current logging level is equal to or greater than
+		 *  "level", then writes "header", followed by "indent"
+		 *  indentations, followed by "va_list" formatted using "format"
+		 *  as a single log entry. */
+		void	write(uint8_t level,
+				const wchar_t *header,
+				uint32_t indent,
+				const wchar_t *format,
+				va_list *argp);
+
+		/** If the current logging level is equal to or greater than
  		 *  "level", then writes "header", followed by "indent"
  		 *  indentations, followed by "}" as a single log entry. */
 		void	end(uint8_t level,
 				const char *header,
+				uint32_t indent);
+
+		/** If the current logging level is equal to or greater than
+ 		 *  "level", then writes "header", followed by "indent"
+ 		 *  indentations, followed by "}" as a single log entry. */
+		void	end(uint8_t level,
+				const wchar_t *header,
 				uint32_t indent);
 
 	#include <rudiments/private/logger.h>

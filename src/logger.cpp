@@ -5,7 +5,9 @@
 #include <rudiments/datetime.h>
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/wstringbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
@@ -60,6 +62,10 @@ void filedestination::write(const char *string) {
 	pvt->_logfile.write(string);
 }
 
+void filedestination::write(const wchar_t *string) {
+	pvt->_logfile.write(string);
+}
+
 void stdoutdestination::write(const char *string) {
 	int32_t	result;
 	error::clearError();
@@ -68,11 +74,27 @@ void stdoutdestination::write(const char *string) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
+void stdoutdestination::write(const wchar_t *string) {
+	int32_t	result;
+	error::clearError();
+	do {
+		result=stdoutput.write(string,wcharstring::length(string));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+}
+
 void stderrdestination::write(const char *string) {
 	int32_t	result;
 	error::clearError();
 	do {
 		result=stderror.write(string,charstring::length(string));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+}
+
+void stderrdestination::write(const wchar_t *string) {
+	int32_t	result;
+	error::clearError();
+	do {
+		result=stderror.write(string,wcharstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
@@ -123,17 +145,27 @@ void syslogdestination::write(const char *string) {
 #endif
 }
 
+void syslogdestination::write(const wchar_t *string) {
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
+	char	*s=charstring::duplicate(string);
+	syslog(pvt->_priority,"%s",s);
+	delete[] s;
+#endif
+}
+
 class loggerprivate {
 	friend class logger;
 	private:
 		loggerlist	_logdestlist;
 		char		_indent;
+		char		_windent;
 		uint8_t		_level;
 };
 
 logger::logger() : object() {
 	pvt=new loggerprivate;
 	pvt->_indent='	';
+	pvt->_windent='	';
 	pvt->_level=0;
 }
 
@@ -158,8 +190,12 @@ void logger::setIndent(char ch) {
 	pvt->_indent=ch;
 }
 
-char logger::getIndent() {
-	return pvt->_indent;
+void logger::setWideIndent(wchar_t ch) {
+	pvt->_windent=ch;
+}
+
+char logger::getWideIndent() {
+	return pvt->_windent;
 }
 
 void logger::setLogLevel(uint8_t level) {
@@ -180,6 +216,16 @@ char *logger::logHeader(const char *name) {
 	return str.detachString();
 }
 
+wchar_t *logger::logHeader(const wchar_t *name) {
+	datetime	dt;
+	dt.getSystemDateAndTime();
+	wstringbuffer	str;
+	str.append(dt.getString())->append(L" ");
+	str.append(name)->append(L" [");
+	str.append((uint64_t)process::getProcessId())->append(L"]");
+	return str.detachString();
+}
+
 void logger::start(uint8_t level, const char *header,
 				uint32_t indent, const char *string) {
 	if (level>pvt->_level) {
@@ -193,6 +239,22 @@ void logger::start(uint8_t level, const char *header,
 		str.append(pvt->_indent);
 	}
 	str.append(string)->append(" {\n");
+	write(str.getString());
+}
+
+void logger::start(uint8_t level, const wchar_t *header,
+				uint32_t indent, const wchar_t *string) {
+	if (level>pvt->_level) {
+		return;
+	}
+	wstringbuffer	str;
+	if (wcharstring::length(header)) {
+		str.append(header)->append(L" : ");
+	}
+	for (uint32_t i=0; i<indent; i++) {
+		str.append(pvt->_windent);
+	}
+	str.append(string)->append(L" {\n");
 	write(str.getString());
 }
 
@@ -218,6 +280,28 @@ void logger::write(uint8_t level, const char *header,
 	write(str.getString());
 }
 
+void logger::write(uint8_t level, const wchar_t *header,
+				uint32_t indent, const wchar_t *format, ...) {
+	if (level>pvt->_level) {
+		return;
+	}
+	wstringbuffer	str;
+	if (wcharstring::length(header)) {
+		str.append(header)->append(L" : ");
+	}
+	for (uint32_t i=0; i<indent; i++) {
+		str.append(pvt->_windent);
+	}
+	if (format) {
+		va_list	argp;
+		va_start(argp,format);
+		str.writeFormatted(format,&argp);
+		va_end(argp);
+	}
+	str.append(L"\n");
+	write(str.getString());
+}
+
 void logger::write(uint8_t level, const char *header,
 				uint32_t indent, const char *format,
 				va_list *argp) {
@@ -236,6 +320,24 @@ void logger::write(uint8_t level, const char *header,
 	write(str.getString());
 }
 
+void logger::write(uint8_t level, const wchar_t *header,
+				uint32_t indent, const wchar_t *format,
+				va_list *argp) {
+	if (level>pvt->_level) {
+		return;
+	}
+	wstringbuffer	str;
+	if (wcharstring::length(header)) {
+		str.append(header)->append(L" : ");
+	}
+	for (uint32_t i=0; i<indent; i++) {
+		str.append(pvt->_windent);
+	}
+	str.writeFormatted(format,argp);
+	str.append(L"\n");
+	write(str.getString());
+}
+
 void logger::end(uint8_t level, const char *header, uint32_t indent) {
 	if (level>pvt->_level) {
 		return;
@@ -251,7 +353,29 @@ void logger::end(uint8_t level, const char *header, uint32_t indent) {
 	write(str.getString());
 }
 
+void logger::end(uint8_t level, const wchar_t *header, uint32_t indent) {
+	if (level>pvt->_level) {
+		return;
+	}
+	wstringbuffer	str;
+	if (wcharstring::length(header)) {
+		str.append(header)->append(L" : ");
+	}
+	for (uint32_t i=0; i<indent; i++) {
+		str.append(pvt->_windent);
+	}
+	str.append(L"}\n");
+	write(str.getString());
+}
+
 void logger::write(const char *logentry) {
+	for (loggerlistnode *current=pvt->_logdestlist.getFirst();
+				current; current=current->getNext()) {
+		current->getValue()->write(logentry);
+	}
+}
+
+void logger::write(const wchar_t *logentry) {
 	for (loggerlistnode *current=pvt->_logdestlist.getFirst();
 				current; current=current->getNext()) {
 		current->getValue()->write(logentry);
