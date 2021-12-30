@@ -9,7 +9,7 @@
 /** The scalarcollection class is the parent class for all rudiments scalar
  *  collections. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC scalarcollection : public collection {
+class scalarcollection : public collection {
 	public:
 
 		/** Creates an instance of the scalarcollection class. */

@@ -9,7 +9,7 @@
 /** The listnode class is the parent class for the node contained by all
  *  rudiments listnode-based collections. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC listnode : public nodecollectionnode<valuetype> {
+class listnode : public nodecollectionnode<valuetype> {
 	public:
 
 		/** Creates an instance of the listnode class. */
@@ -42,7 +42,7 @@ class RUDIMENTS_DLLSPEC listnode : public nodecollectionnode<valuetype> {
 /** The listcollection class is the parent class for all rudiments list
  *  collections. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC listcollection : public nodecollection {
+class listcollection : public nodecollection {
 	public:
 
 		/** Creates an instance of the listcollection class. */

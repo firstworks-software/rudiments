@@ -9,7 +9,7 @@
 /** The treenode class is the parent class for the node contained by all
  *  rudiments treenode-based collections. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC treenode : public nodecollectionnode<valuetype> {
+class treenode : public nodecollectionnode<valuetype> {
 	public:
 		/** Creates an instance of the treenode class that
 		 *  stores value "value". */
@@ -63,7 +63,7 @@ class RUDIMENTS_DLLSPEC treenode : public nodecollectionnode<valuetype> {
 /** The treecollection class is the parent class for all rudiments tree
  *  collections. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC treecollection : public nodecollection {
+class treecollection : public nodecollection {
 	public:
 
 		/** Creates an instance of the treecollection class. */

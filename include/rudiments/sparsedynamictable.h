@@ -19,7 +19,7 @@
  *
  *  Read-write, monolithic, random-access. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC sparsedynamictable : public tablecollection<valuetype> {
+class sparsedynamictable : public tablecollection<valuetype> {
 	public:
 
 		/** Creates an instance of the sparsedynamictable class. */

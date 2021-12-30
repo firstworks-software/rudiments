@@ -12,7 +12,7 @@
  *
  *  Read-write, monolithic, random-access. */
 template <class valuetype>
-class RUDIMENTS_DLLSPEC dynamictable : public tablecollection<valuetype> {
+class dynamictable : public tablecollection<valuetype> {
 	public:
 
 		/** Creates an instance of the dynamictable class. */
