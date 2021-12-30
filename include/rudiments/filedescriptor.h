@@ -303,22 +303,24 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		ssize_t	write(const unsigned char *string, size_t size,
 					int32_t sec, int32_t usec);
 
-		/** Writes "size" bytes of "string" to the file descriptor with
-		 *  a timeout of "sec" seconds and "usec" microseconds.
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
-		 *  timeout occurred.  Note that it is possible to write beyond
-		 *  the string's NULL terminator using this method.  */
-		ssize_t	write(const char *string, size_t size,
+		/** Writes "length" characters of "string" to the file
+		 *  descriptor with a timeout of "sec" seconds and "usec"
+		 *  microseconds.  Returns the number of bytes that were
+		 *  successfully written or RESULT_ERROR if an error occurred
+		 *  or RESULT_TIMEOUT if a timeout occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
+		ssize_t	write(const char *string, size_t length,
 					int32_t sec, int32_t usec);
 
-		/** Writes "size" bytes of "string" to the file descriptor with
-		 *  a timeout of "sec" seconds and "usec" microseconds.
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
-		 *  timeout occurred.  Note that it is possible to write beyond
-		 *  the string's NULL terminator using this method.  */
-		ssize_t	write(const wchar_t *string, size_t size,
+		/** Writes "length" characters of "string" to the file
+		 *  descriptor with a timeout of "sec" seconds and "usec"
+		 *  microseconds.  Returns the number of bytes that were
+		 *  successfully written or RESULT_ERROR if an error occurred
+		 *  or RESULT_TIMEOUT if a timeout occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
+		ssize_t	write(const wchar_t *string, size_t length,
 					int32_t sec, int32_t usec);
 
 		/** Writes "size" bytes of "buffer" to the file descriptor with

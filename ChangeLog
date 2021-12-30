@@ -44,6 +44,7 @@
 	added character/charstring::duplicate(wchar_t) methods to convert wide
 		strings to normal strings
 	replaced ssize_t paramters with size_t in charstring::split()/replace()
+	fixed a few size -> length parameters
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

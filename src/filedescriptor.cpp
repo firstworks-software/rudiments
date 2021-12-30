@@ -696,14 +696,14 @@ ssize_t filedescriptor::write(const unsigned char *string, size_t size,
 	return bufferedWrite(string,size,sec,usec);
 }
 
-ssize_t filedescriptor::write(const char *string, size_t size,
+ssize_t filedescriptor::write(const char *string, size_t length,
 					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,size,sec,usec);
+	return bufferedWrite(string,length,sec,usec);
 }
 
-ssize_t filedescriptor::write(const wchar_t *string, size_t size,
+ssize_t filedescriptor::write(const wchar_t *string, size_t length,
 					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,size*sizeof(wchar_t),sec,usec);
+	return bufferedWrite(string,length*sizeof(wchar_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
@@ -785,7 +785,7 @@ ssize_t filedescriptor::read(char *buffer, size_t length) {
 }
 
 ssize_t filedescriptor::read(wchar_t *buffer, size_t length) {
-	return read(buffer,length,-1,-1);
+	return read(buffer,length*sizeof(wchar_t),-1,-1);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size) {
