@@ -24,6 +24,19 @@ ssize_t output::write(char character, int32_t sec, int32_t usec) {
 	return write(character);
 }
 
+ssize_t output::write(const wchar_t *string, int32_t sec, int32_t usec) {
+	return write(string);
+}
+
+ssize_t output::write(const wchar_t *string, size_t size,
+						int32_t sec, int32_t usec) {
+	return write(string,size);
+}
+
+ssize_t output::write(wchar_t character, int32_t sec, int32_t usec) {
+	return write(character);
+}
+
 ssize_t output::write(int16_t number, int32_t sec, int32_t usec) {
 	return write(number);
 }

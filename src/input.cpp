@@ -19,6 +19,14 @@ ssize_t input::read(char *character, int32_t sec, int32_t usec) {
 	return read(character);
 }
 
+ssize_t input::read(wchar_t *string, size_t size, int32_t sec, int32_t usec) {
+	return read(string,size);
+}
+
+ssize_t input::read(wchar_t *character, int32_t sec, int32_t usec) {
+	return read(character);
+}
+
 ssize_t input::read(int16_t *number, int32_t sec, int32_t usec) {
 	return read(number);
 }
