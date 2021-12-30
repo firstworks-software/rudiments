@@ -4,6 +4,7 @@
 #include <rudiments/private/config.h>
 #include <rudiments/apachehttpserverapi.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 
 #include <rudiments/private/apacheincludes.h>
 
@@ -245,8 +246,30 @@ ssize_t	apachehttpserverapi::write(const char *string, size_t size) {
 	return count;
 }
 
-ssize_t	apachehttpserverapi::write(char character) {
-	return ap_rputc(character,(request_rec *)pvt->_apistruct);
+ssize_t	apachehttpserverapi::write(char ch) {
+	return ap_rputc(ch,(request_rec *)pvt->_apistruct);
+}
+
+ssize_t	apachehttpserverapi::write(const wchar_t *string) {
+	// FIXME: This just converts to char * and writes.
+	// Is there an ar_rputwc or something like that?
+	return write(string,wcharstring::length(string));
+}
+
+ssize_t	apachehttpserverapi::write(const wchar_t *string, size_t size) {
+	// FIXME: This just converts to char * and writes.
+	// Is there an ar_rputwc or something like that?
+	char	*s=charstring::duplicate(string,size,'?');
+	ssize_t	result=write(s,size);
+	delete[] s;
+	return result;
+}
+
+ssize_t	apachehttpserverapi::write(wchar_t ch) {
+	// FIXME: This just converts to char and writes.
+	// Is there an ar_rputwc or something like that?
+	return ap_rputc(character::duplicate(ch,'?'),
+				(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(int16_t number) {
@@ -267,8 +290,8 @@ ssize_t	apachehttpserverapi::write(int64_t number) {
 	return write(buffer);
 }
 
-ssize_t	apachehttpserverapi::write(unsigned char character) {
-	return ap_rputc((char)character,(request_rec *)pvt->_apistruct);
+ssize_t	apachehttpserverapi::write(unsigned char ch) {
+	return ap_rputc((char)ch,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(uint16_t number) {

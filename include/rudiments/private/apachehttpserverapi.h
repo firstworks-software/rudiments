@@ -21,11 +21,14 @@
 		ssize_t	write(const unsigned char *string, size_t size);
 		ssize_t	write(const char *string);
 		ssize_t	write(const char *string, size_t size);
-		ssize_t	write(char character);
+		ssize_t	write(char ch);
+		ssize_t	write(const wchar_t *string);
+		ssize_t	write(const wchar_t *string, size_t size);
+		ssize_t	write(wchar_t ch);
 		ssize_t	write(int16_t number);
 		ssize_t	write(int32_t number);
 		ssize_t	write(int64_t number);
-		ssize_t	write(unsigned char character);
+		ssize_t	write(unsigned char ch);
 		ssize_t	write(uint16_t number);
 		ssize_t	write(uint32_t number);
 		ssize_t	write(uint64_t number);

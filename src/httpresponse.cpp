@@ -129,6 +129,18 @@ ssize_t httpresponse::write(char character) {
 	return pvt->_sapi->write(character);
 }
 
+ssize_t httpresponse::write(const wchar_t *string) {
+	return pvt->_sapi->write(string);
+}
+
+ssize_t httpresponse::write(const wchar_t *string, size_t length) {
+	return pvt->_sapi->write(string,length);
+}
+
+ssize_t httpresponse::write(wchar_t character) {
+	return pvt->_sapi->write(character);
+}
+
 ssize_t httpresponse::write(int16_t character) {
 	return pvt->_sapi->write(character);
 }

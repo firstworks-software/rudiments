@@ -215,6 +215,18 @@ ssize_t	cgihttpserverapi::write(char character) {
 	return stdoutput.write(character);
 }
 
+ssize_t	cgihttpserverapi::write(const wchar_t *string) {
+	return stdoutput.write(string);
+}
+
+ssize_t	cgihttpserverapi::write(const wchar_t *string, size_t size) {
+	return stdoutput.write(string,size);
+}
+
+ssize_t	cgihttpserverapi::write(wchar_t character) {
+	return stdoutput.write(character);
+}
+
 ssize_t	cgihttpserverapi::write(int16_t number) {
 	return stdoutput.printf("%hd",number);
 }
