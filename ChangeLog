@@ -41,6 +41,8 @@
 		various collections to use its methods instead of
 		node_compare(), also added get/setComparator() methods to
 		collection class
+	added character/charstring::duplicate(wchar_t) methods to convert wide
+		strings to normal strings
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

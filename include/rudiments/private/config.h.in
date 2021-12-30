@@ -1524,6 +1524,9 @@
 /* Some systems have wchar.h */
 #undef RUDIMENTS_HAVE_WCHAR_H
 
+/* Some systems have wcrtomb */
+#undef RUDIMENTS_HAVE_WCRTOMB
+
 /* Some systems have wcscasecmp */
 #undef RUDIMENTS_HAVE_WCSCASECMP
 
@@ -1550,6 +1553,9 @@
 
 /* Some systems have wcstoull */
 #undef RUDIMENTS_HAVE_WCSTOULL
+
+/* Some systems have wctomb */
+#undef RUDIMENTS_HAVE_WCTOMB
 
 /* Some systems have wctype.h */
 #undef RUDIMENTS_HAVE_WCTYPE_H

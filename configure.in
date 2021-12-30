@@ -2717,6 +2717,36 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 mbtowc(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBTOWC,1,Some systems have mbtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for wcrtomb)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+wcrtomb(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCRTOMB,1,Some systems have wcrtomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wctomb)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+wctomb(0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCTOMB,1,Some systems have wctomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for swprintf)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 	#define __USE_GNU

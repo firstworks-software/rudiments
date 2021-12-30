@@ -87,6 +87,20 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns true if "c" is in the set of
 		 *  characters in "set" and false otherwise. */
 		static bool	inSet(char c, const char *set);
+
+		/** Returns the character representation of wide
+		 *  character "c".
+		 *
+		 *  Returns '\0' if wide character "c" cannot be converted to a
+		 *  character. */
+		static char	duplicate(wchar_t c);
+
+		/** Returns the character representation of wide
+		 *  character "c".
+		 *
+		 *  Returns "replacement" if wide character "c" cannot be
+		 *  converted to a character. */
+		static char	duplicate(wchar_t c, char replacement);
 };
 
 #endif

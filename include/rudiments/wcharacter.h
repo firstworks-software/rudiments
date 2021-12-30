@@ -88,7 +88,8 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *  characters in "set" and false otherwise. */
 		static bool	inSet(wchar_t c, const wchar_t *set);
 
-		/** Returns the wide character representation of "c". */
+		/** Returns the wide character representation of
+		 *  character "c". */
 		static wchar_t	duplicate(char c);
 
 		/** Returns true if the platform supports wide characters and

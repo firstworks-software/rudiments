@@ -21,6 +21,22 @@ void test(const char *printstring, bool result) {
 	}
 }
 
+void test(const wchar_t *printstring, bool result) {
+	stdoutput.write("\t");
+	// FIXME: print wide string directly rather than converting to string
+	char	*ps=charstring::duplicate(printstring);
+	stdoutput.write(ps);
+	delete[] ps;
+	stdoutput.write((result)?": success":": failed");
+	stdoutput.write("\n");
+	if (!result) {
+		stdoutput.printf("%d: %s\n",
+			error::getErrorNumber(),
+			error::getErrorString());
+		process::exit(1);
+	}
+}
+
 void displayTime(datetime *start, datetime *end) {
 	uint32_t	sec=end->getEpoch()-start->getEpoch();
 	int32_t		usec=end->getMicroseconds()-start->getMicroseconds();

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/character.h>
 #if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
@@ -1807,6 +1808,41 @@ char *charstring::duplicate(const char *str) {
 	return duplicate(str,length(str));
 }
 
+char *charstring::duplicate(const char *str, size_t len) {
+	if (!str) {
+		return NULL;
+	}
+	char	*buffer=new char[len+1];
+	copy(buffer,str,len);
+	buffer[len]='\0';
+	return buffer;
+}
+
+char *charstring::duplicate(const wchar_t *string, size_t length) {
+	return duplicate(string,length,'\0');
+}
+
+char *charstring::duplicate(const wchar_t *string) {
+	return duplicate(string,wcharstring::length(string),'\0');
+}
+
+char *charstring::duplicate(const wchar_t *string, size_t length,
+							char replacement) {
+	if (!string) {
+		return NULL;
+	}
+	char	*retval=new char[length+1];
+	for (size_t i=0; i<length; i++) {
+		retval[i]=character::duplicate(string[i],replacement);
+	}
+	retval[length]='\0';
+	return retval;
+}
+
+char *charstring::duplicate(const wchar_t *string, char replacement) {
+	return duplicate(string,wcharstring::length(string),replacement);
+}
+
 void charstring::rightTrim(char *str) {
 
 	if (!isNullOrEmpty(str)) {
@@ -1944,16 +1980,6 @@ long double charstring::toFloat(const char *string, const char **endptr) {
 	#else
 	return (string)?(long double)(strtod(string,(char **)endptr)):0.0;
 	#endif
-}
-
-char *charstring::duplicate(const char *str, size_t len) {
-	if (!str) {
-		return NULL;
-	}
-	char	*buffer=new char[len+1];
-	copy(buffer,str,len);
-	buffer[len]='\0';
-	return buffer;
 }
 
 void charstring::split(const char *string, const char *delimiter,

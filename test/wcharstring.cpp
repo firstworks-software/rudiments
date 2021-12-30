@@ -4,6 +4,7 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/filedescriptor.h>
+#include <rudiments/wstringbuffer.h>
 #include <rudiments/stdio.h>
 #include <limits.h>
 #include "test.cpp"
@@ -653,5 +654,210 @@ int main(int argc, const char **argv) {
 	t=wcharstring::duplicate(chbuf,20);
 	test("duplicate",!wcharstring::compare(t,wchbuf,20));
 	delete[] t;
+	stdoutput.printf("\n");
+
+
+	// compare with wildcard
+	stdoutput.printf("compareWithWildcard...\n");
+	test("degenerate",
+		wcharstring::compareWithWildcards(
+				NULL,NULL,L'\0',L'\0'));
+	test("string==string (no wildcards)",
+		wcharstring::compareWithWildcards(
+				L"string",L"string",L'\0',L'\0'));
+	test("str?ng==str?ng (no wildcards)",
+		wcharstring::compareWithWildcards(
+				L"str?ng",L"str?ng",L'\0',L'\0'));
+	test("str*ng==str*ng (no wildcards)",
+		wcharstring::compareWithWildcards(
+				L"str*ng",L"str*ng",L'\0',L'\0'));
+	wchar_t	string[17];
+	wcharstring::copy(string,L"0123456789abcdef");
+	wchar_t	pattern[17];
+	wstringbuffer	title;
+	for (uint16_t iter=0; iter<10; iter++) {
+
+		switch (iter) {
+			case 0:
+				stdoutput.printf("single ?...\n");
+				break;
+			case 1:
+				stdoutput.printf("single *...\n");
+				break;
+			case 2:
+				stdoutput.printf("multiple ?...\n");
+				break;
+			case 3:
+				stdoutput.printf("multiple *...\n");
+				break;
+			case 4:
+				stdoutput.printf("interleaved ?...\n");
+				break;
+			case 5:
+				stdoutput.printf("interleaved *...\n");
+				break;
+			case 6:
+				stdoutput.printf("alternating */?...\n");
+				break;
+			case 7:
+				stdoutput.printf("alternating ?/*...\n");
+				break;
+			case 8:
+				stdoutput.printf("trailing *...\n");
+				break;
+			case 9:
+				stdoutput.printf("leading *...\n");
+				break;
+		}
+
+		uint16_t	count=sizeof(pattern)/sizeof(wchar_t);
+		for (uint16_t i=0; i<count-1; i++) {
+
+			// initialize pattern
+			wcharstring::copy(pattern,L"0123456789abcdef");
+
+			// swap in some set of wildcards
+			switch (iter) {
+				case 0:
+					pattern[i]=L'?';
+					break;
+				case 1:
+					pattern[i]=L'*';
+					break;
+				case 2:
+					for (uint16_t j=i;
+						j<count-1; j++) {
+						pattern[j]=L'?';
+					}
+					break;
+				case 3:
+					for (uint16_t j=i;
+						j<count-1; j++) {
+						pattern[j]=L'*';
+					}
+					break;
+				case 4:
+					for (uint16_t j=i;
+						j<count-1; j=j+2) {
+						pattern[j]=L'?';
+					}
+					break;
+				case 5:
+					for (uint16_t j=i;
+						j<count-1; j=j+2) {
+						pattern[j]=L'*';
+					}
+					break;
+				case 6:
+					for (uint16_t j=i;
+						j<count-1; j++) {
+						if (j%2) {
+							pattern[j]=L'?';
+						} else {
+							pattern[j]=L'*';
+						}
+					}
+					break;
+				case 7:
+					for (uint16_t j=i;
+						j<count-1; j++) {
+						if (j%2) {
+							pattern[j]=L'*';
+						} else {
+							pattern[j]=L'?';
+						}
+					}
+					break;
+				case 8:
+					pattern[i]=L'*';
+					pattern[i+1]=L'\0';
+					break;
+				case 9:
+					pattern[0]=L'*';
+					wcharstring::copy(pattern+1,
+						L"0123456789abcdef"+i+1);
+					break;
+			}
+
+			// build the title
+			title.clear();
+			title.append(string)->append(L'=')->append(pattern);
+
+			// run the test
+			test(title.getString(),
+				wcharstring::compareWithWildcards(
+						string,pattern,L'?',L'*'));
+		}
+	}
+	stdoutput.printf("\n");
+	
+
+	// compare versions
+	stdoutput.printf("compareVersions...\n");
+	test("1 vs. 2",
+		wcharstring::compareVersions(L"1",L"2")<0);
+	test("2 vs. 1",
+		wcharstring::compareVersions(L"2",L"1")>0);
+	test("1.1 vs. 1.2",
+		wcharstring::compareVersions(L"1.1",L"1.2")<0);
+	test("1.2 vs. 1.1",
+		wcharstring::compareVersions(L"1.2",L"1.1")>0);
+	test("1.1.1 vs. 1.1.2",
+		wcharstring::compareVersions(L"1.1.1",L"1.1.2")<0);
+	test("1.1.2 vs. 1.1.1",
+		wcharstring::compareVersions(L"1.1.2",L"1.1.1")>0);
+	test("1.1.2 vs. 1.1.12",
+		wcharstring::compareVersions(L"1.1.2",L"1.1.12")<0);
+	test("1.1.12 vs. 1.1.2",
+		wcharstring::compareVersions(L"1.1.12",L"1.1.2")>0);
+	test("1.1 vs. 1.1.1",
+		wcharstring::compareVersions(L"1.1",L"1.1.1")<0);
+	test("1.1.1 vs. 1.1",
+		wcharstring::compareVersions(L"1.1.1",L"1.1")>0);
+	test("1.1. vs. 1.1.1",
+		wcharstring::compareVersions(L"1.1.",L"1.1.1")<0);
+	test("1.1.1 vs. 1.1.",
+		wcharstring::compareVersions(L"1.1.1",L"1.1.")>0);
+	stdoutput.printf("\n");
+	
+
+	// compare natural
+	stdoutput.printf("compareNatural...\n");
+	test("rudiments-1 vs. rudiments-2",
+		wcharstring::compareNatural(L"rudiments-1",
+						L"rudiments-2")<0);
+	test("rudiments-2 vs. rudiments-1",
+		wcharstring::compareNatural(L"rudiments-2",
+						L"rudiments-1")>0);
+	test("rudiments-1.1 vs. rudiments-1.2",
+		wcharstring::compareNatural(L"rudiments-1.1",
+						L"rudiments-1.2")<0);
+	test("rudiments-1.2 vs. rudiments-1.1",
+		wcharstring::compareNatural(L"rudiments-1.2",
+						L"rudiments-1.1")>0);
+	test("rudiments-1.1.1 vs. rudiments-1.1.2",
+		wcharstring::compareNatural(L"rudiments-1.1.1",
+						L"rudiments-1.1.2")<0);
+	test("rudiments-1.1.2 vs. rudiments-1.1.1",
+		wcharstring::compareNatural(L"rudiments-1.1.2",
+						L"rudiments-1.1.1")>0);
+	test("rudiments-1.1.2 vs. rudiments-1.1.12",
+		wcharstring::compareNatural(L"rudiments-1.1.2",
+						L"rudiments-1.1.12")<0);
+	test("rudiments-1.1.12 vs. rudiments-1.1.2",
+		wcharstring::compareNatural(L"rudiments-1.1.12",
+						L"rudiments-1.1.2")>0);
+	test("rudiments-1.1 vs. rudiments-1.1.1",
+		wcharstring::compareNatural(L"rudiments-1.1",
+						L"rudiments-1.1.1")<0);
+	test("rudiments-1.1.1 vs. rudiments-1.1",
+		wcharstring::compareNatural(L"rudiments-1.1.1",
+						L"rudiments-1.1")>0);
+	test("rudiments-1.1. vs. rudiments-1.1.1",
+		wcharstring::compareNatural(L"rudiments-1.1.",
+						L"rudiments-1.1.1")<0);
+	test("rudiments-1.1.1 vs. rudiments-1.1.",
+		wcharstring::compareNatural(L"rudiments-1.1.1",
+						L"rudiments-1.1.")>0);
 	stdoutput.printf("\n");
 }

@@ -2,9 +2,16 @@
 // See the COPYING file for more information.
 
 #include <rudiments/character.h>
+#include <rudiments/bytestring.h>
 
 #ifdef RUDIMENTS_HAVE_CTYPE_H
 	#include <ctype.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#include <wctype.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
 #endif
 
 #include <stdio.h>
@@ -126,4 +133,34 @@ bool character::inSet(char c, const char *set) {
 		}
 	}
 	return false;
+}
+
+char character::duplicate(wchar_t c) {
+	return duplicate(c,'\0');
+}
+
+char character::duplicate(wchar_t c, char replacement) {
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		#if defined(RUDIMENTS_HAVE_WCRTOMB)
+			char		retval;
+			mbstate_t	st;
+			bytestring::zero(&st,sizeof(st));
+			size_t	s=wcrtomb(&retval,c,&st);
+			if (s==(size_t)-1) {
+				return replacement;
+			}
+			return retval;
+		#elif defined(RUDIMENTS_HAVE_WCTOMB)
+			char		retval;
+			size_t	s=wctomb(&retval,&c);
+			if (s==(size_t)-1) {
+				return replacement;
+			}
+			return retval;
+		#else
+			#error no wcrtomb or anything like it
+		#endif
+	#else
+		return replacement;
+	#endif
 }

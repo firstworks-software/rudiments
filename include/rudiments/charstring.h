@@ -512,6 +512,36 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const char *str, size_t len);
 
+		/** Creates a duplicate of the first "len" characters of
+		 *  "str", converts it to a string from a wide string, and
+		 *  returns a pointer to it.  Note that this method allocates
+		 *  a buffer for the duplicate string internally and returns it.
+		 *  The calling program must deallocate this buffer. */
+		static	char	*duplicate(const wchar_t *str, size_t len);
+
+		/** Creates a duplicate "str", converts it to a string from a
+		 *  wide string, and returns a pointer to it.  Note that this
+		 *  method allocates a buffer for the duplicate string
+		 *  internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicate(const wchar_t *str);
+
+		/** Creates a duplicate of the first "len" characters of
+		 *  "str", converts it to a string from a wide string, and
+		 *  returns a pointer to it.  Note that this method allocates
+		 *  a buffer for the duplicate string internally and returns it.
+		 *  The calling program must deallocate this buffer. */
+		static	char	*duplicate(const wchar_t *str, size_t len,
+							char replacement);
+
+		/** Creates a duplicate "str", converts it to a string from a
+		 *  wide string, and returns a pointer to it.  Note that this
+		 *  method allocates a buffer for the duplicate string
+		 *  internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicate(const wchar_t *str,
+							char replacement);
+
 		/** Converts "str" to uppercase. */
 		static	void	upper(char *str); 
 
