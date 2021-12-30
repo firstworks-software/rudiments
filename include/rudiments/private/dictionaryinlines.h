@@ -356,10 +356,16 @@ valuetype dictionarynode<keytype,valuetype>::getValue() const {
 
 template <class keytype, class valuetype>
 inline
-void dictionarynode<keytype,valuetype>::print() const {
-	node_print(key);
+void node_print(dictionarynode<keytype,valuetype> *value) {
+	node_print(value->getKey());
 	stdoutput.printf(":");
-	node_print(value);
+	node_print(value->getValue());
+}
+
+template <class keytype, class valuetype>
+inline
+void dictionarynode<keytype,valuetype>::print() const {
+	node_print(this);
 }
 
 template <class keytype, class valuetype>
@@ -372,10 +378,4 @@ int32_t dictionarynodecomparator<keytype,valuetype>::compare(
 	dictionarynode<keytype,valuetype> *v2=
 		(dictionarynode<keytype,valuetype> *)value2;
 	return comparator::compare(v1->getKey(),v2->getKey());
-}
-
-template <class keytype, class valuetype>
-inline
-void node_print(dictionarynode<keytype,valuetype> *value) {
-	node_print(value);
 }

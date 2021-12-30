@@ -193,6 +193,106 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							const wchar_t *str2,
 							size_t size);
 
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2".
+		 *
+		 * Embedded (version) numbers will be interpreted "naturally"
+		 * (eg. 12 > 8) */
+		static	int32_t	compareNatural(const wchar_t *str1,
+						const wchar_t *str2);
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2".
+		 *
+		 * Embedded (version) numbers will be interpreted "naturally"
+		 * (eg. 12 > 8)
+		 *
+		 * "delimiters" should be set to the set of characters that
+		 * will be interpreted as equivalent delimiters.  Eg. "._"
+		 * means that either .'s or _'s may be used to delimit
+		 * numbers. */
+		static	int32_t	compareNatural(const wchar_t *str1,
+						const wchar_t *str2,
+						const wchar_t *delimiters);
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2", where "str1" and "str2" are version
+		 * numbers with arbitrary numbers of decimal delimiters. */
+		static	int32_t	compareVersions(const wchar_t *str1,
+						const wchar_t *str2);
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2", where "str1" and "str2" are version
+		 * numbers with arbitrary numbers of delimiters.
+		 *
+		 * "delimiters" should be set to the set of characters that
+		 * will be interpreted as equivalent delimiters.  Eg. "._"
+		 * means that either .'s or _'s may be used to delimiters
+		 * numbers. */
+		static	int32_t	compareVersions(const wchar_t *str1,
+						const wchar_t *str2,
+						const wchar_t *delimiters);
+
+		/** Compares the first "stringlength" characters of "string"
+		 *  to the first "patternlength" characters of "pattern" which
+		 *  may contain instances of single-character wildcard markers
+		 *  "singlewildcard" or multi-character wildcard markers
+		 *  "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const wchar_t *string,
+							size_t stringlength,
+							const wchar_t *pattern,
+							size_t patternlength,
+							wchar_t singlewildcard,
+							wchar_t multiwildcard);
+
+		/** Compares "string" to the first "patternlength" characters
+		 *  of "pattern" which may contain instances of single-character
+		 *  wildcard markers "singlewildcard" or multi-character
+		 *  wildcard markers "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const wchar_t *string,
+							const wchar_t *pattern,
+							size_t patternlength,
+							wchar_t singlewildcard,
+							wchar_t multiwildcard);
+
+		/** Compares the first "stringlength" characters of "string"
+		 *  to "pattern" which may contain instances of
+		 *  single-character wildcard markers "singlewildcard" or
+		 *  multi-character wildcard markers "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const wchar_t *string,
+							size_t stringlength,
+							const wchar_t *pattern,
+							wchar_t singlewildcard,
+							wchar_t multiwildcard);
+
+		/** Compares "string" to "pattern" which may contain instances
+		 *  of single-character wildcard markers "singlewildcard" or
+		 *  multi-character wildcard markers "multiwildcard".
+		 *
+		 *  If either "singlewildcard" or "multiwildcard" are '\0' then
+		 *  they are ignored.
+		 *
+		 *  Returns true if a match is found or false otherwise. */
+		static	bool	compareWithWildcards(const wchar_t *string,
+							const wchar_t *pattern,
+							wchar_t singlewildcard,
+							wchar_t multiwildcard);
+
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set".  Also returns true if "str"
 		 *  is NULL and set is NULL or contains only a NULL-terminator.

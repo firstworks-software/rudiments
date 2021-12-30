@@ -1433,6 +1433,269 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 #endif
 }
 
+int32_t wcharstring::compareNatural(const wchar_t *str1, const wchar_t *str2) {
+	return compareNatural(str1,str2,L".");
+}
+
+int32_t wcharstring::compareNatural(const wchar_t *str1,
+					const wchar_t *str2,
+					const wchar_t *delimiters) {
+
+	int64_t	difference=0;
+	const wchar_t	*start1=NULL;
+	const wchar_t	*start2=NULL;
+	wchar_t		*num1=NULL;
+	wchar_t		*num2=NULL;
+	for (;;) {
+
+		// handle end-of-string cases...
+		if (!*str1 && !*str2) {
+			return difference;
+		}
+
+		// str1 has more chars than str2 - str1 > str2
+		if (*str1 && !*str2) {
+			difference++;
+			return difference;
+		}
+
+		// str2 has more chars than str1 - str2 > str1
+		if (!*str1 && *str2) {
+			difference--;
+			return difference;
+		}
+
+		// subtract the "is a digit" status of the next character of
+		// str1 from the "is a digit" status of the next character of
+		// str2 and add the result to the running difference
+		//
+		// (if str1 contains a non-number and str2 contains a number
+		// then the difference will be positive, indicating that
+		// str1 > str2, which is what we want)
+		bool	isdigit1=wcharacter::isDigit(*str1);
+		bool	isdigit2=wcharacter::isDigit(*str2);
+		difference+=isdigit2-isdigit1;
+
+		// if the difference is non-zero then return it
+		if (difference) {
+			return difference;
+		}
+
+		if (isdigit1 && isdigit2) {
+
+			// move to after the number in both strings
+			start1=str1;
+			while (*str1 && (wcharacter::isDigit(*str1) ||
+					wcharacter::inSet(*str1,delimiters))) {
+				str1++;
+			}
+			start2=str2;
+			while (*str2 && (wcharacter::isDigit(*str2) ||
+					wcharacter::inSet(*str2,delimiters))) {
+				str2++;
+			}
+
+			// copy out the numbers
+			num1=wcharstring::duplicate(start1,str1-start1);
+			num2=wcharstring::duplicate(start2,str2-start2);
+
+			// version-compare the numbers and add that
+			// to the running difference
+			difference+=wcharstring::compareVersions(
+						num1,num2,delimiters);
+
+			// clean up
+			delete[] num1;
+			delete[] num2;
+
+		} else {
+
+			// subtract the next character of str2 from the next
+			// character of str1 and add the result to the running
+			// difference
+			difference+=(*str1)-(*str2);
+
+			// move on
+			str1++;
+			str2++;
+		}
+
+		// if the running difference is non-zero then return it
+		if (difference) {
+			return difference;
+		}
+	}
+}
+
+int32_t wcharstring::compareVersions(const wchar_t *str1, const wchar_t *str2) {
+	return compareVersions(str1,str2,L".");
+}
+
+int32_t wcharstring::compareVersions(const wchar_t *str1,
+					const wchar_t *str2,
+					const wchar_t *delimiters) {
+
+	int64_t	difference=0;
+	for (;;) {
+
+		// get the next integers from the strings, subtract them, and
+		// add the result to the running difference
+		difference+=(toInteger(str1)-toInteger(str2));
+
+		// if the difference is non-zero then return it
+		if (difference) {
+			return difference;
+		}
+
+		// skip past the next .
+		str1=findFirstOfSet(str1,delimiters);
+		if (str1) {
+			str1++;
+		}
+		str2=findFirstOfSet(str2,delimiters);
+		if (str2) {
+			str2++;
+		}
+
+		// bail if we're at the end of both strings
+		if ((!str1 || !*str1) && (!str2 || !*str2)) {
+			return difference;
+		}
+
+		// str1 has more parts than str2 - str1 > str2
+		if (str1 && *str1 && (!str2 || !*str2)) {
+			difference++;
+			return difference;
+		}
+
+		// str2 has more parts than str1 - str2 > str1
+		if (str2 && *str2 && (!str1 || !*str1)) {
+			difference--;
+			return difference;
+		}
+	}
+}
+
+bool wcharstring::compareWithWildcards(const wchar_t *string,
+					size_t stringlength,
+					const wchar_t *pattern,
+					size_t patternlength,
+					wchar_t singlewildcard,
+					wchar_t multiwildcard) {
+
+	// handle degenerate case
+	if (!string && !pattern) {
+		return true;
+	}
+
+	const wchar_t	*stringend=string+stringlength;
+	const wchar_t	*patternend=pattern+patternlength;
+
+	for (;;) {
+
+		// if we encountered the end of the string...
+		if (string==stringend) {
+
+			// if we're also at the end of the pattern,
+			// then they match
+			if (pattern==patternend) {
+				return true;
+			}
+
+			// if we're not also at the end of the pattern,
+			// then they don't match
+			return false;
+		}
+
+		// if we encountered the end of the pattern
+		// (but not the end of the string) then they don't match
+		if (pattern==patternend) {
+			return false;
+		}
+
+		// if we encountered a multi-char wildcard...
+		if (multiwildcard && *pattern==multiwildcard) {
+
+			// skip to the next non-multi-character wildcarad
+			// in the pattern
+			while (*pattern==multiwildcard) {
+
+				pattern++;
+				patternlength--;
+
+				// if we hit the end of the pattern then
+				// we have a match
+				if (pattern==patternend) {
+					return true;
+				}
+			}
+
+			// Compare the rest of the string to the rest of the
+			// pattern.  If that fails, move to the next character
+			// of the string and try again.  If any of these
+			// succeed, then we have a match.  If they all fail
+			// then the string and pattern don't match.
+			for (;;) {
+				if (compareWithWildcards(string,stringlength,
+							pattern,patternlength,
+							singlewildcard,
+							multiwildcard)) {
+					return true;
+				}
+
+				// move on...
+				string++;
+				if (string==stringend) {
+					return false;
+				}
+				stringlength--;
+			}
+		}
+
+		// bail if the characters don't match
+		// (unless we encountered a single-character wildcard)
+		if (*string!=*pattern &&
+			(!singlewildcard || *pattern!=singlewildcard)) {
+			return false;
+		}
+
+		// move on...
+		string++;
+		stringlength--;
+		pattern++;
+		patternlength--;
+	}
+}
+
+bool wcharstring::compareWithWildcards(const wchar_t *string,
+					const wchar_t *pattern,
+					size_t patternlength,
+					wchar_t singlewildcard,
+					wchar_t multiwildcard) {
+	return compareWithWildcards(string,wcharstring::length(string),
+					pattern,patternlength,
+					singlewildcard,multiwildcard);
+}
+
+bool wcharstring::compareWithWildcards(const wchar_t *string,
+					size_t stringlength,
+					const wchar_t *pattern,
+					wchar_t singlewildcard,
+					wchar_t multiwildcard) {
+	return compareWithWildcards(string,stringlength,
+					pattern,wcharstring::length(pattern),
+					singlewildcard,multiwildcard);
+}
+
+bool wcharstring::compareWithWildcards(const wchar_t *string,
+					const wchar_t *pattern,
+					wchar_t singlewildcard,
+					wchar_t multiwildcard) {
+	return compareWithWildcards(string,wcharstring::length(string),
+					pattern,wcharstring::length(pattern),
+					singlewildcard,multiwildcard);
+}
+
 bool wcharstring::inSet(const wchar_t *str, const wchar_t * const *set) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!set || !set[0]) {
