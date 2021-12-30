@@ -2783,6 +2783,24 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 vswprintf(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_VSWPRINTF,1,Some systems have vswprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for vfwprintf)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDIO_H
+	#include <stdio.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+vfwprintf(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_VFWPRINTF,1,Some systems have vfwprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined)

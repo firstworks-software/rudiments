@@ -1513,6 +1513,9 @@
 /* Some systems have vdprintf */
 #define RUDIMENTS_HAVE_VDPRINTF 1
 
+/* Some systems have vfwprintf */
+#define RUDIMENTS_HAVE_VFWPRINTF 1
+
 /* Most systems have vsnprintf */
 #define RUDIMENTS_HAVE_VSNPRINTF 1
 

@@ -1504,6 +1504,9 @@
 /* Some systems have vdprintf */
 /* #undef RUDIMENTS_HAVE_VDPRINTF */
 
+/* Some systems have vfwprintf */
+#define RUDIMENTS_HAVE_VFWPRINTF 1
+
 /* Most systems have vsnprintf */
 /* #undef RUDIMENTS_HAVE_VSNPRINTF */
 
@@ -1515,6 +1518,9 @@
 
 /* Some systems have wchar.h */
 #define RUDIMENTS_HAVE_WCHAR_H 1
+
+/* Some systems have wcrtomb */
+#define RUDIMENTS_HAVE_WCRTOMB 1
 
 /* Some systems have wcscasecmp */
 /* #undef RUDIMENTS_HAVE_WCSCASECMP */
@@ -1542,6 +1548,9 @@
 
 /* Some systems have wcstoull */
 /* #undef RUDIMENTS_HAVE_WCSTOULL */
+
+/* Some systems have wctomb */
+/* #undef RUDIMENTS_HAVE_WCTOMB */
 
 /* Some systems have wctype.h */
 #define RUDIMENTS_HAVE_WCTYPE_H 1

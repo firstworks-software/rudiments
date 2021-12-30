@@ -23,10 +23,7 @@ void test(const char *printstring, bool result) {
 
 void test(const wchar_t *printstring, bool result) {
 	stdoutput.write("\t");
-	// FIXME: print wide string directly rather than converting to string
-	char	*ps=charstring::duplicate(printstring);
-	stdoutput.write(ps);
-	delete[] ps;
+	stdoutput.write(printstring);
 	stdoutput.write((result)?": success":": failed");
 	stdoutput.write("\n");
 	if (!result) {

@@ -59,6 +59,9 @@
 #if defined(RUDIMENTS_HAVE_VASPRINTF) && defined(RUDIMENTS_HAVE_STDLIB_H)
 	#include <stdlib.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
 
 // NOTE: These next two headers must be included in this order or LITTLE_ENDIAN
 // will be multiply-defined on linux libc4 systems.  Other systems are
@@ -605,7 +608,7 @@ ssize_t filedescriptor::write(const char *string, size_t length) {
 }
 
 ssize_t filedescriptor::write(const wchar_t *string, size_t length) {
-	return write(string,length*sizeof(wchar_t),-1,-1);
+	return write(string,length,-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string) {
@@ -617,7 +620,7 @@ ssize_t filedescriptor::write(const char *string) {
 }
 
 ssize_t filedescriptor::write(const wchar_t *string) {
-	return write(string,wcharstring::length(string)*sizeof(wchar_t),-1,-1);
+	return write(string,wcharstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size) {
@@ -2686,6 +2689,114 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 	#else
 		delete[] buffer;
 	#endif
+
+	return size;
+}
+
+size_t filedescriptor::printf(const wchar_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	size_t	result=printf(format,&argp);
+	va_end(argp);
+	return result;
+}
+
+size_t filedescriptor::printf(const wchar_t *format, va_list *argp) {
+
+	ssize_t	size=0;
+
+	#ifdef RUDIMENTS_HAVE_VFWPRINTF
+
+	// If we're not buffering writes...
+	if (!pvt->_writebuffer) {
+
+		// otherwise use vfwprintf, if we can
+		FILE	*f=NULL;
+		if (pvt->_fd==0) {
+			f=stdin;
+		} else if (pvt->_fd==1) {
+			f=stdout;
+		} else if (pvt->_fd==2) {
+			f=stderr;
+		}
+
+		// Use fdopen if it's available.  Unfortunately we
+		// can't (reliably) on Windows because it won't work
+		// if the filedescriptor is a socket.
+		#if defined(RUDIMENTS_HAVE_FDOPEN) && \
+			defined(FD) && !defined(_WIN32)
+		else {
+			f=fdopen(pvt->_fd,"a");
+
+			// Some platforms (Unixware) don't like "a"
+			// with some types of file descriptors, so if
+			// "a" fails, then try "w".
+			if (!f) {
+				f=fdopen(pvt->_fd,"w");
+			}
+		}
+		#endif
+
+		if (f) {
+stdoutput.printf("here!\n");
+			size=vfwprintf(f,format,*argp);
+			fflush(f);
+
+			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
+				defined(FD) && !defined(_WIN32)
+			if (f!=stdin && f!=stdout && f!=stderr) {
+
+				// We need to free f but we don't want
+				// fclose() to close pvt->_fd.  There's
+				// no standard way of doing this though.
+				//
+				// Setting f's file descriptor member
+				// to -1 is generally reliable, though
+				// that's tricky too...
+
+				// The size and signedness of
+				// FD varies a bit.  This
+				// is the only way to handle
+				// all variations without the
+				// compiler throwing errors.
+				if (sizeof(FD)==1) {
+					int8_t	i8=-1;
+					bytestring::copy(&(FD),&i8,1);
+				} else if (sizeof(FD)==2) {
+					int16_t i16=-1;
+					bytestring::copy(&(FD),&i16,2);
+				} else if (sizeof(FD)==4) {
+					int32_t i32=-1;
+					bytestring::copy(&(FD),&i32,4);
+				} else if (sizeof(FD)==8) {
+					int64_t i64=-1;
+					bytestring::copy(&(FD),&i64,8);
+				}
+
+				// ok, now close f
+				fclose(f);
+			}
+			#endif
+
+			return size;
+		}
+	}
+
+	#endif
+
+	// If we are buffering writes though, don't use the above because it
+	// would bypass the buffer.
+
+	// write the formatted data to a buffer
+	wchar_t	*buffer=NULL;
+stdoutput.printf("no, here!\n");
+	size=wcharstring::printf(&buffer,format,argp);
+
+	// write the buffer to the file descriptor
+	write(buffer,size);
+
+	// clean up
+	delete[] buffer;
 
 	return size;
 }
