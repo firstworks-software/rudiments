@@ -5,3 +5,4 @@
 		int32_t		multiplier;
 		bool		natural;
 		const char	*delimiters;
+		const wchar_t	*wdelimiters;

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
 #include <rudiments/stdio.h>
 
 inline
@@ -9,6 +10,7 @@ comparator::comparator() {
 	multiplier=1;
 	natural=false;
 	delimiters=".";
+	wdelimiters=L".";
 }
 
 inline
@@ -46,6 +48,16 @@ const char *comparator::getNumberDelimiters() {
 }
 
 inline
+void comparator::setWideNumberDelimiters(const wchar_t *delimiters) {
+	this->wdelimiters=delimiters;
+}
+
+inline
+const wchar_t *comparator::getWideNumberDelimiters() {
+	return wdelimiters;
+}
+
+inline
 int32_t comparator::compare(char *value1, char *value2) {
 	return ((natural)?
 		charstring::compareNatural(value1,value2,delimiters):
@@ -58,6 +70,22 @@ int32_t comparator::compare(const char *value1, const char *value2) {
 	return ((natural)?
 		charstring::compareNatural(value1,value2,delimiters):
 		charstring::compare(value1,value2))*
+		multiplier;
+}
+
+inline
+int32_t comparator::compare(wchar_t *value1, wchar_t *value2) {
+	return ((natural)?
+		wcharstring::compareNatural(value1,value2,wdelimiters):
+		wcharstring::compare(value1,value2))*
+		multiplier;
+}
+
+inline
+int32_t comparator::compare(const wchar_t *value1, const wchar_t *value2) {
+	return ((natural)?
+		wcharstring::compareNatural(value1,value2,wdelimiters):
+		wcharstring::compare(value1,value2))*
 		multiplier;
 }
 

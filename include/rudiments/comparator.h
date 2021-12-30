@@ -42,6 +42,17 @@ class comparator {
 		 *  delimiters when strings are compared "naturally". */
 		const char	*getNumberDelimiters();
 
+		/** Sets the set of wide characters to be used as number
+		 *  delimiters when wide strings are compared "naturally".
+		 *
+		 *  Defaults to "." */
+		void	setWideNumberDelimiters(const wchar_t *delimiters);
+
+		/** Returns the set of wide characters that will be used as
+		 *  number delimiters when wide strings are compared
+		 *  "naturally". */
+		const wchar_t	*getWideNumberDelimiters();
+
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
@@ -51,6 +62,17 @@ class comparator {
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
 		virtual	int32_t compare(const char *value1, const char *value2);
+
+		/** Returns an integer less than, equal to, or greater than 0
+		 *  if value1 is, respectively, less than, equal to, or greater
+		 *  than value2. */
+		virtual	int32_t compare(wchar_t *value1, wchar_t *value2);
+
+		/** Returns an integer less than, equal to, or greater than 0
+		 *  if value1 is, respectively, less than, equal to, or greater
+		 *  than value2. */
+		virtual	int32_t compare(const wchar_t *value1,
+						const wchar_t *value2);
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
