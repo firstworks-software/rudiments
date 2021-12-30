@@ -788,7 +788,7 @@ ssize_t filedescriptor::read(char *buffer, size_t length) {
 }
 
 ssize_t filedescriptor::read(wchar_t *buffer, size_t length) {
-	return read(buffer,length*sizeof(wchar_t),-1,-1);
+	return read(buffer,length,-1,-1);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size) {
@@ -2738,7 +2738,6 @@ size_t filedescriptor::printf(const wchar_t *format, va_list *argp) {
 		#endif
 
 		if (f) {
-stdoutput.printf("here!\n");
 			size=vfwprintf(f,format,*argp);
 			fflush(f);
 
@@ -2789,7 +2788,6 @@ stdoutput.printf("here!\n");
 
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
-stdoutput.printf("no, here!\n");
 	size=wcharstring::printf(&buffer,format,argp);
 
 	// write the buffer to the file descriptor
