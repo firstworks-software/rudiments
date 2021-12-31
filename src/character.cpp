@@ -13,6 +13,9 @@
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
 #endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #include <stdio.h>
 
@@ -152,7 +155,7 @@ char character::duplicate(wchar_t c, char replacement) {
 			return retval;
 		#elif defined(RUDIMENTS_HAVE_WCTOMB)
 			char		retval;
-			size_t	s=wctomb(&retval,&c);
+			size_t	s=wctomb(&retval,c);
 			if (s==(size_t)-1) {
 				return replacement;
 			}
