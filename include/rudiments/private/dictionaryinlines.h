@@ -5,10 +5,10 @@
 #include <rudiments/private/nodeinlines.h>
 
 template <class keytype, class valuetype>
-class dictionarynode : public object {
+class dictionarypair : public object {
 	public:
-		dictionarynode(keytype key, valuetype value);
-		virtual	~dictionarynode();
+		dictionarypair(keytype key, valuetype value);
+		virtual	~dictionarypair();
 
 		void	setKey(keytype key);
 		void	setValue(valuetype value);
@@ -22,7 +22,7 @@ class dictionarynode : public object {
 };
 
 template <class keytype, class valuetype>
-class dictionarynodecomparator : public comparator {
+class dictionarypaircomparator : public comparator {
 	public:
 		int32_t compare(object *value1, object *value2);
 };
@@ -33,7 +33,7 @@ dictionary<keytype,valuetype>::dictionary() :
 				dictionarycollection<keytype,valuetype>() {
 	trackinsertionorder=true;
 	keylist=NULL;
-	comp=new dictionarynodecomparator<keytype,valuetype>();
+	comp=new dictionarypaircomparator<keytype,valuetype>();
 	tree.setComparator(comp);
 
 #ifdef DARWIN_GCC_2952_HACKS
@@ -80,11 +80,11 @@ bool dictionary<keytype,valuetype>::getTrackInsertionOrder() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::setValue(keytype key, valuetype value) {
-	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
+	dictionarypair<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
 		dnode->setValue(value);
 	} else {
-		dnode=new dictionarynode<keytype,valuetype>(key,value);
+		dnode=new dictionarypair<keytype,valuetype>(key,value);
 		tree.insert(dnode);
 		if (trackinsertionorder) {
 			list.append(dnode);
@@ -158,14 +158,14 @@ void dictionary<keytype,valuetype>::setValues(
 					dictionary<keytype,valuetype> *dict) {
 	if (dict) {
 		if (dict->trackinsertionorder) {
-			for (listnode<dictionarynode<keytype,valuetype> *>
+			for (listnode<dictionarypair<keytype,valuetype> *>
 						*node=dict->list.getFirst();
 						node; node=node->getNext()) {
 				setValue(node->getValue()->getKey(),
 						node->getValue()->getValue());
 			}
 		} else {
-			for (treenode<dictionarynode<keytype,valuetype> *>
+			for (treenode<dictionarypair<keytype,valuetype> *>
 						*node=dict->tree.getFirst();
 						node; node=node->getNext()) {
 				setValue(node->getValue()->getKey(),
@@ -178,7 +178,7 @@ void dictionary<keytype,valuetype>::setValues(
 template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::getValue(keytype key, valuetype *value) {
-	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
+	dictionarypair<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
 		*value=dnode->getValue();
 		return true;
@@ -199,7 +199,7 @@ valuetype dictionary<keytype,valuetype>::getValue(keytype key) {
 template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::getKey(keytype key, keytype *k) {
-	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
+	dictionarypair<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
 		*k=dnode->getKey();
 		return true;
@@ -219,9 +219,9 @@ keytype dictionary<keytype,valuetype>::getKey(keytype key) {
 
 template <class keytype, class valuetype>
 inline
-dictionarynode<keytype,valuetype> *dictionary<keytype,valuetype>::
+dictionarypair<keytype,valuetype> *dictionary<keytype,valuetype>::
 							getNode(keytype key) {
-	treenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
+	treenode<dictionarypair<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
 		return tnode->getValue();
 	}
@@ -234,12 +234,12 @@ linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
 	delete keylist;
 	keylist=new linkedlist<keytype>();
 	if (trackinsertionorder) {
-		for (listnode<dictionarynode<keytype,valuetype> *>
+		for (listnode<dictionarypair<keytype,valuetype> *>
 			*node=list.getFirst(); node; node=node->getNext()) {
 			keylist->append(node->getValue()->getKey());
 		}
 	} else {
-		for (treenode<dictionarynode<keytype,valuetype> *>
+		for (treenode<dictionarypair<keytype,valuetype> *>
 			*node=tree.getFirst(); node; node=node->getNext()) {
 			keylist->append(node->getValue()->getKey());
 		}
@@ -256,7 +256,7 @@ uint64_t dictionary<keytype,valuetype>::getLength() {
 template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::remove(keytype key) {
-	treenode<dictionarynode<keytype,valuetype> *> *tnode=find(key);
+	treenode<dictionarypair<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
@@ -280,7 +280,7 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clear() {
-	for (treenode<dictionarynode<keytype,valuetype> *> *node=
+	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		if (this->collection::managekeys) {
 			node_delete_value(node->getValue()->getKey());
@@ -303,7 +303,7 @@ void dictionary<keytype,valuetype>::clear() {
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::print() {
-	for (treenode<dictionarynode<keytype,valuetype> *> *node=
+	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		node_print(node->getValue());
 		stdoutput.printf("\n");
@@ -312,15 +312,15 @@ void dictionary<keytype,valuetype>::print() {
 
 template <class keytype, class valuetype>
 inline
-treenode<dictionarynode<keytype,valuetype> *>
+treenode<dictionarypair<keytype,valuetype> *>
 			*dictionary<keytype,valuetype>::find(keytype key) {
-	dictionarynode<keytype,valuetype>	fnode(key,(valuetype)0);
+	dictionarypair<keytype,valuetype>	fnode(key,(valuetype)0);
 	return tree.find(&fnode);
 }
 
 template <class keytype, class valuetype>
 inline
-dictionarynode<keytype,valuetype>::dictionarynode(keytype key,
+dictionarypair<keytype,valuetype>::dictionarypair(keytype key,
 						valuetype value) : object() {
 	this->key=key;
 	this->value=value;
@@ -328,35 +328,35 @@ dictionarynode<keytype,valuetype>::dictionarynode(keytype key,
 
 template <class keytype, class valuetype>
 inline
-dictionarynode<keytype,valuetype>::~dictionarynode() {}
+dictionarypair<keytype,valuetype>::~dictionarypair() {}
 
 template <class keytype, class valuetype>
 inline
-void dictionarynode<keytype,valuetype>::setKey(keytype key) {
+void dictionarypair<keytype,valuetype>::setKey(keytype key) {
 	this->key=key;
 }
 
 template <class keytype, class valuetype>
 inline
-void dictionarynode<keytype,valuetype>::setValue(valuetype value) {
+void dictionarypair<keytype,valuetype>::setValue(valuetype value) {
 	this->value=value;
 }
 
 template <class keytype, class valuetype>
 inline
-keytype dictionarynode<keytype,valuetype>::getKey() const {
+keytype dictionarypair<keytype,valuetype>::getKey() const {
 	return key;
 }
 
 template <class keytype, class valuetype>
 inline
-valuetype dictionarynode<keytype,valuetype>::getValue() const {
+valuetype dictionarypair<keytype,valuetype>::getValue() const {
 	return value;
 }
 
 template <class keytype, class valuetype>
 inline
-void node_print(dictionarynode<keytype,valuetype> *value) {
+void node_print(dictionarypair<keytype,valuetype> *value) {
 	node_print(value->getKey());
 	stdoutput.printf(":");
 	node_print(value->getValue());
@@ -364,18 +364,18 @@ void node_print(dictionarynode<keytype,valuetype> *value) {
 
 template <class keytype, class valuetype>
 inline
-void dictionarynode<keytype,valuetype>::print() const {
+void dictionarypair<keytype,valuetype>::print() const {
 	node_print(this);
 }
 
 template <class keytype, class valuetype>
 inline
-int32_t dictionarynodecomparator<keytype,valuetype>::compare(
+int32_t dictionarypaircomparator<keytype,valuetype>::compare(
 							object *value1,
 							object *value2) {
-	dictionarynode<keytype,valuetype> *v1=
-		(dictionarynode<keytype,valuetype> *)value1;
-	dictionarynode<keytype,valuetype> *v2=
-		(dictionarynode<keytype,valuetype> *)value2;
+	dictionarypair<keytype,valuetype> *v1=
+		(dictionarypair<keytype,valuetype> *)value1;
+	dictionarypair<keytype,valuetype> *v2=
+		(dictionarypair<keytype,valuetype> *)value2;
 	return comparator::compare(v1->getKey(),v2->getKey());
 }

@@ -7,7 +7,7 @@
 #include <rudiments/linkedlist.h>
 
 template <class keytype, class valuetype>
-class dictionarynode;
+class dictionarypair;
 
 template <class keytype, class valuetype>
-class dictionarynodecomparator;
+class dictionarypaircomparator;
