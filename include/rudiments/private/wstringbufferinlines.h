@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/wcharstring.h>
+#include <rudiments/charstring.h>
 #include <rudiments/wcharacter.h>
 
 inline
