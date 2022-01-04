@@ -9,7 +9,7 @@
 /** The node class is the parent class for the node contained by all rudiments
  *  node-based collections. */
 template <class valuetype>
-class nodecollectionnode : public object {
+class nodecollectionnode : virtual public object {
 	public:
 
 		/** Creates an instance of the node class. */

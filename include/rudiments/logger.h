@@ -8,7 +8,7 @@
 
 /** The logdestination class is a virtual base class that just defines methods
  *  that the real logdestination classes must implement. */
-class RUDIMENTS_DLLSPEC logdestination : public object {
+class RUDIMENTS_DLLSPEC logdestination : virtual public object {
 	#include <rudiments/private/logdestination.h>
 };
 

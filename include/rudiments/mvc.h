@@ -6,7 +6,7 @@
 
 #include <rudiments/private/mvcincludes.h>
 
-class RUDIMENTS_DLLSPEC mvcsecurity : public object {
+class RUDIMENTS_DLLSPEC mvcsecurity : virtual public object {
 	public:
 		mvcsecurity() {};
 		virtual	~mvcsecurity() {};
@@ -25,7 +25,7 @@ class RUDIMENTS_DLLSPEC httpbasicsecurity : public mvcsecurity {
 	#include <rudiments/private/httpbasicsecurity.h>
 };
 
-class RUDIMENTS_DLLSPEC mvcproperties : public object {
+class RUDIMENTS_DLLSPEC mvcproperties : virtual public object {
 	public:
 		mvcproperties();
 		virtual	~mvcproperties();
@@ -38,7 +38,7 @@ class RUDIMENTS_DLLSPEC mvcproperties : public object {
 	#include <rudiments/private/mvcproperties.h>
 };
 
-class RUDIMENTS_DLLSPEC mvctier : public object {
+class RUDIMENTS_DLLSPEC mvctier : virtual public object {
 	public:
 		mvctier();
 		virtual ~mvctier();
@@ -75,7 +75,7 @@ class RUDIMENTS_DLLSPEC mvcservice : public mvctier {
 class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
 };
 
-class RUDIMENTS_DLLSPEC mvcresult : public object {
+class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 	public:
 		mvcresult();
 		virtual ~mvcresult();

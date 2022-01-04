@@ -60,7 +60,7 @@ class compilerpostprocessor;
  *  input and output formats.
  */
 
-class RUDIMENTS_DLLSPEC compiler : public object {
+class RUDIMENTS_DLLSPEC compiler : virtual public object {
 	public:
 
 		/** Creates a new instance of the compiler class. */

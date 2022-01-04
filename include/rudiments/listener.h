@@ -8,7 +8,7 @@
 
 /** The listener class listens for activity on a pool of filedescriptors
  *  or children of the filedescriptor class. */
-class RUDIMENTS_DLLSPEC listener : public object {
+class RUDIMENTS_DLLSPEC listener : virtual public object {
 	public:
 		/** Creates an instance of the listener class. */
 		listener();

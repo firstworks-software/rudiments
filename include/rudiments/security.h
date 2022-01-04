@@ -12,7 +12,7 @@
 
 class	filedescriptor;
 
-class RUDIMENTS_DLLSPEC securitycontext : public object {
+class RUDIMENTS_DLLSPEC securitycontext : virtual public object {
 	public:
 		securitycontext() {};
 		virtual ~securitycontext() {};

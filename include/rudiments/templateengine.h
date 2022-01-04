@@ -39,7 +39,7 @@ struct blockparser {
 
 /** The templateengine class provides a framework for registering user-defined
  *  methods to parse and perform replacements in marked-up files or strings. */
-class RUDIMENTS_DLLSPEC templateengine : public object {
+class RUDIMENTS_DLLSPEC templateengine : virtual public object {
 	public:
 
 		/** Creates an instance of the templateengine class. */

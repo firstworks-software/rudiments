@@ -52,7 +52,7 @@
  *
  *  This is especially useful in MVC applications.
  */
-class RUDIMENTS_DLLSPEC wastebasket : public object {
+class RUDIMENTS_DLLSPEC wastebasket : virtual public object {
 	public:
 
 		/** Creates an instance of the wastebasket class. */

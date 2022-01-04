@@ -9,7 +9,7 @@
 /** The httprequest class provides methods for accessing components of the
  *  http request. */
 
-class RUDIMENTS_DLLSPEC httprequest : public object {
+class RUDIMENTS_DLLSPEC httprequest : virtual public object {
 	public:
 		httprequest(httpserverapi *sapi);
 		virtual	~httprequest();

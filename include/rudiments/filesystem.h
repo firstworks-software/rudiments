@@ -13,7 +13,7 @@
  *  The native methods for accessing filesystem data vary greatly between
  *  platforms and many of these methods only work at all on certain platforms.
  *  */
-class RUDIMENTS_DLLSPEC filesystem : public object {
+class RUDIMENTS_DLLSPEC filesystem : virtual public object {
 	public:
 		/** Creates an instance of the filesystem class. */
 		filesystem();
