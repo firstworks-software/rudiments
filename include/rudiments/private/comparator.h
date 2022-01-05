@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	private:
-		int32_t		multiplier;
+		int32_t		sense;
 		bool		natural;
 		const char	*delimiters;
 		const wchar_t	*wdelimiters;

@@ -24,12 +24,13 @@ class comparator {
 		bool	getReverse();
 
 		/** Set whether to interpret (version) numbers embedded in
-		 *  strings "naturally" (eg. 12 > 8) or not. */
+		 *  strings "naturally" (eg. 12 > 8 and 12.1 > 12.0.3) or
+		 *  not. */
 		void	setNatural(bool natural);
 
 		/** Returns true if comparisons should interpret numbers
-		 *  embedded in strings "naturally" (eg. 12 > 8) and false
-		 *  otherwise. */
+		 *  embedded in strings "naturally"
+		 *  (eg. 12 > 8 and 12.1 > 12.0.3) and false otherwise. */
 		bool	getNatural();
 
 		/** Sets the set of characters to be used as number delimiters
