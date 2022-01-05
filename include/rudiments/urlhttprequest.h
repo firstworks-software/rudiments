@@ -35,7 +35,6 @@
  *  These are parsed into "skin variables".  Skin variables defined in deeper
  *  level .var files override skin variables defined in shallower files.
  */
-
 class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 	public:
 		urlhttprequest(httpserverapi *sapi);

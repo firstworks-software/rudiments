@@ -8,7 +8,6 @@
 
 /** The sys class provides methods for controlling the state of and
  *  accessing information about the operating system. */
-
 class RUDIMENTS_DLLSPEC sys {
 	public:
 
