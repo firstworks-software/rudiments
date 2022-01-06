@@ -76,7 +76,6 @@ PROGS3= handoff \
 	mvcproperties \
 	aes128 \
 	dynamictable \
-	sparsedynamictable \
 	scalar \
 	sensitivevalue
 
@@ -309,9 +308,6 @@ aes128: aes128.cpp aes128.$(OBJ)
 
 dynamictable: dynamictable.cpp dynamictable.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dynamictable.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-sparsedynamictable: sparsedynamictable.cpp sparsedynamictable.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sparsedynamictable.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 scalar: scalar.cpp scalar.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) scalar.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

@@ -52,7 +52,6 @@ for program in \
 	signal \
 	singlylinkedlist \
 	snooze \
-	sparsedynamictable \
 	staticarray \
 	stringbuffer \
 	wstringbuffer \

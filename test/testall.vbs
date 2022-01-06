@@ -50,7 +50,6 @@ tests=Array(_
 	"signal",_
 	"singlylinkedlist",_
 	"snooze",_
-	"sparsedynamictable",_
 	"staticarray",_
 	"stringbuffer",_
 	"wstringbuffer",_

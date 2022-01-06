@@ -72,7 +72,7 @@ class dynamicarray : public arraycollection<valuetype> {
 		uint64_t	getIncrementLength() const;
 
 		/** Returns the number of elements in the array. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Clears the array, deleting all of its values. */
 		void	clear();

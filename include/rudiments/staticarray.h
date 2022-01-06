@@ -58,7 +58,7 @@ class staticarray : public arraycollection<valuetype> {
 		valuetype	&operator[](uint64_t index);
 
 		/** Returns the number of elements in the array. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Clears the array, deleting all of its values. */
 		void	clear();

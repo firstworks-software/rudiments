@@ -224,7 +224,6 @@ headers0="object.h "+_
 	"resultcodes.h "+_
 	"debugprint.h"
 headers1="dynamictable.h "+_
-	"sparsedynamictable.h "+_
 	"linkedlist.h "+_
 	"singlylinkedlist.h "+_
 	"avltree.h "+_
@@ -283,7 +282,6 @@ headers2="dictionary.h "+_
 	"wstringbuffer.h "+_
 	"sys.h"
 headers3="dynamicarray.h "+_
-	"sparsedynamicarray.h "+_
 	"staticarray.h "+_
 	"output.h "+_
 	"input.h "+_
@@ -385,9 +383,6 @@ privateheaders2="winsock.h "+_
 privateheaders3="dynamictable.h "+_
 	"dynamictableincludes.h "+_
 	"dynamictableinlines.h "+_
-	"sparsedynamictable.h "+_
-	"sparsedynamictableincludes.h "+_
-	"sparsedynamictableinlines.h "+_
 	"linkedlist.h "+_
 	"linkedlistincludes.h "+_
 	"linkedlistinlines.h "+_
@@ -472,9 +467,6 @@ privateheaders5="dictionary.h "+_
 privateheaders6="dynamicarray.h "+_
 	"dynamicarrayincludes.h "+_
 	"dynamicarrayinlines.h "+_
-	"sparsedynamicarray.h "+_
-	"sparsedynamicarrayincludes.h "+_
-	"sparsedynamicarrayinlines.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketclientincludes.h "+_
 	"unixsocketserver.h "+_

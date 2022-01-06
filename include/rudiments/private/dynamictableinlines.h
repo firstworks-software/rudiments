@@ -74,7 +74,9 @@ uint64_t dynamictable<valuetype>::getColCount() {
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::setValue(uint64_t row, uint64_t col, valuetype value) {
+void dynamictable<valuetype>::setValue(uint64_t row,
+					uint64_t col,
+					valuetype value) {
 	values[row][col]=value;
 	if (row>=rows) {
 		rows=row+1;

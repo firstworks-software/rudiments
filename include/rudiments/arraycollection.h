@@ -19,7 +19,7 @@ class arraycollection : public collection {
 		virtual	valuetype	&operator[](uint64_t index)=0;
 
 		/** Returns the number of elements in the array. */
-		virtual	uint64_t	getLength() const=0;
+		virtual	uint64_t	getLength()=0;
 
 		/** Clears the array, deleting all of its values. */
 		virtual	void		clear()=0;
