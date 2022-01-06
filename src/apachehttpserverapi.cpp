@@ -36,10 +36,8 @@ class apachehttpserverapiprivate {
 		bytebuffer		*_standardin;
 };
 
-apachehttpserverapi::apachehttpserverapi(void *apistruct) :
-					httpserverapi(apistruct) {
+apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 	pvt=new apachehttpserverapiprivate;
-
 	pvt->_apistruct=apistruct;
 	pvt->_crcount=0;
 	pvt->_stdinptr=NULL;
@@ -48,10 +46,6 @@ apachehttpserverapi::apachehttpserverapi(void *apistruct) :
 
 apachehttpserverapi::~apachehttpserverapi() {
 	delete pvt->_standardin;
-}
-
-void *apachehttpserverapi::getApiStruct() {
-	return pvt->_apistruct;
 }
 
 bool apachehttpserverapi::getCharacter(char *ch) {

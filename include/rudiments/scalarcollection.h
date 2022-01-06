@@ -12,14 +12,6 @@ template <class valuetype>
 class scalarcollection : public collection {
 	public:
 
-#if 0
-		/** Creates an instance of the scalarcollection class. */
-		scalarcollection() : collection() {};
-
-		/** Creates an instance of the scalarcollection class. */
-		scalarcollection(const collection &c) : collection(c) {};
-#endif
-
 		/** Deletes this instance of the scalarcollection class. */
 		virtual	~scalarcollection() {};
 

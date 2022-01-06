@@ -13,25 +13,22 @@
 class cgihttpserverapiprivate {
 	friend class cgihttpserverapi;
 	private:
-		void		*_apistruct;
 		bool		_envdirty;
 		uint64_t	_envcount;
 		char		**_envvars;
 		char		**_envvals;
 };
 
-cgihttpserverapi::cgihttpserverapi(void *apistruct) :
-					httpserverapi(apistruct) {
+cgihttpserverapi::cgihttpserverapi() : httpserverapi() {
 	pvt=new cgihttpserverapiprivate;
-	pvt->_apistruct=apistruct;
+	pvt->_envdirty=false;
+	pvt->_envcount=0;
+	pvt->_envvars=NULL;
+	pvt->_envvals=NULL;
 }
 
 cgihttpserverapi::~cgihttpserverapi() {
 	delete pvt;
-}
-
-void *cgihttpserverapi::getApiStruct() {
-	return pvt->_apistruct;
 }
 
 bool cgihttpserverapi::getCharacter(char *ch) {

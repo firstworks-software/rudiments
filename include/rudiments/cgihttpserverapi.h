@@ -8,7 +8,7 @@
 
 class RUDIMENTS_DLLSPEC cgihttpserverapi : public httpserverapi {
 	public:
-		cgihttpserverapi(void *apistruct);
+		cgihttpserverapi();
 		~cgihttpserverapi();
 
 	#include <rudiments/private/cgihttpserverapi.h>

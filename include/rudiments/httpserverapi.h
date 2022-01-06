@@ -8,9 +8,6 @@
 
 class RUDIMENTS_DLLSPEC httpserverapi : public output {
 	public:
-		httpserverapi(void *apistruct) {};
-		virtual ~httpserverapi() {};
-
 	#include <rudiments/private/httpserverapi.h>
 };
 

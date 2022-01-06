@@ -10,7 +10,7 @@
 static bool httpModuleMain(httpserverapi *sapi);
 
 int main(int argc, char **argv) {
-	cgihttpserverapi	sapi(NULL);
+	cgihttpserverapi	sapi;
 	process::exit(httpModuleMain(&sapi)?0:1);
 }
 

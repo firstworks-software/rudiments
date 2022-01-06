@@ -35,14 +35,6 @@ template <class valuetype>
 class tablecollection : public nodecollection {
 	public:
 
-#if 0
-		/** Creates an instance of the tablecollection class. */
-		tablecollection() : nodecollection() {};
-
-		/** Creates an instance of the tablecollection class. */
-		tablecollection(const collection &c) : nodecollection(c) {};
-#endif
-
 		/** Deletes this instance of the tablecollection class. */
 		virtual	~tablecollection() {};
 
