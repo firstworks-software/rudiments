@@ -44,7 +44,7 @@ void node_print(int64_t value) {
 }
 
 inline
-void node_print(unsigned const char *value) {
+void node_print(const unsigned char *value) {
 	stdoutput.printf("%s",value);
 }
 
@@ -122,7 +122,7 @@ void node_delete_value(int64_t value) {
 }
 
 inline
-void node_delete_value(unsigned const char *value) {
+void node_delete_value(const unsigned char *value) {
 }
 
 inline
@@ -190,7 +190,7 @@ void node_delete_array_value(int64_t value) {
 }
 
 inline
-void node_delete_array_value(unsigned const char *value) {
+void node_delete_array_value(const unsigned char *value) {
 	delete[] (unsigned char *)value;
 }
 
@@ -231,6 +231,173 @@ template <class valuetype>
 inline
 void node_delete_array_value(valuetype *value) {
 	delete[] value;
+}
+
+inline
+const char *node_duplicate_value(const char *value) {
+	return value;
+}
+
+inline
+char *node_duplicate_value(char *value) {
+	return value;
+}
+
+inline
+char node_duplicate_value(char value) {
+	return value;
+}
+
+inline
+int16_t node_duplicate_value(int16_t value) {
+	return value;
+}
+
+inline
+int32_t node_duplicate_value(int32_t value) {
+	return value;
+}
+
+inline
+int64_t node_duplicate_value(int64_t value) {
+	return value;
+}
+
+inline
+const unsigned char *node_duplicate_value(const unsigned char *value) {
+	return value;
+}
+
+inline
+unsigned char *node_duplicate_value(unsigned char *value) {
+	return value;
+}
+
+inline
+unsigned char node_duplicate_value(unsigned char value) {
+	return value;
+}
+
+inline
+uint16_t node_duplicate_value(uint16_t value) {
+	return value;
+}
+
+inline
+uint32_t node_duplicate_value(uint32_t value) {
+	return value;
+}
+
+inline
+uint64_t node_duplicate_value(uint64_t value) {
+	return value;
+}
+
+inline
+float node_duplicate_value(float value) {
+	return value;
+}
+
+inline
+double node_duplicate_value(double value) {
+	return value;
+}
+
+inline
+long double node_duplicate_value(long double value) {
+	return value;
+}
+
+template <class valuetype>
+inline
+valuetype *node_duplicate_value(valuetype *value) {
+	return new valuetype(*value);
+}
+
+inline
+const char *node_duplicate_array_value(const char *value) {
+	return charstring::duplicate(value);
+}
+
+inline
+char *node_duplicate_array_value(char *value) {
+	return charstring::duplicate(value);
+}
+
+inline
+char node_duplicate_array_value(char value) {
+	return value;
+}
+
+inline
+int16_t node_duplicate_array_value(int16_t value) {
+	return value;
+}
+
+inline
+int32_t node_duplicate_array_value(int32_t value) {
+	return value;
+}
+
+inline
+int64_t node_duplicate_array_value(int64_t value) {
+	return value;
+}
+
+inline
+const unsigned char *node_duplicate_array_value(const unsigned char *value) {
+	// this isn't a true duplicate, but it's
+	// the best we can do without a size
+	return (const unsigned char *)charstring::duplicate((const char *)value);
+}
+
+inline
+unsigned char *node_duplicate_array_value(unsigned char *value) {
+	// this isn't a true duplicate, but it's
+	// the best we can do without a size
+	return (unsigned char *)charstring::duplicate((char *)value);
+}
+
+inline
+unsigned char node_duplicate_array_value(unsigned char value) {
+	return value;
+}
+
+inline
+uint16_t node_duplicate_array_value(uint16_t value) {
+	return value;
+}
+
+inline
+uint32_t node_duplicate_array_value(uint32_t value) {
+	return value;
+}
+
+inline
+uint64_t node_duplicate_array_value(uint64_t value) {
+	return value;
+}
+
+inline
+float node_duplicate_array_value(float value) {
+	return value;
+}
+
+inline
+double node_duplicate_array_value(double value) {
+	return value;
+}
+
+inline
+long double node_duplicate_array_value(long double value) {
+	return value;
+}
+
+template <class valuetype>
+inline
+valuetype *node_duplicate_array_value(valuetype *value) {
+	// no way to do this without a length
+	return NULL;
 }
 
 #endif

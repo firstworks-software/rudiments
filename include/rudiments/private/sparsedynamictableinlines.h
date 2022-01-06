@@ -7,9 +7,9 @@
 template <class valuetype>
 inline
 sparsedynamictable<valuetype>::sparsedynamictable() :
-				tablecollection<valuetype>() {
-	cols=0;
-	rows=0;
+	tablecollection<valuetype>(),
+	cols(0),
+	rows(0) {
 }
 
 template <class valuetype>

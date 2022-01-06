@@ -6,10 +6,11 @@
 
 template <class valuetype>
 inline
-singlylinkedlist<valuetype>::singlylinkedlist() : listcollection<valuetype>() {
-	first=NULL;
-	last=NULL;
-	length=0;
+singlylinkedlist<valuetype>::singlylinkedlist() :
+	listcollection<valuetype>(),
+	first(NULL),
+	last(NULL),
+	length(0) {
 }
 
 template <class valuetype>
@@ -602,9 +603,9 @@ void singlylinkedlist<valuetype>::print(uint64_t count) const {
 template <class valuetype>
 inline
 singlylinkedlistnode<valuetype>::singlylinkedlistnode(valuetype value) :
-							listnode<valuetype>() {
-	this->value=value;
-	next=NULL;
+	listnode<valuetype>(),
+	value(value),
+	next(NULL) {
 }
 
 template <class valuetype>

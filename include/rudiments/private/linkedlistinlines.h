@@ -6,11 +6,11 @@
 
 template <class valuetype>
 inline
-linkedlist<valuetype>::linkedlist() : listcollection<valuetype>() {
-	first=NULL;
-	last=NULL;
-	length=0;
-
+linkedlist<valuetype>::linkedlist() :
+	listcollection<valuetype>(),
+	first(NULL),
+	last(NULL),
+	length(0) {
 #ifdef DARWIN_GCC_2952_HACKS
 	return;
 
@@ -584,10 +584,10 @@ void linkedlist<valuetype>::print(uint64_t count) const {
 template <class valuetype>
 inline
 linkedlistnode<valuetype>::linkedlistnode(valuetype value) :
-						listnode<valuetype>() {
-	this->value=value;
-	previous=NULL;
-	next=NULL;
+	listnode<valuetype>(),
+	value(value),
+	next(NULL),
+	previous(NULL) {
 }
 
 template <class valuetype>

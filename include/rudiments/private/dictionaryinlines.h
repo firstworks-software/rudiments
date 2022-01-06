@@ -30,9 +30,10 @@ class dictionarypaircomparator : public comparator {
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::dictionary() :
-				dictionarycollection<keytype,valuetype>() {
-	trackinsertionorder=true;
-	keylist=NULL;
+	dictionarycollection<keytype,valuetype>(),
+	keylist(NULL),
+	trackinsertionorder(true) {
+
 	comp=new dictionarypaircomparator<keytype,valuetype>();
 	tree.setComparator(comp);
 
@@ -321,9 +322,10 @@ treenode<dictionarypair<keytype,valuetype> *>
 template <class keytype, class valuetype>
 inline
 dictionarypair<keytype,valuetype>::dictionarypair(keytype key,
-						valuetype value) : object() {
-	this->key=key;
-	this->value=value;
+							valuetype value) :
+	object(),
+	key(key),
+	value(value) {
 }
 
 template <class keytype, class valuetype>

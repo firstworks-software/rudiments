@@ -71,6 +71,14 @@ class avltree : public treecollection<valuetype> {
 		/** Creates an empty instance of the avltree class. */
 		avltree();
 
+		/** Creates an instance of the avltree class
+		 *  that is a copy of "a". */
+		avltree(const avltree<valuetype> &a);
+
+		/** Makes this instance of the avltree class
+		 *  identical to "a". */
+		avltree<valuetype>	&operator=(const avltree<valuetype> &a);
+
 		/** Deletes this instance of the avltree class and all of
 		 *  its avltreenodes.  Note however, that the value stored
 		 *  in each avltreenode is not deleted by this call. */

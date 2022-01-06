@@ -6,9 +6,10 @@
 
 template <class valuetype>
 inline
-dynamictable<valuetype>::dynamictable() : tablecollection<valuetype>() {
-	cols=0;
-	rows=0;
+dynamictable<valuetype>::dynamictable() :
+	tablecollection<valuetype>(),
+	cols(0),
+	rows(0) {
 }
 
 template <class valuetype>
