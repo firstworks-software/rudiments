@@ -14,6 +14,34 @@ dynamictable<valuetype>::dynamictable() :
 
 template <class valuetype>
 inline
+dynamictable<valuetype>::dynamictable(const dynamictable<valuetype> &a) :
+						tablecollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
+dynamictable<valuetype> &dynamictable<valuetype>::operator=(
+					const dynamictable<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		tablecollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void dynamictable<valuetype>::clone(const dynamictable<valuetype> *table) {
+	columnnames=&(table->columnnames);
+	values=&(table->values);
+	cols=table->cols;
+	rows=table->rows;
+}
+
+template <class valuetype>
+inline
 dynamictable<valuetype>::~dynamictable() {
 	for (uint64_t i=0; i<cols; i++) {
 		delete[] columnnames[i];

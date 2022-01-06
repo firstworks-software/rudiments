@@ -25,6 +25,15 @@ class sparsedynamictable : public tablecollection<valuetype> {
 		/** Creates an instance of the sparsedynamictable class. */
 		sparsedynamictable();
 
+		/** Creates an instance of the sparsedynmaictable class
+		 *  that is a copy of "a". */
+		sparsedynamictable(const sparsedynamictable<valuetype> &a);
+
+		/** Makes this instance of the sparsedynamictable class
+		 *  identical to "a". */
+		sparsedynamictable<valuetype>	&operator=(
+					const sparsedynamictable<valuetype> &a);
+
 		/** Deletes this instance of the sparsedynamictable class. */
 		~sparsedynamictable();
 

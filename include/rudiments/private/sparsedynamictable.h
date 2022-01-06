@@ -2,9 +2,9 @@
 // See the COPYING file for more information
 
 	protected:
+		void	clone(const sparsedynamictable<valuetype> *table);
 
 		sparsedynamicarray<char *>	columnnames;
-
 		sparsedynamicarray<sparsedynamicarray<valuetype> >	values;
 
 		uint64_t	cols;

@@ -18,6 +18,15 @@ class dynamictable : public tablecollection<valuetype> {
 		/** Creates an instance of the dynamictable class. */
 		dynamictable();
 
+		/** Creates an instance of the dynmaictable class
+		 *  that is a copy of "a". */
+		dynamictable(const dynamictable<valuetype> &a);
+
+		/** Makes this instance of the dynamictable class
+		 *  identical to "a". */
+		dynamictable<valuetype>	&operator=(
+					const dynamictable<valuetype> &a);
+
 		/** Deletes this instance of the dynamictable class. */
 		~dynamictable();
 

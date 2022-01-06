@@ -14,6 +14,36 @@ sparsedynamictable<valuetype>::sparsedynamictable() :
 
 template <class valuetype>
 inline
+sparsedynamictable<valuetype>::sparsedynamictable(
+				const sparsedynamictable<valuetype> &a) :
+				tablecollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
+sparsedynamictable<valuetype> &sparsedynamictable<valuetype>::operator=(
+				const sparsedynamictable<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		tablecollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void sparsedynamictable<valuetype>::clone(
+				const sparsedynamictable<valuetype> *table) {
+	columnnames=&(table->columnnames);
+	values=&(table->values);
+	cols=table->cols;
+	rows=table->rows;
+}
+
+template <class valuetype>
+inline
 sparsedynamictable<valuetype>::~sparsedynamictable() {
 	for (uint64_t i=0; i<cols; i++) {
 		delete[] columnnames[i];
