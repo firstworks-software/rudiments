@@ -4,6 +4,7 @@
 #define RUDIMENTS_NODE_H
 
 #include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
 #include <rudiments/stdio.h>
 
 // Ideally we'd use explicit specialization here but old enough
@@ -20,8 +21,23 @@ void node_print(char *value) {
 }
 
 inline
+void node_print(const wchar_t *value) {
+	stdoutput.printf(L"%s",value);
+}
+
+inline
+void node_print(wchar_t *value) {
+	stdoutput.printf(L"%s",value);
+}
+
+inline
 void node_print(char value) {
 	stdoutput.printf("%c",value);
+}
+
+inline
+void node_print(wchar_t value) {
+	stdoutput.printf(L"%c",value);
 }
 
 inline
@@ -106,7 +122,19 @@ void node_delete_value(char *value) {
 }
 
 inline
+void node_delete_value(const wchar_t *value) {
+}
+
+inline
+void node_delete_value(wchar_t *value) {
+}
+
+inline
 void node_delete_value(char value) {
+}
+
+inline
+void node_delete_value(wchar_t value) {
 }
 
 inline
@@ -170,6 +198,16 @@ void node_delete_array_value(const char *value) {
 
 inline
 void node_delete_array_value(char *value) {
+	delete[] value;
+}
+
+inline
+void node_delete_array_value(const wchar_t *value) {
+	delete[] (wchar_t *)value;
+}
+
+inline
+void node_delete_array_value(wchar_t *value) {
 	delete[] value;
 }
 
@@ -244,7 +282,22 @@ char *node_duplicate_value(char *value) {
 }
 
 inline
+const wchar_t *node_duplicate_value(const wchar_t *value) {
+	return value;
+}
+
+inline
+wchar_t *node_duplicate_value(wchar_t *value) {
+	return value;
+}
+
+inline
 char node_duplicate_value(char value) {
+	return value;
+}
+
+inline
+wchar_t node_duplicate_value(wchar_t value) {
 	return value;
 }
 
@@ -325,7 +378,22 @@ char *node_duplicate_array_value(char *value) {
 }
 
 inline
+const wchar_t *node_duplicate_array_value(const wchar_t *value) {
+	return wcharstring::duplicate(value);
+}
+
+inline
+wchar_t *node_duplicate_array_value(wchar_t *value) {
+	return wcharstring::duplicate(value);
+}
+
+inline
 char node_duplicate_array_value(char value) {
+	return value;
+}
+
+inline
+wchar_t node_duplicate_array_value(wchar_t value) {
 	return value;
 }
 
