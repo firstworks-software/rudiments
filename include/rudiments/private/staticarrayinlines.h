@@ -40,6 +40,7 @@ inline
 staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 				const staticarray<valuetype,length> &v) {
 	if (this!=&v) {
+		arraycollection<valuetype>::operator=(v);
 		len=v.len;
 		data=new valuetype[len];
 		for (uint64_t i=0; i<len; i++) {

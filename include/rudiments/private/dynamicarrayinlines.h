@@ -31,6 +31,7 @@ inline
 dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 					const dynamicarray<valuetype> &v) {
 	if (this!=&v) {
+		arraycollection<valuetype>::operator=(v);
 		clearExtentList();
 		init(v.initial,v.extlength);
 		dynamicarrayClone(v);

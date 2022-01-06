@@ -12,12 +12,14 @@ template <class valuetype>
 class listnode : public nodecollectionnode<valuetype> {
 	public:
 
+#if 0
 		/** Creates an instance of the listnode class. */
 		listnode() : nodecollectionnode<valuetype>() {};
 
 		/** Creates an instance of the listnode class. */
 		listnode(const collection &c) :
 				nodecollectionnode<valuetype>(c) {};
+#endif
 
 		/** Deletes this instance of the listnode class. */
 		virtual	~listnode() {};
@@ -45,11 +47,13 @@ template <class valuetype>
 class listcollection : public nodecollection {
 	public:
 
+#if 0
 		/** Creates an instance of the listcollection class. */
 		listcollection() : nodecollection() {};
 
 		/** Creates an instance of the listcollection class. */
 		listcollection(const collection &c) : nodecollection(c) {};
+#endif
 
 		/** Deletes this instance of the listcollection class. */
 		virtual	~listcollection() {};

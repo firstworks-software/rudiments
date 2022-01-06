@@ -23,6 +23,20 @@ collection::collection(const collection &c) :
 }
 
 inline
+collection &collection::operator=(const collection &c) {
+	if (this!=&c) {
+		object::operator=(c);
+		managevalues=c.managevalues;
+		managearrayvalues=c.managearrayvalues;
+		managekeys=c.managekeys;
+		managearraykeys=c.managearraykeys;
+		comp=c.comp;
+		compptr=&comp;
+	}
+	return *this;
+}
+
+inline
 collection::~collection() {
 }
 

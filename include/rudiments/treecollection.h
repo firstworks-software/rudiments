@@ -11,9 +11,11 @@
 template <class valuetype>
 class treenode : public nodecollectionnode<valuetype> {
 	public:
+#if 0
 		/** Creates an instance of the treenode class that
 		 *  stores value "value". */
 		treenode() : nodecollectionnode<valuetype>() {};
+#endif
 
 		/** Deletes this instance of the treenode class.
 		 *  Note however, that the value stored in the treenode
@@ -66,11 +68,13 @@ template <class valuetype>
 class treecollection : public nodecollection {
 	public:
 
+#if 0
 		/** Creates an instance of the treecollection class. */
 		treecollection() : nodecollection() {};
 
 		/** Creates an instance of the treecollection class. */
 		treecollection(const collection &c) : nodecollection(c) {};
+#endif
 
 		/** Deletes this instance of the treecollection class. */
 		virtual	~treecollection() {};

@@ -18,6 +18,10 @@ class collection : virtual public object {
 		 *  of "c". */
 		collection(const collection &c);
 
+		/** Makes this instance of the collection class
+		 *  identical to "c". */
+		collection &operator=(const collection &c);
+
 		/** Deletes this instance of the collection class. */
 		virtual	~collection();
 

@@ -193,7 +193,7 @@ bool avltree<valuetype>::remove(treenode<valuetype> *node) {
 	treenode<valuetype> *detachednode=detach(node);
 	if (this->collection::managevalues) {
 		node_delete_value(detachednode->getValue());
-	} else if (this->collection::managevalues) {
+	} else if (this->collection::managearrayvalues) {
 		node_delete_array_value(detachednode->getValue());
 	}
 	delete detachednode;
@@ -347,7 +347,7 @@ void avltree<valuetype>::clear() {
 		#endif
 		if (this->collection::managevalues) {
 			node_delete_value(node->getValue());
-		} else if (this->collection::managevalues) {
+		} else if (this->collection::managearrayvalues) {
 			node_delete_array_value(node->getValue());
 		}
 		delete node;
@@ -377,13 +377,14 @@ void avltree<valuetype>::print() const {
 
 template <class valuetype>
 inline
-avltreenode<valuetype>::avltreenode(valuetype value) : treenode<valuetype>() {
-	this->value=value;
-	parent=NULL;
-	left=NULL;
-	right=NULL;
-	leftheight=0;
-	rightheight=0;
+avltreenode<valuetype>::avltreenode(valuetype value) :
+	treenode<valuetype>(),
+	value(value),
+	parent(NULL),
+	left(NULL),
+	right(NULL),
+	leftheight(0),
+	rightheight(0) {
 }
 
 template <class valuetype>
