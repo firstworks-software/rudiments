@@ -13,6 +13,62 @@ singlylinkedlist<valuetype>::singlylinkedlist() :
 	length(0) {
 }
 
+
+template <class valuetype>
+inline
+singlylinkedlist<valuetype>::singlylinkedlist(
+				const singlylinkedlist<valuetype> &a) :
+				listcollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
+singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
+					const singlylinkedlist<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		listcollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void singlylinkedlist<valuetype>::clone(
+				const singlylinkedlist<valuetype> *list) {
+
+	first=NULL;
+	last=NULL;
+	length=0;
+
+	// clone the list...
+
+	// run through the list we want to clone...
+	for (listnode<valuetype> *node=list->first;
+					node; node=node->getNext()) {
+
+		// create a new node
+		singlylinkedlistnode<valuetype>	*newnode=
+				new singlylinkedlistnode<valuetype>(NULL);
+
+		// copy the value
+		if (this->collection::managevalues) {
+			newnode->setValue(
+				node_duplicate_value(node->getValue()));
+		} else if (this->collection::managearrayvalues) {
+			newnode->setValue(
+				node_duplicate_array_value(node->getValue()));
+		} else {
+			newnode->setValue(node->getValue());
+		}
+
+		// append the node
+		append(newnode);
+	}
+}
+
 template <class valuetype>
 inline
 singlylinkedlist<valuetype>::~singlylinkedlist() {

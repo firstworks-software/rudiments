@@ -5,8 +5,8 @@
 		void	insert(treenode<valuetype> *top,
 				treenode<valuetype> *node,
 				treenode<valuetype> **treetop);
-		avltreenode<valuetype>	*cloneNode(
-					avltreenode<valuetype> *node);
+		void	clone(const avltree<valuetype> *tree);
+		treenode<valuetype>	*cloneNode(treenode<valuetype> *node);
 
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;

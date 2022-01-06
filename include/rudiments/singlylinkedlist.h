@@ -58,6 +58,15 @@ class singlylinkedlist : public listcollection<valuetype> {
 		/** Creates an empty instance of the singlylinkedlist class. */
 		singlylinkedlist();
 
+		/** Creates an instance of the singlylinkedlist class
+		 *  that is a copy of "a". */
+		singlylinkedlist(const singlylinkedlist<valuetype> &a);
+
+		/** Makes this instance of the singlylinkedlist class
+		 *  identical to "a". */
+		singlylinkedlist<valuetype>	&operator=(
+					const singlylinkedlist<valuetype> &a);
+
 		/** Deletes this instance of the singlylinkedlist class and all
 		 *  of its singlylinkedlistnodes.  Note however, that the value
 		 *  stored in each singlylinkedlistnode is not deleted by this

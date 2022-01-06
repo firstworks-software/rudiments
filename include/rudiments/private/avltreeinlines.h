@@ -19,15 +19,32 @@ avltree<valuetype>::avltree() :
 template <class valuetype>
 inline
 avltree<valuetype>::avltree(const avltree<valuetype> &a) :
-	treecollection<valuetype>(a),
-	top(NULL),
-	first(NULL),
-	last(NULL),
-	length(a.length) {
+					treecollection<valuetype>(a) {
+	clone(&a);
+}
 
-	if (a.top) {
+template <class valuetype>
+inline
+avltree<valuetype> &avltree<valuetype>::operator=(const avltree<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		treecollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void avltree<valuetype>::clone(const avltree<valuetype> *tree) {
+	top=NULL;
+	first=NULL;
+	last=NULL;
+	length=tree->length;
+		
+	if (tree->top) {
 		// clone the tree
-		top=cloneNode(a.top);
+		top=cloneNode(tree->top);
 
 		// update first
 		for (first=top;
@@ -43,37 +60,13 @@ avltree<valuetype>::avltree(const avltree<valuetype> &a) :
 
 template <class valuetype>
 inline
-avltree<valuetype> &avltree<valuetype>::operator=(const avltree<valuetype> &a) {
-	if (this!=&a) {
-		treecollection<valuetype>::operator=(a);
-		top=NULL;
-		first=NULL;
-		last=NULL;
-		length=a.length;
-		
-		if (a.top) {
-			// clone the tree
-			top=cloneNode(a.top);
+treenode<valuetype> *avltree<valuetype>::cloneNode(
+					treenode<valuetype> *node) {
 
-			// update first
-			for (first=top;
-				first->getLeftChild();
-				first=first->getLeftChild()) {}
-
-			// update last
-			for (last=top;
-				last->getRightChild();
-				last=last->getRightChild()) {}
-		}
-	}
-	return *this;
-}
-
-template <class valuetype>
-inline
-avltreenode<valuetype> *avltree<valuetype>::cloneNode(
-					avltreenode<valuetype> *node) {
+	// create a new node
 	avltreenode<valuetype>	*newnode=new avltreenode<valuetype>(NULL);
+
+	// copy the value
 	if (this->collection::managevalues) {
 		newnode->setValue(node_duplicate_value(node->getValue()));
 	} else if (this->collection::managearrayvalues) {
@@ -81,12 +74,25 @@ avltreenode<valuetype> *avltree<valuetype>::cloneNode(
 	} else {
 		newnode->setValue(node->getValue());
 	}
+
+	// clone the left side
 	if (node->getLeftChild()) {
-		newnode->setLeftChild(cloneNode(node->getLeftChild()));
+		treenode<valuetype>	*newleft=
+					cloneNode(node->getLeftChild());
+		newleft->setParent(newnode);
+		newnode->setLeftChild(newleft);
 	}
+	newnode->setLeftHeight(node->getLeftHeight());
+
+	// clone the right side
 	if (node->getRightChild()) {
-		newnode->setRightChild(cloneNode(node->getRightChild()));
+		treenode<valuetype>	*newright=
+					cloneNode(node->getRightChild());
+		newright->setParent(newnode);
+		newnode->setRightChild(newright);
 	}
+	newnode->setRightHeight(node->getRightHeight());
+
 	return newnode;
 }
 
@@ -385,7 +391,7 @@ void avltree<valuetype>::clear() {
 
 	#ifdef DEBUG_AVLTREE
 	uint64_t	i=0;
-	stdoutput.printf("clearing %d nodes {\n",length);
+	stdoutput.printf("clearing %d nodes (%08x) {\n",length,this);
 	#endif
 
 	// start at the top
@@ -412,12 +418,10 @@ void avltree<valuetype>::clear() {
 
 		// delete the node
 		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("	clearing %lld\n",i);
-		// It's dangerous to try to print the value of the node here.
-		// If the value is a pointer to something, it may have been
-		// deleted already.  In fact, it's really common to run through
-		// the tree, deleting values, before finally calling clear()
-		// on the tree itself.
+		stdoutput.printf("	clearing %lld: (%08x) ",
+						i,node->getValue());
+		node_print(node->getValue());
+		stdoutput.printf("\n");
 		i++;
 		#endif
 		if (this->collection::managevalues) {
@@ -445,9 +449,7 @@ void avltree<valuetype>::clear() {
 template <class valuetype>
 inline
 void avltree<valuetype>::print() const {
-	if (top) {
-		node_print(top->getValue());
-	}
+	top->print();
 }
 
 template <class valuetype>

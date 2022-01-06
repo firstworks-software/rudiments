@@ -498,4 +498,70 @@ int main(int argc, char **argv) {
 	charl.clear();
 	test("clear, getLength(): ",!charl.getLength());
 	stdoutput.printf("\n");
+
+	// copy and assignment
+	for (uint16_t i=0; i<2; i++) {
+
+		stdoutput.printf("copy/assignment%s...\n",(!i)?"":" (managed)");
+
+		linkedlist<char *>	cch1;
+		cch1.setManageArrayValues(i);
+		const char *values[]={
+			"a","b","c","d","e","f","g","h","i","j","k","l","m",
+			"n","o","p","q","r","s","t","u","v","w","x","y","z",
+			NULL
+		};
+		for (const char * const *v=values; *v; v++) {
+			if (!i) {
+				cch1.append((char *)*v);
+			} else {
+				cch1.append(charstring::duplicate((char *)*v));
+			}
+		}
+	
+		linkedlist<char *>	cch2(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==1) {
+				cch2.clear();
+			}
+			if (j) {
+				cch2=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy: manage values":
+					"assignment: manage values",
+						cch2.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy: manage array values":
+					"assignment: manage array values",
+						cch2.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy: length":"assignment: length",
+						cch2.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			listnode<char *>	*cch1n=cch1.getFirst();
+			listnode<char *>	*cch2n=cch2.getFirst();
+			while (cch1n) {
+				if (charstring::compare(cch1n->getValue(),
+							cch2n->getValue())) {
+					success=false;
+					break;
+				}
+				cch1n=cch1n->getNext();
+				cch2n=cch2n->getNext();
+			}
+			test((!j)?"copy: values":"assignment: values",success);
+		}
+	}
+	stdoutput.printf("\n");
 }

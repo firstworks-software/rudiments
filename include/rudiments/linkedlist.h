@@ -51,6 +51,15 @@ class linkedlist : public listcollection<valuetype> {
 		/** Creates an empty instance of the linkedlist class. */
 		linkedlist();
 
+		/** Creates an instance of the linkedlist class
+		 *  that is a copy of "a". */
+		linkedlist(const linkedlist<valuetype> &a);
+
+		/** Makes this instance of the linkedlist class
+		 *  identical to "a". */
+		linkedlist<valuetype>	&operator=(
+					const linkedlist<valuetype> &a);
+
 		/** Deletes this instance of the linkedlist class and all of
 		 *  its linkedlistnodes.  Note however, that the value stored
 		 *  in each linkedlistnode is not deleted by this call. */
