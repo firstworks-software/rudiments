@@ -2,21 +2,24 @@
 // See the COPYING file for more information
 
 inline
-collection::collection() : object() {
-	managevalues=false;
-	managearrayvalues=false;
-	managekeys=false;
-	managearraykeys=false;
-	compptr=&comp;
+collection::collection() :
+	object(),
+	managevalues(false),
+	managearrayvalues(false),
+	managekeys(false),
+	managearraykeys(false),
+	compptr(&comp) {
 }
 
 inline
-collection::collection(const collection &c) : object(c) {
-	managevalues=false;
-	managearrayvalues=false;
-	managekeys=false;
-	managearraykeys=false;
-	compptr=&comp;
+collection::collection(const collection &c) :
+	object(c),
+	managevalues(c.managevalues),
+	managearrayvalues(c.managearrayvalues),
+	managekeys(c.managekeys),
+	managearraykeys(c.managearraykeys),
+	comp(c.comp),
+	compptr(&comp) {
 }
 
 inline

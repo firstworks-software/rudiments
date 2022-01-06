@@ -29,7 +29,6 @@ dom::dom(bool stringcacheenabled) : collection() {
 dom::dom(const dom &x) : collection(x) {
 	init(x.pvt->_stringcacheenabled);
 	pvt->_rootnode=x.pvt->_rootnode->clone(this);
-	pvt->_strcache.setManageArrayKeys(true);
 }
 
 dom &dom::operator=(const dom &x) {
@@ -45,6 +44,7 @@ void dom::init(bool stringcacheenabled) {
 	pvt->_nullnode=domnode::createNullNode(this);
 	pvt->_rootnode=pvt->_nullnode;
 	pvt->_stringcacheenabled=stringcacheenabled;
+	pvt->_strcache.setManageArrayKeys(true);
 }
 
 dom::~dom() {

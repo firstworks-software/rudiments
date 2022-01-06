@@ -12,11 +12,13 @@ template <class valuetype>
 class nodecollectionnode : virtual public object {
 	public:
 
+#if 0
 		/** Creates an instance of the node class. */
 		nodecollectionnode() : object() {};
 
 		/** Creates an instance of the node class. */
 		nodecollectionnode(const collection &c) : object(c) {};
+#endif
 
 		/** Deletes this instance of the node class. */
 		virtual	~nodecollectionnode() {};
@@ -36,11 +38,13 @@ class nodecollectionnode : virtual public object {
 class nodecollection : public collection {
 	public:
 
+#if 0
 		/** Creates an instance of the nodecollection class. */
 		nodecollection() : collection() {};
 
 		/** Creates an instance of the nodecollection class. */
 		nodecollection(const collection &c) : collection(c) {};
+#endif
 
 		/** Deletes this instance of the nodecollection class. */
 		virtual	~nodecollection() {};

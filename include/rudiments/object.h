@@ -11,11 +11,13 @@
 class object {
 	public:
 
+#if 0
 		/** Creates an instance of the object class. */
 		object() {};
 
 		/** Creates an instance of the object class. */
 		object(const object &o) {};
+#endif
 
 		/** Deletes this instance of the object class. */
 		virtual	~object() {};

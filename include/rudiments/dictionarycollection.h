@@ -13,12 +13,14 @@ template<class keytype, class valuetype>
 class dictionarycollection : public collection {
 	public:
 
+#if 0
 		/** Creates an instance of the dictionarycollection class. */
 		dictionarycollection() : collection() {};
 
 		/** Creates an instance of the dictionarycollection class
 		 *  that is a copy of "c". */
 		dictionarycollection(const collection &c) : collection(c) {};
+#endif
 
 		/** Deletes this instance of the listcollection class. */
 		virtual	~dictionarycollection() {};

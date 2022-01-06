@@ -12,12 +12,14 @@ template <class valuetype>
 class arraycollection : public collection {
 	public:
 
+#if 0
 		/** Creates an instance of the arraycollection class. */
 		arraycollection() : collection() {};
 
 		/** Creates an instance of the arraycollection class that is
 		 *  a copy of "c". */
 		arraycollection(const collection &c) : collection(c) {};
+#endif
 
 		/** Deletes this instance of the arraycollection class. */
 		virtual	~arraycollection() {};

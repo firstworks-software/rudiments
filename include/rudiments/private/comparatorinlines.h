@@ -6,11 +6,11 @@
 #include <rudiments/stdio.h>
 
 inline
-comparator::comparator() {
-	sense=1;
-	natural=false;
-	delimiters=".";
-	wdelimiters=L".";
+comparator::comparator() :
+	sense(1),
+	natural(false),
+	delimiters("."),
+	wdelimiters(L".") {
 }
 
 inline
