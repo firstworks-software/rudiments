@@ -78,7 +78,7 @@ valuetype &staticarray<valuetype,length>::operator[](uint64_t index) {
 
 template< class valuetype, uint64_t length >
 inline
-uint64_t staticarray<valuetype,length>::getLength() {
+uint64_t staticarray<valuetype,length>::getLength() const {
 	return len;
 }
 

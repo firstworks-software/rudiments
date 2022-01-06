@@ -123,7 +123,7 @@ uint64_t dynamicarray<valuetype>::getIncrementLength() const {
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getLength() {
+uint64_t dynamicarray<valuetype>::getLength() const {
 	return len;
 }
 
