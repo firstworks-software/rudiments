@@ -288,7 +288,7 @@ int main(int argc, const char **argv) {
 			// 1st iteration is copy
 			// 2nd is assignment
 			// 3rd is assignment after clear
-			if (j==1) {
+			if (j==2) {
 				cch2.clear();
 			}
 			if (j) {

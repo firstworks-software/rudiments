@@ -26,9 +26,15 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  below return alist of key-value pairs in ascending order. */
 		dictionary(bool trackinsertionorder);
 
-		/** Deletes this instance of the dictionary class.  Note
-		 *  however, that neither the keys nor values stored in the
-		 *  dictionary are deleted by this call. */
+		/** Deletes this instance of the dictionary class.
+		 *
+		 *  The key stored in each pair is only deleted if
+		 *  setManageKeys(true) or setManageArrayKeys(true) has
+		 *  been called.
+		 *
+		 *  The value stored in each pair is only deleted if
+		 *  setManageValues(true) or setManageArrayValues(true) has
+		 *  been called. */
 		virtual ~dictionary();
 
 		/** Sets whether tracking of the order of key insertion is
@@ -143,6 +149,10 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *
 		 *  The key stored in each pair is only deleted if
 		 *  setManageValues(true) or setManageArrayValues(true) has
+		 *  been called.
+		 *
+		 *  The key stored in each pair is only deleted if
+		 *  setManageKeys(true) or setManageArrayKeys(true) has
 		 *  been called.
 		 *
 		 *  The value stored in each pair is only deleted if

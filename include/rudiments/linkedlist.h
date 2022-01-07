@@ -14,9 +14,7 @@ class linkedlistnode : public listnode<valuetype> {
 		 *  stores value "value". */
 		linkedlistnode(valuetype value);
 
-		/** Deletes this instance of the linkedlistnode class.
-		 *  Note however, that the value stored in the linkedlistnode
-		 *  is not deleted by this call. */
+		/** Deletes this instance of the linkedlistnode class. */
 		~linkedlistnode();
 
 		/** Set the value stored in the node to "value". */
@@ -61,8 +59,11 @@ class linkedlist : public listcollection<valuetype> {
 					const linkedlist<valuetype> &a);
 
 		/** Deletes this instance of the linkedlist class and all of
-		 *  its linkedlistnodes.  Note however, that the value stored
-		 *  in each linkedlistnode is not deleted by this call. */
+		 *  its linkedlistnodes.
+		 *
+		 *  The value stored in each linkedlistnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called. */
 		~linkedlist();
 
 		/** Creates a new linkedlistnode containing "value" and

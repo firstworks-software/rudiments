@@ -15,9 +15,7 @@ class singlylinkedlistnode : public listnode<valuetype> {
 		 *  stores value "value". */
 		singlylinkedlistnode(valuetype value);
 
-		/** Deletes this instance of the singlylinkedlistnode class.
-		 *  Note however, that the value stored in the
-		 *  singlylinkedlistnode is not deleted by this call. */
+		/** Deletes this instance of the singlylinkedlistnode class. */
 		~singlylinkedlistnode();
 
 		/** Set the value stored in the node to "value". */
@@ -68,9 +66,11 @@ class singlylinkedlist : public listcollection<valuetype> {
 					const singlylinkedlist<valuetype> &a);
 
 		/** Deletes this instance of the singlylinkedlist class and all
-		 *  of its singlylinkedlistnodes.  Note however, that the value
-		 *  stored in each singlylinkedlistnode is not deleted by this
-		 *  call. */
+		 *  of its singlylinkedlistnodes.
+		 *
+		 *  The value stored in each singlylinkedlistnode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called. */
 		~singlylinkedlist();
 
 		/** Creates a new singlylinkedlistnode containing "value" and

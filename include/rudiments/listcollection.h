@@ -153,9 +153,7 @@ class listcollection : public nodecollection {
 		 *  list. */
 		virtual void	heapSort()=0;
 
-		/** Deletes all listnodes currently in the listcollection.
-		 *  Note however, that the value stored in each listnode
-		 *  is not deleted by this call. */
+		/** Deletes all listnodes currently in the listcollection. */
 		virtual	void	clear()=0;
 
 		/** Prints out a representation of the listcollection. */

@@ -116,7 +116,6 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 
-#if 0
 	// copy and assignment
 	for (uint16_t i=0; i<2; i++) {
 
@@ -130,7 +129,7 @@ int main(int argc, char **argv) {
 			NULL
 		};
 		for (uint64_t col=0; col<13; col++) {
-			intt.setColumnName(col,colname(col));
+			cch1.setColumnName(col,colname(col));
 		}
 		uint16_t	k=0;
 		for (uint64_t row=0; row<2; row++) {
@@ -153,7 +152,7 @@ int main(int argc, char **argv) {
 			// 1st iteration is copy
 			// 2nd is assignment
 			// 3rd is assignment after clear
-			if (j==1) {
+			if (j==2) {
 				cch2.clear();
 			}
 			if (j) {
@@ -207,5 +206,4 @@ int main(int argc, char **argv) {
 		}
 	}
 	stdoutput.printf("\n");
-#endif
 }

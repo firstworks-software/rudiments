@@ -14,9 +14,7 @@ class avltreenode : public treenode<valuetype> {
 		 *  stores value "value". */
 		avltreenode(valuetype value);
 
-		/** Deletes this instance of the avltreenode class.
-		 *  Note however, that the value stored in the avltreenode
-		 *  is not deleted by this call. */
+		/** Deletes this instance of the avltreenode class. */
 		~avltreenode();
 
 		/** Sets the value stored in the node to "value". */
@@ -80,8 +78,11 @@ class avltree : public treecollection<valuetype> {
 		avltree<valuetype>	&operator=(const avltree<valuetype> &a);
 
 		/** Deletes this instance of the avltree class and all of
-		 *  its avltreenodes.  Note however, that the value stored
-		 *  in each avltreenode is not deleted by this call. */
+		 *  its avltreenodes.
+		 *
+		 *  The value stored in each avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called. */
 		~avltree();
 
 		/** Creates a new avltreenode containing "value" and

@@ -83,9 +83,7 @@ class dictionarycollection : public collection {
 		 *  found. */
 		virtual	bool		remove(keytype key)=0;
 
-		/** Deletes all key-value pairs currently in the dictionary.
-		 *  Note however, that the key and value stored in each
-		 *  key-value pair are not deleted by this call. */
+		/** Deletes all key-value pairs currently in the dictionary. */
 		virtual	void		clear()=0;
 
 		/** Prints out a representation of the dictionary. */

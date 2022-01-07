@@ -11,6 +11,21 @@ template <class valuetype>
 class scalar : public scalarcollection<valuetype> {
 	public:
 
+		/** Creates an instance of the scalar class. */
+		scalar();
+
+		/** Creates an instance of the scalar class
+		 *  that is a copy of "a". */
+		scalar(const scalar<valuetype> &a);
+
+		/** Makes this instance of the scalar class
+		 *  identical to "a". */
+		scalar<valuetype>	&operator=(
+					const scalar<valuetype> &a);
+
+		/** Deletes this instance of the scalar class. */
+		~scalar();
+
 		/** Sets the value stored in this instance to "v". */
 		void		setValue(valuetype v);
 
