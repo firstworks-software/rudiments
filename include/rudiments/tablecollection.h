@@ -67,12 +67,12 @@ class tablecollection : public nodecollection {
 		/** Returns the value at "row", "col".  Returns NULL or 0 if
 		 *  there is no value at that address. */
 		virtual	valuetype	getValue(uint64_t row,
-							uint64_t col)=0;
+						uint64_t col) const=0;
 
 		/** Returns the value at "row", "colname".  Returns NULL or 0
 		 *  if there is no value at that address. */
 		virtual	valuetype	getValue(uint64_t row,
-							const char * colname)=0;
+						const char * colname) const=0;
 
 		/** Returns the current number of rows in the table.
 		 *
@@ -83,12 +83,12 @@ class tablecollection : public nodecollection {
 		 *  of rows through the end of the current block, which is only
 		 *  the total number of rows in the table when
 		 *  getAllRowsAvailable() returns true. */
-		virtual	uint64_t	getRowCount()=0;
+		virtual	uint64_t	getRowCount() const=0;
 
 		/** Always returns true for monolithic implementations.  Only
 		 *  returns true in a block-based implementation if the current
 		 *  block contains the last row in the table. */
-		virtual	bool		getAllRowsAvailable()=0;
+		virtual	bool		getAllRowsAvailable() const=0;
 
 		/** In a read-write implementation, removes all values
 		 *  currently stored in the table, such that getValue() will

@@ -91,13 +91,15 @@ void dynamictable<valuetype>::setValue(uint64_t row,
 
 template <class valuetype>
 inline
-valuetype dynamictable<valuetype>::getValue(uint64_t row, uint64_t col) {
+valuetype dynamictable<valuetype>::getValue(uint64_t row,
+						uint64_t col) const {
 	return (row<rows && col<cols)?values[row][col]:((valuetype)0);
 }
 
 template <class valuetype>
 inline
-valuetype dynamictable<valuetype>::getValue(uint64_t row, const char *colname) {
+valuetype dynamictable<valuetype>::getValue(uint64_t row,
+						const char *colname) const {
 	// FIXME: inefficient
 	for (uint64_t i=0; i<cols; i++) {
 		if (!charstring::compare(colname,columnnames[i])) {
@@ -109,13 +111,13 @@ valuetype dynamictable<valuetype>::getValue(uint64_t row, const char *colname) {
 
 template <class valuetype>
 inline
-uint64_t dynamictable<valuetype>::getRowCount() {
+uint64_t dynamictable<valuetype>::getRowCount() const {
 	return rows;
 }
 
 template <class valuetype>
 inline
-bool dynamictable<valuetype>::getAllRowsAvailable() {
+bool dynamictable<valuetype>::getAllRowsAvailable() const {
 	return true;
 }
 

@@ -116,6 +116,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 
+#if 0
 	// copy and assignment
 	for (uint16_t i=0; i<2; i++) {
 
@@ -206,4 +207,5 @@ int main(int argc, char **argv) {
 		}
 	}
 	stdoutput.printf("\n");
+#endif
 }

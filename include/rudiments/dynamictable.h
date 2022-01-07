@@ -48,20 +48,22 @@ class dynamictable : public tablecollection<valuetype> {
 
 		/** Returns the value at "row", "col".  Returns NULL or 0 if
 		 *  there is no value at that address. */
-		valuetype	getValue(uint64_t row, uint64_t col);
+		valuetype	getValue(uint64_t row,
+						uint64_t col) const;
 
 		/** Returns the value at "row", "colname".  Returns NULL or 0
 		 *  if there is no value at that address. */
-		valuetype	getValue(uint64_t row, const char *colname);
+		valuetype	getValue(uint64_t row,
+						const char *colname) const;
 
 		/** Returns the current number of rows in the table.
 		 *
 		 *  Returns larger and larger values as calls to setValue()
 		 *  extend the table. */
-		uint64_t	getRowCount();
+		uint64_t	getRowCount() const;
 
 		/** Returns true. */
-		bool		getAllRowsAvailable();
+		bool		getAllRowsAvailable() const;
 
 		/** Removes all values currently stored in the table, such that
 		 *  getValue() will return NULL or 0. */
