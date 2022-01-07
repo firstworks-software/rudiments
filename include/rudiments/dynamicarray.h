@@ -61,9 +61,13 @@ class dynamicarray : public arraycollection<valuetype> {
 		 *  its values. */
 		~dynamicarray();
 
-		/** Provides access to the "index"th element of the
+		/** Provides read/write access to the "index"th element of the
 		 *  dynamicarray. */
 		valuetype	&operator[](uint64_t index);
+
+		/** Provides read-only access to the "index"th element of the
+		 *  dynamicarray. */
+		valuetype	operator[](uint64_t index) const;
 
 		/*  Returns the length of the initial extent. */
 		uint64_t	getInitialLength() const;

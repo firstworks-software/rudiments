@@ -6,14 +6,17 @@
 						uint64_t increment);
 		void		dynamicarrayClone(
 					const dynamicarray<valuetype> &v);
-		void		extend(uint64_t len);
+		void		extend(uint64_t length);
+		size_t		findExtentStartIndex(uint64_t index) const;
 		valuetype	&find(uint64_t index);
-		void		clearExtentList();
+		valuetype	find(uint64_t index) const;
 
-		linkedlist< valuetype *>	extents;
-		listnode< valuetype *>		*curext;
-		uint64_t	curind;
-		uint64_t	initial;
-		uint64_t	extlength;
-		uint64_t	len;
-		uint64_t	length;
+		linkedlist<valuetype *>	extents;
+
+		mutable listnode<valuetype *>	*curext;
+		mutable uint64_t		curind;
+
+		uint64_t	initlen;
+		uint64_t	inclen;
+		uint64_t	totallen;
+		uint64_t	lastlen;

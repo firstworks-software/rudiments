@@ -11,10 +11,6 @@
 template <class valuetype>
 class scalarcollection : public collection {
 	public:
-
-		/** Deletes this instance of the scalarcollection class. */
-		virtual	~scalarcollection() {};
-
 		/** Sets the value stored in this instance to "v". */
 		virtual	void		setValue(valuetype v)=0;
 

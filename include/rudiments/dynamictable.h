@@ -34,13 +34,13 @@ class dynamictable : public tablecollection<valuetype> {
 		void		setColumnName(uint64_t col, const char *name);
 
 		/** Returns the name of column "col". */
-		const char	*getColumnName(uint64_t col);
+		const char	*getColumnName(uint64_t col) const;
 
 		/** Returns the current number of columns in the table.
 		 *  
 		 *  Returns larger and larger values as calls to setColumnName()
 		 *  or setValue() extend the table. */
-		uint64_t	getColCount();
+		uint64_t	getColCount() const;
 
 		/** Sets the value at "row", "col" to "value". */
 		void		setValue(uint64_t row, uint64_t col,

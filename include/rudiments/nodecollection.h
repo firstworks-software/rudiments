@@ -11,15 +11,14 @@
 template <class valuetype>
 class nodecollectionnode : virtual public object {
 	public:
-
-		/** Deletes this instance of the node class. */
-		virtual	~nodecollectionnode() {};
-
 		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
 
 		/** Return the value stored in the node. */
 		virtual	valuetype	getValue() const=0;
+
+		/** Return a reference to the value stored in the node. */
+		virtual	valuetype	&getValue()=0;
 
 		/** Prints out a representation of the node. */
 		virtual	void	print() const=0;
@@ -29,9 +28,6 @@ class nodecollectionnode : virtual public object {
  *  collections. */
 class nodecollection : public collection {
 	public:
-
-		/** Deletes this instance of the nodecollection class. */
-		virtual	~nodecollection() {};
 };
 
 #endif

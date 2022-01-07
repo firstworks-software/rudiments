@@ -352,26 +352,26 @@ uint64_t singlylinkedlist<valuetype>::getLength() const {
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlist<valuetype>::getFirst() {
+listnode<valuetype> *singlylinkedlist<valuetype>::getFirst() const {
 	return first;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlist<valuetype>::getLast() {
+listnode<valuetype> *singlylinkedlist<valuetype>::getLast() const {
 	return last;
 }
 
 template <class valuetype>
 inline
 listnode<valuetype> *singlylinkedlist<valuetype>::getNext(
-					listnode<valuetype> *node) {
+					listnode<valuetype> *node) const {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlist<valuetype>::find(valuetype value) {
+listnode<valuetype> *singlylinkedlist<valuetype>::find(valuetype value) const {
 	return find(first,value);
 }
 
@@ -379,7 +379,7 @@ template <class valuetype>
 inline
 listnode<valuetype> *singlylinkedlist<valuetype>::find(
 				listnode<valuetype> *startnode,
-				valuetype value) {
+				valuetype value) const {
 	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
 		if (!this->getComparator()->compare(
@@ -683,13 +683,19 @@ valuetype singlylinkedlistnode<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlistnode<valuetype>::getPrevious() {
+valuetype &singlylinkedlistnode<valuetype>::getValue() {
+	return value;
+}
+
+template <class valuetype>
+inline
+listnode<valuetype> *singlylinkedlistnode<valuetype>::getPrevious() const {
 	return next;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() {
+listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() const {
 	return next;
 }
 

@@ -113,4 +113,97 @@ int main(int argc, char **argv) {
 		title.append(")(out of range after clear)");
 		test(title.getString(),!intt.getValue(i,(uint64_t)0));
 	}
+	stdoutput.printf("\n");
+
+
+	// copy and assignment
+	for (uint16_t i=0; i<2; i++) {
+
+		stdoutput.printf("copy/assignment%s...\n",(!i)?"":" (managed)");
+
+		dynamictable<char *>	cch1;
+		cch1.setManageArrayValues(i);
+		const char *values[]={
+			"a","b","c","d","e","f","g","h","i","j","k","l","m",
+			"n","o","p","q","r","s","t","u","v","w","x","y","z",
+			NULL
+		};
+		for (uint64_t col=0; col<13; col++) {
+			intt.setColumnName(col,colname(col));
+		}
+		uint16_t	k=0;
+		for (uint64_t row=0; row<2; row++) {
+			for (uint64_t col=0; col<13; col++) {
+				if (!i) {
+					cch1.setValue(row,col,
+						(char *)values[k]);
+				} else {
+					cch1.setValue(row,col,
+						charstring::duplicate(
+							(char *)values[k]));
+				}
+				k++;
+			}
+		}
+	
+		dynamictable<char *>	cch2(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==1) {
+				cch2.clear();
+			}
+			if (j) {
+				cch2=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy: manage values":
+					"assignment: manage values",
+						cch2.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy: manage array values":
+					"assignment: manage array values",
+						cch2.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify row/col count
+			test((!j)?"copy: row count":"assignment: row count",
+							cch2.getRowCount()==
+							cch1.getRowCount());
+			test((!j)?"copy: col count":"assignment: col count",
+							cch2.getColCount()==
+							cch1.getColCount());
+
+			// verify column names
+			bool	success=true;
+			for (uint64_t col=0; col<13; col++) {
+				if (charstring::compare(
+						cch1.getColumnName(col),
+						cch2.getColumnName(col))) {
+					success=false;
+					break;
+				}
+			}
+			test((!j)?"copy: columns":"assignment: columns",
+								success);
+
+			// verify values
+			success=true;
+			for (uint64_t row=0; row<2; row++) {
+				for (uint64_t col=0; col<13; col++) {
+					if (charstring::compare(
+						cch1.getValue(row,col),
+						cch2.getValue(row,col))) {
+						success=false;
+						break;
+					}
+				}
+			}
+			test((!j)?"copy: values":"assignment: values",success);
+		}
+	}
+	stdoutput.printf("\n");
 }

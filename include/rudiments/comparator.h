@@ -21,7 +21,7 @@ class comparator {
 
 		/** Returns true if comparisons should sort items in reverse
 		 *  and false otherwise. */
-		bool	getReverse();
+		bool	getReverse() const;
 
 		/** Set whether to interpret (version) numbers embedded in
 		 *  strings "naturally" (eg. 12 > 8 and 12.1 > 12.0.3) or
@@ -31,7 +31,7 @@ class comparator {
 		/** Returns true if comparisons should interpret numbers
 		 *  embedded in strings "naturally"
 		 *  (eg. 12 > 8 and 12.1 > 12.0.3) and false otherwise. */
-		bool	getNatural();
+		bool	getNatural() const;
 
 		/** Sets the set of characters to be used as number delimiters
 		 *  when strings are compared "naturally".
@@ -41,7 +41,7 @@ class comparator {
 
 		/** Returns the set of characters that will be used as number
 		 *  delimiters when strings are compared "naturally". */
-		const char	*getNumberDelimiters();
+		const char	*getNumberDelimiters() const;
 
 		/** Sets the set of wide characters to be used as number
 		 *  delimiters when wide strings are compared "naturally".
@@ -52,106 +52,108 @@ class comparator {
 		/** Returns the set of wide characters that will be used as
 		 *  number delimiters when wide strings are compared
 		 *  "naturally". */
-		const wchar_t	*getWideNumberDelimiters();
+		const wchar_t	*getWideNumberDelimiters() const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(char *value1, char *value2);
+		virtual	int32_t compare(char *value1, char *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(const char *value1, const char *value2);
+		virtual	int32_t compare(const char *value1,
+						const char *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(wchar_t *value1, wchar_t *value2);
+		virtual	int32_t compare(wchar_t *value1, wchar_t *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
 		virtual	int32_t compare(const wchar_t *value1,
-						const wchar_t *value2);
+						const wchar_t *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
 		virtual	int32_t compare(unsigned char *value1,
-						unsigned char *value2);
+						unsigned char *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
 		virtual	int32_t compare(const unsigned char *value1,
-						const unsigned char *value2);
+					const unsigned char *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(char value1, char value2);
+		virtual	int32_t compare(char value1, char value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(int16_t value1, int16_t value2);
+		virtual	int32_t compare(int16_t value1, int16_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(int32_t value1, int32_t value2);
+		virtual	int32_t compare(int32_t value1, int32_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(int64_t value1, int64_t value2);
+		virtual	int32_t compare(int64_t value1, int64_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
 		virtual	int32_t compare(unsigned char value1,
-						unsigned char value2);
+						unsigned char value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(uint16_t value1, uint16_t value2);
+		virtual	int32_t compare(uint16_t value1, uint16_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(uint32_t value1, uint32_t value2);
+		virtual	int32_t compare(uint32_t value1, uint32_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(uint64_t value1, uint64_t value2);
+		virtual	int32_t compare(uint64_t value1, uint64_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(float value1, float value2);
+		virtual	int32_t compare(float value1, float value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(double value1, double value2);
+		virtual	int32_t compare(double value1, double value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(long double value1, long double value2);
+		virtual	int32_t compare(long double value1,
+						long double value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(object *value1, object *value2);
+		virtual	int32_t compare(object *value1, object *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(void *value1, void *value2);
+		virtual	int32_t compare(void *value1, void *value2) const;
 
 	#include <rudiments/private/comparator.h>
 };

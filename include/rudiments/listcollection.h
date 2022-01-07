@@ -11,10 +11,6 @@
 template <class valuetype>
 class listnode : public nodecollectionnode<valuetype> {
 	public:
-
-		/** Deletes this instance of the listnode class. */
-		virtual	~listnode() {};
-
 		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
 
@@ -23,11 +19,11 @@ class listnode : public nodecollectionnode<valuetype> {
 
 		/** Returns the previous node in the linkedlist or NULL
 		 *  if this node is the first node in the list. */
-		virtual	listnode<valuetype>	*getPrevious()=0;
+		virtual	listnode<valuetype>	*getPrevious() const=0;
 
 		/** Returns the next node in the linkedlist or NULL
 		 * if this node is the last node in the list. */
-		virtual	listnode<valuetype>	*getNext()=0;
+		virtual	listnode<valuetype>	*getNext() const=0;
 
 	#include <rudiments/private/listnode.h>
 };
@@ -37,10 +33,6 @@ class listnode : public nodecollectionnode<valuetype> {
 template <class valuetype>
 class listcollection : public nodecollection {
 	public:
-
-		/** Deletes this instance of the listcollection class. */
-		virtual	~listcollection() {};
-
 		/** Creates a new listnode containing "value" and
 		 *  prepends it to the linkedlist. */
 		virtual void	prepend(valuetype value)=0;
@@ -131,24 +123,24 @@ class listcollection : public nodecollection {
 		virtual	uint64_t	getLength() const=0;
 
 		/** Returns the first node in the listcollection. */
-		virtual	listnode<valuetype>	*getFirst()=0;
+		virtual	listnode<valuetype>	*getFirst() const =0;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
 		virtual	listnode<valuetype>	*getNext(
-						listnode<valuetype> *node)=0;
+					listnode<valuetype> *node) const=0;
 
 		/** Returns a pointer to the first listnode
 		 *  containing "value" or NULL if "value" was not found. */
-		virtual	listnode<valuetype>	*find(valuetype value)=0;
+		virtual	listnode<valuetype>	*find(valuetype value) const=0;
 
 		/** Returns a pointer to the first listnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
 		virtual	listnode<valuetype>	*find(
 						listnode<valuetype> *startnode,
-						valuetype value)=0;
+						valuetype value) const=0;
 
 		/** Sorts the linkedlist in ascending order using a modified
 		 *  insertion sort algorithm.  This sort is slower than

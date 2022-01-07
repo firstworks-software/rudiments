@@ -53,9 +53,13 @@ class staticarray : public arraycollection<valuetype> {
 		/** Deletes this instance of the staticarray class. */
 		~staticarray();
 
-		/** Provides access to the "index"th element of the
+		/** Provides read/write access to the "index"th element of the
 		 *  staticarray. */
 		valuetype	&operator[](uint64_t index);
+
+		/** Provides read-only access to the "index"th element of the
+		 *  staticarray. */
+		valuetype	operator[](uint64_t index) const;
 
 		/** Returns the number of elements in the array. */
 		uint64_t	getLength() const;

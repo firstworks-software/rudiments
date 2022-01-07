@@ -11,12 +11,13 @@
 template <class valuetype>
 class arraycollection : public collection {
 	public:
-
-		/** Deletes this instance of the arraycollection class. */
-		virtual	~arraycollection() {};
-
-		/** Provides access ot the "index"th element of the array. */
+		/** Provides read/write access ot the "index"th element of the
+		 *  array. */
 		virtual	valuetype	&operator[](uint64_t index)=0;
+
+		/** Provides read-only access ot the "index"th element of the
+		 *  array. */
+		virtual	valuetype	operator[](uint64_t index) const=0;
 
 		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength() const=0;

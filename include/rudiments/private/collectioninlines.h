@@ -41,7 +41,7 @@ collection::~collection() {
 }
 
 inline
-comparator *collection::getComparator() {
+comparator *collection::getComparator() const {
 	return compptr;
 }
 
@@ -61,27 +61,27 @@ void collection::setManageValues(bool manage) {
 }
 
 inline
-bool collection::getIsReadOnly() {
+bool collection::getIsReadOnly() const {
 	return false;
 }
 
 inline
-bool collection::getIsBlockBased() {
+bool collection::getIsBlockBased() const {
 	return false;
 }
 
 inline
-uint64_t collection::getBlockSize() {
+uint64_t collection::getBlockSize() const {
 	return 0;
 }
 
 inline
-bool collection::getIsSequentialAccess() {
+bool collection::getIsSequentialAccess() const {
 	return false;
 }
 
 inline
-bool collection::getManageValues() {
+bool collection::getManageValues() const {
 	return managevalues;
 }
 
@@ -92,7 +92,7 @@ void collection::setManageArrayValues(bool manage) {
 }
 
 inline
-bool collection::getManageArrayValues() {
+bool collection::getManageArrayValues() const {
 	return managearrayvalues;
 }
 
@@ -103,7 +103,7 @@ void collection::setManageKeys(bool manage) {
 }
 
 inline
-bool collection::getManageKeys() {
+bool collection::getManageKeys() const {
 	return managekeys;
 }
 
@@ -114,6 +114,6 @@ void collection::setManageArrayKeys(bool manage) {
 }
 
 inline
-bool collection::getManageArrayKeys() {
+bool collection::getManageArrayKeys() const {
 	return managearraykeys;
 }

@@ -47,14 +47,14 @@ class tablecollection : public nodecollection {
 
 		/** Returns the name of column "col" or NULL if column "col"
 		 *  has no name. */
-		virtual	const char	*getColumnName(uint64_t col)=0;
+		virtual	const char	*getColumnName(uint64_t col) const=0;
 
 		/** Returns the current number of columns in the table.
 		 *
 		 *  In a read-write implementation, returns larger and larger
 		 *  values as calls to setColumnName() or setValue() extend the
 		 *  table. */
-		virtual	uint64_t	getColCount()=0;
+		virtual	uint64_t	getColCount() const=0;
 		
 		/** In a read-write implementation, sets the value at "row",
 		 *  "col" to "value".

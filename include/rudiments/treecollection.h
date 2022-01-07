@@ -19,31 +19,31 @@ class treenode : public nodecollectionnode<valuetype> {
 
 		/** Returns the parent node in the tree or NULL
 		 *  if this node is the top-most node in the tree. */
-		virtual treenode<valuetype>	*getParent()=0;
+		virtual treenode<valuetype>	*getParent() const=0;
 
 		/** Returns the left child of this node in the tree
 		 *  or NULL if this node has no left child. */
-		virtual treenode<valuetype>	*getLeftChild()=0;
+		virtual treenode<valuetype>	*getLeftChild() const=0;
 
 		/** Returns the right child of this node in the tree
 		 *  or NULL if this node has no right child. */
-		virtual treenode<valuetype>	*getRightChild()=0;
+		virtual treenode<valuetype>	*getRightChild() const=0;
 
 		/** Returns the left height of this node in the tree. */
-		virtual uint8_t	getLeftHeight()=0;
+		virtual uint8_t	getLeftHeight() const=0;
 
 		/** Returns the right height of this node in the tree. */
-		virtual uint8_t	getRightHeight()=0;
+		virtual uint8_t	getRightHeight() const=0;
 
 		/** Returns the previous node in the tree (in an in-order,
  		 *  depth-first traversal) or NULL if this node is the first
  		 *  node in the tree. */
-		virtual treenode<valuetype>	*getPrevious()=0;
+		virtual treenode<valuetype>	*getPrevious() const=0;
 
 		/** Returns the next node in the tree (in an in-order,
 		 *  depth-first traversal) or NULL if this node is the last
 		 *  node in the tree. */
-		virtual treenode<valuetype>	*getNext()=0;
+		virtual treenode<valuetype>	*getNext() const=0;
 
 		/** Prints the value stored in the node. */
 		virtual void	print() const=0;
@@ -60,38 +60,38 @@ class treecollection : public nodecollection {
 		virtual uint64_t	getLength() const=0;
 
 		/** Returns the top-most node in the treecollection. */
-		virtual treenode<valuetype>	*getTop()=0;
+		virtual treenode<valuetype>	*getTop() const=0;
 
 		/** Returns the first node in the treecollection (in an
 		 *  in-order, depth-first traversal). */
-		virtual treenode<valuetype>	*getFirst()=0;
+		virtual treenode<valuetype>	*getFirst() const=0;
 
 		/** Returns the last node in the treecollection (in an in-order,
 		 *  depth-first traversal). */
-		virtual treenode<valuetype>	*getLast()=0;
+		virtual treenode<valuetype>	*getLast() const=0;
 
 		/** Returns the node prior to "node" or NULL if this node is
 		 *  the first node in the tree (in an in-order, depth-first
 		 *  traversal).  "node" is presumed to be in the tree. */
 		virtual treenode<valuetype>	*getPrevious(
-					treenode<valuetype> *node)=0;
+					treenode<valuetype> *node) const=0;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the tree (in an in-order, depth-first
 		 *  traversal). "node" is presumed to be in the tree. */
 		virtual treenode<valuetype>	*getNext(
-					treenode<valuetype> *node)=0;
+					treenode<valuetype> *node) const=0;
 
 		/** Returns a pointer to the first treenode containing
 		 *  "value" or NULL if "value" was not found. */
-		virtual treenode<valuetype>	*find(valuetype value)=0;
+		virtual treenode<valuetype>	*find(valuetype value) const=0;
 
 		/** Returns a pointer to the first treenode below
 		 *  "startnode" containing "value" or NULL if "value" was not
 		 *  found. */
 		virtual treenode<valuetype>
 			*find(treenode<valuetype> *startnode,
-							valuetype value)=0;
+						valuetype value) const=0;
 
 		/** Deletes all treenodes currently in the
 		 *  treecollection.

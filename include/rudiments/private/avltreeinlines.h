@@ -289,39 +289,39 @@ uint64_t avltree<valuetype>::getLength() const {
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltree<valuetype>::getTop() {
+treenode<valuetype> *avltree<valuetype>::getTop() const {
 	return top;
 }
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltree<valuetype>::getFirst() {
+treenode<valuetype> *avltree<valuetype>::getFirst() const {
 	return first;
 }
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltree<valuetype>::getLast() {
+treenode<valuetype> *avltree<valuetype>::getLast() const {
 	return last;
 }
 
 template <class valuetype>
 inline
 treenode<valuetype> *avltree<valuetype>::getPrevious(
-					treenode<valuetype> *node) {
+					treenode<valuetype> *node) const {
 	return (node)?node->getPrevious():NULL;
 }
 
 template <class valuetype>
 inline
 treenode<valuetype> *avltree<valuetype>::getNext(
-					treenode<valuetype> *node) {
+					treenode<valuetype> *node) const {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltree<valuetype>::find(valuetype value) {
+treenode<valuetype> *avltree<valuetype>::find(valuetype value) const {
 	return find((treenode<valuetype> *)top,value);
 }
 
@@ -329,7 +329,7 @@ template <class valuetype>
 inline
 treenode<valuetype> *avltree<valuetype>::find(
 					treenode<valuetype> *startnode,
-					valuetype value) {
+					valuetype value) const {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("find ");
@@ -483,37 +483,43 @@ valuetype avltreenode<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltreenode<valuetype>::getParent() {
+valuetype &avltreenode<valuetype>::getValue() {
+	return value;
+}
+
+template <class valuetype>
+inline
+treenode<valuetype> *avltreenode<valuetype>::getParent() const {
 	return parent;
 }
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltreenode<valuetype>::getLeftChild() {
+treenode<valuetype> *avltreenode<valuetype>::getLeftChild() const {
 	return left;
 }
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltreenode<valuetype>::getRightChild() {
+treenode<valuetype> *avltreenode<valuetype>::getRightChild() const {
 	return right;
 }
 
 template <class valuetype>
 inline
-uint8_t avltreenode<valuetype>::getLeftHeight() {
+uint8_t avltreenode<valuetype>::getLeftHeight() const {
 	return leftheight;
 }
 
 template <class valuetype>
 inline
-uint8_t avltreenode<valuetype>::getRightHeight() {
+uint8_t avltreenode<valuetype>::getRightHeight() const {
 	return rightheight;
 }
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltreenode<valuetype>::getPrevious() {
+treenode<valuetype> *avltreenode<valuetype>::getPrevious() const {
 
 	// reverse in-order, depth-first traversal...
 
@@ -558,7 +564,7 @@ treenode<valuetype> *avltreenode<valuetype>::getPrevious() {
 
 template <class valuetype>
 inline
-treenode<valuetype> *avltreenode<valuetype>::getNext() {
+treenode<valuetype> *avltreenode<valuetype>::getNext() const {
 
 	// in-order, depth-first traversal...
 

@@ -34,8 +34,11 @@ dynamictable<valuetype> &dynamictable<valuetype>::operator=(
 template <class valuetype>
 inline
 void dynamictable<valuetype>::clone(const dynamictable<valuetype> *table) {
-	columnnames=&(table->columnnames);
-	values=&(table->values);
+	for (uint64_t col=0; col<table->getColCount(); col++) {
+		columnnames[col]=
+			charstring::duplicate(table->getColumnName(col));
+	}
+	values=table->values;
 	cols=table->cols;
 	rows=table->rows;
 }
@@ -62,13 +65,13 @@ void dynamictable<valuetype>::setColumnName(uint64_t col, const char *name) {
 
 template <class valuetype>
 inline
-const char *dynamictable<valuetype>::getColumnName(uint64_t col) {
+const char *dynamictable<valuetype>::getColumnName(uint64_t col) const {
 	return (col<cols)?columnnames[col]:NULL;
 }
 
 template <class valuetype>
 inline
-uint64_t dynamictable<valuetype>::getColCount() {
+uint64_t dynamictable<valuetype>::getColCount() const {
 	return cols;
 }
 

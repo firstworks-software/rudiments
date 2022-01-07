@@ -27,11 +27,11 @@ class singlylinkedlistnode : public listnode<valuetype> {
 		valuetype	getValue() const;
 
 		/** Always returns NULL. */
-		listnode<valuetype>	*getPrevious();
+		listnode<valuetype>	*getPrevious() const;
 
 		/** Returns the next node in the singlylinkedlist or NULL
 		 * if this node is the last node in the list. */
-		listnode<valuetype>	*getNext();
+		listnode<valuetype>	*getNext() const;
 
 		/** Prints the value stored in the node. */
 		void	print() const;
@@ -158,25 +158,26 @@ class singlylinkedlist : public listcollection<valuetype> {
 		uint64_t	getLength() const;
 
 		/** Returns the first node in the singlylinkedlist. */
-		listnode<valuetype>	*getFirst();
+		listnode<valuetype>	*getFirst() const;
 
 		/** Returns the last node in the singlylinkedlist. */
-		listnode<valuetype>	*getLast();
+		listnode<valuetype>	*getLast() const;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
-		listnode<valuetype>	*getNext(listnode<valuetype> *node);
+		listnode<valuetype>	*getNext(
+					listnode<valuetype> *node) const;
 
 		/** Returns a pointer to the first singlylinkedlistnode
 		 *  containing "value" or NULL if "value" was not found. */
-		listnode<valuetype>	*find(valuetype value);
+		listnode<valuetype>	*find(valuetype value) const;
 
 		/** Returns a pointer to the first singlylinkedlistnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
 		listnode<valuetype> *find(listnode<valuetype> *startnode,
-							valuetype value);
+							valuetype value) const;
 
 		/** Sorts the singlylinkedlist in ascending order using a
 		 *  modified insertion sort algorithm.  This sort is slower

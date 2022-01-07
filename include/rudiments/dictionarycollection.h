@@ -12,10 +12,6 @@
 template<class keytype, class valuetype>
 class dictionarycollection : public collection {
 	public:
-
-		/** Deletes this instance of the listcollection class. */
-		virtual	~dictionarycollection() {};
-
 		/** Sets the value associated with "key" to "value".
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value". */
@@ -57,30 +53,30 @@ class dictionarycollection : public collection {
 		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		virtual	bool	getValue(keytype key, valuetype *value)=0;
+		virtual	bool	getValue(keytype key, valuetype *value) const=0;
 
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid value of NULL associated with "key". */
-		virtual	valuetype	getValue(keytype key)=0;
+		virtual	valuetype	getValue(keytype key) const=0;
 
 		/** Sets "k" to the key associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		virtual	bool	getKey(keytype key, keytype *k)=0;
+		virtual	bool	getKey(keytype key, keytype *k) const=0;
 
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid value of NULL associated with "key". */
-		virtual	keytype getKey(keytype key)=0;
+		virtual	keytype getKey(keytype key) const=0;
 
 		/** Returns a list of the keys in the dictionary. */
-		virtual	linkedlist<keytype>	*getKeys()=0;
+		virtual	linkedlist<keytype>	*getKeys() const=0;
 
 		/** Returns the number of key/value pairs in the dictionary. */
-		virtual	uint64_t	getLength()=0;
+		virtual	uint64_t	getLength() const=0;
 
 		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't
@@ -93,7 +89,7 @@ class dictionarycollection : public collection {
 		virtual	void		clear()=0;
 
 		/** Prints out a representation of the dictionary. */
-		virtual	void		print()=0;
+		virtual	void		print() const=0;
 };
 
 #endif

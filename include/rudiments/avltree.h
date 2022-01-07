@@ -27,31 +27,31 @@ class avltreenode : public treenode<valuetype> {
 
 		/** Returns the parent node in the avltree or NULL
 		 *  if this node is the top-most node in the tree. */
-		treenode<valuetype>	*getParent();
+		treenode<valuetype>	*getParent() const;
 
 		/** Returns the left child of this node in the avltree
 		 *  or NULL if this node has no left child. */
-		treenode<valuetype>	*getLeftChild();
+		treenode<valuetype>	*getLeftChild() const;
 
 		/** Returns the right child of this node in the avltree
 		 *  or NULL if this node has no right child. */
-		treenode<valuetype>	*getRightChild();
+		treenode<valuetype>	*getRightChild() const;
 
 		/** Returns the left height of this node in the avltree. */
-		uint8_t	getLeftHeight();
+		uint8_t	getLeftHeight() const;
 
 		/** Returns the right height of this node in the avltree. */
-		uint8_t	getRightHeight();
+		uint8_t	getRightHeight() const;
 
 		/** Returns the previous node in the avltree (in an in-order,
  		 *  depth-first traversal) or NULL if this node is the first
  		 *  node in the tree. */
-		treenode<valuetype>	*getPrevious();
+		treenode<valuetype>	*getPrevious() const;
 
 		/** Returns the next node in the avltree (in an in-order,
 		 *  depth-first traversal) or NULL if this node is the last
 		 *  node in the tree. */
-		treenode<valuetype>	*getNext();
+		treenode<valuetype>	*getNext() const;
 
 		/** Prints the value stored in the node. */
 		void	print() const;
@@ -137,38 +137,37 @@ class avltree : public treecollection<valuetype> {
 		uint64_t	getLength() const;
 
 		/** Returns the top-most node in the avltree. */
-		treenode<valuetype>	*getTop();
+		treenode<valuetype>	*getTop() const;
 
 		/** Returns the first node in the avltree (in an in-order,
 		 *  depth-first traversal). */
-		treenode<valuetype>	*getFirst();
+		treenode<valuetype>	*getFirst() const;
 
 		/** Returns the last node in the avltree (in an in-order,
 		 *  depth-first traversal). */
-		treenode<valuetype>	*getLast();
+		treenode<valuetype>	*getLast() const;
 
 		/** Returns the node prior to "node" or NULL if this node is
 		 *  the first node in the tree (in an in-order, depth-first
 		 *  traversal).  "node" is presumed to be in the tree. */
 		treenode<valuetype>	*getPrevious(
-					treenode<valuetype> *node);
+					treenode<valuetype> *node) const;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the tree (in an in-order, depth-first
 		 *  traversal). "node" is presumed to be in the tree. */
 		treenode<valuetype>	*getNext(
-					treenode<valuetype> *node);
+					treenode<valuetype> *node) const;
 
 		/** Returns a pointer to the first avltreenode containing
 		 *  "value" or NULL if "value" was not found. */
-		treenode<valuetype>	*find(valuetype value);
+		treenode<valuetype>	*find(valuetype value) const;
 
 		/** Returns a pointer to the first avltreenode below
 		 *  "startnode" containing "value" or NULL if "value" was not
 		 *  found. */
-		treenode<valuetype>
-			*find(treenode<valuetype> *startnode,
-							valuetype value);
+		treenode<valuetype> *find(treenode<valuetype> *startnode,
+							valuetype value) const;
 
 		/** Deletes all avltreenodes currently in the avltree.
 		 *

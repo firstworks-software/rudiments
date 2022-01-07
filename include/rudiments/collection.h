@@ -28,7 +28,7 @@ class collection : virtual public object {
 		/** Returns the comparator used internally by the class.
 		 *  Returns whatever was previously set by setComparator() or
 		 *  an instance of the comparator class by default. */
-		comparator	*getComparator();
+		comparator	*getComparator() const;
 
 		/** Sets the comparator used by the class.  Reverts to the
 		 *  default comparator if "newcomp" is NULL. */
@@ -38,25 +38,25 @@ class collection : virtual public object {
 		 *  read-write implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsReadOnly();
+		virtual bool		getIsReadOnly() const;
 
 		/** Returns true for block-based implementations and false for
 		 *  monolithic implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsBlockBased();
+		virtual bool		getIsBlockBased() const;
 
 		/** Returns the block size for block-based implementations and
 		 *  0 for monolithic implementations.
 		 *
 		 *  Returns 0 by default. */
-		virtual uint64_t	getBlockSize();
+		virtual uint64_t	getBlockSize() const;
 
 		/** Returns true for sequential-access implementations and
 		 *  false for random-access implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsSequentialAccess();
+		virtual bool		getIsSequentialAccess() const;
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should delete the values that are stored at each
@@ -83,7 +83,7 @@ class collection : virtual public object {
 		 *  is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageValues();
+		virtual	bool	getManageValues() const;
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should array-delete the values that are stored at each
@@ -110,7 +110,7 @@ class collection : virtual public object {
 		 *  method is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageArrayValues();
+		virtual	bool	getManageArrayValues() const;
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should delete the keys that are stored at each
@@ -137,7 +137,7 @@ class collection : virtual public object {
 		 *  is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageKeys();
+		virtual	bool	getManageKeys() const;
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should array-delete the keys that are stored at each
@@ -164,7 +164,7 @@ class collection : virtual public object {
 		 *  method is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageArrayKeys();
+		virtual	bool	getManageArrayKeys() const;
 
 	#include <rudiments/private/collection.h>
 };

@@ -55,7 +55,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 
 		/** Returns "true" if insertion order tracking is enabled and
 		 *  false otherwise. */
-		bool	getTrackInsertionOrder();
+		bool	getTrackInsertionOrder() const;
 
 		/** Sets the value associated with "key" to "value".
 		 *  If "key" already exists, the value currently
@@ -101,30 +101,30 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	getValue(keytype key, valuetype *value);
+		bool	getValue(keytype key, valuetype *value) const;
 
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid value of NULL associated with "key". */
-		valuetype getValue(keytype key);
+		valuetype getValue(keytype key) const;
 
 		/** Sets "k" to the key associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	getKey(keytype key, keytype *k);
+		bool	getKey(keytype key, keytype *k) const;
 
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid value of NULL associated with "key". */
-		keytype getKey(keytype key);
+		keytype getKey(keytype key) const;
 
 		/** Returns a list of the keys in the dictionary. */
-		linkedlist<keytype>	*getKeys();
+		linkedlist<keytype>	*getKeys() const;
 
 		/** Returns the number of key-value pairs in the dictionary. */
-		uint64_t	getLength();
+		uint64_t	getLength() const;
 
 		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't
@@ -151,7 +151,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		void	clear();
 
 		/** Prints out a representation of the dictionary. */
-		void	print();
+		void	print() const;
 
 	#include <rudiments/private/dictionary.h>
 };
