@@ -123,7 +123,7 @@ class listcollection : public nodecollection {
 		virtual	uint64_t	getLength() const=0;
 
 		/** Returns the first node in the listcollection. */
-		virtual	listnode<valuetype>	*getFirst() const =0;
+		virtual	listnode<valuetype>	*getFirst() const=0;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the

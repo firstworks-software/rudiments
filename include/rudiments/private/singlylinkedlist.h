@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const singlylinkedlist<valuetype> *list);
+		void	clone(const listcollection<valuetype> *list);
 		void	insertBefore(listnode<valuetype> *node,
 							valuetype value) {};
 		void	insertBefore(listnode<valuetype> *node,

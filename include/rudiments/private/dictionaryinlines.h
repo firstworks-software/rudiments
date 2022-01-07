@@ -89,7 +89,7 @@ inline
 void dictionary<keytype,valuetype>::clone(
 				const dictionary<keytype,valuetype> *a) {
 
-	trackinsertionorder=a->trackinsertionorder;
+	trackinsertionorder=a->getTrackInsertionOrder();
 
 	// comp should already exist at this point
 	tree.setComparator(comp);
@@ -106,12 +106,12 @@ void dictionary<keytype,valuetype>::clone(
 			*node=a->tree.getFirst(); node; node=node->getNext()) {
 		setValue(node_duplicate_value(
 				node->getValue()->getKey(),
-				this->collection::managekeys,
-				this->collection::managearraykeys),
+				this->getManageValues(),
+				this->getManageArrayValues()),
 			node_duplicate_value(
 				node->getValue()->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues));
+				this->getManageValues(),
+				this->getManageArrayValues()));
 	}
 
 	// if a's keylist was already built then go ahead and build ours too
@@ -330,11 +330,11 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 			list.remove(tnode->getValue());
 		}
 		node_delete_value(tnode->getValue()->getKey(),
-				this->collection::managekeys,
-				this->collection::managearraykeys);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		node_delete_value(tnode->getValue()->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -347,11 +347,11 @@ void dictionary<keytype,valuetype>::clear() {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		node_delete_value(node->getValue()->getKey(),
-				this->collection::managekeys,
-				this->collection::managearraykeys);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		node_delete_value(node->getValue()->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete node->getValue();
 	}
 	tree.clear();

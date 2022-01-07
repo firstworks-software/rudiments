@@ -60,10 +60,19 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  that is a copy of "a". */
 		singlylinkedlist(const singlylinkedlist<valuetype> &a);
 
+		/** Creates an instance of the singlylinkedlist class
+		 *  that is a copy of "a". */
+		singlylinkedlist(const listcollection<valuetype> &a);
+
 		/** Makes this instance of the singlylinkedlist class
 		 *  identical to "a". */
 		singlylinkedlist<valuetype>	&operator=(
 					const singlylinkedlist<valuetype> &a);
+
+		/** Makes this instance of the singlylinkedlist class
+		 *  identical to "a". */
+		singlylinkedlist<valuetype>	&operator=(
+					const listcollection<valuetype> &a);
 
 		/** Deletes this instance of the singlylinkedlist class and all
 		 *  of its singlylinkedlistnodes.

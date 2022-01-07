@@ -13,11 +13,18 @@ singlylinkedlist<valuetype>::singlylinkedlist() :
 	length(0) {
 }
 
-
 template <class valuetype>
 inline
 singlylinkedlist<valuetype>::singlylinkedlist(
 				const singlylinkedlist<valuetype> &a) :
+				listcollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
+singlylinkedlist<valuetype>::singlylinkedlist(
+				const listcollection<valuetype> &a) :
 				listcollection<valuetype>(a) {
 	clone(&a);
 }
@@ -36,8 +43,19 @@ singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::clone(
-				const singlylinkedlist<valuetype> *list) {
+singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
+					const listcollection<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		listcollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void singlylinkedlist<valuetype>::clone(const listcollection<valuetype> *list) {
 
 	first=NULL;
 	last=NULL;
@@ -46,7 +64,7 @@ void singlylinkedlist<valuetype>::clone(
 	// clone the list...
 
 	// run through the list we want to clone...
-	for (listnode<valuetype> *node=list->first;
+	for (listnode<valuetype> *node=list->getFirst();
 					node; node=node->getNext()) {
 
 		// create a new node
@@ -55,8 +73,8 @@ void singlylinkedlist<valuetype>::clone(
 
 		// copy the value
 		newnode->setValue(node_duplicate_value(node->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues));
+						this->getManageValues(),
+						this->getManageArrayValues()));
 
 		// append the node
 		append(newnode);
@@ -225,8 +243,8 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 	}
 	if (current) {
 		node_delete_value(current->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete current;
 		length--;
 		return true;
@@ -248,16 +266,16 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			first=NULL;
 			last=NULL;
 			node_delete_value(current->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 			delete current;
 			length--;
 			return true;
 		} else {
 			first=first->getNext();
 			node_delete_value(current->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 			delete current;
 			length--;
 			current=first;
@@ -275,8 +293,8 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 				last=prev;
 			}
 			node_delete_value(current->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 			delete current;
 			length--;
 			current=temp;
@@ -319,8 +337,8 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	}
 	if (current) {
 		node_delete_value(current->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete current;
 		length--;
 		return true;
@@ -605,8 +623,8 @@ void singlylinkedlist<valuetype>::clear() {
 	while (current) {
 		next=current->getNext();
 		node_delete_value(current->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete current;
 		current=next;
 	}

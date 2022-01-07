@@ -32,7 +32,7 @@
  *  of 10, then getting a value in row 6, followed by a value in row 22 would
  *  succeed, but a subsequent attempt to get a value from row 7 would fail. */
 template <class valuetype>
-class tablecollection : public nodecollection {
+class tablecollection : public collection {
 	public:
 
 		/** Deletes this instance of the tablecollection class. */
@@ -95,7 +95,7 @@ class tablecollection : public nodecollection {
 		 *  return NULL or 0.
 		 *
 		 *  In a read-only implementation, has no effect. */
-		virtual	void		clear()=0;
+		virtual	void	clear()=0;
 };
 
 #endif

@@ -25,7 +25,15 @@ avltree<valuetype>::avltree(const avltree<valuetype> &a) :
 
 template <class valuetype>
 inline
-avltree<valuetype> &avltree<valuetype>::operator=(const avltree<valuetype> &a) {
+avltree<valuetype>::avltree(const treecollection<valuetype> &a) :
+					treecollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
+avltree<valuetype> &avltree<valuetype>::operator=(
+					const avltree<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		treecollection<valuetype>::operator=(a);
@@ -36,15 +44,28 @@ avltree<valuetype> &avltree<valuetype>::operator=(const avltree<valuetype> &a) {
 
 template <class valuetype>
 inline
-void avltree<valuetype>::clone(const avltree<valuetype> *tree) {
+avltree<valuetype> &avltree<valuetype>::operator=(
+					const treecollection<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		treecollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void avltree<valuetype>::clone(const treecollection<valuetype> *tree) {
 	top=NULL;
 	first=NULL;
 	last=NULL;
-	length=tree->length;
+	length=tree->getLength();
 		
-	if (tree->top) {
+	if (tree->getTop()) {
+
 		// clone the tree
-		top=cloneNode(tree->top);
+		top=cloneNode(tree->getTop());
 
 		// update first
 		for (first=top;
@@ -68,8 +89,8 @@ treenode<valuetype> *avltree<valuetype>::cloneNode(
 
 	// copy the value
 	newnode->setValue(node_duplicate_value(node->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues));
+						this->getManageValues(),
+						this->getManageArrayValues()));
 
 	// clone the left side
 	if (node->getLeftChild()) {
@@ -269,8 +290,8 @@ inline
 bool avltree<valuetype>::remove(treenode<valuetype> *node) {
 	treenode<valuetype> *detachednode=detach(node);
 	node_delete_value(detachednode->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+				this->getManageValues(),
+				this->getManageArrayValues());
 	delete detachednode;
 	return true;
 }
@@ -419,8 +440,8 @@ void avltree<valuetype>::clear() {
 		i++;
 		#endif
 		node_delete_value(node->getValue(),
-				this->collection::managevalues,
-				this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete node;
 
 		// continue with parent...

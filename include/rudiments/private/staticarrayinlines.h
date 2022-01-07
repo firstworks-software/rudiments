@@ -17,22 +17,7 @@ staticarray<valuetype,length>::staticarray(
 						arraycollection<valuetype>(v) {
 	len=v.len;
 	data=new valuetype[len];
-	for (uint64_t i=0; i<len; i++) {
-
-		// Why not just:
-		//	*data[i]=*v.data[i];
-		//
-		// Some compilers get confused and think that
-		//	*data[i]=*v.data[i]
-		//		means
-		//	*((data[i])->operator=(*v.data[i]))
-		// and no carefully placed parentheses help.
-		//
-		// This silliness sorts out the problem.
-		valuetype	*a=&(data[i]);
-		valuetype	*b=&(v.data[i]);
-		*a=*b;
-	}
+	clone(&v);
 }
 
 template< class valuetype, uint64_t length >
@@ -42,26 +27,31 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 	if (this!=&v) {
 		arraycollection<valuetype>::operator=(v);
 		clear();
-		len=v.len;
-		data=new valuetype[len];
-		for (uint64_t i=0; i<len; i++) {
-
-			// Why not just:
-			//	*data[i]=*v.data[i];
-			//
-			// Some compilers get confused and think that
-			//	*data[i]=*v.data[i]
-			//		means
-			//	*((data[i])->operator=(*v.data[i]))
-			// and no carefully placed parentheses help.
-			//
-			// This silliness sorts out the problem.
-			valuetype	*a=&(data[i]);
-			valuetype	*b=&(v.data[i]);
-			*a=*b;
-		}
+		clone(&v);
 	}
 	return *this;
+}
+
+template< class valuetype, uint64_t length >
+inline
+void staticarray<valuetype,length>::clone(
+			const staticarray<valuetype,length> *v) {
+	for (uint64_t i=0; i<len; i++) {
+
+		// Why not just:
+		//	*data[i]=*v->data[i];
+		//
+		// Some compilers get confused and think that
+		//	*data[i]=*v->data[i]
+		//		means
+		//	*((data[i])->operator=(*v->data[i]))
+		// and no carefully placed parentheses help.
+		//
+		// This silliness sorts out the problem.
+		valuetype	*a=&(data[i]);
+		valuetype	*b=&(v->data[i]);
+		*a=*b;
+	}
 }
 
 template< class valuetype, uint64_t length >

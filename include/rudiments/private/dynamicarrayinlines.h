@@ -112,11 +112,9 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 template< class valuetype >
 inline
 valuetype dynamicarray<valuetype>::operator[](uint64_t index) const {
-#if 0
 	if (index>=lastlen) {
-		return (valuetype)0;
+		return *((valuetype *)NULL);
 	}
-#endif
 	return find(index);
 }
 

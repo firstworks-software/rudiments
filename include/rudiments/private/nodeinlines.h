@@ -215,16 +215,6 @@ void node_delete_value(valuetype *value, bool managed, bool managedarray) {
 }
 
 inline
-const char *node_duplicate_value(const char *value,
-				bool managed, bool managedarray) {
-	if (managedarray) {
-		return charstring::duplicate(value);
-	} else {
-		return value;
-	}
-}
-
-inline
 char *node_duplicate_value(char *value,
 				bool managed, bool managedarray) {
 	if (managedarray) {

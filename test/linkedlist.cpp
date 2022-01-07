@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/linkedlist.h>
+#include <rudiments/singlylinkedlist.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -562,6 +563,57 @@ int main(int argc, char **argv) {
 			}
 			test((!j)?"copy: values":"assignment: values",success);
 		}
+
+
+		singlylinkedlist<char *>	cch3(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==2) {
+				cch3.clear();
+			}
+			if (j) {
+				cch3=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy (singlylinkedlist): manage values":
+					"assignment: manage values",
+						cch3.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy (singlylinkedlist): "
+						"manage array values":
+					"assignment (singlylinkedlist): "
+						"manage array values",
+						cch3.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy (singlylinkedlist): length":
+					"assignment (singlylinkedlist): length",
+						cch3.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			listnode<char *>	*cch1n=cch1.getFirst();
+			listnode<char *>	*cch3n=cch3.getFirst();
+			while (cch1n) {
+				if (charstring::compare(cch1n->getValue(),
+							cch3n->getValue())) {
+					success=false;
+					break;
+				}
+				cch1n=cch1n->getNext();
+				cch3n=cch3n->getNext();
+			}
+			test((!j)?"copy (singlylinkedlist): values":
+					"assignment (singlylinkedlist): values",
+					success);
+		}
 	}
 	stdoutput.printf("\n");
+
 }

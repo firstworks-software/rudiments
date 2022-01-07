@@ -41,6 +41,19 @@ linkedlist<valuetype>::linkedlist(const linkedlist<valuetype> &a) :
 
 template <class valuetype>
 inline
+linkedlist<valuetype>::linkedlist(const listcollection<valuetype> &a) :
+					listcollection<valuetype>(a) {
+	clone(&a);
+#ifdef DARWIN_GCC_2952_HACKS
+	return;
+
+	// see note above
+	first=(linkedlistnode<valuetype> *)getFirst();
+#endif
+}
+
+template <class valuetype>
+inline
 linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 					const linkedlist<valuetype> &a) {
 	if (this!=&a) {
@@ -53,7 +66,19 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::clone(const linkedlist<valuetype> *list) {
+linkedlist<valuetype> &linkedlist<valuetype>::operator=(
+					const listcollection<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		listcollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void linkedlist<valuetype>::clone(const listcollection<valuetype> *list) {
 
 	first=NULL;
 	last=NULL;
@@ -62,7 +87,7 @@ void linkedlist<valuetype>::clone(const linkedlist<valuetype> *list) {
 	// clone the list...
 
 	// run through the list we want to clone...
-	for (listnode<valuetype> *node=list->first;
+	for (listnode<valuetype> *node=list->getFirst();
 					node; node=node->getNext()) {
 
 		// create a new node
@@ -71,8 +96,8 @@ void linkedlist<valuetype>::clone(const linkedlist<valuetype> *list) {
 
 		// copy the value
 		newnode->setValue(node_duplicate_value(node->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues));
+						this->getManageValues(),
+						this->getManageArrayValues()));
 
 		// append the node
 		append(newnode);
@@ -274,8 +299,8 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 		last=node->getPrevious();
 	}
 	node_delete_value(node->getValue(),
-			this->collection::managevalues,
-			this->collection::managearrayvalues);
+				this->getManageValues(),
+				this->getManageArrayValues());
 	delete node;
 	length--;
 	return true;
@@ -597,8 +622,8 @@ void linkedlist<valuetype>::clear() {
 	while (current) {
 		next=current->getNext();
 		node_delete_value(current->getValue(),
-					this->collection::managevalues,
-					this->collection::managearrayvalues);
+					this->getManageValues(),
+					this->getManageArrayValues());
 		delete current;
 		current=next;
 	}

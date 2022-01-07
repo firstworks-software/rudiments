@@ -53,10 +53,19 @@ class linkedlist : public listcollection<valuetype> {
 		 *  that is a copy of "a". */
 		linkedlist(const linkedlist<valuetype> &a);
 
+		/** Creates an instance of the linkedlist class
+		 *  that is a copy of "a". */
+		linkedlist(const listcollection<valuetype> &a);
+
 		/** Makes this instance of the linkedlist class
 		 *  identical to "a". */
 		linkedlist<valuetype>	&operator=(
 					const linkedlist<valuetype> &a);
+
+		/** Makes this instance of the linkedlist class
+		 *  identical to "a". */
+		linkedlist<valuetype>	&operator=(
+					const listcollection<valuetype> &a);
 
 		/** Deletes this instance of the linkedlist class and all of
 		 *  its linkedlistnodes.

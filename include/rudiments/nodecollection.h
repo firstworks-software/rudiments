@@ -27,7 +27,6 @@ class nodecollectionnode : virtual public object {
 /** The collection class is the parent class for all rudiments node-based
  *  collections. */
 class nodecollection : public collection {
-	public:
 };
 
 #endif
