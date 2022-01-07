@@ -30,23 +30,17 @@ scalar<valuetype> &scalar<valuetype>::operator=(const scalar<valuetype> &a) {
 template <class valuetype>
 inline
 void scalar<valuetype>::clone(const scalar<valuetype> *a) {
-	if (this->collection::managevalues) {
-		v=node_duplicate_value(a->getValue());
-	} else if (this->collection::managearrayvalues) {
-		v=node_duplicate_array_value(a->getValue());
-	} else {
-		v=a->getValue();
-	}
+	v=node_duplicate_value(a->getValue(),
+			this->collection::managevalues,
+			this->collection::managearrayvalues);
 }
 
 template <class valuetype>
 inline
 scalar<valuetype>::~scalar() {
-	if (this->collection::managevalues) {
-		node_delete_value(v);
-	} else if (this->collection::managearrayvalues) {
-		node_delete_array_value(v);
-	}
+	node_delete_value(v,
+		this->collection::managevalues,
+		this->collection::managearrayvalues);
 }
 
 template <class valuetype>
@@ -70,10 +64,8 @@ valuetype &scalar<valuetype>::getValue() {
 template <class valuetype>
 inline
 void scalar<valuetype>::clear() {
-	if (this->collection::managevalues) {
-		node_delete_value(v);
-	} else if (this->collection::managearrayvalues) {
-		node_delete_array_value(v);
-	}
+	node_delete_value(v,
+		this->collection::managevalues,
+		this->collection::managearrayvalues);
 	v=0;
 }

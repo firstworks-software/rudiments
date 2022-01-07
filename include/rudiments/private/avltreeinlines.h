@@ -67,13 +67,9 @@ treenode<valuetype> *avltree<valuetype>::cloneNode(
 	avltreenode<valuetype>	*newnode=new avltreenode<valuetype>(NULL);
 
 	// copy the value
-	if (this->collection::managevalues) {
-		newnode->setValue(node_duplicate_value(node->getValue()));
-	} else if (this->collection::managearrayvalues) {
-		newnode->setValue(node_duplicate_array_value(node->getValue()));
-	} else {
-		newnode->setValue(node->getValue());
-	}
+	newnode->setValue(node_duplicate_value(node->getValue(),
+					this->collection::managevalues,
+					this->collection::managearrayvalues));
 
 	// clone the left side
 	if (node->getLeftChild()) {
@@ -272,11 +268,9 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::remove(treenode<valuetype> *node) {
 	treenode<valuetype> *detachednode=detach(node);
-	if (this->collection::managevalues) {
-		node_delete_value(detachednode->getValue());
-	} else if (this->collection::managearrayvalues) {
-		node_delete_array_value(detachednode->getValue());
-	}
+	node_delete_value(detachednode->getValue(),
+				this->collection::managevalues,
+				this->collection::managearrayvalues);
 	delete detachednode;
 	return true;
 }
@@ -424,11 +418,9 @@ void avltree<valuetype>::clear() {
 		stdoutput.printf("\n");
 		i++;
 		#endif
-		if (this->collection::managevalues) {
-			node_delete_value(node->getValue());
-		} else if (this->collection::managearrayvalues) {
-			node_delete_array_value(node->getValue());
-		}
+		node_delete_value(node->getValue(),
+				this->collection::managevalues,
+				this->collection::managearrayvalues);
 		delete node;
 
 		// continue with parent...

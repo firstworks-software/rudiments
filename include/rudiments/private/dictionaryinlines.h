@@ -95,7 +95,7 @@ void dictionary<keytype,valuetype>::clone(
 	tree.setComparator(comp);
 
 	// We can't just set tree=a->tree and list=a->list because
-	// we don't have a node_duplicate_value/array_value() for a
+	// we don't have a node_duplicate_value() for a
 	// dictionarypair.  We can't just implement one because it
 	// would need to know whether to duplicate the key and value
 	// individually.
@@ -104,33 +104,14 @@ void dictionary<keytype,valuetype>::clone(
 	// adding its key/value pairs to ourself.
 	for (treenode<dictionarypair<keytype,valuetype> *>
 			*node=a->tree.getFirst(); node; node=node->getNext()) {
-		
-		// get the key and value
-		keytype		k=node->getValue()->getKey();
-		valuetype	v=node->getValue()->getValue();
-
-		// duplicate the key appropriately
-		keytype		nk;
-		if (this->collection::managekeys) {
-			nk=node_duplicate_value(k);
-		} else if (this->collection::managearraykeys) {
-			nk=node_duplicate_array_value(k);
-		} else {
-			nk=k;
-		}
-
-		// duplicate the value appropriately
-		valuetype	nv;
-		if (this->collection::managevalues) {
-			nv=node_duplicate_value(v);
-		} else if (this->collection::managearrayvalues) {
-			nv=node_duplicate_array_value(v);
-		} else {
-			nv=v;
-		}
-
-		// set the value
-		setValue(nk,nv);
+		setValue(node_duplicate_value(
+				node->getValue()->getKey(),
+				this->collection::managekeys,
+				this->collection::managearraykeys),
+			node_duplicate_value(
+				node->getValue()->getValue(),
+				this->collection::managevalues,
+				this->collection::managearrayvalues));
 	}
 
 	// if a's keylist was already built then go ahead and build ours too
@@ -348,16 +329,12 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
-		if (this->collection::managekeys) {
-			node_delete_value(tnode->getValue()->getKey());
-		} else if (this->collection::managearraykeys) {
-			node_delete_array_value(tnode->getValue()->getKey());
-		}
-		if (this->collection::managevalues) {
-			node_delete_value(tnode->getValue()->getValue());
-		} else if (this->collection::managearrayvalues) {
-			node_delete_array_value(tnode->getValue()->getValue());
-		}
+		node_delete_value(tnode->getValue()->getKey(),
+				this->collection::managekeys,
+				this->collection::managearraykeys);
+		node_delete_value(tnode->getValue()->getValue(),
+				this->collection::managevalues,
+				this->collection::managearrayvalues);
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -369,16 +346,12 @@ inline
 void dictionary<keytype,valuetype>::clear() {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		if (this->collection::managekeys) {
-			node_delete_value(node->getValue()->getKey());
-		} else if (this->collection::managearraykeys) {
-			node_delete_array_value(node->getValue()->getKey());
-		}
-		if (this->collection::managevalues) {
-			node_delete_value(node->getValue()->getValue());
-		} else if (this->collection::managearrayvalues) {
-			node_delete_array_value(node->getValue()->getValue());
-		}
+		node_delete_value(node->getValue()->getKey(),
+				this->collection::managekeys,
+				this->collection::managearraykeys);
+		node_delete_value(node->getValue()->getValue(),
+				this->collection::managevalues,
+				this->collection::managearrayvalues);
 		delete node->getValue();
 	}
 	tree.clear();
