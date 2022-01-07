@@ -48,6 +48,7 @@
 	dictionarynode renamed dictionarypair
 	updated comparator class to use arithmetic instead of comparisons
 		where possible
+	fixed bugs in dynamicarray::clear()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
