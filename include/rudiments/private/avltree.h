@@ -6,6 +6,7 @@
 				treenode<valuetype> *node,
 				treenode<valuetype> **treetop);
 		void	clone(const treecollection<valuetype> *tree);
+		void	clone(const nodecollection<valuetype> *coll);
 		treenode<valuetype>	*cloneNode(treenode<valuetype> *node);
 
 		treenode<valuetype>	*top;

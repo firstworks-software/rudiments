@@ -35,7 +35,7 @@ singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
 					const singlylinkedlist<valuetype> &a) {
 	if (this!=&a) {
 		clear();
-		listcollection<valuetype>::operator=(a);
+		nodecollection<valuetype>::operator=(a);
 		clone(&a);
 	}
 	return *this;
@@ -44,10 +44,10 @@ singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
 template <class valuetype>
 inline
 singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
-					const listcollection<valuetype> &a) {
+					const nodecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
-		listcollection<valuetype>::operator=(a);
+		nodecollection<valuetype>::operator=(a);
 		clone(&a);
 	}
 	return *this;
@@ -55,29 +55,17 @@ singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::clone(const listcollection<valuetype> *list) {
+void singlylinkedlist<valuetype>::clone(const nodecollection<valuetype> *coll) {
 
 	first=NULL;
 	last=NULL;
 	length=0;
 
-	// clone the list...
-
-	// run through the list we want to clone...
-	for (listnode<valuetype> *node=list->getFirst();
-					node; node=node->getNext()) {
-
-		// create a new node
-		singlylinkedlistnode<valuetype>	*newnode=
-				new singlylinkedlistnode<valuetype>(NULL);
-
-		// copy the value
-		newnode->setValue(node_duplicate_value(node->getValue(),
+	for (nodecollectionnode<valuetype> *node=coll->getFirst();
+						node; node=node->getNext()) {
+		append(node_duplicate_value(node->getValue(),
 						this->getManageValues(),
 						this->getManageArrayValues()));
-
-		// append the node
-		append(newnode);
 	}
 }
 

@@ -77,6 +77,10 @@ class avltree : public treecollection<valuetype> {
 		 *  that is a copy of "a". */
 		avltree(const treecollection<valuetype> &a);
 
+		/** Creates an instance of the avltree class
+		 *  that is a copy of "a". */
+		avltree(const nodecollection<valuetype> &a);
+
 		/** Makes this instance of the avltree class
 		 *  identical to "a". */
 		avltree<valuetype>	&operator=(
@@ -86,6 +90,11 @@ class avltree : public treecollection<valuetype> {
 		 *  identical to "a". */
 		avltree<valuetype>	&operator=(
 					const treecollection<valuetype> &a);
+
+		/** Makes this instance of the avltree class
+		 *  identical to "a". */
+		avltree<valuetype>	&operator=(
+					const nodecollection<valuetype> &a);
 
 		/** Deletes this instance of the avltree class and all of
 		 *  its avltreenodes.

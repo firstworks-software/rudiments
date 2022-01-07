@@ -54,8 +54,16 @@ class treenode : public nodecollectionnode<valuetype> {
 /** The treecollection class is the parent class for all rudiments tree
  *  collections. */
 template <class valuetype>
-class treecollection : public nodecollection {
+class treecollection : public nodecollection<valuetype> {
 	public:
+		/** Creates an empty instance of the treecollection class. */
+		treecollection() : nodecollection<valuetype>() {}
+
+		/** Creates an instance of the treecollection class
+		 *  that is a copy of "a". */
+		treecollection(const nodecollection<valuetype> &a) :
+					nodecollection<valuetype>(a) {}
+
 		/** Returns the number of nodes in the tree. */
 		virtual uint64_t	getLength() const=0;
 

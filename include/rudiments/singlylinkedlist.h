@@ -72,7 +72,7 @@ class singlylinkedlist : public listcollection<valuetype> {
 		/** Makes this instance of the singlylinkedlist class
 		 *  identical to "a". */
 		singlylinkedlist<valuetype>	&operator=(
-					const listcollection<valuetype> &a);
+					const nodecollection<valuetype> &a);
 
 		/** Deletes this instance of the singlylinkedlist class and all
 		 *  of its singlylinkedlistnodes.

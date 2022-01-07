@@ -32,11 +32,18 @@ avltree<valuetype>::avltree(const treecollection<valuetype> &a) :
 
 template <class valuetype>
 inline
+avltree<valuetype>::avltree(const nodecollection<valuetype> &a) :
+					treecollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
 avltree<valuetype> &avltree<valuetype>::operator=(
 					const avltree<valuetype> &a) {
 	if (this!=&a) {
 		clear();
-		treecollection<valuetype>::operator=(a);
+		nodecollection<valuetype>::operator=(a);
 		clone(&a);
 	}
 	return *this;
@@ -48,7 +55,19 @@ avltree<valuetype> &avltree<valuetype>::operator=(
 					const treecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
-		treecollection<valuetype>::operator=(a);
+		nodecollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+avltree<valuetype> &avltree<valuetype>::operator=(
+					const nodecollection<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		nodecollection<valuetype>::operator=(a);
 		clone(&a);
 	}
 	return *this;
@@ -67,6 +86,36 @@ void avltree<valuetype>::clone(const treecollection<valuetype> *tree) {
 		// clone the tree
 		top=cloneNode(tree->getTop());
 
+		// update first
+		for (first=top;
+			first->getLeftChild();
+			first=first->getLeftChild()) {}
+
+		// update last
+		for (last=top;
+			last->getRightChild();
+			last=last->getRightChild()) {}
+	}
+}
+
+template <class valuetype>
+inline
+void avltree<valuetype>::clone(const nodecollection<valuetype> *coll) {
+	top=NULL;
+	first=NULL;
+	last=NULL;
+	length=0;
+
+	if (coll->getFirst()) {
+
+		// clone the collection...
+		for (nodecollectionnode<valuetype> *node=coll->getFirst();
+						node; node=node->getNext()) {
+			insert(node_duplicate_value(node->getValue(),
+						this->getManageValues(),
+						this->getManageArrayValues()));
+		}
+	
 		// update first
 		for (first=top;
 			first->getLeftChild();

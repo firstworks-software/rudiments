@@ -2,6 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/singlylinkedlist.h>
+#include <rudiments/linkedlist.h>
+#include <rudiments/avltree.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -474,6 +476,55 @@ int main(int argc, char **argv) {
 			}
 			test((!j)?"copy (linkedlist): values":
 					"assignment (linkedlist): values",
+					success);
+		}
+
+		avltree<char *>	cch4(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==2) {
+				cch4.clear();
+			}
+			if (j) {
+				cch4=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy (avltree): manage values":
+					"assignment: manage values",
+						cch4.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy (avltree): "
+						"manage array values":
+					"assignment (avltree): "
+						"manage array values",
+						cch4.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy (avltree): length":
+					"assignment (avltree): length",
+						cch4.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			listnode<char *>	*cch1n=cch1.getFirst();
+			treenode<char *>	*cch4n=cch4.getFirst();
+			while (cch1n) {
+				if (charstring::compare(cch1n->getValue(),
+							cch4n->getValue())) {
+					success=false;
+					break;
+				}
+				cch1n=cch1n->getNext();
+				cch4n=cch4n->getNext();
+			}
+			test((!j)?"copy (avltree): values":
+					"assignment (avltree): values",
 					success);
 		}
 	}

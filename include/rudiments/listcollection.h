@@ -17,11 +17,11 @@ class listnode : public nodecollectionnode<valuetype> {
 		/** Return the value stored in the node. */
 		virtual	valuetype	getValue() const=0;
 
-		/** Returns the previous node in the linkedlist or NULL
+		/** Returns the previous node in the listcollection or NULL
 		 *  if this node is the first node in the list. */
 		virtual	listnode<valuetype>	*getPrevious() const=0;
 
-		/** Returns the next node in the linkedlist or NULL
+		/** Returns the next node in the listcollection or NULL
 		 * if this node is the last node in the list. */
 		virtual	listnode<valuetype>	*getNext() const=0;
 
@@ -31,51 +31,59 @@ class listnode : public nodecollectionnode<valuetype> {
 /** The listcollection class is the parent class for all rudiments list
  *  collections. */
 template <class valuetype>
-class listcollection : public nodecollection {
+class listcollection : public nodecollection<valuetype> {
 	public:
+		/** Creates an empty instance of the listcollection class. */
+		listcollection() : nodecollection<valuetype>() {}
+
+		/** Creates an instance of the listcollection class
+		 *  that is a copy of "a". */
+		listcollection(const nodecollection<valuetype> &a) :
+					nodecollection<valuetype>(a) {}
+
 		/** Creates a new listnode containing "value" and
-		 *  prepends it to the linkedlist. */
+		 *  prepends it to the listcollection. */
 		virtual void	prepend(valuetype value)=0;
 
 		/** Prepends already created listnode "node" to the
-		 *  linkedlist. */
+		 *  listcollection. */
 		virtual void	prepend(listnode<valuetype> *node)=0;
 
 		/** Creates a new listnode containing "value" and
-		 *  appends it to the linkedlist. */
+		 *  appends it to the listcollection. */
 		virtual void	append(valuetype value)=0;
 
 		/** Appends already created listnode "node" to the
-		 *  linkedlist. */
+		 *  listcollection. */
 		virtual void	append(listnode<valuetype> *node)=0;
 
 		/** Creates a new listnode containing "value" and
-		 *  inserts it into the linkedlist before "node". */
+		 *  inserts it into the listcollection before "node". */
 		virtual void	insertBefore(listnode<valuetype> *node,
 							valuetype value)=0;
 
 		/** Inserts already created listnode "newnode" into the
-		 *  linkedlist before "node". */
+		 *  listcollection before "node". */
 		virtual void	insertBefore(listnode<valuetype> *node,
 					listnode<valuetype> *newnode)=0;
 
 		/** Creates a new listnode containing "value" and
-		 *  inserts it into the linkedlist after "node". */
+		 *  inserts it into the listcollection after "node". */
 		virtual void	insertAfter(listnode<valuetype> *node,
 							valuetype value)=0;
 
 		/** Inserts already created listnode "newnode" into the
-		 *  linkedlist after "node". */
+		 *  listcollection after "node". */
 		virtual void	insertAfter(listnode<valuetype> *node,
 					listnode<valuetype> *newnode)=0;
 
 		/** Moves node "nodetomove" to the position before "node" in
-		 *  the linkedlist. */
+		 *  the listcollection. */
 		virtual void	moveBefore(listnode<valuetype> *node,
 					listnode<valuetype> *nodetomove)=0;
 
 		/** Moves node "nodetomove" to the position after "node" in
-		 *  the linkedlist. */
+		 *  the listcollection. */
 		virtual void	moveAfter(listnode<valuetype> *node,
 					listnode<valuetype> *nodetomove)=0;
 
@@ -106,7 +114,7 @@ class listcollection : public nodecollection {
 		 *  Returns true on success and false on failure. */
 		virtual bool	removeAll(valuetype value)=0;
 
-		/** Removes listnode "node" from the linkedlist.
+		/** Removes listnode "node" from the listcollection.
 		 *
 		 *  The value stored in the listnode is only
 		 *  deleted if setManageValues(true) or
@@ -142,12 +150,12 @@ class listcollection : public nodecollection {
 						listnode<valuetype> *startnode,
 						valuetype value) const=0;
 
-		/** Sorts the linkedlist in ascending order using a modified
+		/** Sorts the listcollection in ascending order using a modified
 		 *  insertion sort algorithm.  This sort is slower than
 		 *  heapSort() but uses no additional memory. */
 		virtual void	insertionSort()=0;
 
-		/** Sorts the linkedlist in ascending order using a heap
+		/** Sorts the listcollection in ascending order using a heap
 		 *  sort algorithm.  This sort is faster than heapSort() but
 		 *  uses additional memory in proportion to the size of the
 		 *  list. */

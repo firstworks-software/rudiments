@@ -41,7 +41,7 @@ linkedlist<valuetype>::linkedlist(const linkedlist<valuetype> &a) :
 
 template <class valuetype>
 inline
-linkedlist<valuetype>::linkedlist(const listcollection<valuetype> &a) :
+linkedlist<valuetype>::linkedlist(const nodecollection<valuetype> &a) :
 					listcollection<valuetype>(a) {
 	clone(&a);
 #ifdef DARWIN_GCC_2952_HACKS
@@ -58,7 +58,7 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 					const linkedlist<valuetype> &a) {
 	if (this!=&a) {
 		clear();
-		listcollection<valuetype>::operator=(a);
+		nodecollection<valuetype>::operator=(a);
 		clone(&a);
 	}
 	return *this;
@@ -67,10 +67,10 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 template <class valuetype>
 inline
 linkedlist<valuetype> &linkedlist<valuetype>::operator=(
-					const listcollection<valuetype> &a) {
+					const nodecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
-		listcollection<valuetype>::operator=(a);
+		nodecollection<valuetype>::operator=(a);
 		clone(&a);
 	}
 	return *this;
@@ -78,29 +78,17 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::clone(const listcollection<valuetype> *list) {
+void linkedlist<valuetype>::clone(const nodecollection<valuetype> *coll) {
 
 	first=NULL;
 	last=NULL;
 	length=0;
 
-	// clone the list...
-
-	// run through the list we want to clone...
-	for (listnode<valuetype> *node=list->getFirst();
-					node; node=node->getNext()) {
-
-		// create a new node
-		linkedlistnode<valuetype>	*newnode=
-					new linkedlistnode<valuetype>(NULL);
-
-		// copy the value
-		newnode->setValue(node_duplicate_value(node->getValue(),
+	for (nodecollectionnode<valuetype> *node=coll->getFirst();
+						node; node=node->getNext()) {
+		append(node_duplicate_value(node->getValue(),
 						this->getManageValues(),
 						this->getManageArrayValues()));
-
-		// append the node
-		append(newnode);
 	}
 }
 

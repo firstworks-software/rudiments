@@ -2,6 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/avltree.h>
+#include <rudiments/linkedlist.h>
+#include <rudiments/singlylinkedlist.h>
 #include <rudiments/charstring.h>
 #include <rudiments/randomnumber.h>
 #include <rudiments/snooze.h>
@@ -444,6 +446,7 @@ int main(int argc, char **argv) {
 			}
 		}
 	
+		// copy/assign to another avltree...
 		avltree<char *>	cch2(cch1);
 		for (uint16_t j=0; j<3; j++) {
 
@@ -486,6 +489,100 @@ int main(int argc, char **argv) {
 				cch2n=cch2n->getNext();
 			}
 			test((!j)?"copy: values":"assignment: values",success);
+		}
+	
+		// copy/assign to a linkedlist...
+		linkedlist<char *>	cch3(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==2) {
+				cch3.clear();
+			}
+			if (j) {
+				cch3=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy (linkedlist): manage values":
+					"assignment: manage values",
+						cch3.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy (linkedlist): manage array values":
+					"assignment: manage array values",
+						cch3.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy (linkedlist): length":
+					"assignment: length",
+						cch3.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			treenode<char *>	*cch1n=cch1.getFirst();
+			listnode<char *>	*cch3n=cch3.getFirst();
+			while (cch1n) {
+				if (charstring::compare(cch1n->getValue(),
+							cch3n->getValue())) {
+					success=false;
+					break;
+				}
+				cch1n=cch1n->getNext();
+				cch3n=cch3n->getNext();
+			}
+			test((!j)?"copy (linkedlist): values":
+					"assignment: values",success);
+		}
+	
+		// copy/assign to a linkedlist...
+		linkedlist<char *>	cch4(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==2) {
+				cch4.clear();
+			}
+			if (j) {
+				cch4=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy (linkedlist): manage values":
+					"assignment: manage values",
+						cch4.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy (linkedlist): manage array values":
+					"assignment: manage array values",
+						cch4.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy (linkedlist): length":
+					"assignment: length",
+						cch4.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			treenode<char *>	*cch1n=cch1.getFirst();
+			listnode<char *>	*cch4n=cch4.getFirst();
+			while (cch1n) {
+				if (charstring::compare(cch1n->getValue(),
+							cch4n->getValue())) {
+					success=false;
+					break;
+				}
+				cch1n=cch1n->getNext();
+				cch4n=cch4n->getNext();
+			}
+			test((!j)?"copy (linkedlist): values":
+					"assignment: values",success);
 		}
 	}
 	stdoutput.printf("\n");
