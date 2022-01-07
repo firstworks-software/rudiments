@@ -18,6 +18,10 @@ class scalarcollection : public collection {
 		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue() const=0;
 
+		/** Returns a reference to the value stored in this intance.
+		 *  Returns NULL or 0 if no value has been stored. */
+		virtual	valuetype	&getValue()=0;
+
 		/** Removes the value currently stored in this instance, such
 		 *  that getValue() will return NULL or 0.
 		 *
