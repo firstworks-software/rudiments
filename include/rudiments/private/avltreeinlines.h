@@ -496,12 +496,6 @@ valuetype avltreenode<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-valuetype &avltreenode<valuetype>::getValue() {
-	return value;
-}
-
-template <class valuetype>
-inline
 treenode<valuetype> *avltreenode<valuetype>::getParent() const {
 	return parent;
 }

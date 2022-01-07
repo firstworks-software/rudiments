@@ -56,12 +56,6 @@ valuetype scalar<valuetype>::getValue() const {
 
 template <class valuetype>
 inline
-valuetype &scalar<valuetype>::getValue() {
-	return v;
-}
-
-template <class valuetype>
-inline
 void scalar<valuetype>::clear() {
 	node_delete_value(v,this->getManageValues(),
 				this->getManageArrayValues());

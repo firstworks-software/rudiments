@@ -17,9 +17,6 @@ class nodecollectionnode : virtual public object {
 		/** Return the value stored in the node. */
 		virtual	valuetype	getValue() const=0;
 
-		/** Return a reference to the value stored in the node. */
-		virtual	valuetype	&getValue()=0;
-
 		/** Prints out a representation of the node. */
 		virtual	void	print() const=0;
 };
