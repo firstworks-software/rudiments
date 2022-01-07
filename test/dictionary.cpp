@@ -435,4 +435,75 @@ int main(int argc, const char **argv) {
 	test("...and array delete: clear(): ...",
 				!charchardict.getValue((char *)"one"));
 	stdoutput.printf("\n");
+
+	// copy and assignment
+	for (uint16_t i=0; i<2; i++) {
+
+		stdoutput.printf("copy/assignment%s...\n",(!i)?"":" (managed)");
+
+		dictionary<uint16_t,char *>	cch1;
+		cch1.setManageArrayValues(i);
+		const char *values[]={
+			"a","b","c","d","e","f","g","h","i","j","k","l","m",
+			"n","o","p","q","r","s","t","u","v","w","x","y","z",
+			NULL
+		};
+		for (uint16_t j=0; j<26; j++) {
+			if (!i) {
+				cch1.setValue(j,(char *)values[j]);
+			} else {
+				cch1.setValue(j,charstring::duplicate(
+							(char *)values[j]));
+			}
+		}
+	
+		dictionary<uint16_t,char *>	cch2(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==2) {
+				cch2.clear();
+			}
+			if (j) {
+				cch2=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy: manage keys":
+					"assignment: manage keys",
+						cch2.getManageKeys()==
+						cch1.getManageKeys());
+			test((!j)?"copy: manage array keys":
+					"assignment: manage array keys",
+						cch2.getManageArrayKeys()==
+						cch1.getManageArrayKeys());
+			test((!j)?"copy: manage values":
+					"assignment: manage values",
+						cch2.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy: manage array values":
+					"assignment: manage array values",
+						cch2.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy: length":"assignment: length",
+						cch2.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			for (uint16_t k=0; k<26; k++) {
+				if (charstring::compare(cch1.getValue(k),
+							cch2.getValue(k))) {
+					success=false;
+					break;
+				}
+			}
+			test((!j)?"copy: values":"assignment: values",success);
+		}
+	}
+	stdoutput.printf("\n");
 }

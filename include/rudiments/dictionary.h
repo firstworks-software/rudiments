@@ -26,6 +26,15 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  below return alist of key-value pairs in ascending order. */
 		dictionary(bool trackinsertionorder);
 
+		/** Creates an instance of the linkedlist class
+		 *  that is a copy of "a". */
+		dictionary(const dictionary<keytype,valuetype> &a);
+
+		/** Makes this instance of the dictionary class
+		 *  identical to "a". */
+		dictionary<keytype,valuetype>	&operator=(
+					const dictionary<keytype,valuetype> &a);
+
 		/** Deletes this instance of the dictionary class.
 		 *
 		 *  The key stored in each pair is only deleted if
@@ -35,7 +44,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  The value stored in each pair is only deleted if
 		 *  setManageValues(true) or setManageArrayValues(true) has
 		 *  been called. */
-		virtual ~dictionary();
+		~dictionary();
 
 		/** Sets whether tracking of the order of key insertion is
 		 *  enabled or not.
@@ -102,7 +111,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  corresponding value from "dict".
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value". */
-		void	setValues(dictionary<keytype, valuetype> *dict);
+		void	setValues(dictionary<keytype,valuetype> *dict);
 
 		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
