@@ -597,7 +597,13 @@ treenode<valuetype> *avltreenode<valuetype>::getPrevious() const {
 
 		// if we're the right child of our parent,
 		// then our parent contains the next lowest value
-		if (parent->getRightChild()==this) {
+		//
+		// Why the weird cast?  I really don't know.  gcc 2.95.2 on
+		// some platforms (os 10.0, 10.1, and mklinux) require it, but
+		// oddly don't in other cases of comparing left/right child to
+		// this.
+		if ((const treenode<valuetype> *)parent->getRightChild()==
+					(const treenode<valuetype> *)this) {
 			return parent;
 		}
 
@@ -642,7 +648,13 @@ treenode<valuetype> *avltreenode<valuetype>::getNext() const {
 
 		// if we're the left child of our parent,
 		// then our parent contains the next highest value
-		if (parent->getLeftChild()==this) {
+		//
+		// Why the weird cast?  I really don't know.  gcc 2.95.2 on
+		// some platforms (os 10.0, 10.1, and mklinux) require it, but
+		// oddly don't in other cases of comparing left/right child to
+		// this.
+		if ((const treenode<valuetype> *)parent->getLeftChild()==
+					(const treenode<valuetype> *)this) {
 			return parent;
 		}
 
