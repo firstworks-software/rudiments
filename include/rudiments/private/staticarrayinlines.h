@@ -58,20 +58,7 @@ template< class valuetype, uint64_t length >
 inline
 void staticarray<valuetype,length>::clone(const arraycollection<valuetype> *v) {
 	for (uint64_t i=0; i<len && i<v->getLength(); i++) {
-
-		// Why not just:
-		//	*data[i]=(*v)[i];
-		//
-		// Some compilers get confused and think that
-		//	*data[i]=(*v)[i]
-		//		means
-		//	*((data[i])->operator=((*v)[i]))
-		// and no carefully placed parentheses help.
-		//
-		// This silliness sorts out the problem.
-		valuetype	*a=&(data[i]);
-		valuetype	b=(*v)[i];
-		*a=b;
+		data[i]=(*v)[i];
 	}
 }
 
