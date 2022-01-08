@@ -18,7 +18,15 @@ scalar<valuetype>::scalar(const scalar<valuetype> &a) :
 
 template <class valuetype>
 inline
-scalar<valuetype> &scalar<valuetype>::operator=(const scalar<valuetype> &a) {
+scalar<valuetype>::scalar(const scalarcollection<valuetype> &a) :
+				scalarcollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
+scalar<valuetype> &scalar<valuetype>::operator=(
+				const scalar<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		scalarcollection<valuetype>::operator=(a);
@@ -29,7 +37,19 @@ scalar<valuetype> &scalar<valuetype>::operator=(const scalar<valuetype> &a) {
 
 template <class valuetype>
 inline
-void scalar<valuetype>::clone(const scalar<valuetype> *a) {
+scalar<valuetype> &scalar<valuetype>::operator=(
+				const scalarcollection<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		scalarcollection<valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class valuetype>
+inline
+void scalar<valuetype>::clone(const scalarcollection<valuetype> *a) {
 	v=node_duplicate_value(a->getValue(),
 				this->getManageValues(),
 				this->getManageArrayValues());

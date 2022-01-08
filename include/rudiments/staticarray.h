@@ -45,10 +45,19 @@ class staticarray : public arraycollection<valuetype> {
 		 *  that is a copy of "v". */
 		staticarray(const staticarray<valuetype,length> &v);
 
+		/** Creates an instance of the staticarray class
+		 *  that is a copy of "v". */
+		staticarray(const arraycollection<valuetype> &v);
+
 		/** Makes this instance of the staticarray class
 		 *  identical to "v". */
 		staticarray<valuetype,length>	&operator=(
-					const staticarray<valuetype,length> &v);
+				const staticarray<valuetype,length> &v);
+
+		/** Makes this instance of the staticarray class
+		 *  identical to "v". */
+		staticarray<valuetype,length>	&operator=(
+				const arraycollection<valuetype> &v);
 
 		/** Deletes this instance of the staticarray class. */
 		~staticarray();

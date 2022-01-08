@@ -22,10 +22,19 @@ class dynamictable : public tablecollection<valuetype> {
 		 *  that is a copy of "a". */
 		dynamictable(const dynamictable<valuetype> &a);
 
+		/** Creates an instance of the dynmaictable class
+		 *  that is a copy of "a". */
+		dynamictable(const tablecollection<valuetype> &a);
+
 		/** Makes this instance of the dynamictable class
 		 *  identical to "a". */
 		dynamictable<valuetype>	&operator=(
 					const dynamictable<valuetype> &a);
+
+		/** Makes this instance of the dynamictable class
+		 *  identical to "a". */
+		dynamictable<valuetype>	&operator=(
+					const tablecollection<valuetype> &a);
 
 		/** Deletes this instance of the dynamictable class. */
 		~dynamictable();

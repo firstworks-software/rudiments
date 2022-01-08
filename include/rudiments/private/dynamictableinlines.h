@@ -21,6 +21,13 @@ dynamictable<valuetype>::dynamictable(const dynamictable<valuetype> &a) :
 
 template <class valuetype>
 inline
+dynamictable<valuetype>::dynamictable(const tablecollection<valuetype> &a) :
+						tablecollection<valuetype>(a) {
+	clone(&a);
+}
+
+template <class valuetype>
+inline
 dynamictable<valuetype> &dynamictable<valuetype>::operator=(
 					const dynamictable<valuetype> &a) {
 	if (this!=&a) {
@@ -33,14 +40,46 @@ dynamictable<valuetype> &dynamictable<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::clone(const dynamictable<valuetype> *table) {
-	for (uint64_t col=0; col<table->getColCount(); col++) {
-		columnnames[col]=
-			charstring::duplicate(table->getColumnName(col));
+dynamictable<valuetype> &dynamictable<valuetype>::operator=(
+					const tablecollection<valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		tablecollection<valuetype>::operator=(a);
+		clone(&a);
 	}
-	values=table->values;
-	cols=table->cols;
-	rows=table->rows;
+	return *this;
+}
+
+template <class valuetype>
+inline
+void dynamictable<valuetype>::clone(const dynamictable<valuetype> *t) {
+	for (uint64_t col=0; col<t->getColCount(); col++) {
+		columnnames[col]=
+			charstring::duplicate(t->getColumnName(col));
+	}
+	values=t->values;
+	cols=t->getColCount();
+	rows=t->getRowCount();
+}
+
+template <class valuetype>
+inline
+void dynamictable<valuetype>::clone(const tablecollection<valuetype> *t) {
+	cols=0;
+	rows=0;
+	for (uint64_t col=0; col<t->getColCount(); col++) {
+		setColumnName(col,t->getColumnName(col));
+	}
+	for (uint64_t row=0;
+		!(t->getAllRowsAvailable() && row==t->getRowCount());
+		row++) {
+		for (uint64_t col=0; col<t->getColCount(); col++) {
+			setValue(row,col,
+				node_duplicate_value(t->getValue(row,col),
+						this->getManageValues(),
+						this->getManageArrayValues()));
+		}
+	}
 }
 
 template <class valuetype>

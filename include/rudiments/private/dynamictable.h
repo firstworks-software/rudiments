@@ -2,7 +2,8 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const dynamictable<valuetype> *table);
+		void	clone(const dynamictable<valuetype> *t);
+		void	clone(const tablecollection<valuetype> *t);
 
 		dynamicarray<char *>			columnnames;
 		dynamicarray<dynamicarray<valuetype> >	values;

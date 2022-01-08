@@ -18,10 +18,19 @@ class scalar : public scalarcollection<valuetype> {
 		 *  that is a copy of "a". */
 		scalar(const scalar<valuetype> &a);
 
+		/** Creates an instance of the scalar class
+		 *  that is a copy of "a". */
+		scalar(const scalarcollection<valuetype> &a);
+
 		/** Makes this instance of the scalar class
 		 *  identical to "a". */
 		scalar<valuetype>	&operator=(
 					const scalar<valuetype> &a);
+
+		/** Makes this instance of the scalar class
+		 *  identical to "a". */
+		scalar<valuetype>	&operator=(
+					const scalarcollection<valuetype> &a);
 
 		/** Deletes this instance of the scalar class. */
 		~scalar();

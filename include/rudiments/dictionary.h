@@ -26,14 +26,23 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  below return alist of key-value pairs in ascending order. */
 		dictionary(bool trackinsertionorder);
 
-		/** Creates an instance of the linkedlist class
+		/** Creates an instance of the dictionary class
 		 *  that is a copy of "a". */
 		dictionary(const dictionary<keytype,valuetype> &a);
+
+		/** Creates an instance of the dictionary class
+		 *  that is a copy of "a". */
+		dictionary(const dictionarycollection<keytype,valuetype> &a);
 
 		/** Makes this instance of the dictionary class
 		 *  identical to "a". */
 		dictionary<keytype,valuetype>	&operator=(
 					const dictionary<keytype,valuetype> &a);
+
+		/** Makes this instance of the dictionary class
+		 *  identical to "a". */
+		dictionary<keytype,valuetype>	&operator=(
+			const dictionarycollection<keytype,valuetype> &a);
 
 		/** Deletes this instance of the dictionary class.
 		 *

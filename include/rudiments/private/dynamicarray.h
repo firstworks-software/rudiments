@@ -4,8 +4,8 @@
 	private:
 		void		init(uint64_t initiallength,
 						uint64_t increment);
-		void		dynamicarrayClone(
-					const dynamicarray<valuetype> &v);
+		void		clone(const dynamicarray<valuetype> *v);
+		void		clone(const arraycollection<valuetype> *v);
 		void		extend(uint64_t length);
 		size_t		findExtentStartIndex(uint64_t index) const;
 		valuetype	&find(uint64_t index);

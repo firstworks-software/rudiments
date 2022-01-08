@@ -56,9 +56,28 @@ dictionary<keytype,valuetype>::dictionary() :
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::dictionary(
-				const dictionary<keytype,valuetype> &a) :
-				dictionarycollection<keytype,valuetype>(a),
-				keylist(NULL) {
+			const dictionary<keytype,valuetype> &a) :
+			dictionarycollection<keytype,valuetype>(a),
+			keylist(NULL) {
+
+	comp=new dictionarypaircomparator<keytype,valuetype>();
+	clone(&a);
+
+#ifdef DARWIN_GCC_2952_HACKS
+	return;
+
+	// see note above
+	keylist=getKeys();
+	setValues(NULL);
+#endif
+}
+
+template <class keytype, class valuetype>
+inline
+dictionary<keytype,valuetype>::dictionary(
+			const dictionarycollection<keytype,valuetype> &a) :
+			dictionarycollection<keytype,valuetype>(a),
+			keylist(NULL) {
 
 	comp=new dictionarypaircomparator<keytype,valuetype>();
 	clone(&a);
@@ -75,7 +94,19 @@ dictionary<keytype,valuetype>::dictionary(
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype> &dictionary<keytype,valuetype>::
-			operator=(const dictionary<keytype,valuetype> &a) {
+		operator=(const dictionary<keytype,valuetype> &a) {
+	if (this!=&a) {
+		clear();
+		dictionarycollection<keytype,valuetype>::operator=(a);
+		clone(&a);
+	}
+	return *this;
+}
+
+template <class keytype, class valuetype>
+inline
+dictionary<keytype,valuetype> &dictionary<keytype,valuetype>::
+		operator=(const dictionarycollection<keytype,valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		dictionarycollection<keytype,valuetype>::operator=(a);
@@ -118,6 +149,34 @@ void dictionary<keytype,valuetype>::clone(
 	if (a->keylist) {
 		getKeys();
 	}
+}
+
+template <class keytype, class valuetype>
+inline
+void dictionary<keytype,valuetype>::clone(
+			const dictionarycollection<keytype,valuetype> *a) {
+
+	//trackinsertionorder=a->getTrackInsertionOrder();
+	trackinsertionorder=true;
+
+	// comp should already exist at this point
+	tree.setComparator(comp);
+
+	for (listnode<keytype> *node=a->getKeys()->getFirst();
+					node; node=node->getNext()) {
+		keytype		key=node->getValue();
+		valuetype	value=a->getValue(key);
+		setValue(node_duplicate_value(key,
+				this->getManageValues(),
+				this->getManageArrayValues()),
+			node_duplicate_value(value,
+				this->getManageValues(),
+				this->getManageArrayValues()));
+	}
+
+	// a's keylist will have been built as a result of the getKeys() call
+	// above, so go ahead and build ours too.
+	getKeys();
 }
 
 template <class keytype, class valuetype>

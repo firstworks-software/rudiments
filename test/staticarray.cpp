@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/staticarray.h>
+#include <rudiments/dynamicarray.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -277,6 +278,7 @@ int main(int argc, const char **argv) {
 			k++;
 		}
 	
+		// copy/assign to another staticarray...
 		staticarray<char *,26>	cch2(cch1);
 		for (uint16_t j=0; j<3; j++) {
 
@@ -309,6 +311,46 @@ int main(int argc, const char **argv) {
 			bool	success=true;
 			for (k=0; k<26; k++) {
 				if (charstring::compare(cch1[k],cch2[k])) {
+					success=false;
+					break;
+				}
+			}
+			test((!j)?"copy: values":"assignment: values",success);
+		}
+	
+		// copy/assign to a dynamicarray...
+		dynamicarray<char *>	cch3(cch1);
+		for (uint16_t j=0; j<3; j++) {
+
+			// 1st iteration is copy
+			// 2nd is assignment
+			// 3rd is assignment after clear
+			if (j==2) {
+				cch3.clear();
+			}
+			if (j) {
+				cch3=cch1;
+			}
+
+			// verify flags
+			test((!j)?"copy: manage values":
+					"assignment: manage values",
+						cch3.getManageValues()==
+						cch1.getManageValues());
+			test((!j)?"copy: manage array values":
+					"assignment: manage array values",
+						cch3.getManageArrayValues()==
+						cch1.getManageArrayValues());
+
+			// verify length
+			test((!j)?"copy: length":"assignment: length",
+						cch3.getLength()==
+						cch1.getLength());
+
+			// verify values
+			bool	success=true;
+			for (k=0; k<26; k++) {
+				if (charstring::compare(cch1[k],cch3[k])) {
 					success=false;
 					break;
 				}

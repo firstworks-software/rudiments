@@ -15,7 +15,17 @@ inline
 staticarray<valuetype,length>::staticarray(
 				const staticarray<valuetype,length> &v) :
 						arraycollection<valuetype>(v) {
-	len=v.len;
+	len=length;
+	data=new valuetype[len];
+	clone(&v);
+}
+
+template< class valuetype, uint64_t length >
+inline
+staticarray<valuetype,length>::staticarray(
+				const arraycollection<valuetype> &v) :
+						arraycollection<valuetype>(v) {
+	len=length;
 	data=new valuetype[len];
 	clone(&v);
 }
@@ -25,8 +35,8 @@ inline
 staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 				const staticarray<valuetype,length> &v) {
 	if (this!=&v) {
-		arraycollection<valuetype>::operator=(v);
 		clear();
+		arraycollection<valuetype>::operator=(v);
 		clone(&v);
 	}
 	return *this;
@@ -34,23 +44,34 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 
 template< class valuetype, uint64_t length >
 inline
-void staticarray<valuetype,length>::clone(
-			const staticarray<valuetype,length> *v) {
-	for (uint64_t i=0; i<len; i++) {
+staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
+					const arraycollection<valuetype> &v) {
+	if (this!=&v) {
+		clear();
+		arraycollection<valuetype>::operator=(v);
+		clone(&v);
+	}
+	return *this;
+}
+
+template< class valuetype, uint64_t length >
+inline
+void staticarray<valuetype,length>::clone(const arraycollection<valuetype> *v) {
+	for (uint64_t i=0; i<len && i<v->getLength(); i++) {
 
 		// Why not just:
-		//	*data[i]=*v->data[i];
+		//	*data[i]=(*v)[i];
 		//
 		// Some compilers get confused and think that
-		//	*data[i]=*v->data[i]
+		//	*data[i]=(*v)[i]
 		//		means
-		//	*((data[i])->operator=(*v->data[i]))
+		//	*((data[i])->operator=((*v)[i]))
 		// and no carefully placed parentheses help.
 		//
 		// This silliness sorts out the problem.
 		valuetype	*a=&(data[i]);
-		valuetype	*b=&(v->data[i]);
-		*a=*b;
+		valuetype	b=(*v)[i];
+		*a=b;
 	}
 }
 

@@ -52,10 +52,19 @@ class dynamicarray : public arraycollection<valuetype> {
 		 *  that is a copy of "v". */
 		dynamicarray(const dynamicarray<valuetype> &v);
 
+		/** Creates an instance of the dynamicarray class
+		 *  that is a copy of "v". */
+		dynamicarray(const arraycollection<valuetype> &v);
+
 		/** Makes this instance of the dynamicarray class
 		 *  identical to "v". */
 		dynamicarray<valuetype>	&operator=(
 					const dynamicarray<valuetype> &v);
+
+		/** Makes this instance of the dynamicarray class
+		 *  identical to "v". */
+		dynamicarray<valuetype>	&operator=(
+					const arraycollection<valuetype> &v);
 
 		/** Deletes this instance of the dynamicarray class and all of
 		 *  its values. */

@@ -23,7 +23,15 @@ inline
 dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) :
 						arraycollection<valuetype>(v) {
 	init(v.initlen,v.inclen);
-	dynamicarrayClone(v);
+	clone(&v);
+}
+
+template< class valuetype >
+inline
+dynamicarray<valuetype>::dynamicarray(const arraycollection<valuetype> &v) :
+						arraycollection<valuetype>(v) {
+	init(128,32);
+	clone(&v);
 }
 
 template< class valuetype >
@@ -31,10 +39,23 @@ inline
 dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 					const dynamicarray<valuetype> &v) {
 	if (this!=&v) {
-		arraycollection<valuetype>::operator=(v);
 		clear(v.initlen,v.inclen);
+		arraycollection<valuetype>::operator=(v);
 		init(v.initlen,v.inclen);
-		dynamicarrayClone(v);
+		clone(&v);
+	}
+	return *this;
+}
+
+template< class valuetype >
+inline
+dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
+					const arraycollection<valuetype> &v) {
+	if (this!=&v) {
+		clear();
+		arraycollection<valuetype>::operator=(v);
+		init(initlen,inclen);
+		clone(&v);
 	}
 	return *this;
 }
@@ -55,42 +76,36 @@ void dynamicarray<valuetype>::init(uint64_t initiallength,
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::dynamicarrayClone(
-				const dynamicarray<valuetype> &v) {
+void dynamicarray<valuetype>::clone(const dynamicarray<valuetype> *v) {
 
 	// extend storage to fit (do this before setting length)
-	extend(v.lastlen);
+	extend(v->lastlen);
 
 	// clone lengths and positions
-	totallen=v.totallen;
-	lastlen=v.lastlen;
-	initlen=v.initlen;
-	inclen=v.inclen;
+	totallen=v->totallen;
+	lastlen=v->lastlen;
+	initlen=v->initlen;
+	inclen=v->inclen;
 
 	// clone the data
-	for (uint64_t i=0; i<v.getLength(); i++) {
-
-		// Why not just:
-		//	this[i]=v[i];
-		//
-		// Some compilers don't allow v[] because the operator[] method
-		// isn't const, but v is.
-		//
-		// Also, some compilers get confused and think that
-		//	this[i]=v[i]
-		//		means
-		//	(this[i])->operator=(v[i])
-		// and no carefully placed parentheses help.
-		//
-		// This silliness sorts both issues out.
-		find(i)=((dynamicarray<valuetype> *)&v)->find(i);
+	for (uint64_t i=0; i<v->getLength(); i++) {
+		find(i)=v->find(i);
 	}
 
 	// clone positions
-	curind=v.curind;
+	curind=v->curind;
 	curext=extents.getFirst();
 	for (uint64_t eind=0; eind<curind; eind++) {
 		curext=curext->getNext();
+	}
+}
+
+template< class valuetype >
+inline
+void dynamicarray<valuetype>::clone(const arraycollection<valuetype> *v) {
+	lastlen=v->getLength();
+	for (uint64_t i=0; i<lastlen; i++) {
+		find(i)=(*v)[i];
 	}
 }
 

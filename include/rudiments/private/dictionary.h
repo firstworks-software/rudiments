@@ -3,6 +3,7 @@
 
 	protected:
 		void	clone(const dictionary<keytype,valuetype> *a);
+		void	clone(const dictionarycollection<keytype,valuetype> *a);
 		dictionarypair<keytype,valuetype>
 					*getNode(keytype key) const;
 		treenode< dictionarypair<keytype,valuetype> *>

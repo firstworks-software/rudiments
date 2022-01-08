@@ -2,6 +2,6 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const scalar<valuetype> *a);
+		void	clone(const scalarcollection<valuetype> *a);
 
 		valuetype	v;
