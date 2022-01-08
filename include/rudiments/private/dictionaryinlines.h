@@ -156,8 +156,7 @@ inline
 void dictionary<keytype,valuetype>::clone(
 			const dictionarycollection<keytype,valuetype> *a) {
 
-	//trackinsertionorder=a->getTrackInsertionOrder();
-	trackinsertionorder=true;
+	trackinsertionorder=a->getTrackInsertionOrder();
 
 	// comp should already exist at this point
 	tree.setComparator(comp);
@@ -174,8 +173,8 @@ void dictionary<keytype,valuetype>::clone(
 				this->getManageArrayValues()));
 	}
 
-	// a's keylist will have been built as a result of the getKeys() call
-	// above, so go ahead and build ours too.
+	// a's keylist may have been built as a result of the getKeys() call
+	// above, so go ahead and build ours too
 	getKeys();
 }
 

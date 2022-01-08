@@ -59,13 +59,12 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  enabled or not.
 		 * 
 		 *  If "trackinsertionorder" is true then the order of key
-		 *  insertion is tracked and getKeys() and getList() below
-		 *  return a list of key-value pairs in the order that they
-		 *  were inserted.
+		 *  insertion is tracked and getKeys() returns a list of
+		 *  keys in the order that they were inserted.
 		 *  
 		 *  If "trackinsertionorder" is false then the order of key
-		 *  insertion is not tracked and getList() and getList()
-		 *  below return alist of key-value pairs in ascending order.
+		 *  insertion is not tracked and getKeys() returns a list of
+		 *  keys in ascending order.
 		 *
 		 *  Defaults to "true".
 		 *
@@ -78,7 +77,15 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		bool	setTrackInsertionOrder(bool trackinsertionorder);
 
 		/** Returns "true" if insertion order tracking is enabled and
-		 *  false otherwise. */
+		 *  false otherwise.
+		 * 
+		 *  If getTrackInsertionOrder() is true then the order of key
+		 *  insertion is tracked and getKeys() returns a list of
+		 *  keys in the order that they were inserted.
+		 *  
+		 *  If getTrackInsertionOrder() is false then the order of key
+		 *  insertion is not tracked and getKeys() returns a list of
+		 *  keys in ascending order. */
 		bool	getTrackInsertionOrder() const;
 
 		/** Sets the value associated with "key" to "value".

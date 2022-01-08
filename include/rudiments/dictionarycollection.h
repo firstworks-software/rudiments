@@ -12,6 +12,18 @@
 template<class keytype, class valuetype>
 class dictionarycollection : public collection {
 	public:
+		/** Returns "true" if insertion order tracking is enabled and
+		 *  false otherwise.
+		 * 
+		 *  If getTrackInsertionOrder() is true then the order of key
+		 *  insertion is tracked and getKeys() returns a list of
+		 *  keys in the order that they were inserted.
+		 *  
+		 *  If getTrackInsertionOrder() is false then the order of key
+		 *  insertion is not tracked and getKeys() returns a list of
+		 *  keys in ascending order. */
+		virtual bool	getTrackInsertionOrder() const=0;
+
 		/** Sets the value associated with "key" to "value".
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value". */
