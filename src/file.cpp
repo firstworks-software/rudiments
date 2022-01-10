@@ -392,38 +392,10 @@ bool file::open(const char *name, int32_t flags, mode_t perms) {
 }
 
 char *file::getContents() {
-	if (fd()==-1) {
-		return NULL;
-	}
-	getCurrentProperties();
-	off64_t	curpos=getCurrentPosition();
-	setPositionRelativeToBeginning(0);
-	char	*contents=NULL;
-	if (pvt->_st.st_size) {
-		off64_t	size=pvt->_st.st_size;
-		contents=new char[size+1];
-		contents[size]='\0';
-		if (size && read(contents,size)!=size) {
-			delete[] contents;
-			contents=NULL;
-		}
-	} else {
-		stringbuffer	cts;
-		// FIXME: this is fine for url's but for actual files that
-		// we don't know the size of, we ought to use a more
-		// intelligent size.
-		char		buffer[16*1024];
-		for (;;) {
-			ssize_t	s=read(buffer,sizeof(buffer));
-			cts.append(buffer,s);
-			if (s<(ssize_t)sizeof(buffer)) {
-				contents=cts.detachString();
-				break;
-			}
-		}
-	}
-	setPositionRelativeToBeginning(curpos);
-	return contents;
+	unsigned char	*buffer;
+	size_t		buffersize;
+	getContents(&buffer,&buffersize,true);
+	return (char *)buffer;
 }
 
 char *file::getContents(const char *name) {
@@ -447,6 +419,70 @@ ssize_t file::getContents(const char *name, unsigned char *buffer,
 	return bytes;
 }
 
+ssize_t file::getContents(unsigned char **buffer, size_t *buffersize) {
+	return getContents(buffer,buffersize,false);
+}
+
+ssize_t file::getContents(unsigned char **buffer, size_t *buffersize,
+							bool terminate) {
+	unsigned char	*intbuffer=NULL;
+	size_t		intbuffersize=0;
+	if (fd()!=-1) {
+		getCurrentProperties();
+		off64_t	curpos=getCurrentPosition();
+		setPositionRelativeToBeginning(0);
+		if (pvt->_st.st_size) {
+			intbuffersize=pvt->_st.st_size;
+			intbuffer=new unsigned char[intbuffersize+
+							((terminate)?1:0)];
+			if (terminate) {
+				intbuffer[intbuffersize]='\0';
+			}
+			if (intbuffersize &&
+				(size_t)read(intbuffer,intbuffersize)!=
+								intbuffersize) {
+				delete[] intbuffer;
+				intbuffer=NULL;
+				intbuffersize=0;
+			}
+		} else {
+			bytebuffer	cts;
+			// FIXME: this is fine for url's but for actual files
+			// that we don't know the size of, we ought to use a
+			// more intelligent size.
+			unsigned char	buf[16*1024];
+			for (;;) {
+				ssize_t	s=read(buf,sizeof(buf));
+				cts.append(buf,s);
+				if (s<(ssize_t)sizeof(buf)) {
+					if (terminate) {
+						cts.append('\0');
+					}
+					intbuffersize=cts.getSize();
+					intbuffer=cts.detachBuffer();
+					break;
+				}
+			}
+		}
+		setPositionRelativeToBeginning(curpos);
+	}
+	if (buffer) {
+		*buffer=intbuffer;
+	}
+	if (buffersize) {
+		*buffersize=intbuffersize;
+	}
+	return intbuffersize;
+}
+
+ssize_t file::getContents(const char *name, unsigned char **buffer,
+						size_t *buffersize) {
+	file	fl;
+	fl.open(name,O_RDONLY|O_BINARY);
+	ssize_t	bytes=fl.getContents(buffer,buffersize);
+	fl.close();
+	return bytes;
+}
 
 bool file::tryLockFile(int16_t type) const {
 	return tryLockRegion(type,0,0);

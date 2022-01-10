@@ -127,6 +127,19 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		virtual ssize_t	getContents(unsigned char *buffer,
 							size_t buffersize);
 
+		/** Allocates "buffer" large enough to accommodate the
+		 *  contents of the currently opened file, reads the contents
+		 *  of the file into "buffer" and sets "buffersize" to the
+		 *  size of the buffer.  "buffer" must be freed by the calling
+		 *  program.
+		 *
+		 *  Note: The contents returned by this method are as-is.
+		 *  No end-of-line translation is performed.
+		 * 
+		 *  Returns the number of bytes copied into "buffer" or
+		 *  -1 on error. */
+		virtual ssize_t	getContents(unsigned char **buffer,
+							size_t *buffersize);
 
 		/** Truncates all data in the file, resulting in a file of
 		 * zero bytes.  Returns true on success and false on
@@ -970,6 +983,20 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		static	ssize_t	getContents(const char *name,
 						unsigned char *buffer,
 						size_t buffersize);
+
+		/** Allocates "buffer" large enough to accommodate the
+		 *  contents of the file "name", reads the contents of the
+		 *  file into "buffer" and sets "buffersize" to the size of
+		 *  the buffer.  "buffer" must be freed by the calling program.
+		 *
+		 *  Note: The contents returned by this method are as-is.
+		 *  No end-of-line translation is performed.
+		 * 
+		 *  Returns the number of bytes copied into "buffer" or
+		 *  -1 on error. */
+		virtual ssize_t	getContents(const char *name,
+						unsigned char **buffer,
+						size_t *buffersize);
 
 
 		/** Returns true if the file exists and false otherwise. */
