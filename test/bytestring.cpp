@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/bytestring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
@@ -74,7 +75,7 @@ int main(int argc, const char **argv) {
 	// error in my code, or if swab() is just implemented incorrectly on
 	// that platform, or if it's a subtle bug in gxemul.  For now, this
 	// test is disabled for that platform though.
-	char	*os=sys::getOperatingSystem();
+	char	*os=sys::getOperatingSystemName();
 	char	*arch=sys::getOperatingSystemArchitecture();
 	if (!(!charstring::compare(os,"NetBSD") &&
 		!charstring::compare(arch,"pmax"))) {
@@ -87,6 +88,8 @@ int main(int argc, const char **argv) {
 				!bytestring::compare(data,"2143658709",10));
 		stdoutput.printf("\n");
 	}
+	delete[] os;
+	delete[] arch;
 
 	// set
 	stdoutput.printf("set...\n");
