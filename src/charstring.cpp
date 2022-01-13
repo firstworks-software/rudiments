@@ -2715,6 +2715,50 @@ char *charstring::pad(const char *str, char padchar,
 	return newstring;
 }
 
+char *charstring::humanReadable(int64_t number) {
+	return humanReadable(number,false);
+}
+
+char *charstring::humanReadable(int64_t number, bool onethousand) {
+	return humanReadable((long double)number,onethousand);
+}
+
+char *charstring::humanReadable(uint64_t number) {
+	return humanReadable(number,false);
+}
+
+char *charstring::humanReadable(uint64_t number, bool onethousand) {
+	return humanReadable((long double)number,onethousand);
+}
+
+char *charstring::humanReadable(long double number) {
+	return humanReadable(number,false);
+}
+
+char *charstring::humanReadable(long double number, bool onethousand) {
+
+	long double	k=(onethousand)?1000.0:1024.0;
+	char		suffixes[]={
+		'\0','K','M','G','T','P','Z','Y','B'
+	};
+	long double	num=(number>=0)?number:(number*-1.0);
+	long double	size=k*k*k*k*k*k*k*k;
+	uint8_t i=8;
+	do {
+		if (num>=size) {
+			break;
+		}
+		size/=k;
+		i--;
+	} while (i>0);
+	
+	char	*buf=NULL;
+	printf(&buf,"%0.1Lf%c",number/size,suffixes[i]);
+	char	*subbed=replace(buf,".0","");
+	delete[] buf;
+	return subbed;
+}
+
 ssize_t charstring::printf(char *buffer, size_t len,
 					const char *format, ...) {
 	va_list	args;

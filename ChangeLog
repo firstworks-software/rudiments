@@ -49,6 +49,8 @@
 	updated comparator class to use arithmetic instead of comparisons
 		where possible
 	fixed bugs in dynamicarray::clear()
+	added memory-related methods to sys class
+	added charstring/wcharstring::humanReadable() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

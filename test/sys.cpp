@@ -97,6 +97,40 @@ int main(int argc, const char **argv) {
 			"		: %lld\n",
 			(LONG_LONG)sys::getAvailablePhysicalPageCount());
 
+	stdoutput.printf("Used Physical Page Count"
+			"		: %lld\n",
+			(LONG_LONG)sys::getUsedPhysicalPageCount());
+
+	stdoutput.printf("Physical Memory Size"
+			"			: %lld\n",
+			(LONG_LONG)sys::getPhysicalMemorySize());
+
+	char	*hr=charstring::humanReadable(sys::getPhysicalMemorySize());
+	stdoutput.printf("Physical Memory Size"
+			"			: %s\n",
+			hr);
+	delete[] hr;
+
+	stdoutput.printf("Available Physical Memory Size"
+			"		: %lld\n",
+			(LONG_LONG)sys::getAvailablePhysicalMemorySize());
+
+	hr=charstring::humanReadable(sys::getAvailablePhysicalMemorySize());
+	stdoutput.printf("Available Physical Memory Size"
+			"		: %s\n",
+			hr);
+	delete[] hr;
+
+	stdoutput.printf("Used Physical Memory Size"
+			"		: %lld\n",
+			(LONG_LONG)sys::getUsedPhysicalMemorySize());
+
+	hr=charstring::humanReadable(sys::getUsedPhysicalMemorySize());
+	stdoutput.printf("Used Physical Memory Size"
+			"		: %s\n",
+			hr);
+	delete[] hr;
+
 	stdoutput.printf("Processor Count"
 			"				: %lld\n",
 			(LONG_LONG)sys::getProcessorCount());

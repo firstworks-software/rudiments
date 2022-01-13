@@ -1013,6 +1013,50 @@ class RUDIMENTS_DLLSPEC wcharstring {
 						const wchar_t *src,
 						uint64_t index);
 
+		/** Returns a human-readable version of the number.
+		 *  
+		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.
+		 *
+		 *  Where 1K = 1024. */
+		static wchar_t	*humanReadable(int64_t number);
+
+		/** Returns a human-readable version of the number.
+		 *  
+		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.
+		 *
+		 *  If "onethousand" = true then 1K = 1000, otherwise
+		 *  1K = 1024. */
+		static wchar_t	*humanReadable(int64_t number,
+							bool onethousand);
+
+		/** Returns a human-readable version of the number.
+		 *  
+		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc. */
+		static wchar_t	*humanReadable(uint64_t number);
+
+		/** Returns a human-readable version of the number.
+		 *  
+		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.
+		 *
+		 *  If "onethousand" = true then 1K = 1000, otherwise
+		 *  1K = 1024. */
+		static wchar_t	*humanReadable(uint64_t number,
+							bool onethousand);
+
+		/** Returns a human-readable version of the number.
+		 *  
+		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc. */
+		static wchar_t	*humanReadable(long double number);
+
+		/** Returns a human-readable version of the number.
+		 *  
+		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.
+		 *
+		 *  If "onethousand" = true then 1K = 1000, otherwise
+		 *  1K = 1024. */
+		static wchar_t	*humanReadable(long double number,
+							bool onethousand);
+
 		/** Appends "..." to "buffer" of character length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.

@@ -4,15 +4,9 @@
 #include <rudiments/wstringbuffer.h>
 #include <rudiments/wcharstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
-
-uint32_t	iterations=5;
-#ifdef LOWMEMORY
-uint32_t	members=64;
-#else
-uint32_t	members=1024;
-#endif
 
 wchar_t	alphabet[]=L"abcdefghijklmnopqrstuvwxyz";
 
@@ -26,21 +20,31 @@ int main(int argc, const char **argv) {
 		return 0;
 	}
 
+	const wchar_t	alphabet[]=L"abcdefghijklmnopqrstuvwxyz";
+	const uint32_t	iterations=5;
+	uint32_t	members;
+	size_t		strl;
+	if (sys::getPhysicalMemorySize()>256*1024*1024) {
+		// for systems with more than 256M of memory...
+		members=1024;
+		strl=300000;
+	} else {
+		// for systems with less than 256M of memory...
+		members=64;
+		strl=20000;
+	}
+	wchar_t	*str=new wchar_t[strl];
+	wchar_t	buf[64];
+
 	// create a new string buffer
 	wstringbuffer	*strb=new wstringbuffer();
-	#ifdef LOWMEMORY
-	wchar_t		str[20000];
-	#else
-	wchar_t		str[300000];
-	#endif
-	wchar_t		buf[64];
 
 	// append...
 	stdoutput.printf("append...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 
 		strb->clear();
-		bytestring::zero(str,sizeof(str));
+		bytestring::zero(str,strl*sizeof(wchar_t));
 
 		for (uint16_t j=0; j<members; j++) {
 
@@ -117,7 +121,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 		for (uint32_t j=0;
-			j<(sizeof(str)/sizeof(wchar_t))-5-1; j=j+10+i) {
+			j<(strl/sizeof(wchar_t))-5-1; j=j+10+i) {
 			strb->setPosition(j);
 			strb->write(L"66666");
 			wcharstring::copy(str+j,L"66666",5);
@@ -132,7 +136,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("initial contents...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 
-		bytestring::zero(str,sizeof(str));
+		bytestring::zero(str,strl*sizeof(wchar_t));
 
 		wchar_t	*data=new wchar_t[1024*(i+1)+1];
 		wcharstring::zero(data,1024*(i+1)+1);

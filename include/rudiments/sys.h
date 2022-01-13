@@ -172,6 +172,26 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getAvailablePhysicalPageCount();
 
+		/** Returns the number of pages of physical memory that
+		 *  are in use.
+		 *  Returns -1 if not supported by the system. */
+		static	int64_t	getUsedPhysicalPageCount();
+
+		/** Returns the number of bytes of physical memory, not
+		 *  including swap.
+		 *  Returns -1 if not supported by the system. */
+		static	int64_t	getPhysicalMemorySize();
+
+		/** Returns the number of bytes of physical memory that
+		 *  are available.
+		 *  Returns -1 if not supported by the system. */
+		static	int64_t	getAvailablePhysicalMemorySize();
+
+		/** Returns the number of bytes of physical memory that
+		 *  are in use.
+		 *  Returns -1 if not supported by the system. */
+		static	int64_t	getUsedPhysicalMemorySize();
+
 		/** Returns the number of processors the system is configured
 		 *  to support.
 		 *  Returns -1 if not supported by the system. */

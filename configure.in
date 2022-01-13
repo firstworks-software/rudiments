@@ -410,10 +410,6 @@ AC_ARG_ENABLE(slow-system,
 	[  --enable-slow-system    This is a slow system, affects tests],
 	SLOWSYSTEM="-DSLOWSYSTEM",
 	SLOWSYSTEM="")
-AC_ARG_ENABLE(low-memory,
-	[  --enable-low-memory     This is a low-memory system, affects tests],
-	LOWMEMORY="-DLOWMEMORY",
-	LOWMEMORY="")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -437,7 +433,7 @@ AC_PROG_MAKE_SET
 AC_LANG(C++)
 echo "******************************"
 
-CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $SLOWSYSTEM $LOWMEMORY $CPPFLAGS"
+CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $SLOWSYSTEM $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 EXTRALIBS=""
 

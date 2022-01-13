@@ -4,38 +4,40 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-uint32_t	iterations=5;
-#ifdef LOWMEMORY
-uint32_t	members=64;
-#else
-uint32_t	members=1024;
-#endif
-
-char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
 
 int main(int argc, const char **argv) {
 
 	header("stringbuffer");
 
+	const char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
+	const uint32_t	iterations=5;
+	uint32_t	members;
+	size_t		strl;
+	if (sys::getPhysicalMemorySize()>256*1024*1024) {
+		// for systems with more than 256M of memory...
+		members=1024;
+		strl=700000;
+	} else {
+		// for systems with less than 256M of memory...
+		members=64;
+		strl=40000;
+	}
+	char	*str=new char[strl];
+	char	buf[64];
 
 	// create a new string buffer
 	stringbuffer	*strb=new stringbuffer();
-	#ifdef LOWMEMORY
-	char		str[40000];
-	#else
-	char		str[700000];
-	#endif
-	char		buf[64];
 
 	// append...
 	stdoutput.printf("append...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 
 		strb->clear();
-		bytestring::zero(str,sizeof(str));
+		bytestring::zero(str,strl);
 
 		for (uint16_t j=0; j<members; j++) {
 
@@ -105,7 +107,7 @@ int main(int argc, const char **argv) {
 	// setPosition and write...
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
-		for (uint32_t j=0; j<sizeof(str)-5-1; j=j+30+i) {
+		for (uint32_t j=0; j<strl-5-1; j=j+30+i) {
 			strb->setPosition(j);
 			strb->write("66666");
 			charstring::copy(str+j,"66666",5);
@@ -120,7 +122,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("initial contents...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 
-		bytestring::zero(str,sizeof(str));
+		bytestring::zero(str,strl);
 
 		char	*data=new char[1024*(i+1)+1];
 		bytestring::zero(data,1024*(i+1)+1);
@@ -139,4 +141,6 @@ int main(int argc, const char **argv) {
 		delete strb;
 	}
 	stdoutput.printf("\n");
+
+	delete[] str;
 }

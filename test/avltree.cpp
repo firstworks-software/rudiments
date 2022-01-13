@@ -8,17 +8,14 @@
 #include <rudiments/randomnumber.h>
 #include <rudiments/snooze.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
 
 const int32_t	randomlow=10000;
 const int32_t	randomhigh=99999;
-#ifdef LOWMEMORY
-const uint16_t	nodecount=512;
-#else
-const uint16_t	nodecount=4096;
-#endif
+uint16_t	nodecount;
 
 
 // generates a random number
@@ -114,6 +111,10 @@ char *toString(int32_t number) {
 
 
 int main(int argc, char **argv) {
+
+	// 4096 nodes for systems with more than 256M of memory,
+	// 512 nodes for systems with less than 256M of memory
+	nodecount=(sys::getPhysicalMemorySize()>256*1024*1024)?4096:512;
 
 	header("avltree");
 

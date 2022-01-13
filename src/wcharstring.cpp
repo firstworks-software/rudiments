@@ -2663,6 +2663,50 @@ wchar_t *wcharstring::pad(const wchar_t *str, wchar_t padchar,
 #endif
 }
 
+wchar_t *wcharstring::humanReadable(int64_t number) {
+	return humanReadable(number,false);
+}
+
+wchar_t *wcharstring::humanReadable(int64_t number, bool onethousand) {
+	return humanReadable((long double)number,onethousand);
+}
+
+wchar_t *wcharstring::humanReadable(uint64_t number) {
+	return humanReadable(number,false);
+}
+
+wchar_t *wcharstring::humanReadable(uint64_t number, bool onethousand) {
+	return humanReadable((long double)number,onethousand);
+}
+
+wchar_t *wcharstring::humanReadable(long double number) {
+	return humanReadable(number,false);
+}
+
+wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
+
+	long double	k=(onethousand)?1000.0:1024.0;
+	wchar_t		suffixes[]={
+		L'\0',L'K',L'M',L'G',L'T',L'P',L'Z',L'Y',L'B'
+	};
+	long double	num=(number>=0)?number:(number*-1.0);
+	long double	size=k*k*k*k*k*k*k*k;
+	uint8_t i=8;
+	do {
+		if (num>=size) {
+			break;
+		}
+		size/=k;
+		i--;
+	} while (i>0);
+	
+	wchar_t	*buf=NULL;
+	printf(&buf,L"%0.1Lf%c",number/size,suffixes[i]);
+	wchar_t	*subbed=replace(buf,L".0",L"");
+	delete[] buf;
+	return subbed;
+}
+
 ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, ...) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H

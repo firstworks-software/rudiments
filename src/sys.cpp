@@ -877,6 +877,22 @@ int64_t sys::getAvailablePhysicalPageCount() {
 	#endif
 }
 
+int64_t sys::getUsedPhysicalPageCount() {
+	return getPhysicalPageCount()-getAvailablePhysicalPageCount();
+}
+
+int64_t sys::getPhysicalMemorySize() {
+	return getPhysicalPageCount()*getPageSize();
+}
+
+int64_t sys::getAvailablePhysicalMemorySize() {
+	return getAvailablePhysicalPageCount()*getPageSize();
+}
+
+int64_t sys::getUsedPhysicalMemorySize() {
+	return getUsedPhysicalPageCount()*getPageSize();
+}
+
 int64_t sys::getProcessorCount() {
 	#if defined(_SC_NPROCESSORS_CONF)
 		return sysConf(_SC_NPROCESSORS_CONF);
