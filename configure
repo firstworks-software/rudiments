@@ -904,6 +904,7 @@ enable_apache2
 enable_cgi
 enable_mvc
 enable_slow_system
+enable_low_memory
 enable_shared
 enable_static
 with_pic
@@ -1632,12 +1633,13 @@ Optional Features:
   --disable-propsax      Don't build propsax class
   --disable-propdom      Don't build propdom class
   --disable-cursordomnode Don't build cursordomnode class
-  --disable-request             Don't build request classes
-  --disable-response            Don't build response classes
-  --disable-apache2             Disable Apache 2 support
-  --disable-cgi                 Disable CGI support
-  --disable-mvc                 Disable MVC support
+  --disable-request       Don't build request classes
+  --disable-response      Don't build response classes
+  --disable-apache2       Disable Apache 2 support
+  --disable-cgi           Disable CGI support
+  --disable-mvc           Disable MVC support
   --enable-slow-system    This is a slow system, affects tests
+  --enable-low-memory     This is a low-memory system, affects tests
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -3273,6 +3275,13 @@ else
   SLOWSYSTEM=""
 fi
 
+# Check whether --enable-low-memory was given.
+if test "${enable_low_memory+set}" = set; then :
+  enableval=$enable_low_memory; LOWMEMORY="-DLOWMEMORY"
+else
+  LOWMEMORY=""
+fi
+
 
 if ( test -n "$SMALLCODE" ); then
 
@@ -4649,7 +4658,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 echo "******************************"
 
-CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $SLOWSYSTEM $CPPFLAGS"
+CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $SLOWSYSTEM $LOWMEMORY $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 EXTRALIBS=""
 

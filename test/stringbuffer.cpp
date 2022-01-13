@@ -8,7 +8,7 @@
 #include "test.cpp"
 
 uint32_t	iterations=5;
-#ifdef SLOWSYSTEM
+#ifdef LOWMEMORY
 uint32_t	members=64;
 #else
 uint32_t	members=1024;
@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 
 	// create a new string buffer
 	stringbuffer	*strb=new stringbuffer();
-	#ifdef SLOWSYSTEM
+	#ifdef LOWMEMORY
 	char		str[40000];
 	#else
 	char		str[700000];

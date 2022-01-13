@@ -14,7 +14,7 @@
 
 const int32_t	randomlow=10000;
 const int32_t	randomhigh=99999;
-#ifdef SLOWSYSTEM
+#ifdef LOWMEMORY
 const uint16_t	nodecount=512;
 #else
 const uint16_t	nodecount=4096;
