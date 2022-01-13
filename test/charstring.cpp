@@ -1059,35 +1059,35 @@ int main(int argc, const char **argv) {
 	char	*sval=charstring::humanReadable(val);
 	test("humanReadable 2.1B",!charstring::compare(sval,"2.1B"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1Y",!charstring::compare(sval,"2.1Y"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1Z",!charstring::compare(sval,"2.1Z"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1P",!charstring::compare(sval,"2.1P"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1T",!charstring::compare(sval,"2.1T"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1G",!charstring::compare(sval,"2.1G"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1M",!charstring::compare(sval,"2.1M"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1K",!charstring::compare(sval,"2.1K"));
 	delete[] sval;
-	val/=1024;
+	val/=1024.0;
 	sval=charstring::humanReadable(val);
 	test("humanReadable 2.1",!charstring::compare(sval,"2.1"));
 	delete[] sval;
@@ -1097,40 +1097,43 @@ int main(int argc, const char **argv) {
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1B",!charstring::compare(sval,"2.1B"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1Y",!charstring::compare(sval,"2.1Y"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1Z",!charstring::compare(sval,"2.1Z"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1P",!charstring::compare(sval,"2.1P"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1T",!charstring::compare(sval,"2.1T"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1G",!charstring::compare(sval,"2.1G"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1M",!charstring::compare(sval,"2.1M"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1K",!charstring::compare(sval,"2.1K"));
 	delete[] sval;
-	val/=1000;
+	val/=1000.0;
 	sval=charstring::humanReadable(val,true);
 	test("humanReadable 2.1",!charstring::compare(sval,"2.1"));
 	delete[] sval;
 
-	uint64_t	ival=3*1024.0*1024.0*1024.0*1024.0*1024.0*1024.0;
+	uint64_t	ival=((uint64_t)3)*
+				((uint64_t)1024)*((uint64_t)1024)*
+				((uint64_t)1024)*((uint64_t)1024)*
+				((uint64_t)1024)*((uint64_t)1024);
 	sval=charstring::humanReadable(ival);
 	test("humanReadable 3Z",!charstring::compare(sval,"3Z"));
 	delete[] sval;
@@ -1159,7 +1162,9 @@ int main(int argc, const char **argv) {
 	test("humanReadable 3",!charstring::compare(sval,"3"));
 	delete[] sval;
 
-	int64_t	sival=-3*1000.0*1000.0*1000.0*1000.0*1000.0*1000.0;
+	int64_t	sival=((int64_t)-3)*
+			((int64_t)1000)*((int64_t)1000)*((int64_t)1000)*
+			((int64_t)1000)*((int64_t)1000)*((int64_t)1000);
 	sval=charstring::humanReadable(sival,true);
 	test("humanReadable -3Z",!charstring::compare(sval,"-3Z"));
 	delete[] sval;
