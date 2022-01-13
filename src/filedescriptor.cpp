@@ -31,6 +31,7 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
+#include <rudiments/sys.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -2287,6 +2288,24 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 #endif
 }
 
+bool filedescriptor::supportsPassReceiveFileDescriptor() {
+
+        // not supported on Cygwin, Linux < 2.2, syllable, IRIX, mac os 10.0...
+        char    *os=sys::getOperatingSystemName();
+        char    *rel=sys::getOperatingSystemRelease();
+        double  ver=charstring::toFloat(rel);
+	delete[] rel;
+	bool	supported=!(
+			!charstring::compare(os,"CYGWIN",6) ||
+			(!charstring::compare(os,"Linux",5) && ver<2.2) ||
+			!charstring::compare(os,"syllable",8) ||
+			!charstring::compare(os,"IRIX",4) ||
+               		(!charstring::compare(os,"Darwin",6) && ver<1.4)
+			);
+	delete[] os;
+	return supported;
+}
+
 bool filedescriptor::passSocket(int32_t sock) {
 
 #if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
@@ -2359,6 +2378,12 @@ bool filedescriptor::receiveSocket(int32_t *sock) {
 #else
 	return receiveFileDescriptor(sock);
 #endif
+}
+
+bool filedescriptor::supportsPassReceiveSocket() {
+	// so far, any platform that supports passing file
+	// descriptors also supports passing sockets
+	return supportsPassReceiveFileDescriptor();
 }
 
 bool filedescriptor::useNaglesAlgorithm() {

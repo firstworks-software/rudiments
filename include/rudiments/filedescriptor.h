@@ -884,6 +884,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  from another process over a unix socket, for example. */
 		virtual bool	receiveFileDescriptor(int32_t *fd);
 
+		/** Returns true if the platform supports passing and receiving
+		 *  file descriptors or false otherwise. */
+		static bool	supportsPassReceiveFileDescriptor();
+
 
 		/** Sends socket "sock" to the file descriptor.  This
 		 *  is useful for passing an open socket from one
@@ -894,6 +898,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  receiving an open file descriptor passed from another
 		 *  process over a unix socket, for example. */
 		virtual bool	receiveSocket(int32_t *sock);
+
+		/** Returns true if the platform supports passing and receiving
+		 *  sockets or false otherwise. */
+		static bool	supportsPassReceiveSocket();
 
 
 		/** Translate integers from native byte order to network byte
