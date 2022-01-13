@@ -153,6 +153,7 @@ bool inetsocketserver::bind() {
 							sizeof(sockaddr_in));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {
+stdoutput.printf("fail 5\n");
 		return false;
 	}
 

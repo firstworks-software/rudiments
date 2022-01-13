@@ -83,12 +83,16 @@ bool socketclient::supportsBlockingNonBlockingModes() {
 
 bool socketclient::useNonBlockingMode() const {
 	// The posix way of setting blocking/non-blocking mode is to use
-	// fcntl, which is what the filedescriptor class does, but this doesn't
-	// work for sockets on all platforms.  If FIONBIO is defined, then use
-	// it with an ioctl instead.
-	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
+	// fcntl(), which is what the filedescriptor class does, but this
+	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
+	// then we'll try that with an ioctl first, and fall back to fcntl() if
+	// that fails with an "Inappropriate ioctl for device".
+	#if defined(FIONBIO)
 		int32_t	nonblocking=1;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
+		if (!retval && error::getErrorNumber()==ENOTTY) {
+			retval=filedescriptor::useNonBlockingMode();
+		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
 			pvt->_nonblockingmode=true;
@@ -102,12 +106,16 @@ bool socketclient::useNonBlockingMode() const {
 
 bool socketclient::useBlockingMode() const {
 	// The posix way of setting blocking/non-blocking mode is to use
-	// fcntl, which is what the filedescriptor class does, but this doesn't
-	// work for sockets on all platforms.  If FIONBIO is defined, then use
-	// it with an ioctl instead.
-	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
+	// fcntl(), which is what the filedescriptor class does, but this
+	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
+	// then we'll try that with an ioctl first, and fall back to fcntl() if
+	// that fails with an "Inappropriate ioctl for device".
+	#if defined(FIONBIO)
 		int32_t	nonblocking=0;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
+		if (!retval && error::getErrorNumber()==ENOTTY) {
+			retval=filedescriptor::useBlockingMode();
+		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
 			pvt->_nonblockingmode=false;

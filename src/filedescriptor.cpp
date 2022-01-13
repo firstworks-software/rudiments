@@ -2290,7 +2290,8 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 
 bool filedescriptor::supportsPassReceiveFileDescriptor() {
 
-        // not supported on Cygwin, Linux < 2.2, syllable, IRIX, mac os 10.0...
+        // not supported on Cygwin, Linux < 2.2, syllable, IRIX, mac os 10.0,
+        // FreeBSD, NetBSD, or OpenBSD
         char    *os=sys::getOperatingSystemName();
         char    *rel=sys::getOperatingSystemRelease();
         double  ver=charstring::toFloat(rel);
@@ -2300,7 +2301,10 @@ bool filedescriptor::supportsPassReceiveFileDescriptor() {
 			(!charstring::compare(os,"Linux",5) && ver<2.2) ||
 			!charstring::compare(os,"syllable",8) ||
 			!charstring::compare(os,"IRIX",4) ||
-               		(!charstring::compare(os,"Darwin",6) && ver<1.4)
+               		(!charstring::compare(os,"Darwin",6) && ver<1.4) ||
+               		!charstring::compare(os,"FreeBSD",7) ||
+               		!charstring::compare(os,"NetBSD",6) ||
+               		!charstring::compare(os,"OpenBSD",7) ||
 			);
 	delete[] os;
 	return supported;

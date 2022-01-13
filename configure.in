@@ -485,10 +485,6 @@ FW_CHECK_HAIKU
 FW_CHECK_SYLLABLE
 FW_CHECK_SCO
 FW_CHECK_IRIX
-if ( test -n "$MINIX" -o -n "$SYLLABLE" )
-then
-	AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
-fi
 if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
 then
 	dnl you can add FSU Pthreads to OSR5 but they cause odd problems

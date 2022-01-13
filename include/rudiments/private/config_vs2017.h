@@ -60,9 +60,6 @@
 /* Platform requires default TLS ciper of PROFILE=SYSTEM */
 /* #undef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM */
 
-/* ioctl/FIONBIO doesn't work on some systems */
-/* #undef RUDIMENTS_DISABLE_FIONBIO */
-
 /* Enable runtime notification of methods that set ENOSYS */
 /* #undef RUDIMENTS_ENOSYS_NOTIFY */
 

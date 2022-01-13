@@ -51,7 +51,8 @@
 	fixed bugs in dynamicarray::clear()
 	added memory-related methods to sys class
 	added charstring/wcharstring::humanReadable() methods
-	added filedescriptor::supportsPassReceiveFileDescriptor/Socket()
+	added filedescriptor::supportsPassReceiveFileDescriptor/Socket() and
+		updated it for various systems
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

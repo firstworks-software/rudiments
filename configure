@@ -16643,12 +16643,6 @@ $as_echo "no" >&6; }
 esac
 
 
-if ( test -n "$MINIX" -o -n "$SYLLABLE" )
-then
-
-$as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
-
-fi
 if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
 then
 		ENABLE_RUDIMENTS_THREADS="no"
