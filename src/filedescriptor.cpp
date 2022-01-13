@@ -2304,7 +2304,7 @@ bool filedescriptor::supportsPassReceiveFileDescriptor() {
                		(!charstring::compare(os,"Darwin",6) && ver<1.4) ||
                		!charstring::compare(os,"FreeBSD",7) ||
                		!charstring::compare(os,"NetBSD",6) ||
-               		!charstring::compare(os,"OpenBSD",7) ||
+               		!charstring::compare(os,"OpenBSD",7)
 			);
 	delete[] os;
 	return supported;
