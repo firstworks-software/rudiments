@@ -861,7 +861,6 @@ int main(int argc, const char **argv) {
 						L"rudiments-1.1.")>0);
 	stdoutput.printf("\n");
 
-
 	// human readable
 	stdoutput.printf("humanReadable...\n");
 	long double	val=2.1*1024.0*1024.0*1024.0*1024.0*

@@ -2,13 +2,17 @@
 // See the COPYING file for more information
 
 #include <rudiments/wcharstring.h>
-#include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharacter.h>
 #include <rudiments/process.h>
 #include <rudiments/file.h>
 #include <rudiments/wstringbuffer.h>
 #include <rudiments/error.h>
+
+#ifndef RUDIMENTS_HAVE_SWPRINTF
+	#include <rudiments/charstring.h>
+	#include <rudiments/character.h>
+#endif
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -2700,8 +2704,17 @@ wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
 		i--;
 	} while (i>0);
 	
-	wchar_t	*buf=NULL;
-	printf(&buf,L"%0.1Lf%c",number/size,suffixes[i]);
+	#ifdef RUDIMENTS_HAVE_SWPRINTF
+		wchar_t	*buf=NULL;
+		printf(&buf,L"%0.1Lf%c",number/size,suffixes[i]);
+	#else
+		char	*tmp=NULL;
+		charstring::printf(&tmp,"%0.1Lf%c",number/size,
+					character::duplicate(suffixes[i]));
+		wchar_t	*buf=duplicate(tmp);
+		delete[] tmp;
+	#endif
+
 	wchar_t	*subbed=replace(buf,L".0",L"");
 	delete[] buf;
 	return subbed;
