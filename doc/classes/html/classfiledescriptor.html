@@ -71,10 +71,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa00470d8a789f7df974dc50b8bbe0b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad10225534354a124366752ea3263d946"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad10225534354a124366752ea3263d946">duplicate</a> (int32_t newfd) const</td></tr>
 <tr class="separator:ad10225534354a124366752ea3263d946"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e077d4780acd07b63932897a81f6a4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a4e077d4780acd07b63932897a81f6a4f">setSecurityContext</a> (<a class="el" href="classsecuritycontext.html">securitycontext</a> *ctx)</td></tr>
-<tr class="separator:a4e077d4780acd07b63932897a81f6a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3090f0d9aad119a6f4a121313cac579"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsecuritycontext.html">securitycontext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad3090f0d9aad119a6f4a121313cac579">getSecurityContext</a> ()</td></tr>
-<tr class="separator:ad3090f0d9aad119a6f4a121313cac579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a886db6103e51b87b877593d066c0ca22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a886db6103e51b87b877593d066c0ca22">setSocketLayer</a> (<a class="el" href="classsocketlayer.html">socketlayer</a> *layer)</td></tr>
+<tr class="separator:a886db6103e51b87b877593d066c0ca22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0799678fb81a39efec06e51c10f1325"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsocketlayer.html">socketlayer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad0799678fb81a39efec06e51c10f1325">getSocketLayer</a> ()</td></tr>
+<tr class="separator:ad0799678fb81a39efec06e51c10f1325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba9a7fa52d49184adda885bf76e1197b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">supportsBlockingNonBlockingModes</a> ()</td></tr>
 <tr class="separator:aba9a7fa52d49184adda885bf76e1197b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42225c84a85cb29c0c1f525048db2698"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a42225c84a85cb29c0c1f525048db2698">useNonBlockingMode</a> () const</td></tr>
@@ -1064,21 +1064,21 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad3090f0d9aad119a6f4a121313cac579"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3090f0d9aad119a6f4a121313cac579">&#9670;&nbsp;</a></span>getSecurityContext()</h2>
+<a id="ad0799678fb81a39efec06e51c10f1325"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0799678fb81a39efec06e51c10f1325">&#9670;&nbsp;</a></span>getSocketLayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsecuritycontext.html">securitycontext</a>* filedescriptor::getSecurityContext </td>
+          <td class="memname"><a class="el" href="classsocketlayer.html">socketlayer</a>* filedescriptor::getSocketLayer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the securitycontext currently associated with the filedescriptor or NULL if none is currently associated. </p>
+<p>Returns the socketlayer currently associated with the filedescriptor or NULL if none is currently associated. </p>
 
 </div>
 </div>
@@ -3652,22 +3652,22 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4e077d4780acd07b63932897a81f6a4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e077d4780acd07b63932897a81f6a4f">&#9670;&nbsp;</a></span>setSecurityContext()</h2>
+<a id="a886db6103e51b87b877593d066c0ca22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a886db6103e51b87b877593d066c0ca22">&#9670;&nbsp;</a></span>setSocketLayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void filedescriptor::setSecurityContext </td>
+          <td class="memname">void filedescriptor::setSocketLayer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsecuritycontext.html">securitycontext</a> *&#160;</td>
-          <td class="paramname"><em>ctx</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classsocketlayer.html">socketlayer</a> *&#160;</td>
+          <td class="paramname"><em>layer</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Associates a securitycontext "ctx" with the filedescriptor. To remove the current context, pass in a NULL for "ctx". </p>
+<p>Associates a socketlayer "layer" with the filedescriptor. To remove the current layer, pass in a NULL for "layer". </p>
 
 </div>
 </div>
@@ -5392,7 +5392,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 14 2022 14:33:10 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 15:28:39 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

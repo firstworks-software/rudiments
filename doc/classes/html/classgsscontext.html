@@ -212,7 +212,7 @@ Public Member Functions</h2></td></tr>
 <p>Note that if this instance is set as the current GSS context of a child of the socketserver class, then this method is called implicitly during a successful call to <a class="el" href="classgsscontext.html#a9168075d072e081e9b05ff4429e7d844">accept()</a>.</p>
 <p>Returns true on success and false on failure. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -240,7 +240,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Releases any security context established during the previous call to <a class="el" href="classgsscontext.html#a3bacd4f71044088fac3485e8433bf17c">connect()</a> or <a class="el" href="classgsscontext.html#a9168075d072e081e9b05ff4429e7d844">accept()</a>. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -270,7 +270,7 @@ Public Member Functions</h2></td></tr>
 <p>Note that if this instance is set as the current security context of a child of the socketclient class, then this method is called implicitly during a successful call to <a class="el" href="classgsscontext.html#a3bacd4f71044088fac3485e8433bf17c">connect()</a>.</p>
 <p>Returns true on success and false on failure. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -442,7 +442,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the filedscriptor by a previous call to <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a> or NULL if no filedescriptor has been set. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -709,7 +709,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the maximum number of bytes that can be written or read in a single call to <a class="el" href="classgsscontext.html#a0d66b3e9c4dcf62b719f7109f527c4d4">write()</a> or <a class="el" href="classgsscontext.html#a9384e6898577924feed53a51a33dc88d">read()</a>. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -755,7 +755,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the number of bytes that are buffered and available for immediate read. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -794,7 +794,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Reads tokens from the file descriptor previously configured by <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a>, unwraps them, and writes the unwrapped data to "buf" until "size" bytes have been read. Returns the number of unwrapped bytes that were written to "buf" or RESULT_ERROR if an error occurred. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -920,7 +920,7 @@ Public Member Functions</h2></td></tr>
 <p>Note that if this instance is set as the current GSS context of a child of the socketclient class, then this method is called implicitly during a successful call to <a class="el" href="classgsscontext.html#a3bacd4f71044088fac3485e8433bf17c">connect()</a>.</p>
 <p>Note also that if this instance is set as the current GSS context of a child of the socketserver class, then this method is called implicitly during a successful call to <a class="el" href="classgsscontext.html#a9168075d072e081e9b05ff4429e7d844">accept()</a>. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
@@ -1201,14 +1201,14 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Wraps "size" bytes from "buf" and writes them to the file descriptor previously configured by <a class="el" href="classgsscontext.html#abfff2fc72aef384095efd69ec5410fc6">setFileDescriptor()</a>. Returns the number of unwrapped bytes that were written or RESULT_ERROR if an error occurred. </p>
 
-<p>Implements <a class="el" href="classsecuritycontext.html">securitycontext</a>.</p>
+<p>Implements <a class="el" href="classsocketlayer.html">socketlayer</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 14 2022 14:33:11 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 15:28:39 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
