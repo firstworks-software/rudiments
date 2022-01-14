@@ -114,7 +114,7 @@ int32_t unixsocketclient::connect() {
 	close();
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-	pvt->_isc.setSecurityContext(getSecurityContext());
+	pvt->_isc.setSocketLayer(getSocketLayer());
 	int32_t	result=pvt->_isc.connect();
 	if (result>-1) {
 		fd(pvt->_isc.getFileDescriptor());

@@ -218,13 +218,13 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 	pvt->_readreadylist.clear();
 
 	// return immediately if any of the filedescriptors
-	// have data pending from the security context
+	// have data pending from the socket layer
 	for (listnode< fddata_t * >	*node=
 					pvt->_fdlist.getFirst();
 					node; node=node->getNext()) {
-		securitycontext	*sctx=
-			node->getValue()->fd->getSecurityContext();
-		if (sctx && sctx->pending()) {
+		socketlayer	*slr=
+			node->getValue()->fd->getSocketLayer();
+		if (slr && slr->pending()) {
 			pvt->_readreadylist.append(node->getValue()->fd);
 			result++;
 		}
@@ -414,12 +414,12 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 					FD_SET(fd,&readlist);
 
-					// check here to see if the security
-					// context has data pending
-					securitycontext	*sctx=
+					// check here to see if the socket
+					// layer has data pending
+					socketlayer	*slr=
 						node->getValue()->fd->
-							getSecurityContext();
-					if (sctx && sctx->pending()) {
+							getSocketLayer();
+					if (slr && slr->pending()) {
 						pvt->_readreadylist.append(
 							node->getValue()->fd);
 						result++;
@@ -440,7 +440,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 			}
 
 			// return here if even 1 of the filedescriptors's
-			// security contexts had data pending
+			// socket layers had data pending
 			if (result) {
 				return result;
 			}

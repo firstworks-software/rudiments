@@ -57,14 +57,15 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  Returns true on success and false on failure. */
 		bool	duplicate(int32_t newfd) const;
 
-		/** Associates a securitycontext "ctx" with the filedescriptor.
-		 *  To remove the current context, pass in a NULL for "ctx". */
-		void	setSecurityContext(securitycontext *ctx);
+		/** Associates a socketlayer "layer" with the filedescriptor.
+		 *  To remove the current layer, pass in a NULL for
+		 *  "layer". */
+		void	setSocketLayer(socketlayer *layer);
 
-		/** Returns the securitycontext currently associated
+		/** Returns the socketlayer currently associated
 		 *  with the filedescriptor or NULL if none
 		 *  is currently associated. */
-		securitycontext	*getSecurityContext();
+		socketlayer	*getSocketLayer();
 
 		/** Returns true if the client socket supports
 		 *  blocking/nonblocking modes and false otherwise. */

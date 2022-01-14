@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
-		bool	securityContextAccept(filedescriptor *sock);
+		bool	socketLayerAccept(filedescriptor *sock);
 
 		ssize_t	lowLevelRead(void *buf, ssize_t count);
 		ssize_t	lowLevelWrite(const void *buf, ssize_t count);

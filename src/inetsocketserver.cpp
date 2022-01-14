@@ -229,8 +229,8 @@ filedescriptor *inetsocketserver::accept() {
 		return NULL;
 	}
 
-	// handle securitycontext-accept if necessary
-	if (!securityContextAccept(returnsock)) {
+	// handle socketlayer-accept if necessary
+	if (!socketLayerAccept(returnsock)) {
 		delete returnsock;
 		return NULL;
 	}

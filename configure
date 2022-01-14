@@ -37472,8 +37472,8 @@ then
 	SRCS="$SRCS filedescriptor.cpp stdio.cpp"
 	LOBJS="$LOBJS filedescriptor.lo stdio.lo"
 
-	#include security too
-	HEADERS3="$HEADERS3 security.h"
+	#include socketlayer and securitycontext too
+	HEADERS3="$HEADERS3 socketlayer.h securitycontext.h"
 
 	# include GSS too
 	HEADERS3="$HEADERS3 gss.h"

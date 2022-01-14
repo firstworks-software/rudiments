@@ -113,7 +113,7 @@ int main(int argc, const char **argv) {
 	fd.setReadBufferSize(65536);
 
 	// attach the security context
-	fd.setSecurityContext(&ctx);
+	fd.setSocketLayer(&ctx);
 
 	// loop, having sessions with the server
 	for (int64_t i=0; i<ccount; i++) {

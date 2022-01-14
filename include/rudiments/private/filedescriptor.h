@@ -38,7 +38,7 @@
 		int32_t	fd() const;
 		void	fd(int32_t filedes);
 
-		securitycontext	*secctx();
+		socketlayer	*socklr();
 
 	private:
 		static void	lowLevelWriteWorker(void *attr);

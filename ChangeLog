@@ -53,6 +53,8 @@
 	added charstring/wcharstring::humanReadable() methods
 	added filedescriptor::supportsPassReceiveFileDescriptor/Socket() and
 		updated it for various systems
+	added a socketlayer class below securitycontext and updated websocket
+		to inherit from that
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

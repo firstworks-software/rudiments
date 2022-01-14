@@ -287,7 +287,8 @@ headers3="dynamicarray.h "+_
 	"input.h "+_
 	"wastebasket.h "+_
 	"sensitivevalue.h "+_
-	"security.h "+_
+	"socketlayer.h "+_
+	"securitycontext.h "+_
 	"gss.h "+_
 	"tls.h "+_
 	"websocket.h "+_

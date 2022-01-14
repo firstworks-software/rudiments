@@ -185,13 +185,13 @@ bool socketserver::listen(int32_t backlog) {
 	return !result;
 }
 
-bool socketserver::securityContextAccept(filedescriptor *sock) {
-	if (secctx()) {
-		sock->setSecurityContext(secctx());
-		secctx()->setFileDescriptor(sock);
-		if (!secctx()->accept()) {
-			sock->setSecurityContext(NULL);
-			secctx()->setFileDescriptor(NULL);
+bool socketserver::socketLayerAccept(filedescriptor *sock) {
+	if (socklr()) {
+		sock->setSocketLayer(socklr());
+		socklr()->setFileDescriptor(sock);
+		if (!socklr()->accept()) {
+			sock->setSocketLayer(NULL);
+			socklr()->setFileDescriptor(NULL);
 			return false;
 		}
 	}

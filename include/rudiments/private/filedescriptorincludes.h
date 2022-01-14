@@ -6,7 +6,7 @@
 
 #include <rudiments/input.h>
 #include <rudiments/output.h>
-#include <rudiments/security.h>
+#include <rudiments/socketlayer.h>
 #include <rudiments/resultcodes.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H

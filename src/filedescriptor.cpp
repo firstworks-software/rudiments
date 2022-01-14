@@ -22,7 +22,6 @@
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/stringbuffer.h>
-#include <rudiments/security.h>
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
 		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
@@ -250,7 +249,7 @@ class filedescriptorprivate {
 
 		int32_t	_fd;
 
-		securitycontext	*_secctx;
+		socketlayer	*_socklr;
 
 		const char	*_type;
 
@@ -309,7 +308,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_allowshortreads=false;
 	pvt->_allowshortwrites=false;
 	pvt->_translatebyteorder=false;
-	pvt->_secctx=NULL;
+	pvt->_socklr=NULL;
 	pvt->_type="filedescriptor";
 	pvt->_lstnr=NULL;
 	pvt->_writebuffer=NULL;
@@ -339,7 +338,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
-	pvt->_secctx=f.pvt->_secctx;
+	pvt->_socklr=f.pvt->_socklr;
 	if (f.pvt->_writebuffer) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
 						f.pvt->_writebuffer;
@@ -501,12 +500,12 @@ bool filedescriptor::duplicate(int32_t newfd) const {
 	return (result==newfd);
 }
 
-void filedescriptor::setSecurityContext(securitycontext *ctx) {
-	pvt->_secctx=ctx;
+void filedescriptor::setSocketLayer(socketlayer *layer) {
+	pvt->_socklr=layer;
 }
 
-securitycontext *filedescriptor::getSecurityContext() {
-	return pvt->_secctx;
+socketlayer *filedescriptor::getSocketLayer() {
+	return pvt->_socklr;
 }
 
 bool filedescriptor::supportsBlockingNonBlockingModes() {
@@ -1260,7 +1259,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
 	ssize_t	actualread;
-	ssize_t	sizemax=(pvt->_secctx)?pvt->_secctx->getSizeMax():SSIZE_MAX;
+	ssize_t	sizemax=(pvt->_socklr)?pvt->_socklr->getSizeMax():SSIZE_MAX;
 	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalread<count) {
 
@@ -1290,13 +1289,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// read...
 		error::clearError();
-		if (pvt->_secctx) {
+		if (pvt->_socklr) {
 
 			#ifdef DEBUG_READ
-			debugPrintf(" (SecurityContext) ");
+			debugPrintf(" (SocketLayer) ");
 			#endif
 
-			actualread=pvt->_secctx->read(ptr,sizetoread);
+			actualread=pvt->_socklr->read(ptr,sizetoread);
 		} else {
 			actualread=lowLevelRead(ptr,sizetoread);
 		}
@@ -1510,7 +1509,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	ssize_t	totalwrite=0;
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
-	ssize_t	sizemax=(pvt->_secctx)?pvt->_secctx->getSizeMax():SSIZE_MAX;
+	ssize_t	sizemax=(pvt->_socklr)?pvt->_socklr->getSizeMax():SSIZE_MAX;
 	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalwrite<count) {
 
@@ -1540,13 +1539,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			(const void *)((const unsigned char *)buf+totalwrite);
 
 		error::clearError();
-		if (pvt->_secctx) {
+		if (pvt->_socklr) {
 
 			#ifdef DEBUG_WRITE
-			debugPrintf(" (SecurityContext) ");
+			debugPrintf(" (SocketLayer) ");
 			#endif
 
-			actualwrite=pvt->_secctx->write(ptr,sizetowrite);
+			actualwrite=pvt->_socklr->write(ptr,sizetowrite);
 		} else {
 			actualwrite=midLevelWrite(ptr,sizetowrite);
 		}
@@ -2551,8 +2550,8 @@ void filedescriptor::fd(int32_t filedes) {
 	setFileDescriptor(filedes);
 }
 
-securitycontext *filedescriptor::secctx() {
-	return pvt->_secctx;
+socketlayer *filedescriptor::socklr() {
+	return pvt->_socklr;
 }
 
 bool filedescriptor::closeOnExec() {

@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_SECURITY_H
-#define RUDIMENTS_SECURITY_H
+#ifndef RUDIMENTS_SOCKETLAYER_H
+#define RUDIMENTS_SOCKETLAYER_H
 
 #include <rudiments/object.h>
 
@@ -12,7 +12,7 @@
 
 class	filedescriptor;
 
-class RUDIMENTS_DLLSPEC securitycontext : virtual public object {
+class RUDIMENTS_DLLSPEC socketlayer : virtual public object {
 	public:
 		virtual	void	setFileDescriptor(filedescriptor *fd)=0;
 		virtual	filedescriptor	*getFileDescriptor()=0;

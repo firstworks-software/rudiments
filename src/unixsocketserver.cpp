@@ -184,7 +184,7 @@ bool unixsocketserver::listen(int32_t backlog) {
 filedescriptor *unixsocketserver::accept() {
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-	pvt->_iss.setSecurityContext(getSecurityContext());
+	pvt->_iss.setSocketLayer(getSocketLayer());
 	return pvt->_iss.accept();
 #else
 	// initialize a socket address structure
@@ -225,8 +225,8 @@ filedescriptor *unixsocketserver::accept() {
 		return NULL;
 	}
 
-	// handle securitycontext-accept if necessary
-	if (!securityContextAccept(returnsock)) {
+	// handle socketlayer-accept if necessary
+	if (!socketLayerAccept(returnsock)) {
 		delete returnsock;
 		return NULL;
 	}

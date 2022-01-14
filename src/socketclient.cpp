@@ -429,10 +429,10 @@ wsacleanup:
 	#endif
 
 	// securitycontext-connect if necessary
-	if (retval==RESULT_SUCCESS && secctx()) {
-		secctx()->setFileDescriptor(this);
-		if (!secctx()->connect()) {
-			secctx()->setFileDescriptor(NULL);
+	if (retval==RESULT_SUCCESS && socklr()) {
+		socklr()->setFileDescriptor(this);
+		if (!socklr()->connect()) {
+			socklr()->setFileDescriptor(NULL);
 			close();
 			return RESULT_ERROR;
 		}

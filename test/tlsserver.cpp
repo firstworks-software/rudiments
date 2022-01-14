@@ -65,7 +65,7 @@ int main(int argc, const char **argv) {
 	inetsocketserver	iss;
 
 	// attach the security context
-	iss.setSecurityContext(&ctx);
+	iss.setSocketLayer(&ctx);
 
 	// listen
 	if (iss.listen(NULL,port,0)) {

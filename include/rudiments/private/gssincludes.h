@@ -3,7 +3,7 @@
 
 #include <rudiments/object.h>
 
-#include <rudiments/security.h>
+#include <rudiments/securitycontext.h>
 #include <rudiments/stringbuffer.h>
 
 #if defined(RUDIMENTS_HAS_GSS)

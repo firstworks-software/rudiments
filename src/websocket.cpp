@@ -53,7 +53,7 @@ class websocketprivate {
 		uint64_t	_pingbuffersize;
 };
 
-websocket::websocket() : securitycontext() {
+websocket::websocket() : socketlayer() {
 	pvt=new websocketprivate;
 	pvt->_isclient=false;
 	pvt->_fd=NULL;
@@ -94,19 +94,19 @@ bool websocket::connect() {
 
 bool websocket::accept() {
 
-	// temporarily disable the security context so
+	// temporarily disable the socket layer so
 	// local reads don't use websocket::read();
-	if (pvt->_fd->getSecurityContext()!=this) {
+	if (pvt->_fd->getSocketLayer()!=this) {
 		// FIXME: set error
 		return false;
 	}
-	pvt->_fd->setSecurityContext(NULL);
+	pvt->_fd->setSocketLayer(NULL);
 
 	// accept...
 	bool	retval=acceptInternal();
 
-	// reset security context
-	pvt->_fd->setSecurityContext(this);
+	// reset socket layer
+	pvt->_fd->setSocketLayer(this);
 
 	return retval;
 }
@@ -437,19 +437,19 @@ ssize_t websocket::read(void *buf, ssize_t size) {
 	// decrement size by whatever we got from the buffer
 	size-=bytescopiedout;
 
-	// temporarily disable the security context so
+	// temporarily disable the socket layer so
 	// local reads don't use websocket::read();
-	if (pvt->_fd->getSecurityContext()!=this) {
+	if (pvt->_fd->getSocketLayer()!=this) {
 		// FIXME: set error
 		return RESULT_ERROR;
 	}
-	pvt->_fd->setSecurityContext(NULL);
+	pvt->_fd->setSocketLayer(NULL);
 
 	// read...
 	ssize_t	retval=readInternal(buf,size);
 
-	// reset security context
-	pvt->_fd->setSecurityContext(this);
+	// reset socket layer
+	pvt->_fd->setSocketLayer(this);
 
 	return retval;
 }
@@ -688,19 +688,19 @@ ssize_t websocket::write(const void *buf, ssize_t size) {
 ssize_t websocket::write(const void *buf, ssize_t size,
 						unsigned char opcode) {
 
-	// temporarily disable the security context so
+	// temporarily disable the socket layer so
 	// local writes don't use websocket::write();
-	if (pvt->_fd->getSecurityContext()!=this) {
+	if (pvt->_fd->getSocketLayer()!=this) {
 		// FIXME: set error
 		return RESULT_ERROR;
 	}
-	pvt->_fd->setSecurityContext(NULL);
+	pvt->_fd->setSocketLayer(NULL);
 
 	// write...
 	ssize_t	retval=writeInternal(buf,size,opcode);
 
-	// reset security context
-	pvt->_fd->setSecurityContext(this);
+	// reset socket layer
+	pvt->_fd->setSocketLayer(this);
 
 	return retval;
 }
