@@ -104,6 +104,14 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aa92db2afeb5dc201365bee597924f44e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a140e307456fa33fcedf07a01ea1efa43"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a140e307456fa33fcedf07a01ea1efa43">getAvailablePhysicalPageCount</a> ()</td></tr>
 <tr class="separator:a140e307456fa33fcedf07a01ea1efa43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1bd865befbfc931f58d0c3f7a2ffa16"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#ab1bd865befbfc931f58d0c3f7a2ffa16">getUsedPhysicalPageCount</a> ()</td></tr>
+<tr class="separator:ab1bd865befbfc931f58d0c3f7a2ffa16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acadea8d57fa0fc7f6f01a3dfc0c71096"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#acadea8d57fa0fc7f6f01a3dfc0c71096">getPhysicalMemorySize</a> ()</td></tr>
+<tr class="separator:acadea8d57fa0fc7f6f01a3dfc0c71096"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e51b9097846ae06d0a436a4afe29448"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a3e51b9097846ae06d0a436a4afe29448">getAvailablePhysicalMemorySize</a> ()</td></tr>
+<tr class="separator:a3e51b9097846ae06d0a436a4afe29448"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a049855a30144231647a729b285afd1f0"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a049855a30144231647a729b285afd1f0">getUsedPhysicalMemorySize</a> ()</td></tr>
+<tr class="separator:a049855a30144231647a729b285afd1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a97d8c59b010281ed1978438a6073cc"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a4a97d8c59b010281ed1978438a6073cc">getProcessorCount</a> ()</td></tr>
 <tr class="separator:a4a97d8c59b010281ed1978438a6073cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaba41a49b6ee1dc66c7a0a5f91c1f0ca"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#aaba41a49b6ee1dc66c7a0a5f91c1f0ca">getMaxProcessorCount</a> ()</td></tr>
@@ -317,6 +325,32 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the allocation granularity, in bytes. Allocation granularity is the minimum number of bytes that a program's address space can be extended by. It's usually the same as the page size, but not on Windows, for example. Returns -1 if not supported by the system. </p>
+
+</div>
+</div>
+<a id="a3e51b9097846ae06d0a436a4afe29448"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e51b9097846ae06d0a436a4afe29448">&#9670;&nbsp;</a></span>getAvailablePhysicalMemorySize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t sys::getAvailablePhysicalMemorySize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of bytes of physical memory that are available. Returns -1 if not supported by the system. </p>
 
 </div>
 </div>
@@ -1276,6 +1310,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="acadea8d57fa0fc7f6f01a3dfc0c71096"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acadea8d57fa0fc7f6f01a3dfc0c71096">&#9670;&nbsp;</a></span>getPhysicalMemorySize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t sys::getPhysicalMemorySize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of bytes of physical memory, not including swap. Returns -1 if not supported by the system. </p>
+
+</div>
+</div>
 <a id="aa92db2afeb5dc201365bee597924f44e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa92db2afeb5dc201365bee597924f44e">&#9670;&nbsp;</a></span>getPhysicalPageCount()</h2>
 
@@ -1455,6 +1515,58 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the number of tries that will be made to destroy thraed-specific data on thread exit. Returns -1 if not supported by the system. </p>
+
+</div>
+</div>
+<a id="a049855a30144231647a729b285afd1f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a049855a30144231647a729b285afd1f0">&#9670;&nbsp;</a></span>getUsedPhysicalMemorySize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t sys::getUsedPhysicalMemorySize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of bytes of physical memory that are in use. Returns -1 if not supported by the system. </p>
+
+</div>
+</div>
+<a id="ab1bd865befbfc931f58d0c3f7a2ffa16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1bd865befbfc931f58d0c3f7a2ffa16">&#9670;&nbsp;</a></span>getUsedPhysicalPageCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t sys::getUsedPhysicalPageCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of pages of physical memory that are in use. Returns -1 if not supported by the system. </p>
 
 </div>
 </div>
@@ -2041,7 +2153,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 13 2021 00:14:22 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 14:33:11 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

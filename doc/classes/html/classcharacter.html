@@ -88,10 +88,80 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a374913feb44ab89688f9a5717c61a62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85ef5e5488549ce9f944606805183a17"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a85ef5e5488549ce9f944606805183a17">inSet</a> (char c, const char *set)</td></tr>
 <tr class="separator:a85ef5e5488549ce9f944606805183a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa182f46a1f1ababdfb5c081eb76f18c5"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#aa182f46a1f1ababdfb5c081eb76f18c5">duplicate</a> (wchar_t c)</td></tr>
+<tr class="separator:aa182f46a1f1ababdfb5c081eb76f18c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5e44a0ad2fbf7cf3b83ed7ba6457f05"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#ab5e44a0ad2fbf7cf3b83ed7ba6457f05">duplicate</a> (wchar_t c, char replacement)</td></tr>
+<tr class="separator:ab5e44a0ad2fbf7cf3b83ed7ba6457f05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The character class provides static methods for evaluating and manipulating ascii characters. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa182f46a1f1ababdfb5c081eb76f18c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa182f46a1f1ababdfb5c081eb76f18c5">&#9670;&nbsp;</a></span>duplicate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char character::duplicate </td>
+          <td>(</td>
+          <td class="paramtype">wchar_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the character representation of wide character "c".</p>
+<p>Returns '\0' if wide character "c" cannot be converted to a character. </p>
+
+</div>
+</div>
+<a id="ab5e44a0ad2fbf7cf3b83ed7ba6457f05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5e44a0ad2fbf7cf3b83ed7ba6457f05">&#9670;&nbsp;</a></span>duplicate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char character::duplicate </td>
+          <td>(</td>
+          <td class="paramtype">wchar_t&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>replacement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the character representation of wide character "c".</p>
+<p>Returns "replacement" if wide character "c" cannot be converted to a character. </p>
+
+</div>
+</div>
 <a id="a85ef5e5488549ce9f944606805183a17"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85ef5e5488549ce9f944606805183a17">&#9670;&nbsp;</a></span>inSet()</h2>
 
@@ -645,7 +715,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 13 2021 00:14:21 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 14:33:10 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

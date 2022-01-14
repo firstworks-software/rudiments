@@ -21,7 +21,7 @@ for program in \
 	dictionary \
 	directory \
 	dynamicarray \
-	dynamictable \
+	table \
 	dynamiclib \
 	environment \
 	error \

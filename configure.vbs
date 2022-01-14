@@ -223,7 +223,7 @@ headers0="object.h "+_
 	"dictionarycollection.h "+_
 	"resultcodes.h "+_
 	"debugprint.h"
-headers1="dynamictable.h "+_
+headers1="table.h "+_
 	"linkedlist.h "+_
 	"singlylinkedlist.h "+_
 	"avltree.h "+_
@@ -380,9 +380,9 @@ privateheaders2="winsock.h "+_
 	"inetsocketclientincludes.h "+_
 	"inetsocketserver.h "+_
 	"inetsocketserverincludes.h"
-privateheaders3="dynamictable.h "+_
-	"dynamictableincludes.h "+_
-	"dynamictableinlines.h "+_
+privateheaders3="table.h "+_
+	"tableincludes.h "+_
+	"tableinlines.h "+_
 	"linkedlist.h "+_
 	"linkedlistincludes.h "+_
 	"linkedlistinlines.h "+_

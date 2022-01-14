@@ -6,7 +6,7 @@
 
 template <class valuetype>
 inline
-dynamictable<valuetype>::dynamictable() :
+table<valuetype>::table() :
 	tablecollection<valuetype>(),
 	cols(0),
 	rows(0) {
@@ -14,22 +14,21 @@ dynamictable<valuetype>::dynamictable() :
 
 template <class valuetype>
 inline
-dynamictable<valuetype>::dynamictable(const dynamictable<valuetype> &a) :
-						tablecollection<valuetype>(a) {
+table<valuetype>::table(const table<valuetype> &a) :
+				tablecollection<valuetype>(a) {
 	clone(&a);
 }
 
 template <class valuetype>
 inline
-dynamictable<valuetype>::dynamictable(const tablecollection<valuetype> &a) :
-						tablecollection<valuetype>(a) {
+table<valuetype>::table(const tablecollection<valuetype> &a) :
+				tablecollection<valuetype>(a) {
 	clone(&a);
 }
 
 template <class valuetype>
 inline
-dynamictable<valuetype> &dynamictable<valuetype>::operator=(
-					const dynamictable<valuetype> &a) {
+table<valuetype> &table<valuetype>::operator=(const table<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		tablecollection<valuetype>::operator=(a);
@@ -40,7 +39,7 @@ dynamictable<valuetype> &dynamictable<valuetype>::operator=(
 
 template <class valuetype>
 inline
-dynamictable<valuetype> &dynamictable<valuetype>::operator=(
+table<valuetype> &table<valuetype>::operator=(
 					const tablecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
@@ -52,7 +51,7 @@ dynamictable<valuetype> &dynamictable<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::clone(const dynamictable<valuetype> *t) {
+void table<valuetype>::clone(const table<valuetype> *t) {
 	for (uint64_t col=0; col<t->getColCount(); col++) {
 		columnnames[col]=
 			charstring::duplicate(t->getColumnName(col));
@@ -64,7 +63,7 @@ void dynamictable<valuetype>::clone(const dynamictable<valuetype> *t) {
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::clone(const tablecollection<valuetype> *t) {
+void table<valuetype>::clone(const tablecollection<valuetype> *t) {
 	cols=0;
 	rows=0;
 	for (uint64_t col=0; col<t->getColCount(); col++) {
@@ -84,7 +83,7 @@ void dynamictable<valuetype>::clone(const tablecollection<valuetype> *t) {
 
 template <class valuetype>
 inline
-dynamictable<valuetype>::~dynamictable() {
+table<valuetype>::~table() {
 	for (uint64_t i=0; i<cols; i++) {
 		delete[] columnnames[i];
 	}
@@ -92,7 +91,7 @@ dynamictable<valuetype>::~dynamictable() {
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::setColumnName(uint64_t col, const char *name) {
+void table<valuetype>::setColumnName(uint64_t col, const char *name) {
 	if (cols && col<cols-1) {
 		delete[] columnnames[col];
 	}
@@ -104,21 +103,19 @@ void dynamictable<valuetype>::setColumnName(uint64_t col, const char *name) {
 
 template <class valuetype>
 inline
-const char *dynamictable<valuetype>::getColumnName(uint64_t col) const {
+const char *table<valuetype>::getColumnName(uint64_t col) const {
 	return (col<cols)?columnnames[col]:NULL;
 }
 
 template <class valuetype>
 inline
-uint64_t dynamictable<valuetype>::getColCount() const {
+uint64_t table<valuetype>::getColCount() const {
 	return cols;
 }
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::setValue(uint64_t row,
-					uint64_t col,
-					valuetype value) {
+void table<valuetype>::setValue(uint64_t row, uint64_t col, valuetype value) {
 	values[row][col]=value;
 	if (row>=rows) {
 		rows=row+1;
@@ -130,15 +127,13 @@ void dynamictable<valuetype>::setValue(uint64_t row,
 
 template <class valuetype>
 inline
-valuetype dynamictable<valuetype>::getValue(uint64_t row,
-						uint64_t col) const {
+valuetype table<valuetype>::getValue(uint64_t row, uint64_t col) const {
 	return (row<rows && col<cols)?values[row][col]:((valuetype)0);
 }
 
 template <class valuetype>
 inline
-valuetype dynamictable<valuetype>::getValue(uint64_t row,
-						const char *colname) const {
+valuetype table<valuetype>::getValue(uint64_t row, const char *colname) const {
 	// FIXME: inefficient
 	for (uint64_t i=0; i<cols; i++) {
 		if (!charstring::compare(colname,columnnames[i])) {
@@ -150,19 +145,19 @@ valuetype dynamictable<valuetype>::getValue(uint64_t row,
 
 template <class valuetype>
 inline
-uint64_t dynamictable<valuetype>::getRowCount() const {
+uint64_t table<valuetype>::getRowCount() const {
 	return rows;
 }
 
 template <class valuetype>
 inline
-bool dynamictable<valuetype>::getAllRowsAvailable() const {
+bool table<valuetype>::getAllRowsAvailable() const {
 	return true;
 }
 
 template <class valuetype>
 inline
-void dynamictable<valuetype>::clear() {
+void table<valuetype>::clear() {
 	for (uint64_t i=0; i<rows; i++) {
 		values[i].clear();
 	}

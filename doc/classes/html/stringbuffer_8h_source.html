@@ -83,106 +83,133 @@ $(function() {
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(int16_t number);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(int32_t number);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(int64_t number);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(uint16_t number);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(uint32_t number);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>, <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length,</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                                                        <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">wchar_t</span> <a class="code" href="classcharacter.html">character</a>);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(uint64_t number);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">float</span> number);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">float</span> number, uint16_t scale);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">float</span> number, uint16_t precision,</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                                                        uint16_t scale);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">wchar_t</span> <a class="code" href="classcharacter.html">character</a>, <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(int16_t number);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(int32_t number);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(int64_t number);</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">double</span> number);</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">double</span> number, uint16_t scale);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">double</span> number, uint16_t precision,</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                                                        uint16_t scale);</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>,</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                                                        <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(uint16_t number);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(uint32_t number);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(uint64_t number);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">float</span> number);</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">float</span> number, uint16_t scale);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">float</span> number, uint16_t precision,</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                                                        uint16_t scale);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int16_t number);</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int32_t number);</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int64_t number);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint16_t number);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint32_t number);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint64_t number);</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int16_t number, uint16_t zeropadding);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int32_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">double</span> number);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">double</span> number, uint16_t scale);</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                ssize_t <a class="code" href="classbytebuffer.html#a940a2ad6148528a560c7ac7e8e5b54b1">write</a>(<span class="keywordtype">double</span> number, uint16_t precision,</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                                                        uint16_t scale);</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>,</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                                                        <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int64_t number, uint16_t zeropadding);</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint16_t number, uint16_t zeropadding);</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint32_t number, uint16_t zeropadding);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint64_t number, uint16_t zeropadding);</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">float</span> number);</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; </div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">float</span> number, uint16_t scale);</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">float</span> number, uint16_t precision,</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                                                        uint16_t scale);</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160; </div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">double</span> number);</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160; </div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">double</span> number, uint16_t scale);</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">double</span> number, uint16_t precision,</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                                                        uint16_t scale);</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a6686eb75cabf0b1a9549905f4a10cbcb">truncate</a>(<span class="keywordtype">size_t</span> pos);</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a6686eb75cabf0b1a9549905f4a10cbcb">truncate</a>();</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a3c76e3d3d3f476dfe8b706e66adc0eac">clear</a>();</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a3c76e3d3d3f476dfe8b706e66adc0eac">clear</a>(<span class="keywordtype">size_t</span> initialsize);</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; </div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a3c76e3d3d3f476dfe8b706e66adc0eac">clear</a>(<span class="keywordtype">char</span> *initialcontents, <span class="keywordtype">size_t</span> initialsize);</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160; </div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getString();</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160; </div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;                <span class="keywordtype">char</span>    *detachString();</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160; </div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;                <span class="keywordtype">size_t</span>  getStringLength();</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;};</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/stringbufferinlines.h&gt;</span></div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160; </div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>,</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                                                <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160; </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length,</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                                                        <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">wchar_t</span> <a class="code" href="classcharacter.html">character</a>);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">wchar_t</span> <a class="code" href="classcharacter.html">character</a>, <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int16_t number);</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int32_t number);</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int64_t number);</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="classcharacter.html">character</a>);</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint16_t number);</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160; </div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint32_t number);</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160; </div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint64_t number);</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160; </div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int16_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160; </div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int32_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160; </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(int64_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160; </div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint16_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint32_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(uint64_t number, uint16_t zeropadding);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">float</span> number);</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">float</span> number, uint16_t scale);</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160; </div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">float</span> number, uint16_t precision,</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;                                                        uint16_t scale);</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">double</span> number);</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">double</span> number, uint16_t scale);</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160; </div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *<a class="code" href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">append</a>(<span class="keywordtype">double</span> number, uint16_t precision,</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;                                                        uint16_t scale);</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160; </div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a6686eb75cabf0b1a9549905f4a10cbcb">truncate</a>(<span class="keywordtype">size_t</span> pos);</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a6686eb75cabf0b1a9549905f4a10cbcb">truncate</a>();</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a3c76e3d3d3f476dfe8b706e66adc0eac">clear</a>();</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a3c76e3d3d3f476dfe8b706e66adc0eac">clear</a>(<span class="keywordtype">size_t</span> initialsize);</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160; </div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classbytebuffer.html#a3c76e3d3d3f476dfe8b706e66adc0eac">clear</a>(<span class="keywordtype">char</span> *initialcontents, <span class="keywordtype">size_t</span> initialsize);</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getString();</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                <span class="keywordtype">char</span>    *detachString();</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                <span class="keywordtype">size_t</span>  getStringLength();</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;};</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/stringbufferinlines.h&gt;</span></div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160; </div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassbytebuffer_html"><div class="ttname"><a href="classbytebuffer.html">bytebuffer</a></div><div class="ttdef"><b>Definition:</b> bytebuffer.h:13</div></div>
 <div class="ttc" id="aclassbytebuffer_html_a2c716a75785adf6e558f075f5e79bc4f"><div class="ttname"><a href="classbytebuffer.html#a2c716a75785adf6e558f075f5e79bc4f">bytebuffer::append</a></div><div class="ttdeci">bytebuffer * append(const unsigned char *data, size_t size)</div></div>
 <div class="ttc" id="aclassbytebuffer_html_a37ad20a802e0ea502c38f902a644031b"><div class="ttname"><a href="classbytebuffer.html#a37ad20a802e0ea502c38f902a644031b">bytebuffer::setPosition</a></div><div class="ttdeci">void setPosition(size_t pos)</div></div>
@@ -196,7 +223,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 13 2021 00:14:21 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 14:33:10 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

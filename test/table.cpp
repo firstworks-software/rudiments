@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the file COPYING for more information
 
-#include <rudiments/dynamictable.h>
+#include <rudiments/table.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
 #include "test.cpp"
@@ -15,7 +15,7 @@ const char	*colname(uint64_t col) {
 
 int main(int argc, char **argv) {
 
-	header("dynamictable");
+	header("table");
 
 	uint64_t	rows=10;
 	uint64_t	cols=5;
@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("integers, fully populated:\n");
 
 	// fully populate table
-	dynamictable<int32_t>	intt;
+	table<int32_t>	intt;
 	int32_t		count=start;
 	for (uint64_t j=0; j<cols; j++) {
 		intt.setColumnName(j,colname(j));
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
 
 		stdoutput.printf("copy/assignment%s...\n",(!i)?"":" (managed)");
 
-		dynamictable<char *>	cch1;
+		table<char *>	cch1;
 		cch1.setManageArrayValues(i);
 		const char *values[]={
 			"a","b","c","d","e","f","g","h","i","j","k","l","m",
@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
 			}
 		}
 	
-		dynamictable<char *>	cch2(cch1);
+		table<char *>	cch2(cch1);
 		for (uint16_t j=0; j<3; j++) {
 
 			// 1st iteration is copy

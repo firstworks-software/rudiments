@@ -55,35 +55,25 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/collection.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classscalarcollection.html">   12</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classscalarcollection.html">scalarcollection</a> : <span class="keyword">public</span> <a class="code" href="classcollection.html">collection</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classscalarcollection.html">   12</a></span>&#160;<span class="keyword">class </span><a class="code" href="classscalarcollection.html">scalarcollection</a> : <span class="keyword">public</span> <a class="code" href="classcollection.html">collection</a> {</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classscalarcollection.html#aa9a9b761b1f0bbd5aacca9e8a0fd6b54">   16</a></span>&#160;                <a class="code" href="classscalarcollection.html#aa9a9b761b1f0bbd5aacca9e8a0fd6b54">scalarcollection</a>() : <a class="code" href="classcollection.html">collection</a>() {};</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classscalarcollection.html#add19061f2d5eafdfc46671e136ab66dc">   19</a></span>&#160;                <a class="code" href="classscalarcollection.html#add19061f2d5eafdfc46671e136ab66dc">scalarcollection</a>(<span class="keyword">const</span> <a class="code" href="classcollection.html">collection</a> &amp;c) : <a class="code" href="classcollection.html">collection</a>(c) {};</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">   15</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code" href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">setValue</a>(valuetype v)=0;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">   19</a></span>&#160;                <span class="keyword">virtual</span> valuetype       <a class="code" href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">getValue</a>() <span class="keyword">const</span>=0;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a425cbd819ebe6a306a6457c16d62d1e6">   22</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classscalarcollection.html#a425cbd819ebe6a306a6457c16d62d1e6">~scalarcollection</a>() {};</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">   25</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code" href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">setValue</a>(valuetype v)=0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">   29</a></span>&#160;                <span class="keyword">virtual</span> valuetype       <a class="code" href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">getValue</a>() <span class="keyword">const</span>=0;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classscalarcollection.html#abdc5d4b26691a9e2c635adf94c103f7c">   36</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code" href="classscalarcollection.html#abdc5d4b26691a9e2c635adf94c103f7c">clear</a>()=0;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition:</b> collection.h:10</div></div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classscalarcollection.html#abdc5d4b26691a9e2c635adf94c103f7c">   26</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code" href="classscalarcollection.html#abdc5d4b26691a9e2c635adf94c103f7c">clear</a>()=0;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;};</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition:</b> collection.h:11</div></div>
 <div class="ttc" id="aclassscalarcollection_html"><div class="ttname"><a href="classscalarcollection.html">scalarcollection</a></div><div class="ttdef"><b>Definition:</b> scalarcollection.h:12</div></div>
-<div class="ttc" id="aclassscalarcollection_html_a425cbd819ebe6a306a6457c16d62d1e6"><div class="ttname"><a href="classscalarcollection.html#a425cbd819ebe6a306a6457c16d62d1e6">scalarcollection::~scalarcollection</a></div><div class="ttdeci">virtual ~scalarcollection()</div><div class="ttdef"><b>Definition:</b> scalarcollection.h:22</div></div>
 <div class="ttc" id="aclassscalarcollection_html_a57d013b7dbd8e46e39736ff40a1a6603"><div class="ttname"><a href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">scalarcollection::setValue</a></div><div class="ttdeci">virtual void setValue(valuetype v)=0</div></div>
 <div class="ttc" id="aclassscalarcollection_html_a9ec2c6a6f26969e90377e307de0111c2"><div class="ttname"><a href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">scalarcollection::getValue</a></div><div class="ttdeci">virtual valuetype getValue() const =0</div></div>
-<div class="ttc" id="aclassscalarcollection_html_aa9a9b761b1f0bbd5aacca9e8a0fd6b54"><div class="ttname"><a href="classscalarcollection.html#aa9a9b761b1f0bbd5aacca9e8a0fd6b54">scalarcollection::scalarcollection</a></div><div class="ttdeci">scalarcollection()</div><div class="ttdef"><b>Definition:</b> scalarcollection.h:16</div></div>
 <div class="ttc" id="aclassscalarcollection_html_abdc5d4b26691a9e2c635adf94c103f7c"><div class="ttname"><a href="classscalarcollection.html#abdc5d4b26691a9e2c635adf94c103f7c">scalarcollection::clear</a></div><div class="ttdeci">virtual void clear()=0</div></div>
-<div class="ttc" id="aclassscalarcollection_html_add19061f2d5eafdfc46671e136ab66dc"><div class="ttname"><a href="classscalarcollection.html#add19061f2d5eafdfc46671e136ab66dc">scalarcollection::scalarcollection</a></div><div class="ttdeci">scalarcollection(const collection &amp;c)</div><div class="ttdef"><b>Definition:</b> scalarcollection.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 13 2021 00:14:21 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 14:33:10 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

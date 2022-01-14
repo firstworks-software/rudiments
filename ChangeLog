@@ -1,5 +1,5 @@
 2.0.0 - added object, collection class heirarchy
-	added dynamictable classes
+	added table class
 	added scalar class
 	various semi-obscure internal fixes to dictionary class
 	removed namevaluepairs/constnamevaluepairs typedefs

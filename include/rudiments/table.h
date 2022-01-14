@@ -1,43 +1,43 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_DYNAMICTABLE_H
-#define RUDIMENTS_DYNAMICTABLE_H
+#ifndef RUDIMENTS_TABLE_H
+#define RUDIMENTS_TABLE_H
 
-#include <rudiments/private/dynamictableincludes.h>
+#include <rudiments/private/tableincludes.h>
 
-/** The dynamictable class allows you to store an arbitrary number of values
- *  in a table.  Since the dynamictable class is template-based, you can 
+/** The table class allows you to store an arbitrary number of values
+ *  in a table.  Since the table class is template-based, you can 
  *  store arbitrary types of values.
  *
  *  Read-write, monolithic, random-access. */
 template <class valuetype>
-class dynamictable : public tablecollection<valuetype> {
+class table : public tablecollection<valuetype> {
 	public:
 
-		/** Creates an instance of the dynamictable class. */
-		dynamictable();
+		/** Creates an instance of the table class. */
+		table();
 
-		/** Creates an instance of the dynmaictable class
+		/** Creates an instance of the table class
 		 *  that is a copy of "a". */
-		dynamictable(const dynamictable<valuetype> &a);
+		table(const table<valuetype> &a);
 
-		/** Creates an instance of the dynmaictable class
+		/** Creates an instance of the table class
 		 *  that is a copy of "a". */
-		dynamictable(const tablecollection<valuetype> &a);
+		table(const tablecollection<valuetype> &a);
 
-		/** Makes this instance of the dynamictable class
+		/** Makes this instance of the table class
 		 *  identical to "a". */
-		dynamictable<valuetype>	&operator=(
-					const dynamictable<valuetype> &a);
+		table<valuetype>	&operator=(
+					const table<valuetype> &a);
 
-		/** Makes this instance of the dynamictable class
+		/** Makes this instance of the table class
 		 *  identical to "a". */
-		dynamictable<valuetype>	&operator=(
+		table<valuetype>	&operator=(
 					const tablecollection<valuetype> &a);
 
-		/** Deletes this instance of the dynamictable class. */
-		~dynamictable();
+		/** Deletes this instance of the table class. */
+		~table();
 
 		/** Sets the name of column "col" to "name" */
 		void		setColumnName(uint64_t col, const char *name);
@@ -78,9 +78,9 @@ class dynamictable : public tablecollection<valuetype> {
 		 *  getValue() will return NULL or 0. */
 		void		clear();
 
-	#include <rudiments/private/dynamictable.h>
+	#include <rudiments/private/table.h>
 };
 
-#include <rudiments/private/dynamictableinlines.h>
+#include <rudiments/private/tableinlines.h>
 
 #endif

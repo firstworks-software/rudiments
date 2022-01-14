@@ -20,7 +20,7 @@ tests=Array(_
 	"dictionary",_
 	"directory",_
 	"dynamicarray",_
-	"dynamictable",_
+	"table",_
 	"dynamiclib",_
 	"environment",_
 	"error",_

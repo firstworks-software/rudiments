@@ -63,43 +63,50 @@ $(function() {
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <a class="code" href="classdynamicarray.html#a18fb0582d2a39c69c108f31db5715d79">dynamicarray</a>(<span class="keyword">const</span> <a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;v);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;<a class="code" href="classdynamicarray.html#a82a9619f2b437faef423d54c6c3c0a65">operator=</a>(</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                                        <span class="keyword">const</span> <a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;v);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <a class="code" href="classdynamicarray.html#a738975b551ba142b67dab540f53236e7">~dynamicarray</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <a class="code" href="classdynamicarray.html#a18fb0582d2a39c69c108f31db5715d79">dynamicarray</a>(<span class="keyword">const</span> <a class="code" href="classarraycollection.html">arraycollection&lt;valuetype&gt;</a> &amp;v);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;<a class="code" href="classdynamicarray.html#a82a9619f2b437faef423d54c6c3c0a65">operator=</a>(</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                                        <span class="keyword">const</span> <a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;v);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                valuetype       &amp;<a class="code" href="classdynamicarray.html#a9d4110fd34f7d737bebc9cc9e9c5297b">operator[]</a>(uint64_t index);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="comment">/*  Returns the length of the initial extent. */</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                uint64_t        getInitialLength() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="comment">/*  Returns the length of each incremental extent. */</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                uint64_t        getIncrementLength() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                uint64_t        <a class="code" href="classdynamicarray.html#a58e45176d15dee7acd4a5fd8d86e56b0">getLength</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;<a class="code" href="classdynamicarray.html#a82a9619f2b437faef423d54c6c3c0a65">operator=</a>(</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                        <span class="keyword">const</span> <a class="code" href="classarraycollection.html">arraycollection&lt;valuetype&gt;</a> &amp;v);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <a class="code" href="classdynamicarray.html#a738975b551ba142b67dab540f53236e7">~dynamicarray</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                valuetype       &amp;<a class="code" href="classdynamicarray.html#a9d4110fd34f7d737bebc9cc9e9c5297b">operator[]</a>(uint64_t index);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdynamicarray.html#a66226854edecfc96b84927eac83c7d86">clear</a>();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdynamicarray.html#a66226854edecfc96b84927eac83c7d86">clear</a>(uint64_t initiallength, uint64_t incrementlength);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                valuetype       <a class="code" href="classdynamicarray.html#a9d4110fd34f7d737bebc9cc9e9c5297b">operator[]</a>(uint64_t index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="comment">/*  Returns the length of the initial extent. */</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                uint64_t        getInitialLength() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/dynamicarray.h&gt;</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;};</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                <span class="comment">/*  Returns the length of each incremental extent. */</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                uint64_t        getIncrementLength() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/dynamicarrayinlines.h&gt;</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                uint64_t        <a class="code" href="classdynamicarray.html#a58e45176d15dee7acd4a5fd8d86e56b0">getLength</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdynamicarray.html#a66226854edecfc96b84927eac83c7d86">clear</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdynamicarray.html#a66226854edecfc96b84927eac83c7d86">clear</a>(uint64_t initiallength, uint64_t incrementlength);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/dynamicarray.h&gt;</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;};</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/dynamicarrayinlines.h&gt;</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassarraycollection_html"><div class="ttname"><a href="classarraycollection.html">arraycollection</a></div><div class="ttdef"><b>Definition:</b> arraycollection.h:12</div></div>
 <div class="ttc" id="aclassdynamicarray_html"><div class="ttname"><a href="classdynamicarray.html">dynamicarray</a></div><div class="ttdef"><b>Definition:</b> dynamicarray.h:40</div></div>
 <div class="ttc" id="aclassdynamicarray_html_a18fb0582d2a39c69c108f31db5715d79"><div class="ttname"><a href="classdynamicarray.html#a18fb0582d2a39c69c108f31db5715d79">dynamicarray::dynamicarray</a></div><div class="ttdeci">dynamicarray()</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:8</div></div>
-<div class="ttc" id="aclassdynamicarray_html_a58e45176d15dee7acd4a5fd8d86e56b0"><div class="ttname"><a href="classdynamicarray.html#a58e45176d15dee7acd4a5fd8d86e56b0">dynamicarray::getLength</a></div><div class="ttdeci">uint64_t getLength() const</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:125</div></div>
-<div class="ttc" id="aclassdynamicarray_html_a66226854edecfc96b84927eac83c7d86"><div class="ttname"><a href="classdynamicarray.html#a66226854edecfc96b84927eac83c7d86">dynamicarray::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:184</div></div>
-<div class="ttc" id="aclassdynamicarray_html_a738975b551ba142b67dab540f53236e7"><div class="ttname"><a href="classdynamicarray.html#a738975b551ba142b67dab540f53236e7">dynamicarray::~dynamicarray</a></div><div class="ttdeci">~dynamicarray()</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:97</div></div>
-<div class="ttc" id="aclassdynamicarray_html_a82a9619f2b437faef423d54c6c3c0a65"><div class="ttname"><a href="classdynamicarray.html#a82a9619f2b437faef423d54c6c3c0a65">dynamicarray::operator=</a></div><div class="ttdeci">dynamicarray&lt; valuetype &gt; &amp; operator=(const dynamicarray&lt; valuetype &gt; &amp;v)</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:31</div></div>
-<div class="ttc" id="aclassdynamicarray_html_a9d4110fd34f7d737bebc9cc9e9c5297b"><div class="ttname"><a href="classdynamicarray.html#a9d4110fd34f7d737bebc9cc9e9c5297b">dynamicarray::operator[]</a></div><div class="ttdeci">valuetype &amp; operator[](uint64_t index)</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:103</div></div>
+<div class="ttc" id="aclassdynamicarray_html_a58e45176d15dee7acd4a5fd8d86e56b0"><div class="ttname"><a href="classdynamicarray.html#a58e45176d15dee7acd4a5fd8d86e56b0">dynamicarray::getLength</a></div><div class="ttdeci">uint64_t getLength() const</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:150</div></div>
+<div class="ttc" id="aclassdynamicarray_html_a66226854edecfc96b84927eac83c7d86"><div class="ttname"><a href="classdynamicarray.html#a66226854edecfc96b84927eac83c7d86">dynamicarray::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:214</div></div>
+<div class="ttc" id="aclassdynamicarray_html_a738975b551ba142b67dab540f53236e7"><div class="ttname"><a href="classdynamicarray.html#a738975b551ba142b67dab540f53236e7">dynamicarray::~dynamicarray</a></div><div class="ttdeci">~dynamicarray()</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:114</div></div>
+<div class="ttc" id="aclassdynamicarray_html_a82a9619f2b437faef423d54c6c3c0a65"><div class="ttname"><a href="classdynamicarray.html#a82a9619f2b437faef423d54c6c3c0a65">dynamicarray::operator=</a></div><div class="ttdeci">dynamicarray&lt; valuetype &gt; &amp; operator=(const dynamicarray&lt; valuetype &gt; &amp;v)</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:39</div></div>
+<div class="ttc" id="aclassdynamicarray_html_a9d4110fd34f7d737bebc9cc9e9c5297b"><div class="ttname"><a href="classdynamicarray.html#a9d4110fd34f7d737bebc9cc9e9c5297b">dynamicarray::operator[]</a></div><div class="ttdeci">valuetype &amp; operator[](uint64_t index)</div><div class="ttdef"><b>Definition:</b> dynamicarrayinlines.h:119</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 13 2021 00:14:21 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Jan 14 2022 14:33:10 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

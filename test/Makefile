@@ -75,7 +75,7 @@ PROGS3= handoff \
 	propdom \
 	mvcproperties \
 	aes128 \
-	dynamictable \
+	table \
 	scalar \
 	sensitivevalue
 
@@ -306,8 +306,8 @@ mvcproperties: mvcproperties.cpp mvcproperties.$(OBJ)
 aes128: aes128.cpp aes128.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes128.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-dynamictable: dynamictable.cpp dynamictable.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dynamictable.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+table: table.cpp table.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) table.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 scalar: scalar.cpp scalar.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) scalar.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
