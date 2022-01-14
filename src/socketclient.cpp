@@ -86,11 +86,21 @@ bool socketclient::useNonBlockingMode() const {
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
 	// then we'll try that with an ioctl first, and fall back to fcntl() if
-	// that fails with an "Inappropriate ioctl for device".
+	// that fails with one of:
+	// * "Inappropriate ioctl for device"
+	// * "Device not configured"
+	// * "Operation not supported"
 	#if defined(FIONBIO)
 		int32_t	nonblocking=1;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
-		if (!retval && error::getErrorNumber()==ENOTTY) {
+		if (!retval && (error::getErrorNumber()==ENOTTY
+				#if defined(ENXIO)
+				|| error::getErrorNumber()==ENXIO
+				#endif
+				#if defined(EOPNOTSUPP)
+				|| error::getErrorNumber()==EOPNOTSUPP
+				#endif
+				)) {
 			retval=filedescriptor::useNonBlockingMode();
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -109,11 +119,21 @@ bool socketclient::useBlockingMode() const {
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
 	// then we'll try that with an ioctl first, and fall back to fcntl() if
-	// that fails with an "Inappropriate ioctl for device".
+	// that fails with one of:
+	// * "Inappropriate ioctl for device"
+	// * "Device not configured"
+	// * "Operation not supported"
 	#if defined(FIONBIO)
 		int32_t	nonblocking=0;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
-		if (!retval && error::getErrorNumber()==ENOTTY) {
+		if (!retval && (error::getErrorNumber()==ENOTTY
+				#if defined(ENXIO)
+				|| error::getErrorNumber()==ENXIO
+				#endif
+				#if defined(EOPNOTSUPP)
+				|| error::getErrorNumber()==EOPNOTSUPP
+				#endif
+				)) {
 			retval=filedescriptor::useBlockingMode();
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
