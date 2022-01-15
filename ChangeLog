@@ -55,6 +55,7 @@
 		updated it for various systems
 	added a socketlayer class below securitycontext and updated websocket
 		to inherit from that
+	fixed memory leak in avltree clear()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

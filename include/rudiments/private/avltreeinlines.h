@@ -441,14 +441,6 @@ treenode<valuetype> *avltree<valuetype>::find(
 	return current;
 }
 
-// NOTE: Don't collapse the clear methods into a single method, or the compiler
-// will attempt to compile calls to:
-// 	delete current->getValue();
-// 	and
-// 	delete[] current->getValue();
-// even if the app just calls clear().  This will fail for primitive types or
-// when the type has a private destructor.
-
 template <class valuetype>
 inline
 void avltree<valuetype>::clear() {
@@ -462,15 +454,17 @@ void avltree<valuetype>::clear() {
 	treenode<valuetype>	*node=top;
 	while (node) {
 
-		// go right one, then go left as far as possible
-		if (node->getRightChild()) {
-			node=node->getRightChild();
-		}
+		// go left as far as possible
 		while (node->getLeftChild()) {
 			node=node->getLeftChild();
 		}
 
-		// get the parent
+		// go right as far as possible
+		while (node->getRightChild()) {
+			node=node->getRightChild();
+		}
+
+		// remove this node from its parent
 		treenode<valuetype>	*p=node->getParent();
 		if (p) {
 			if (p->getLeftChild()==node) {
@@ -480,7 +474,7 @@ void avltree<valuetype>::clear() {
 			}
 		}
 
-		// delete the node
+		// debug
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("	clearing %lld: (%08x) ",
 						i,node->getValue());
@@ -488,14 +482,19 @@ void avltree<valuetype>::clear() {
 		stdoutput.printf("\n");
 		i++;
 		#endif
+
+		// delete the value in the node
 		node_delete_value(node->getValue(),
 					this->getManageValues(),
 					this->getManageArrayValues());
+
+		// delete the node itself
 		delete node;
 
-		// continue with parent...
+		// continue with the parent...
 		node=p;
 	}
+	
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} cleared %d nodes\n\n",i);
