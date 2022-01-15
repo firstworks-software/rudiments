@@ -23,7 +23,7 @@ inline
 dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) :
 						arraycollection<valuetype>(v) {
 	init(v.initlen,v.inclen);
-	clone(&v);
+	clone(v);
 }
 
 template< class valuetype >
@@ -31,7 +31,7 @@ inline
 dynamicarray<valuetype>::dynamicarray(const arraycollection<valuetype> &v) :
 						arraycollection<valuetype>(v) {
 	init(128,32);
-	clone(&v);
+	clone(v);
 }
 
 template< class valuetype >
@@ -42,7 +42,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 		clear(v.initlen,v.inclen);
 		arraycollection<valuetype>::operator=(v);
 		init(v.initlen,v.inclen);
-		clone(&v);
+		clone(v);
 	}
 	return *this;
 }
@@ -55,7 +55,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 		clear();
 		arraycollection<valuetype>::operator=(v);
 		init(initlen,inclen);
-		clone(&v);
+		clone(v);
 	}
 	return *this;
 }
@@ -76,24 +76,26 @@ void dynamicarray<valuetype>::init(uint64_t initiallength,
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clone(const dynamicarray<valuetype> *v) {
+void dynamicarray<valuetype>::clone(const dynamicarray<valuetype> &v) {
 
 	// extend storage to fit (do this before setting length)
-	extend(v->lastlen);
+	extend(v.lastlen);
 
 	// clone lengths and positions
-	totallen=v->totallen;
-	lastlen=v->lastlen;
-	initlen=v->initlen;
-	inclen=v->inclen;
+	totallen=v.totallen;
+	lastlen=v.lastlen;
+	initlen=v.initlen;
+	inclen=v.inclen;
 
 	// clone the data
-	for (uint64_t i=0; i<v->getLength(); i++) {
-		find(i)=v->find(i);
+	for (uint64_t i=0; i<v.getLength(); i++) {
+		find(i)=node_duplicate_value(v.find(i),
+					this->getManageValues(),
+					this->getManageArrayValues());
 	}
 
 	// clone positions
-	curind=v->curind;
+	curind=v.curind;
 	curext=extents.getFirst();
 	for (uint64_t eind=0; eind<curind; eind++) {
 		curext=curext->getNext();
@@ -102,16 +104,19 @@ void dynamicarray<valuetype>::clone(const dynamicarray<valuetype> *v) {
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clone(const arraycollection<valuetype> *v) {
-	lastlen=v->getLength();
+void dynamicarray<valuetype>::clone(const arraycollection<valuetype> &v) {
+	lastlen=v.getLength();
 	for (uint64_t i=0; i<lastlen; i++) {
-		find(i)=(*v)[i];
+		find(i)=node_duplicate_value(v[i],
+					this->getManageValues(),
+					this->getManageArrayValues());
 	}
 }
 
 template< class valuetype >
 inline
 dynamicarray<valuetype>::~dynamicarray() {
+	deleteManagedValues();
 }
 
 template< class valuetype >
@@ -217,8 +222,33 @@ void dynamicarray<valuetype>::clear() {
 
 template< class valuetype >
 inline
+void dynamicarray<valuetype>::deleteManagedValues() {
+
+	// delete managed values in all extents
+	if (this->getManageValues() || this->getManageArrayValues()) {
+		uint64_t	i=0;
+		uint64_t	length=initlen;
+		for (curext=extents.getFirst(); i<lastlen && curext;
+						curext=curext->getNext()) {
+			valuetype	*data=curext->getValue();
+			for (uint64_t j=0; i<lastlen && j<length; j++) {
+				node_delete_value(data[j],
+					this->getManageValues(),
+					this->getManageArrayValues());
+				node_zero_value(&(data[j]));
+				i++;
+			}
+			length=inclen;
+		}
+	}
+}
+
+template< class valuetype >
+inline
 void dynamicarray<valuetype>::clear(uint64_t initiallength,
 					uint64_t incrementlength) {
+
+	deleteManagedValues();
 
 	if (initiallength==initlen) {
 

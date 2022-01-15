@@ -2,12 +2,12 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/new.h>
+#include <rudiments/private/nodeinlines.h>
 
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length>::staticarray() : arraycollection<valuetype>() {
-	len=length;
-	data=new valuetype[len];
+	data=new valuetype[length];
 }
 
 template< class valuetype, uint64_t length >
@@ -15,9 +15,8 @@ inline
 staticarray<valuetype,length>::staticarray(
 				const staticarray<valuetype,length> &v) :
 						arraycollection<valuetype>(v) {
-	len=length;
-	data=new valuetype[len];
-	clone(&v);
+	data=new valuetype[length];
+	clone(v);
 }
 
 template< class valuetype, uint64_t length >
@@ -25,9 +24,8 @@ inline
 staticarray<valuetype,length>::staticarray(
 				const arraycollection<valuetype> &v) :
 						arraycollection<valuetype>(v) {
-	len=length;
-	data=new valuetype[len];
-	clone(&v);
+	data=new valuetype[length];
+	clone(v);
 }
 
 template< class valuetype, uint64_t length >
@@ -37,7 +35,7 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
-		clone(&v);
+		clone(v);
 	}
 	return *this;
 }
@@ -49,22 +47,31 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
-		clone(&v);
+		clone(v);
 	}
 	return *this;
 }
 
 template< class valuetype, uint64_t length >
 inline
-void staticarray<valuetype,length>::clone(const arraycollection<valuetype> *v) {
-	for (uint64_t i=0; i<len && i<v->getLength(); i++) {
-		data[i]=(*v)[i];
+void staticarray<valuetype,length>::clone(const arraycollection<valuetype> &v) {
+	for (uint64_t i=0; i<length && i<v.getLength(); i++) {
+		data[i]=node_duplicate_value(v[i],
+					this->getManageValues(),
+					this->getManageArrayValues());
 	}
 }
 
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length>::~staticarray() {
+	if (this->getManageValues() || this->getManageArrayValues()) {
+		for (uint64_t i=0; i<length; i++) {
+			node_delete_value(data[i],
+					this->getManageValues(),
+					this->getManageArrayValues());
+		}
+	}
 	delete[] data;
 }
 
@@ -83,13 +90,17 @@ valuetype staticarray<valuetype,length>::operator[](uint64_t index) const {
 template< class valuetype, uint64_t length >
 inline
 uint64_t staticarray<valuetype,length>::getLength() const {
-	return len;
+	return length;
 }
 
 template< class valuetype, uint64_t length >
 inline
 void staticarray<valuetype,length>::clear() {
-	for (uint64_t i=0; i<len; i++) {
+	for (uint64_t i=0; i<length; i++) {
+		node_delete_value(data[i],
+				this->getManageValues(),
+				this->getManageArrayValues());
+		node_zero_value(&(data[i]));
 		((valuetype *)&data[i])->~valuetype();
 		new(&data[i]) valuetype;
 	}

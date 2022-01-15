@@ -10,6 +10,9 @@
 // Ideally we'd use explicit specialization here but old enough
 // compilers don't support it and this isn't any less efficient.
 
+
+// print methods...
+
 inline
 void node_print(const char *value) {
 	stdoutput.printf("%s",value);
@@ -113,6 +116,12 @@ void node_print(void *value) {
 	stdoutput.printf("%08x",value);
 }
 
+
+
+
+
+// delete methods...
+
 inline
 void node_delete_value(const char *value, bool managed, bool managedarray) {
 	if (managedarray) {
@@ -213,6 +222,124 @@ void node_delete_value(valuetype *value, bool managed, bool managedarray) {
 		delete[] value;
 	}
 }
+
+template <class valuetype>
+inline
+void node_delete_value(valuetype &value, bool managed, bool managedarray) {
+}
+
+
+
+
+
+// zero methods...
+
+inline
+void node_zero_value(const char **value) {
+	*((char **)value)=NULL;
+}
+
+inline
+void node_zero_value(char **value) {
+	*value=NULL;
+}
+
+inline
+void node_zero_value(const wchar_t **value) {
+	*((wchar_t **)value)=NULL;
+}
+
+inline
+void node_zero_value(wchar_t **value) {
+	*value=NULL;
+}
+
+inline
+void node_zero_value(char *value) {
+	*value='\0';
+}
+
+inline
+void node_zero_value(wchar_t *value) {
+	*value=L'\0';
+}
+
+inline
+void node_zero_value(int16_t *value) {
+	*value=0;
+}
+
+inline
+void node_zero_value(int32_t *value) {
+	*value=0;
+}
+
+inline
+void node_zero_value(int64_t *value) {
+	*value=0;
+}
+
+inline
+void node_zero_value(const unsigned char **value) {
+	*((unsigned char **)value)=NULL;
+}
+
+inline
+void node_zero_value(unsigned char **value) {
+	*value=NULL;
+}
+
+inline
+void node_zero_value(unsigned char *value) {
+	*value='\0';
+}
+
+inline
+void node_zero_value(uint16_t *value) {
+	*value=0;
+}
+
+inline
+void node_zero_value(uint32_t *value) {
+	*value=0;
+}
+
+inline
+void node_zero_value(uint64_t *value) {
+	*value=0;
+}
+
+inline
+void node_zero_value(float *value) {
+	*value=0.0;
+}
+
+inline
+void node_zero_value(double *value) {
+	*value=0.0;
+}
+
+inline
+void node_zero_value(long double *value) {
+	*value=0.0;
+}
+
+template <class valuetype>
+inline
+void node_zero_value(valuetype **value) {
+	*value=NULL;
+}
+
+template <class valuetype>
+inline
+void node_zero_value(valuetype *value) {
+}
+
+
+
+
+
+// duplicate methods...
 
 inline
 char *node_duplicate_value(char *value,
@@ -350,7 +477,35 @@ valuetype *node_duplicate_value(valuetype *value,
 		return new valuetype(*value);
 	} else if (managedarray) {
 		// no way to do this without a length
-		return NULL;
+		return value;
+	} else {
+		return value;
+	}
+}
+
+template <class valuetype>
+inline
+valuetype &node_duplicate_value(valuetype &value,
+				bool managed, bool managedarray) {
+	if (managed) {
+		return *(new valuetype(value));
+	} else if (managedarray) {
+		// no way to do this without a length
+		return value;
+	} else {
+		return value;
+	}
+}
+
+template <class valuetype>
+inline
+const valuetype &node_duplicate_value(const valuetype &value,
+				bool managed, bool managedarray) {
+	if (managed) {
+		return *(new valuetype(value));
+	} else if (managedarray) {
+		// no way to do this without a length
+		return value;
 	} else {
 		return value;
 	}
