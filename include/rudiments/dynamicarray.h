@@ -35,6 +35,18 @@
  * 	dynamicarray<staticarray<int> > d;
  * 	dynamicarray<staticarray<myclass> > d;
  * 	dynamicarray<staticarray<myclass *> > d;
+ *
+ *
+ *  NOTE: If "valuetype" is a pointer and either of
+ *  collection::setManageValues(true) or collection::setManageArrayValue(true)
+ *  are called, then all elements of the dynamicarray prior to the highest set
+ *  element must also be set to something.
+ *
+ *  For example, if element 9 is set to some value then elements 0-8 must also
+ *  be set to some value.  They may be set to 0 or NULL, but they must be set.
+ *
+ *  Otherwise attempts to delete the uninitialized elements during calls to
+ *  clear() or the destructor will likely cause the program to crash.
  */
 template <class valuetype>
 class dynamicarray : public arraycollection<valuetype> {
@@ -87,11 +99,11 @@ class dynamicarray : public arraycollection<valuetype> {
 		/** Returns the number of elements in the array. */
 		uint64_t	getLength() const;
 
-		/** Clears the array, deleting all of its values. */
+		/** Clears the array. */
 		void	clear();
 
-		/** Clears the array, deleting all of its values and resetting
-		 *  the lengths of the initial and incremental extents. */
+		/** Clears the array and resets the lengths of the initial and
+ 		 *  incremental extents. */
 		void	clear(uint64_t initiallength, uint64_t incrementlength);
 
 	#include <rudiments/private/dynamicarray.h>

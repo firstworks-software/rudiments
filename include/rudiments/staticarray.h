@@ -32,6 +32,17 @@
  * 	staticarray<dynamicarray<int>,10> d;
  * 	staticarray<dynamicarray<myclass>,10> d;
  * 	staticarray<dynamicarray<myclass *>,10> d;
+ *
+ *
+ *  NOTE: If "valuetype" is a pointer and either of
+ *  collection::setManageValues(true) or collection::setManageArrayValue(true)
+ *  are called, then all elements of the staticarray must be set to something.
+ *
+ *  For example, if the staticarray has length 10 then elements 0-9 must be set
+ *  to some value.  They may be set to 0 or NULL, but they must be set.
+ *
+ *  Otherwise attempts to delete the uninitialized elements during calls to
+ *  clear() or the destructor will likely cause the program to crash.
  */
 template <class valuetype, uint64_t length>
 class staticarray : public arraycollection<valuetype> {
@@ -73,7 +84,7 @@ class staticarray : public arraycollection<valuetype> {
 		/** Returns the number of elements in the array. */
 		uint64_t	getLength() const;
 
-		/** Clears the array, deleting all of its values. */
+		/** Clears the array. */
 		void	clear();
 
 	#include <rudiments/private/staticarray.h>
