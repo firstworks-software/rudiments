@@ -28,8 +28,7 @@ class table : public tablecollection<valuetype> {
 
 		/** Makes this instance of the table class
 		 *  identical to "a". */
-		table<valuetype>	&operator=(
-					const table<valuetype> &a);
+		table<valuetype>	&operator=(const table<valuetype> &a);
 
 		/** Makes this instance of the table class
 		 *  identical to "a". */
@@ -49,7 +48,7 @@ class table : public tablecollection<valuetype> {
 		 *  
 		 *  Returns larger and larger values as calls to setColumnName()
 		 *  or setValue() extend the table. */
-		uint64_t	getColCount() const;
+		uint64_t	getColumnCount() const;
 
 		/** Sets the value at "row", "col" to "value". */
 		void		setValue(uint64_t row, uint64_t col,

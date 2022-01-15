@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
 
 	// fully populate table
 	table<int32_t>	intt;
+	intt.setCopyColumnNames(true);
 	int32_t		count=start;
 	for (uint64_t j=0; j<cols; j++) {
 		intt.setColumnName(j,colname(j));
@@ -41,7 +42,7 @@ int main(int argc, char **argv) {
 	stringbuffer	title;
 	count=start;
 	test("row count",intt.getRowCount()==(uint64_t)rows);
-	test("col count",intt.getColCount()==(uint64_t)cols);
+	test("col count",intt.getColumnCount()==(uint64_t)cols);
 	for (uint64_t j=0; j<cols; j++) {
 		title.clear();
 		title.append("colname(")->append(j)->append(")");
@@ -122,6 +123,7 @@ int main(int argc, char **argv) {
 		stdoutput.printf("copy/assignment%s...\n",(!i)?"":" (managed)");
 
 		table<char *>	cch1;
+		cch1.setCopyColumnNames(true);
 		cch1.setManageArrayValues(i);
 		const char *values[]={
 			"a","b","c","d","e","f","g","h","i","j","k","l","m",
@@ -174,8 +176,8 @@ int main(int argc, char **argv) {
 							cch2.getRowCount()==
 							cch1.getRowCount());
 			test((!j)?"copy: col count":"assignment: col count",
-							cch2.getColCount()==
-							cch1.getColCount());
+							cch2.getColumnCount()==
+							cch1.getColumnCount());
 
 			// verify column names
 			bool	success=true;

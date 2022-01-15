@@ -35,8 +35,19 @@ template <class valuetype>
 class tablecollection : public collection {
 	public:
 
+		/** Creates an instance of the tablecollection class. */
+		tablecollection();
+
+		/** Creates an instance of the tablecollection class that
+		 *  is a copy of "c". */
+		tablecollection(const tablecollection &c);
+
+		/** Makes this instance of the tablecollection class
+		 *  identical to "c". */
+		tablecollection &operator=(const tablecollection &c);
+
 		/** Deletes this instance of the tablecollection class. */
-		virtual	~tablecollection() {};
+		virtual	~tablecollection();
 
 		/** In a read-write implementation, sets the name of column
 		 *  "col" to "name".
@@ -49,12 +60,26 @@ class tablecollection : public collection {
 		 *  has no name. */
 		virtual	const char	*getColumnName(uint64_t col) const=0;
 
+		/** Indicates whether or not this instance of the
+		 *  tablecollection class should make copies the values that
+		 *  are passed in to setColumnName().
+		 *
+		 *  Defaults to "false". */
+		virtual	void	setCopyColumnNames(bool copy);
+
+		/** Returns whether or not this instance of the tablecollection
+ 		 *  class is configured to make copies of the values that are
+ 		 *  passed in to setColumnName().
+		 *
+		 *  Returns true if it is and false if it is not. */
+		virtual	bool	getCopyColumnNames() const;
+
 		/** Returns the current number of columns in the table.
 		 *
 		 *  In a read-write implementation, returns larger and larger
 		 *  values as calls to setColumnName() or setValue() extend the
 		 *  table. */
-		virtual	uint64_t	getColCount() const=0;
+		virtual	uint64_t	getColumnCount() const=0;
 		
 		/** In a read-write implementation, sets the value at "row",
 		 *  "col" to "value".
@@ -96,6 +121,10 @@ class tablecollection : public collection {
 		 *
 		 *  In a read-only implementation, has no effect. */
 		virtual	void	clear()=0;
+
+	#include <rudiments/private/tablecollection.h>
 };
+
+#include <rudiments/private/tablecollectioninlines.h>
 
 #endif

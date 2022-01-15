@@ -381,7 +381,9 @@ privateheaders2="winsock.h "+_
 	"inetsocketclientincludes.h "+_
 	"inetsocketserver.h "+_
 	"inetsocketserverincludes.h"
-privateheaders3="table.h "+_
+privateheaders3="tablecollection.h "+_
+	"tablecollectioninlines.h "+_
+	"table.h "+_
 	"tableincludes.h "+_
 	"tableinlines.h "+_
 	"linkedlist.h "+_

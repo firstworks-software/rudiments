@@ -51,28 +51,16 @@ table<valuetype> &table<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void table<valuetype>::clone(const table<valuetype> *t) {
-	for (uint64_t col=0; col<t->getColCount(); col++) {
-		columnnames[col]=
-			charstring::duplicate(t->getColumnName(col));
-	}
-	values=t->values;
-	cols=t->getColCount();
-	rows=t->getRowCount();
-}
-
-template <class valuetype>
-inline
 void table<valuetype>::clone(const tablecollection<valuetype> *t) {
 	cols=0;
 	rows=0;
-	for (uint64_t col=0; col<t->getColCount(); col++) {
+	for (uint64_t col=0; col<t->getColumnCount(); col++) {
 		setColumnName(col,t->getColumnName(col));
 	}
 	for (uint64_t row=0;
 		!(t->getAllRowsAvailable() && row==t->getRowCount());
 		row++) {
-		for (uint64_t col=0; col<t->getColCount(); col++) {
+		for (uint64_t col=0; col<t->getColumnCount(); col++) {
 			setValue(row,col,
 				node_duplicate_value(t->getValue(row,col),
 						this->getManageValues(),
@@ -84,18 +72,24 @@ void table<valuetype>::clone(const tablecollection<valuetype> *t) {
 template <class valuetype>
 inline
 table<valuetype>::~table() {
-	for (uint64_t i=0; i<cols; i++) {
-		delete[] columnnames[i];
+	if (this->copycolumnnames) {
+		for (uint64_t i=0; i<cols; i++) {
+			delete[] columnnames[i];
+		}
 	}
 }
 
 template <class valuetype>
 inline
 void table<valuetype>::setColumnName(uint64_t col, const char *name) {
-	if (cols && col<cols-1) {
-		delete[] columnnames[col];
+	if (this->copycolumnnames) {
+		if (cols && col<cols-1) {
+			delete[] columnnames[col];
+		}
+		columnnames[col]=charstring::duplicate(name);
+	} else {
+		columnnames[col]=(char *)name;
 	}
-	columnnames[col]=charstring::duplicate(name);
 	if (col>=cols) {
 		cols=col+1;
 	}
@@ -109,7 +103,7 @@ const char *table<valuetype>::getColumnName(uint64_t col) const {
 
 template <class valuetype>
 inline
-uint64_t table<valuetype>::getColCount() const {
+uint64_t table<valuetype>::getColumnCount() const {
 	return cols;
 }
 
