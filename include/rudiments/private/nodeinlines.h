@@ -160,7 +160,6 @@ void node_delete_value(const char **value, bool managed, bool managedarray) {
 
 inline
 void node_delete_value(char **value, bool managed, bool managedarray) {
-stdoutput.printf("char *\n");
 	if (managedarray) {
 		delete[] *value;
 	}
@@ -246,7 +245,6 @@ void node_delete_value(long double *value, bool managed, bool managedarray) {
 template <class valuetype>
 inline
 void node_delete_value(valuetype **value, bool managed, bool managedarray) {
-stdoutput.printf("valuetype *\n");
 	if (managed) {
 		delete *value;
 	} else if (managedarray) {
@@ -257,7 +255,6 @@ stdoutput.printf("valuetype *\n");
 template <class valuetype>
 inline
 void node_delete_value(valuetype *value, bool managed, bool managedarray) {
-stdoutput.printf("valuetype\n");
 }
 
 
