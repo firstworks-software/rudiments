@@ -55,6 +55,8 @@ void table<valuetype>::clone(const tablecollection<valuetype> *t) {
 	cols=0;
 	rows=0;
 	setCopyColumnNames(t->getCopyColumnNames());
+	setManageValues(t->getManageValues());
+	setManageArrayValues(t->getManageArrayValues());
 	for (uint64_t col=0; col<t->getColumnCount(); col++) {
 		setColumnName(col,t->getColumnName(col));
 	}
@@ -114,6 +116,30 @@ template <class valuetype>
 inline
 uint64_t table<valuetype>::getColumnCount() const {
 	return cols;
+}
+
+template <class valuetype>
+inline
+void table<valuetype>::setManageValues(bool manage) {
+	values.setManageValues(manage);
+}
+
+template <class valuetype>
+inline
+bool table<valuetype>::getManageValues() const {
+	return values.getManageValues();
+}
+
+template <class valuetype>
+inline
+void table<valuetype>::setManageArrayValues(bool manage) {
+	values.setManageArrayValues(manage);
+}
+
+template <class valuetype>
+inline
+bool table<valuetype>::getManageArrayValues() const {
+	return values.getManageArrayValues();
 }
 
 template <class valuetype>
