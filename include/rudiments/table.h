@@ -66,16 +66,15 @@ class table : public tablecollection<valuetype> {
 
 		/** Indicates whether or not this instance of the table
 		 *  class should delete the values that are stored at each
-		 *  location in the table when a clear()/remove() method
-		 *  is called.
+		 *  location in the table when clear() is called.
 		 *
 		 *  Setting "manage" to true causes the instance to delete the
 		 *  values that are stored at each location in the table
-		 *  when a clear() or remove() method is called.
+		 *  when clear() is called.
 		 *
 		 *  Setting "manage" to false causes the instance not to delete
 		 *  the values that are stored at each location in the
-		 *  table when a clear() or remove() method is called.
+		 *  table when clear() is called.
 		 *
 		 *  Defaults to "false".
 		 *
@@ -85,24 +84,22 @@ class table : public tablecollection<valuetype> {
 
 		/** Returns whether or not this instance of the table class
 		 *  is configured to delete the values that are stored at each
-		 *  location in the table when a clear()/remove() method
-		 *  is called.
+		 *  location in the table when clear() is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
 		bool	getManageValues() const;
 
 		/** Indicates whether or not this instance of the table
 		 *  class should array-delete the values that are stored at each
-		 *  location in the table when a clear()/remove() method
-		 *  is called.
+		 *  location in the table when clear() is called.
 		 *
 		 *  Setting "manage" to true causes the instance to
 		 *  array-delete the values that are stored at each location in
-		 *  the table when a clear() or remove() method is called.
+		 *  the table when clear() is called.
 		 *
 		 *  Setting "manage" to false causes the instance not to
 		 *  array-delete the values that are stored at each location in
-		 *  the table when a clear() or remove() method is called.
+		 *  the table when clear() is called.
 		 *
 		 *  Defaults to "false".
 		 *
@@ -112,8 +109,7 @@ class table : public tablecollection<valuetype> {
 
 		/** Returns whether or not this instance of the table class
 		 *  is configured to array-delete the values that are stored at
-		 *  each location in the table when a clear()/remove()
-		 *  method is called.
+		 *  each location in the table when clear() is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
 		bool	getManageArrayValues() const;
