@@ -194,3 +194,16 @@ void table<valuetype>::clear() {
 	cols=0;
 	rows=0;
 }
+
+template <class valuetype>
+inline
+void table<valuetype>::print() const {
+	for (uint64_t i=0; i<rows; i++) {
+		stdoutput.printf("row %lld:\n",i);
+		for (uint64_t j=0; j<cols; j++) {
+			stdoutput.printf("  col %lld: ",j);
+			node_print(getValue(i,j));
+			stdoutput.printf("\n");
+		}
+	}
+}
