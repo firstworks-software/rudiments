@@ -109,3 +109,13 @@ void staticarray<valuetype,length>::deleteManagedValues() {
 		}
 	}
 }
+
+template< class valuetype, uint64_t length >
+inline
+void staticarray<valuetype,length>::print() const {
+	for (uint64_t i=0; i<length; i++) {
+		stdoutput.printf("%lld: ",i);
+		node_print(data[i]);
+		stdoutput.printf("\n");
+	}
+}

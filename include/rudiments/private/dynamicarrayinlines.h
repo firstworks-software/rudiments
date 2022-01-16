@@ -291,3 +291,13 @@ void dynamicarray<valuetype>::clear(uint64_t initiallength,
 	// reset current extent index
 	curind=0;
 }
+
+template< class valuetype >
+inline
+void dynamicarray<valuetype>::print() const {
+	for (uint64_t i=0; i<lastlen; i++) {
+		stdoutput.printf("%lld: ",i);
+		node_print(find(i));
+		stdoutput.printf("\n");
+	}
+}

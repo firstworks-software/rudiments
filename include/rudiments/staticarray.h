@@ -87,6 +87,9 @@ class staticarray : public arraycollection<valuetype> {
 		/** Clears the array. */
 		void	clear();
 
+		/** Prints out a representation of the staticarray. */
+		void	print() const;
+
 	#include <rudiments/private/staticarray.h>
 };
 
