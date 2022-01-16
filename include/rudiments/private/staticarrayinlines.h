@@ -65,13 +65,7 @@ void staticarray<valuetype,length>::clone(const arraycollection<valuetype> &v) {
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length>::~staticarray() {
-	if (this->getManageValues() || this->getManageArrayValues()) {
-		for (uint64_t i=0; i<length; i++) {
-			node_delete_value(data[i],
-					this->getManageValues(),
-					this->getManageArrayValues());
-		}
-	}
+	deleteManagedValues();
 	delete[] data;
 }
 
@@ -96,12 +90,22 @@ uint64_t staticarray<valuetype,length>::getLength() const {
 template< class valuetype, uint64_t length >
 inline
 void staticarray<valuetype,length>::clear() {
+	deleteManagedValues();
 	for (uint64_t i=0; i<length; i++) {
-		node_delete_value(data[i],
-				this->getManageValues(),
-				this->getManageArrayValues());
-		node_zero_value(&(data[i]));
 		((valuetype *)&data[i])->~valuetype();
 		new(&data[i]) valuetype;
+	}
+}
+
+template< class valuetype, uint64_t length >
+inline
+void staticarray<valuetype,length>::deleteManagedValues() {
+	if (this->getManageValues() || this->getManageArrayValues()) {
+		for (uint64_t i=0; i<length; i++) {
+			node_delete_value(&(data[i]),
+						this->getManageValues(),
+						this->getManageArrayValues());
+			node_zero_value(&(data[i]));
+		}
 	}
 }

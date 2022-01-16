@@ -3,5 +3,6 @@
 
 	private:
 		void	clone(const arraycollection<valuetype> &v);
+		void	deleteManagedValues();
 
 		valuetype	*data;

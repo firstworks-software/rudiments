@@ -12,7 +12,9 @@ class dictionarypair : public object {
 		void	setKey(keytype key);
 		void	setValue(valuetype value);
 		keytype		getKey() const;
+		keytype		&getKey();
 		valuetype	getValue() const;
+		valuetype	&getValue();
 		void	print() const;
 
 	private:
@@ -387,12 +389,12 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
-		node_delete_value(tnode->getValue()->getKey(),
-					this->getManageValues(),
-					this->getManageArrayValues());
-		node_delete_value(tnode->getValue()->getValue(),
-					this->getManageValues(),
-					this->getManageArrayValues());
+		node_delete_value(&(tnode->getValue()->getKey()),
+						this->getManageValues(),
+						this->getManageArrayValues());
+		node_delete_value(&(tnode->getValue()->getValue()),
+						this->getManageValues(),
+						this->getManageArrayValues());
 		delete tnode->getValue();
 		return tree.remove(tnode);
 	}
@@ -404,10 +406,10 @@ inline
 void dictionary<keytype,valuetype>::clear() {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_value(node->getValue()->getKey(),
+		node_delete_value(&(node->getValue()->getKey()),
 					this->getManageValues(),
 					this->getManageArrayValues());
-		node_delete_value(node->getValue()->getValue(),
+		node_delete_value(&(node->getValue()->getValue()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete node->getValue();
@@ -465,7 +467,19 @@ keytype dictionarypair<keytype,valuetype>::getKey() const {
 
 template <class keytype, class valuetype>
 inline
+keytype &dictionarypair<keytype,valuetype>::getKey() {
+	return key;
+}
+
+template <class keytype, class valuetype>
+inline
 valuetype dictionarypair<keytype,valuetype>::getValue() const {
+	return value;
+}
+
+template <class keytype, class valuetype>
+inline
+valuetype &dictionarypair<keytype,valuetype>::getValue() {
 	return value;
 }
 

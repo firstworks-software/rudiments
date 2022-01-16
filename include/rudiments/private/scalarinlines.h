@@ -58,8 +58,8 @@ void scalar<valuetype>::clone(const scalarcollection<valuetype> *a) {
 template <class valuetype>
 inline
 scalar<valuetype>::~scalar() {
-	node_delete_value(v,this->getManageValues(),
-				this->getManageArrayValues());
+	node_delete_value(&v,this->getManageValues(),
+					this->getManageArrayValues());
 }
 
 template <class valuetype>
@@ -77,7 +77,7 @@ valuetype scalar<valuetype>::getValue() const {
 template <class valuetype>
 inline
 void scalar<valuetype>::clear() {
-	node_delete_value(v,this->getManageValues(),
-				this->getManageArrayValues());
+	node_delete_value(&v,this->getManageValues(),
+					this->getManageArrayValues());
 	v=0;
 }

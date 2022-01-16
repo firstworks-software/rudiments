@@ -232,9 +232,9 @@ void dynamicarray<valuetype>::deleteManagedValues() {
 						curext=curext->getNext()) {
 			valuetype	*data=curext->getValue();
 			for (uint64_t j=0; i<lastlen && j<length; j++) {
-				node_delete_value(data[j],
-					this->getManageValues(),
-					this->getManageArrayValues());
+				node_delete_value(&(data[j]),
+						this->getManageValues(),
+						this->getManageArrayValues());
 				node_zero_value(&(data[j]));
 				i++;
 			}

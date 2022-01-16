@@ -14,7 +14,7 @@ struct test {
 
 class testclass {
 	public:
-			testclass();
+		testclass();
 		uint32_t	getValue();
 		void		setValue(uint32_t value);
 	private:

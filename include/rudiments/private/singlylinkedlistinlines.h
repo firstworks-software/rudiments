@@ -230,7 +230,7 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 		}
 	}
 	if (current) {
-		node_delete_value(current->getValue(),
+		node_delete_value(&(current->getValue()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -253,17 +253,17 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
-			node_delete_value(current->getValue(),
-					this->getManageValues(),
-					this->getManageArrayValues());
+			node_delete_value(&(current->getValue()),
+						this->getManageValues(),
+						this->getManageArrayValues());
 			delete current;
 			length--;
 			return true;
 		} else {
 			first=first->getNext();
-			node_delete_value(current->getValue(),
-					this->getManageValues(),
-					this->getManageArrayValues());
+			node_delete_value(&(current->getValue()),
+						this->getManageValues(),
+						this->getManageArrayValues());
 			delete current;
 			length--;
 			current=first;
@@ -280,9 +280,9 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			if (last==current) {
 				last=prev;
 			}
-			node_delete_value(current->getValue(),
-					this->getManageValues(),
-					this->getManageArrayValues());
+			node_delete_value(&(current->getValue()),
+						this->getManageValues(),
+						this->getManageArrayValues());
 			delete current;
 			length--;
 			current=temp;
@@ -324,7 +324,7 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 		}
 	}
 	if (current) {
-		node_delete_value(current->getValue(),
+		node_delete_value(&(current->getValue()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -610,7 +610,7 @@ void singlylinkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		node_delete_value(current->getValue(),
+		node_delete_value(&(current->getValue()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;

@@ -122,110 +122,142 @@ void node_print(void *value) {
 
 // delete methods...
 
+// Why do all of the node_delete_value() functions take pointers, just to
+// dereference them?
+//
+// Older compilers (eg. gcc-2.95.2) seem to have trouble determining which
+// function to call when passing a reference rather than passing a pointer.
+//
+// Eg. If there are a bunch of node_delete_value() methods for primitives and
+// templated ones for const valuetype & (which does nothing),
+// valuetype & (which also does nothing) and valuetype * (which actually
+// deletes), then a call like:
+//
+// someclass	a;
+// node_delete_value(a,true,false);
+//
+// get confused whether to call the const valuetype &, valuetype & or
+// valuetype * version.
+//
+// It's not clear why except just that there's a bug in the compiler.  Newer
+// compilers work as expected.
+//
+// This works around the problem though.  Apparently those old compilers don't
+// have any trouble figuring out which function to call if you have functions
+// that all take pointers and you call something like:
+//
+// someclass	a;
+// node_delete_value(&a,true,false);
+//
+// So, for now at least, we'll do it this way.
+
 inline
-void node_delete_value(const char *value, bool managed, bool managedarray) {
+void node_delete_value(const char **value, bool managed, bool managedarray) {
 	if (managedarray) {
-		delete[] (char *)value;
+		delete[] (char *)*value;
+	}
+}
+
+inline
+void node_delete_value(char **value, bool managed, bool managedarray) {
+stdoutput.printf("char *\n");
+	if (managedarray) {
+		delete[] *value;
+	}
+}
+
+inline
+void node_delete_value(const wchar_t **value, bool managed, bool managedarray) {
+	if (managedarray) {
+		delete[] (wchar_t *)*value;
+	}
+}
+
+inline
+void node_delete_value(wchar_t **value, bool managed, bool managedarray) {
+	if (managedarray) {
+		delete[] *value;
 	}
 }
 
 inline
 void node_delete_value(char *value, bool managed, bool managedarray) {
-	if (managedarray) {
-		delete[] value;
-	}
-}
-
-inline
-void node_delete_value(const wchar_t *value, bool managed, bool managedarray) {
-	if (managedarray) {
-		delete[] (wchar_t *)value;
-	}
 }
 
 inline
 void node_delete_value(wchar_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(int16_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(int32_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(int64_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(const unsigned char **value,
+				bool managed, bool managedarray) {
 	if (managedarray) {
-		delete[] value;
+		delete[] (unsigned char *)*value;
 	}
 }
 
 inline
-void node_delete_value(char value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(wchar_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(int16_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(int32_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(int64_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(const unsigned char *value,
-				bool managed, bool managedarray) {
+void node_delete_value(unsigned char **value, bool managed, bool managedarray) {
 	if (managedarray) {
-		delete[] (unsigned char *)value;
+		delete[] *value;
 	}
 }
 
 inline
 void node_delete_value(unsigned char *value, bool managed, bool managedarray) {
-	if (managedarray) {
-		delete[] value;
+}
+
+inline
+void node_delete_value(uint16_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(uint32_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(uint64_t *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(float *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(double *value, bool managed, bool managedarray) {
+}
+
+inline
+void node_delete_value(long double *value, bool managed, bool managedarray) {
+}
+
+template <class valuetype>
+inline
+void node_delete_value(valuetype **value, bool managed, bool managedarray) {
+stdoutput.printf("valuetype *\n");
+	if (managed) {
+		delete *value;
+	} else if (managedarray) {
+		delete[] *value;
 	}
-}
-
-inline
-void node_delete_value(unsigned char value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(uint16_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(uint32_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(uint64_t value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(float value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(double value, bool managed, bool managedarray) {
-}
-
-inline
-void node_delete_value(long double value, bool managed, bool managedarray) {
 }
 
 template <class valuetype>
 inline
 void node_delete_value(valuetype *value, bool managed, bool managedarray) {
-	if (managed) {
-		delete value;
-	} else if (managedarray) {
-		delete[] value;
-	}
-}
-
-template <class valuetype>
-inline
-void node_delete_value(valuetype &value, bool managed, bool managedarray) {
+stdoutput.printf("valuetype\n");
 }
 
 
