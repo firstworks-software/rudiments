@@ -54,6 +54,7 @@ inline
 void table<valuetype>::clone(const tablecollection<valuetype> *t) {
 	cols=0;
 	rows=0;
+	setCopyColumnNames(t->getCopyColumnNames());
 	for (uint64_t col=0; col<t->getColumnCount(); col++) {
 		setColumnName(col,t->getColumnName(col));
 	}
@@ -72,11 +73,6 @@ void table<valuetype>::clone(const tablecollection<valuetype> *t) {
 template <class valuetype>
 inline
 table<valuetype>::~table() {
-	if (this->copycolumnnames) {
-		for (uint64_t i=0; i<cols; i++) {
-			delete[] columnnames[i];
-		}
-	}
 }
 
 template <class valuetype>
@@ -99,6 +95,19 @@ template <class valuetype>
 inline
 const char *table<valuetype>::getColumnName(uint64_t col) const {
 	return (col<cols)?columnnames[col]:NULL;
+}
+
+template <class valuetype>
+inline
+void table<valuetype>::setCopyColumnNames(bool copy) {
+	tablecollection<valuetype>::setCopyColumnNames(copy);
+	columnnames.setManageArrayValues(copy);
+}
+
+template <class valuetype>
+inline
+bool table<valuetype>::getCopyColumnNames() const {
+	return columnnames.getManageArrayValues();
 }
 
 template <class valuetype>

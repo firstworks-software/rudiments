@@ -44,6 +44,20 @@ class table : public tablecollection<valuetype> {
 		/** Returns the name of column "col". */
 		const char	*getColumnName(uint64_t col) const;
 
+		/** Indicates whether or not this instance of the
+		 *  tablecollection class should make copies the values that
+		 *  are passed in to setColumnName().
+		 *
+		 *  Defaults to "false". */
+		void	setCopyColumnNames(bool copy);
+
+		/** Returns whether or not this instance of the tablecollection
+ 		 *  class is configured to make copies of the values that are
+ 		 *  passed in to setColumnName().
+		 *
+		 *  Returns true if it is and false if it is not. */
+		bool	getCopyColumnNames() const;
+
 		/** Returns the current number of columns in the table.
 		 *  
 		 *  Returns larger and larger values as calls to setColumnName()
