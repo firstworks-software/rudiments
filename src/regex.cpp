@@ -296,7 +296,7 @@ init_syntax_once ()
      if (ISALNUM (c))
 	re_syntax_table[c] = Sword;
 
-   re_syntax_table['_'] = Sword;
+   re_syntax_table[(int)'_'] = Sword;
 
    done = 1;
 }
