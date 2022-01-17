@@ -9,7 +9,7 @@
 #include <rudiments/wstringbuffer.h>
 #include <rudiments/error.h>
 
-#ifndef RUDIMENTS_HAVE_SWPRINTF
+#ifndef RUDIMENTS_HAVE_VSWPRINTF
 	#include <rudiments/charstring.h>
 	#include <rudiments/character.h>
 #endif
@@ -2688,6 +2688,7 @@ wchar_t *wcharstring::humanReadable(long double number) {
 }
 
 wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
+#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	long double	k=(onethousand)?1000.0:1024.0;
 	wchar_t		suffixes[]={
@@ -2704,7 +2705,7 @@ wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
 		i--;
 	} while (i>0);
 	
-	#ifdef RUDIMENTS_HAVE_SWPRINTF
+	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 		wchar_t	*buf=NULL;
 		printf(&buf,L"%0.1Lf%c",number/size,suffixes[i]);
 	#else
@@ -2718,6 +2719,9 @@ wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
 	wchar_t	*subbed=replace(buf,L".0",L"");
 	delete[] buf;
 	return subbed;
+#else
+	return NULL;
+#endif
 }
 
 ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
