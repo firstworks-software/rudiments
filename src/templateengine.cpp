@@ -486,7 +486,7 @@ bool templateengine::getBlockName(
 		if (!pvt->_err.getSize()) {
 			pvt->_err.appendFormatted(
 				"getBlockName(%s) failed: getName() failed\n",
-				blockname);
+				blockname->getString());
 		}
 		return false;
 	}
@@ -578,7 +578,7 @@ bool templateengine::getIncludeFilename(
 			pvt->_err.appendFormatted(
 				"getIncludeFilename(%s) failed: "
 				"getName() failed\n",
-				filename);
+				filename->getString());
 		}
 		return false;
 	}
