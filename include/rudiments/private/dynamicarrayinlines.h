@@ -132,9 +132,25 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 template< class valuetype >
 inline
 valuetype dynamicarray<valuetype>::operator[](uint64_t index) const {
-	if (index>=lastlen) {
-		return *((valuetype *)NULL);
-	}
+	// I once had (semi-clever) bounds-checking code here like:
+	//
+	// if (index>=lastlen) {
+	//	return *((valuetype *)NULL);
+	// }
+	//
+	// which would successfully return a NULL/0 if valuetype was a pointer,
+	// but would throw warnings on some platforms if valuetype isn't a
+	// pointer, and would probably crash on those platforms if it managed
+	// to run.
+	//
+	// It's (apparently) conventional for the operator[] not to do any
+	// bounds checking, not even throw any exceptions, and and just attempt
+	// to access and return the requested index, possibly crashing in the
+	// process.  When a program accesses via the [] opertator it's telling
+	// the compiler "trust me, I know what I'm doing".
+	//
+	// So, for now, I removed that code above and we'll just let whatever
+	// happens, happen.
 	return find(index);
 }
 
