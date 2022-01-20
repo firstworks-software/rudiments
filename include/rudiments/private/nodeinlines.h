@@ -514,20 +514,6 @@ valuetype *node_duplicate_value(valuetype *value,
 
 template <class valuetype>
 inline
-valuetype &node_duplicate_value(valuetype &value,
-				bool managed, bool managedarray) {
-	if (managed) {
-		return *(new valuetype(value));
-	} else if (managedarray) {
-		// no way to do this without a length
-		return value;
-	} else {
-		return value;
-	}
-}
-
-template <class valuetype>
-inline
 const valuetype &node_duplicate_value(const valuetype &value,
 				bool managed, bool managedarray) {
 	if (managed) {
