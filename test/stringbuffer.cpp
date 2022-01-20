@@ -106,8 +106,9 @@ int main(int argc, const char **argv) {
 
 	// setPosition and write...
 	stdoutput.printf("write...\n");
+	size_t	strlen=charstring::length(str);
 	for (uint16_t i=0; i<iterations; i++) {
-		for (uint32_t j=0; j<strl-5-1; j=j+30+i) {
+		for (uint32_t j=0; j<strlen-5-1; j=j+30+i) {
 			strb->setPosition(j);
 			strb->write("66666");
 			charstring::copy(str+j,"66666",5);

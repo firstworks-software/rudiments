@@ -58,6 +58,7 @@
 	fixed memory leak in avltree clear()
 	added an int cast to a char array subscript in regex.cpp
 	removed bounds checking from various operator[] methods
+	added some Unixware-specific libtool tweaks
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
