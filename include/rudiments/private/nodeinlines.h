@@ -18,20 +18,10 @@ void node_print(const char *value) {
 	stdoutput.printf("%s",value);
 }
 
-/*inline
-void node_print(char *value) {
-	stdoutput.printf("%s",value);
-}*/
-
 inline
 void node_print(const wchar_t *value) {
 	stdoutput.printf(L"%s",value);
 }
-
-/*inline
-void node_print(wchar_t *value) {
-	stdoutput.printf(L"%s",value);
-}*/
 
 inline
 void node_print(char value) {
@@ -66,11 +56,6 @@ inline
 void node_print(const unsigned char *value) {
 	stdoutput.printf("%s",value);
 }
-
-/*inline
-void node_print(unsigned char *value) {
-	stdoutput.printf("%s",value);
-}*/
 
 inline
 void node_print(unsigned char value) {
@@ -371,6 +356,16 @@ void node_zero_value(valuetype *value) {
 // duplicate methods...
 
 inline
+char *node_duplicate_value(const char *value,
+				bool managed, bool managedarray) {
+	if (managedarray) {
+		return charstring::duplicate(value);
+	} else {
+		return (char *)value;
+	}
+}
+
+inline
 char *node_duplicate_value(char *value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
@@ -386,7 +381,7 @@ const wchar_t *node_duplicate_value(const wchar_t *value,
 	if (managedarray) {
 		return wcharstring::duplicate(value);
 	} else {
-		return value;
+		return (wchar_t *)value;
 	}
 }
 
@@ -431,16 +426,16 @@ int64_t node_duplicate_value(int64_t value,
 }
 
 inline
-const unsigned char *node_duplicate_value(
+unsigned char *node_duplicate_value(
 				const unsigned char *value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
 		// this isn't a true duplicate, but it's
 		// the best we can do without a size
-		return (const unsigned char *)
+		return (unsigned char *)
 			charstring::duplicate((const char *)value);
 	} else {
-		return value;
+		return (unsigned char *)value;
 	}
 }
 
