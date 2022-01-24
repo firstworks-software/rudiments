@@ -145,10 +145,10 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  found. */
 		bool	getKey(keytype key, keytype *k) const;
 
-		/** Returns the value associated with "key" or NULL
+		/** Returns the key associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
-		 *  and a valid value of NULL associated with "key". */
+		 *  and a valid key of NULL associated with "key". */
 		keytype getKey(keytype key) const;
 
 		/** Returns a list of the keys in the dictionary. */
