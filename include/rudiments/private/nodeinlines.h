@@ -18,20 +18,20 @@ void node_print(const char *value) {
 	stdoutput.printf("%s",value);
 }
 
-inline
+/*inline
 void node_print(char *value) {
 	stdoutput.printf("%s",value);
-}
+}*/
 
 inline
 void node_print(const wchar_t *value) {
 	stdoutput.printf(L"%s",value);
 }
 
-inline
+/*inline
 void node_print(wchar_t *value) {
 	stdoutput.printf(L"%s",value);
-}
+}*/
 
 inline
 void node_print(char value) {
@@ -67,10 +67,10 @@ void node_print(const unsigned char *value) {
 	stdoutput.printf("%s",value);
 }
 
-inline
+/*inline
 void node_print(unsigned char *value) {
 	stdoutput.printf("%s",value);
-}
+}*/
 
 inline
 void node_print(unsigned char value) {
@@ -112,7 +112,7 @@ void node_print(long double value) {
 }
 
 inline
-void node_print(void *value) {
+void node_print(const void *value) {
 	stdoutput.printf("%08x",value);
 }
 
