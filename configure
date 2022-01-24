@@ -16566,7 +16566,7 @@ esac
 
 SCO_OSR5=""
 SCO_OSR6=""
-SCO_UW="yes"
+SCO_UW=""
 CRTLIB=""
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO" >&5
@@ -40510,6 +40510,15 @@ fi
 if ( test -r "libtool" -a -n "$DARWIN" )
 then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+
+if ( test -r "libtool" -a -n "$SCO_UW" )
+then
+		sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
+	mv libtool.new libtool
+
+			sed -e "s|\\\\\$wl-h,\\\\\$soname ||g" libtool > libtool.new
 	mv libtool.new libtool
 fi
 
