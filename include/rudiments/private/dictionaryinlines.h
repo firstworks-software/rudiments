@@ -139,8 +139,8 @@ void dictionary<keytype,valuetype>::clone(
 			*node=a->tree.getFirst(); node; node=node->getNext()) {
 		setValue(node_duplicate_value(
 				node->getValue()->getKey(),
-				this->getManageValues(),
-				this->getManageArrayValues()),
+				this->getManageKeys(),
+				this->getManageArrayKeys()),
 			node_duplicate_value(
 				node->getValue()->getValue(),
 				this->getManageValues(),
@@ -168,8 +168,8 @@ void dictionary<keytype,valuetype>::clone(
 		keytype		key=node->getValue();
 		valuetype	value=a->getValue(key);
 		setValue(node_duplicate_value(key,
-				this->getManageValues(),
-				this->getManageArrayValues()),
+				this->getManageKeys(),
+				this->getManageArrayKeys()),
 			node_duplicate_value(value,
 				this->getManageValues(),
 				this->getManageArrayValues()));
@@ -390,8 +390,8 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 			list.remove(tnode->getValue());
 		}
 		node_delete_value(&(tnode->getValue()->getKey()),
-						this->getManageValues(),
-						this->getManageArrayValues());
+						this->getManageKeys(),
+						this->getManageArrayKeys());
 		node_delete_value(&(tnode->getValue()->getValue()),
 						this->getManageValues(),
 						this->getManageArrayValues());
@@ -407,8 +407,8 @@ void dictionary<keytype,valuetype>::clear() {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		node_delete_value(&(node->getValue()->getKey()),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					this->getManageKeys(),
+					this->getManageArrayKeys());
 		node_delete_value(&(node->getValue()->getValue()),
 					this->getManageValues(),
 					this->getManageArrayValues());
