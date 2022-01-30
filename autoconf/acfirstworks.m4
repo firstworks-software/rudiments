@@ -655,7 +655,7 @@ if ( test -n "$WERROR" )
 then
 	OLDCPPFLAGS=$CPPFLAGS
 	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
-	AC_MSG_CHECKING(whether -Wno-format is needed)
+	AC_MSG_CHECKING(for -Wno-format option)
 	AC_TRY_COMPILE([#include <stdio.h>
 
 class charstring {
@@ -680,7 +680,7 @@ AC_DEFUN([FW_CHECK_WNOOVERLOADEDVIRTUAL],
 [
 
 WNOOVERLOADEDVIRTUAL=""
-AC_MSG_CHECKING(whether -Wno-overloaded-virtual is needed)
+AC_MSG_CHECKING(for -Wno-overloaded-virtual option)
 
 # clang's -Wall includes -Woverloaded-virtual, which we don't want
 if ( test -n "`$CC --version 2> /dev/null | grep clang`" )
@@ -702,7 +702,7 @@ AC_DEFUN([FW_CHECK_WNOMISMATCHEDTAGS],
 [
 
 WNOMISMATCHEDTAGS=""
-AC_MSG_CHECKING(whether -Wno-mismatched-tags is needed)
+AC_MSG_CHECKING(for -Wno-mismatched-tags option)
 
 # clang's -Wall includes -Wmismatched-tags, which we don't want
 if ( test -n "`$CC --version 2> /dev/null | grep clang`" )
@@ -730,7 +730,7 @@ if ( test -n "$WERROR" )
 then
 	OLDCPPFLAGS=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS -Wno-deprecated-declarations"
-	AC_MSG_CHECKING(whether -Wno-deprecated-declarations is permitted)
+	AC_MSG_CHECKING(for -Wno-deprecated-declarations option)
 	AC_TRY_COMPILE([#include <stdio.h>],[printf("hello");],AC_MSG_RESULT(yes); WNODEPRECATEDDECLARATIONS="-Wno-deprecated-declarations",AC_MSG_RESULT(yes))	
 	CPPFLAGS=$OLDCPPFLAGS
 fi
@@ -1058,7 +1058,7 @@ dnl if it does, then WNOERRORDATETIME="-Wno-error=date-time" is set
 dnl if it does not, then WNOERRORDATETIME="" is set
 AC_DEFUN([FW_CHECK_WNOERRORDATETIME],
 [
-AC_MSG_CHECKING(for -Wno-error=date-time)
+AC_MSG_CHECKING(for -Wno-error=date-time option)
 FW_TRY_LINK([#include <stdio.h>],[printf("%s %s\n",__DATE__,__TIME__);],[-Wall -Werror -Wno-error=date-time],[],[],[WNOERRORDATETIME="-Wno-error=date-time"],[WNOERRORDATETIME=""])
 if ( test -n "$WNOERRORDATETIME" )
 then
@@ -1067,6 +1067,23 @@ else
 	AC_MSG_RESULT(no)
 fi
 AC_SUBST(WNOERRORDATETIME)
+])
+
+
+dnl checks to see if the -Wno-string-plus-int compiler option works or not
+dnl if it does, then WNOSTRINGPLUSINT="-Wno-string-plus-int" is set
+dnl if it does not, then WNOSTRINGPLUSINT="" is set
+AC_DEFUN([FW_CHECK_WNOSTRINGPLUSINT],
+[
+AC_MSG_CHECKING(for -Wno-string-plus-int option)
+FW_TRY_LINK([#include <stdio.h>],[char *a="12345"; uint16_t i=1; char *b; b=a+i+1;);],[-Wall -Werror -Wno-string-plus-int],[],[],[WNOSTRINGPLUSINT="-Wno-string-plus-int"],[WNOSTRINGPLUSINT=""])
+if ( test -n "$WNOSTRINGPLUSINT" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(WNOSTRINGPLUSINT)
 ])
 
 

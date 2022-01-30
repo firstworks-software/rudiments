@@ -112,6 +112,7 @@
 	added encryption interface
 	added aes128 encryption
 	added charstring::startsWith/endsWith
+	-Wno-string-plus-int is now included if possible
 
 1.2.2 - fixed another long-standing charstring::httpEscape bug
 	-Wno-deprecated-declarations is now included if possible
