@@ -17058,7 +17058,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-const char *a="12345"; uint16_t i=1; const char *b; b=a+i+1;);
+const char *a="12345"; unsigned short i=1; const char *b; b=a+i+1;);
   ;
   return 0;
 }

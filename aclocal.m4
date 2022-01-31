@@ -10131,7 +10131,7 @@ dnl if it does not, then WNOSTRINGPLUSINT="" is set
 AC_DEFUN([FW_CHECK_WNOSTRINGPLUSINT],
 [
 AC_MSG_CHECKING(for -Wno-string-plus-int option)
-FW_TRY_LINK([#include <stdio.h>],[const char *a="12345"; uint16_t i=1; const char *b; b=a+i+1;);],[-Wall -Werror -Wno-string-plus-int],[],[],[WNOSTRINGPLUSINT="-Wno-string-plus-int"],[WNOSTRINGPLUSINT=""])
+FW_TRY_LINK([#include <stdio.h>],[const char *a="12345"; unsigned short i=1; const char *b; b=a+i+1;);],[-Wall -Werror -Wno-string-plus-int],[],[],[WNOSTRINGPLUSINT="-Wno-string-plus-int"],[WNOSTRINGPLUSINT=""])
 if ( test -n "$WNOSTRINGPLUSINT" )
 then
 	AC_MSG_RESULT(yes)
@@ -11678,7 +11678,7 @@ dnl if it does not, then WNOSTRINGPLUSINT="" is set
 AC_DEFUN([FW_CHECK_WNOSTRINGPLUSINT],
 [
 AC_MSG_CHECKING(for -Wno-string-plus-int option)
-FW_TRY_LINK([#include <stdio.h>],[const char *a="12345"; uint16_t i=1; const char *b; b=a+i+1;);],[-Wall -Werror -Wno-string-plus-int],[],[],[WNOSTRINGPLUSINT="-Wno-string-plus-int"],[WNOSTRINGPLUSINT=""])
+FW_TRY_LINK([#include <stdio.h>],[const char *a="12345"; unsigned short i=1; const char *b; b=a+i+1;);],[-Wall -Werror -Wno-string-plus-int],[],[],[WNOSTRINGPLUSINT="-Wno-string-plus-int"],[WNOSTRINGPLUSINT=""])
 if ( test -n "$WNOSTRINGPLUSINT" )
 then
 	AC_MSG_RESULT(yes)
