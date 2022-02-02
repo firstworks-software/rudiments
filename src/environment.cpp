@@ -78,11 +78,10 @@ bool environment::setValue(const char *variable, const char *value) {
 	} while (result && error::getErrorNumber()==EINTR);
 	if (!result) {
 		char	*oldpestr=NULL;
-		if (_envstrings->getValue(
-				const_cast<char *>(variable),&oldpestr)) {
+		if (_envstrings->getValue((char *)variable,&oldpestr)) {
 			free((void *)oldpestr);
 		}
-		_envstrings->setValue(const_cast<char *>(variable),pestr);
+		_envstrings->setValue((char *)variable,pestr);
 		retval=true;
 	} else {
 		free((void *)pestr);

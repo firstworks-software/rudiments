@@ -1349,9 +1349,6 @@ class gsscontextprivate {
 			OM_uint32	_minor;
 		#elif defined(RUDIMENTS_HAS_SSPI)
 			SECURITY_STATUS	_sstatus;
-		#else
-			uint32_t	_major;
-			uint32_t	_minor;
 		#endif
 
 		stringbuffer		_status;
@@ -1398,8 +1395,6 @@ class gsscontextprivate {
 			gss_ctx_id_t	_context;
 		#elif defined(RUDIMENTS_HAS_SSPI)
 			_SecHandle 	_context;
-		#else
-			void		*_context;
 		#endif
 
 		char			*_initiator;
