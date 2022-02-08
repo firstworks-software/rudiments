@@ -33,6 +33,7 @@
 class regularexpressionprivate {
 	friend class regularexpression;
 	private:
+		bool		_studied;
 		bool		_null;
 		const char	*_pattern;
 
@@ -64,6 +65,26 @@ regularexpression::regularexpression(const char *pattern) : object() {
 	setPattern(pattern);
 }
 
+regularexpression::regularexpression(const regularexpression &r) : object() {
+	init();
+	setPattern(r.getPattern());
+	if (r.pvt->_studied) {
+		study();
+	}
+}
+
+regularexpression &regularexpression::operator=(const regularexpression &r) {
+	if (this!=&r) {
+		clear();
+		init();
+		setPattern(r.getPattern());
+		if (r.pvt->_studied) {
+			study();
+		}
+	}
+	return *this;
+}
+
 void regularexpression::init() {
 	pvt=new regularexpressionprivate;
 	#ifdef RUDIMENTS_HAS_PCRE
@@ -73,6 +94,7 @@ void regularexpression::init() {
 		bytestring::zero(&pvt->_expr,sizeof(pvt->_expr));
 		pvt->_strcopy=NULL;
 	#endif
+	pvt->_studied=false;
 	pvt->_null=false;
 	pvt->_pattern=NULL;
 	pvt->_matchcount=0;
@@ -81,6 +103,11 @@ void regularexpression::init() {
 }
 
 regularexpression::~regularexpression() {
+	clear();
+	delete pvt;
+}
+
+void regularexpression::clear() {
 	#ifdef RUDIMENTS_HAS_PCRE
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
@@ -92,10 +119,10 @@ regularexpression::~regularexpression() {
 		regfree(&pvt->_expr);
 		delete[] pvt->_strcopy;
 	#endif
-	delete pvt;
 }
 
 bool regularexpression::setPattern(const char *pattern) {
+	pvt->_studied=false;
 	pvt->_null=false;
 	if (!pattern) {
 		pvt->_null=true;
@@ -128,6 +155,7 @@ bool regularexpression::study() {
 	if (pvt->_null) {
 		return true;
 	}
+	pvt->_studied=true;
 	#ifdef RUDIMENTS_HAS_PCRE
 		const char	*error;
 		if (pvt->_extra) {

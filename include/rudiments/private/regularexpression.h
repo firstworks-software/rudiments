@@ -3,9 +3,6 @@
 
 	private:
 		void	init();
-		// FIXME: it should be possible to copy a regularexpression,
-		// but how do you copy *expr and *extra?
-				regularexpression(const regularexpression &r);
-		regularexpression	&operator=(const regularexpression &r);
+		void	clear();
 
 		regularexpressionprivate	*pvt;

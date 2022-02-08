@@ -32,6 +32,14 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
  		 *  "pattern". */
 		regularexpression(const char *pattern);
 
+		/** Creates an instance of the regularexpression class that
+		 *  is a copy of "r". */
+		regularexpression(const regularexpression &r);
+
+		/** Makes this instance of the regularexpression class
+		 *  identical to "r". */
+		regularexpression	&operator=(const regularexpression &r);
+
 		/** Deletes this instance of the regular expression class. */
 		~regularexpression();
 
