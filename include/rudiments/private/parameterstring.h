@@ -18,8 +18,4 @@
 						int32_t quotes,
 						int32_t escapedchars);
 		
-		// FIXME: it should be possible to copy a parameterstring
-				parameterstring(const parameterstring &p);
-		parameterstring	&operator=(const parameterstring &p);
-
 		parameterstringprivate	*pvt;

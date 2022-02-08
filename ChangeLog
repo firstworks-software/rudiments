@@ -59,6 +59,8 @@
 	added an int cast to a char array subscript in regex.cpp
 	removed bounds checking from various operator[] methods
 	added some Unixware-specific libtool tweaks
+	implemented copy constructors and = operators for various classes that
+		they were previously hidden in
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
