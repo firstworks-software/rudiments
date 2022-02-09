@@ -19,6 +19,21 @@ enum childstatechange {
 class RUDIMENTS_DLLSPEC process {
 	public:
 
+		/** Checks for filename "filename" and reads the
+		 *  process id out of it, if it exists.  Returns
+		 *  the process id on success or -1 on failure. */
+		static int64_t	checkForPidFile(const char *filename);
+
+		/** Create's file "filename" with permissions
+		 *  "permissions" and puts the current process
+		 *  id in it.  Note that when you delete this
+		 *  file during shutdown you must use the full
+		 *  pathname since the process::detach() method
+		 *  changes directories to "/".  Returns true on
+		 *  success and false on failure. */
+		static bool	createPidFile(const char *filename,
+						mode_t permissions);
+
 		/** Returns the process id of the current process. */
 		static	pid_t	getProcessId();
 
@@ -200,6 +215,11 @@ class RUDIMENTS_DLLSPEC process {
 		  * the exit status to "status". */
 		static void	exitImmediately(int32_t status);
 
+		/** Registers "function" to be called when the process
+		 *  exits normally.  Returns true on success and false on
+		 *  failure. */
+		static bool	atExit(void (*function)(void));
+
 		/** Send signal "signum" to process "processid".
 		 *  Returns true on success and false on failure. */
 		static	bool	sendSignal(pid_t processid, int32_t signum);
@@ -207,37 +227,36 @@ class RUDIMENTS_DLLSPEC process {
 		/** Send signal "signum" to self.
 		 *  Returns true on success and false on failure. */
 		static	bool	raiseSignal(int32_t signum);
-
-		/** Registers "function" to be called when the process
-		 *  exits normally.  Returns true on success and false on
-		 *  failure. */
-		static bool	atExit(void (*function)(void));
 		
-		/** Calls exitOnShutDown(), exitOnCrash() and
-		 *  waitForChildren() below. */
+		/** Calls exitOnShutDown(), exitOnCrash() below. */
 		static	void	exitOnCrashOrShutDown();
 
-		/** Checks for filename "filename" and reads the
-		 *  process id out of it, if it exists.  Returns
-		 *  the process id on success or -1 on failure. */
-		static int64_t	checkForPidFile(const char *filename);
-
-		/** Create's file "filename" with permissions
-		 *  "permissions" and puts the current process
-		 *  id in it.  Note that when you delete this
-		 *  file during shutdown you must use the full
-		 *  pathname since the process::detach() method
-		 *  changes directories to "/".  Returns true on
-		 *  success and false on failure. */
-		static bool	createPidFile(const char *filename,
-						mode_t permissions);
-
-		/** Sets up a default handler that exits cleanly when the
-		 *  process is killed with a termination signal -
-		 *  SIGINT, SIGTERM, SIGQUIT or SIGHUP.
-		 *  NOTE: The default handler calls waitForChildren() before
-		 *  exiting to prevent zombie processes. */
+		/** Sets up a default handler that calls exitImmediately()
+		 *  when the process is killed with a termination signal -
+		 *  SIGINT, SIGTERM, SIGQUIT or SIGHUP. */
 		static void	exitOnShutDown();
+
+		/** Sets up a default handler that calls exitImmediately() if
+		 *  the process crashes with a program error signal -
+		 *  SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
+		 *  SIGEMT or SIGSYS. */
+		static void	exitOnCrash();
+		
+		/** Calls setShutDownFlagOnShutDown(),
+		 *  setShutDownFlagOnCrash() below. */
+		static	void	setShutDownFlagOnCrashOrShutDown();
+
+		/** Sets up a default handler that sets the global shutdown
+		 *  flag (see setShutDownFlag()) to true when the process is
+		 *  killed with a termination signal - SIGINT, SIGTERM, SIGQUIT
+		 *  or SIGHUP. */
+		static void	setShutDownFlagOnShutDown();
+
+		/** Sets up a default handler that sets the global shutdown
+		 *  flag (see setShutDownFlag()) to true the process crashes
+		 *  with a program error signal - SIGABRT, SIGFPE, SIGILL,
+		 *  SIGSEGV, SIGBUS, SIGIOT, SIGEMT or SIGSYS. */
+		static void	setShutDownFlagOnCrash();
 
 		/** Allows you to designate a function to run when the
 		 *  process is killed with a termination signal -
@@ -245,19 +264,77 @@ class RUDIMENTS_DLLSPEC process {
 		static	void	handleShutDown(
 					void (*shutdownfunction)(int32_t));
 
-		/** Sets up a default handler that exits cleanly if the
-		 *  process crashes with a program error signal -
-		 *  SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
-		 *  SIGEMT or SIGSYS.
-		 *  NOTE: The default handler calls waitForChildren() before
-		 *  exiting to prevent zombie processes. */
-		static void	exitOnCrash();
-
 		/** Allows you to designate a function to run if the
 		 *  process crashes with a program error signal -
 		 *  SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
 		 *  SIGEMT or SIGSYS. */
 		static	void	handleCrash(void (*crashfunction)(int32_t));
+
+		/** Sets a global shutdown flag indicating whether or not the
+		 *  process has been asked to shut down.
+		 *
+		 *  For example...
+		 *
+		 *  The "shutdownfunction" of handleShutDown() may simply call
+		 *  setShutDownFlag(true) and then return.
+		 *
+		 *  The process may then call getShutDownFlag() at strategic
+		 *  points to see if a shutdown has been requested and shut
+		 *  down gracefully if it has.
+		 *
+		 *  All rudiments methods that retry interrupted system calls
+		 *  (see retryInterrupted*() methods of various classes) exit
+		 *  if this flag is set upon return from the system call. */
+		static	void	setShutDownFlag(bool shutdownflag);
+
+		/** Returns the value of a global shutdown flag indicating
+		 *  whether or not the process has been asked to shut down.
+		 *
+		 *  For example...
+		 *
+		 *  The "shutdownfunction" of handleShutDown() may simply call
+		 *  setShutDownFlag(true) and then return.
+		 *
+		 *  The process may then call getShutDownFlag() at strategic
+		 *  points to see if a shutdown has been requested and shut
+		 *  down gracefully if it has.
+		 *
+		 *  All rudiments methods that retry interrupted system calls
+		 *  (see retryInterrupted*() methods of various classes) exit
+		 *  if this flag is set upon return from the system call. */
+		static	bool	getShutDownFlag();
+
+		/** Sets a global variable indicating which signal was received
+		 *  that initiated the process shut down.
+		 *
+		 *  For example...
+		 *
+		 *  The "shutdownfunction" of handleShutDown() may call
+		 *  setShutDownSignal(signum), passing it the value of its
+		 *  "signum" parameter.
+		 *
+		 *  Once the process determines that a shutdown has been
+		 *  initiated (perhaps by checking getShutDownFlag(), it may
+		 *  then call getShutDownSignal() to query which signal was
+		 *  received that initiated the shutdown and respond
+		 *  differently to different signals. */
+		static	void	setShutDownSignal(int32_t signum);
+
+		/** Returns the value of a global variable indicating which
+		 *  signal was received that initiated the process shut down.
+		 *
+		 *  For example...
+		 *
+		 *  The "shutdownfunction" of handleShutDown() may call
+		 *  setShutDownSignal(signum), passing it the value of its
+		 *  "signum" parameter.
+		 *
+		 *  Once the process determines that a shutdown has been
+		 *  initiated (perhaps by checking getShutDownFlag(), it may
+		 *  then call getShutDownSignal() to query which signal was
+		 *  received that initiated the shutdown and respond
+		 *  differently to different signals. */
+		static	int32_t	getShutDownSignal();
 
 		/** This method causes the process to wait on child processes
 		 *  which have exited, preventing so-called "zombie" processes

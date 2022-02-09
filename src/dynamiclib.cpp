@@ -3,6 +3,7 @@
 
 #include <rudiments/dynamiclib.h>
 #include <rudiments/charstring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_DLFCN_H)
@@ -82,7 +83,8 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		do {
 			dlerror();
 			pvt->_handle=dlopen(library,flag);
-		} while (!pvt->_handle && error::getErrorNumber()==EINTR);
+		} while (!pvt->_handle && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (pvt->_handle!=NULL);
 
 	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
@@ -285,7 +287,8 @@ bool dynamiclib::close() {
 			// dlclose() should return 0 on success or -1 on error.
 			// Some platforms (MacOS X 10.3) also return 1 on
 			// success.  So, we'll catch -1 below, rather than 0.
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		retval=(result!=-1);
 	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
 
@@ -327,7 +330,8 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 			// dlsym with char * argument rather than const char *.
 			// This works with old and new implementations.
 			symhandle=dlsym(pvt->_handle,(char *)symbol);
-		} while (!symhandle && error::getErrorNumber()==EINTR);
+		} while (!symhandle && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (pvt->_handle)?symhandle:NULL;
 	#elif defined(RUDIMENTS_HAVE_NSLINKMODULE)
 
@@ -391,7 +395,8 @@ char *dynamiclib::getError() const {
 		error::clearError();
 		do {
 			err=dlerror();
-		} while (!err && error::getErrorNumber()==EINTR);
+		} while (!err && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		char		*retval=NULL;
 		if (err) {
 			retval=charstring::duplicate(err);

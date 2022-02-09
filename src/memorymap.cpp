@@ -3,6 +3,7 @@
 
 #include <rudiments/memorymap.h>
 #include <rudiments/sys.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #if defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 	#include <rudiments/filedescriptor.h>
@@ -69,7 +70,8 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 		do {
 			pvt->_data=mmap(NULL,size,protection,flags,fd,offset);
 		} while (pvt->_data==(void *)MAP_FAILED &&
-				error::getErrorNumber()==EINTR);
+				error::getErrorNumber()==EINTR &&
+				!process::getShutDownFlag());
 		return (pvt->_data!=(void *)MAP_FAILED);
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
@@ -148,7 +150,8 @@ bool memorymap::detach() {
 				result=munmap(
 					reinterpret_cast<MUNMAP_ADDRCAST>
 					(pvt->_data),pvt->_size);
-			} while (result==-1 && error::getErrorNumber()==EINTR);
+			} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 			bool	retval=!result;
 		#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 			bool	retval=(UnmapViewOfFile(pvt->_data)==TRUE &&
@@ -186,7 +189,8 @@ bool memorymap::sync(off64_t offset, size_t size,
 			result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),size,
 					((immediate)?MS_SYNC:MS_ASYNC)|
 						((invalidate)?MS_INVALIDATE:0));
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		unsigned char	*ptr=

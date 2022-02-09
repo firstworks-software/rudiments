@@ -3,6 +3,7 @@
 
 #include <rudiments/serialport.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 // on SCO OSR5, tcdrain and friends are macros that
@@ -54,7 +55,8 @@ bool serialport::drain() {
 	error::clearError();
 	do {
 		result=tcdrain(fd());
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -91,7 +93,8 @@ bool serialport::sendBreak(int32_t duration) {
 	error::clearError();
 	do {
 		result=tcsendbreak(fd(),duration);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -101,7 +104,8 @@ bool serialport::getProfile(serialportprofile *profile) {
 	error::clearError();
 	do {
 		result=tcgetattr(fd(),&tio);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (result) {
 		return false;
 	}
@@ -114,7 +118,8 @@ bool serialport::tcSetAttr(int32_t optional_actions, termios *termios_p) {
 	error::clearError();
 	do {
 		result=tcsetattr(fd(),optional_actions,termios_p);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return result;
 }
 
@@ -123,7 +128,8 @@ bool serialport::tcFlush(int32_t queue_selector) {
 	error::clearError();
 	do {
 		result=tcflush(fd(),queue_selector);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -132,6 +138,7 @@ bool serialport::tcFlow(int32_t action) {
 	error::clearError();
 	do {
 		result=tcflow(fd(),action);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }

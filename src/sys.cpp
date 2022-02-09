@@ -3,6 +3,7 @@
 
 #include <rudiments/private/config.h>
 #include <rudiments/sys.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
 #include <rudiments/device.h>
@@ -133,7 +134,8 @@ char *sys::getOperatingSystemName() {
 		error::clearError();
 		do {
 			result=uname(&u);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (result==-1)?NULL:charstring::duplicate(u.sysname);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 		return charstring::duplicate("Windows");
@@ -150,7 +152,8 @@ char *sys::getOperatingSystemRelease() {
 		error::clearError();
 		do {
 			result=uname(&u);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (result==-1)?NULL:charstring::duplicate(u.release);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 		// for windows, just return the same as the version number
@@ -168,7 +171,8 @@ char *sys::getOperatingSystemVersion() {
 		error::clearError();
 		do {
 			result=uname(&u);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (result==-1)?NULL:charstring::duplicate(u.version);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 
@@ -205,7 +209,8 @@ char *sys::getOperatingSystemArchitecture() {
 		error::clearError();
 		do {
 			result=uname(&u);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
 	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO) || \
 			defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
@@ -266,7 +271,8 @@ char *sys::getHostName() {
 			error::clearError();
 			do {
 				result=gethostname(name,namelen);
-			} while (result==-1 && error::getErrorNumber()==EINTR);
+			} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 
 			// return the name on success
 			if (!result) {
@@ -347,7 +353,8 @@ bool sys::setHostName(const char *hostname, uint64_t hostnamelen) {
 			// cast it to a char * and this appears to work on all
 			// platforms.
 			result=sethostname((char *)hostname,hostnamelen);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1209,7 +1216,8 @@ int64_t sys::sysConf(int32_t name) {
 		error::clearError();
 		do {
 			result=sysconf(name);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1243,7 +1251,8 @@ bool sys::setProtection(unsigned char *ptr, size_t size, int32_t protection) {
 			result=mprotect(
 				reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
 				size,protection);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1304,7 +1313,8 @@ bool sys::lock(unsigned char *ptr, size_t size) {
 			result=mlock(
 				reinterpret_cast<MLOCK_ADDRCAST>(ptr),
 				size);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1320,7 +1330,8 @@ bool sys::unlock(unsigned char *ptr, size_t size) {
 			result=munlock(
 				reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),
 				size);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1347,7 +1358,8 @@ bool sys::notPagedOut(unsigned char *ptr, size_t size) {
 			result=mincore(
 				reinterpret_cast<MINCORE_ADDRCAST>(ptr),
 				size,tmp);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (result) {
 			delete[] tmp;
 			return false;
@@ -1402,7 +1414,8 @@ bool sys::enablePaging() {
 		error::clearError();
 		do {
 			result=munlockall();
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1418,7 +1431,8 @@ bool sys::mAdvise(unsigned char *start, size_t size, int32_t advice) {
 			result=madvise(
 				reinterpret_cast<MADVISE_ADDRCAST>(start),
 				size,advice);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1432,7 +1446,8 @@ bool sys::mLockAll(int32_t flags) {
 		error::clearError();
 		do {
 			result=mlockall(flags);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS

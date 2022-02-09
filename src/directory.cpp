@@ -4,6 +4,7 @@
 #include <rudiments/stdio.h>
 #include <rudiments/directory.h>
 #include <rudiments/charstring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #ifdef RUDIMENTS_HAVE_MKDIR_1
 	#include <rudiments/permissions.h>
@@ -108,7 +109,8 @@ bool directory::open(const char *path) {
 		error::clearError();
 		do {
 			pvt->_dir=opendir(path);
-		} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
+		} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (pvt->_dir!=NULL);
 	#endif
 }
@@ -152,7 +154,8 @@ char *directory::read() {
 		error::clearError();
 		do {
 			entry=readdir(pvt->_dir);
-		} while (!entry && error::getErrorNumber()==EINTR);
+		} while (!entry && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (!entry) {
 			return NULL;
 		}
@@ -186,7 +189,8 @@ bool directory::close() {
 			error::clearError();
 			do {
 				retval=!closedir(pvt->_dir);
-			} while (!retval && error::getErrorNumber()==EINTR);
+			} while (!retval && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 			pvt->_dir=NULL;
 			pvt->_currentindex=0;
 		}
@@ -280,7 +284,8 @@ bool directory::create(const char *path, mode_t perms) {
 			#else
 				#error no mkdir or anything like it
 			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		#if defined(RUDIMENTS_HAVE_MKDIR_2)
 			return !result;
 		#elif defined(RUDIMENTS_HAVE_MKDIR_1)
@@ -298,7 +303,8 @@ bool directory::createTemporaryDirectory(char *templatedirname, mode_t perms) {
 		error::clearError();
 		do {
 			result=mkdtemp(templatedirname);
-		} while (!result && error::getErrorNumber()==EINTR);
+		} while (!result && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (result && !file::setPermissions(templatedirname,perms)) {
 			remove(templatedirname);
 			result=false;
@@ -354,7 +360,8 @@ bool directory::remove(const char *path) {
 		error::clearError();
 		do {
 			result=rmdir(path);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#endif
 }
@@ -417,7 +424,8 @@ char *directory::getCurrentWorkingDirectory() {
 			error::clearError();
 			do {
 				result=getcwd(buffer,size);
-			} while (!result && error::getErrorNumber()==EINTR);
+			} while (!result && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		#endif
 		if (result) {
 			return buffer;
@@ -436,7 +444,8 @@ bool directory::changeDirectory(const char *path) {
 		error::clearError();
 		do {
 			result=chdir(path);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#endif
 }
@@ -460,7 +469,8 @@ bool directory::changeRoot(const char *path) {
 			// within 2 lines of x86_64 assembly and this is
 			// the only way to guarantee that.
 			result=(!chdir(path) && !chroot(path));
-		} while (!result && error::getErrorNumber()==EINTR);
+		} while (!result && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -492,7 +502,8 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 		error::clearError();
 		do {
 			result=pathconf(pathname,name);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
@@ -540,7 +551,8 @@ int64_t directory::fpathConf(int32_t name) {
 						pvt->_dir->d_fd
 					#endif
 					,name);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {

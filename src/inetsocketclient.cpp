@@ -7,6 +7,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/snooze.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/environment.h>
 #include <rudiments/randomnumber.h>
@@ -162,7 +163,8 @@ int32_t inetsocketclient::connect() {
 		do {
 			error::clearError();
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
-		} while (result!=0 && error::getErrorNumber()==EINTR);
+		} while (result!=0 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		// ...In theory, we should only loop back and try again if
 		// getaddrinfo() returns EAI_SYSTEM and errno was EINTR.
 		// However, apparently, on some systems, if interrupted, it can
@@ -255,7 +257,8 @@ int32_t inetsocketclient::connect() {
 						#error no socket or anything like it
 					#endif
 				} while (fd()==-1 &&
-					error::getErrorNumber()==EINTR);
+					error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 				if (fd()==-1) {
 					// remove this addrinfo from the list
 					// and try again
@@ -366,7 +369,8 @@ int32_t inetsocketclient::connect() {
 						#error no socket or anything like it
 					#endif
 				} while (fd()==-1 &&
-					error::getErrorNumber()==EINTR);
+					error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag())
 				if (fd()==-1) {
 					return RESULT_ERROR;
 				}

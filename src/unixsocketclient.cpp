@@ -4,6 +4,7 @@
 #include <rudiments/unixsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/snooze.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 	#include <rudiments/inetsocketclient.h>
@@ -134,7 +135,8 @@ int32_t unixsocketclient::connect() {
 		#else
 			#error no socket or anything like it
 		#endif
-	} while (fd()==-1 && error::getErrorNumber()==EINTR);
+	} while (fd()==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (fd()==-1) {
 		return RESULT_ERROR;
 	}

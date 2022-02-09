@@ -75,7 +75,8 @@ bool environment::setValue(const char *variable, const char *value) {
 		#else
 			#error no putenv or anything like it
 		#endif
-	} while (result && error::getErrorNumber()==EINTR);
+	} while (result && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (!result) {
 		char	*oldpestr=NULL;
 		if (_envstrings->getValue((char *)variable,&oldpestr)) {
@@ -128,7 +129,7 @@ const char *environment::getValue(const char *variable) {
 		#else
 			#error no getenv or anything like it
 		#endif
-	} while (error::getErrorNumber()==EINTR);
+	} while (error::getErrorNumber()==EINTR && !process::getShutDownFlag());
 	if (_envmutex) {
 		_envmutex->unlock();
 	}
@@ -146,7 +147,8 @@ bool environment::setValue(const char *variable, const char *value) {
 	error::clearError();
 	do {
 		retval=!setenv(variable,value,1);
-	} while (!retval && error::getErrorNumber()==EINTR);
+	} while (!retval && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (_envmutex) {
 		_envmutex->unlock();
 	}

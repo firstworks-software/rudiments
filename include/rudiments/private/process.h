@@ -4,8 +4,10 @@
 	private:
 		static	void	shutDown(int32_t signum);
 		static	void	crash(int32_t signum);
-		static	void	defaultShutDown(int32_t signum);
-		static	void	defaultCrash(int32_t signum);
+		static	void	exitShutDown(int32_t signum);
+		static	void	exitCrash(int32_t signum);
+		static	void	setShutDownFlagShutDown(int32_t signum);
+		static	void	setShutDownFlagCrash(int32_t signum);
 		static	void	waitForChildrenToExit(int32_t signum);
 		static	char	*fullyQualifiedCommand(const char *command);
 
@@ -15,3 +17,6 @@
 		static	void		(*_shutdownfunc)(int32_t);
 		static	void		(*_crashfunc)(int32_t);
 		static	bool		_retry;
+
+		static	volatile sig_atomic_t	_shutdownflag;
+		static	int32_t			_shutdownsignal;

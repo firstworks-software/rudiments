@@ -5,6 +5,7 @@
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 #include <rudiments/private/winsock.h>
@@ -119,7 +120,8 @@ bool inetsocketserver::initialize(const char *address, uint16_t port) {
 		#else
 			#error no socket or anything like it
 		#endif
-	} while (fd()==-1 && error::getErrorNumber()==EINTR);
+	} while (fd()==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (fd()==-1) {
 		return false;
 	}
@@ -151,7 +153,8 @@ bool inetsocketserver::bind() {
 	do {
 		result=::bind(fd(),reinterpret_cast<struct sockaddr *>(_sin()),
 							sizeof(sockaddr_in));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (result==-1) {
 		return false;
 	}
@@ -171,7 +174,8 @@ bool inetsocketserver::bind() {
 				reinterpret_cast<struct sockaddr *>
 							(&socknamesin),
 				&size);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (result!=-1) {
 			*_port()=static_cast<uint16_t>(
 						ntohs(socknamesin.sin_port));
@@ -185,7 +189,8 @@ bool inetsocketserver::listen(int32_t backlog) {
 	error::clearError();
 	do {
 		result=::listen(fd(),backlog);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -203,7 +208,8 @@ filedescriptor *inetsocketserver::accept() {
 		clientsock=::accept(fd(),
 				reinterpret_cast<struct sockaddr *>(&clientsin),
 				&size);
-	} while (clientsock==-1 && error::getErrorNumber()==EINTR);
+	} while (clientsock==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 	if (clientsock==-1) {
 		return NULL;
 	}

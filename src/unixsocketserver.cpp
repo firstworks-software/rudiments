@@ -109,7 +109,8 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 		#else
 			#error no socket or anything like it
 		#endif
-	} while (fd()==-1 && error::getErrorNumber()==EINTR);
+	} while (fd()==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (fd()==-1) {
 		return false;
 	}
@@ -155,7 +156,8 @@ bool unixsocketserver::bind() {
 		result=::bind(fd(),
 			reinterpret_cast<struct sockaddr *>(_sun()),
 				sizeof(sockaddr_un));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (result==-1) {
 		retval=false;
 	}
@@ -176,7 +178,8 @@ bool unixsocketserver::listen(int32_t backlog) {
 	error::clearError();
 	do {
 		result=::listen(fd(),backlog);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 #endif
 }
@@ -200,7 +203,8 @@ filedescriptor *unixsocketserver::accept() {
 				reinterpret_cast<struct sockaddr *>(
 								&clientsun),
 				&size);
-	} while (clientsock==-1 && error::getErrorNumber()==EINTR);
+	} while (clientsock==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 	if (clientsock==-1) {
 		return NULL;
 	}

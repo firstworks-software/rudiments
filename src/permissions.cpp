@@ -3,6 +3,7 @@
 
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/file.h>
 #include <rudiments/userentry.h>
@@ -163,7 +164,8 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 		error::clearError();
 		do {
 			result=fchmod(fd,perms);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 

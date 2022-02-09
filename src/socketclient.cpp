@@ -3,6 +3,7 @@
 
 #include <rudiments/socketclient.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -167,8 +168,10 @@ int32_t socketclient::ioCtl(int32_t cmd, void *arg) const {
 		error::clearError();
 		do {
 			result=ioctlsocket(fd(),cmd,(u_long *)arg);
-		} while (getRetryInterruptedIoctl() && result==-1 &&
-				error::getErrorNumber()==EINTR);
+		} while (getRetryInterruptedIoctl() &&
+				result==-1 &&
+				error::getErrorNumber()==EINTR &&
+				!process::getShutDownFlag());
 		return result;
 	#else
 		return filedescriptor::ioCtl(cmd,arg);
@@ -295,7 +298,8 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 		do {
 			bytestring::zero(&peeraddr,size);
 			result=getpeername(fd(),&peeraddr,&size);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (result==-1) {
 
 			// On some platforms, getpeername() will fail and set

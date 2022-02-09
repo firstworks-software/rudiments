@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/threadmutex.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
@@ -34,7 +35,8 @@ threadmutex::threadmutex() : object() {
 	pvt->_mut=new pthread_mutex_t;
 	error::clearError();
 	do {} while (pthread_mutex_init(pvt->_mut,NULL)==-1 &&
-				error::getErrorNumber()==EINTR);
+				error::getErrorNumber()==EINTR &&
+				!process::getShutDownFlag());
 	pvt->_destroy=true;
 }
 
@@ -83,7 +85,8 @@ threadmutex::~threadmutex() {
 	pvt->_mut = NULL;
 	if (pvt->_destroy && tmpmut) {
 		do {} while (pthread_mutex_destroy(tmpmut)==-1 &&
-					error::getErrorNumber()==EINTR);
+					error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 		delete tmpmut;
 	}
 
@@ -97,7 +100,8 @@ bool threadmutex::lock() {
 	error::clearError();
 	do {
 		result=pthread_mutex_lock(pvt->_mut);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -106,7 +110,8 @@ bool threadmutex::tryLock() {
 	error::clearError();
 	do {
 		result=pthread_mutex_trylock(pvt->_mut);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -115,7 +120,8 @@ bool threadmutex::unlock() {
 	error::clearError();
 	do {
 		result=pthread_mutex_unlock(pvt->_mut);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 

@@ -7,6 +7,7 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/permissions.h>
@@ -372,7 +373,8 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 					#error no open or anything like it
 				#endif
 			}
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		fd(result);
 	#endif
 
@@ -744,7 +746,8 @@ bool file::reserve(off64_t start, size_t len) const {
 		error::clearError();
 		do {
 			result=posix_fallocate(fd(),start,len);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		return false;
@@ -827,7 +830,8 @@ off64_t file::lseek(off64_t offset, int32_t whence) const {
 		#else
 			#error no lseek or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return result;
 }
 
@@ -859,7 +863,8 @@ bool file::accessible(const char *filename, int32_t mode) {
 		#else
 			#error no access or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -868,7 +873,8 @@ bool file::getCurrentProperties() {
 	error::clearError();
 	do {
 		result=fstat(fd(),&pvt->_st);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (result) {
 		return false;
 	}
@@ -927,7 +933,8 @@ bool file::stat(const char *filename, void *st) {
 	error::clearError();
 	do {
 		result=::stat(filename,(struct stat *)st);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return (result!=-1);
 }
 
@@ -1211,7 +1218,8 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 		error::clearError();
 		do {
 			result=fchown(fd(),uid,gid);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
@@ -1375,7 +1383,8 @@ bool file::rename(const char *oldpath, const char *newpath) {
 	error::clearError();
 	do {
 		result=::rename(oldpath,newpath);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -1390,7 +1399,8 @@ bool file::remove(const char *filename) {
 		#else
 			#error no unlink or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 
@@ -1400,7 +1410,8 @@ bool file::createHardLink(const char *oldpath, const char *newpath) {
 		error::clearError();
 		do {
 			result=link(oldpath,newpath);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARY)
 		bool	retval=false;
@@ -1429,7 +1440,8 @@ bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 		error::clearError();
 		do {
 			result=symlink(oldpath,newpath);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1452,7 +1464,8 @@ char *file::resolveSymbolicLink(const char *filename) {
 			error::clearError();
 			do {
 				len=::readlink(filename,buffer,size);
-			} while (len==-1 && error::getErrorNumber()==EINTR);
+			} while (len==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 
 			if (len==-1) {
 
@@ -1490,7 +1503,8 @@ bool file::sync() const {
 		error::clearError();
 		do {
 			result=fsync(fd());
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
 		return (FlushFileBuffers(
@@ -1508,7 +1522,8 @@ bool file::dataSync() const {
 		error::clearError();
 		do {
 			result=fdatasync(fd());
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		return sync();
@@ -1555,7 +1570,8 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 			#elif defined(RUDIMENTS_HAVE_UTIMES_CHAR)
 				result=utimes((char *)filename,tv);
 			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_UTIME)
 		utimbuf	tb;
@@ -1565,7 +1581,8 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		error::clearError();
 		do {
 			result=utime(filename,&tb);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETFILETIME)
 
@@ -1622,7 +1639,8 @@ bool file::setLastAccessAndModificationTimes(const char *filename) {
 			#elif defined(RUDIMENTS_HAVE_UTIMES_CHAR)
 				result=utimes((char *)filename,NULL);
 			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		datetime	dt;
@@ -1639,7 +1657,8 @@ bool file::createFifo(const char *filename, mode_t perms) {
 		error::clearError();
 		do {
 			result=mkfifo(filename,perms);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATENAMEDPIPE)
 		HANDLE	handle=CreateNamedPipe(filename,0,0,1,
@@ -1661,7 +1680,8 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 		error::clearError();
 		do {
 			result=mkstemp(templatefilename);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		// sanity check on templatefilename
@@ -1935,7 +1955,8 @@ bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) const {
 		error::clearError();
 		do {
 			result=posix_fadvise(fd(),offset,len,advice);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		// on platforms that don't support this, it's ok to just return
@@ -1950,7 +1971,8 @@ int64_t file::pathConf(const char *path, int32_t name) {
 		error::clearError();
 		do {
 			result=pathconf(path,name);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -1964,7 +1986,8 @@ int64_t file::fpathConf(int32_t name) const {
 		error::clearError();
 		do {
 			result=fpathconf(fd(),name);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -2024,7 +2047,9 @@ static void getMatchingFileNames(const char *root,
 			error::clearError();
 			do {
 				result=::stat(fpn.getString(),&st);
-			} while (result==-1 && error::getErrorNumber()==EINTR);
+			} while (result==-1 &&
+					error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 			if (result==-1) {
 				// we're emulating glob() without GLOB_ERR, so
 				// there's no need to set an error if this

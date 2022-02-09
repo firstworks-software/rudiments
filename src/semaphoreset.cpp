@@ -5,6 +5,7 @@
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/stdio.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
@@ -110,7 +111,9 @@ semaphoreset::semaphoreset() : object() {
 		error::clearError();
 		do {
 			result=semtimedop(-1,NULL,0,NULL);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+					pvt->_retryinterruptedoperations &&
+					!process::getShutDownFlag());
 		pvt->_supportstimedops=(error::getErrorNumber()!=ENOSYS);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		pvt->_supportstimedops=true;
@@ -665,7 +668,8 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 			result=semget(key,nsems,semflg);
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
-				pvt->_retryinterruptedoperations);
+				pvt->_retryinterruptedoperations &&
+				!process::getShutDownFlag());
 
 		pvt->_semid=result;
 	
@@ -837,7 +841,8 @@ int32_t semaphoreset::semControl(semaphoresetprivate *pvt, int32_t semnum,
 			result=semctl(pvt->_semid,semnum,cmd,*semctlun);
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
-				pvt->_retryinterruptedoperations);
+				pvt->_retryinterruptedoperations &&
+				!process::getShutDownFlag());
 		return result;
 	#elif defined(RUDIMENTS_HAVE_SEM_INIT)
 		return 1;
@@ -857,7 +862,8 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 			result=semop(pvt->_semid,sops,1);
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
-				pvt->_retryinterruptedoperations);
+				pvt->_retryinterruptedoperations &&
+				!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SEM_INIT)
 		return true;
@@ -881,7 +887,8 @@ bool semaphoreset::semTimedOp(struct sembuf *sops,
 			result=semtimedop(pvt->_semid,sops,1,&ts);
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
-				pvt->_retryinterruptedoperations);
+				pvt->_retryinterruptedoperations &&
+				!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;

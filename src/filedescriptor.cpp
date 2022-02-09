@@ -22,15 +22,12 @@
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/stringbuffer.h>
-#if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
-		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
-	#include <rudiments/process.h>
-#endif
 #include <rudiments/thread.h>
 #include <rudiments/semaphoreset.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/sys.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -481,7 +478,8 @@ int32_t filedescriptor::duplicate() const {
 		#else
 			#error no dup or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return result;
 }
 
@@ -496,7 +494,8 @@ bool filedescriptor::duplicate(int32_t newfd) const {
 		#else
 			#error no dup2 or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return (result==newfd);
 }
 
@@ -919,7 +918,8 @@ bool filedescriptor::close() {
 		error::clearError();
 		do {
 			result=lowLevelClose();
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (result==-1) {
 			return false;
 		}
@@ -1329,7 +1329,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the read
-				if (pvt->_retryinterruptedreads) {
+				if (process::getShutDownFlag()) {
+					return RESULT_ERROR;
+				} else if (pvt->_retryinterruptedreads) {
 					continue;
 				} else {
 					totalread=totalread+actualread;
@@ -1578,7 +1580,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the write
-				if (pvt->_retryinterruptedwrites) {
+				if (process::getShutDownFlag()) {
+					return RESULT_ERROR;
+				} else if (pvt->_retryinterruptedwrites) {
 					continue;
 				} else {
 					totalwrite=totalwrite+actualwrite;
@@ -1647,7 +1651,8 @@ void filedescriptor::lowLevelWriteWorker(void *attr) {
 						bytestowrite);
 			if (result==-1) {
 				if (error::getErrorNumber()==EINTR &&
-					fd->pvt->_retryinterruptedwrites) {
+					fd->pvt->_retryinterruptedwrites &&
+					!process::getShutDownFlag()) {
 					continue;
 				} else {
 					break;
@@ -1782,7 +1787,8 @@ bool filedescriptor::createPipe(filedescriptor *readfd,
 		#else
 			#error no pipe or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (!result) {
 		if (readfd) {
 			readfd->setFileDescriptor(fd[0]);
@@ -1963,7 +1969,8 @@ int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
 		do {
 			result=fcntl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedfcntl && result==-1 &&
-				error::getErrorNumber()==EINTR);
+					error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 		return result;
 	#else
 		return -1;
@@ -1977,7 +1984,8 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 		do {
 			result=ioctl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedioctl && result==-1 &&
-					error::getErrorNumber()==EINTR);
+					error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 		return result;
 	#else
 		return -1;
@@ -2046,7 +2054,8 @@ bool filedescriptor::passFileDescriptor(int32_t fd) {
 			#error no sendmsg or anything like it
 		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
-					pvt->_retryinterruptedwrites);
+					pvt->_retryinterruptedwrites &&
+					!process::getShutDownFlag());
 
 	// clean up
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
@@ -2187,7 +2196,8 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 			#endif
 		}
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
-					pvt->_retryinterruptedreads);
+					pvt->_retryinterruptedreads &&
+					!process::getShutDownFlag());
 	if (result==-1) {
 		#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 			delete[] control;
@@ -2482,7 +2492,8 @@ char *filedescriptor::getPeerAddress() const {
 		#else
 			#error no getpeername or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 
 	// if getpeername was successful and the peer was an inet socket,
 	// convert the address to a string and return a copy of it,
@@ -2510,7 +2521,8 @@ int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
 		#else
 			#error no getsockopt or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	if (optlen) {
 		*optlen=tempoptlen;
 	}
@@ -2530,7 +2542,8 @@ int32_t filedescriptor::setSockOpt(int32_t level, int32_t optname,
 		#else
 			#error no setsockopt or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return result;
 }
 

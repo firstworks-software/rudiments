@@ -2,13 +2,11 @@
 // See the COPYING file for more information
 
 #include <rudiments/signalclasses.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/bytestring.h>
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
 	#include <rudiments/linkedlist.h>
-#endif
-#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
-	#include <rudiments/process.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -367,7 +365,8 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 				result=sigprocmask(SIG_SETMASK,
 						&sset->pvt->_sigset,NULL);
 			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SIGNAL)
 		bool	result=true;
@@ -407,7 +406,8 @@ bool signalmanager::examineBlockedSignals(signalset *sset) {
 		error::clearError();
 		do {
 			result=sigpending(&sset->pvt->_sigset);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		// see sendSignal above...
@@ -562,7 +562,8 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 		do {
 			result=sigaction(signum,&pvt->_handlerstruct,
 								&oldaction);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		if (oldhandler) {
 			oldhandler->pvt->_handlerstruct=oldaction;
 		}

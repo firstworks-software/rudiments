@@ -75,6 +75,26 @@ void		(*process::_crashfunc)(int32_t);
 
 bool		process::_retry=true;
 
+volatile sig_atomic_t	process::_shutdownflag=0;
+int32_t			process::_shutdownsignal=-1;
+
+bool process::createPidFile(const char *filename, mode_t permissions) {
+	char	*pid=charstring::parseNumber((uint64_t)process::getProcessId());
+	file	pidfile;
+	bool	retval=(pidfile.create(filename,permissions) &&
+			pidfile.write(pid)==(ssize_t)charstring::length(pid));
+	delete[] pid;
+	return retval;
+}
+
+int64_t process::checkForPidFile(const char *filename) {
+	char	*pidstring=file::getContents(filename);
+	int64_t	retval=(pidstring && pidstring[0])?
+				charstring::toInteger(pidstring):-1;
+	delete[] pidstring;
+	return retval;
+}
+
 pid_t process::getProcessId() {
 	#if defined(RUDIMENTS_HAVE_GETCURRENTPROCESSID)
 		return GetCurrentProcessId();
@@ -339,7 +359,8 @@ pid_t process::fork() {
 				snooze::macrosnooze(1);
 				continue;
 			}
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+							!getShutDownFlag());
 		return result;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -612,13 +633,22 @@ void process::exitImmediately(int32_t status) {
 	_exit(status);
 }
 
+bool process::atExit(void (*function)(void)) {
+	#ifdef RUDIMENTS_HAVE_ATEXIT
+		return !atexit(function);
+	#else
+		return false;
+	#endif
+}
+
 bool process::sendSignal(pid_t processid, int32_t signum) {
 	#ifdef RUDIMENTS_HAVE_KILL
 		int32_t	result;
 		error::clearError();
 		do {
 			result=kill(processid,signum);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+							!getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
 
@@ -913,37 +943,13 @@ bool process::raiseSignal(int32_t signum) {
 		error::clearError();
 		do {
 			result=raise(signum);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+							!getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
-}
-
-bool process::atExit(void (*function)(void)) {
-	#ifdef RUDIMENTS_HAVE_ATEXIT
-		return !atexit(function);
-	#else
-		return false;
-	#endif
-}
-
-bool process::createPidFile(const char *filename, mode_t permissions) {
-	char	*pid=charstring::parseNumber((uint64_t)process::getProcessId());
-	file	pidfile;
-	bool	retval=(pidfile.create(filename,permissions) &&
-			pidfile.write(pid)==(ssize_t)charstring::length(pid));
-	delete[] pid;
-	return retval;
-}
-
-int64_t process::checkForPidFile(const char *filename) {
-	char	*pidstring=file::getContents(filename);
-	int64_t	retval=(pidstring && pidstring[0])?
-				charstring::toInteger(pidstring):-1;
-	delete[] pidstring;
-	return retval;
 }
 
 void process::exitOnCrashOrShutDown() {
@@ -952,20 +958,7 @@ void process::exitOnCrashOrShutDown() {
 }
 
 void process::exitOnShutDown() {
-	_shutdownhandler.setHandler(defaultShutDown);
-	_shutdownhandler.handleSignal(SIGINT);
-	_shutdownhandler.handleSignal(SIGTERM);
-	#ifdef SIGQUIT
-	_shutdownhandler.handleSignal(SIGQUIT);
-	#endif
-	#ifdef SIGHUP
-	_shutdownhandler.handleSignal(SIGHUP);
-	#endif
-}
-
-void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
-	_shutdownfunc=shutdownfunction;
-	_shutdownhandler.setHandler(shutDown);
+	_shutdownhandler.setHandler(exitShutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
 	#ifdef SIGQUIT
@@ -977,7 +970,7 @@ void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
 }
 
 void process::exitOnCrash() {
-	_crashhandler.setHandler(defaultCrash);
+	_crashhandler.setHandler(exitCrash);
 	_crashhandler.handleSignal(SIGABRT);
 	_crashhandler.handleSignal(SIGFPE);
 	_crashhandler.handleSignal(SIGILL);
@@ -993,6 +986,74 @@ void process::exitOnCrash() {
 	#endif
 	#ifdef SIGSYS
 	_crashhandler.handleSignal(SIGSYS);
+	#endif
+}
+
+void process::exitShutDown(int32_t signum) {
+	setShutDownFlagShutDown(signum);
+	process::exitImmediately(0);
+}
+
+void process::exitCrash(int32_t signum) {
+	exitShutDown(signum);
+}
+
+void process::setShutDownFlagOnCrashOrShutDown() {
+	setShutDownFlagOnShutDown();
+	setShutDownFlagOnCrash();
+}
+
+void process::setShutDownFlagOnShutDown() {
+	_shutdownhandler.setHandler(setShutDownFlagShutDown);
+	_shutdownhandler.handleSignal(SIGINT);
+	_shutdownhandler.handleSignal(SIGTERM);
+	#ifdef SIGQUIT
+	_shutdownhandler.handleSignal(SIGQUIT);
+	#endif
+	#ifdef SIGHUP
+	_shutdownhandler.handleSignal(SIGHUP);
+	#endif
+}
+
+void process::setShutDownFlagOnCrash() {
+	_crashhandler.setHandler(setShutDownFlagCrash);
+	_crashhandler.handleSignal(SIGABRT);
+	_crashhandler.handleSignal(SIGFPE);
+	_crashhandler.handleSignal(SIGILL);
+	_crashhandler.handleSignal(SIGSEGV);
+	#ifdef SIGBUS
+	_crashhandler.handleSignal(SIGBUS);
+	#endif
+	#ifdef SIGIOT
+	_crashhandler.handleSignal(SIGIOT);
+	#endif
+	#ifdef SIGEMT
+	_crashhandler.handleSignal(SIGEMT);
+	#endif
+	#ifdef SIGSYS
+	_crashhandler.handleSignal(SIGSYS);
+	#endif
+}
+
+void process::setShutDownFlagShutDown(int32_t signum) {
+	_shutdownflag=1;
+	_shutdownsignal=(signalhandler::isSignalHandlerIntUsed())?signum:-1;
+}
+
+void process::setShutDownFlagCrash(int32_t signum) {
+	setShutDownFlagShutDown(signum);
+}
+
+void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
+	_shutdownfunc=shutdownfunction;
+	_shutdownhandler.setHandler(shutDown);
+	_shutdownhandler.handleSignal(SIGINT);
+	_shutdownhandler.handleSignal(SIGTERM);
+	#ifdef SIGQUIT
+	_shutdownhandler.handleSignal(SIGQUIT);
+	#endif
+	#ifdef SIGHUP
+	_shutdownhandler.handleSignal(SIGHUP);
 	#endif
 }
 
@@ -1017,6 +1078,22 @@ void process::handleCrash(void (*crashfunction)(int32_t)) {
 	#endif
 }
 
+void process::setShutDownFlag(bool shutdownflag) {
+	_shutdownflag=shutdownflag;
+}
+
+bool process::getShutDownFlag() {
+	return _shutdownflag;
+}
+
+void process::setShutDownSignal(int32_t signum) {
+	_shutdownsignal=signum;
+}
+
+int32_t process::getShutDownSignal() {
+	return _shutdownsignal;
+}
+
 void process::waitForChildren() {
 	#ifdef SIGCHLD
 		_deadchildhandler.setHandler(waitForChildrenToExit);
@@ -1039,14 +1116,6 @@ void process::shutDown(int32_t signum) {
 
 void process::crash(int32_t signum) {
 	(*_crashfunc)(signum);
-}
-
-void process::defaultShutDown(int32_t signum) {
-	process::exit(0);
-}
-
-void process::defaultCrash(int32_t signum) {
-	process::exit(1);
 }
 
 void process::waitForChildrenToExit(int32_t signum) {
@@ -1138,7 +1207,8 @@ pid_t process::getChildStateChange(pid_t pid,
 	do {
 		// Minix 3.1.8 needs the int * cast
 		childpid=waitpid(pid,(int *)&status,options);
-	} while (childpid==-1 && error::getErrorNumber()==EINTR);
+	} while (childpid==-1 && error::getErrorNumber()==EINTR &&
+						!getShutDownFlag());
 
 	// set return values
 	if (childpid>0 && newstate) {

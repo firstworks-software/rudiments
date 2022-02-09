@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/socketserver.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -151,8 +152,10 @@ int32_t socketserver::ioCtl(int32_t cmd, void *arg) const {
 		error::clearError();
 		do {
 			result=ioctlsocket(fd(),cmd,(u_long *)arg);
-		} while (getRetryInterruptedIoctl() && result==-1 &&
-				error::getErrorNumber()==EINTR);
+		} while (getRetryInterruptedIoctl() &&
+				result==-1 &&
+				error::getErrorNumber()==EINTR &&
+				!process::getShutDownFlag());
 		return result;
 	#else
 		return filedescriptor::ioCtl(cmd,arg);
@@ -201,7 +204,8 @@ bool socketserver::listen(int32_t backlog) {
 	error::clearError();
 	do {
 		result=::listen(fd(),backlog);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 

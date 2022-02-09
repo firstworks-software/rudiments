@@ -61,6 +61,11 @@
 	added some Unixware-specific libtool tweaks
 	implemented copy constructors and = operators for various classes that
 		they were previously hidden in
+	added shutdown flag/signal framework to process class
+	process::exitOn*() call exitImmediately() now (which is
+		async-signal-safe)
+	methods that retry on EINTR also check process::getShutDownFlag() now
+		and return if it's true
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

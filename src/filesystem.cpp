@@ -4,6 +4,7 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/directory.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
@@ -141,7 +142,8 @@ bool filesystem::open(const char *path) {
 			#else
 				#error no open or anything like it
 			#endif
-		} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR);
+		} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return (pvt->_fd!=-1 && getCurrentProperties());
 	#else 
 		// extract the volume name from the path
@@ -299,7 +301,8 @@ bool filesystem::close() {
 				#else
 					#error no close or anything like it
 				#endif
-			} while (result==-1 && error::getErrorNumber()==EINTR);
+			} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		}
 	#else
 		delete[] pvt->_volume;
@@ -324,7 +327,8 @@ bool filesystem::getCurrentProperties() {
 			#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
 				result=fstatfs(pvt->_fd,&pvt->_st);
 			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 
 	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)

@@ -8,8 +8,8 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/wstringbuffer.h>
-#include <rudiments/error.h>
 #include <rudiments/process.h>
+#include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -71,7 +71,8 @@ void stdoutdestination::write(const char *string) {
 	error::clearError();
 	do {
 		result=stdoutput.write(string,charstring::length(string));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 }
 
 void stdoutdestination::write(const wchar_t *string) {
@@ -79,7 +80,8 @@ void stdoutdestination::write(const wchar_t *string) {
 	error::clearError();
 	do {
 		result=stdoutput.write(string,wcharstring::length(string));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 }
 
 void stderrdestination::write(const char *string) {
@@ -87,7 +89,8 @@ void stderrdestination::write(const char *string) {
 	error::clearError();
 	do {
 		result=stderror.write(string,charstring::length(string));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 }
 
 void stderrdestination::write(const wchar_t *string) {
@@ -95,7 +98,8 @@ void stderrdestination::write(const wchar_t *string) {
 	error::clearError();
 	do {
 		result=stderror.write(string,wcharstring::length(string));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 }
 
 class syslogdestinationprivate {

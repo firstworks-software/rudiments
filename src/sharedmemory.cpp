@@ -5,6 +5,7 @@
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 	#include <rudiments/charstring.h>
@@ -30,7 +31,8 @@ static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
 	error::clearError();
 	do {
 		result=shmget(key,size,shmflag);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return result;
 }
 
@@ -40,7 +42,8 @@ static void *shmAttach(int32_t id) {
 	do {
 		result=shmat(id,0,0);
 	} while (reinterpret_cast<int64_t>(result)==-1 &&
-				error::getErrorNumber()==EINTR);
+				error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return result;
 }
 
@@ -49,7 +52,8 @@ static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
 	error::clearError();
 	do {
 		result=shmctl(id,cmd,buf);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
 	return !result;
 }
 

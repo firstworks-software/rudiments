@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/device.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 // for mknod
@@ -49,7 +50,8 @@ bool device::createDeviceNode(const char *filename, bool blockdevice,
 		error::clearError();
 		do {
 			result=mknod(filename,mode,dev);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
 		return !result;
 	#else
 		RUDIMENTS_SET_ENOSYS

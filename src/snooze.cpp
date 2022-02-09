@@ -3,6 +3,7 @@
 
 #include <rudiments/private/config.h>
 #include <rudiments/snooze.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 // for timespec
@@ -110,7 +111,8 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 				) {
 			
 				if (autoresume &&
-					error::getErrorNumber()==EINTR) {
+					error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag()) {
 					timetosnooze.tv_sec=
 						timeremaining.tv_sec;
 					timetosnooze.tv_nsec=
@@ -142,7 +144,8 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 			do {
 				error::clearError();
 				remainder=::sleep(remainder);
-			} while (autoresume && error::getErrorNumber()==EINTR);
+			} while (autoresume && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag()) {
 			if (remainder) {
 				timeremaining.tv_sec=remainder;
 				timeremaining.tv_nsec=timetosnooze.tv_nsec;

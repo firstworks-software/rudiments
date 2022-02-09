@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/listener.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/linkedlist.h>
 
@@ -456,7 +457,8 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 			// if a signal caused the wait to fall through, retry
 			if (pvt->_retryinterruptedwaits &&
-				error::getErrorNumber()==EINTR) {
+				error::getErrorNumber()==EINTR &&
+				!process::getShutDownFlag()) {
 				continue;
 			}
 			result=RESULT_ERROR;
