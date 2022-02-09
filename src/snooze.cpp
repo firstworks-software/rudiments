@@ -145,7 +145,7 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 				error::clearError();
 				remainder=::sleep(remainder);
 			} while (autoresume && error::getErrorNumber()==EINTR &&
-						!process::getShutDownFlag()) {
+						!process::getShutDownFlag());
 			if (remainder) {
 				timeremaining.tv_sec=remainder;
 				timeremaining.tv_nsec=timetosnooze.tv_nsec;
