@@ -958,7 +958,7 @@ void process::exitOnCrashOrShutDown() {
 }
 
 void process::exitOnShutDown() {
-	_shutdownhandler.setHandler(exitShutDown);
+	_shutdownhandler.setHandler(exitHandler);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
 	#ifdef SIGQUIT
@@ -970,7 +970,7 @@ void process::exitOnShutDown() {
 }
 
 void process::exitOnCrash() {
-	_crashhandler.setHandler(exitCrash);
+	_crashhandler.setHandler(exitHandler);
 	_crashhandler.handleSignal(SIGABRT);
 	_crashhandler.handleSignal(SIGFPE);
 	_crashhandler.handleSignal(SIGILL);
@@ -989,13 +989,9 @@ void process::exitOnCrash() {
 	#endif
 }
 
-void process::exitShutDown(int32_t signum) {
-	setShutDownFlagShutDown(signum);
+void process::exitHandler(int32_t signum) {
+	setShutDownFlagHandler(signum);
 	process::exitImmediately(0);
-}
-
-void process::exitCrash(int32_t signum) {
-	exitShutDown(signum);
 }
 
 void process::setShutDownFlagOnCrashOrShutDown() {
@@ -1004,7 +1000,7 @@ void process::setShutDownFlagOnCrashOrShutDown() {
 }
 
 void process::setShutDownFlagOnShutDown() {
-	_shutdownhandler.setHandler(setShutDownFlagShutDown);
+	_shutdownhandler.setHandler(setShutDownFlagHandler);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
 	#ifdef SIGQUIT
@@ -1016,7 +1012,7 @@ void process::setShutDownFlagOnShutDown() {
 }
 
 void process::setShutDownFlagOnCrash() {
-	_crashhandler.setHandler(setShutDownFlagCrash);
+	_crashhandler.setHandler(setShutDownFlagHandler);
 	_crashhandler.handleSignal(SIGABRT);
 	_crashhandler.handleSignal(SIGFPE);
 	_crashhandler.handleSignal(SIGILL);
@@ -1035,13 +1031,9 @@ void process::setShutDownFlagOnCrash() {
 	#endif
 }
 
-void process::setShutDownFlagShutDown(int32_t signum) {
+void process::setShutDownFlagHandler(int32_t signum) {
 	_shutdownflag=1;
 	_shutdownsignal=(signalhandler::isSignalHandlerIntUsed())?signum:-1;
-}
-
-void process::setShutDownFlagCrash(int32_t signum) {
-	setShutDownFlagShutDown(signum);
 }
 
 void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
@@ -1092,6 +1084,14 @@ void process::setShutDownSignal(int32_t signum) {
 
 int32_t process::getShutDownSignal() {
 	return _shutdownsignal;
+}
+
+signalhandler *process::getCrashSignalHandler() {
+	return &_crashhandler;
+}
+
+signalhandler *process::getShutDownSignalHandler() {
+	return &_shutdownhandler;
 }
 
 void process::waitForChildren() {

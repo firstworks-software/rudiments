@@ -27,11 +27,57 @@
 static threadmutex	*_envmutex;
 
 #if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
+
+// When using putenv(), things are a lot more complicated...
+//
+// You have to build a "key=value" type string and pass that to putenv().
+// All putenv() does with that is set a pointer to it in the global environ
+// variable.  So, the string you built has to persist until the program
+// exits or until you unsetenv() it.
+//
+// As such, we need a static _envstrings dictionary to keep track of
+// key -> "key=value" pairs.
+//
+// The "key=value" string must also be allocated using malloc() rather than
+// new.  I think.  Sadly, I don't have a record of which platform cares about
+// this, or why, but some platform does.
+//
+// So, we can't just call _envstrings->setManageArrayValues(true) and let it
+// automatically clean up.  Rather we have to manually clean up before calling
+// _envstrings->setValue() or _envstrings->remove(), and register an atExit()
+// method to clean up the values before _envstrings gets deleted.
+//
+// Further, we can't trust that the compiler will be compliant and call
+// atExit() methods after calling static destructors, so _envstrings has to be
+// manually allocated and then manually deleted during the atExit() method.
+//
+// We also can't trust that a program which calls setValue() will do so with a
+// string literal, or some other pointer to a persistent string.  It may have
+// passed in a local variable that will disappear soon.
+//
+// Additionally, on some platforms (fedora 34, at least), the text segment of
+// the process appers to be deallocated (or some other bad thing) by the time
+// the atExit() methods run, so even if the program did pass in a string
+// literal, we don't appear to have access to it when the atExit() method is
+// run, leading to crash-loops on exit and hung processes.
+//
+// So we need to make a copy of the key.  Fortunately we can use
+// _envstrings->setManageArrayKeys(true) and let it automatically clean up
+// these copies.
+//
+// setenv() does all of that for us, so ideally, we'd prefer setenv() to
+// putenv(), but it turns out there are platforms who's setenv()
+// implementations leak memory if you call it over and over, and their putenv()
+// implementations don't.  Sadly, again, I don't have a record of which ones.
+//
+// It's a mess.
+
 // LAME: not in the class
 static dictionary<char *, char *>	*_envstrings;
 
 void environment::init() {
-	_envstrings=new dictionary<char *, char *>();
+	_envstrings=new dictionary<char *, char *>;
+	_envstrings->setManageArrayKeys(true);
 
 	// On windows, the entire rudiments dll appears to have been unloaded
 	// before atexit functions are called, and it leads to all kinds of
@@ -43,10 +89,9 @@ void environment::init() {
 }
 
 void environment::exit() {
-	for (listnode< char *> *node=_envstrings->getKeys()->getFirst();
+	for (listnode<char *> *node=_envstrings->getKeys()->getFirst();
 						node; node=node->getNext()) {
 		free((void *)_envstrings->getValue(node->getValue()));
-		_envstrings->setValue(node->getValue(),NULL);
 	}
 	delete _envstrings;
 }
@@ -81,8 +126,11 @@ bool environment::setValue(const char *variable, const char *value) {
 		char	*oldpestr=NULL;
 		if (_envstrings->getValue((char *)variable,&oldpestr)) {
 			free((void *)oldpestr);
+			_envstrings->setValue((char *)variable,pestr);
+		} else {
+			_envstrings->setValue(
+				charstring::duplicate(variable),pestr);
 		}
-		_envstrings->setValue((char *)variable,pestr);
 		retval=true;
 	} else {
 		free((void *)pestr);
@@ -170,11 +218,10 @@ bool environment::remove(const char *variable) {
 	unsetenv(variable);
 	#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 		char *pestr;
-		if (_envstrings->getValue(
-				const_cast<char *>(variable),&pestr)) {
+		if (_envstrings->getValue((char *)variable,&pestr)) {
 			free((void *)pestr);
+			_envstrings->remove((char *)variable);
 		}
-		_envstrings->remove(const_cast<char *>(variable));
 	#endif
 	retval=true;
 	if (_envmutex) {

@@ -4,10 +4,8 @@
 	private:
 		static	void	shutDown(int32_t signum);
 		static	void	crash(int32_t signum);
-		static	void	exitShutDown(int32_t signum);
-		static	void	exitCrash(int32_t signum);
-		static	void	setShutDownFlagShutDown(int32_t signum);
-		static	void	setShutDownFlagCrash(int32_t signum);
+		static	void	exitHandler(int32_t signum);
+		static	void	setShutDownFlagHandler(int32_t signum);
 		static	void	waitForChildrenToExit(int32_t signum);
 		static	char	*fullyQualifiedCommand(const char *command);
 

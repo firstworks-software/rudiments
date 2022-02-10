@@ -336,6 +336,28 @@ class RUDIMENTS_DLLSPEC process {
 		 *  differently to different signals. */
 		static	int32_t	getShutDownSignal();
 
+		/** Returns the signalhandler used internally to handle a crash.
+		 *  Calls to exitOnCrash(), exitOnCrashOrShutDown(),
+		 *  setShutDownFlagOnCrash(), or
+		 *  setShutDownFlagOnCrashOrShutDown() configure this set to
+		 *  include SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
+		 *  SIGEMT, and SIGSYS.
+		 *  If you would like to add signals, or change the signal
+		 *  handler from the default to a custom handler, then you can
+		 *  use this method to get the signalhandler. */
+		static	signalhandler	*getCrashSignalHandler();
+
+		/** Returns the signalhandler used internally to handle a shut
+		 *  down.
+		 *  Calls to exitOnShutDown(), exitOnCrashOrShutDown(),
+		 *  setShutDownFlagOnShutDown(), or
+		 *  setShutDownFlagOnCrashOrShutDown() configure this set to
+		 *  include SIGINT, SIGTERM, SIGQUIT, and SIGHUP.
+		 *  If you would like to add signals, or change the signal
+		 *  handler from the default to a custom handler, then you can
+		 *  use this method to get the signalhandler. */
+		static	signalhandler	*getShutDownSignalHandler();
+
 		/** This method causes the process to wait on child processes
 		 *  which have exited, preventing so-called "zombie" processes
 		 *  from occurring. */
