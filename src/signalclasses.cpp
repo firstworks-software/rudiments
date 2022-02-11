@@ -248,6 +248,15 @@ bool signalset::removeShutDownSignals() {
 		#ifdef SIGHUP
 		&& removeSignal(SIGHUP)
 		#endif
+		#ifdef SIGXCPU
+		&& removeSignal(SIGXCPU)
+		#endif
+		#ifdef SIGXFSZ
+		&& removeSignal(SIGXFSZ)
+		#endif
+		#ifdef SIGPWR
+		&& removeSignal(SIGPWR)
+		#endif
 		;
 }
 

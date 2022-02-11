@@ -967,6 +967,15 @@ void process::exitOnShutDown() {
 	#ifdef SIGHUP
 	_shutdownhandler.handleSignal(SIGHUP);
 	#endif
+	#ifdef SIGXCPU
+	_shutdownhandler.handleSignal(SIGXCPU);
+	#endif
+	#ifdef SIGXFSZ
+	_shutdownhandler.handleSignal(SIGXFSZ);
+	#endif
+	#ifdef SIGPWR
+	_shutdownhandler.handleSignal(SIGPWR);
+	#endif
 }
 
 void process::exitOnCrash() {
@@ -1009,6 +1018,15 @@ void process::setShutDownFlagOnShutDown() {
 	#ifdef SIGHUP
 	_shutdownhandler.handleSignal(SIGHUP);
 	#endif
+	#ifdef SIGXCPU
+	_shutdownhandler.handleSignal(SIGXCPU);
+	#endif
+	#ifdef SIGXFSZ
+	_shutdownhandler.handleSignal(SIGXFSZ);
+	#endif
+	#ifdef SIGPWR
+	_shutdownhandler.handleSignal(SIGPWR);
+	#endif
 }
 
 void process::setShutDownFlagOnCrash() {
@@ -1047,6 +1065,15 @@ void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
 	#endif
 	#ifdef SIGHUP
 	_shutdownhandler.handleSignal(SIGHUP);
+	#endif
+	#ifdef SIGXCPU
+	_shutdownhandler.handleSignal(SIGXCPU);
+	#endif
+	#ifdef SIGXFSZ
+	_shutdownhandler.handleSignal(SIGXFSZ);
+	#endif
+	#ifdef SIGPWR
+	_shutdownhandler.handleSignal(SIGPWR);
 	#endif
 }
 

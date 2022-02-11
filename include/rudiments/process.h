@@ -232,8 +232,14 @@ class RUDIMENTS_DLLSPEC process {
 		static	void	exitOnCrashOrShutDown();
 
 		/** Sets up a default handler that calls exitImmediately()
-		 *  when the process is killed with a termination signal -
-		 *  SIGINT, SIGTERM, SIGQUIT or SIGHUP. */
+		 *  when the process receives with a shutdown signal:
+		 *  * SIGINT - interrupt (ctrl-C)
+		 *  * SIGTERM - terminate (kill)
+		 *  * SIGQUIT - quit (ctrl-\)
+		 *  * SIGHUP - hangup (terminal disconnected)
+		 *  * SIGXCPU - cpu consumption soft limit exceeded
+		 *  * SIGXFZ - file size limit exceeded
+		 *  * SIGPWR - ACPI (or similar) power down */
 		static void	exitOnShutDown();
 
 		/** Sets up a default handler that calls exitImmediately() if
@@ -247,9 +253,15 @@ class RUDIMENTS_DLLSPEC process {
 		static	void	setShutDownFlagOnCrashOrShutDown();
 
 		/** Sets up a default handler that sets the global shutdown
-		 *  flag (see setShutDownFlag()) to true when the process is
-		 *  killed with a termination signal - SIGINT, SIGTERM, SIGQUIT
-		 *  or SIGHUP. */
+		 *  flag (see setShutDownFlag()) to true when the process
+		 *  receives a termination signal:
+		 *  * SIGINT - interrupt (ctrl-C)
+		 *  * SIGTERM - terminate (kill)
+		 *  * SIGQUIT - quit (ctrl-\)
+		 *  * SIGHUP - hangup (terminal disconnected)
+		 *  * SIGXCPU - cpu consumption soft limit exceeded
+		 *  * SIGXFSZ - file size limit exceeded
+		 *  * SIGPWR - ACPI (or similar) power down */
 		static void	setShutDownFlagOnShutDown();
 
 		/** Sets up a default handler that sets the global shutdown
@@ -259,8 +271,14 @@ class RUDIMENTS_DLLSPEC process {
 		static void	setShutDownFlagOnCrash();
 
 		/** Allows you to designate a function to run when the
-		 *  process is killed with a termination signal -
-		 *  SIGINT, SIGTERM, SIGQUIT or SIGHUP. */
+		 *  process receives a termination signal:
+		 *  * SIGINT - interrupt (ctrl-C)
+		 *  * SIGTERM - terminate (kill)
+		 *  * SIGQUIT - quit (ctrl-\)
+		 *  * SIGHUP - hangup (terminal disconnected)
+		 *  * SIGXCPU - cpu consumption soft limit exceeded
+		 *  * SIGXFZ - file size limit exceeded
+		 *  * SIGPWR - ACPI (or similar) power down */
 		static	void	handleShutDown(
 					void (*shutdownfunction)(int32_t));
 
@@ -340,8 +358,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  Calls to exitOnCrash(), exitOnCrashOrShutDown(),
 		 *  setShutDownFlagOnCrash(), or
 		 *  setShutDownFlagOnCrashOrShutDown() configure this set to
-		 *  include SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
-		 *  SIGEMT, and SIGSYS.
+		 *  include a standard set of crash signals.
 		 *  If you would like to add signals, or change the signal
 		 *  handler from the default to a custom handler, then you can
 		 *  use this method to get the signalhandler. */
@@ -352,7 +369,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  Calls to exitOnShutDown(), exitOnCrashOrShutDown(),
 		 *  setShutDownFlagOnShutDown(), or
 		 *  setShutDownFlagOnCrashOrShutDown() configure this set to
-		 *  include SIGINT, SIGTERM, SIGQUIT, and SIGHUP.
+		 *  include a standard set of shutdown signals.
 		 *  If you would like to add signals, or change the signal
 		 *  handler from the default to a custom handler, then you can
 		 *  use this method to get the signalhandler. */
