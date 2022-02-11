@@ -162,6 +162,10 @@ int32_t unixsocketclient::connect() {
 	// try to connect, over and over for the specified number of times
 	for (uint32_t counter=0; counter<_tries() || !_tries(); counter++) {
 
+		if (process::getShutDownFlag()) {
+			return RESULT_ERROR;
+		}
+
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
