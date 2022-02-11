@@ -580,7 +580,7 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 	#endif
 }
 
-bool signalhandler::isSignalHandlerIntUsed() {
+bool signalhandler::supportsSignalHandlerParameter() {
 	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 		return true;
 	#else

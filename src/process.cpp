@@ -1033,7 +1033,8 @@ void process::setShutDownFlagOnCrash() {
 
 void process::setShutDownFlagHandler(int32_t signum) {
 	_shutdownflag=1;
-	_shutdownsignal=(signalhandler::isSignalHandlerIntUsed())?signum:-1;
+	_shutdownsignal=
+		(signalhandler::supportsSignalHandlerParameter())?signum:-1;
 }
 
 void process::handleShutDown(void (*shutdownfunction)(int32_t)) {

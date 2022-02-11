@@ -145,16 +145,18 @@ class RUDIMENTS_DLLSPEC signalhandler : public object {
 		const signalset	*getMask() const;
 
 		/** The function that you pass into setHandler() must have a
-		 *  void (*)(int32_t) signature.  However, the native signal
-		 *  handling frameworks on some systems do not allow the
-		 *  signal number to be passed to the handler in the int32_t
-		 *  parameter.  As a result, on those platforms, inside the
-		 *  signal handler, the paramer must be ignored.
+		 *  void (*)(int32_t) signature.
+		 *
+		 *  However, on some platforms, the native signal handling
+		 *  frameworks do not actually pass the signal into the signal
+		 *  handler in this parameter.  As a result, on those platforms,
+		 *  inside the signal handler, the parameter will have an
+		 *  undefined value and must be ignored.
 		 * 
 		 *  This method will return true if the platform's native
-		 *  signal handling framework passes anything into the int32_t
+		 *  signal handling framework passes anything into the
 		 *  parameter and false otherwise. */
-		static	bool	isSignalHandlerIntUsed();
+		static	bool	supportsSignalHandlerParameter();
 
 	#include <rudiments/private/signalhandler.h>
 

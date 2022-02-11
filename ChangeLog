@@ -68,6 +68,7 @@
 		and return if it's true
 	refactored environment a bit and added a lengthy explanation for why 
 		it has to do all the things that it does
+	renamed isSignaHandlerIntUsed to supportsSignalHandlerParameter
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
