@@ -125,6 +125,10 @@ int32_t modemclient::connect() {
 	uint32_t	whichtry=0;
 	for (;;) {
 
+		if (process::getShutDownFlag()) {
+			return RESULT_ERROR;
+		}
+
 		delete[] *(_connecterror());
 		*(_connecterror())=NULL;
 
