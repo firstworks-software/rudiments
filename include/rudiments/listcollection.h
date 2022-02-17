@@ -53,6 +53,10 @@ class listcollection : public nodecollection<valuetype> {
 		 *  appends it to the listcollection. */
 		virtual void	append(valuetype value)=0;
 
+		/** Creates new listnodes containing "count" members of
+		 *  array "value" and appends them to the listcollection. */
+		virtual void	append(valuetype *values, uint64_t count);
+
 		/** Appends already created listnode "node" to the
 		 *  listcollection. */
 		virtual void	append(listnode<valuetype> *node)=0;
@@ -171,5 +175,7 @@ class listcollection : public nodecollection<valuetype> {
 		 *  nodes of the listcollection. */
 		virtual	void	print(uint64_t count) const=0;
 };
+
+#include <rudiments/private/listcollectioninlines.h>
 
 #endif

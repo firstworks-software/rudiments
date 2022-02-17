@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
-#ifndef RUDIMENTS_NODE_H
-#define RUDIMENTS_NODE_H
+#ifndef RUDIMENTS_NODEINLINES_H
+#define RUDIMENTS_NODEINLINES_H
 
 #include <rudiments/charstring.h>
 #include <rudiments/wcharstring.h>
