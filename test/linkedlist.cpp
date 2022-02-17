@@ -502,17 +502,17 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 	// copy and assignment
+	const char *values[]={
+		"a","b","c","d","e","f","g","h","i","j","k","l","m",
+		"n","o","p","q","r","s","t","u","v","w","x","y","z",
+		NULL
+	};
 	for (uint16_t i=0; i<2; i++) {
 
 		stdoutput.printf("copy/assignment%s...\n",(!i)?"":" (managed)");
 
 		linkedlist<char *>	cch1;
 		cch1.setManageArrayValues(i);
-		const char *values[]={
-			"a","b","c","d","e","f","g","h","i","j","k","l","m",
-			"n","o","p","q","r","s","t","u","v","w","x","y","z",
-			NULL
-		};
 		for (const char * const *v=values; *v; v++) {
 			if (!i) {
 				cch1.append((char *)*v);
@@ -666,6 +666,84 @@ int main(int argc, char **argv) {
 					success);
 		}
 	}
+	stdoutput.printf("\n");
+
+	stdoutput.printf("arrays...\n");
+	strl.clear();
+
+	// append
+	strl.listcollection::append(values,26);
+	test("append[]/getLength",strl.getLength()==26);
+	bool		success=true;
+	uint64_t	i=0;
+	for (listnode<const char *> *node=strl.getFirst();
+					node; node=node->getNext()) {
+		if (charstring::compare(node->getValue(),values[i])) {
+			success=false;
+			break;
+		}
+		i++;
+	}
+	test("append[]/values",success);
+
+	// prepend
+	strl.listcollection::prepend(values,26);
+	test("prepend[]/getLength",strl.getLength()==52);
+	success=true;
+	i=0;
+	for (listnode<const char *> *node=strl.getFirst();
+					node; node=node->getNext()) {
+		if (charstring::compare(node->getValue(),values[i])) {
+			success=false;
+			break;
+		}
+		i++;
+		if (i==26) {
+			i=0;
+		}
+	}
+	test("prepend[]/values",success);
+
+	// insertBefore
+	listnode<const char *>	*a2node=strl.find(
+					strl.getFirst()->getNext(),"a");
+	strl.listcollection::insertBefore(a2node,values,26);
+	test("insertBefore[]/getLength",strl.getLength()==78);
+	success=true;
+	i=0;
+	for (listnode<const char *> *node=strl.getFirst();
+					node; node=node->getNext()) {
+		if (charstring::compare(node->getValue(),values[i])) {
+			success=false;
+			break;
+		}
+		i++;
+		if (i==26) {
+			i=0;
+		}
+	}
+	test("insertBefore[]/values",success);
+
+	// insertAfter
+	listnode<const char *>	*znode=strl.find(strl.getFirst(),"z");
+	strl.listcollection::insertAfter(znode,values,26);
+	test("insertAfter[]/getLength",strl.getLength()==104);
+	success=true;
+	i=0;
+	for (listnode<const char *> *node=strl.getFirst();
+					node; node=node->getNext()) {
+		if (charstring::compare(node->getValue(),values[i])) {
+			success=false;
+			break;
+		}
+		i++;
+		if (i==26) {
+			i=0;
+		}
+	}
+	test("insertAfter[]/values",success);
+
+
 	stdoutput.printf("\n");
 
 }

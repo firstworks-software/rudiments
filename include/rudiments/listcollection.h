@@ -45,6 +45,10 @@ class listcollection : public nodecollection<valuetype> {
 		 *  prepends it to the listcollection. */
 		virtual void	prepend(valuetype value)=0;
 
+		/** Creates new listnodes containing "count" members of
+		 *  array "value" and prepends them to the listcollection. */
+		virtual void	prepend(valuetype *values, uint64_t count);
+
 		/** Prepends already created listnode "node" to the
 		 *  listcollection. */
 		virtual void	prepend(listnode<valuetype> *node)=0;
@@ -66,6 +70,12 @@ class listcollection : public nodecollection<valuetype> {
 		virtual void	insertBefore(listnode<valuetype> *node,
 							valuetype value)=0;
 
+		/** Creates new listnodes containing "count" members of
+		 *  array "value" and inserts them into the listcollection
+		 *  before "node". */
+		virtual void	insertBefore(listnode<valuetype> *node,
+					valuetype *values, uint64_t count);
+
 		/** Inserts already created listnode "newnode" into the
 		 *  listcollection before "node". */
 		virtual void	insertBefore(listnode<valuetype> *node,
@@ -75,6 +85,12 @@ class listcollection : public nodecollection<valuetype> {
 		 *  inserts it into the listcollection after "node". */
 		virtual void	insertAfter(listnode<valuetype> *node,
 							valuetype value)=0;
+
+		/** Creates new listnodes containing "count" members of
+		 *  array "value" and inserts them into the listcollection
+		 *  after "node". */
+		virtual void	insertAfter(listnode<valuetype> *node,
+					valuetype *values, uint64_t count);
 
 		/** Inserts already created listnode "newnode" into the
 		 *  listcollection after "node". */
