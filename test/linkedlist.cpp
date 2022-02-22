@@ -672,7 +672,7 @@ int main(int argc, char **argv) {
 	strl.clear();
 
 	// append
-	strl.listcollection::append(values,26);
+	strl.listcollection<const char *>::append(values,26);
 	test("append[]/getLength",strl.getLength()==26);
 	bool		success=true;
 	uint64_t	i=0;
@@ -687,7 +687,7 @@ int main(int argc, char **argv) {
 	test("append[]/values",success);
 
 	// prepend
-	strl.listcollection::prepend(values,26);
+	strl.listcollection<const char *>::prepend(values,26);
 	test("prepend[]/getLength",strl.getLength()==52);
 	success=true;
 	i=0;
@@ -707,7 +707,7 @@ int main(int argc, char **argv) {
 	// insertBefore
 	listnode<const char *>	*a2node=strl.find(
 					strl.getFirst()->getNext(),"a");
-	strl.listcollection::insertBefore(a2node,values,26);
+	strl.listcollection<const char *>::insertBefore(a2node,values,26);
 	test("insertBefore[]/getLength",strl.getLength()==78);
 	success=true;
 	i=0;
@@ -726,7 +726,7 @@ int main(int argc, char **argv) {
 
 	// insertAfter
 	listnode<const char *>	*znode=strl.find(strl.getFirst(),"z");
-	strl.listcollection::insertAfter(znode,values,26);
+	strl.listcollection<const char *>::insertAfter(znode,values,26);
 	test("insertAfter[]/getLength",strl.getLength()==104);
 	success=true;
 	i=0;
