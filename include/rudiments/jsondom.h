@@ -6,7 +6,73 @@
 
 #include <rudiments/private/jsondomincludes.h>
 
-/** The jsondom class implements a minimal JSON DOM parser. */
+/** The jsondom class implements a minimal JSON DOM parser.
+ *
+ *  It parses a file or string of JSON-formatted data and produces a dom tree
+ *  representing the data.  It creates an "r" element for the root, named
+ *  elements for each object or array, and "v" elements for each array value.
+ *  It adds a "t" attribute to each object, indicating the type: "o" for
+ *  standard object, "a" for array, "s" for string, "n" for number, "t" for
+ *  true, "f" for false, and "u" for null.  It also adds a "v" attribute to
+ *  each string or number object, containing the value.
+ *
+ *  For example, the following JSON:
+ *
+ *  {
+ *  	string_object: "string value 1",
+ *  	number_object: 10,
+ *  	true_object: true,
+ *  	false_object: false,
+ *  	null_object: null,
+ *  	composite_object: {
+ *  		string_member: "string value",
+ *  		number_member: 10,
+ *  		true_member: true,
+ *  		false_member: false,
+ *  		null_member: null
+ *  		nested_composite_object: {
+ *  			string_member: "string value",
+ *  			number_member: 10,
+ *  			true_member: true,
+ *  			false_member: false,
+ *  			null_member: null
+ *  		}
+ *  	},
+ *  	array_object: ["string value", 10, true, false, null]
+ *  }
+ *
+ *  would produce the following dom tree:
+ *
+ *  <r>
+ *    <string_object t="s" v="string value 1"/>
+ *    <number_object t="n" v="10"/>
+ *    <true_object t="t"/>
+ *    <false_object t="f"/>
+ *    <null_object t="u"/>
+ *    <composite_object t="o">
+ *      <string_member t="s" v="string value"/>
+ *      <number_member t="n" v="10"/>
+ *      <true_member t="t"/>
+ *      <false_member t="f"/>
+ *      <null_member t="u"/>
+ *      <nested_composite_object t="o">
+ *        <string_member t="s" v="string value"/>
+ *        <number_member t="n" v="10"/>
+ *        <true_member t="t"/>
+ *        <false_member t="f"/>
+ *        <null_member t="u"/>
+ *        <array_object t="a">
+ *          <v t="s" v="string value"/>
+ *          <v t="n" v="10"/>
+ *          <v t="t"/>
+ *          <v t="f"/>
+ *          <v t="u"/>
+ *        </array_object>
+ *      </nested_composite_object>
+ *    </composite_object>
+ *  </r>
+ *
+ */
 class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 	public:
 

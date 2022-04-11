@@ -55,7 +55,7 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		virtual bool	writeFile(const char *filename,
 						mode_t perms) const;
 
-		/** Writes the current DOM tree to "out". */
+		/** Writes the current DOM tree to "out", in XML format. */
 		virtual bool	write(output *out) const;
 
 		/** Writes the current DOM tree to "out".

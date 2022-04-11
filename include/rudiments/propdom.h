@@ -6,6 +6,36 @@
 
 #include <rudiments/private/propdomincludes.h>
 
+/** The propdom class implements a minimal DOM parser for a JAVA-style
+ *  properties file.
+ *
+ *  It parses a file or string of property-file-formatted data and produces a
+ *  dom tree representing the data.  It creates "k" elements for each key, "p" elements for each pound-delimited comment, and "c" elements for each semicolon-delimited comments.  It adds a "v" attribute to each element, containing the value.  For each "k" element, it also adds a "k" attribute, containing the name of the key.  Text dom nodes (nodes of type TEXT_DOMNODETYPE) are used to preserve whitespace.
+ *
+ *  For example, the following INI:
+ *
+ *  #pound comment
+ *  ;semicolon comment
+ *  key1=value1
+ *  key2=value2
+ *
+ *  key 3=value 3
+ *  key 4=value 4
+ *
+ *  would produce the following dom tree:
+ *
+ *    <p v="pound comment"/>
+ *    <s v="semicolon comment"/>
+ *    <k k="key1" v="value1"/>
+ *    <k k="key2" v="value2"/>
+ *
+ *    <k k="key 3" v="value 3"/>
+ *    <k k="key 4" v="value 4"/>
+ *
+ *  (Note the blank line of text between key2 and key 3.  This is the text
+ *  domnode, used to preserve the whitespace.)
+ */
+
 /** The propdom class implements a minimal properties file DOM parser. */
 class RUDIMENTS_DLLSPEC propdom : public propsax, public dom {
 	public:

@@ -6,7 +6,12 @@
 
 #include <rudiments/private/xmldomincludes.h>
 
-/** The xmldom class implements a minimal XML DOM parser. */
+/** The xmldom class implements a minimal XML DOM parser.
+ *
+ *  It parses a file or string of XML-formatted data and produces a dom tree
+ *  representing the data.
+ *
+ *  See the "domnode" class for more detail. */
 class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 	public:
 
