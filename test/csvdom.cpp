@@ -63,7 +63,7 @@ int main() {
 			test("write to file",
 				f.write(testcsv,charstring::length(testcsv))==
 					(ssize_t)charstring::length(testcsv));
-			test ("parse file",c.parseFile("test.csv"));
+			test("parse file",c.parseFile("test.csv"));
 			file::remove("test.csv");
 		}
 
@@ -655,5 +655,84 @@ int main() {
 		!charstring::compare(c.getField(9,4),"vale");
 	test("carry all down",success);
 
+	stringbuffer	longdata;
+	file		f;
+	uint16_t	headerlines=256;
+	uint16_t	footerlines=512;
+	c.setIgnoreHeaderLines(headerlines);
+	c.setIgnoreFooterLines(footerlines);
+	for (uint16_t iter=0; iter<2; iter++) {
+
+		stdoutput.printf("long data - %s...\n",(!iter)?"string":"file");
+
+		// add header garbage
+		for (uint16_t i=0; i<headerlines; i++) {
+			longdata.append("garbage\n");
+		}
+
+		// add columns
+		for (uint16_t i=0; i<128; i++) {
+			if (i) {
+				longdata.append(',');
+			}
+			longdata.append("col")->append(i);
+		}
+		longdata.append("\n");
+
+		// add values
+		for (uint16_t i=0; i<128; i++) {
+			for (uint16_t j=0; j<128; j++) {
+				if (j) {
+					longdata.append(',');
+				}
+				longdata.append("val")->append(i)->append(j);
+			}
+			longdata.append("\n");
+		}
+
+		// add footer garbage
+		for (uint16_t i=0; i<footerlines; i++) {
+			longdata.append("garbage\n");
+		}
+
+		// parse the data
+		if (iter) {
+			c.parseString(longdata.getString());
+		} else {
+			file	f;
+			test("create file",f.create("longdata.csv",
+				permissions::evalPermString("rw-r--r--")));
+			test("write to file",
+				f.write(longdata.getString(),
+					longdata.getStringLength())==
+					(ssize_t)longdata.getStringLength());
+			test("parse file",c.parseFile("longdata.csv"));
+			file::remove("longdata.csv");
+		}
+
+		// test columns
+		stringbuffer	col;
+		for (uint16_t i=0; i<128; i++) {
+			col.clear();
+			col.append("col")->append(i);
+			test(col.getString(),
+				!charstring::compare(col.getString(),
+							c.getColumnName(i)));
+		}
+
+		// test values
+		stringbuffer	field;
+		for (uint16_t i=0; i<128; i++) {
+			for (uint16_t j=0; j<128; j++) {
+				field.clear();
+				field.append("val")->append(i)->append(j);
+				test(field.getString(),
+					!charstring::compare(
+							field.getString(),
+							c.getField(i,j)));
+			}
+		}
+	}
+	
 	stdoutput.printf("\n");
 }
