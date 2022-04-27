@@ -264,7 +264,7 @@ char sax::getCharacter(bool processignores) {
 			return '\0';
 		}
 	}
-	pvt->_offset++;
+	(pvt->_offset)++;
 	if (ch=='\n') {
 		(pvt->_line)++;
 	}
@@ -320,7 +320,7 @@ char sax::getCharacterBackwards() {
 		}
 		ch=*(pvt->_ptr);
 		(pvt->_ptr)--;
-		pvt->_offset--;
+		(pvt->_offset)--;
 		if (pvt->_offset==-1) {
 			pvt->_ptr=NULL;
 		}
@@ -330,7 +330,7 @@ char sax::getCharacterBackwards() {
 		if (pvt->_fl->read(&ch)!=sizeof(char)) {
 			return '\0';
 		}
-		pvt->_offset--;
+		(pvt->_offset)--;
 	}
 	return ch;
 }
@@ -412,6 +412,14 @@ bool sax::mapFile() {
 	}
 	if (pvt->_offset) {
 		pvt->_mm.detach();
+	}
+
+	// bail if offset is past the end of the file, otherwise, if the offset
+	// is contained in what would be the last block of the file if the file
+	// were long enough, then the calculation below will return the last
+	// block 
+	if (pvt->_offset>=pvt->_filesize) {
+		return false;
 	}
 
 	off64_t	startofblock=(pvt->_offset/pvt->_optblocksize)*
