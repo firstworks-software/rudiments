@@ -18,6 +18,26 @@ class RUDIMENTS_DLLSPEC sax : virtual public object {
 		/** Deletes this instance of the sax class. */
 		virtual	~sax();
 
+		/** Configures the instance to ignore the first "lines" lines
+		 *  and begin parsing after them.
+		 *
+		 *  If used in conjunction with setIgnoreHeaderUntil() then the
+		 *  lines specified here are ignored first, then lines are
+		 *  skipped until one begins with the pattern specified by
+		 *  setIgnoreHeaderUntil(). */
+		void	setIgnoreHeaderLines(uint64_t lines);
+
+		/** Returns the value set by setIgnoreHeader() or 0 if none
+		 *  was set. */
+		uint64_t	getIgnoreHeaderLines();
+
+		/** Configures the instance to ignore the last "lines" lines of
+		 *  the data. */
+		void	setIgnoreFooterLines(uint64_t lines);
+
+		/** Returns the value set by setIgnoreFooter() or 0 if none
+		 *  was set. */
+		uint64_t	getIgnoreFooterLines();
 
 		/** Parses file "filename" and calls the appropriate callback
 		 *  when tags, attributes, text, etc. are encountered.

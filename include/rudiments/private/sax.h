@@ -10,6 +10,10 @@
 			bool	parseRemoteFile(const char *filename);
 			char	skipWhitespace(char current);
 			char	getCharacter();
+			char	getCharacter(bool processignores);
+			char	getCharacterBackwards();
+			void	ignoreHeaderLines();
+			void	ignoreFooterLines();
 			bool	mapFile();
 			void	parseFailed(const char *thing);
 	private:
