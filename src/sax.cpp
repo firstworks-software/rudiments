@@ -452,8 +452,6 @@ bool sax::mapFile() {
 
 void sax::parseFailed(const char *thing) {
         pvt->_err.clear();
-        pvt->_err.append("error: parse ");
-	pvt->_err.append(thing);
-	pvt->_err.append(" failed at line ");
-        pvt->_err.append(pvt->_line);
+        pvt->_err.append("parse ")->append(thing);
+	pvt->_err.append(" failed at line ")->append(pvt->_line);
 }
