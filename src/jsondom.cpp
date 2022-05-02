@@ -255,10 +255,6 @@ bool jsondom::objectEnd() {
 	return true;
 }
 
-bool jsondom::write(output *out) const {
-	return dom::write(out,true);
-}
-
 domnode *jsondom::whichNode() {
 	// if we're in an array then append a "v" tag and use it,
 	// otherwise just use the current tag

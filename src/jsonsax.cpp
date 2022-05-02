@@ -186,8 +186,12 @@ bool jsonsax::parseObject(char current, char *next) {
 	char	ch=current;
 
 	// make sure there's a {, skip any whitespace after it
-	if (ch!='{' || !(ch=skipWhitespace(getCharacter()))) {
-		parseFailed("object");
+	if (ch!='{') {
+		parseFailed("object","missing {");
+		return false;
+	}
+	if (!(ch=skipWhitespace(getCharacter()))) {
+		parseFailed("object","failed to parse whitespace after {");
 		return false;
 	}
 
@@ -219,7 +223,7 @@ bool jsonsax::parseObject(char current, char *next) {
 
 		// make sure there's a colon
 		if (ch!=':') {
-			parseFailed("object");
+			parseFailed("object","missing :");
 			return false;
 		}
 
@@ -245,7 +249,7 @@ bool jsonsax::parseObject(char current, char *next) {
 
 	// make sure there's a }
 	if (ch!='}') {
-		parseFailed("object");
+		parseFailed("object","missing }");
 		return false;
 	}
 
@@ -264,7 +268,7 @@ bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 
 	// make sure there's a "
 	if (ch!='"') {
-		parseFailed("str");
+		parseFailed("str","missing \"");
 		return false;
 	}
 
@@ -292,7 +296,7 @@ bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 		} else if (ch=='"') {
 			break;
 		} else if (ch=='\0') {
-			parseFailed("str");
+			parseFailed("str","null character encountered");
 			return false;
 		} else {
 			str->append(ch);
@@ -355,7 +359,7 @@ bool jsonsax::parseValue(char current, char *next) {
 		return valueEnd();
 	}
 
-	parseFailed("value");
+	parseFailed("value","");
 	return false;
 }
 
@@ -364,8 +368,12 @@ bool jsonsax::parseArray(char current, char *next) {
 	char	ch=current;
 
 	// make sure there's a [, skip any whitespace after it
-	if (ch!='[' || !(ch=skipWhitespace(getCharacter()))) {
-		parseFailed("array");
+	if (ch!='[') {
+		parseFailed("array","missing [");
+		return false;
+	}
+	if (!(ch=skipWhitespace(getCharacter()))) {
+		parseFailed("array","failed to parse whitespace after [");
 		return false;
 	}
 
@@ -395,7 +403,7 @@ bool jsonsax::parseArray(char current, char *next) {
 
 	// make sure there's a ]
 	if (ch!=']') {
-		parseFailed("array");
+		parseFailed("array","missing ]");
 		return false;
 	}
 
@@ -450,7 +458,7 @@ bool jsonsax::parseLiteral(const char *literal, char current, char *next) {
 	const char	*ptr=literal;
 	while (ch && *ptr) {
 		if (ch!=*ptr) {
-			parseFailed("literal");
+			parseFailed("literal","");
 			return false;
 		}
  		ch=getCharacter();

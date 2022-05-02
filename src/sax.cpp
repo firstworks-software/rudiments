@@ -450,8 +450,11 @@ bool sax::mapFile() {
 	return false;
 }
 
-void sax::parseFailed(const char *thing) {
+void sax::parseFailed(const char *thing, const char *why) {
         pvt->_err.clear();
         pvt->_err.append("parse ")->append(thing);
 	pvt->_err.append(" failed at line ")->append(pvt->_line);
+	if (!charstring::isNullOrEmpty(why)) {
+		pvt->_err.append(": ")->append(why);
+	}
 }

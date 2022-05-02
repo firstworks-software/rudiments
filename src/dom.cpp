@@ -80,6 +80,10 @@ domnode *dom::getNullNode() const {
 }
 
 bool dom::writeFile(const char *filename, mode_t perms) const {
+	return writeFile(filename,perms,true);
+}
+
+bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 	filesystem	fs;
 	off64_t	optblocksize;
 	if (fs.open(filename)) {
@@ -92,7 +96,7 @@ bool dom::writeFile(const char *filename, mode_t perms) const {
 		return false;
 	}
 	fl.setWriteBufferSize(optblocksize);
-	bool	retval=write(&fl);
+	bool	retval=write(&fl,indent);
 	fl.flushWriteBuffer(-1,-1);
 	if (!fl.close()) {
 		retval=false;
@@ -101,7 +105,7 @@ bool dom::writeFile(const char *filename, mode_t perms) const {
 }
 
 bool dom::write(output *out) const {
-	return write(out,false);
+	return write(out,true);
 }
 
 bool dom::write(output *out, bool indent) const {

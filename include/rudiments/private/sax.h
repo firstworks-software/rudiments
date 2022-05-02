@@ -15,7 +15,7 @@
 			void	ignoreHeaderLines();
 			void	ignoreFooterLines();
 			bool	mapFile();
-			void	parseFailed(const char *thing);
+			void	parseFailed(const char *thing, const char *why);
 	private:
 				sax(const sax &x);
 			sax	&operator=(const sax &x);

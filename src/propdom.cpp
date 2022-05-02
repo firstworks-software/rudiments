@@ -253,10 +253,6 @@ bool propdom::valueEnd() {
 	return true;
 }
 
-bool propdom::write(output *out) const {
-	return dom::write(out,true);
-}
-
 void propdom::writeAndEscape(output *out, const char *value) const {
 	for (const char *c=value; *c; c++) {
 		if (character::isWhitespace(*c)) {

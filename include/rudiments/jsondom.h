@@ -110,9 +110,6 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		 *  tree from scratch. */
 		void	createRootNode();
 
-		/** Writes the current DOM tree to "out". */
-		virtual bool	write(output *out) const;
-
 	protected:
 
 		/** Gets called when an object start is parsed. */

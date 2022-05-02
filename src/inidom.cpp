@@ -275,10 +275,6 @@ bool inidom::valueEnd() {
 	return true;
 }
 
-bool inidom::write(output *out) const {
-	return dom::write(out,true);
-}
-
 void inidom::write(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 

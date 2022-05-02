@@ -74,9 +74,6 @@ class RUDIMENTS_DLLSPEC propdom : public propsax, public dom {
 		 *  tree from scratch. */
 		void	createRootNode();
 
-		/** Writes the current DOM tree to "out". */
-		virtual bool	write(output *out) const;
-
 	protected:
 
 		/** Gets called when the start of whitespace (outside of a
