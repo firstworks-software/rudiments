@@ -1540,7 +1540,16 @@ void domnode::write(output *out) const {
 
 void domnode::write(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	pvt->_dom->write(this,out,indent,(indent)?&indentlevel:NULL);
+	pvt->_dom->writeNode(this,out,indent,(indent)?&indentlevel:NULL);
+}
+
+void domnode::writeXml(output *out) const {
+	writeXml(out,false);
+}
+
+void domnode::writeXml(output *out, bool indent) const {
+	uint16_t	indentlevel=0;
+	pvt->_dom->dom::writeNode(this,out,indent,(indent)?&indentlevel:NULL);
 }
 
 stringbuffer *domnode::getPath() const {

@@ -9,7 +9,7 @@
 			const char	*cacheString(const char *string);
 			void		unCacheString(const char *string);
 
-			virtual void	write(const domnode *dn,
+			virtual void	writeNode(const domnode *dn,
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;

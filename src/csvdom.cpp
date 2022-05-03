@@ -661,7 +661,7 @@ void csvdom::carryAllValuesDown() {
 	}
 }
 
-void csvdom::write(const domnode *dn, output *out,
+void csvdom::writeNode(const domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) const {
 
 	domnode	*header=dn->getFirstTagChild("h");

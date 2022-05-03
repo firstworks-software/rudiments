@@ -113,7 +113,17 @@ bool dom::write(output *out, bool indent) const {
 	return true;
 }
 
-void dom::write(const domnode *dn, output *out,
+bool dom::writeXml(output *out) const {
+	return writeXml(out,true);
+}
+
+bool dom::writeXml(output *out, bool indent) const {
+	uint16_t	indentlevel=0;
+	dom::writeNode(getRootNode(),out,indent,&indentlevel);
+	return true;
+}
+
+void dom::writeNode(const domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) const {
 
 	// NOTE: this method is written a little strangely
@@ -123,7 +133,7 @@ void dom::write(const domnode *dn, output *out,
 	if (dn->getType()==ROOT_DOMNODETYPE) {
 		current=dn->getFirstChild();
 		while (!current->isNullNode()) {
-			dom::write(current,out,indent,indentlevel);
+			dom::writeNode(current,out,indent,indentlevel);
 			current=current->getNextSibling();
 		}
 	} else if (dn->getType()==TAG_DOMNODETYPE) {
@@ -139,7 +149,7 @@ void dom::write(const domnode *dn, output *out,
 		current=dn->getAttribute((uint64_t)0);
 		while (current && !current->isNullNode()) {
 			out->write(" ");
-			dom::write(current,out,indent,indentlevel);
+			dom::writeNode(current,out,indent,indentlevel);
 			current=current->getNextSibling();
 		}
 		current=dn->getFirstChild();
@@ -154,7 +164,7 @@ void dom::write(const domnode *dn, output *out,
 			}
 			domnodetype	prevtype=current->getType();
 			while (!current->isNullNode()) {
-				dom::write(current,out,indent,indentlevel);
+				dom::writeNode(current,out,indent,indentlevel);
 				prevtype=current->getType();
 				current=current->getNextSibling();
 			}

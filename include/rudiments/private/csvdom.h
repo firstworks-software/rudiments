@@ -32,7 +32,7 @@
 
 			void	trimFields(bool left, bool right);
 
-			void	write(const domnode *dn,
+			void	writeNode(const domnode *dn,
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;
