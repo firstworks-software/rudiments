@@ -43,7 +43,7 @@
  *
  *  would produce the following dom tree:
  *
- *  <r>
+ *  <r t="o">
  *    <string_object t="s" v="string value 1"/>
  *    <number_object t="n" v="10"/>
  *    <true_object t="t"/>
