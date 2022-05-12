@@ -64,6 +64,59 @@ class treecollection : public nodecollection<valuetype> {
 		treecollection(const nodecollection<valuetype> &a) :
 					nodecollection<valuetype>(a) {}
 
+		/** Creates a new treenode containing "value" and
+		 *  prepends it to the avltree. */
+		virtual void	insert(valuetype value)=0;
+
+		/** Creates new treenodes containing "count" members of
+		 *  array "value" and inserts them into the treecollection. */
+		virtual void	insert(valuetype *value, uint64_t count);
+
+		/** Inserts already created treenode "node" to the
+		 *  treecollection. */
+		virtual void	insert(treenode<valuetype> *node)=0;
+
+		/** Detaches "node" from the tree. */
+		virtual treenode<valuetype>
+			*detach(treenode<valuetype> *node)=0;
+
+		/** Deletes the first avltreenode containing "value".
+		 *
+		 *  The value stored in the avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	remove(valuetype value)=0;
+
+		/** Deletes all avltreenodes containing "value".
+		 *
+		 *  The value stored in each avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 * 
+		 *  Returns true on success and false on failure. */
+		virtual bool	removeAll(valuetype value)=0;
+
+		/** Removed avltreenode "node" from the avltree.
+		 *
+		 *  The value stored in the avltreenode is only
+		 *  deleted if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.
+		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	remove(treenode<valuetype> *node)=0;
+
 		/** Returns the number of nodes in the tree. */
 		virtual uint64_t	getLength() const=0;
 
@@ -113,5 +166,7 @@ class treecollection : public nodecollection<valuetype> {
 		 *  treecollection. */
 		virtual void	print() const=0;
 };
+
+#include <rudiments/private/treecollectioninlines.h>
 
 #endif

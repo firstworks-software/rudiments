@@ -335,7 +335,9 @@ privateheaders0="config.h "+_
 	"comparator.h "+_
 	"comparatorinlines.h "+_
 	"listnode.h "+_
-	"treenode.h"
+	"listcollectioninlines.h "+_
+	"treenode.h"+_
+	"treecollectioninlines.h"
 privateheaders1="inttypes.h "+_
 	"new.h "+_
 	"characterincludes.h "+_
