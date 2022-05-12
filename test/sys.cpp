@@ -23,7 +23,6 @@ int main(int argc, const char **argv) {
 	char	*arch=sys::getOperatingSystemArchitecture();
 	char	*hostname=sys::getHostName();
 
-#if 1
 	stdoutput.printf("OS Name	: %s\n",osname);
 	stdoutput.printf("OS Release	: %s\n",release);
 	stdoutput.printf("OS Version	: %s\n",version);
@@ -214,7 +213,6 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Max Process ID"
 			"				: %lld\n",
 			(LONG_LONG)sys::getMaxProcessId());
-#endif
 
 	// these should be non-empty/non-null
 	test("OS Name",!charstring::isNullOrEmpty(osname));

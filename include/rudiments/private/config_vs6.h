@@ -805,6 +805,12 @@
 /* Some systems use caddr_t argument for madvise */
 #define RUDIMENTS_HAVE_MADVISE_CADDR_T 1
 
+/* Some systems have mas.h */
+/* #undef RUDIMENTS_HAVE_MAS_H */
+
+/* Some systems have mas_open */
+/* #undef RUDIMENTS_HAVE_MAS_OPEN */
+
 /* Some systems have mbrtowc */
 #define RUDIMENTS_HAVE_MBRTOWC 1
 
@@ -819,6 +825,9 @@
 
 /* Some systems have memrchr */
 /* #undef RUDIMENTS_HAVE_MEMRCHR */
+
+/* Some systems have metreg.h */
+/* #undef RUDIMENTS_HAVE_METREG_H */
 
 /* Some systems have mincore */
 /* #undef RUDIMENTS_HAVE_MINCORE */
@@ -1320,6 +1329,9 @@
 
 /* Some systems have sys/devpoll.h */
 /* #undef RUDIMENTS_HAVE_SYS_DEVPOLL_H */
+
+/* Some systems have sys/dl.h */
+/* #undef RUDIMENTS_HAVE_SYS_DL_H */
 
 /* Some systems have sys/epoll.h */
 /* #undef RUDIMENTS_HAVE_SYS_EPOLL_H */

@@ -948,6 +948,24 @@ AC_TRY_COMPILE([#include <wchar.h>],
 AC_MSG_CHECKING(for glob.h)
 AC_TRY_COMPILE([#include <glob.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_GLOB_H, 1, Some systems have glob.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for metreg.h)
+AC_TRY_COMPILE([#include <metreg.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_METREG_H, 1, Some systems have metreg.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for mas.h)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_METREG_H
+	#include <metreg.h>
+#endif
+#include <mas.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_MAS_H, 1, Some systems have mas.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/dl.h)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/dl.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_DL_H, 1, Some systems have sys/dl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -4380,6 +4398,16 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif],
 ExitWindowsEx(0,0),AC_DEFINE(RUDIMENTS_HAVE_EXITWINDOWSEX,1,Some systems have ExitWindowsEx) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+MASLIB=""
+AC_MSG_CHECKING(for mas_open)
+FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_METREG_H
+	#include <metreg.h>
+#endif
+#ifdef RUDIMENTS_HAVE_MAS_H
+	#include <mas.h>
+#endif],[mas_open(0,0);],[],[-lmas],[],[MASLIB="-lmas"; AC_DEFINE(RUDIMENTS_HAVE_MAS_OPEN,1,Some systems have mas_open) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+AC_SUBST(MASLIB)
 
 echo "******************************"
 

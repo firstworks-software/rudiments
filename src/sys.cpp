@@ -63,6 +63,16 @@
 	#include <sys/uadmin.h>
 #endif
 
+#if defined(RUDIMENTS_HAVE_METREG_H) && \
+	defined(RUDIMENTS_HAVE_MAS_H) && \
+	defined(RUDIMENTS_HAVE_SYS_DL_H)
+	#include <metreg.h>
+	#include <mas.h>
+	#include <sys/dl.h>
+	#include <rudiments/datetime.h>
+	#include <rudiments/snooze.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_GETVERSIONEX
 	#ifdef RUDIMENTS_HAVE_TIME_H
 		// for CLOCKS_PER_SEC
@@ -857,6 +867,8 @@ int64_t sys::getMaxLineLength() {
 int64_t sys::getPhysicalPageCount() {
 	#if defined(_SC_PHYS_PAGES)
 		return sysConf(_SC_PHYS_PAGES);
+	#elif defined(_SC_TOTAL_MEMORY)
+		return sysConf(_SC_TOTAL_MEMORY);
 	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX) && \
 						_WIN32_WINNT>=0x0500
 		MEMORYSTATUSEX	ms;
@@ -872,6 +884,74 @@ int64_t sys::getPhysicalPageCount() {
 int64_t sys::getAvailablePhysicalPageCount() {
 	#if defined(_SC_AVPHYS_PAGES)
 		return sysConf(_SC_AVPHYS_PAGES);
+	#elif defined(RUDIMENTS_HAVE_MAS_OPEN)
+
+		// The available memory metric isn't just a page count.  Rather
+		// the available page count is added to the metric every second.
+		//
+		// To get the currently available page count, you have to
+		// sample it twice, one second apart, then subtract the samples.
+		//
+		// Really, you have to do (sample2-sample2)/(time2-time1) to get
+		// the page count, but since (time2-time1) is always 1 when we
+		// wait 1 second, then we can get away with just doing
+		// (sample2-sample1).
+
+		// open /var/adm/metreg.data (or whatever...)
+		// Even though this file typically has 644 perms, it can't be
+		// mas_open()ed by non-root users (at least on UnixWare 7.0.1).
+		int	mas=mas_open(MAS_FILE,MAS_MMAP_ACCESS);
+		if (mas==-1) {
+			// NOTE: when this fails, the error is available via
+			// mas_error() and mas_errstr(), but errno appears to
+			// also get set appropriately (at least on
+			// UnixWare 7.0.1) so for now, we won't worry about
+			// doing anything with mas_error()/mas_errstr().
+			return -1;
+		}
+
+		// get the first sample
+		uint64_t	*met1p=(uint64_t *)mas_get_met(mas,FREEMEM,0);
+		if (!met1p) {
+			// see note above re. mas_error()/mas_errstr()
+			mas_close(mas);
+			return -1;
+		}
+		uint64_t	met1=*met1p;
+
+		// get the second sample, handling overflows...
+		uint64_t	met2=0;
+		for (;;) {
+
+			// wait 1 second
+			snooze::macrosnooze(1);
+
+			// get the second sample
+			uint64_t	*met2p=
+					(uint64_t *)mas_get_met(mas,FREEMEM,0);
+			if (!met2p) {
+				// see note above re. mas_error()/mas_errstr()
+				mas_close(mas);
+				return -1;
+			}
+			met2=*met2p;
+
+			// handle overflows...
+			// if the second sample was greater than the first, then
+			// we're good, otherwise we need to loop back and try
+			// again
+			if (met2>met1) {
+				break;
+			}
+			met1=met2;
+		}
+
+		// close /var/adm/metreg.data (or whatever...)
+		mas_close(mas);
+
+		// return the result
+		return met2-met1;
+
 	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX) && \
 						_WIN32_WINNT>=0x0500
 		MEMORYSTATUSEX	ms;

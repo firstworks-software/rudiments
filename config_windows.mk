@@ -117,6 +117,9 @@ CRTLIB = @CRTLIB@
 # getpgid library
 GETPGIDLIB = @GETPGIDLIB@
 
+# mas library
+MASLIB = @MASLIB@
+
 # rudiments library (for tests)
 RUDIMENTSLIB = /LIBPATH:@top_builddir@\src librudiments.lib
 

@@ -602,6 +602,7 @@ BELIB=""
 GNULIB=""
 CRTLIB=""
 DLLIB=""
+MASLIB=""
 GETPGIDLIB=""
 
 ' extension
@@ -877,6 +878,7 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@GNULIB@",GNULIB,1,-1,0)
 	content=replace(content,"@CRTLIB@",CRTLIB,1,-1,0)
 	content=replace(content,"@DLLIB@",DLLIB,1,-1,0)
+	content=replace(content,"@MASLIB@",MASLIB,1,-1,0)
 	content=replace(content,"@GETPGIDLIB@",GETPGIDLIB,1,-1,0)
 	content=replace(content,"@SDKLIBS@",SDKLIBS,1,-1,0)
 	content=replace(content,"@APACHEINCLUDES@","",1,-1,0)

@@ -124,6 +124,9 @@ GETPGIDLIB = @GETPGIDLIB@
 # libedit library
 LIBEDITLIBS = @LIBEDITLIBS@
 
+# mas library
+MASLIB = @MASLIB@
+
 # rudiments library (for tests)
 RUDIMENTSLIB = -L$(top_builddir)/src -lrudiments
 
