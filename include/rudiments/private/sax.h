@@ -6,18 +6,20 @@
 
 			virtual bool	parse()=0;
 
-			bool	parseLocalFile(const char *filename);
-			bool	parseRemoteFile(const char *filename);
 			char	skipWhitespace(char current);
 			char	getCharacter();
+			void	parseFailed(const char *thing, const char *why);
+	private:
+				sax(const sax &x);
+			sax	&operator=(const sax &x);
+
+			bool	parseLocalFile(const char *filename);
+			bool	parseRemoteFile(const char *filename);
+
 			char	getCharacter(bool processignores);
 			char	getCharacterBackwards();
 			void	ignoreHeaderLines();
 			void	ignoreFooterLines();
 			bool	mapFile();
-			void	parseFailed(const char *thing, const char *why);
-	private:
-				sax(const sax &x);
-			sax	&operator=(const sax &x);
 
 			saxprivate	*pvt;

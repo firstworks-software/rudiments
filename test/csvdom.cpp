@@ -41,6 +41,7 @@ int main() {
 
 	csvdom	c;
 
+#if 0
 	stdoutput.printf("normal...\n");
 	c.parseString(normal);
 	c.writeFile("normal.csv",permissions::evalPermString("rw-r--r--"));
@@ -654,6 +655,7 @@ int main() {
 		!charstring::compare(c.getField(9,3),"vald") &&
 		!charstring::compare(c.getField(9,4),"vale");
 	test("carry all down",success);
+#endif
 
 	stringbuffer	longdata;
 	file		f;

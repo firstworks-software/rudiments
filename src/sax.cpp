@@ -16,6 +16,7 @@ class saxprivate {
 	private:
 		const char	*_string;
 		const char	*_ptr;
+		const char	*_startptr;
 		const char	*_endptr;
 		file		*_fl;
 		off64_t		_eof;
@@ -45,6 +46,7 @@ sax::~sax() {
 void sax::reset() {
 	pvt->_string=NULL;
 	pvt->_ptr=NULL;
+	pvt->_startptr=NULL;
 	pvt->_endptr=NULL;
 	pvt->_fl=NULL;
 	pvt->_eof=0;
@@ -172,7 +174,9 @@ bool sax::parseString(const char *string) {
 	reset();
 
 	// set string pointers
-	pvt->_ptr=pvt->_string=string;
+	pvt->_string=string;
+	pvt->_ptr=string;
+	pvt->_startptr=string;
 	pvt->_endptr=pvt->_string+charstring::length(string);
 	pvt->_mmapped=false;
 
@@ -252,7 +256,7 @@ char sax::getCharacter(bool processignores) {
 		if (pvt->_ptr==pvt->_endptr) {
 			// if we're not parsing a memory-mapped file, we're done
 			// if we're parsing a memory-mapped file,
-			// we need to try to re-map it, if we can't we're done
+			// we need to try to re-map it, if we can't, we're done
 			if (!pvt->_mmapped || !mapFile()) {
 				return '\0';
 			}
@@ -287,17 +291,16 @@ void sax::ignoreHeaderLines() {
 
 char sax::getCharacterBackwards() {
 
-	// FIXME: It's possible for offset to go negative due to a call to this
-	// method.  This code handles that, but no other code does.  Currently,
-	// no code other than ignoreFooterLines() calls getCharacterBackwards()
-	// and it ultimately makes sure that offset is positive or 0, but this
-	// method is protected, so it's not impossible that a method of a child
-	// class could call it, and if offset goes negative after that call,
-	// unexpected things could happen.  Resolve this.
-
 	if (pvt->_offset==-1) {
 		return '\0';
 	}
+
+	// NOTE: It's possible for offset to go negative in the final branch
+	// below.  This method handles that case, but no other code does.
+	// Currently, no code other than ignoreFooterLines() calls
+	// getCharacterBackwards() and it ultimately makes sure that offset is
+	// positive or 0, but be aware of this possibility if any other code is
+	// updated to use this method.
 
 	// get a character from the string or file, whichever is appropriate,
 	// bail and return a NULL character if we run off of the beginning of
@@ -313,19 +316,24 @@ char sax::getCharacterBackwards() {
 		if (pvt->_ptr==NULL) {
 			// if we're not parsing a memory-mapped file, we're done
 			// if we're parsing a memory-mapped file,
-			// we need to try to re-map it, if we can't we're done
+			// we need to try to re-map it, if we can't, we're done
 			if (!pvt->_mmapped || !mapFile()) {
 				return '\0';
 			}
+			pvt->_ptr=pvt->_endptr-1;
 		}
 		ch=*(pvt->_ptr);
-		(pvt->_ptr)--;
-		(pvt->_offset)--;
-		if (pvt->_offset==-1) {
+		if (pvt->_ptr==pvt->_startptr) {
 			pvt->_ptr=NULL;
+		} else {
+			(pvt->_ptr)--;
+		}
+		if (!pvt->_offset) {
+			pvt->_ptr=NULL;
+		} else {
+			(pvt->_offset)--;
 		}
 	} else {
-		// FIXME: setPosition doesn't work with buffered reads
 		pvt->_fl->setPositionRelativeToBeginning(pvt->_offset);
 		if (pvt->_fl->read(&ch)!=sizeof(char)) {
 			return '\0';
@@ -443,6 +451,7 @@ bool sax::mapFile() {
 				startofblock,len,PROT_READ,MAP_PRIVATE)) {
 		pvt->_string=static_cast<char *>(pvt->_mm.getData());
 		pvt->_ptr=pvt->_string;	
+		pvt->_startptr=pvt->_string;
 		pvt->_endptr=pvt->_ptr+len;
 		pvt->_mmapped=true;
 		return true;
