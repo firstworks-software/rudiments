@@ -6,7 +6,50 @@
 
 #include <rudiments/private/csvdomincludes.h>
 
-/** The csvdom class implements a minimal CSV DOM parser. */
+/** The csvdom class implements a minimal CSV DOM parser.
+ *
+ *  It parses a file or string of CSV-formatted data and produces a dom tree
+ *  representing the data.  It creates an "h" element for the header, "c"
+ *  element for each column, "r" element for each row, and "f" element for each
+ *  field.  To each "c" and "f" element, it adds a "v" attribute, containing
+ *  the value, and a "q" element which can contain "y" or "n" indicating whether
+ *  or not the value is quoted.
+ *
+ *  For example, the following CSV:
+ *
+ *  "col1","col2",col3,col4
+ *  field11,field12,"field13","field14"
+ *  "field21",field22,field23,"field24"
+ *  field31,"field32",field33,field34
+ *
+ *  would produce the following dom tree:
+ *
+ *  <h>
+ *    <c v="col1" q="y"/>
+ *    <c v="col2" q="y"/>
+ *    <c v="col3" q="n"/>
+ *    <c v="col4" q="n"/>
+ *  </h>
+ *  <r>
+ *    <f v="field11" q="n"/>
+ *    <f v="field12" q="n"/>
+ *    <f v="field13" q="y"/>
+ *    <f v="field14" q="y"/>
+ *  </r>
+ *  <r>
+ *    <f v="field21" q="y"/>
+ *    <f v="field22" q="n"/>
+ *    <f v="field23" q="n"/>
+ *    <f v="field24" q="y"/>
+ *  </r>
+ *  <r>
+ *    <f v="field31" q="n"/>
+ *    <f v="field32" q="y"/>
+ *    <f v="field33" q="n"/>
+ *    <f v="field34" q="n"/>
+ *  </r>
+ *
+ */
 class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 	public:
 
@@ -319,13 +362,6 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		 *  that row is empty, then replace it with the value of the
 		 *  field at the same position from the previous row. */
 		void	carryAllValuesDown();
-
-		/** Writes the current DOM tree to "out".
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is output
-		 *  as-is. */
-		bool	write(output *out, bool indent) const;
 
 	protected:
 

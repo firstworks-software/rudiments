@@ -70,6 +70,7 @@
 		it has to do all the things that it does
 	renamed isSignaHandlerIntUsed to supportsSignalHandlerParameter
 	added SIGXCPU, SIGXFSZ and SIGPWR to the "shutdown signals"
+	refactored write methods of dom class and its children a bit
 	implemented sys::getAvailable*() for SVR5 (eg. UnixWare)
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes

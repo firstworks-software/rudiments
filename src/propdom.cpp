@@ -75,7 +75,7 @@ bool propdom::parseFile(const char *filename,
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
-	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
 #endif
 	return retval;
 }
@@ -95,7 +95,7 @@ bool propdom::parseString(const char *string,
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
-	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
 #endif
 	return retval;
 }
@@ -253,10 +253,6 @@ bool propdom::valueEnd() {
 	return true;
 }
 
-bool propdom::write(output *out) const {
-	return dom::write(out,true);
-}
-
 void propdom::writeAndEscape(output *out, const char *value) const {
 	for (const char *c=value; *c; c++) {
 		if (character::isWhitespace(*c)) {
@@ -266,7 +262,7 @@ void propdom::writeAndEscape(output *out, const char *value) const {
 	}
 }
 
-void propdom::write(const domnode *dn, output *out,
+void propdom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
 	switch (dn->getType()) {
@@ -274,7 +270,7 @@ void propdom::write(const domnode *dn, output *out,
 			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
 					child=child->getNextSibling()) {
-				write(child,out,indent,indentlevel);
+				writeNode(child,out,indent,indentlevel);
 			}
 			break;
 		case TAG_DOMNODETYPE:

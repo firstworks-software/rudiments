@@ -55,6 +55,16 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		virtual bool	writeFile(const char *filename,
 						mode_t perms) const;
 
+		/** Writes the current DOM tree to "filename" and sets
+		 *  permissions of the file to "perms".
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is output
+		 *  as-is. */
+		virtual bool	writeFile(const char *filename,
+						mode_t perms,
+						bool indent) const;
+
 		/** Writes the current DOM tree to "out". */
 		virtual bool	write(output *out) const;
 
@@ -64,6 +74,16 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
 		virtual bool	write(output *out, bool indent) const;
+
+		/** Writes the current DOM tree to "out", in XML format. */
+		virtual bool	writeXml(output *out) const;
+
+		/** Writes the current DOM tree to "out", in XML format.
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is output
+		 *  as-is. */
+		virtual bool	writeXml(output *out, bool indent) const;
 
 		/** Returns true if the string cache is enabled and false
 		 *  if it is disabled. */

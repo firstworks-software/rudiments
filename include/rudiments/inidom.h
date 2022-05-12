@@ -6,7 +6,49 @@
 
 #include <rudiments/private/inidomincludes.h>
 
-/** The inidom class implements a minimal INI DOM parser. */
+/** The inidom class implements a minimal INI DOM parser.
+ *
+ *  It parses a file or string of INI-formatted data and produces a dom tree
+ *  representing the data.  It creates "s" elements for each section, "k"
+ *  elements for each key, "p" elements for each pound-delimited comment, and
+ *  "c" elements for each semicolon-delimited comments.  It adds a "v"
+ *  attribute to each element, containing the value.  For each "k" element, it
+ *  also adds a "k" attribute, containing the name of the key.  Text dom nodes
+ *  (nodes of type TEXT_DOMNODETYPE) are used to preserve whitespace.
+ *
+ *  For example, the following INI:
+ *
+ *  [section 1]
+ *  #pound comment
+ *  ;semicolon comment
+ *  key1=value1
+ *  key2=value2
+ *
+ *  [section 2]
+ *  key 1=value 1
+ *  key 2=value 2
+ *  #pound comment
+ *  ;semicolon comment
+ *
+ *  would produce the following dom tree:
+ *
+ *  <s v="section 1">
+ *    <p v="pound comment"/>
+ *    <s v="semicolon comment"/>
+ *    <k k="key1" v="value1"/>
+ *    <k k="key2" v="value2"/>
+ *  </s>
+ *
+ *  <s v="section 2">
+ *    <k k="key 1" v="value 1"/>
+ *    <k k="key 2" v="value 2"/>
+ *    <p v="pound comment"/>
+ *    <s v="semicolon comment"/>
+ *  </s>
+ *
+ *  (Note the blank line of text between the sections.  This is the text
+ *  domnode, used to preserve the whitespace.)
+ */
 class RUDIMENTS_DLLSPEC inidom : public inisax, public dom {
 	public:
 
@@ -43,9 +85,6 @@ class RUDIMENTS_DLLSPEC inidom : public inisax, public dom {
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */
 		void	createRootNode();
-
-		/** Writes the current DOM tree to "out". */
-		virtual bool	write(output *out) const;
 
 	protected:
 

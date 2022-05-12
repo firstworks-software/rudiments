@@ -74,7 +74,7 @@ bool inidom::parseFile(const char *filename,
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
-	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
 #endif
 	return retval;
 }
@@ -94,7 +94,7 @@ bool inidom::parseString(const char *string,
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
-	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
 #endif
 	return retval;
 }
@@ -275,11 +275,7 @@ bool inidom::valueEnd() {
 	return true;
 }
 
-bool inidom::write(output *out) const {
-	return dom::write(out,true);
-}
-
-void inidom::write(const domnode *dn, output *out,
+void inidom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
 	switch (dn->getType()) {
@@ -287,7 +283,7 @@ void inidom::write(const domnode *dn, output *out,
 			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
 					child=child->getNextSibling()) {
-				write(child,out,indent,indentlevel);
+				writeNode(child,out,indent,indentlevel);
 			}
 			break;
 		case TAG_DOMNODETYPE:
@@ -309,7 +305,7 @@ void inidom::write(const domnode *dn, output *out,
 					for (domnode *child=dn->getFirstChild();
 						!child->isNullNode();
 						child=child->getNextSibling()) {
-						write(child,out,
+						writeNode(child,out,
 							indent,indentlevel);
 					}
 					break;

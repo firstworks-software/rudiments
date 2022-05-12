@@ -76,7 +76,7 @@ bool jsondom::parseFile(const char *filename,
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
-	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
 #endif
 	return retval;
 }
@@ -96,7 +96,7 @@ bool jsondom::parseString(const char *string,
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
-	dom::write(getRootNode(),&stdoutput,true,&indentlevel);
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
 #endif
 	return retval;
 }
@@ -255,10 +255,6 @@ bool jsondom::objectEnd() {
 	return true;
 }
 
-bool jsondom::write(output *out) const {
-	return dom::write(out,true);
-}
-
 domnode *jsondom::whichNode() {
 	// if we're in an array then append a "v" tag and use it,
 	// otherwise just use the current tag
@@ -268,7 +264,7 @@ domnode *jsondom::whichNode() {
 			pvt->_current;
 }
 
-void jsondom::write(const domnode *dn, output *out,
+void jsondom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
 	if (dn->getType()!=TAG_DOMNODETYPE && dn->getType()!=ROOT_DOMNODETYPE) {
@@ -330,7 +326,7 @@ void jsondom::write(const domnode *dn, output *out,
 						out->write('\n');
 					}
 				}
-				write(child,out,indent,indentlevel);
+				writeNode(child,out,indent,indentlevel);
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
@@ -421,7 +417,7 @@ void jsondom::write(const domnode *dn, output *out,
 				if (indent) {
 					writeIndent(out,*indentlevel);
 				}
-				write(child,out,indent,indentlevel);
+				writeNode(child,out,indent,indentlevel);
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
@@ -435,7 +431,8 @@ void jsondom::write(const domnode *dn, output *out,
 			}
 			break;
 		case 'r':
-			write(dn->getFirstTagChild(),out,indent,indentlevel);
+			writeNode(dn->getFirstTagChild(),
+					out,indent,indentlevel);
 			break;
 	}
 }

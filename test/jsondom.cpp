@@ -380,7 +380,8 @@ int main() {
 		filename.clear();
 		filename.append(t->name)->append(".json");
 		j.writeFile(filename.getString(),
-				permissions::evalPermString("rw-r--r--"));
+				permissions::evalPermString("rw-r--r--"),
+				true);
 		char	*contents=file::getContents(filename.getString());
 		test("file contents",
 			!charstring::compare(

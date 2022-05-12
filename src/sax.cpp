@@ -18,17 +18,22 @@ class saxprivate {
 		const char	*_ptr;
 		const char	*_endptr;
 		file		*_fl;
+		off64_t		_eof;
 		bool		_mmapped;
 		off64_t		_filesize;
 		off64_t		_optblocksize;
 		memorymap	_mm;
-		off64_t		_fileoffset;
+		off64_t		_offset;
 		uint32_t	_line;
 		stringbuffer	_err;
+		uint64_t	_ignoreheaderlines;
+		uint64_t	_ignorefooterlines;
 };
 
 sax::sax() : object() {
 	pvt=new saxprivate;
+	pvt->_ignoreheaderlines=0;
+	pvt->_ignorefooterlines=0;
 	reset();
 }
 
@@ -42,10 +47,27 @@ void sax::reset() {
 	pvt->_ptr=NULL;
 	pvt->_endptr=NULL;
 	pvt->_fl=NULL;
+	pvt->_eof=0;
 	pvt->_filesize=0;
-	pvt->_fileoffset=0;
+	pvt->_offset=0;
 	pvt->_mmapped=false;
 	pvt->_line=1;
+}
+
+void sax::setIgnoreHeaderLines(uint64_t lines) {
+	pvt->_ignoreheaderlines=lines;
+}
+
+uint64_t sax::getIgnoreHeaderLines() {
+	return pvt->_ignoreheaderlines;
+}
+
+void sax::setIgnoreFooterLines(uint64_t lines) {
+	pvt->_ignorefooterlines=lines;
+}
+
+uint64_t sax::getIgnoreFooterLines() {
+	return pvt->_ignorefooterlines;
 }
 
 bool sax::parseFile(const char *filename) {
@@ -112,8 +134,7 @@ bool sax::parseLocalFile(const char *filename) {
 		// will be set to NULL from the previous call to reset() and
 		// will cause getCharacter() to read from the file rather than
 		// the map when parse() calls it.
-		pvt->_fileoffset=0;
-		pvt->_mmapped=true;
+		pvt->_offset=0;
 		mapFile();
 
 		// parse the file
@@ -202,9 +223,24 @@ char sax::skipWhitespace(char current) {
 }
 
 char sax::getCharacter() {
+	return getCharacter(true);
+}
+
+char sax::getCharacter(bool processignores) {
+
+	// if we're at the very beginning, then ignore footer and header lines
+	if (processignores && !pvt->_offset) {
+		ignoreFooterLines();
+		ignoreHeaderLines();
+	}
+
+	// bail if we've hit the designated eof
+	if (pvt->_eof && pvt->_offset==pvt->_eof) {
+		return '\0';
+	}
 
 	// get a character from the string or file, whichever is appropriate,
-	// if the character is an EOF, return a NULL
+	// bail and return a NULL character if we hit the end of string or file
 	char	ch;
 	if (pvt->_string) {
 		// If you've come here chasing valgrind errors...
@@ -223,35 +259,179 @@ char sax::getCharacter() {
 		}
 		ch=*(pvt->_ptr);
 		(pvt->_ptr)++;
-		if (pvt->_mmapped) {
-			pvt->_fileoffset++;
-		}
 	} else {
 		if (pvt->_fl->read(&ch)!=sizeof(char)) {
 			return '\0';
 		}
 	}
+	(pvt->_offset)++;
 	if (ch=='\n') {
 		(pvt->_line)++;
 	}
 	return ch;
 }
 
+void sax::ignoreHeaderLines() {
+	uint64_t	skipped=0;
+	char		ch;
+	while (skipped<pvt->_ignoreheaderlines) {
+		ch=getCharacter(false);
+		if (ch=='\0') {
+			return;
+		}
+		if (ch=='\n') {
+			skipped++;
+		}
+	}
+}
+
+char sax::getCharacterBackwards() {
+
+	// FIXME: It's possible for offset to go negative due to a call to this
+	// method.  This code handles that, but no other code does.  Currently,
+	// no code other than ignoreFooterLines() calls getCharacterBackwards()
+	// and it ultimately makes sure that offset is positive or 0, but this
+	// method is protected, so it's not impossible that a method of a child
+	// class could call it, and if offset goes negative after that call,
+	// unexpected things could happen.  Resolve this.
+
+	if (pvt->_offset==-1) {
+		return '\0';
+	}
+
+	// get a character from the string or file, whichever is appropriate,
+	// bail and return a NULL character if we run off of the beginning of
+	// the string or file
+	char	ch;
+	if (pvt->_string) {
+		// If you've come here chasing valgrind errors...
+		// ptr may be set to the return value of mmap() which is
+		// neither on the stack nor in the heap.  There's no actual
+		// error here, valgrind just doesn't know about variables that
+		// aren't on the stack or in the heap and it thinks it's
+		// uninitialized.
+		if (pvt->_ptr==NULL) {
+			// if we're not parsing a memory-mapped file, we're done
+			// if we're parsing a memory-mapped file,
+			// we need to try to re-map it, if we can't we're done
+			if (!pvt->_mmapped || !mapFile()) {
+				return '\0';
+			}
+		}
+		ch=*(pvt->_ptr);
+		(pvt->_ptr)--;
+		(pvt->_offset)--;
+		if (pvt->_offset==-1) {
+			pvt->_ptr=NULL;
+		}
+	} else {
+		// FIXME: setPosition doesn't work with buffered reads
+		pvt->_fl->setPositionRelativeToBeginning(pvt->_offset);
+		if (pvt->_fl->read(&ch)!=sizeof(char)) {
+			return '\0';
+		}
+		(pvt->_offset)--;
+	}
+	return ch;
+}
+
+void sax::ignoreFooterLines() {
+
+	// bail if we're not ignoring any footer lines
+	if (!pvt->_ignorefooterlines) {
+		return;
+	}
+
+	// go to the very last character
+	if (pvt->_mmapped) {
+		pvt->_offset=pvt->_fl->getSize()-1;
+		if (!mapFile()) {
+			// FIXME: do something...
+		}
+		pvt->_ptr=pvt->_endptr-1;
+	} else if (pvt->_string) {
+		pvt->_offset=pvt->_endptr-pvt->_string-1;
+		pvt->_ptr=pvt->_endptr-1;
+	} else {
+		// ugly hack...
+		// setPosition*() don't work with buffered reads, so disable
+		// buffering for now
+		pvt->_fl->setReadBufferSize(0);
+		pvt->_offset=pvt->_fl->getSize()-1;
+		pvt->_fl->setPositionRelativeToEnd(-1);
+	}
+
+	// work backwards, finding carriage returns
+	bool		first=true;
+	uint64_t	skipped=0;
+	char		ch;
+	while (skipped<pvt->_ignorefooterlines) {
+		ch=getCharacterBackwards();
+		if (ch=='\0') {
+			return;
+		}
+		if (first) {
+			// if the last character in the file was a
+			// carriage return the don't count that one
+			first=false;
+		} else {
+			if (ch=='\n') {
+				skipped++;
+			}
+		}
+	}
+
+	// set the end-of-file to 1 char after the
+	// final carriage return that we found
+	pvt->_eof=pvt->_offset+2;
+
+	// go to the beginning...
+	pvt->_offset=0;
+	if (pvt->_mmapped) {
+		if (!mapFile()) {
+			// FIXME: do something...
+		}
+	} else if (pvt->_string) {
+		pvt->_ptr=pvt->_string;
+	} else {
+		pvt->_fl->setPositionRelativeToBeginning(0);
+		// ugly hack...
+		// setPosition*() don't work with buffered reads, so we
+		// disabled it earliser.  Re-enable it now.
+		pvt->_fl->setReadBufferSize(pvt->_optblocksize);
+	}
+}
+
 const char *sax::getError() {
 	return pvt->_err.getString();
 }
 
-
 bool sax::mapFile() {
+
+	pvt->_mmapped=false;
+
+	// map the block that contains the offset,
+	// which may not begin at the offset
 
 	if (!memorymap::supported()) {
 		return false;
 	}
-	if (pvt->_fileoffset) {
+	if (pvt->_offset) {
 		pvt->_mm.detach();
 	}
 
-	off64_t	len=pvt->_filesize-pvt->_fileoffset;
+	// bail if offset is past the end of the file, otherwise, if the offset
+	// is contained in what would be the last block of the file if the file
+	// were long enough, then the calculation below will return the last
+	// block 
+	if (pvt->_offset>=pvt->_filesize) {
+		return false;
+	}
+
+	off64_t	startofblock=(pvt->_offset/pvt->_optblocksize)*
+						pvt->_optblocksize;
+
+	off64_t	len=pvt->_filesize-startofblock;
 	if (len>pvt->_optblocksize) {
 		len=pvt->_optblocksize;
 	}
@@ -260,19 +440,21 @@ bool sax::mapFile() {
 	}
 
 	if (pvt->_mm.attach(pvt->_fl->getFileDescriptor(),
-				pvt->_fileoffset,len,PROT_READ,MAP_PRIVATE)) {
+				startofblock,len,PROT_READ,MAP_PRIVATE)) {
 		pvt->_string=static_cast<char *>(pvt->_mm.getData());
 		pvt->_ptr=pvt->_string;	
 		pvt->_endptr=pvt->_ptr+len;
+		pvt->_mmapped=true;
 		return true;
 	}
 	return false;
 }
 
-void sax::parseFailed(const char *thing) {
+void sax::parseFailed(const char *thing, const char *why) {
         pvt->_err.clear();
-        pvt->_err.append("error: parse ");
-	pvt->_err.append(thing);
-	pvt->_err.append(" failed at line ");
-        pvt->_err.append(pvt->_line);
+        pvt->_err.append("parse ")->append(thing);
+	pvt->_err.append(" failed at line ")->append(pvt->_line);
+	if (!charstring::isNullOrEmpty(why)) {
+		pvt->_err.append(": ")->append(why);
+	}
 }

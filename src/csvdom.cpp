@@ -5,7 +5,6 @@
 #include <rudiments/file.h>
 #include <rudiments/filesystem.h>
 #include <rudiments/sys.h>
-//#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
 class csvdomprivate {
@@ -662,13 +661,10 @@ void csvdom::carryAllValuesDown() {
 	}
 }
 
-bool csvdom::write(output *out, bool indent) const {
+void csvdom::writeNode(const domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) const {
 
-	domnode	*root=getRootNode();
-#ifdef DEBUG_MESSAGES
-	root->print(&stdoutput);
-#endif
-	domnode	*header=root->getFirstTagChild("h");
+	domnode	*header=dn->getFirstTagChild("h");
 	bool	firstcolumn=true;
 	for (domnode *column=header->getFirstTagChild("c");
 			!column->isNullNode();
@@ -681,7 +677,7 @@ bool csvdom::write(output *out, bool indent) const {
 		writeValue(out,column);
 	}
 	out->write("\n");
-	for (domnode *row=root->getFirstTagChild("r");
+	for (domnode *row=dn->getFirstTagChild("r");
 			!row->isNullNode();
 			row=row->getNextTagSibling("r")) {
 		bool	firstrow=true;
@@ -697,7 +693,6 @@ bool csvdom::write(output *out, bool indent) const {
 		}
 		out->write("\n");
 	}
-	return true;
 }
 
 void csvdom::writeValue(output *out, domnode *value) const {

@@ -229,7 +229,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(normal));
 	file::remove("normal.xml");
 	test("write file",x.writeFile("normal.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*normaldotxml=file::getContents("normal.xml");
 	test("file contents",!charstring::compare(normal,normaldotxml));
 	test("parse file",x.parseFile("normal.xml"));
@@ -239,7 +240,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(ns));
 	file::remove("ns.xml");
 	test("write file",x.writeFile("ns.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*nsdotxml=file::getContents("ns.xml");
 	test("file contents",!charstring::compare(ns,nsdotxml));
 	delete[] nsdotxml;
@@ -251,7 +253,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(entities));
 	file::remove("entities.xml");
 	test("write file",x.writeFile("entities.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*entitiesdotxml=file::getContents("entities.xml");
 	test("file contents",!charstring::compare(
 				entitiesresult,entitiesdotxml));
@@ -264,7 +267,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(cdata));
 	file::remove("cdata.xml");
 	test("write file",x.writeFile("cdata.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*cdatadotxml=file::getContents("cdata.xml");
 	test("file contents",!charstring::compare(cdata,cdatadotxml));
 	delete[] cdatadotxml;
@@ -276,7 +280,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(target));
 	file::remove("target.xml");
 	test("write file",x.writeFile("target.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*targetdotxml=file::getContents("target.xml");
 	test("file contents",!charstring::compare(target,targetdotxml));
 	delete[] targetdotxml;
@@ -288,7 +293,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(singlequotes));
 	file::remove("singlequotes.xml");
 	test("write file",x.writeFile("singlequotes.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*singlequotesdotxml=file::getContents("singlequotes.xml");
 	test("file contents",!charstring::compare(normal,singlequotesdotxml));
 	delete[] singlequotesdotxml;
@@ -300,7 +306,8 @@ int main(int argc, const char **argv) {
 	test("parse string",x.parseString(oddspacing));
 	file::remove("oddspacing.xml");
 	test("write file",x.writeFile("oddspacing.xml",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::evalPermString("rw-r--r--"),
+				false));
 	char	*oddspacingdotxml=file::getContents("oddspacing.xml");
 	test("file contents",!charstring::compare(normal,oddspacingdotxml));
 	delete[] oddspacingdotxml;

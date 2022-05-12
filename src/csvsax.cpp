@@ -23,9 +23,9 @@ enum csvstate {
 class csvsaxprivate {
 	friend class csvsax;
 	private:
-		csvstate	_state;
-		char		_quote;
-		char		_delimiter;
+		csvstate		_state;
+		char			_quote;
+		char			_delimiter;
 };
 
 csvsax::csvsax() : sax() {
