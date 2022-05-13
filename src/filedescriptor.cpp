@@ -253,13 +253,13 @@ class filedescriptorprivate {
 		listener	*_lstnr;
 
 		unsigned char	*_writebuffer;
+		unsigned char	*_writebuffertail;
 		unsigned char	*_writebufferend;
-		unsigned char	*_writebufferptr;
 
 		unsigned char	*_readbuffer;
-		unsigned char	*_readbufferend;
-		unsigned char	*_readbufferhead;
+		unsigned char	*_readbufferptr;
 		unsigned char	*_readbuffertail;
+		unsigned char	*_readbufferend;
 
 		thread		*_thr;
 		semaphoreset	*_thrsem;
@@ -305,12 +305,12 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_type="filedescriptor";
 	pvt->_lstnr=NULL;
 	pvt->_writebuffer=NULL;
+	pvt->_writebuffertail=NULL;
 	pvt->_writebufferend=NULL;
-	pvt->_writebufferptr=NULL;
 	pvt->_readbuffer=NULL;
-	pvt->_readbufferend=NULL;
-	pvt->_readbufferhead=NULL;
+	pvt->_readbufferptr=NULL;
 	pvt->_readbuffertail=NULL;
+	pvt->_readbufferend=NULL;
 	pvt->_thr=NULL;
 	pvt->_thrsem=NULL;
 	pvt->_threxit=false;
@@ -335,13 +335,13 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 		bytestring::copy(pvt->_writebuffer,
 				f.pvt->_writebuffer,
 				writebuffersize);
+		pvt->_writebuffertail=pvt->_writebuffer+
+				(f.pvt->_writebuffertail-f.pvt->_writebuffer);
 		pvt->_writebufferend=pvt->_writebuffer+writebuffersize;
-		pvt->_writebufferptr=pvt->_writebuffer+
-				(f.pvt->_writebufferptr-f.pvt->_writebuffer);
 	} else {
 		pvt->_writebuffer=NULL;
+		pvt->_writebuffertail=NULL;
 		pvt->_writebufferend=NULL;
-		pvt->_writebufferptr=NULL;
 	}
 	pvt->_lstnr=NULL;
 }
@@ -409,8 +409,8 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
 	delete[] pvt->_writebuffer;
 	pvt->_writebuffer=(size)?new unsigned char[size]:NULL;
+	pvt->_writebuffertail=pvt->_writebuffer;
 	pvt->_writebufferend=pvt->_writebuffer+size;
-	pvt->_writebufferptr=pvt->_writebuffer;
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("done setting write buffer size\n");
@@ -437,9 +437,9 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 
 	delete[] pvt->_readbuffer;
 	pvt->_readbuffer=(size)?new unsigned char[size]:NULL;
-	pvt->_readbufferend=pvt->_readbuffer+size;
-	pvt->_readbufferhead=pvt->_readbuffer;
+	pvt->_readbufferptr=pvt->_readbuffer;
 	pvt->_readbuffertail=pvt->_readbuffer;
+	pvt->_readbufferend=pvt->_readbuffer+size;
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf("done setting read buffer size\n");
@@ -1122,7 +1122,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 
 		// copy out what we can from the buffer
 		ssize_t	bytesavailabletocopy=pvt->_readbuffertail-
-						pvt->_readbufferhead;
+						pvt->_readbufferptr;
 		if (bytesavailabletocopy) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
@@ -1142,10 +1142,10 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			#endif
 
 			// copy out those bytes
-			bytestring::copy(data,pvt->_readbufferhead,bytestocopy);
+			bytestring::copy(data,pvt->_readbufferptr,bytestocopy);
 			data=data+bytestocopy;
 			bytesread=bytesread+bytestocopy;
-			pvt->_readbufferhead=pvt->_readbufferhead+bytestocopy;
+			pvt->_readbufferptr=pvt->_readbufferptr+bytestocopy;
 			bytesunread=bytesunread-bytestocopy;
 
 			// return if we've copied out
@@ -1165,7 +1165,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		}
 
 		// if we've emptied the buffer, then fill it again
-		if (pvt->_readbufferhead==pvt->_readbuffertail) {
+		if (pvt->_readbufferptr==pvt->_readbuffertail) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			debugPrintf("attempting to fill read buffer, ");
@@ -1235,8 +1235,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				return result;
 			}
 
-			// if all went well, reset the buffer head/tail pointers
-			pvt->_readbufferhead=pvt->_readbuffer;
+			// if all went well, reset the buffer ptr/tail
+			pvt->_readbufferptr=pvt->_readbuffer;
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
@@ -1414,20 +1414,20 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 
 	// do an actual bufffered write...
 	const unsigned char	*data=(const unsigned char *)buf;
-	ssize_t	initialwritebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
+	ssize_t	initialwritebuffersize=pvt->_writebuffertail-pvt->_writebuffer;
 	bool	first=true;
 	ssize_t	byteswritten=0;
 	ssize_t	bytesunwritten=count;
 	while (byteswritten<count) {
 
 		// determine the number of bytes currently buffered
-		ssize_t	writebuffersize=pvt->_writebufferptr-
+		ssize_t	writebuffersize=pvt->_writebuffertail-
 						pvt->_writebuffer;
 
 		// detemine the number of bytes of space remaining in the
 		// buffer after the data
 		ssize_t	writebufferspace=pvt->_writebufferend-
-						pvt->_writebufferptr;
+						pvt->_writebuffertail;
 
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("	writebuffersize=%d\n",
@@ -1449,9 +1449,9 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			#endif
 
 			// copy the data into the buffer
-			bytestring::copy(pvt->_writebufferptr,
+			bytestring::copy(pvt->_writebuffertail,
 					data,bytesunwritten);
-			pvt->_writebufferptr=pvt->_writebufferptr+
+			pvt->_writebuffertail=pvt->_writebuffertail+
 							bytesunwritten;
 			byteswritten=byteswritten+bytesunwritten;
 
@@ -1468,8 +1468,8 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			#endif
 
 			// copy what we can of the data into the buffer
-			bytestring::copy(pvt->_writebufferptr,
-					data,writebufferspace);
+			bytestring::copy(pvt->_writebuffertail,
+						data,writebufferspace);
 
 			// attempt to write the contents of the buffer
 			// (temporarily allowing short writes)
@@ -1486,8 +1486,8 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 				return result;
 			}
 
-			// reset the buffer pointer to the start of the buffer
-			pvt->_writebufferptr=pvt->_writebuffer;
+			// reset the buffer tail to the start of the buffer
+			pvt->_writebuffertail=pvt->_writebuffer;
 
 			// The first time the buffer is written, the number of
 			// bytes that were already in the buffer need to be
@@ -1515,14 +1515,14 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	if (!pvt->_writebuffer) {
 		return true;
 	}
-	ssize_t	writebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
+	ssize_t	writebuffersize=pvt->_writebuffertail-pvt->_writebuffer;
 	#if defined(DEBUG_BUFFERING)
 		debugPrintf("flush write buffer: %d bytes\n",
 						(int)writebuffersize);
 	#endif
 	bool	retval=(safeWrite(pvt->_writebuffer,writebuffersize,
 						sec,usec)==writebuffersize);
-	pvt->_writebufferptr=pvt->_writebuffer;
+	pvt->_writebuffertail=pvt->_writebuffer;
 	return retval;
 }
 
