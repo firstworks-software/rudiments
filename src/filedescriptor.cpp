@@ -265,10 +265,6 @@ class filedescriptorprivate {
 		semaphoreset	*_thrsem;
 		bool		_threxit;
 		bool		_threrror;
-		bool		_asyncwrite;
-		unsigned char	*_asyncbuf;
-		uint32_t	_asyncbufsize;
-		ssize_t		_asynccount;
 };
 
 filedescriptor::filedescriptor() : input(), output() {
@@ -319,10 +315,6 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_thrsem=NULL;
 	pvt->_threxit=false;
 	pvt->_threrror=false;
-	pvt->_asyncwrite=false;
-	pvt->_asyncbuf=NULL;
-	pvt->_asyncbufsize=0;
-	pvt->_asynccount=0;
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
@@ -377,10 +369,6 @@ filedescriptor::~filedescriptor() {
 		thread	*tmpthr=pvt->_thr;
 		pvt->_thr=NULL;
 		delete tmpthr;
-
-		unsigned char	*tmpasyncbuf=pvt->_asyncbuf;
-		pvt->_asyncbuf=NULL;
-		delete[] tmpasyncbuf;
 	}
 
 	unsigned char	*tmpbuffer=pvt->_readbuffer;
@@ -540,14 +528,6 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#else
 		return false;
 	#endif
-}
-
-void filedescriptor::useAsyncWrite() {
-	pvt->_asyncwrite=true;
-}
-
-void filedescriptor::dontUseAsyncWrite() {
-	pvt->_asyncwrite=false;
 }
 
 ssize_t filedescriptor::write(uint16_t number) {
@@ -1121,10 +1101,12 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 	debugPrintf("bufferedRead of %d bytes\n",(int)count);
 	#endif
 
+	// degenerate case, bail immediately
 	if (!count) {
 		return 0;
 	}
 
+	// if we're not actually buffering reads, then just do a safeRead()
 	if (!pvt->_readbuffer) {
 		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf("no read buffer...\n");
@@ -1132,13 +1114,13 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		return safeRead(buf,count,sec,usec);
 	}
 
+	// do an actual bufffered read...
 	unsigned char	*data=(unsigned char *)buf;
 	ssize_t		bytesread=0;
 	ssize_t		bytesunread=count;
-
 	for (;;) {
 
-		// copy what we can from the buffer
+		// copy out what we can from the buffer
 		ssize_t	bytesavailabletocopy=pvt->_readbuffertail-
 						pvt->_readbufferhead;
 		if (bytesavailabletocopy) {
@@ -1148,6 +1130,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						(int)bytesavailabletocopy);
 			#endif
 
+			// determine how many bytes to copy out
 			ssize_t	bytestocopy=(bytesavailabletocopy<bytesunread)?
 						bytesavailabletocopy:
 						bytesunread;
@@ -1158,13 +1141,15 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						(int)bytestocopy);
 			#endif
 
+			// copy out those bytes
 			bytestring::copy(data,pvt->_readbufferhead,bytestocopy);
 			data=data+bytestocopy;
 			bytesread=bytesread+bytestocopy;
 			pvt->_readbufferhead=pvt->_readbufferhead+bytestocopy;
 			bytesunread=bytesunread-bytestocopy;
 
-			// return if we've read enough
+			// return if we've copied out
+			// enough to satisfy the request
 			if (bytesread==count) {
 				#if defined(DEBUG_READ) && \
 					 defined(DEBUG_BUFFERING)
@@ -1179,7 +1164,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			#endif
 		}
 
-		// if we've copied out everything in the buffer, read some more
+		// if we've emptied the buffer, then fill it again
 		if (pvt->_readbufferhead==pvt->_readbuffertail) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
@@ -1189,6 +1174,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 							pvt->_readbuffer));
 			#endif
 
+			// attempt to fill the buffer
+			// (temporarily allowing short reads)
 			bool	saveasr=pvt->_allowshortreads;
 			pvt->_allowshortreads=true;
 			ssize_t	result=safeRead(pvt->_readbuffer,
@@ -1197,8 +1184,12 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						sec,usec);
 			pvt->_allowshortreads=saveasr;
 
+			// if we encountered an EOF...
 			if (!result) {
 
+				// if short reads are allowed, then just
+				// return the number of bytes that we were
+				// able to read prior to hitting the EOF
 				if (pvt->_allowshortreads) {
 					#if defined(DEBUG_READ) && \
 						defined(DEBUG_BUFFERING)
@@ -1213,10 +1204,18 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 							"reading...\n",
 							(int)bytesunread);
 				#endif
+
+				// if short reads are not allowed, then
+				// try again, this time not allowing further
+				// short reads
 				result=safeRead(pvt->_readbuffer,
 						bytesunread,
 						sec,usec);
 
+				// if we still got short read (I think in this
+				// case, it could only have been an EOF) then
+				// return the number of bytes that we were able
+				// to read prior to hitting the EOF
 				if (result>-1 && result!=bytesunread) {
 					#if defined(DEBUG_READ) && \
 						defined(DEBUG_BUFFERING)
@@ -1226,6 +1225,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				}
 			}
 
+			// if an error, timeout, abort, max-read, etc. occurred
+			// during any of the above then return that
 			if (result<0) {
 				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
@@ -1234,6 +1235,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				return result;
 			}
 
+			// if all went well, reset the buffer head/tail pointers
 			pvt->_readbufferhead=pvt->_readbuffer;
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
@@ -1247,6 +1249,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec) {
 
+	// degenerate case, bail immediately
 	if (!buf) {
 		return 0;
 	}
@@ -1255,6 +1258,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	debugPrintf("%d: safeRead(%d,(attempting %d bytes)",
 			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
 	#endif
+
+	// read from the file descriptor:
+	// * timing out, if necessary
+	// * doing multiple individual reads, if necessary
+	// * limiting individual reads to SSIZE_MAX,
+	//   (or whatever maximum size is set by the socketlayer)
+	// * retrying interrupted reads, if necessary
 
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
@@ -1287,7 +1297,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// to read data into
 		void	*ptr=(void *)((unsigned char *)buf+totalread);
 
-		// read...
+		// read into that position...
 		error::clearError();
 		if (pvt->_socklr) {
 
@@ -1355,7 +1365,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		totalread=totalread+actualread;
 
-		// if we want to allow short reads, then break out here
+		// if short reads are allowed, then break out here
 		if (pvt->_allowshortreads) {
 			#ifdef DEBUG_READ
 			debugPrintf(" SHORTREAD ");
@@ -1367,6 +1377,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	#ifdef DEBUG_READ
 	debugPrintf(",%d)\n",(int)totalread);
 	#endif
+
+	// return the total number of bytes that we were able to read
 	return totalread;
 }
 
@@ -1387,10 +1399,12 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	debugPrintf("bufferedWrite of %d bytes\n",(int)count);
 	#endif
 
+	// degenerate case, bail immediately
 	if (!count) {
 		return 0;
 	}
 
+	// if we're not actually buffering writes, then just do a safeWrite()
 	if (!pvt->_writebuffer) {
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("no write buffer...\n");
@@ -1398,17 +1412,20 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		return safeWrite(buf,count,sec,usec);
 	}
 
+	// do an actual bufffered write...
 	const unsigned char	*data=(const unsigned char *)buf;
-
 	ssize_t	initialwritebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
 	bool	first=true;
-
 	ssize_t	byteswritten=0;
 	ssize_t	bytesunwritten=count;
 	while (byteswritten<count) {
 
+		// determine the number of bytes currently buffered
 		ssize_t	writebuffersize=pvt->_writebufferptr-
 						pvt->_writebuffer;
+
+		// detemine the number of bytes of space remaining in the
+		// buffer after the data
 		ssize_t	writebufferspace=pvt->_writebufferend-
 						pvt->_writebufferptr;
 
@@ -1423,6 +1440,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						(int)bytesunwritten);
 		#endif
 
+		// if we have enough space to just buffer the data...
 		if (bytesunwritten<=writebufferspace) {
 
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
@@ -1430,12 +1448,14 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						(int)bytesunwritten);
 			#endif
 
+			// copy the data into the buffer
 			bytestring::copy(pvt->_writebufferptr,
 					data,bytesunwritten);
 			pvt->_writebufferptr=pvt->_writebufferptr+
 							bytesunwritten;
 			byteswritten=byteswritten+bytesunwritten;
 
+		// if we don't have enough space to just buffer the data...
 		} else {
 
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
@@ -1447,9 +1467,12 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 				(int)(writebuffersize+writebufferspace));
 			#endif
 
+			// copy what we can of the data into the buffer
 			bytestring::copy(pvt->_writebufferptr,
 					data,writebufferspace);
 
+			// attempt to write the contents of the buffer
+			// (temporarily allowing short writes)
 			bool	saveasw=pvt->_allowshortwrites;
 			pvt->_allowshortwrites=true;
 			ssize_t	result=safeWrite(pvt->_writebuffer,
@@ -1457,11 +1480,15 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					sec,usec);
 			pvt->_allowshortwrites=saveasw;
 
+			// if we got an EOF, short write, error, timeout,
+			// abort, or max-write, then return that
 			if (result!=writebuffersize+writebufferspace) {
 				return result;
 			}
 
+			// reset the buffer pointer to the start of the buffer
 			pvt->_writebufferptr=pvt->_writebuffer;
+
 			// The first time the buffer is written, the number of
 			// bytes that were already in the buffer need to be
 			// taken into account when calculating byteswritten,
@@ -1470,12 +1497,17 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			if (first) {
 				first=false;
 			}
+
+			// update stats
 			byteswritten=byteswritten+result-adjustment;
 			bytesunwritten=bytesunwritten-result+adjustment;
+
+			// update the position in the data that we're writing
 			data=data+result-adjustment;
 		}
 	}
 
+	// return the total number of bytes that we were able to write
 	return byteswritten;
 }
 
@@ -1497,6 +1529,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
 
+	// degenerate case, bail immediately
 	if (!buf) {
 		return 0;
 	}
@@ -1505,6 +1538,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	debugPrintf("%d: safeWrite(%d,",
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
+
+	// write to the file descriptor:
+	// * timing out, if necessary
+	// * doing multiple individual writes, if necessary
+	// * limiting individual writes to SSIZE_MAX,
+	//   (or whatever maximum size is set by the socketlayer)
+	// * retrying interrupted writes, if necessary
 
 	int32_t	olderrno=error::getErrorNumber();
 
@@ -1549,7 +1589,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 			actualwrite=pvt->_socklr->write(ptr,sizetowrite);
 		} else {
-			actualwrite=midLevelWrite(ptr,sizetowrite);
+			actualwrite=lowLevelWrite(ptr,sizetowrite);
 		}
 
 		#ifdef DEBUG_WRITE
@@ -1563,7 +1603,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		stdoutput.flush();
 		#endif
 
-		// if we didn't read the number of bytes we expected to,
+		// if we didn't write the number of bytes we expected to,
 		// handle that...
 		if (actualwrite!=sizetowrite) {
 			if (isusingnonblockingmode &&
@@ -1619,119 +1659,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	debugPrintf(",%d)\n",(int)totalwrite);
 	#endif
 	error::setErrorNumber(olderrno);
+
+	// return the total number of bytes that we were able to write
 	return totalwrite;
-}
-
-void filedescriptor::lowLevelWriteWorker(void *attr) {
-
-	// get the filedescriptor
-	filedescriptor	*fd=(filedescriptor *)attr;
-
-	for (;;) {
-
-		// signal that we're ready for work
-		fd->pvt->_thrsem->signal(1);
-
-		// wait for work to do
-		fd->pvt->_thrsem->wait(0);
-
-		// handle exit
-		if (fd->pvt->_threxit) {
-			return;
-		}
-
-		// attempt to write all data
-		// FIXME: what about allowshortwrites?
-		ssize_t	bytestowrite=fd->pvt->_asynccount;
-		ssize_t	byteswritten=0;
-		do {
-			error::clearError();
-			ssize_t	result=fd->lowLevelWrite(
-						fd->pvt->_asyncbuf+byteswritten,
-						bytestowrite);
-			if (result==-1) {
-				if (error::getErrorNumber()==EINTR &&
-					fd->pvt->_retryinterruptedwrites &&
-					!process::getShutDownFlag()) {
-					continue;
-				} else {
-					break;
-				}
-			}
-			bytestowrite-=result;
-			byteswritten+=result;
-		} while (byteswritten<fd->pvt->_asynccount);
-
-		// if we failed to write everything, then
-		// declare than an error has occurred
-		if (byteswritten!=fd->pvt->_asynccount) {
-			fd->pvt->_threrror=true;
-		}
-	}
-}
-
-ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) {
-
-	if (pvt->_asyncwrite) {
-
-		if (!pvt->_thr) {
-
-			// create the worker thread semaphore
-			pvt->_thrsem=new semaphoreset;
-			int32_t	vals[2]={0,0};
-			if (!pvt->_thrsem->create(
-				IPC_PRIVATE,
-				permissions::evalPermString("rw-------"),
-				2,vals)) {
-				delete pvt->_thrsem;
-				pvt->_thrsem=NULL;
-				return RESULT_ERROR;
-			}
-
-			// create the worker thread
-			pvt->_thr=new thread;
-			if (!pvt->_thr->spawn(
-				(void *(*)(void *))lowLevelWriteWorker,
-				(void *)this,false)) {	
-
-				delete pvt->_thrsem;
-				pvt->_thrsem=NULL;
-				delete pvt->_thr;
-				pvt->_thr=NULL;
-				return RESULT_ERROR;
-			}
-		}
-
-		// wait for the worker thread to be ready
-		pvt->_thrsem->wait(1);
-
-		// if a previous write failed, then return an error
-		if (pvt->_threrror) {
-			pvt->_threrror=false;
-			// FIXME: RESULT_ASYNC_ERROR or something...
-			return RESULT_ERROR;
-		}
-
-		// copy the buffer
-		if ((ssize_t)pvt->_asyncbufsize<count) {
-			delete[] pvt->_asyncbuf;
-			// pad to 1024-byte boundary to reduce the need to
-			// re-allocate this buffer
-			pvt->_asyncbufsize=count+((1024-(count%1024))%1024);
-			pvt->_asyncbuf=new unsigned char[pvt->_asyncbufsize];
-		}
-		bytestring::copy(pvt->_asyncbuf,buf,count);
-		pvt->_asynccount=count;
-
-		// signal the worker thread to do work
-		pvt->_thrsem->signal(0);
-
-		// return success
-		return count;
-
-	} else {
-		return lowLevelWrite(buf,count);
-	}
 }
 
 ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) {
