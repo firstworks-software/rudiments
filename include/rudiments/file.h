@@ -45,7 +45,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  O_RDWR - Open the file in write-only mode.
 		 *
 		 *  O_APPEND - All writes will occur at end of the file.
-		 *  (NOTE: This option conflicts with buffering.
+		 *  (NOTE: This flag conflicts with buffering.  Don't use when
+		 *  also using buffering.)
 		 *
 		 *  O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
 		 *
@@ -69,7 +70,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  O_RDWR - Open the file in write-only mode.
 		 *
-		 *  O_APPEND - Set the position to the end of the file.
+		 *  O_APPEND - All writes will occur at end of the file.
+		 *  (NOTE: This flag conflicts with buffering.  Don't use when
+		 *  also using buffering.)
 		 *
 		 *  O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
 		 *
