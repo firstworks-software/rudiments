@@ -9,13 +9,13 @@
 			const char	*cacheString(const char *string);
 			void		unCacheString(const char *string);
 
-			virtual void	writeNode(const domnode *dn,
+			virtual bool	writeNode(const domnode *dn,
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;
-			virtual	void	writeIndent(output *out,
+			virtual	bool	writeIndent(output *out,
 						uint16_t indent) const;
-			virtual	void	safeWrite(output *out,
+			virtual	bool	safeWrite(output *out,
 						const char *str) const;
 
 				dom(const dom &x);

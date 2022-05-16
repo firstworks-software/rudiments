@@ -1534,22 +1534,24 @@ bool domnode::deleteAttribute(domnode *attribute) {
 				&pvt->_attributecount);
 }
 
-void domnode::write(output *out) const {
-	write(out,false);
+bool domnode::write(output *out) const {
+	return write(out,false);
 }
 
-void domnode::write(output *out, bool indent) const {
+bool domnode::write(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	pvt->_dom->writeNode(this,out,indent,(indent)?&indentlevel:NULL);
+	return pvt->_dom->
+		writeNode(this,out,indent,(indent)?&indentlevel:NULL);
 }
 
-void domnode::writeXml(output *out) const {
-	writeXml(out,false);
+bool domnode::writeXml(output *out) const {
+	return writeXml(out,false);
 }
 
-void domnode::writeXml(output *out, bool indent) const {
+bool domnode::writeXml(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	pvt->_dom->dom::writeNode(this,out,indent,(indent)?&indentlevel:NULL);
+	return pvt->_dom->
+		dom::writeNode(this,out,indent,(indent)?&indentlevel:NULL);
 }
 
 stringbuffer *domnode::getPath() const {

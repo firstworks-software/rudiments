@@ -81,6 +81,7 @@ bool inetsocketserver::listen(const char *address, uint16_t port,
 
 bool inetsocketserver::initialize(const char *address, uint16_t port) {
 
+	close();
 	inetsocketutil::initialize(address,port);
 
 	// initialize a socket address structure

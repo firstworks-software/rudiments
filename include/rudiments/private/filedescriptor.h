@@ -9,15 +9,31 @@
 		void	filedescriptorInit();
 		void	filedescriptorClone(const filedescriptor &f);
 
-		virtual	ssize_t	bufferedRead(void *buf, ssize_t count,
+		off64_t	setPosition(off64_t offset, int32_t whence);
+		off64_t	lseek(off64_t offset, int32_t whence) const;
+
+		ssize_t	fillWriteBuffer(int32_t sec, int32_t usec);
+		bool	realignWriteBuffer(int32_t sec, int32_t usec);
+
+		ssize_t	bufferedRead(void *buf, ssize_t count,
+						int32_t sec, int32_t usec);
+		ssize_t	bufferedWrite(const void *buf, ssize_t count,
+						int32_t sec, int32_t usec);
+		ssize_t	streamBufferedRead(void *buf, ssize_t count,
+						int32_t sec, int32_t usec);
+		ssize_t	streamBufferedWrite(const void *buf, ssize_t count,
+						int32_t sec, int32_t usec);
+		ssize_t	storageBufferedRead(void *buf, ssize_t count,
+						int32_t sec, int32_t usec);
+		ssize_t	storageBufferedWrite(const void *buf, ssize_t count,
+						int32_t sec, int32_t usec);
+
+		ssize_t	safeRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec);
-		virtual	ssize_t	bufferedWrite(const void *buf, ssize_t count,
+		ssize_t	safeWrite(const void *buf, ssize_t count,
 					int32_t sec, int32_t usec);
-		virtual	ssize_t	safeRead(void *buf, ssize_t count,
-					int32_t sec, int32_t usec);
-		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
-					int32_t sec, int32_t usec);
-		bool		setNoDelay(int32_t onoff);
+
+		bool	setNoDelay(int32_t onoff);
 
 		int32_t	getSockOpt(int32_t level, int32_t optname,
 					void *optval, socklen_t *optlen);
@@ -39,7 +55,6 @@
 		socketlayer	*socklr();
 
 	private:
-		static void	lowLevelWriteWorker(void *attr);
 		filedescriptorprivate	*pvt;
 
 	public:

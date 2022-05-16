@@ -253,16 +253,21 @@ bool propdom::valueEnd() {
 	return true;
 }
 
-void propdom::writeAndEscape(output *out, const char *value) const {
+bool propdom::writeAndEscape(output *out, const char *value) const {
 	for (const char *c=value; *c; c++) {
 		if (character::isWhitespace(*c)) {
-			out->write('\\');
+			if (out->write('\\')<1) {
+				return false;
+			}
 		}
-		out->write(*c);
+		if (out->write(*c)<1) {
+			return false;
+		}
 	}
+	return true;
 }
 
-void propdom::writeNode(const domnode *dn, output *out,
+bool propdom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
 	switch (dn->getType()) {
@@ -270,36 +275,55 @@ void propdom::writeNode(const domnode *dn, output *out,
 			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
 					child=child->getNextSibling()) {
-				writeNode(child,out,indent,indentlevel);
+				if (!writeNode(child,out,indent,indentlevel)) {
+					return false;
+				}
 			}
 			break;
 		case TAG_DOMNODETYPE:
 			{
 			const char	*name=dn->getName();
+			const char	*e=NULL;
+			ssize_t		elen=0;
+			const char	*val=dn->getAttributeValue("v");
+			ssize_t		vlen=charstring::length(val);
 			switch (*name) {
 				case 'c':
-					out->write('!');
-					out->write(dn->getAttributeValue("v"));
+					if (out->write('!')<1 ||
+						out->write(val,vlen)<vlen) {
+						return false;
+					}
 					break;
 				case 'p':
-					out->write('#');
-					out->write(dn->getAttributeValue("v"));
+					if (out->write('#')<1 ||
+						out->write(val,vlen)<vlen) {
+						return false;
+					}
 					break;
 				case 'k':
-					writeAndEscape(out,
-						dn->getAttributeValue("k"));
-					out->write(
-						dn->getAttributeValue("e"));
-					writeAndEscape(out,
-						dn->getAttributeValue("v"));
+					e=dn->getAttributeValue("e");
+					elen=charstring::length(e);
+					if (!writeAndEscape(out,
+						dn->getAttributeValue("k")) ||
+						out->write(e,elen)<elen ||
+						!writeAndEscape(out,val)) {
+						return false;
+					}
 					break;
 			}
 			}
 			break;
 		case TEXT_DOMNODETYPE:
-			out->write(dn->getValue());
+			{
+			const char	*val=dn->getValue();
+			ssize_t		vlen=charstring::length(val);
+			if (out->write(val,vlen)<vlen) {
+				return false;
+			}
+			}
 			break;
 		default:
 			break;
 	}
+	return true;
 }

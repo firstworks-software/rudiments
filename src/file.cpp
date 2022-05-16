@@ -138,6 +138,7 @@ file::file() : filedescriptor() {
 		pvt->_blocksize=0;
 	#endif
 	pvt->_getcurrentpropertiesonopen=true;
+	setIsStream(false);
 	type("file");
 }
 
@@ -346,11 +347,6 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 		if (flags&O_TRUNC) {
 			truncate();
 		}
-
-		// append if specified
-		if (flags&O_APPEND) {
-			setPositionRelativeToEnd(0);
-		}
 	#else
 
 		int32_t	result;
@@ -382,12 +378,14 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 }
 
 bool file::open(const char *name, int32_t flags) {
+	close();
 	return (lowLevelOpen(name,flags,0,false) &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int32_t flags, mode_t perms) {
+	close();
 	return (lowLevelOpen(name,flags,perms,true) &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
@@ -801,38 +799,6 @@ bool file::unlockRemainderFromEnd() const {
 
 bool file::unlockRemainderFromEnd(off64_t start) const {
 	return unlock(SEEK_END,start,0);
-}
-
-off64_t file::setPositionRelativeToBeginning(off64_t offset) const {
-	return lseek(offset,SEEK_SET);
-}
-
-off64_t file::setPositionRelativeToCurrent(off64_t offset) const {
-	return lseek(offset,SEEK_CUR);
-}
-
-off64_t file::setPositionRelativeToEnd(off64_t offset) const {
-	return lseek(offset,SEEK_END);
-}
-
-off64_t file::getCurrentPosition() const {
-	return lseek(0,SEEK_CUR);
-}
-
-off64_t file::lseek(off64_t offset, int32_t whence) const {
-	int32_t	result;
-	error::clearError();
-	do {
-		#if defined(RUDIMENTS_HAVE__LSEEK)
-			result=_lseek(fd(),offset,whence);
-		#elif defined(RUDIMENTS_HAVE_LSEEK)
-			result=::lseek(fd(),offset,whence);
-		#else
-			#error no lseek or anything like it
-		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR &&
-					!process::getShutDownFlag());
-	return result;
 }
 
 bool file::exists(const char *filename) {

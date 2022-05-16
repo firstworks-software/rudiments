@@ -6,11 +6,11 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
-			void	writeNode(const domnode *dn,
+			bool	writeNode(const domnode *dn,
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;
-			void	writeAndEscape(output *out,
+			bool	writeAndEscape(output *out,
 						const char *value) const;
 
 				propdom(const propdom &x);

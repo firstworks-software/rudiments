@@ -92,7 +92,7 @@ bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 		optblocksize=sys::getPageSize();
 	}
 	file	fl;
-	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {
+	if (!fl.open(filename,O_RDWR|O_CREAT|O_TRUNC,perms)) {
 		return false;
 	}
 	fl.setWriteBufferSize(optblocksize);
@@ -109,8 +109,7 @@ bool dom::write(output *out) const {
 }
 
 bool dom::write(output *out, bool indent) const {
-	getRootNode()->write(out,indent);
-	return true;
+	return getRootNode()->write(out,indent);
 }
 
 bool dom::writeXml(output *out) const {
@@ -119,11 +118,10 @@ bool dom::writeXml(output *out) const {
 
 bool dom::writeXml(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	dom::writeNode(getRootNode(),out,indent,&indentlevel);
-	return true;
+	return dom::writeNode(getRootNode(),out,indent,&indentlevel);
 }
 
-void dom::writeNode(const domnode *dn, output *out,
+bool dom::writeNode(const domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) const {
 
 	// NOTE: this method is written a little strangely
@@ -133,38 +131,58 @@ void dom::writeNode(const domnode *dn, output *out,
 	if (dn->getType()==ROOT_DOMNODETYPE) {
 		current=dn->getFirstChild();
 		while (!current->isNullNode()) {
-			dom::writeNode(current,out,indent,indentlevel);
+			if (!dom::writeNode(current,out,indent,indentlevel)) {
+				return false;
+			}
 			current=current->getNextSibling();
 		}
 	} else if (dn->getType()==TAG_DOMNODETYPE) {
 		if (indent && indentlevel) {
-			writeIndent(out,*indentlevel);
+			if (!writeIndent(out,*indentlevel)) {
+				return false;
+			}
 		}
-		out->write("<");
+		if (out->write("<")<1) {
+			return false;
+		}
 		if (dn->getNamespace()) {
-			safeWrite(out,dn->getNamespace());
-			out->write(":");
+			if (!safeWrite(out,dn->getNamespace()) ||
+						out->write(":")<1) {
+				return false;
+			}
 		}
-		safeWrite(out,dn->getName());
+		if (!safeWrite(out,dn->getName())) {
+			return false;
+		}
 		current=dn->getAttribute((uint64_t)0);
 		while (current && !current->isNullNode()) {
-			out->write(" ");
-			dom::writeNode(current,out,indent,indentlevel);
+			if (out->write(" ")<1 ||
+				!dom::writeNode(current,out,
+						indent,indentlevel)) {
+				return false;
+			}
 			current=current->getNextSibling();
 		}
 		current=dn->getFirstChild();
 		if (!current->isNullNode()) {
-			out->write(">");
+			if (out->write(">")<1) {
+				return false;
+			}
 			if (indent && indentlevel) {
 				if (current->getType()!=TEXT_DOMNODETYPE &&
 					current->getType()!=CDATA_DOMNODETYPE) {
-					out->write("\n");
+					if (out->write("\n")<1) {
+						return false;
+					}
 				}
 				*indentlevel=*indentlevel+2;
 			}
 			domnodetype	prevtype=current->getType();
 			while (!current->isNullNode()) {
-				dom::writeNode(current,out,indent,indentlevel);
+				if (!dom::writeNode(
+					current,out,indent,indentlevel)) {
+					return false;
+				}
 				prevtype=current->getType();
 				current=current->getNextSibling();
 			}
@@ -172,65 +190,99 @@ void dom::writeNode(const domnode *dn, output *out,
 				*indentlevel=*indentlevel-2;
 				if (prevtype!=TEXT_DOMNODETYPE &&
 					prevtype!=CDATA_DOMNODETYPE) {
-					writeIndent(out,*indentlevel);
+					if (!writeIndent(out,*indentlevel)) {
+						return false;
+					}
 				}
 			}
-			out->write("</");
+			if (out->write("</")<2) {
+				return false;
+			}
 			if (dn->getNamespace()) {
 				safeWrite(out,dn->getNamespace());
-				out->write(":");
+				if (out->write(":")<1) {
+					return false;
+				}
 			}
-			safeWrite(out,dn->getName());
-			out->write(">");
+			if (!safeWrite(out,dn->getName())) {
+				return false;
+			}
+			if (out->write(">")<1) {
+				return false;
+			}
 			if (indent && indentlevel) {
-				out->write("\n");
+				if (out->write("\n")<1) {
+					return false;
+				}
 			}
 		} else {
 			if (dn->getName()[0]=='?') {
-				out->write("?>");
+				if (out->write("?>")<2) {
+					return false;
+				}
 			} else if (dn->getName()[0]=='!') {
-				out->write(">");
+				if (out->write(">")<1) {
+					return false;
+				}
 			} else {
-				out->write("/>");
+				if (out->write("/>")<2) {
+					return false;
+				}
 			}
 			if (indent && indentlevel) {
-				out->write("\n");
+				if (out->write("\n")<1) {
+					return false;
+				}
 			}
 		}
 	} else if (dn->getType()==TEXT_DOMNODETYPE) {
-		safeWrite(out,dn->getValue());
+		if (!safeWrite(out,dn->getValue())) {
+			return false;
+		}
 	} else if (dn->getType()==ATTRIBUTE_DOMNODETYPE) {
 		if (dn->getParent()->getName()[0]=='!') {
-			out->write("\"");
-			safeWrite(out,dn->getValue());
-			out->write("\"");
+			if (out->write("\"")<1 ||
+					!safeWrite(out,dn->getValue()) ||
+					out->write("\"")<1) {
+				return false;
+			}
 		} else {
-			safeWrite(out,dn->getName());
-			out->write("=\"");
-			safeWrite(out,dn->getValue());
-			out->write("\"");
+			if (!safeWrite(out,dn->getName()) ||
+					out->write("=\"")<2 ||
+					!safeWrite(out,dn->getValue()) ||
+					out->write("\"")<1) {
+				return false;
+			}
 		}
 	} else if (dn->getType()==COMMENT_DOMNODETYPE) {
-		out->write("<!--");
-		safeWrite(out,dn->getValue());
-		out->write("-->");
+		if (out->write("<!--")<4 ||
+				!safeWrite(out,dn->getValue()) ||
+				out->write("-->")<3) {
+			return false;
+		}
 	} else if (dn->getType()==CDATA_DOMNODETYPE) {
-		out->write("<![CDATA[");
-		safeWrite(out,dn->getValue());
-		out->write("]]>");
+		if (out->write("<![CDATA[")<9 ||
+				!safeWrite(out,dn->getValue()) ||
+				out->write("]]>")<3) {
+			return false;
+		}
 	}
+	return true;
 }
 
-void dom::writeIndent(output *out, uint16_t indent) const {
+bool dom::writeIndent(output *out, uint16_t indent) const {
 	for (uint16_t i=0; i<indent; i++) {
-		out->write(" ");
+		if (out->write(" ")<1) {
+			return false;
+		}
 	}
+	return true;
 }
 
-void dom::safeWrite(output *out, const char *str) const {
+bool dom::safeWrite(output *out, const char *str) const {
 
 	if (!str) {
-		return;
+		return true;
 	}
 
 	const char	*start=str;
@@ -254,22 +306,35 @@ void dom::safeWrite(output *out, const char *str) const {
 					static_cast<unsigned char>(*ch));
 		}
 		if (entity || num) {
-			out->write(start,ch-start);
+			if (out->write(start,ch-start)<ch-start) {
+				return false;
+			}
 			if (entity) {
-				out->write(entity);
+				ssize_t	len=charstring::length(entity);
+				if (out->write(entity,len)<len) {
+					return false;
+				}
 				entity=NULL;
 			} else {
-				out->write("&#");
+				if (out->write("&#")<2) {
+					return false;
+				}
 				char	*numstr=charstring::parseNumber(num);
-				out->write(numstr);
+				ssize_t	len=charstring::length(numstr);
+				if (out->write(numstr,len)<len) {
+					delete[] numstr;
+					return false;
+				}
 				delete[] numstr;
-				out->write(";");
+				if (out->write(";")<1) {
+					return false;
+				}
 				num=0;
 			}
 			start=ch+1;
 		}
 	}
-	out->write(start,ch-start);
+	return (out->write(start,ch-start)==ch-start);
 }
 
 bool dom::stringCacheEnabled() {

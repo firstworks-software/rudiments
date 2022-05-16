@@ -38,6 +38,23 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  the class to "filedesc". */
 		void	setFileDescriptor(int32_t filedesc);
 
+		/** Set "isstream" to true (the default) if this filedescriptor
+		 *  is a stream such as a socket, serial port, fifo, etc. or
+		 *  false if this filedescriptor is storage such as a file,
+		 *  raw block device, etc..  This setting impacts how buffering
+		 *  works, as well as how the various setPosition() and
+		 *  getPosition() methods work.
+		 *
+		 *  Note that if the filedescriptor is as stream, but this is
+		 *  set false, or vice versa, then unexpected results may
+		 *  occur if buffering is used, and/or the
+		 *  setPosition()/getPosition() methods are called. */
+		void	setIsStream(bool isstream);
+
+		/** Returns true if this filedescriptor was set to be a stream
+		 *  using setIsStream() or false otherwise. */
+		bool	getIsStream();
+
 		/** Duplicates the file descriptor and returns
 		 *  the handle of the duplicate descriptor.  The
 		 *  old and new descriptors may be used
@@ -84,6 +101,31 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Returns true if the file descriptor is in
 		 *  non-blocking mode and false otherwise. */
 		virtual bool	isUsingNonBlockingMode() const;
+
+		/** Returns the position (relative to the beginning of the
+		 *  file descriptor) at which the next read or write will
+		 *  occur, or -1 on failure. */
+		virtual off64_t	getCurrentPosition() const;
+
+		/** Sets the position (relative to the beginning of the file
+		 *  descriptor) at which the next read or write will occur to
+		 *  "offset".  Returns that position on success or -1 on
+		 *  failure. */
+		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
+
+		/** Advances the position at which the next read or write will
+ 		 *  occur by "offset" bytes.  Returns that position on success
+ 		 *  or -1 on failure. */
+		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
+
+		/** Sets the position at which the next read or write will
+		 *  occur to the end of the file plus "offset" bytes.
+		 *  Generally, "offset" will be negative though most filesystems
+		 *  allow the creation of files with holes in them and that can
+		 *  be accomplished by using a positive "offset" and then
+		 *  writing data at that position.  Returns the position on
+		 *  succes or -1 on failure. */
+		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
@@ -1010,6 +1052,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  Returns true on success and false on failure. */
 		bool	setWriteBufferSize(ssize_t size) const;
 
+		/** Returns the current size of the write buffer. */
+		ssize_t	getWriteBufferSize() const;
+
 		/** If an application does many small writes, the overhead of
 		 *  all of those system calls can slow the application down
 		 *  substantially.  To address that issue, the filedescriptor
@@ -1059,6 +1104,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  This method sets the read buffer size to "size" bytes and
 		 *  returns true on success and false on failure. */
 		bool	setReadBufferSize(ssize_t size) const;
+
+		/** Returns the current size of the read buffer. */
+		ssize_t	getReadBufferSize() const;
 
 		/** If the close-on-exec status is false (the default), then the
 		 *  file descriptor will remain open across an execve() call,

@@ -32,11 +32,11 @@
 
 			void	trimFields(bool left, bool right);
 
-			void	writeNode(const domnode *dn,
+			bool	writeNode(const domnode *dn,
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;
-			void	writeValue(output *out, domnode *value) const;
+			bool	writeValue(output *out, domnode *value) const;
 
 				csvdom(const csvdom &x);
 			csvdom	&operator=(const csvdom &x);

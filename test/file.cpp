@@ -199,6 +199,115 @@ int main(int argc, const char **argv) {
 		test("unlock 1",fl.unlockFile());
 
 		snooze::macrosnooze(1);
+
+		test("truncate",fl.truncate());
+		test("getCurrentProperties after truncate",
+					fl.getCurrentProperties());
+		test("getSize after truncate",!fl.getSize());
+		fl.setWriteBufferSize(1024);
+		test("getWriteBufferSize",fl.getWriteBufferSize()==1024);
+		test("getReadBufferSize",fl.getReadBufferSize()==1024);
+
+		// sequential writes/reads
+		// write 400 a's, followed by 400 b's, followed by 400 c's, etc.
+		// then
+		// read 400 a's, followed by 400 b's, followed by 400 c's, etc.
+		//
+		// (note that 400 is not aligned with the buffer size of 1024)
+		bool	success=true;
+		for (uint8_t iter=0; iter<2; iter++) {
+			for (char ch='a'; ch<='z'; ch++) {
+				for (uint16_t i=0; i<400; i++) {
+					char	rch;
+					ssize_t	result=(!iter)?fl.write(ch):
+								fl.read(&rch);
+					if (result!=sizeof(char)) {
+						success=false;
+						break;
+					}
+					if (iter && rch!=ch) {
+						success=false;
+						break;
+					}
+				}
+				if (!success) {
+					break;
+				}
+			}
+			test((!iter)?"sequential buffered writes":
+					"sequential buffered reads",success);
+			fl.setPositionRelativeToBeginning(0);
+		}
+
+		// non-sequential reads
+		// read the first a, first b, first c, etc.
+		// then
+		// read the second a, second b, second c, etc.
+		// then
+		// read the third a, third b, third c, etc.
+		// etc.
+		for (uint16_t i=0; i<400; i++) {
+			for (char ch='a'; ch<='z'; ch++) {
+				fl.setPositionRelativeToBeginning(
+							(ch-'a')*400+i);
+				char	rch;
+				ssize_t	result=fl.read(&rch);
+				if (result!=sizeof(char)) {
+					success=false;
+					break;
+				}
+				if (rch!=ch) {
+					success=false;
+					break;
+				}
+			}
+			if (!success) {
+				break;
+			}
+		}
+		test("non-sequential buffered reads",success);
+
+		// non-sequential writes
+		// replace the zeroth a, zeroth b, zeroth c, etc. with 0
+		// then
+		// replace the tenth a, tenth b, tenth c, etc. with 0
+		// etc.
+		for (uint16_t i=0; i<400; i+=10) {
+			for (char ch='a'; ch<='z'; ch++) {
+				fl.setPositionRelativeToBeginning(
+							(ch-'a')*400+i);
+				ssize_t	result=fl.write('0');
+				if (result!=sizeof(char)) {
+					success=false;
+					break;
+				}
+			}
+			if (!success) {
+				break;
+			}
+		}
+		test("non-sequential buffered writes",success);
+
+		// verify that the above worked
+		fl.setPositionRelativeToBeginning(0);
+		for (char ch='a'; ch<='z'; ch++) {
+			for (uint16_t i=0; i<400; i=i+1) {
+				char	rch;
+				ssize_t	result=fl.read(&rch);
+				if (result!=sizeof(char)) {
+					success=false;
+					break;
+				}
+				if (rch!=((i%10)?ch:'0')) {
+					success=false;
+					break;
+				}
+			}
+			if (!success) {
+				break;
+			}
+		}
+		test("sequential buffered reads",success);
 		stdoutput.printf("\n");
 
 		fl.close();

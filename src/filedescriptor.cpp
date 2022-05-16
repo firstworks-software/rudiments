@@ -252,9 +252,14 @@ class filedescriptorprivate {
 
 		listener	*_lstnr;
 
+		bool		_isstream;
+		off64_t		_offset;
+		off64_t		_blockoffset;
+
 		unsigned char	*_writebuffer;
 		unsigned char	*_writebuffertail;
 		unsigned char	*_writebufferend;
+		bool		_writebufferdirty;
 
 		unsigned char	*_readbuffer;
 		unsigned char	*_readbufferptr;
@@ -304,9 +309,13 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_socklr=NULL;
 	pvt->_type="filedescriptor";
 	pvt->_lstnr=NULL;
+	pvt->_offset=0;
+	pvt->_blockoffset=0;
+	pvt->_isstream=true;
 	pvt->_writebuffer=NULL;
 	pvt->_writebuffertail=NULL;
 	pvt->_writebufferend=NULL;
+	pvt->_writebufferdirty=false;
 	pvt->_readbuffer=NULL;
 	pvt->_readbufferptr=NULL;
 	pvt->_readbuffertail=NULL;
@@ -328,6 +337,9 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
 	pvt->_socklr=f.pvt->_socklr;
+	pvt->_offset=f.pvt->_offset;
+	pvt->_blockoffset=f.pvt->_blockoffset;
+	pvt->_isstream=f.pvt->_isstream;
 	if (f.pvt->_writebuffer) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
 						f.pvt->_writebuffer;
@@ -343,6 +355,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 		pvt->_writebuffertail=NULL;
 		pvt->_writebufferend=NULL;
 	}
+	pvt->_writebufferdirty=f.pvt->_writebufferdirty;
 	pvt->_lstnr=NULL;
 }
 
@@ -397,40 +410,94 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 	}
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		debugPrintf("setting write buffer size to %d\n",size);
+	debugPrintf("%d: setWriteBufferSize(%d,attempting %d bytes",
+			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
 	if (size<0) {
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			debugPrintf("invalid size: %d\n",size);
+		debugPrintf(",error: invalid size: %d)\n",size);
 		#endif
 		return false;
 	}
 
-	delete[] pvt->_writebuffer;
-	pvt->_writebuffer=(size)?new unsigned char[size]:NULL;
+	if (size) {
+
+		// here, we will be buffering, going forward...
+
+		// we need to figure out the current offset and block offset...
+
+		// if we haven't been buffering then we need to get the offset
+		// from the file itself, otherwise, if we have been buffering
+		// then pvt->_offset ought to be valid
+		if (!pvt->_writebuffer) {
+			pvt->_offset=getCurrentPosition();
+		}
+
+		// calculate the block offset from the
+		// offset and the new block size
+		pvt->_blockoffset=pvt->_offset/size*size;
+
+		// clean up and create a new write buffer
+		delete[] pvt->_writebuffer;
+		pvt->_writebuffer=new unsigned char[size];
+
+	} else {
+
+		// here, we won't be buffering, going forward...
+
+		// invalidate both offset and block offset, as
+		// these should only be valid if we're buffering
+		pvt->_offset=0;
+		pvt->_blockoffset=0;
+
+		// clean up and don't create a new write buffer
+		delete[] pvt->_writebuffer;
+		pvt->_writebuffer=NULL;
+	}
+
+	// reset write buffer pointers
 	pvt->_writebuffertail=pvt->_writebuffer;
 	pvt->_writebufferend=pvt->_writebuffer+size;
 
+	// mark the buffer not dirty
+	pvt->_writebufferdirty=false;
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		debugPrintf("done setting write buffer size\n");
+	debugPrintf(",success)\n");
 	#endif
 	return true;
 }
 
+ssize_t filedescriptor::getWriteBufferSize() const {
+	return pvt->_writebufferend-pvt->_writebuffer;
+}
+
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
+
+	// for storage (non-stream) filedescriptors,
+	// we only use one buffer, the write buffer
+	if (!pvt->_isstream) {
+		delete[] pvt->_readbuffer;
+		pvt->_readbuffer=NULL;
+		pvt->_readbufferptr=NULL;
+		pvt->_readbuffertail=NULL;
+		pvt->_readbufferend=NULL;
+		return setWriteBufferSize(size);
+	}
 
 	if (size>SSIZE_MAX) {
 		size=SSIZE_MAX;
 	}
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		debugPrintf("setting read buffer size to %d\n",size);
+	debugPrintf("%d: setReadBufferSize(%d,attempting %d bytes",
+			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
 	if (size<0) {
 		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			debugPrintf("invalid size: %d\n",size);
+		debugPrintf(",error: invalid size: %d)\n",size);
 		#endif
 		return false;
 	}
@@ -442,9 +509,15 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 	pvt->_readbufferend=pvt->_readbuffer+size;
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		debugPrintf("done setting read buffer size\n");
+	debugPrintf(",success)\n");
 	#endif
 	return true;
+}
+
+ssize_t filedescriptor::getReadBufferSize() const {
+	return (pvt->_isstream)?
+			(pvt->_readbufferend-pvt->_readbuffer):
+			getWriteBufferSize();
 }
 
 int32_t filedescriptor::getFileDescriptor() const {
@@ -453,6 +526,14 @@ int32_t filedescriptor::getFileDescriptor() const {
 
 void filedescriptor::setFileDescriptor(int32_t filedesc) {
 	pvt->_fd=filedesc;
+}
+
+void filedescriptor::setIsStream(bool isstream) {
+	pvt->_isstream=isstream;
+}
+
+bool filedescriptor::getIsStream() {
+	return pvt->_isstream;
 }
 
 int32_t filedescriptor::duplicate() const {
@@ -528,6 +609,216 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#else
 		return false;
 	#endif
+}
+
+off64_t filedescriptor::setPositionRelativeToBeginning(off64_t offset) {
+	return setPosition(offset,SEEK_SET);
+}
+
+off64_t filedescriptor::setPositionRelativeToCurrent(off64_t offset) {
+	return setPosition(offset,SEEK_CUR);
+}
+
+off64_t filedescriptor::setPositionRelativeToEnd(off64_t offset) {
+	return setPosition(offset,SEEK_END);
+}
+
+off64_t filedescriptor::getCurrentPosition() const {
+
+	// for stream filedescriptors, the position is always 0, just return
+	// the current offset, which should always be 0
+	if (pvt->_isstream) {
+		return 0;
+	}
+
+	// for storage filedescriptors...
+
+	// if we're not buffering then our offset is unreliable, and we need
+	// to read the offset from the file
+	if (!pvt->_writebuffer) {
+		return lseek(0,SEEK_CUR);
+	}
+
+	// if we are buffering then just return our offset, which
+	// should be kept updated by storageBufferedRead(),
+	// storageBufferedWrite(), and setPosition() 
+	return pvt->_offset;
+}
+
+off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
+
+	// for stream filedescriptors, we can't set the position, just return
+	// the current offset, which should always be 0
+	if (pvt->_isstream) {
+		return 0;
+	}
+
+	// for non-stream (storage) filedescriptors...
+
+	// if we're not buffering then we need to directly seek to the
+	// requested offset
+	if (!pvt->_writebuffer) {
+		return lseek(offset,whence);
+	}
+
+	// if we are buffering, then just set the offset
+	if (whence==SEEK_CUR) {
+		offset=pvt->_offset+offset;
+	} else if (whence==SEEK_END) {
+		file	f;
+		f.setFileDescriptor(pvt->_fd);
+		if (!f.getCurrentProperties()) {
+			f.setFileDescriptor(-1);
+			return -1;
+		}
+		offset=f.getSize()+offset;
+		f.setFileDescriptor(-1);
+	}
+	pvt->_offset=offset;
+	return offset;
+}
+
+off64_t filedescriptor::lseek(off64_t offset, int32_t whence) const {
+	int32_t	result;
+	error::clearError();
+	do {
+		#if defined(RUDIMENTS_HAVE__LSEEK)
+			result=_lseek(fd(),offset,whence);
+		#elif defined(RUDIMENTS_HAVE_LSEEK)
+			result=::lseek(fd(),offset,whence);
+		#else
+			#error no lseek or anything like it
+		#endif
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					!process::getShutDownFlag());
+	return result;
+}
+
+ssize_t filedescriptor::fillWriteBuffer(int32_t sec, int32_t usec) {
+
+	// bail if the write buffer isn't empty
+	if (pvt->_writebuffertail!=pvt->_writebuffer) {
+
+		// return the number of bytes of data in the buffer
+		return pvt->_writebuffertail-pvt->_writebuffer;
+	}
+
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf("%d: fillWriteBuffer(%d,attempting %d bytes "
+						"from offset %08x...\n",
+				(int)process::getProcessId(),
+				(int)pvt->_fd,
+				(int)(pvt->_writebufferend-pvt->_writebuffer),
+				pvt->_blockoffset);
+	#endif
+
+	// move to the beginning of the current block
+	if (lseek(pvt->_blockoffset,SEEK_SET)==-1) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("...,error)\n");
+		#endif
+		return RESULT_ERROR;
+	}
+
+	// reset tail
+	pvt->_writebuffertail=pvt->_writebuffer;
+
+	// calculate how many bytes we need to read to fill the buffer
+	ssize_t	bytestoread=pvt->_writebufferend-pvt->_writebuffer;
+
+	// attempt to fill the buffer
+	// (temporarily not allowing short reads)
+	bool	saveasr=pvt->_allowshortreads;
+	pvt->_allowshortreads=false;
+	ssize_t	result=safeRead(pvt->_writebuffer,bytestoread,sec,usec);
+	pvt->_allowshortreads=saveasr;
+
+	// if an error, timeout, abort, max-read, etc. occurred then return that
+	if (result<0) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("...error reading: %d)\n",result);
+		#endif
+		return result;
+	}
+
+	#if defined(DEBUG_BUFFERING)
+	if (!result) {
+		debugPrintf("...EOF\n");
+	} else if (result!=bytestoread) {
+		debugPrintf("...short read\n");
+	} else {
+		debugPrintf("...success\n");
+	}
+	#endif
+
+	// all went well enough
+	pvt->_writebuffertail=pvt->_writebuffer+result;
+
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf(",read %d bytes)\n",(int)result);
+	#endif
+
+	// return the number of bytes of data in the buffer
+	return result;
+}
+
+bool filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
+
+	// degenerate case, bail immediately
+	if (pvt->_isstream) {
+		return true;
+	}
+
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf("%d: realignWriteBuffer(%d",
+			(int)process::getProcessId(),(int)pvt->_fd);
+	#endif
+
+	// calculate the block size of the write buffer
+	ssize_t	blocksize=pvt->_writebufferend-pvt->_writebuffer;
+
+	// if "offset" is outside of the currently buffered block...
+	if (pvt->_offset/blocksize!=pvt->_blockoffset/blocksize) {
+
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf(",current blockoffset=%08x...\n",pvt->_blockoffset);
+		#endif
+
+		// empty the write buffer
+		bool	result=flushWriteBuffer(sec,usec);
+		if (!result) {
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf(",failed)\n");
+			#endif
+			return false;
+		}
+
+		// calculate the offset of the block containing "offset"
+		pvt->_blockoffset=pvt->_offset/blocksize*blocksize;
+
+		// move to that block offset
+		// FIXME: if flushWriteBuffer returned the offset then we could
+		// avoid doing this in cases where we're doing sequential writes
+		if (lseek(pvt->_blockoffset,SEEK_SET)!=pvt->_blockoffset) {
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf(",lseek failed)\n");
+			#endif
+			return false;
+		}
+
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("...,new blockoffset=%08x",pvt->_blockoffset);
+		#endif
+	}
+
+	#if defined(DEBUG_BUFFERING)
+	else {
+		debugPrintf(",blockoffset=%08x,already aligned",
+						pvt->_blockoffset);
+	}
+	debugPrintf(",success)\n");
+	#endif
+	return true;
 }
 
 ssize_t filedescriptor::write(uint16_t number) {
@@ -893,7 +1184,10 @@ ssize_t filedescriptor::read(void *buffer, size_t size,
 }
 
 bool filedescriptor::close() {
+
 	if (pvt->_fd!=-1) {
+
+		// do a low level close
 		int32_t	result;
 		error::clearError();
 		do {
@@ -903,8 +1197,25 @@ bool filedescriptor::close() {
 		if (result==-1) {
 			return false;
 		}
+
+		// reset the file descriptor
 		setFileDescriptor(-1);
 	}
+
+	// reset offsets
+	pvt->_offset=0;
+	pvt->_blockoffset=0;
+
+	// empty buffers
+	if (pvt->_readbuffer) {
+		pvt->_readbufferptr=pvt->_readbuffer;
+		pvt->_readbuffertail=pvt->_readbuffer;
+	}
+	if (pvt->_writebuffer) {
+		pvt->_writebuffertail=pvt->_writebuffer;
+		pvt->_writebufferdirty=false;
+	}
+
 	return true;
 }
 
@@ -1096,10 +1407,13 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 
 ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec) {
+	return (pvt->_isstream)?
+			streamBufferedRead(buf,count,sec,usec):
+			storageBufferedRead(buf,count,sec,usec);
+}
 
-	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-	debugPrintf("bufferedRead of %d bytes\n",(int)count);
-	#endif
+ssize_t filedescriptor::streamBufferedRead(void *buf, ssize_t count,
+						int32_t sec, int32_t usec) {
 
 	// degenerate case, bail immediately
 	if (!count) {
@@ -1108,11 +1422,12 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 
 	// if we're not actually buffering reads, then just do a safeRead()
 	if (!pvt->_readbuffer) {
-		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		debugPrintf("no read buffer...\n");
-		#endif
 		return safeRead(buf,count,sec,usec);
 	}
+
+	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+	debugPrintf("streamBufferedRead of %d bytes\n",(int)count);
+	#endif
 
 	// do an actual bufffered read...
 	unsigned char	*data=(unsigned char *)buf;
@@ -1121,32 +1436,31 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 	for (;;) {
 
 		// copy out what we can from the buffer
-		ssize_t	bytesavailabletocopy=pvt->_readbuffertail-
-						pvt->_readbufferptr;
-		if (bytesavailabletocopy) {
+		ssize_t	bytesavailable=pvt->_readbuffertail-pvt->_readbufferptr;
+		if (bytesavailable) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			debugPrintf("%d bytes in read buffer\n",
-						(int)bytesavailabletocopy);
+						(int)bytesavailable);
 			#endif
 
-			// determine how many bytes to copy out
-			ssize_t	bytestocopy=(bytesavailabletocopy<bytesunread)?
-						bytesavailabletocopy:
-						bytesunread;
+			// calculate how many bytes to copy out
+			ssize_t	bytestocopy=(bytesavailable<bytesunread)?
+						bytesavailable:bytesunread;
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			debugPrintf("copying %d bytes "
-						"out of read buffer\n",
-						(int)bytestocopy);
+			debugPrintf("copying %d bytes out of read buffer\n",
+							(int)bytestocopy);
 			#endif
 
 			// copy out those bytes
 			bytestring::copy(data,pvt->_readbufferptr,bytestocopy);
-			data=data+bytestocopy;
-			bytesread=bytesread+bytestocopy;
-			pvt->_readbufferptr=pvt->_readbufferptr+bytestocopy;
-			bytesunread=bytesunread-bytestocopy;
+
+			// advance various pointers
+			data+=bytestocopy;
+			bytesread+=bytestocopy;
+			pvt->_readbufferptr+=bytestocopy;
+			bytesunread-=bytestocopy;
 
 			// return if we've copied out
 			// enough to satisfy the request
@@ -1168,11 +1482,15 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		if (pvt->_readbufferptr==pvt->_readbuffertail) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			debugPrintf("attempting to fill read buffer, ");
-			debugPrintf("reading %d bytes...\n",
+			debugPrintf("attempting to fill read buffer, "
+					"reading %d bytes...\n",
 						(int)(pvt->_readbufferend-
 							pvt->_readbuffer));
 			#endif
+
+			// reset ptr and tail
+			pvt->_readbufferptr=pvt->_readbuffer;
+			pvt->_readbuffertail=pvt->_readbuffer;
 
 			// attempt to fill the buffer
 			// (temporarily allowing short reads)
@@ -1221,6 +1539,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						defined(DEBUG_BUFFERING)
 					debugPrintf("EOF\n");
 					#endif
+					pvt->_readbuffertail=
+						pvt->_readbuffer+result;
 					return bytesread;
 				}
 			}
@@ -1230,12 +1550,12 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			if (result<0) {
 				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
-				debugPrintf("error reading...\n");
+				debugPrintf("error reading: %d...\n",result);
 				#endif
 				return result;
 			}
 
-			// if all went well, reset the buffer ptr/tail
+			// all went well
 			pvt->_readbufferptr=pvt->_readbuffer;
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
@@ -1243,6 +1563,101 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			debugPrintf("read %d bytes\n",(int)result);
 			#endif
 		}
+	}
+}
+
+ssize_t filedescriptor::storageBufferedRead(void *buf, ssize_t count,
+						int32_t sec, int32_t usec) {
+
+	// degenerate case, bail immediately
+	if (!count) {
+		return 0;
+	}
+
+	// if we're not actually buffering reads, then just do a safeRead()
+	if (!pvt->_writebuffer) {
+		ssize_t	result=safeRead(buf,count,sec,usec);
+		if (result>0) {
+			// update the offset
+			pvt->_offset+=result;
+		}
+		return result;
+	}
+
+	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+	debugPrintf("%d: storageBufferedRead(%d,attempting %d bytes...\n",
+			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
+	#endif
+
+	// do an actual bufffered read...
+	unsigned char	*data=(unsigned char *)buf;
+	ssize_t		bytesread=0;
+	ssize_t		bytesunread=count;
+	for (;;) {
+
+		// realign the write buffer
+		if (!realignWriteBuffer(sec,usec)) {
+			return RESULT_ERROR;
+		}
+
+		// fill the write buffer
+		// if an error, timeout, abort, max-read,
+		// etc. occurred then return that
+		ssize_t	result=fillWriteBuffer(sec,usec);
+		if (result<0) {
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+			debugPrintf("...,error: %d)\n",result);
+			#endif
+			return result;
+		}
+
+		// calculate the position in the buffer
+		// that we want to start copying out from
+		unsigned char	*bufferhead=pvt->_writebuffer+
+					(pvt->_offset-pvt->_blockoffset);
+
+		// FIXME: verify that bufferhead<pvt->_writebuffertail?
+
+		// calculate how many bytes are available to copy out
+		ssize_t	bytesavailable=pvt->_writebuffertail-bufferhead;
+		if (!bytesavailable) {
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			debugPrintf("...0 bytes available!)\n");
+			#endif
+			return bytesread;
+		}
+
+		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+		debugPrintf("...%d bytes available",(int)bytesavailable);
+		#endif
+
+		// calculate how many bytes to actually copy out
+		ssize_t	bytestocopy=(bytesavailable<bytesunread)?
+						bytesavailable:bytesunread;
+
+		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+		debugPrintf(",copying out %d bytes\n",(int)bytestocopy);
+		#endif
+
+		// copy out those bytes
+		bytestring::copy(data,bufferhead,bytestocopy);
+		data+=bytestocopy;
+		bytesread+=bytestocopy;
+		bytesunread-=bytestocopy;
+		pvt->_offset+=bytestocopy;
+
+		// return if we've copied out enough to satisfy the request
+		if (bytesread==count) {
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			debugPrintf(")\n");
+			#endif
+			return bytesread;
+		}
+
+		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+		debugPrintf(",need to read %d more bytes",
+						(int)bytesunread);
+		#endif
 	}
 }
 
@@ -1255,8 +1670,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	debugPrintf("%d: safeRead(%d,(attempting %d bytes)",
-			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
+	debugPrintf("%d: safeRead(%d,attempting %d bytes,sec=%d,usec=%d",
+		(int)process::getProcessId(),(int)pvt->_fd,(int)count,sec,usec);
 	#endif
 
 	// read from the file descriptor:
@@ -1287,7 +1702,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			// return error or timeout
 			if (waitresult<0) {
 				#ifdef DEBUG_READ
-				debugPrintf(")\n");
+				debugPrintf(",ERROR/TIMEOUT)\n");
 				#endif
 				return waitresult;
 			}
@@ -1300,23 +1715,24 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// read into that position...
 		error::clearError();
 		if (pvt->_socklr) {
-
 			#ifdef DEBUG_READ
-			debugPrintf(" (SocketLayer) ");
+			debugPrintf(",(SocketLayer)");
 			#endif
-
 			actualread=pvt->_socklr->read(ptr,sizetoread);
 		} else {
 			actualread=lowLevelRead(ptr,sizetoread);
 		}
 
 		#ifdef DEBUG_READ
+		debugPrintf(",");
 		for (int32_t i=0; i<actualread; i++) {
 			debugSafePrint(((unsigned char *)ptr)[i]);
 		}
-		debugPrintf("(%ld bytes) ",(long)actualread);
+		debugPrintf(",%ld bytes",(long)actualread);
 		if (actualread==-1) {
-			debugPrintf("%s ",error::getErrorString());
+			char	*e=error::getErrorString();
+			debugPrintf(",%s",e);
+			delete[] e;
 		}
 		stdoutput.flush();
 		#endif
@@ -1327,15 +1743,14 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			if (isusingnonblockingmode &&
 				error::getErrorNumber()==EAGAIN) {
 				#ifdef DEBUG_READ
-				debugPrintf(" EAGAIN ");
+				debugPrintf(",EAGAIN");
 				#endif
 				// if we got an EAGAIN, and we're in
-				// non-blocking mode, there was nothing
-				// to read and we're done
+				// non-blocking mode, then try again
 				break;
 			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_READ
-				debugPrintf(" EINTR ");
+				debugPrintf(",EINTR");
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the read
@@ -1351,13 +1766,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 					error::getErrorNumber()==0) {
 				// eof condition
 				#ifdef DEBUG_READ
-				debugPrintf(" EOF ");
+				debugPrintf(",EOF");
 				#endif
 				break;
 			} else if (actualread==-1) {
 				// error condition
 				#ifdef DEBUG_READ
-				debugPrintf(" ERROR )\n");
+				debugPrintf(",ERROR)\n");
 				#endif
 				return RESULT_ERROR;
 			}
@@ -1368,7 +1783,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if short reads are allowed, then break out here
 		if (pvt->_allowshortreads) {
 			#ifdef DEBUG_READ
-			debugPrintf(" SHORTREAD ");
+			debugPrintf(",SHORTREAD");
 			#endif
 			break;
 		}
@@ -1394,10 +1809,13 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
+	return (pvt->_isstream)?
+			streamBufferedWrite(buf,count,sec,usec):
+			storageBufferedWrite(buf,count,sec,usec);
+}
 
-	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-	debugPrintf("bufferedWrite of %d bytes\n",(int)count);
-	#endif
+ssize_t filedescriptor::streamBufferedWrite(const void *buf, ssize_t count,
+						int32_t sec, int32_t usec) {
 
 	// degenerate case, bail immediately
 	if (!count) {
@@ -1406,11 +1824,12 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 
 	// if we're not actually buffering writes, then just do a safeWrite()
 	if (!pvt->_writebuffer) {
-		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		debugPrintf("no write buffer...\n");
-		#endif
 		return safeWrite(buf,count,sec,usec);
 	}
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf("streamBufferedWrite of %d bytes\n",(int)count);
+	#endif
 
 	// do an actual bufffered write...
 	const unsigned char	*data=(const unsigned char *)buf;
@@ -1420,7 +1839,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	ssize_t	bytesunwritten=count;
 	while (byteswritten<count) {
 
-		// determine the number of bytes currently buffered
+		// calculate the number of bytes currently buffered
 		ssize_t	writebuffersize=pvt->_writebuffertail-
 						pvt->_writebuffer;
 
@@ -1451,9 +1870,8 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			// copy the data into the buffer
 			bytestring::copy(pvt->_writebuffertail,
 					data,bytesunwritten);
-			pvt->_writebuffertail=pvt->_writebuffertail+
-							bytesunwritten;
-			byteswritten=byteswritten+bytesunwritten;
+			pvt->_writebuffertail+=bytesunwritten;
+			byteswritten+=bytesunwritten;
 
 		// if we don't have enough space to just buffer the data...
 		} else {
@@ -1499,11 +1917,11 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			}
 
 			// update stats
-			byteswritten=byteswritten+result-adjustment;
-			bytesunwritten=bytesunwritten-result+adjustment;
+			byteswritten+=result-adjustment;
+			bytesunwritten-=result+adjustment;
 
 			// update the position in the data that we're writing
-			data=data+result-adjustment;
+			data+=result-adjustment;
 		}
 	}
 
@@ -1511,19 +1929,189 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	return byteswritten;
 }
 
+ssize_t filedescriptor::storageBufferedWrite(const void *buf, ssize_t count,
+						int32_t sec, int32_t usec) {
+
+	// degenerate case, bail immediately
+	if (!count) {
+		return 0;
+	}
+
+	// if we're not actually buffering writes, then just do a safeWrite()
+	if (!pvt->_writebuffer) {
+		ssize_t	result=safeWrite(buf,count,sec,usec);
+		if (result>0) {
+			// update the offset
+			pvt->_offset+=result;
+		}
+		return result;
+	}
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf("%d: storageBufferedWrite(%d,attempting %d bytes...\n",
+			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
+	#endif
+
+	// do an actual bufffered write...
+	unsigned char	*data=(unsigned char *)buf;
+	ssize_t		byteswritten=0;
+	ssize_t		bytesunwritten=count;
+	for (;;) {
+
+		// realign the write buffer
+		if (!realignWriteBuffer(sec,usec)) {
+			return RESULT_ERROR;
+		}
+
+		// fill the write buffer
+		// if an error, timeout, abort, max-read,
+		// etc. occurred then return that
+		ssize_t	result=fillWriteBuffer(sec,usec);
+		if (result<0) {
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			debugPrintf("...,error: %d)\n",result);
+			#endif
+			return result;
+		}
+
+		// calculate the position in the buffer
+		// that we want to start copying in to
+		unsigned char	*bufferhead=pvt->_writebuffer+
+					(pvt->_offset-pvt->_blockoffset);
+
+		// FIXME: verify that bufferhead<pvt->_writebuffertail?
+
+		// calculate how many bytes are available to copy into
+		//
+		// NOTE: Unlike in storageBufferedRead(), we're using
+		// writebufferend rather than writebuffertail for this
+		// calculation.  When appending to a file, writebuffertail may
+		// not be at the end of the buffer, and thus doesn't represent
+		// the end of the bytes available for us to copy in to.  In
+		// every case, writebufferend does, so we need to use it
+		// instead.
+		ssize_t	bytesavailable=pvt->_writebufferend-bufferhead;
+		if (!bytesavailable) {
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			debugPrintf("...0 bytes available!)\n");
+			#endif
+			return byteswritten;
+		}
+
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf("...%d bytes available",(int)bytesavailable);
+		#endif
+
+		// calculate how many bytes to actually copy in
+		ssize_t	bytestocopy=(bytesavailable<bytesunwritten)?
+						bytesavailable:bytesunwritten;
+
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf(",copying in %d bytes\n",(int)bytestocopy);
+		#endif
+
+		// copy in those bytes
+		bytestring::copy(bufferhead,data,bytestocopy);
+
+		// advance various pointers
+		data+=bytestocopy;
+		byteswritten+=bytestocopy;
+		bytesunwritten-=bytestocopy;
+		pvt->_offset+=bytestocopy;
+
+		// mark the buffer dirty
+		pvt->_writebufferdirty=true;
+
+		// adjust the buffer tail, if necessary (see NOTE above)
+		if (pvt->_writebuffertail<pvt->_writebufferend) {
+			pvt->_writebuffertail=bufferhead+bytestocopy;
+		}
+
+		// return if we've copied in enough to satisfy the request
+		if (byteswritten==count) {
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			debugPrintf(")\n");
+			#endif
+			return byteswritten;
+		}
+
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf(",need to write %d more bytes",
+						(int)bytesunwritten);
+		#endif
+	}
+}
+
 bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
+
+	// degenerate case, bail immediately
 	if (!pvt->_writebuffer) {
 		return true;
 	}
+
+	// if this isn't a streaming filedescriptor (i.e. is a storage file
+	// descriptor) and the buffer isn't dirty (i.e. hasn't had anything
+	// actually written to it), then just reset the buffer tail
+	if (!pvt->_isstream && !pvt->_writebufferdirty) {
+
+		// reset the buffer tail
+		pvt->_writebuffertail=pvt->_writebuffer;
+		return true;
+	}
+
+	// calculate how much to write
 	ssize_t	writebuffersize=pvt->_writebuffertail-pvt->_writebuffer;
 	#if defined(DEBUG_BUFFERING)
-		debugPrintf("flush write buffer: %d bytes\n",
-						(int)writebuffersize);
+	debugPrintf("%d: flushWriteBuffer(%d,attempting %d bytes",
+					(int)process::getProcessId(),
+					(int)pvt->_fd,(int)writebuffersize);
 	#endif
-	bool	retval=(safeWrite(pvt->_writebuffer,writebuffersize,
-						sec,usec)==writebuffersize);
+
+	// set the position in the file to write to
+	// (unless this is a streaming filedescriptor)
+	// FIXME: this appears to be necessary, though I need to figure out
+	// in what situations we're not just naturally at this position, as
+	// we may be able to avoid doing this sometimes
+	if (!pvt->_isstream) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf(",current pos=%08x,seeking to %08x",
+					lseek(0,SEEK_CUR),pvt->_blockoffset);
+		#endif
+		if (lseek(pvt->_blockoffset,SEEK_SET)!=pvt->_blockoffset) {
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf(",lseek failed)\n");
+			#endif
+			return false;
+		}
+	}
+
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf(",...\n");
+	#endif
+
+	// write the contents of the buffer
+	// (temporarily not allowing short writes)
+	bool	saveasw=pvt->_allowshortwrites;
+	pvt->_allowshortwrites=false;
+	ssize_t	result=safeWrite(pvt->_writebuffer,writebuffersize,sec,usec);
+	pvt->_allowshortwrites=saveasw;
+
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf("...,%d bytes,%s)\n",(int)result,
+			(result==writebuffersize)?"true":"false");
+	#endif
+
+	// reset the buffer tail
 	pvt->_writebuffertail=pvt->_writebuffer;
-	return retval;
+
+	// mark the buffer clean
+	pvt->_writebufferdirty=false;
+
+	// FIXME: arguably, we shouldn't reset writebuffertail or
+	// writebufferdirty if the above didn't succeed
+
+	// return success/failure
+	return (result==writebuffersize);
 }
 
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
@@ -1535,8 +2123,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_WRITE
-	debugPrintf("%d: safeWrite(%d,",
-			(int)process::getProcessId(),(int)pvt->_fd);
+	debugPrintf("%d: safeWrite(%d,attempting %d bytes,sec=%d,usec=%d",
+		(int)process::getProcessId(),(int)pvt->_fd,count,sec,usec);
 	#endif
 
 	// write to the file descriptor:
@@ -1569,7 +2157,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			// return error or timeout
 			if (waitresult<0) {
 				#ifdef DEBUG_WRITE
-				debugPrintf(")\n");
+				debugPrintf(",ERROR/TIMEOUT)\n");
 				#endif
 				return waitresult;
 			}
@@ -1582,23 +2170,24 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		error::clearError();
 		if (pvt->_socklr) {
-
 			#ifdef DEBUG_WRITE
-			debugPrintf(" (SocketLayer) ");
+			debugPrintf(",(SocketLayer)");
 			#endif
-
 			actualwrite=pvt->_socklr->write(ptr,sizetowrite);
 		} else {
 			actualwrite=lowLevelWrite(ptr,sizetowrite);
 		}
 
 		#ifdef DEBUG_WRITE
+		debugPrintf(",");
 		for (int32_t i=0; i<actualwrite; i++) {
 			debugSafePrint(((const unsigned char *)(ptr))[i]);
 		}
-		debugPrintf("(%ld bytes) ",(long)actualwrite);
+		debugPrintf(",%ld bytes",(long)actualwrite);
 		if (actualwrite==-1) {
-			debugPrintf("%s ",error::getErrorString());
+			char	*e=error::getErrorString();
+			debugPrintf(",%s",e);
+			delete[] e;
 		}
 		stdoutput.flush();
 		#endif
@@ -1609,14 +2198,14 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			if (isusingnonblockingmode &&
 				error::getErrorNumber()==EAGAIN) {
 				#ifdef DEBUG_READ
-				debugPrintf(" EAGAIN ");
+				debugPrintf(",EAGAIN");
 				#endif
 				// if we got an EAGAIN, and we're in
 				// non-blocking mode, then try again
 				break;
 			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_WRITE
-				debugPrintf(" EINTR ");
+				debugPrintf(",EINTR");
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the write
@@ -1632,13 +2221,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 					error::getErrorNumber()==0) {
 				// eof condition
 				#ifdef DEBUG_WRITE
-				debugPrintf(" EOF ");
+				debugPrintf(",EOF");
 				#endif
 				break;
 			} else if (actualwrite==-1) {
 				// error condition
 				#ifdef DEBUG_WRITE
-				debugPrintf(" ERROR )\n");
+				debugPrintf(",ERROR)\n");
 				#endif
 				return RESULT_ERROR;
 			}
@@ -1646,10 +2235,10 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		totalwrite=totalwrite+actualwrite;
 
-		// if we want to allow short writes, then break out here
+		// if short writes are allowed, then break out here
 		if (pvt->_allowshortwrites) {
 			#ifdef DEBUG_WRITE
-			debugPrintf(" SHORTWRITE ");
+			debugPrintf(",SHORTWRITE");
 			#endif
 			break;
 		}

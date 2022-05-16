@@ -105,6 +105,7 @@ void inetsocketclient::initialize(const char *host,
 						int32_t timeoutusec,
 						uint32_t retrywait,
 						uint32_t tries) {
+	close();
 	inetsocketutil::initialize(host,port);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
 }

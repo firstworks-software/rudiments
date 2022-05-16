@@ -44,7 +44,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  O_RDWR - Open the file in write-only mode.
 		 *
-		 *  O_APPEND - Set the position to the end of the file.
+		 *  O_APPEND - All writes will occur at end of the file.
+		 *  (NOTE: This option conflicts with buffering.
 		 *
 		 *  O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
 		 *
@@ -151,32 +152,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  success and false on failure. */
 		virtual bool	truncate(off64_t size) const;
 
-
-		/** Returns the position (relative to the beginning of the file)
-		 *  at which the next read or write will occur, or -1 on
-		 *  failure. */
-		virtual off64_t	getCurrentPosition() const;
-
-		/** Sets the position (relative to the beginning of the file)
-		 *  at which the next read or write will occur to "offset".
-		 *  Returns that position on success or -1 on failure. */
-		virtual off64_t	setPositionRelativeToBeginning(
-						off64_t offset) const;
-
-		/** Advances the position at which the next read or write will
- 		 *  occur by "offset" bytes.  Returns that position on success
- 		 *  or -1 on failure. */
-		virtual off64_t	setPositionRelativeToCurrent(
-						off64_t offset) const;
-
-		/** Sets the position at which the next read or write will
-		 *  occur to the end of the file plus "offset" bytes.
-		 *  Generally, "offset" will be negative though most filesystems
-		 *  allow the creation of files with holes in them and that can
-		 *  be accomplished by using a positive "offset" and then
-		 *  writing data at that position.  Returns the position on
-		 *  succes or -1 on failure. */
-		virtual off64_t	setPositionRelativeToEnd(off64_t offset) const;
 
 		/** Attempts to lock the entire file using the specified lock
 		 *  "type" (F_RDLCK or F_WRLCK).  Returns true if the lock can

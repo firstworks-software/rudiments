@@ -1325,7 +1325,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  node into "out" which can be an instance of stringbuffer,
 		 *  filedescriptor, or any other class that implements
 		 *  the output interface. */
-		void	write(output *out) const;
+		bool	write(output *out) const;
 
 		/** Writes a text representation of the tree starting at this
 		 *  node into "out" which can be an instance of stringbuffer,
@@ -1335,13 +1335,13 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  If "indent" is true then the output is automatically
 		 *  indented.  If "indent" is false, then the domnode is
 		 *  output as-is. */
-		void	write(output *out, bool indent) const;
+		bool	write(output *out, bool indent) const;
 
 		/** Writes a text representation, in XML format, of the tree
 		 *  starting at this node into "out" which can be an instance
 		 *  of stringbuffer, filedescriptor, or any other class that
 		 *  implements the output interface. */
-		void	writeXml(output *out) const;
+		bool	writeXml(output *out) const;
 
 		/** Writes a text representation, in XML format, of the tree
 		 *  starting at this node into "out" which can be an instance
@@ -1351,7 +1351,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  If "indent" is true then the output is automatically
 		 *  indented.  If "indent" is false, then the domnode is
 		 *  output as-is. */
-		void	writeXml(output *out, bool indent) const;
+		bool	writeXml(output *out, bool indent) const;
 
 		/** If the domnode is an element, returns the
 		 *  "path" of the domnode.  The path will have

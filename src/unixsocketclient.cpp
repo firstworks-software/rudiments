@@ -78,6 +78,7 @@ void unixsocketclient::initialize(const char *filename,
 						int32_t timeoutusec,
 						uint32_t retrywait,
 						uint32_t tries) {
+	close();
 	unixsocketutil::initialize(filename);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
 	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)

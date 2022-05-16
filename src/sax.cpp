@@ -361,10 +361,6 @@ void sax::ignoreFooterLines() {
 		pvt->_offset=pvt->_endptr-pvt->_string-1;
 		pvt->_ptr=pvt->_endptr-1;
 	} else {
-		// ugly hack...
-		// setPosition*() don't work with buffered reads, so disable
-		// buffering for now
-		pvt->_fl->setReadBufferSize(0);
 		pvt->_offset=pvt->_fl->getSize()-1;
 		pvt->_fl->setPositionRelativeToEnd(-1);
 	}
@@ -403,10 +399,6 @@ void sax::ignoreFooterLines() {
 		pvt->_ptr=pvt->_string;
 	} else {
 		pvt->_fl->setPositionRelativeToBeginning(0);
-		// ugly hack...
-		// setPosition*() don't work with buffered reads, so we
-		// disabled it earliser.  Re-enable it now.
-		pvt->_fl->setReadBufferSize(pvt->_optblocksize);
 	}
 }
 

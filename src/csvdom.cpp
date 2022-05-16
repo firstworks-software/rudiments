@@ -661,7 +661,7 @@ void csvdom::carryAllValuesDown() {
 	}
 }
 
-void csvdom::writeNode(const domnode *dn, output *out,
+bool csvdom::writeNode(const domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) const {
 
 	domnode	*header=dn->getFirstTagChild("h");
@@ -672,11 +672,17 @@ void csvdom::writeNode(const domnode *dn, output *out,
 		if (firstcolumn) {
 			firstcolumn=false;
 		} else {
-			out->write(getDelimiter());
+			if (out->write(getDelimiter())<1) {
+				return false;
+			}
 		}
-		writeValue(out,column);
+		if (!writeValue(out,column)) {
+			return false;
+		}
 	}
-	out->write("\n");
+	if (out->write("\n")<1) {
+		return false;
+	}
 	for (domnode *row=dn->getFirstTagChild("r");
 			!row->isNullNode();
 			row=row->getNextTagSibling("r")) {
@@ -687,28 +693,46 @@ void csvdom::writeNode(const domnode *dn, output *out,
 			if (firstrow) {
 				firstrow=false;
 			} else {
-				out->write(getDelimiter());
+				if (out->write(getDelimiter())<1) {
+					return false;
+				}
 			}
-			writeValue(out,field);
+			if (!writeValue(out,field)) {
+				return false;
+			}
 		}
-		out->write("\n");
+		if (out->write("\n")<1) {
+			return false;
+		}
 	}
+	return true;
 }
 
-void csvdom::writeValue(output *out, domnode *value) const {
+bool csvdom::writeValue(output *out, domnode *value) const {
 	const char	*v=value->getAttributeValue("v");
 	if (value->getAttributeValue("q")[0]=='y') {
-		out->write(getQuote());
+		if (out->write(getQuote())<1) {
+			return false;
+		}
 		for (const char *ptr=v; *ptr; ptr++) {
 			if (*ptr==getQuote()) {
-				out->write(*ptr);
+				if (out->write(*ptr)<1) {
+					return false;
+				}
 			}
-			out->write(*ptr);
+			if (out->write(*ptr)<1) {
+				return false;
+			}
 		}
-		out->write(getQuote());
+		if (out->write(getQuote())<1) {
+			return false;
+		}
 	} else {
-		out->write(v);
+		if (out->write(v)<1) {
+			return false;
+		}
 	}
+	return true;
 }
 
 bool csvdom::headerStart() {

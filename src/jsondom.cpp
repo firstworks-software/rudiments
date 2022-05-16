@@ -264,28 +264,44 @@ domnode *jsondom::whichNode() {
 			pvt->_current;
 }
 
-void jsondom::writeNode(const domnode *dn, output *out,
+bool jsondom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
 	if (dn->getType()!=TAG_DOMNODETYPE && dn->getType()!=ROOT_DOMNODETYPE) {
-		return;
+		return true;
 	}
 
 	bool	inarray=(pvt->_inarray.getLength() &&
 				pvt->_inarray.getLast()->getValue());
 	if (indentlevel && *indentlevel && !inarray) {
 		if (indent) {
-			writeIndent(out,*indentlevel);
+			if (!writeIndent(out,*indentlevel)) {
+				return false;
+			}
 		}
-		out->write('"');
-		out->write(dn->getName());
-		out->write('"');
-		if (indent) {
-			out->write(' ');
+		if (out->write('"')<1) {
+			return false;
 		}
-		out->write(':');
+		const char	*name=dn->getName();
+		ssize_t		len=charstring::length(name);
+		if (out->write(name,len)<len) {
+			return false;
+		}
+		if (out->write('"')<1) {
+			return false;
+		}
 		if (indent) {
-			out->write(' ');
+			if (out->write(' ')<1) {
+				return false;
+			}
+		}
+		if (out->write(':')<1) {
+			return false;
+		}
+		if (indent) {
+			if (out->write(' ')<1) {
+				return false;
+			}
 		}
 	}
 
@@ -295,15 +311,21 @@ void jsondom::writeNode(const domnode *dn, output *out,
 			{
 			if (indent) {
 				if (*indentlevel && !inarray) {
-					out->write('\n');
+					if (out->write('\n')<1) {
+						return false;
+					}
 				}
 				if (!inarray) {
-					writeIndent(out,*indentlevel);
+					if (!writeIndent(out,*indentlevel)) {
+						return false;
+					}
 				}
 			}
 			out->write('{');
 			if (indent) {
-				out->write('\n');
+				if (out->write('\n')<1) {
+					return false;
+				}
 				*indentlevel=*indentlevel+2;
 			}
 			pvt->_inarray.append(false);
@@ -321,77 +343,128 @@ void jsondom::writeNode(const domnode *dn, output *out,
 				if (first) {
 					first=false;
 				} else {
-					out->write(',');
+					if (out->write(',')<1) {
+						return false;
+					}
 					if (indent) {
-						out->write('\n');
+						if (out->write('\n')<1) {
+							return false;
+						}
 					}
 				}
-				writeNode(child,out,indent,indentlevel);
+				if (!writeNode(child,out,indent,indentlevel)) {
+					return false;
+				}
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
 				if (!first) {
-					out->write('\n');
+					if (out->write('\n')<1) {
+						return false;
+					}
 				}
 				*indentlevel=*indentlevel-2;
-				writeIndent(out,*indentlevel);
+				if (!writeIndent(out,*indentlevel)) {
+					return false;
+				}
 			}
-			out->write('}');
+			if (out->write('}')<1) {
+				return false;
+			}
 			}
 			break;
 		case 's':
 			{
-			out->write('"');
+			if (out->write('"')<1) {
+				return false;
+			}
 			const char *val=getValue(dn);
 			if (val) {
 				for (;;) {
 					if (*val=='\0') {
 						break;
 					} else if (*val=='\b') {
-						out->write("\\b");
+						if (out->write("\\b")<1) {
+							return false;
+						}
 					} else if (*val=='\f') {
-						out->write("\\f");
+						if (out->write("\\f")<1) {
+							return false;
+						}
 					} else if (*val=='\n') {
-						out->write("\\n");
+						if (out->write("\\n")<1) {
+							return false;
+						}
 					} else if (*val=='\r') {
-						out->write("\\r");
+						if (out->write("\\r")<1) {
+							return false;
+						}
 					} else if (*val=='\t') {
-						out->write("\\t");
+						if (out->write("\\t")<1) {
+							return false;
+						}
 					} else {
-						out->write(*val);
+						if (out->write(*val)<1) {
+							return false;
+						}
 					}
 					val++;
 				}
 			}
-			out->write('"');
+			if (out->write('"')<1) {
+				return false;
+			}
 			}
 			break;
 		case 'n':
 			{
 			const char	*v=getValue(dn);
-			out->write((!charstring::isNullOrEmpty(v))?v:"0");
+			if (!charstring::isNullOrEmpty(v)) {
+				ssize_t	len=charstring::length(v);
+				if (out->write(v,len)<len) {
+					return false;
+				}
+			} else {
+				if (out->write('0')<1) {
+					return false;
+				}
+			}
 			}
 			break;
 		case 't':
-			out->write("true");
+			if (out->write("true")<4) {
+				return false;
+			}
 			break;
 		case 'f':
-			out->write("false");
+			if (out->write("false")<5) {
+				return false;
+			}
 			break;
 		case 'u':
-			out->write("null");
+			if (out->write("null")<4) {
+				return false;
+			}
 			break;
 		case 'a':
 			{
 			if (indent) {
 				if (*indentlevel) {
-					out->write('\n');
+					if (out->write('\n')<1) {
+						return false;
+					}
 				}
-				writeIndent(out,*indentlevel);
+				if (!writeIndent(out,*indentlevel)) {
+					return false;
+				}
 			}
-			out->write('[');
+			if (out->write('[')<1) {
+				return false;
+			}
 			if (indent) {
-				out->write('\n');
+				if (out->write('\n')<1) {
+					return false;
+				}
 				*indentlevel=*indentlevel+2;
 			}
 			pvt->_inarray.append(true);
@@ -409,32 +482,49 @@ void jsondom::writeNode(const domnode *dn, output *out,
 				if (first) {
 					first=false;
 				} else {
-					out->write(',');
+					if (out->write(',')<1) {
+						return false;
+					}
 					if (indent) {
-						out->write('\n');
+						if (out->write('\n')<1) {
+							return false;
+						}
 					}
 				}
 				if (indent) {
-					writeIndent(out,*indentlevel);
+					if (!writeIndent(out,*indentlevel)) {
+						return false;
+					}
 				}
-				writeNode(child,out,indent,indentlevel);
+				if (!writeNode(child,out,indent,indentlevel)) {
+					return false;
+				}
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
 				if (!first) {
-					out->write('\n');
+					if (out->write('\n')<1) {
+						return false;
+					}
 				}
 				*indentlevel=*indentlevel-2;
-				writeIndent(out,*indentlevel);
+				if (!writeIndent(out,*indentlevel)) {
+					return false;
+				}
 			}
-			out->write(']');
+			if (out->write(']')<1) {
+				return false;
+			}
 			}
 			break;
 		case 'r':
-			writeNode(dn->getFirstTagChild(),
-					out,indent,indentlevel);
+			if (!writeNode(dn->getFirstTagChild(),
+						out,indent,indentlevel)) {
+				return false;
+			}
 			break;
 	}
+	return true;
 }
 
 const char *jsondom::getType(const domnode *dn) const {

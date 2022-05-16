@@ -78,6 +78,7 @@ unixsocketserver::~unixsocketserver() {
 
 bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
+	close();
 	unixsocketutil::initialize(filename);
 	pvt->_mask=mask;
 
