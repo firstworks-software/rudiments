@@ -12,8 +12,7 @@
 		off64_t	setPosition(off64_t offset, int32_t whence);
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 
-		ssize_t	fillWriteBuffer(int32_t sec, int32_t usec);
-		bool	realignWriteBuffer(int32_t sec, int32_t usec);
+		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
 
 		ssize_t	bufferedRead(void *buf, ssize_t count,
 						int32_t sec, int32_t usec);

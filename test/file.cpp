@@ -13,6 +13,7 @@
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/filesystem.h>
 #include "test.cpp"
 
 #ifndef WIN32
@@ -204,16 +205,23 @@ int main(int argc, const char **argv) {
 		test("getCurrentProperties after truncate",
 					fl.getCurrentProperties());
 		test("getSize after truncate",!fl.getSize());
-		fl.setWriteBufferSize(1024);
-		test("getWriteBufferSize",fl.getWriteBufferSize()==1024);
-		test("getReadBufferSize",fl.getReadBufferSize()==1024);
+		filesystem	fs;
+		fs.open(testfiletxt);
+		ssize_t	blocksize=fs.getOptimumTransferBlockSize();
+		if (blocksize==-1) {
+			blocksize=1024;
+		}
+		fl.setWriteBufferSize(blocksize);
+		test("getWriteBufferSize",fl.getWriteBufferSize()==blocksize);
+		test("getReadBufferSize",fl.getReadBufferSize()==blocksize);
 
 		// sequential writes/reads
 		// write 400 a's, followed by 400 b's, followed by 400 c's, etc.
 		// then
 		// read 400 a's, followed by 400 b's, followed by 400 c's, etc.
 		//
-		// (note that 400 is not aligned with the buffer size of 1024)
+		// (note that 400 is not aligned with the buffer size which is
+		// probably some multiple of 512)
 		bool	success=true;
 		for (uint8_t iter=0; iter<2; iter++) {
 			for (char ch='a'; ch<='z'; ch++) {
