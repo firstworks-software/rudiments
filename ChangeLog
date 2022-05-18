@@ -72,7 +72,9 @@
 	added SIGXCPU, SIGXFSZ and SIGPWR to the "shutdown signals"
 	refactored write methods of dom class and its children a bit
 	implemented sys::getAvailable*() for SVR5 (eg. UnixWare)
-	implemented block-aligned buffering for non-stream filedescriptors
+	implemented block-aligned buffering, which prefers to use mmap, but
+		can fall back to traditional buffering, for non-stream
+		filedescriptors
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
