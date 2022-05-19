@@ -41,7 +41,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Set "isstream" to true (the default) if this filedescriptor
 		 *  is a stream such as a socket, serial port, fifo, etc. or
 		 *  false if this filedescriptor is storage such as a file,
-		 *  raw block device, etc..  This setting impacts how buffering
+		 *  raw block device, etc.  This setting impacts how buffering
 		 *  works, as well as how the various setPosition() and
 		 *  getPosition() methods work.
 		 *
@@ -1107,6 +1107,28 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns the current size of the read buffer. */
 		ssize_t	getReadBufferSize() const;
+
+		/** If "enabled" is set true then mmap may be used when
+		 *  buffering a storage filedescriptor such as a file, raw
+		 *  block device, etc.  If set false, then mmap will not be
+		 *  used. */
+		void	setMmapBufferingEnabled(bool enabled);
+
+		/** Returns true if mmap may be used when buffering a storage
+		 *  filedescriptor such as a file, raw block device, etc. or
+		 *  false otherwise. */
+		bool	getMmapBufferingEnabled();
+
+		/** Returns true if this is a storage filedescriptor such as a
+		 *  file, raw block device, etc. and the current block is
+		 *  buffered using mmap, or false otherwise. */
+		bool	getIsCurrentBlockMmapBuffered();
+
+		/** If buffering is enabled, and this is a storage
+		 *  filedescriptor such as a file, raw block device, etc. then
+		 *  this returns the offset of the currently buffered block, or
+		 *  0 otherwise. */
+		off64_t	getCurrentBlockOffset();
 
 		/** If the close-on-exec status is false (the default), then the
 		 *  file descriptor will remain open across an execve() call,

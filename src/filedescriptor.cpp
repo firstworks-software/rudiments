@@ -263,6 +263,7 @@ class filedescriptorprivate {
 		unsigned char	*_writebuffertail;
 		unsigned char	*_writebufferend;
 		bool		_writebufferdirty;
+		bool		_writebuffermmapenabled;
 
 		unsigned char	*_readbuffer;
 		unsigned char	*_readbufferptr;
@@ -325,6 +326,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_writebuffertail=NULL;
 	pvt->_writebufferend=NULL;
 	pvt->_writebufferdirty=false;
+	pvt->_writebuffermmapenabled=true;
 	pvt->_readbuffer=NULL;
 	pvt->_readbufferptr=NULL;
 	pvt->_readbuffertail=NULL;
@@ -369,6 +371,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 		pvt->_writebufferend=NULL;
 	}
 	pvt->_writebufferdirty=f.pvt->_writebufferdirty;
+	pvt->_writebuffermmapenabled=f.pvt->_writebuffermmapenabled;
 	pvt->_lstnr=NULL;
 }
 
@@ -598,6 +601,22 @@ ssize_t filedescriptor::getReadBufferSize() const {
 	return (pvt->_isstream)?
 			(pvt->_readbufferend-pvt->_readbuffer):
 			getWriteBufferSize();
+}
+
+void filedescriptor::setMmapBufferingEnabled(bool enabled) {
+	pvt->_writebuffermmapenabled=enabled;
+}
+
+bool filedescriptor::getMmapBufferingEnabled() {
+	return pvt->_writebuffermmapenabled;
+}
+
+bool filedescriptor::getIsCurrentBlockMmapBuffered() {
+	return pvt->_writebuffermap;
+}
+
+off64_t filedescriptor::getCurrentBlockOffset() {
+	return pvt->_blockoffset;
 }
 
 int32_t filedescriptor::getFileDescriptor() const {
@@ -904,39 +923,58 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// So we can only mmap it if it's not the last block, or if it is, but
 	// it's a full block (i.e. it's exactly pvt->_blocksize bytes), so...
 
-	// get the size of the file and determine if we can mmap the block
-	file	f;
-	f.setFileDescriptor(pvt->_fd);
-	if (!f.getCurrentProperties()) {
-		f.setFileDescriptor(-1);
-		#if defined(DEBUG_BUFFERING)
-		debugPrintf(",error getting file size)\n");
-		#endif
-		// It's safe to just return error here.  The operation will
-		// fail gracefully and all buffer pointers are set such that
-		// a retry will fall through safely to this point again.
-		return RESULT_ERROR;
-	}
-	#if defined(DEBUG_BUFFERING)
-	if (f.getSize()/pvt->_blocksize==pvt->_blockoffset/pvt->_blocksize) {
-		debugPrintf(",is last block");
-		if (f.getSize()-pvt->_blockoffset==pvt->_blocksize) {
-			debugPrintf(",is full block,can mmap...\n");
-		} else {
-			debugPrintf(",is partial block,can't mmap...\n");
+	bool	canmmap=false;
+	if (pvt->_writebuffermmapenabled) {
+
+		// get the size of the file and
+		// determine if we can mmap the block
+		file	f;
+		f.setFileDescriptor(pvt->_fd);
+		if (!f.getCurrentProperties()) {
+			f.setFileDescriptor(-1);
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf(",error getting file size)\n");
+			#endif
+			// It's safe to just return error here.  The operation
+			// will fail gracefully and all buffer pointers are set
+			// such that a retry will fall through safely to this
+			// point again.
+			return RESULT_ERROR;
 		}
-	} else {
-		debugPrintf(",can mmap");
-	}
-	#endif
-	bool	canmmap=(
+		off64_t	filesize=f.getSize();
+		f.setFileDescriptor(-1);
+		f.close();
+
+		#if defined(DEBUG_BUFFERING)
+		if (filesize/pvt->_blocksize==
+				pvt->_blockoffset/pvt->_blocksize) {
+			debugPrintf(",is last block");
+			if (filesize-pvt->_blockoffset==pvt->_blocksize) {
+				debugPrintf(",is full block,"
+						"can mmap");
+			} else {
+				debugPrintf(",is partial block,"
+						"can't mmap...\n");
+			}
+		} else {
+			debugPrintf(",can mmap");
+		}
+		#endif
+
+		canmmap=(
 			// not the last block
-			!(f.getSize()/pvt->_blocksize==
+			!(filesize/pvt->_blocksize==
 					pvt->_blockoffset/pvt->_blocksize) ||
 			// is a full block
-			(f.getSize()-pvt->_blockoffset==pvt->_blocksize));
-	f.setFileDescriptor(-1);
-	f.close();
+			(filesize-pvt->_blockoffset==pvt->_blocksize));
+
+	}
+	#if defined(DEBUG_BUFFERING)
+	else {
+		debugPrintf(",mmap disabled,can't mmap...\n");
+	}
+	#endif
+
 
 	// if we can mmap the block...
 	if (canmmap) {

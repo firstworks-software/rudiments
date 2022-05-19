@@ -22,7 +22,8 @@ PROGS = dictionary \
 	inetsocketserver \
 	bytestring \
 	charstring \
-	socket
+	socket \
+	file
 
 .SUFFIXES: .lo .obj .cpp
 
@@ -91,3 +92,6 @@ charstring: charstring.cpp charstring.$(OBJ)
 
 socket: socket.cpp socket.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) socket.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+file: file.cpp file.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) file.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
