@@ -32,10 +32,14 @@ int main(int argc, const char **argv) {
 
 	// create the file
 	file	f;
-	if (!f.create(filename,permissions::evalPermString("rw-r--r--"))) {
-		stdoutput.printf("create failed\n");
+	if (!f.open(filename,O_RDONLY)) {
+		stdoutput.printf("open failed\n");
 		process::exit(1);
 	}
+	/*if (!f.create(filename,permissions::evalPermString("rw-r--r--"))) {
+		stdoutput.printf("create failed\n");
+		process::exit(1);
+	}*/
 
 	// use optimium block size for buffers
 	filesystem	fs;
@@ -53,6 +57,7 @@ int main(int argc, const char **argv) {
 
 	// write to the file
 	uint64_t	filesize=(uint64_t)1024*(uint64_t)1024*(uint64_t)512;
+#if 0
 	char	*hr=charstring::humanReadable(filesize);
 	stdoutput.printf("writing %s bytes...\n",hr);
 	delete[] hr;
@@ -71,8 +76,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("done writing %lld bytes\n",filesize);
 	displayTime(&start,&end);
 	stdoutput.printf("\n");
+#endif
 
-#if 1
 	// read tests
 	const char	*type[]={
 		"unbuffered","buffered","mmap-buffered"
@@ -114,31 +119,68 @@ int main(int argc, const char **argv) {
 		displayTime(&start,&end);
 		stdoutput.printf("\n");
 	}
-#endif
 
+#if 0
 	// manual mmap test
 	memorymap	m;
 	char		*p;
 	char		ch;
 	stdoutput.printf("reading manual mmap...\n");
 	start.getSystemDateAndTime();
+bool		isstream=false;
+uint64_t	offset=0;
+uint64_t	blockoffset=0;
+unsigned char	*writebuffer;
+unsigned char	*writebufferend;
+unsigned char	*writebuffertail;
 	for (uint64_t i=0; i<filesize; i++) {
-		if (!(i%blocksize)) {
-			if (i) {
-				m.detach();
-			}
-			if (!m.attach(f.getFileDescriptor(),
+		if (isstream) {
+			continue;
+		}
+		if (!blocksize) {
+			continue;
+		}
+ssize_t		bytestoread=1;
+ssize_t		bytesread=0;
+		for (;;) {
+			if (!(i%blocksize)) {
+				if (i) {
+					m.detach();
+				}
+blockoffset=i;
+f.getCurrentProperties();
+				if (!m.attach(f.getFileDescriptor(),
 					i,blocksize,PROT_READ,MAP_PRIVATE)) {
-				stdoutput.printf("  mmap attach failed\n");
-				process::exit(1);
+					stdoutput.printf(
+						"  mmap attach failed\n");
+					process::exit(1);
+				}
+writebuffer=(unsigned char *)m.getData();
+writebufferend=writebuffer+blocksize;
+writebuffertail=writebuffer;
+				p=(char *)m.getData();
+				if (!(i%(1024*1024*50))) {
+					stdoutput.printf(
+						"  %lld bytes read...\n",i);
+				}
 			}
-			p=(char *)m.getData();
-			if (!(i%(1024*1024*50))) {
-				stdoutput.printf("  %lld bytes read...\n",i);
+unsigned char	*bufferhead=writebuffer+(offset-blockoffset);
+ssize_t		bytesavailable=writebufferend-bufferhead;
+			//ch=*p;
+			//bytestring::copy(&ch,p,sizeof(char));
+			ch=read(p);
+bytesread++;
+offset+=bytestoread;
+// avoids set but not used warning
+bufferhead++;
+bytesavailable++;
+			if (writebuffertail<writebufferend) {
+				writebuffertail=bufferhead+bytesread;
+			}
+			if (bytesread==bytestoread) {
+				break;
 			}
 		}
-		//ch=*p;
-		ch=read(p);
 	}
 	m.detach();
 	end.getSystemDateAndTime();
@@ -147,10 +189,12 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 	// avoids set but not used warning
 	ch++;
+writebuffertail++;
+#endif
 
 	// clean up
 	f.close();
-	file::remove(filename);
+	//file::remove(filename);
 
 	process::exit(0);
 }
