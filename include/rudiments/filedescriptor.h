@@ -1209,4 +1209,6 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 	#include <rudiments/private/filedescriptor.h>
 };
 
+#include <rudiments/private/filedescriptorinlines.h>
+
 #endif

@@ -372,6 +372,7 @@ privateheaders2="winsock.h "+_
 	"urlincludes.h "+_
 	"filedescriptor.h "+_
 	"filedescriptorincludes.h "+_
+	"filedescriptorinlines.h "+_
 	"stdio.h "+_
 	"filesystem.h "+_
 	"filesystemincludes.h "+_

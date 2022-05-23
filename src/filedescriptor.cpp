@@ -257,6 +257,10 @@ class filedescriptorprivate {
 		off64_t		_offset;
 		off64_t		_blockoffset;
 		ssize_t		_blocksize;
+		ssize_t 	(filedescriptor::*_bufferedReadPtr)(
+					void *,ssize_t,int32_t,int32_t);
+		ssize_t 	(filedescriptor::*_bufferedWritePtr)(
+					const void *,ssize_t,int32_t,int32_t);
 
 		memorymap	*_writebuffermap;
 		unsigned char	*_writebuffer;
@@ -269,11 +273,6 @@ class filedescriptorprivate {
 		unsigned char	*_readbufferptr;
 		unsigned char	*_readbuffertail;
 		unsigned char	*_readbufferend;
-
-		thread		*_thr;
-		semaphoreset	*_thrsem;
-		bool		_threxit;
-		bool		_threrror;
 };
 
 filedescriptor::filedescriptor() : input(), output() {
@@ -321,6 +320,8 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_blockoffset=0;
 	pvt->_blocksize=0;
 	pvt->_isstream=true;
+	pvt->_bufferedReadPtr=&filedescriptor::safeRead;
+	pvt->_bufferedWritePtr=&filedescriptor::safeWrite;
 	pvt->_writebuffermap=NULL;
 	pvt->_writebuffer=NULL;
 	pvt->_writebuffertail=NULL;
@@ -331,15 +332,10 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_readbufferptr=NULL;
 	pvt->_readbuffertail=NULL;
 	pvt->_readbufferend=NULL;
-	pvt->_thr=NULL;
-	pvt->_thrsem=NULL;
-	pvt->_threxit=false;
-	pvt->_threrror=false;
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	setFileDescriptor(f.pvt->_fd);
-	pvt->_translatebyteorder=f.pvt->_translatebyteorder;
 	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
 	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
 	pvt->_retryinterruptedwaits=f.pvt->_retryinterruptedwaits;
@@ -347,32 +343,27 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
+	pvt->_translatebyteorder=f.pvt->_translatebyteorder;
 	pvt->_socklr=f.pvt->_socklr;
+	pvt->_type="filedescriptor";
+	pvt->_lstnr=NULL;
 	pvt->_offset=f.pvt->_offset;
 	pvt->_blockoffset=f.pvt->_blockoffset;
 	pvt->_blocksize=f.pvt->_blocksize;
 	pvt->_isstream=f.pvt->_isstream;
-	if (f.pvt->_writebuffer) {
-		// FIXME: clone memorymap
-		pvt->_writebuffermap=NULL;
-		ssize_t	writebuffersize=f.pvt->_writebufferend-
-						f.pvt->_writebuffer;
-		pvt->_writebuffer=new unsigned char[writebuffersize];
-		bytestring::copy(pvt->_writebuffer,
-				f.pvt->_writebuffer,
-				writebuffersize);
-		pvt->_writebuffertail=pvt->_writebuffer+
-				(f.pvt->_writebuffertail-f.pvt->_writebuffer);
-		pvt->_writebufferend=pvt->_writebuffer+writebuffersize;
-	} else {
-		pvt->_writebuffermap=NULL;
-		pvt->_writebuffer=NULL;
-		pvt->_writebuffertail=NULL;
-		pvt->_writebufferend=NULL;
-	}
-	pvt->_writebufferdirty=f.pvt->_writebufferdirty;
+	// FIXME: clone function pointers
+	pvt->_bufferedReadPtr=&filedescriptor::safeRead;
+	pvt->_bufferedWritePtr=&filedescriptor::safeWrite;
+	// FIXME: clone buffere
+	pvt->_writebuffermap=NULL;
+	pvt->_writebuffer=NULL;
+	pvt->_writebuffertail=NULL;
+	pvt->_writebufferend=NULL;
+	pvt->_writebufferdirty=false;
 	pvt->_writebuffermmapenabled=f.pvt->_writebuffermmapenabled;
-	pvt->_lstnr=NULL;
+	pvt->_readbuffer=NULL;
+	pvt->_readbufferptr=NULL;
+	pvt->_readbuffertail=NULL;
 }
 
 filedescriptor::~filedescriptor() {
@@ -381,23 +372,6 @@ filedescriptor::~filedescriptor() {
 
 	if (!pvt) {
 		return;
-	}
-
-	if (pvt->_thr) {
-
-		if (pvt->_thrsem) {
-			pvt->_thrsem->wait(1);
-			pvt->_threxit=true;
-			pvt->_thrsem->signal(0);
-			semaphoreset	*tmpthrsem=pvt->_thrsem;
-			pvt->_thrsem=NULL;
-			delete tmpthrsem;
-		}
-
-		pvt->_thr->wait(NULL);
-		thread	*tmpthr=pvt->_thr;
-		pvt->_thr=NULL;
-		delete tmpthr;
 	}
 
 	unsigned char	*tmpbuffer=pvt->_readbuffer;
@@ -549,11 +523,9 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 }
 
 ssize_t filedescriptor::getWriteBufferSize() const {
-	if (pvt->_isstream) {
-		return pvt->_writebufferend-pvt->_writebuffer;
-	} else {
-		return pvt->_blocksize;
-	}
+	return (pvt->_isstream)?
+			(pvt->_writebufferend-pvt->_writebuffer):
+			pvt->_blocksize;
 }
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
@@ -600,7 +572,7 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 ssize_t filedescriptor::getReadBufferSize() const {
 	return (pvt->_isstream)?
 			(pvt->_readbufferend-pvt->_readbuffer):
-			getWriteBufferSize();
+			pvt->_blocksize;
 }
 
 void filedescriptor::setMmapBufferingEnabled(bool enabled) {
@@ -619,6 +591,11 @@ off64_t filedescriptor::getCurrentBlockOffset() {
 	return pvt->_blockoffset;
 }
 
+ssize_t filedescriptor::getBytesBuffered() {
+	return (pvt->_writebuffertail && pvt->_writebuffer)?
+			pvt->_writebuffertail-pvt->_writebuffer:0;
+}
+
 int32_t filedescriptor::getFileDescriptor() const {
 	return pvt->_fd;
 }
@@ -631,6 +608,13 @@ void filedescriptor::setIsStream(bool isstream) {
 	// FIXME: it's not safe to change this while buffering is enabled,
 	// and it ought to return false if we try
 	pvt->_isstream=isstream;
+	if (isstream) {
+		pvt->_bufferedReadPtr=&filedescriptor::streamBufferedRead;
+		pvt->_bufferedWritePtr=&filedescriptor::streamBufferedWrite;
+	} else {
+		pvt->_bufferedReadPtr=&filedescriptor::storageBufferedRead;
+		pvt->_bufferedWritePtr=&filedescriptor::storageBufferedWrite;
+	}
 }
 
 bool filedescriptor::getIsStream() {
@@ -815,8 +799,31 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
-	// if the current offset is inside of the currently buffered block...
-	if (pvt->_offset/pvt->_blocksize==pvt->_blockoffset/pvt->_blocksize) {
+	// Since the comparison below occurs on every read/write, it needs to
+	// be optimized.
+	//
+	// It originally checked for:
+	// 	pvt->_offset/pvt->_blocksize==pvt->_blockoffset/pvt->_blocksize
+	// but that was more than 4 times slower than this.
+	//
+	// In its current incarnation...
+	//
+	// If the offset is inside of the current block, then
+	// offset-blockoffset<blocksize.  Also, if the offset is way past the
+	// current block, then offset-blockoffset>blocksize.  Those work
+	// naturally.
+	//
+	// We use a trick to handle cases where the offset is before the
+	// current block though.  In that case, offset-blockoffset ends up
+	// being a negative number, but since we convert it to an unsigned
+	// integer, it becomes a large positive number, so still we have a case
+	// where offset-blockoffset>blocksize.
+	//
+	// I belive that since all numbers involved are signed, there should be
+	// no way for offset-blockoffset to result in a large enough negative
+	// number that it wraps back around and ends up < blocksize.
+	if ((uint64_t)(pvt->_offset-pvt->_blockoffset)<
+					(uint64_t)pvt->_blocksize) {
 
 		#if defined(DEBUG_BUFFERING)
 		debugPrintf(",blockoffset=%08x,already aligned,blocksize=%d",
@@ -824,15 +831,14 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		#endif
 
 		// if we have already buffered that block, then just
-		// return the number of bytes that are still buffered
-		if (pvt->_writebuffertail!=pvt->_writebuffer) {
-
+		// return the number of bytes that are currently buffered
+		ssize_t bufferedbytes=pvt->_writebuffertail-pvt->_writebuffer;
+		if (bufferedbytes) {
 			#if defined(DEBUG_BUFFERING)
-			debugPrintf(",%d bytes still buffered)\n",
-				(int)(pvt->_writebuffertail-pvt->_writebuffer));
+			debugPrintf(",%d bytes currently buffered)\n",
+						(int)(bufferedbytes));
 			#endif
-
-			return pvt->_writebuffertail-pvt->_writebuffer;
+			return bufferedbytes;
 		}
 
 		// If we haven't buffered the block yet, then the various
@@ -1013,7 +1019,6 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			#endif
 
 			return pvt->_blocksize;
-
 		}
 
 		// if the previous buffer was mmapped then we need to set
@@ -1023,7 +1028,10 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		}
 
 		#if defined(DEBUG_BUFFERING)
-		debugPrintf(",mmap failed,attempting traditional buffer...\n");
+		char	*err=error::getErrorString();
+		debugPrintf(",mmap failed: %s,"
+			"attempting traditional buffer...\n",err);
+		delete[] err;
 		#endif
 	}
 
@@ -1094,82 +1102,6 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	return result;
 }
 
-ssize_t filedescriptor::write(uint16_t number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(uint32_t number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(uint64_t number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(int16_t number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(int32_t number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(int64_t number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(float number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(double number) {
-	return write(number,-1,-1);
-}
-
-ssize_t filedescriptor::write(unsigned char character) {
-	return write(character,-1,-1);
-}
-
-ssize_t filedescriptor::write(bool value) {
-	return write(value,-1,-1);
-}
-
-ssize_t filedescriptor::write(char character) {
-	return write(character,-1,-1);
-}
-
-ssize_t filedescriptor::write(wchar_t character) {
-	return write(character,-1,-1);
-}
-
-ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
-	return write(string,size,-1,-1);
-}
-
-ssize_t filedescriptor::write(const char *string, size_t length) {
-	return write(string,length,-1,-1);
-}
-
-ssize_t filedescriptor::write(const wchar_t *string, size_t length) {
-	return write(string,length,-1,-1);
-}
-
-ssize_t filedescriptor::write(const unsigned char *string) {
-	return write(string,charstring::length((const char *)string),-1,-1);
-}
-
-ssize_t filedescriptor::write(const char *string) {
-	return write(string,charstring::length(string),-1,-1);
-}
-
-ssize_t filedescriptor::write(const wchar_t *string) {
-	return write(string,wcharstring::length(string),-1,-1);
-}
-
-ssize_t filedescriptor::write(const void *buffer, size_t size) {
-	return write(buffer,size,-1,-1);
-}
-
 ssize_t filedescriptor::write(uint16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
@@ -1210,146 +1142,6 @@ ssize_t filedescriptor::write(int64_t number, int32_t sec, int32_t usec) {
 		number=hostToNet((uint64_t)number);
 	}
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
-}
-
-ssize_t filedescriptor::write(float number, int32_t sec,int32_t usec) {
-	return bufferedWrite(&number,sizeof(float),sec,usec);
-}
-
-ssize_t filedescriptor::write(double number, int32_t sec, int32_t usec) {
-	return bufferedWrite(&number,sizeof(double),sec,usec);
-}
-
-ssize_t filedescriptor::write(unsigned char character,
-				int32_t sec, int32_t usec) {
-	return bufferedWrite(&character,sizeof(unsigned char),sec,usec);
-}
-
-ssize_t filedescriptor::write(bool value, int32_t sec, int32_t usec) {
-	return bufferedWrite(&value,sizeof(bool),sec,usec);
-}
-
-ssize_t filedescriptor::write(char character, int32_t sec, int32_t usec) {
-	return bufferedWrite(&character,sizeof(char),sec,usec);
-}
-
-ssize_t filedescriptor::write(wchar_t character, int32_t sec, int32_t usec) {
-	return bufferedWrite(&character,sizeof(wchar_t),sec,usec);
-}
-
-ssize_t filedescriptor::write(const unsigned char *string, size_t size,
-						int32_t sec, int32_t usec) {
-	return bufferedWrite(string,size,sec,usec);
-}
-
-ssize_t filedescriptor::write(const char *string, size_t length,
-					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,length,sec,usec);
-}
-
-ssize_t filedescriptor::write(const wchar_t *string, size_t length,
-					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,length*sizeof(wchar_t),sec,usec);
-}
-
-ssize_t filedescriptor::write(const unsigned char *string,
-					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,
-			charstring::length((const char *)string),sec,usec);
-}
-
-ssize_t filedescriptor::write(const char *string,
-					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,charstring::length(string),sec,usec);
-}
-
-ssize_t filedescriptor::write(const wchar_t *string,
-					int32_t sec, int32_t usec) {
-	return bufferedWrite(string,
-			wcharstring::length(string)*sizeof(wchar_t),sec,usec);
-}
-
-ssize_t filedescriptor::write(const void *buffer, size_t size,
-					int32_t sec, int32_t usec) {
-	return bufferedWrite(buffer,size,sec,usec);
-}
-
-ssize_t filedescriptor::read(uint16_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(uint32_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(uint64_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(int16_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(int32_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(int64_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(float *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(double *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(unsigned char *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(bool *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(char *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(wchar_t *buffer) {
-	return read(buffer,-1,-1);
-}
-
-ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
-	return read(buffer,size,-1,-1);
-}
-
-ssize_t filedescriptor::read(char *buffer, size_t length) {
-	return read(buffer,length,-1,-1);
-}
-
-ssize_t filedescriptor::read(wchar_t *buffer, size_t length) {
-	return read(buffer,length,-1,-1);
-}
-
-ssize_t filedescriptor::read(void *buffer, size_t size) {
-	return read(buffer,size,-1,-1);
-}
-
-ssize_t filedescriptor::read(char **buffer, const char *terminator) {
-	return read(buffer,terminator,0,'\0',-1,-1);
-}
-
-ssize_t filedescriptor::read(char **buffer,
-				const char *terminator, size_t maxbytes) {
-	return read(buffer,terminator,maxbytes,'\0',-1,-1);
-}
-
-ssize_t filedescriptor::read(char **buffer, const char *terminator,
-						int32_t sec, int32_t usec) {
-	return read(buffer,terminator,0,'\0',sec,usec);
 }
 
 ssize_t filedescriptor::read(uint16_t *buffer,
@@ -1404,56 +1196,6 @@ ssize_t filedescriptor::read(int64_t *buffer,
 		*buffer=netToHost((uint64_t)*buffer);
 	}
 	return retval;
-}
-
-ssize_t filedescriptor::read(float *buffer,
-				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(float),sec,usec);
-}
-
-ssize_t filedescriptor::read(double *buffer,
-				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(double),sec,usec);
-}
-
-ssize_t filedescriptor::read(unsigned char *buffer,
-				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(unsigned char),sec,usec);
-}
-
-ssize_t filedescriptor::read(bool *buffer,
-				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(bool),sec,usec);
-}
-
-ssize_t filedescriptor::read(char *buffer,
-				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(char),sec,usec);
-}
-
-ssize_t filedescriptor::read(wchar_t *buffer,
-				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(wchar_t),sec,usec);
-}
-
-ssize_t filedescriptor::read(unsigned char *buffer, size_t size,
-					int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,size,sec,usec);
-}
-
-ssize_t filedescriptor::read(char *buffer, size_t size,
-					int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,size,sec,usec);
-}
-
-ssize_t filedescriptor::read(wchar_t *buffer, size_t size,
-					int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,size*sizeof(wchar_t),sec,usec);
-}
-
-ssize_t filedescriptor::read(void *buffer, size_t size,
-					int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,size,sec,usec);
 }
 
 bool filedescriptor::close() {
@@ -1586,11 +1328,6 @@ void filedescriptor::dontAllowShortWrites() {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
-				size_t maxbytes, int32_t sec, int32_t usec) {
-	return read(buffer,terminator,maxbytes,'\0',sec,usec);
-}
-
-ssize_t filedescriptor::read(char **buffer, const char *terminator,
 				size_t maxbytes, char escapechar,
 				int32_t sec, int32_t usec) {
 
@@ -1685,11 +1422,10 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 	return retval;
 }
 
-ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
+inline ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec) {
-	return (pvt->_isstream)?
-			streamBufferedRead(buf,count,sec,usec):
-			storageBufferedRead(buf,count,sec,usec);
+	// gets called on every read, so needs to be optimized
+	return (this->*pvt->_bufferedReadPtr)(buf,count,sec,usec);
 }
 
 ssize_t filedescriptor::streamBufferedRead(void *buf, ssize_t count,
@@ -2084,9 +1820,8 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
-	return (pvt->_isstream)?
-			streamBufferedWrite(buf,count,sec,usec):
-			storageBufferedWrite(buf,count,sec,usec);
+	// gets called on every write, so needs to be optimized
+	return (this->*pvt->_bufferedWritePtr)(buf,count,sec,usec);
 }
 
 ssize_t filedescriptor::streamBufferedWrite(const void *buf, ssize_t count,

@@ -11,35 +11,22 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
-char safeRead(char *ptr) {
-	char	ch;
-	bytestring::copy(&ch,ptr,sizeof(char));
-	return ch;
-}
-char storageBufferedRead(char *ptr) {
-	return safeRead(ptr);
-}
-char bufferedRead(char *ptr) {
-	return bufferedRead(ptr);
-}
-char read(char *ptr) {
-	return storageBufferedRead(ptr);
-}
-
 int main(int argc, const char **argv) {
 
 	const char	*filename="/home/dmuse/testfile.txt";
 
 	// create the file
 	file	f;
-	if (!f.open(filename,O_RDONLY)) {
+	if (!f.open(filename,O_RDWR)) {
 		stdoutput.printf("open failed\n");
 		process::exit(1);
 	}
-	/*if (!f.create(filename,permissions::evalPermString("rw-r--r--"))) {
+#if 0
+	if (!f.create(filename,permissions::evalPermString("rw-r--r--"))) {
 		stdoutput.printf("create failed\n");
 		process::exit(1);
-	}*/
+	}
+#endif
 
 	// use optimium block size for buffers
 	filesystem	fs;
@@ -57,7 +44,7 @@ int main(int argc, const char **argv) {
 
 	// write to the file
 	uint64_t	filesize=(uint64_t)1024*(uint64_t)1024*(uint64_t)512;
-#if 0
+#if 1
 	char	*hr=charstring::humanReadable(filesize);
 	stdoutput.printf("writing %s bytes...\n",hr);
 	delete[] hr;
@@ -76,17 +63,18 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("done writing %lld bytes\n",filesize);
 	displayTime(&start,&end);
 	stdoutput.printf("\n");
+//process::exit(0);
 #endif
 
 	// read tests
 	const char	*type[]={
 		"unbuffered","buffered","mmap-buffered"
 	};
-	//for (uint8_t i=0; i<3; i++) {
+	for (uint8_t i=0; i<3; i++) {
 	// for now, skip unbuffered
 	//for (uint8_t i=1; i<3; i++) {
 	// for now, skip unbuffered and regular-buffered
-	for (uint8_t i=2; i<3; i++) {
+	//for (uint8_t i=2; i<3; i++) {
 
 		stdoutput.printf("reading %s...\n",type[i]);
 
@@ -120,67 +108,30 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("\n");
 	}
 
-#if 0
 	// manual mmap test
 	memorymap	m;
 	char		*p;
 	char		ch;
 	stdoutput.printf("reading manual mmap...\n");
 	start.getSystemDateAndTime();
-bool		isstream=false;
-uint64_t	offset=0;
-uint64_t	blockoffset=0;
-unsigned char	*writebuffer;
-unsigned char	*writebufferend;
-unsigned char	*writebuffertail;
 	for (uint64_t i=0; i<filesize; i++) {
-		if (isstream) {
-			continue;
-		}
-		if (!blocksize) {
-			continue;
-		}
-ssize_t		bytestoread=1;
-ssize_t		bytesread=0;
-		for (;;) {
-			if (!(i%blocksize)) {
-				if (i) {
-					m.detach();
-				}
-blockoffset=i;
-f.getCurrentProperties();
-				if (!m.attach(f.getFileDescriptor(),
-					i,blocksize,PROT_READ,MAP_PRIVATE)) {
-					stdoutput.printf(
-						"  mmap attach failed\n");
-					process::exit(1);
-				}
-writebuffer=(unsigned char *)m.getData();
-writebufferend=writebuffer+blocksize;
-writebuffertail=writebuffer;
-				p=(char *)m.getData();
-				if (!(i%(1024*1024*50))) {
-					stdoutput.printf(
-						"  %lld bytes read...\n",i);
-				}
+		if (!(i%blocksize)) {
+			if (i) {
+				m.detach();
 			}
-unsigned char	*bufferhead=writebuffer+(offset-blockoffset);
-ssize_t		bytesavailable=writebufferend-bufferhead;
-			//ch=*p;
-			//bytestring::copy(&ch,p,sizeof(char));
-			ch=read(p);
-bytesread++;
-offset+=bytestoread;
-// avoids set but not used warning
-bufferhead++;
-bytesavailable++;
-			if (writebuffertail<writebufferend) {
-				writebuffertail=bufferhead+bytesread;
+			if (!m.attach(f.getFileDescriptor(),
+				i,blocksize,PROT_READ,MAP_PRIVATE)) {
+				stdoutput.printf(
+					"  mmap attach failed\n");
+				process::exit(1);
 			}
-			if (bytesread==bytestoread) {
-				break;
+			p=(char *)m.getData();
+			if (!(i%(1024*1024*50))) {
+				stdoutput.printf(
+					"  %lld bytes read...\n",i);
 			}
 		}
+		ch=*p;
 	}
 	m.detach();
 	end.getSystemDateAndTime();
@@ -189,8 +140,6 @@ bytesavailable++;
 	stdoutput.printf("\n");
 	// avoids set but not used warning
 	ch++;
-writebuffertail++;
-#endif
 
 	// clean up
 	f.close();
