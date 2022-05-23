@@ -35,13 +35,11 @@ void test(const wchar_t *printstring, bool result) {
 }
 
 void displayTime(datetime *start, datetime *end) {
-	uint32_t	sec=end->getEpoch()-start->getEpoch();
-	int32_t		usec=end->getMicroseconds()-start->getMicroseconds();
-	if (usec<0) {
-		sec--;
-		usec=usec+100000;
-	}
-	long double	totalsec=(long double)sec+
-					(((long double)usec)/1000000.0);
-	stdoutput.printf("time: %Lf\n",totalsec);
+
+	uint32_t	millisec=(end->getEpoch()*1000+
+					end->getMicroseconds()/1000)-
+					(start->getEpoch()*1000+
+					start->getMicroseconds()/1000);
+	long double	totalsec=(long double)millisec/1000.0;
+	stdoutput.printf("time: %0.2Lf\n",totalsec);
 }

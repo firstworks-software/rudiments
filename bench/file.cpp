@@ -11,7 +11,8 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
-//#define ONLYREAD 1
+#define ONLYREAD 1
+//#define STATS 1
 
 int main(int argc, const char **argv) {
 
@@ -49,7 +50,12 @@ int main(int argc, const char **argv) {
 	uint64_t	filesize=(uint64_t)1024*(uint64_t)1024*(uint64_t)512;
 #ifndef ONLYREAD
 	char	*hr=charstring::humanReadable(filesize);
-	stdoutput.printf("writing %s bytes...\n",hr);
+	stdoutput.printf("writing %s bytes...",hr);
+#ifdef PROGRESS
+	stdoutput.printf("\n");
+#else
+	stdoutput.flush();
+#endif
 	delete[] hr;
 	start.getSystemDateAndTime();
 	for (uint64_t i=0; i<filesize; i++) {
@@ -69,80 +75,115 @@ int main(int argc, const char **argv) {
 //process::exit(0);
 #endif
 
-	// read tests
-	const char	*type[]={
-		"unbuffered","buffered","mmap-buffered"
-	};
-	for (uint8_t i=0; i<3; i++) {
-	// for now, skip unbuffered
-	//for (uint8_t i=1; i<3; i++) {
-	// for now, skip unbuffered and regular-buffered
-	//for (uint8_t i=2; i<3; i++) {
+	for (int64_t readsize=1; readsize<=blocksize; readsize*=2) {
 
-		stdoutput.printf("reading %s...\n",type[i]);
+		char	*buf=new char[readsize];
 
-		f.setPositionRelativeToBeginning(0);
+		// read tests
+		const char	*type[]={
+			"   unbuffered",
+			"     buffered",
+			"mmap-buffered"
+		};
+		//for (uint8_t i=0; i<3; i++) {
+		// for now, skip unbuffered
+		for (uint8_t i=1; i<3; i++) {
+		// for now, skip unbuffered and regular-buffered
+		//for (uint8_t i=2; i<3; i++) {
 
-		if (i==0) {
-			f.setReadBufferSize(0);
-		} else if (i==1) {
-			f.setReadBufferSize(blocksize);
-			f.setMmapBufferingEnabled(false);
-		} else if (i==2) {
-			f.setReadBufferSize(blocksize);
-			f.setMmapBufferingEnabled(true);
+			stdoutput.printf("reading: %s "
+						"(readsize=%04lld)...  ",
+						type[i],readsize);
+#ifdef PROGRESS
+			stdoutput.printf("\n");
+#else
+			stdoutput.flush();
+#endif
+
+			f.setPositionRelativeToBeginning(0);
+
+			if (i==0) {
+				f.setReadBufferSize(0);
+			} else if (i==1) {
+				f.setReadBufferSize(blocksize);
+				f.setMmapBufferingEnabled(false);
+			} else if (i==2) {
+				f.setReadBufferSize(blocksize);
+				f.setMmapBufferingEnabled(true);
+			}
+
+			start.getSystemDateAndTime();
+			for (uint64_t i=0; i<filesize; i+=readsize) {
+				if (f.read(buf,readsize)!=readsize) {
+					stdoutput.printf(
+						"read failed at %lld\n",i);
+					process::exit(1);
+				}
+#ifdef PROGRESS
+				if (!(i%(1024*1024*50))) {
+					stdoutput.printf(
+						"  %lld bytes read...\n",i);
+				}
+#endif
+			}
+			end.getSystemDateAndTime();
+
+#ifdef PROGRESS
+			stdoutput.printf("done reading %lld bytes\n",filesize);
+#endif
+			displayTime(&start,&end);
+#ifdef PROGRESS
+			stdoutput.printf("\n");
+#endif
 		}
 
-		char	ch;
+		// manual mmap test
+		memorymap	m;
+		char		*p;
+		stdoutput.printf("reading:   manual mmap "
+					"(readsize=%04lld)...  ",
+					readsize);
+#ifdef PROGRESS
+			stdoutput.printf("\n");
+#else
+			stdoutput.flush();
+#endif
 		start.getSystemDateAndTime();
-		for (uint64_t i=0; i<filesize; i++) {
-			if (f.read(&ch)!=sizeof(char)) {
-				stdoutput.printf("read failed at %lld\n",i);
-				process::exit(1);
+		for (uint64_t i=0; i<filesize; i+=readsize) {
+			if (!(i%blocksize)) {
+				if (i) {
+					m.detach();
+				}
+				if (!m.attach(f.getFileDescriptor(),
+					i,blocksize,PROT_READ,MAP_PRIVATE)) {
+					stdoutput.printf(
+						"  mmap attach failed\n");
+					process::exit(1);
+				}
+				p=(char *)m.getData();
+#ifdef PROGRESS
+				if (!(i%(1024*1024*50))) {
+					stdoutput.printf(
+						"  %lld bytes read...\n",i);
+				}
+#endif
 			}
-			if (!(i%(1024*1024*50))) {
-				stdoutput.printf("  %lld bytes read...\n",i);
-			}
+			charstring::copy(buf,p,readsize);
+			p+=readsize;
 		}
+		m.detach();
 		end.getSystemDateAndTime();
-
+#ifdef PROGRESS
 		stdoutput.printf("done reading %lld bytes\n",filesize);
+#endif
 		displayTime(&start,&end);
+#ifdef PROGRESS
 		stdoutput.printf("\n");
-	}
+#endif
 
-	// manual mmap test
-	memorymap	m;
-	char		*p;
-	char		ch;
-	stdoutput.printf("reading manual mmap...\n");
-	start.getSystemDateAndTime();
-	for (uint64_t i=0; i<filesize; i++) {
-		if (!(i%blocksize)) {
-			if (i) {
-				m.detach();
-			}
-			if (!m.attach(f.getFileDescriptor(),
-				i,blocksize,PROT_READ,MAP_PRIVATE)) {
-				stdoutput.printf(
-					"  mmap attach failed\n");
-				process::exit(1);
-			}
-			p=(char *)m.getData();
-			if (!(i%(1024*1024*50))) {
-				stdoutput.printf(
-					"  %lld bytes read...\n",i);
-			}
-		}
-		ch=*p;
+		stdoutput.printf("\n");
+		delete[] buf;
 	}
-	m.detach();
-	end.getSystemDateAndTime();
-	stdoutput.printf("done reading %lld bytes\n",filesize);
-	displayTime(&start,&end);
-	stdoutput.printf("\n");
-	// avoids set but not used warning
-	ch++;
 
 	// clean up
 	f.close();

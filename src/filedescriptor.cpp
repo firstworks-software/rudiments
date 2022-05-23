@@ -1422,7 +1422,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 	return retval;
 }
 
-inline ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
+ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec) {
 	// gets called on every read, so needs to be optimized
 	return (this->*pvt->_bufferedReadPtr)(buf,count,sec,usec);
