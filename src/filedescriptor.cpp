@@ -320,8 +320,8 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_blockoffset=0;
 	pvt->_blocksize=0;
 	pvt->_isstream=true;
-	pvt->_bufferedReadPtr=&filedescriptor::safeRead;
-	pvt->_bufferedWritePtr=&filedescriptor::safeWrite;
+	pvt->_bufferedReadPtr=&filedescriptor::streamBufferedRead;
+	pvt->_bufferedWritePtr=&filedescriptor::streamBufferedWrite;
 	pvt->_writebuffermap=NULL;
 	pvt->_writebuffer=NULL;
 	pvt->_writebuffertail=NULL;
@@ -352,8 +352,8 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_blocksize=f.pvt->_blocksize;
 	pvt->_isstream=f.pvt->_isstream;
 	// FIXME: clone function pointers
-	pvt->_bufferedReadPtr=&filedescriptor::safeRead;
-	pvt->_bufferedWritePtr=&filedescriptor::safeWrite;
+	pvt->_bufferedReadPtr=&filedescriptor::streamBufferedRead;
+	pvt->_bufferedWritePtr=&filedescriptor::streamBufferedWrite;
 	// FIXME: clone buffere
 	pvt->_writebuffermap=NULL;
 	pvt->_writebuffer=NULL;

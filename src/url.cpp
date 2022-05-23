@@ -126,6 +126,7 @@ url::url() : file() {
 
 	init();
 	type("url");
+	setIsStream(true);
 
 	winsock::initWinsock();
 }
@@ -134,6 +135,7 @@ url::url(const url &u) : file(u) {
 	// no good way to do this
 	pvt=new urlprivate;
 	type("url");
+	setIsStream(true);
 }
 
 url &url::operator=(const url &u) {

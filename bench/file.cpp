@@ -11,17 +11,20 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
+//#define ONLYREAD 1
+
 int main(int argc, const char **argv) {
 
 	const char	*filename="/home/dmuse/testfile.txt";
 
 	// create the file
 	file	f;
+#ifdef ONLYREAD
 	if (!f.open(filename,O_RDWR)) {
 		stdoutput.printf("open failed\n");
 		process::exit(1);
 	}
-#if 0
+#else
 	if (!f.create(filename,permissions::evalPermString("rw-r--r--"))) {
 		stdoutput.printf("create failed\n");
 		process::exit(1);
@@ -44,7 +47,7 @@ int main(int argc, const char **argv) {
 
 	// write to the file
 	uint64_t	filesize=(uint64_t)1024*(uint64_t)1024*(uint64_t)512;
-#if 1
+#ifndef ONLYREAD
 	char	*hr=charstring::humanReadable(filesize);
 	stdoutput.printf("writing %s bytes...\n",hr);
 	delete[] hr;
