@@ -11,8 +11,8 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
-#define ONLYREAD 1
-//#define STATS 1
+//#define ONLYREAD 1
+//#define SHOWPROGRESS 1
 
 int main(int argc, const char **argv) {
 
@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
 #ifndef ONLYREAD
 	char	*hr=charstring::humanReadable(filesize);
 	stdoutput.printf("writing %s bytes...",hr);
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 	stdoutput.printf("\n");
 #else
 	stdoutput.flush();
@@ -94,7 +94,7 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("reading: %s "
 						"(readsize=%04lld)...  ",
 						type[i],readsize);
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 			stdoutput.printf("\n");
 #else
 			stdoutput.flush();
@@ -119,7 +119,7 @@ int main(int argc, const char **argv) {
 						"read failed at %lld\n",i);
 					process::exit(1);
 				}
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 				if (!(i%(1024*1024*50))) {
 					stdoutput.printf(
 						"  %lld bytes read...\n",i);
@@ -128,11 +128,11 @@ int main(int argc, const char **argv) {
 			}
 			end.getSystemDateAndTime();
 
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 			stdoutput.printf("done reading %lld bytes\n",filesize);
 #endif
 			displayTime(&start,&end);
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 			stdoutput.printf("\n");
 #endif
 		}
@@ -143,7 +143,7 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("reading:   manual mmap "
 					"(readsize=%04lld)...  ",
 					readsize);
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 			stdoutput.printf("\n");
 #else
 			stdoutput.flush();
@@ -161,7 +161,7 @@ int main(int argc, const char **argv) {
 					process::exit(1);
 				}
 				p=(char *)m.getData();
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 				if (!(i%(1024*1024*50))) {
 					stdoutput.printf(
 						"  %lld bytes read...\n",i);
@@ -173,11 +173,11 @@ int main(int argc, const char **argv) {
 		}
 		m.detach();
 		end.getSystemDateAndTime();
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 		stdoutput.printf("done reading %lld bytes\n",filesize);
 #endif
 		displayTime(&start,&end);
-#ifdef PROGRESS
+#ifdef SHOWPROGRESS
 		stdoutput.printf("\n");
 #endif
 

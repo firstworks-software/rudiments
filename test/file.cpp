@@ -244,6 +244,7 @@ int main(int argc, const char **argv) {
 			}
 			test((!iter)?"sequential buffered writes":
 					"sequential buffered reads",success);
+			fl.flushWriteBuffer(-1,-1);
 			fl.setPositionRelativeToBeginning(0);
 		}
 
@@ -294,6 +295,7 @@ int main(int argc, const char **argv) {
 				break;
 			}
 		}
+		fl.flushWriteBuffer(-1,-1);
 		test("non-sequential buffered writes",success);
 
 		// verify that the above worked
