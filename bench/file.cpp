@@ -205,7 +205,9 @@ int main(int argc, const char **argv) {
 
 	// clean up
 	f.close();
+#ifdef ONLYREAD
 	file::remove(filename.getString());
+#endif
 
 	process::exit(0);
 }
