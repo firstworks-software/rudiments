@@ -1,6 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the file COPYING for more information
 
+#include <rudiments/environment.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/filesystem.h>
@@ -16,17 +18,33 @@
 
 int main(int argc, const char **argv) {
 
-	const char	*filename="/home/dmuse/testfile.txt";
+	// 
+	stringbuffer	filename;
+	const char	*home=environment::getValue("HOME");
+	if (charstring::isNullOrEmpty(home)) {
+		filename.append("/home/");
+		const char	*user=environment::getValue("USER");
+		if (charstring::isNullOrEmpty(user)) {
+			filename.append("dmuse");
+		} else {
+			filename.append(user);
+		}
+	} else {
+		filename.append(home);
+	}
+	filename.append('/')->append("testfile.txt");
+	stdoutput.printf("filename: %s\n",filename.getString());
 
 	// create the file
 	file	f;
 #ifdef ONLYREAD
-	if (!f.open(filename,O_RDWR)) {
+	if (!f.open(filename.getString(),O_RDWR)) {
 		stdoutput.printf("open failed\n");
 		process::exit(1);
 	}
 #else
-	if (!f.create(filename,permissions::evalPermString("rw-r--r--"))) {
+	if (!f.create(filename.getString(),
+			permissions::evalPermString("rw-r--r--"))) {
 		stdoutput.printf("create failed\n");
 		process::exit(1);
 	}
@@ -34,7 +52,7 @@ int main(int argc, const char **argv) {
 
 	// use optimium block size for buffers
 	filesystem	fs;
-	fs.open(filename);
+	fs.open(filename.getString());
 	int64_t	blocksize=fs.getOptimumTransferBlockSize();
 	if (blocksize<=0) {
 		stdoutput.printf("get optimum block size failed\n");
@@ -187,7 +205,7 @@ int main(int argc, const char **argv) {
 
 	// clean up
 	f.close();
-	//file::remove(filename);
+	file::remove(filename.getString());
 
 	process::exit(0);
 }
