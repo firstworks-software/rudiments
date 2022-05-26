@@ -1111,7 +1111,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** If "enabled" is set true then mmap may be used when
 		 *  buffering a storage filedescriptor such as a file, raw
 		 *  block device, etc.  If set false, then mmap will not be
-		 *  used. */
+		 *  used.  Defaults to true. */
 		void	setMmapBufferingEnabled(bool enabled);
 
 		/** Returns true if mmap may be used when buffering a storage

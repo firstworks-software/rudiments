@@ -53,7 +53,7 @@ int main(int argc, const char **argv) {
 	// use optimium block size for buffers
 	filesystem	fs;
 	fs.open(filename.getString());
-	int64_t	blocksize=fs.getOptimumTransferBlockSize();
+	int64_t	blocksize=fs.getOptimumTransferBlockSize()*3;
 	if (blocksize<=0) {
 		stdoutput.printf("get optimum block size failed\n");
 		process::exit(1);
@@ -119,6 +119,8 @@ int main(int argc, const char **argv) {
 #endif
 
 			f.setPositionRelativeToBeginning(0);
+			f.sequentialAccess(0,filesize);
+			f.willNeed(0,filesize);
 
 			if (i==0) {
 				f.setReadBufferSize(0);
@@ -166,14 +168,17 @@ int main(int argc, const char **argv) {
 #else
 			stdoutput.flush();
 #endif
+		f.sequentialAccess(0,filesize);
+		f.willNeed(0,filesize);
+		int32_t	fd=f.getFileDescriptor();
 		start.getSystemDateAndTime();
 		for (uint64_t i=0; i<filesize; i+=readsize) {
 			if (!(i%blocksize)) {
 				if (i) {
 					m.detach();
 				}
-				if (!m.attach(f.getFileDescriptor(),
-					i,blocksize,PROT_READ,MAP_PRIVATE)) {
+				if (!m.attach(fd,i,blocksize,PROT_READ,
+								MAP_SHARED)) {
 					stdoutput.printf(
 						"  mmap attach failed\n");
 					process::exit(1);
@@ -186,7 +191,7 @@ int main(int argc, const char **argv) {
 				}
 #endif
 			}
-			charstring::copy(buf,p,readsize);
+			bytestring::copy(buf,p,readsize);
 			p+=readsize;
 		}
 		m.detach();
