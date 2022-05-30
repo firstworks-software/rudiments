@@ -299,6 +299,28 @@ char *charstring::replace(const char *str, const char *oldstr,
 }
 
 char *charstring::replace(const char *str, const char * const *oldstrset,
+						const char * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
+
+	// count members of oldstrset
+	uint64_t	i=0;
+	for (const char * const *o=oldstrset; *o; o++) {
+		i++;
+	}
+
+	// create oldstrlen
+	size_t	*oldstrlen=new size_t[i];
+	for (const char * const *o=oldstrset; *o; o++) {
+		oldstrlen[i]=charstring::length(*o);
+	}
+
+	// replace
+	return replace(str,oldstrset,oldstrlen,newstrset);
+}
+
+char *charstring::replace(const char *str, const char * const *oldstrset,
 						size_t *oldstrlen,
 						const char * const *newstrset) {
 	if (!str) {

@@ -606,6 +606,16 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset" */
+		static	char	*replace(const char *str,
+						const char * const *oldstrset,
+						const char * const *newstrset);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
 		 *  array "oldstrset", the number of characters of which are
 		 *  given by the array "oldstrlen", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
