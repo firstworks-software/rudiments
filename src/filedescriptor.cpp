@@ -1879,7 +1879,7 @@ ssize_t filedescriptor::streamBufferedWrite(const void *buf, ssize_t count,
 
 			// copy the data into the buffer
 			bytestring::copy(pvt->_writebuffertail,
-					data,bytesunwritten);
+						data,bytesunwritten);
 			pvt->_writebuffertail+=bytesunwritten;
 			byteswritten+=bytesunwritten;
 
@@ -1928,7 +1928,7 @@ ssize_t filedescriptor::streamBufferedWrite(const void *buf, ssize_t count,
 
 			// update stats
 			byteswritten+=result-adjustment;
-			bytesunwritten-=result+adjustment;
+			bytesunwritten-=result-adjustment;
 
 			// update the position in the data that we're writing
 			data+=result-adjustment;
@@ -2190,9 +2190,11 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		#ifdef DEBUG_WRITE
 		debugPrintf(",");
-		for (int32_t i=0; i<actualwrite; i++) {
+		//for (int32_t i=0; i<actualwrite; i++) {
+		for (int32_t i=0; i<20; i++) {
 			debugSafePrint(((const unsigned char *)(ptr))[i]);
 		}
+		debugPrintf("...");
 		debugPrintf(",%ld bytes",(long)actualwrite);
 		if (actualwrite==-1) {
 			char	*e=error::getErrorString();
