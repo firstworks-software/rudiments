@@ -7,6 +7,7 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/file.h>
 #include <rudiments/sys.h>
+#include <rudiments/error.h>
 
 class domprivate {
 	friend class dom;
@@ -84,6 +85,8 @@ bool dom::writeFile(const char *filename, mode_t perms) const {
 }
 
 bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
+
+	// get the optimum block size for I/O on this filesystem
 	filesystem	fs;
 	off64_t	optblocksize;
 	if (fs.open(filename)) {
@@ -91,16 +94,37 @@ bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 	} else {
 		optblocksize=sys::getPageSize();
 	}
+
+	// open the file
 	file	fl;
 	if (!fl.open(filename,O_RDWR|O_CREAT|O_TRUNC,perms)) {
 		return false;
 	}
 	fl.setWriteBufferSize(optblocksize);
+
+	// write the file, saving any error that may occur
 	bool	retval=write(&fl,indent);
+	int32_t	err=0;
+	if (!retval) {
+		err=error::getErrorNumber();
+	}
+
+	// flush the write buffer
 	fl.flushWriteBuffer(-1,-1);
+
+	// since flushWriteBuffer() might also (silently) fail and set errno,
+	// we need to restore whatever error we saved earlier because that's
+	// the error that we care about
+	if (!retval) {
+		error::setErrorNumber(err);
+	}
+
+	// close (allowing this to overwrite the earlier error)
 	if (!fl.close()) {
 		retval=false;
 	}
+
+	// return the result
 	return retval;
 }
 

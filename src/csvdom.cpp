@@ -728,7 +728,7 @@ bool csvdom::writeValue(output *out, domnode *value) const {
 			return false;
 		}
 	} else {
-		if (out->write(v)<1) {
+		if (out->write(v)!=(ssize_t)charstring::length(v)) {
 			return false;
 		}
 	}
