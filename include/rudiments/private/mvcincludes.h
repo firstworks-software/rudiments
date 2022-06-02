@@ -8,6 +8,8 @@
 #include <rudiments/dom.h>
 #include <rudiments/linkedlist.h>
 #include <rudiments/dictionary.h>
+#include <rudiments/scalarcollection.h>
+#include <rudiments/tablecollection.h>
 #include <rudiments/wastebasket.h>
 
 class httpbasicsecurityprivate;

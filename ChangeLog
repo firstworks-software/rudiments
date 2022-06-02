@@ -75,6 +75,7 @@
 	implemented block-aligned buffering, which prefers to use mmap, but
 		can fall back to traditional buffering, for non-stream
 		filedescriptors
+	added mvccrud interface
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
