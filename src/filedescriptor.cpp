@@ -2190,11 +2190,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		#ifdef DEBUG_WRITE
 		debugPrintf(",");
-		//for (int32_t i=0; i<actualwrite; i++) {
-		for (int32_t i=0; i<20; i++) {
+		for (int32_t i=0; i<actualwrite; i++) {
 			debugSafePrint(((const unsigned char *)(ptr))[i]);
 		}
-		debugPrintf("...");
 		debugPrintf(",%ld bytes",(long)actualwrite);
 		if (actualwrite==-1) {
 			char	*e=error::getErrorString();
