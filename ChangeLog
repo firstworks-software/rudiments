@@ -76,6 +76,8 @@
 		can fall back to traditional buffering, for non-stream
 		filedescriptors
 	added mvccrud interface
+	fixed some formatting bugs in datetime::formatAs()
+	yday->mday in datetime::setDays()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

@@ -370,7 +370,7 @@ bool datetime::setHours(int32_t hours) {
 }
 
 bool datetime::setDays(int32_t days) {
-	pvt->_yday=days;
+	pvt->_mday=days;
 	return normalize();
 }
 
@@ -1910,6 +1910,10 @@ char *datetime::formatAs(const char *format,
 			charstring::printf(buf,5,"%02d",day);
 			output.append(buf);
 			ptr=ptr+2;
+		} else if (!charstring::compare(ptr,"D",1)) {
+			charstring::printf(buf,5,"%d",day);
+			output.append(buf);
+			ptr=ptr+1;
 		} else if (!charstring::compare(ptr,"MM",2)) {
 			charstring::printf(buf,5,"%02d",month);
 			output.append(buf);
@@ -1919,7 +1923,7 @@ char *datetime::formatAs(const char *format,
 			ptr=ptr+3;
 		} else if (!charstring::compare(ptr,"Month",5)) {
 			output.append(longmonths[month-1]);
-			ptr=ptr+3;
+			ptr=ptr+5;
 		} else if (!charstring::compare(ptr,"YYYY",4)) {
 			charstring::printf(buf,5,"%04d",year);
 			output.append(buf);
