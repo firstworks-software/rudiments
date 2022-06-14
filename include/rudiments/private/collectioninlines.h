@@ -8,7 +8,8 @@ collection::collection() :
 	managearrayvalues(false),
 	managekeys(false),
 	managearraykeys(false),
-	compptr(&comp) {
+	compptr(&comp),
+	wrptr(&wr) {
 }
 
 inline
@@ -19,7 +20,9 @@ collection::collection(const collection &c) :
 	managekeys(c.managekeys),
 	managearraykeys(c.managearraykeys),
 	comp(c.comp),
-	compptr(&comp) {
+	compptr(&comp),
+	wr(c.wr),
+	wrptr(&wr) {
 }
 
 inline
@@ -32,6 +35,8 @@ collection &collection::operator=(const collection &c) {
 		managearraykeys=c.managearraykeys;
 		comp=c.comp;
 		compptr=&comp;
+		wr=c.wr;
+		wrptr=&wr;
 	}
 	return *this;
 }
@@ -51,6 +56,20 @@ void collection::setComparator(comparator *newcomp) {
 		compptr=newcomp;
 	} else {
 		compptr=&comp;
+	}
+}
+
+inline
+writer *collection::getWriter() const {
+	return wrptr;
+}
+
+inline
+void collection::setWriter(writer *newwr) {
+	if (newwr) {
+		wrptr=newwr;
+	} else {
+		wrptr=&wr;
 	}
 }
 

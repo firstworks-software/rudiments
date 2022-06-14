@@ -47,7 +47,10 @@ class scalar : public scalarcollection<valuetype> {
 		 *
 		 *  The value is only deleted if setManageValues(true) or
 		 *  setManageArrayValues(true) has been called. */
-		void		clear();
+		void	clear();
+
+		/** Prints out a representation of the scalar. */
+		void	print() const;
 
 	#include <rudiments/private/scalar.h>
 };

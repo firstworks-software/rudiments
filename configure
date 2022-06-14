@@ -37490,11 +37490,11 @@ $as_echo "#define SONAME_VERSION_INFO \"8:0:0\"" >>confdefs.h
 
 
 
-HEADERS0="object.h collection.h comparator.h nodecollection.h listcollection.h treecollection.h tablecollection.h scalarcollection.h arraycollection.h dictionarycollection.h resultcodes.h debugprint.h"
+HEADERS0="object.h collection.h comparator.h writer.h nodecollection.h listcollection.h treecollection.h tablecollection.h scalarcollection.h arraycollection.h dictionarycollection.h resultcodes.h debugprint.h"
 HEADERS1="table.h linkedlist.h singlylinkedlist.h avltree.h scalar.h"
 HEADERS2="dictionary.h hash.h sha1.h sha256.h md5.h encryption.h aes128.h"
 HEADERS3="dynamicarray.h staticarray.h output.h input.h wastebasket.h sensitivevalue.h"
-PRIVATEHEADERS0="config.h debugprint.h collection.h collectioninlines.h comparator.h comparatorinlines.h listnode.h listcollectioninlines.h treenode.h treecollectioninlines.h"
+PRIVATEHEADERS0="config.h debugprint.h collection.h collectioninlines.h comparator.h comparatorinlines.h writerinlines.h listnode.h listcollectioninlines.h treenode.h treecollectioninlines.h"
 PRIVATEHEADERS1="inttypes.h new.h"
 PRIVATEHEADERS2="winsock.h dll.h"
 PRIVATEHEADERS3="tablecollection.h tablecollectioninlines.h table.h tableincludes.h tableinlines.h linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h nodeinlines.h avltree.h avltreeincludes.h avltreeinlines.h avltreenode.h scalar.h scalarincludes.h scalarinlines.h"

@@ -51,9 +51,6 @@ class avltreenode : public treenode<valuetype> {
 		 *  node in the tree. */
 		treenode<valuetype>	*getNext() const;
 
-		/** Prints the value stored in the node. */
-		void	print() const;
-
 	#include <rudiments/private/avltreenode.h>
 };
 

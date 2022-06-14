@@ -24,6 +24,10 @@
 		void	setLeftHeight(uint8_t height);
 		void	setRightHeight(uint8_t height);
 
+		void	print(const treecollection<valuetype> *tree,
+				const char *name,
+				uint16_t *indentlevel) const;
+
 	protected:
 		valuetype		value;
 		treenode<valuetype>	*parent;
@@ -31,6 +35,3 @@
 		treenode<valuetype>	*right;
 		uint8_t			leftheight;
 		uint8_t			rightheight;
-
-	private:
-		void	print(const char *name, uint16_t *indentlevel) const;

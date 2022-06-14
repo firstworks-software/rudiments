@@ -31,9 +31,6 @@ class linkedlistnode : public listnode<valuetype> {
 		 * if this node is the last node in the list. */
 		listnode<valuetype>	*getNext() const;
 
-		/** Prints the value stored in the node. */
-		void	print() const;
-
 	#include <rudiments/private/linkedlistnode.h>
 };
 

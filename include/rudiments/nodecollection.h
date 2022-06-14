@@ -20,9 +20,6 @@ class nodecollectionnode : virtual public object {
 		/** Returns the next node in the nodecollection or NULL
 		 * if this node is the last node in the collection. */
 		virtual	nodecollectionnode<valuetype>	*getNext() const=0;
-
-		/** Prints out a representation of the node. */
-		virtual	void	print() const=0;
 };
 
 /** The collection class is the parent class for all rudiments node-based

@@ -425,7 +425,9 @@ inline
 void dictionary<keytype,valuetype>::print() const {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		node_print(node->getValue());
+		this->getWriter()->write(node->getValue()->getKey());
+		stdoutput.printf(":");
+		this->getWriter()->write(node->getValue()->getValue());
 		stdoutput.printf("\n");
 	}
 }

@@ -81,3 +81,10 @@ void scalar<valuetype>::clear() {
 					this->getManageArrayValues());
 	v=0;
 }
+
+template <class valuetype>
+inline
+void scalar<valuetype>::print() const {
+	this->getWriter()->write(v);
+	stdoutput.printf("\n");
+}

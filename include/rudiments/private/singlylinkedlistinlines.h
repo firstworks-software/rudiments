@@ -638,7 +638,7 @@ void singlylinkedlist<valuetype>::print(uint64_t count) const {
 		#else
 			stdoutput.printf("index %ld: ",(long)i);
 		#endif
-		node_print(current->getValue());
+		this->getWriter()->write(current->getValue());
 		stdoutput.printf("\n");
 		i++;
 	}
@@ -685,12 +685,6 @@ template <class valuetype>
 inline
 listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() const {
 	return next;
-}
-
-template <class valuetype>
-inline
-void singlylinkedlistnode<valuetype>::print() const {
-	node_print(value);
 }
 
 template <class valuetype>

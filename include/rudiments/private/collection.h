@@ -9,3 +9,6 @@
 
 		comparator	comp;
 		comparator	*compptr;
+
+		writer		wr;
+		writer		*wrptr;

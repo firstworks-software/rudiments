@@ -45,9 +45,6 @@ class treenode : public nodecollectionnode<valuetype> {
 		 *  node in the tree. */
 		virtual treenode<valuetype>	*getNext() const=0;
 
-		/** Prints the value stored in the node. */
-		virtual void	print() const=0;
-
 	#include <rudiments/private/treenode.h>
 };
 
