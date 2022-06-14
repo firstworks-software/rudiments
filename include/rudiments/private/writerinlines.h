@@ -5,88 +5,167 @@
 
 inline
 void writer::write(const char *value) const {
-	stdoutput.printf("%s",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(const wchar_t *value) const {
-	stdoutput.printf(L"%s",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(char value) const {
-	stdoutput.printf("%c",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(wchar_t value) const {
-	stdoutput.printf(L"%c",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(int16_t value) const {
-	stdoutput.printf("%hd",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(int32_t value) const {
-	stdoutput.printf("%d",(int)value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(int64_t value) const {
-	#ifdef RUDIMENTS_HAVE_LONG_LONG
-		stdoutput.printf("%lld",(long long)value);
-	#else
-		stdoutput.printf("%ld",(long)value);
-	#endif
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(const unsigned char *value) const {
-	stdoutput.printf("%s",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(unsigned char value) const {
-	stdoutput.printf("%c",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(uint16_t value) const {
-	stdoutput.printf("%hd",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(uint32_t value) const {
-	stdoutput.printf("%d",(unsigned int)value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(uint64_t value) const {
-	#ifdef RUDIMENTS_HAVE_LONG_LONG
-		stdoutput.printf("%lld",(unsigned long long)value);
-	#else
-		stdoutput.printf("%ld",(unsigned long)value);
-	#endif
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(float value) const {
-	stdoutput.printf("%f",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(double value) const {
-	stdoutput.printf("%f",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(long double value) const {
-	stdoutput.printf("%Lf",value);
+	write(&stdoutput,value);
 }
 
 inline
 void writer::write(const void *value) const {
-	stdoutput.printf("%08x",value);
+	write(&stdoutput,value);
+}
+inline
+void writer::write(output *out, const char *value) const {
+	out->printf("%s",value);
+}
+
+inline
+void writer::write(output *out, const wchar_t *value) const {
+	out->printf(L"%s",value);
+}
+
+inline
+void writer::write(output *out, char value) const {
+	out->printf("%c",value);
+}
+
+inline
+void writer::write(output *out, wchar_t value) const {
+	out->printf(L"%c",value);
+}
+
+inline
+void writer::write(output *out, int16_t value) const {
+	out->printf("%hd",value);
+}
+
+inline
+void writer::write(output *out, int32_t value) const {
+	out->printf("%d",(int)value);
+}
+
+inline
+void writer::write(output *out, int64_t value) const {
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		out->printf("%lld",(long long)value);
+	#else
+		out->printf("%ld",(long)value);
+	#endif
+}
+
+inline
+void writer::write(output *out, const unsigned char *value) const {
+	out->printf("%s",value);
+}
+
+inline
+void writer::write(output *out, unsigned char value) const {
+	out->printf("%c",value);
+}
+
+inline
+void writer::write(output *out, uint16_t value) const {
+	out->printf("%hd",value);
+}
+
+inline
+void writer::write(output *out, uint32_t value) const {
+	out->printf("%d",(unsigned int)value);
+}
+
+inline
+void writer::write(output *out, uint64_t value) const {
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		out->printf("%lld",(unsigned long long)value);
+	#else
+		out->printf("%ld",(unsigned long)value);
+	#endif
+}
+
+inline
+void writer::write(output *out, float value) const {
+	out->printf("%f",value);
+}
+
+inline
+void writer::write(output *out, double value) const {
+	out->printf("%f",value);
+}
+
+inline
+void writer::write(output *out, long double value) const {
+	out->printf("%Lf",value);
+}
+
+inline
+void writer::write(output *out, const void *value) const {
+	out->printf("%08x",value);
 }

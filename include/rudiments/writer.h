@@ -57,6 +57,55 @@ class writer {
 
 		/** Writes "value" to standard output. */
 		virtual void	write(const void *value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, const char *value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, const wchar_t *value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, char value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, wchar_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, int16_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, int32_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, int64_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out,
+					const unsigned char *value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, unsigned char value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, uint16_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, uint32_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, uint64_t value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, float value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, double value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, long double value) const;
+
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, const void *value) const;
 };
 
 #include <rudiments/private/writerinlines.h>
