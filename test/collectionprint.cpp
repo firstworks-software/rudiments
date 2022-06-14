@@ -5,8 +5,8 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/singlylinkedlist.h>
 #include <rudiments/avltree.h>
-#include <rudiments/table.h>
 #include <rudiments/dictionary.h>
+#include <rudiments/table.h>
 #include <rudiments/dynamicarray.h>
 #include <rudiments/staticarray.h>
 #include "test.cpp"
@@ -97,5 +97,69 @@ int main(int argc, const char **argv) {
 		d.setValue(i,numbers[i]);
 	}
 	d.print();
+	stdoutput.printf("\n");
+
+
+
+	stdoutput.printf("table (int32_t):\n");
+	table<int32_t>	ti32;
+	for (int32_t i=0; i<10; i++) {
+		ti32.setColumnName(i,numbers[i]);
+		for (int32_t j=0; j<10; j++) {
+			ti32.setValue(i,j,j);
+		}
+	}
+	ti32.print();
+	stdoutput.printf("\n");
+
+	stdoutput.printf("table (const char *):\n");
+	table<const char *>	tc;
+	for (uint32_t i=0; i<10; i++) {
+		tc.setColumnName(i,numbers[i]);
+		for (int32_t j=0; j<10; j++) {
+			tc.setValue(i,j,numbers[j]);
+		}
+	}
+	tc.print();
+	stdoutput.printf("\n");
+
+
+
+	stdoutput.printf("dynamicarray (int32_t):\n");
+	dynamicarray<int32_t>	dai32;
+	for (int32_t i=0; i<10; i++) {
+		dai32[i]=i;
+	}
+	dai32.print();
+	stdoutput.printf("\n");
+
+
+
+	stdoutput.printf("dynamicarray (const char *):\n");
+	dynamicarray<const char *>	dac;
+	for (int32_t i=0; i<10; i++) {
+		dac[i]=numbers[i];
+	}
+	dac.print();
+	stdoutput.printf("\n");
+
+
+
+	stdoutput.printf("staticarray (int32_t):\n");
+	staticarray<int32_t,10>	sai32;
+	for (int32_t i=0; i<10; i++) {
+		sai32[i]=i;
+	}
+	sai32.print();
+	stdoutput.printf("\n");
+
+
+
+	stdoutput.printf("staticarray (const char *):\n");
+	staticarray<const char *,10>	sac;
+	for (int32_t i=0; i<10; i++) {
+		sac[i]=numbers[i];
+	}
+	sac.print();
 	stdoutput.printf("\n");
 }
