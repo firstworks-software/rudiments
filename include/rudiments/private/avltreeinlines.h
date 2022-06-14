@@ -1,8 +1,6 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-//#define DEBUG_AVLTREE 1
-
 #include <rudiments/stdio.h>
 #include <rudiments/private/nodeinlines.h>
 
@@ -183,11 +181,6 @@ void avltree<valuetype>::insert(treenode<valuetype> *node) {
 		return;
 	}
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("----------------------------------------"
-				"---------------------------------------\n");
-	#endif
-
 	if (top) {
 
 		// insert the node, optionally replacing the top of the tree
@@ -236,15 +229,6 @@ void avltree<valuetype>::insert(treenode<valuetype> *top,
 			if (location->getLeftChild()) {
 				location=location->getLeftChild();
 			} else {
-
-				#ifdef DEBUG_AVLTREE
-				stdoutput.printf("insert ");
-				node_print(node->getValue());
-				stdoutput.printf(" to left of ");
-				node_print(location->getValue());
-				stdoutput.printf(" {\n\n");
-				#endif
-
 				location->setLeftChild(node);
 				break;
 			}
@@ -256,15 +240,6 @@ void avltree<valuetype>::insert(treenode<valuetype> *top,
 			if (location->getRightChild()) {
 				location=location->getRightChild();
 			} else {
-
-				#ifdef DEBUG_AVLTREE
-				stdoutput.printf("insert ");
-				node_print(node->getValue());
-				stdoutput.printf(" to right of ");
-				node_print(location->getValue());
-				stdoutput.printf(" {\n\n");
-				#endif
-
 				location->setRightChild(node);
 				break;
 			}
@@ -278,10 +253,6 @@ void avltree<valuetype>::insert(treenode<valuetype> *top,
 
 	// balance the tree
 	node->getParent()->balance(treetop);
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} insert\n\n");
-	#endif
 }
 
 template <class valuetype>
@@ -292,11 +263,6 @@ treenode<valuetype> *avltree<valuetype>::detach(treenode<valuetype> *node) {
 	if (!node) {
 		return NULL;
 	}
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("----------------------------------------"
-				"---------------------------------------\n");
-	#endif
 
 	// update first
 	if (first==node) {
@@ -395,30 +361,12 @@ treenode<valuetype> *avltree<valuetype>::find(
 					treenode<valuetype> *startnode,
 					valuetype value) const {
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("find ");
-	node_print(value);
-	stdoutput.printf(" from ");
-	if (startnode) {
-		node_print(startnode->getValue());
-	} else {
-		node_print("(null)");
-	}
-	stdoutput.printf(" {\n");
-	#endif
-
 	// descend the tree until we find the value or run off of the bottom
 	treenode<valuetype> *current=startnode;
 	while (current) {
 
 		int32_t	result=this->getComparator()->compare(
 						current->getValue(),value);
-
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("  ");
-		node_print(current->getValue());
-		stdoutput.printf(" - %d\n",result);
-		#endif
 
 		if (result<0) {
 			current=current->getRightChild();
@@ -429,26 +377,12 @@ treenode<valuetype> *avltree<valuetype>::find(
 		}
 	}
 
-	#ifdef DEBUG_AVLTREE
-	if (current) {
-		stdoutput.printf("  success!\n");
-	} else {
-		stdoutput.printf("  failed\n");
-	}
-	stdoutput.printf("} find\n\n");
-	#endif
-
 	return current;
 }
 
 template <class valuetype>
 inline
 void avltree<valuetype>::clear() {
-
-	#ifdef DEBUG_AVLTREE
-	uint64_t	i=0;
-	stdoutput.printf("clearing %d nodes (%08x) {\n",length,this);
-	#endif
 
 	// start at the top
 	treenode<valuetype>	*node=top;
@@ -474,15 +408,6 @@ void avltree<valuetype>::clear() {
 			}
 		}
 
-		// debug
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("	clearing %lld: (%08x) ",
-						i,node->getValue());
-		node_print(node->getValue());
-		stdoutput.printf("\n");
-		i++;
-		#endif
-
 		// delete the value in the node
 		node_delete_value(&(node->getValue()),
 					this->getManageValues(),
@@ -495,11 +420,6 @@ void avltree<valuetype>::clear() {
 		node=p;
 	}
 	
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} cleared %d nodes\n\n",i);
-	#endif
-
 	// clear pointers and length
 	top=NULL;
 	first=NULL;
@@ -749,23 +669,9 @@ template <class valuetype>
 inline
 void avltreenode<valuetype>::detach(treenode<valuetype> **treetop) {
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("detach ");
-	node_print(value);
-	stdoutput.printf(" {\n\n");
-
-	treenode<valuetype>	*top=this;
-	while (top->getParent()) { top=top->getParent(); }
-	node_print(top->getValue()); stdoutput.printf("\n");
-	#endif
-
 	if (left && right) {
 
 		// node with left and right children...
-
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("less simple case: 2 children\n\n");
-		#endif
 
 		// get this node's successor...
 		//
@@ -779,15 +685,6 @@ void avltreenode<valuetype>::detach(treenode<valuetype> **treetop) {
 		while (successor->getLeftChild()) {
 			successor=successor->getLeftChild();
 		}
-
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("swap ");
-		node_print(value);
-		stdoutput.printf(" and ");
-		node_print(successor->getValue());
-		stdoutput.printf("\n\n");
-		#endif
-
 
 		// if the successor was the immediate right child of this node
 		// then we need to handle a few things differently later
@@ -861,21 +758,11 @@ void avltreenode<valuetype>::detach(treenode<valuetype> **treetop) {
 		leftheight=temp.getLeftHeight();
 		rightheight=temp.getRightHeight();
 
-		#ifdef DEBUG_AVLTREE
-		treenode<valuetype>	*top=this;
-		while (top->getParent()) { top=top->getParent(); }
-		node_print(top->getValue()); stdoutput.printf("\n");
-		#endif
-
 		// fall through to the code below because now
 		// the node should have one or zero children...
 	}
 
 	// node with one or zero children...
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("simple case: 1 or 0 children\n\n");
-	#endif
 
 	// decide which child the node has
 	// NOTE: If the node has no children then this will implicitly
@@ -932,17 +819,7 @@ void avltreenode<valuetype>::detach(treenode<valuetype> **treetop) {
 		// implicitly (re)set treetop=NULL, which is what
 		// we want in that case.
 		*treetop=child;
-
-		#ifdef DEBUG_AVLTREE
-		treenode<valuetype>	*top=this;
-		while (top->getParent()) { top=top->getParent(); }
-		node_print(top->getValue()); stdoutput.printf("\n");
-		#endif
 	}
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} detach\n\n");
-	#endif
 }
 
 template <class valuetype>
@@ -987,16 +864,6 @@ void avltreenode<valuetype>::balance(treenode<valuetype> **treetop) {
 
 	// AVL balance...
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("balance at ");
-	node_print(value);
-	stdoutput.printf(" {\n\n");
-
-	treenode<valuetype>	*top=this;
-	while (top->getParent()) { top=top->getParent(); }
-	node_print(top->getValue()); stdoutput.printf("\n");
-	#endif
-
 	// start balancing with the current node
 	treenode<valuetype> *node=this;
 	while (node) {
@@ -1007,12 +874,6 @@ void avltreenode<valuetype>::balance(treenode<valuetype> **treetop) {
 			node->getLeftHeight()-node->getRightHeight()>1) ||
 			(node->getRightHeight()>node->getLeftHeight() &&
 			node->getRightHeight()-node->getLeftHeight()>1)) {
-
-			#ifdef DEBUG_AVLTREE
-			stdoutput.printf("imbalance at ");
-			node_print(node->getValue());
-			stdoutput.printf("\n\n");
-			#endif
 
 			// apply the appropriate rotation to restore balance
 			// and let the rotation method tell us whch node to
@@ -1035,38 +896,13 @@ void avltreenode<valuetype>::balance(treenode<valuetype> **treetop) {
 				}
 			}
 
-			#ifdef DEBUG_AVLTREE
-			treenode<valuetype>	*top=this;
-			while (top->getParent()) { top=top->getParent(); }
-			node_print(top->getValue()); stdoutput.printf("\n");
-			#endif
-
 		} else {
-
-			#ifdef DEBUG_AVLTREE
-			stdoutput.printf("no imbalance at ");
-			node_print(node->getValue());
-			stdoutput.printf("\n\n");
-			#endif
 
 			// if there's no imbalance then the next node we need
 			// to process is the parent of the current node
 			node=node->getParent();
 		}
-
-		#ifdef DEBUG_AVLTREE
-		if (node) {
-			stdoutput.printf("continuing at ");
-			node_print(node->getValue());
-			stdoutput.printf("\n\n");
-		}
-		#endif
 	}
-
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} balance\n\n");
-	#endif
 }
 
 template <class valuetype>
@@ -1086,12 +922,6 @@ treenode<valuetype> *avltreenode<valuetype>::leftRotate(
  	 *                 *
  	 * needs left rotation */
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("left rotation at ");
-	node_print(value);
-	stdoutput.printf("\n\n");
-	#endif
-
 	// get a, b, and "star"
 	treenode<valuetype>	*a=this;
 	treenode<valuetype>	*b=a->getRightChild();
@@ -1107,9 +937,6 @@ treenode<valuetype> *avltreenode<valuetype>::leftRotate(
 			p->setLeftChild(b);
 		}
 	} else {
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("(new tree top)\n\n");
-		#endif
 		*treetop=b;
 	}
 	b->setParent(a->getParent());
@@ -1152,13 +979,6 @@ treenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
 	 *
 	 * needs right-left rotation */
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("right-left rotation at ");
-	node_print(value);
-	stdoutput.printf(" {\n\n");
-	stdoutput.printf("right part\n\n");
-	#endif
-
 	// do the right part of the right-left rotation...
 
 	// get a, c, b, and "star"
@@ -1186,18 +1006,8 @@ treenode<valuetype> *avltreenode<valuetype>::rightLeftRotate(
 	// update heights up the tree
 	adjustParentHeights(c);
 
-	#ifdef DEBUG_AVLTREE
-	treenode<valuetype>	*top=this;
-	while (top->getParent()) { top=top->getParent(); }
-	node_print(top->getValue()); stdoutput.printf("\n");
-	#endif
-
 	// do the left part of the right-left rotation
 	leftRotate(treetop);
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} right-left\n\n");
-	#endif
 
 	// Since c was moved into a location in the tree that may not have
 	// prevoiusly existed, and thus may have unbalanced the tree, we need
@@ -1222,12 +1032,6 @@ treenode<valuetype> *avltreenode<valuetype>::rightRotate(
 	 *                 *
 	 * needs right rotation */
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("right rotation at ");
-	node_print(value);
-	stdoutput.printf("\n\n");
-	#endif
-
 	// get c, b, and "star"
 	treenode<valuetype>	*c=this;
 	treenode<valuetype>	*b=c->getLeftChild();
@@ -1243,9 +1047,6 @@ treenode<valuetype> *avltreenode<valuetype>::rightRotate(
 			p->setLeftChild(b);
 		}
 	} else {
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("(new tree top)\n\n");
-		#endif
 		*treetop=b;
 	}
 	b->setParent(c->getParent());
@@ -1288,13 +1089,6 @@ treenode<valuetype> *avltreenode<valuetype>::leftRightRotate(
 	 *
 	 * needs left-right rotation */
 
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("left-right rotation at ");
-	node_print(value);
-	stdoutput.printf(" {\n\n");
-	stdoutput.printf("left part\n\n");
-	#endif
-
 	// do the left part of the left-right rotation...
 
 	// get c, a, b, and "star"
@@ -1322,18 +1116,8 @@ treenode<valuetype> *avltreenode<valuetype>::leftRightRotate(
 	// update heights up the tree
 	adjustParentHeights(a);
 
-	#ifdef DEBUG_AVLTREE
-	treenode<valuetype>	*top=this;
-	while (top->getParent()) { top=top->getParent(); }
-	node_print(top->getValue()); stdoutput.printf("\n");
-	#endif
-
 	// do the right part of the left-right rotation
 	rightRotate(treetop);
-
-	#ifdef DEBUG_AVLTREE
-	stdoutput.printf("} left-right\n\n");
-	#endif
 
 	// Since a was moved into a location in the tree that may not have
 	// prevoiusly existed, and thus may have unbalanced the tree, we need

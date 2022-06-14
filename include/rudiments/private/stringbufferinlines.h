@@ -311,17 +311,17 @@ ssize_t stringbuffer::write(wchar_t character, char replacement) {
 
 inline
 ssize_t stringbuffer::write(int16_t number) {
-	return writeFormatted("%hd",number);
+	return printf("%hd",number);
 }
 
 inline
 ssize_t stringbuffer::write(int32_t number) {
-	return writeFormatted("%d",number);
+	return printf("%d",number);
 }
 
 inline
 ssize_t stringbuffer::write(int64_t number) {
-	return writeFormatted("%lld",number);
+	return printf("%lld",number);
 }
 
 inline
@@ -331,17 +331,17 @@ ssize_t stringbuffer::write(unsigned char character) {
 
 inline
 ssize_t stringbuffer::write(uint16_t number) {
-	return writeFormatted("%hd",number);
+	return printf("%hd",number);
 }
 
 inline
 ssize_t stringbuffer::write(uint32_t number) {
-	return writeFormatted("%d",number);
+	return printf("%d",number);
 }
 
 inline
 ssize_t stringbuffer::write(uint64_t number) {
-	return bytebuffer::writeFormatted("%lld",number);
+	return bytebuffer::printf("%lld",number);
 }
 
 inline
@@ -351,12 +351,12 @@ ssize_t stringbuffer::write(float number) {
 
 inline
 ssize_t stringbuffer::write(float number, uint16_t scale) {
-	return writeFormatted("%.*f",scale,number);
+	return printf("%.*f",scale,number);
 }
 
 inline
 ssize_t stringbuffer::write(float number, uint16_t precision, uint16_t scale) {
-	return writeFormatted("%*.*f",precision,scale,number);
+	return printf("%*.*f",precision,scale,number);
 }
 
 inline
@@ -366,12 +366,12 @@ ssize_t stringbuffer::write(double number) {
 
 inline
 ssize_t stringbuffer::write(double number, uint16_t scale) {
-	return writeFormatted("%.*f",scale,number);
+	return printf("%.*f",scale,number);
 }
 
 inline
 ssize_t stringbuffer::write(double number, uint16_t precision, uint16_t scale) {
-	return writeFormatted("%*.*f",precision,scale,number);
+	return printf("%*.*f",precision,scale,number);
 }
 
 inline

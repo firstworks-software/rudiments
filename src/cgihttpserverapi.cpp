@@ -259,3 +259,27 @@ ssize_t	cgihttpserverapi::write(float number) {
 ssize_t	cgihttpserverapi::write(double number) {
 	return stdoutput.printf("%f",number);
 }
+
+ssize_t cgihttpserverapi::printf(const char *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	ssize_t	result=stdoutput.printf(format,&argp);
+	va_end(argp);
+	return result;
+}
+
+ssize_t cgihttpserverapi::printf(const char *format, va_list *argp) {
+	return stdoutput.printf(format,argp);
+}
+
+ssize_t cgihttpserverapi::printf(const wchar_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	ssize_t	result=printf(format,&argp);
+	va_end(argp);
+	return result;
+}
+
+ssize_t cgihttpserverapi::printf(const wchar_t *format, va_list *argp) {
+	return stdoutput.printf(format,argp);
+}

@@ -202,7 +202,7 @@ void table<valuetype>::print() const {
 		stdoutput.printf("row %lld:\n",i);
 		for (uint64_t j=0; j<cols; j++) {
 			stdoutput.printf("  col %lld: ",j);
-			node_print(getValue(i,j));
+			this->getWriter()->write(getValue(i,j));
 			stdoutput.printf("\n");
 		}
 	}

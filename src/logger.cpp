@@ -277,7 +277,7 @@ void logger::write(uint8_t level, const char *header,
 	if (format) {
 		va_list	argp;
 		va_start(argp,format);
-		str.writeFormatted(format,&argp);
+		str.printf(format,&argp);
 		va_end(argp);
 	}
 	str.append("\n");
@@ -299,7 +299,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 	if (format) {
 		va_list	argp;
 		va_start(argp,format);
-		str.writeFormatted(format,&argp);
+		str.printf(format,&argp);
 		va_end(argp);
 	}
 	str.append(L"\n");
@@ -319,7 +319,7 @@ void logger::write(uint8_t level, const char *header,
 	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_indent);
 	}
-	str.writeFormatted(format,argp);
+	str.printf(format,argp);
 	str.append("\n");
 	write(str.getString());
 }
@@ -337,7 +337,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 	for (uint32_t i=0; i<indent; i++) {
 		str.append(pvt->_windent);
 	}
-	str.writeFormatted(format,argp);
+	str.printf(format,argp);
 	str.append(L"\n");
 	write(str.getString());
 }

@@ -5,6 +5,7 @@
 #include <rudiments/apachehttpserverapi.h>
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
+#include <rudiments/wstringbuffer.h>
 
 #include <rudiments/private/apacheincludes.h>
 
@@ -316,4 +317,32 @@ ssize_t	apachehttpserverapi::write(double number) {
 	char	buffer[22];
 	charstring::printf(buffer,sizeof(buffer),"%f",number);
 	return write(buffer);
+}
+
+ssize_t apachehttpserverapi::printf(const char *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	size_t	result=printf(format,&argp);
+	va_end(argp);
+	return result;
+}
+
+ssize_t apachehttpserverapi::printf(const char *format, va_list *argp) {
+	bytebuffer	b;
+	b.printf(format,argp);
+	return write(b.getBuffer(),b.getSize());
+}
+
+ssize_t apachehttpserverapi::printf(const wchar_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	size_t	result=printf(format,&argp);
+	va_end(argp);
+	return result;
+}
+
+ssize_t apachehttpserverapi::printf(const wchar_t *format, va_list *argp) {
+	wstringbuffer	b;
+	b.printf(format,argp);
+	return write(b.getString(),b.getStringLength());
 }

@@ -60,6 +60,11 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	write(double number,
 						int32_t sec, int32_t usec);
+
+		virtual	ssize_t	printf(const char *format, ...)=0;
+		virtual	ssize_t	printf(const char *format, va_list *argp)=0;
+		virtual	ssize_t	printf(const wchar_t *format, ...)=0;
+		virtual	ssize_t	printf(const wchar_t *format, va_list *argp)=0;
 };
 
 #endif

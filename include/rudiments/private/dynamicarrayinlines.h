@@ -313,7 +313,7 @@ inline
 void dynamicarray<valuetype>::print() const {
 	for (uint64_t i=0; i<lastlen; i++) {
 		stdoutput.printf("%lld: ",i);
-		node_print(find(i));
+		this->getWriter()->write(find(i));
 		stdoutput.printf("\n");
 	}
 }

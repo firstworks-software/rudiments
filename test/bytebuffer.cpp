@@ -198,8 +198,8 @@ int main(int argc, const char **argv) {
 	bb.appendFormatted("%0.5f",12.12345);
 	test("appendFormatted(), data",
 		!bytestring::compare(bb.getBuffer(),"12.12345",8));
-	bb.writeFormatted("%0.5f",12.12345);
-	test("writeFormatted(), data",
+	bb.printf("%0.5f",12.12345);
+	test("printf(), data",
 		!bytestring::compare(bb.getBuffer(),"12.1234512.12345",16));
 	stdoutput.printf("\n");
 

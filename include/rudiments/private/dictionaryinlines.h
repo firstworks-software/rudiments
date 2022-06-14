@@ -15,7 +15,6 @@ class dictionarypair : public object {
 		keytype		&getKey();
 		valuetype	getValue() const;
 		valuetype	&getValue();
-		void	print() const;
 
 	private:
 		keytype		key;
@@ -483,20 +482,6 @@ template <class keytype, class valuetype>
 inline
 valuetype &dictionarypair<keytype,valuetype>::getValue() {
 	return value;
-}
-
-template <class keytype, class valuetype>
-inline
-void node_print(dictionarypair<keytype,valuetype> *value) {
-	node_print(value->getKey());
-	stdoutput.printf(":");
-	node_print(value->getValue());
-}
-
-template <class keytype, class valuetype>
-inline
-void dictionarypair<keytype,valuetype>::print() const {
-	node_print(this);
 }
 
 template <class keytype, class valuetype>

@@ -376,25 +376,25 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Prints "..." to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules. */
-		size_t	printf(const char *format, ...);
+		ssize_t	printf(const char *format, ...);
 
 		/** Prints "argp" to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
-		size_t	printf(const char *format, va_list *argp);
+		ssize_t	printf(const char *format, va_list *argp);
 
 		/** Prints "..." to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules. */
-		size_t	printf(const wchar_t *format, ...);
+		ssize_t	printf(const wchar_t *format, ...);
 
 		/** Prints "argp" to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
-		size_t	printf(const wchar_t *format, va_list *argp);
+		ssize_t	printf(const wchar_t *format, va_list *argp);
 
 		/** Prints "c" to the filedescriptor, however if "c" is
 		 *  non-printing character then it is printed as a hex value of

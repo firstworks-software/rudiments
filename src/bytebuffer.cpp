@@ -206,15 +206,15 @@ ssize_t bytebuffer::write(double number) {
 								sizeof(double));
 }
 
-ssize_t bytebuffer::writeFormatted(const char *format, ...) {
+ssize_t bytebuffer::printf(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	ssize_t	retval=writeFormatted(format,&argp);
+	ssize_t	retval=printf(format,&argp);
 	va_end(argp);
 	return retval;
 }
 
-ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
+ssize_t bytebuffer::printf(const char *format, va_list *argp) {
 
 	// write the formatted data to a buffer
 	char	*buffer=NULL;
@@ -246,15 +246,15 @@ ssize_t bytebuffer::writeFormatted(const char *format, va_list *argp) {
 	return size;
 }
 
-ssize_t bytebuffer::writeFormatted(const wchar_t *format, ...) {
+ssize_t bytebuffer::printf(const wchar_t *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	ssize_t	retval=writeFormatted(format,&argp);
+	ssize_t	retval=printf(format,&argp);
 	va_end(argp);
 	return retval;
 }
 
-ssize_t bytebuffer::writeFormatted(const wchar_t *format, va_list *argp) {
+ssize_t bytebuffer::printf(const wchar_t *format, va_list *argp) {
 
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
@@ -433,7 +433,7 @@ bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
 
 bytebuffer *bytebuffer::appendFormatted(const char *format, va_list *argp) {
 	pvt->_pos=pvt->_size;
-	return (writeFormatted(format,argp)!=-1)?this:NULL;
+	return (printf(format,argp)!=-1)?this:NULL;
 }
 
 bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, ...) {
@@ -446,7 +446,7 @@ bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, ...) {
 
 bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, va_list *argp) {
 	pvt->_pos=pvt->_size;
-	return (writeFormatted(format,argp)!=-1)?this:NULL;
+	return (printf(format,argp)!=-1)?this:NULL;
 }
 
 void bytebuffer::truncate(size_t pos) {

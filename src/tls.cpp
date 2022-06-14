@@ -1811,8 +1811,7 @@ void tlscontext::setError(int32_t ret) {
 				SSL_SESSION	*sess=
 						SSL_get_session(pvt->_ssl);
 				if (sess) {
-					pvt->_errorstr.writeFormatted(
-					"0x%04x",
+					pvt->_errorstr.printf("0x%04x",
 					SSL_SESSION_get_protocol_version(sess));
 				} else {
 					pvt->_errorstr.append("unknown");

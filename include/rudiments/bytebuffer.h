@@ -186,7 +186,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns the number of bytes written or -1 if an error
 		 *  occurred. */
-		ssize_t	writeFormatted(const char *format, ...);
+		ssize_t	printf(const char *format, ...);
 
 		/** Writes "argp" to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
@@ -197,7 +197,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns the number of bytes written or -1 if an error
 		 *  occurred. */
-		ssize_t	writeFormatted(const char *format, va_list *argp);
+		ssize_t	printf(const char *format, va_list *argp);
 
 		/** Writes "..." to the byte buffer using "format"
 		 *  which should comply with standard wprintf formatting
@@ -209,7 +209,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  NOTE: This method is unsupported on platforms where
 		 *  wcharstring::supportsPrintf() returns false.  On those
 		 *  platforms this method returns -1 and sets ENOSYS. */
-		ssize_t	writeFormatted(const wchar_t *format, ...);
+		ssize_t	printf(const wchar_t *format, ...);
 
 		/** Writes "argp" to the byte buffer using "format"
 		 *  which should comply with standard wprintf formatting
@@ -223,7 +223,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  NOTE: This method is unsupported on platforms where
 		 *  wcharstring::supportsPrintf() returns false.  On those
 		 *  platforms this method returns -1 and sets ENOSYS. */
-		ssize_t	writeFormatted(const wchar_t *format, va_list *argp);
+		ssize_t	printf(const wchar_t *format, va_list *argp);
 
 
 		/** Appends the first "size" bytes of "data" to the
