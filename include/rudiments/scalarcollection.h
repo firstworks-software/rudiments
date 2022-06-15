@@ -5,6 +5,7 @@
 #define RUDIMENTS_SCALARCOLLECTION_H
 
 #include <rudiments/collection.h>
+#include <rudiments/output.h>
 
 /** The scalarcollection class is the parent class for all rudiments scalar
  *  collections. */
@@ -17,6 +18,11 @@ class scalarcollection : public collection {
 		/** Returns the value stored in this intance.  Returns NULL or
 		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue() const=0;
+
+		/** Writes a representation of the scalarcollection to "out". */
+		virtual	bool	write(output *out) const;
 };
+
+#include <rudiments/private/scalarcollectioninlines.h>
 
 #endif
