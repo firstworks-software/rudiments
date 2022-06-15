@@ -1,6 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+			void	clear();
+
 	friend class domnode;
 	protected:
 			virtual void	init(bool stringcacheenabled);

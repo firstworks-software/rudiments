@@ -421,14 +421,15 @@ void dictionary<keytype,valuetype>::clear() {
 
 template <class keytype, class valuetype>
 inline
-void dictionary<keytype,valuetype>::print() const {
+bool dictionary<keytype,valuetype>::write(output *out) const {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		this->getWriter()->write(node->getValue()->getKey());
-		stdoutput.printf(":");
+		out->write(':');
 		this->getWriter()->write(node->getValue()->getValue());
-		stdoutput.printf("\n");
+		out->write('\n');
 	}
+	return true;
 }
 
 template <class keytype, class valuetype>

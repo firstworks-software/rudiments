@@ -94,12 +94,6 @@ class dictionarycollection : public collection {
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		virtual	bool		remove(keytype key)=0;
-
-		/** Deletes all key-value pairs currently in the dictionary. */
-		virtual	void		clear()=0;
-
-		/** Prints out a representation of the dictionary. */
-		virtual	void		print() const=0;
 };
 
 #endif

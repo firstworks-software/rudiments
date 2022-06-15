@@ -49,8 +49,8 @@ class scalar : public scalarcollection<valuetype> {
 		 *  setManageArrayValues(true) has been called. */
 		void	clear();
 
-		/** Prints out a representation of the scalar. */
-		void	print() const;
+		/** Writes a representation of the scalar to "out". */
+		bool	write(output *out) const;
 
 	#include <rudiments/private/scalar.h>
 };

@@ -57,6 +57,13 @@ dom::~dom() {
 	delete pvt;
 }
 
+void dom::clear() {
+	// FIXME: this is only here to satisfy the pure virtual method defined
+	// in the collection base class.  Arguably it ought to actually do
+	// something - probably the same as reset(), but it needs to be safe to
+	// call at any point, which I'm not sure reset() is.
+}
+
 void dom::reset() {
 	if (!pvt->_rootnode->isNullNode()) {
 		pvt->_rootnode->cascadeOnDelete();

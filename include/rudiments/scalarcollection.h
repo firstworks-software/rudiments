@@ -17,13 +17,6 @@ class scalarcollection : public collection {
 		/** Returns the value stored in this intance.  Returns NULL or
 		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue() const=0;
-
-		/** Removes the value currently stored in this instance, such
-		 *  that getValue() will return NULL or 0.
-		 *
-		 *  The value is only deleted if setManageValues(true) or
-		 *  setManageArrayValues(true) has been called. */
-		virtual	void		clear()=0;
 };
 
 #endif

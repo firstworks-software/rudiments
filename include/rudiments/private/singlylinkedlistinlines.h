@@ -623,25 +623,20 @@ void singlylinkedlist<valuetype>::clear() {
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::print() const {
-	print(length);
-}
-
-template <class valuetype>
-inline
-void singlylinkedlist<valuetype>::print(uint64_t count) const {
+bool singlylinkedlist<valuetype>::write(output *out) const {
 	uint64_t	i=0;
 	for (listnode<valuetype> *current=first;
-			current && i<count; current=current->getNext()) {
+				current; current=current->getNext()) {
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
-			stdoutput.printf("index %lld: ",(long long)i);
+			out->printf("index %lld: ",(long long)i);
 		#else
-			stdoutput.printf("index %ld: ",(long)i);
+			out->printf("index %ld: ",(long)i);
 		#endif
-		this->getWriter()->write(current->getValue());
-		stdoutput.printf("\n");
+		this->getWriter()->write(out,current->getValue());
+		out->write('\n');
 		i++;
 	}
+	return true;
 }
 
 template <class valuetype>

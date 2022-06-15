@@ -176,6 +176,16 @@ class collection : virtual public object {
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayKeys() const;
 
+		/** Emptyies the collection. */
+		virtual	void	clear()=0;
+
+		/** Writes a representation of the collection to standard
+		 *  output. */
+		virtual	bool	write() const;
+
+		/** Writes a representation of the collection to "out". */
+		virtual	bool	write(output *out) const=0;
+
 	#include <rudiments/private/collection.h>
 };
 

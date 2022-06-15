@@ -115,13 +115,6 @@ class tablecollection : public collection {
 		 *  block contains the last row in the table. */
 		virtual	bool		getAllRowsAvailable() const=0;
 
-		/** In a read-write implementation, removes all values
-		 *  currently stored in the table, such that getValue() will
-		 *  return NULL or 0.
-		 *
-		 *  In a read-only implementation, has no effect. */
-		virtual	void	clear()=0;
-
 	#include <rudiments/private/tablecollection.h>
 };
 

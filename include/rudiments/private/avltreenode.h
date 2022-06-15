@@ -24,7 +24,8 @@
 		void	setLeftHeight(uint8_t height);
 		void	setRightHeight(uint8_t height);
 
-		void	print(const treecollection<valuetype> *tree,
+		void	write(output *out,
+				const treecollection<valuetype> *tree,
 				const char *name,
 				uint16_t *indentlevel) const;
 

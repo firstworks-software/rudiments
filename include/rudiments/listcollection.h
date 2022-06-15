@@ -180,16 +180,6 @@ class listcollection : public nodecollection<valuetype> {
 		 *  uses additional memory in proportion to the size of the
 		 *  list. */
 		virtual void	heapSort()=0;
-
-		/** Deletes all listnodes currently in the listcollection. */
-		virtual	void	clear()=0;
-
-		/** Prints out a representation of the listcollection. */
-		virtual	void	print() const=0;
-
-		/** Prints out a representation of the first "count"
-		 *  nodes of the listcollection. */
-		virtual	void	print(uint64_t count) const=0;
 };
 
 #include <rudiments/private/listcollectioninlines.h>

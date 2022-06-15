@@ -84,7 +84,8 @@ void scalar<valuetype>::clear() {
 
 template <class valuetype>
 inline
-void scalar<valuetype>::print() const {
+bool scalar<valuetype>::write(output *out) const {
 	this->getWriter()->write(v);
-	stdoutput.printf("\n");
+	out->write('\n');
+	return true;
 }

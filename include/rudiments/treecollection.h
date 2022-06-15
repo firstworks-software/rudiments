@@ -150,18 +150,6 @@ class treecollection : public nodecollection<valuetype> {
 		virtual treenode<valuetype>
 			*find(treenode<valuetype> *startnode,
 						valuetype value) const=0;
-
-		/** Deletes all treenodes currently in the
-		 *  treecollection.
-		 *
-		 *  The value stored in each treenode is only
-		 *  deleted if setManageValues(true) or
-		 *  setManageArrayValues(true) has been called. */
-		virtual void	clear()=0;
-
-		/** Prints out an xml-style representation of the
-		 *  treecollection. */
-		virtual void	print() const=0;
 };
 
 #include <rudiments/private/treecollectioninlines.h>

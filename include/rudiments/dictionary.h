@@ -185,8 +185,8 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  been called. */
 		void	clear();
 
-		/** Prints out a representation of the dictionary. */
-		void	print() const;
+		/** Writes a representation of the dictionary to "out". */
+		bool	write(output *out) const;
 
 	#include <rudiments/private/dictionary.h>
 };

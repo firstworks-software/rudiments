@@ -139,10 +139,10 @@ class table : public tablecollection<valuetype> {
 
 		/** Removes all values currently stored in the table, such that
 		 *  getValue() will return NULL or 0. */
-		void		clear();
+		void	clear();
 
-		/** Prints out a representation of the table. */
-		void	print() const;
+		/** Writes a representation of the table to "out". */
+		bool	write(output *out) const;
 
 	#include <rudiments/private/table.h>
 };

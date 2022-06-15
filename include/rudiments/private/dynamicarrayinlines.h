@@ -310,10 +310,11 @@ void dynamicarray<valuetype>::clear(uint64_t initiallength,
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::print() const {
+bool dynamicarray<valuetype>::write(output *out) const {
 	for (uint64_t i=0; i<lastlen; i++) {
-		stdoutput.printf("%lld: ",i);
+		out->printf("%lld: ",i);
 		this->getWriter()->write(find(i));
-		stdoutput.printf("\n");
+		out->write('\n');
 	}
+	return true;
 }

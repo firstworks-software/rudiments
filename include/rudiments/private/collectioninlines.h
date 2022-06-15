@@ -136,3 +136,8 @@ inline
 bool collection::getManageArrayKeys() const {
 	return managearraykeys;
 }
+
+inline
+bool collection::write() const {
+	return write(&stdoutput);
+}

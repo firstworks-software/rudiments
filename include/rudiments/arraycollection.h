@@ -21,9 +21,6 @@ class arraycollection : public collection {
 
 		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength() const=0;
-
-		/** Clears the array, deleting all of its values. */
-		virtual	void		clear()=0;
 };
 
 #endif

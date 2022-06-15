@@ -193,8 +193,9 @@ class avltree : public treecollection<valuetype> {
 		 *  setManageArrayValues(true) has been called. */
 		void	clear();
 
-		/** Prints out an xml-style representation of the avltree. */
-		void	print() const;
+		/** Writes an xml-style representation of the avltree to
+		 *  "out". */
+		bool	write(output *out) const;
 
 	#include <rudiments/private/avltree.h>
 };

@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 	scalar<int32_t>	si32;
 	for (int32_t i=-5; i<5; i++) {
 		si32.setValue(i);
-		si32.print();
+		si32.collection::write();
 	}
 	stdoutput.printf("\n");
 
@@ -31,7 +31,7 @@ int main(int argc, const char **argv) {
 	scalar<const char *>	sc;
 	for (uint32_t i=0; i<10; i++) {
 		sc.setValue(numbers[i]);
-		sc.print();
+		sc.collection::write();
 	}
 	stdoutput.printf("\n");
 
@@ -42,7 +42,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=-5; i<5; i++) {
 		lli32.append(i);
 	}
-	lli32.print();
+	lli32.collection::write();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("linkedlist (const char *):\n");
@@ -50,7 +50,7 @@ int main(int argc, const char **argv) {
 	for (uint32_t i=0; i<10; i++) {
 		llc.append(numbers[i]);
 	}
-	llc.print();
+	llc.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -60,7 +60,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=-5; i<5; i++) {
 		slli32.append(i);
 	}
-	slli32.print();
+	slli32.collection::write();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("singlylinkedlist (const char *):\n");
@@ -68,7 +68,7 @@ int main(int argc, const char **argv) {
 	for (uint32_t i=0; i<10; i++) {
 		sllc.append(numbers[i]);
 	}
-	sllc.print();
+	sllc.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -78,7 +78,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=-5; i<5; i++) {
 		ati32.insert(i);
 	}
-	ati32.print();
+	ati32.collection::write();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("avltree (const char *):\n");
@@ -86,7 +86,7 @@ int main(int argc, const char **argv) {
 	for (uint32_t i=0; i<10; i++) {
 		atc.insert(numbers[i]);
 	}
-	atc.print();
+	atc.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -96,7 +96,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=0; i<10; i++) {
 		d.setValue(i,numbers[i]);
 	}
-	d.print();
+	d.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -109,7 +109,7 @@ int main(int argc, const char **argv) {
 			ti32.setValue(i,j,j);
 		}
 	}
-	ti32.print();
+	ti32.collection::write();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("table (const char *):\n");
@@ -120,7 +120,7 @@ int main(int argc, const char **argv) {
 			tc.setValue(i,j,numbers[j]);
 		}
 	}
-	tc.print();
+	tc.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -130,7 +130,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=0; i<10; i++) {
 		dai32[i]=i;
 	}
-	dai32.print();
+	dai32.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -140,7 +140,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=0; i<10; i++) {
 		dac[i]=numbers[i];
 	}
-	dac.print();
+	dac.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -150,7 +150,7 @@ int main(int argc, const char **argv) {
 	for (int32_t i=0; i<10; i++) {
 		sai32[i]=i;
 	}
-	sai32.print();
+	sai32.collection::write();
 	stdoutput.printf("\n");
 
 
@@ -160,6 +160,6 @@ int main(int argc, const char **argv) {
 	for (int32_t i=0; i<10; i++) {
 		sac[i]=numbers[i];
 	}
-	sac.print();
+	sac.collection::write();
 	stdoutput.printf("\n");
 }

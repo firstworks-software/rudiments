@@ -131,10 +131,11 @@ void staticarray<valuetype,length>::deleteManagedValues() {
 
 template< class valuetype, uint64_t length >
 inline
-void staticarray<valuetype,length>::print() const {
+bool staticarray<valuetype,length>::write(output *out) const {
 	for (uint64_t i=0; i<length; i++) {
-		stdoutput.printf("%lld: ",i);
+		out->printf("%lld: ",i);
 		this->getWriter()->write(data[i]);
-		stdoutput.printf("\n");
+		out->write('\n');
 	}
+	return true;
 }

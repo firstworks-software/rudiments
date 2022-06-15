@@ -197,13 +197,14 @@ void table<valuetype>::clear() {
 
 template <class valuetype>
 inline
-void table<valuetype>::print() const {
+bool table<valuetype>::write(output *out) const {
 	for (uint64_t i=0; i<rows; i++) {
-		stdoutput.printf("row %lld:\n",i);
+		out->printf("row %lld:\n",i);
 		for (uint64_t j=0; j<cols; j++) {
-			stdoutput.printf("  col %lld: ",j);
+			out->printf("  col %lld: ",j);
 			this->getWriter()->write(getValue(i,j));
-			stdoutput.printf("\n");
+			out->write('\n');
 		}
 	}
+	return true;
 }

@@ -204,12 +204,8 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  setManageArrayValues(true) has been called. */
 		void	clear();
 
-		/** Prints out a representation of the linkedlist. */
-		void	print() const;
-
-		/** Prints out a representation of the first "count"
-		 *  nodes of the linkedlist. */
-		void	print(uint64_t count) const;
+		/** Writes out a representation of the linkedlist to "out". */
+		bool	write(output *out) const;
 
 	#include <rudiments/private/singlylinkedlist.h>
 };
