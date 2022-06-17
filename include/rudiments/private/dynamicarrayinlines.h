@@ -307,14 +307,3 @@ void dynamicarray<valuetype>::clear(uint64_t initiallength,
 	// reset current extent index
 	curind=0;
 }
-
-template< class valuetype >
-inline
-bool dynamicarray<valuetype>::write(output *out) const {
-	for (uint64_t i=0; i<lastlen; i++) {
-		out->printf("%lld: ",i);
-		this->getWriter()->write(find(i));
-		out->write('\n');
-	}
-	return true;
-}

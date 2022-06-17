@@ -42,3 +42,17 @@ inline
 bool tablecollection<valuetype>::getCopyColumnNames() const {
 	return copycolumnnames;
 }
+
+template <class valuetype>
+inline
+bool tablecollection<valuetype>::write(output *out) const {
+	for (uint64_t i=0; i<getRowCount(); i++) {
+		out->printf("row %lld:\n",i);
+		for (uint64_t j=0; j<getColumnCount(); j++) {
+			out->printf("  col %lld: ",j);
+			this->getWriter()->write(getValue(i,j));
+			out->write('\n');
+		}
+	}
+	return true;
+}
