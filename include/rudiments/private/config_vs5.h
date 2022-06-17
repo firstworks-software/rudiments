@@ -250,6 +250,9 @@
 /* Most systems have bool */
 #define RUDIMENTS_HAVE_BOOL 1
 
+/* Some systems have broken towctrans */
+/* #undef RUDIMENTS_HAVE_BROKEN_TOWCTRANS */
+
 /* Some systems have BRoster::_ShutDown */
 /* #undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN */
 
