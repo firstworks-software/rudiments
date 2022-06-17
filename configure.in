@@ -2762,6 +2762,13 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 wctomb(0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCTOMB,1,Some systems have wctomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for broken towctrans)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#include <wctype.h>
+#endif],
+towupper('a');,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_BROKEN_TOWCTRANS,1,Some systems have broken towctrans) AC_MSG_RESULT(yes))
+
 AC_MSG_CHECKING(for swprintf)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 	#define __USE_GNU

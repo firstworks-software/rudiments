@@ -156,6 +156,19 @@ bool wcharacter::isAscii(int32_t c) {
 	#endif
 }
 
+#ifdef RUDIMENTS_HAVE_BROKEN_TOWCTRANS
+
+static wint_t localtowctrans(wint_t wc, const int *desc) {
+	return towctrans(wc,(wctrans_t)desc);
+}
+
+#undef towupper
+#define towupper(wc) localtowctrans(wc,__ctype_toupper)
+#undef towlower
+#define towlower(wc) localtowctrans(wc,__ctype_tolower)
+
+#endif
+
 int32_t wcharacter::toUpperCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towupper(c);
