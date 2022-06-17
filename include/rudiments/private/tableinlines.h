@@ -194,17 +194,3 @@ void table<valuetype>::clear() {
 	cols=0;
 	rows=0;
 }
-
-template <class valuetype>
-inline
-bool table<valuetype>::write(output *out) const {
-	for (uint64_t i=0; i<rows; i++) {
-		out->printf("row %lld:\n",i);
-		for (uint64_t j=0; j<cols; j++) {
-			out->printf("  col %lld: ",j);
-			this->getWriter()->write(getValue(i,j));
-			out->write('\n');
-		}
-	}
-	return true;
-}

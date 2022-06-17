@@ -106,9 +106,6 @@ class dynamicarray : public arraycollection<valuetype> {
  		 *  incremental extents. */
 		void	clear(uint64_t initiallength, uint64_t incrementlength);
 
-		/** Writes a representation of the dynamicarray to "out". */
-		bool	write(output *out) const;
-
 	#include <rudiments/private/dynamicarray.h>
 };
 

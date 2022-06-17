@@ -115,6 +115,9 @@ class tablecollection : public collection {
 		 *  block contains the last row in the table. */
 		virtual	bool		getAllRowsAvailable() const=0;
 
+		/** Writes a representation of the tablecollection to "out". */
+		virtual	bool	write(output *out) const;
+
 	#include <rudiments/private/tablecollection.h>
 };
 

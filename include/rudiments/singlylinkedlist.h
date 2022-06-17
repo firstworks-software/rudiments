@@ -204,9 +204,6 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  setManageArrayValues(true) has been called. */
 		void	clear();
 
-		/** Writes out a representation of the linkedlist to "out". */
-		bool	write(output *out) const;
-
 	#include <rudiments/private/singlylinkedlist.h>
 };
 

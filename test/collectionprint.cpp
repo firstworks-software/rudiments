@@ -12,7 +12,7 @@
 #include "test.cpp"
 
 const char *numbers[]={
-	"one","two","three","four","five","six","seven","eight","nine","ten"
+	"zero","one","two","three","four","five","six","seven","eight","nine"
 };
 
 int main(int argc, const char **argv) {

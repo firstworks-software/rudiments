@@ -421,19 +421,6 @@ void dictionary<keytype,valuetype>::clear() {
 
 template <class keytype, class valuetype>
 inline
-bool dictionary<keytype,valuetype>::write(output *out) const {
-	for (treenode<dictionarypair<keytype,valuetype> *> *node=
-				tree.getFirst(); node; node=node->getNext()) {
-		this->getWriter()->write(node->getValue()->getKey());
-		out->write(':');
-		this->getWriter()->write(node->getValue()->getValue());
-		out->write('\n');
-	}
-	return true;
-}
-
-template <class keytype, class valuetype>
-inline
 treenode<dictionarypair<keytype,valuetype> *>
 		*dictionary<keytype,valuetype>::find(keytype key) const {
 	dictionarypair<keytype,valuetype>	fnode(key,(valuetype)0);

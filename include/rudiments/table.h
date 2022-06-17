@@ -141,9 +141,6 @@ class table : public tablecollection<valuetype> {
 		 *  getValue() will return NULL or 0. */
 		void	clear();
 
-		/** Writes a representation of the table to "out". */
-		bool	write(output *out) const;
-
 	#include <rudiments/private/table.h>
 };
 

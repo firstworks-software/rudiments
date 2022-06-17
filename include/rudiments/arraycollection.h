@@ -5,6 +5,7 @@
 #define RUDIMENTS_ARRAYCOLLECTION_H
 
 #include <rudiments/collection.h>
+#include <rudiments/output.h>
 
 /** The arraycollection class is the parent class for all rudiments array
  *  collections. */
@@ -21,6 +22,11 @@ class arraycollection : public collection {
 
 		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength() const=0;
+
+		/** Writes a representation of the arraycollection to "out". */
+		virtual	bool	write(output *out) const;
 };
+
+#include <rudiments/private/arraycollectioninlines.h>
 
 #endif

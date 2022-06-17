@@ -94,6 +94,12 @@ class dictionarycollection : public collection {
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		virtual	bool		remove(keytype key)=0;
+
+		/** Writes a representation of the dictionarycollection to
+		 *  "out". */
+		virtual	bool	write(output *out) const;
 };
+
+#include <rudiments/private/dictionarycollectioninlines.h>
 
 #endif
