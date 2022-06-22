@@ -16,7 +16,7 @@
 // Why do all of the node_delete_value() functions take pointers, just to
 // dereference them?
 //
-// Older compilers (eg. gcc-2.95.2) seem to have trouble determining which
+// Older compilers (SCO CC on uw-7.0.1) seem to have trouble determining which
 // function to call when passing a reference rather than passing a pointer.
 //
 // Eg. If there are a bunch of node_delete_value() methods for primitives and
