@@ -3,101 +3,9 @@
 
 #include <rudiments/writer.h>
 
-inline
-void writer::write(const char *value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(const wchar_t *value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(char value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(wchar_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(int16_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(int32_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(int64_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(const unsigned char *value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(unsigned char value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(uint16_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(uint32_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(uint64_t value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(float value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(double value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(long double value) const {
-	write(&stdoutput,value);
-}
-
-inline
-void writer::write(const void *value) const {
-	write(&stdoutput,value);
-}
-
-template <class valuetype>
-inline
-void writer::write(valuetype &value) const {
-	write(&stdoutput,value);
-}
-
-template <class valuetype>
-inline
-void writer::write(const valuetype &value) const {
-	write(&stdoutput,value);
-}
-
-
-
-
+// NOTE: these methods are defined out-of-order from their declarations because
+// some compilers (eg. gcc 2.7.x) prefer for inline methods to be defined before
+// they are used.
 
 inline
 void writer::write(output *out, const char *value) const {
@@ -197,4 +105,100 @@ template <class valuetype>
 inline
 void writer::write(output *out, const valuetype &value) const {
 	out->printf("%08x",&value);
+}
+
+
+
+
+
+inline
+void writer::write(const char *value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(const wchar_t *value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(char value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(wchar_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(int16_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(int32_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(int64_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(const unsigned char *value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(unsigned char value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(uint16_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(uint32_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(uint64_t value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(float value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(double value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(long double value) const {
+	write(&stdoutput,value);
+}
+
+inline
+void writer::write(const void *value) const {
+	write(&stdoutput,value);
+}
+
+template <class valuetype>
+inline
+void writer::write(valuetype &value) const {
+	write(&stdoutput,value);
+}
+
+template <class valuetype>
+inline
+void writer::write(const valuetype &value) const {
+	write(&stdoutput,value);
 }
