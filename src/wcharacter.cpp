@@ -156,7 +156,8 @@ bool wcharacter::isAscii(int32_t c) {
 	#endif
 }
 
-#ifdef RUDIMENTS_HAVE_BROKEN_TOWCTRANS
+#if defined(RUDIMENTS_HAVE_WCTYPE_H) && \
+	defined(RUDIMENTS_HAVE_BROKEN_TOWCTRANS)
 
 static wint_t localtowctrans(wint_t wc, const int *desc) {
 	return towctrans(wc,(wctrans_t)desc);

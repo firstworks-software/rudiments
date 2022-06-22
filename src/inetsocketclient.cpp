@@ -375,7 +375,7 @@ int32_t inetsocketclient::connect() {
 					#endif
 				} while (fd()==-1 &&
 					error::getErrorNumber()==EINTR &&
-						!process::getShutDownFlag())
+						!process::getShutDownFlag());
 				if (fd()==-1) {
 					return RESULT_ERROR;
 				}

@@ -30197,7 +30197,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-towupper('a');
+
+#ifdef RUDIMENTS_HAVE_WCTYPE_H
+	towupper('a');
+#endif
   ;
   return 0;
 }
