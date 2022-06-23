@@ -326,7 +326,8 @@ headers3="dynamicarray.h "+_
 	"httpserverapi.h "+_
 	"httpserverapimain.h "+_
 	"mvc.h "+_
-	"cronschedule.h"
+	"cronschedule.h "+_
+	"writer.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -336,8 +337,11 @@ privateheaders0="config.h "+_
 	"comparatorinlines.h "+_
 	"listnode.h "+_
 	"listcollectioninlines.h "+_
-	"treenode.h"+_
-	"treecollectioninlines.h"
+	"treenode.h "+_
+	"treecollectioninlines.h "+_
+	"arraycollectioninlines.h "+_
+	"dictionarycollectioninlines.h "+_
+	"scalarcollectioninlines.h"
 privateheaders1="inttypes.h "+_
 	"new.h "+_
 	"characterincludes.h "+_
@@ -567,7 +571,8 @@ privateheaders7="staticarray.h "+_
 	"mvcview.h "+_
 	"httpbasicsecurity.h "+_
 	"cronscheduleincludes.h "+_
-	"cronschedule.h"
+	"cronschedule.h "+_
+	"writerinlines.h"
 
 ' version
 RUDIMENTS_VERSION="2.0.0"
