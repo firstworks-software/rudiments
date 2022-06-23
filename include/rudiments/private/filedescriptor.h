@@ -9,7 +9,7 @@
 		void	filedescriptorInit();
 		void	filedescriptorClone(const filedescriptor &f);
 
-		off64_t	setPosition(off64_t offset, int32_t whence);
+		off64_t	setPosition(off64_t offset, int32_t whence) const;
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);

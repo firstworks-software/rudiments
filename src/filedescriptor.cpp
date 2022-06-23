@@ -491,7 +491,7 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 					#if defined(DEBUG_BUFFERING)
 					debugPrintf("lseek failed)\n");
 					#endif
-					return RESULT_ERROR;
+					return false;
 				}
 			}
 
@@ -696,19 +696,19 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#endif
 }
 
-off64_t filedescriptor::setPositionRelativeToBeginning(off64_t offset) {
+off64_t filedescriptor::setPositionRelativeToBeginning(off64_t offset) const {
 	return setPosition(offset,SEEK_SET);
 }
 
-off64_t filedescriptor::setPositionRelativeToCurrent(off64_t offset) {
+off64_t filedescriptor::setPositionRelativeToCurrent(off64_t offset) const {
 	return setPosition(offset,SEEK_CUR);
 }
 
-off64_t filedescriptor::setPositionRelativeToEnd(off64_t offset) {
+off64_t filedescriptor::setPositionRelativeToEnd(off64_t offset) const {
 	return setPosition(offset,SEEK_END);
 }
 
-off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
+off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 
 	// for stream filedescriptors, we can't set the position, just return
 	// the current offset, which should always be 0

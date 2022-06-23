@@ -111,12 +111,14 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  descriptor) at which the next read or write will occur to
 		 *  "offset".  Returns that position on success or -1 on
 		 *  failure. */
-		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
+		virtual off64_t	setPositionRelativeToBeginning(off64_t offset)
+									const;
 
 		/** Advances the position at which the next read or write will
  		 *  occur by "offset" bytes.  Returns that position on success
  		 *  or -1 on failure. */
-		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
+		virtual off64_t	setPositionRelativeToCurrent(off64_t offset)
+									const;
 
 		/** Sets the position at which the next read or write will
 		 *  occur to the end of the file plus "offset" bytes.
@@ -125,7 +127,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  be accomplished by using a positive "offset" and then
 		 *  writing data at that position.  Returns the position on
 		 *  succes or -1 on failure. */
-		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
+		virtual off64_t	setPositionRelativeToEnd(off64_t offset) const;
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
