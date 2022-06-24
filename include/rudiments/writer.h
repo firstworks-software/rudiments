@@ -10,6 +10,9 @@
  *  collections to write out representations of themselves. */
 class writer {
 	public:
+		/** Deletes this instance of the writer class. */
+		virtual	~writer();
+
 		/** Writes "value" to standard output. */
 		virtual void	write(const char *value) const;
 

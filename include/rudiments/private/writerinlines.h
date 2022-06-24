@@ -8,6 +8,10 @@
 // they are used.
 
 inline
+writer::~writer() {
+}
+
+inline
 void writer::write(output *out, const char *value) const {
 	out->printf("%s",value);
 }
