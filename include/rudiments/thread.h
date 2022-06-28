@@ -70,7 +70,9 @@ class RUDIMENTS_DLLSPEC thread : virtual public object {
 		bool	getRetryFailedSpawn();
 
 		/** Returns true if the platform supports threads and rudiments
-		 *  was built with thread support and false otherwise. */
+		 *  was built with thread support and false otherwise.
+		 *
+		 *  See also: reliable(). */
 		static bool	supported();
 
 		/** Returns false if the platform supports threads, but they
