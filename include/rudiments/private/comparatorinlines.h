@@ -120,6 +120,11 @@ int32_t comparator::compare(char value1, char value2) const {
 }
 
 inline
+int32_t comparator::compare(bool value1, bool value2) const {
+	return (((int16_t)value1)-((int16_t)value2))*sense;
+}
+
+inline
 int32_t comparator::compare(int16_t value1, int16_t value2) const {
 	return (((int32_t)value1)-((int32_t)value2))*sense;
 }

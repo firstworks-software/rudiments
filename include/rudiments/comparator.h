@@ -96,6 +96,11 @@ class comparator {
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
+		virtual	int32_t compare(bool value1, bool value2) const;
+
+		/** Returns an integer less than, equal to, or greater than 0
+		 *  if value1 is, respectively, less than, equal to, or greater
+		 *  than value2. */
 		virtual	int32_t compare(int16_t value1, int16_t value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
