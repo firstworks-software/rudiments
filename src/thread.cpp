@@ -5,6 +5,9 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
+#if __GLIBC__==2 && __GLIBC_MINOR__ == 0
+	#include <rudiments/sys.h>
+#endif
 
 // for pthread_kill
 #include <signal.h>
@@ -261,4 +264,25 @@ bool thread::supported() {
 	#else
 		return false;
 	#endif
+}
+
+bool thread::reliable() {
+	#if __GLIBC__==2 && __GLIBC_MINOR__ == 0
+		// glibc 2.0.x on linux 2.0.x supports thread, but they are
+		// unreliable.  The rudiments tests tend to succeed, but, for
+		// exmaple, on redhat 5.2, the sqlr-listener crashes when a
+		// client exits.  I may have a bug somewhere, but for now we'll
+		// allow everything to compile, but declare threads to be
+		// unreliable with this combination.
+		char	*os=sys::getOperatingSystemName();
+		char	*rel=sys::getOperatingSystemRelease();
+		double	ver=charstring::toFloat(rel);
+		delete[] rel;
+		if (!charstring::compare(os,"Linux") && ver<=2.0) {
+			delete[] os;
+			return false;
+		}
+		delete[] os;
+	#endif
+	return supported();
 }

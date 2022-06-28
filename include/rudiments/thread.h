@@ -73,6 +73,10 @@ class RUDIMENTS_DLLSPEC thread : virtual public object {
 		 *  was built with thread support and false otherwise. */
 		static bool	supported();
 
+		/** Returns false if the platform supports threads, but they
+		 *  are believed to be unreliable, and true otherwise. */
+		static bool	reliable();
+
 	#include <rudiments/private/thread.h>
 };
 

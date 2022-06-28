@@ -79,6 +79,7 @@
 	fixed some formatting bugs in datetime::formatAs()
 	yday->mday in datetime::setDays()
 	filedescriptor::printf() methods return ssize_t now
+	added thread::reliable()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
