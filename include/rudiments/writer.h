@@ -61,11 +61,15 @@ class writer {
 		/** Writes "value" to standard output. */
 		virtual void	write(const void *value) const;
 
-		/*template <class valuetype>
-		void	write(valuetype &value) const;*/
+		/** Writes "value" to standard output. */
+		virtual void	write(const object *value) const;
 
-		template <class valuetype>
-		void	write(const valuetype &value) const;
+		/** Writes "value" to standard output. */
+		virtual void	write(const object &value) const;
+
+		/** Writes "value" to standard output. */
+		/*template <class valuetype>
+		void	write(const valuetype &value) const;*/
 
 
 
@@ -118,11 +122,15 @@ class writer {
 		/** Writes "value" to "output". */
 		virtual void	write(output *out, const void *value) const;
 
-		/*template <class valuetype>
-		void	write(output *out, valuetype &value) const;*/
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, const object *value) const;
 
-		template <class valuetype>
-		void	write(output *out, const valuetype &value) const;
+		/** Writes "value" to "output". */
+		virtual void	write(output *out, const object &value) const;
+
+		/** Writes "value" to "output". */
+		/*template <class valuetype>
+		void	write(output *out, const valuetype &value) const;*/
 };
 
 #include <rudiments/private/writerinlines.h>

@@ -153,12 +153,12 @@ class comparator {
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(object *value1, object *value2) const;
+		virtual	int32_t compare(void *value1, void *value2) const;
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(void *value1, void *value2) const;
+		virtual	int32_t compare(object *value1, object *value2) const;
 
 	#include <rudiments/private/comparator.h>
 };

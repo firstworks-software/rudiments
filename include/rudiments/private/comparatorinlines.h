@@ -205,7 +205,7 @@ int32_t comparator::compare(long double value1, long double value2) const {
 }
 
 inline
-int32_t comparator::compare(object *value1, object *value2) const {
+int32_t comparator::compare(void *value1, void *value2) const {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -216,7 +216,7 @@ int32_t comparator::compare(object *value1, object *value2) const {
 }
 
 inline
-int32_t comparator::compare(void *value1, void *value2) const {
+int32_t comparator::compare(object *value1, object *value2) const {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {

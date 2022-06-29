@@ -99,17 +99,21 @@ void writer::write(output *out, const void *value) const {
 	out->printf("%08x",value);
 }
 
-/*template <class valuetype>
 inline
-void writer::write(output *out, valuetype &value) const {
-	out->printf("%08x",&value);
-}*/
+void writer::write(output *out, const object *value) const {
+	out->printf("%08x",value);
+}
 
-template <class valuetype>
+inline
+void writer::write(output *out, const object &value) const {
+	out->printf("%08x",&value);
+}
+
+/*template <class valuetype>
 inline
 void writer::write(output *out, const valuetype &value) const {
 	out->printf("%08x",&value);
-}
+}*/
 
 
 
@@ -195,14 +199,18 @@ void writer::write(const void *value) const {
 	write(&stdoutput,value);
 }
 
-/*template <class valuetype>
 inline
-void writer::write(valuetype &value) const {
+void writer::write(const object *value) const {
 	write(&stdoutput,value);
-}*/
+}
 
-template <class valuetype>
+inline
+void writer::write(const object &value) const {
+	write(&stdoutput,value);
+}
+
+/*template <class valuetype>
 inline
 void writer::write(const valuetype &value) const {
 	write(&stdoutput,value);
-}
+}*/
