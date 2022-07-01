@@ -135,11 +135,11 @@ bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 	return retval;
 }
 
-bool dom::write(output *out) const {
-	return write(out,true);
+ssize_t dom::write(output *out) const {
+	return (write(out,true))?1:RESULT_ERROR;
 }
 
-bool dom::write(output *out, bool indent) const {
+ssize_t dom::write(output *out, bool indent) const {
 	return getRootNode()->write(out,indent);
 }
 

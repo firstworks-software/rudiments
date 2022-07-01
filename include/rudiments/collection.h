@@ -181,10 +181,10 @@ class collection : virtual public object {
 
 		/** Writes a representation of the collection to standard
 		 *  output. */
-		virtual	bool	write() const;
+		virtual	ssize_t	write() const;
 
 		/** Writes a representation of the collection to "out". */
-		virtual	bool	write(output *out) const=0;
+		virtual	ssize_t	write(output *out) const=0;
 
 	#include <rudiments/private/collection.h>
 };

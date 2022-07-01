@@ -5,11 +5,12 @@
 
 template< class valuetype >
 inline
-bool arraycollection<valuetype>::write(output *out) const {
+ssize_t arraycollection<valuetype>::write(output *out) const {
+	ssize_t	retval=0;
 	for (uint64_t i=0; i<getLength(); i++) {
-		out->printf("%lld: ",i);
-		this->getWriter()->write((*this)[i]);
-		out->write('\n');
+		retval+=out->printf("%lld: ",i);
+		retval+=this->writeDelegate(out,(*this)[i]);
+		retval+=out->write('\n');
 	}
-	return true;
+	return retval;
 }

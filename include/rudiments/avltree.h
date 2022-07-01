@@ -195,7 +195,7 @@ class avltree : public treecollection<valuetype> {
 
 		/** Writes an xml-style representation of the avltree to
 		 *  "out". */
-		bool	write(output *out) const;
+		ssize_t	write(output *out) const;
 
 	#include <rudiments/private/avltree.h>
 };

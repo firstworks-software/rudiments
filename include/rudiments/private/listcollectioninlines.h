@@ -39,20 +39,21 @@ void listcollection<valuetype>::insertAfter(listnode<valuetype> *node,
 
 template <class valuetype>
 inline
-bool listcollection<valuetype>::write(output *out) const {
+ssize_t listcollection<valuetype>::write(output *out) const {
+	ssize_t		retval=0;
 	uint64_t	i=0;
 	for (listnode<valuetype> *current=getFirst();
 				current; current=current->getNext()) {
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
-			out->printf("index %lld: ",(long long)i);
+			retval+=out->printf("index %lld: ",(long long)i);
 		#else
-			out->printf("index %ld: ",(long)i);
+			retval+=out->printf("index %ld: ",(long)i);
 		#endif
-		this->getWriter()->write(out,current->getValue());
-		out->write('\n');
+		retval+=this->writeDelegate(out,current->getValue());
+		retval+=out->write('\n');
 		i++;
 	}
-	return true;
+	return retval;
 }
 
 #endif

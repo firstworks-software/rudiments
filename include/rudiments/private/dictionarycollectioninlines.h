@@ -5,13 +5,14 @@
 
 template< class keytype, class valuetype >
 inline
-bool dictionarycollection<keytype,valuetype>::write(output *out) const {
+ssize_t dictionarycollection<keytype,valuetype>::write(output *out) const {
+	ssize_t	retval=0;
 	for (listnode<keytype> *node=getKeys()->getFirst();
 					node; node=node->getNext()) {
-		this->getWriter()->write(node->getValue());
-		out->write(':');
-		this->getWriter()->write(getValue(node->getValue()));
-		out->write('\n');
+		retval+=this->writeDelegate(out,node->getValue());
+		retval+=out->write(':');
+		retval+=this->writeDelegate(out,getValue(node->getValue()));
+		retval+=out->write('\n');
 	}
-	return true;
+	return retval;
 }

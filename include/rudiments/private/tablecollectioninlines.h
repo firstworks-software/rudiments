@@ -45,14 +45,15 @@ bool tablecollection<valuetype>::getCopyColumnNames() const {
 
 template <class valuetype>
 inline
-bool tablecollection<valuetype>::write(output *out) const {
+ssize_t tablecollection<valuetype>::write(output *out) const {
+	ssize_t	retval=0;
 	for (uint64_t i=0; i<getRowCount(); i++) {
-		out->printf("row %lld:\n",i);
+		retval+=out->printf("row %lld:\n",i);
 		for (uint64_t j=0; j<getColumnCount(); j++) {
-			out->printf("  col %lld: ",j);
-			this->getWriter()->write(getValue(i,j));
-			out->write('\n');
+			retval+=out->printf("  col %lld: ",j);
+			retval+=this->writeDelegate(out,getValue(i,j));
+			retval+=out->write('\n');
 		}
 	}
-	return true;
+	return retval;
 }

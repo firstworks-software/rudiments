@@ -182,7 +182,7 @@ class listcollection : public nodecollection<valuetype> {
 		virtual void	heapSort()=0;
 
 		/** Writes a representation of the listcollection to "out". */
-		virtual	bool	write(output *out) const;
+		virtual	ssize_t	write(output *out) const;
 };
 
 #include <rudiments/private/listcollectioninlines.h>

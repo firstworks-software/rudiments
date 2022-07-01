@@ -138,6 +138,97 @@ bool collection::getManageArrayKeys() const {
 }
 
 inline
-bool collection::write() const {
+ssize_t collection::write() const {
 	return write(&stdoutput);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, const char *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, const wchar_t *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, char value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, wchar_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, int16_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, int32_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, int64_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, const unsigned char *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, unsigned char value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, uint16_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, uint32_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, uint64_t value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, float value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, double value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, long double value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, const void *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, const object *value) const {
+	return getWriter()->write(out,value);
+}
+
+template <class valuetype>
+inline
+ssize_t collection::writeDelegate(output *out, const valuetype &value) const {
+	return getWriter()->write(out,(const void *)&value);
 }

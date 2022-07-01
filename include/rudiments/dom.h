@@ -66,14 +66,14 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 						bool indent) const;
 
 		/** Writes the current DOM tree to "out". */
-		virtual bool	write(output *out) const;
+		virtual ssize_t	write(output *out) const;
 
 		/** Writes the current DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
-		virtual bool	write(output *out, bool indent) const;
+		virtual ssize_t	write(output *out, bool indent) const;
 
 		/** Writes the current DOM tree to "out", in XML format. */
 		virtual bool	writeXml(output *out) const;

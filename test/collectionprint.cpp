@@ -145,6 +145,19 @@ int main(int argc, const char **argv) {
 
 
 
+	stdoutput.printf("dynamicarray (struct test):\n");
+	struct test {
+		const char	*blah;
+	};
+	dynamicarray<struct test>	dt;
+	for (uint32_t i=0; i<10; i++) {
+		dt[i].blah=NULL;
+	}
+	dt.collection::write();
+	stdoutput.printf("\n");
+
+
+
 	stdoutput.printf("staticarray (int32_t):\n");
 	staticarray<int32_t,10>	sai32;
 	for (int32_t i=0; i<10; i++) {
@@ -161,5 +174,12 @@ int main(int argc, const char **argv) {
 		sac[i]=numbers[i];
 	}
 	sac.collection::write();
+	stdoutput.printf("\n");
+
+
+
+	stdoutput.printf("staticarray (struct test):\n");
+	staticarray<struct test, 10>	st;
+	st.collection::write();
 	stdoutput.printf("\n");
 }

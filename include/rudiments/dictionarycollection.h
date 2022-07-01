@@ -97,7 +97,7 @@ class dictionarycollection : public collection {
 
 		/** Writes a representation of the dictionarycollection to
 		 *  "out". */
-		virtual	bool	write(output *out) const;
+		virtual	ssize_t	write(output *out) const;
 };
 
 #include <rudiments/private/dictionarycollectioninlines.h>

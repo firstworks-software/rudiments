@@ -7,12 +7,12 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-struct test : public object {
+struct test {
 	char		str[100];
 	uint32_t	uintval;
 };
 
-class testclass : public object {
+class testclass {
 	public:
 			testclass();
 		uint32_t	getValue();

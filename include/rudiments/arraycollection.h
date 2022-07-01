@@ -24,7 +24,7 @@ class arraycollection : public collection {
 		virtual	uint64_t	getLength() const=0;
 
 		/** Writes a representation of the arraycollection to "out". */
-		virtual	bool	write(output *out) const;
+		virtual	ssize_t		write(output *out) const;
 };
 
 #include <rudiments/private/arraycollectioninlines.h>

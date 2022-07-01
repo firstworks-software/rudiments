@@ -3,8 +3,9 @@
 
 template <class valuetype>
 inline
-bool scalarcollection<valuetype>::write(output *out) const {
-	this->getWriter()->write(getValue());
-	out->write('\n');
-	return true;
+ssize_t scalarcollection<valuetype>::write(output *out) const {
+	ssize_t	retval=0;
+	retval+=this->writeDelegate(out,getValue());
+	retval+=out->write('\n');
+	return retval;
 }
