@@ -109,14 +109,6 @@ void writer::write(output *out, const object &value) const {
 	out->printf("%08x",&value);
 }
 
-/*template <class valuetype>
-inline
-void writer::write(output *out, const valuetype &value) const {
-	out->printf("%08x",&value);
-}*/
-
-
-
 
 
 inline
@@ -208,9 +200,3 @@ inline
 void writer::write(const object &value) const {
 	write(&stdoutput,value);
 }
-
-/*template <class valuetype>
-inline
-void writer::write(const valuetype &value) const {
-	write(&stdoutput,value);
-}*/
