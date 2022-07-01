@@ -15,6 +15,10 @@ const char *numbers[]={
 	"zero","one","two","three","four","five","six","seven","eight","nine"
 };
 
+struct test {
+	const char	*blah;
+};
+
 int main(int argc, const char **argv) {
 
 	header("collectionprint");
@@ -146,9 +150,6 @@ int main(int argc, const char **argv) {
 
 
 	stdoutput.printf("dynamicarray (struct test):\n");
-	struct test {
-		const char	*blah;
-	};
 	dynamicarray<struct test>	dt;
 	for (uint32_t i=0; i<10; i++) {
 		dt[i].blah=NULL;
