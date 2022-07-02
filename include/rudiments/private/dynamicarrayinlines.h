@@ -279,7 +279,16 @@ void dynamicarray<valuetype>::clear(uint64_t initiallength,
 		// reinit first extent
 		valuetype	*ext=curext->getValue();
 		for (uint64_t i=0; i<initlen; i++) {
-			ext[i].~valuetype();
+			// gcc 2.91.66 on redhat 6.2 throws an internal
+			// compiler error unless we use a pointer to call
+			// the destructor.  No other compilers appear to have
+			// this problem.
+			#if __GNUC__ == 2 && __GNUC_MINOR__ == 91
+				valuetype	*v=&(ext[i]);
+				v->~valuetype();
+			#else
+				ext[i].~valuetype();
+			#endif
 			new(&(ext[i])) valuetype;
 		}
 
