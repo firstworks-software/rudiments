@@ -376,28 +376,6 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		ssize_t	write(const void *buffer, size_t size,
 					int32_t sec, int32_t usec);
 
-		/** Prints "..." to the filedescriptor using "format" which
-		 *  should comply with standard printf formatting rules. */
-		ssize_t	printf(const char *format, ...);
-
-		/** Prints "argp" to the filedescriptor using "format" which
-		 *  should comply with standard printf formatting rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list. */
-		ssize_t	printf(const char *format, va_list *argp);
-
-		/** Prints "..." to the filedescriptor using "format" which
-		 *  should comply with standard printf formatting rules. */
-		ssize_t	printf(const wchar_t *format, ...);
-
-		/** Prints "argp" to the filedescriptor using "format" which
-		 *  should comply with standard printf formatting rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list. */
-		ssize_t	printf(const wchar_t *format, va_list *argp);
-
 		/** Prints "c" to the filedescriptor, however if "c" is
 		 *  non-printing character then it is printed as a hex value of
 		 *  the format: (0x0a).  Carriage returns, line feeds and tabs

@@ -319,29 +319,15 @@ ssize_t	apachehttpserverapi::write(double number) {
 	return write(buffer);
 }
 
-ssize_t apachehttpserverapi::printf(const char *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	size_t	result=printf(format,&argp);
-	va_end(argp);
-	return result;
-}
-
-ssize_t apachehttpserverapi::printf(const char *format, va_list *argp) {
+ssize_t apachehttpserverapi::printfDelegate(const char *format,
+							va_list *argp) {
 	bytebuffer	b;
 	b.printf(format,argp);
 	return write(b.getBuffer(),b.getSize());
 }
 
-ssize_t apachehttpserverapi::printf(const wchar_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	size_t	result=printf(format,&argp);
-	va_end(argp);
-	return result;
-}
-
-ssize_t apachehttpserverapi::printf(const wchar_t *format, va_list *argp) {
+ssize_t apachehttpserverapi::printfDelegate(const wchar_t *format,
+							va_list *argp) {
 	wstringbuffer	b;
 	b.printf(format,argp);
 	return write(b.getString(),b.getStringLength());

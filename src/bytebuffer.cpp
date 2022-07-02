@@ -206,15 +206,7 @@ ssize_t bytebuffer::write(double number) {
 								sizeof(double));
 }
 
-ssize_t bytebuffer::printf(const char *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	ssize_t	retval=printf(format,&argp);
-	va_end(argp);
-	return retval;
-}
-
-ssize_t bytebuffer::printf(const char *format, va_list *argp) {
+ssize_t bytebuffer::printfDelegate(const char *format, va_list *argp) {
 
 	// write the formatted data to a buffer
 	char	*buffer=NULL;
@@ -246,15 +238,7 @@ ssize_t bytebuffer::printf(const char *format, va_list *argp) {
 	return size;
 }
 
-ssize_t bytebuffer::printf(const wchar_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	ssize_t	retval=printf(format,&argp);
-	va_end(argp);
-	return retval;
-}
-
-ssize_t bytebuffer::printf(const wchar_t *format, va_list *argp) {
+ssize_t bytebuffer::printfDelegate(const wchar_t *format, va_list *argp) {
 
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;

@@ -61,10 +61,41 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		virtual	ssize_t	write(double number,
 						int32_t sec, int32_t usec);
 
-		virtual	ssize_t	printf(const char *format, ...)=0;
-		virtual	ssize_t	printf(const char *format, va_list *argp)=0;
-		virtual	ssize_t	printf(const wchar_t *format, ...)=0;
-		virtual	ssize_t	printf(const wchar_t *format, va_list *argp)=0;
+		/** Writes "..." using "format" which should comply with
+		 *  standard printf formatting rules.
+		 *
+		 *  Returns the number of bytes written or -1 if an error
+		 *  occurred. */
+		virtual	ssize_t	printf(const char *format, ...);
+
+		/** Writes "argp" using "format" which should comply with
+		 *  standard printf formatting rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list.
+		 *
+		 *  Returns the number of bytes written. */
+		virtual	ssize_t	printf(const char *format, va_list *argp);
+
+		/** Writes "..." using "format" which should comply with
+		 *  standard wprintf formatting rules.
+		 *
+		 *  Returns the number of bytes written or -1 if an error
+		 *  occurred. */
+		virtual	ssize_t	printf(const wchar_t *format, ...);
+
+		/** Writes "argp" using "format" which should comply with
+		 *  standard wprintf formatting rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list.
+		 *
+		 *  Returns the number of bytes written. */
+		virtual	ssize_t	printf(const wchar_t *format, va_list *argp);
+
+	#include <rudiments/private/output.h>
 };
+
+#include <rudiments/private/outputinlines.h>
 
 #endif

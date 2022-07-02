@@ -60,3 +60,8 @@
 		filedescriptor(int32_t fd);
 		static void	*getHandleFromFileDescriptor(int32_t fd);
 		ssize_t	getBytesBuffered();
+
+		ssize_t	printfDelegate(const char *format, va_list *argp);
+		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
+
+

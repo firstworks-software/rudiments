@@ -3137,15 +3137,7 @@ bool filedescriptor::getCloseOnExec() {
 	#endif
 }
 
-ssize_t filedescriptor::printf(const char *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	ssize_t	result=printf(format,&argp);
-	va_end(argp);
-	return result;
-}
-
-ssize_t filedescriptor::printf(const char *format, va_list *argp) {
+ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 
 	ssize_t	size=0;
 
@@ -3263,15 +3255,7 @@ ssize_t filedescriptor::printf(const char *format, va_list *argp) {
 	return size;
 }
 
-ssize_t filedescriptor::printf(const wchar_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	ssize_t	result=printf(format,&argp);
-	va_end(argp);
-	return result;
-}
-
-ssize_t filedescriptor::printf(const wchar_t *format, va_list *argp) {
+ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 
 	ssize_t	size=0;
 

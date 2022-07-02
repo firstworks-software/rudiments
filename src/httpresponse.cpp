@@ -178,27 +178,11 @@ ssize_t httpresponse::write(double character) {
 	return pvt->_sapi->write(character);
 }
 
-ssize_t httpresponse::printf(const char *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	ssize_t	result=pvt->_sapi->printf(format,&argp);
-	va_end(argp);
-	return result;
-}
-
-ssize_t httpresponse::printf(const char *format, va_list *argp) {
+ssize_t httpresponse::printfDelegate(const char *format, va_list *argp) {
 	return pvt->_sapi->printf(format,argp);
 }
 
-ssize_t httpresponse::printf(const wchar_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	ssize_t	result=pvt->_sapi->printf(format,&argp);
-	va_end(argp);
-	return result;
-}
-
-ssize_t httpresponse::printf(const wchar_t *format, va_list *argp) {
+ssize_t httpresponse::printfDelegate(const wchar_t *format, va_list *argp) {
 	return pvt->_sapi->printf(format,argp);
 }
 

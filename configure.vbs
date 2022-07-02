@@ -515,6 +515,8 @@ privateheaders6="dynamicarray.h "+_
 privateheaders7="staticarray.h "+_
 	"staticarrayinlines.h "+_
 	"outputincludes.h "+_
+	"output.h "+_
+	"outputinlines.h "+_
 	"inputincludes.h "+_
 	"wastebasketincludes.h "+_
 	"wastebasket.h "+_

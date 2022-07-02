@@ -34,9 +34,7 @@
 		ssize_t	write(float number);
 		ssize_t	write(double number);
 
-		ssize_t	printf(const char *format, ...);
-		ssize_t	printf(const char *format, va_list *argp);
-		ssize_t	printf(const wchar_t *format, ...);
-		ssize_t	printf(const wchar_t *format, va_list *argp);
+		ssize_t	printfDelegate(const char *format, va_list *argp);
+		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 	private:
 		apachehttpserverapiprivate	*pvt;

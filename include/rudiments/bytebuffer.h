@@ -180,52 +180,6 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Returns the number of bytes written. */
 		ssize_t	write(double number);
 
-		/** Writes "..." to the byte buffer using "format"
-		 *  which should comply with standard printf formatting
-		 *  rules.
-		 *
-		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred. */
-		ssize_t	printf(const char *format, ...);
-
-		/** Writes "argp" to the byte buffer using "format"
-		 *  which should comply with standard printf formatting
-		 *  rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list.
-		 *
-		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred. */
-		ssize_t	printf(const char *format, va_list *argp);
-
-		/** Writes "..." to the byte buffer using "format"
-		 *  which should comply with standard wprintf formatting
-		 *  rules.
-		 *
-		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred.
-		 *
-		 *  NOTE: This method is unsupported on platforms where
-		 *  wcharstring::supportsPrintf() returns false.  On those
-		 *  platforms this method returns -1 and sets ENOSYS. */
-		ssize_t	printf(const wchar_t *format, ...);
-
-		/** Writes "argp" to the byte buffer using "format"
-		 *  which should comply with standard wprintf formatting
-		 *  rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list.
-		 *
-		 *  Returns the number of bytes written.
-		 *
-		 *  NOTE: This method is unsupported on platforms where
-		 *  wcharstring::supportsPrintf() returns false.  On those
-		 *  platforms this method returns -1 and sets ENOSYS. */
-		ssize_t	printf(const wchar_t *format, va_list *argp);
-
-
 		/** Appends the first "size" bytes of "data" to the
 		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
