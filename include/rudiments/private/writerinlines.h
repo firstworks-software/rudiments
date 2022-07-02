@@ -99,12 +99,16 @@ ssize_t writer::write(output *out, const void *value) const {
 
 inline
 ssize_t writer::write(output *out, const object *value) const {
-	return out->printf("%08x",value);
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("%08x",(const void *)value);
 }
 
 inline
 ssize_t writer::write(output *out, const object &value) const {
-	return out->printf("%08x",&value);
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("%08x",(const void *)&value);
 }
 
 
