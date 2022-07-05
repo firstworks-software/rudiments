@@ -65,6 +65,9 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 						mode_t perms,
 						bool indent) const;
 
+		/** Writes the current DOM tree to stdout. */
+		virtual ssize_t	write() const;
+
 		/** Writes the current DOM tree to "out". */
 		virtual ssize_t	write(output *out) const;
 

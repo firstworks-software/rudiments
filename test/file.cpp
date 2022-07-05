@@ -160,6 +160,7 @@ int main(int argc, const char **argv) {
 		test("getMatchingFileNames",
 			file::getMatchingFileNames(&patterns,&matches));
 		matches.heapSort();
+matches.write();
 		listnode<char *>	*node=matches.getFirst();
 		test("getMatchingFileNames: match 1",
 			charstring::endsWith(node->getValue(),

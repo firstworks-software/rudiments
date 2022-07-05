@@ -19,6 +19,10 @@ class scalarcollection : public collection {
 		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue() const=0;
 
+		/** Writes a representation of the scalarcollection to
+		 *  stdout. */
+		virtual	ssize_t		write() const;
+
 		/** Writes a representation of the scalarcollection to "out". */
 		virtual	ssize_t		write(output *out) const;
 };

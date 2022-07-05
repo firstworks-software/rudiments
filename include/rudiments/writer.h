@@ -17,7 +17,13 @@ class writer {
 		virtual ssize_t	write(const char *value) const;
 
 		/** Writes "value" to standard output. */
+		virtual ssize_t	write(char *value) const;
+
+		/** Writes "value" to standard output. */
 		virtual ssize_t	write(const wchar_t *value) const;
+
+		/** Writes "value" to standard output. */
+		virtual ssize_t	write(wchar_t *value) const;
 
 		/** Writes "value" to standard output. */
 		virtual ssize_t	write(char value) const;
@@ -62,7 +68,13 @@ class writer {
 		virtual ssize_t	write(const void *value) const;
 
 		/** Writes "value" to standard output. */
+		virtual ssize_t	write(void *value) const;
+
+		/** Writes "value" to standard output. */
 		virtual ssize_t	write(const object *value) const;
+
+		/** Writes "value" to standard output. */
+		virtual ssize_t	write(object *value) const;
 
 		/** Writes "value" to standard output. */
 		virtual ssize_t	write(const object &value) const;
@@ -73,7 +85,13 @@ class writer {
 		virtual ssize_t	write(output *out, const char *value) const;
 
 		/** Writes "value" to "output". */
+		virtual ssize_t	write(output *out, char *value) const;
+
+		/** Writes "value" to "output". */
 		virtual ssize_t	write(output *out, const wchar_t *value) const;
+
+		/** Writes "value" to "output". */
+		virtual ssize_t	write(output *out, wchar_t *value) const;
 
 		/** Writes "value" to "output". */
 		virtual ssize_t	write(output *out, char value) const;
@@ -119,7 +137,13 @@ class writer {
 		virtual ssize_t	write(output *out, const void *value) const;
 
 		/** Writes "value" to "output". */
+		virtual ssize_t	write(output *out, void *value) const;
+
+		/** Writes "value" to "output". */
 		virtual ssize_t	write(output *out, const object *value) const;
+
+		/** Writes "value" to "output". */
+		virtual ssize_t	write(output *out, object *value) const;
 
 		/** Writes "value" to "output". */
 		virtual ssize_t	write(output *out, const object &value) const;

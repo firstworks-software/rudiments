@@ -181,6 +181,9 @@ class listcollection : public nodecollection<valuetype> {
 		 *  list. */
 		virtual void	heapSort()=0;
 
+		/** Writes a representation of the listcollection to stdout. */
+		virtual	ssize_t	write() const;
+
 		/** Writes a representation of the listcollection to "out". */
 		virtual	ssize_t	write(output *out) const;
 };

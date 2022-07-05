@@ -135,6 +135,10 @@ bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 	return retval;
 }
 
+ssize_t dom::write() const {
+	return write(&stdoutput);
+}
+
 ssize_t dom::write(output *out) const {
 	return (write(out,true))?1:RESULT_ERROR;
 }

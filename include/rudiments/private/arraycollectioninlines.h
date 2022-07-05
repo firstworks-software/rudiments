@@ -5,6 +5,12 @@
 
 template< class valuetype >
 inline
+ssize_t arraycollection<valuetype>::write() const {
+	return write(&stdoutput);
+}
+
+template< class valuetype >
+inline
 ssize_t arraycollection<valuetype>::write(output *out) const {
 	ssize_t	retval=0;
 	for (uint64_t i=0; i<getLength(); i++) {

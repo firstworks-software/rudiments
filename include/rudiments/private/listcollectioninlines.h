@@ -39,6 +39,12 @@ void listcollection<valuetype>::insertAfter(listnode<valuetype> *node,
 
 template <class valuetype>
 inline
+ssize_t listcollection<valuetype>::write() const {
+	return write(&stdoutput);
+}
+
+template <class valuetype>
+inline
 ssize_t listcollection<valuetype>::write(output *out) const {
 	ssize_t		retval=0;
 	uint64_t	i=0;

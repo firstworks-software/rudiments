@@ -194,6 +194,10 @@ class avltree : public treecollection<valuetype> {
 		void	clear();
 
 		/** Writes an xml-style representation of the avltree to
+		 *  stdout. */
+		ssize_t	write() const;
+
+		/** Writes an xml-style representation of the avltree to
 		 *  "out". */
 		ssize_t	write(output *out) const;
 

@@ -23,6 +23,9 @@ class arraycollection : public collection {
 		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength() const=0;
 
+		/** Writes a representation of the arraycollection to stdout. */
+		virtual	ssize_t		write() const;
+
 		/** Writes a representation of the arraycollection to "out". */
 		virtual	ssize_t		write(output *out) const;
 };

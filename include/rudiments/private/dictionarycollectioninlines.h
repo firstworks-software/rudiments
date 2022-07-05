@@ -5,6 +5,12 @@
 
 template< class keytype, class valuetype >
 inline
+ssize_t dictionarycollection<keytype,valuetype>::write() const {
+	return write(&stdoutput);
+}
+
+template< class keytype, class valuetype >
+inline
 ssize_t dictionarycollection<keytype,valuetype>::write(output *out) const {
 	ssize_t	retval=0;
 	for (listnode<keytype> *node=getKeys()->getFirst();

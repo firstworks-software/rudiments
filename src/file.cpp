@@ -2073,9 +2073,25 @@ bool file::getMatchingFileNames(const char *pattern,
 		// and don't sort the returned pathnames
 		glob_t	g;
 		bytestring::zero(&g,sizeof(g));
-		if (glob(pattern,GLOB_MARK|GLOB_NOSORT,NULL,&g)) {
+		int	result=glob(pattern,GLOB_MARK|GLOB_NOSORT,NULL,&g);
+		if (result==GLOB_NOSPACE ||
+				result==GLOB_ABEND
+				#ifdef GLOB_ABORTED
+				|| result==GLOB_ABORTED
+				#endif
+				) {
 			globfree(&g);
 			return false;
+		} else if (result==GLOB_NOMATCH) {
+			// actually not an error, per-se
+			globfree(&g);
+			return true;
+		#ifdef GLOB_NOSYS
+		} else if (result==GLOB_NOSYS) {
+			RUDIMENTS_SET_ENOSYS
+			globfree(&g);
+			return false;
+		#endif
 		}
 
 		// populate "matches"

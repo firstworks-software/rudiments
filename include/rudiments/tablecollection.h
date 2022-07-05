@@ -115,6 +115,9 @@ class tablecollection : public collection {
 		 *  block contains the last row in the table. */
 		virtual	bool		getAllRowsAvailable() const=0;
 
+		/** Writes a representation of the tablecollection to stdout. */
+		virtual	ssize_t		write() const;
+
 		/** Writes a representation of the tablecollection to "out". */
 		virtual	ssize_t		write(output *out) const;
 

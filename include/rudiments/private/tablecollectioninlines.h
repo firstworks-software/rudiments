@@ -45,6 +45,12 @@ bool tablecollection<valuetype>::getCopyColumnNames() const {
 
 template <class valuetype>
 inline
+ssize_t tablecollection<valuetype>::write() const {
+	return write(&stdoutput);
+}
+
+template <class valuetype>
+inline
 ssize_t tablecollection<valuetype>::write(output *out) const {
 	ssize_t	retval=0;
 	for (uint64_t i=0; i<getRowCount(); i++) {

@@ -181,7 +181,7 @@ class collection : virtual public object {
 
 		/** Writes a representation of the collection to standard
 		 *  output. */
-		virtual	ssize_t	write() const;
+		virtual	ssize_t	write() const=0;
 
 		/** Writes a representation of the collection to "out". */
 		virtual	ssize_t	write(output *out) const=0;

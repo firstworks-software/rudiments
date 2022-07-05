@@ -138,17 +138,22 @@ bool collection::getManageArrayKeys() const {
 }
 
 inline
-ssize_t collection::write() const {
-	return write(&stdoutput);
-}
-
-inline
 ssize_t collection::writeDelegate(output *out, const char *value) const {
 	return getWriter()->write(out,value);
 }
 
 inline
+ssize_t collection::writeDelegate(output *out, char *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
 ssize_t collection::writeDelegate(output *out, const wchar_t *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, wchar_t *value) const {
 	return getWriter()->write(out,value);
 }
 
@@ -178,7 +183,14 @@ ssize_t collection::writeDelegate(output *out, int64_t value) const {
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, const unsigned char *value) const {
+ssize_t collection::writeDelegate(output *out,
+					const unsigned char *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out,
+					unsigned char *value) const {
 	return getWriter()->write(out,value);
 }
 
@@ -223,7 +235,17 @@ ssize_t collection::writeDelegate(output *out, const void *value) const {
 }
 
 inline
+ssize_t collection::writeDelegate(output *out, void *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
 ssize_t collection::writeDelegate(output *out, const object *value) const {
+	return getWriter()->write(out,value);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, object *value) const {
 	return getWriter()->write(out,value);
 }
 

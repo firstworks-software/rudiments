@@ -15,7 +15,17 @@ ssize_t writer::write(output *out, const char *value) const {
 }
 
 inline
+ssize_t writer::write(output *out, char *value) const {
+	return out->printf("%s",value);
+}
+
+inline
 ssize_t writer::write(output *out, const wchar_t *value) const {
+	return out->printf(L"%s",value);
+}
+
+inline
+ssize_t writer::write(output *out, wchar_t *value) const {
 	return out->printf(L"%s",value);
 }
 
@@ -98,7 +108,19 @@ ssize_t writer::write(output *out, const void *value) const {
 }
 
 inline
+ssize_t writer::write(output *out, void *value) const {
+	return out->printf("%08x",value);
+}
+
+inline
 ssize_t writer::write(output *out, const object *value) const {
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("%08x",(const void *)value);
+}
+
+inline
+ssize_t writer::write(output *out, object *value) const {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("%08x",(const void *)value);
@@ -119,7 +141,17 @@ ssize_t writer::write(const char *value) const {
 }
 
 inline
+ssize_t writer::write(char *value) const {
+	return write(&stdoutput,value);
+}
+
+inline
 ssize_t writer::write(const wchar_t *value) const {
+	return write(&stdoutput,value);
+}
+
+inline
+ssize_t writer::write(wchar_t *value) const {
 	return write(&stdoutput,value);
 }
 
@@ -194,7 +226,17 @@ ssize_t writer::write(const void *value) const {
 }
 
 inline
+ssize_t writer::write(void *value) const {
+	return write(&stdoutput,value);
+}
+
+inline
 ssize_t writer::write(const object *value) const {
+	return write(&stdoutput,value);
+}
+
+inline
+ssize_t writer::write(object *value) const {
 	return write(&stdoutput,value);
 }
 

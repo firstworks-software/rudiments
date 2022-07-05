@@ -429,6 +429,12 @@ void avltree<valuetype>::clear() {
 
 template <class valuetype>
 inline
+ssize_t avltree<valuetype>::write() const {
+	return write(&stdoutput);
+}
+
+template <class valuetype>
+inline
 ssize_t avltree<valuetype>::write(output *out) const {
 	uint16_t	indentlevel=0;
 	return ((avltreenode<valuetype> *)top)->

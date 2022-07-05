@@ -4,7 +4,11 @@
 		ssize_t	writeDelegate(output *out,
 					const char *value) const;
 		ssize_t	writeDelegate(output *out,
+					char *value) const;
+		ssize_t	writeDelegate(output *out,
 					const wchar_t *value) const;
+		ssize_t	writeDelegate(output *out,
+					wchar_t *value) const;
 		ssize_t	writeDelegate(output *out,
 					char value) const;
 		ssize_t	writeDelegate(output *out,
@@ -17,6 +21,8 @@
 					int64_t value) const;
 		ssize_t	writeDelegate(output *out,
 					const unsigned char *value) const;
+		ssize_t	writeDelegate(output *out,
+					unsigned char *value) const;
 		ssize_t	writeDelegate(output *out,
 					unsigned char value) const;
 		ssize_t	writeDelegate(output *out,
@@ -34,7 +40,11 @@
 		ssize_t	writeDelegate(output *out,
 					const void *value) const;
 		ssize_t	writeDelegate(output *out,
+					void *value) const;
+		ssize_t	writeDelegate(output *out,
 					const object *value) const;
+		ssize_t	writeDelegate(output *out,
+					object *value) const;
 		template <class valuetype>
 		ssize_t	writeDelegate(output *out,
 					const valuetype &value) const;

@@ -96,6 +96,10 @@ class dictionarycollection : public collection {
 		virtual	bool		remove(keytype key)=0;
 
 		/** Writes a representation of the dictionarycollection to
+		 *  stdout. */
+		virtual	ssize_t	write() const;
+
+		/** Writes a representation of the dictionarycollection to
 		 *  "out". */
 		virtual	ssize_t	write(output *out) const;
 };
