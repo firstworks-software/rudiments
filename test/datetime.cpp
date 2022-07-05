@@ -447,12 +447,12 @@ int main(int argc, const char **argv) {
 	char	*os=sys::getOperatingSystemName();
 	char	*rel=sys::getOperatingSystemRelease();
 	double	ver=charstring::toFloat(rel);
-	// FIXME: not supported on linux libc, however it's possible that
-	// there's a distro with a pre 2.0 kernel that doesn't use libc
-	// Also doesn't appear to work on Mac OS X <= 10.1
+	// not supported on linux libc or Mac OS X <= 10.1
 	bool	notsupported=
-			((!charstring::compare(os,"Linux",5) && ver<2.0) ||
-			(!charstring::compare(os,"Darwin",6) && ver<6.0));
+			#if !defined(__GLIBC__)
+			!charstring::compare(os,"Linux",5) ||
+			#endif
+			(!charstring::compare(os,"Darwin",6) && ver<6.0);
 	delete[] os;
 	delete[] rel;
 			
