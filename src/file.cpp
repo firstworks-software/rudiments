@@ -2084,10 +2084,12 @@ bool file::getMatchingFileNames(const char *pattern,
 				) {
 			globfree(&g);
 			return false;
+		#ifdef GLOB_NOMATCH
 		} else if (result==GLOB_NOMATCH) {
 			// actually not an error, per-se
 			globfree(&g);
 			return true;
+		#endif
 		#ifdef GLOB_NOSYS
 		} else if (result==GLOB_NOSYS) {
 			RUDIMENTS_SET_ENOSYS
