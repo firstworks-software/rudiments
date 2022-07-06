@@ -429,16 +429,48 @@ void avltree<valuetype>::clear() {
 
 template <class valuetype>
 inline
-ssize_t avltree<valuetype>::write() const {
-	return write(&stdoutput);
-}
+ssize_t avltree<valuetype>::write(output *out,
+					const treenode<valuetype> *node,
+					const char *name,
+					uint16_t *indentlevel) const {
 
-template <class valuetype>
-inline
-ssize_t avltree<valuetype>::write(output *out) const {
-	uint16_t	indentlevel=0;
-	return ((avltreenode<valuetype> *)top)->
-			write(out,this,"top",&indentlevel);
+	avltreenode<valuetype>	*n=(avltreenode<valuetype> *)node;
+	avltreenode<valuetype>	*left=
+			(avltreenode<valuetype> *)n->getLeftChild();
+	avltreenode<valuetype>	*right=
+			(avltreenode<valuetype> *)n->getRightChild();
+	uint8_t		leftheight=n->getLeftHeight();
+	uint8_t		rightheight=n->getRightHeight();
+
+	ssize_t	retval=0;
+
+	// print an xml-style representation of the node and its descendents
+	for (uint16_t i=0; i<*indentlevel; i++) {
+		retval+=out->write(' ');
+	}
+	retval+=out->printf("<%s value=\"",name);
+	retval+=this->writeDelegate(out,n->getValue());
+	retval+=out->printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
+						leftheight,rightheight,
+						leftheight-rightheight);
+	if (!left && !right) {
+		retval+=out->write("/>\n");
+	} else {
+		retval+=out->write(">\n");
+		(*indentlevel)++;
+		if (left) {
+			retval+=write(out,left,"left ",indentlevel);
+		}
+		if (right) {
+			retval+=write(out,right,"right",indentlevel);
+		}
+		(*indentlevel)--;
+		for (uint16_t i=0; i<*indentlevel; i++) {
+			retval+=out->write(' ');
+		}
+		retval+=out->printf("</%s>\n",name);
+	}
+	return retval;
 }
 
 template <class valuetype>
@@ -606,44 +638,6 @@ treenode<valuetype> *avltreenode<valuetype>::getNext() const {
 		}
 	}
 	return NULL;
-}
-
-template <class valuetype>
-inline
-ssize_t avltreenode<valuetype>::write(output *out,
-					const treecollection<valuetype> *tree,
-					const char *name,
-					uint16_t *indentlevel) const {
-	ssize_t	retval=0;
-
-	// print an xml-style representation of the node and its descendents
-	for (uint16_t i=0; i<*indentlevel; i++) {
-		retval+=out->write(' ');
-	}
-	retval+=out->printf("<%s value=\"",name);
-	retval+=tree->writeDelegate(out,value);
-	retval+=out->printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
-			leftheight,rightheight,leftheight-rightheight);
-	if (!left && !right) {
-		retval+=out->write("/>\n");
-	} else {
-		retval+=out->write(">\n");
-		(*indentlevel)++;
-		if (left) {
-			retval+=((avltreenode<valuetype> *)left)->
-					write(out,tree,"left ",indentlevel);
-		}
-		if (right) {
-			retval+=((avltreenode<valuetype> *)right)->
-					write(out,tree,"right",indentlevel);
-		}
-		(*indentlevel)--;
-		for (uint16_t i=0; i<*indentlevel; i++) {
-			retval+=out->write(' ');
-		}
-		retval+=out->printf("</%s>\n",name);
-	}
-	return retval;
 }
 
 template <class valuetype>

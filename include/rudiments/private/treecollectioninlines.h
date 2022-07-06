@@ -11,4 +11,17 @@ void treecollection<valuetype>::insert(valuetype *values, uint64_t count) {
 	}
 }
 
+template <class valuetype>
+inline
+ssize_t treecollection<valuetype>::write() const {
+	return write(&stdoutput);
+}
+
+template <class valuetype>
+inline
+ssize_t treecollection<valuetype>::write(output *out) const {
+	uint16_t	indentlevel=0;
+	return write(out,getTop(),"top",&indentlevel);
+}
+
 #endif

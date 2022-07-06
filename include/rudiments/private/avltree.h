@@ -9,6 +9,11 @@
 		void	clone(const nodecollection<valuetype> *coll);
 		treenode<valuetype>	*cloneNode(treenode<valuetype> *node);
 
+		ssize_t	write(output *out,
+				const treenode<valuetype> *node,
+				const char *name,
+				uint16_t *indentlevel) const;
+
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;
 		treenode<valuetype>	*last;

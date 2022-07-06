@@ -150,6 +150,14 @@ class treecollection : public nodecollection<valuetype> {
 		virtual treenode<valuetype>
 			*find(treenode<valuetype> *startnode,
 						valuetype value) const=0;
+
+		/** Writes a representation of the treecollection to stdout. */
+		virtual	ssize_t	write() const;
+
+		/** Writes a representation of the treecollection to "out". */
+		virtual	ssize_t	write(output *out) const;
+
+	#include <rudiments/private/treecollection.h>
 };
 
 #include <rudiments/private/treecollectioninlines.h>

@@ -338,6 +338,7 @@ privateheaders0="config.h "+_
 	"listnode.h "+_
 	"listcollectioninlines.h "+_
 	"treenode.h "+_
+	"treecollection.h "+_
 	"treecollectioninlines.h "+_
 	"arraycollectioninlines.h "+_
 	"dictionarycollectioninlines.h "+_

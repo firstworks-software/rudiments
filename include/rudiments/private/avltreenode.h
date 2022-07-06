@@ -24,11 +24,6 @@
 		void	setLeftHeight(uint8_t height);
 		void	setRightHeight(uint8_t height);
 
-		ssize_t	write(output *out,
-				const treecollection<valuetype> *tree,
-				const char *name,
-				uint16_t *indentlevel) const;
-
 	protected:
 		valuetype		value;
 		treenode<valuetype>	*parent;
