@@ -148,19 +148,28 @@ ssize_t dom::write(output *out, bool indent) const {
 }
 
 ssize_t dom::writeJson() const {
-	return writeJson(&stdoutput);
+	return writeJson(&stdoutput,true);
+}
+
+ssize_t dom::writeJson(bool indent) const {
+	return writeJson(&stdoutput,indent);
 }
 
 ssize_t dom::writeJson(output *out) const {
-	return (writeJson(out,true))?1:RESULT_ERROR;
+	return writeJson(out,true);
 }
 
 ssize_t dom::writeJson(output *out, bool indent) const {
+	// FIXME: implement this
 	return RESULT_ERROR;
 }
 
 ssize_t dom::writeXml() const {
 	return writeXml(&stdoutput,true);
+}
+
+ssize_t dom::writeXml(bool indent) const {
+	return writeXml(&stdoutput,indent);
 }
 
 ssize_t dom::writeXml(output *out) const {

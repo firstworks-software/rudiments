@@ -240,6 +240,26 @@ ssize_t collection::writeDelegate(output *out, void *value) const {
 }
 
 inline
+ssize_t collection::writeDelegate(output *out, const collection *value) const {
+	return value->write(out);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, collection *value) const {
+	return value->write(out);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, const collection &value) const {
+	return value.write(out);
+}
+
+inline
+ssize_t collection::writeDelegate(output *out, collection &value) const {
+	return value.write(out);
+}
+
+inline
 ssize_t collection::writeDelegate(output *out, const object *value) const {
 	return getWriter()->write(out,value);
 }
@@ -253,4 +273,26 @@ template <class valuetype>
 inline
 ssize_t collection::writeDelegate(output *out, const valuetype &value) const {
 	return getWriter()->write(out,(const void *)&value);
+}
+
+inline
+bool collection::incOrErr(ssize_t *retval, ssize_t val) const {
+
+	// add val to *retval unless:
+	// * retval is already negative, indicating that an error condition
+	//   occurred previously, in this case leave retval set to the error
+	//   condition
+	// * val is negative, indicating an error condition just occurred, in
+	//   this case set retval to the error condition
+	// return true on success or false if an error condition occurred
+
+	if (*retval>-1) {
+		if (val>-1) {
+			(*retval)+=val;
+			return true;
+		} else {
+			(*retval)=val;
+		}
+	}
+	return false;
 }

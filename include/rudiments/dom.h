@@ -65,7 +65,8 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 						mode_t perms,
 						bool indent) const;
 
-		/** Writes a representation of the DOM tree to stdout. */
+		/** Writes a representation of the DOM tree to standard
+		 *  output. */
 		virtual ssize_t	write() const;
 
 		/** Writes a representation of the DOM tree to "out". */
@@ -78,8 +79,17 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  as-is. */
 		virtual ssize_t	write(output *out, bool indent) const;
 
-		/** Writes a JSON representation of the DOM tree to stdout. */
+		/** Writes a JSON representation of the DOM tree to
+		 *  standard output. */
 		virtual ssize_t	writeJson() const;
+
+		/** Writes a JSON representation of the DOM tree to standard
+		 *  output.
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
+		virtual ssize_t	writeJson(bool indent) const;
 
 		/** Writes a JSON representation of the DOM tree to "out". */
 		virtual ssize_t	writeJson(output *out) const;
@@ -87,12 +97,21 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		/** Writes a JSON representation of the DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is output
-		 *  as-is. */
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
 		virtual ssize_t	writeJson(output *out, bool indent) const;
 
-		/** Writes an XML representation of the DOM tree to stdout. */
+		/** Writes an XML representation of the DOM tree to
+		 *  standard output. */
 		virtual ssize_t	writeXml() const;
+
+		/** Writes an XML representation of the DOM tree to standard
+		 *  output.
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
+		virtual ssize_t	writeXml(bool indent) const;
 
 		/** Writes an XML representation of the DOM tree to "out". */
 		virtual ssize_t	writeXml(output *out) const;
@@ -100,8 +119,8 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		/** Writes an XML representation of the DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is output
-		 *  as-is. */
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
 		virtual ssize_t	writeXml(output *out, bool indent) const;
 
 		/** Returns true if the string cache is enabled and false

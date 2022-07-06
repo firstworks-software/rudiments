@@ -445,30 +445,32 @@ ssize_t avltree<valuetype>::writeNode(output *out,
 	ssize_t	retval=0;
 
 	// print an xml-style representation of the node and its descendents
-	for (uint16_t i=0; i<*indentlevel; i++) {
-		retval+=out->write(' ');
+	for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
+		this->incOrErr(&retval,out->write(' '));
 	}
-	retval+=out->printf("<%s value=\"",name);
-	retval+=this->writeDelegate(out,n->getValue());
-	retval+=out->printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
+	this->incOrErr(&retval,out->printf("<%s value=\"",name)) &&
+	this->incOrErr(&retval,this->writeDelegate(out,n->getValue())) &&
+	this->incOrErr(&retval,out->printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
 						leftheight,rightheight,
-						leftheight-rightheight);
+						leftheight-rightheight));
 	if (!left && !right) {
-		retval+=out->write("/>\n");
+		this->incOrErr(&retval,out->write("/>\n"));
 	} else {
-		retval+=out->write(">\n");
+		this->incOrErr(&retval,out->write(">\n"));
 		(*indentlevel)++;
-		if (left) {
-			retval+=writeNode(out,left,"left ",indentlevel);
+		if (retval>-1 && left) {
+			this->incOrErr(&retval,
+				writeNode(out,left,"left ",indentlevel));
 		}
-		if (right) {
-			retval+=writeNode(out,right,"right",indentlevel);
+		if (retval>-1 && right) {
+			this->incOrErr(&retval,
+				writeNode(out,right,"right",indentlevel));
 		}
 		(*indentlevel)--;
-		for (uint16_t i=0; i<*indentlevel; i++) {
-			retval+=out->write(' ');
+		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
+			this->incOrErr(&retval,out->write(' '));
 		}
-		retval+=out->printf("</%s>\n",name);
+		this->incOrErr(&retval,out->printf("</%s>\n",name));
 	}
 	return retval;
 }

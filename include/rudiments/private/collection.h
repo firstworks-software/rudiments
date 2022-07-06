@@ -45,11 +45,21 @@
 					const object *value) const;
 		ssize_t	writeDelegate(output *out,
 					object *value) const;
+		ssize_t	writeDelegate(output *out,
+					const collection *value) const;
+		ssize_t	writeDelegate(output *out,
+					collection *value) const;
+		ssize_t	writeDelegate(output *out,
+					const collection &value) const;
+		ssize_t	writeDelegate(output *out,
+					collection &value) const;
 		template <class valuetype>
 		ssize_t	writeDelegate(output *out,
 					const valuetype &value) const;
 
 	protected:
+		bool	incOrErr(ssize_t *retval, ssize_t val) const;
+
 		bool	managevalues;
 		bool	managearrayvalues;
 		bool	managekeys;

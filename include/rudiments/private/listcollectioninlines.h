@@ -47,15 +47,18 @@ ssize_t listcollection<valuetype>::write(output *out) const {
 	ssize_t		retval=0;
 	uint64_t	i=0;
 	for (listnode<valuetype> *current=getFirst();
-				current; current=current->getNext()) {
+		current &&
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
-			retval+=out->printf("index %lld: ",(long long)i);
+			this->incOrErr(&retval,
+				out->printf("index %lld: ",(long long)i)) &&
 		#else
-			retval+=out->printf("index %ld: ",(long)i);
+			this->incOrErr(&retval,
+				out->printf("index %ld: ",(long)i)) &&
 		#endif
-		retval+=this->writeDelegate(out,current->getValue());
-		retval+=out->write('\n');
-		i++;
+		this->incOrErr(&retval,
+			this->writeDelegate(out,current->getValue())) &&
+		this->incOrErr(&retval,out->write('\n'));
+		current=current->getNext(), i++) {
 	}
 	return retval;
 }
@@ -63,12 +66,24 @@ ssize_t listcollection<valuetype>::write(output *out) const {
 template< class valuetype >
 inline
 ssize_t listcollection<valuetype>::writeJson() const {
-	return writeJson(&stdoutput);
+	return writeJson(&stdoutput,true);
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeJson(bool indent) const {
+	return writeJson(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
 ssize_t listcollection<valuetype>::writeJson(output *out) const {
+	return writeJson(out,true);
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) const {
 	// FIXME: implement this
 	return RESULT_ERROR;
 }
@@ -76,12 +91,24 @@ ssize_t listcollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t listcollection<valuetype>::writeXml() const {
-	return writeXml(&stdoutput);
+	return writeXml(&stdoutput,true);
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeXml(bool indent) const {
+	return writeXml(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
 ssize_t listcollection<valuetype>::writeXml(output *out) const {
+	return writeXml(out,true);
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeXml(output *out, bool indent) const {
 	// FIXME: implement this
 	return RESULT_ERROR;
 }

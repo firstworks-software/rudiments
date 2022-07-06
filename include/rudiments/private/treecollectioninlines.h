@@ -25,12 +25,24 @@ ssize_t treecollection<valuetype>::write(output *out) const {
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeJson() const {
-	return writeJson(&stdoutput);
+	return writeJson(&stdoutput,true);
+}
+
+template< class valuetype >
+inline
+ssize_t treecollection<valuetype>::writeJson(bool indent) const {
+	return writeJson(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeJson(output *out) const {
+	return writeJson(out,true);
+}
+
+template< class valuetype >
+inline
+ssize_t treecollection<valuetype>::writeJson(output *out, bool indent) const {
 	// FIXME: implement this
 	return RESULT_ERROR;
 }
@@ -38,12 +50,24 @@ ssize_t treecollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeXml() const {
-	return writeXml(&stdoutput);
+	return writeXml(&stdoutput,true);
+}
+
+template< class valuetype >
+inline
+ssize_t treecollection<valuetype>::writeXml(bool indent) const {
+	return writeXml(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeXml(output *out) const {
+	return writeXml(out,true);
+}
+
+template< class valuetype >
+inline
+ssize_t treecollection<valuetype>::writeXml(output *out, bool indent) const {
 	// FIXME: implement this
 	return RESULT_ERROR;
 }

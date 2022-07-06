@@ -53,12 +53,13 @@ template <class valuetype>
 inline
 ssize_t tablecollection<valuetype>::write(output *out) const {
 	ssize_t	retval=0;
-	for (uint64_t i=0; i<getRowCount(); i++) {
-		retval+=out->printf("row %lld:\n",i);
-		for (uint64_t j=0; j<getColumnCount(); j++) {
-			retval+=out->printf("  col %lld: ",j);
-			retval+=this->writeDelegate(out,getValue(i,j));
-			retval+=out->write('\n');
+	for (uint64_t i=0; i<getRowCount() && retval>-1; i++) {
+		incOrErr(&retval,out->printf("row %lld:\n",i));
+		for (uint64_t j=0; j<getColumnCount() && retval>=1; j++) {
+			incOrErr(&retval,out->printf("  col %lld: ",j)) &&
+			incOrErr(&retval,
+				this->writeDelegate(out,getValue(i,j))) &&
+			incOrErr(&retval,out->write('\n'));
 		}
 	}
 	return retval;
@@ -67,12 +68,24 @@ ssize_t tablecollection<valuetype>::write(output *out) const {
 template< class valuetype >
 inline
 ssize_t tablecollection<valuetype>::writeJson() const {
-	return writeJson(&stdoutput);
+	return writeJson(&stdoutput,true);
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeJson(bool indent) const {
+	return writeJson(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
 ssize_t tablecollection<valuetype>::writeJson(output *out) const {
+	return writeJson(out,true);
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
 	// FIXME: implement this
 	return RESULT_ERROR;
 }
@@ -80,12 +93,24 @@ ssize_t tablecollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t tablecollection<valuetype>::writeXml() const {
-	return writeXml(&stdoutput);
+	return writeXml(&stdoutput,true);
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeXml(bool indent) const {
+	return writeXml(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
 ssize_t tablecollection<valuetype>::writeXml(output *out) const {
+	return writeXml(out,true);
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeXml(output *out, bool indent) const {
 	// FIXME: implement this
 	return RESULT_ERROR;
 }

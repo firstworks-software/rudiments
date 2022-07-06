@@ -36,6 +36,8 @@ int main(int argc, const char **argv) {
 	for (uint32_t i=0; i<10; i++) {
 		sc.setValue(numbers[i]);
 		sc.write();
+		sc.writeJson();
+		sc.writeXml();
 	}
 	stdoutput.printf("\n");
 
@@ -47,6 +49,8 @@ int main(int argc, const char **argv) {
 		lli32.append(i);
 	}
 	lli32.write();
+	lli32.writeJson();
+	lli32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("linkedlist (const char *):\n");
@@ -55,6 +59,8 @@ int main(int argc, const char **argv) {
 		llc.append(numbers[i]);
 	}
 	llc.write();
+	llc.writeJson();
+	llc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -65,6 +71,8 @@ int main(int argc, const char **argv) {
 		slli32.append(i);
 	}
 	slli32.write();
+	slli32.writeJson();
+	slli32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("singlylinkedlist (const char *):\n");
@@ -73,6 +81,8 @@ int main(int argc, const char **argv) {
 		sllc.append(numbers[i]);
 	}
 	sllc.write();
+	sllc.writeJson();
+	sllc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -83,6 +93,8 @@ int main(int argc, const char **argv) {
 		ati32.insert(i);
 	}
 	ati32.write();
+	ati32.writeJson();
+	ati32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("avltree (const char *):\n");
@@ -91,6 +103,8 @@ int main(int argc, const char **argv) {
 		atc.insert(numbers[i]);
 	}
 	atc.write();
+	atc.writeJson();
+	atc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -101,6 +115,8 @@ int main(int argc, const char **argv) {
 		d.setValue(i,numbers[i]);
 	}
 	d.write();
+	d.writeJson();
+	d.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -114,6 +130,8 @@ int main(int argc, const char **argv) {
 		}
 	}
 	ti32.write();
+	ti32.writeJson();
+	ti32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("table (const char *):\n");
@@ -125,6 +143,8 @@ int main(int argc, const char **argv) {
 		}
 	}
 	tc.write();
+	tc.writeJson();
+	tc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -135,6 +155,8 @@ int main(int argc, const char **argv) {
 		dai32[i]=i;
 	}
 	dai32.write();
+	dai32.writeJson();
+	dai32.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -145,6 +167,8 @@ int main(int argc, const char **argv) {
 		dac[i]=numbers[i];
 	}
 	dac.write();
+	dac.writeJson();
+	dac.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -155,6 +179,8 @@ int main(int argc, const char **argv) {
 		dt[i].blah=NULL;
 	}
 	dt.write();
+	dt.writeJson();
+	dt.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -165,6 +191,8 @@ int main(int argc, const char **argv) {
 		sai32[i]=i;
 	}
 	sai32.write();
+	sai32.writeJson();
+	sai32.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -175,6 +203,8 @@ int main(int argc, const char **argv) {
 		sac[i]=numbers[i];
 	}
 	sac.write();
+	sac.writeJson();
+	sac.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -182,5 +212,17 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("staticarray (struct test):\n");
 	staticarray<struct test, 10>	st;
 	st.write();
+	st.writeJson();
+	st.writeXml();
+	stdoutput.printf("\n");
+
+	stdoutput.printf("nested staticarray (int32_t):\n");
+	staticarray<staticarray<int32_t,10>,10>	nsai32;
+	for (int32_t i=0; i<10; i++) {
+		for (int32_t j=0; j<10; j++) {
+			nsai32[i][j]=j;
+		}
+	}
+	nsai32.write();
 	stdoutput.printf("\n");
 }

@@ -23,27 +23,60 @@ class arraycollection : public collection {
 		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength() const=0;
 
-		/** Writes a representation of the arraycollection to stdout. */
+		/** Writes a representation of the arraycollection to standard
+		 *  output. */
 		virtual	ssize_t		write() const;
 
 		/** Writes a representation of the arraycollection to "out". */
 		virtual	ssize_t		write(output *out) const;
 
 		/** Writes a JSON representation of the arraycollection to
-		 *  stdout. */
+		 *  standard output. */
 		virtual	ssize_t		writeJson() const;
+
+		/** Writes a JSON representation of the arraycollection to
+		 *  standard output.
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
+		virtual	ssize_t		writeJson(bool indent) const;
 
 		/** Writes a JSON representation of the arraycollection to
 		 *  "out". */
 		virtual	ssize_t		writeJson(output *out) const;
 
+		/** Writes a JSON representation of the arraycollection to
+		 *  "out".
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
+		virtual	ssize_t	writeJson(output *out, bool indent) const;
+
 		/** Writes an XML representation of the arraycollection to
-		 *  stdout. */
+		 *  standard output. */
 		virtual	ssize_t		writeXml() const;
+
+		/** Writes an XML representation of the arraycollection to
+		 *  standard output.
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
+		virtual	ssize_t	writeXml(bool indent) const;
 
 		/** Writes an XML representation of the arraycollection to
 		 *  "out". */
 		virtual	ssize_t		writeXml(output *out) const;
+
+		/** Writes an XML representation of the arraycollection to
+		 *  "out".
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is written
+		 *  without indentation. */
+		virtual	ssize_t	writeXml(output *out, bool indent) const;
 };
 
 #include <rudiments/private/arraycollectioninlines.h>
