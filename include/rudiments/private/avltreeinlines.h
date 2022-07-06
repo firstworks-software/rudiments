@@ -429,7 +429,7 @@ void avltree<valuetype>::clear() {
 
 template <class valuetype>
 inline
-ssize_t avltree<valuetype>::write(output *out,
+ssize_t avltree<valuetype>::writeNode(output *out,
 					const treenode<valuetype> *node,
 					const char *name,
 					uint16_t *indentlevel) const {
@@ -459,10 +459,10 @@ ssize_t avltree<valuetype>::write(output *out,
 		retval+=out->write(">\n");
 		(*indentlevel)++;
 		if (left) {
-			retval+=write(out,left,"left ",indentlevel);
+			retval+=writeNode(out,left,"left ",indentlevel);
 		}
 		if (right) {
-			retval+=write(out,right,"right",indentlevel);
+			retval+=writeNode(out,right,"right",indentlevel);
 		}
 		(*indentlevel)--;
 		for (uint16_t i=0; i<*indentlevel; i++) {

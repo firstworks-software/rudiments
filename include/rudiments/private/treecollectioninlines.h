@@ -21,7 +21,7 @@ template <class valuetype>
 inline
 ssize_t treecollection<valuetype>::write(output *out) const {
 	uint16_t	indentlevel=0;
-	return write(out,getTop(),"top",&indentlevel);
+	return writeNode(out,getTop(),"top",&indentlevel);
 }
 
 #endif
