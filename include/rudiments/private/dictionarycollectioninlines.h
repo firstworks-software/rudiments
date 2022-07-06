@@ -22,3 +22,29 @@ ssize_t dictionarycollection<keytype,valuetype>::write(output *out) const {
 	}
 	return retval;
 }
+
+template< class keytype, class valuetype >
+inline
+ssize_t dictionarycollection<keytype,valuetype>::writeJson() const {
+	return writeJson(&stdoutput);
+}
+
+template< class keytype, class valuetype >
+inline
+ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}
+
+template< class keytype, class valuetype >
+inline
+ssize_t dictionarycollection<keytype,valuetype>::writeXml() const {
+	return writeXml(&stdoutput);
+}
+
+template< class keytype, class valuetype >
+inline
+ssize_t dictionarycollection<keytype,valuetype>::writeXml(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}

@@ -50,13 +50,13 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  tree from scratch. */
 		virtual void	createRootNode();
 
-		/** Writes the current DOM tree to "filename" and sets
-		 *  permissions of the file to "perms". */
+		/** Writes the DOM tree to "filename" and sets permissions of
+		 *  the file to "perms". */
 		virtual bool	writeFile(const char *filename,
 						mode_t perms) const;
 
-		/** Writes the current DOM tree to "filename" and sets
-		 *  permissions of the file to "perms".
+		/** Writes the DOM tree to "filename" and sets permissions of
+		 *  the file to "perms".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
@@ -65,28 +65,44 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 						mode_t perms,
 						bool indent) const;
 
-		/** Writes the current DOM tree to stdout. */
+		/** Writes a representation of the DOM tree to stdout. */
 		virtual ssize_t	write() const;
 
-		/** Writes the current DOM tree to "out". */
+		/** Writes a representation of the DOM tree to "out". */
 		virtual ssize_t	write(output *out) const;
 
-		/** Writes the current DOM tree to "out".
+		/** Writes a representation of the DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
 		virtual ssize_t	write(output *out, bool indent) const;
 
-		/** Writes the current DOM tree to "out", in XML format. */
-		virtual bool	writeXml(output *out) const;
+		/** Writes a JSON representation of the DOM tree to stdout. */
+		virtual ssize_t	writeJson() const;
 
-		/** Writes the current DOM tree to "out", in XML format.
+		/** Writes a JSON representation of the DOM tree to "out". */
+		virtual ssize_t	writeJson(output *out) const;
+
+		/** Writes a JSON representation of the DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
-		virtual bool	writeXml(output *out, bool indent) const;
+		virtual ssize_t	writeJson(output *out, bool indent) const;
+
+		/** Writes an XML representation of the DOM tree to stdout. */
+		virtual ssize_t	writeXml() const;
+
+		/** Writes an XML representation of the DOM tree to "out". */
+		virtual ssize_t	writeXml(output *out) const;
+
+		/** Writes an XML representation of the DOM tree to "out".
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is output
+		 *  as-is. */
+		virtual ssize_t	writeXml(output *out, bool indent) const;
 
 		/** Returns true if the string cache is enabled and false
 		 *  if it is disabled. */

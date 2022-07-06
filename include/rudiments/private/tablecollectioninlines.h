@@ -63,3 +63,29 @@ ssize_t tablecollection<valuetype>::write(output *out) const {
 	}
 	return retval;
 }
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeJson() const {
+	return writeJson(&stdoutput);
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeJson(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeXml() const {
+	return writeXml(&stdoutput);
+}
+
+template< class valuetype >
+inline
+ssize_t tablecollection<valuetype>::writeXml(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}

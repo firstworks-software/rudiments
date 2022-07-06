@@ -1,7 +1,5 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
-#ifndef RUDIMENTS_LISTCOLLECTIONINLINES_H
-#define RUDIMENTS_LISTCOLLECTIONINLINES_H
 
 template <class valuetype>
 inline
@@ -62,4 +60,28 @@ ssize_t listcollection<valuetype>::write(output *out) const {
 	return retval;
 }
 
-#endif
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeJson() const {
+	return writeJson(&stdoutput);
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeJson(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeXml() const {
+	return writeXml(&stdoutput);
+}
+
+template< class valuetype >
+inline
+ssize_t listcollection<valuetype>::writeXml(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}

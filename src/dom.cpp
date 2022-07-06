@@ -147,13 +147,30 @@ ssize_t dom::write(output *out, bool indent) const {
 	return getRootNode()->write(out,indent);
 }
 
-bool dom::writeXml(output *out) const {
+ssize_t dom::writeJson() const {
+	return writeJson(&stdoutput);
+}
+
+ssize_t dom::writeJson(output *out) const {
+	return (writeJson(out,true))?1:RESULT_ERROR;
+}
+
+ssize_t dom::writeJson(output *out, bool indent) const {
+	return RESULT_ERROR;
+}
+
+ssize_t dom::writeXml() const {
+	return writeXml(&stdoutput,true);
+}
+
+ssize_t dom::writeXml(output *out) const {
 	return writeXml(out,true);
 }
 
-bool dom::writeXml(output *out, bool indent) const {
+ssize_t dom::writeXml(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	return dom::writeNode(getRootNode(),out,indent,&indentlevel);
+	return (dom::writeNode(getRootNode(),out,
+				indent,&indentlevel))?1:RESULT_ERROR;
 }
 
 bool dom::writeNode(const domnode *dn, output *out,

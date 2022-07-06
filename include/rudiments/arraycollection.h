@@ -28,6 +28,22 @@ class arraycollection : public collection {
 
 		/** Writes a representation of the arraycollection to "out". */
 		virtual	ssize_t		write(output *out) const;
+
+		/** Writes a JSON representation of the arraycollection to
+		 *  stdout. */
+		virtual	ssize_t		writeJson() const;
+
+		/** Writes a JSON representation of the arraycollection to
+		 *  "out". */
+		virtual	ssize_t		writeJson(output *out) const;
+
+		/** Writes an XML representation of the arraycollection to
+		 *  stdout. */
+		virtual	ssize_t		writeXml() const;
+
+		/** Writes an XML representation of the arraycollection to
+		 *  "out". */
+		virtual	ssize_t		writeXml(output *out) const;
 };
 
 #include <rudiments/private/arraycollectioninlines.h>

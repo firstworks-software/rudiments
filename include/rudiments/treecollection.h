@@ -157,6 +157,22 @@ class treecollection : public nodecollection<valuetype> {
 		/** Writes a representation of the treecollection to "out". */
 		virtual	ssize_t	write(output *out) const;
 
+		/** Writes a JSON representation of the treecollection to
+		 *  stdout. */
+		virtual	ssize_t	writeJson() const;
+
+		/** Writes a JSON representation of the treecollection to
+		 *  "out". */
+		virtual	ssize_t	writeJson(output *out) const;
+
+		/** Writes an XML representation of the treecollection to
+		 *  stdout. */
+		virtual	ssize_t	writeXml() const;
+
+		/** Writes an XML representation of the treecollection to
+		 *  "out". */
+		virtual	ssize_t	writeXml(output *out) const;
+
 	#include <rudiments/private/treecollection.h>
 };
 

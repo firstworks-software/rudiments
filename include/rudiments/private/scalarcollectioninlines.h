@@ -15,3 +15,29 @@ ssize_t scalarcollection<valuetype>::write(output *out) const {
 	retval+=out->write('\n');
 	return retval;
 }
+
+template< class valuetype >
+inline
+ssize_t scalarcollection<valuetype>::writeJson() const {
+	return writeJson(&stdoutput);
+}
+
+template< class valuetype >
+inline
+ssize_t scalarcollection<valuetype>::writeJson(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}
+
+template< class valuetype >
+inline
+ssize_t scalarcollection<valuetype>::writeXml() const {
+	return writeXml(&stdoutput);
+}
+
+template< class valuetype >
+inline
+ssize_t scalarcollection<valuetype>::writeXml(output *out) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}

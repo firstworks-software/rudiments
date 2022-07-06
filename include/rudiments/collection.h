@@ -186,6 +186,20 @@ class collection : virtual public object {
 		/** Writes a representation of the collection to "out". */
 		virtual	ssize_t	write(output *out) const=0;
 
+		/** Writes a JSON representation of the collection to standard
+		 *  output. */
+		virtual	ssize_t	writeJson() const=0;
+
+		/** Writes a JSON representation of the collection to "out". */
+		virtual	ssize_t	writeJson(output *out) const=0;
+
+		/** Writes an XML representation of the collection to standard
+		 *  output. */
+		virtual	ssize_t	writeXml() const=0;
+
+		/** Writes an XML representation of the collection to "out". */
+		virtual	ssize_t	writeXml(output *out) const=0;
+
 	#include <rudiments/private/collection.h>
 };
 
