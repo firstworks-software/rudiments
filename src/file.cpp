@@ -2074,8 +2074,10 @@ bool file::getMatchingFileNames(const char *pattern,
 		glob_t	g;
 		bytestring::zero(&g,sizeof(g));
 		int	result=glob(pattern,GLOB_MARK|GLOB_NOSORT,NULL,&g);
-		if (result==GLOB_NOSPACE ||
-				result==GLOB_ABEND
+		if (result==GLOB_NOSPACE
+				#ifdef GLOB_ABEND
+				|| result==GLOB_ABEND
+				#endif
 				#ifdef GLOB_ABORTED
 				|| result==GLOB_ABORTED
 				#endif
