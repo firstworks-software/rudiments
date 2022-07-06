@@ -149,7 +149,16 @@ int main(int argc, const char **argv) {
 		stringbuffer	fn;
 		fn.append(pwd);
 		fn.append(sys::getDirectorySeparator());
-		fn.append("**?ile*.cpp");
+		// glob on Linux libc doesn't work with **?ile*.cpp
+		// but does work with *?ile*.cpp
+		#ifndef __GLIBC__
+		if (!charstring::compare(osname,"Linux")) {
+			fn.append("*?ile*.cpp");
+		} else
+		#endif
+		{
+			fn.append("**?ile*.cpp");
+		}
 		patterns.append(fn.detachString());
 		fn.append(pwd);
 		fn.append(sys::getDirectorySeparator());
@@ -160,7 +169,6 @@ int main(int argc, const char **argv) {
 		test("getMatchingFileNames",
 			file::getMatchingFileNames(&patterns,&matches));
 		matches.heapSort();
-matches.write();
 		listnode<char *>	*node=matches.getFirst();
 		test("getMatchingFileNames: match 1",
 			charstring::endsWith(node->getValue(),
