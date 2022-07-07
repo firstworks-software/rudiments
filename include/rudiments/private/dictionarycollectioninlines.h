@@ -16,10 +16,10 @@ ssize_t dictionarycollection<keytype,valuetype>::write(output *out) const {
 	for (listnode<keytype> *node=getKeys()->getFirst();
 		node &&
 		incOrErr(&retval,
-			this->writeDelegate(out,node->getValue())) &&
+			this->writeValue(out,node->getValue())) &&
 		incOrErr(&retval,out->write(':')) &&
 		incOrErr(&retval,
-			this->writeDelegate(out,getValue(node->getValue()))) &&
+			this->writeValue(out,getValue(node->getValue()))) &&
 		incOrErr(&retval,out->write('\n'));
 		node=node->getNext()) {
 	}

@@ -16,7 +16,7 @@ ssize_t arraycollection<valuetype>::write(output *out) const {
 	for (uint64_t i=0;
 		i<getLength() &&
 		incOrErr(&retval,out->printf("%lld: ",i)) &&
-		incOrErr(&retval,this->writeDelegate(out,(*this)[i])) &&
+		incOrErr(&retval,this->writeValue(out,(*this)[i])) &&
 		incOrErr(&retval,out->write('\n'));
 		i++) {
 	}

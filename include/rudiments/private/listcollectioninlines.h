@@ -56,7 +56,7 @@ ssize_t listcollection<valuetype>::write(output *out) const {
 				out->printf("index %ld: ",(long)i)) &&
 		#endif
 		this->incOrErr(&retval,
-			this->writeDelegate(out,current->getValue())) &&
+			this->writeValue(out,current->getValue())) &&
 		this->incOrErr(&retval,out->write('\n'));
 		current=current->getNext(), i++) {
 	}

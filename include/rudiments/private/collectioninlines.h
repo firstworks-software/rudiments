@@ -1,6 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
+#include <rudiments/charstring.h>
+#include <rudiments/wcharstring.h>
+#include <rudiments/character.h>
+
 inline
 collection::collection() :
 	object(),
@@ -119,47 +123,52 @@ bool collection::getManageArrayKeys() const {
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, const char *value) const {
+ssize_t collection::writeValue(output *out, const char *value) const {
 	return out->printf("%s",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, char *value) const {
+ssize_t collection::writeValue(output *out, char *value) const {
 	return out->printf("%s",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, const wchar_t *value) const {
+ssize_t collection::writeValue(output *out, const wchar_t *value) const {
 	return out->printf(L"%s",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, wchar_t *value) const {
+ssize_t collection::writeValue(output *out, wchar_t *value) const {
 	return out->printf(L"%s",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, char value) const {
+ssize_t collection::writeValue(output *out, char value) const {
 	return out->printf("%c",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, wchar_t value) const {
+ssize_t collection::writeValue(output *out, wchar_t value) const {
 	return out->printf(L"%c",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, int16_t value) const {
+ssize_t collection::writeValue(output *out, bool value) const {
+	return out->printf("%s",(value)?"true":"false");
+}
+
+inline
+ssize_t collection::writeValue(output *out, int16_t value) const {
 	return out->printf("%hd",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, int32_t value) const {
+ssize_t collection::writeValue(output *out, int32_t value) const {
 	return out->printf("%d",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, int64_t value) const {
+ssize_t collection::writeValue(output *out, int64_t value) const {
 	#ifdef RUDIMENTS_HAVE_LONG_LONG
 		return out->printf("%lld",(long long)value);
 	#else
@@ -168,34 +177,34 @@ ssize_t collection::writeDelegate(output *out, int64_t value) const {
 }
 
 inline
-ssize_t collection::writeDelegate(output *out,
+ssize_t collection::writeValue(output *out,
 					const unsigned char *value) const {
 	return out->printf("%s",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out,
+ssize_t collection::writeValue(output *out,
 					unsigned char *value) const {
 	return out->printf("%s",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, unsigned char value) const {
+ssize_t collection::writeValue(output *out, unsigned char value) const {
 	return out->printf("%c",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, uint16_t value) const {
+ssize_t collection::writeValue(output *out, uint16_t value) const {
 	return out->printf("%hd",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, uint32_t value) const {
+ssize_t collection::writeValue(output *out, uint32_t value) const {
 	return out->printf("%d",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, uint64_t value) const {
+ssize_t collection::writeValue(output *out, uint64_t value) const {
 	#ifdef RUDIMENTS_HAVE_LONG_LONG
 		return out->printf("%lld",(long long)value);
 	#else
@@ -204,59 +213,39 @@ ssize_t collection::writeDelegate(output *out, uint64_t value) const {
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, float value) const {
+ssize_t collection::writeValue(output *out, float value) const {
 	return out->printf("%f",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, double value) const {
+ssize_t collection::writeValue(output *out, double value) const {
 	return out->printf("%f",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, long double value) const {
+ssize_t collection::writeValue(output *out, long double value) const {
 	return out->printf("%Lf",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, const void *value) const {
+ssize_t collection::writeValue(output *out, const void *value) const {
 	return out->printf("%08x",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, void *value) const {
+ssize_t collection::writeValue(output *out, void *value) const {
 	return out->printf("%08x",value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, const collection *value) const {
-	return value->write(out);
-}
-
-inline
-ssize_t collection::writeDelegate(output *out, collection *value) const {
-	return value->write(out);
-}
-
-inline
-ssize_t collection::writeDelegate(output *out, const collection &value) const {
-	return value.write(out);
-}
-
-inline
-ssize_t collection::writeDelegate(output *out, collection &value) const {
-	return value.write(out);
-}
-
-inline
-ssize_t collection::writeDelegate(output *out, const object *value) const {
+ssize_t collection::writeValue(output *out, const object *value) const {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("%08x",(const void *)value);
 }
 
 inline
-ssize_t collection::writeDelegate(output *out, object *value) const {
+ssize_t collection::writeValue(output *out, object *value) const {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("%08x",(const void *)value);
@@ -264,10 +253,198 @@ ssize_t collection::writeDelegate(output *out, object *value) const {
 
 template <class valuetype>
 inline
-ssize_t collection::writeDelegate(output *out, const valuetype &value) const {
+ssize_t collection::writeValue(output *out, const valuetype &value) const {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("%08x",(const void *)&value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, const char *value) const {
+	if (!value) {
+		return out->write("null");
+	} else if (charstring::isNumber(value)) {
+		return out->printf("%s",value);
+	}
+	return out->printf("\"%s\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, char *value) const {
+	if (!value) {
+		return out->write("null");
+	} else if (charstring::isNumber(value)) {
+		return out->printf("%s",value);
+	}
+	return out->printf("\"%s\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, const wchar_t *value) const {
+	if (!value) {
+		return out->write("null");
+	} else if (wcharstring::isNumber(value)) {
+		return out->printf(L"%s",value);
+	}
+	return out->printf(L"\"%s\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, wchar_t *value) const {
+	if (!value) {
+		return out->write("null");
+	} else if (wcharstring::isNumber(value)) {
+		return out->printf(L"%s",value);
+	}
+	return out->printf(L"\"%s\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, char value) const {
+	if (character::isDigit(value)) {
+		return out->printf("%c",value);
+	}
+	return out->printf("\"%c\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, wchar_t value) const {
+	if (character::isDigit(value)) {
+		return out->printf(L"%c",value);
+	}
+	return out->printf(L"\"%c\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, bool value) const {
+	return out->printf("%s",(value)?"true":"false");
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, int16_t value) const {
+	return out->printf("%hd",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, int32_t value) const {
+	return out->printf("%d",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, int64_t value) const {
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		return out->printf("%lld",(long long)value);
+	#else
+		return out->printf("%ld",(long)value);
+	#endif
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out,
+					const unsigned char *value) const {
+	if (!value) {
+		return out->write("null");
+	} else if (charstring::isNumber((const char *)value)) {
+		return out->printf("%s",value);
+	}
+	return out->printf("\"%s\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out,
+					unsigned char *value) const {
+	if (!value) {
+		return out->write("null");
+	} else if (charstring::isNumber((char *)value)) {
+		return out->printf("%s",value);
+	}
+	return out->printf("\"%s\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, unsigned char value) const {
+	if (character::isDigit(value)) {
+		return out->printf("%c",value);
+	}
+	return out->printf("\"%c\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, uint16_t value) const {
+	return out->printf("%hd",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, uint32_t value) const {
+	return out->printf("%d",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, uint64_t value) const {
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		return out->printf("%lld",(long long)value);
+	#else
+		return out->printf("%ld",(long)value);
+	#endif
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, float value) const {
+	return out->printf("%f",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, double value) const {
+	return out->printf("%f",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, long double value) const {
+	return out->printf("%Lf",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, const void *value) const {
+	if (!value) {
+		return out->write("null");
+	}
+	return out->printf("\"%08x\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, void *value) const {
+	if (!value) {
+		return out->write("null");
+	}
+	return out->printf("\"%08x\"",value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, const object *value) const {
+	if (!value) {
+		return out->write("null");
+	}
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("\"%08x\"",(const void *)value);
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, object *value) const {
+	if (!value) {
+		return out->write("null");
+	}
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("\"%08x\"",(const void *)value);
+}
+
+template <class valuetype>
+inline
+ssize_t collection::writeJsonValue(output *out, const valuetype &value) const {
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("\"%08x\"",(const void *)&value);
 }
 
 inline

@@ -13,6 +13,7 @@
 
 const char *numbers[]={
 	"zero","one","two","three","four","five","six","seven","eight","nine"
+	//"0","1","2","3","4","5","6","7","8","9"
 };
 
 struct test {
@@ -23,11 +24,37 @@ int main(int argc, const char **argv) {
 
 	header("collectionprint");
 
+	stdoutput.printf("scalar (bool):\n");
+	scalar<bool>	sb;
+	sb.setValue(true);
+	sb.write();
+	sb.writeJson();
+	sb.writeXml();
+	sb.setValue(false);
+	sb.write();
+	sb.writeJson();
+	sb.writeXml();
+	stdoutput.printf("\n");
+
+	stdoutput.printf("scalar (null/non-null):\n");
+	scalar<const char *>	sn;
+	sn.setValue(NULL);
+	sn.write();
+	sn.writeJson();
+	sn.writeXml();
+	sn.setValue("not-null");
+	sn.write();
+	sn.writeJson();
+	sn.writeXml();
+	stdoutput.printf("\n");
+
 	stdoutput.printf("scalar (int32_t):\n");
 	scalar<int32_t>	si32;
 	for (int32_t i=-5; i<5; i++) {
 		si32.setValue(i);
 		si32.write();
+		si32.writeJson();
+		si32.writeXml();
 	}
 	stdoutput.printf("\n");
 

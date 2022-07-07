@@ -57,8 +57,7 @@ ssize_t tablecollection<valuetype>::write(output *out) const {
 		incOrErr(&retval,out->printf("row %lld:\n",i));
 		for (uint64_t j=0; j<getColumnCount() && retval>=1; j++) {
 			incOrErr(&retval,out->printf("  col %lld: ",j)) &&
-			incOrErr(&retval,
-				this->writeDelegate(out,getValue(i,j))) &&
+			incOrErr(&retval,this->writeValue(out,getValue(i,j))) &&
 			incOrErr(&retval,out->write('\n'));
 		}
 	}

@@ -449,7 +449,7 @@ ssize_t avltree<valuetype>::writeNode(output *out,
 		this->incOrErr(&retval,out->write(' '));
 	}
 	this->incOrErr(&retval,out->printf("<%s value=\"",name)) &&
-	this->incOrErr(&retval,this->writeDelegate(out,n->getValue())) &&
+	this->incOrErr(&retval,this->writeValue(out,n->getValue())) &&
 	this->incOrErr(&retval,out->printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
 						leftheight,rightheight,
 						leftheight-rightheight));
