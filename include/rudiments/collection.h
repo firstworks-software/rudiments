@@ -6,7 +6,6 @@
 
 #include <rudiments/object.h>
 #include <rudiments/comparator.h>
-#include <rudiments/writer.h>
 
 /** The collection class is the parent class for all rudiments collections. */
 class collection : virtual public object {
@@ -34,15 +33,6 @@ class collection : virtual public object {
 		/** Sets the comparator used by the class.  Reverts to the
 		 *  default comparator if "newcomp" is NULL. */
 		void	setComparator(comparator *newcomp);
-
-		/** Returns the writer used internally by the class.
-		 *  Returns whatever was previously set by setWriter() or
-		 *  an instance of the writer class by default. */
-		writer	*getWriter() const;
-
-		/** Sets the writer used by the class.  Reverts to the
-		 *  default writer if "newwriter" is NULL. */
-		void	setWriter(writer *newwriter);
 
 		/** Returns true for read-only implementations and false for
 		 *  read-write implementations.

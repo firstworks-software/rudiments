@@ -8,8 +8,7 @@ collection::collection() :
 	managearrayvalues(false),
 	managekeys(false),
 	managearraykeys(false),
-	compptr(&comp),
-	wrptr(&wr) {
+	compptr(&comp) {
 }
 
 inline
@@ -20,9 +19,7 @@ collection::collection(const collection &c) :
 	managekeys(c.managekeys),
 	managearraykeys(c.managearraykeys),
 	comp(c.comp),
-	compptr(&comp),
-	wr(c.wr),
-	wrptr(&wr) {
+	compptr(&comp) {
 }
 
 inline
@@ -35,8 +32,6 @@ collection &collection::operator=(const collection &c) {
 		managearraykeys=c.managearraykeys;
 		comp=c.comp;
 		compptr=&comp;
-		wr=c.wr;
-		wrptr=&wr;
 	}
 	return *this;
 }
@@ -56,20 +51,6 @@ void collection::setComparator(comparator *newcomp) {
 		compptr=newcomp;
 	} else {
 		compptr=&comp;
-	}
-}
-
-inline
-writer *collection::getWriter() const {
-	return wrptr;
-}
-
-inline
-void collection::setWriter(writer *newwr) {
-	if (newwr) {
-		wrptr=newwr;
-	} else {
-		wrptr=&wr;
 	}
 }
 
@@ -139,104 +120,112 @@ bool collection::getManageArrayKeys() const {
 
 inline
 ssize_t collection::writeDelegate(output *out, const char *value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%s",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, char *value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%s",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, const wchar_t *value) const {
-	return getWriter()->write(out,value);
+	return out->printf(L"%s",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, wchar_t *value) const {
-	return getWriter()->write(out,value);
+	return out->printf(L"%s",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, char value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%c",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, wchar_t value) const {
-	return getWriter()->write(out,value);
+	return out->printf(L"%c",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, int16_t value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%hd",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, int32_t value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%d",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, int64_t value) const {
-	return getWriter()->write(out,value);
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		return out->printf("%lld",(long long)value);
+	#else
+		return out->printf("%ld",(long)value);
+	#endif
 }
 
 inline
 ssize_t collection::writeDelegate(output *out,
 					const unsigned char *value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%s",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out,
 					unsigned char *value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%s",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, unsigned char value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%c",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, uint16_t value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%hd",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, uint32_t value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%d",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, uint64_t value) const {
-	return getWriter()->write(out,value);
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		return out->printf("%lld",(long long)value);
+	#else
+		return out->printf("%ld",(long)value);
+	#endif
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, float value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%f",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, double value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%f",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, long double value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%Lf",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, const void *value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%08x",value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, void *value) const {
-	return getWriter()->write(out,value);
+	return out->printf("%08x",value);
 }
 
 inline
@@ -261,18 +250,24 @@ ssize_t collection::writeDelegate(output *out, collection &value) const {
 
 inline
 ssize_t collection::writeDelegate(output *out, const object *value) const {
-	return getWriter()->write(out,value);
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("%08x",(const void *)value);
 }
 
 inline
 ssize_t collection::writeDelegate(output *out, object *value) const {
-	return getWriter()->write(out,value);
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("%08x",(const void *)value);
 }
 
 template <class valuetype>
 inline
 ssize_t collection::writeDelegate(output *out, const valuetype &value) const {
-	return getWriter()->write(out,(const void *)&value);
+	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
+	// segfaults without it, and it doesn't hurt other compilers.
+	return out->printf("%08x",(const void *)&value);
 }
 
 inline

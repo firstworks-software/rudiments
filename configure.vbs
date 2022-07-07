@@ -326,8 +326,7 @@ headers3="dynamicarray.h "+_
 	"httpserverapi.h "+_
 	"httpserverapimain.h "+_
 	"mvc.h "+_
-	"cronschedule.h "+_
-	"writer.h"
+	"cronschedule.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -574,8 +573,7 @@ privateheaders7="staticarray.h "+_
 	"mvcview.h "+_
 	"httpbasicsecurity.h "+_
 	"cronscheduleincludes.h "+_
-	"cronschedule.h "+_
-	"writerinlines.h"
+	"cronschedule.h "
 
 ' version
 RUDIMENTS_VERSION="2.0.0"
