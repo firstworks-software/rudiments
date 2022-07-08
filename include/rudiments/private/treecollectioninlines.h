@@ -19,7 +19,7 @@ template <class valuetype>
 inline
 ssize_t treecollection<valuetype>::write(output *out) const {
 	uint16_t	indentlevel=0;
-	return writeNodeXml(out,getTop(),"t",&indentlevel,true);
+	return writeNodeXml(out,getTop(),"t",&indentlevel,true,true);
 }
 
 template< class valuetype >
@@ -43,8 +43,8 @@ ssize_t treecollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeJson(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
+	uint16_t	indentlevel=0;
+	return writeNodeJson(out,getTop(),&indentlevel,indent);
 }
 
 template< class valuetype >
@@ -69,5 +69,5 @@ template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeXml(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
-	return writeNodeXml(out,getTop(),"t",&indentlevel,false);
+	return writeNodeXml(out,getTop(),"t",&indentlevel,false,indent);
 }

@@ -6,4 +6,9 @@
 						const treenode<valuetype> *node,
 						const char *name,
 						uint16_t *indentlevel,
-						bool includedetails) const=0;
+						bool details,
+						bool indent) const=0;
+		virtual	ssize_t	writeNodeJson(output *out,
+						const treenode<valuetype> *node,
+						uint16_t *indentlevel,
+						bool indent) const=0;

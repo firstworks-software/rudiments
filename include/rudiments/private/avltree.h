@@ -13,7 +13,12 @@
 					const treenode<valuetype> *node,
 					const char *name,
 					uint16_t *indentlevel,
-					bool details) const;
+					bool details,
+					bool indent) const;
+		ssize_t	writeNodeJson(output *out,
+					const treenode<valuetype> *node,
+					uint16_t *indentlevel,
+					bool indent) const;
 
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;

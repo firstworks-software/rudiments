@@ -433,7 +433,10 @@ ssize_t avltree<valuetype>::writeNodeXml(output *out,
 						const treenode<valuetype> *node,
 						const char *name,
 						uint16_t *indentlevel,
-						bool details) const {
+						bool details,
+						bool indent) const {
+
+	// FIXME: pay attention to indent
 
 	avltreenode<valuetype>	*n=(avltreenode<valuetype> *)node;
 	avltreenode<valuetype>	*left=
@@ -456,26 +459,87 @@ ssize_t avltree<valuetype>::writeNodeXml(output *out,
 					" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
 					leftheight,rightheight,
 					leftheight-rightheight)):true);
-	if (!left && !right) {
-		this->incOrErr(&retval,out->write("/>\n"));
-	} else {
+	if (left || right) {
 		this->incOrErr(&retval,out->write(">\n"));
 		(*indentlevel)++;
 		if (retval>-1 && left) {
 			this->incOrErr(&retval,
 				writeNodeXml(out,left,"l",
-						indentlevel,details));
+						indentlevel,details,indent));
 		}
 		if (retval>-1 && right) {
 			this->incOrErr(&retval,
 				writeNodeXml(out,right,"r",
-						indentlevel,details));
+						indentlevel,details,indent));
 		}
 		(*indentlevel)--;
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
 			this->incOrErr(&retval,out->write(' '));
 		}
 		this->incOrErr(&retval,out->printf("</%s>\n",name));
+	} else {
+		this->incOrErr(&retval,out->write("/>\n"));
+	}
+	return retval;
+}
+
+template <class valuetype>
+inline
+ssize_t avltree<valuetype>::writeNodeJson(output *out,
+						const treenode<valuetype> *node,
+						uint16_t *indentlevel,
+						bool indent) const {
+
+	avltreenode<valuetype>	*n=(avltreenode<valuetype> *)node;
+	avltreenode<valuetype>	*left=
+			(avltreenode<valuetype> *)n->getLeftChild();
+	avltreenode<valuetype>	*right=
+			(avltreenode<valuetype> *)n->getRightChild();
+
+	ssize_t	retval=0;
+
+	if (*indentlevel) {
+		this->incOrErr(&retval,out->write(',')) &&
+		((indent)?this->incOrErr(&retval,out->write('\n')):true);
+	}
+	if (indent) {
+		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
+			this->incOrErr(&retval,out->write("  "));
+		}
+	}
+	this->incOrErr(&retval,out->write('[')) &&
+	((indent)?this->incOrErr(&retval,out->write('\n')):true);
+	if (indent) {
+		for (uint16_t i=0; i<*indentlevel+1 && retval>-1; i++) {
+			this->incOrErr(&retval,out->write("  "));
+		}
+	}
+	this->incOrErr(&retval,this->writeJsonValue(out,n->getValue()));
+
+	if (left || right) {
+		(*indentlevel)++;
+		if (retval>-1 && left) {
+			this->incOrErr(&retval,
+				writeNodeJson(out,left,indentlevel,indent));
+		}
+		if (retval>-1 && right) {
+			this->incOrErr(&retval,
+				writeNodeJson(out,right,indentlevel,indent));
+		}
+		(*indentlevel)--;
+	}
+
+	if (indent) {
+		this->incOrErr(&retval,out->write('\n'));
+		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
+			this->incOrErr(&retval,out->write("  "));
+		}
+	}
+	this->incOrErr(&retval,out->write(']'));
+	if (indent) {
+		if (!*indentlevel) {
+			this->incOrErr(&retval,out->write('\n'));
+		}
 	}
 	return retval;
 }

@@ -111,6 +111,7 @@ int main(int argc, const char **argv) {
 	}
 	ati32.write();
 	ati32.writeXml();
+	ati32.writeJson();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("avltree (const char *):\n");
@@ -120,6 +121,7 @@ int main(int argc, const char **argv) {
 	}
 	atc.write();
 	atc.writeXml();
+	ati32.writeJson();
 	stdoutput.printf("\n");
 
 
