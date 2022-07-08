@@ -140,11 +140,16 @@ ssize_t dom::write() const {
 }
 
 ssize_t dom::write(output *out) const {
-	return (write(out,true))?1:RESULT_ERROR;
+	return write(out,true);
 }
 
 ssize_t dom::write(output *out, bool indent) const {
-	return getRootNode()->write(out,indent);
+	// by calling writeNode(), we get the version of the method which may
+	// be overridden by a child class, and which writes node and its
+	// children in the class' native format
+	uint16_t	indentlevel=0;
+	return (writeNode(getRootNode(),out,
+				indent,&indentlevel))?1:RESULT_ERROR;
 }
 
 ssize_t dom::writeJson() const {
@@ -177,6 +182,8 @@ ssize_t dom::writeXml(output *out) const {
 }
 
 ssize_t dom::writeXml(output *out, bool indent) const {
+	// by calling dom::writeNode(), we call the method from the dom
+	// class, which writes node and its children in the XML format
 	uint16_t	indentlevel=0;
 	return (dom::writeNode(getRootNode(),out,
 				indent,&indentlevel))?1:RESULT_ERROR;
