@@ -2,7 +2,8 @@
 // See the COPYING file for more information
 
 	protected:
-		virtual	ssize_t	writeNode(output *out,
-					const treenode<valuetype> *node,
-					const char *name,
-					uint16_t *indentlevel) const=0;
+		virtual	ssize_t	writeNodeXml(output *out,
+						const treenode<valuetype> *node,
+						const char *name,
+						uint16_t *indentlevel,
+						bool includedetails) const=0;

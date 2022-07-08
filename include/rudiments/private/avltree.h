@@ -9,10 +9,11 @@
 		void	clone(const nodecollection<valuetype> *coll);
 		treenode<valuetype>	*cloneNode(treenode<valuetype> *node);
 
-		ssize_t	writeNode(output *out,
-				const treenode<valuetype> *node,
-				const char *name,
-				uint16_t *indentlevel) const;
+		ssize_t	writeNodeXml(output *out,
+					const treenode<valuetype> *node,
+					const char *name,
+					uint16_t *indentlevel,
+					bool details) const;
 
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;

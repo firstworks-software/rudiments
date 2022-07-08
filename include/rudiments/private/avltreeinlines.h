@@ -429,10 +429,11 @@ void avltree<valuetype>::clear() {
 
 template <class valuetype>
 inline
-ssize_t avltree<valuetype>::writeNode(output *out,
-					const treenode<valuetype> *node,
-					const char *name,
-					uint16_t *indentlevel) const {
+ssize_t avltree<valuetype>::writeNodeXml(output *out,
+						const treenode<valuetype> *node,
+						const char *name,
+						uint16_t *indentlevel,
+						bool details) const {
 
 	avltreenode<valuetype>	*n=(avltreenode<valuetype> *)node;
 	avltreenode<valuetype>	*left=
@@ -448,11 +449,13 @@ ssize_t avltree<valuetype>::writeNode(output *out,
 	for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
 		this->incOrErr(&retval,out->write(' '));
 	}
-	this->incOrErr(&retval,out->printf("<%s value=\"",name)) &&
+	this->incOrErr(&retval,out->printf("<%s v=\"",name)) &&
 	this->incOrErr(&retval,this->writeValue(out,n->getValue())) &&
-	this->incOrErr(&retval,out->printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
-						leftheight,rightheight,
-						leftheight-rightheight));
+	this->incOrErr(&retval,out->write('"')) &&
+	((details)?this->incOrErr(&retval,out->printf(
+					" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
+					leftheight,rightheight,
+					leftheight-rightheight)):true);
 	if (!left && !right) {
 		this->incOrErr(&retval,out->write("/>\n"));
 	} else {
@@ -460,11 +463,13 @@ ssize_t avltree<valuetype>::writeNode(output *out,
 		(*indentlevel)++;
 		if (retval>-1 && left) {
 			this->incOrErr(&retval,
-				writeNode(out,left,"left ",indentlevel));
+				writeNodeXml(out,left,"l",
+						indentlevel,details));
 		}
 		if (retval>-1 && right) {
 			this->incOrErr(&retval,
-				writeNode(out,right,"right",indentlevel));
+				writeNodeXml(out,right,"r",
+						indentlevel,details));
 		}
 		(*indentlevel)--;
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {

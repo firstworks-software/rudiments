@@ -18,7 +18,8 @@ ssize_t treecollection<valuetype>::write() const {
 template <class valuetype>
 inline
 ssize_t treecollection<valuetype>::write(output *out) const {
-	return writeXml(out,true);
+	uint16_t	indentlevel=0;
+	return writeNodeXml(out,getTop(),"t",&indentlevel,true);
 }
 
 template< class valuetype >
@@ -67,8 +68,6 @@ ssize_t treecollection<valuetype>::writeXml(output *out) const {
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeXml(output *out, bool indent) const {
-	// FIXME: have another verion of this that has arguments for whether
-	// to include lh, rh, and bf, and have write() call that
 	uint16_t	indentlevel=0;
-	return writeNode(out,getTop(),"top",&indentlevel);
+	return writeNodeXml(out,getTop(),"t",&indentlevel,false);
 }
