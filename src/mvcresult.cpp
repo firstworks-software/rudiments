@@ -12,7 +12,7 @@ class mvcresultprivate {
 		char		*_message;
 
 		dictionary<char *, char *>		_types;
-		dictionary<char *, collection *>	_data;
+		dictionary<char *, const collection *>	_data;
 
 		wastebasket	_wb;
 		
@@ -26,7 +26,6 @@ mvcresult::mvcresult() : object() {
 	pvt->_types.setManageArrayKeys(true);
 	pvt->_types.setManageArrayValues(true);
 	pvt->_data.setManageArrayKeys(true);
-	pvt->_data.setManageValues(true);
 }
 
 mvcresult::~mvcresult() {
@@ -97,9 +96,9 @@ const char *mvcresult::getMessage() {
 	return pvt->_message;
 }
 
-void mvcresult::attachData(const char *name,
+void mvcresult::setData(const char *name,
 				const char *type,
-				collection *data) {
+				const collection *data) {
 
 	// remove any existing type for this name
 	pvt->_types.remove((char *)name);
@@ -123,7 +122,7 @@ const char *mvcresult::getType(const char *name) {
 	return pvt->_types.getValue((char *)name);
 }
 
-collection *mvcresult::getData(const char *name) {
+const collection *mvcresult::getData(const char *name) {
 	return pvt->_data.getValue((char *)name);
 }
 

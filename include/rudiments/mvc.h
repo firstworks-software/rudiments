@@ -251,13 +251,13 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		void		setMessage(const char *message);
 		const char	*getMessage();
 
-		void	attachData(const char *key,
+		void		setData(const char *key,
 					const char *type,
-					collection *data);
+					const collection *data);
 
 		linkedlist<char *>	*getKeys();
 		const char		*getType(const char *key);
-		collection		*getData(const char *key);
+		const collection	*getData(const char *key);
 
 		wastebasket	*getWastebasket();
 
