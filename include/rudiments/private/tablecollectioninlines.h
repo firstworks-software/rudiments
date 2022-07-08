@@ -52,16 +52,7 @@ ssize_t tablecollection<valuetype>::write() const {
 template <class valuetype>
 inline
 ssize_t tablecollection<valuetype>::write(output *out) const {
-	ssize_t	retval=0;
-	for (uint64_t i=0; i<getRowCount() && retval>-1; i++) {
-		incOrErr(&retval,out->printf("row %lld:\n",i));
-		for (uint64_t j=0; j<getColumnCount() && retval>=1; j++) {
-			incOrErr(&retval,out->printf("  col %lld: ",j)) &&
-			incOrErr(&retval,this->writeValue(out,getValue(i,j))) &&
-			incOrErr(&retval,out->write('\n'));
-		}
-	}
-	return retval;
+	return writeJson(out,true);
 }
 
 template< class valuetype >
@@ -85,8 +76,55 @@ ssize_t tablecollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
+
+	ssize_t	retval=0;
+
+	incOrErr(&retval,out->write('{')) &&
+	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
+	incOrErr(&retval,out->write("columns:")) &&
+	((indent)?incOrErr(&retval,out->write(' ')):true) &&
+	incOrErr(&retval,out->write('['));
+
+	for (uint64_t i=0; i<getColumnCount() && retval>-1; i++) {
+		((i)?incOrErr(&retval,out->write(',')):true) &&
+		((indent)?incOrErr(&retval,
+				out->write("\n		")):true) &&
+		incOrErr(&retval,this->writeJsonValue(out,getColumnName(i)));
+	}
+
+	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
+	incOrErr(&retval,out->write("],")) &&
+	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
+	incOrErr(&retval,out->write("rows:")) &&
+	((indent)?incOrErr(&retval,out->write(' ')):true) &&
+	incOrErr(&retval,out->write('['));
+
+	for (uint64_t i=0; i<getRowCount() && retval>-1; i++) {
+
+		((i)?incOrErr(&retval,out->write(',')):true) &&
+		((indent)?incOrErr(&retval,
+				out->write("\n		")):true) &&
+		incOrErr(&retval,out->write('['));
+
+		for (uint64_t j=0; j<getColumnCount() && retval>-1; j++) {
+			((j)?incOrErr(&retval,out->write(',')):true) &&
+			((indent)?incOrErr(&retval,
+				out->write("\n			")):true) &&
+			incOrErr(&retval,
+				this->writeJsonValue(out,getValue(i,j)));
+		}
+
+		((indent)?incOrErr(&retval,
+				out->write("\n		")):true) &&
+		incOrErr(&retval,out->write("]"));
+	}
+
+	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
+	incOrErr(&retval,out->write("]")) &&
+	((indent)?incOrErr(&retval,out->write("\n")):true);
+	incOrErr(&retval,out->write('}'));
+
+	return retval;
 }
 
 template< class valuetype >

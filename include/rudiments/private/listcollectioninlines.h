@@ -44,23 +44,7 @@ ssize_t listcollection<valuetype>::write() const {
 template <class valuetype>
 inline
 ssize_t listcollection<valuetype>::write(output *out) const {
-	ssize_t		retval=0;
-	uint64_t	i=0;
-	for (listnode<valuetype> *current=getFirst();
-		current &&
-		#ifdef RUDIMENTS_HAVE_LONG_LONG
-			this->incOrErr(&retval,
-				out->printf("index %lld: ",(long long)i)) &&
-		#else
-			this->incOrErr(&retval,
-				out->printf("index %ld: ",(long)i)) &&
-		#endif
-		this->incOrErr(&retval,
-			this->writeValue(out,current->getValue())) &&
-		this->incOrErr(&retval,out->write('\n'));
-		current=current->getNext(), i++) {
-	}
-	return retval;
+	return writeJson(out,true);
 }
 
 template< class valuetype >
@@ -84,8 +68,22 @@ ssize_t listcollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
+	ssize_t			retval=0;
+	uint64_t		i=0;
+	listnode<valuetype>	*node=getFirst();
+	this->incOrErr(&retval,out->write('['));
+	while (node && retval>-1) {
+		((i)?this->incOrErr(&retval,out->write(',')):true) &&
+		((indent)?this->incOrErr(&retval,out->write("\n	")):true) &&
+		this->incOrErr(&retval,
+			this->writeJsonValue(out,node->getValue()));
+		node=node->getNext();
+		i++;
+	}
+	((indent)?this->incOrErr(&retval,out->write('\n')):true) &&
+	this->incOrErr(&retval,out->write(']')) &&
+	((indent)?this->incOrErr(&retval,out->write('\n')):true);
+	return retval;
 }
 
 template< class valuetype >

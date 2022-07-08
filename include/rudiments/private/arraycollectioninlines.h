@@ -12,15 +12,7 @@ ssize_t arraycollection<valuetype>::write() const {
 template< class valuetype >
 inline
 ssize_t arraycollection<valuetype>::write(output *out) const {
-	ssize_t	retval=0;
-	for (uint64_t i=0;
-		i<getLength() &&
-		incOrErr(&retval,out->printf("%lld: ",i)) &&
-		incOrErr(&retval,this->writeValue(out,(*this)[i])) &&
-		incOrErr(&retval,out->write('\n'));
-		i++) {
-	}
-	return retval;
+	return writeJson(out,true);
 }
 
 template< class valuetype >
@@ -44,8 +36,17 @@ ssize_t arraycollection<valuetype>::writeJson(output *out) const {
 template< class valuetype >
 inline
 ssize_t arraycollection<valuetype>::writeJson(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
+	ssize_t	retval=0;
+	incOrErr(&retval,out->write('['));
+	for (uint64_t i=0; i<getLength() && retval>-1; i++) {
+		((i)?this->incOrErr(&retval,out->write(',')):true) &&
+		((indent)?this->incOrErr(&retval,out->write("\n	")):true) &&
+		incOrErr(&retval,this->writeValue(out,(*this)[i]));
+	}
+	((indent)?incOrErr(&retval,out->write('\n')):true) &&
+	incOrErr(&retval,out->write(']')) &&
+	((indent)?incOrErr(&retval,out->write('\n')):true);
+	return retval;
 }
 
 template< class valuetype >

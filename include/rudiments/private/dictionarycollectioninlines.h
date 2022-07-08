@@ -12,18 +12,7 @@ ssize_t dictionarycollection<keytype,valuetype>::write() const {
 template< class keytype, class valuetype >
 inline
 ssize_t dictionarycollection<keytype,valuetype>::write(output *out) const {
-	ssize_t	retval=0;
-	for (listnode<keytype> *node=getKeys()->getFirst();
-		node &&
-		incOrErr(&retval,
-			this->writeValue(out,node->getValue())) &&
-		incOrErr(&retval,out->write(':')) &&
-		incOrErr(&retval,
-			this->writeValue(out,getValue(node->getValue()))) &&
-		incOrErr(&retval,out->write('\n'));
-		node=node->getNext()) {
-	}
-	return retval;
+	return writeJson(out,true);
 }
 
 template< class keytype, class valuetype >
@@ -48,8 +37,25 @@ template< class keytype, class valuetype >
 inline
 ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out,
 							bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
+	ssize_t			retval=0;
+	uint64_t		i=0;
+	listnode<keytype>	*node=getKeys()->getFirst();
+	incOrErr(&retval,out->write('{'));
+	while (node && retval>-1) {
+		((i)?incOrErr(&retval,out->write(',')):true) &&
+		((indent)?incOrErr(&retval,out->write("\n	")):true) &&
+		incOrErr(&retval,
+			this->writeJsonValue(out,node->getValue())) &&
+		incOrErr(&retval,out->write(':')) &&
+		incOrErr(&retval,
+			this->writeJsonValue(out,getValue(node->getValue())));
+ 		node=node->getNext();
+		i++;
+	}
+	((indent)?incOrErr(&retval,out->write('\n')):true) &&
+	incOrErr(&retval,out->write('}')) &&
+	((indent)?incOrErr(&retval,out->write('\n')):true);
+	return retval;
 }
 
 template< class keytype, class valuetype >

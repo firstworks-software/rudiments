@@ -10,10 +10,7 @@ ssize_t scalarcollection<valuetype>::write() const {
 template <class valuetype>
 inline
 ssize_t scalarcollection<valuetype>::write(output *out) const {
-	ssize_t	retval=0;
-	incOrErr(&retval,this->writeValue(out,getValue())) &&
-	incOrErr(&retval,out->write('\n'));
-	return retval;
+	return writeJson(out,true);
 }
 
 template< class valuetype >
