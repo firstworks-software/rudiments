@@ -187,37 +187,64 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  most recent failed method call. */
 		virtual int64_t		getErrorCode()=0;
 
-		/** Returns an instance of scalar, representing the first
-		 *  field of the first row of the results if doRead() was
+		/** Returns an instance of scalarcollection, containing the
+		 *  number of affected rows if doCreate(), doUpdate(), or
+		 *  doDelete() was most recently called or an empty scalar if
+		 *  doRead() was most recently called. */
+		virtual const scalarcollection<uint64_t>
+						*getAffectedRowsScalar()=0;
+
+		/** Returns an instance of listcollection with a single element,
+		 *  containing the affected rows doCreate(), doUpdate(), or
+		 *  doDelete() was most recently called or an empty list if
+		 *  doRead() was most recently called. */
+		virtual const listcollection<uint64_t>
+						*getAffectedRowsList()=0;
+
+		/** Returns an instance of dictionarycollection with a single
+		 *  element, containing the affected rows doCreate(),
+		 *  doUpdate(), or doDelete() was most recently called or an
+		 *  empty dictionary if doRead() was most recently called. */
+		virtual const dictionarycollection<const char *, uint64_t>
+						*getAffectedRowsDictionary()=0;
+
+		/** Returns an instance of tablecollection with a single
+		 *  field, containing the affected rows doCreate(),
+		 *  doUpdate(), or doDelete() was most recently called or an
+		 *  empty table if doRead() was most recently called. */
+		virtual const tablecollection<uint64_t>
+						*getAffectedRowsTable()=0;
+
+		/** Returns an instance of scalarcollection, representing the
+		 *  first field of the first row of the results if doRead() was
 		 *  most recently called, or an empty scalar if doCreate(),
 		 *  doUpdate(), or doDelete() was most recently called. */
 		virtual const scalarcollection<const char *>
-							*getScalar()=0;
+						*getFirstFieldScalar()=0;
 
-		/** Returns an instance of linkedlist, representing the
+		/** Returns an instance of listcollection, representing the
 		 *  first row of the results if doRead() was most recently
-		 *  called, or an empty linkedlist if doCreate(), doUpdate(),
-		 *  or doDelete() was most recently called. */
+		 *  called, or an empty list if doCreate(), doUpdate(), or
+		 *  doDelete() was most recently called. */
 		virtual const listcollection<const char *>
-							*getRowLinkedList()=0;
+						*getFirstRowList()=0;
 
-		/** Returns an instance of dictionary, representing the first
-		 *  row of the results if doRead() was most recently
+		/** Returns an instance of dictionarycollection, representing
+		 *  the first row of the results if doRead() was most recently
 		 *  called, or an empty dictionary if doCreate(), doUpdate(),
 		 *  or doDelete() was most recently called. */
 		virtual const dictionarycollection<const char *, const char *>
-							*getRowDictionary()=0;
+						*getFirstRowDictionary()=0;
 
-		/** Returns an instance of dictionary, representing the first
-		 *  column of each row of the results if doRead() was most
-		 *  recently called, or an empty resultsetlinkedlist if
-		 *  doCreate(), doUpdate(), or doDelete() was most recently
-		 *  called. */
+		/** Returns an instance of dictionarycollection, representing
+		 *  the first column of each row of the results if doRead() was
+		 *  most recently called, or an empty dictionary if doCreate(),
+		 *  doUpdate(), or doDelete() was most recently called. */
 		virtual const listcollection<const char *>
-						*getResultSetLinkedList()=0;
+						*getFirstColumnList()=0;
 
-		/** Returns an instance of table, representing the results
-		 *  if doRead() was most recently called, or an empty
+		/** Returns an instance of tablecollection, representing the
+ 		 *  results if doRead() was most recently called, or an empty
 		 *  resultsettable if doCreate(), doUpdate(), or doDelete() was
 		 *  most recently called. */
 		virtual const tablecollection<const char *>

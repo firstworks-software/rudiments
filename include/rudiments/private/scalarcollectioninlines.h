@@ -37,7 +37,7 @@ ssize_t scalarcollection<valuetype>::writeJson(output *out, bool indent) const {
 	ssize_t	retval=0;
 	incOrErr(&retval,out->write('{')) &&
 	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("v:")) &&
+	incOrErr(&retval,out->write("\"v\":")) &&
 	((indent)?incOrErr(&retval,out->write(' ')):true) &&
 	incOrErr(&retval,this->writeJsonValue(out,getValue())) &&
 	((indent)?incOrErr(&retval,out->write('\n')):true) &&
