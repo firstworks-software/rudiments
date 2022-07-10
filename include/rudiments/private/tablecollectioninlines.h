@@ -81,7 +81,7 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
 
 	incOrErr(&retval,out->write('{')) &&
 	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("\"columns\":")) &&
+	incOrErr(&retval,out->write("\"c\":")) &&
 	((indent)?incOrErr(&retval,out->write(' ')):true) &&
 	incOrErr(&retval,out->write('['));
 
@@ -95,7 +95,7 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
 	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
 	incOrErr(&retval,out->write("],")) &&
 	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("\"rows\":")) &&
+	incOrErr(&retval,out->write("\"r\":")) &&
 	((indent)?incOrErr(&retval,out->write(' ')):true) &&
 	incOrErr(&retval,out->write('['));
 
@@ -122,7 +122,8 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
 	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
 	incOrErr(&retval,out->write("]")) &&
 	((indent)?incOrErr(&retval,out->write("\n")):true);
-	incOrErr(&retval,out->write('}'));
+	incOrErr(&retval,out->write('}')) &&
+	((indent)?incOrErr(&retval,out->write("\n")):true);
 
 	return retval;
 }

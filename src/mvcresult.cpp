@@ -126,6 +126,134 @@ const collection *mvcresult::getData(const char *name) {
 	return pvt->_data.getValue((char *)name);
 }
 
+ssize_t mvcresult::write() const {
+	return write();
+}
+
+ssize_t mvcresult::write(output *out) const {
+	return writeJson(out,true);
+}
+
+ssize_t mvcresult::writeJson() const {
+	return writeJson(true);
+}
+
+ssize_t mvcresult::writeJson(bool indent) const {
+	return writeJson(&stdoutput,indent);
+}
+
+ssize_t mvcresult::writeJson(output *out) const {
+	return writeJson(out,true);
+}
+
+ssize_t mvcresult::writeJson(output *out, bool indent) const {
+
+	ssize_t			retval=0;
+
+	// begin object
+	incOrErr(&retval,out->write('{')) &&
+	((indent)?incOrErr(&retval,out->write("\n")):true) &&
+
+	// success: true/false
+	incOrErr(&retval,out->write("\"s\":")) &&
+	((indent)?incOrErr(&retval,out->write(' ')):true) &&
+	incOrErr(&retval,out->write((pvt->_success)?"true":"false")) &&
+	incOrErr(&retval,out->write(',')) &&
+	((indent)?incOrErr(&retval,out->write('\n')):true);
+
+	if (pvt->_success) {
+
+		// collections
+		bool	first=true;
+		for (listnode<char *> *key=
+				pvt->_data.getKeys()->getFirst();
+				key; key=key->getNext()) {
+			
+			if (first) {
+				first=false;
+			} else {
+				incOrErr(&retval,out->write(',')) &&
+				((indent)?incOrErr(&retval,
+						out->write('\n')):true);
+			}
+			incOrErr(&retval,out->write('"')) &&
+			incOrErr(&retval,out->write(key->getValue())) &&
+			incOrErr(&retval,out->write("\":")) &&
+			((indent)?incOrErr(&retval,out->write(' ')):true);
+			const collection	*c=
+				pvt->_data.getValue(key->getValue());
+			if (c) {
+				incOrErr(&retval,c->writeJson(out,indent));
+			} else {
+				incOrErr(&retval,out->write("null"));
+			}
+		}
+		
+	} else {
+
+		// error code
+		incOrErr(&retval,out->write("\"c\":")) &&
+		((indent)?incOrErr(&retval,out->write(' ')):true) &&
+		incOrErr(&retval,out->write(pvt->_code)) &&
+		incOrErr(&retval,out->write(',')) &&
+		((indent)?incOrErr(&retval,out->write('\n')):true) &&
+
+		// error message
+		incOrErr(&retval,out->write("\"m\":")) &&
+		((indent)?incOrErr(&retval,out->write(' ')):true) &&
+		incOrErr(&retval,out->write('"')) &&
+		incOrErr(&retval,out->write(pvt->_message)) &&
+		incOrErr(&retval,out->write('"')) &&
+		((indent)?incOrErr(&retval,out->write('\n')):true);
+	}
+
+	// end object
+	incOrErr(&retval,out->write('}')) &&
+	((indent)?incOrErr(&retval,out->write('\n')):true);
+
+	return retval;
+}
+
+ssize_t mvcresult::writeXml() const {
+	return writeXml(true);
+}
+
+ssize_t mvcresult::writeXml(bool indent) const {
+	return writeXml(&stdoutput,indent);
+}
+
+ssize_t mvcresult::writeXml(output *out) const {
+	return writeXml(out,true);
+}
+
+ssize_t mvcresult::writeXml(output *out, bool indent) const {
+	// FIXME: implement this
+	return RESULT_ERROR;
+}
+
+bool mvcresult::incOrErr(ssize_t *retval, ssize_t val) const {
+
+	// FIXME: this is duplicated in collection, move them somewhere
+
+	// add val to *retval unless:
+	// * retval is already negative, indicating that an error condition
+	//   occurred previously, in this case leave retval set to the error
+	//   condition
+	// * val is negative, indicating an error condition just occurred, in
+	//   this case set retval to the error condition
+	// return true on success or false if an error condition occurred
+
+	if (*retval>-1) {
+		if (val>-1) {
+			(*retval)+=val;
+			return true;
+		} else {
+			(*retval)=val;
+		}
+	}
+	return false;
+}
+
 wastebasket *mvcresult::getWastebasket() {
 	return &pvt->_wb;
 }

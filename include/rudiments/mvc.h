@@ -286,6 +286,19 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		const char		*getType(const char *key);
 		const collection	*getData(const char *key);
 
+		ssize_t	write() const;
+		ssize_t	write(output *out) const;
+
+		ssize_t	writeJson() const;
+		ssize_t	writeJson(bool indent) const;
+		ssize_t	writeJson(output *out) const;
+		ssize_t	writeJson(output *out, bool indent) const;
+
+		ssize_t	writeXml() const;
+		ssize_t	writeXml(bool indent) const;
+		ssize_t	writeXml(output *out) const;
+		ssize_t	writeXml(output *out, bool indent) const;
+
 		wastebasket	*getWastebasket();
 
 	#include <rudiments/private/mvcresult.h>

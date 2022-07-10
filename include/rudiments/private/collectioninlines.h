@@ -450,6 +450,8 @@ ssize_t collection::writeJsonValue(output *out, const valuetype &value) const {
 inline
 bool collection::incOrErr(ssize_t *retval, ssize_t val) const {
 
+	// FIXME: this is duplicated in mvcresult, move them somewhere
+
 	// add val to *retval unless:
 	// * retval is already negative, indicating that an error condition
 	//   occurred previously, in this case leave retval set to the error
