@@ -33,6 +33,12 @@ tablecollection<valuetype>::~tablecollection() {
 
 template <class valuetype>
 inline
+const char *tablecollection<valuetype>::getType() const {
+	return "table";
+}
+
+template <class valuetype>
+inline
 void tablecollection<valuetype>::setCopyColumnNames(bool copy) {
 	copycolumnnames=copy;
 }

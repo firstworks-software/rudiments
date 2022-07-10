@@ -12,6 +12,9 @@
 template <class valuetype>
 class scalarcollection : public collection {
 	public:
+		/** Returns "scalar". */
+		virtual const char	*getType() const;
+
 		/** Sets the value stored in this instance to "v". */
 		virtual	void		setValue(valuetype v)=0;
 

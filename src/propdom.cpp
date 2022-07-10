@@ -60,6 +60,10 @@ propdom::~propdom() {
 	delete pvt;
 }
 
+const char *propdom::getType() const {
+	return "propdom";
+}
+
 bool propdom::parseFile(const char *filename) {
 	return parseFile(filename,NULL,0);
 }

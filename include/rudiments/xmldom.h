@@ -39,6 +39,9 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		/** Deletes this instance of the xmldom class. */
 		virtual	~xmldom();
 
+		/** Returns "xmldom". */
+		virtual const char	*getType() const;
+
 		/** Parses file "filename" and generates a DOM tree. */
 		bool	parseFile(const char *filename);
 

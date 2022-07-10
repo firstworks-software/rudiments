@@ -46,6 +46,10 @@ xmldom::~xmldom() {
 	delete pvt;
 }
 
+const char *xmldom::getType() const {
+	return "xmldom";
+}
+
 bool xmldom::parseFile(const char *filename) {
 	return parseFile(filename,NULL,0);
 }

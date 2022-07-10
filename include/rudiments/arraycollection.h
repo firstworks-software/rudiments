@@ -12,6 +12,9 @@
 template <class valuetype>
 class arraycollection : public collection {
 	public:
+		/** Returns "array". */
+		virtual const char	*getType() const;
+
 		/** Provides read/write access ot the "index"th element of the
 		 *  array. */
 		virtual	valuetype	&operator[](uint64_t index)=0;

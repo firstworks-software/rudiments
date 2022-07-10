@@ -77,6 +77,9 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Deletes this instance of the csvdom class. */
 		virtual	~csvdom();
 
+		/** Returns "csvdom". */
+		virtual const char	*getType() const;
+
 		/** Parses file "filename" and generates a DOM tree. */
 		bool	parseFile(const char *filename);
 

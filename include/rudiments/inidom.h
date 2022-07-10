@@ -76,6 +76,9 @@ class RUDIMENTS_DLLSPEC inidom : public inisax, public dom {
 		/** Deletes this instance of the inidom class. */
 		virtual	~inidom();
 
+		/** Returns "inidom". */
+		virtual const char	*getType() const;
+
 		/** Parses file "filename" and generates a DOM tree. */
 		bool	parseFile(const char *filename);
 

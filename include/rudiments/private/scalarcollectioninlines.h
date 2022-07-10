@@ -3,6 +3,12 @@
 
 template <class valuetype>
 inline
+const char *scalarcollection<valuetype>::getType() const {
+	return "scalar";
+}
+
+template <class valuetype>
+inline
 ssize_t scalarcollection<valuetype>::write() const {
 	return write(&stdoutput);
 }

@@ -41,6 +41,10 @@ csvdom::~csvdom() {
 	delete pvt;
 }
 
+const char *csvdom::getType() const {
+	return "csvdom";
+}
+
 bool csvdom::parseFile(const char *filename) {
 	reset();
 	return csvsax::parseFile(filename);

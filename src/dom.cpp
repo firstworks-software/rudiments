@@ -73,6 +73,10 @@ void dom::reset() {
 	pvt->_strcache.clear();
 }
 
+const char *dom::getType() const {
+	return "dom";
+}
+
 void dom::createRootNode() {
 	pvt->_rootnode=new domnode(this,pvt->_nullnode,
 					ROOT_DOMNODETYPE,

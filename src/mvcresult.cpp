@@ -11,7 +11,6 @@ class mvcresultprivate {
 		uint32_t	_code;
 		char		*_message;
 
-		dictionary<char *, char *>		_types;
 		dictionary<char *, const collection *>	_data;
 
 		wastebasket	_wb;
@@ -23,8 +22,6 @@ mvcresult::mvcresult() : object() {
 	pvt->_success=false;
 	pvt->_code=0;
 	pvt->_message=NULL;
-	pvt->_types.setManageArrayKeys(true);
-	pvt->_types.setManageArrayValues(true);
 	pvt->_data.setManageArrayKeys(true);
 }
 
@@ -97,29 +94,17 @@ const char *mvcresult::getMessage() {
 }
 
 void mvcresult::setData(const char *name,
-				const char *type,
 				const collection *data) {
-
-	// remove any existing type for this name
-	pvt->_types.remove((char *)name);
 
 	// remove any existing data for this name
 	pvt->_data.remove((char *)name);
 	
-	// set type
-	pvt->_types.setValue(charstring::duplicate(name),
-				charstring::duplicate(type));
-
 	// attach data
 	pvt->_data.setValue(charstring::duplicate(name),data);
 }
 
 linkedlist<char *> *mvcresult::getKeys() {
 	return pvt->_data.getKeys();
-}
-
-const char *mvcresult::getType(const char *name) {
-	return pvt->_types.getValue((char *)name);
 }
 
 const collection *mvcresult::getData(const char *name) {

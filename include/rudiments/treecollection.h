@@ -61,6 +61,9 @@ class treecollection : public nodecollection<valuetype> {
 		treecollection(const nodecollection<valuetype> &a) :
 					nodecollection<valuetype>(a) {}
 
+		/** Returns "tree". */
+		virtual const char	*getType() const;
+
 		/** Creates a new treenode containing "value" and
 		 *  prepends it to the avltree. */
 		virtual void	insert(valuetype value)=0;

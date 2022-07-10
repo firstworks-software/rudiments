@@ -100,6 +100,9 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		/** Deletes this instance of the jsondom class. */
 		virtual	~jsondom();
 
+		/** Returns "jsondom". */
+		virtual const char	*getType() const;
+
 		/** Parses file "filename" and generates a DOM tree. */
 		bool	parseFile(const char *filename);
 

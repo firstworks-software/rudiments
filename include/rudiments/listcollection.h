@@ -41,6 +41,9 @@ class listcollection : public nodecollection<valuetype> {
 		listcollection(const nodecollection<valuetype> &a) :
 					nodecollection<valuetype>(a) {}
 
+		/** Returns "list". */
+		virtual const char	*getType() const;
+
 		/** Creates a new listnode containing "value" and
 		 *  prepends it to the listcollection. */
 		virtual void	prepend(valuetype value)=0;

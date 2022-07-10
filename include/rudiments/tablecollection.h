@@ -49,6 +49,9 @@ class tablecollection : public collection {
 		/** Deletes this instance of the tablecollection class. */
 		virtual	~tablecollection();
 
+		/** Returns "table". */
+		virtual const char	*getType() const;
+
 		/** In a read-write implementation, sets the name of column
 		 *  "col" to "name".
 		 *

@@ -5,6 +5,12 @@
 
 template< class keytype, class valuetype >
 inline
+const char *dictionarycollection<keytype,valuetype>::getType() const {
+	return "dictionary";
+}
+
+template< class keytype, class valuetype >
+inline
 ssize_t dictionarycollection<keytype,valuetype>::write() const {
 	return write(&stdoutput);
 }

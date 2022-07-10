@@ -34,6 +34,9 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		/** Deletes this instance of the dom class. */
 		virtual	~dom();
 
+		/** Returns "dom". */
+		virtual const char	*getType() const;
+
 		/** Parses file "filename" and generates a DOM tree. */
 		virtual bool	parseFile(const char *filename)=0;
 

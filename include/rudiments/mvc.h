@@ -279,11 +279,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		const char	*getMessage();
 
 		void		setData(const char *key,
-					const char *type,
 					const collection *data);
 
 		linkedlist<char *>	*getKeys();
-		const char		*getType(const char *key);
 		const collection	*getData(const char *key);
 
 		ssize_t	write() const;

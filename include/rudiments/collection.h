@@ -25,6 +25,10 @@ class collection : virtual public object {
 		/** Deletes this instance of the collection class. */
 		virtual	~collection();
 
+		/** Returns a string representing the base type of the
+		 *  collection, eg. list, dictionary, tree, etc. */
+		virtual const char	*getType() const=0;
+
 		/** Returns the comparator used internally by the class.
 		 *  Returns whatever was previously set by setComparator() or
 		 *  an instance of the comparator class by default. */

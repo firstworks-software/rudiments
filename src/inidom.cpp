@@ -59,6 +59,10 @@ inidom::~inidom() {
 	delete pvt;
 }
 
+const char *inidom::getType() const {
+	return "inidom";
+}
+
 bool inidom::parseFile(const char *filename) {
 	return parseFile(filename,NULL,0);
 }

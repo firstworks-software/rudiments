@@ -3,6 +3,12 @@
 
 template <class valuetype>
 inline
+const char *listcollection<valuetype>::getType() const {
+	return "list";
+}
+
+template <class valuetype>
+inline
 void listcollection<valuetype>::prepend(valuetype *values, uint64_t count) {
 	for (uint64_t i=count; i>0; i--) {
 		prepend(values[i-1]);

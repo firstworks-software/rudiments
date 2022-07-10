@@ -3,6 +3,12 @@
 
 template <class valuetype>
 inline
+const char *treecollection<valuetype>::getType() const {
+	return "tree";
+}
+
+template <class valuetype>
+inline
 void treecollection<valuetype>::insert(valuetype *values, uint64_t count) {
 	for (uint64_t i=0; i<count; i++) {
 		insert(values[i]);

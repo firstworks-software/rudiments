@@ -12,6 +12,9 @@
 template<class keytype, class valuetype>
 class dictionarycollection : public collection {
 	public:
+		/** Returns "dictionary". */
+		virtual const char	*getType() const;
+
 		/** Returns "true" if insertion order tracking is enabled and
 		 *  false otherwise.
 		 * 

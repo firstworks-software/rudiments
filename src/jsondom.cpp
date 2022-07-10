@@ -61,6 +61,10 @@ jsondom::~jsondom() {
 	delete pvt;
 }
 
+const char *jsondom::getType() const {
+	return "jsondom";
+}
+
 bool jsondom::parseFile(const char *filename) {
 	return parseFile(filename,NULL,0);
 }
