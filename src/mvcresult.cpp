@@ -93,14 +93,18 @@ const char *mvcresult::getMessage() {
 	return pvt->_message;
 }
 
-void mvcresult::setData(const char *name,
-				const collection *data) {
+void mvcresult::setData(const char *name, const collection *data) {
 
 	// remove any existing data for this name
 	pvt->_data.remove((char *)name);
 	
 	// attach data
 	pvt->_data.setValue(charstring::duplicate(name),data);
+}
+
+void mvcresult::attachData(const char *name, collection *data) {
+	setData(name,data);
+	pvt->_wb.attach(data);
 }
 
 linkedlist<char *> *mvcresult::getKeys() {

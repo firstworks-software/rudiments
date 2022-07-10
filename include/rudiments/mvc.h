@@ -280,6 +280,8 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 
 		void		setData(const char *key,
 					const collection *data);
+		void		attachData(const char *key,
+					collection *data);
 
 		linkedlist<char *>	*getKeys();
 		const collection	*getData(const char *key);
