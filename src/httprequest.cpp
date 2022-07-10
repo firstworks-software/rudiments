@@ -141,6 +141,10 @@ class httprequestprivate {
 		uint64_t	_allvariablecount;
 		const char	**_allvars;
 		const char	**_allvals;
+
+		stringbuffer	_rawpost;
+		bool		_json;
+		bool		_xml;
 };
 
 httprequest::httprequest(httpserverapi *sapi) : object() {
@@ -316,12 +320,13 @@ void httprequest::initParameters() {
 	pvt->_dirtyparameters=false;
 	pvt->_parametervars=NULL;
 	pvt->_parametervals=NULL;
+	pvt->_rawpost.clear();
+	pvt->_json=false;
+	pvt->_xml=false;
 
 	// handle a get or a head
-	const char	*requestmethod=
-				getEnvironmentVariable("REQUEST_METHOD");
-	const char	*contenttype=
-				getEnvironmentVariable("CONTENT_TYPE");
+	const char	*requestmethod=getEnvironmentVariable("REQUEST_METHOD");
+	const char	*contenttype=getEnvironmentVariable("CONTENT_TYPE");
 	if (requestmethod &&
 		(!charstring::compareIgnoringCase(requestmethod,"get") || 
 		!charstring::compareIgnoringCase(requestmethod,"head"))) {
@@ -333,7 +338,7 @@ void httprequest::initParameters() {
 	if (requestmethod &&
 		!charstring::compareIgnoringCase(requestmethod,"post")) {
 
-		// handle application/x-www-form-urlencoded and 
+		// handle application/x-www-form-urlencoded
 		if (contenttype && !charstring::compare(contenttype,
 				"application/x-www-form-urlencoded",33)) {
 			parseQueryString(post_request);
@@ -342,6 +347,18 @@ void httprequest::initParameters() {
 		} else if (contenttype && !charstring::compare(contenttype,
 						"multipart/form-data",19)) {
 			parseMultipart();
+
+		// handle application/json
+		} else if (contenttype && !charstring::compare(contenttype,
+						"application/json",16)) {
+			pvt->_json=true;
+			parseJsonOrXml();
+
+		// handle application/xml
+		} else if (contenttype && !charstring::compare(contenttype,
+						"application/xml",15)) {
+			pvt->_xml=true;
+			parseJsonOrXml();
 		}
 	}
 }
@@ -578,6 +595,27 @@ void httprequest::parseMultipart() {
 	delete[] altboundary;
 }
 
+void httprequest::parseJsonOrXml() {
+
+	// read until we hit an unquoted \r\n or EOF
+	char	prevch='\0';
+	char	ch='\0';
+	bool	inquotes=false;
+	char	quote='\0';
+	for (;;) {
+		if (!pvt->_sapi->getCharacter(&ch)) {
+			return;
+		}
+		if ((quote=='"' && ch=='"') || (quote=='\'' && ch=='\'')) {
+			inquotes=!inquotes;
+		} else if (!inquotes && prevch=='\r' && ch=='\n') {
+			return;
+		}
+		pvt->_rawpost.append(ch);
+		prevch=ch;
+	}
+}
+
 void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename, 
 						stringbuffer **mimetype) {
 
@@ -709,6 +747,14 @@ bool httprequest::setFileParameter(const char *name,
 		return true;
 	}
 	return false;
+}
+
+const char *httprequest::getJson() {
+	return (pvt->_json)?pvt->_rawpost.getString():"";
+}
+
+const char *httprequest::getXml() {
+	return (pvt->_xml)?pvt->_rawpost.getString():"";
 }
 
 const char *httprequest::getParameter(const char *name) {

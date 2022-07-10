@@ -1534,6 +1534,14 @@ bool domnode::deleteAttribute(domnode *attribute) {
 				&pvt->_attributecount);
 }
 
+ssize_t domnode::write() const {
+	return write(false);
+}
+
+ssize_t domnode::write(bool indent) const {
+	return write(&stdoutput,indent);
+}
+
 ssize_t domnode::write(output *out) const {
 	return write(out,false);
 }
@@ -1543,6 +1551,14 @@ ssize_t domnode::write(output *out, bool indent) const {
 	return (pvt->_dom->
 		writeNode(this,out,indent,(indent)?&indentlevel:NULL))?
 								1:RESULT_ERROR;
+}
+
+bool domnode::writeXml() const {
+	return writeXml(false);
+}
+
+bool domnode::writeXml(bool indent) const {
+	return writeXml(&stdoutput,indent);
 }
 
 bool domnode::writeXml(output *out) const {

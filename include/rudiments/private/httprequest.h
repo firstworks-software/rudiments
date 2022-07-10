@@ -30,6 +30,7 @@
 		void	initParameters();
 		void	initFileNames();
 		void	parseMultipart();
+		void	parseJsonOrXml();
 		void	getNewNames(stringbuffer **name, 
 					stringbuffer **filename,
 					stringbuffer **mimetype);

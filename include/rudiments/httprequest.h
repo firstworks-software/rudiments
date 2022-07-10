@@ -153,6 +153,20 @@ class RUDIMENTS_DLLSPEC httprequest : virtual public object {
 		 *  to the variables returned from getAllVariables(). */
 		const char * const *getAllValues();
 
+
+
+		/** Returns the posted json, if the content type of the
+ 		 *  request was application/json, or an empty string
+ 		 *  otherwise. */
+		const char	*getJson();
+
+		/** Returns the posted xml, if the content type of the
+ 		 *  request was application/xml, or an empty string
+ 		 *  otherwise. */
+		const char	*getXml();
+
+
+
 		/** Matches the REQUEST_METHOD environment variable against
 		 *  "deniedmethods" and "allowedmethods" (in that order) using
 		 *  regular expression syntax to determine whether the client's

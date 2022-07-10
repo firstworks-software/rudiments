@@ -10,6 +10,7 @@
 #include <rudiments/dictionary.h>
 #include <rudiments/scalarcollection.h>
 #include <rudiments/tablecollection.h>
+#include <rudiments/jsondom.h>
 #include <rudiments/wastebasket.h>
 
 class httpbasicsecurityprivate;

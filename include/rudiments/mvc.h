@@ -123,24 +123,49 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  */
 class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 	public:
-		/** Executes the create operation utilizing "keys" and "values"
-		 *  as appropriate.
+
+		/** Executes a create (insert) operation.
+		 *
+		 *  "columns" should contain the set of columns that
+		 *  corresponding elements of "values" will be inserted into.
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
 		 *  getErrorMessage(). */
-		virtual bool	doCreate(const char * const *keys,
+		virtual bool	doCreate(const char * const *columns,
 						const char * const *values)=0;
 
-		/** Executes the read opertation.
+		/** Executes a create (insert) operation.
+		 *
+		 * "kvp" should contain the column/value pairs to be inserted.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doCreate(
+				dictionary<const char *, const char *> *kvp)=0;
+
+		/** Executes a create (insert) operation.
+		 *
+		 *  "j" should be a jsondom containing 1 object:
+		 *
+		 *  "data" should be a JSON object consisting of the
+		 *  column/value pairs to be inserted.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doCreate(jsondom *j)=0;
+
+		/** Executes a read operation.
 		 *
 		 *  "criteria" should be a JSON string representing the
 		 *  criteria that will be used to build the where clause,
 		 *  conforming to the format described in the class description.
 		 *
-		 *  "sort" should be a JSON string representing the criteria
-		 *  that will be used to build the order-by clause, conforming
-		 *  to the format described in the class description.
+		 *  "sort" should be a JSON object representing the criteria
+		 *  that will be used to order the results, conforming to the
+		 *  format described in the class description.
 		 *
 		 *  "skip" indicates how many rows to skip immediately (useful
 		 *  for paging).
@@ -152,32 +177,97 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 						const char *sort,
 						uint64_t skip)=0;
 
-		/** Executes the update opertaion.
+		/** Executes a read operation.
 		 *
-		 *  "keys" and "values" should be set to the key/value pairs to
-		 *  be updated.
+		 *  "j" should be a jsondom containing 3 objects:
+		 *
+		 *  "criteria" should be a JSON object representing the
+		 *  criteria that will be used to determine what to read,
+		 *  conforming to the format described in the class description.
+		 *
+		 *  "sort" should be a JSON object representing the criteria
+		 *  that will be used to order the results, conforming to the
+		 *  format described in the class description.
+		 *
+		 *  "skip" should be a number indicating how many rows to skip
+		 *  immediately (useful for paging).
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doRead(jsondom *j)=0;
+
+		/** Executes an update operation.
+		 *
+		 *  "columns" and "values" should be set to the column/value
+		 *  pairs to be updated.
 		 *
 		 *  "criteria" should be a JSON string representing the
-		 *  criteria that will be used to build the where clause,
+		 *  criteria that will be used to determine what to update,
 		 *  conforming to the format described in the class description.
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
 		 *  getErrorMessage(). */
-		virtual bool	doUpdate(const char * const * keys,
+		virtual bool	doUpdate(const char * const * columns,
 						const char * const *values,
 						const char *criteria)=0;
 
-		/** Executes the delete operation.
+		/** Executes an update operation.
+		 *
+		 *  Keys of "kvp" and values of "kvp" should be set to the
+		 *  column/value pairs to be updated.
 		 *
 		 *  "criteria" should be a JSON string representing the
-		 *  criteria that will be used to build the where clause,
+		 *  criteria that will be used to determine what to update,
+		 *  conforming to the format described in the class description.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doUpdate(
+				dictionary<const char *, const char *> *kvp,
+				const char *criteria)=0;
+
+		/** Executes an update operation.
+		 *
+		 *  "j" should be a jsondom containing 2 objects:
+		 *
+		 *  "criteria" should be a JSON object representing the
+		 *  criteria that will be used to determine what to update,
+		 *  conforming to the format described in the class description.
+		 *
+		 *  "data" should be a JSON object consisting of the
+		 *  column/value pairs to be updated.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doUpdate(jsondom *j)=0;
+
+		/** Executes a delete operation.
+		 *
+		 *  "criteria" should be a JSON string representing the
+		 *  criteria that will be used to determine what to delete,
 		 *  conforming to the format described in the class description.
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
 		 *  getErrorMessage(). */
 		virtual bool	doDelete(const char *criteria)=0;
+
+		/** Executes a delete operation.
+		 *
+		 *  "j" should be a jsondom containing 1 object:
+		 *
+		 *  "criteria" should be a JSON object representing the
+		 *  criteria that will be used to determine what to delete,
+		 *  conforming to the format described in the class description.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doDelete(jsondom *j)=0;
 
 		/** Returns whatever error message may have been set by the
 		 *  most recent failed method call. */

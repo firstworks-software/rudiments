@@ -80,6 +80,7 @@
 	yday->mday in datetime::setDays()
 	filedescriptor::printf() methods return ssize_t now
 	added thread::reliable()
+	refactored mvcresult a bit
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
@@ -103,6 +104,9 @@
 	tls::setProtocolVersion() supports "v" format: SSLv3, TLSv1.3, etc.
 	applied patch from Igor to fix configure.vbs VC++ version detection
 		for non-US versions
+	added support for reading posted json/xml to httprequest
+	fixed bug that caused jsondom::writeNode() not to print node names
+		when not indenting
 
 1.3.1 - added apache-related items to spec file BuildRequries
 
