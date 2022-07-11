@@ -116,7 +116,7 @@ const collection *mvcresult::getData(const char *name) {
 }
 
 ssize_t mvcresult::write() const {
-	return write();
+	return write(&stdoutput);
 }
 
 ssize_t mvcresult::write(output *out) const {
