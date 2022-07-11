@@ -1535,7 +1535,7 @@ bool domnode::deleteAttribute(domnode *attribute) {
 }
 
 ssize_t domnode::write() const {
-	return write(false);
+	return write(true);
 }
 
 ssize_t domnode::write(bool indent) const {
@@ -1543,7 +1543,7 @@ ssize_t domnode::write(bool indent) const {
 }
 
 ssize_t domnode::write(output *out) const {
-	return write(out,false);
+	return write(out,true);
 }
 
 ssize_t domnode::write(output *out, bool indent) const {

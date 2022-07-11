@@ -140,7 +140,11 @@ bool dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 }
 
 ssize_t dom::write() const {
-	return write(&stdoutput);
+	return write(true);
+}
+
+ssize_t dom::write(bool indent) const {
+	return write(&stdoutput,indent);
 }
 
 ssize_t dom::write(output *out) const {

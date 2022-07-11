@@ -28,14 +28,14 @@ class arraycollection : public collection {
 
 		/** Writes a representation of the arraycollection to standard
 		 *  output. */
-		virtual	ssize_t		write() const;
+		virtual	ssize_t	write() const;
 
 		/** Writes a representation of the arraycollection to "out". */
-		virtual	ssize_t		write(output *out) const;
+		virtual	ssize_t	write(output *out) const;
 
 		/** Writes a JSON representation of the arraycollection to
 		 *  standard output. */
-		virtual	ssize_t		writeJson() const;
+		virtual	ssize_t	writeJson() const;
 
 		/** Writes a JSON representation of the arraycollection to
 		 *  standard output.
@@ -43,11 +43,11 @@ class arraycollection : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t		writeJson(bool indent) const;
+		virtual	ssize_t	writeJson(bool indent) const;
 
 		/** Writes a JSON representation of the arraycollection to
 		 *  "out". */
-		virtual	ssize_t		writeJson(output *out) const;
+		virtual	ssize_t	writeJson(output *out) const;
 
 		/** Writes a JSON representation of the arraycollection to
 		 *  "out".
@@ -59,7 +59,7 @@ class arraycollection : public collection {
 
 		/** Writes an XML representation of the arraycollection to
 		 *  standard output. */
-		virtual	ssize_t		writeXml() const;
+		virtual	ssize_t	writeXml() const;
 
 		/** Writes an XML representation of the arraycollection to
 		 *  standard output.
@@ -71,7 +71,7 @@ class arraycollection : public collection {
 
 		/** Writes an XML representation of the arraycollection to
 		 *  "out". */
-		virtual	ssize_t		writeXml(output *out) const;
+		virtual	ssize_t	writeXml(output *out) const;
 
 		/** Writes an XML representation of the arraycollection to
 		 *  "out".

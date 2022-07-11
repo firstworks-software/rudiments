@@ -72,6 +72,14 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  output. */
 		virtual ssize_t	write() const;
 
+		/** Writes a representation of the DOM tree to standard
+		 *  output.
+		 *  
+		 *  If "indent" is true, then the output is automatically
+		 *  indented.  If "indent" is false, then the tree is output
+		 *  as-is. */
+		virtual ssize_t	write(bool indent) const;
+
 		/** Writes a representation of the DOM tree to "out". */
 		virtual ssize_t	write(output *out) const;
 
