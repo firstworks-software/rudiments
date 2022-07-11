@@ -277,7 +277,9 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 
 	bool	inarray=(pvt->_inarray.getLength() &&
 				pvt->_inarray.getLast()->getValue());
-	if (dn->getParent()->getType()!=ROOT_DOMNODETYPE && !inarray) {
+	if (dn->getType()!=ROOT_DOMNODETYPE &&
+			dn->getParent()->getType()!=ROOT_DOMNODETYPE &&
+			!inarray) {
 		if (indent) {
 			if (!writeIndent(out,*indentlevel)) {
 				return false;
