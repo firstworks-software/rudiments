@@ -30,15 +30,15 @@ mvcresult::~mvcresult() {
 	delete pvt;
 }
 
-void mvcresult::setResult(bool success) {
-	setResult(success,0,NULL);
+void mvcresult::setStatus(bool success) {
+	setStatus(success,0,NULL);
 }
 
-void mvcresult::setResult(bool success, uint32_t code) {
-	setResult(success,code,NULL);
+void mvcresult::setStatus(bool success, uint32_t code) {
+	setStatus(success,code,NULL);
 }
 
-void mvcresult::setResult(bool success, uint32_t code, const char *message) {
+void mvcresult::setStatus(bool success, uint32_t code, const char *message) {
 	setSuccess(success);
 	setCode(code);
 	setMessage(message);
@@ -53,7 +53,7 @@ void mvcresult::setSuccess(uint32_t code) {
 }
 
 void mvcresult::setSuccess(uint32_t code, const char *message) {
-	setResult(true,code,message);
+	setStatus(true,code,message);
 }
 
 void mvcresult::setFailed() {
@@ -65,7 +65,7 @@ void mvcresult::setFailed(uint32_t code) {
 }
 
 void mvcresult::setFailed(uint32_t code, const char *message) {
-	setResult(false,code,message);
+	setStatus(false,code,message);
 }
 
 void mvcresult::setSuccess(bool success) {
@@ -94,11 +94,7 @@ const char *mvcresult::getMessage() {
 }
 
 void mvcresult::setData(const char *name, const collection *data) {
-
-	// remove any existing data for this name
 	pvt->_data.remove((char *)name);
-	
-	// attach data
 	pvt->_data.setValue(charstring::duplicate(name),data);
 }
 
@@ -150,6 +146,21 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 	incOrErr(&retval,out->write(',')) &&
 	((indent)?incOrErr(&retval,out->write('\n')):true);
 
+	// status code
+	incOrErr(&retval,out->write("\"c\":")) &&
+	((indent)?incOrErr(&retval,out->write(' ')):true) &&
+	incOrErr(&retval,out->write(pvt->_code)) &&
+	incOrErr(&retval,out->write(',')) &&
+	((indent)?incOrErr(&retval,out->write('\n')):true) &&
+
+	// status message
+	incOrErr(&retval,out->write("\"m\":")) &&
+	((indent)?incOrErr(&retval,out->write(' ')):true) &&
+	incOrErr(&retval,out->write('"')) &&
+	incOrErr(&retval,out->write(pvt->_message)) &&
+	incOrErr(&retval,out->write('"')) &&
+	((indent)?incOrErr(&retval,out->write('\n')):true);
+
 	if (pvt->_success) {
 
 		// collections
@@ -178,22 +189,6 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 			}
 		}
 		
-	} else {
-
-		// error code
-		incOrErr(&retval,out->write("\"c\":")) &&
-		((indent)?incOrErr(&retval,out->write(' ')):true) &&
-		incOrErr(&retval,out->write(pvt->_code)) &&
-		incOrErr(&retval,out->write(',')) &&
-		((indent)?incOrErr(&retval,out->write('\n')):true) &&
-
-		// error message
-		incOrErr(&retval,out->write("\"m\":")) &&
-		((indent)?incOrErr(&retval,out->write(' ')):true) &&
-		incOrErr(&retval,out->write('"')) &&
-		incOrErr(&retval,out->write(pvt->_message)) &&
-		incOrErr(&retval,out->write('"')) &&
-		((indent)?incOrErr(&retval,out->write('\n')):true);
 	}
 
 	// end object

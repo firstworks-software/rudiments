@@ -346,9 +346,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		mvcresult();
 		virtual ~mvcresult();
 
-		void	setResult(bool success);
-		void	setResult(bool success, uint32_t code);
-		void	setResult(bool success, uint32_t code,
+		void	setStatus(bool success);
+		void	setStatus(bool success, uint32_t code);
+		void	setStatus(bool success, uint32_t code,
 						const char *message);
 
 		void	setSuccess();
@@ -359,8 +359,8 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		void	setFailed(uint32_t code);
 		void	setFailed(uint32_t code, const char *message);
 
-		void	setSuccess(bool success);
-		bool	getSuccess();
+		void		setSuccess(bool success);
+		bool		getSuccess();
 
 		void		setCode(uint32_t code);
 		uint32_t	getCode();
@@ -369,9 +369,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		const char	*getMessage();
 
 		void		setData(const char *key,
-					const collection *data);
+						const collection *data);
 		void		attachData(const char *key,
-					collection *data);
+						collection *data);
 
 		linkedlist<char *>	*getKeys();
 		const collection	*getData(const char *key);
