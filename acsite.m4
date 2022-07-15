@@ -1604,12 +1604,10 @@ then
 	FW_CHECK_APRCONFIG
 	FW_CHECK_APUCONFIG
 
-	dnl for now, only support apache 2
-	dnl if ( test -z "$APXS" -o -z "$APR_CONFIG" )
-	dnl then
-		dnl INCLUDE_APACHE2="0"
-		dnl APACHEINCLUDES=""
-	dnl fi
+	if ( test -z "$APACHEINCLUDES" )
+	then
+		INCLUDE_APACHE2="0"
+	fi
 else
 	echo "disabled"
 fi

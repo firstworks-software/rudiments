@@ -37478,7 +37478,11 @@ then
 fi
 
 
-								else
+	if ( test -z "$APACHEINCLUDES" )
+	then
+		INCLUDE_APACHE2="0"
+	fi
+else
 	echo "disabled"
 fi
 
