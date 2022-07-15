@@ -34,7 +34,7 @@ class apachehttpserverapiprivate {
 
 		const unsigned char	*_stdinptr;
 		size_t			_stdinpos;
-		bytebuffer		*_standardin;
+		bytebuffer		_standardin;
 };
 
 apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
@@ -42,11 +42,9 @@ apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 	pvt->_apistruct=apistruct;
 	pvt->_crcount=0;
 	pvt->_stdinptr=NULL;
-	pvt->_standardin=new bytebuffer();
 }
 
 apachehttpserverapi::~apachehttpserverapi() {
-	delete pvt->_standardin;
 }
 
 bool apachehttpserverapi::getCharacter(char *ch) {
@@ -86,17 +84,17 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 				apr_bucket_read(bucket,&data,&len,
 							APR_BLOCK_READ);
 
-				pvt->_standardin->append(data,
+				pvt->_standardin.append(data,
 					static_cast<size_t>(len));
 			}
 
 			apr_brigade_cleanup(bb);
 		}
 
-		pvt->_stdinptr=pvt->_standardin->getBuffer();
+		pvt->_stdinptr=pvt->_standardin.getBuffer();
 		pvt->_stdinpos=0;
 	}
-	if (pvt->_stdinpos<pvt->_standardin->getSize()) {
+	if (pvt->_stdinpos<pvt->_standardin.getSize()) {
 		*ch=static_cast<char>(*pvt->_stdinptr);
 		pvt->_stdinptr++;
 		pvt->_stdinpos++;
@@ -210,35 +208,17 @@ httpserverapi *apachehttpserverapi::header(const char *string) {
 }
 
 ssize_t	apachehttpserverapi::write(const unsigned char *string, size_t size) {
-	int	count=0;
-	for (uint64_t index=0; index<size; index++) {
-		int	result=ap_rputc(string[index],
-					(request_rec *)pvt->_apistruct);
-		if (result>=0) {
-			count+=result;
-		} else {
-			return result;
-		}
-	}
-	return count;
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%.*s",
+						(int)size,(const char *)string);
 }
 
 ssize_t	apachehttpserverapi::write(const char *string) {
-	return ap_rputs(string,(request_rec *)pvt->_apistruct);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%s",string);
 }
 
 ssize_t	apachehttpserverapi::write(const char *string, size_t size) {
-	int	count=0;
-	for (uint64_t index=0; index<size; index++) {
-		int	result=ap_rputc(string[index],
-					(request_rec *)pvt->_apistruct);
-		if (result>=0) {
-			count+=result;
-		} else {
-			return result;
-		}
-	}
-	return count;
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%.*s",
+						(int)size,string);
 }
 
 ssize_t	apachehttpserverapi::write(char ch) {
@@ -268,21 +248,16 @@ ssize_t	apachehttpserverapi::write(wchar_t ch) {
 }
 
 ssize_t	apachehttpserverapi::write(int16_t number) {
-	char	buffer[7];
-	charstring::printf(buffer,sizeof(buffer),"%hd",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%hd",number);
 }
 
 ssize_t	apachehttpserverapi::write(int32_t number) {
-	char	buffer[12];
-	charstring::printf(buffer,sizeof(buffer),"%d",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%d",number);
 }
 
 ssize_t	apachehttpserverapi::write(int64_t number) {
-	char	buffer[22];
-	charstring::printf(buffer,sizeof(buffer),"%lld",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%lld",
+							(long long)number);
 }
 
 ssize_t	apachehttpserverapi::write(unsigned char ch) {
@@ -290,33 +265,24 @@ ssize_t	apachehttpserverapi::write(unsigned char ch) {
 }
 
 ssize_t	apachehttpserverapi::write(uint16_t number) {
-	char	buffer[7];
-	charstring::printf(buffer,sizeof(buffer),"%hd",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%hd",number);
 }
 
 ssize_t	apachehttpserverapi::write(uint32_t number) {
-	char	buffer[12];
-	charstring::printf(buffer,sizeof(buffer),"%d",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%d",number);
 }
 
 ssize_t	apachehttpserverapi::write(uint64_t number) {
-	char	buffer[22];
-	charstring::printf(buffer,sizeof(buffer),"%lld",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%lld",
+							(long long)number);
 }
 
 ssize_t	apachehttpserverapi::write(float number) {
-	char	buffer[22];
-	charstring::printf(buffer,sizeof(buffer),"%f",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%f",number);
 }
 
 ssize_t	apachehttpserverapi::write(double number) {
-	char	buffer[22];
-	charstring::printf(buffer,sizeof(buffer),"%f",number);
-	return write(buffer);
+	return ap_rprintf((request_rec *)pvt->_apistruct,"%f",number);
 }
 
 ssize_t apachehttpserverapi::printfDelegate(const char *format,

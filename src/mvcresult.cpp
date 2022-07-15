@@ -144,7 +144,7 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 	((indent)?incOrErr(&retval,out->write(' ')):true) &&
 	incOrErr(&retval,out->write((pvt->_success)?"true":"false")) &&
 	incOrErr(&retval,out->write(',')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true);
+	((indent)?incOrErr(&retval,out->write('\n')):true) &&
 
 	// status code
 	incOrErr(&retval,out->write("\"c\":")) &&
