@@ -1598,7 +1598,7 @@ AC_DEFUN([FW_CHECK_APACHE],
 [
 APACHEINCLUDES=""
 
-if ( test "$INCLUDE_APACHE2" = "1" )
+if ( test "$INCLUDE_APACHE" = "1" )
 then
 	FW_CHECK_APXS
 	FW_CHECK_APRCONFIG
@@ -1606,7 +1606,7 @@ then
 
 	if ( test -z "$APACHEINCLUDES" )
 	then
-		INCLUDE_APACHE2="0"
+		INCLUDE_APACHE="0"
 	fi
 else
 	echo "disabled"

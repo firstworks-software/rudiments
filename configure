@@ -902,7 +902,7 @@ enable_propdom
 enable_cursordomnode
 enable_request
 enable_response
-enable_apache2
+enable_apache
 enable_cgi
 enable_mvc
 enable_slow_system
@@ -1636,7 +1636,7 @@ Optional Features:
   --disable-cursordomnode Don't build cursordomnode class
   --disable-request       Don't build request classes
   --disable-response      Don't build response classes
-  --disable-apache2       Disable Apache 2 support
+  --disable-apache        Disable Apache support
   --disable-cgi           Disable CGI support
   --disable-mvc           Disable MVC support
   --enable-slow-system    This is a slow system, affects tests
@@ -3247,11 +3247,11 @@ else
   INCLUDE_RESPONSE="1"
 fi
 
-# Check whether --enable-apache2 was given.
-if test "${enable_apache2+set}" = set; then :
-  enableval=$enable_apache2; INCLUDE_APACHE2="0"
+# Check whether --enable-apache was given.
+if test "${enable_apache+set}" = set; then :
+  enableval=$enable_apache; INCLUDE_APACHE="0"
 else
-  INCLUDE_APACHE2="1"
+  INCLUDE_APACHE="1"
 fi
 
 # Check whether --enable-cgi was given.
@@ -36925,11 +36925,11 @@ echo "******************************"
 
 
 echo
-echo "***** Apache 2 ***************"
+echo "***** Apache *****************"
 
 APACHEINCLUDES=""
 
-if ( test "$INCLUDE_APACHE2" = "1" )
+if ( test "$INCLUDE_APACHE" = "1" )
 then
 
 
@@ -37480,7 +37480,7 @@ fi
 
 	if ( test -z "$APACHEINCLUDES" )
 	then
-		INCLUDE_APACHE2="0"
+		INCLUDE_APACHE="0"
 	fi
 else
 	echo "disabled"
@@ -38185,7 +38185,7 @@ then
 	LOBJS="$LOBJS httpresponse.lo"
 fi
 
-if ( test "$INCLUDE_APACHE2" = "1" )
+if ( test "$INCLUDE_APACHE" = "1" )
 then
 	HEADERS3="$HEADERS3 apachehttpserverapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
@@ -38203,7 +38203,7 @@ then
 	LOBJS="$LOBJS cgihttpserverapi.lo"
 fi
 
-if ( test "$INCLUDE_APACHE2" = "1" -o "$INCLUDE_CGI" = "1" )
+if ( test "$INCLUDE_APACHE" = "1" -o "$INCLUDE_CGI" = "1" )
 then
 	HEADERS3="$HEADERS3 httpserverapi.h httpserverapimain.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 httpserverapi.h httpserverapiincludes.h"
@@ -40761,10 +40761,10 @@ if ( test "$INCLUDE_CGI" = "1")
 then
 	CGIBUILD="yes"
 fi
-APACHE2BUILD="no"
-if ( test "$INCLUDE_APACHE2" = "1")
+APACHEBUILD="no"
+if ( test "$INCLUDE_APACHE" = "1")
 then
-	APACHE2BUILD="yes"
+	APACHEBUILD="yes"
 fi
 
 echo " Features     : Threads   $HAS_THREADS"
@@ -40774,7 +40774,7 @@ echo "                TLS/SSL   $SSLBUILD"
 echo "                GSS       $GSSBUILD"
 echo "                libedit   $LIBEDITBUILD"
 echo "                CGI       $CGIBUILD"
-echo "                Apache 2  $APACHE2BUILD"
+echo "                Apache    $APACHEBUILD"
 echo "*******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"

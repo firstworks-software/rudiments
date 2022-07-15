@@ -394,10 +394,10 @@ AC_ARG_ENABLE(response,
 	[  --disable-response      Don't build response classes],
 	INCLUDE_RESPONSE="0",
 	INCLUDE_RESPONSE="1")
-AC_ARG_ENABLE(apache2,
-	[  --disable-apache2       Disable Apache 2 support],
-	INCLUDE_APACHE2="0",
-	INCLUDE_APACHE2="1")
+AC_ARG_ENABLE(apache,
+	[  --disable-apache        Disable Apache support],
+	INCLUDE_APACHE="0",
+	INCLUDE_APACHE="1")
 AC_ARG_ENABLE(cgi,
 	[  --disable-cgi           Disable CGI support],
 	INCLUDE_CGI="0",
@@ -4492,7 +4492,7 @@ echo "******************************"
 
 dnl Check for Apache module api
 echo
-echo "***** Apache 2 ***************"
+echo "***** Apache *****************"
 FW_CHECK_APACHE
 echo "******************************"
 
@@ -5170,7 +5170,7 @@ then
 	LOBJS="$LOBJS httpresponse.lo"
 fi
 
-if ( test "$INCLUDE_APACHE2" = "1" )
+if ( test "$INCLUDE_APACHE" = "1" )
 then
 	HEADERS3="$HEADERS3 apachehttpserverapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 apachehttpserverapi.h apachehttpserverapiincludes.h apacheincludes.h apachemodule.h"
@@ -5188,7 +5188,7 @@ then
 	LOBJS="$LOBJS cgihttpserverapi.lo"
 fi
 
-if ( test "$INCLUDE_APACHE2" = "1" -o "$INCLUDE_CGI" = "1" )
+if ( test "$INCLUDE_APACHE" = "1" -o "$INCLUDE_CGI" = "1" )
 then
 	HEADERS3="$HEADERS3 httpserverapi.h httpserverapimain.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 httpserverapi.h httpserverapiincludes.h"
@@ -5326,10 +5326,10 @@ if ( test "$INCLUDE_CGI" = "1")
 then
 	CGIBUILD="yes"
 fi
-APACHE2BUILD="no"
-if ( test "$INCLUDE_APACHE2" = "1")
+APACHEBUILD="no"
+if ( test "$INCLUDE_APACHE" = "1")
 then
-	APACHE2BUILD="yes"
+	APACHEBUILD="yes"
 fi
 
 echo " Features     : Threads   $HAS_THREADS"
@@ -5339,7 +5339,7 @@ echo "                TLS/SSL   $SSLBUILD"
 echo "                GSS       $GSSBUILD"
 echo "                libedit   $LIBEDITBUILD"
 echo "                CGI       $CGIBUILD"
-echo "                Apache 2  $APACHE2BUILD"
+echo "                Apache    $APACHEBUILD"
 echo "*******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"
