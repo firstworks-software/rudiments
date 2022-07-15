@@ -37478,12 +37478,7 @@ then
 fi
 
 
-		if ( test -z "$APXS" -o -z "$APR_CONFIG" )
-	then
-		INCLUDE_APACHE2="0"
-		APACHEINCLUDES=""
-	fi
-else
+								else
 	echo "disabled"
 fi
 

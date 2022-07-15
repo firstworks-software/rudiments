@@ -18,7 +18,16 @@
 	#define ap_table_elts apr_table_elts
 #endif
 
+#ifndef APACHE_2
+	// apache 1.x uses table instead of apr_table_t, which
+	// collides with our table class, so use some trickery
+	// to work around that
+	#define table apr_table_t
+#endif
 #include <util_script.h>
+#ifndef APACHE_2
+	#undef table
+#endif
 
 class apachehttpserverapiprivate {
 	friend class apachehttpserverapi;
@@ -54,11 +63,22 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 	if (!pvt->_stdinptr) {
 
 		request_rec		*r=(request_rec *)pvt->_apistruct;
+
+#ifdef APACHE_2
 		apr_bucket_brigade	*bb=apr_brigade_create(r->pool,
 						r->connection->bucket_alloc);
+#else
+		if (ap_setup_client_block(r,REQUEST_CHUNKED_ERROR)!=OK ||
+						!ap_should_client_block(r)) {
+			return false;
+		}
+		char	data[HUGE_STRING_LEN];
+#endif
+
 		bool	done=false;
 		while (!done) {
 
+#ifdef APACHE_2
 			if (ap_get_brigade(r->input_filters,bb,
 						AP_MODE_READBYTES,
 						APR_BLOCK_READ,
@@ -84,18 +104,25 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 				apr_bucket_read(bucket,&data,&len,
 							APR_BLOCK_READ);
 
-				pvt->_standardin.append(data,
-					static_cast<size_t>(len));
+				pvt->_standardin.append(data,(size_t)len);
 			}
 
 			apr_brigade_cleanup(bb);
+#else
+			int	len=ap_get_client_block(r,data,sizeof(data));
+			if (len) {
+				pvt->_standardin.append(data,(size_t)len);
+			} else {
+				done=false;
+			}
+#endif
 		}
 
 		pvt->_stdinptr=pvt->_standardin.getBuffer();
 		pvt->_stdinpos=0;
 	}
 	if (pvt->_stdinpos<pvt->_standardin.getSize()) {
-		*ch=static_cast<char>(*pvt->_stdinptr);
+		*ch=(char)(*pvt->_stdinptr);
 		pvt->_stdinptr++;
 		pvt->_stdinpos++;
 		return true;
@@ -208,17 +235,15 @@ httpserverapi *apachehttpserverapi::header(const char *string) {
 }
 
 ssize_t	apachehttpserverapi::write(const unsigned char *string, size_t size) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%.*s",
-						(int)size,(const char *)string);
+	return ap_rwrite(string,size,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(const char *string) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%s",string);
+	return ap_rputs(string,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(const char *string, size_t size) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%.*s",
-						(int)size,string);
+	return ap_rwrite(string,size,(request_rec *)pvt->_apistruct);
 }
 
 ssize_t	apachehttpserverapi::write(char ch) {
