@@ -7,11 +7,15 @@
 #include <rudiments/cgihttpserverapi.h>
 #include <rudiments/process.h>
 
+static bool httpModuleInit(httpserverapi *sapi);
 static bool httpModuleMain(httpserverapi *sapi);
+static bool httpModuleExit(httpserverapi *sapi);
 
 int main(int argc, char **argv) {
 	cgihttpserverapi	sapi;
-	process::exit(httpModuleMain(&sapi)?0:1);
+	process::exit((httpModuleInit(&sapi) &&
+			httpModuleMain(&sapi) &&
+			httpModuleExit(&sapi))?0:1);
 }
 
 #endif

@@ -81,6 +81,7 @@
 	filedescriptor::printf() methods return ssize_t now
 	added thread::reliable()
 	refactored mvcresult a bit
+	added httpModuleInit/httpModuleExit functions
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

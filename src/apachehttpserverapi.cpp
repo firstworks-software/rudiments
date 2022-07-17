@@ -29,6 +29,12 @@
 	#undef table
 #endif
 
+// this matches what is defined in apachemodule.h
+struct apacheapistruct {
+	void	*requestrec;
+	void	*serverrec;
+};
+
 class apachehttpserverapiprivate {
 	friend class apachehttpserverapi;
 	private:
@@ -62,7 +68,8 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 	// without first buffering the entire string
 	if (!pvt->_stdinptr) {
 
-		request_rec		*r=(request_rec *)pvt->_apistruct;
+		request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
 
 #ifdef APACHE_2
 		apr_bucket_brigade	*bb=apr_brigade_create(r->pool,
@@ -131,18 +138,24 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 }
 
 void apachehttpserverapi::initEnvironmentVariables() {
+
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+
 	pvt->_envdirty=false;
 	pvt->_envcount=0;
 	pvt->_envvars=NULL;
 	pvt->_envvals=NULL;
-	ap_add_common_vars((request_rec *)pvt->_apistruct);
-	ap_add_cgi_vars((request_rec *)pvt->_apistruct);
+	ap_add_common_vars(r);
+	ap_add_cgi_vars(r);
 }
 
 const char *apachehttpserverapi::getEnvironmentVariable(const char *name) {
-	char	*val=(char *)ap_table_get(
-			((request_rec *)pvt->_apistruct)->subprocess_env,
-			name);
+
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+
+	char	*val=(char *)ap_table_get(r->subprocess_env,name);
 	if (val) {
 		return val;
 	}
@@ -166,9 +179,12 @@ const char * const *apachehttpserverapi::getEnvironmentValues() {
 
 bool apachehttpserverapi::setEnvironmentVariable(const char *name,
 							const char *value) {
+
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+
 	pvt->_envdirty=true;
-	ap_table_set(((request_rec *)pvt->_apistruct)->
-				subprocess_env,name,value);
+	ap_table_set(r->subprocess_env,name,value);
 	return true;
 }
 
@@ -178,13 +194,16 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 	// or if they haven't been initialized at all
 	if (!pvt->_envvars || pvt->_envdirty) {
 
+		request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+
+
 		// delete old lists
 		delete[] pvt->_envvars;
 		delete[] pvt->_envvals;
 
 		// update counter
-		pvt->_envcount=ap_table_elts(((request_rec *)pvt->_apistruct)->
-							subprocess_env)->nelts;
+		pvt->_envcount=ap_table_elts(r->subprocess_env)->nelts;
 
 		// create new lists
 		pvt->_envvars=new char *[pvt->_envcount+1];
@@ -193,9 +212,7 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 		pvt->_envvals[pvt->_envcount]=NULL;
 		
 		// insert variables into lists
-		array_header	*arr=ap_table_elts(
-					((request_rec *)pvt->_apistruct)->
-							subprocess_env);
+		array_header	*arr=ap_table_elts(r->subprocess_env);
 		table_entry	*list=(table_entry *)arr->elts;
 		for (uint64_t index=0; index<pvt->_envcount; index++) {
 			pvt->_envvars[index]=list[index].key;
@@ -207,18 +224,24 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 }
 
 httpserverapi *apachehttpserverapi::status(const char *string) {
-	charstring::copy((char *)
-			((request_rec *)pvt->_apistruct)->status_line,string);
+
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+
+	charstring::copy((char *)r->status_line,string);
 	return this;
 }
 
 httpserverapi *apachehttpserverapi::header(const char *variable,
 							const char *value) {
+
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+
 	if (!charstring::compare(variable,"Content-type")) {
-		((request_rec *)pvt->_apistruct)->content_type=value;
+		r->content_type=value;
 	} else {
-		ap_table_set(((request_rec *)pvt->_apistruct)->headers_out,
-				variable,value);
+		ap_table_set(r->headers_out,variable,value);
 	}
 	return this;
 }
@@ -226,7 +249,21 @@ httpserverapi *apachehttpserverapi::header(const char *variable,
 httpserverapi *apachehttpserverapi::header(const char *string) {
 	if (!charstring::compare(string,"\r\n")) {
 		if (pvt->_crcount==1) {
-			ap_send_http_header((request_rec *)pvt->_apistruct);
+			// gcc 11.2.1 on fedora 34 gets confused when I set r
+			// then call ap_send_http_header(r) and throws
+			// unused variable warnings/errors.  If I use it
+			// directly though, it works.
+			#if 0
+			request_rec	*r=(request_rec *)
+				((apacheapistruct *)pvt->_apistruct)->
+								requestrec;
+			ap_send_http_header(r);
+			#else
+			ap_send_http_header(
+				(request_rec *)
+				((apacheapistruct *)pvt->_apistruct)->
+								requestrec);
+			#endif
 		} else {
 			pvt->_crcount++;
 		}
@@ -235,19 +272,27 @@ httpserverapi *apachehttpserverapi::header(const char *string) {
 }
 
 ssize_t	apachehttpserverapi::write(const unsigned char *string, size_t size) {
-	return ap_rwrite(string,size,(request_rec *)pvt->_apistruct);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rwrite(string,size,r);
 }
 
 ssize_t	apachehttpserverapi::write(const char *string) {
-	return ap_rputs(string,(request_rec *)pvt->_apistruct);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return (string)?ap_rputs(string,r):0;
 }
 
 ssize_t	apachehttpserverapi::write(const char *string, size_t size) {
-	return ap_rwrite(string,size,(request_rec *)pvt->_apistruct);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rwrite(string,size,r);
 }
 
 ssize_t	apachehttpserverapi::write(char ch) {
-	return ap_rputc(ch,(request_rec *)pvt->_apistruct);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rputc(ch,r);
 }
 
 ssize_t	apachehttpserverapi::write(const wchar_t *string) {
@@ -266,48 +311,65 @@ ssize_t	apachehttpserverapi::write(const wchar_t *string, size_t size) {
 }
 
 ssize_t	apachehttpserverapi::write(wchar_t ch) {
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	// FIXME: This just converts to char and writes.
 	// Is there an ar_rputwc or something like that?
-	return ap_rputc(character::duplicate(ch,'?'),
-				(request_rec *)pvt->_apistruct);
+	return ap_rputc(character::duplicate(ch,'?'),r);
 }
 
 ssize_t	apachehttpserverapi::write(int16_t number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%hd",number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%hd",number);
 }
 
 ssize_t	apachehttpserverapi::write(int32_t number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%d",number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%d",number);
 }
 
 ssize_t	apachehttpserverapi::write(int64_t number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%lld",
-							(long long)number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%lld",(long long)number);
 }
 
 ssize_t	apachehttpserverapi::write(unsigned char ch) {
-	return ap_rputc((char)ch,(request_rec *)pvt->_apistruct);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rputc((char)ch,r);
 }
 
 ssize_t	apachehttpserverapi::write(uint16_t number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%hd",number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%hd",number);
 }
 
 ssize_t	apachehttpserverapi::write(uint32_t number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%d",number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%d",number);
 }
 
 ssize_t	apachehttpserverapi::write(uint64_t number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%lld",
-							(long long)number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%lld",(long long)number);
 }
 
 ssize_t	apachehttpserverapi::write(float number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%f",number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%f",number);
 }
 
 ssize_t	apachehttpserverapi::write(double number) {
-	return ap_rprintf((request_rec *)pvt->_apistruct,"%f",number);
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	return ap_rprintf(r,"%f",number);
 }
 
 ssize_t apachehttpserverapi::printfDelegate(const char *format,
