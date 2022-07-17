@@ -11,6 +11,8 @@ class RUDIMENTS_DLLSPEC apachehttpserverapi : public httpserverapi {
 		apachehttpserverapi(void *apistruct);
 		~apachehttpserverapi();
 
+		uint64_t	getThreadsPerProcess();
+
 	#include <rudiments/private/apachehttpserverapi.h>
 };
 

@@ -4,7 +4,8 @@
 #ifndef RUDIMENTS_HTTPSERVERMAIN_H
 #define RUDIMENTS_HTTPSERVERMAIN_H
 
-// Include this file in the .cpp file that contains your httpModuleMain().
+// Include this file in the .cpp file that contains your functions
+// httpModuleInit(), httpModuleMain(), and httpModuleExit().
 //
 // Define HTTP_MODULE_CGI to compile your program as a CGI.
 // Define HTTP_MODULE_APACHE to compile your program as an Apache module.

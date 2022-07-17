@@ -62,6 +62,25 @@ apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 apachehttpserverapi::~apachehttpserverapi() {
 }
 
+uint64_t apachehttpserverapi::getThreadsPerProcess() {
+	#ifdef APACHE_2
+
+#if 0
+		// get the server_rec
+		server_rec	*s=(server_rec *)
+					((apacheapistruct *)pvt->_apistruct)->
+					serverrec;
+
+		// get the process configuration pool
+		// FIXME: maybe it's in here somewhere?
+		s->process->pconf;
+#endif
+		return 1;
+	#else
+		return 1;
+	#endif
+}
+
 bool apachehttpserverapi::getCharacter(char *ch) {
 
 	// FIXME: this is sort of lame, it should be possible to do this

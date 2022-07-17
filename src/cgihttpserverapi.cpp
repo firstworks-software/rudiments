@@ -31,6 +31,10 @@ cgihttpserverapi::~cgihttpserverapi() {
 	delete pvt;
 }
 
+uint64_t cgihttpserverapi::getThreadsPerProcess() {
+	return 1;
+}
+
 bool cgihttpserverapi::getCharacter(char *ch) {
 	return (stdinput.read(ch)==sizeof(char));
 }

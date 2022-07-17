@@ -11,6 +11,8 @@ class RUDIMENTS_DLLSPEC cgihttpserverapi : public httpserverapi {
 		cgihttpserverapi();
 		~cgihttpserverapi();
 
+		uint64_t	getThreadsPerProcess();
+
 	#include <rudiments/private/cgihttpserverapi.h>
 };
 

@@ -18,3 +18,5 @@
 		virtual	httpserverapi	*header(const char *variable,
 							const char *value)=0;
 		virtual	httpserverapi	*header(const char *string)=0;
+
+		virtual	uint64_t	getThreadsPerProcess()=0;

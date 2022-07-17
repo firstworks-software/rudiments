@@ -198,7 +198,7 @@ static apr_status_t XHANDLER_FUNCTION(HTTP_MODULE_NAME)(request_rec *r) {
 
 	apacheapistruct	aas;
 	aas.requestrec=r;
-	aas.serverrec=NULL;
+	aas.serverrec=r->server;
 
 	apachehttpserverapi	sapi((void *)&aas);
 	return (httpModuleMain(&sapi))?OK:DECLINED;
