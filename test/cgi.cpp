@@ -10,6 +10,10 @@
 #include <rudiments/httpserverapimain.h>
 #include <rudiments/stdio.h>
 
+static bool httpModuleInit(httpserverapi *sapi) {
+	return true;
+}
+
 static bool httpModuleMain(httpserverapi *sapi) {
 
 	urlhttprequest	req(sapi);
@@ -131,5 +135,9 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	stdoutput.printf("Count of File Parameters: %d\n",req.getFileCount());
 	stdoutput.printf("\n");
 
+	return true;
+}
+
+static bool httpModuleExit(httpserverapi *sapi) {
 	return true;
 }

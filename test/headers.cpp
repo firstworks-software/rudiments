@@ -8,6 +8,10 @@
 #include <rudiments/httpresponse.h>
 #include <rudiments/httpserverapimain.h>
 
+static bool httpModuleInit(httpserverapi *sapi) {
+	return true;
+}
+
 static bool httpModuleMain(httpserverapi *sapi) {
 
 	httpresponse	resp(sapi);
@@ -35,5 +39,9 @@ static bool httpModuleMain(httpserverapi *sapi) {
 
 	resp.header("Title","Hello, This is a title.");
 
+	return true;
+}
+
+static bool httpModuleExit(httpserverapi *sapi) {
 	return true;
 }

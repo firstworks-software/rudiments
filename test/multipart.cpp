@@ -11,6 +11,10 @@
 #include <rudiments/file.h>
 #include <rudiments/snooze.h>
 
+static bool httpModuleInit(httpserverapi *sapi) {
+	return true;
+}
+
 static bool httpModuleMain(httpserverapi *sapi) {
 
 	httpresponse	resp(sapi);
@@ -46,5 +50,9 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	// send the final boundary string
 	resp.multiPartEnd(NULL);
 
+	return true;
+}
+
+static bool httpModuleExit(httpserverapi *sapi) {
 	return true;
 }

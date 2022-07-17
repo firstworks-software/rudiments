@@ -115,6 +115,10 @@ bool mod1mod2::sthtmlparser::replacements(output *container,
 	return te->parse(container,block,length,NULL,&vars);
 }
 
+static bool httpModuleInit(httpserverapi *sapi) {
+	return true;
+}
+
 bool httpModuleMain(httpserverapi *sapi) {
 
 	urlhttprequest	mreq(sapi);
@@ -133,4 +137,8 @@ bool httpModuleMain(httpserverapi *sapi) {
 	vars.setValues(req->getAllVariables(),req->getAllValues());
 
 	return te->parse(resp,req->pagePath(),ph,&vars);
+}
+
+static bool httpModuleExit(httpserverapi *sapi) {
+	return true;
 }
