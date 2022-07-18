@@ -82,6 +82,7 @@
 	added thread::reliable()
 	refactored mvcresult a bit
 	added httpModuleInit/httpModuleExit functions
+	added resourcepool class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

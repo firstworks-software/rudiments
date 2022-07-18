@@ -78,6 +78,7 @@ PROGS3= handoff \
 	table \
 	scalar \
 	sensitivevalue \
+	resourcepool \
 	collectionprint
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
@@ -315,6 +316,9 @@ scalar: scalar.cpp scalar.$(OBJ)
 
 sensitivevalue: sensitivevalue.cpp sensitivevalue.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sensitivevalue.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+resourcepool: resourcepool.cpp resourcepool.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) resourcepool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 collectionprint: collectionprint.cpp collectionprint.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) collectionprint.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

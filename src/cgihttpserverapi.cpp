@@ -31,8 +31,8 @@ cgihttpserverapi::~cgihttpserverapi() {
 	delete pvt;
 }
 
-uint64_t cgihttpserverapi::getThreadsPerProcess() {
-	return 1;
+const char *cgihttpserverapi::getType() const {
+	return "cgi";
 }
 
 bool cgihttpserverapi::getCharacter(char *ch) {

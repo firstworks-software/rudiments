@@ -326,7 +326,8 @@ headers3="dynamicarray.h "+_
 	"httpserverapi.h "+_
 	"httpserverapimain.h "+_
 	"mvc.h "+_
-	"cronschedule.h "
+	"cronschedule.h "+_
+	"resourcepool.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -573,7 +574,10 @@ privateheaders7="staticarray.h "+_
 	"mvcview.h "+_
 	"httpbasicsecurity.h "+_
 	"cronscheduleincludes.h "+_
-	"cronschedule.h "
+	"cronschedule.h "+_
+	"resourcepool.h "+_
+	"resourcepoolincludes.h "+_
+	"resourcepoolinlines.h "
 
 ' version
 RUDIMENTS_VERSION="2.0.0"

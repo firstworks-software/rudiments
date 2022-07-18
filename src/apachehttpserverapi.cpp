@@ -62,22 +62,11 @@ apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 apachehttpserverapi::~apachehttpserverapi() {
 }
 
-uint64_t apachehttpserverapi::getThreadsPerProcess() {
+const char *apachehttpserverapi::getType() const {
 	#ifdef APACHE_2
-
-#if 0
-		// get the server_rec
-		server_rec	*s=(server_rec *)
-					((apacheapistruct *)pvt->_apistruct)->
-					serverrec;
-
-		// get the process configuration pool
-		// FIXME: maybe it's in here somewhere?
-		s->process->pconf;
-#endif
-		return 1;
+		return "apache2";
 	#else
-		return 1;
+		return "apache1";
 	#endif
 }
 
