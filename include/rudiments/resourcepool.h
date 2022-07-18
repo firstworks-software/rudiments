@@ -63,16 +63,19 @@ class resourcepool {
 		bool	initialize();
 
 		/** Clears the resourcepool, deleting all resources in the
-		 *  pool. */
-		void	clear();
+		 *  pool.
+		 *
+		 *  Returns true on success and false if a mutex lock failed. */
+		bool	clear();
 
 		/** Returns a pointer to an instance of "valuetype" from the
 		 *  pool, or NULL if none are available or a mutex lock
 		 *  failed. */
 		valuetype	*borrowResource();
 
-		/** Returns "resource" to the pool.  Returns true on success
-		 *  and false if a mutex lock failed. */
+		/** Returns "resource" to the pool.
+
+		 *  Returns true on success and false if a mutex lock failed. */
 		bool	returnResource(valuetype *resource);
 
 		/** Sets a mutex to use when borrowing or returning

@@ -4,8 +4,8 @@
 	protected:
 		virtual valuetype	*createResource();
 
-	private:
 		void	clone(const resourcepool<valuetype> *r);
+		void	clearDelegate();
 
 		uint64_t	min;
 		uint64_t	max;

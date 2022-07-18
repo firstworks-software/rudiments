@@ -52,6 +52,9 @@ template <class valuetype>
 inline
 void resourcepool<valuetype>::setMin(uint64_t min) {
 	this->min=min;
+	if (max<min) {
+		max=min;
+	}
 }
 
 template <class valuetype>
@@ -87,22 +90,58 @@ uint64_t resourcepool<valuetype>::getGrowBy() const {
 template <class valuetype>
 inline
 bool resourcepool<valuetype>::initialize() {
+
+	// lock mutex
+	if (mtx && !mtx->lock()) {
+		return false;
+	}
+
 	for (uint64_t i=0; i<min; i++) {
 		valuetype	*v=createResource();
 		if (!v) {
-			clear();
+			clearDelegate();
+
+			// unlock mutex
+			if (mtx) {
+				mtx->unlock();
+			}
+
 			return false;
 		}
 		initiallist.append(v);
 	}
 	total=min;
 	initialized=true;
+
+	// unlock mutex
+	if (mtx) {
+		mtx->unlock();
+	}
+
 	return true;
 }
 
 template <class valuetype>
 inline
-void resourcepool<valuetype>::clear() {
+bool resourcepool<valuetype>::clear() {
+
+	// lock mutex
+	if (mtx && !mtx->lock()) {
+		return false;
+	}
+
+	clearDelegate();
+
+	// unlock mutex
+	if (mtx) {
+		mtx->unlock();
+	}
+	return true;
+}
+
+template <class valuetype>
+inline
+void resourcepool<valuetype>::clearDelegate() {
 
 	initiallist.setManageValues(true);
 	initiallist.clear();
