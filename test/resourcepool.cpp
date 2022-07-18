@@ -71,6 +71,15 @@ int main(int argc, char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	// borrow too many
+	stdoutput.printf("borrow too many\n");
+	test("borrow",!r.borrowResource());
+	test("available initial (after)",
+			!r.getAvailableInitialResourceCount());
+	test("available on-demand (after)",
+			!r.getAvailableOnDemandResourceCount());
+	stdoutput.printf("\n");
+
 	// return to initial pool
 	count=0;
 	for (uint64_t i=0; i<r.getMin(); i++) {
