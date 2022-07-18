@@ -43,6 +43,8 @@ class RUDIMENTS_DLLSPEC mvctier : virtual public object {
 		mvctier();
 		virtual ~mvctier();
 
+		virtual const char	*getType() const;
+
 		void		setProperties(mvcproperties *prop);
 		mvcproperties	*getProperties();
 

@@ -7,32 +7,36 @@
 class mvctierprivate {
 	friend class mvctier;
 	private:
-		mvcproperties	*prop;
-		mvcsecurity	*sec;
+		mvcproperties	*_prop;
+		mvcsecurity	*_sec;
 };
 
 mvctier::mvctier() : object() {
 	pvt=new mvctierprivate;
-	pvt->prop=NULL;
-	pvt->sec=NULL;
+	pvt->_prop=NULL;
+	pvt->_sec=NULL;
 }
 
 mvctier::~mvctier() {
 	delete pvt;
 }
 
+const char *mvctier::getType() const {
+	return "mvctier";
+}
+
 void mvctier::setProperties(mvcproperties *prop) {
-	pvt->prop=prop;
+	pvt->_prop=prop;
 }
 
 mvcproperties *mvctier::getProperties() {
-	return pvt->prop;
+	return pvt->_prop;
 }
 
 void mvctier::setSecurity(mvcsecurity *sec) {
-	pvt->sec=sec;
+	pvt->_sec=sec;
 }
 
 mvcsecurity *mvctier::getSecurity() {
-	return pvt->sec;
+	return pvt->_sec;
 }
