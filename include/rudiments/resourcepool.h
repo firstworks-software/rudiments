@@ -6,7 +6,10 @@
 
 #include <rudiments/private/resourcepoolincludes.h>
 
-/** The resourcepool class allows you to ... */
+/** The resourcepool class provides a pool of objects.  Objects can be borrowed
+ *  from and returned to the pool.  The pool contains a configurable number of
+ *  objects that are allocated when the pool is initialized, and can allocate a
+ *  configurable number of additional objects on-demand.  */
 template <class valuetype>
 class resourcepool {
 	public:
