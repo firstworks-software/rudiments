@@ -128,7 +128,7 @@ bool apachehttpserverapi::getCharacter(char *ch) {
 			if (len) {
 				pvt->_standardin.append(data,(size_t)len);
 			} else {
-				done=false;
+				done=true;
 			}
 #endif
 		}
