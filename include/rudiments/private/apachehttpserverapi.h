@@ -1,7 +1,20 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-		bool	getCharacter(char *ch);
+		ssize_t	read(unsigned char *buffer, size_t size);
+		ssize_t	read(char *buffer, size_t length);
+		ssize_t	read(char *character);
+		ssize_t	read(wchar_t *buffer, size_t length);
+		ssize_t	read(wchar_t *character);
+		ssize_t	read(int16_t *number);
+		ssize_t	read(int32_t *number);
+		ssize_t	read(int64_t *number);
+		ssize_t	read(unsigned char *character);
+		ssize_t	read(uint16_t *number);
+		ssize_t	read(uint32_t *number);
+		ssize_t	read(uint64_t *number);
+		ssize_t	read(float *number);
+		ssize_t	read(double *number);
 
 		void		initEnvironmentVariables();
 		const char	*getEnvironmentVariable(const char *name);
@@ -36,5 +49,9 @@
 
 		ssize_t	printfDelegate(const char *format, va_list *argp);
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
+
 	private:
+		ssize_t	bufferedRead(void *buf, ssize_t count);
+		ssize_t	bufferedRead(char *ch);
+
 		apachehttpserverapiprivate	*pvt;

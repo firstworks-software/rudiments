@@ -412,7 +412,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			charbuf=querystring[i];
 		} else { 
 			// for post get from stdin
-			pvt->_sapi->getCharacter(&charbuf);
+			pvt->_sapi->read(&charbuf);
 		}
 
 		if (charbuf=='&') {
@@ -438,7 +438,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			if (method==get_request || method==head_request) {
 				charbuf=querystring[i];
 			} else { 
-				pvt->_sapi->getCharacter(&charbuf);
+				pvt->_sapi->read(&charbuf);
 			}
 
 			sixteens=character::toUpperCase(charbuf);
@@ -453,7 +453,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			if (method==get_request || method==head_request) {
 				charbuf=querystring[i];
 			} else { 
-				pvt->_sapi->getCharacter(&charbuf);
+				pvt->_sapi->read(&charbuf);
 			}
 
 			ones=character::toUpperCase(charbuf);
@@ -515,7 +515,7 @@ void httprequest::parseMultipart() {
 	for (;;) {
 
 		// get a character
-		if (!pvt->_sapi->getCharacter(&charbuf)) {
+		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
 			break;
 		}
 
@@ -530,8 +530,10 @@ void httprequest::parseMultipart() {
 			// we're done, otherwise they're \r\n and we need to
 			// add the parameter
 			bool	finalboundary=false;
-			if (!pvt->_sapi->getCharacter(&(boundaryend[0])) ||
-				!pvt->_sapi->getCharacter(&(boundaryend[1])) ||
+			if (pvt->_sapi->read(&(boundaryend[0]))!=
+							sizeof(char) ||
+				pvt->_sapi->read(&(boundaryend[1]))!=
+							sizeof(char) ||
 				!charstring::compare(boundaryend,"--")) {
 				finalboundary=true;
 			}
@@ -603,7 +605,7 @@ void httprequest::parseJsonOrXml() {
 	bool	inquotes=false;
 	char	quote='\0';
 	for (;;) {
-		if (!pvt->_sapi->getCharacter(&ch)) {
+		if (pvt->_sapi->read(&ch)!=sizeof(char)) {
 			return;
 		}
 		if ((quote=='"' && ch=='"') || (quote=='\'' && ch=='\'')) {
@@ -622,11 +624,11 @@ void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename,
 	// get the new name and possibly filename
 	*name=getName();
 	char	charbuf;
-	pvt->_sapi->getCharacter(&charbuf);
+	pvt->_sapi->read(&charbuf);
 	if (charbuf==';') {
 
 		*filename=getFileName();
-		pvt->_sapi->getCharacter(&charbuf);
+		pvt->_sapi->read(&charbuf);
 
 		*mimetype=getMimeType();
 	} else {
@@ -637,9 +639,9 @@ void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename,
 
 	// get the 2 \r\n's before the content
 	// (we should already have the first \r)
-	pvt->_sapi->getCharacter(&charbuf);
-	pvt->_sapi->getCharacter(&charbuf);
-	pvt->_sapi->getCharacter(&charbuf);
+	pvt->_sapi->read(&charbuf);
+	pvt->_sapi->read(&charbuf);
+	pvt->_sapi->read(&charbuf);
 }
 
 void httprequest::getTempFile(const char *filename, file **tempfile,
@@ -682,7 +684,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// skip to the "n" or "f" in (file)name="...";
 	for (;;) {
-		if (!pvt->_sapi->getCharacter(&charbuf)) {
+		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
 			return name;
 		} else if (charbuf==c) {
 			break;
@@ -691,7 +693,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// skip to the first " in (file)name="...";
 	for (;;) {
-		if (!pvt->_sapi->getCharacter(&charbuf)) {
+		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
 			return name;
 		} else if (charbuf=='"') {
 			break;
@@ -700,7 +702,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// get everything before the last " in (file)name="...";
 	for (;;) {
-		if (!pvt->_sapi->getCharacter(&charbuf)) {
+		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
 			return name;
 		} else if (charbuf=='"') {
 			break;
@@ -719,16 +721,16 @@ stringbuffer *httprequest::getMimeType() {
 	// skip past "Content-type:"
 	char	charbuf;
 	for (;;) {
-		if (!pvt->_sapi->getCharacter(&charbuf) || charbuf==':') {
+		if (pvt->_sapi->read(&charbuf)!=sizeof(char) || charbuf==':') {
 			break;
 		}
 	}
 
 	// skip the space after "Content-type:"
-	pvt->_sapi->getCharacter(&charbuf);
+	pvt->_sapi->read(&charbuf);
 
 	// get the mime type
-	while (pvt->_sapi->getCharacter(&charbuf) && charbuf!='\r') {
+	while (pvt->_sapi->read(&charbuf)==sizeof(char) && charbuf!='\r') {
 		mimetype->append(charbuf);
 	}
 

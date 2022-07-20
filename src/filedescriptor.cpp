@@ -1495,6 +1495,9 @@ ssize_t filedescriptor::streamBufferedRead(void *buf, ssize_t count,
 		}
 
 		// if we've emptied the buffer, then fill it again
+		// FIXME: I think if we're here then we must have copied out
+		// the entire buffer, and pvt->_readbufferptr will always
+		// equal pvt->_readbuffertail, so this test is redundant
 		if (pvt->_readbufferptr==pvt->_readbuffertail) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)

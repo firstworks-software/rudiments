@@ -35,8 +35,60 @@ const char *cgihttpserverapi::getType() const {
 	return "cgi";
 }
 
-bool cgihttpserverapi::getCharacter(char *ch) {
-	return (stdinput.read(ch)==sizeof(char));
+ssize_t cgihttpserverapi::read(unsigned char *buffer, size_t size) {
+	return stdinput.read(buffer,size);
+}
+
+ssize_t cgihttpserverapi::read(char *buffer, size_t length) {
+	return stdinput.read(buffer,length);
+}
+
+ssize_t cgihttpserverapi::read(char *character) {
+	return stdinput.read(character);
+}
+
+ssize_t cgihttpserverapi::read(wchar_t *buffer, size_t length) {
+	return stdinput.read(buffer,length);
+}
+
+ssize_t cgihttpserverapi::read(wchar_t *character) {
+	return stdinput.read(character);
+}
+
+ssize_t cgihttpserverapi::read(int16_t *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(int32_t *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(int64_t *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(unsigned char *character) {
+	return stdinput.read(character);
+}
+
+ssize_t cgihttpserverapi::read(uint16_t *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(uint32_t *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(uint64_t *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(float *number) {
+	return stdinput.read(number);
+}
+
+ssize_t cgihttpserverapi::read(double *number) {
+	return stdinput.read(number);
 }
 
 void cgihttpserverapi::initEnvironmentVariables() {
