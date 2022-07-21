@@ -58,26 +58,21 @@ class apachehttpserverapiprivate {
 
 		uint16_t	_crcount;
 
-		const unsigned char	*_stdinptr;
-		size_t			_stdinpos;
-		bytebuffer		_standardin;
-
 		#ifdef APACHE_2
 			apr_bucket_brigade	*_brigade;
 			apr_bucket		*_bucket;
 			const char		*_buffer;
-			const char		*_buffertail;
-			const char		*_bufferptr;
 		#else
-			const char		_buffer[HUGE_STRING_LEN];
+			char			_buffer[HUGE_STRING_LEN];
 		#endif
+		const char		*_buffertail;
+		const char		*_bufferptr;
 };
 
 apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 	pvt=new apachehttpserverapiprivate;
 	pvt->_apistruct=apistruct;
 	pvt->_crcount=0;
-	pvt->_stdinptr=NULL;
 	#ifdef APACHE_2
 		pvt->_brigade=NULL;
 		pvt->_bucket=NULL;
@@ -273,13 +268,14 @@ ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 			#endif
 
 			// reset buffer pointers
-			pvt->_buffer=NULL;
 			pvt->_bufferptr=NULL;
 			pvt->_buffertail=NULL;
 
 			// attempt to fill the buffer...
 
 #ifdef APACHE_2
+			pvt->_buffer=NULL;
+
 			// if we don't already have a brigade..
 			if (!pvt->_brigade) {
 
@@ -426,7 +422,9 @@ ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 			// prepare to receive a block of data
 			if (ap_setup_client_block(r,
 					REQUEST_CHUNKED_ERROR)!=OK) {
+				#if defined(DEBUG_BUFFERING)
 				debugPrintf("ap_setup_client_block failed\n");
+				#endif
 				return RESULT_ERROR;
 			}
 

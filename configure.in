@@ -1508,7 +1508,7 @@ AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_NAME,1,Some 
 
 dnl OSR5 has this, but it's broken
 AC_MSG_CHECKING(for tm_tzadj)
-if ( test -z "SCO_OSR5" )
+if ( test -z "$SCO_OSR5" )
 then
 	AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 else
@@ -5327,20 +5327,36 @@ then
 	CGIBUILD="yes"
 fi
 APACHEBUILD="no"
+APACHEWARNING=""
 if ( test "$INCLUDE_APACHE" = "1")
 then
+	if ( test -z "`echo $APACHEINCLUDES | grep APACHE_2`" -a -n "$HAVE_PTHREAD" )
+	then
+		APACHEWARNING="(see warning below)"
+	fi
 	APACHEBUILD="yes"
 fi
 
-echo " Features     : Threads   $HAS_THREADS"
+echo " Features     : Threads   $HAS_THREADS $APACHEWARNING"
 echo "                PCRE      $PCREBUILD"
 echo "                libcurl   $LIBCURLBUILD"
 echo "                TLS/SSL   $SSLBUILD"
 echo "                GSS       $GSSBUILD"
 echo "                libedit   $LIBEDITBUILD"
 echo "                CGI       $CGIBUILD"
-echo "                Apache    $APACHEBUILD"
+echo "                Apache    $APACHEBUILD $APACHEWARNING"
 echo "*******************************"
+if ( test -n "$APACHEWARNING" )
+then
+echo
+echo "WARNING! Support for both threads (specifically pthreads) and Apache 1.x "
+echo "modules are enabled.  Apache 1.x modules which are linked against "
+echo "libpthread are known to crash on various platforms.  Even if you don't "
+echo "use threads in your module, the fact that Rudiments is linked against "
+echo "libpthread causes the crash.  To disable support for threads, reconfigure"
+echo "with the --disable-threads option.  To disable support for Apache "
+echo "modules, reconfigure with the --disable-apache option."
+fi
 echo
 echo "If you expected a feature that doesn't show up in the Summary"
 echo "then the configure script probably couldn't find a package it needed to"
