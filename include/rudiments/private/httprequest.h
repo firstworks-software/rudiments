@@ -51,4 +51,9 @@
 		void	buildCookieList();
 		void	buildFileNameList();
 
+		bool	allowedThing(const char *thing,
+					bool allowemptything,
+					const char *deniedthings,
+					const char *allowedthings);
+
 		httprequestprivate	*pvt;

@@ -13,8 +13,8 @@
 
 class ringbuffer {
 	public:
-			ringbuffer(uint64_t size);
-			~ringbuffer();
+		ringbuffer(uint64_t size);
+		~ringbuffer();
 		bool	compare(const char *string, uint64_t length);
 		void	append(char ch);
 		bool	isFull();
@@ -141,10 +141,6 @@ class httprequestprivate {
 		uint64_t	_allvariablecount;
 		const char	**_allvars;
 		const char	**_allvals;
-
-		stringbuffer	_rawpost;
-		bool		_json;
-		bool		_xml;
 };
 
 httprequest::httprequest(httpserverapi *sapi) : object() {
@@ -320,9 +316,6 @@ void httprequest::initParameters() {
 	pvt->_dirtyparameters=false;
 	pvt->_parametervars=NULL;
 	pvt->_parametervals=NULL;
-	pvt->_rawpost.clear();
-	pvt->_json=false;
-	pvt->_xml=false;
 
 	// handle a get or a head
 	const char	*requestmethod=getEnvironmentVariable("REQUEST_METHOD");
@@ -347,18 +340,6 @@ void httprequest::initParameters() {
 		} else if (contenttype && !charstring::compare(contenttype,
 						"multipart/form-data",19)) {
 			parseMultipart();
-
-		// handle application/json
-		} else if (contenttype && !charstring::compare(contenttype,
-						"application/json",16)) {
-			pvt->_json=true;
-			parseJsonOrXml();
-
-		// handle application/xml
-		} else if (contenttype && !charstring::compare(contenttype,
-						"application/xml",15)) {
-			pvt->_xml=true;
-			parseJsonOrXml();
 		}
 	}
 }
@@ -384,12 +365,8 @@ void httprequest::parseQueryString(httprequestmethod method) {
 				getEnvironmentVariable("QUERY_STRING");
 	const char	*contentlengthstr=
 				getEnvironmentVariable("CONTENT_LENGTH");
-	size_t	contentlength;
-	if (!charstring::isNullOrEmpty(contentlengthstr)) {
-		contentlength=charstring::toUnsignedInteger(contentlengthstr);
-	} else {
-		contentlength=0;
-	}
+	size_t		contentlength=
+				charstring::toUnsignedInteger(contentlengthstr);
 	if (method==get_request || method==head_request) {
 		if (!charstring::isNullOrEmpty(querystring)) {
 			length=charstring::length(querystring);
@@ -598,24 +575,6 @@ void httprequest::parseMultipart() {
 }
 
 void httprequest::parseJsonOrXml() {
-
-	// read until we hit an unquoted \r\n or EOF
-	char	prevch='\0';
-	char	ch='\0';
-	bool	inquotes=false;
-	char	quote='\0';
-	for (;;) {
-		if (pvt->_sapi->read(&ch)!=sizeof(char)) {
-			return;
-		}
-		if ((quote=='"' && ch=='"') || (quote=='\'' && ch=='\'')) {
-			inquotes=!inquotes;
-		} else if (!inquotes && prevch=='\r' && ch=='\n') {
-			return;
-		}
-		pvt->_rawpost.append(ch);
-		prevch=ch;
-	}
 }
 
 void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename, 
@@ -751,12 +710,60 @@ bool httprequest::setFileParameter(const char *name,
 	return false;
 }
 
-const char *httprequest::getJson() {
-	return (pvt->_json)?pvt->_rawpost.getString():"";
+ssize_t	httprequest::read(unsigned char *buffer, size_t size) {
+	return pvt->_sapi->read(buffer,size);
 }
 
-const char *httprequest::getXml() {
-	return (pvt->_xml)?pvt->_rawpost.getString():"";
+ssize_t	httprequest::read(char *buffer, size_t length) {
+	return pvt->_sapi->read(buffer,length);
+}
+
+ssize_t	httprequest::read(char *character) {
+	return pvt->_sapi->read(character);
+}
+
+ssize_t	httprequest::read(wchar_t *buffer, size_t length) {
+	return pvt->_sapi->read(buffer,length);
+}
+
+ssize_t	httprequest::read(wchar_t *character) {
+	return pvt->_sapi->read(character);
+}
+
+ssize_t	httprequest::read(int16_t *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(int32_t *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(int64_t *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(unsigned char *character) {
+	return pvt->_sapi->read(character);
+}
+
+ssize_t	httprequest::read(uint16_t *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(uint32_t *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(uint64_t *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(float *number) {
+	return pvt->_sapi->read(number);
+}
+
+ssize_t	httprequest::read(double *number) {
+	return pvt->_sapi->read(number);
 }
 
 const char *httprequest::getParameter(const char *name) {
@@ -1116,50 +1123,52 @@ void httprequest::buildAllVariables() {
 	pvt->_dirtyallvars=false;
 }
 
-bool httprequest::methodAllowed(const char *allowedmethods,
-					const char *deniedmethods) {
-
-	const char	*requestmethod=getEnvironmentVariable("REQUEST_METHOD");
-
-	if ((!charstring::isNullOrEmpty(deniedmethods) &&
-			regularexpression::match(requestmethod,
-							deniedmethods)) &&
-		!(!charstring::isNullOrEmpty(allowedmethods) && 
-			regularexpression::match(requestmethod,
-							allowedmethods))) {
-		return false;
-	}
-	return true;
+bool httprequest::methodAllowed(const char *deniedmethods,
+					const char *allowedmethods) {
+	return allowedThing(getEnvironmentVariable("REQUEST_METHOD"),true,
+						deniedmethods,allowedmethods);
 }
 
-bool httprequest::ipAllowed(const char *allowedips,
-					const char *deniedips) {
+bool httprequest::allowedThing(const char *thing,
+				bool allowemptything,
+				const char *deniedthings,
+				const char *allowedthings) {
 
-	const char	*remoteaddr=getEnvironmentVariable("REMOTE_ADDR");
+	// if the thing itself is empty then we may just allow it
+	if (allowemptything && charstring::isNullOrEmpty(thing)) {
+		return true;
+	}
 
-	if ((!charstring::isNullOrEmpty(deniedips) &&
-			regularexpression::match(remoteaddr,deniedips)) &&
-		!(!charstring::isNullOrEmpty(allowedips) && 
-			regularexpression::match(remoteaddr,allowedips))) {
+	// if denied...
+	if (!charstring::isNullOrEmpty(deniedthings) &&
+			regularexpression::match(thing,deniedthings)) {
 		return false;
 	}
-	return true;
+
+	// if allowed...
+	if (!charstring::isNullOrEmpty(allowedthings) && 
+			regularexpression::match(thing,allowedthings)) {
+		return true;
+	}
+	return false;
 }
 
-bool httprequest::refererAllowed(const char *allowedreferers,
-					const char *deniedreferers) {
+bool httprequest::contentTypeAllowed(const char *deniedcontenttypes,
+					const char *allowedcontenttypes) {
+	return allowedThing(getEnvironmentVariable("CONTENT_TYPE"),true,
+					deniedcontenttypes,allowedcontenttypes);
+}
 
-	const char	*httpreferer=getEnvironmentVariable("HTTP_REFERER");
+bool httprequest::ipAllowed(const char *deniedips,
+					const char *allowedips) {
+	return allowedThing(getEnvironmentVariable("REMOTE_ADDR"),false,
+							deniedips,allowedips);
+}
 
-	if ((!charstring::isNullOrEmpty(deniedreferers) &&
-			regularexpression::match(httpreferer,
-							deniedreferers)) &&
-		!(!charstring::isNullOrEmpty(allowedreferers) && 
-			regularexpression::match(httpreferer,
-							allowedreferers))) {
-		return false;
-	}
-	return true;
+bool httprequest::refererAllowed(const char *deniedreferers,
+					const char *allowedreferers) {
+	return allowedThing(getEnvironmentVariable("HTTP_REFERER"),true,
+						deniedreferers,allowedreferers);
 }
 
 bool httprequest::requiredParameters(parameterrequirement **pr) {

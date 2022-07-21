@@ -39,6 +39,12 @@ class RUDIMENTS_DLLSPEC sax : virtual public object {
 		 *  was set. */
 		uint64_t	getIgnoreFooterLines();
 
+		/** Parses generic input "in" and calls the appropriate callback
+		 *  when tags, attributes, text, etc. are encountered.
+		 *
+		 *  Returns true on success or false otherwise. */
+		virtual bool	parse(input *in);
+
 		/** Parses file "filename" and calls the appropriate callback
 		 *  when tags, attributes, text, etc. are encountered.
 		 *

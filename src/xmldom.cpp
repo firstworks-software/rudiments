@@ -50,6 +50,22 @@ const char *xmldom::getType() const {
 	return "xmldom";
 }
 
+bool xmldom::parse(input *in) {
+	return parse(in,NULL,0);
+}
+
+bool xmldom::parse(input *in, domnode *parent, uint64_t position) {
+	if (parent) {
+		pvt->_currentparent=parent;
+		pvt->_currentattribute=NULL;
+		pvt->_top=parent;
+		pvt->_topposition=position;
+	} else {
+		reset();
+	}
+	return sax::parse(in);
+}
+
 bool xmldom::parseFile(const char *filename) {
 	return parseFile(filename,NULL,0);
 }
@@ -64,7 +80,7 @@ bool xmldom::parseFile(const char *filename,
 	} else {
 		reset();
 	}
-	return xmlsax::parseFile(filename);
+	return sax::parseFile(filename);
 }
 
 bool xmldom::parseString(const char *string) {
@@ -81,7 +97,7 @@ bool xmldom::parseString(const char *string,
 	} else {
 		reset();
 	}
-	return xmlsax::parseString(string);
+	return sax::parseString(string);
 }
 
 void xmldom::reset() {

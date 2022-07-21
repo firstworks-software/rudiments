@@ -63,6 +63,25 @@ const char *inidom::getType() const {
 	return "inidom";
 }
 
+bool inidom::parse(input *in) {
+	return parse(in,NULL,0);
+}
+
+bool inidom::parse(input *in, domnode *parent, uint64_t position) {
+	if (parent) {
+		pvt->_current=parent;
+	} else {
+		reset();
+	}
+	bool	retval=sax::parse(in);
+#ifdef DEBUG_MESSAGES
+	stdoutput.write("\ndom:\n");
+	uint16_t	indentlevel=0;
+	dom::writeNode(getRootNode(),&stdoutput,true,&indentlevel);
+#endif
+	return retval;
+}
+
 bool inidom::parseFile(const char *filename) {
 	return parseFile(filename,NULL,0);
 }
@@ -74,7 +93,7 @@ bool inidom::parseFile(const char *filename,
 	} else {
 		reset();
 	}
-	bool	retval=inisax::parseFile(filename);
+	bool	retval=sax::parseFile(filename);
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;
@@ -94,7 +113,7 @@ bool inidom::parseString(const char *string,
 	} else {
 		reset();
 	}
-	bool	retval=inisax::parseString(string);
+	bool	retval=sax::parseString(string);
 #ifdef DEBUG_MESSAGES
 	stdoutput.write("\ndom:\n");
 	uint16_t	indentlevel=0;

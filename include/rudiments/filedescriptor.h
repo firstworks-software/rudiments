@@ -499,12 +499,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  occurred. */
 		ssize_t	read(unsigned char *buffer);
 
-		/** Reads an character from the file descriptor into "buffer".
+		/** Reads a character from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(char *buffer);
 
-		/** Reads an character from the file descriptor into "buffer".
+		/** Reads a character from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(wchar_t *buffer);

@@ -9,7 +9,8 @@
 /** The httprequest class provides methods for accessing components of the
  *  http request. */
 
-class RUDIMENTS_DLLSPEC httprequest : virtual public object {
+//class RUDIMENTS_DLLSPEC httprequest : virtual public object {
+class RUDIMENTS_DLLSPEC httprequest : public input {
 	public:
 		httprequest(httpserverapi *sapi);
 		virtual	~httprequest();
@@ -155,32 +156,244 @@ class RUDIMENTS_DLLSPEC httprequest : virtual public object {
 
 
 
-		/** Returns the posted json, if the content type of the
- 		 *  request was application/json, or an empty string
- 		 *  otherwise. */
-		const char	*getJson();
+		/** Reads "size" bytes from the data posted by the client into
+		 *  "buffer".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(unsigned char *buffer, size_t size);
 
-		/** Returns the posted xml, if the content type of the
- 		 *  request was application/xml, or an empty string
- 		 *  otherwise. */
-		const char	*getXml();
+		/** Reads "length" characters from the data posted by the
+		 *  client into "buffer".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(char *buffer, size_t length);
+
+		/** Reads a character from the data posted by the client into
+		 *  "character".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(char *character);
+
+		/** Reads "length" characters from the data posted by the
+		 *  client into "buffer".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(wchar_t *buffer, size_t length);
+
+		/** Reads a character from the data posted by the client into
+		 *  "character".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(wchar_t *character);
+
+		/** Reads a 16-bit integer from the data posted by the client
+		 *  into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(int16_t *number);
+
+		/** Reads a 32-bit integer from the data posted by the client
+		 *  into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(int32_t *number);
+
+		/** Reads a 64-bit integer from the data posted by the client
+		 *  into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(int64_t *number);
+
+		/** Reads an unsigned character from the data posted by the
+		 *  client into "character".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(unsigned char *character);
+
+		/** Reads a 16-bit unsigned integer from the data posted by the
+		 *  client into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(uint16_t *number);
+
+		/** Reads a 32-bit unsigned integer from the data posted by the
+		 *  client into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(uint32_t *number);
+
+		/** Reads a 64-bit unsigned integer from the data posted by the
+		 *  client into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(uint64_t *number);
+
+		/** Reads a floating point number from the data posted by the
+		 *  client into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(float *number);
+
+		/** Reads a double-precision floating point number from the
+		 *  data posted by the client into "number".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(double *number);
 
 
 
 		/** Matches the REQUEST_METHOD environment variable against
 		 *  "deniedmethods" and "allowedmethods" (in that order) using
-		 *  regular expression syntax to determine whether the client's
-		 *  IP address is allowed to access this application.
+		 *  regular expression syntax.  Returns true if the request
+		 *  method used by the client is allowed and false otherwise.
 		 * 
 		 *  This method may be overriden to provide customized
-		 *  ip-based security. */
+		 *  request-method-based security. */
 		virtual bool	methodAllowed(const char *deniedmethods,
 						const char *allowedmethods);
 
+		/** Matches the CONTENT_TYPE environment variable against
+		 *  "deniedcontenttypes" and "allowedcontenttypes" (in that
+		 *  order) using regular expression syntax.  Returns true if
+		 *  the content type of the data posted by the client is
+		 *  allowed and false otherwise.
+		 * 
+		 *  This method may be overriden to provide customized
+		 *  content-type-based security. */
+		virtual bool	contentTypeAllowed(
+					const char *deniedcontenttypes,
+					const char *allowedcontenttypes);
+
 		/** Matches the REMOTE_ADDR environment variable against
 		 *  "deniedips" and "allowedips" (in that order) using regular
-		 *  expression syntax to determine whether the client's IP
-		 *  address is allowed to access this application.
+		 *  expression syntax.  Returns true if the client's IP
+		 *  address is allowed and false otherwise.
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  ip-based security. */
@@ -189,11 +402,11 @@ class RUDIMENTS_DLLSPEC httprequest : virtual public object {
 
 		/** Matches the HTTP_REFERER environment variable against
 		 *  "deniedreferers" and "allowedreferers" (in that order)
-		 *  using regular expression syntax to determine whether the
-		 *  client's IP address is allowed to access this application.
+		 *  using regular expression syntax.  Returns true if the
+		 *  referrer is permitted and false otherwise.
 		 * 
 		 *  This method may be overriden to provide customized
-		 *  referer-based security. */
+		 *  referrer-based security. */
 		virtual	bool	refererAllowed(const char *deniedreferers,
 						const char *allowedreferers);
 

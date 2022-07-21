@@ -67,6 +67,9 @@ class RUDIMENTS_DLLSPEC propdom : public propsax, public dom {
 		/** Returns "propdom". */
 		virtual const char	*getType() const;
 
+		/** Parses generic input "in" and generates a DOM tree. */
+		bool	parse(input *in);
+
 		/** Parses file "filename" and generates a DOM tree. */
 		bool	parseFile(const char *filename);
 

@@ -10,6 +10,8 @@
 			xmldom	&operator=(const xmldom &x);
 
 	private:
+			bool	parse(input *in, domnode *parent,
+						uint64_t position);
 			bool	parseFile(const char *string,
 						domnode *parent,
 						uint64_t position);

@@ -45,14 +45,19 @@ const char *csvdom::getType() const {
 	return "csvdom";
 }
 
+bool csvdom::parse(input *in) {
+	reset();
+	return sax::parse(in);
+}
+
 bool csvdom::parseFile(const char *filename) {
 	reset();
-	return csvsax::parseFile(filename);
+	return sax::parseFile(filename);
 }
 
 bool csvdom::parseString(const char *string) {
 	reset();
-	return csvsax::parseString(string);
+	return sax::parseString(string);
 }
 
 void csvdom::reset() {

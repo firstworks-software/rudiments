@@ -19,6 +19,7 @@ class saxprivate {
 		const char	*_startptr;
 		const char	*_endptr;
 		file		*_fl;
+		input		*_in;
 		off64_t		_eof;
 		bool		_mmapped;
 		off64_t		_filesize;
@@ -49,6 +50,7 @@ void sax::reset() {
 	pvt->_startptr=NULL;
 	pvt->_endptr=NULL;
 	pvt->_fl=NULL;
+	pvt->_in=NULL;
 	pvt->_eof=0;
 	pvt->_filesize=0;
 	pvt->_offset=0;
@@ -70,6 +72,11 @@ void sax::setIgnoreFooterLines(uint64_t lines) {
 
 uint64_t sax::getIgnoreFooterLines() {
 	return pvt->_ignorefooterlines;
+}
+
+bool sax::parse(input *in) {
+	pvt->_in=in;
+	return parse();
 }
 
 bool sax::parseFile(const char *filename) {
@@ -185,7 +192,7 @@ bool sax::parseString(const char *string) {
 
 void sax::close() {
 
-	// close any previously opened files
+	// close any previously opened file
 	delete pvt->_fl;
 
 	// reset string/fd/line
@@ -263,8 +270,12 @@ char sax::getCharacter(bool processignores) {
 		}
 		ch=*(pvt->_ptr);
 		(pvt->_ptr)++;
-	} else {
+	} else if (pvt->_fl) {
 		if (pvt->_fl->read(&ch)!=sizeof(char)) {
+			return '\0';
+		}
+	} else {
+		if (pvt->_in->read(&ch)!=sizeof(char)) {
 			return '\0';
 		}
 	}
@@ -295,7 +306,7 @@ char sax::getCharacterBackwards() {
 		return '\0';
 	}
 
-	// NOTE: It's possible for offset to go negative in the final branch
+	// NOTE: It's possible for offset to go negative in the pvt->_fl branch
 	// below.  This method handles that case, but no other code does.
 	// Currently, no code other than ignoreFooterLines() calls
 	// getCharacterBackwards() and it ultimately makes sure that offset is
@@ -333,12 +344,15 @@ char sax::getCharacterBackwards() {
 		} else {
 			(pvt->_offset)--;
 		}
-	} else {
+	} else if (pvt->_fl) {
 		pvt->_fl->setPositionRelativeToBeginning(pvt->_offset);
 		if (pvt->_fl->read(&ch)!=sizeof(char)) {
 			return '\0';
 		}
 		(pvt->_offset)--;
+	} else {
+		// we can't skip backwards in generic input, bail
+		return '\0';
 	}
 	return ch;
 }
@@ -360,9 +374,12 @@ void sax::ignoreFooterLines() {
 	} else if (pvt->_string) {
 		pvt->_offset=pvt->_endptr-pvt->_string-1;
 		pvt->_ptr=pvt->_endptr-1;
-	} else {
+	} else if (pvt->_fl) {
 		pvt->_offset=pvt->_fl->getSize()-1;
 		pvt->_fl->setPositionRelativeToEnd(-1);
+	} else {
+		// we can't skip backwards in generic input, bail
+		return;
 	}
 
 	// work backwards, finding carriage returns

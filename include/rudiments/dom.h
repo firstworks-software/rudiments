@@ -37,6 +37,9 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		/** Returns "dom". */
 		virtual const char	*getType() const;
 
+		/** Parses generic input "in" and generates a DOM tree. */
+		virtual bool	parse(input *in)=0;
+
 		/** Parses file "filename" and generates a DOM tree. */
 		virtual bool	parseFile(const char *filename)=0;
 
