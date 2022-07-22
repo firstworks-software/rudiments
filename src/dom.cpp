@@ -219,13 +219,13 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 				return retval;
 			}
 		}
-		if (!incOrErr(&retval,out->write("<"))) {
+		if (!incOrErr(&retval,out->write('<'),1)) {
 			return retval;
 		}
 		if (dn->getNamespace()) {
 			if (!incOrErr(&retval,
 					safeWrite(out,dn->getNamespace())) ||
-				!incOrErr(&retval,out->write(":"))) {
+				!incOrErr(&retval,out->write(':'),1)) {
 				return retval;
 			}
 		}
@@ -234,7 +234,7 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 		}
 		current=dn->getAttribute((uint64_t)0);
 		while (current && !current->isNullNode()) {
-			if (!incOrErr(&retval,out->write(" ")) ||
+			if (!incOrErr(&retval,out->write(' '),1) ||
 				!incOrErr(&retval,
 					dom::writeNode(current,out,
 						indent,indentlevel))) {
@@ -244,14 +244,14 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 		}
 		current=dn->getFirstChild();
 		if (!current->isNullNode()) {
-			if (!incOrErr(&retval,out->write(">"))) {
+			if (!incOrErr(&retval,out->write('>'),1)) {
 				return retval;
 			}
 			if (indent && indentlevel) {
 				if (current->getType()!=TEXT_DOMNODETYPE &&
 					current->getType()!=CDATA_DOMNODETYPE) {
 					if (!incOrErr(&retval,
-							out->write("\n"))) {
+							out->write('\n'),1)) {
 						return retval;
 					}
 				}
@@ -279,7 +279,7 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 					}
 				}
 			}
-			if (!incOrErr(&retval,out->write("</"))) {
+			if (!incOrErr(&retval,out->write("</",2),2)) {
 				return retval;
 			}
 			if (dn->getNamespace()) {
@@ -287,35 +287,35 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 					safeWrite(out,dn->getNamespace()))) {
 					return retval;
 				}
-				if (!incOrErr(&retval,out->write(":"))) {
+				if (!incOrErr(&retval,out->write(':'),1)) {
 					return retval;
 				}
 			}
 			if (!incOrErr(&retval,safeWrite(out,dn->getName())) ||
-					!incOrErr(&retval,out->write(">"))) {
+					!incOrErr(&retval,out->write('>'),1)) {
 				return retval;
 			}
 			if (indent && indentlevel) {
-				if (!incOrErr(&retval,out->write("\n"))) {
+				if (!incOrErr(&retval,out->write('\n'),1)) {
 					return retval;
 				}
 			}
 		} else {
 			if (dn->getName()[0]=='?') {
-				if (!incOrErr(&retval,out->write("?>"))) {
+				if (!incOrErr(&retval,out->write("?>",2),2)) {
 					return retval;
 				}
 			} else if (dn->getName()[0]=='!') {
-				if (!incOrErr(&retval,out->write(">"))) {
+				if (!incOrErr(&retval,out->write('>'),1)) {
 					return retval;
 				}
 			} else {
-				if (!incOrErr(&retval,out->write("/>"))) {
+				if (!incOrErr(&retval,out->write("/>",2),2)) {
 					return retval;
 				}
 			}
 			if (indent && indentlevel) {
-				if (!incOrErr(&retval,out->write("\n"))) {
+				if (!incOrErr(&retval,out->write('\n'),1)) {
 					return retval;
 				}
 			}
@@ -324,23 +324,23 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 		incOrErr(&retval,safeWrite(out,dn->getValue()));
 	} else if (dn->getType()==ATTRIBUTE_DOMNODETYPE) {
 		if (dn->getParent()->getName()[0]=='!') {
-			incOrErr(&retval,out->write("\"")) &&
+			incOrErr(&retval,out->write('"'),1) &&
 			incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-			incOrErr(&retval,out->write("\""));
+			incOrErr(&retval,out->write('"'),1);
 		} else {
 			incOrErr(&retval,safeWrite(out,dn->getName())) &&
-			incOrErr(&retval,out->write("=\"")) &&
+			incOrErr(&retval,out->write("=\"",2),2) &&
 			incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-			incOrErr(&retval,out->write("\""));
+			incOrErr(&retval,out->write('"'),1);
 		}
 	} else if (dn->getType()==COMMENT_DOMNODETYPE) {
-		incOrErr(&retval,out->write("<!--")) &&
+		incOrErr(&retval,out->write("<!--",4),4) &&
 		incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-		incOrErr(&retval,out->write("-->"));
+		incOrErr(&retval,out->write("-->",3),3);
 	} else if (dn->getType()==CDATA_DOMNODETYPE) {
-		incOrErr(&retval,out->write("<![CDATA[")) &&
+		incOrErr(&retval,out->write("<![CDATA[",9),9) &&
 		incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-		incOrErr(&retval,out->write("]]>"));
+		incOrErr(&retval,out->write("]]>",3),3);
 	}
 	return retval;
 }
@@ -348,7 +348,9 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 ssize_t dom::writeIndent(output *out, uint16_t indent) const {
 	ssize_t	retval=0;
 	for (uint16_t i=0; i<indent; i++) {
-		incOrErr(&retval,out->write(' '));
+		if (!incOrErr(&retval,out->write(' '),1)) {
+			break;
+		}
 	}
 	return retval;
 }
@@ -381,24 +383,24 @@ ssize_t dom::safeWrite(output *out, const char *str) const {
 					static_cast<unsigned char>(*ch));
 		}
 		if (entity || num) {
-			incOrErr(&retval,out->write(start,ch-start));
+			incOrErr(&retval,out->write(start,ch-start),ch-start);
 			if (entity) {
 				ssize_t	len=charstring::length(entity);
-				incOrErr(&retval,out->write(entity,len));
+				incOrErr(&retval,out->write(entity,len),len);
 				entity=NULL;
 			} else {
-				incOrErr(&retval,out->write("&#"));
+				incOrErr(&retval,out->write("&#",2),2);
 				char	*numstr=charstring::parseNumber(num);
 				ssize_t	len=charstring::length(numstr);
-				incOrErr(&retval,out->write(numstr,len));
+				incOrErr(&retval,out->write(numstr,len),len);
 				delete[] numstr;
-				incOrErr(&retval,out->write(";"));
+				incOrErr(&retval,out->write(';'),1);
 				num=0;
 			}
 			start=ch+1;
 		}
 	}
-	incOrErr(&retval,out->write(start,ch-start));
+	incOrErr(&retval,out->write(start,ch-start),ch-start);
 	return retval;
 }
 

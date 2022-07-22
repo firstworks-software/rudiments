@@ -77,18 +77,18 @@ ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) const {
 	ssize_t			retval=0;
 	uint64_t		i=0;
 	listnode<valuetype>	*node=getFirst();
-	this->incOrErr(&retval,out->write('['));
+	this->incOrErr(&retval,out->write('['),1);
 	while (node && retval>-1) {
-		((i)?this->incOrErr(&retval,out->write(',')):true) &&
-		((indent)?this->incOrErr(&retval,out->write("\n	")):true) &&
+		((i)?this->incOrErr(&retval,out->write(','),1):true) &&
+		((indent)?this->incOrErr(&retval,out->write("\n	",2),2):true) &&
 		this->incOrErr(&retval,
 			this->writeJsonValue(out,node->getValue()));
 		node=node->getNext();
 		i++;
 	}
-	((indent)?this->incOrErr(&retval,out->write('\n')):true) &&
-	this->incOrErr(&retval,out->write(']')) &&
-	((indent)?this->incOrErr(&retval,out->write('\n')):true);
+	((indent)?this->incOrErr(&retval,out->write('\n'),1):true) &&
+	this->incOrErr(&retval,out->write(']'),1) &&
+	((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
 	return retval;
 }
 

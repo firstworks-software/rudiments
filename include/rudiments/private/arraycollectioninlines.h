@@ -43,15 +43,15 @@ template< class valuetype >
 inline
 ssize_t arraycollection<valuetype>::writeJson(output *out, bool indent) const {
 	ssize_t	retval=0;
-	incOrErr(&retval,out->write('['));
+	incOrErr(&retval,out->write('['),1);
 	for (uint64_t i=0; i<getLength() && retval>-1; i++) {
-		((i)?this->incOrErr(&retval,out->write(',')):true) &&
-		((indent)?this->incOrErr(&retval,out->write("\n	")):true) &&
+		((i)?this->incOrErr(&retval,out->write(','),1):true) &&
+		((indent)?this->incOrErr(&retval,out->write("\n	",2),2):true) &&
 		incOrErr(&retval,this->writeJsonValue(out,(*this)[i]));
 	}
-	((indent)?incOrErr(&retval,out->write('\n')):true) &&
-	incOrErr(&retval,out->write(']')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true);
+	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+	incOrErr(&retval,out->write(']'),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 	return retval;
 }
 

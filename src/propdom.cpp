@@ -280,11 +280,11 @@ ssize_t propdom::writeAndEscape(output *out, const char *value) const {
 	ssize_t	retval=0;
 	for (const char *c=value; *c; c++) {
 		if (character::isWhitespace(*c)) {
-			if (!incOrErr(&retval,out->write('\\'))) {
+			if (!incOrErr(&retval,out->write('\\'),1)) {
 				return retval;
 			}
 		}
-		if (!incOrErr(&retval,out->write(*c))) {
+		if (!incOrErr(&retval,out->write(*c),1)) {
 			return retval;
 		}
 	}
@@ -318,17 +318,19 @@ ssize_t propdom::writeNode(const domnode *dn, output *out,
 			switch (*name) {
 				case 'c':
 					if (!incOrErr(&retval,
-							out->write('!')) ||
+							out->write('!'),1) ||
 						!incOrErr(&retval,
-							out->write(val,vlen))) {
+							out->write(val,vlen),
+							vlen)) {
 						return retval;
 					}
 					break;
 				case 'p':
 					if (!incOrErr(&retval,
-							out->write('#')) ||
+							out->write('#'),1) ||
 						!incOrErr(&retval,
-							out->write(val,vlen))) {
+							out->write(val,vlen),
+							vlen)) {
 						return retval;
 					}
 					break;
@@ -336,7 +338,7 @@ ssize_t propdom::writeNode(const domnode *dn, output *out,
 					e=dn->getAttributeValue("e");
 					elen=charstring::length(e);
 					if (!incOrErr(&retval,writeAndEscape(out,dn->getAttributeValue("k"))) ||
-						!incOrErr(&retval,out->write(e,elen)) ||
+						!incOrErr(&retval,out->write(e,elen),elen) ||
 						!incOrErr(&retval,writeAndEscape(out,val))) {
 						return retval;
 					}
@@ -348,7 +350,7 @@ ssize_t propdom::writeNode(const domnode *dn, output *out,
 			{
 			const char	*val=dn->getValue();
 			ssize_t		vlen=charstring::length(val);
-			if (!incOrErr(&retval,out->write(val,vlen))) {
+			if (!incOrErr(&retval,out->write(val,vlen),vlen)) {
 				return retval;
 			}
 			}

@@ -85,51 +85,51 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
 
 	ssize_t	retval=0;
 
-	incOrErr(&retval,out->write('{')) &&
-	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("\"c\":")) &&
-	((indent)?incOrErr(&retval,out->write(' ')):true) &&
-	incOrErr(&retval,out->write('['));
+	incOrErr(&retval,out->write('{'),1) &&
+	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+	incOrErr(&retval,out->write("\"c\":",4),4) &&
+	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+	incOrErr(&retval,out->write('['),1);
 
 	for (uint64_t i=0; i<getColumnCount() && retval>-1; i++) {
-		((i)?incOrErr(&retval,out->write(',')):true) &&
+		((i)?incOrErr(&retval,out->write(','),1):true) &&
 		((indent)?incOrErr(&retval,
-				out->write("\n		")):true) &&
+				out->write("\n		",3),3):true) &&
 		incOrErr(&retval,this->writeJsonValue(out,getColumnName(i)));
 	}
 
-	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("],")) &&
-	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("\"r\":")) &&
-	((indent)?incOrErr(&retval,out->write(' ')):true) &&
-	incOrErr(&retval,out->write('['));
+	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+	incOrErr(&retval,out->write("],",2),2) &&
+	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+	incOrErr(&retval,out->write("\"r\":",4),4) &&
+	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+	incOrErr(&retval,out->write('['),1);
 
 	for (uint64_t i=0; i<getRowCount() && retval>-1; i++) {
 
-		((i)?incOrErr(&retval,out->write(',')):true) &&
+		((i)?incOrErr(&retval,out->write(','),1):true) &&
 		((indent)?incOrErr(&retval,
-				out->write("\n		")):true) &&
-		incOrErr(&retval,out->write('['));
+				out->write("\n		",3),3):true) &&
+		incOrErr(&retval,out->write('['),1);
 
 		for (uint64_t j=0; j<getColumnCount() && retval>-1; j++) {
-			((j)?incOrErr(&retval,out->write(',')):true) &&
+			((j)?incOrErr(&retval,out->write(','),1):true) &&
 			((indent)?incOrErr(&retval,
-				out->write("\n			")):true) &&
+				out->write("\n			",4),4):true) &&
 			incOrErr(&retval,
 				this->writeJsonValue(out,getValue(i,j)));
 		}
 
 		((indent)?incOrErr(&retval,
-				out->write("\n		")):true) &&
-		incOrErr(&retval,out->write("]"));
+				out->write("\n		",3),3):true) &&
+		incOrErr(&retval,out->write("]"),1);
 	}
 
-	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("]")) &&
-	((indent)?incOrErr(&retval,out->write("\n")):true);
-	incOrErr(&retval,out->write('}')) &&
-	((indent)?incOrErr(&retval,out->write("\n")):true);
+	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+	incOrErr(&retval,out->write("]"),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+	incOrErr(&retval,out->write('}'),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 
 	return retval;
 }

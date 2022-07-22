@@ -135,31 +135,36 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 
 	ssize_t			retval=0;
 
+	size_t	mlen=charstring::length(pvt->_message);
+	char	*code=charstring::parseNumber(pvt->_code);
+	size_t	clen=charstring::length(code);
+
 	// begin object
-	incOrErr(&retval,out->write('{')) &&
+	incOrErr(&retval,out->write('{'),1) &&
 	((indent)?incOrErr(&retval,out->write("\n")):true) &&
 
 	// success: true/false
-	incOrErr(&retval,out->write("\"s\":")) &&
-	((indent)?incOrErr(&retval,out->write(' ')):true) &&
-	incOrErr(&retval,out->write((pvt->_success)?"true":"false")) &&
-	incOrErr(&retval,out->write(',')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true) &&
+	incOrErr(&retval,out->write("\"s\":",4),4) &&
+	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+	((pvt->_success)?incOrErr(&retval,out->write("true",4),4):
+			incOrErr(&retval,out->write("false",5),5)) &&
+	incOrErr(&retval,out->write(','),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
 
 	// status code
-	incOrErr(&retval,out->write("\"c\":")) &&
-	((indent)?incOrErr(&retval,out->write(' ')):true) &&
-	incOrErr(&retval,out->write(pvt->_code)) &&
-	incOrErr(&retval,out->write(',')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true) &&
+	incOrErr(&retval,out->write("\"c\":",4),4) &&
+	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+	incOrErr(&retval,out->write(code,clen),clen) &&
+	incOrErr(&retval,out->write(','),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
 
 	// status message
-	incOrErr(&retval,out->write("\"m\":")) &&
-	((indent)?incOrErr(&retval,out->write(' ')):true) &&
-	incOrErr(&retval,out->write('"')) &&
-	incOrErr(&retval,out->write(pvt->_message)) &&
-	incOrErr(&retval,out->write('"')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true);
+	incOrErr(&retval,out->write("\"m\":",4),4) &&
+	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+	incOrErr(&retval,out->write('"'),1) &&
+	incOrErr(&retval,out->write(pvt->_message,mlen),mlen) &&
+	incOrErr(&retval,out->write('"'),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 
 	if (pvt->_success) {
 
@@ -168,32 +173,38 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 		for (listnode<char *> *key=
 				pvt->_data.getKeys()->getFirst();
 				key; key=key->getNext()) {
+
+			ssize_t	klen=charstring::length(key->getValue());
 			
 			if (first) {
 				first=false;
 			} else {
-				incOrErr(&retval,out->write(',')) &&
+				incOrErr(&retval,out->write(','),1) &&
 				((indent)?incOrErr(&retval,
-						out->write('\n')):true);
+						out->write('\n'),1):true);
 			}
-			incOrErr(&retval,out->write('"')) &&
-			incOrErr(&retval,out->write(key->getValue())) &&
-			incOrErr(&retval,out->write("\":")) &&
-			((indent)?incOrErr(&retval,out->write(' ')):true);
+			incOrErr(&retval,out->write('"'),1) &&
+			incOrErr(&retval,out->write(
+					key->getValue(),klen),klen) &&
+			incOrErr(&retval,out->write("\":",2),2) &&
+			((indent)?incOrErr(&retval,out->write(' '),1):true);
 			const collection	*c=
 				pvt->_data.getValue(key->getValue());
 			if (c) {
 				incOrErr(&retval,c->writeJson(out,indent));
 			} else {
-				incOrErr(&retval,out->write("null"));
+				incOrErr(&retval,out->write("null",4),4);
 			}
 		}
 		
 	}
 
 	// end object
-	incOrErr(&retval,out->write('}')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true);
+	incOrErr(&retval,out->write('}'),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+
+	// clean up
+	delete[] code;
 
 	return retval;
 }

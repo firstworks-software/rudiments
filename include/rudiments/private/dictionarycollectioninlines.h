@@ -46,21 +46,21 @@ ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out,
 	ssize_t			retval=0;
 	uint64_t		i=0;
 	listnode<keytype>	*node=getKeys()->getFirst();
-	incOrErr(&retval,out->write('{'));
+	incOrErr(&retval,out->write('{'),1);
 	while (node && retval>-1) {
-		((i)?incOrErr(&retval,out->write(',')):true) &&
-		((indent)?incOrErr(&retval,out->write("\n	")):true) &&
+		((i)?incOrErr(&retval,out->write(','),1):true) &&
+		((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
 		incOrErr(&retval,
 			this->writeJsonValue(out,node->getValue())) &&
-		incOrErr(&retval,out->write(':')) &&
+		incOrErr(&retval,out->write(':'),1) &&
 		incOrErr(&retval,
 			this->writeJsonValue(out,getValue(node->getValue())));
  		node=node->getNext();
 		i++;
 	}
-	((indent)?incOrErr(&retval,out->write('\n')):true) &&
-	incOrErr(&retval,out->write('}')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true);
+	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+	incOrErr(&retval,out->write('}'),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 	return retval;
 }
 

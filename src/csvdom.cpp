@@ -682,7 +682,7 @@ ssize_t csvdom::writeNode(const domnode *dn, output *out,
 		if (firstcolumn) {
 			firstcolumn=false;
 		} else {
-			if (!incOrErr(&retval,out->write(getDelimiter()))) {
+			if (!incOrErr(&retval,out->write(getDelimiter()),1)) {
 				return retval;
 			}
 		}
@@ -690,7 +690,7 @@ ssize_t csvdom::writeNode(const domnode *dn, output *out,
 			return retval;
 		}
 	}
-	if (!incOrErr(&retval,out->write("\n"))) {
+	if (!incOrErr(&retval,out->write('\n'),1)) {
 		return retval;
 	}
 	for (domnode *row=dn->getFirstTagChild("r");
@@ -704,7 +704,7 @@ ssize_t csvdom::writeNode(const domnode *dn, output *out,
 				firstrow=false;
 			} else {
 				if (!incOrErr(&retval,
-					out->write(getDelimiter()))) {
+					out->write(getDelimiter()),1)) {
 					return retval;
 				}
 			}
@@ -712,7 +712,7 @@ ssize_t csvdom::writeNode(const domnode *dn, output *out,
 				return retval;
 			}
 		}
-		if (!incOrErr(&retval,out->write("\n"))) {
+		if (!incOrErr(&retval,out->write('\n'),1)) {
 			return retval;
 		}
 	}
@@ -723,22 +723,23 @@ ssize_t csvdom::writeValue(output *out, domnode *value) const {
 	ssize_t		retval=0;
 	const char	*v=value->getAttributeValue("v");
 	if (value->getAttributeValue("q")[0]=='y') {
-		if (!incOrErr(&retval,out->write(getQuote()))) {
+		if (!incOrErr(&retval,out->write(getQuote()),1)) {
 			return retval;
 		}
 		for (const char *ptr=v; *ptr; ptr++) {
 			if (*ptr==getQuote()) {
-				if (!incOrErr(&retval,out->write(*ptr))) {
+				if (!incOrErr(&retval,out->write(*ptr),1)) {
 					return retval;
 				}
 			}
-			if (!incOrErr(&retval,out->write(*ptr))) {
+			if (!incOrErr(&retval,out->write(*ptr),1)) {
 				return retval;
 			}
 		}
-		incOrErr(&retval,out->write(getQuote()));
+		incOrErr(&retval,out->write(getQuote()),1);
 	} else {
-		incOrErr(&retval,out->write(v));
+		size_t	len=charstring::length(v);
+		incOrErr(&retval,out->write(v,len),len);
 	}
 	return retval;
 }

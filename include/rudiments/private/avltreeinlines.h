@@ -450,17 +450,17 @@ ssize_t avltree<valuetype>::writeNodeXml(output *out,
 
 	// print an xml-style representation of the node and its descendents
 	for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-		this->incOrErr(&retval,out->write(' '));
+		this->incOrErr(&retval,out->write(' '),1);
 	}
 	this->incOrErr(&retval,out->printf("<%s v=\"",name)) &&
 	this->incOrErr(&retval,this->writeValue(out,n->getValue())) &&
-	this->incOrErr(&retval,out->write('"')) &&
+	this->incOrErr(&retval,out->write('"'),1) &&
 	((details)?this->incOrErr(&retval,out->printf(
 					" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
 					leftheight,rightheight,
 					leftheight-rightheight)):true);
 	if (left || right) {
-		this->incOrErr(&retval,out->write(">\n"));
+		this->incOrErr(&retval,out->write(">\n",2),2);
 		(*indentlevel)++;
 		if (retval>-1 && left) {
 			this->incOrErr(&retval,
@@ -478,7 +478,7 @@ ssize_t avltree<valuetype>::writeNodeXml(output *out,
 		}
 		this->incOrErr(&retval,out->printf("</%s>\n",name));
 	} else {
-		this->incOrErr(&retval,out->write("/>\n"));
+		this->incOrErr(&retval,out->write("/>\n",3),3);
 	}
 	return retval;
 }
@@ -499,19 +499,19 @@ ssize_t avltree<valuetype>::writeNodeJson(output *out,
 	ssize_t	retval=0;
 
 	if (*indentlevel) {
-		this->incOrErr(&retval,out->write(',')) &&
-		((indent)?this->incOrErr(&retval,out->write('\n')):true);
+		this->incOrErr(&retval,out->write(','),1) &&
+		((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
 	}
 	if (indent) {
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-			this->incOrErr(&retval,out->write("  "));
+			this->incOrErr(&retval,out->write("  ",2),2);
 		}
 	}
-	this->incOrErr(&retval,out->write('[')) &&
-	((indent)?this->incOrErr(&retval,out->write('\n')):true);
+	this->incOrErr(&retval,out->write('['),1) &&
+	((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
 	if (indent) {
 		for (uint16_t i=0; i<*indentlevel+1 && retval>-1; i++) {
-			this->incOrErr(&retval,out->write("  "));
+			this->incOrErr(&retval,out->write("  ",2),2);
 		}
 	}
 	this->incOrErr(&retval,this->writeJsonValue(out,n->getValue()));
@@ -530,15 +530,15 @@ ssize_t avltree<valuetype>::writeNodeJson(output *out,
 	}
 
 	if (indent) {
-		this->incOrErr(&retval,out->write('\n'));
+		this->incOrErr(&retval,out->write('\n'),1);
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-			this->incOrErr(&retval,out->write("  "));
+			this->incOrErr(&retval,out->write("  ",2),2);
 		}
 	}
-	this->incOrErr(&retval,out->write(']'));
+	this->incOrErr(&retval,out->write(']'),1);
 	if (indent) {
 		if (!*indentlevel) {
-			this->incOrErr(&retval,out->write('\n'));
+			this->incOrErr(&retval,out->write('\n'),1);
 		}
 	}
 	return retval;

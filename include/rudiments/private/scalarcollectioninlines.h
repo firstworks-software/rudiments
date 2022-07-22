@@ -41,14 +41,14 @@ template< class valuetype >
 inline
 ssize_t scalarcollection<valuetype>::writeJson(output *out, bool indent) const {
 	ssize_t	retval=0;
-	incOrErr(&retval,out->write('{')) &&
-	((indent)?incOrErr(&retval,out->write("\n	")):true) &&
-	incOrErr(&retval,out->write("\"v\":")) &&
-	((indent)?incOrErr(&retval,out->write(' ')):true) &&
+	incOrErr(&retval,out->write('{'),1) &&
+	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+	incOrErr(&retval,out->write("\"v\":",4),4) &&
+	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
 	incOrErr(&retval,this->writeJsonValue(out,getValue())) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true) &&
-	incOrErr(&retval,out->write('}')) &&
-	((indent)?incOrErr(&retval,out->write('\n')):true);
+	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+	incOrErr(&retval,out->write('}'),1) &&
+	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 	return retval;
 }
 
