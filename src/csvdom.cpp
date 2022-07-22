@@ -670,9 +670,10 @@ void csvdom::carryAllValuesDown() {
 	}
 }
 
-bool csvdom::writeNode(const domnode *dn, output *out,
+ssize_t csvdom::writeNode(const domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) const {
 
+	ssize_t	retval=0;
 	domnode	*header=dn->getFirstTagChild("h");
 	bool	firstcolumn=true;
 	for (domnode *column=header->getFirstTagChild("c");
@@ -681,16 +682,16 @@ bool csvdom::writeNode(const domnode *dn, output *out,
 		if (firstcolumn) {
 			firstcolumn=false;
 		} else {
-			if (out->write(getDelimiter())<1) {
-				return false;
+			if (!incOrErr(&retval,out->write(getDelimiter()))) {
+				return retval;
 			}
 		}
-		if (!writeValue(out,column)) {
-			return false;
+		if (!incOrErr(&retval,writeValue(out,column))) {
+			return retval;
 		}
 	}
-	if (out->write("\n")<1) {
-		return false;
+	if (!incOrErr(&retval,out->write("\n"))) {
+		return retval;
 	}
 	for (domnode *row=dn->getFirstTagChild("r");
 			!row->isNullNode();
@@ -702,46 +703,44 @@ bool csvdom::writeNode(const domnode *dn, output *out,
 			if (firstrow) {
 				firstrow=false;
 			} else {
-				if (out->write(getDelimiter())<1) {
-					return false;
+				if (!incOrErr(&retval,
+					out->write(getDelimiter()))) {
+					return retval;
 				}
 			}
-			if (!writeValue(out,field)) {
-				return false;
+			if (!incOrErr(&retval,writeValue(out,field))) {
+				return retval;
 			}
 		}
-		if (out->write("\n")<1) {
-			return false;
+		if (!incOrErr(&retval,out->write("\n"))) {
+			return retval;
 		}
 	}
-	return true;
+	return retval;
 }
 
-bool csvdom::writeValue(output *out, domnode *value) const {
+ssize_t csvdom::writeValue(output *out, domnode *value) const {
+	ssize_t		retval=0;
 	const char	*v=value->getAttributeValue("v");
 	if (value->getAttributeValue("q")[0]=='y') {
-		if (out->write(getQuote())<1) {
-			return false;
+		if (!incOrErr(&retval,out->write(getQuote()))) {
+			return retval;
 		}
 		for (const char *ptr=v; *ptr; ptr++) {
 			if (*ptr==getQuote()) {
-				if (out->write(*ptr)<1) {
-					return false;
+				if (!incOrErr(&retval,out->write(*ptr))) {
+					return retval;
 				}
 			}
-			if (out->write(*ptr)<1) {
-				return false;
+			if (!incOrErr(&retval,out->write(*ptr))) {
+				return retval;
 			}
 		}
-		if (out->write(getQuote())<1) {
-			return false;
-		}
+		incOrErr(&retval,out->write(getQuote()));
 	} else {
-		if (out->write(v)!=(ssize_t)charstring::length(v)) {
-			return false;
-		}
+		incOrErr(&retval,out->write(v));
 	}
-	return true;
+	return retval;
 }
 
 bool csvdom::headerStart() {

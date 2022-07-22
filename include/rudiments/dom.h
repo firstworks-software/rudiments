@@ -58,7 +58,7 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 
 		/** Writes the DOM tree to "filename" and sets permissions of
 		 *  the file to "perms". */
-		virtual bool	writeFile(const char *filename,
+		virtual ssize_t	writeFile(const char *filename,
 						mode_t perms) const;
 
 		/** Writes the DOM tree to "filename" and sets permissions of
@@ -67,7 +67,7 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
-		virtual bool	writeFile(const char *filename,
+		virtual ssize_t	writeFile(const char *filename,
 						mode_t perms,
 						bool indent) const;
 

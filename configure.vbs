@@ -22,6 +22,7 @@ next
 
 ' source, object and header files
 srcs="winsock.cpp "+_
+	"object.cpp "+_
 	"sha1.cpp "+_
 	"sha256.cpp "+_
 	"md5.cpp "+_
@@ -117,6 +118,7 @@ srcs="winsock.cpp "+_
 	"cronschedule.cpp"
 
 lobjs="winsock.obj "+_
+	"object.obj "+_
 	"sha1.obj "+_
 	"sha256.obj "+_
 	"md5.obj "+_
@@ -331,6 +333,8 @@ headers3="dynamicarray.h "+_
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
+	"objectincludes.h "+_
+	"object.h "+_
 	"collection.h "+_
 	"collectioninlines.h "+_
 	"comparator.h "+_
@@ -519,6 +523,7 @@ privateheaders7="staticarray.h "+_
 	"output.h "+_
 	"outputinlines.h "+_
 	"inputincludes.h "+_
+	"inputinlines.h "+_
 	"wastebasketincludes.h "+_
 	"wastebasket.h "+_
 	"sensitivevalueincludes.h "+_

@@ -215,29 +215,6 @@ ssize_t mvcresult::writeXml(output *out, bool indent) const {
 	return RESULT_ERROR;
 }
 
-bool mvcresult::incOrErr(ssize_t *retval, ssize_t val) const {
-
-	// FIXME: this is duplicated in collection, move them somewhere
-
-	// add val to *retval unless:
-	// * retval is already negative, indicating that an error condition
-	//   occurred previously, in this case leave retval set to the error
-	//   condition
-	// * val is negative, indicating an error condition just occurred, in
-	//   this case set retval to the error condition
-	// return true on success or false if an error condition occurred
-
-	if (*retval>-1) {
-		if (val>-1) {
-			(*retval)+=val;
-			return true;
-		} else {
-			(*retval)=val;
-		}
-	}
-	return false;
-}
-
 wastebasket *mvcresult::getWastebasket() {
 	return &pvt->_wb;
 }

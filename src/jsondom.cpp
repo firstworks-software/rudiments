@@ -287,12 +287,14 @@ domnode *jsondom::whichNode() {
 			pvt->_current;
 }
 
-bool jsondom::writeNode(const domnode *dn, output *out,
+ssize_t jsondom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
 
 	if (dn->getType()!=TAG_DOMNODETYPE && dn->getType()!=ROOT_DOMNODETYPE) {
-		return true;
+		return 0;
 	}
+
+	ssize_t	retval=0;
 
 	bool	inarray=(pvt->_inarray.getLength() &&
 				pvt->_inarray.getLast()->getValue());
@@ -300,32 +302,32 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 			dn->getParent()->getType()!=ROOT_DOMNODETYPE &&
 			!inarray) {
 		if (indent) {
-			if (!writeIndent(out,*indentlevel)) {
-				return false;
+			if (!incOrErr(&retval,writeIndent(out,*indentlevel))) {
+				return retval;
 			}
 		}
-		if (out->write('"')<1) {
-			return false;
+		if (!incOrErr(&retval,out->write('"'))) {
+			return retval;
 		}
 		const char	*name=dn->getName();
 		ssize_t		len=charstring::length(name);
-		if (out->write(name,len)<len) {
-			return false;
+		if (!incOrErr(&retval,out->write(name,len))) {
+			return retval;
 		}
-		if (out->write('"')<1) {
-			return false;
+		if (!incOrErr(&retval,out->write('"'))) {
+			return retval;
 		}
 		if (indent) {
-			if (out->write(' ')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write(' '))) {
+				return retval;
 			}
 		}
-		if (out->write(':')<1) {
-			return false;
+		if (!incOrErr(&retval,out->write(':'))) {
+			return retval;
 		}
 		if (indent) {
-			if (out->write(' ')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write(' '))) {
+				return retval;
 			}
 		}
 	}
@@ -336,20 +338,25 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 			{
 			if (indent) {
 				if (*indentlevel && !inarray) {
-					if (out->write('\n')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('\n'))) {
+						return retval;
 					}
 				}
 				if (!inarray) {
-					if (!writeIndent(out,*indentlevel)) {
-						return false;
+					if (!incOrErr(&retval,
+						writeIndent(out,
+							*indentlevel))) {
+						return retval;
 					}
 				}
 			}
-			out->write('{');
+			if (!incOrErr(&retval,out->write('{'))) {
+				return retval;
+			}
 			if (indent) {
-				if (out->write('\n')<1) {
-					return false;
+				if (!incOrErr(&retval,out->write('\n'))) {
+					return retval;
 				}
 				*indentlevel=*indentlevel+2;
 			}
@@ -368,40 +375,46 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 				if (first) {
 					first=false;
 				} else {
-					if (out->write(',')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write(','))) {
+						return retval;
 					}
 					if (indent) {
-						if (out->write('\n')<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write('\n'))) {
+							return retval;
 						}
 					}
 				}
-				if (!writeNode(child,out,indent,indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,
+						writeNode(child,out,
+							indent,indentlevel))) {
+					return retval;
 				}
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
 				if (!first) {
-					if (out->write('\n')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('\n'))) {
+						return retval;
 					}
 				}
 				*indentlevel=*indentlevel-2;
-				if (!writeIndent(out,*indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,writeIndent(out,
+							*indentlevel))) {
+					return retval;
 				}
 			}
-			if (out->write('}')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write('}'))) {
+				return retval;
 			}
 			}
 			break;
 		case 's':
 			{
-			if (out->write('"')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write('"'))) {
+				return retval;
 			}
 			const char *val=getValue(dn);
 			if (val) {
@@ -409,35 +422,41 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 					if (*val=='\0') {
 						break;
 					} else if (*val=='\b') {
-						if (out->write("\\b")<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write("\\b"))) {
+							return retval;
 						}
 					} else if (*val=='\f') {
-						if (out->write("\\f")<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write("\\f"))) {
+							return retval;
 						}
 					} else if (*val=='\n') {
-						if (out->write("\\n")<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write("\\n"))) {
+							return retval;
 						}
 					} else if (*val=='\r') {
-						if (out->write("\\r")<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write("\\r"))) {
+							return retval;
 						}
 					} else if (*val=='\t') {
-						if (out->write("\\t")<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write("\\t"))) {
+							return retval;
 						}
 					} else {
-						if (out->write(*val)<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write(*val))) {
+							return retval;
 						}
 					}
 					val++;
 				}
 			}
-			if (out->write('"')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write('"'))) {
+				return retval;
 			}
 			}
 			break;
@@ -446,49 +465,51 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 			const char	*v=getValue(dn);
 			if (!charstring::isNullOrEmpty(v)) {
 				ssize_t	len=charstring::length(v);
-				if (out->write(v,len)<len) {
-					return false;
+				if (!incOrErr(&retval,out->write(v,len))) {
+					return retval;
 				}
 			} else {
-				if (out->write('0')<1) {
-					return false;
+				if (!incOrErr(&retval,out->write('0'))) {
+					return retval;
 				}
 			}
 			}
 			break;
 		case 't':
-			if (out->write("true")<4) {
-				return false;
+			if (!incOrErr(&retval,out->write("true"))) {
+				return retval;
 			}
 			break;
 		case 'f':
-			if (out->write("false")<5) {
-				return false;
+			if (!incOrErr(&retval,out->write("false"))) {
+				return retval;
 			}
 			break;
 		case 'u':
-			if (out->write("null")<4) {
-				return false;
+			if (!incOrErr(&retval,out->write("null"))) {
+				return retval;
 			}
 			break;
 		case 'a':
 			{
 			if (indent) {
 				if (*indentlevel) {
-					if (out->write('\n')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('\n'))) {
+						return retval;
 					}
 				}
-				if (!writeIndent(out,*indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,
+					writeIndent(out,*indentlevel))) {
+					return retval;
 				}
 			}
-			if (out->write('[')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write('['))) {
+				return retval;
 			}
 			if (indent) {
-				if (out->write('\n')<1) {
-					return false;
+				if (!incOrErr(&retval,out->write('\n'))) {
+					return retval;
 				}
 				*indentlevel=*indentlevel+2;
 			}
@@ -507,49 +528,58 @@ bool jsondom::writeNode(const domnode *dn, output *out,
 				if (first) {
 					first=false;
 				} else {
-					if (out->write(',')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write(','))) {
+						return retval;
 					}
 					if (indent) {
-						if (out->write('\n')<1) {
-							return false;
+						if (!incOrErr(&retval,
+							out->write('\n'))) {
+							return retval;
 						}
 					}
 				}
 				if (indent) {
-					if (!writeIndent(out,*indentlevel)) {
-						return false;
+					if (!incOrErr(&retval,
+						writeIndent(out,
+							*indentlevel))) {
+						return retval;
 					}
 				}
-				if (!writeNode(child,out,indent,indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,
+						writeNode(child,out,
+							indent,indentlevel))) {
+					return retval;
 				}
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
 			if (indent) {
 				if (!first) {
-					if (out->write('\n')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('\n'))) {
+						return retval;
 					}
 				}
 				*indentlevel=*indentlevel-2;
-				if (!writeIndent(out,*indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,
+					writeIndent(out,*indentlevel))) {
+					return retval;
 				}
 			}
-			if (out->write(']')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write(']'))) {
+				return retval;
 			}
 			}
 			break;
 		case 'r':
-			if (!writeNode(dn->getFirstTagChild(),
-						out,indent,indentlevel)) {
-				return false;
+			if (!incOrErr(&retval,
+				writeNode(dn->getFirstTagChild(),
+						out,indent,indentlevel))) {
+				return retval;
 			}
 			break;
 	}
-	return true;
+	return false;
 }
 
 const char *jsondom::getType(const domnode *dn) const {

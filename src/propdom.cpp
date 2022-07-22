@@ -276,30 +276,35 @@ bool propdom::valueEnd() {
 	return true;
 }
 
-bool propdom::writeAndEscape(output *out, const char *value) const {
+ssize_t propdom::writeAndEscape(output *out, const char *value) const {
+	ssize_t	retval=0;
 	for (const char *c=value; *c; c++) {
 		if (character::isWhitespace(*c)) {
-			if (out->write('\\')<1) {
-				return false;
+			if (!incOrErr(&retval,out->write('\\'))) {
+				return retval;
 			}
 		}
-		if (out->write(*c)<1) {
-			return false;
+		if (!incOrErr(&retval,out->write(*c))) {
+			return retval;
 		}
 	}
-	return true;
+	return retval;
 }
 
-bool propdom::writeNode(const domnode *dn, output *out,
+ssize_t propdom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
+
+	ssize_t	retval=0;
 
 	switch (dn->getType()) {
 		case ROOT_DOMNODETYPE:
 			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
 					child=child->getNextSibling()) {
-				if (!writeNode(child,out,indent,indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,
+						writeNode(child,out,
+							indent,indentlevel))) {
+					return retval;
 				}
 			}
 			break;
@@ -312,25 +317,28 @@ bool propdom::writeNode(const domnode *dn, output *out,
 			ssize_t		vlen=charstring::length(val);
 			switch (*name) {
 				case 'c':
-					if (out->write('!')<1 ||
-						out->write(val,vlen)<vlen) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('!')) ||
+						!incOrErr(&retval,
+							out->write(val,vlen))) {
+						return retval;
 					}
 					break;
 				case 'p':
-					if (out->write('#')<1 ||
-						out->write(val,vlen)<vlen) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('#')) ||
+						!incOrErr(&retval,
+							out->write(val,vlen))) {
+						return retval;
 					}
 					break;
 				case 'k':
 					e=dn->getAttributeValue("e");
 					elen=charstring::length(e);
-					if (!writeAndEscape(out,
-						dn->getAttributeValue("k")) ||
-						out->write(e,elen)<elen ||
-						!writeAndEscape(out,val)) {
-						return false;
+					if (!incOrErr(&retval,writeAndEscape(out,dn->getAttributeValue("k"))) ||
+						!incOrErr(&retval,out->write(e,elen)) ||
+						!incOrErr(&retval,writeAndEscape(out,val))) {
+						return retval;
 					}
 					break;
 			}
@@ -340,13 +348,13 @@ bool propdom::writeNode(const domnode *dn, output *out,
 			{
 			const char	*val=dn->getValue();
 			ssize_t		vlen=charstring::length(val);
-			if (out->write(val,vlen)<vlen) {
-				return false;
+			if (!incOrErr(&retval,out->write(val,vlen))) {
+				return retval;
 			}
 			}
 			break;
 		default:
 			break;
 	}
-	return true;
+	return retval;
 }

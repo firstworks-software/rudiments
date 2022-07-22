@@ -298,16 +298,20 @@ bool inidom::valueEnd() {
 	return true;
 }
 
-bool inidom::writeNode(const domnode *dn, output *out,
+ssize_t inidom::writeNode(const domnode *dn, output *out,
 			bool indent, uint16_t *indentlevel) const {
+
+	ssize_t	retval=0;
 
 	switch (dn->getType()) {
 		case ROOT_DOMNODETYPE:
 			for (domnode *child=dn->getFirstChild();
 					!child->isNullNode();
 					child=child->getNextSibling()) {
-				if (!writeNode(child,out,indent,indentlevel)) {
-					return false;
+				if (!incOrErr(&retval,
+						writeNode(child,out,
+							indent,indentlevel))) {
+					return retval;
 				}
 			}
 			break;
@@ -320,39 +324,51 @@ bool inidom::writeNode(const domnode *dn, output *out,
 			ssize_t		vlen=charstring::length(val);
 			switch (*name) {
 				case 'c':
-					if (out->write(';')<1 ||
-						out->write(val,vlen)<vlen) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write(';')) ||
+						!incOrErr(&retval,
+							out->write(val,vlen))) {
+						return retval;
 					}
 					break;
 				case 'p':
-					if (out->write('#')<1 ||
-						out->write(val,vlen)<vlen) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('#')) ||
+						!incOrErr(&retval,
+							out->write(val,vlen))) {
+						return retval;
 					}
 					break;
 				case 's':
-					if (out->write('[')<1 ||
-						out->write(val,vlen)<vlen ||
-						out->write(']')<1) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write('[')) ||
+						!incOrErr(&retval,
+							out->write(val,vlen)) ||
+						!incOrErr(&retval,
+							out->write(']'))) {
+						return retval;
 					}
 					for (domnode *child=dn->getFirstChild();
 						!child->isNullNode();
 						child=child->getNextSibling()) {
-						if (!writeNode(child,out,
-							indent,indentlevel)) {
-							return false;
+						if (!incOrErr(&retval,
+							writeNode(child,
+								out,indent,
+								indentlevel))) {
+							return retval;
 						}
 					}
 					break;
 				case 'k':
 					key=dn->getAttributeValue("k");
 					klen=charstring::length(key);
-					if (out->write(key,klen)<klen ||
-						out->write('=')<1 ||
-						out->write(val,vlen)<vlen) {
-						return false;
+					if (!incOrErr(&retval,
+							out->write(key,klen)) ||
+						!incOrErr(&retval,
+							out->write('=')) ||
+						!incOrErr(&retval,
+							out->write(val,vlen))) {
+						return retval;
 					}
 					break;
 			}
@@ -362,13 +378,13 @@ bool inidom::writeNode(const domnode *dn, output *out,
 			{
 			const char	*val=dn->getValue();
 			ssize_t		vlen=charstring::length(val);
-			if (out->write(val,vlen)<vlen) {
-				return false;
+			if (!incOrErr(&retval,out->write(val,vlen))) {
+				return retval;
 			}
 			}
 			break;
 		default:
 			break;
 	}
-	return true;
+	return retval;
 }

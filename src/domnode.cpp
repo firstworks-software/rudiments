@@ -1553,19 +1553,19 @@ ssize_t domnode::write(output *out, bool indent) const {
 								1:RESULT_ERROR;
 }
 
-bool domnode::writeXml() const {
+ssize_t domnode::writeXml() const {
 	return writeXml(false);
 }
 
-bool domnode::writeXml(bool indent) const {
+ssize_t domnode::writeXml(bool indent) const {
 	return writeXml(&stdoutput,indent);
 }
 
-bool domnode::writeXml(output *out) const {
+ssize_t domnode::writeXml(output *out) const {
 	return writeXml(out,false);
 }
 
-bool domnode::writeXml(output *out, bool indent) const {
+ssize_t domnode::writeXml(output *out, bool indent) const {
 	uint16_t	indentlevel=0;
 	return pvt->_dom->
 		dom::writeNode(this,out,indent,(indent)?&indentlevel:NULL);

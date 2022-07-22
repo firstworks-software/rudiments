@@ -6,7 +6,7 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
-			bool	writeNode(const domnode *dn,
+			ssize_t	writeNode(const domnode *dn,
 						output *out,
 						bool indent,
 						uint16_t *indentlevel) const;

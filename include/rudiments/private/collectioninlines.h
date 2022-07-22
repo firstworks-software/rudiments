@@ -446,27 +446,3 @@ ssize_t collection::writeJsonValue(output *out, const valuetype &value) const {
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("\"%08x\"",(const void *)&value);
 }
-
-inline
-bool collection::incOrErr(ssize_t *retval, ssize_t val) const {
-
-	// FIXME: this is duplicated in mvcresult, move them somewhere
-
-	// add val to *retval unless:
-	// * retval is already negative, indicating that an error condition
-	//   occurred previously, in this case leave retval set to the error
-	//   condition
-	// * val is negative, indicating an error condition just occurred, in
-	//   this case set retval to the error condition
-	// return true on success or false if an error condition occurred
-
-	if (*retval>-1) {
-		if (val>-1) {
-			(*retval)+=val;
-			return true;
-		} else {
-			(*retval)=val;
-		}
-	}
-	return false;
-}

@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_OBJECT_H
 #define RUDIMENTS_OBJECT_H
 
-#include <rudiments/private/dll.h>
-#include <rudiments/private/inttypes.h>
+#include <rudiments/private/objectincludes.h>
 
 /** The object class is the parent class for all rudiments classes. */
 class object {
@@ -13,6 +12,8 @@ class object {
 
 		/** Deletes this instance of the object class. */
 		virtual	~object() {};
+
+	#include <rudiments/private/object.h>
 };
 
 #endif

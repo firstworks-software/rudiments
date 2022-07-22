@@ -102,8 +102,6 @@
 					const valuetype &value) const;
 
 	protected:
-		bool	incOrErr(ssize_t *retval, ssize_t val) const;
-
 		bool	managevalues;
 		bool	managearrayvalues;
 		bool	managekeys;

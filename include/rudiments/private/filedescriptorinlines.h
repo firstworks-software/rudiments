@@ -234,13 +234,20 @@ ssize_t filedescriptor::read(void *buffer, size_t size,
 inline
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
 						int32_t sec, int32_t usec) {
-	return read(buffer,terminator,0,'\0',sec,usec);
+	return input::read(buffer,terminator,0,'\0',sec,usec);
 }
 
 inline
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
 				size_t maxbytes, int32_t sec, int32_t usec) {
-	return read(buffer,terminator,maxbytes,'\0',sec,usec);
+	return input::read(buffer,terminator,maxbytes,'\0',sec,usec);
+}
+
+inline
+ssize_t	filedescriptor::read(char **buffer,
+				const char *terminator, size_t maxbytes,
+				char escapechar, int32_t sec, int32_t usec) {
+	return input::read(buffer,terminator,maxbytes,escapechar,sec,usec);
 }
 
 inline
@@ -325,11 +332,11 @@ ssize_t filedescriptor::read(void *buffer, size_t size) {
 
 inline
 ssize_t filedescriptor::read(char **buffer, const char *terminator) {
-	return read(buffer,terminator,0,'\0',-1,-1);
+	return input::read(buffer,terminator,0,'\0',-1,-1);
 }
 
 inline
 ssize_t filedescriptor::read(char **buffer,
 				const char *terminator, size_t maxbytes) {
-	return read(buffer,terminator,maxbytes,'\0',-1,-1);
+	return input::read(buffer,terminator,maxbytes,'\0',-1,-1);
 }
