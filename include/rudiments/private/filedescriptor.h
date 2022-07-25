@@ -9,6 +9,8 @@
 		void	filedescriptorInit();
 		void	filedescriptorClone(const filedescriptor &f);
 
+		void	allocateWriteBuffer(ssize_t size) const;
+
 		off64_t	setPosition(off64_t offset, int32_t whence) const;
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 
