@@ -13,7 +13,7 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
-#define ONLYREAD 1
+//#define ONLYREAD 1
 //#define SHOWPROGRESS 1
 
 int main(int argc, const char **argv) {
