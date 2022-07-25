@@ -329,7 +329,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_writebuffertail=NULL;
 	pvt->_writebufferend=NULL;
 	pvt->_writebufferdirty=false;
-	pvt->_writebuffermmapenabled=true;
+	pvt->_writebuffermmapenabled=false;
 	pvt->_readbuffer=NULL;
 	pvt->_readbufferptr=NULL;
 	pvt->_readbuffertail=NULL;

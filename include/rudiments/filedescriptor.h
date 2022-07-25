@@ -1088,13 +1088,21 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Returns the current size of the read buffer. */
 		ssize_t	getReadBufferSize() const;
 
-		/** If "enabled" is set true then mmap may be used when
+		/** If "enabled" is set true then mmap will be used when
 		 *  buffering a storage filedescriptor such as a file, raw
-		 *  block device, etc.  If set false, then mmap will not be
-		 *  used.  Defaults to true. */
+		 *  block device, etc.  If set false, then traditional
+		 *  buffering will be used.
+		 *
+		 *  On platforms with modern file caching, traditional buffers
+		 *  tend to outperform mmap-buffering except when O_DIRECT is
+		 *  used to bypass the cache, when using large buffer sizes,
+		 *  when randomly accessing small parts of large files, and
+		 *  possibly other very specific situations.
+		 *
+		 *  Defaults to false. */
 		void	setMmapBufferingEnabled(bool enabled);
 
-		/** Returns true if mmap may be used when buffering a storage
+		/** Returns true if mmap will be used when buffering a storage
 		 *  filedescriptor such as a file, raw block device, etc. or
 		 *  false otherwise. */
 		bool	getMmapBufferingEnabled();
