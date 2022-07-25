@@ -13,7 +13,7 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
-//#define ONLYREAD 1
+#define ONLYREAD 1
 //#define SHOWPROGRESS 1
 
 int main(int argc, const char **argv) {
@@ -105,9 +105,9 @@ int main(int argc, const char **argv) {
 		};
 		//for (uint8_t i=0; i<3; i++) {
 		// for now, skip unbuffered
-		for (uint8_t i=1; i<3; i++) {
+		//for (uint8_t i=1; i<3; i++) {
 		// for now, skip unbuffered and regular-buffered
-		//for (uint8_t i=2; i<3; i++) {
+		for (uint8_t i=2; i<3; i++) {
 
 			stdoutput.printf("reading: %s "
 						"(readsize=%04lld)...  ",
@@ -157,6 +157,7 @@ int main(int argc, const char **argv) {
 #endif
 		}
 
+#if 0
 		// manual mmap test
 		memorymap	m;
 		char		*p;
@@ -204,6 +205,8 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("\n");
 #endif
 
+#endif
+
 		stdoutput.printf("\n");
 		delete[] buf;
 	}
@@ -211,7 +214,7 @@ int main(int argc, const char **argv) {
 	// clean up
 	f.close();
 #ifdef ONLYREAD
-	file::remove(filename.getString());
+	//file::remove(filename.getString());
 #endif
 
 	process::exit(0);
