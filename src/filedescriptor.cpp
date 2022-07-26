@@ -1954,6 +1954,7 @@ ssize_t filedescriptor::storageBufferedWrite(const unsigned char *buf,
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: storageBufferedWrite(%d,attempting %d bytes...\n",
 			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
+debugPrintf("\"%.*s\"",count,buf);
 	#endif
 
 	// do an actual bufffered write...
@@ -1994,7 +1995,7 @@ ssize_t filedescriptor::storageBufferedWrite(const unsigned char *buf,
 					pvt->_writebufferwriteavail:count;
 
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		debugPrintf(",copying in %d bytes\n",(int)bytestocopy);
+		debugPrintf(",copying in %d bytes",(int)bytestocopy);
 		#endif
 
 		// copy in those bytes
@@ -2008,11 +2009,12 @@ ssize_t filedescriptor::storageBufferedWrite(const unsigned char *buf,
 		count-=bytestocopy;
 		pvt->_writebufferwriteavail-=bytestocopy;
 
-		// adjust the buffer tail, which is necessary if we're
+		// If the buffer head catches up to the buffer tail, then
+		// adjust the buffer tail.  This can happen if we're
 		// appending to the last block of a file, and it was a
-		// partial block
-		if (pvt->_writebuffertail<pvt->_writebufferend) {
-			pvt->_writebuffertail=pvt->_writebufferhead+bytestocopy;
+		// partial block.
+		if (pvt->_writebufferhead>pvt->_writebuffertail) {
+			pvt->_writebuffertail=pvt->_writebufferhead;
 		}
 
 		// reset the read avail
@@ -2054,6 +2056,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	if ((!pvt->_isstream && !pvt->_writebufferdirty) ||
 					pvt->_writebuffermap ) {
 		pvt->_writebuffertail=pvt->_writebuffer;
+		pvt->_writebufferreadavail=0;
 		pvt->_writebufferdirty=false;
 		return true;
 	}
@@ -2107,6 +2110,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	if (result) {
 		// reset the buffer tail and mark the buffer clean
 		pvt->_writebuffertail=pvt->_writebuffer;
+		pvt->_writebufferreadavail=0;
 		pvt->_writebufferdirty=false;
 		return true;
 	}
