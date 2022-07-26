@@ -15,19 +15,23 @@
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
-		ssize_t	bufferNewBlock(int32_t sec, int32_t usec);
 
-		ssize_t	bufferedRead(void *buf, ssize_t count,
+		ssize_t	bufferedRead(unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	bufferedWrite(const void *buf, ssize_t count,
+		ssize_t	bufferedWrite(const unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	streamBufferedRead(void *buf, ssize_t count,
+		ssize_t	streamBufferedRead(unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	streamBufferedWrite(const void *buf, ssize_t count,
+		ssize_t	streamBufferedWrite(const unsigned char *buf,
+						ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	storageBufferedRead(void *buf, ssize_t count,
+		ssize_t	storageBufferedRead(unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	storageBufferedWrite(const void *buf, ssize_t count,
+		ssize_t	actualStorageBufferedRead(unsigned char *buf,
+						ssize_t count,
+						int32_t sec, int32_t usec);
+		ssize_t	storageBufferedWrite(const unsigned char *buf,
+						ssize_t count,
 						int32_t sec, int32_t usec);
 
 		ssize_t	safeRead(void *buf, ssize_t count,

@@ -91,7 +91,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("done writing %lld bytes\n",filesize);
 	displayTime(&start,&end);
 	stdoutput.printf("\n");
-//process::exit(0);
+process::exit(0);
 #endif
 
 	for (int64_t readsize=1; readsize<=blocksize; readsize*=2) {
