@@ -1297,11 +1297,9 @@ bool filedescriptor::close() {
 		pvt->_writebufferwriteavail=0;
 		pvt->_writebufferdirty=false;
 	} else if (pvt->_writebuffer) {
-		pvt->_writebufferhead=pvt->_writebuffer;
 		pvt->_writebuffertail=pvt->_writebuffer;
-		pvt->_writebufferend=pvt->_writebuffer;
-		pvt->_writebufferreadavail=0;
-		pvt->_writebufferwriteavail=0;
+		pvt->_writebufferreadavail=pvt->_writebuffertail-
+						pvt->_writebufferhead;
 		pvt->_writebufferdirty=false;
 	}
 
