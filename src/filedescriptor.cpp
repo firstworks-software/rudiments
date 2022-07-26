@@ -787,6 +787,11 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 	}
 	pvt->_offset=offset;
 
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf("%d: setPosition(%d,offset=%08x,",
+		(int)process::getProcessId(),(int)pvt->_fd,offset);
+	#endif
+
 	// If the offset is inside of the current block, then
 	// offset-blockoffset<blocksize.  Also, if the offset is way past the
 	// current block, then offset-blockoffset>blocksize.  Those work
@@ -801,15 +806,18 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 	// I belive that since all numbers involved are signed, there should be
 	// no way for offset-blockoffset to result in a large enough negative
 	// number that it wraps back around and ends up < blocksize.
-	if ((uint64_t)(pvt->_offset-pvt->_blockoffset)<
-						(uint64_t)pvt->_blocksize) {
+	if ((uint64_t)(offset-pvt->_blockoffset)<(uint64_t)pvt->_blocksize) {
+
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("inside current block");
+		#endif
 
 		// if we just moved around inside of the current block then
 		// we need to adjust the head and read/write avails (see note
 		// at end of realignWriteBuffer() for why the read/write avails
 		// are different)
 		pvt->_writebufferhead=pvt->_writebuffer+
-					(pvt->_offset-pvt->_blockoffset);
+						(offset-pvt->_blockoffset);
 		pvt->_writebufferreadavail=pvt->_writebuffertail-
 						pvt->_writebufferhead;
 		pvt->_writebufferwriteavail=pvt->_writebufferend-
@@ -821,7 +829,15 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 		// realignWriteBuffer() will realign the buffer the next
 		// time it's called
 		pvt->_writebufferwriteavail=0;
+
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("outside current block");
+		#endif
 	}
+
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf(")\n");
+	#endif
 	return offset;
 }
 
@@ -1042,7 +1058,8 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			// update the write buffer pointers
 			pvt->_writebuffer=(unsigned char *)
 					pvt->_writebuffermap->getData();
-			pvt->_writebufferhead=pvt->_writebuffer;
+			pvt->_writebufferhead=pvt->_writebuffer+
+					(pvt->_offset-pvt->_blockoffset);
 			pvt->_writebuffertail=pvt->_writebuffer+pvt->_blocksize;
 			pvt->_writebufferend=pvt->_writebuffertail;
 			pvt->_writebufferreadavail=pvt->_blocksize;
@@ -1096,7 +1113,8 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	}
 
 	// update the write buffer pointers
-	pvt->_writebufferhead=pvt->_writebuffer;
+	pvt->_writebufferhead=pvt->_writebuffer+
+				(pvt->_offset-pvt->_blockoffset);
 	pvt->_writebuffertail=pvt->_writebuffer;
 	pvt->_writebufferend=pvt->_writebuffer+pvt->_blocksize;
 
