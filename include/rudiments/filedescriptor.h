@@ -1099,6 +1099,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  when randomly accessing small parts of large files, and
 		 *  possibly other very specific situations.
 		 *
+		 *  NOTE: if memorymap::supported() returns false, then calling
+		 *  this method with "enabled" set to true has no effect.
+		 *
 		 *  Defaults to false. */
 		void	setMmapBufferingEnabled(bool enabled);
 

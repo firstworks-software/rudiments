@@ -23,7 +23,8 @@ PROGS = dictionary \
 	bytestring \
 	charstring \
 	socket \
-	file
+	file \
+	xmlsax
 
 .SUFFIXES: .lo .obj .cpp
 
@@ -95,3 +96,6 @@ socket: socket.cpp socket.$(OBJ)
 
 file: file.cpp file.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) file.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+xmlsax: xmlsax.cpp xmlsax.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmlsax.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

@@ -604,7 +604,7 @@ ssize_t filedescriptor::getReadBufferSize() const {
 }
 
 void filedescriptor::setMmapBufferingEnabled(bool enabled) {
-	pvt->_writebuffermmapenabled=enabled;
+	pvt->_writebuffermmapenabled=(enabled && memorymap::supported());
 }
 
 bool filedescriptor::getMmapBufferingEnabled() {
@@ -758,12 +758,12 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 	} else if (whence==SEEK_END) {
 		file	f;
 		f.setFileDescriptor(pvt->_fd);
-		if (!f.getCurrentProperties()) {
-			f.setFileDescriptor(-1);
+		bool	success=f.getCurrentProperties();
+		f.setFileDescriptor(-1);
+		if (!success) {
 			return -1;
 		}
 		offset=f.getSize()+offset;
-		f.setFileDescriptor(-1);
 	}
 	pvt->_offset=offset;
 	return offset;
@@ -944,6 +944,11 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		#endif
 	}
 
+	return bufferNewBlock(sec,usec);
+}
+
+ssize_t filedescriptor::bufferNewBlock(int32_t sec, int32_t usec) {
+
 	// If we're here, then any data that was previously buffered has been
 	// un-buffered and pvt->_blockoffset is aligned to the new block.
 	//
@@ -964,8 +969,9 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		// determine if we can mmap the block
 		file	f;
 		f.setFileDescriptor(pvt->_fd);
-		if (!f.getCurrentProperties()) {
-			f.setFileDescriptor(-1);
+		bool	success=f.getCurrentProperties();
+		f.setFileDescriptor(-1);
+		if (!success) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf(",error getting file size)\n");
 			#endif
@@ -976,8 +982,6 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			return RESULT_ERROR;
 		}
 		off64_t	filesize=f.getSize();
-		f.setFileDescriptor(-1);
-		f.close();
 
 		#if defined(DEBUG_BUFFERING)
 		if (filesize/pvt->_blocksize==

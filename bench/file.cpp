@@ -13,7 +13,7 @@
 #include <rudiments/bytestring.h>
 #include "../test/test.cpp"
 
-//#define ONLYREAD 1
+#define ONLYREAD 1
 //#define SHOWPROGRESS 1
 
 int main(int argc, const char **argv) {
@@ -38,7 +38,7 @@ int main(int argc, const char **argv) {
 	// create the file
 	file	f;
 #ifdef ONLYREAD
-	if (!f.open(filename.getString(),O_RDWR)) {
+	if (!f.open(filename.getString(),O_RDONLY)) {
 		stdoutput.printf("open failed\n");
 		process::exit(1);
 	}
@@ -53,8 +53,7 @@ int main(int argc, const char **argv) {
 	// use optimium block size for buffers
 	filesystem	fs;
 	fs.open(filename.getString());
-	//int64_t	blocksize=fs.getOptimumTransferBlockSize()*3;
-	int64_t	blocksize=fs.getOptimumTransferBlockSize()*1;
+	int64_t	blocksize=fs.getOptimumTransferBlockSize()*3;
 	if (blocksize<=0) {
 		stdoutput.printf("get optimum block size failed\n");
 		process::exit(1);

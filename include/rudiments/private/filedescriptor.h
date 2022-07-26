@@ -15,6 +15,7 @@
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
+		ssize_t	bufferNewBlock(int32_t sec, int32_t usec);
 
 		ssize_t	bufferedRead(void *buf, ssize_t count,
 						int32_t sec, int32_t usec);
