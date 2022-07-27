@@ -9603,14 +9603,14 @@ then
 
 		dnl disable -Werror with gcc < 2.7 because
 		dnl it misinterprets placement new
-		CXX_VERSION=`$CXX --version 2> /dev/null | head -1 | tr -d '.' | cut -c1-2`
+		CXX_VERSION=`$CXX --version 2> /dev/null | head -1`
 
 		dnl Newer versions of gcc output the version differently
 		dnl and the above results in "g+".  These all work correctly.
-		if ( test "$CXX_VERSION" != "g+" )
+		if ( test -n "$CXX_VERSION" -a -z "`echo $CXX_VERSION | grep g++`" )
 		then
 			dnl older versions output something like 27, 28, 29, etc.
-			if (  test "$CXX_VERSION" -lt "27" )
+			if (  test "`echo $CXX_VERSION | tr -d'.' | cut -c1-2`" -lt "27" )
 			then
 				WERROR=""
 			fi
@@ -11170,14 +11170,14 @@ then
 
 		dnl disable -Werror with gcc < 2.7 because
 		dnl it misinterprets placement new
-		CXX_VERSION=`$CXX --version 2> /dev/null | head -1 | tr -d '.' | cut -c1-2`
+		CXX_VERSION=`$CXX --version 2> /dev/null | head -1`
 
 		dnl Newer versions of gcc output the version differently
 		dnl and the above results in "g+".  These all work correctly.
-		if ( test "$CXX_VERSION" != "g+" )
+		if ( test -n "$CXX_VERSION" -a -z "`echo $CXX_VERSION | grep g++`" )
 		then
 			dnl older versions output something like 27, 28, 29, etc.
-			if (  test "$CXX_VERSION" -lt "27" )
+			if (  test "`echo $CXX_VERSION | tr -d'.' | cut -c1-2`" -lt "27" )
 			then
 				WERROR=""
 			fi

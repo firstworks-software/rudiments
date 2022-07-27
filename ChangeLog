@@ -86,6 +86,8 @@
 	httpserverapi and httprequest are inputs now
 	dom and children's write*() methods return the number of bytes written
 		now, instead of just true/false
+	fixed a Werror-detection bug in the configure script for
+		cross-compilers
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
