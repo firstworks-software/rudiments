@@ -792,50 +792,68 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 		(int)process::getProcessId(),(int)pvt->_fd,offset);
 	#endif
 
-	// If the offset is inside of the current block, then
-	// offset-blockoffset<blocksize.  Also, if the offset is way past the
-	// current block, then offset-blockoffset>blocksize.  Those work
-	// naturally.
-	//
-	// We use a trick to handle cases where the offset is before the
-	// current block though.  In that case, offset-blockoffset ends up
-	// being a negative number, but since we convert it to an unsigned
-	// integer, it becomes a large positive number, so still we have a case
-	// where offset-blockoffset>blocksize.
-	//
-	// I belive that since all numbers involved are signed, there should be
-	// no way for offset-blockoffset to result in a large enough negative
-	// number that it wraps back around and ends up < blocksize.
-	if ((uint64_t)(offset-pvt->_blockoffset)<(uint64_t)pvt->_blocksize) {
+	// If we have an existing pvt->_writebuffer (eg. we didn't just open the
+	// file, enable buffering and immediately call setPosition()) then...
+	if (pvt->_writebuffer) {
 
-		#if defined(DEBUG_BUFFERING)
-		debugPrintf("inside current block");
-		#endif
+		// If the offset is inside of the current block, then
+		// offset-blockoffset<blocksize.  Also, if the offset is way
+		// past the current block, then offset-blockoffset>blocksize.
+		// Those work naturally.
+		//
+		// We use a trick to handle cases where the offset is before
+		// the current block though.  In that case, offset-blockoffset
+		// ends up being a negative number, but since we convert it to
+		// an unsigned integer, it becomes a large positive number, so
+		// still we have a case where offset-blockoffset>blocksize.
+		//
+		// I belive that since all numbers involved are signed, there
+		// should be no way for offset-blockoffset to result in a large
+		// enough negative number that it wraps back around and ends
+		// up < blocksize.
+		if ((uint64_t)(offset-pvt->_blockoffset)<
+					(uint64_t)pvt->_blocksize) {
 
-		// if we just moved around inside of the current block then
-		// we need to adjust the head and read/write avails (see note
-		// at end of realignWriteBuffer() for why the read/write avails
-		// are different)
-		pvt->_writebufferhead=pvt->_writebuffer+
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf("inside current block");
+			#endif
+
+			// if we just moved around inside of the current block
+			// then we need to adjust the head and read/write
+			// avails (see note at end of realignWriteBuffer() for
+			// why the read/write avails are different)
+			pvt->_writebufferhead=pvt->_writebuffer+
 						(offset-pvt->_blockoffset);
-		pvt->_writebufferreadavail=pvt->_writebuffertail-
+			pvt->_writebufferreadavail=pvt->_writebuffertail-
 						pvt->_writebufferhead;
-		pvt->_writebufferwriteavail=pvt->_writebufferend-
+			pvt->_writebufferwriteavail=pvt->_writebufferend-
 						pvt->_writebufferhead;
 
-	} else {
+		} else {
 
-		// otherwise we'll just set the write avail to 0 so that 
-		// realignWriteBuffer() will realign the buffer the next
-		// time it's called
-		pvt->_writebufferwriteavail=0;
+			// Otherwise we'll just set the write avail to 0 so that
+			// realignWriteBuffer() will figure everything out the
+			// first time it's called.
+			//
+			// This is redundant in the case that pvt->_writebuffer
+			// is NULL, in which case pvt->_writebufferwriteavail
+			// will also be 0, but it doesn't hurt to set it.
+			pvt->_writebufferwriteavail=0;
 
-		#if defined(DEBUG_BUFFERING)
-		debugPrintf("outside current block");
-		#endif
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf("outside current block");
+			#endif
+		}
+	}
+	#if defined(DEBUG_BUFFERING)
+	else {
+
+		// in this case, pvt->_writebuffer will be 0, which will
+		// trigger realignWriteBuffer() to figure everything out
+		// the first time it's called.
+		debugPrintf("no existing write buffer");
 	}
 
-	#if defined(DEBUG_BUFFERING)
 	debugPrintf(")\n");
 	#endif
 	return offset;
