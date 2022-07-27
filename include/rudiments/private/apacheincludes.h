@@ -11,6 +11,9 @@ extern "C" {
 		// to work around that
 		#define table apr_table_t
 	#endif
+	#ifdef _DARWIN
+		#define MAC_OS 1
+	#endif
 	#include "httpd.h"
 	#include "http_config.h"
 	#include "http_protocol.h"

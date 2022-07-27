@@ -16390,6 +16390,9 @@ case $host_os in
 	*darwin* )
 		DARWIN="yes"
 
+$as_echo "#define _DARWIN 1" >>confdefs.h
+
+
 				PV1="`sw_vers | grep ProductVersion | cut -d':' -f2 | tr -d '\t' | cut -d'.' -f1`"
 		PV2="`sw_vers | grep ProductVersion | cut -d':' -f2 | tr -d '\t' | cut -d'.' -f2`"
 		PRODUCTVERSION="$PV1.$PV2"

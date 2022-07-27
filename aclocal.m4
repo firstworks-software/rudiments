@@ -10031,6 +10031,7 @@ AC_MSG_CHECKING(for OSX)
 case $host_os in
 	*darwin* )
 		DARWIN="yes"
+		AC_DEFINE(_DARWIN,1,Darwin)
 
 		dnl get the actual mac os version
 		PV1="`sw_vers | grep ProductVersion | cut -d':' -f2 | tr -d '\t' | cut -d'.' -f1`"
@@ -11597,6 +11598,7 @@ AC_MSG_CHECKING(for OSX)
 case $host_os in
 	*darwin* )
 		DARWIN="yes"
+		AC_DEFINE(_DARWIN,1,Darwin)
 
 		dnl get the actual mac os version
 		PV1="`sw_vers | grep ProductVersion | cut -d':' -f2 | tr -d '\t' | cut -d'.' -f1`"

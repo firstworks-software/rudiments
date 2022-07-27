@@ -1684,6 +1684,9 @@
 /* Hack for gcc on SCO OSR6 */
 /* #undef _CFRONT_3_0 */
 
+/* Darwin */
+/* #undef _DARWIN */
+
 /* Haiku OS */
 /* #undef _HAIKU */
 
