@@ -1027,7 +1027,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  write() system call.
 		 *
 		 *  This method sets the write buffer size to "size" bytes.
-		 *  A size of 0 means not to buffer writes at all.
+		 *  A size of 0 (or less) means not to buffer writes at all.
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	setWriteBufferSize(ssize_t size) const;
@@ -1081,8 +1081,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  system calls.  This buffer is in user space and populated
 		 *  in the manner described above.
 		 *
-		 *  This method sets the read buffer size to "size" bytes and
-		 *  returns true on success and false on failure. */
+		 *  This method sets the read buffer size to "size" bytes.
+		 *  A size of 0 (or less) means not to buffer writes at all.
+		 *
+		 *  Returns true on success and false on failure. */
 		bool	setReadBufferSize(ssize_t size) const;
 
 		/** Returns the current size of the read buffer. */
