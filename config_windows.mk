@@ -48,6 +48,8 @@ LINK = link
 AR =
 LDFLAGS = /nologo @DEBUGLDFLAGS@ @SDKLIBS@
 LINKFLAGS = /dll
+MODLINKFLAGS =
+APACHELINKFLAGS = $(LINKFLAGS)
 INSTALLLIB = installdll
 UNINSTALLLIB = uninstalldll
 LIBEXT = dll
@@ -119,9 +121,6 @@ GETPGIDLIB = @GETPGIDLIB@
 
 # mas library
 MASLIB = @MASLIB@
-
-# apache library
-APACHELIBS = @APACHELIBS@
 
 # rudiments library (for tests)
 RUDIMENTSLIB = /LIBPATH:@top_builddir@\src librudiments.lib
