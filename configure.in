@@ -4494,6 +4494,21 @@ dnl Check for Apache module api
 echo
 echo "***** Apache *****************"
 FW_CHECK_APACHE
+if ( test "$INCLUDE_APACHE" = "1" )
+then
+	if ( test -n "$DARWIN" )
+	then
+		if ( test -n "$BUNDLE_LOADER" )
+		then
+			APACHELINKFLAGS="$APACHELINKFLAGS \$(MODLINKFLAGS)"
+		else
+			APACHELINKFLAGS="$APACHELINKFLAGS \$(LINKFLAGS)"
+		fi
+	else
+		APACHELINKFLAGS="\$(LINKFLAGS)"
+	fi
+fi
+AC_SUBST(APACHELINKFLAGS)
 echo "******************************"
 
 
