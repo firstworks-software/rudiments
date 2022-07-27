@@ -32,12 +32,12 @@ resourcepool<valuetype> &resourcepool<valuetype>::operator=(
 template <class valuetype>
 inline
 void resourcepool<valuetype>::clone(const resourcepool<valuetype> *r) {
-	initialized=r.initialized;
-	min=r.min;
-	max=r.max;
-	mtx=r.mtx;
-	growby=r.growby;
-	if (r.initialized) {
+	initialized=r->initialized;
+	min=r->min;
+	max=r->max;
+	mtx=r->mtx;
+	growby=r->growby;
+	if (r->initialized) {
 		initialize();
 	}
 }
