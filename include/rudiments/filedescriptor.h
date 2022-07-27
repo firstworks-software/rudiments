@@ -650,20 +650,20 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		ssize_t	read(unsigned char *buffer, size_t size,
 					int32_t sec, int32_t usec);
 
-		/** Reads "size" characters from the file
+		/** Reads "length" characters from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(char *buffer, size_t size,
+		ssize_t	read(char *buffer, size_t length,
 					int32_t sec, int32_t usec);
 
-		/** Reads "size" characters from the file
+		/** Reads "length" characters from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(wchar_t *buffer, size_t size,
+		ssize_t	read(wchar_t *buffer, size_t length,
 					int32_t sec, int32_t usec);
 
 		/** Reads "size" bytes from the file

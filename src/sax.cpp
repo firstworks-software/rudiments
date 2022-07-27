@@ -144,7 +144,7 @@ bool sax::parseLocalFile(const char *filename) {
 		// will cause getCharacter() to read from the file rather than
 		// the map when parse() calls it.
 		pvt->_offset=0;
-		mapFile();
+		//mapFile();
 
 		// parse the file
 		retval=parse();

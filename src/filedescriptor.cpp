@@ -1428,6 +1428,11 @@ void filedescriptor::dontAllowShortWrites() {
 	pvt->_allowshortwrites=false;
 }
 
+ssize_t filedescriptor::bufferedRead(unsigned char *buf, ssize_t count) {
+	// gets called on every read, so needs to be optimized
+	return (this->*pvt->_bufferedReadPtr)(buf,count,-1,-1);
+}
+
 ssize_t filedescriptor::bufferedRead(unsigned char *buf, ssize_t count,
 					int32_t sec, int32_t usec) {
 	// gets called on every read, so needs to be optimized
@@ -1825,6 +1830,11 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 	#else
 		#error no read or anything like it
 	#endif
+}
+
+ssize_t filedescriptor::bufferedWrite(const unsigned char *buf, ssize_t count) {
+	// gets called on every write, so needs to be optimized
+	return (this->*pvt->_bufferedWritePtr)(buf,count,-1,-1);
 }
 
 ssize_t filedescriptor::bufferedWrite(const unsigned char *buf,

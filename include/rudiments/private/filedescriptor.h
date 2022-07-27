@@ -16,8 +16,10 @@
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
 
+		ssize_t	bufferedRead(unsigned char *buf, ssize_t count);
 		ssize_t	bufferedRead(unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec);
+		ssize_t	bufferedWrite(const unsigned char *buf, ssize_t count);
 		ssize_t	bufferedWrite(const unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec);
 		ssize_t	streamBufferedRead(unsigned char *buf, ssize_t count,
