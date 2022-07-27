@@ -255,8 +255,8 @@ class filedescriptorprivate {
 
 		bool		_isstream;
 		off64_t		_offset;
-		off64_t		_blockoffset;
-		ssize_t		_blocksize;
+		off64_t		_writeblockoffset;
+		ssize_t		_writeblocksize;
 		ssize_t 	(filedescriptor::*_readPtr)(
 						unsigned char *,ssize_t,
 						int32_t,int32_t);
@@ -276,7 +276,7 @@ class filedescriptorprivate {
 		bool		_writebuffermmapenabled;
 
 		unsigned char	*_readbuffer;
-		unsigned char	*_readbufferptr;
+		unsigned char	*_readbufferhead;
 		unsigned char	*_readbuffertail;
 		unsigned char	*_readbufferend;
 };
@@ -323,8 +323,8 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_type="filedescriptor";
 	pvt->_lstnr=NULL;
 	pvt->_offset=0;
-	pvt->_blockoffset=0;
-	pvt->_blocksize=0;
+	pvt->_writeblockoffset=0;
+	pvt->_writeblocksize=0;
 	pvt->_isstream=true;
 	pvt->_readPtr=&filedescriptor::unBufferedRead;
 	pvt->_writePtr=&filedescriptor::unBufferedWrite;
@@ -339,7 +339,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_writebufferdirty=false;
 	pvt->_writebuffermmapenabled=false;
 	pvt->_readbuffer=NULL;
-	pvt->_readbufferptr=NULL;
+	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
 	pvt->_readbufferend=NULL;
 }
@@ -358,8 +358,8 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_type="filedescriptor";
 	pvt->_lstnr=NULL;
 	pvt->_offset=f.pvt->_offset;
-	pvt->_blockoffset=f.pvt->_blockoffset;
-	pvt->_blocksize=f.pvt->_blocksize;
+	pvt->_writeblockoffset=f.pvt->_writeblockoffset;
+	pvt->_writeblocksize=f.pvt->_writeblocksize;
 	pvt->_isstream=f.pvt->_isstream;
 	// FIXME: clone function pointers
 	pvt->_readPtr=&filedescriptor::unBufferedRead;
@@ -376,7 +376,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_writebufferdirty=false;
 	pvt->_writebuffermmapenabled=f.pvt->_writebuffermmapenabled;
 	pvt->_readbuffer=NULL;
-	pvt->_readbufferptr=NULL;
+	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
 }
 
@@ -388,10 +388,12 @@ filedescriptor::~filedescriptor() {
 		return;
 	}
 
+	// clean up read buffer
 	unsigned char	*tmpbuffer=pvt->_readbuffer;
 	pvt->_readbuffer=NULL;
 	delete[] tmpbuffer;
 
+	// clean up write buffer
 	if (pvt->_writebuffermap) {
 		memorymap	*tmpmap=pvt->_writebuffermap;
 		pvt->_writebuffermap=NULL;
@@ -402,12 +404,15 @@ filedescriptor::~filedescriptor() {
 		delete[] tmpbuffer;
 	}
 
+	// clean up listener
 	listener	*tmplstnr=pvt->_lstnr;
 	pvt->_lstnr=NULL;
 	delete tmplstnr;
 
+	// close
 	close();
 
+	// clean up pvt
 	filedescriptorprivate	*tmppvt=pvt;
 	pvt=NULL;
 	delete tmppvt;
@@ -415,7 +420,7 @@ filedescriptor::~filedescriptor() {
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
-	// sanity check on size
+	// finagle size
 	if (size>SSIZE_MAX) {
 		size=SSIZE_MAX;
 	}
@@ -423,138 +428,215 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 		size=0;
 	}
 
+	// set/unset stream/storage buffers, as appropriate
+	return (size)?
+		((pvt->_isstream)?
+			setStreamWriteBufferSize(size):
+			setStorageWriteBufferSize(size)):
+		((pvt->_isstream)?
+			unsetStreamWriteBuffer():
+			unsetStorageWriteBuffer());
+}
+
+bool filedescriptor::setStreamWriteBufferSize(ssize_t size) const {
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-	debugPrintf("%d: setWriteBufferSize(%d,attempting %d bytes",
+	debugPrintf("%d: setStreamWriteBufferSize(%d,attempting %d bytes",
 			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
-	// if we will be buffering, going forward...
-	if (size) {
+	// invalidate stuff that's only used
+	// when buffering storage
+	pvt->_offset=0;
+	pvt->_writeblockoffset=0;
 
-		// FIXME: arguably, if we already have a buffer, and
-		// size hasn't changed, then some or all of the below is
-		// unnecessary
+	// update write block size
+	pvt->_writeblocksize=size;
 
-		// if this is a stream
-		if (pvt->_isstream) {
-
-			// clean up and create a new buffer
-			delete[] pvt->_writebufferunaligned;
-			allocateWriteBuffer(size);
-			pvt->_writebufferhead=pvt->_writebuffer;
-			pvt->_writebuffertail=pvt->_writebuffer;
-			pvt->_writebufferend=pvt->_writebuffer+size;
-			pvt->_writebufferreadavail=size;
-			pvt->_writebufferwriteavail=size;
-
-			// set the write method to use
-			pvt->_writePtr=&filedescriptor::streamBufferedWrite;
-		}
-
-		// if this is storage
-		else {
-
-			// we need to figure out the current offset
-			// and block offset...
-
-			// if we haven't been buffering then we need to set
-			// pvt->_offset from the current position in the file
-			// itself
-			//
-			// if we have been buffering then pvt->_offset ought to
-			// already be valid
-			if (!pvt->_writebuffer) {
-				off64_t	pos=getCurrentPosition();
-				if (pos==-1) {
-					#if defined(DEBUG_WRITE) && \
-						defined(DEBUG_BUFFERING)
-					debugPrintf(",error: lseek failed)\n");
-					#endif
-					return false;
-				}
-				pvt->_offset=pos;
-			}
-			pvt->_blockoffset=pvt->_offset/size*size;
-			pvt->_blocksize=size;
-
-			// clean up and don't create a new write buffer
-			// the new buffer will be created during the first
-			// call to realignWriteBuffer()
-			if (pvt->_writebuffermap) {
-				delete pvt->_writebuffermap;
-				pvt->_writebuffermap=NULL;
-			} else {
-				delete[] pvt->_writebufferunaligned;
-				pvt->_writebufferunaligned=NULL;
-			}
-			pvt->_writebuffer=NULL;
-			pvt->_writebufferhead=NULL;
-			pvt->_writebuffertail=NULL;
-			pvt->_writebufferend=NULL;
-			pvt->_writebufferreadavail=0;
-			pvt->_writebufferwriteavail=0;
-
-			// set the read and write methods to use
-			// (for storage, if we're buffering writes then we
-			// have to buffer reads too)
-			pvt->_readPtr=&filedescriptor::storageBufferedRead;
-			pvt->_writePtr=&filedescriptor::storageBufferedWrite;
-		}
+	// clean up
+	if (pvt->_writebuffermap) {
+		delete pvt->_writebuffermap;
+		pvt->_writebuffermap=NULL;
+	} else {
+		delete[] pvt->_writebufferunaligned;
 	}
 
-	// if we won't be buffering, going forward...
-	else {
+	// create a new buffer
+	allocateWriteBuffer(size);
 
-		// if this is storage
-		if (!pvt->_isstream) {
+	// update the write buffer pointers and counts
+	pvt->_writebufferhead=pvt->_writebuffer;
+	pvt->_writebuffertail=pvt->_writebuffer;
+	pvt->_writebufferend=pvt->_writebuffer+size;
+	pvt->_writebufferreadavail=size;
+	pvt->_writebufferwriteavail=size;
 
-			// if we were buffering previously then the current
-			// file position is probably pvt->_blockoffset.
-			// go to pvt->_offset instead
-			if (pvt->_writebuffer) {
-				if (lseek(pvt->_offset,SEEK_SET)!=
-							pvt->_offset) {
-					#if defined(DEBUG_BUFFERING)
-					debugPrintf("lseek failed)\n");
-					#endif
-					return false;
-				}
-			}
-
-			// invalidate stuff that's only used
-			// when buffering storage
-			pvt->_offset=0;
-			pvt->_blockoffset=0;
-			pvt->_blocksize=0;
-
-			// set the read method to use
-			// (For storage, if we're not buffering writes then we
-			// can't buffer reads either.  The write method will be
-			// set below.)
-			pvt->_readPtr=&filedescriptor::unBufferedRead;
-		}
-
-		// clean up and don't create a new write buffer
-		if (pvt->_writebuffermap) {
-			delete pvt->_writebuffermap;
-			pvt->_writebuffermap=NULL;
-		} else {
-			delete[] pvt->_writebufferunaligned;
-			pvt->_writebufferunaligned=NULL;
-		}
-		pvt->_writebuffer=NULL;
-		pvt->_writebufferhead=NULL;
-		pvt->_writebuffertail=NULL;
-		pvt->_writebufferend=NULL;
-		pvt->_writebufferreadavail=0;
-		pvt->_writebufferwriteavail=0;
-
-		// set the write method to use
-		pvt->_writePtr=&filedescriptor::unBufferedWrite;
-	}
-
-	// mark the buffer not dirty
+	// mark the write buffer not dirty
 	pvt->_writebufferdirty=false;
+
+	// set the write method to use
+	pvt->_writePtr=&filedescriptor::streamBufferedWrite;
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf(",success)\n");
+	#endif
+	return true;
+}
+
+bool filedescriptor::setStorageWriteBufferSize(ssize_t size) const {
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf("%d: setStorageWriteBufferSize(%d,attempting %d bytes",
+			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
+	#endif
+
+	// figure out the current offset...
+	//
+	// If we haven't been buffering then we need to set pvt->_offset from
+	// the current position in the file.
+	//
+	// If we have been buffering then pvt->_offset ought to already be
+	// valid.
+	if (!pvt->_writebuffer) {
+		off64_t	pos=getCurrentPosition();
+		if (pos==-1) {
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			debugPrintf(",error: lseek failed)\n");
+			#endif
+			return false;
+		}
+		pvt->_offset=pos;
+	}
+
+	// update write block offset and write block size
+	pvt->_writeblockoffset=pvt->_offset/size*size;
+	pvt->_writeblocksize=size;
+
+	// clean up but don't create a new write buffer
+	// the new buffer will be created during the first call to
+	// realignWriteBuffer()
+	if (pvt->_writebuffermap) {
+		delete pvt->_writebuffermap;
+		pvt->_writebuffermap=NULL;
+	} else {
+		delete[] pvt->_writebufferunaligned;
+		pvt->_writebufferunaligned=NULL;
+	}
+
+	// update the write buffer pointers and counts
+	pvt->_writebuffer=NULL;
+	pvt->_writebufferhead=NULL;
+	pvt->_writebuffertail=NULL;
+	pvt->_writebufferend=NULL;
+	pvt->_writebufferreadavail=0;
+	pvt->_writebufferwriteavail=0;
+
+	// mark the write buffer not dirty
+	pvt->_writebufferdirty=false;
+
+	// set the read and write methods to use
+	// (for storage, if we're buffering writes
+	// then we have to buffer reads too)
+	pvt->_readPtr=&filedescriptor::storageBufferedRead;
+	pvt->_writePtr=&filedescriptor::storageBufferedWrite;
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf(",success)\n");
+	#endif
+	return true;
+}
+
+bool filedescriptor::unsetStreamWriteBuffer() const {
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf("%d: unsetStreamWriteBuffer(%d,",
+			(int)process::getProcessId(),(int)pvt->_fd);
+	#endif
+
+	// invalidate stuff that's only used
+	// when buffering storage
+	pvt->_offset=0;
+	pvt->_writeblockoffset=0;
+
+	// update write block size
+	pvt->_writeblocksize=0;
+
+	// clean up
+	if (pvt->_writebuffermap) {
+		delete pvt->_writebuffermap;
+		pvt->_writebuffermap=NULL;
+	} else {
+		delete[] pvt->_writebufferunaligned;
+		pvt->_writebufferunaligned=NULL;
+	}
+
+	// update the write buffer pointers and counts
+	pvt->_writebuffer=NULL;
+	pvt->_writebufferhead=NULL;
+	pvt->_writebuffertail=NULL;
+	pvt->_writebufferend=NULL;
+	pvt->_writebufferreadavail=0;
+	pvt->_writebufferwriteavail=0;
+
+	// mark the write buffer not dirty
+	pvt->_writebufferdirty=false;
+
+	// set the write method to use
+	pvt->_writePtr=&filedescriptor::unBufferedWrite;
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf(",success)\n");
+	#endif
+	return true;
+}
+
+bool filedescriptor::unsetStorageWriteBuffer() const {
+
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+	debugPrintf("%d: unsetStorageWriteBuffer(%d,",
+			(int)process::getProcessId(),(int)pvt->_fd);
+	#endif
+
+	// If we were buffering previously then the current file position is
+	// probably pvt->_writeblockoffset.  Go to pvt->_offset instead.
+	if (pvt->_writebuffer) {
+		if (lseek(pvt->_offset,SEEK_SET)!=pvt->_offset) {
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf("lseek failed)\n");
+			#endif
+			return false;
+		}
+	}
+
+	// update write block offset and write block size
+	pvt->_writeblockoffset=0;
+	pvt->_writeblocksize=0;
+
+	// clean up
+	if (pvt->_writebuffermap) {
+		delete pvt->_writebuffermap;
+		pvt->_writebuffermap=NULL;
+	} else {
+		delete[] pvt->_writebufferunaligned;
+		pvt->_writebufferunaligned=NULL;
+	}
+
+	// update the write buffer pointers and counts
+	pvt->_writebuffer=NULL;
+	pvt->_writebufferhead=NULL;
+	pvt->_writebuffertail=NULL;
+	pvt->_writebufferend=NULL;
+	pvt->_writebufferreadavail=0;
+	pvt->_writebufferwriteavail=0;
+
+	// mark the write buffer not dirty
+	pvt->_writebufferdirty=false;
+
+	// set the read and write methods to use
+	// (for storage, if we're not buffering writes then we
+	// can't buffer reads either)
+	pvt->_readPtr=&filedescriptor::unBufferedRead;
+	pvt->_writePtr=&filedescriptor::unBufferedWrite;
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf(",success)\n");
@@ -582,30 +664,12 @@ void filedescriptor::allocateWriteBuffer(ssize_t size) const {
 }
 
 ssize_t filedescriptor::getWriteBufferSize() const {
-	return (pvt->_isstream)?
-			(pvt->_writebufferend-pvt->_writebuffer):
-			pvt->_blocksize;
+	return pvt->_writeblocksize;
 }
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
 
-	// for storage (non-stream) filedescriptors,
-	// we only use one buffer, the write buffer
-	if (!pvt->_isstream) {
-
-		// clean up and don't create a new read buffer
-		delete[] pvt->_readbuffer;
-		pvt->_readbuffer=NULL;
-		pvt->_readbufferptr=NULL;
-		pvt->_readbuffertail=NULL;
-		pvt->_readbufferend=NULL;
-
-		return setWriteBufferSize(size);
-	}
-
-	// for stream filedescriptors...
-
-	// sanity check on size
+	// finagle size
 	if (size>SSIZE_MAX) {
 		size=SSIZE_MAX;
 	}
@@ -613,38 +677,34 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 		size=0;
 	}
 
+	// set/unset stream/storage buffers, as appropriate
+	return (size)?
+		((pvt->_isstream)?
+			setStreamReadBufferSize(size):
+			setStorageReadBufferSize(size)):
+		((pvt->_isstream)?
+			unsetStreamReadBuffer():
+			unsetStorageReadBuffer());
+}
+
+bool filedescriptor::setStreamReadBufferSize(ssize_t size) const {
+
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-	debugPrintf("%d: setReadBufferSize(%d,attempting %d bytes",
+	debugPrintf("%d: setStreamReadBufferSize(%d,attempting %d bytes",
 			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
-	// if we will be buffering, going forward...
-	if (size) {
+	// clean up and create a new buffer
+	delete[] pvt->_readbuffer;
+	pvt->_readbuffer=new unsigned char[size];
 
-		// clean up and create a new buffer
-		delete[] pvt->_readbuffer;
-		pvt->_readbuffer=new unsigned char[size];
-		pvt->_readbufferptr=pvt->_readbuffer;
-		pvt->_readbuffertail=pvt->_readbuffer;
-		pvt->_readbufferend=pvt->_readbuffer+size;
+	// update the read buffer pointers
+	pvt->_readbufferhead=pvt->_readbuffer;
+	pvt->_readbuffertail=pvt->_readbuffer;
+	pvt->_readbufferend=pvt->_readbuffer+size;
 
-		// set the read method to use
-		pvt->_readPtr=&filedescriptor::streamBufferedRead;
-	}
-
-	// if we won't be buffering, going forward...
-	else {
-
-		// clean up and don't create a new read buffer
-		delete[] pvt->_readbuffer;
-		pvt->_readbuffer=NULL;
-		pvt->_readbufferptr=NULL;
-		pvt->_readbuffertail=NULL;
-		pvt->_readbufferend=NULL;
-
-		// set the read method to use
-		pvt->_readPtr=&filedescriptor::unBufferedRead;
-	}
+	// set the read method to use
+	pvt->_readPtr=&filedescriptor::streamBufferedRead;
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 	debugPrintf(",success)\n");
@@ -652,10 +712,71 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 	return true;
 }
 
+bool filedescriptor::setStorageReadBufferSize(ssize_t size) const {
+
+	// for storage filedescriptors, we only
+	// use one buffer, the write buffer
+
+	// clean up but don't create a new read buffer
+	delete[] pvt->_readbuffer;
+	pvt->_readbuffer=NULL;
+
+	// update the read buffer pointers
+	pvt->_readbufferhead=NULL;
+	pvt->_readbuffertail=NULL;
+	pvt->_readbufferend=NULL;
+
+	// set the write buffer size
+	return setWriteBufferSize(size);
+}
+
+bool filedescriptor::unsetStreamReadBuffer() const {
+
+	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+	debugPrintf("%d: unsetStreamReadBufferSize(%d,",
+			(int)process::getProcessId(),(int)pvt->_fd);
+	#endif
+
+	// clean up but don't create a new read buffer
+	delete[] pvt->_readbuffer;
+	pvt->_readbuffer=NULL;
+
+	// update the read buffer pointers
+	pvt->_readbufferhead=NULL;
+	pvt->_readbuffertail=NULL;
+	pvt->_readbufferend=NULL;
+	
+	// set the read method to use
+	pvt->_readPtr=&filedescriptor::unBufferedRead;
+
+	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+	debugPrintf(",success)\n");
+	#endif
+	return true;
+}
+
+bool filedescriptor::unsetStorageReadBuffer() const {
+
+	// for storage filedescriptors, we only
+	// use one buffer, the write buffer
+
+	// clean up but don't create a new read buffer
+	delete[] pvt->_readbuffer;
+	pvt->_readbuffer=NULL;
+
+	// update the read buffer pointers
+	pvt->_readbufferhead=NULL;
+	pvt->_readbuffertail=NULL;
+	pvt->_readbufferend=NULL;
+
+	// unset the write buffer
+	return unsetStorageWriteBuffer();
+}
+
 ssize_t filedescriptor::getReadBufferSize() const {
 	return (pvt->_isstream)?
 			(pvt->_readbufferend-pvt->_readbuffer):
-			pvt->_blocksize;
+			pvt->_writeblocksize;
 }
 
 void filedescriptor::setMmapBufferingEnabled(bool enabled) {
@@ -671,7 +792,7 @@ bool filedescriptor::getIsCurrentBlockMmapBuffered() {
 }
 
 off64_t filedescriptor::getCurrentBlockOffset() {
-	return pvt->_blockoffset;
+	return pvt->_writeblockoffset;
 }
 
 ssize_t filedescriptor::getBytesBuffered() {
@@ -687,10 +808,12 @@ void filedescriptor::setFileDescriptor(int32_t filedesc) {
 	pvt->_fd=filedesc;
 }
 
-void filedescriptor::setIsStream(bool isstream) {
-	// FIXME: it's not safe to change this while buffering is enabled,
-	// and it ought to return false if we try
+bool filedescriptor::setIsStream(bool isstream) {
+	if (pvt->_readbuffer || pvt->_writebuffer) {
+		return false;
+	}
 	pvt->_isstream=isstream;
+	return true;
 }
 
 bool filedescriptor::getIsStream() {
@@ -794,24 +917,21 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 
 	// for non-stream (storage) filedescriptors...
 
-	// if we're not buffering then we need to directly seek to the
-	// requested offset
-	if (!pvt->_blocksize) {
+	// if we're not buffering then seek to the requested offset
+	if (!pvt->_writeblocksize) {
 		return lseek(offset,whence);
 	}
 
-	// if we are buffering, then just set the offset
+	// if we are buffering, then just set the offset, the first call to
+	// realignWriteBuffer() will actually position us in the file
 	if (whence==SEEK_CUR) {
 		offset=pvt->_offset+offset;
 	} else if (whence==SEEK_END) {
-		file	f;
-		f.setFileDescriptor(pvt->_fd);
-		bool	success=f.getCurrentProperties();
-		f.setFileDescriptor(-1);
-		if (!success) {
-			return -1;
+		off64_t	size=getSize();
+		if (size<0) {
+			return size;
 		}
-		offset=f.getSize()+offset;
+		offset=size+offset;
 	}
 	pvt->_offset=offset;
 
@@ -839,8 +959,8 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 		// should be no way for offset-blockoffset to result in a large
 		// enough negative number that it wraps back around and ends
 		// up < blocksize.
-		if ((uint64_t)(offset-pvt->_blockoffset)<
-					(uint64_t)pvt->_blocksize) {
+		if ((uint64_t)(offset-pvt->_writeblockoffset)<
+					(uint64_t)pvt->_writeblocksize) {
 
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("inside current block");
@@ -851,7 +971,7 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 			// avails (see note at end of realignWriteBuffer() for
 			// why the read/write avails are different)
 			pvt->_writebufferhead=pvt->_writebuffer+
-						(offset-pvt->_blockoffset);
+						(offset-pvt->_writeblockoffset);
 			pvt->_writebufferreadavail=pvt->_writebuffertail-
 						pvt->_writebufferhead;
 			pvt->_writebufferwriteavail=pvt->_writebufferend-
@@ -887,25 +1007,32 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 	return offset;
 }
 
+off64_t filedescriptor::getSize() const {
+	file	f;
+	f.setFileDescriptor(pvt->_fd);
+	bool	success=f.getCurrentProperties();
+	f.setFileDescriptor(-1);
+	if (!success) {
+		return -1;
+	}
+	return f.getSize();
+}
+
 off64_t filedescriptor::getCurrentPosition() const {
 
-	// for stream filedescriptors, the position is always 0, just return
-	// the current offset, which should always be 0
+	// for stream filedescriptors, the position is always 0
 	if (pvt->_isstream) {
 		return 0;
 	}
 
 	// for storage filedescriptors...
 
-	// if we're not buffering then our offset is unreliable, and we need
-	// to read the offset from the file
-	if (!pvt->_blocksize) {
+	// if we're not buffering then we need to read the offset from the file
+	if (!pvt->_writeblocksize) {
 		return lseek(0,SEEK_CUR);
 	}
 
-	// if we are buffering then just return our offset, which
-	// should be kept updated by storageBufferedRead(),
-	// storageBufferedWrite(), and setPosition() 
+	// if we are buffering then return the offset that we've been tracking
 	return pvt->_offset;
 }
 
@@ -929,7 +1056,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	// At this point...
 	//
-	// pvt->_blockoffset is set to the offset of the beginning of the
+	// pvt->_writeblockoffset is set to the offset of the beginning of the
 	// current block.  That block may or may not have been actually
 	// buffered yet though.
 	//
@@ -941,7 +1068,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf("%d: realignWriteBuffer(%d,current blockoffset=%08x",
 						(int)process::getProcessId(),
-						pvt->_blockoffset,
+						pvt->_writeblockoffset,
 						(int)pvt->_fd);
 	#endif
 
@@ -1002,15 +1129,16 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	}
 
 	// calculate the new block offset
-	pvt->_blockoffset=pvt->_offset/pvt->_blocksize*pvt->_blocksize;
+	pvt->_writeblockoffset=
+		pvt->_offset/pvt->_writeblocksize*pvt->_writeblocksize;
 
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf(",new blockoffset=%08x,blocksize=%lld",
-				pvt->_blockoffset,pvt->_blocksize);
+				pvt->_writeblockoffset,pvt->_writeblocksize);
 	#endif
 
 	// If we're here, then any data that was previously buffered has been
-	// un-buffered and pvt->_blockoffset is aligned to the new block.
+	// un-buffered and pvt->_writeblockoffset is aligned to the new block.
 	//
 	// We're ready to buffer that new block.
 	//
@@ -1020,18 +1148,16 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// a full block that runs off of the end of the file.
 	//
 	// So we can only mmap it if it's not the last block, or if it is, but
-	// it's a full block (i.e. it's exactly pvt->_blocksize bytes), so...
+	// it's a full block (i.e. it's exactly pvt->_writeblocksize bytes),
+	// so...
 
 	bool	canmmap=false;
 	if (pvt->_writebuffermmapenabled) {
 
 		// get the size of the file and
 		// determine if we can mmap the block
-		file	f;
-		f.setFileDescriptor(pvt->_fd);
-		bool	success=f.getCurrentProperties();
-		f.setFileDescriptor(-1);
-		if (!success) {
+		off64_t	filesize=getSize();
+		if (filesize<0) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf(",error getting file size)\n");
 			#endif
@@ -1041,13 +1167,13 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			// point again.
 			return RESULT_ERROR;
 		}
-		off64_t	filesize=f.getSize();
 
 		#if defined(DEBUG_BUFFERING)
-		if (filesize/pvt->_blocksize==
-				pvt->_blockoffset/pvt->_blocksize) {
+		if (filesize/pvt->_writeblocksize==
+				pvt->_writeblockoffset/pvt->_writeblocksize) {
 			debugPrintf(",is last block");
-			if (filesize-pvt->_blockoffset==pvt->_blocksize) {
+			if (filesize-pvt->_writeblockoffset==
+						pvt->_writeblocksize) {
 				debugPrintf(",is full block,"
 						"can mmap");
 			} else {
@@ -1061,10 +1187,12 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 		canmmap=(
 			// not the last block
-			!(filesize/pvt->_blocksize==
-					pvt->_blockoffset/pvt->_blocksize) ||
+			!(filesize/pvt->_writeblocksize==
+					pvt->_writeblockoffset/
+					pvt->_writeblocksize) ||
 			// is a full block
-			(filesize-pvt->_blockoffset==pvt->_blocksize));
+			(filesize-pvt->_writeblockoffset==
+					pvt->_writeblocksize));
 
 	}
 	#if defined(DEBUG_BUFFERING)
@@ -1088,8 +1216,10 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		}
 
 		// attempt to attach the memorymap to the current block
-		if (pvt->_writebuffermap->attach(pvt->_fd,
-					pvt->_blockoffset,pvt->_blocksize,
+		if (pvt->_writebuffermap->attach(
+					pvt->_fd,
+					pvt->_writeblockoffset,
+					pvt->_writeblocksize,
 					PROT_WRITE|PROT_READ,MAP_SHARED)) {
 
 			// success...
@@ -1101,18 +1231,20 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 				pvt->_writebufferunaligned=NULL;
 			}
 
-			// update the write buffer pointers
+			// update the write buffer pointers and counts
 			pvt->_writebuffer=(unsigned char *)
 					pvt->_writebuffermap->getData();
 			pvt->_writebufferhead=pvt->_writebuffer+
-					(pvt->_offset-pvt->_blockoffset);
-			pvt->_writebuffertail=pvt->_writebuffer+pvt->_blocksize;
+					(pvt->_offset-pvt->_writeblockoffset);
+			pvt->_writebuffertail=
+					pvt->_writebuffer+pvt->_writeblocksize;
 			pvt->_writebufferend=pvt->_writebuffertail;
-			pvt->_writebufferreadavail=pvt->_blocksize;
-			pvt->_writebufferwriteavail=pvt->_blocksize;
+			pvt->_writebufferreadavail=pvt->_writeblocksize;
+			pvt->_writebufferwriteavail=pvt->_writeblocksize;
 
 			#if defined(DEBUG_BUFFERING)
-			debugPrintf(",mapped %d bytes)",(int)pvt->_blocksize);
+			debugPrintf(",mapped %d bytes)",
+					(int)pvt->_writeblocksize);
 			#endif
 
 			// return non-error
@@ -1138,7 +1270,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// attempt failed, then buffer this block traditionally...
 
 	// move to the beginning of the current block
-	if (lseek(pvt->_blockoffset,SEEK_SET)!=pvt->_blockoffset) {
+	if (lseek(pvt->_writeblockoffset,SEEK_SET)!=pvt->_writeblockoffset) {
 		#if defined(DEBUG_BUFFERING)
 		debugPrintf("...,error)\n");
 		#endif
@@ -1153,23 +1285,23 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	// we may or may not already have a buffer, depending on too many
 	// conditions to list here, but if we don't, then create one
-	// (and align it to a pvt->_blocksize boundary)
+	// (and align it to a pvt->_writeblocksize boundary)
 	if (!pvt->_writebuffer) {
-		allocateWriteBuffer(pvt->_blocksize);
+		allocateWriteBuffer(pvt->_writeblocksize);
 	}
 
 	// update the write buffer pointers
 	pvt->_writebufferhead=pvt->_writebuffer+
-				(pvt->_offset-pvt->_blockoffset);
+				(pvt->_offset-pvt->_writeblockoffset);
 	pvt->_writebuffertail=pvt->_writebuffer;
-	pvt->_writebufferend=pvt->_writebuffer+pvt->_blocksize;
+	pvt->_writebufferend=pvt->_writebuffer+pvt->_writeblocksize;
 
 	// attempt to fill the buffer
 	// (temporarily not allowing short reads)
 	bool	saveasr=pvt->_allowshortreads;
 	pvt->_allowshortreads=false;
 	ssize_t	result=unBufferedRead(pvt->_writebuffer,
-					pvt->_blocksize,sec,usec);
+					pvt->_writeblocksize,sec,usec);
 	pvt->_allowshortreads=saveasr;
 
 	// if an error, timeout, abort, max-read, etc.
@@ -1185,7 +1317,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	#if defined(DEBUG_BUFFERING)
 	if (!result) {
 		debugPrintf("...EOF\n");
-	} else if (result!=pvt->_blocksize) {
+	} else if (result!=pvt->_writeblocksize) {
 		debugPrintf("...short read\n");
 	} else {
 		debugPrintf("...success\n");
@@ -1205,7 +1337,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// size of the buffer.  These might be different if this is the last
 	// block of the file and it's a partial block.
 	pvt->_writebufferreadavail=result;
-	pvt->_writebufferwriteavail=pvt->_blocksize;
+	pvt->_writebufferwriteavail=pvt->_writeblocksize;
 
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf(",read %d bytes)\n",(int)result);
@@ -1415,6 +1547,50 @@ ssize_t filedescriptor::read(int64_t *buffer,
 
 bool filedescriptor::close() {
 
+	// reset offsets
+	pvt->_offset=0;
+	pvt->_writeblockoffset=0;
+
+	// empty the read buffer...
+	if (pvt->_readbuffer) {
+
+		// preserve the buffer so it can be reused if we open another
+		// file, but mark it empty by setting the head and tail to the
+		// beginning
+		pvt->_readbufferhead=pvt->_readbuffer;
+		pvt->_readbuffertail=pvt->_readbuffer;
+	}
+
+	// empty the write buffer...
+	if (pvt->_writebuffermap) {
+
+		// if we've been mmapping...
+
+		// don't preserve the buffer, we'll let realignWriteBuffer()
+		// figure out what to do the next time it's called
+		delete pvt->_writebuffermap;
+		pvt->_writebuffermap=NULL;
+		pvt->_writebuffer=NULL;
+		pvt->_writebufferhead=NULL;
+		pvt->_writebuffertail=NULL;
+		pvt->_writebufferend=NULL;
+
+	} else if (pvt->_writebuffer) {
+
+		// if we haven't been mmapping...
+
+		// preserve the buffer so it can be reused if we open another
+		// file, but mark it empty by setting the head and tail to the
+		// beginning
+		pvt->_writebufferhead=pvt->_writebuffer;
+		pvt->_writebuffertail=pvt->_writebuffer;
+		pvt->_writebufferreadavail=0;
+	}
+
+	// mark the write buffer not dirty
+	pvt->_writebufferdirty=false;
+
+	// close the actual file
 	if (pvt->_fd!=-1) {
 
 		// do a low level close
@@ -1431,33 +1607,6 @@ bool filedescriptor::close() {
 		// reset the file descriptor
 		setFileDescriptor(-1);
 	}
-
-	// reset offsets
-	pvt->_offset=0;
-	pvt->_blockoffset=0;
-
-	// empty buffers
-	if (pvt->_readbuffer) {
-		pvt->_readbufferptr=pvt->_readbuffer;
-		pvt->_readbuffertail=pvt->_readbuffer;
-	}
-	if (pvt->_writebuffermap) {
-		delete pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-		pvt->_writebuffer=NULL;
-		pvt->_writebufferhead=NULL;
-		pvt->_writebuffertail=NULL;
-		pvt->_writebufferend=NULL;
-		pvt->_writebufferreadavail=0;
-		pvt->_writebufferwriteavail=0;
-		pvt->_writebufferdirty=false;
-	} else if (pvt->_writebuffer) {
-		pvt->_writebuffertail=pvt->_writebuffer;
-		pvt->_writebufferreadavail=pvt->_writebuffertail-
-						pvt->_writebufferhead;
-		pvt->_writebufferdirty=false;
-	}
-
 	return true;
 }
 
@@ -1574,7 +1723,8 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 	for (;;) {
 
 		// copy out what we can from the buffer
-		ssize_t	bytesavailable=pvt->_readbuffertail-pvt->_readbufferptr;
+		ssize_t	bytesavailable=pvt->_readbuffertail-
+						pvt->_readbufferhead;
 		if (bytesavailable) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
@@ -1592,12 +1742,12 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 			#endif
 
 			// copy out those bytes
-			bytestring::copy(buf,pvt->_readbufferptr,bytestocopy);
+			bytestring::copy(buf,pvt->_readbufferhead,bytestocopy);
 
 			// advance various pointers
 			buf+=bytestocopy;
 			bytesread+=bytestocopy;
-			pvt->_readbufferptr+=bytestocopy;
+			pvt->_readbufferhead+=bytestocopy;
 			bytesunread-=bytestocopy;
 
 			// return if we've copied out
@@ -1618,9 +1768,9 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 
 		// if we've emptied the buffer, then fill it again
 		// FIXME: I think if we're here then we must have copied out
-		// the entire buffer, and pvt->_readbufferptr will always
+		// the entire buffer, and pvt->_readbufferhead will always
 		// equal pvt->_readbuffertail, so this test is redundant
-		if (pvt->_readbufferptr==pvt->_readbuffertail) {
+		if (pvt->_readbufferhead==pvt->_readbuffertail) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			debugPrintf("attempting to fill read buffer, "
@@ -1630,7 +1780,7 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 			#endif
 
 			// reset ptr and tail
-			pvt->_readbufferptr=pvt->_readbuffer;
+			pvt->_readbufferhead=pvt->_readbuffer;
 			pvt->_readbuffertail=pvt->_readbuffer;
 
 			// attempt to fill the buffer
@@ -1697,7 +1847,7 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 			}
 
 			// all went well
-			pvt->_readbufferptr=pvt->_readbuffer;
+			pvt->_readbufferhead=pvt->_readbuffer;
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
@@ -2190,9 +2340,11 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	if (!pvt->_isstream) {
 		#if defined(DEBUG_BUFFERING)
 		debugPrintf(",current pos=%08x,seeking to %08x",
-					lseek(0,SEEK_CUR),pvt->_blockoffset);
+						lseek(0,SEEK_CUR),
+						pvt->_writeblockoffset);
 		#endif
-		if (lseek(pvt->_blockoffset,SEEK_SET)!=pvt->_blockoffset) {
+		if (lseek(pvt->_writeblockoffset,SEEK_SET)!=
+						pvt->_writeblockoffset) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf(",lseek failed)\n");
 			#endif

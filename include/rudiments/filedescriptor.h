@@ -48,8 +48,21 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  Note that if the filedescriptor is as stream, but this is
 		 *  set false, or vice versa, then unexpected results may
 		 *  occur if buffering is used, and/or the
-		 *  setPosition()/getPosition() methods are called. */
-		void	setIsStream(bool isstream);
+		 *  setPosition()/getPosition() methods are called.
+		 *
+		 *  Note that this method to have any effect, it must be called
+		 *  when buffering is disabled.  It must be called immedaiately
+		 *  upon creation of the instance, when buffering is disabled
+		 *  implicitly, or after a set of calls to disable buffering.
+		 *  For example:
+		 *
+		 *  setReadBufferSize(0);
+		 *  setWriteBufferSize(0);
+		 *  setIsStream(false);
+		 *
+		 *  Returns true on success or false if called while buffering
+		 *  is enabled. */
+		bool	setIsStream(bool isstream);
 
 		/** Returns true if this filedescriptor was set to be a stream
 		 *  using setIsStream() or false otherwise. */

@@ -9,9 +9,20 @@
 		void	filedescriptorInit();
 		void	filedescriptorClone(const filedescriptor &f);
 
+		bool	setStreamWriteBufferSize(ssize_t size) const;
+		bool	setStorageWriteBufferSize(ssize_t size) const;
+		bool	unsetStreamWriteBuffer() const;
+		bool	unsetStorageWriteBuffer() const;
+
+		bool	setStreamReadBufferSize(ssize_t size) const;
+		bool	setStorageReadBufferSize(ssize_t size) const;
+		bool	unsetStreamReadBuffer() const;
+		bool	unsetStorageReadBuffer() const;
+
 		void	allocateWriteBuffer(ssize_t size) const;
 
 		off64_t	setPosition(off64_t offset, int32_t whence) const;
+		off64_t	getSize() const;
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
