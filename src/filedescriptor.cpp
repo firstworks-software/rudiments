@@ -979,14 +979,12 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 
 		} else {
 
-			// Otherwise we'll just set the write avail to 0 so that
-			// realignWriteBuffer() will figure everything out the
-			// first time it's called.
-			//
-			// This is redundant in the case that pvt->_writebuffer
-			// is NULL, in which case pvt->_writebufferwriteavail
-			// will also be 0, but it doesn't hurt to set it.
+			// Otherwise we'll just set the read/write avail to 0
+			// so that realignWriteBuffer() will get called during
+			// the next read/write and figure everything out at that
+			// time.
 			pvt->_writebufferwriteavail=0;
+			pvt->_writebufferreadavail=0;
 
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("outside current block");
@@ -996,9 +994,9 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 	#if defined(DEBUG_BUFFERING)
 	else {
 
-		// in this case, pvt->_writebuffer will be 0, which will
-		// trigger realignWriteBuffer() to figure everything out
-		// the first time it's called.
+		// In this case, read/write avail will be 0, which will
+		// trigger realignWriteBuffer() to be called during the next
+		// read/write and to figure everything out at that time.
 		debugPrintf("no existing write buffer");
 	}
 
@@ -1068,8 +1066,8 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf("%d: realignWriteBuffer(%d,current blockoffset=%08x",
 						(int)process::getProcessId(),
-						pvt->_writeblockoffset,
-						(int)pvt->_fd);
+						(int)pvt->_fd,
+						pvt->_writeblockoffset);
 	#endif
 
 	// un-buffer the current block...
@@ -1876,7 +1874,7 @@ ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
 	ssize_t		bytestocopy;
 	for (;;) {
 
-		if (!pvt->_writebufferwriteavail) {
+		if (!pvt->_writebufferreadavail) {
 
 			// realign/fill the write buffer
 			result=realignWriteBuffer(sec,usec);
@@ -1889,34 +1887,31 @@ ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
 				#endif
 				return result;
 			}
-		}
 
-		// bail on EOF
-		if (!pvt->_writebufferreadavail) {
-			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			debugPrintf("...0 bytes available!)\n");
-			#endif
-			return bytesread;
+			// bail on EOF
+			if (!pvt->_writebufferreadavail) {
+				#if defined(DEBUG_WRITE) && \
+					defined(DEBUG_BUFFERING)
+				debugPrintf("...0 bytes available!)\n");
+				#endif
+				return bytesread;
+			}
 		}
-
-		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		debugPrintf("...%d bytes available",
-					(int)pvt->_writebufferreadavail);
-		#endif
 
 		// calculate how many bytes to actually copy out
 		bytestocopy=(pvt->_writebufferreadavail<count)?
 					pvt->_writebufferreadavail:count;
 
 		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		debugPrintf(",copying out %d bytes\n",(int)bytestocopy);
+		debugPrintf("...%d bytes available,copying out %d bytes\n",
+					(int)pvt->_writebufferreadavail,
+					(int)bytestocopy);
 		#endif
 
 		// copy out those bytes
 		bytestring::copy(buf,pvt->_writebufferhead,bytestocopy);
 
 		// adjust positions and counts
-		buf+=bytestocopy;
 		pvt->_writebufferhead+=bytestocopy;
 		pvt->_offset+=bytestocopy;
 		bytesread+=bytestocopy;
@@ -1931,6 +1926,9 @@ ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
 			#endif
 			return bytesread;
 		}
+
+		// adjust buf
+		buf+=bytestocopy;
 
 		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf(",need to read %d more bytes",(int)count);
@@ -2238,34 +2236,31 @@ ssize_t filedescriptor::storageBufferedWrite(
 				#endif
 				return result;
 			}
-		}
 
-		// bail on out of file system space or simmilar
-		if (!pvt->_writebufferwriteavail) {
-			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			debugPrintf("...0 bytes available!)\n");
-			#endif
-			return byteswritten;
+			// bail on out of file system space or simmilar
+			if (!pvt->_writebufferwriteavail) {
+				#if defined(DEBUG_WRITE) && \
+					defined(DEBUG_BUFFERING)
+				debugPrintf("...0 bytes available!)\n");
+				#endif
+				return byteswritten;
+			}
 		}
-
-		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		debugPrintf("...%d bytes available",
-					(int)pvt->_writebufferwriteavail);
-		#endif
 
 		// calculate how many bytes to actually copy in
 		bytestocopy=(pvt->_writebufferwriteavail<count)?
 					pvt->_writebufferwriteavail:count;
 
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		debugPrintf(",copying in %d bytes",(int)bytestocopy);
+		debugPrintf("...%d bytes available,copying in %d bytes",
+					(int)pvt->_writebufferwriteavail,
+					(int)bytestocopy);
 		#endif
 
 		// copy in those bytes
 		bytestring::copy(pvt->_writebufferhead,buf,bytestocopy);
 
 		// advance various pointers
-		buf+=bytestocopy;
 		pvt->_writebufferhead+=bytestocopy;
 		pvt->_offset+=bytestocopy;
 		byteswritten+=bytestocopy;
@@ -2294,6 +2289,9 @@ ssize_t filedescriptor::storageBufferedWrite(
 			#endif
 			return byteswritten;
 		}
+
+		// adjust buf
+		buf+=bytestocopy;
 
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf(",need to write %d more bytes",(int)count);
