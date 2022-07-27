@@ -1858,8 +1858,8 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
 
-	// degenerate case, bail immediately
-	if (!count) {
+	// degenerate cases, bail immediately
+	if (!count || !buf) {
 		return 0;
 	}
 
@@ -1909,7 +1909,9 @@ ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
 		#endif
 
 		// copy out those bytes
-		bytestring::copy(buf,pvt->_writebufferhead,bytestocopy);
+		// (use memcpy to improve performance by
+		// avoiding bytestring::copy()'s NULL checks)
+		memcpy(buf,pvt->_writebufferhead,bytestocopy);
 
 		// adjust positions and counts
 		pvt->_writebufferhead+=bytestocopy;
@@ -2204,11 +2206,11 @@ ssize_t filedescriptor::streamBufferedWrite(
 }
 
 ssize_t filedescriptor::storageBufferedWrite(
-				const unsigned char *buf,ssize_t count,
+				const unsigned char *buf, ssize_t count,
 				int32_t sec, int32_t usec) {
 
-	// degenerate case, bail immediately
-	if (!count) {
+	// degenerate cases, bail immediately
+	if (!count || !buf) {
 		return 0;
 	}
 
@@ -2258,7 +2260,9 @@ ssize_t filedescriptor::storageBufferedWrite(
 		#endif
 
 		// copy in those bytes
-		bytestring::copy(pvt->_writebufferhead,buf,bytestocopy);
+		// (use memcpy to improve performance by
+		// avoiding bytestring::copy()'s NULL checks)
+		memcpy(pvt->_writebufferhead,buf,bytestocopy);
 
 		// advance various pointers
 		pvt->_writebufferhead+=bytestocopy;
