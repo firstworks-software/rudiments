@@ -120,6 +120,9 @@ GETPGIDLIB = @GETPGIDLIB@
 # mas library
 MASLIB = @MASLIB@
 
+# apache library
+APACHELIBS = @APACHELIBS@
+
 # rudiments library (for tests)
 RUDIMENTSLIB = /LIBPATH:@top_builddir@\src librudiments.lib
 

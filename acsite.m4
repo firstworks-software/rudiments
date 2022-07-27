@@ -1597,6 +1597,7 @@ dnl checks for apache module api
 AC_DEFUN([FW_CHECK_APACHE],
 [
 APACHEINCLUDES=""
+APACHELIBS=""
 
 if ( test "$INCLUDE_APACHE" = "1" )
 then
@@ -1604,8 +1605,27 @@ then
 	FW_CHECK_APRCONFIG
 	FW_CHECK_APUCONFIG
 
-	if ( test -z "$APACHEINCLUDES" )
+	if ( test -n "$APACHEINCLUDES" )
 	then
+		if ( test -n "$DARWIN" )
+		then
+			if ( test -n "$BUNDLE_LOADER" )
+			then
+				APACHE=""
+				for apache in apache2 apache httpd
+				do
+					APACHE=`which $apache | grep -v "$no "`
+					if ( test -n "$APACHE" )
+					then	
+						break
+					fi
+				done
+				APACHELIBS="-Wl,$BUNDLE_LOADER -Wl,$APACHE"
+			else
+				APACHELIBS="$UNDEFINED_DYNAMIC_LOOKUP"
+			fi
+		fi
+	else
 		INCLUDE_APACHE="0"
 	fi
 else
@@ -1613,6 +1633,7 @@ else
 fi
 
 AC_SUBST(APACHEINCLUDES)
+AC_SUBST(APACHELIBS)
 ])
 
 

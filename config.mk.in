@@ -127,6 +127,9 @@ LIBEDITLIBS = @LIBEDITLIBS@
 # mas library
 MASLIB = @MASLIB@
 
+# apache library
+APACHELIBS = @APACHELIBS@
+
 # rudiments library (for tests)
 RUDIMENTSLIB = -L$(top_builddir)/src -lrudiments
 
