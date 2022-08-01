@@ -312,12 +312,19 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 
 	// create oldstrlen
 	size_t	*oldstrlen=new size_t[i];
+	i=0;
 	for (const char * const *o=oldstrset; *o; o++) {
 		oldstrlen[i]=charstring::length(*o);
+		i++;
 	}
 
 	// replace
-	return replace(str,oldstrset,oldstrlen,newstrset);
+	char	*result=replace(str,oldstrset,oldstrlen,newstrset);
+
+	// clean up
+	delete[] oldstrlen;
+
+	return result;
 }
 
 char *charstring::replace(const char *str, const char * const *oldstrset,
