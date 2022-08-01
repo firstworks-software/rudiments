@@ -965,7 +965,6 @@ bool url::curlOpen(const char *urlname, char *userpwd) {
 				stringbuffer	hdr;
 				hdr.append("Content-Type: ");
 				hdr.append(pvt->_httppostcontenttype);
-				hdr.append("\r\n");
 				curl_slist_append(headerlist,hdr.getString());
 			}
 		}
