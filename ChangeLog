@@ -88,6 +88,7 @@
 		now, instead of just true/false
 	fixed a Werror-detection bug in the configure script for
 		cross-compilers
+	fixed segfault in charstring::replace()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
