@@ -72,7 +72,6 @@ install:
 	$(CHMOD) 644 $(docdir)/classes/html/co*.html
 	$(CHMOD) 644 $(docdir)/classes/html/cr*.html
 	$(CHMOD) 644 $(docdir)/classes/html/cs*.html
-	$(CHMOD) 644 $(docdir)/classes/html/cu*.html
 	$(CHMOD) 644 $(docdir)/classes/html/d*.html
 	$(CHMOD) 644 $(docdir)/classes/html/e*.html
 	$(CHMOD) 644 $(docdir)/classes/html/f*.html
