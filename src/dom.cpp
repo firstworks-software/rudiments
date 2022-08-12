@@ -172,8 +172,15 @@ ssize_t dom::writeJson(output *out) const {
 }
 
 ssize_t dom::writeJson(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
+	// There's no standard way to express a generic dom as JSON, so we'll
+	// just write a degenerate object here.  Child classes can provide
+	// implementations as necessary.
+	ssize_t	retval=0;
+	incOrErr(&retval,out->write('{')) &&
+	(indent)?incOrErr(&retval,out->write('\n')):true &&
+	incOrErr(&retval,out->write('}')) &&
+	(indent)?incOrErr(&retval,out->write('\n')):true;
+	return retval;
 }
 
 ssize_t dom::writeXml() const {

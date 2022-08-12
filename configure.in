@@ -382,10 +382,6 @@ AC_ARG_ENABLE(propdom,
 	[  --disable-propdom      Don't build propdom class],
 	INCLUDE_PROPDOM="0",
 	INCLUDE_PROPDOM="1")
-AC_ARG_ENABLE(cursordomnode,
-	[  --disable-cursordomnode Don't build cursordomnode class],
-	INCLUDE_CURSORDOMNODE="0",
-	INCLUDE_CURSORDOMNODE="1")
 AC_ARG_ENABLE(request,
 	[  --disable-request       Don't build request classes],
 	INCLUDE_REQUEST="0",
@@ -5159,14 +5155,6 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 propdom.h propdomincludes.h"
 	SRCS="$SRCS propdom.cpp"
 	LOBJS="$LOBJS propdom.lo"
-fi
-
-if ( test "$INCLUDE_CURSORDOMNODE" = "1" )
-then
-	HEADERS3="$HEADERS3 cursordomnode.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 cursordomnode.h cursordomnodeincludes.h"
-	SRCS="$SRCS cursordomnode.cpp"
-	LOBJS="$LOBJS cursordomnode.lo"
 fi
 
 if ( test "$INCLUDE_REQUEST" = "1" )

@@ -2,6 +2,13 @@
 // See the COPYING file for more information.
 
 	friend class domnode;
+
+			virtual ssize_t	writeJson() const;
+			virtual ssize_t	writeJson(bool indent) const;
+			virtual ssize_t	writeJson(output *out) const;
+			virtual ssize_t	writeJson(output *out,
+							bool indent) const;
+
 	protected:
 			void	init(bool stringcacheenabled);
 			void	reset();

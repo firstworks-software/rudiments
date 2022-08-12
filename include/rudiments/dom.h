@@ -93,28 +93,6 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  as-is. */
 		virtual ssize_t	write(output *out, bool indent) const;
 
-		/** Writes a JSON representation of the DOM tree to
-		 *  standard output. */
-		virtual ssize_t	writeJson() const;
-
-		/** Writes a JSON representation of the DOM tree to standard
-		 *  output.
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
-		virtual ssize_t	writeJson(bool indent) const;
-
-		/** Writes a JSON representation of the DOM tree to "out". */
-		virtual ssize_t	writeJson(output *out) const;
-
-		/** Writes a JSON representation of the DOM tree to "out".
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
-		virtual ssize_t	writeJson(output *out, bool indent) const;
-
 		/** Writes an XML representation of the DOM tree to
 		 *  standard output. */
 		virtual ssize_t	writeXml() const;

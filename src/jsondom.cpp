@@ -647,3 +647,19 @@ const char *jsondom::getValue(const domnode *dn) const {
 	// FIXME: then fall back to the immediate text node
 	return value;
 }
+
+ssize_t jsondom::writeJson() const {
+	return write(&stdoutput,true);
+}
+
+ssize_t jsondom::writeJson(bool indent) const {
+	return write(&stdoutput,indent);
+}
+
+ssize_t jsondom::writeJson(output *out) const {
+	return write(out,true);
+}
+
+ssize_t jsondom::writeJson(output *out, bool indent) const {
+	return write(out,true);
+}

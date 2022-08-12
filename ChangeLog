@@ -90,6 +90,7 @@
 		cross-compilers
 	fixed segfault in charstring::replace()
 	fixed Content-Type in url class when using curl
+	removed cursordomnode class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

@@ -3,6 +3,12 @@
 
 			void	clear();
 
+			virtual ssize_t	writeJson() const;
+			virtual ssize_t	writeJson(bool indent) const;
+			virtual ssize_t	writeJson(output *out) const;
+			virtual ssize_t	writeJson(output *out,
+							bool indent) const;
+
 	friend class domnode;
 	protected:
 			virtual void	init(bool stringcacheenabled);

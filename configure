@@ -901,7 +901,6 @@ enable_inisax
 enable_inidom
 enable_propsax
 enable_propdom
-enable_cursordomnode
 enable_request
 enable_response
 enable_apache
@@ -1635,7 +1634,6 @@ Optional Features:
   --disable-inidom       Don't build inidom class
   --disable-propsax      Don't build propsax class
   --disable-propdom      Don't build propdom class
-  --disable-cursordomnode Don't build cursordomnode class
   --disable-request       Don't build request classes
   --disable-response      Don't build response classes
   --disable-apache        Disable Apache support
@@ -3226,13 +3224,6 @@ if test "${enable_propdom+set}" = set; then :
   enableval=$enable_propdom; INCLUDE_PROPDOM="0"
 else
   INCLUDE_PROPDOM="1"
-fi
-
-# Check whether --enable-cursordomnode was given.
-if test "${enable_cursordomnode+set}" = set; then :
-  enableval=$enable_cursordomnode; INCLUDE_CURSORDOMNODE="0"
-else
-  INCLUDE_CURSORDOMNODE="1"
 fi
 
 # Check whether --enable-request was given.
@@ -38241,14 +38232,6 @@ then
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 propdom.h propdomincludes.h"
 	SRCS="$SRCS propdom.cpp"
 	LOBJS="$LOBJS propdom.lo"
-fi
-
-if ( test "$INCLUDE_CURSORDOMNODE" = "1" )
-then
-	HEADERS3="$HEADERS3 cursordomnode.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 cursordomnode.h cursordomnodeincludes.h"
-	SRCS="$SRCS cursordomnode.cpp"
-	LOBJS="$LOBJS cursordomnode.lo"
 fi
 
 if ( test "$INCLUDE_REQUEST" = "1" )

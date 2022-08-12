@@ -105,7 +105,6 @@ srcs="winsock.cpp "+_
 	"inidom.cpp "+_
 	"propsax.cpp "+_
 	"propdom.cpp "+_
-	"cursordomnode.cpp "+_
 	"httprequest.cpp "+_
 	"urlhttprequest.cpp "+_
 	"httpresponse.cpp "+_
@@ -201,7 +200,6 @@ lobjs="winsock.obj "+_
 	"inidom.obj "+_
 	"propsax.obj "+_
 	"propdom.obj "+_
-	"cursordomnode.obj "+_
 	"httprequest.obj "+_
 	"urlhttprequest.obj "+_
 	"httpresponse.obj "+_
@@ -319,7 +317,6 @@ headers3="dynamicarray.h "+_
 	"inidom.h "+_
 	"propsax.h "+_
 	"propdom.h "+_
-	"cursordomnode.h "+_
 	"httprequest.h "+_
 	"urlhttprequest.h "+_
 	"httpresponse.h "+_
@@ -514,9 +511,7 @@ privateheaders6="dynamicarray.h "+_
 	"socketclient.h "+_
 	"socketclientincludes.h "+_
 	"prompt.h "+_
-	"promptincludes.h "+_
-	"cursordomnode.h "+_
-	"cursordomnodeincludes.h"
+	"promptincludes.h"
 privateheaders7="staticarray.h "+_
 	"staticarrayinlines.h "+_
 	"outputincludes.h "+_
