@@ -149,30 +149,6 @@ class tablecollection : public collection {
 		 *  without indentation. */
 		virtual	ssize_t	writeJson(output *out, bool indent) const;
 
-		/** Writes an XML representation of the tablecollection to
-		 *  standard output. */
-		virtual	ssize_t	writeXml() const;
-
-		/** Writes an XML representation of the tablecollection to
-		 *  standard output.
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
-		virtual	ssize_t	writeXml(bool indent) const;
-
-		/** Writes an XML representation of the tablecollection to
-		 *  "out". */
-		virtual	ssize_t	writeXml(output *out) const;
-
-		/** Writes an XML representation of the tablecollection to
-		 *  "out".
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
-		virtual	ssize_t	writeXml(output *out, bool indent) const;
-
 	#include <rudiments/private/tablecollection.h>
 };
 

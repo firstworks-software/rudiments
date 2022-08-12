@@ -386,11 +386,6 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		ssize_t	writeJson(output *out) const;
 		ssize_t	writeJson(output *out, bool indent) const;
 
-		ssize_t	writeXml() const;
-		ssize_t	writeXml(bool indent) const;
-		ssize_t	writeXml(output *out) const;
-		ssize_t	writeXml(output *out, bool indent) const;
-
 		wastebasket	*getWastebasket();
 
 	#include <rudiments/private/mvcresult.h>

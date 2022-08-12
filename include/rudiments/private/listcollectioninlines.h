@@ -91,28 +91,3 @@ ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) const {
 	((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
 	return retval;
 }
-
-template< class valuetype >
-inline
-ssize_t listcollection<valuetype>::writeXml() const {
-	return writeXml(&stdoutput,true);
-}
-
-template< class valuetype >
-inline
-ssize_t listcollection<valuetype>::writeXml(bool indent) const {
-	return writeXml(&stdoutput,indent);
-}
-
-template< class valuetype >
-inline
-ssize_t listcollection<valuetype>::writeXml(output *out) const {
-	return writeXml(out,true);
-}
-
-template< class valuetype >
-inline
-ssize_t listcollection<valuetype>::writeXml(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
-}

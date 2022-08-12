@@ -63,29 +63,3 @@ ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out,
 	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 	return retval;
 }
-
-template< class keytype, class valuetype >
-inline
-ssize_t dictionarycollection<keytype,valuetype>::writeXml() const {
-	return writeXml(&stdoutput,true);
-}
-
-template< class keytype, class valuetype >
-inline
-ssize_t dictionarycollection<keytype,valuetype>::writeXml(bool indent) const {
-	return writeXml(&stdoutput,indent);
-}
-
-template< class keytype, class valuetype >
-inline
-ssize_t dictionarycollection<keytype,valuetype>::writeXml(output *out) const {
-	return writeXml(out,true);
-}
-
-template< class keytype, class valuetype >
-inline
-ssize_t dictionarycollection<keytype,valuetype>::writeXml(output *out,
-							bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
-}

@@ -209,23 +209,6 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 	return retval;
 }
 
-ssize_t mvcresult::writeXml() const {
-	return writeXml(true);
-}
-
-ssize_t mvcresult::writeXml(bool indent) const {
-	return writeXml(&stdoutput,indent);
-}
-
-ssize_t mvcresult::writeXml(output *out) const {
-	return writeXml(out,true);
-}
-
-ssize_t mvcresult::writeXml(output *out, bool indent) const {
-	// FIXME: implement this
-	return RESULT_ERROR;
-}
-
 wastebasket *mvcresult::getWastebasket() {
 	return &pvt->_wb;
 }

@@ -28,20 +28,16 @@ int main(int argc, const char **argv) {
 	scalar<bool>	sb;
 	sb.setValue(true);
 	sb.write();
-	sb.writeXml();
 	sb.setValue(false);
 	sb.write();
-	sb.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("scalar (null/non-null):\n");
 	scalar<const char *>	sn;
 	sn.setValue(NULL);
 	sn.write();
-	sn.writeXml();
 	sn.setValue("not-null");
 	sn.write();
-	sn.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("scalar (int32_t):\n");
@@ -49,7 +45,6 @@ int main(int argc, const char **argv) {
 	for (int32_t i=-5; i<5; i++) {
 		si32.setValue(i);
 		si32.write();
-		si32.writeXml();
 	}
 	stdoutput.printf("\n");
 
@@ -58,7 +53,6 @@ int main(int argc, const char **argv) {
 	for (uint32_t i=0; i<10; i++) {
 		sc.setValue(numbers[i]);
 		sc.write();
-		sc.writeXml();
 	}
 	stdoutput.printf("\n");
 
@@ -70,7 +64,6 @@ int main(int argc, const char **argv) {
 		lli32.append(i);
 	}
 	lli32.write();
-	lli32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("linkedlist (const char *):\n");
@@ -79,7 +72,6 @@ int main(int argc, const char **argv) {
 		llc.append(numbers[i]);
 	}
 	llc.write();
-	llc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -90,7 +82,6 @@ int main(int argc, const char **argv) {
 		slli32.append(i);
 	}
 	slli32.write();
-	slli32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("singlylinkedlist (const char *):\n");
@@ -99,7 +90,6 @@ int main(int argc, const char **argv) {
 		sllc.append(numbers[i]);
 	}
 	sllc.write();
-	sllc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -132,7 +122,6 @@ int main(int argc, const char **argv) {
 		d.setValue(i,numbers[i]);
 	}
 	d.write();
-	d.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -146,7 +135,6 @@ int main(int argc, const char **argv) {
 		}
 	}
 	ti32.write();
-	ti32.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("table (const char *):\n");
@@ -158,7 +146,6 @@ int main(int argc, const char **argv) {
 		}
 	}
 	tc.write();
-	tc.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -169,7 +156,6 @@ int main(int argc, const char **argv) {
 		dai32[i]=i;
 	}
 	dai32.write();
-	dai32.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -180,7 +166,6 @@ int main(int argc, const char **argv) {
 		dac[i]=numbers[i];
 	}
 	dac.write();
-	dac.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -191,7 +176,6 @@ int main(int argc, const char **argv) {
 		dt[i].blah=NULL;
 	}
 	dt.write();
-	dt.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -202,7 +186,6 @@ int main(int argc, const char **argv) {
 		sai32[i]=i;
 	}
 	sai32.write();
-	sai32.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -213,7 +196,6 @@ int main(int argc, const char **argv) {
 		sac[i]=numbers[i];
 	}
 	sac.write();
-	sac.writeXml();
 	stdoutput.printf("\n");
 
 
@@ -221,7 +203,6 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("staticarray (struct test):\n");
 	staticarray<struct test, 10>	st;
 	st.write();
-	st.writeXml();
 	stdoutput.printf("\n");
 
 	stdoutput.printf("nested staticarray (int32_t):\n");

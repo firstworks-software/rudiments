@@ -56,30 +56,6 @@ class arraycollection : public collection {
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
 		virtual	ssize_t	writeJson(output *out, bool indent) const;
-
-		/** Writes an XML representation of the arraycollection to
-		 *  standard output. */
-		virtual	ssize_t	writeXml() const;
-
-		/** Writes an XML representation of the arraycollection to
-		 *  standard output.
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
-		virtual	ssize_t	writeXml(bool indent) const;
-
-		/** Writes an XML representation of the arraycollection to
-		 *  "out". */
-		virtual	ssize_t	writeXml(output *out) const;
-
-		/** Writes an XML representation of the arraycollection to
-		 *  "out".
-		 *  
-		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
-		virtual	ssize_t	writeXml(output *out, bool indent) const;
 };
 
 #include <rudiments/private/arraycollectioninlines.h>
