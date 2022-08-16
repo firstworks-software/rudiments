@@ -82,13 +82,15 @@ memorypool::memorypool(size_t initialsize,
 }
 
 memorypool::memorypool(memorypool &m) : object() {
-	// FIXME: implement this
+	init(m.pvt->_initialsize,m.pvt->_incrementsize,m.pvt->_resizeinterval);
 }
 
 memorypool &memorypool::operator=(memorypool &m) {
 	if (this!=&m) {
 		object::operator=(m);
-		// FIXME: implement this
+		clear(true,m.pvt->_initialsize,
+				m.pvt->_incrementsize,
+				m.pvt->_resizeinterval);
 	}
 	return *this;
 }
