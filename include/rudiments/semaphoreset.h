@@ -147,7 +147,7 @@ class RUDIMENTS_DLLSPEC semaphoreset : public object {
 		/** Set the "index"'th semaphore in the set to "value". */
 		bool	setValue(int32_t index, int32_t value);
 
-		/** Return the value of the "index"'th semaphore in the set. */
+		/** Returns the value of the "index"'th semaphore in the set. */
 		int32_t	getValue(int32_t index);
 
 

@@ -39,7 +39,7 @@ class RUDIMENTS_DLLSPEC permissions {
 		 *  Returns true on success and false on failure. */
 		static	bool	setFilePermissions(int32_t fd, mode_t perms);
 
-		/** Return a permission defined in "permstring".
+		/** Returns the permission defined in "permstring".
 		 * 
 		 *  "permstring" should be the same format as
 		 *  displayed by the "ls -l" command.

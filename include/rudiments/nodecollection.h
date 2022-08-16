@@ -14,8 +14,11 @@ class nodecollectionnode : virtual public object {
 		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
 
-		/** Return the value stored in the node. */
+		/** Returns the value stored in the node. */
 		virtual	valuetype	getValue()=0;
+
+		/** Returns a reference to the value stored in the node. */
+		virtual	valuetype	&getReference()=0;
 
 		/** Returns the next node in the nodecollection or NULL
 		 * if this node is the last node in the collection. */

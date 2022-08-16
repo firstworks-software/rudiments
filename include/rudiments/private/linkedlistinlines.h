@@ -79,14 +79,12 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 template <class valuetype>
 inline
 void linkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
-
 	first=NULL;
 	last=NULL;
 	length=0;
-
 	for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
-		append(node_duplicate_value(node->getValue(),
+		append(node_duplicate_value(node->getReference(),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 	}
@@ -286,7 +284,7 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
-	node_delete_value(&(node->getValueRef()),
+	node_delete_value(&(node->getReference()),
 				this->getManageValues(),
 				this->getManageArrayValues());
 	delete node;
@@ -609,7 +607,7 @@ void linkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		node_delete_value(&(current->getValueRef()),
+		node_delete_value(&(current->getReference()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -648,7 +646,7 @@ valuetype linkedlistnode<valuetype>::getValue() {
 
 template <class valuetype>
 inline
-valuetype &linkedlistnode<valuetype>::getValueRef() {
+valuetype &linkedlistnode<valuetype>::getReference() {
 	return value;
 }
 

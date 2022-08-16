@@ -415,7 +415,7 @@ valuetype *node_duplicate_value(valuetype *value,
 
 template <class valuetype>
 inline
-const valuetype &node_duplicate_value(const valuetype &value,
+const valuetype &node_duplicate_value(valuetype &value,
 				bool managed, bool managedarray) {
 	if (managed) {
 		return *(new valuetype(value));

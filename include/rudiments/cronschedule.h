@@ -12,7 +12,8 @@
 class RUDIMENTS_DLLSPEC cronschedule : virtual public object {
 	public:
 		cronschedule();
-
+		cronschedule(cronschedule &c);
+		cronschedule	&operator=(cronschedule &c);
 		virtual	~cronschedule();
 
 		void	setSchedule(const char *when);

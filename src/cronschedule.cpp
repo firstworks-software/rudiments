@@ -16,22 +16,41 @@ class cronscheduleprivate {
 
 cronschedule::cronschedule() : object() {
 	pvt=new cronscheduleprivate;
+	pvt->_years.setManageValues(true);
+	pvt->_months.setManageValues(true);
+	pvt->_daysofmonth.setManageValues(true);
+	pvt->_daysofweek.setManageValues(true);
+	pvt->_dayparts.setManageValues(true);
 }
 
 cronschedule::cronschedule(cronschedule &c) : object() {
-	// FIXME: implement this
+	pvt=new cronscheduleprivate;
+	pvt->_years.setManageValues(true);
+	pvt->_months.setManageValues(true);
+	pvt->_daysofmonth.setManageValues(true);
+	pvt->_daysofweek.setManageValues(true);
+	pvt->_dayparts.setManageValues(true);
+	clone(c);
 }
 
 cronschedule &cronschedule::operator=(cronschedule &c) {
 	if (this!=&c) {
 		object::operator=(c);
-		// FIXME: implement this
+		clear();
+		clone(c);
 	}
 	return *this;
 }
 
+void cronschedule::clone(cronschedule &c) {
+	pvt->_years=c.pvt->_years;
+	pvt->_months=c.pvt->_months;
+	pvt->_daysofmonth=c.pvt->_daysofmonth;
+	pvt->_daysofweek=c.pvt->_daysofweek;
+	pvt->_dayparts=c.pvt->_dayparts;
+}
+
 cronschedule::~cronschedule() {
-	clear();
 	delete pvt;
 }
 
@@ -76,26 +95,11 @@ void cronschedule::init(const char *years,
 }
 
 void cronschedule::clear() {
-	for (listnode< cronscheduleperiod * > *n=pvt->_years.getFirst();
-							n; n=n->getNext()) {
-		delete n->getValue();
-	}
-	for (listnode< cronscheduleperiod * > *n=pvt->_months.getFirst();
-							n; n=n->getNext()) {
-		delete n->getValue();
-	}
-	for (listnode< cronscheduleperiod * > *n=pvt->_daysofmonth.getFirst();
-							n; n=n->getNext()) {
-		delete n->getValue();
-	}
-	for (listnode< cronscheduleperiod * > *n=pvt->_daysofweek.getFirst();
-							n; n=n->getNext()) {
-		delete n->getValue();
-	}
-	for (listnode< cronscheduledaypart * > *n=pvt->_dayparts.getFirst();
-							n; n=n->getNext()) {
-		delete n->getValue();
-	}
+	pvt->_years.clear();
+	pvt->_months.clear();
+	pvt->_daysofmonth.clear();
+	pvt->_daysofweek.clear();
+	pvt->_dayparts.clear();
 }
 
 void cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,

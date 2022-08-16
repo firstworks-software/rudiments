@@ -133,7 +133,7 @@ class RUDIMENTS_DLLSPEC signalhandler : public object {
 	 	 *  behavior of this signal handler. */
 		void	removeFlag(int32_t flag);
 
-		/** Return the set of flags modifying the behavior of 
+		/** Returns the set of flags modifying the behavior of 
 		 *  this signal handler. */
 		int32_t	getFlags();
 

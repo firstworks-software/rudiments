@@ -21,8 +21,11 @@ class singlylinkedlistnode : public listnode<valuetype> {
 		/** Set the value stored in the node to "value". */
 		void		setValue(valuetype value);
 
-		/** Return the value stored in the node. */
+		/** Returns the value stored in the node. */
 		valuetype	getValue();
+
+		/** Returns a reference to the value stored in the node. */
+		valuetype	&getReference();
 
 		/** Always returns NULL. */
 		listnode<valuetype>	*getPrevious();

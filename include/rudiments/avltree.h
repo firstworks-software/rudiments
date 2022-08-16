@@ -20,8 +20,11 @@ class avltreenode : public treenode<valuetype> {
 		/** Sets the value stored in the node to "value". */
 		void	setValue(valuetype value);
 
-		/** Return the value stored in the node. */
+		/** Returns the value stored in the node. */
 		valuetype	getValue();
+
+		/** Returns a reference to the value stored in the node. */
+		valuetype	&getReference();
 
 		/** Returns the parent node in the avltree or NULL
 		 *  if this node is the top-most node in the tree. */

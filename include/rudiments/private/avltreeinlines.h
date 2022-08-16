@@ -109,7 +109,7 @@ void avltree<valuetype>::clone(nodecollection<valuetype> *coll) {
 		// clone the collection...
 		for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
-			insert(node_duplicate_value(node->getValue(),
+			insert(node_duplicate_value(node->getReference(),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 		}
@@ -135,7 +135,7 @@ treenode<valuetype> *avltree<valuetype>::cloneNode(
 	avltreenode<valuetype>	*newnode=new avltreenode<valuetype>(NULL);
 
 	// copy the value
-	newnode->setValue(node_duplicate_value(node->getValue(),
+	newnode->setValue(node_duplicate_value(node->getReference(),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 
@@ -304,7 +304,7 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::remove(treenode<valuetype> *node) {
 	treenode<valuetype> *detachednode=detach(node);
-	node_delete_value(&(detachednode->getValueRef()),
+	node_delete_value(&(detachednode->getReference()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 	delete detachednode;
@@ -409,7 +409,7 @@ void avltree<valuetype>::clear() {
 		}
 
 		// delete the value in the node
-		node_delete_value(&(node->getValueRef()),
+		node_delete_value(&(node->getReference()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 
@@ -575,7 +575,7 @@ valuetype avltreenode<valuetype>::getValue() {
 
 template <class valuetype>
 inline
-valuetype &avltreenode<valuetype>::getValueRef() {
+valuetype &avltreenode<valuetype>::getReference() {
 	return value;
 }
 

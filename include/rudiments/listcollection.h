@@ -17,6 +17,9 @@ class listnode : public nodecollectionnode<valuetype> {
 		/** Returns the value stored in the node. */
 		virtual	valuetype	getValue()=0;
 
+		/** Returns a reference to the value stored in the node. */
+		virtual	valuetype	&getReference()=0;
+
 		/** Returns the previous node in the listcollection or NULL
 		 *  if this node is the first node in the list. */
 		virtual	listnode<valuetype>	*getPrevious()=0;

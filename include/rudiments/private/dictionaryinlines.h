@@ -136,11 +136,11 @@ void dictionary<keytype,valuetype>::clone(dictionary<keytype,valuetype> *a) {
 	for (treenode<dictionarypair<keytype,valuetype> *>
 			*node=a->tree.getFirst(); node; node=node->getNext()) {
 		setValue(node_duplicate_value(
-				node->getValue()->getKey(),
+				node->getValue()->getKeyRef(),
 				this->getManageKeys(),
 				this->getManageArrayKeys()),
 			node_duplicate_value(
-				node->getValue()->getValue(),
+				node->getValue()->getValueRef(),
 				this->getManageValues(),
 				this->getManageArrayValues()));
 	}
