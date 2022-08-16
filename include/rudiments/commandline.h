@@ -18,6 +18,14 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *  argument count and arguments to "argc" and "argv". */
 		commandline(int32_t argc, const char **argv);
 
+		/** Creates an instance of the commandline class
+		 *  that is a copy of "c". */
+		commandline(commandline &c);
+
+		/** Makes this instance of the commandline class
+		 *  identical to "c". */
+		commandline	&operator=(commandline &c);
+
 		/** Deletes this instance of the commandline class. */
 		~commandline();
 
