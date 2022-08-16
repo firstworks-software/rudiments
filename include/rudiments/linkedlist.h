@@ -21,7 +21,7 @@ class linkedlistnode : public listnode<valuetype> {
 		void		setValue(valuetype value);
 
 		/** Return the value stored in the node. */
-		valuetype	getValue() const;
+		valuetype	getValue();
 
 		/** Returns the previous node in the linkedlist or NULL
 		 *  if this node is the first node in the list. */

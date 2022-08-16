@@ -126,12 +126,6 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 	if (index>=lastlen) {
 		lastlen=index+1;
 	}
-	return find(index);
-}
-
-template< class valuetype >
-inline
-valuetype dynamicarray<valuetype>::operator[](uint64_t index) const {
 	// I once had (semi-clever) bounds-checking code here like:
 	//
 	// if (index>=lastlen) {
@@ -186,7 +180,7 @@ void dynamicarray<valuetype>::extend(uint64_t length) {
 
 template< class valuetype >
 inline
-size_t dynamicarray<valuetype>::findExtentStartIndex(uint64_t index) const {
+size_t dynamicarray<valuetype>::findExtentStartIndex(uint64_t index) {
 
 	// move to the extent that contains the specified index
 	// (also calculate the index of the first element of the extent)
@@ -218,14 +212,8 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 	// breaks everything, at least with gcc-11.
 	// I imagine that findExtendStartIndex() being inline and const, but
 	// also modifying mutable variables, somehow confuses the optimizer.
-	size_t eind=findExtentStartIndex(index);
-	return curext->getValue()[index-eind];
-}
-
-template< class valuetype >
-inline
-valuetype dynamicarray<valuetype>::find(uint64_t index) const {
-	// see note above...
+	// FIXME: now that the methods aren't const and modifying mutables,
+	// it might work
 	size_t eind=findExtentStartIndex(index);
 	return curext->getValue()[index-eind];
 }

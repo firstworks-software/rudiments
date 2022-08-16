@@ -7,15 +7,13 @@
 		void		clone(dynamicarray<valuetype> &v);
 		void		clone(arraycollection<valuetype> &v);
 		void		extend(uint64_t length);
-		size_t		findExtentStartIndex(uint64_t index) const;
+		size_t		findExtentStartIndex(uint64_t index);
 		valuetype	&find(uint64_t index);
-		valuetype	find(uint64_t index) const;
 		void		deleteManagedValues();
 
-		mutable linkedlist<valuetype *>	extents;
-
-		mutable	listnode<valuetype *>	*curext;
-		mutable	uint64_t		curind;
+		linkedlist<valuetype *>	extents;
+		listnode<valuetype *>	*curext;
+		uint64_t		curind;
 
 		uint64_t	initlen;
 		uint64_t	inclen;

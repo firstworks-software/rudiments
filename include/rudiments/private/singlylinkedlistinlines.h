@@ -230,7 +230,7 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 		}
 	}
 	if (current) {
-		node_delete_value(&(current->getValue()),
+		node_delete_value(&(current->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -253,7 +253,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 		if (first==last) {
 			first=NULL;
 			last=NULL;
-			node_delete_value(&(current->getValue()),
+			node_delete_value(&(current->getValueRef()),
 						this->getManageValues(),
 						this->getManageArrayValues());
 			delete current;
@@ -261,7 +261,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			return true;
 		} else {
 			first=first->getNext();
-			node_delete_value(&(current->getValue()),
+			node_delete_value(&(current->getValueRef()),
 						this->getManageValues(),
 						this->getManageArrayValues());
 			delete current;
@@ -280,7 +280,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			if (last==current) {
 				last=prev;
 			}
-			node_delete_value(&(current->getValue()),
+			node_delete_value(&(current->getValueRef()),
 						this->getManageValues(),
 						this->getManageArrayValues());
 			delete current;
@@ -324,7 +324,7 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 		}
 	}
 	if (current) {
-		node_delete_value(&(current->getValue()),
+		node_delete_value(&(current->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -610,7 +610,7 @@ void singlylinkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		node_delete_value(&(current->getValue()),
+		node_delete_value(&(current->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -642,13 +642,13 @@ void singlylinkedlistnode<valuetype>::setValue(valuetype value) {
 
 template <class valuetype>
 inline
-valuetype singlylinkedlistnode<valuetype>::getValue() const {
+valuetype singlylinkedlistnode<valuetype>::getValue() {
 	return value;
 }
 
 template <class valuetype>
 inline
-valuetype &singlylinkedlistnode<valuetype>::getValue() {
+valuetype &singlylinkedlistnode<valuetype>::getValueRef() {
 	return value;
 }
 

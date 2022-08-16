@@ -72,12 +72,6 @@ staticarray<valuetype,length>::~staticarray() {
 template< class valuetype, uint64_t length >
 inline
 valuetype &staticarray<valuetype,length>::operator[](uint64_t index) {
-	return data[index];
-}
-
-template< class valuetype, uint64_t length >
-inline
-valuetype staticarray<valuetype,length>::operator[](uint64_t index) const {
 	// I once had (semi-clever) bounds-checking code here like:
 	//
 	// if (index>=length) {

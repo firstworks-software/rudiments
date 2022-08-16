@@ -304,7 +304,7 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::remove(treenode<valuetype> *node) {
 	treenode<valuetype> *detachednode=detach(node);
-	node_delete_value(&(detachednode->getValue()),
+	node_delete_value(&(detachednode->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 	delete detachednode;
@@ -409,7 +409,7 @@ void avltree<valuetype>::clear() {
 		}
 
 		// delete the value in the node
-		node_delete_value(&(node->getValue()),
+		node_delete_value(&(node->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 
@@ -569,13 +569,13 @@ void avltreenode<valuetype>::setValue(valuetype value) {
 
 template <class valuetype>
 inline
-valuetype avltreenode<valuetype>::getValue() const {
+valuetype avltreenode<valuetype>::getValue() {
 	return value;
 }
 
 template <class valuetype>
 inline
-valuetype &avltreenode<valuetype>::getValue() {
+valuetype &avltreenode<valuetype>::getValueRef() {
 	return value;
 }
 

@@ -11,10 +11,10 @@ class dictionarypair : public object {
 
 		void	setKey(keytype key);
 		void	setValue(valuetype value);
-		keytype		getKey() const;
-		keytype		&getKey();
-		valuetype	getValue() const;
-		valuetype	&getValue();
+		keytype		getKey();
+		keytype		&getKeyRef();
+		valuetype	getValue();
+		valuetype	&getValueRef();
 
 	private:
 		keytype		key;
@@ -387,10 +387,10 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 		if (trackinsertionorder) {
 			list.remove(tnode->getValue());
 		}
-		node_delete_value(&(tnode->getValue()->getKey()),
+		node_delete_value(&(tnode->getValue()->getKeyRef()),
 						this->getManageKeys(),
 						this->getManageArrayKeys());
-		node_delete_value(&(tnode->getValue()->getValue()),
+		node_delete_value(&(tnode->getValue()->getValueRef()),
 						this->getManageValues(),
 						this->getManageArrayValues());
 		delete tnode->getValue();
@@ -404,10 +404,10 @@ inline
 void dictionary<keytype,valuetype>::clear() {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
-		node_delete_value(&(node->getValue()->getKey()),
+		node_delete_value(&(node->getValue()->getKeyRef()),
 					this->getManageKeys(),
 					this->getManageArrayKeys());
-		node_delete_value(&(node->getValue()->getValue()),
+		node_delete_value(&(node->getValue()->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete node->getValue();
@@ -449,25 +449,25 @@ void dictionarypair<keytype,valuetype>::setValue(valuetype value) {
 
 template <class keytype, class valuetype>
 inline
-keytype dictionarypair<keytype,valuetype>::getKey() const {
+keytype dictionarypair<keytype,valuetype>::getKey() {
 	return key;
 }
 
 template <class keytype, class valuetype>
 inline
-keytype &dictionarypair<keytype,valuetype>::getKey() {
+keytype &dictionarypair<keytype,valuetype>::getKeyRef() {
 	return key;
 }
 
 template <class keytype, class valuetype>
 inline
-valuetype dictionarypair<keytype,valuetype>::getValue() const {
+valuetype dictionarypair<keytype,valuetype>::getValue() {
 	return value;
 }
 
 template <class keytype, class valuetype>
 inline
-valuetype &dictionarypair<keytype,valuetype>::getValue() {
+valuetype &dictionarypair<keytype,valuetype>::getValueRef() {
 	return value;
 }
 

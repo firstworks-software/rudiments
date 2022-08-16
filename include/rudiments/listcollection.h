@@ -15,7 +15,7 @@ class listnode : public nodecollectionnode<valuetype> {
 		virtual	void		setValue(valuetype value)=0;
 
 		/** Returns the value stored in the node. */
-		virtual	valuetype	getValue() const=0;
+		virtual	valuetype	getValue()=0;
 
 		/** Returns the previous node in the listcollection or NULL
 		 *  if this node is the first node in the list. */

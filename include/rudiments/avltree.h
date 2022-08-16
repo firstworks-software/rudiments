@@ -21,7 +21,7 @@ class avltreenode : public treenode<valuetype> {
 		void	setValue(valuetype value);
 
 		/** Return the value stored in the node. */
-		valuetype	getValue() const;
+		valuetype	getValue();
 
 		/** Returns the parent node in the avltree or NULL
 		 *  if this node is the top-most node in the tree. */

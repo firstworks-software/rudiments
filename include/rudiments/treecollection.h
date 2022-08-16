@@ -15,7 +15,7 @@ class treenode : public nodecollectionnode<valuetype> {
 		virtual void	setValue(valuetype value)=0;
 
 		/** Return the value stored in the node. */
-		virtual valuetype	getValue() const=0;
+		virtual valuetype	getValue()=0;
 
 		/** Returns the parent node in the tree or NULL
 		 *  if this node is the top-most node in the tree. */

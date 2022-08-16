@@ -19,10 +19,6 @@ class arraycollection : public collection {
 		 *  array. */
 		virtual	valuetype	&operator[](uint64_t index)=0;
 
-		/** Provides read-only access ot the "index"th element of the
-		 *  array. */
-		virtual	valuetype	operator[](uint64_t index) const=0;
-
 		/** Returns the number of elements in the array. */
 		virtual	uint64_t	getLength()=0;
 

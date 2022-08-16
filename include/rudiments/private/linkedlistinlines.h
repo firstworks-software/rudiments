@@ -286,7 +286,7 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 	if (node==last) {
 		last=node->getPrevious();
 	}
-	node_delete_value(&(node->getValue()),
+	node_delete_value(&(node->getValueRef()),
 				this->getManageValues(),
 				this->getManageArrayValues());
 	delete node;
@@ -609,7 +609,7 @@ void linkedlist<valuetype>::clear() {
 	listnode<valuetype>	*current=first;
 	while (current) {
 		next=current->getNext();
-		node_delete_value(&(current->getValue()),
+		node_delete_value(&(current->getValueRef()),
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
@@ -642,13 +642,13 @@ void linkedlistnode<valuetype>::setValue(valuetype value) {
 
 template <class valuetype>
 inline
-valuetype linkedlistnode<valuetype>::getValue() const {
+valuetype linkedlistnode<valuetype>::getValue() {
 	return value;
 }
 
 template <class valuetype>
 inline
-valuetype &linkedlistnode<valuetype>::getValue() {
+valuetype &linkedlistnode<valuetype>::getValueRef() {
 	return value;
 }
 
