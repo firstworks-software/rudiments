@@ -40,7 +40,7 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 		virtual	~xmldom();
 
 		/** Returns "xmldom". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** Parses generic input "in" and generates a DOM tree. */
 		bool	parse(input *in);

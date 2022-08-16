@@ -17,7 +17,7 @@ parameterstring::parameterstring() : object() {
 	pvt->_delim=';';
 }
 
-parameterstring::parameterstring(const parameterstring &p) : object() {
+parameterstring::parameterstring(parameterstring &p) : object() {
 	pvt=new parameterstringprivate;
 	pvt->_nvp=p.pvt->_nvp;
 	pvt->_nvp.setManageArrayKeys(true);
@@ -25,7 +25,7 @@ parameterstring::parameterstring(const parameterstring &p) : object() {
 	pvt->_delim=p.pvt->_delim;
 }
 
-parameterstring &parameterstring::operator=(const parameterstring &p) {
+parameterstring &parameterstring::operator=(parameterstring &p) {
 	if (this!=&p) {
 		pvt->_nvp.clear();
 		pvt->_nvp=p.pvt->_nvp;

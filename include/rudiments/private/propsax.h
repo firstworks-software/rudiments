@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+			propsax(propsax &x);
+			propsax	&operator=(propsax &x);
+
 	private:
 			bool	parse();
 
@@ -12,8 +15,5 @@
 			bool	parsePoundComment(char current, char *next);
 			bool	parseKey(char current, char *next);
 			bool	parseValue(char ch, char *next);
-
-				propsax(const propsax &x);
-			propsax	&operator=(const propsax &x);
 
 			propsaxprivate	*pvt;

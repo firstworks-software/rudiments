@@ -13,7 +13,7 @@ staticarray<valuetype,length>::staticarray() : arraycollection<valuetype>() {
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length>::staticarray(
-				const staticarray<valuetype,length> &v) :
+				staticarray<valuetype,length> &v) :
 						arraycollection<valuetype>(v) {
 	data=new valuetype[length];
 	clone(v);
@@ -22,7 +22,7 @@ staticarray<valuetype,length>::staticarray(
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length>::staticarray(
-				const arraycollection<valuetype> &v) :
+				arraycollection<valuetype> &v) :
 						arraycollection<valuetype>(v) {
 	data=new valuetype[length];
 	clone(v);
@@ -31,7 +31,7 @@ staticarray<valuetype,length>::staticarray(
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
-				const staticarray<valuetype,length> &v) {
+				staticarray<valuetype,length> &v) {
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
@@ -43,7 +43,7 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 template< class valuetype, uint64_t length >
 inline
 staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
-					const arraycollection<valuetype> &v) {
+					arraycollection<valuetype> &v) {
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
@@ -54,7 +54,7 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 
 template< class valuetype, uint64_t length >
 inline
-void staticarray<valuetype,length>::clone(const arraycollection<valuetype> &v) {
+void staticarray<valuetype,length>::clone(arraycollection<valuetype> &v) {
 	for (uint64_t i=0; i<length && i<v.getLength(); i++) {
 		data[i]=node_duplicate_value(v[i],
 					this->getManageValues(),
@@ -102,7 +102,7 @@ valuetype staticarray<valuetype,length>::operator[](uint64_t index) const {
 
 template< class valuetype, uint64_t length >
 inline
-uint64_t staticarray<valuetype,length>::getLength() const {
+uint64_t staticarray<valuetype,length>::getLength() {
 	return length;
 }
 

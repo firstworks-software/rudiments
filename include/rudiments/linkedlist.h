@@ -25,11 +25,11 @@ class linkedlistnode : public listnode<valuetype> {
 
 		/** Returns the previous node in the linkedlist or NULL
 		 *  if this node is the first node in the list. */
-		listnode<valuetype>	*getPrevious() const;
+		listnode<valuetype>	*getPrevious();
 
 		/** Returns the next node in the linkedlist or NULL
 		 * if this node is the last node in the list. */
-		listnode<valuetype>	*getNext() const;
+		listnode<valuetype>	*getNext();
 
 	#include <rudiments/private/linkedlistnode.h>
 };
@@ -48,21 +48,21 @@ class linkedlist : public listcollection<valuetype> {
 
 		/** Creates an instance of the linkedlist class
 		 *  that is a copy of "a". */
-		linkedlist(const linkedlist<valuetype> &a);
+		linkedlist(linkedlist<valuetype> &a);
 
 		/** Creates an instance of the linkedlist class
 		 *  that is a copy of "a". */
-		linkedlist(const nodecollection<valuetype> &a);
+		linkedlist(nodecollection<valuetype> &a);
 
 		/** Makes this instance of the linkedlist class
 		 *  identical to "a". */
 		linkedlist<valuetype>	&operator=(
-					const linkedlist<valuetype> &a);
+					linkedlist<valuetype> &a);
 
 		/** Makes this instance of the linkedlist class
 		 *  identical to "a". */
 		linkedlist<valuetype>	&operator=(
-					const nodecollection<valuetype> &a);
+					nodecollection<valuetype> &a);
 
 		/** Deletes this instance of the linkedlist class and all of
 		 *  its linkedlistnodes.
@@ -159,35 +159,35 @@ class linkedlist : public listcollection<valuetype> {
 		bool	remove(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the linkedlist. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Returns the first node in the linkedlist. */
-		listnode<valuetype>	*getFirst() const;
+		listnode<valuetype>	*getFirst();
 
 		/** Returns the last node in the linkedlist. */
-		listnode<valuetype>	*getLast() const;
+		listnode<valuetype>	*getLast();
 
 		/** Returns the node prior to "node" or NULL if this node is
 		 *  the first node in the list.  "node" is presumed to be in
 		 *  the list. */
 		listnode<valuetype>	*getPrevious(
-					listnode<valuetype> *node) const;
+					listnode<valuetype> *node);
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
 		listnode<valuetype>	*getNext(
-					listnode<valuetype> *node) const;
+					listnode<valuetype> *node);
 
 		/** Returns a pointer to the first linkedlistnode
 		 *  containing "value" or NULL if "value" was not found. */
-		listnode<valuetype>	*find(valuetype value) const;
+		listnode<valuetype>	*find(valuetype value);
 
 		/** Returns a pointer to the first linkedlistnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
 		listnode<valuetype>	*find(listnode<valuetype> *startnode,
-							valuetype value) const;
+							valuetype value);
 
 		/** Sorts the linkedlist in ascending order using a modified
 		 *  insertion sort algorithm.  This sort is slower than

@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 
 		/** Creates an instance of the socketserver class
  		 *  that is a copy of "s". */
-		socketserver(const socketserver &s);
+		socketserver(socketserver &s);
 
 		/** Makes this instance of the socketserver class
 		 *  identical to "s". */
-		socketserver	&operator=(const socketserver &s);
+		socketserver	&operator=(socketserver &s);
 
 		/** Deletes this instance of the socketserver class. */
 		virtual		~socketserver();
@@ -35,22 +35,22 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		 *  failure.
 		 *  Returns false if the system doesn't support
 		 *  blocking/nonblocking modes. */
-		virtual bool	useNonBlockingMode() const;
+		virtual bool	useNonBlockingMode();
 
 		/** Puts the file descriptor in blocking mode.
 		 *  Returns true on success and false on
 		 *  failure.
 		 *  Returns false if the system doesn't support
 		 *  blocking/nonblocking modes. */
-		virtual bool	useBlockingMode() const;
+		virtual bool	useBlockingMode();
 
 		/** Returns true if the file descriptor is in
 		 *  non-blocking mode and false otherwise. */
-		virtual bool	isUsingNonBlockingMode() const;
+		virtual bool	isUsingNonBlockingMode();
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
-		virtual int32_t	ioCtl(int32_t command, void *arg) const;
+		virtual int32_t	ioCtl(int32_t command, void *arg);
 
 
 		/** Instructs the socket to stay open for

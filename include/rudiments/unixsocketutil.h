@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 
 		/** Creates an instance of the unixsocketutil class
 		 *  that is a copy of "u". */
-		unixsocketutil(const unixsocketutil &u);
+		unixsocketutil(unixsocketutil &u);
 
 		/** Makes this instance of the unixsocketutil class
 		 *  identical to "u". */
-		unixsocketutil	&operator=(const unixsocketutil &u);
+		unixsocketutil	&operator=(unixsocketutil &u);
 
 		/** Deletes this instance of the unixsocketutill class. */
 		virtual		~unixsocketutil();

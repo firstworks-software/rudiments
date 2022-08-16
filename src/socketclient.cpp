@@ -43,7 +43,7 @@ socketclient::socketclient() : client() {
 	winsock::initWinsock();
 }
 
-socketclient::socketclient(const socketclient &c) : client(c) {
+socketclient::socketclient(socketclient &c) : client(c) {
 	pvt=new socketclientprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 	pvt->_nonblockingmode=c.pvt->_nonblockingmode;
@@ -52,7 +52,7 @@ socketclient::socketclient(const socketclient &c) : client(c) {
 	winsock::initWinsock();
 }
 
-socketclient &socketclient::operator=(const socketclient &c) {
+socketclient &socketclient::operator=(socketclient &c) {
 	if (this!=&c) {
 		client::operator=(c);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -82,7 +82,7 @@ bool socketclient::supportsBlockingNonBlockingModes() {
 	#endif
 }
 
-bool socketclient::useNonBlockingMode() const {
+bool socketclient::useNonBlockingMode() {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -115,7 +115,7 @@ bool socketclient::useNonBlockingMode() const {
 	#endif
 }
 
-bool socketclient::useBlockingMode() const {
+bool socketclient::useBlockingMode() {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -148,7 +148,7 @@ bool socketclient::useBlockingMode() const {
 	#endif
 }
 
-bool socketclient::isUsingNonBlockingMode() const {
+bool socketclient::isUsingNonBlockingMode() {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -162,7 +162,7 @@ bool socketclient::isUsingNonBlockingMode() const {
 	#endif
 }
 
-int32_t socketclient::ioCtl(int32_t cmd, void *arg) const {
+int32_t socketclient::ioCtl(int32_t cmd, void *arg) {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
 		error::clearError();

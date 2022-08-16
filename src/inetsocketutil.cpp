@@ -17,12 +17,12 @@ inetsocketutil::inetsocketutil() {
 	initialize(NULL,0);
 }
 
-inetsocketutil::inetsocketutil(const inetsocketutil &i) {
+inetsocketutil::inetsocketutil(inetsocketutil &i) {
 	pvt=new inetsocketutilprivate;
 	initialize(i.pvt->_address,i.pvt->_port);
 }
 
-inetsocketutil &inetsocketutil::operator=(const inetsocketutil &i) {
+inetsocketutil &inetsocketutil::operator=(inetsocketutil &i) {
 	if (this!=&i) {
 		initialize(i.pvt->_address,i.pvt->_port);
 	}

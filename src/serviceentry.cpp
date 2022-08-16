@@ -53,13 +53,13 @@ serviceentry::serviceentry() : object() {
 	#endif
 }
 
-serviceentry::serviceentry(const serviceentry &s) : object(s) {
+serviceentry::serviceentry(serviceentry &s) : object(s) {
 	pvt=new serviceentryprivate;
 	winsock::initWinsock();
 	initialize(s.getName(),s.getProtocol());
 }
 
-serviceentry &serviceentry::operator=(const serviceentry &s) {
+serviceentry &serviceentry::operator=(serviceentry &s) {
 	if (this!=&s) {
 		initialize(s.getName(),s.getProtocol());
 	}
@@ -74,20 +74,20 @@ serviceentry::~serviceentry() {
 	delete pvt;
 }
 
-const char *serviceentry::getName() const {
+const char *serviceentry::getName() {
 	return (pvt->_se)?pvt->_se->s_name:NULL;
 }
 
-int32_t serviceentry::getPort() const {
+int32_t serviceentry::getPort() {
 	return (pvt->_se)?filedescriptor::netToHost(
 				static_cast<uint16_t>(pvt->_se->s_port)):-1;
 }
 
-const char *serviceentry::getProtocol() const {
+const char *serviceentry::getProtocol() {
 	return (pvt->_se)?pvt->_se->s_proto:NULL;
 }
 
-const char * const *serviceentry::getAliasList() const {
+const char * const *serviceentry::getAliasList() {
 	return (pvt->_se &&
 		pvt->_se->s_aliases &&
 		pvt->_se->s_aliases[0])?

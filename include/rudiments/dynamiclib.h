@@ -35,7 +35,7 @@ class RUDIMENTS_DLLSPEC dynamiclib : public object {
 		/** Returns a handle to "symbol" (exported function or
 		 *  variable) in the currently open library or NULL if
 		 *  an error occurs or if no library is currently open. */
-		void	*getSymbol(const char *symbol) const;
+		void	*getSymbol(const char *symbol);
 
 		/** Returns a human-readable description of the previous
 		 *  error that occurred, or NULL if no error has
@@ -44,7 +44,7 @@ class RUDIMENTS_DLLSPEC dynamiclib : public object {
 		 *  This method allocates a buffer internally and
 		 *  returns it.  The calling program must deallocate
 		 *  the buffer. */
-		char	*getError() const;
+		char	*getError();
 		
 		/** getError() is not reentrant and thus not thread safe.  If
 		 *  your application is multi-threaded and you use getError(),

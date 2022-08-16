@@ -16,21 +16,21 @@ class scalar : public scalarcollection<valuetype> {
 
 		/** Creates an instance of the scalar class
 		 *  that is a copy of "a". */
-		scalar(const scalar<valuetype> &a);
+		scalar(scalar<valuetype> &a);
 
 		/** Creates an instance of the scalar class
 		 *  that is a copy of "a". */
-		scalar(const scalarcollection<valuetype> &a);
+		scalar(scalarcollection<valuetype> &a);
 
 		/** Makes this instance of the scalar class
 		 *  identical to "a". */
 		scalar<valuetype>	&operator=(
-					const scalar<valuetype> &a);
+					scalar<valuetype> &a);
 
 		/** Makes this instance of the scalar class
 		 *  identical to "a". */
 		scalar<valuetype>	&operator=(
-					const scalarcollection<valuetype> &a);
+					scalarcollection<valuetype> &a);
 
 		/** Deletes this instance of the scalar class. */
 		~scalar();
@@ -40,7 +40,7 @@ class scalar : public scalarcollection<valuetype> {
 
 		/** Returns the value stored in this intance. Returns NULL or
 		 *  0 if no value has been stored. */
-		valuetype	getValue() const;
+		valuetype	getValue();
 
 		/** Removes the value currently stored in this instance, such
 		 *  that getValue() will return NULL or 0.

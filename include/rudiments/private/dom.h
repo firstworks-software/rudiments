@@ -3,11 +3,11 @@
 
 			void	clear();
 
-			virtual ssize_t	writeJson() const;
-			virtual ssize_t	writeJson(bool indent) const;
-			virtual ssize_t	writeJson(output *out) const;
+			virtual ssize_t	writeJson();
+			virtual ssize_t	writeJson(bool indent);
+			virtual ssize_t	writeJson(output *out);
 			virtual ssize_t	writeJson(output *out,
-							bool indent) const;
+							bool indent);
 
 	friend class domnode;
 	protected:
@@ -17,17 +17,17 @@
 			const char	*cacheString(const char *string);
 			void		unCacheString(const char *string);
 
-			virtual ssize_t	writeNode(const domnode *dn,
+			virtual ssize_t	writeNode(domnode *dn,
 						output *out,
 						bool indent,
-						uint16_t *indentlevel) const;
+						uint16_t *indentlevel);
 			virtual	ssize_t	writeIndent(output *out,
-						uint16_t indent) const;
+						uint16_t indent);
 			virtual	ssize_t	safeWrite(output *out,
-						const char *str) const;
+						const char *str);
 
-				dom(const dom &x);
-			dom	&operator=(const dom &x);
+				dom(dom &x);
+			dom	&operator=(dom &x);
 
 	private:
 			domprivate	*pvt;

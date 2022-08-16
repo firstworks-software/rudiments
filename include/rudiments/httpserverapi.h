@@ -9,7 +9,7 @@
 class RUDIMENTS_DLLSPEC httpserverapi : public input, public output {
 	public:
 
-		virtual const char	*getType() const=0;
+		virtual const char	*getType()=0;
 
 	#include <rudiments/private/httpserverapi.h>
 };

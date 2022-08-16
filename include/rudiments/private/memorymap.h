@@ -1,13 +1,13 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
-		// FIXME: it should be possible to copy a memorymap
-				memorymap(const memorymap &m);
-		memorymap	&operator=(const memorymap &m);
+		memorymap(memorymap &m);
+		memorymap	&operator=(memorymap &m);
 
-			bool	mAdvise(unsigned char *start,
+	private:
+		bool	mAdvise(unsigned char *start,
 					size_t length, int32_t advice);
+
 		static	bool	mLockAll(int32_t flags);
 
 		memorymapprivate	*pvt;

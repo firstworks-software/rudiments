@@ -182,62 +182,62 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 
 
 		/** Returns the type of the node. */
-		virtual	domnodetype	getType() const;
+		virtual	domnodetype	getType();
 
 		/** Returns the namespace of the node. */
-		virtual	const char	*getNamespace() const;
+		virtual	const char	*getNamespace();
 
 		/** Returns the name of the node. */
-		virtual	const char	*getName() const;
+		virtual	const char	*getName();
 
 		/** Returns the value of node. */
-		virtual	const char	*getValue() const;
+		virtual	const char	*getValue();
 
 
 		/** Returns a pointer to the tree that this node is
 		 *  attached to or NULL if it isn't attached to any tree. */
-		dom	*getTree() const;
+		dom	*getTree();
 
 		/** Returns a pointer to the parent node or the
 		 *  nullnode if none exists. */
-		virtual	domnode	*getParent() const;
+		virtual	domnode	*getParent();
 
 		/** Returns the position of the node, relative to its
 		 *  siblings. */
-		virtual	uint64_t	getPosition() const;
+		virtual	uint64_t	getPosition();
 
 		/** Returns a pointer to the previous sibling
 		 *  node or the nullnode if none exists. */
-		virtual	domnode	*getPreviousSibling() const;
+		virtual	domnode	*getPreviousSibling();
 
 		/** Returns a pointer to the previous sibling
 		 *  node whose type is TAG_DOMNODE.  If no
 		 *  match is found, nullnode is returned. */
-		domnode	*getPreviousTagSibling() const;
+		domnode	*getPreviousTagSibling();
 
 		/** Returns the previous sibling node named
 		 *  "name" whose type is TAG_DOMNODE or the
 		 *  nullnode if not found. */
-		domnode	*getPreviousTagSibling(const char *name) const;
+		domnode	*getPreviousTagSibling(const char *name);
 
 		/** Returns the previous sibling node in namespace
 		 *  "ns" named "name" whose type is TAG_DOMNODE or the
 		 *  nullnode if not found. */
 		domnode	*getPreviousTagSibling(const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the previous sibling node named "name"
 		 *  (ignoring case) whose type is TAG_DOMNODE or the
 		 *  nullnode if not found. */
 		domnode	*getPreviousTagSiblingIgnoringCase(
-						const char *name) const;
+						const char *name);
 
 		/** Returns the previous sibling node in namespace
 		 *  "napesp" named "name" (both ignoring case) whose type is
 		 *  TAG_DOMNODE or the nullnode if not found. */
 		domnode	*getPreviousTagSiblingIgnoringCase(
 						const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the previous sibling node named
 		 *  "name" with an attribute named
@@ -251,7 +251,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getPreviousTagSibling(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the previous sibling node in namespace
 		 *  "ns" named "name" with an attribute named
@@ -266,7 +266,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the previous sibling node named
 		 *  "name" (ignoring case) with an attribute named
@@ -279,7 +279,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getPreviousTagSiblingIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the previous sibling node in namespace
 		 *  "ns" (ignoring case) named "name" (ignoring case)
@@ -294,40 +294,40 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns a pointer to the next sibling node
 		 *  or the nullnode if none exists. */
-		virtual	domnode	*getNextSibling() const;
+		virtual	domnode	*getNextSibling();
 
 		/** Returns a pointer to the next sibling node
 		 *  whose type is TAG_DOMNODE.  If no match
 		 *  is found, nullnode is returned. */
-		domnode	*getNextTagSibling() const;
+		domnode	*getNextTagSibling();
 
 		/** Returns the next sibling node named "name"
 		 *  whose type is TAG_DOMNODE or the nullnode
 		 *  if not found. */
-		domnode	*getNextTagSibling(const char *name) const;
+		domnode	*getNextTagSibling(const char *name);
 
 		/** Returns the next sibling node in namespace "ns"
 		 *  named "name" whose type is TAG_DOMNODE or the nullnode
 		 *  if not found. */
 		domnode	*getNextTagSibling(const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the next sibling node named "name"
 		 *  (ignoring case) whose type is TAG_DOMNODE
 		 *  or the nullnode if not found. */
 		domnode	*getNextTagSiblingIgnoringCase(
-						const char *name) const;
+						const char *name);
 
 		/** Returns the next sibling node in namespace "ns"
 		 *  named "name" (both ignoring case) whose type is
 		 *  TAG_DOMNODE or the nullnode if not found. */
 		domnode	*getNextTagSiblingIgnoringCase(
 						const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the next sibling node named "name"
 		 *  with an attribute named "attributename" with
@@ -341,7 +341,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getNextTagSibling(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the next sibling node in namespace
 		 *  "ns" named "name" with an attribute named
@@ -355,7 +355,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the next sibling node named "name"
 		 *  (ignoring case) with an attribute named
@@ -368,7 +368,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getNextTagSiblingIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the next sibling node in namespace "ns"
 		 *  (ignoring case) named "name" (ignoring case) with an
@@ -382,14 +382,14 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the next sibling node whose type is TAG_DOMNODE
 		 *  and whose name matches one of the members of the
 		 *  NULL-terminated array "set".  If no match is found,
 		 *  nullnode is returned. */
 		domnode	*getNextTagSiblingInSet(
-					const char * const *set) const;
+					const char * const *set);
 
 		/** Returns the next sibling node in namespace "ns"
 		 *  whose name matches one of the members of the
@@ -398,40 +398,40 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  returned. */
 		domnode	*getNextTagSiblingInSet(
 					const char *ns,
-					const char * const *set) const;
+					const char * const *set);
 
 
 		/** Returns the number of immediate child nodes. */
-		virtual	uint64_t	getChildCount() const;
+		virtual	uint64_t	getChildCount();
 
 		/** Returns the first child node or the nullnode
 		 *  if no children are found. */
-		virtual	domnode	*getFirstChild() const;
+		virtual	domnode	*getFirstChild();
 
 		/** Returns the first child node named "name"
 		 *  or the nullnode if not found. */
-		domnode	*getFirstChild(const char *name) const;
+		domnode	*getFirstChild(const char *name);
 
 		/** Returns the first child node in namespace "ns"
 		 *  named "name" or the nullnode if not found. */
 		domnode	*getFirstChild(const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the child node named "name" (ignoring case)
 		 *  or the nullnode if not found. */
 		domnode	*getFirstChildIgnoringCase(
-						const char *name) const;
+						const char *name);
 
 		/** Returns the child node in namespace "ns"
 		 *  (ignoring case) named "name" (ignoring case)
 		 *  or the nullnode if not found. */
 		domnode	*getFirstChildIgnoringCase(
 						const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the child node at index "position"
 		 *  or the nullnode if not found. */
-		domnode	*getChild(uint64_t position) const;
+		domnode	*getChild(uint64_t position);
 
 		/** Returns the first child node named "name"
 		 *  with an attribute named "attributename" with
@@ -443,8 +443,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  nullnode is returned. */
 		domnode	*getFirstChild(const char *name,
 						const char *attributename,
-						const char *attributevalue)
-						const;
+						const char *attributevalue);
 
 		/** Returns the first child node in namespace "ns"
 		 *  named "name" with an attribute named "attributename" with
@@ -457,8 +456,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getFirstChild(const char *ns,
 						const char *name,
 						const char *attributename,
-						const char *attributevalue)
-						const;
+						const char *attributevalue);
 
 		/** Returns the first child node named "name"
 		 *  (ignoring case) with an attribute named
@@ -471,8 +469,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getFirstChildIgnoringCase(
 						const char *name,
 						const char *attributename,
-						const char *attributevalue)
-						const;
+						const char *attributevalue);
 
 		/** Returns the first child node in namespace "ns"
 		 *  (ignoring case) named "name" (ignoring case) with an
@@ -485,30 +482,29 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 						const char *ns,
 						const char *name,
 						const char *attributename,
-						const char *attributevalue)
-						const;
+						const char *attributevalue);
 
 		/** Returns the first child node whose type is
 		 *  TAG_DOMNODE.  If no match is found,
 		 *  nullnode is returned. */
-		domnode	*getFirstTagChild() const;
+		domnode	*getFirstTagChild();
 
 		/** Returns the first child node named "name"
 		 *  whose type is TAG_DOMNODE.  If no match
 		 *  is found, nullnode is returned. */
-		domnode	*getFirstTagChild(const char *name) const;
+		domnode	*getFirstTagChild(const char *name);
 
 		/** Returns the first child node in namespace "ns"
 		 *  named "name" whose type is TAG_DOMNODE.  If no match
 		 *  is found, nullnode is returned. */
 		domnode	*getFirstTagChild(const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the first child node named "name" (ignoring case)
 		 *  whose type is TAG_DOMNODE.  If no match
 		 *  is found, nullnode is returned. */
 		domnode	*getFirstTagChildIgnoringCase(
-						const char *name) const;
+						const char *name);
 
 		/** Returns the first child node in namespace "ns"
 		 *  named "name" (both ignoring case) whose type is
@@ -516,7 +512,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  returned. */
 		domnode	*getFirstTagChildIgnoringCase(
 						const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the first child node named "name"
 		 *  with an attribute named "attributename" with
@@ -530,7 +526,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getFirstTagChild(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first child node in namespace "ns"
 		 *  named "name" with an attribute named "attributename"
@@ -543,7 +539,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first child node named "name" 
 		 *  (ignoring case) with an attribute named
@@ -556,7 +552,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getFirstTagChildIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first child node in namespace "ns"
 		 *  (ignoring case) named "name" *  (ignoring case) with an
@@ -570,14 +566,14 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first child node whose type is TAG_DOMNODE
 		 *  and whose name matches one of the members of the
 		 *  NULL-terminated array "set".  If no match is found,
 		 *  nullnode is returned. */
 		domnode	*getFirstTagChildInSet(
-					const char * const *set) const;
+					const char * const *set);
 
 		/** Returns the first child node in namespace "ns"
 		 *  whose name matches one of the members of the
@@ -586,13 +582,13 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  returned. */
 		domnode	*getFirstTagChildInSet(
 					const char *ns,
-					const char * const *set) const;
+					const char * const *set);
 
 
 		/** Returns the first descendent node named "name"
 		 *  whose type is TAG_DOMNODE.  If no match
 		 *  is found, nullnode is returned. */
-		domnode	*getFirstTagDescendent(const char *name) const;
+		domnode	*getFirstTagDescendent(const char *name);
 
 
 		/** Returns the first descendent node in namespace "ns"
@@ -600,14 +596,14 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  is found, nullnode is returned. */
 		domnode	*getFirstTagDescendent(
 						const char *ns,
-						const char *name) const;
+						const char *name);
 
 
 		/** Returns the first descendent node named "name"
 		 *  (ignoring case) whose type is TAG_DOMNODE.
 		 *  If no match is found, nullnode is returned. */
 		domnode	*getFirstTagDescendentIgnoringCase(
-							const char *name) const;
+							const char *name);
 
 
 		/** Returns the first descendent node in namespace "ns"
@@ -616,7 +612,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  returned. */
 		domnode	*getFirstTagDescendentIgnoringCase(
 						const char *ns,
-						const char *name) const;
+						const char *name);
 
 		/** Returns the first descendent node named "name"
 		 *  with an attribute named "attributename" with
@@ -630,7 +626,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getFirstTagDescendent(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first descendent node in namespace "ns"
 		 *  named "name" with an attribute named "attributename" with
@@ -643,7 +639,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first descendent node named "name" 
 		 *  (ignoring case) with an attribute named
@@ -656,7 +652,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		domnode	*getFirstTagDescendentIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first descendent node in namespace "ns"
 		 *  (ignoring case) named "name" (ignoring case) with an
@@ -670,14 +666,14 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const;
+					const char *attributevalue);
 
 		/** Returns the first descendent node whose type is
 		 *  TAG_DOMNODE and whose name matches one of the members of
 		 *  the NULL-terminated array "set".  If no match is found,
 		 *  nullnode is returned. */
 		domnode	*getFirstTagDescendentInSet(
-					const char * const *set) const;
+					const char * const *set);
 
 		/** Returns the first descendent node in namespace "ns"
 		 *  whose name matches one of the members of the NULL-terminated
@@ -685,55 +681,55 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  is found, nullnode is returned. */
 		domnode	*getFirstTagDescendentInSet(
 					const char *ns,
-					const char * const *set) const;
+					const char * const *set);
 
 		/** Returns the next node in a depth-first traversal whose
 		 *  type is TAG_DOMNODE. */
-		domnode	*getNextTag() const;
+		domnode	*getNextTag();
 
 		/** Returns the next node in a depth-first traversal of the
 		 *  nodes beneath "top" whose type is TAG_DOMNODE.
 		 *
 		 *  The behavior is undefined if "top" is not a direct
 		 *  ancestor of this node. */
-		domnode	*getNextTag(domnode *top) const;
+		domnode	*getNextTag(domnode *top);
 
 		/** Returns the previous node in a depth-first traversal whose
 		 *  type is TAG_DOMNODE. */
-		domnode	*getPreviousTag() const;
+		domnode	*getPreviousTag();
 
 		/** Returns the previous node in a depth-first traversal of the
 		 *  nodes beneath "top" whose type is TAG_DOMNODE.
 		 *
 		 *  The behavior is undefined if "top" is not a direct
 		 *  ancestor of this node. */
-		domnode	*getPreviousTag(domnode *top) const;
+		domnode	*getPreviousTag(domnode *top);
 
 
 		/** Returns the number of attributes. */
-		virtual	uint64_t	getAttributeCount() const;
+		virtual	uint64_t	getAttributeCount();
 
 		/** Returns the attribute named "name"
 		 *  or the nullnode if not found. */
-		virtual	domnode	*getAttribute(const char *name) const;
+		virtual	domnode	*getAttribute(const char *name);
 
 		/** Returns the attribute named "name" (ignoring case)
 		 *  or the nullnode if not found. */
 		virtual	domnode	*getAttributeIgnoringCase(
-						const char *name) const;
+						const char *name);
 
 		/** Returns the attribute node at index
 		 *  "position" or the nullnode if not found. */
-		virtual	domnode	*getAttribute(uint64_t position) const;
+		virtual	domnode	*getAttribute(uint64_t position);
 
 		/** Returns the value of the attribute named
 		 *  "name" or the nullnode if not found. */
-		const char	*getAttributeValue(const char *name) const;
+		const char	*getAttributeValue(const char *name);
 
 		/** Returns the value of the attribute node at
 		 *  index "position" or the nullnode if not
 		 *  found. */
-		const char	*getAttributeValue(uint64_t position) const;
+		const char	*getAttributeValue(uint64_t position);
 
 		/** Returns the attribute names and values in
 		 *  a dictionary.  The dictionary is allocated
@@ -741,7 +737,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  calling program.  Returns NULL if the node
 		 *  is a nullNode and an empty dictionary if the
 		 *  node has no attributes. */
-		dictionary<const char *, const char *> *getAttributes() const;
+		dictionary<const char *, const char *> *getAttributes();
 
 		/** Sets the value of the attribute named
 		 *  "name" to "value".  Creates attribute
@@ -759,11 +755,11 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		void	setAttributeValue(const char *name, uint64_t value);
 
 		/** Returns the nullnode used by this node. */
-		domnode	*getNullNode() const;
+		domnode	*getNullNode();
 
 		/** Returns true if this node is the special
 		 *  nullnode and false otherwise. */
-		virtual	bool	isNullNode() const;
+		virtual	bool	isNullNode();
 
 
 		/** Sets the node type to "type". */
@@ -1323,7 +1319,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 
 		/** Writes a text representation of the tree starting at this
 		 *  node to standard output. */
-		ssize_t	write() const;
+		ssize_t	write();
 
 		/** Writes a text representation of the tree starting at this
 		 *  node to standard output.
@@ -1331,13 +1327,13 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  If "indent" is true then the output is automatically
 		 *  indented.  If "indent" is false, then the domnode is
 		 *  output as-is. */
-		ssize_t	write(bool indent) const;
+		ssize_t	write(bool indent);
 
 		/** Writes a text representation of the tree starting at this
 		 *  node into "out" which can be an instance of stringbuffer,
 		 *  filedescriptor, or any other class that implements
 		 *  the output interface. */
-		ssize_t	write(output *out) const;
+		ssize_t	write(output *out);
 
 		/** Writes a text representation of the tree starting at this
 		 *  node into "out" which can be an instance of stringbuffer,
@@ -1347,11 +1343,11 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  If "indent" is true then the output is automatically
 		 *  indented.  If "indent" is false, then the domnode is
 		 *  output as-is. */
-		ssize_t	write(output *out, bool indent) const;
+		ssize_t	write(output *out, bool indent);
 
 		/** Writes a text representation, in XML format, of the tree
 		 *  starting at this node to standard output. */
-		ssize_t	writeXml() const;
+		ssize_t	writeXml();
 
 		/** Writes a text representation, in XML format, of the tree
 		 *  starting at this node to standard output.
@@ -1359,13 +1355,13 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  If "indent" is true then the output is automatically
 		 *  indented.  If "indent" is false, then the domnode is
 		 *  output as-is. */
-		ssize_t	writeXml(bool indent) const;
+		ssize_t	writeXml(bool indent);
 
 		/** Writes a text representation, in XML format, of the tree
 		 *  starting at this node into "out" which can be an instance
 		 *  of stringbuffer, filedescriptor, or any other class that
 		 *  implements the output interface. */
-		ssize_t	writeXml(output *out) const;
+		ssize_t	writeXml(output *out);
 
 		/** Writes a text representation, in XML format, of the tree
 		 *  starting at this node into "out" which can be an instance
@@ -1375,7 +1371,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  If "indent" is true then the output is automatically
 		 *  indented.  If "indent" is false, then the domnode is
 		 *  output as-is. */
-		ssize_t	writeXml(output *out, bool indent) const;
+		ssize_t	writeXml(output *out, bool indent);
 
 		/** If the domnode is an element, returns the
 		 *  "path" of the domnode.  The path will have
@@ -1386,7 +1382,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  The return value is allocated inside the
 		 *  method and must be deallocated by the calling
 		 *  program. */
-		stringbuffer	*getPath() const;
+		stringbuffer	*getPath();
 
 		/** Returns the child element with "path" of the form:
 		 * 
@@ -1394,7 +1390,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 * 
 		 *  Returns the null node if the specified
 		 *  element was not found. */
-		domnode	*getChildByPath(const char *path) const;
+		domnode	*getChildByPath(const char *path);
 
 		/** Returns the attribute node at index
 		 *  "position" of the child element with "path"
@@ -1405,7 +1401,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  Returns the null node if the specified
 		 *  element was not found. */
 		domnode	*getAttributeByPath(const char *path,
-						uint64_t position) const;
+						uint64_t position);
 
 		/** Returns the attribute node named "name"
 		 *  of the child element with "path" of the form:
@@ -1415,7 +1411,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  Returns the null node if the specified
 		 *  element was not found. */
 		domnode	*getAttributeByPath(const char *path,
-							const char *name) const;
+							const char *name);
 
 		/** Returns the value of the attribute at index
 		 *  "position" of the child element with "path"
@@ -1426,7 +1422,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  Returns the null node if the specified
 		 *  element was not found. */
 		const char	*getAttributeValueByPath(const char *path,
-						uint64_t position) const;
+						uint64_t position);
 
 		/** Returns the value of the attribute named
 		 *  "name" of the child element with "path" of
@@ -1437,7 +1433,7 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  Returns the null node if the specified
 		 *  element was not found. */
 		const char	*getAttributeValueByPath(const char *path,
-							const char *name) const;
+							const char *name);
 
 		/** Allows an app to associate arbitrary data with the node. */
 		void	setData(void *data);

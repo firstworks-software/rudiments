@@ -48,13 +48,13 @@ protocolentry::protocolentry() : object() {
 	#endif
 }
 
-protocolentry::protocolentry(const protocolentry &p) : object(p) {
+protocolentry::protocolentry(protocolentry &p) : object(p) {
 	pvt=new protocolentryprivate;
 	winsock::initWinsock();
 	initialize(p.getName());
 }
 
-protocolentry &protocolentry::operator=(const protocolentry &p) {
+protocolentry &protocolentry::operator=(protocolentry &p) {
 	if (this!=&p) {
 		initialize(p.getName());
 	}
@@ -69,18 +69,18 @@ protocolentry::~protocolentry() {
 	delete pvt;
 }
 
-const char *protocolentry::getName() const {
+const char *protocolentry::getName() {
 	return (pvt->_pe)?pvt->_pe->p_name:NULL;
 }
 
-const char * const *protocolentry::getAliasList() const {
+const char * const *protocolentry::getAliasList() {
 	return (pvt->_pe &&
 		pvt->_pe->p_aliases &&
 		pvt->_pe->p_aliases[0])?
 		pvt->_pe->p_aliases:NULL;
 }
 
-int32_t protocolentry::getNumber() const {
+int32_t protocolentry::getNumber() {
 	return (pvt->_pe)?pvt->_pe->p_proto:-1;
 }
 

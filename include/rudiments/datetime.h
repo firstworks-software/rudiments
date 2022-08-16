@@ -104,77 +104,77 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 
 		/** Returns the hour component of the date/time currently
 		 *  represented in the instance of the class. */
-		int32_t	getHour() const;
+		int32_t	getHour();
 
 		/** Returns the minute component of the date/time currently
 		 *  represented in the instance of the class. */
-		int32_t	getMinutes() const;
+		int32_t	getMinutes();
 
 		/** Returns the seconds component of the date/time currently
 		 *  represented in the instance of the class. */
-		int32_t	getSeconds() const;
+		int32_t	getSeconds();
 
 		/** Returns the microseconds component of the date/time
 		 *  currently represented in the instance of the class. */
-		int32_t	getMicroseconds() const;
+		int32_t	getMicroseconds();
 
 		/** Returns the month component (1-12) of the date/time
 		 *  currently represented in the instance of the class. */
-		int32_t	getMonth() const;
+		int32_t	getMonth();
 
 		/** Returns the full name of the month component of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
-		const char	*getMonthName() const;
+		const char	*getMonthName();
 
 		/** Returns the abbreviated name of the month component of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
-		const char	*getMonthAbbreviation() const;
+		const char	*getMonthAbbreviation();
 
 		/** Returns the day of the month component (1-31) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
-		int32_t	getDayOfMonth() const;
+		int32_t	getDayOfMonth();
 
 		/** Returns the day of the week component (1-7) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
-		int32_t	getDayOfWeek() const;
+		int32_t	getDayOfWeek();
 
 		/** Returns the day of the year component (1-365) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
-		int32_t	getDayOfYear() const;
+		int32_t	getDayOfYear();
 
 		/** Returns the week of the year component (1-52) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
-		int32_t	getWeekOfYear() const;
+		int32_t	getWeekOfYear();
 
 		/** Returns the year component, including the century, of
 		 *  the date/time currently represented in the instance of the
 		 *  class. */
-		int32_t	getYear() const;
+		int32_t	getYear();
 
 		/** Returns the year component, not including the century, of
 		 *  the date/time currently represented in the instance of the
 		 *  class. */
-		int32_t	getShortYear() const;
+		int32_t	getShortYear();
 
 		/** Returns the (one-based) century component of the date/time
  		 *  currently represented in the instance of the class. */
-		int32_t	getCentury() const;
+		int32_t	getCentury();
 
 		/** Returns true if daylight savings time is currently
 		 *  in effect and false if it isn't */
-		bool	isDaylightSavingsTime() const;
+		bool	isDaylightSavingsTime();
 
 		/** Returns a 3 character string representing the time zone */
-		const char	*getTimeZoneString() const;
+		const char	*getTimeZoneString();
 
 		/** Returns the offset from GMT in seconds */
-		int32_t	getTimeZoneOffset() const;
+		int32_t	getTimeZoneOffset();
 			
 		/** Recalculates the time currently represented in the
 		 *  class to correspond to the time zone "newtz".
@@ -306,7 +306,7 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 
 
 		/** Returns the number of seconds since 1970 (the epoch). */
-		time_t		getEpoch() const;
+		time_t		getEpoch();
 
 
 		/** Returns a NULL terminated array of timezone

@@ -20,7 +20,7 @@ dynamicarray<valuetype>::dynamicarray(uint64_t initiallength,
 
 template< class valuetype >
 inline
-dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) :
+dynamicarray<valuetype>::dynamicarray(dynamicarray<valuetype> &v) :
 						arraycollection<valuetype>(v) {
 	init(v.initlen,v.inclen);
 	clone(v);
@@ -28,7 +28,7 @@ dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) :
 
 template< class valuetype >
 inline
-dynamicarray<valuetype>::dynamicarray(const arraycollection<valuetype> &v) :
+dynamicarray<valuetype>::dynamicarray(arraycollection<valuetype> &v) :
 						arraycollection<valuetype>(v) {
 	init(128,32);
 	clone(v);
@@ -37,7 +37,7 @@ dynamicarray<valuetype>::dynamicarray(const arraycollection<valuetype> &v) :
 template< class valuetype >
 inline
 dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
-					const dynamicarray<valuetype> &v) {
+					dynamicarray<valuetype> &v) {
 	if (this!=&v) {
 		clear(v.initlen,v.inclen);
 		arraycollection<valuetype>::operator=(v);
@@ -50,7 +50,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 template< class valuetype >
 inline
 dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
-					const arraycollection<valuetype> &v) {
+					arraycollection<valuetype> &v) {
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
@@ -76,7 +76,7 @@ void dynamicarray<valuetype>::init(uint64_t initiallength,
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clone(const dynamicarray<valuetype> &v) {
+void dynamicarray<valuetype>::clone(dynamicarray<valuetype> &v) {
 
 	// extend storage to fit (do this before setting length)
 	extend(v.lastlen);
@@ -104,7 +104,7 @@ void dynamicarray<valuetype>::clone(const dynamicarray<valuetype> &v) {
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clone(const arraycollection<valuetype> &v) {
+void dynamicarray<valuetype>::clone(arraycollection<valuetype> &v) {
 	lastlen=v.getLength();
 	for (uint64_t i=0; i<lastlen; i++) {
 		find(i)=node_duplicate_value(v[i],
@@ -156,19 +156,19 @@ valuetype dynamicarray<valuetype>::operator[](uint64_t index) const {
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getInitialLength() const {
+uint64_t dynamicarray<valuetype>::getInitialLength() {
 	return initlen;
 }
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getIncrementLength() const {
+uint64_t dynamicarray<valuetype>::getIncrementLength() {
 	return inclen;
 }
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getLength() const {
+uint64_t dynamicarray<valuetype>::getLength() {
 	return lastlen;
 }
 

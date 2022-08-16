@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC socketclient : public client {
 
 		/** Creates an instance of the socketclient class
 		 *  that is a copy of "c". */
-		socketclient(const socketclient &c);
+		socketclient(socketclient &c);
 
 		/** Makes this instance of the socketclient class
 		 *  idenitcal to "c". */
-		socketclient	&operator=(const socketclient &c);
+		socketclient	&operator=(socketclient &c);
 
 		/** Deletes this instance of the socketclient class. */
 		virtual	~socketclient();
@@ -32,20 +32,20 @@ class RUDIMENTS_DLLSPEC socketclient : public client {
 		/** Puts the client socket in non-blocking mode.  Returns true
 		 *  on success and false on failure.  Returns false if the
 		 *  system doesn't support blocking/nonblocking modes. */
-		virtual bool	useNonBlockingMode() const;
+		virtual bool	useNonBlockingMode();
 
 		/** Puts the client socket in blocking mode.  Returns true on
 		 *  success and false on failure.  Returns false if the system
 		 *  doesn't support blocking/nonblocking modes. */
-		virtual bool	useBlockingMode() const;
+		virtual bool	useBlockingMode();
 
 		/** Returns true if the file descriptor is in
 		 *  non-blocking mode and false otherwise. */
-		virtual bool	isUsingNonBlockingMode() const;
+		virtual bool	isUsingNonBlockingMode();
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
-		virtual int32_t	ioCtl(int32_t command, void *arg) const;
+		virtual int32_t	ioCtl(int32_t command, void *arg);
 
 	#include <rudiments/private/socketclient.h>
 };

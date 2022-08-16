@@ -4,7 +4,7 @@
 	protected:
 		virtual valuetype	*createResource();
 
-		void	clone(const resourcepool<valuetype> *r);
+		void	clone(resourcepool<valuetype> *r);
 		void	clearDelegate();
 
 		uint64_t	min;

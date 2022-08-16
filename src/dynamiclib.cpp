@@ -55,6 +55,18 @@ dynamiclib::dynamiclib() : object() {
 	#endif
 }
 
+dynamiclib::dynamiclib(dynamiclib &d) : object() {
+	// FIXME: implement this
+}
+
+dynamiclib &dynamiclib::operator=(dynamiclib &d) {
+	if (this!=&d) {
+		object::operator=(d);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 dynamiclib::~dynamiclib() {
 
 	// see NOTE in ~threadmutex()
@@ -319,7 +331,7 @@ bool dynamiclib::close() {
 	return retval;
 }
 
-void *dynamiclib::getSymbol(const char *symbol) const {
+void *dynamiclib::getSymbol(const char *symbol) {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		void	*symhandle;
 		error::clearError();
@@ -386,7 +398,7 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 	#endif
 }
 
-char *dynamiclib::getError() const {
+char *dynamiclib::getError() {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		if (_errormutex && !_errormutex->lock()) {
 			return NULL;

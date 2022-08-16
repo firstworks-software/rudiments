@@ -37,7 +37,7 @@ class signalhandlerprivate {
 	friend class signalmanager;
 	friend class signalhandler;
 	private:
-		const signalset	*_sset;
+		signalset	*_sset;
 		int32_t		_flags;
 		void		(*_handler)(int32_t);
 		#if defined(RUDIMENTS_HAVE_SIGACTION)
@@ -292,7 +292,7 @@ bool signalset::removeAllSignals() {
 	#endif
 }
 
-int32_t signalset::signalIsInSet(int32_t signum) const {
+int32_t signalset::signalIsInSet(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return sigismember(&pvt->_sigset,signum);
 	#else
@@ -336,7 +336,7 @@ uint32_t signalmanager::alarm(uint32_t seconds) {
 	#endif
 }
 
-bool signalmanager::ignoreSignals(const signalset *sset) {
+bool signalmanager::ignoreSignals(signalset *sset) {
 	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER) || \
 		defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 		bool	result=true;
@@ -392,7 +392,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 	#endif
 }
 
-bool signalmanager::waitForSignals(const signalset *sset) {
+bool signalmanager::waitForSignals(signalset *sset) {
 	#ifdef RUDIMENTS_HAVE_KILL
 		error::clearError();
 		if (!sset) {
@@ -436,6 +436,18 @@ signalhandler::signalhandler() : object() {
 	#endif
 }
 
+signalhandler::signalhandler(signalhandler &s) : object() {
+	// FIXME: implement this
+}
+
+signalhandler &signalhandler::operator=(signalhandler &s) {
+	if (this!=&s) {
+		object::operator=(s);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 signalhandler::~signalhandler() {
 	// set NOTE in ~threadmutex()
 	signalhandlerprivate	*tmppvt=pvt;
@@ -463,15 +475,15 @@ void signalhandler::removeFlag(int32_t flag) {
 	pvt->_flags&=(~flag);
 }
 
-int32_t signalhandler::getFlags() const {
+int32_t signalhandler::getFlags() {
 	return pvt->_flags;
 }
 
-void signalhandler::setMask(const signalset *sset) {
+void signalhandler::setMask(signalset *sset) {
 	pvt->_sset=sset;
 }
 
-const signalset *signalhandler::getMask() const {
+const signalset *signalhandler::getMask() {
 	return pvt->_sset;
 }
 

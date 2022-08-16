@@ -28,21 +28,21 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 
 		/** Creates an instance of the dictionary class
 		 *  that is a copy of "a". */
-		dictionary(const dictionary<keytype,valuetype> &a);
+		dictionary(dictionary<keytype,valuetype> &a);
 
 		/** Creates an instance of the dictionary class
 		 *  that is a copy of "a". */
-		dictionary(const dictionarycollection<keytype,valuetype> &a);
+		dictionary(dictionarycollection<keytype,valuetype> &a);
 
 		/** Makes this instance of the dictionary class
 		 *  identical to "a". */
 		dictionary<keytype,valuetype>	&operator=(
-					const dictionary<keytype,valuetype> &a);
+					dictionary<keytype,valuetype> &a);
 
 		/** Makes this instance of the dictionary class
 		 *  identical to "a". */
 		dictionary<keytype,valuetype>	&operator=(
-			const dictionarycollection<keytype,valuetype> &a);
+				dictionarycollection<keytype,valuetype> &a);
 
 		/** Deletes this instance of the dictionary class.
 		 *
@@ -86,7 +86,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If getTrackInsertionOrder() is false then the order of key
 		 *  insertion is not tracked and getKeys() returns a list of
 		 *  keys in ascending order. */
-		bool	getTrackInsertionOrder() const;
+		bool	getTrackInsertionOrder();
 
 		/** Sets the value associated with "key" to "value".
 		 *  If "key" already exists, the value currently
@@ -132,30 +132,30 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	getValue(keytype key, valuetype *value) const;
+		bool	getValue(keytype key, valuetype *value);
 
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid value of NULL associated with "key". */
-		valuetype getValue(keytype key) const;
+		valuetype getValue(keytype key);
 
 		/** Sets "k" to the key associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	getKey(keytype key, keytype *k) const;
+		bool	getKey(keytype key, keytype *k);
 
 		/** Returns the key associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
 		 *  way to distinguish between failure to find "key"
 		 *  and a valid key of NULL associated with "key". */
-		keytype getKey(keytype key) const;
+		keytype getKey(keytype key);
 
 		/** Returns a list of the keys in the dictionary. */
-		linkedlist<keytype>	*getKeys() const;
+		linkedlist<keytype>	*getKeys();
 
 		/** Returns the number of key-value pairs in the dictionary. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't

@@ -2,104 +2,104 @@
 // See the COPYING file for more information
 
 		ssize_t	writeValue(output *out,
-					const char *value) const;
+					const char *value);
 		ssize_t	writeValue(output *out,
-					char *value) const;
+					char *value);
 		ssize_t	writeValue(output *out,
-					const wchar_t *value) const;
+					const wchar_t *value);
 		ssize_t	writeValue(output *out,
-					wchar_t *value) const;
+					wchar_t *value);
 		ssize_t	writeValue(output *out,
-					char value) const;
+					char value);
 		ssize_t	writeValue(output *out,
-					wchar_t value) const;
+					wchar_t value);
 		ssize_t	writeValue(output *out,
-					bool value) const;
+					bool value);
 		ssize_t	writeValue(output *out,
-					int16_t value) const;
+					int16_t value);
 		ssize_t	writeValue(output *out,
-					int32_t value) const;
+					int32_t value);
 		ssize_t	writeValue(output *out,
-					int64_t value) const;
+					int64_t value);
 		ssize_t	writeValue(output *out,
-					const unsigned char *value) const;
+					const unsigned char *value);
 		ssize_t	writeValue(output *out,
-					unsigned char *value) const;
+					unsigned char *value);
 		ssize_t	writeValue(output *out,
-					unsigned char value) const;
+					unsigned char value);
 		ssize_t	writeValue(output *out,
-					uint16_t value) const;
+					uint16_t value);
 		ssize_t	writeValue(output *out,
-					uint32_t value) const;
+					uint32_t value);
 		ssize_t	writeValue(output *out,
-					uint64_t value) const;
+					uint64_t value);
 		ssize_t	writeValue(output *out,
-					float value) const;
+					float value);
 		ssize_t	writeValue(output *out,
-					double value) const;
+					double value);
 		ssize_t	writeValue(output *out,
-					long double value) const;
+					long double value);
 		ssize_t	writeValue(output *out,
-					const void *value) const;
+					const void *value);
 		ssize_t	writeValue(output *out,
-					void *value) const;
+					void *value);
 		ssize_t	writeValue(output *out,
-					const object *value) const;
+					const object *value);
 		ssize_t	writeValue(output *out,
-					object *value) const;
+					object *value);
 		template <class valuetype>
 		ssize_t	writeValue(output *out,
-					const valuetype &value) const;
+					const valuetype &value);
 
 		ssize_t	writeJsonValue(output *out,
-					const char *value) const;
+					const char *value);
 		ssize_t	writeJsonValue(output *out,
-					char *value) const;
+					char *value);
 		ssize_t	writeJsonValue(output *out,
-					const wchar_t *value) const;
+					const wchar_t *value);
 		ssize_t	writeJsonValue(output *out,
-					wchar_t *value) const;
+					wchar_t *value);
 		ssize_t	writeJsonValue(output *out,
-					char value) const;
+					char value);
 		ssize_t	writeJsonValue(output *out,
-					wchar_t value) const;
+					wchar_t value);
 		ssize_t	writeJsonValue(output *out,
-					bool value) const;
+					bool value);
 		ssize_t	writeJsonValue(output *out,
-					int16_t value) const;
+					int16_t value);
 		ssize_t	writeJsonValue(output *out,
-					int32_t value) const;
+					int32_t value);
 		ssize_t	writeJsonValue(output *out,
-					int64_t value) const;
+					int64_t value);
 		ssize_t	writeJsonValue(output *out,
-					const unsigned char *value) const;
+					const unsigned char *value);
 		ssize_t	writeJsonValue(output *out,
-					unsigned char *value) const;
+					unsigned char *value);
 		ssize_t	writeJsonValue(output *out,
-					unsigned char value) const;
+					unsigned char value);
 		ssize_t	writeJsonValue(output *out,
-					uint16_t value) const;
+					uint16_t value);
 		ssize_t	writeJsonValue(output *out,
-					uint32_t value) const;
+					uint32_t value);
 		ssize_t	writeJsonValue(output *out,
-					uint64_t value) const;
+					uint64_t value);
 		ssize_t	writeJsonValue(output *out,
-					float value) const;
+					float value);
 		ssize_t	writeJsonValue(output *out,
-					double value) const;
+					double value);
 		ssize_t	writeJsonValue(output *out,
-					long double value) const;
+					long double value);
 		ssize_t	writeJsonValue(output *out,
-					const void *value) const;
+					const void *value);
 		ssize_t	writeJsonValue(output *out,
-					void *value) const;
+					void *value);
 		ssize_t	writeJsonValue(output *out,
-					const object *value) const;
+					const object *value);
 		ssize_t	writeJsonValue(output *out,
-					object *value) const;
+					object *value);
 		template <class valuetype>
 		ssize_t	writeJsonValue(output *out,
-					const valuetype &value) const;
+					const valuetype &value);
 
 	protected:
 		bool	managevalues;

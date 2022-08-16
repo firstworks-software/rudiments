@@ -195,12 +195,12 @@ userentry::userentry() : object() {
 	pvt->_sidsize=0;
 }
 
-userentry::userentry(const userentry &u) : object(u) {
+userentry::userentry(userentry &u) : object(u) {
 	pvt=new userentryprivate;
 	initialize(u.getName());
 }
 
-userentry &userentry::operator=(const userentry &u) {
+userentry &userentry::operator=(userentry &u) {
 	if (this!=&u) {
 		initialize(u.getName());
 	}
@@ -230,7 +230,7 @@ userentry::~userentry() {
 	delete pvt;
 }
 
-const char *userentry::getName() const {
+const char *userentry::getName() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_name:NULL;
 #else
@@ -238,7 +238,7 @@ const char *userentry::getName() const {
 #endif
 }
 
-const char *userentry::getPassword() const {
+const char *userentry::getPassword() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	#ifndef __VMS
 		return (pvt->_pwd)?pvt->_pwd->pw_passwd:NULL;
@@ -250,7 +250,7 @@ const char *userentry::getPassword() const {
 #endif
 }
 
-const char *userentry::getEncryptedPassword() const {
+const char *userentry::getEncryptedPassword() {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		return (pvt->_sp)?pvt->_sp->sp_pwdp:NULL;
 	#else
@@ -258,7 +258,7 @@ const char *userentry::getEncryptedPassword() const {
 	#endif
 }
 
-long userentry::getLastChangeDate() const {
+long userentry::getLastChangeDate() {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		return (pvt->_sp)?pvt->_sp->sp_lstchg:-1;
 	#else
@@ -266,7 +266,7 @@ long userentry::getLastChangeDate() const {
 	#endif
 }
 
-int32_t userentry::getDaysBeforeChangeAllowed() const {
+int32_t userentry::getDaysBeforeChangeAllowed() {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		return (pvt->_sp)?pvt->_sp->sp_min:-1;
 	#else
@@ -274,7 +274,7 @@ int32_t userentry::getDaysBeforeChangeAllowed() const {
 	#endif
 }
 
-int32_t userentry::getDaysBeforeChangeRequired() const {
+int32_t userentry::getDaysBeforeChangeRequired() {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		return (pvt->_sp)?pvt->_sp->sp_max:-1;
 	#else
@@ -282,7 +282,7 @@ int32_t userentry::getDaysBeforeChangeRequired() const {
 	#endif
 }
 
-int32_t userentry::getDaysBeforeExpirationWarning() const {
+int32_t userentry::getDaysBeforeExpirationWarning() {
 	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_WARN)
 		return (pvt->_sp)?pvt->_sp->sp_warn:-1;
 	#else
@@ -290,7 +290,7 @@ int32_t userentry::getDaysBeforeExpirationWarning() const {
 	#endif
 }
 
-int32_t userentry::getDaysOfInactivityAllowed() const {
+int32_t userentry::getDaysOfInactivityAllowed() {
 	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_INACT)
 		return (pvt->_sp)?pvt->_sp->sp_inact:-1;
 	#else
@@ -298,7 +298,7 @@ int32_t userentry::getDaysOfInactivityAllowed() const {
 	#endif
 }
 
-int32_t userentry::getExpirationDate() const {
+int32_t userentry::getExpirationDate() {
 	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_EXPIRE)
 		return (pvt->_sp)?pvt->_sp->sp_expire:-1;
 	#else
@@ -306,7 +306,7 @@ int32_t userentry::getExpirationDate() const {
 	#endif
 }
 
-int32_t userentry::getFlag() const {
+int32_t userentry::getFlag() {
 	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_FLAG)
 		return (pvt->_sp)?(int32_t)pvt->_sp->sp_flag:-1;
 	#else
@@ -314,7 +314,7 @@ int32_t userentry::getFlag() const {
 	#endif
 }
 
-uid_t userentry::getUserId() const {
+uid_t userentry::getUserId() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_uid:(uid_t)-1;
 #else
@@ -322,7 +322,7 @@ uid_t userentry::getUserId() const {
 #endif
 }
 
-const char *userentry::getSidString() const {
+const char *userentry::getSidString() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	if (!pvt->_sidstr) {
 		if (pvt->_pwd) {
@@ -338,7 +338,7 @@ const char *userentry::getSidString() const {
 #endif
 }
 
-const void *userentry::getSid() const {
+const void *userentry::getSid() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	if (!pvt->_sidstr) {
 		if (pvt->_pwd) {
@@ -354,7 +354,7 @@ const void *userentry::getSid() const {
 #endif
 }
 
-uint64_t userentry::getSidSize() const {
+uint64_t userentry::getSidSize() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	if (!pvt->_sidstr) {
 		if (pvt->_pwd) {
@@ -370,7 +370,7 @@ uint64_t userentry::getSidSize() const {
 #endif
 }
 
-gid_t userentry::getPrimaryGroupId() const {
+gid_t userentry::getPrimaryGroupId() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_gid:(gid_t)-1;
 #else
@@ -378,7 +378,7 @@ gid_t userentry::getPrimaryGroupId() const {
 #endif
 }
 
-const char *userentry::getRealName() const {
+const char *userentry::getRealName() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	#ifndef __VMS
 		return (pvt->_pwd)?pvt->_pwd->pw_gecos:NULL;
@@ -390,7 +390,7 @@ const char *userentry::getRealName() const {
 #endif
 }
 
-const char *userentry::getHomeDirectory() const {
+const char *userentry::getHomeDirectory() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_dir:NULL;
 #else
@@ -398,7 +398,7 @@ const char *userentry::getHomeDirectory() const {
 #endif
 }
 
-const char *userentry::getShell() const {
+const char *userentry::getShell() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_shell:NULL;
 #else

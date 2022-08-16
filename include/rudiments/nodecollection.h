@@ -19,7 +19,7 @@ class nodecollectionnode : virtual public object {
 
 		/** Returns the next node in the nodecollection or NULL
 		 * if this node is the last node in the collection. */
-		virtual	nodecollectionnode<valuetype>	*getNext() const=0;
+		virtual	nodecollectionnode<valuetype>	*getNext()=0;
 };
 
 /** The collection class is the parent class for all rudiments node-based
@@ -28,10 +28,10 @@ template <class valuetype>
 class nodecollection : public collection {
 	public:
 		/** Returns the first node in the nodecollection. */
-		virtual nodecollectionnode<valuetype>	*getFirst() const=0;
+		virtual nodecollectionnode<valuetype>	*getFirst()=0;
 
 		/** Returns the number of nodes in the nodecollection. */
-		virtual	uint64_t	getLength() const=0;
+		virtual	uint64_t	getLength()=0;
 };
 
 #endif

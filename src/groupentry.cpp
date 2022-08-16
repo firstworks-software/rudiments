@@ -162,12 +162,12 @@ groupentry::groupentry() : object() {
 	pvt->_sidsize=0;
 }
 
-groupentry::groupentry(const groupentry &g) : object(g) {
+groupentry::groupentry(groupentry &g) : object(g) {
 	pvt=new groupentryprivate;
 	initialize(g.getName());
 }
 
-groupentry &groupentry::operator=(const groupentry &g) {
+groupentry &groupentry::operator=(groupentry &g) {
 	if (this!=&g) {
 		initialize(g.getName());
 	}
@@ -193,7 +193,7 @@ groupentry::~groupentry() {
 	delete pvt;
 }
 
-const char *groupentry::getName() const {
+const char *groupentry::getName() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return (pvt->_grp)?pvt->_grp->gr_name:NULL;
 #else
@@ -201,7 +201,7 @@ const char *groupentry::getName() const {
 #endif
 }
 
-gid_t groupentry::getGroupId() const {
+gid_t groupentry::getGroupId() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return (pvt->_grp)?pvt->_grp->gr_gid:(gid_t)-1;
 #else
@@ -209,7 +209,7 @@ gid_t groupentry::getGroupId() const {
 #endif
 }
 
-const char * const *groupentry::getMembers() const {
+const char * const *groupentry::getMembers() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	// If a group has no members then pvt->_grp->gr_mem will be an
 	// array containing a single NULL or empty member.  Rather than
@@ -224,7 +224,7 @@ const char * const *groupentry::getMembers() const {
 #endif
 }
 
-const char *groupentry::getSidString() const {
+const char *groupentry::getSidString() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sidstr) {
 		if (pvt->_grp) {
@@ -240,7 +240,7 @@ const char *groupentry::getSidString() const {
 #endif
 }
 
-const void *groupentry::getSid() const {
+const void *groupentry::getSid() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sidstr) {
 		if (pvt->_grp) {
@@ -256,7 +256,7 @@ const void *groupentry::getSid() const {
 #endif
 }
 
-uint64_t groupentry::getSidSize() const {
+uint64_t groupentry::getSidSize() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sidstr) {
 		if (pvt->_grp) {
@@ -522,19 +522,19 @@ groupentry &groupentry::operator=(const groupentry &g) {
 groupentry::~groupentry() {
 }
 
-const char *groupentry::getName() const {
+const char *groupentry::getName() {
 	return NULL;
 }
 
-gid_t groupentry::getGroupId() const {
+gid_t groupentry::getGroupId() {
 	return 0;
 }
 
-const char * const *groupentry::getMembers() const {
+const char * const *groupentry::getMembers() {
 	return NULL;
 }
 
-const char *groupentry::getSidString() const {
+const char *groupentry::getSidString() {
 	return NULL;
 }
 

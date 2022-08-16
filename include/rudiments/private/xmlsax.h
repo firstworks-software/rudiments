@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+			xmlsax(xmlsax &x);
+			xmlsax	&operator=(xmlsax &x);
+
 	private:
 			bool	parse();
 			bool	parseTag(char current, char *next);
@@ -13,8 +16,5 @@
 			char	parseAttribute(char current, char standalone);
 			int32_t	getGeneralEntity(char breakchar);
 			bool	parseText(char current, char *next);
-
-				xmlsax(const xmlsax &x);
-			xmlsax	&operator=(const xmlsax &x);
 
 			xmlsaxprivate	*pvt;

@@ -18,6 +18,18 @@ propsax::propsax() : sax() {
 	pvt=new propsaxprivate;
 }
 
+propsax::propsax(propsax &p) : sax(p) {
+	// FIXME: implement this
+}
+
+propsax &propsax::operator=(propsax &p) {
+	if (this!=&p) {
+		sax::operator=(p);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 propsax::~propsax() {
 	delete pvt;
 }

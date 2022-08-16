@@ -101,7 +101,7 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		virtual	~jsondom();
 
 		/** Returns "jsondom". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** Parses generic input "in" and generates a DOM tree. */
 		bool	parse(input *in);

@@ -20,11 +20,11 @@ wstringbuffer::wstringbuffer(wchar_t *initialcontents, size_t initialsize) :
 }
 
 inline
-wstringbuffer::wstringbuffer(const wstringbuffer &s) : bytebuffer(s) {
+wstringbuffer::wstringbuffer(wstringbuffer &s) : bytebuffer(s) {
 }
 
 inline
-wstringbuffer &wstringbuffer::operator=(const wstringbuffer &s) {
+wstringbuffer &wstringbuffer::operator=(wstringbuffer &s) {
 	if (this!=&s) {
 		bytebuffer::operator=(s);
 	}

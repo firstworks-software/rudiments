@@ -21,11 +21,11 @@ csvdom::csvdom(bool stringcacheenabled) : csvsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-csvdom::csvdom(const csvdom &x) : csvsax(), dom(x) {
+csvdom::csvdom(csvdom &x) : csvsax(), dom(x) {
 	init(stringCacheEnabled());
 }
 
-csvdom &csvdom::operator=(const csvdom &x) {
+csvdom &csvdom::operator=(csvdom &x) {
 	if (this!=&x) {
 		reset();
 		dom::operator=(x);
@@ -41,7 +41,7 @@ csvdom::~csvdom() {
 	delete pvt;
 }
 
-const char *csvdom::getType() const {
+const char *csvdom::getType() {
 	return "csvdom";
 }
 
@@ -670,8 +670,8 @@ void csvdom::carryAllValuesDown() {
 	}
 }
 
-ssize_t csvdom::writeNode(const domnode *dn, output *out,
-				bool indent, uint16_t *indentlevel) const {
+ssize_t csvdom::writeNode(domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) {
 
 	ssize_t	retval=0;
 	domnode	*header=dn->getFirstTagChild("h");
@@ -719,7 +719,7 @@ ssize_t csvdom::writeNode(const domnode *dn, output *out,
 	return retval;
 }
 
-ssize_t csvdom::writeValue(output *out, domnode *value) const {
+ssize_t csvdom::writeValue(output *out, domnode *value) {
 	ssize_t		retval=0;
 	const char	*v=value->getAttributeValue("v");
 	if (value->getAttributeValue("q")[0]=='y') {

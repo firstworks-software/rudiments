@@ -5,44 +5,44 @@
 
 template< class keytype, class valuetype >
 inline
-const char *dictionarycollection<keytype,valuetype>::getType() const {
+const char *dictionarycollection<keytype,valuetype>::getType() {
 	return "dictionary";
 }
 
 template< class keytype, class valuetype >
 inline
-ssize_t dictionarycollection<keytype,valuetype>::write() const {
+ssize_t dictionarycollection<keytype,valuetype>::write() {
 	return write(&stdoutput);
 }
 
 template< class keytype, class valuetype >
 inline
-ssize_t dictionarycollection<keytype,valuetype>::write(output *out) const {
+ssize_t dictionarycollection<keytype,valuetype>::write(output *out) {
 	return writeJson(out,true);
 }
 
 template< class keytype, class valuetype >
 inline
-ssize_t dictionarycollection<keytype,valuetype>::writeJson() const {
+ssize_t dictionarycollection<keytype,valuetype>::writeJson() {
 	return writeJson(&stdoutput,true);
 }
 
 template< class keytype, class valuetype >
 inline
-ssize_t dictionarycollection<keytype,valuetype>::writeJson(bool indent) const {
+ssize_t dictionarycollection<keytype,valuetype>::writeJson(bool indent) {
 	return writeJson(&stdoutput,indent);
 }
 
 template< class keytype, class valuetype >
 inline
-ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out) const {
+ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out) {
 	return writeJson(out,true);
 }
 
 template< class keytype, class valuetype >
 inline
 ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out,
-							bool indent) const {
+							bool indent) {
 	ssize_t			retval=0;
 	uint64_t		i=0;
 	listnode<keytype>	*node=getKeys()->getFirst();

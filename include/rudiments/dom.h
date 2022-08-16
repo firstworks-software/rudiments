@@ -35,7 +35,7 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		virtual	~dom();
 
 		/** Returns "dom". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** Parses generic input "in" and generates a DOM tree. */
 		virtual bool	parse(input *in)=0;
@@ -47,10 +47,10 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		virtual bool	parseString(const char *string)=0;
 
 		/** Returns the root node of the DOM tree. */
-		virtual domnode	*getRootNode() const;
+		virtual domnode	*getRootNode();
 
 		/** Returns the null node of the DOM tree. */
-		virtual domnode	*getNullNode() const;
+		virtual domnode	*getNullNode();
 
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */
@@ -59,7 +59,7 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		/** Writes the DOM tree to "filename" and sets permissions of
 		 *  the file to "perms". */
 		virtual ssize_t	writeFile(const char *filename,
-						mode_t perms) const;
+						mode_t perms);
 
 		/** Writes the DOM tree to "filename" and sets permissions of
 		 *  the file to "perms".
@@ -69,11 +69,11 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  as-is. */
 		virtual ssize_t	writeFile(const char *filename,
 						mode_t perms,
-						bool indent) const;
+						bool indent);
 
 		/** Writes a representation of the DOM tree to standard
 		 *  output. */
-		virtual ssize_t	write() const;
+		virtual ssize_t	write();
 
 		/** Writes a representation of the DOM tree to standard
 		 *  output.
@@ -81,21 +81,21 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
-		virtual ssize_t	write(bool indent) const;
+		virtual ssize_t	write(bool indent);
 
 		/** Writes a representation of the DOM tree to "out". */
-		virtual ssize_t	write(output *out) const;
+		virtual ssize_t	write(output *out);
 
 		/** Writes a representation of the DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is output
 		 *  as-is. */
-		virtual ssize_t	write(output *out, bool indent) const;
+		virtual ssize_t	write(output *out, bool indent);
 
 		/** Writes an XML representation of the DOM tree to
 		 *  standard output. */
-		virtual ssize_t	writeXml() const;
+		virtual ssize_t	writeXml();
 
 		/** Writes an XML representation of the DOM tree to standard
 		 *  output.
@@ -103,17 +103,17 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual ssize_t	writeXml(bool indent) const;
+		virtual ssize_t	writeXml(bool indent);
 
 		/** Writes an XML representation of the DOM tree to "out". */
-		virtual ssize_t	writeXml(output *out) const;
+		virtual ssize_t	writeXml(output *out);
 
 		/** Writes an XML representation of the DOM tree to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual ssize_t	writeXml(output *out, bool indent) const;
+		virtual ssize_t	writeXml(output *out, bool indent);
 
 		/** Returns true if the string cache is enabled and false
 		 *  if it is disabled. */

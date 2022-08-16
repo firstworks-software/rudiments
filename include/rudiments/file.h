@@ -24,11 +24,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Creates an instance of the file class
 		 *  that is a copy of "f". */
-		file(const file &f);
+		file(file &f);
 
 		/** Makes this instance of the file class
 		 *  identical to "f". */
-		file	&operator=(const file &f);
+		file	&operator=(file &f);
 
 		/** Deletes this instance of the file class. */
 		virtual ~file();
@@ -148,24 +148,24 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Truncates all data in the file, resulting in a file of
 		 * zero bytes.  Returns true on success and false on
 		 * failure. */
-		virtual bool	truncate() const;
+		virtual bool	truncate();
 
 		/** Truncates all data beyond the first "size" bytes,
 		 *  resulting in a file of "size" bytes.  Returns true on
 		 *  success and false on failure. */
-		virtual bool	truncate(off64_t size) const;
+		virtual bool	truncate(off64_t size);
 
 
 		/** Attempts to lock the entire file using the specified lock
 		 *  "type" (F_RDLCK or F_WRLCK).  Returns true if the lock can
 		 *  be established immediately or false otherwise. */
-		virtual bool	tryLockFile(int16_t type) const;
+		virtual bool	tryLockFile(int16_t type);
 
 		/** Attempts to lock the entire file using the specified lock
 		 *  "type" (F_RDLCK or F_WRLCK) and blocks until the lock
 		 *  can be established.  Return true on success or false
 		 *  otherwise. */
-		virtual bool	lockFile(int16_t type) const;
+		virtual bool	lockFile(int16_t type);
 
 		/** Checks to see if the entire file can be locked or not
 		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) but
@@ -185,11 +185,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
-						off64_t *conflen) const;
+						off64_t *conflen);
 
 		/** Attempts to release a previosly established lock and returns
 		 *  true on success or false otherwise. */
-		virtual bool	unlockFile() const;
+		virtual bool	unlockFile();
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  position "start" (relative to the beginning of the file)
@@ -198,7 +198,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  false otherwise. */
 		virtual bool	tryLockRegion(int16_t type,
 						off64_t start,
-						off64_t len) const;
+						off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  position "start" (relative to the beginning of the file)
@@ -207,7 +207,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  success or false otherwise. */
 		virtual bool	lockRegion(int16_t type,
 						off64_t start,
-						off64_t len) const;
+						off64_t len);
 
 		/** Checks to see if "len" bytes of the file starting at
 		 *  position "start" (relative to the beginning of the file)
@@ -230,21 +230,21 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
-						off64_t *conflen) const;
+						off64_t *conflen);
 
 		/** Attempts to release a previosly established lock of "len"
 		 *  bytes of the file starting at position "start" (relative to
 		 *  the beginning of the file).  Returns true on success or
 		 *  false otherwise. */
 		virtual bool	unlockRegion(off64_t start,
-						off64_t len) const;
+						off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the current position in the file using the specified lock
 		 *  "type" (F_RDLCK or F_WRLCK).  Returns true if the lock can
 		 *  be established immediately or false otherwise. */
 		virtual bool	tryLockFromCurrent(int16_t type,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the current position in the file plus "start" bytes
@@ -253,7 +253,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  false otherwise. */
 		virtual bool	tryLockFromCurrent(int16_t type,
 							off64_t start,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the current position in the file using the specified lock
@@ -261,7 +261,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  be established.  Returns true on success or false
 		 *  otherwise. */
 		virtual bool	lockFromCurrent(int16_t type,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the current position in the file plus "start" bytes
@@ -270,7 +270,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  success or false otherwise. */
 		virtual bool	lockFromCurrent(int16_t type,
 							off64_t start,
-							off64_t len) const;
+							off64_t len);
 
 		/** Checks to see if "len" bytes of the file starting at
 		 *  the current position in the file can be locked or not using
@@ -291,7 +291,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							int16_t *conftype,
 							int16_t *confwhence,
 							off64_t *confstart,
-							off64_t *conflen) const;
+							off64_t *conflen);
 
 		/** Checks to see if "len" bytes of the file starting at
 		 *  the current position in the file plus "start" bytes
@@ -314,26 +314,26 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							int16_t *conftype,
 							int16_t *confwhence,
 							off64_t *confstart,
-							off64_t *conflen) const;
+							off64_t *conflen);
 
 		/** Attempts to release a previosly established lock of "len"
 		 *  bytes of the file starting at the current position in the
 		 *  file.  Returns true on success or false otherwise. */
-		virtual bool	unlockFromCurrent(off64_t len) const;
+		virtual bool	unlockFromCurrent(off64_t len);
 
 		/** Attempts to release a previosly established lock of "len"
 		 *  bytes of the file starting at the current position in the
 		 *  file plus "start" bytes.  Returns true on success or
 		 *  false otherwise. */
 		virtual bool	unlockFromCurrent(off64_t start,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the end of the file using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK).  Returns true if the lock can be
 		 *  established immediately or false otherwise. */
 		virtual bool	tryLockFromEnd(int16_t type,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the the end of the file plus "start" bytes using the
@@ -342,14 +342,14 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  otherwise. */
 		virtual bool	tryLockFromEnd(int16_t type,
 							off64_t start,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the end of the file using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK) and blocks until the lock can
 		 *  be established.  Returns true on success or false
 		 *  otherwise. */
-		virtual bool	lockFromEnd(int16_t type, off64_t len) const;
+		virtual bool	lockFromEnd(int16_t type, off64_t len);
 
 		/** Attempts to lock "len" bytes of the file starting at
 		 *  the end of the file plus "start" bytes using the specified
@@ -358,7 +358,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  otherwise. */
 		virtual bool	lockFromEnd(int16_t type,
 							off64_t start,
-							off64_t len) const;
+							off64_t len);
 
 		/** Checks to see if "len" bytes of the file starting at
 		 *  the end of the file can be locked or not using the
@@ -379,7 +379,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							int16_t *conftype,
 							int16_t *confwhence,
 							off64_t *confstart,
-							off64_t *conflen) const;
+							off64_t *conflen);
 
 		/** Checks to see if "len" bytes of the file starting at
 		 *  the end of the file plus "start" bytes can be locked or not
@@ -402,19 +402,19 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							int16_t *conftype,
 							int16_t *confwhence,
 							off64_t *confstart,
-							off64_t *conflen) const;
+							off64_t *conflen);
 
 		/** Attempts to release a previosly established lock of "len"
 		 *  bytes of the file starting at the end of the file.
 		 *  Returns true on success or false otherwise. */
-		virtual bool	unlockFromEnd(off64_t len) const;
+		virtual bool	unlockFromEnd(off64_t len);
 
 		/** Attempts to release a previosly established lock of "len"
 		 *  bytes of the file starting at the end of the file plus
 		 *  "start" bytes.  Returns true on success or false
 		 *  otherwise. */
 		virtual bool	unlockFromEnd(off64_t start,
-							off64_t len) const;
+							off64_t len);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  position "start" (relative to the beginning of the file)
@@ -422,7 +422,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns true if the lock can be established immediately or
 		 *  false otherwise. */
 		virtual bool	tryLockRemainder(int16_t type,
-							off64_t start) const;
+							off64_t start);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  position "start" (relative to the beginning of the file)
@@ -430,7 +430,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  blocks until the lock can be established.  Returns true on
 		 *  success or false otherwise. */
 		virtual bool	lockRemainder(int16_t type,
-							off64_t start) const;
+							off64_t start);
 
 		/** Checks to see if the remainder of the file starting at
 		 *  position "start" (relative to the beginning of the file)
@@ -452,32 +452,32 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							int16_t *conftype,
 							int16_t *confwhence,
 							off64_t *confstart,
-							off64_t *conflen) const;
+							off64_t *conflen);
 
 		/** Attempts to release a previosly established lock on the
 		 *  remainder of the file, starting at position "start"
 		 *  (relative to the begining of the file).  Returns true on
 		 *  success or false otherwise. */
-		virtual bool	unlockRemainder(off64_t start) const;
+		virtual bool	unlockRemainder(off64_t start);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the current position using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK).  Returns true if the lock can be
 		 *  established immediately or false otherwise. */
-		virtual bool	tryLockRemainderFromCurrent(int16_t type) const;
+		virtual bool	tryLockRemainderFromCurrent(int16_t type);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the current position plus "start" bytes using the specified
 		 *  lock "type" (F_RDLCK or F_WRLCK).  Returns true if the lock
 		 *  can be established immediately or false otherwise. */
 		virtual bool	tryLockRemainderFromCurrent(int16_t type,
-							off64_t start) const;
+							off64_t start);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the current position using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK) and blocks until the lock can be
 		 *  established.  Returns true on success or false otherwise. */
-		virtual bool	lockRemainderFromCurrent(int16_t type) const;
+		virtual bool	lockRemainderFromCurrent(int16_t type);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the current position plus "start" bytes using the specified
@@ -485,7 +485,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  can be established.  Returns true on success or false
 		 *  otherwise. */
 		virtual bool	lockRemainderFromCurrent(int16_t type,
-							off64_t start) const;
+							off64_t start);
 
 		/** Checks to see if the remainder of the file starting at
 		 *  the current position can be locked or not using the
@@ -506,7 +506,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
-						off64_t *conflen) const;
+						off64_t *conflen);
 
 		/** Checks to see if the remainder of the file starting at
 		 *  the current position plus "start" bytes can be locked or not
@@ -529,44 +529,44 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
-						off64_t *conflen) const;
+						off64_t *conflen);
 
 		/** Attempts to release a previosly established lock on the
 		 *  remainder of the file, starting at the current position.
 		 *  Returns true on success or false otherwise. */
-		virtual bool	unlockRemainderFromCurrent() const;
+		virtual bool	unlockRemainderFromCurrent();
 
 		/** Attempts to release a previosly established lock on the
 		 *  remainder of the file, starting at the current position
 		 *  plus "start" bytes.  Returns true on success or false
 		 *  otherwise. */
-		virtual bool	unlockRemainderFromCurrent(off64_t start) const;
+		virtual bool	unlockRemainderFromCurrent(off64_t start);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the end using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK).  Returns true if the lock can be
 		 *  established immediately or false otherwise. */
-		virtual bool	tryLockRemainderFromEnd(int16_t type) const;
+		virtual bool	tryLockRemainderFromEnd(int16_t type);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the end plus "start" bytes using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK).  Returns true if the lock can be
 		 *  established immediately or false otherwise. */
 		virtual bool	tryLockRemainderFromEnd(int16_t type,
-							off64_t start) const;
+							off64_t start);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the end using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK) and blocks until the lock can be
 		 *  established.  Returns true on success or false otherwise. */
-		virtual bool	lockRemainderFromEnd(int16_t type) const;
+		virtual bool	lockRemainderFromEnd(int16_t type);
 
 		/** Attempts to lock the remainder of the file starting at
 		 *  the end plus "start" bytes using the specified lock "type"
 		 *  (F_RDLCK or F_WRLCK) and blocks until the lock can be
 		 *  established.  Returns true on success or false otherwise. */
 		virtual bool	lockRemainderFromEnd(int16_t type,
-							off64_t start) const;
+							off64_t start);
 
 		/** Checks to see if the remainder of the file starting at
 		 *  the end can be locked or not using the specified lock
@@ -587,7 +587,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
-						off64_t *conflen) const;
+						off64_t *conflen);
 
 		/** Checks to see if the remainder of the file starting at
 		 *  the end plus "start" bytes can be locked or not using the
@@ -609,17 +609,17 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
-						off64_t *conflen) const;
+						off64_t *conflen);
 
 		/** Attempts to release a previosly established lock on the
 		 *  remainder of the file, starting at the end.
 		 *  Returns true on success or false otherwise. */
-		virtual bool	unlockRemainderFromEnd() const;
+		virtual bool	unlockRemainderFromEnd();
 
 		/** Attempts to release a previosly established lock on the
 		 *  remainder of the file, starting at the end plus "start"
 		 *  bytes.  Returns true on success or false otherwise. */
-		virtual bool	unlockRemainderFromEnd(off64_t start) const;
+		virtual bool	unlockRemainderFromEnd(off64_t start);
 
 
 		/** Advises the kernel that you are going to access the region
@@ -632,7 +632,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
 		virtual bool	sequentialAccess(off64_t start,
-							size_t len) const;
+							size_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -643,7 +643,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	randomAccess(off64_t start, size_t len) const;
+		virtual bool	randomAccess(off64_t start, size_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -654,7 +654,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	onlyOnce(off64_t start, size_t len) const;
+		virtual bool	onlyOnce(off64_t start, size_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -665,7 +665,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	willNeed(off64_t start, size_t len) const;
+		virtual bool	willNeed(off64_t start, size_t len);
 
 		/** Advises the kernel that you are not going to access the
 		 *  region of the currently open file begining at byte "start",
@@ -676,7 +676,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	wontNeed(off64_t start, size_t len) const;
+		virtual bool	wontNeed(off64_t start, size_t len);
 
 		/** Advises the kernel that you are going to access the
 		 *  region of the currently open file begining at byte "start",
@@ -687,7 +687,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	normalAccess(off64_t start, size_t len) const;
+		virtual bool	normalAccess(off64_t start, size_t len);
 
 
 		/** Reserves space on the storage medium such that a
@@ -697,7 +697,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns true if the region can be reserved and
 		 *  false otherwise. */
-		virtual bool	reserve(off64_t start, size_t len) const;
+		virtual bool	reserve(off64_t start, size_t len);
 
 
 		/** On most filesystems, changes to files are often cached in
@@ -712,7 +712,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  enabled, this method only assures that the changes
 		 *  has been copied into the disk's write cache, not
 		 *  necessarily to the disk itself. */
-		virtual bool	sync() const;
+		virtual bool	sync();
 
 		/** On most filesystems, changes to files are often cached in
 		 *  system ram, this methods causes those changes to be
@@ -729,7 +729,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  enabled, this method only assures that the changes
 		 *  has been copied into the disk's write cache, not
 		 *  necessarily to the disk itself. */
-		virtual bool	dataSync() const;
+		virtual bool	dataSync();
 
 
 		/** Causes the open() and create() methods to call
@@ -756,104 +756,104 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		virtual bool	getCurrentProperties();
 
 		/** Returns the permissions settings for the file. */
-		virtual mode_t		getPermissions() const;
+		virtual mode_t		getPermissions();
 
 		/** Returns the user id of the file's owner. */
-		virtual uid_t		getOwnerUserId() const;
+		virtual uid_t		getOwnerUserId();
 
 		/** Returns the group id of the file's owner. */
-		virtual gid_t		getOwnerGroupId() const;
+		virtual gid_t		getOwnerGroupId();
 
 		/** Returns the number of bytes in the file. */
-		virtual off64_t		getSize() const;
+		virtual off64_t		getSize();
 
 		/** Returns the blocksize to use for most
 		 *  efficient I/O with the file or -1 for
 		 *  systems don't support this. */
-		virtual blksize_t	getBlockSize() const;
+		virtual blksize_t	getBlockSize();
 
 		/** Returns the number of blocks allocated for
 		 *  the file or -1 for systems don't support this. */
-		virtual blkcnt_t	getBlockCount() const;
+		virtual blkcnt_t	getBlockCount();
 
 		/** Returns 1 if the file is a socket,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isSocket() const;
+		virtual int32_t		isSocket();
 
 		/** Returns 1 if the file is a symbolic link,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isSymbolicLink() const;
+		virtual int32_t		isSymbolicLink();
 
 		/** Returns 1 if the file is a regular file,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isRegularFile() const;
+		virtual int32_t		isRegularFile();
 
 		/** Returns 1 if the file is a block device,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isBlockDevice() const;
+		virtual int32_t		isBlockDevice();
 
 		/** Returns 1 if the file is a directory,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isDirectory() const;
+		virtual int32_t		isDirectory();
 
 		/** Returns 1 if the file is a character device,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isCharacterDevice() const;
+		virtual int32_t		isCharacterDevice();
 
 		/** Returns 1 if the file is a fifo,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isFifo() const;
+		virtual int32_t		isFifo();
 
 		/** Returns the time of last access of the file. */
-		virtual time_t		getLastAccessTime() const;
+		virtual time_t		getLastAccessTime();
 
 		/** Returns the time of last modification of the file.
 		 *
 		 *  Modification time IS NOT affected by changing file
 		 *  permissions, ownership or creating links. */
-		virtual time_t		getLastModificationTime() const;
+		virtual time_t		getLastModificationTime();
 
 		/** Returns the time of last change of the file.
 		 *
 		 *  Change time IS affected by changing file
 		 *  permissions, ownership or creating links. */
-		virtual time_t		getLastChangeTime() const;
+		virtual time_t		getLastChangeTime();
 
 		/** Returns the device of the file. */
-		virtual dev_t		getDevice() const;
+		virtual dev_t		getDevice();
 
 		/** Returns the device type of the file. */
-		virtual dev_t		getDeviceType() const;
+		virtual dev_t		getDeviceType();
 
 		/** Returns the base inode of the file. */
-		virtual uint64_t	getInode() const;
+		virtual uint64_t	getInode();
 
 		/** Returns the number of hard links to the file. */
-		virtual nlink_t		getNumberOfHardLinks() const;
+		virtual nlink_t		getNumberOfHardLinks();
 
 
 		/** Sets the permissions of the file to "perms".
 		 *  Returns true on success and false on failure. */
-		virtual bool	setPermissions(mode_t perms) const;
+		virtual bool	setPermissions(mode_t perms);
 
 
 		/** Changes the user and/or group that owns the file.
 		 *  Returns true on success and false on failure. */
 		virtual bool	changeOwner(const char *newuser,
-						const char *newgroup) const;
+						const char *newgroup);
 
 		/** Changes the user that owns the file.
 		 *  Returns true on success and false on failure. */
-		virtual bool	changeOwner(uid_t uid, gid_t gid) const;
+		virtual bool	changeOwner(uid_t uid, gid_t gid);
 
 		/** Returns true if any of the changeOwner()
 		 *  methods are allowed on "filename" and
 		 *  false otherwise. */
-		virtual bool	canChangeOwner() const;
+		virtual bool	canChangeOwner();
 
 		/** Returns the maximum number of links that can be
 		 *  created to "filename". */
-		virtual int64_t	maxLinks() const;
+		virtual int64_t	maxLinks();
 
 
 		/** Returns a pointer to the file stats structure

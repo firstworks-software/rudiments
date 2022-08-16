@@ -58,12 +58,12 @@ class RUDIMENTS_DLLSPEC sharedmemory : public object {
 
 		/** Returns the internal id for the 
 		 *  shared memory segment. */
-		int32_t	getId() const;
+		int32_t	getId();
 
 		/** Returns a pointer to the shared memory
 		 *  segment.  Data may be read from or written
 		 *  to the segment using this pointer. */
-		void	*getPointer() const;
+		void	*getPointer();
 
 		/** Makes this shared memory segment owned by
 		 *  the user "username".

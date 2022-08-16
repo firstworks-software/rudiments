@@ -3,6 +3,6 @@
 
 	protected:
 		bool	incOrErr(ssize_t *retval,
-					ssize_t val) const;
+					ssize_t val);
 		bool	incOrErr(ssize_t *retval,
-					ssize_t val, ssize_t expected) const;
+					ssize_t val, ssize_t expected);

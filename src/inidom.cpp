@@ -38,11 +38,11 @@ inidom::inidom(bool stringcacheenabled) : inisax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-inidom::inidom(const inidom &x) : inisax(), dom(x) {
+inidom::inidom(inidom &x) : inisax(), dom(x) {
 	init(stringCacheEnabled());
 }
 
-inidom &inidom::operator=(const inidom &x) {
+inidom &inidom::operator=(inidom &x) {
 	if (this!=&x) {
 		reset();
 		dom::operator=(x);
@@ -59,7 +59,7 @@ inidom::~inidom() {
 	delete pvt;
 }
 
-const char *inidom::getType() const {
+const char *inidom::getType() {
 	return "inidom";
 }
 
@@ -298,8 +298,8 @@ bool inidom::valueEnd() {
 	return true;
 }
 
-ssize_t inidom::writeNode(const domnode *dn, output *out,
-			bool indent, uint16_t *indentlevel) const {
+ssize_t inidom::writeNode(domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) {
 
 	ssize_t	retval=0;
 

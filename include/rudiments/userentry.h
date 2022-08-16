@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 
 		/** Creates an instance of the userentry class.
 		 *  that is a copy of "u". */
-		userentry(const userentry &u);
+		userentry(userentry &u);
 
 		/** Makes this instance of the userentry class
  		 *  identical to "u". */
-		userentry	&operator=(const userentry &u);
+		userentry	&operator=(userentry &u);
 
 		/** Deletes this instance of the userentry class. */
 		~userentry();
@@ -34,10 +34,10 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		bool	initialize(uid_t userid);
 
 		/** Returns the name of this user. */
-		const char	*getName() const;
+		const char	*getName();
 
 		/** Returns the encrypted password of this user. */
-		const char	*getPassword() const;
+		const char	*getPassword();
 
 		/** Returns the id of this user.
 		 * 
@@ -49,7 +49,7 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		 *  to access and ultimately translate to a user.  It should
 		 *  not be passed in to functions or methods of other libraries
 		 *  that don't ultimately use rudiments methods. */
-		uid_t		getUserId() const;
+		uid_t		getUserId();
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this user.
@@ -58,7 +58,7 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		 *  platformSupportsFormalSid method returns false, the value
 		 *  returned is just a string representation of the number
 		 *  returned by getUserId(). */
-		const char	*getSidString() const;
+		const char	*getSidString();
 
 		/** Returns a binary representation of the SID (security id) of
 		 *  this user.
@@ -67,54 +67,54 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		 *  platformSupportsFormalSid method returns false, the value
 		 *  returned is just a string representation of the number
 		 *  returned by getUserId(). */
-		const void	*getSid() const;
+		const void	*getSid();
 
 		/** Returns the size of the binary representation of the SID
 		 *  (security id) of this user, returned by getSid(). */
-		uint64_t	getSidSize() const;
+		uint64_t	getSidSize();
 
 		/** Returns the primary group id of this user. */
-		gid_t		getPrimaryGroupId() const;
+		gid_t		getPrimaryGroupId();
 
 		/** Returns the real name of this user. */
-		const char	*getRealName() const;
+		const char	*getRealName();
 
 		/** Returns the home directory of this user. */
-		const char	*getHomeDirectory() const;
+		const char	*getHomeDirectory();
 
 		/** Returns the shell of this user. */
-		const char	*getShell() const;
+		const char	*getShell();
 
 		/** Returns the encrypted password of this user. */
-		const char	*getEncryptedPassword() const;
+		const char	*getEncryptedPassword();
 
 		/** Returns the last time that the password for the user
 		 *  was changed.  The time is given as the number of seconds
 		 *  since 1970. */
-		long		getLastChangeDate() const;
+		long		getLastChangeDate();
 
 		/** Returns the number of days before the password for the
  		 *  user may be changed. */
-		int32_t		getDaysBeforeChangeAllowed() const;
+		int32_t		getDaysBeforeChangeAllowed();
 
 		/** Returns the number of days before the password for the
  		 *  user is required to be changed. */
-		int32_t		getDaysBeforeChangeRequired() const;
+		int32_t		getDaysBeforeChangeRequired();
 
 		/** Returns the number of days before a warning that the
 		 *  password for the user will expire should be displayed. */
-		int32_t		getDaysBeforeExpirationWarning() const;
+		int32_t		getDaysBeforeExpirationWarning();
 
 		/** Returns the number of days of inactivity that are allowed
 		 *  for the user before the password will expire. */
-		int32_t		getDaysOfInactivityAllowed() const;
+		int32_t		getDaysOfInactivityAllowed();
 
 		/** Returns the expiration date of the user.  The date
 		 *  is returned as the number of seconds since 1970. */
-		int32_t		getExpirationDate() const;
+		int32_t		getExpirationDate();
 
 		/** Returns the system-specific set of flags for the user. */
-		int32_t		getFlag() const;
+		int32_t		getFlag();
 
 
 		/** Convenience method.

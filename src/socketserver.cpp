@@ -35,7 +35,7 @@ socketserver::socketserver() : server() {
 	winsock::initWinsock();
 }
 
-socketserver::socketserver(const socketserver &s) : server(s) {
+socketserver::socketserver(socketserver &s) : server(s) {
 	pvt=new socketserverprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 	pvt->_nonblockingmode=s.pvt->_nonblockingmode;
@@ -44,7 +44,7 @@ socketserver::socketserver(const socketserver &s) : server(s) {
 	winsock::initWinsock();
 }
 
-socketserver &socketserver::operator=(const socketserver &s) {
+socketserver &socketserver::operator=(socketserver &s) {
 	if (this!=&s) {
 		server::operator=(s);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -66,7 +66,7 @@ bool socketserver::supportsBlockingNonBlockingModes() {
 	#endif
 }
 
-bool socketserver::useNonBlockingMode() const {
+bool socketserver::useNonBlockingMode() {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -99,7 +99,7 @@ bool socketserver::useNonBlockingMode() const {
 	#endif
 }
 
-bool socketserver::useBlockingMode() const {
+bool socketserver::useBlockingMode() {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -132,7 +132,7 @@ bool socketserver::useBlockingMode() const {
 	#endif
 }
 
-bool socketserver::isUsingNonBlockingMode() const {
+bool socketserver::isUsingNonBlockingMode() {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -146,7 +146,7 @@ bool socketserver::isUsingNonBlockingMode() const {
 	#endif
 }
 
-int32_t socketserver::ioCtl(int32_t cmd, void *arg) const {
+int32_t socketserver::ioCtl(int32_t cmd, void *arg) {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
 		error::clearError();

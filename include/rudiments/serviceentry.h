@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC serviceentry : public object {
 
 		/** Creates an instance of the serviceentry class that is
 		 *  a copy of "s". */
-		serviceentry(const serviceentry &s);
+		serviceentry(serviceentry &s);
 
 		/** Makes this instance of the serviceentry class
 		 *  identical to "s". */
-		serviceentry	&operator=(const serviceentry &s);
+		serviceentry	&operator=(serviceentry &s);
 
 		/** Deletes this instance of the serviceentry class. */
 		~serviceentry();
@@ -38,19 +38,19 @@ class RUDIMENTS_DLLSPEC serviceentry : public object {
 		bool	initialize(int32_t port, const char *protocol);
 
 		/** Returns the name of the service entry. */
-		const char		*getName() const;
+		const char		*getName();
 
 		/** Returns the port that a server for this service entry
  		 *  would listen on. */
-		int32_t			getPort() const;
+		int32_t			getPort();
 
 		/** Returns the protocol (tcp, udp, etc.) for this service
 		 *  entry. */
-		const char		*getProtocol() const;
+		const char		*getProtocol();
 
 		/** Returns a NULL-terminated list of aliases for the service
 		 *  entry. */
-		const char * const *	getAliasList() const;
+		const char * const *	getAliasList();
 
 		/** Convenience method.
 		 *  Returns the port that the server for "servicename"

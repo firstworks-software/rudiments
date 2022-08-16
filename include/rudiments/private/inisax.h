@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+			inisax(inisax &x);
+			inisax	&operator=(inisax &x);
+
 	private:
 			bool	parse();
 
@@ -12,8 +15,5 @@
 			void	parseRestOfSectionName(char *next);
 			bool	parseKey(char current, char *next);
 			bool	parseValue(char *next);
-
-				inisax(const inisax &x);
-			inisax	&operator=(const inisax &x);
 
 			inisaxprivate	*pvt;

@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const nodecollection<valuetype> *coll);
+		void	clone(nodecollection<valuetype> *coll);
 		void	insertBefore(listnode<valuetype> *node,
 							valuetype value) {};
 		void	insertBefore(listnode<valuetype> *node,

@@ -13,8 +13,8 @@
 		bool	setTZ(const char *zone, char **oldzone, bool ignoredst);
 		bool	restoreTZ(char *oldzone);
 
-		const char	*lookupCombinedTimeZone(const char *zone) const;
-		bool		daylightZone(const char *zone) const;
+		const char	*lookupCombinedTimeZone(const char *zone);
+		bool		daylightZone(const char *zone);
 
 		const char	*getTzName(uint8_t index, void *tms);
 

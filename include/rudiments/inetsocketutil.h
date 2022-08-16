@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC inetsocketutil {
 
 		/** Creates an instance of the inetsocketutil class
 		 *  that is a copy of "i". */
-		inetsocketutil(const inetsocketutil &i);
+		inetsocketutil(inetsocketutil &i);
 
 		/** Makes this instance of the inetsocketutil class
 		 *  identical to "i". */
-		inetsocketutil	&operator=(const inetsocketutil &i);
+		inetsocketutil	&operator=(inetsocketutil &i);
 
 		/** Deletes this instance of the inetsocketutil class. */
 		virtual		~inetsocketutil();

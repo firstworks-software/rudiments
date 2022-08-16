@@ -21,7 +21,7 @@ mvctier::~mvctier() {
 	delete pvt;
 }
 
-const char *mvctier::getType() const {
+const char *mvctier::getType() {
 	return "mvctier";
 }
 

@@ -65,7 +65,7 @@ regularexpression::regularexpression(const char *pattern) : object() {
 	setPattern(pattern);
 }
 
-regularexpression::regularexpression(const regularexpression &r) : object() {
+regularexpression::regularexpression(regularexpression &r) : object() {
 	init();
 	setPattern(r.getPattern());
 	if (r.pvt->_studied) {
@@ -73,7 +73,7 @@ regularexpression::regularexpression(const regularexpression &r) : object() {
 	}
 }
 
-regularexpression &regularexpression::operator=(const regularexpression &r) {
+regularexpression &regularexpression::operator=(regularexpression &r) {
 	if (this!=&r) {
 		clear();
 		init();
@@ -147,7 +147,7 @@ bool regularexpression::setPattern(const char *pattern) {
 	#endif
 }
 
-const char *regularexpression::getPattern() const {
+const char *regularexpression::getPattern() {
 	return pvt->_pattern;
 }
 

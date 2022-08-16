@@ -43,7 +43,7 @@ class RUDIMENTS_DLLSPEC mvctier : virtual public object {
 		mvctier();
 		virtual ~mvctier();
 
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		void		setProperties(mvcproperties *prop);
 		mvcproperties	*getProperties();
@@ -283,64 +283,64 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  number of affected rows if doCreate(), doUpdate(), or
 		 *  doDelete() was most recently called or an empty scalar if
 		 *  doRead() was most recently called. */
-		virtual const scalarcollection<uint64_t>
-						*getAffectedRowsScalar()=0;
+		virtual scalarcollection<uint64_t>
+					*getAffectedRowsScalar()=0;
 
 		/** Returns an instance of listcollection with a single element,
 		 *  containing the affected rows doCreate(), doUpdate(), or
 		 *  doDelete() was most recently called or an empty list if
 		 *  doRead() was most recently called. */
-		virtual const listcollection<uint64_t>
-						*getAffectedRowsList()=0;
+		virtual listcollection<uint64_t>
+					*getAffectedRowsList()=0;
 
 		/** Returns an instance of dictionarycollection with a single
 		 *  element, containing the affected rows doCreate(),
 		 *  doUpdate(), or doDelete() was most recently called or an
 		 *  empty dictionary if doRead() was most recently called. */
-		virtual const dictionarycollection<const char *, uint64_t>
-						*getAffectedRowsDictionary()=0;
+		virtual dictionarycollection<const char *, uint64_t>
+					*getAffectedRowsDictionary()=0;
 
 		/** Returns an instance of tablecollection with a single
 		 *  field, containing the affected rows doCreate(),
 		 *  doUpdate(), or doDelete() was most recently called or an
 		 *  empty table if doRead() was most recently called. */
-		virtual const tablecollection<uint64_t>
-						*getAffectedRowsTable()=0;
+		virtual tablecollection<uint64_t>
+					*getAffectedRowsTable()=0;
 
 		/** Returns an instance of scalarcollection, representing the
 		 *  first field of the first row of the results if doRead() was
 		 *  most recently called, or an empty scalar if doCreate(),
 		 *  doUpdate(), or doDelete() was most recently called. */
-		virtual const scalarcollection<const char *>
-						*getFirstFieldScalar()=0;
+		virtual scalarcollection<const char *>
+					*getFirstFieldScalar()=0;
 
 		/** Returns an instance of listcollection, representing the
 		 *  first row of the results if doRead() was most recently
 		 *  called, or an empty list if doCreate(), doUpdate(), or
 		 *  doDelete() was most recently called. */
-		virtual const listcollection<const char *>
-						*getFirstRowList()=0;
+		virtual listcollection<const char *>
+					*getFirstRowList()=0;
 
 		/** Returns an instance of dictionarycollection, representing
 		 *  the first row of the results if doRead() was most recently
 		 *  called, or an empty dictionary if doCreate(), doUpdate(),
 		 *  or doDelete() was most recently called. */
-		virtual const dictionarycollection<const char *, const char *>
+		virtual dictionarycollection<const char *, const char *>
 						*getFirstRowDictionary()=0;
 
 		/** Returns an instance of dictionarycollection, representing
 		 *  the first column of each row of the results if doRead() was
 		 *  most recently called, or an empty dictionary if doCreate(),
 		 *  doUpdate(), or doDelete() was most recently called. */
-		virtual const listcollection<const char *>
-						*getFirstColumnList()=0;
+		virtual listcollection<const char *>
+					*getFirstColumnList()=0;
 
 		/** Returns an instance of tablecollection, representing the
  		 *  results if doRead() was most recently called, or an empty
 		 *  resultsettable if doCreate(), doUpdate(), or doDelete() was
 		 *  most recently called. */
-		virtual const tablecollection<const char *>
-						*getResultSetTable()=0;
+		virtual tablecollection<const char *>
+					*getResultSetTable()=0;
 };
 
 class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
@@ -371,20 +371,20 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		const char	*getMessage();
 
 		void		setData(const char *key,
-						const collection *data);
+						collection *data);
 		void		attachData(const char *key,
 						collection *data);
 
 		linkedlist<char *>	*getKeys();
-		const collection	*getData(const char *key);
+		collection		*getData(const char *key);
 
-		ssize_t	write() const;
-		ssize_t	write(output *out) const;
+		ssize_t	write();
+		ssize_t	write(output *out);
 
-		ssize_t	writeJson() const;
-		ssize_t	writeJson(bool indent) const;
-		ssize_t	writeJson(output *out) const;
-		ssize_t	writeJson(output *out, bool indent) const;
+		ssize_t	writeJson();
+		ssize_t	writeJson(bool indent);
+		ssize_t	writeJson(output *out);
+		ssize_t	writeJson(output *out, bool indent);
 
 		wastebasket	*getWastebasket();
 

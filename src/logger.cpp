@@ -32,13 +32,13 @@ filedestination::filedestination() : logdestination() {
 	pvt=new filedestinationprivate;
 }
 
-filedestination::filedestination(const filedestination &f) :
+filedestination::filedestination(filedestination &f) :
 						logdestination(f) {
 	pvt=new filedestinationprivate;
 	pvt->_logfile=f.pvt->_logfile;
 }
 
-filedestination &filedestination::operator=(const filedestination &f) {
+filedestination &filedestination::operator=(filedestination &f) {
 	if (this!=&f) {
 		pvt->_logfile=f.pvt->_logfile;
 	}
@@ -112,12 +112,12 @@ syslogdestination::syslogdestination() : logdestination() {
 	pvt=new syslogdestinationprivate;
 }
 
-syslogdestination::syslogdestination(const syslogdestination &s) :
+syslogdestination::syslogdestination(syslogdestination &s) :
 						logdestination(s) {
 	pvt=new syslogdestinationprivate;
 }
 
-syslogdestination &syslogdestination::operator=(const syslogdestination &s) {
+syslogdestination &syslogdestination::operator=(syslogdestination &s) {
 	if (this!=&s) {
 		pvt->_priority=s.pvt->_priority;
 	}

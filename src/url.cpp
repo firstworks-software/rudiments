@@ -131,14 +131,14 @@ url::url() : file() {
 	winsock::initWinsock();
 }
 
-url::url(const url &u) : file(u) {
+url::url(url &u) : file(u) {
 	// no good way to do this
 	pvt=new urlprivate;
 	type("url");
 	setIsStream(true);
 }
 
-url &url::operator=(const url &u) {
+url &url::operator=(url &u) {
 	// no good way to do this
 	return *this;
 }
@@ -1534,19 +1534,19 @@ bool url::getCurrentProperties() {
 	return false;
 }
 
-off64_t url::getCurrentPosition() const {
+off64_t url::getCurrentPosition() {
 	return -1;
 }
 
-off64_t url::setPositionRelativeToBeginning(off64_t offset) const {
+off64_t url::setPositionRelativeToBeginning(off64_t offset) {
 	return -1;
 }
 
-off64_t url::setPositionRelativeToCurrent(off64_t offset) const {
+off64_t url::setPositionRelativeToCurrent(off64_t offset) {
 	return -1;
 }
 
-off64_t url::setPositionRelativeToEnd(off64_t offset) const {
+off64_t url::setPositionRelativeToEnd(off64_t offset) {
 	return -1;
 }
 

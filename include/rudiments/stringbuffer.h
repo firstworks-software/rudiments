@@ -30,11 +30,11 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 
 		/** Creates an instance of the stringbuffer class
 		 *  that is a copy of "s". */
-		stringbuffer(const stringbuffer &s);
+		stringbuffer(stringbuffer &s);
 
 		/** Makes this instance of the stringbuffer class
 		 *  identical to "s". */
-		stringbuffer	&operator=(const stringbuffer &s);
+		stringbuffer	&operator=(stringbuffer &s);
 
 		/** Deletes this instance of the stringbuffer class. */
 		~stringbuffer();

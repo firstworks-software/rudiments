@@ -122,6 +122,18 @@ semaphoreset::semaphoreset() : object() {
 	#endif
 }
 
+semaphoreset::semaphoreset(semaphoreset &s) : object() {
+	// FIXME: implement this
+}
+
+semaphoreset &semaphoreset::operator=(semaphoreset &s) {
+	if (this!=&s) {
+		object::operator=(s);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 semaphoreset::~semaphoreset() {
 
 	#if defined(RUDIMENTS_HAVE_SEMGET)
@@ -207,7 +219,7 @@ void semaphoreset::dontRemove() {
 	pvt->_created=false;
 }
 
-int32_t semaphoreset::getId() const {
+int32_t semaphoreset::getId() {
 	return pvt->_semid;
 }
 

@@ -40,6 +40,18 @@ threadmutex::threadmutex() : object() {
 	pvt->_destroy=true;
 }
 
+threadmutex::threadmutex(threadmutex &t) : object() {
+	// FIXME: implement this
+}
+
+threadmutex &threadmutex::operator=(threadmutex &t) {
+	if (this!=&t) {
+		object::operator=(t);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 threadmutex::threadmutex(void *mut) : object() {
 	pvt=new threadmutexprivate;
 	pvt->_mut=(pthread_mutex_t *)mut;

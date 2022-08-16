@@ -40,11 +40,11 @@ jsondom::jsondom(bool stringcacheenabled) : jsonsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-jsondom::jsondom(const jsondom &x) : jsonsax(), dom(x) {
+jsondom::jsondom(jsondom &x) : jsonsax(), dom(x) {
 	init(stringCacheEnabled());
 }
 
-jsondom &jsondom::operator=(const jsondom &x) {
+jsondom &jsondom::operator=(jsondom &x) {
 	if (this!=&x) {
 		reset();
 		dom::operator=(x);
@@ -61,7 +61,7 @@ jsondom::~jsondom() {
 	delete pvt;
 }
 
-const char *jsondom::getType() const {
+const char *jsondom::getType() {
 	return "jsondom";
 }
 
@@ -287,8 +287,8 @@ domnode *jsondom::whichNode() {
 			pvt->_current;
 }
 
-ssize_t jsondom::writeNode(const domnode *dn, output *out,
-			bool indent, uint16_t *indentlevel) const {
+ssize_t jsondom::writeNode(domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) {
 
 	if (dn->getType()!=TAG_DOMNODETYPE && dn->getType()!=ROOT_DOMNODETYPE) {
 		return 0;
@@ -587,7 +587,7 @@ ssize_t jsondom::writeNode(const domnode *dn, output *out,
 	return false;
 }
 
-const char *jsondom::getType(const domnode *dn) const {
+const char *jsondom::getType(domnode *dn) {
 
 	// return nothing for the root node
 	if (dn->getType()==ROOT_DOMNODETYPE) {
@@ -634,7 +634,7 @@ const char *jsondom::getType(const domnode *dn) const {
 	return type;
 }
 
-const char *jsondom::getValue(const domnode *dn) const {
+const char *jsondom::getValue(domnode *dn) {
 
 	// first try attribute "v"
 	const char	*value=dn->getAttributeValue("v");
@@ -648,18 +648,18 @@ const char *jsondom::getValue(const domnode *dn) const {
 	return value;
 }
 
-ssize_t jsondom::writeJson() const {
+ssize_t jsondom::writeJson() {
 	return write(&stdoutput,true);
 }
 
-ssize_t jsondom::writeJson(bool indent) const {
+ssize_t jsondom::writeJson(bool indent) {
 	return write(&stdoutput,indent);
 }
 
-ssize_t jsondom::writeJson(output *out) const {
+ssize_t jsondom::writeJson(output *out) {
 	return write(out,true);
 }
 
-ssize_t jsondom::writeJson(output *out, bool indent) const {
+ssize_t jsondom::writeJson(output *out, bool indent) {
 	return write(out,true);
 }

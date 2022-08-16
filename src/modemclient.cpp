@@ -47,7 +47,7 @@ modemclient::modemclient() : client(), modemutil() {
 
 modemclient::modemclient(const modemclient &m) : client(m), modemutil(m) {
 	pvt=new modemclientprivate;
-	modemclientClone(m);
+	clone(m);
 	type("modemclient");
 }
 
@@ -55,12 +55,12 @@ modemclient &modemclient::operator=(const modemclient &m) {
 	if (this!=&m) {
 		client::operator=(m);
 		modemutil::operator=(m);
-		modemclientClone(m);
+		clone(m);
 	}
 	return *this;
 }
 
-void modemclient::modemclientClone(const modemclient &m) {
+void modemclient::clone(const modemclient &m) {
 	pvt->_customatcommands=m.pvt->_customatcommands;
 	pvt->_connectscript=m.pvt->_connectscript;
 	pvt->_phonenumber=m.pvt->_phonenumber;

@@ -1,12 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
-		// FIXME: it should be possible to copy a memorypool
-				memorypool(const memorypool &m);
-		memorypool	&operator=(const memorypool &m);
-		memorypoolprivate	*pvt;
+		memorypool(memorypool &m);
+		memorypool	&operator=(memorypool &m);
 
+	private:
 		void	init(size_t initialsize,
 				size_t increment,
 				size_t resizeinterval);
@@ -14,3 +12,5 @@
 				size_t initialsize,
 				size_t increment,
 				size_t resizeinterval);
+
+		memorypoolprivate	*pvt;

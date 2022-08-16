@@ -31,7 +31,7 @@ cgihttpserverapi::~cgihttpserverapi() {
 	delete pvt;
 }
 
-const char *cgihttpserverapi::getType() const {
+const char *cgihttpserverapi::getType() {
 	return "cgi";
 }
 

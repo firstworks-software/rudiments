@@ -31,11 +31,11 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 
 		/** Creates an instance of the wstringbuffer class
 		 *  that is a copy of "s". */
-		wstringbuffer(const wstringbuffer &s);
+		wstringbuffer(wstringbuffer &s);
 
 		/** Makes this instance of the wstringbuffer class
 		 *  identical to "s". */
-		wstringbuffer	&operator=(const wstringbuffer &s);
+		wstringbuffer	&operator=(wstringbuffer &s);
 
 		/** Deletes this instance of the wstringbuffer class. */
 		~wstringbuffer();

@@ -36,14 +36,14 @@ unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
 	type("unixsocketserver");
 }
 
-unixsocketserver::unixsocketserver(const unixsocketserver &u) :
+unixsocketserver::unixsocketserver(unixsocketserver &u) :
 					socketserver(u), unixsocketutil(u) {
 	pvt=new unixsocketserverprivate;
 	pvt->_mask=u.pvt->_mask;
 	type("unixsocketserver");
 }
 
-unixsocketserver &unixsocketserver::operator=(const unixsocketserver &u) {
+unixsocketserver &unixsocketserver::operator=(unixsocketserver &u) {
 	if (this!=&u) {
 		socketserver::operator=(u);
 		unixsocketutil::operator=(u);

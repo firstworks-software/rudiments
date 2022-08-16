@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const tablecollection<valuetype> *t);
+		void	clone(tablecollection<valuetype> *t);
 
 		dynamicarray<char *>			columnnames;
 		dynamicarray<dynamicarray<valuetype> >	values;

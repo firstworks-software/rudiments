@@ -34,11 +34,11 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 
 		/** Creates an instance of the regularexpression class that
 		 *  is a copy of "r". */
-		regularexpression(const regularexpression &r);
+		regularexpression(regularexpression &r);
 
 		/** Makes this instance of the regularexpression class
 		 *  identical to "r". */
-		regularexpression	&operator=(const regularexpression &r);
+		regularexpression	&operator=(regularexpression &r);
 
 		/** Deletes this instance of the regular expression class. */
 		~regularexpression();
@@ -50,7 +50,7 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		bool	setPattern(const char *pattern);
 
 		/** Returns the regular expression of this instance. */
-		const char	*getPattern() const;
+		const char	*getPattern();
 
 		/** Studies the current pattern so it can be executed faster.
 		 *  If you plan on calling match() several times on this

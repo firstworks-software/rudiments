@@ -22,11 +22,11 @@ xmldom::xmldom(bool stringcacheenabled) : xmlsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-xmldom::xmldom(const xmldom &x) : xmlsax(), dom(x) {
+xmldom::xmldom(xmldom &x) : xmlsax(), dom(x) {
 	init(stringCacheEnabled());
 }
 
-xmldom &xmldom::operator=(const xmldom &x) {
+xmldom &xmldom::operator=(xmldom &x) {
 	if (this!=&x) {
 		reset();
 		dom::operator=(x);
@@ -46,7 +46,7 @@ xmldom::~xmldom() {
 	delete pvt;
 }
 
-const char *xmldom::getType() const {
+const char *xmldom::getType() {
 	return "xmldom";
 }
 

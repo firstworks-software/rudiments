@@ -25,11 +25,11 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 
 		/** Creates an instance of the inetsocketserver class
 		 *  that is a copy of "i". */
-		inetsocketserver(const inetsocketserver &i);
+		inetsocketserver(inetsocketserver &i);
 
 		/** Makes this instance of the inetsocketserver class
 		 *  identical to "i". */
-		inetsocketserver	&operator=(const inetsocketserver &i);
+		inetsocketserver	&operator=(inetsocketserver &i);
 
 		/** Deletes this instance of the inetsocketserver class. */
 		virtual		~inetsocketserver();

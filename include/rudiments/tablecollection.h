@@ -40,17 +40,17 @@ class tablecollection : public collection {
 
 		/** Creates an instance of the tablecollection class that
 		 *  is a copy of "c". */
-		tablecollection(const tablecollection &c);
+		tablecollection(tablecollection &c);
 
 		/** Makes this instance of the tablecollection class
 		 *  identical to "c". */
-		tablecollection &operator=(const tablecollection &c);
+		tablecollection &operator=(tablecollection &c);
 
 		/** Deletes this instance of the tablecollection class. */
 		virtual	~tablecollection();
 
 		/** Returns "table". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** In a read-write implementation, sets the name of column
 		 *  "col" to "name".
@@ -61,7 +61,7 @@ class tablecollection : public collection {
 
 		/** Returns the name of column "col" or NULL if column "col"
 		 *  has no name. */
-		virtual	const char	*getColumnName(uint64_t col) const=0;
+		virtual	const char	*getColumnName(uint64_t col)=0;
 
 		/** Indicates whether or not this instance of the
 		 *  tablecollection class should make copies the values that
@@ -75,14 +75,14 @@ class tablecollection : public collection {
  		 *  passed in to setColumnName().
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getCopyColumnNames() const;
+		virtual	bool	getCopyColumnNames();
 
 		/** Returns the current number of columns in the table.
 		 *
 		 *  In a read-write implementation, returns larger and larger
 		 *  values as calls to setColumnName() or setValue() extend the
 		 *  table. */
-		virtual	uint64_t	getColumnCount() const=0;
+		virtual	uint64_t	getColumnCount()=0;
 		
 		/** In a read-write implementation, sets the value at "row",
 		 *  "col" to "value".
@@ -95,12 +95,12 @@ class tablecollection : public collection {
 		/** Returns the value at "row", "col".  Returns NULL or 0 if
 		 *  there is no value at that address. */
 		virtual	valuetype	getValue(uint64_t row,
-						uint64_t col) const=0;
+						uint64_t col)=0;
 
 		/** Returns the value at "row", "colname".  Returns NULL or 0
 		 *  if there is no value at that address. */
 		virtual	valuetype	getValue(uint64_t row,
-						const char * colname) const=0;
+						const char * colname)=0;
 
 		/** Returns the current number of rows in the table.
 		 *
@@ -111,23 +111,23 @@ class tablecollection : public collection {
 		 *  of rows through the end of the current block, which is only
 		 *  the total number of rows in the table when
 		 *  getAllRowsAvailable() returns true. */
-		virtual	uint64_t	getRowCount() const=0;
+		virtual	uint64_t	getRowCount()=0;
 
 		/** Always returns true for monolithic implementations.  Only
 		 *  returns true in a block-based implementation if the current
 		 *  block contains the last row in the table. */
-		virtual	bool		getAllRowsAvailable() const=0;
+		virtual	bool		getAllRowsAvailable()=0;
 
 		/** Writes a representation of the tablecollection to standard
 		 *  output. */
-		virtual	ssize_t	write() const;
+		virtual	ssize_t	write();
 
 		/** Writes a representation of the tablecollection to "out". */
-		virtual	ssize_t	write(output *out) const;
+		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the tablecollection to
 		 *  standard output. */
-		virtual	ssize_t	writeJson() const;
+		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the tablecollection to
 		 *  standard output.
@@ -135,11 +135,11 @@ class tablecollection : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(bool indent) const;
+		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the tablecollection to
 		 *  "out". */
-		virtual	ssize_t	writeJson(output *out) const;
+		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the tablecollection to
 		 *  "out".
@@ -147,7 +147,7 @@ class tablecollection : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(output *out, bool indent) const;
+		virtual	ssize_t	writeJson(output *out, bool indent);
 
 	#include <rudiments/private/tablecollection.h>
 };

@@ -27,12 +27,12 @@ dom::dom(bool stringcacheenabled) : collection() {
 	init(stringcacheenabled);
 }
 
-dom::dom(const dom &x) : collection(x) {
+dom::dom(dom &x) : collection(x) {
 	init(x.pvt->_stringcacheenabled);
 	pvt->_rootnode=x.pvt->_rootnode->clone(this);
 }
 
-dom &dom::operator=(const dom &x) {
+dom &dom::operator=(dom &x) {
 	if (this!=&x) {
 		reset();
 		pvt->_rootnode=x.pvt->_rootnode->clone(this);
@@ -73,7 +73,7 @@ void dom::reset() {
 	pvt->_strcache.clear();
 }
 
-const char *dom::getType() const {
+const char *dom::getType() {
 	return "dom";
 }
 
@@ -83,19 +83,19 @@ void dom::createRootNode() {
 					NULL,"document",NULL);
 }
 
-domnode *dom::getRootNode() const {
+domnode *dom::getRootNode() {
 	return (pvt->_rootnode)?pvt->_rootnode:pvt->_nullnode;
 }
 
-domnode *dom::getNullNode() const {
+domnode *dom::getNullNode() {
 	return pvt->_nullnode;
 }
 
-ssize_t dom::writeFile(const char *filename, mode_t perms) const {
+ssize_t dom::writeFile(const char *filename, mode_t perms) {
 	return writeFile(filename,perms,true);
 }
 
-ssize_t dom::writeFile(const char *filename, mode_t perms, bool indent) const {
+ssize_t dom::writeFile(const char *filename, mode_t perms, bool indent) {
 
 	// get the optimum block size for I/O on this filesystem
 	filesystem	fs;
@@ -139,19 +139,19 @@ ssize_t dom::writeFile(const char *filename, mode_t perms, bool indent) const {
 	return retval;
 }
 
-ssize_t dom::write() const {
+ssize_t dom::write() {
 	return write(true);
 }
 
-ssize_t dom::write(bool indent) const {
+ssize_t dom::write(bool indent) {
 	return write(&stdoutput,indent);
 }
 
-ssize_t dom::write(output *out) const {
+ssize_t dom::write(output *out) {
 	return write(out,true);
 }
 
-ssize_t dom::write(output *out, bool indent) const {
+ssize_t dom::write(output *out, bool indent) {
 	// by calling writeNode(), we get the version of the method which may
 	// be overridden by a child class, and which writes node and its
 	// children in the class' native format
@@ -159,19 +159,19 @@ ssize_t dom::write(output *out, bool indent) const {
 	return writeNode(getRootNode(),out,indent,&indentlevel);
 }
 
-ssize_t dom::writeJson() const {
+ssize_t dom::writeJson() {
 	return writeJson(&stdoutput,true);
 }
 
-ssize_t dom::writeJson(bool indent) const {
+ssize_t dom::writeJson(bool indent) {
 	return writeJson(&stdoutput,indent);
 }
 
-ssize_t dom::writeJson(output *out) const {
+ssize_t dom::writeJson(output *out) {
 	return writeJson(out,true);
 }
 
-ssize_t dom::writeJson(output *out, bool indent) const {
+ssize_t dom::writeJson(output *out, bool indent) {
 	// There's no standard way to express a generic dom as JSON, so we'll
 	// just write a degenerate object here.  Child classes can provide
 	// implementations as necessary.
@@ -183,27 +183,27 @@ ssize_t dom::writeJson(output *out, bool indent) const {
 	return retval;
 }
 
-ssize_t dom::writeXml() const {
+ssize_t dom::writeXml() {
 	return writeXml(&stdoutput,true);
 }
 
-ssize_t dom::writeXml(bool indent) const {
+ssize_t dom::writeXml(bool indent) {
 	return writeXml(&stdoutput,indent);
 }
 
-ssize_t dom::writeXml(output *out) const {
+ssize_t dom::writeXml(output *out) {
 	return writeXml(out,true);
 }
 
-ssize_t dom::writeXml(output *out, bool indent) const {
+ssize_t dom::writeXml(output *out, bool indent) {
 	// by calling dom::writeNode(), we call the method from the dom
 	// class, which writes node and its children in the XML format
 	uint16_t	indentlevel=0;
 	return dom::writeNode(getRootNode(),out,indent,&indentlevel);
 }
 
-ssize_t dom::writeNode(const domnode *dn, output *out,
-				bool indent, uint16_t *indentlevel) const {
+ssize_t dom::writeNode(domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) {
 
 	// NOTE: this method is written a little strangely
 	// to work correctly with cursordomnodes
@@ -352,7 +352,7 @@ ssize_t dom::writeNode(const domnode *dn, output *out,
 	return retval;
 }
 
-ssize_t dom::writeIndent(output *out, uint16_t indent) const {
+ssize_t dom::writeIndent(output *out, uint16_t indent) {
 	ssize_t	retval=0;
 	for (uint16_t i=0; i<indent; i++) {
 		if (!incOrErr(&retval,out->write(' '),1)) {
@@ -362,7 +362,7 @@ ssize_t dom::writeIndent(output *out, uint16_t indent) const {
 	return retval;
 }
 
-ssize_t dom::safeWrite(output *out, const char *str) const {
+ssize_t dom::safeWrite(output *out, const char *str) {
 
 	if (!str) {
 		return 0;

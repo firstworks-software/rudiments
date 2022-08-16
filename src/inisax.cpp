@@ -19,6 +19,18 @@ inisax::inisax() : sax() {
 	pvt->_insection=false;
 }
 
+inisax::inisax(inisax &i) : sax(i) {
+	// FIXME: implement this
+}
+
+inisax &inisax::operator=(inisax &i) {
+	if (this!=&i) {
+		sax::operator=(i);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 inisax::~inisax() {
 	delete pvt;
 }

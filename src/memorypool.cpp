@@ -81,6 +81,18 @@ memorypool::memorypool(size_t initialsize,
 	init(initialsize,incrementsize,resizeinterval);
 }
 
+memorypool::memorypool(memorypool &m) : object() {
+	// FIXME: implement this
+}
+
+memorypool &memorypool::operator=(memorypool &m) {
+	if (this!=&m) {
+		object::operator=(m);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 memorypool::~memorypool() {
 	pvt->_bufferlist.setManageValues(true);
 	delete pvt;
@@ -113,15 +125,15 @@ void memorypool::init(size_t initialsize,
 	pvt->_first=pvt->_bufferlist.getFirst();
 }
 
-size_t memorypool::getInitialSize() const {
+size_t memorypool::getInitialSize() {
 	return pvt->_initialsize;
 }
 
-size_t memorypool::getIncrementSize() const {
+size_t memorypool::getIncrementSize() {
 	return pvt->_incrementsize;
 }
 
-size_t memorypool::getResizeInterval() const {
+size_t memorypool::getResizeInterval() {
 	return pvt->_resizeinterval;
 }
 

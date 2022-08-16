@@ -46,7 +46,7 @@ class RUDIMENTS_DLLSPEC signalset : public object {
 
 		/** Returns 1 if the signal "signum" is in the 
 		 *  set, 0 if it is not and -1 on error. */
-		int32_t	signalIsInSet(int32_t signum) const;
+		int32_t	signalIsInSet(int32_t signum);
 
 	#include <rudiments/private/signalset.h>
 };
@@ -70,12 +70,12 @@ class RUDIMENTS_DLLSPEC signalmanager {
 
 		/** Ignore signal "signum".
 		 *  Returns true on success and false on failure. */
-		static	bool	ignoreSignals(const signalset *sset);
+		static	bool	ignoreSignals(signalset *sset);
 
 		/** Wait until a signal NOT in the signal set 
 		 *  "mask" is received.
 		 *  Returns true on success and false on failure. */
-		static	bool	waitForSignals(const signalset *mask);
+		static	bool	waitForSignals(signalset *mask);
 
 		/** Sets "sset" to the set of signals that
 		 *  were raised, but blocked during a call to 
@@ -135,14 +135,14 @@ class RUDIMENTS_DLLSPEC signalhandler : public object {
 
 		/** Return the set of flags modifying the behavior of 
 		 *  this signal handler. */
-		int32_t	getFlags() const;
+		int32_t	getFlags();
 
 
 		/**  Explicitly sets the mask to "sset". */
-		void		setMask(const signalset *sset);
+		void		setMask(signalset *sset);
 
 		/** Returns the current signal mask. */
-		const signalset	*getMask() const;
+		const signalset	*getMask();
 
 		/** The function that you pass into setHandler() must have a
 		 *  void (*)(int32_t) signature.

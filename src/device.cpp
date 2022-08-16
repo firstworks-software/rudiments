@@ -25,12 +25,12 @@ device::device() : file() {
 	type("device");
 }
 
-device::device(const device &d) : file(d) {
+device::device(device &d) : file(d) {
 	pvt=new deviceprivate;
 	type("device");
 }
 
-device &device::operator=(const device &d) {
+device &device::operator=(device &d) {
 	if (this!=&d) {
 		file::operator=(d);
 	}

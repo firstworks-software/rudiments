@@ -150,7 +150,7 @@
 				value=b;
 				return *this;
 			}
-			operator long() const {
+			operator long() {
 				return value;
 			}
 			int operator!() {

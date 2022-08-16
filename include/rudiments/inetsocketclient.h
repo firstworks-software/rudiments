@@ -21,11 +21,11 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 
 		/** Creates an instance of the inetsocketclient class
 		 *  that is a copy of "i". */
-		inetsocketclient(const inetsocketclient &i);
+		inetsocketclient(inetsocketclient &i);
 
 		/** Makes this instance of the inetsocketclient class
 		 *  identical to "i". */
-		inetsocketclient	&operator=(const inetsocketclient &i);
+		inetsocketclient	&operator=(inetsocketclient &i);
 
 		/** Deletes this instance of the inetsocketclient class. */
 		virtual		~inetsocketclient();

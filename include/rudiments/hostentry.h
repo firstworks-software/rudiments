@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC hostentry : public object {
 
 		/** Creates an instance of the hostentry class
 		 *  that is a copy of "h". */
-		hostentry(const hostentry &h);
+		hostentry(hostentry &h);
 
 		/** Makes this instance of the hostentry class
 		 *  identical to "h". */
-		hostentry	&operator=(const hostentry &h);
+		hostentry	&operator=(hostentry &h);
 
 		/** Deletes this instance of the hostentry class. */
 		~hostentry();
@@ -36,27 +36,27 @@ class RUDIMENTS_DLLSPEC hostentry : public object {
 					int32_t len, int32_t type);
 
 		/** Returns the primary hostname of the host entry. */
-		const char		*getName() const;
+		const char		*getName();
 
 		/** Returns a NULL-terminated list of aliases for the
 		 *  host entry. */
-		const char * const	*getAliasList() const;
+		const char * const	*getAliasList();
 
 		/** Returns the address type of the host entry. */
-		int32_t			getAddressType() const;
+		int32_t			getAddressType();
 
 		/** Returns the address length of the host entry. */
-		int32_t			getAddressLength() const;
+		int32_t			getAddressLength();
 
 		/** Returns a NULL-terminated list of addresses for the
 		 *  host entry. */
-		const char * const	*getAddressList() const;
+		const char * const	*getAddressList();
 
 		/** Returns the "index"'th address of the host entry.
 		 *
 		 *  Note that this method allocated a buffer internally and
 		 *  returns it.  The calling program must free the buffer. */
-		char	*getAddressString(int32_t index) const;
+		char	*getAddressString(int32_t index);
 
 		/** Convenience method.
 		 *  Returns the address of "hostname".

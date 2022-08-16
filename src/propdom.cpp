@@ -39,11 +39,11 @@ propdom::propdom(bool stringcacheenabled) : propsax(), dom(stringcacheenabled) {
 	init(stringcacheenabled);
 }
 
-propdom::propdom(const propdom &x) : propsax(), dom(x) {
+propdom::propdom(propdom &x) : propsax(), dom(x) {
 	init(stringCacheEnabled());
 }
 
-propdom &propdom::operator=(const propdom &x) {
+propdom &propdom::operator=(propdom &x) {
 	if (this!=&x) {
 		reset();
 		dom::operator=(x);
@@ -60,7 +60,7 @@ propdom::~propdom() {
 	delete pvt;
 }
 
-const char *propdom::getType() const {
+const char *propdom::getType() {
 	return "propdom";
 }
 
@@ -276,7 +276,7 @@ bool propdom::valueEnd() {
 	return true;
 }
 
-ssize_t propdom::writeAndEscape(output *out, const char *value) const {
+ssize_t propdom::writeAndEscape(output *out, const char *value) {
 	ssize_t	retval=0;
 	for (const char *c=value; *c; c++) {
 		if (character::isWhitespace(*c)) {
@@ -291,8 +291,8 @@ ssize_t propdom::writeAndEscape(output *out, const char *value) const {
 	return retval;
 }
 
-ssize_t propdom::writeNode(const domnode *dn, output *out,
-			bool indent, uint16_t *indentlevel) const {
+ssize_t propdom::writeNode(domnode *dn, output *out,
+				bool indent, uint16_t *indentlevel) {
 
 	ssize_t	retval=0;
 

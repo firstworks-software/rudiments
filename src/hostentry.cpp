@@ -50,13 +50,13 @@ hostentry::hostentry() : object() {
 	#endif
 }
 
-hostentry::hostentry(const hostentry &h) : object(h) {
+hostentry::hostentry(hostentry &h) : object(h) {
 	pvt=new hostentryprivate;
 	winsock::initWinsock();
 	initialize(h.getName());
 }
 
-hostentry &hostentry::operator=(const hostentry &h) {
+hostentry &hostentry::operator=(hostentry &h) {
 	if (this!=&h) {
 		initialize(h.getName());
 	}
@@ -71,26 +71,26 @@ hostentry::~hostentry() {
 	delete pvt;
 }
 
-const char *hostentry::getName() const {
+const char *hostentry::getName() {
 	return (pvt->_he)?pvt->_he->h_name:NULL;
 }
 
-const char * const *hostentry::getAliasList() const {
+const char * const *hostentry::getAliasList() {
 	return (pvt->_he &&
 		pvt->_he->h_aliases &&
 		pvt->_he->h_aliases[0])?
 		pvt->_he->h_aliases:NULL;
 }
 
-int32_t hostentry::getAddressType() const {
+int32_t hostentry::getAddressType() {
 	return (pvt->_he)?pvt->_he->h_addrtype:-1;
 }
 
-int32_t hostentry::getAddressLength() const {
+int32_t hostentry::getAddressLength() {
 	return (pvt->_he)?pvt->_he->h_length:-1;
 }
 
-const char * const *hostentry::getAddressList() const {
+const char * const *hostentry::getAddressList() {
 	return (pvt->_he &&
 		pvt->_he->h_addr_list &&
 		pvt->_he->h_addr_list[0])?
@@ -186,7 +186,7 @@ bool hostentry::initialize(const char *hostname, const char *address,
 	#endif
 }
 
-char *hostentry::getAddressString(int32_t index) const {
+char *hostentry::getAddressString(int32_t index) {
 	size_t	addresslen=(getAddressLength()*4)+1;
 	char	*address=new char[addresslen];
 	address[0]='\0';

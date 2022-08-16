@@ -18,6 +18,18 @@ cronschedule::cronschedule() : object() {
 	pvt=new cronscheduleprivate;
 }
 
+cronschedule::cronschedule(cronschedule &c) : object() {
+	// FIXME: implement this
+}
+
+cronschedule &cronschedule::operator=(cronschedule &c) {
+	if (this!=&c) {
+		object::operator=(c);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 cronschedule::~cronschedule() {
 	clear();
 	delete pvt;

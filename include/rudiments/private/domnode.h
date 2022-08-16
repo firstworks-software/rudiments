@@ -31,60 +31,60 @@
 					const char *ns,
 					const char *name,
 					bool ignorecase,
-					uint64_t count) const;
+					uint64_t count);
 		domnode	*getAttribute(
 					const char *name,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getFirstChild(
 					const char *ns,
 					const char *name,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getFirstChild(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getFirstTagChild(
 					const char *ns,
 					const char *name,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getFirstTagChild(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getPreviousTagSibling(
 					const char *ns,
 					const char *name,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getPreviousTagSibling(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getNextTagSibling(
 					const char *ns,
 					const char *name,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getNextTagSibling(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getFirstTagDescendent(
 					const char *ns,
 					const char *name,
-					bool ignorecase) const;
+					bool ignorecase);
 		domnode	*getFirstTagDescendent(
 					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const;
+					bool ignorecase);
 		bool		deleteFirstChild(
 					const char *ns,
 					const char *name,
@@ -141,20 +141,20 @@
 					bool ignorecase);
 		void		write(output *out,
 					bool indent,
-					uint16_t *indentlevel) const;
-		void		safeWrite(output *out, const char *str) const;
+					uint16_t *indentlevel);
+		void		safeWrite(output *out, const char *str);
 		bool		match(domnode *node,
 						const char *ns,
 						const char *name,
-						bool ignorecase) const;
+						bool ignorecase);
 		bool		match(domnode *node,
 						const char *ns,
-						const char * const *set) const;
+						const char * const *set);
 
 		void	setPrivateData(void *privatedata);
 		void	*getPrivateData();
 
-				domnode(const domnode &x);
-		domnode	&operator=(const domnode &x);
+				domnode(domnode &x);
+		domnode	&operator=(domnode &x);
 
 		domnodeprivate	*pvt;

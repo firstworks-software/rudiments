@@ -2,16 +2,16 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const dictionary<keytype,valuetype> *a);
-		void	clone(const dictionarycollection<keytype,valuetype> *a);
+		void	clone(dictionary<keytype,valuetype> *a);
+		void	clone(dictionarycollection<keytype,valuetype> *a);
 		dictionarypair<keytype,valuetype>
-					*getNode(keytype key) const;
+					*getNode(keytype key);
 		treenode< dictionarypair<keytype,valuetype> *>
-					*find(keytype key) const;
+					*find(keytype key);
 
 		bool	trackinsertionorder;
 
 		avltree<dictionarypair<keytype,valuetype> *>	tree;
 		linkedlist<dictionarypair<keytype,valuetype> *>	list;
-		mutable linkedlist<keytype>			*keylist;
+		linkedlist<keytype>				*keylist;
 		dictionarypaircomparator<keytype,valuetype>	*comp;

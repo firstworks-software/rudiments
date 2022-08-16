@@ -7,7 +7,7 @@
 	protected:
 		void		init(unsigned char *initialcontents,
 						size_t initialsize);
-		void		bytebufferClone(const bytebuffer &v);
+		void		clone(bytebuffer &v);
 		void		extend(size_t requiredsize);
 
 		size_t		_size();

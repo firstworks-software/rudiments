@@ -37,11 +37,11 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 
 		/** Creates an instance of the unixsocketserver class
 		 *  that is a copy of "u". */
-		unixsocketserver(const unixsocketserver &u);
+		unixsocketserver(unixsocketserver &u);
 
 		/** Makes this instance of the unixsocketserver class
 		 *  identical to "u". */
-		unixsocketserver	&operator=(const unixsocketserver &u);
+		unixsocketserver	&operator=(unixsocketserver &u);
 
 		/** Deletes this instance of the unixsocketserver class. */
 		virtual		~unixsocketserver();

@@ -13,12 +13,12 @@ server::server() : filedescriptor() {
 	type("server");
 }
 
-server::server(const server &s) : filedescriptor(s) {
+server::server(server &s) : filedescriptor(s) {
 	pvt=new serverprivate;
 	type("server");
 }
 
-server &server::operator=(const server &s) {
+server &server::operator=(server &s) {
 	if (this!=&s) {
 		filedescriptor::operator=(s);
 	}

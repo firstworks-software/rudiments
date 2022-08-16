@@ -13,7 +13,7 @@
 						bool terminate);
 
 		bool	lock(int32_t method, int16_t type, int16_t whence,
-					off64_t start, off64_t len) const;
+					off64_t start, off64_t len);
 		bool	checkLock(int16_t type,
 					int16_t whence,
 					off64_t start,
@@ -21,16 +21,16 @@
 					int16_t *conftype,
 					int16_t *confwhence,
 					off64_t *confstart,
-					off64_t *conflen) const;
+					off64_t *conflen);
 		bool	unlock(int16_t whence,
-					off64_t start, off64_t len) const;
+					off64_t start, off64_t len);
 
-		void	fileClone(const file &f);
+		void	fileClone(file &f);
 
 
 			bool	posixFadvise(off64_t offset, off64_t len,
-							int32_t advice) const;
+							int32_t advice);
 		static	int64_t	pathConf(const char *path, int32_t name);
-			int64_t	fpathConf(int32_t name) const;
+			int64_t	fpathConf(int32_t name);
 
 		fileprivate	*pvt;

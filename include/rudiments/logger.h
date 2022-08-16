@@ -21,11 +21,11 @@ class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 
 		/** Creates an instance of the syslogdestination class
 		 *  that is a copy of "f". */
-		syslogdestination(const syslogdestination &f);
+		syslogdestination(syslogdestination &f);
 
 		/** Makes this instance of the syslogdestination class
 		 *  identical to "f". */
-		syslogdestination	&operator=(const syslogdestination &f);
+		syslogdestination	&operator=(syslogdestination &f);
 
 		/** Deletes this instance of the syslogdestination class. */
 		virtual		~syslogdestination();
@@ -51,11 +51,11 @@ class RUDIMENTS_DLLSPEC filedestination : public logdestination {
 
 		/** Creates an instance of the filedestination class
 		 *  that is a copy of "f". */
-		filedestination(const filedestination &f);
+		filedestination(filedestination &f);
 
 		/** Makes this instance of the filedestination class
 		 *  identical to "f". */
-		filedestination	&operator=(const filedestination &f);
+		filedestination	&operator=(filedestination &f);
 
 		/** Deletes this instance of the filedestination class. */
 		virtual		~filedestination();

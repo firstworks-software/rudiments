@@ -13,25 +13,25 @@ template <class valuetype>
 class scalarcollection : public collection {
 	public:
 		/** Returns "scalar". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** Sets the value stored in this instance to "v". */
 		virtual	void		setValue(valuetype v)=0;
 
 		/** Returns the value stored in this intance.  Returns NULL or
 		 *  0 if no value has been stored. */
-		virtual	valuetype	getValue() const=0;
+		virtual	valuetype	getValue()=0;
 
 		/** Writes a representation of the scalarcollection to
 		 *  standard output. */
-		virtual	ssize_t	write() const;
+		virtual	ssize_t	write();
 
 		/** Writes a representation of the scalarcollection to "out". */
-		virtual	ssize_t	write(output *out) const;
+		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the scalarcollection to
 		 *  standard output. */
-		virtual	ssize_t	writeJson() const;
+		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the scalarcollection to
 		 *  standard output.
@@ -39,11 +39,11 @@ class scalarcollection : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(bool indent) const;
+		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the scalarcollection to
 		 *  "out". */
-		virtual	ssize_t	writeJson(output *out) const;
+		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the scalarcollection to
 		 *  "out".
@@ -51,7 +51,7 @@ class scalarcollection : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(output *out, bool indent) const;
+		virtual	ssize_t	writeJson(output *out, bool indent);
 };
 
 #include <rudiments/private/scalarcollectioninlines.h>

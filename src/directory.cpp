@@ -82,6 +82,18 @@ directory::directory() : object() {
 	pvt->_currentindex=0;
 }
 
+directory::directory(directory &d) : object() {
+	// FIXME: implement this
+}
+
+directory &directory::operator=(directory &d) {
+	if (this!=&d) {
+		object::operator=(d);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 directory::~directory() {
 	close();
 	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)

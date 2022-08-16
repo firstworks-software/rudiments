@@ -2,5 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-		void		filesystemClone(const filesystem &f);
+		void	clone(filesystem &f);
+
 		filesystemprivate	*pvt;

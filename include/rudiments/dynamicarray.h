@@ -62,21 +62,21 @@ class dynamicarray : public arraycollection<valuetype> {
 
 		/** Creates an instance of the dynamicarray class
 		 *  that is a copy of "v". */
-		dynamicarray(const dynamicarray<valuetype> &v);
+		dynamicarray(dynamicarray<valuetype> &v);
 
 		/** Creates an instance of the dynamicarray class
 		 *  that is a copy of "v". */
-		dynamicarray(const arraycollection<valuetype> &v);
+		dynamicarray(arraycollection<valuetype> &v);
 
 		/** Makes this instance of the dynamicarray class
 		 *  identical to "v". */
 		dynamicarray<valuetype>	&operator=(
-					const dynamicarray<valuetype> &v);
+					dynamicarray<valuetype> &v);
 
 		/** Makes this instance of the dynamicarray class
 		 *  identical to "v". */
 		dynamicarray<valuetype>	&operator=(
-					const arraycollection<valuetype> &v);
+					arraycollection<valuetype> &v);
 
 		/** Deletes this instance of the dynamicarray class and all of
 		 *  its values. */
@@ -91,13 +91,13 @@ class dynamicarray : public arraycollection<valuetype> {
 		valuetype	operator[](uint64_t index) const;
 
 		/*  Returns the length of the initial extent. */
-		uint64_t	getInitialLength() const;
+		uint64_t	getInitialLength();
 
 		/*  Returns the length of each incremental extent. */
-		uint64_t	getIncrementLength() const;
+		uint64_t	getIncrementLength();
 
 		/** Returns the number of elements in the array. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Clears the array. */
 		void	clear();

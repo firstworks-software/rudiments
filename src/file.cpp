@@ -142,13 +142,13 @@ file::file() : filedescriptor() {
 	type("file");
 }
 
-file::file(const file &f) : filedescriptor(f) {
+file::file(file &f) : filedescriptor(f) {
 	pvt=new fileprivate;
 	fileClone(f);
 	type("file");
 }
 
-file &file::operator=(const file &f) {
+file &file::operator=(file &f) {
 	if (this!=&f) {
 		filedescriptor::operator=(f);
 		fileClone(f);
@@ -156,7 +156,7 @@ file &file::operator=(const file &f) {
 	return *this;
 }
 
-void file::fileClone(const file &f) {
+void file::fileClone(file &f) {
 	pvt->_st=f.pvt->_st;
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=f.pvt->_filetype;
@@ -484,207 +484,207 @@ ssize_t file::getContents(const char *name, unsigned char **buffer,
 	return bytes;
 }
 
-bool file::tryLockFile(int16_t type) const {
+bool file::tryLockFile(int16_t type) {
 	return tryLockRegion(type,0,0);
 }
 
-bool file::lockFile(int16_t type) const {
+bool file::lockFile(int16_t type) {
 	return lockRegion(type,0,0);
 }
 
 bool file::checkLockFile(int16_t type,
 			int16_t *conftype, int16_t *confwhence,
-			off64_t *confstart, off64_t *conflen) const {
+			off64_t *confstart, off64_t *conflen) {
 	return checkLockRegion(type,0,0,conftype,confwhence,confstart,conflen);
 }
 
-bool file::unlockFile() const {
+bool file::unlockFile() {
 	return unlockRegion(0,0);
 }
 
-bool file::tryLockRegion(int16_t type, off64_t start, off64_t len) const {
+bool file::tryLockRegion(int16_t type, off64_t start, off64_t len) {
 	return lock(F_SETLK,type,SEEK_SET,start,len);
 }
 
-bool file::lockRegion(int16_t type, off64_t start, off64_t len) const {
+bool file::lockRegion(int16_t type, off64_t start, off64_t len) {
 	return lock(F_SETLKW,type,SEEK_SET,start,len);
 }
 
 bool file::checkLockRegion(int16_t type, off64_t start, off64_t len,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLock(type,SEEK_SET,start,len,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::unlockRegion(off64_t start, off64_t len) const {
+bool file::unlockRegion(off64_t start, off64_t len) {
 	return unlock(SEEK_SET,start,len);
 }
 
-bool file::tryLockFromCurrent(int16_t type, off64_t len) const {
+bool file::tryLockFromCurrent(int16_t type, off64_t len) {
 	return tryLockFromCurrent(type,0,len);
 }
 
-bool file::tryLockFromCurrent(int16_t type, off64_t start, off64_t len) const {
+bool file::tryLockFromCurrent(int16_t type, off64_t start, off64_t len) {
 	return lock(F_SETLK,type,SEEK_CUR,start,len);
 }
 
-bool file::lockFromCurrent(int16_t type, off64_t len) const {
+bool file::lockFromCurrent(int16_t type, off64_t len) {
 	return lockFromCurrent(type,0,len);
 }
 
-bool file::lockFromCurrent(int16_t type, off64_t start, off64_t len) const {
+bool file::lockFromCurrent(int16_t type, off64_t start, off64_t len) {
 	return lock(F_SETLKW,type,SEEK_CUR,start,len);
 }
 
 bool file::checkLockFromCurrent(int16_t type, off64_t len,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLockFromCurrent(type,0,len,
 				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockFromCurrent(int16_t type, off64_t start, off64_t len,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLock(type,SEEK_CUR,start,len,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::unlockFromCurrent(off64_t len) const {
+bool file::unlockFromCurrent(off64_t len) {
 	return unlockFromCurrent(0,len);
 }
 
-bool file::unlockFromCurrent(off64_t start, off64_t len) const {
+bool file::unlockFromCurrent(off64_t start, off64_t len) {
 	return unlock(SEEK_CUR,start,len);
 }
 
-bool file::tryLockFromEnd(int16_t type, off64_t len) const {
+bool file::tryLockFromEnd(int16_t type, off64_t len) {
 	return tryLockFromEnd(type,0,len);
 }
 
-bool file::tryLockFromEnd(int16_t type, off64_t start, off64_t len) const {
+bool file::tryLockFromEnd(int16_t type, off64_t start, off64_t len) {
 	return lock(F_SETLK,type,SEEK_END,start,len);
 }
 
-bool file::lockFromEnd(int16_t type, off64_t len) const {
+bool file::lockFromEnd(int16_t type, off64_t len) {
 	return lockFromEnd(type,0,len);
 }
 
-bool file::lockFromEnd(int16_t type, off64_t start, off64_t len) const {
+bool file::lockFromEnd(int16_t type, off64_t start, off64_t len) {
 	return lock(F_SETLKW,type,SEEK_END,start,len);
 }
 
 bool file::checkLockFromEnd(int16_t type, off64_t len,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLockFromEnd(type,0,len,
 				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockFromEnd(int16_t type, off64_t start, off64_t len,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLock(type,SEEK_END,start,len,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::unlockFromEnd(off64_t len) const {
+bool file::unlockFromEnd(off64_t len) {
 	return unlockFromEnd(0,len);
 }
 
-bool file::unlockFromEnd(off64_t start, off64_t len) const {
+bool file::unlockFromEnd(off64_t start, off64_t len) {
 	return unlock(SEEK_END,start,len);
 }
 
-bool file::tryLockRemainder(int16_t type, off64_t start) const {
+bool file::tryLockRemainder(int16_t type, off64_t start) {
 	return lock(F_SETLK,type,SEEK_SET,start,0);
 }
 
-bool file::lockRemainder(int16_t type, off64_t start) const {
+bool file::lockRemainder(int16_t type, off64_t start) {
 	return lock(F_SETLKW,type,SEEK_SET,start,0);
 }
 
 bool file::checkLockRemainder(int16_t type, off64_t start,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLock(type,SEEK_SET,start,0,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::unlockRemainder(off64_t start) const {
+bool file::unlockRemainder(off64_t start) {
 	return unlock(SEEK_SET,start,0);
 }
 
-bool file::tryLockRemainderFromCurrent(int16_t type) const {
+bool file::tryLockRemainderFromCurrent(int16_t type) {
 	return tryLockRemainderFromCurrent(type,0);
 }
 
-bool file::tryLockRemainderFromCurrent(int16_t type, off64_t start) const {
+bool file::tryLockRemainderFromCurrent(int16_t type, off64_t start) {
 	return lock(F_SETLK,type,SEEK_CUR,start,0);
 }
 
-bool file::lockRemainderFromCurrent(int16_t type) const {
+bool file::lockRemainderFromCurrent(int16_t type) {
 	return lockRemainderFromCurrent(type,0);
 }
 
-bool file::lockRemainderFromCurrent(int16_t type, off64_t start) const {
+bool file::lockRemainderFromCurrent(int16_t type, off64_t start) {
 	return lock(F_SETLKW,type,SEEK_CUR,start,0);
 }
 
 bool file::checkLockRemainderFromCurrent(int16_t type,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLockRemainderFromCurrent(type,0,
 				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockRemainderFromCurrent(int16_t type, off64_t start,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLock(type,SEEK_CUR,start,0,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::unlockRemainderFromCurrent() const {
+bool file::unlockRemainderFromCurrent() {
 	return unlockRemainderFromCurrent(0);
 }
 
-bool file::unlockRemainderFromCurrent(off64_t start) const {
+bool file::unlockRemainderFromCurrent(off64_t start) {
 	return unlock(SEEK_CUR,start,0);
 }
 
-bool file::tryLockRemainderFromEnd(int16_t type) const {
+bool file::tryLockRemainderFromEnd(int16_t type) {
 	return tryLockRemainderFromEnd(type,0);
 }
 
-bool file::tryLockRemainderFromEnd(int16_t type, off64_t start) const {
+bool file::tryLockRemainderFromEnd(int16_t type, off64_t start) {
 	return lock(F_SETLK,type,SEEK_END,start,0);
 }
 
-bool file::lockRemainderFromEnd(int16_t type) const {
+bool file::lockRemainderFromEnd(int16_t type) {
 	return lockRemainderFromEnd(type,0);
 }
 
-bool file::lockRemainderFromEnd(int16_t type, off64_t start) const {
+bool file::lockRemainderFromEnd(int16_t type, off64_t start) {
 	return lock(F_SETLKW,type,SEEK_END,start,0);
 }
 
 bool file::checkLockRemainderFromEnd(int16_t type,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLockRemainderFromEnd(type,0,
 				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockRemainderFromEnd(int16_t type, off64_t start,
 				int16_t *conftype, int16_t *confwhence,
-				off64_t *confstart, off64_t *conflen) const {
+				off64_t *confstart, off64_t *conflen) {
 	return checkLock(type,SEEK_END,start,0,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::sequentialAccess(off64_t start, size_t len) const {
+bool file::sequentialAccess(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_SEQUENTIAL)
 		return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
@@ -693,7 +693,7 @@ bool file::sequentialAccess(off64_t start, size_t len) const {
 	#endif
 }
 
-bool file::randomAccess(off64_t start, size_t len) const {
+bool file::randomAccess(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_RANDOM)
 		return posixFadvise(start,len,POSIX_FADV_RANDOM);
@@ -702,7 +702,7 @@ bool file::randomAccess(off64_t start, size_t len) const {
 	#endif
 }
 
-bool file::onlyOnce(off64_t start, size_t len) const {
+bool file::onlyOnce(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NOREUSE)
 		return posixFadvise(start,len,POSIX_FADV_NOREUSE);
@@ -711,7 +711,7 @@ bool file::onlyOnce(off64_t start, size_t len) const {
 	#endif
 }
 
-bool file::willNeed(off64_t start, size_t len) const {
+bool file::willNeed(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_WILLNEED)
 		return posixFadvise(start,len,POSIX_FADV_WILLNEED);
@@ -720,7 +720,7 @@ bool file::willNeed(off64_t start, size_t len) const {
 	#endif
 }
 
-bool file::wontNeed(off64_t start, size_t len) const {
+bool file::wontNeed(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_DONTNEED)
 		return posixFadvise(start,len,POSIX_FADV_DONTNEED);
@@ -729,7 +729,7 @@ bool file::wontNeed(off64_t start, size_t len) const {
 	#endif
 }
 
-bool file::normalAccess(off64_t start, size_t len) const {
+bool file::normalAccess(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NORMAL)
 		return posixFadvise(start,len,POSIX_FADV_NORMAL);
@@ -738,7 +738,7 @@ bool file::normalAccess(off64_t start, size_t len) const {
 	#endif
 }
 
-bool file::reserve(off64_t start, size_t len) const {
+bool file::reserve(off64_t start, size_t len) {
 	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
 		int32_t	result;
 		error::clearError();
@@ -769,11 +769,11 @@ bool file::truncate(const char *filename, off64_t size) {
 	#endif
 }
 
-bool file::truncate() const {
+bool file::truncate() {
 	return truncate((off64_t)0);
 }
 
-bool file::truncate(off64_t size) const {
+bool file::truncate(off64_t size) {
 	int32_t	result;
 	do {
 		#if defined(RUDIMENTS_HAVE_FTRUNCATE) || \
@@ -793,11 +793,11 @@ bool file::truncate(off64_t size) const {
 	return !result;
 }
 
-bool file::unlockRemainderFromEnd() const {
+bool file::unlockRemainderFromEnd() {
 	return unlockRemainderFromEnd(0);
 }
 
-bool file::unlockRemainderFromEnd(off64_t start) const {
+bool file::unlockRemainderFromEnd(off64_t start) {
 	return unlock(SEEK_END,start,0);
 }
 
@@ -904,23 +904,23 @@ bool file::stat(const char *filename, void *st) {
 	return (result!=-1);
 }
 
-mode_t file::getPermissions() const {
+mode_t file::getPermissions() {
 	return pvt->_st.st_mode;
 }
 
-uid_t file::getOwnerUserId() const {
+uid_t file::getOwnerUserId() {
 	return pvt->_st.st_uid;
 }
 
-gid_t file::getOwnerGroupId() const {
+gid_t file::getOwnerGroupId() {
 	return pvt->_st.st_gid;
 }
 
-off64_t file::getSize() const {
+off64_t file::getSize() {
 	return pvt->_st.st_size;
 }
 
-blksize_t file::getBlockSize() const {
+blksize_t file::getBlockSize() {
 	#ifdef RUDIMENTS_HAVE_BLKSIZE_T
 		return pvt->_st.st_blksize;
 	#else
@@ -928,7 +928,7 @@ blksize_t file::getBlockSize() const {
 	#endif
 }
 
-blkcnt_t file::getBlockCount() const {
+blkcnt_t file::getBlockCount() {
 	#ifdef RUDIMENTS_HAVE_BLKCNT_T
 		return pvt->_st.st_blocks;
 	#else
@@ -942,7 +942,7 @@ blkcnt_t file::getBlockCount() const {
 	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
 #endif
 
-int32_t file::isSocket() const {
+int32_t file::isSocket() {
 	#if defined(_S_IFSOCK)
 		return ((pvt->_st.st_mode&_S_IFSOCK)==_S_IFSOCK);
 	#elif defined(S_IFSOCK)
@@ -956,7 +956,7 @@ int32_t file::isSocket() const {
 	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
 #endif
 
-int32_t file::isSymbolicLink() const {
+int32_t file::isSymbolicLink() {
 	#if defined(_S_IFLNK)
 		return ((pvt->_st.st_mode&_S_IFLNK)==_S_IFLNK);
 	#elif defined(S_IFLNK)
@@ -966,7 +966,7 @@ int32_t file::isSymbolicLink() const {
 	#endif
 }
 
-int32_t file::isRegularFile() const {
+int32_t file::isRegularFile() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_DISK);
 	#elif defined(_S_IFREG)
@@ -982,7 +982,7 @@ int32_t file::isRegularFile() const {
 	#define S_ISBLK(m) (((m&0060000)==0060000)?1:0)
 #endif
 
-int32_t file::isBlockDevice() const {
+int32_t file::isBlockDevice() {
 	#if defined(_S_IFBLK)
 		return ((pvt->_st.st_mode&_S_IFBLK)==_S_IFBLK);
 	#elif defined(S_IFBLK)
@@ -992,7 +992,7 @@ int32_t file::isBlockDevice() const {
 	#endif
 }
 
-int32_t file::isDirectory() const {
+int32_t file::isDirectory() {
 	#if defined(_S_IFDIR)
 		return ((pvt->_st.st_mode&_S_IFDIR)==_S_IFDIR);
 	#elif defined(S_IFDIR)
@@ -1002,7 +1002,7 @@ int32_t file::isDirectory() const {
 	#endif
 }
 
-int32_t file::isCharacterDevice() const {
+int32_t file::isCharacterDevice() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_CHAR);
 	#elif defined(_S_IFCHR)
@@ -1014,7 +1014,7 @@ int32_t file::isCharacterDevice() const {
 	#endif
 }
 
-int32_t file::isFifo() const {
+int32_t file::isFifo() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_PIPE);
 	#elif defined(_S_IFIFO)
@@ -1026,28 +1026,28 @@ int32_t file::isFifo() const {
 	#endif
 }
 
-time_t file::getLastAccessTime() const {
+time_t file::getLastAccessTime() {
 	return pvt->_st.st_atime;
 }
 
-time_t file::getLastModificationTime() const {
+time_t file::getLastModificationTime() {
 	return pvt->_st.st_mtime;
 }
 
-time_t file::getLastChangeTime() const {
+time_t file::getLastChangeTime() {
 	return pvt->_st.st_ctime;
 }
 
 
-dev_t file::getDevice() const {
+dev_t file::getDevice() {
 	return pvt->_st.st_dev;
 }
 
-dev_t file::getDeviceType() const {
+dev_t file::getDeviceType() {
 	return pvt->_st.st_rdev;
 }
 
-uint64_t file::getInode() const {
+uint64_t file::getInode() {
 	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
 		return pvt->_inode;
 	#else
@@ -1056,7 +1056,7 @@ uint64_t file::getInode() const {
 	#endif
 }
 
-nlink_t file::getNumberOfHardLinks() const {
+nlink_t file::getNumberOfHardLinks() {
 	return pvt->_st.st_nlink;
 }
 
@@ -1069,7 +1069,7 @@ void file::dontGetCurrentPropertiesOnOpen() {
 }
 
 bool file::lock(int32_t method, int16_t type,
-			int16_t whence, off64_t start, off64_t len) const {
+			int16_t whence, off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
 		lck.l_type=type;
@@ -1113,7 +1113,7 @@ bool file::lock(int32_t method, int16_t type,
 bool file::checkLock(int16_t type, int16_t whence,
 			off64_t start, off64_t len,
 			int16_t *conftype, int16_t *confwhence,
-			off64_t *confstart, off64_t *conflen) const {
+			off64_t *confstart, off64_t *conflen) {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
 		lck.l_type=type;
@@ -1135,7 +1135,7 @@ bool file::checkLock(int16_t type, int16_t whence,
 	#endif
 }
 
-bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
+bool file::unlock(int16_t whence, off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
 		lck.l_type=F_UNLCK;
@@ -1168,16 +1168,16 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 	#endif
 }
 
-bool file::setPermissions(mode_t perms) const {
+bool file::setPermissions(mode_t perms) {
 	return permissions::setFilePermissions(fd(),perms);
 }
 
-bool file::changeOwner(const char *newuser, const char *newgroup) const {
+bool file::changeOwner(const char *newuser, const char *newgroup) {
 	return changeOwner(userentry::getUserId(newuser),
 				groupentry::getGroupId(newgroup));
 }
 
-bool file::changeOwner(uid_t uid, gid_t gid) const {
+bool file::changeOwner(uid_t uid, gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_FCHOWN)
 
 		int32_t	result;
@@ -1340,7 +1340,7 @@ bool file::canChangeOwner(const char *filename) {
 	return !pathConf(filename,_PC_CHOWN_RESTRICTED);
 }
 
-bool file::canChangeOwner() const {
+bool file::canChangeOwner() {
 	return !fpathConf(_PC_CHOWN_RESTRICTED);
 }
 
@@ -1462,7 +1462,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 	#endif
 }
 
-bool file::sync() const {
+bool file::sync() {
 	#if defined(RUDIMENTS_HAVE_FSYNC) || \
 		defined(RUDIMENTS_HAVE_UNDEFINED_FSYNC)
 		int32_t	result;
@@ -1482,7 +1482,7 @@ bool file::sync() const {
 	#endif
 }
 
-bool file::dataSync() const {
+bool file::dataSync() {
 	#ifdef RUDIMENTS_HAVE_FDATASYNC
 		int32_t	result;
 		error::clearError();
@@ -1911,11 +1911,11 @@ int64_t file::maxLinks(const char *filename) {
 	return pathConf(filename,_PC_LINK_MAX);
 }
 
-int64_t file::maxLinks() const {
+int64_t file::maxLinks() {
 	return fpathConf(_PC_LINK_MAX);
 }
 
-bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) const {
+bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) {
 	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
 		int32_t	result;
 		error::clearError();
@@ -1946,7 +1946,7 @@ int64_t file::pathConf(const char *path, int32_t name) {
 	#endif
 }
 
-int64_t file::fpathConf(int32_t name) const {
+int64_t file::fpathConf(int32_t name) {
 	#if defined(RUDIMENTS_HAVE_FPATHCONF)
 		int64_t	result;
 		error::clearError();

@@ -16,7 +16,7 @@ singlylinkedlist<valuetype>::singlylinkedlist() :
 template <class valuetype>
 inline
 singlylinkedlist<valuetype>::singlylinkedlist(
-				const singlylinkedlist<valuetype> &a) :
+				singlylinkedlist<valuetype> &a) :
 				listcollection<valuetype>(a) {
 	clone(&a);
 }
@@ -24,7 +24,7 @@ singlylinkedlist<valuetype>::singlylinkedlist(
 template <class valuetype>
 inline
 singlylinkedlist<valuetype>::singlylinkedlist(
-				const listcollection<valuetype> &a) :
+				listcollection<valuetype> &a) :
 				listcollection<valuetype>(a) {
 	clone(&a);
 }
@@ -32,7 +32,7 @@ singlylinkedlist<valuetype>::singlylinkedlist(
 template <class valuetype>
 inline
 singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
-					const singlylinkedlist<valuetype> &a) {
+					singlylinkedlist<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		nodecollection<valuetype>::operator=(a);
@@ -44,7 +44,7 @@ singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
 template <class valuetype>
 inline
 singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
-					const nodecollection<valuetype> &a) {
+					nodecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		nodecollection<valuetype>::operator=(a);
@@ -55,7 +55,7 @@ singlylinkedlist<valuetype> &singlylinkedlist<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::clone(const nodecollection<valuetype> *coll) {
+void singlylinkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 
 	first=NULL;
 	last=NULL;
@@ -336,32 +336,32 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 
 template <class valuetype>
 inline
-uint64_t singlylinkedlist<valuetype>::getLength() const {
+uint64_t singlylinkedlist<valuetype>::getLength() {
 	return length;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlist<valuetype>::getFirst() const {
+listnode<valuetype> *singlylinkedlist<valuetype>::getFirst() {
 	return first;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlist<valuetype>::getLast() const {
+listnode<valuetype> *singlylinkedlist<valuetype>::getLast() {
 	return last;
 }
 
 template <class valuetype>
 inline
 listnode<valuetype> *singlylinkedlist<valuetype>::getNext(
-					listnode<valuetype> *node) const {
+					listnode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlist<valuetype>::find(valuetype value) const {
+listnode<valuetype> *singlylinkedlist<valuetype>::find(valuetype value) {
 	return find(first,value);
 }
 
@@ -369,7 +369,7 @@ template <class valuetype>
 inline
 listnode<valuetype> *singlylinkedlist<valuetype>::find(
 				listnode<valuetype> *startnode,
-				valuetype value) const {
+				valuetype value) {
 	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
 		if (!this->getComparator()->compare(
@@ -654,13 +654,13 @@ valuetype &singlylinkedlistnode<valuetype>::getValue() {
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlistnode<valuetype>::getPrevious() const {
+listnode<valuetype> *singlylinkedlistnode<valuetype>::getPrevious() {
 	return next;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() const {
+listnode<valuetype> *singlylinkedlistnode<valuetype>::getNext() {
 	return next;
 }
 

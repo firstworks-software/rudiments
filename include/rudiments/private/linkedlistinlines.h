@@ -28,7 +28,7 @@ linkedlist<valuetype>::linkedlist() :
 
 template <class valuetype>
 inline
-linkedlist<valuetype>::linkedlist(const linkedlist<valuetype> &a) :
+linkedlist<valuetype>::linkedlist(linkedlist<valuetype> &a) :
 					listcollection<valuetype>(a) {
 	clone(&a);
 #ifdef DARWIN_GCC_2952_HACKS
@@ -41,7 +41,7 @@ linkedlist<valuetype>::linkedlist(const linkedlist<valuetype> &a) :
 
 template <class valuetype>
 inline
-linkedlist<valuetype>::linkedlist(const nodecollection<valuetype> &a) :
+linkedlist<valuetype>::linkedlist(nodecollection<valuetype> &a) :
 					listcollection<valuetype>(a) {
 	clone(&a);
 #ifdef DARWIN_GCC_2952_HACKS
@@ -55,7 +55,7 @@ linkedlist<valuetype>::linkedlist(const nodecollection<valuetype> &a) :
 template <class valuetype>
 inline
 linkedlist<valuetype> &linkedlist<valuetype>::operator=(
-					const linkedlist<valuetype> &a) {
+					linkedlist<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		nodecollection<valuetype>::operator=(a);
@@ -67,7 +67,7 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 template <class valuetype>
 inline
 linkedlist<valuetype> &linkedlist<valuetype>::operator=(
-					const nodecollection<valuetype> &a) {
+					nodecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		nodecollection<valuetype>::operator=(a);
@@ -78,7 +78,7 @@ linkedlist<valuetype> &linkedlist<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::clone(const nodecollection<valuetype> *coll) {
+void linkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 
 	first=NULL;
 	last=NULL;
@@ -296,39 +296,39 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 
 template <class valuetype>
 inline
-uint64_t linkedlist<valuetype>::getLength() const {
+uint64_t linkedlist<valuetype>::getLength() {
 	return length;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *linkedlist<valuetype>::getFirst() const {
+listnode<valuetype> *linkedlist<valuetype>::getFirst() {
 	return first;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *linkedlist<valuetype>::getLast() const {
+listnode<valuetype> *linkedlist<valuetype>::getLast() {
 	return last;
 }
 
 template <class valuetype>
 inline
 listnode<valuetype> *linkedlist<valuetype>::getPrevious(
-					listnode<valuetype> *node) const {
+					listnode<valuetype> *node) {
 	return (node)?node->getPrevious():NULL;
 }
 
 template <class valuetype>
 inline
 listnode<valuetype> *linkedlist<valuetype>::getNext(
-					listnode<valuetype> *node) const {
+					listnode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *linkedlist<valuetype>::find(valuetype value) const {
+listnode<valuetype> *linkedlist<valuetype>::find(valuetype value) {
 	return find(first,value);
 }
 
@@ -336,7 +336,7 @@ template <class valuetype>
 inline
 listnode<valuetype> *linkedlist<valuetype>::find(
 					listnode<valuetype> *startnode,
-					valuetype value) const {
+					valuetype value) {
 	for (listnode<valuetype> *current=startnode;
 			current; current=current->getNext()) {
 		if (!this->getComparator()->compare(
@@ -654,13 +654,13 @@ valuetype &linkedlistnode<valuetype>::getValue() {
 
 template <class valuetype>
 inline
-listnode<valuetype> *linkedlistnode<valuetype>::getPrevious() const {
+listnode<valuetype> *linkedlistnode<valuetype>::getPrevious() {
 	return previous;
 }
 
 template <class valuetype>
 inline
-listnode<valuetype> *linkedlistnode<valuetype>::getNext() const {
+listnode<valuetype> *linkedlistnode<valuetype>::getNext() {
 	return next;
 }
 

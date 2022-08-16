@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 
 		/** Creates an instance of the groupentry class
 		 *  that is a copy of "g". */
-		groupentry(const groupentry &g);
+		groupentry(groupentry &g);
 
 		/** Makes this instance of the groupentry class
 		 *  identical to "g". */
-		groupentry	&operator=(const groupentry &g);
+		groupentry	&operator=(groupentry &g);
 
 		/** Deletes this instance of the groupentry class. */
 		~groupentry();
@@ -34,7 +34,7 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		bool	initialize(gid_t groupid);
 
 		/** Returns the name of the group. */
-		const char		*getName() const;
+		const char		*getName();
 
 		/** Returns the id of the group.
 		 *
@@ -46,7 +46,7 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		 *  to access and ultimately translate to a group.  It should
 		 *  not be passed in to functions or methods of other libraries
 		 *  that don't ultimately use rudiments methods. */
-		gid_t		getGroupId() const;
+		gid_t		getGroupId();
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this group.
@@ -55,13 +55,13 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		 *  platformSupportsFormalSid method returns false, the value
 		 *  returned is just a string representation of the number
 		 *  returned by getGroupId(). */
-		const char	*getSidString() const;
-		const void	*getSid() const;
-		uint64_t	getSidSize() const;
+		const char	*getSidString();
+		const void	*getSid();
+		uint64_t	getSidSize();
 
 		/** Returns a NULL-terminated list of the
 		 *  names of the members of the group. */
-		const char * const	*getMembers() const;
+		const char * const	*getMembers();
 
 		/** Convenience method.
 		 *  Returns the id for "groupname".

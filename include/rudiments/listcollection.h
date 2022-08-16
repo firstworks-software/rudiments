@@ -19,11 +19,11 @@ class listnode : public nodecollectionnode<valuetype> {
 
 		/** Returns the previous node in the listcollection or NULL
 		 *  if this node is the first node in the list. */
-		virtual	listnode<valuetype>	*getPrevious() const=0;
+		virtual	listnode<valuetype>	*getPrevious()=0;
 
 		/** Returns the next node in the listcollection or NULL
 		 * if this node is the last node in the list. */
-		virtual	listnode<valuetype>	*getNext() const=0;
+		virtual	listnode<valuetype>	*getNext()=0;
 
 	#include <rudiments/private/listnode.h>
 };
@@ -34,15 +34,14 @@ template <class valuetype>
 class listcollection : public nodecollection<valuetype> {
 	public:
 		/** Creates an empty instance of the listcollection class. */
-		listcollection() : nodecollection<valuetype>() {}
+		listcollection();
 
 		/** Creates an instance of the listcollection class
 		 *  that is a copy of "a". */
-		listcollection(const nodecollection<valuetype> &a) :
-					nodecollection<valuetype>(a) {}
+		listcollection(nodecollection<valuetype> &n);
 
 		/** Returns "list". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** Creates a new listnode containing "value" and
 		 *  prepends it to the listcollection. */
@@ -151,27 +150,27 @@ class listcollection : public nodecollection<valuetype> {
 		virtual bool	remove(listnode<valuetype> *node)=0;
 
 		/** Returns the number of nodes in the listcollection. */
-		virtual	uint64_t	getLength() const=0;
+		virtual	uint64_t	getLength()=0;
 
 		/** Returns the first node in the listcollection. */
-		virtual	listnode<valuetype>	*getFirst() const=0;
+		virtual	listnode<valuetype>	*getFirst()=0;
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
 		virtual	listnode<valuetype>	*getNext(
-					listnode<valuetype> *node) const=0;
+					listnode<valuetype> *node)=0;
 
 		/** Returns a pointer to the first listnode
 		 *  containing "value" or NULL if "value" was not found. */
-		virtual	listnode<valuetype>	*find(valuetype value) const=0;
+		virtual	listnode<valuetype>	*find(valuetype value)=0;
 
 		/** Returns a pointer to the first listnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
 		virtual	listnode<valuetype>	*find(
 						listnode<valuetype> *startnode,
-						valuetype value) const=0;
+						valuetype value)=0;
 
 		/** Sorts the listcollection in ascending order using a modified
 		 *  insertion sort algorithm.  This sort is slower than
@@ -186,14 +185,14 @@ class listcollection : public nodecollection<valuetype> {
 
 		/** Writes a representation of the listcollection to standard
 		 *  output. */
-		virtual	ssize_t	write() const;
+		virtual	ssize_t	write();
 
 		/** Writes a representation of the listcollection to "out". */
-		virtual	ssize_t	write(output *out) const;
+		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the listcollection to
 		 *  standard output. */
-		virtual	ssize_t	writeJson() const;
+		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the listcollection to
 		 *  standard output.
@@ -201,11 +200,11 @@ class listcollection : public nodecollection<valuetype> {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(bool indent) const;
+		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the listcollection to
 		 *  "out". */
-		virtual	ssize_t	writeJson(output *out) const;
+		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the listcollection to
 		 *  "out".
@@ -213,7 +212,7 @@ class listcollection : public nodecollection<valuetype> {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(output *out, bool indent) const;
+		virtual	ssize_t	writeJson(output *out, bool indent);
 };
 
 #include <rudiments/private/listcollectioninlines.h>

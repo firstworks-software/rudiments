@@ -24,7 +24,7 @@ class dictionarypair : public object {
 template <class keytype, class valuetype>
 class dictionarypaircomparator : public comparator {
 	public:
-		int32_t compare(object *value1, object *value2) const;
+		int32_t compare(object *value1, object *value2);
 };
 
 template <class keytype, class valuetype>
@@ -57,7 +57,7 @@ dictionary<keytype,valuetype>::dictionary() :
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::dictionary(
-			const dictionary<keytype,valuetype> &a) :
+			dictionary<keytype,valuetype> &a) :
 			dictionarycollection<keytype,valuetype>(a),
 			keylist(NULL) {
 
@@ -76,7 +76,7 @@ dictionary<keytype,valuetype>::dictionary(
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype>::dictionary(
-			const dictionarycollection<keytype,valuetype> &a) :
+			dictionarycollection<keytype,valuetype> &a) :
 			dictionarycollection<keytype,valuetype>(a),
 			keylist(NULL) {
 
@@ -95,7 +95,7 @@ dictionary<keytype,valuetype>::dictionary(
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype> &dictionary<keytype,valuetype>::
-		operator=(const dictionary<keytype,valuetype> &a) {
+			operator=(dictionary<keytype,valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		dictionarycollection<keytype,valuetype>::operator=(a);
@@ -107,7 +107,7 @@ dictionary<keytype,valuetype> &dictionary<keytype,valuetype>::
 template <class keytype, class valuetype>
 inline
 dictionary<keytype,valuetype> &dictionary<keytype,valuetype>::
-		operator=(const dictionarycollection<keytype,valuetype> &a) {
+			operator=(dictionarycollection<keytype,valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		dictionarycollection<keytype,valuetype>::operator=(a);
@@ -118,8 +118,7 @@ dictionary<keytype,valuetype> &dictionary<keytype,valuetype>::
 
 template <class keytype, class valuetype>
 inline
-void dictionary<keytype,valuetype>::clone(
-				const dictionary<keytype,valuetype> *a) {
+void dictionary<keytype,valuetype>::clone(dictionary<keytype,valuetype> *a) {
 
 	trackinsertionorder=a->getTrackInsertionOrder();
 
@@ -155,7 +154,7 @@ void dictionary<keytype,valuetype>::clone(
 template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::clone(
-			const dictionarycollection<keytype,valuetype> *a) {
+				dictionarycollection<keytype,valuetype> *a) {
 
 	trackinsertionorder=a->getTrackInsertionOrder();
 
@@ -199,7 +198,7 @@ bool dictionary<keytype,valuetype>::setTrackInsertionOrder(
 
 template <class keytype, class valuetype>
 inline
-bool dictionary<keytype,valuetype>::getTrackInsertionOrder() const {
+bool dictionary<keytype,valuetype>::getTrackInsertionOrder() {
 	return trackinsertionorder;
 }
 
@@ -304,7 +303,7 @@ void dictionary<keytype,valuetype>::setValues(
 template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::getValue(keytype key,
-						valuetype *value) const {
+						valuetype *value) {
 	dictionarypair<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
 		*value=dnode->getValue();
@@ -315,7 +314,7 @@ bool dictionary<keytype,valuetype>::getValue(keytype key,
 
 template <class keytype, class valuetype>
 inline
-valuetype dictionary<keytype,valuetype>::getValue(keytype key) const {
+valuetype dictionary<keytype,valuetype>::getValue(keytype key) {
 	valuetype	value;
 	if (getValue(key,&value)) {
 		return value;
@@ -325,7 +324,7 @@ valuetype dictionary<keytype,valuetype>::getValue(keytype key) const {
 
 template <class keytype, class valuetype>
 inline
-bool dictionary<keytype,valuetype>::getKey(keytype key, keytype *k) const {
+bool dictionary<keytype,valuetype>::getKey(keytype key, keytype *k) {
 	dictionarypair<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
 		*k=dnode->getKey();
@@ -336,7 +335,7 @@ bool dictionary<keytype,valuetype>::getKey(keytype key, keytype *k) const {
 
 template <class keytype, class valuetype>
 inline
-keytype dictionary<keytype,valuetype>::getKey(keytype key) const {
+keytype dictionary<keytype,valuetype>::getKey(keytype key) {
 	keytype	k;
 	if (getKey(key,&k)) {
 		return k;
@@ -347,7 +346,7 @@ keytype dictionary<keytype,valuetype>::getKey(keytype key) const {
 template <class keytype, class valuetype>
 inline
 dictionarypair<keytype,valuetype>
-		*dictionary<keytype,valuetype>::getNode(keytype key) const {
+		*dictionary<keytype,valuetype>::getNode(keytype key) {
 	treenode<dictionarypair<keytype,valuetype> *> *tnode=find(key);
 	if (tnode) {
 		return tnode->getValue();
@@ -357,7 +356,7 @@ dictionarypair<keytype,valuetype>
 
 template <class keytype, class valuetype>
 inline
-linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() const {
+linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
 	delete keylist;
 	keylist=new linkedlist<keytype>();
 	if (trackinsertionorder) {
@@ -376,7 +375,7 @@ linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() const {
 
 template <class keytype, class valuetype>
 inline
-uint64_t dictionary<keytype,valuetype>::getLength() const {
+uint64_t dictionary<keytype,valuetype>::getLength() {
 	return tree.getLength();
 }
 
@@ -422,7 +421,7 @@ void dictionary<keytype,valuetype>::clear() {
 template <class keytype, class valuetype>
 inline
 treenode<dictionarypair<keytype,valuetype> *>
-		*dictionary<keytype,valuetype>::find(keytype key) const {
+		*dictionary<keytype,valuetype>::find(keytype key) {
 	dictionarypair<keytype,valuetype>	fnode(key,(valuetype)0);
 	return tree.find(&fnode);
 }
@@ -476,7 +475,7 @@ template <class keytype, class valuetype>
 inline
 int32_t dictionarypaircomparator<keytype,valuetype>::compare(
 							object *value1,
-							object *value2) const {
+							object *value2) {
 	dictionarypair<keytype,valuetype> *v1=
 		(dictionarypair<keytype,valuetype> *)value1;
 	dictionarypair<keytype,valuetype> *v2=

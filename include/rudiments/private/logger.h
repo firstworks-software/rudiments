@@ -6,7 +6,7 @@
 		void	write(const wchar_t *logentry);
 
 		// FIXME: should be possible to copy a logger
-			logger(const logger &l);
-		logger	&operator=(const logger &l);
+			logger(logger &l);
+		logger	&operator=(logger &l);
 
 		loggerprivate	*pvt;

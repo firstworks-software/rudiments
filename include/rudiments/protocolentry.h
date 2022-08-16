@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC protocolentry : public object {
 
 		/** Creates an instance of the protocolentry class.
 		 *  that is identical to "p". */
-		protocolentry(const protocolentry &p);
+		protocolentry(protocolentry &p);
 
 		/** Makes this instance of the protocolentry class
 		 *  identical to "p". */
-		protocolentry	&operator=(const protocolentry &p);
+		protocolentry	&operator=(protocolentry &p);
 
 		/** Deletes this instance of the protocolentry class. */
 		~protocolentry();
@@ -34,14 +34,14 @@ class RUDIMENTS_DLLSPEC protocolentry : public object {
 		bool	initialize(int32_t number);
 
 		/** Returns the name of the protocol entry. */
-		const char		*getName() const;
+		const char		*getName();
 
 		/** Returns a NULL-terminated list of aliases for the protocol
 		 *  entry. */
-		const char * const	*getAliasList() const;
+		const char * const	*getAliasList();
 
 		/** Returns the number associated with the protocol entry. */
-		int32_t			getNumber() const;
+		int32_t			getNumber();
 
 		/** Convenience method.
 		 *  Returns the number associated with "protocolname".

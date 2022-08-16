@@ -30,11 +30,11 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 
 		/** Creates an instance of the unixsocketclient class.
  		 *  that is a copy of "u". */
-		unixsocketclient(const unixsocketclient &u);
+		unixsocketclient(unixsocketclient &u);
 
 		/** Makes this instance of the unixsocketclient class
 		 *  identical to "u". */
-		unixsocketclient	&operator=(const unixsocketclient &u);
+		unixsocketclient	&operator=(unixsocketclient &u);
 
 		/** Deletes this instance of unixsocketclient. */
 		virtual		~unixsocketclient();

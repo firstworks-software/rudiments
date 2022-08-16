@@ -35,6 +35,18 @@ csvsax::csvsax() : sax() {
 	reset();
 }
 
+csvsax::csvsax(csvsax &c) : sax(c) {
+	// FIXME: implement this
+}
+
+csvsax &csvsax::operator=(csvsax &c) {
+	if (this!=&c) {
+		sax::operator=(c);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 csvsax::~csvsax() {
 	delete pvt;
 }
@@ -48,7 +60,7 @@ void csvsax::setQuote(char quote) {
 	pvt->_quote=quote;
 }
 
-char csvsax::getQuote() const {
+char csvsax::getQuote() {
 	return pvt->_quote;
 }
 
@@ -56,7 +68,7 @@ void csvsax::setDelimiter(char delimiter) {
 	pvt->_delimiter=delimiter;
 }
 
-char csvsax::getDelimiter() const {
+char csvsax::getDelimiter() {
 	return pvt->_delimiter;
 }
 

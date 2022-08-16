@@ -19,11 +19,11 @@ stringbuffer::stringbuffer(char *initialcontents, size_t initialsize) :
 }
 
 inline
-stringbuffer::stringbuffer(const stringbuffer &s) : bytebuffer(s) {
+stringbuffer::stringbuffer(stringbuffer &s) : bytebuffer(s) {
 }
 
 inline
-stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
+stringbuffer &stringbuffer::operator=(stringbuffer &s) {
 	if (this!=&s) {
 		bytebuffer::operator=(s);
 	}

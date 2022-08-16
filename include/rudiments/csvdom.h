@@ -78,7 +78,7 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		virtual	~csvdom();
 
 		/** Returns "csvdom". */
-		virtual const char	*getType() const;
+		virtual const char	*getType();
 
 		/** Parses generic input "in" and generates a DOM tree. */
 		bool	parse(input *in);

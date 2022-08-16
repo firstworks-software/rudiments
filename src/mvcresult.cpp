@@ -11,7 +11,7 @@ class mvcresultprivate {
 		uint32_t	_code;
 		char		*_message;
 
-		dictionary<char *, const collection *>	_data;
+		dictionary<char *, collection *>	_data;
 
 		wastebasket	_wb;
 		
@@ -93,7 +93,7 @@ const char *mvcresult::getMessage() {
 	return pvt->_message;
 }
 
-void mvcresult::setData(const char *name, const collection *data) {
+void mvcresult::setData(const char *name, collection *data) {
 	pvt->_data.remove((char *)name);
 	pvt->_data.setValue(charstring::duplicate(name),data);
 }
@@ -107,31 +107,31 @@ linkedlist<char *> *mvcresult::getKeys() {
 	return pvt->_data.getKeys();
 }
 
-const collection *mvcresult::getData(const char *name) {
+collection *mvcresult::getData(const char *name) {
 	return pvt->_data.getValue((char *)name);
 }
 
-ssize_t mvcresult::write() const {
+ssize_t mvcresult::write() {
 	return write(&stdoutput);
 }
 
-ssize_t mvcresult::write(output *out) const {
+ssize_t mvcresult::write(output *out) {
 	return writeJson(out,true);
 }
 
-ssize_t mvcresult::writeJson() const {
+ssize_t mvcresult::writeJson() {
 	return writeJson(true);
 }
 
-ssize_t mvcresult::writeJson(bool indent) const {
+ssize_t mvcresult::writeJson(bool indent) {
 	return writeJson(&stdoutput,indent);
 }
 
-ssize_t mvcresult::writeJson(output *out) const {
+ssize_t mvcresult::writeJson(output *out) {
 	return writeJson(out,true);
 }
 
-ssize_t mvcresult::writeJson(output *out, bool indent) const {
+ssize_t mvcresult::writeJson(output *out, bool indent) {
 
 	ssize_t			retval=0;
 
@@ -188,7 +188,7 @@ ssize_t mvcresult::writeJson(output *out, bool indent) const {
 					key->getValue(),klen),klen) &&
 			incOrErr(&retval,out->write("\":",2),2) &&
 			((indent)?incOrErr(&retval,out->write(' '),1):true);
-			const collection	*c=
+			collection	*c=
 				pvt->_data.getValue(key->getValue());
 			if (c) {
 				incOrErr(&retval,c->writeJson(out,indent));

@@ -40,14 +40,14 @@ inetsocketserver::inetsocketserver() : socketserver(), inetsocketutil() {
 	type("inetsocketserver");
 }
 
-inetsocketserver::inetsocketserver(const inetsocketserver &i) :
+inetsocketserver::inetsocketserver(inetsocketserver &i) :
 					socketserver(i), inetsocketutil(i) {
 	pvt=new inetsocketserverprivate;
 	translateByteOrder();
 	type("inetsocketserver");
 }
 
-inetsocketserver &inetsocketserver::operator=(const inetsocketserver &i) {
+inetsocketserver &inetsocketserver::operator=(inetsocketserver &i) {
 	if (this!=&i) {
 		socketserver::operator=(i);
 		inetsocketutil::operator=(i);

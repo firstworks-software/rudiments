@@ -101,7 +101,7 @@ class RUDIMENTS_DLLSPEC semaphoreset : public object {
 		bool	forceRemove();
 
 		/** Returns the internal id for the semaphore set. */
-		int32_t	getId() const;
+		int32_t	getId();
 
 		/** Wait on the "index"'th semaphore in the set. */
 		bool	wait(int32_t index);

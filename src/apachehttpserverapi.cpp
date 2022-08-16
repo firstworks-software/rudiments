@@ -90,7 +90,7 @@ apachehttpserverapi::~apachehttpserverapi() {
 	#endif
 }
 
-const char *apachehttpserverapi::getType() const {
+const char *apachehttpserverapi::getType() {
 	#ifdef APACHE_2
 		return "apache2";
 	#else

@@ -16,23 +16,23 @@ class collection : virtual public object {
 
 		/** Creates an instance of the collection class that is a copy
 		 *  of "c". */
-		collection(const collection &c);
+		collection(collection &c);
 
 		/** Makes this instance of the collection class
 		 *  identical to "c". */
-		collection &operator=(const collection &c);
+		collection &operator=(collection &c);
 
 		/** Deletes this instance of the collection class. */
 		virtual	~collection();
 
 		/** Returns a string representing the base type of the
 		 *  collection, eg. list, dictionary, tree, etc. */
-		virtual const char	*getType() const=0;
+		virtual const char	*getType()=0;
 
 		/** Returns the comparator used internally by the class.
 		 *  Returns whatever was previously set by setComparator() or
 		 *  an instance of the comparator class by default. */
-		comparator	*getComparator() const;
+		comparator	*getComparator();
 
 		/** Sets the comparator used by the class.  Reverts to the
 		 *  default comparator if "newcomp" is NULL. */
@@ -42,25 +42,25 @@ class collection : virtual public object {
 		 *  read-write implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsReadOnly() const;
+		virtual bool		getIsReadOnly();
 
 		/** Returns true for block-based implementations and false for
 		 *  monolithic implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsBlockBased() const;
+		virtual bool		getIsBlockBased();
 
 		/** Returns the block size for block-based implementations and
 		 *  0 for monolithic implementations.
 		 *
 		 *  Returns 0 by default. */
-		virtual uint64_t	getBlockSize() const;
+		virtual uint64_t	getBlockSize();
 
 		/** Returns true for sequential-access implementations and
 		 *  false for random-access implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsSequentialAccess() const;
+		virtual bool		getIsSequentialAccess();
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should delete the values that are stored at each
@@ -87,7 +87,7 @@ class collection : virtual public object {
 		 *  is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageValues() const;
+		virtual	bool	getManageValues();
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should array-delete the values that are stored at each
@@ -114,7 +114,7 @@ class collection : virtual public object {
 		 *  method is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageArrayValues() const;
+		virtual	bool	getManageArrayValues();
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should delete the keys that are stored at each
@@ -141,7 +141,7 @@ class collection : virtual public object {
 		 *  is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageKeys() const;
+		virtual	bool	getManageKeys();
 
 		/** Indicates whether or not this instance of the collection
 		 *  class should array-delete the keys that are stored at each
@@ -168,21 +168,21 @@ class collection : virtual public object {
 		 *  method is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		virtual	bool	getManageArrayKeys() const;
+		virtual	bool	getManageArrayKeys();
 
 		/** Emptyies the collection. */
 		virtual	void	clear()=0;
 
 		/** Writes a representation of the collection to standard
 		 *  output. */
-		virtual	ssize_t	write() const=0;
+		virtual	ssize_t	write()=0;
 
 		/** Writes a representation of the collection to "out". */
-		virtual	ssize_t	write(output *out) const=0;
+		virtual	ssize_t	write(output *out)=0;
 
 		/** Writes a JSON representation of the collection to standard
 		 *  output. */
-		virtual	ssize_t	writeJson() const=0;
+		virtual	ssize_t	writeJson()=0;
 
 		/** Writes a JSON representation of the collection to standard
 		 *  output.
@@ -190,17 +190,17 @@ class collection : virtual public object {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(bool indent) const=0;
+		virtual	ssize_t	writeJson(bool indent)=0;
 
 		/** Writes a JSON representation of the collection to "out". */
-		virtual	ssize_t	writeJson(output *out) const=0;
+		virtual	ssize_t	writeJson(output *out)=0;
 
 		/** Writes a JSON representation of the collection to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
 		 *  without indentation. */
-		virtual	ssize_t	writeJson(output *out, bool indent) const=0;
+		virtual	ssize_t	writeJson(output *out, bool indent)=0;
 
 	#include <rudiments/private/collection.h>
 };

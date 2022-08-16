@@ -131,7 +131,7 @@ domnode *domnode::createNullNode(dom *dom) {
 	return nn;
 }
 
-domnode *domnode::getPreviousTagSibling() const {
+domnode *domnode::getPreviousTagSibling() {
 	domnode	*node=getPreviousSibling();
 	while (!node->isNullNode() && node->getType()!=TAG_DOMNODETYPE) {
 		node=node->getPreviousSibling();
@@ -139,29 +139,29 @@ domnode *domnode::getPreviousTagSibling() const {
 	return node;
 }
 
-domnode *domnode::getPreviousTagSibling(const char *name) const {
+domnode *domnode::getPreviousTagSibling(const char *name) {
 	return getPreviousTagSibling(NULL,name,false);
 }
 
 domnode *domnode::getPreviousTagSibling(const char *ns,
-						const char *name) const {
+						const char *name) {
 	return getPreviousTagSibling(ns,name,false);
 }
 
 domnode *domnode::getPreviousTagSiblingIgnoringCase(
-						const char *name) const {
+						const char *name) {
 	return getPreviousTagSibling(NULL,name,true);
 }
 
 domnode *domnode::getPreviousTagSiblingIgnoringCase(
 						const char *ns,
-						const char *name) const {
+						const char *name) {
 	return getPreviousTagSibling(ns,name,true);
 }
 
 domnode *domnode::getPreviousTagSibling(const char *ns,
 					const char *name,
-					bool ignorecase) const {
+					bool ignorecase) {
 	for (domnode *current=getPreviousTagSibling();
 			current && !current->isNullNode();
 			current=current->getPreviousTagSibling()) {
@@ -174,7 +174,7 @@ domnode *domnode::getPreviousTagSibling(const char *ns,
 
 domnode *domnode::getPreviousTagSibling(const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getPreviousTagSibling(NULL,name,
 					attributename,attributevalue,false);
 }
@@ -182,7 +182,7 @@ domnode *domnode::getPreviousTagSibling(const char *name,
 domnode *domnode::getPreviousTagSibling(const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getPreviousTagSibling(ns,name,
 					attributename,attributevalue,false);
 }
@@ -190,7 +190,7 @@ domnode *domnode::getPreviousTagSibling(const char *ns,
 domnode *domnode::getPreviousTagSiblingIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getPreviousTagSibling(NULL,name,
 					attributename,attributevalue,true);
 }
@@ -199,7 +199,7 @@ domnode *domnode::getPreviousTagSiblingIgnoringCase(
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getPreviousTagSibling(ns,name,
 					attributename,attributevalue,true);
 }
@@ -208,7 +208,7 @@ domnode *domnode::getPreviousTagSibling(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const {
+					bool ignorecase) {
 	for (domnode *current=getPreviousTagSibling();
 			current && !current->isNullNode();
 			current=current->getPreviousTagSibling()) {
@@ -230,7 +230,7 @@ domnode *domnode::getPreviousTagSibling(const char *ns,
 	return pvt->_nullnode;
 }
 
-domnode *domnode::getNextTagSibling() const {
+domnode *domnode::getNextTagSibling() {
 	if (getType()==TAG_DOMNODETYPE) {
 		return pvt->_nexttag;
 	}
@@ -241,29 +241,29 @@ domnode *domnode::getNextTagSibling() const {
 	return node;
 }
 
-domnode *domnode::getNextTagSibling(const char *name) const {
+domnode *domnode::getNextTagSibling(const char *name) {
 	return getNextTagSibling(NULL,name,false);
 }
 
 domnode *domnode::getNextTagSibling(const char *ns,
-					const char *name) const {
+					const char *name) {
 	return getNextTagSibling(ns,name,false);
 }
 
 domnode *domnode::getNextTagSiblingIgnoringCase(
-					const char *name) const {
+					const char *name) {
 	return getNextTagSibling(NULL,name,true);
 }
 
 domnode *domnode::getNextTagSiblingIgnoringCase(
 					const char *ns,
-					const char *name) const {
+					const char *name) {
 	return getNextTagSibling(ns,name,true);
 }
 
 domnode *domnode::getNextTagSibling(const char *ns,
 					const char *name,
-					bool ignorecase) const {
+					bool ignorecase) {
 	for (domnode *current=getNextTagSibling();
 			current && !current->isNullNode();
 			current=current->getNextTagSibling()) {
@@ -276,7 +276,7 @@ domnode *domnode::getNextTagSibling(const char *ns,
 
 domnode *domnode::getNextTagSibling(const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getNextTagSibling(NULL,name,
 				attributename,attributevalue,false);
 }
@@ -284,7 +284,7 @@ domnode *domnode::getNextTagSibling(const char *name,
 domnode *domnode::getNextTagSibling(const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getNextTagSibling(ns,name,
 				attributename,attributevalue,false);
 }
@@ -292,7 +292,7 @@ domnode *domnode::getNextTagSibling(const char *ns,
 domnode *domnode::getNextTagSiblingIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getNextTagSibling(NULL,name,
 				attributename,attributevalue,true);
 }
@@ -301,7 +301,7 @@ domnode *domnode::getNextTagSiblingIgnoringCase(
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getNextTagSibling(ns,name,
 				attributename,attributevalue,true);
 }
@@ -310,7 +310,7 @@ domnode *domnode::getNextTagSibling(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const {
+					bool ignorecase) {
 	for (domnode *current=getNextTagSibling();
 			current && !current->isNullNode();
 			current=current->getNextTagSibling()) {
@@ -332,12 +332,12 @@ domnode *domnode::getNextTagSibling(const char *ns,
 	return pvt->_nullnode;
 }
 
-domnode *domnode::getNextTagSiblingInSet(const char * const *set) const {
+domnode *domnode::getNextTagSiblingInSet(const char * const *set) {
 	return getNextTagSiblingInSet(NULL,set);
 }
 
 domnode *domnode::getNextTagSiblingInSet(const char *ns,
-						const char * const *set) const {
+						const char * const *set) {
 	for (domnode *child=getNextTagSibling();
 			!child->isNullNode(); 
 			child=child->getNextTagSibling()) {
@@ -348,30 +348,30 @@ domnode *domnode::getNextTagSiblingInSet(const char *ns,
 	return pvt->_nullnode;
 }
 
-domnode *domnode::getFirstTagChild() const {
+domnode *domnode::getFirstTagChild() {
 	return pvt->_firsttagchild;
 }
 
-domnode *domnode::getFirstTagChild(const char *name) const {
+domnode *domnode::getFirstTagChild(const char *name) {
 	return getFirstTagChild(NULL,name,false);
 }
 
-domnode *domnode::getFirstTagChild(const char *ns, const char *name) const {
+domnode *domnode::getFirstTagChild(const char *ns, const char *name) {
 	return getFirstTagChild(ns,name,false);
 }
 
-domnode *domnode::getFirstTagChildIgnoringCase(const char *name) const {
+domnode *domnode::getFirstTagChildIgnoringCase(const char *name) {
 	return getFirstTagChild(NULL,name,true);
 }
 
 domnode *domnode::getFirstTagChildIgnoringCase(const char *ns,
-						const char *name) const {
+						const char *name) {
 	return getFirstTagChild(ns,name,true);
 }
 
 domnode *domnode::getFirstTagChild(const char *ns,
 					const char *name,
-					bool ignorecase) const {
+					bool ignorecase) {
 	domnode	*node=pvt->_firsttagchild;
 	if (node->isNullNode() || match(node,ns,name,ignorecase)) {
 		return node;
@@ -381,27 +381,27 @@ domnode *domnode::getFirstTagChild(const char *ns,
 
 domnode *domnode::getFirstTagChild(const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagChild(NULL,name,attributename,attributevalue,false);
 }
 
 domnode *domnode::getFirstTagChild(const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagChild(ns,name,attributename,attributevalue,false);
 }
 
 domnode *domnode::getFirstTagChildIgnoringCase(const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagChild(NULL,name,attributename,attributevalue,true);
 }
 
 domnode *domnode::getFirstTagChildIgnoringCase(const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagChild(ns,name,attributename,attributevalue,true);
 }
 
@@ -409,7 +409,7 @@ domnode *domnode::getFirstTagChild(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const {
+					bool ignorecase) {
 	domnode	*node=getFirstChild(ns,name,attributename,
 						attributevalue,ignorecase);
 	return (node->isNullNode() || node->getType()==TAG_DOMNODETYPE)?
@@ -418,12 +418,12 @@ domnode *domnode::getFirstTagChild(const char *ns,
 					attributevalue,ignorecase);
 }
 
-domnode *domnode::getFirstTagChildInSet(const char * const *set) const {
+domnode *domnode::getFirstTagChildInSet(const char * const *set) {
 	return getFirstTagChildInSet(NULL,set);
 }
 
 domnode *domnode::getFirstTagChildInSet(const char *ns,
-						const char * const *set) const {
+						const char * const *set) {
 	domnode	*child=getFirstTagChild();
 	if (match(child,ns,set)) {
 		return child;
@@ -431,27 +431,27 @@ domnode *domnode::getFirstTagChildInSet(const char *ns,
 	return child->getNextTagSiblingInSet(ns,set);
 }
 
-domnode *domnode::getFirstChild() const {
+domnode *domnode::getFirstChild() {
 	return pvt->_firstchild;
 }
 
 domnode *domnode::getFirstChild(const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstChild(NULL,name,attributename,attributevalue,false);
 }
 
 domnode *domnode::getFirstChild(const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstChild(ns,name,attributename,attributevalue,false);
 }
 
 domnode *domnode::getFirstChildIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstChild(NULL,name,attributename,attributevalue,true);
 }
 
@@ -459,7 +459,7 @@ domnode *domnode::getFirstChildIgnoringCase(
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstChild(ns,name,attributename,attributevalue,true);
 }
 
@@ -467,7 +467,7 @@ domnode *domnode::getFirstChild(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const {
+					bool ignorecase) {
 	for (domnode *current=pvt->_firstchild;
 			!current->isNullNode();
 			current=current->getNextSibling()) {
@@ -489,29 +489,29 @@ domnode *domnode::getFirstChild(const char *ns,
 	return pvt->_nullnode;
 }
 
-domnode *domnode::getFirstTagDescendent(const char *name) const {
+domnode *domnode::getFirstTagDescendent(const char *name) {
 	return getFirstTagDescendent(NULL,name,false);
 }
 
 domnode *domnode::getFirstTagDescendent(const char *ns,
-						const char *name) const {
+						const char *name) {
 	return getFirstTagDescendent(ns,name,false);
 }
 
 domnode *domnode::getFirstTagDescendentIgnoringCase(
-						const char *name) const {
+						const char *name) {
 	return getFirstTagDescendent(NULL,name,true);
 }
 
 domnode *domnode::getFirstTagDescendentIgnoringCase(
 						const char *ns,
-						const char *name) const {
+						const char *name) {
 	return getFirstTagDescendent(ns,name,true);
 }
 
 domnode *domnode::getFirstTagDescendent(const char *ns,
 						const char *name,
-						bool ignorecase) const {
+						bool ignorecase) {
 	for (domnode *child=getFirstTagChild();
 			!child->isNullNode();
 			child=child->getNextTagSibling()) {
@@ -531,7 +531,7 @@ domnode *domnode::getFirstTagDescendent(const char *ns,
 
 domnode *domnode::getFirstTagDescendent(const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagDescendent(NULL,name,
 					attributename,attributevalue,false);
 }
@@ -539,7 +539,7 @@ domnode *domnode::getFirstTagDescendent(const char *name,
 domnode *domnode::getFirstTagDescendent(const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagDescendent(ns,name,
 					attributename,attributevalue,false);
 }
@@ -547,7 +547,7 @@ domnode *domnode::getFirstTagDescendent(const char *ns,
 domnode *domnode::getFirstTagDescendentIgnoringCase(
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagDescendent(NULL,name,
 					attributename,attributevalue,true);
 }
@@ -556,7 +556,7 @@ domnode *domnode::getFirstTagDescendentIgnoringCase(
 					const char *ns,
 					const char *name,
 					const char *attributename,
-					const char *attributevalue) const {
+					const char *attributevalue) {
 	return getFirstTagDescendent(ns,name,
 					attributename,attributevalue,true);
 }
@@ -565,7 +565,7 @@ domnode *domnode::getFirstTagDescendent(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
-					bool ignorecase) const {
+					bool ignorecase) {
 
 	for (domnode *child=getFirstTagChild();
 			!child->isNullNode();
@@ -593,13 +593,13 @@ domnode *domnode::getFirstTagDescendent(const char *ns,
 }
 
 domnode *domnode::getFirstTagDescendentInSet(
-					const char * const *set) const {
+					const char * const *set) {
 	return getFirstTagDescendentInSet(NULL,set);
 }
 
 domnode *domnode::getFirstTagDescendentInSet(
 					const char *ns,
-					const char * const *set) const {
+					const char * const *set) {
 	for (domnode *child=getFirstTagChild();
 			!child->isNullNode();
 			child=child->getNextTagSibling()) {
@@ -616,11 +616,11 @@ domnode *domnode::getFirstTagDescendentInSet(
 	return pvt->_nullnode;
 }
 
-domnode *domnode::getNextTag() const {
+domnode *domnode::getNextTag() {
 	return getNextTag(NULL);
 }
 
-domnode *domnode::getNextTag(domnode *top) const {
+domnode *domnode::getNextTag(domnode *top) {
 
 	domnode	*ftc=getFirstTagChild();
 	if (!ftc->isNullNode()) {
@@ -630,7 +630,7 @@ domnode *domnode::getNextTag(domnode *top) const {
 	if (!nts->isNullNode()) {
 		return nts;
 	}
-	const domnode	*ancestor=this;
+	domnode	*ancestor=this;
 	for (;;) {
 		ancestor=ancestor->getParent();
 		if (ancestor->isNullNode() || ancestor==top) {
@@ -643,17 +643,17 @@ domnode *domnode::getNextTag(domnode *top) const {
 	}
 }
 
-domnode *domnode::getPreviousTag() const {
+domnode *domnode::getPreviousTag() {
 	return getPreviousTag(NULL);
 }
 
-domnode *domnode::getPreviousTag(domnode *top) const {
+domnode *domnode::getPreviousTag(domnode *top) {
 
 	domnode	*nts=getPreviousTagSibling();
 	if (!nts->isNullNode()) {
 		return nts;
 	}
-	const domnode	*ancestor=this;
+	domnode	*ancestor=this;
 	for (;;) {
 		ancestor=ancestor->getParent();
 		if (ancestor->isNullNode() || ancestor==top) {
@@ -694,7 +694,7 @@ domnode *domnode::getNode(domnode *first,
 				const char *ns,
 				const char *name,
 				bool ignorecase,
-				uint64_t count) const {
+				uint64_t count) {
 	if (!first || position>=count) {
 		return pvt->_nullnode;
 	}
@@ -886,7 +886,7 @@ bool domnode::appendAttribute(const char *name, const char *value) {
 	return insertAttribute(name,value,getAttributeCount());
 }
 
-dictionary<const char *, const char *> *domnode::getAttributes() const {
+dictionary<const char *, const char *> *domnode::getAttributes() {
 
 	if (pvt->_isnullnode) {
 		return NULL;
@@ -933,31 +933,31 @@ void domnode::dontCascadeOnDelete() {
 	pvt->_cascade=false;
 }
 
-domnodetype domnode::getType() const {
+domnodetype domnode::getType() {
 	return pvt->_type;
 }
 
-const char *domnode::getNamespace() const {
+const char *domnode::getNamespace() {
 	return pvt->_namespace;
 }
 
-const char *domnode::getName() const {
+const char *domnode::getName() {
 	return pvt->_name;
 }
 
-const char *domnode::getValue() const {
+const char *domnode::getValue() {
 	return pvt->_value;
 }
 
-dom *domnode::getTree() const {
+dom *domnode::getTree() {
 	return pvt->_dom;
 }
 
-domnode *domnode::getParent() const {
+domnode *domnode::getParent() {
 	return pvt->_parent;
 }
 
-uint64_t domnode::getPosition() const {
+uint64_t domnode::getPosition() {
 	domnode	*current=getParent()->getChild((uint64_t)0);
 	if (!current) {
 		// shouldn't ever happen
@@ -974,82 +974,82 @@ uint64_t domnode::getPosition() const {
 	return 0;
 }
 
-domnode *domnode::getPreviousSibling() const {
+domnode *domnode::getPreviousSibling() {
 	return pvt->_previous;
 }
 
-domnode *domnode::getNextSibling() const {
+domnode *domnode::getNextSibling() {
 	return pvt->_next;
 }
 
-domnode *domnode::getNullNode() const {
+domnode *domnode::getNullNode() {
 	return pvt->_nullnode;
 }
 
-bool domnode::isNullNode() const {
+bool domnode::isNullNode() {
 	return pvt->_isnullnode;
 }
 
-uint64_t domnode::getChildCount() const {
+uint64_t domnode::getChildCount() {
 	return pvt->_childcount;
 }
 
-domnode *domnode::getChild(uint64_t position) const {
+domnode *domnode::getChild(uint64_t position) {
 	return getNode(pvt->_firstchild,position,
 				NULL,NULL,false,getChildCount());
 }
 
-domnode *domnode::getFirstChild(const char *name) const {
+domnode *domnode::getFirstChild(const char *name) {
 	return getFirstChild(NULL,name,false);
 }
 
 domnode *domnode::getFirstChild(const char *ns,
-					const char *name) const {
+					const char *name) {
 	return getFirstChild(ns,name,false);
 }
 
-domnode *domnode::getFirstChildIgnoringCase(const char *name) const {
+domnode *domnode::getFirstChildIgnoringCase(const char *name) {
 	return getFirstChild(NULL,name,true);
 }
 
 domnode *domnode::getFirstChildIgnoringCase(const char *ns,
-						const char *name) const {
+						const char *name) {
 	return getFirstChild(ns,name,true);
 }
 
 domnode *domnode::getFirstChild(const char *ns,
 					const char *name,
-					bool ignorecase) const {
+					bool ignorecase) {
 	return getNode(pvt->_firstchild,0,ns,name,ignorecase,getChildCount());
 }
 
-uint64_t domnode::getAttributeCount() const {
+uint64_t domnode::getAttributeCount() {
 	return pvt->_attributecount;
 }
 
-domnode *domnode::getAttribute(uint64_t position) const {
+domnode *domnode::getAttribute(uint64_t position) {
 	return getNode(pvt->_firstattribute,position,
 				NULL,NULL,false,getAttributeCount());
 }
 
-domnode *domnode::getAttribute(const char *name) const {
+domnode *domnode::getAttribute(const char *name) {
 	return getAttribute(name,false);
 }
 
-domnode *domnode::getAttributeIgnoringCase(const char *name) const {
+domnode *domnode::getAttributeIgnoringCase(const char *name) {
 	return getAttribute(name,true);
 }
 
-domnode *domnode::getAttribute(const char *name, bool ignorecase) const {
+domnode *domnode::getAttribute(const char *name, bool ignorecase) {
 	return getNode(pvt->_firstattribute,0,
 				NULL,name,ignorecase,getAttributeCount());
 }
 
-const char *domnode::getAttributeValue(uint64_t position) const {
+const char *domnode::getAttributeValue(uint64_t position) {
 	return getAttribute(position)->getValue();
 }
 
-const char *domnode::getAttributeValue(const char *name) const {
+const char *domnode::getAttributeValue(const char *name) {
 	return getAttribute(name)->getValue();
 }
 
@@ -1534,50 +1534,50 @@ bool domnode::deleteAttribute(domnode *attribute) {
 				&pvt->_attributecount);
 }
 
-ssize_t domnode::write() const {
+ssize_t domnode::write() {
 	return write(true);
 }
 
-ssize_t domnode::write(bool indent) const {
+ssize_t domnode::write(bool indent) {
 	return write(&stdoutput,indent);
 }
 
-ssize_t domnode::write(output *out) const {
+ssize_t domnode::write(output *out) {
 	return write(out,true);
 }
 
-ssize_t domnode::write(output *out, bool indent) const {
+ssize_t domnode::write(output *out, bool indent) {
 	uint16_t	indentlevel=0;
 	return (pvt->_dom->
 		writeNode(this,out,indent,(indent)?&indentlevel:NULL))?
 								1:RESULT_ERROR;
 }
 
-ssize_t domnode::writeXml() const {
+ssize_t domnode::writeXml() {
 	return writeXml(false);
 }
 
-ssize_t domnode::writeXml(bool indent) const {
+ssize_t domnode::writeXml(bool indent) {
 	return writeXml(&stdoutput,indent);
 }
 
-ssize_t domnode::writeXml(output *out) const {
+ssize_t domnode::writeXml(output *out) {
 	return writeXml(out,false);
 }
 
-ssize_t domnode::writeXml(output *out, bool indent) const {
+ssize_t domnode::writeXml(output *out, bool indent) {
 	uint16_t	indentlevel=0;
 	return pvt->_dom->
 		dom::writeNode(this,out,indent,(indent)?&indentlevel:NULL);
 }
 
-stringbuffer *domnode::getPath() const {
+stringbuffer *domnode::getPath() {
 
 	// Path: /element[index]/...
 
 	// run up the tree, counting parent nodes
 	int64_t			ancestors=0;
-	const domnode	*node=this;
+	domnode	*node=this;
 	while (!node->isNullNode() && node->getType()!=ROOT_DOMNODETYPE) {
 		ancestors++;
 		node=node->getParent();
@@ -1621,10 +1621,10 @@ stringbuffer *domnode::getPath() const {
 	return path;
 }
 
-domnode *domnode::getChildByPath(const char *path) const {
+domnode *domnode::getChildByPath(const char *path) {
 
 	// Path: /element[index]/...
-	const domnode	*node=this;
+	domnode			*node=this;
 	stringbuffer		name;
 	stringbuffer		indexstring;
 	stringbuffer		*buffer=&name;
@@ -1665,22 +1665,22 @@ domnode *domnode::getChildByPath(const char *path) const {
 }
 
 domnode *domnode::getAttributeByPath(const char *path,
-						uint64_t position) const {
+						uint64_t position) {
 	return getChildByPath(path)->getAttribute(position);
 }
 
 domnode *domnode::getAttributeByPath(const char *path,
-						const char *name) const {
+						const char *name) {
 	return getChildByPath(path)->getAttribute(name);
 }
 
 const char *domnode::getAttributeValueByPath(const char *path,
-						uint64_t position) const {
+						uint64_t position) {
 	return getChildByPath(path)->getAttributeValue(position);
 }
 
 const char *domnode::getAttributeValueByPath(const char *path,
-						const char *name) const {
+						const char *name) {
 	return getChildByPath(path)->getAttributeValue(name);
 }
 
@@ -1895,7 +1895,7 @@ domnode *domnode::clone(dom *dom) {
 bool domnode::match(domnode *node,
 				const char *ns,
 				const char *name,
-				bool ignorecase) const {
+				bool ignorecase) {
 
 	const char	*nodens=node->getNamespace();
 	const char	*nodename=node->getName();
@@ -1928,7 +1928,7 @@ bool domnode::match(domnode *node,
 
 bool domnode::match(domnode *node,
 				const char *ns,
-				const char * const *set) const {
+				const char * const *set) {
 	if (ns && charstring::compare(node->getNamespace(),ns)) {
 		return false;
 	}

@@ -14,21 +14,21 @@ table<valuetype>::table() :
 
 template <class valuetype>
 inline
-table<valuetype>::table(const table<valuetype> &a) :
+table<valuetype>::table(table<valuetype> &a) :
 				tablecollection<valuetype>(a) {
 	clone(&a);
 }
 
 template <class valuetype>
 inline
-table<valuetype>::table(const tablecollection<valuetype> &a) :
+table<valuetype>::table(tablecollection<valuetype> &a) :
 				tablecollection<valuetype>(a) {
 	clone(&a);
 }
 
 template <class valuetype>
 inline
-table<valuetype> &table<valuetype>::operator=(const table<valuetype> &a) {
+table<valuetype> &table<valuetype>::operator=(table<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		tablecollection<valuetype>::operator=(a);
@@ -39,8 +39,7 @@ table<valuetype> &table<valuetype>::operator=(const table<valuetype> &a) {
 
 template <class valuetype>
 inline
-table<valuetype> &table<valuetype>::operator=(
-					const tablecollection<valuetype> &a) {
+table<valuetype> &table<valuetype>::operator=(tablecollection<valuetype> &a) {
 	if (this!=&a) {
 		clear();
 		tablecollection<valuetype>::operator=(a);
@@ -51,7 +50,7 @@ table<valuetype> &table<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void table<valuetype>::clone(const tablecollection<valuetype> *t) {
+void table<valuetype>::clone(tablecollection<valuetype> *t) {
 	cols=0;
 	rows=0;
 	setCopyColumnNames(t->getCopyColumnNames());
@@ -95,7 +94,7 @@ void table<valuetype>::setColumnName(uint64_t col, const char *name) {
 
 template <class valuetype>
 inline
-const char *table<valuetype>::getColumnName(uint64_t col) const {
+const char *table<valuetype>::getColumnName(uint64_t col) {
 	return (col<cols)?columnnames[col]:NULL;
 }
 
@@ -108,13 +107,13 @@ void table<valuetype>::setCopyColumnNames(bool copy) {
 
 template <class valuetype>
 inline
-bool table<valuetype>::getCopyColumnNames() const {
+bool table<valuetype>::getCopyColumnNames() {
 	return columnnames.getManageArrayValues();
 }
 
 template <class valuetype>
 inline
-uint64_t table<valuetype>::getColumnCount() const {
+uint64_t table<valuetype>::getColumnCount() {
 	return cols;
 }
 
@@ -126,7 +125,7 @@ void table<valuetype>::setManageValues(bool manage) {
 
 template <class valuetype>
 inline
-bool table<valuetype>::getManageValues() const {
+bool table<valuetype>::getManageValues() {
 	return values.getManageValues();
 }
 
@@ -138,7 +137,7 @@ void table<valuetype>::setManageArrayValues(bool manage) {
 
 template <class valuetype>
 inline
-bool table<valuetype>::getManageArrayValues() const {
+bool table<valuetype>::getManageArrayValues() {
 	return values.getManageArrayValues();
 }
 
@@ -156,13 +155,13 @@ void table<valuetype>::setValue(uint64_t row, uint64_t col, valuetype value) {
 
 template <class valuetype>
 inline
-valuetype table<valuetype>::getValue(uint64_t row, uint64_t col) const {
+valuetype table<valuetype>::getValue(uint64_t row, uint64_t col) {
 	return (row<rows && col<cols)?values[row][col]:((valuetype)0);
 }
 
 template <class valuetype>
 inline
-valuetype table<valuetype>::getValue(uint64_t row, const char *colname) const {
+valuetype table<valuetype>::getValue(uint64_t row, const char *colname) {
 	// FIXME: inefficient
 	for (uint64_t i=0; i<cols; i++) {
 		if (!charstring::compare(colname,columnnames[i])) {
@@ -174,13 +173,13 @@ valuetype table<valuetype>::getValue(uint64_t row, const char *colname) const {
 
 template <class valuetype>
 inline
-uint64_t table<valuetype>::getRowCount() const {
+uint64_t table<valuetype>::getRowCount() {
 	return rows;
 }
 
 template <class valuetype>
 inline
-bool table<valuetype>::getAllRowsAvailable() const {
+bool table<valuetype>::getAllRowsAvailable() {
 	return true;
 }
 

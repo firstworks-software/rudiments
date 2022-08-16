@@ -292,19 +292,19 @@ filedescriptor::filedescriptor(int32_t fd) : input(), output() {
 	setFileDescriptor(fd);
 }
 
-filedescriptor::filedescriptor(const filedescriptor &f) : input(f), output(f) {
+filedescriptor::filedescriptor(filedescriptor &f) : input(f), output(f) {
 	pvt=new filedescriptorprivate;
-	filedescriptorClone(f);
+	clone(f);
 }
 
-filedescriptor &filedescriptor::operator=(const filedescriptor &f) {
+filedescriptor &filedescriptor::operator=(filedescriptor &f) {
 	if (this!=&f) {
 		if (pvt->_writebuffermap) {
 			delete pvt->_writebuffermap;
 		} else {
 			delete[] pvt->_writebufferunaligned;
 		}
-		filedescriptorClone(f);
+		clone(f);
 	}
 	return *this;
 }
@@ -344,7 +344,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_readbufferend=NULL;
 }
 
-void filedescriptor::filedescriptorClone(const filedescriptor &f) {
+void filedescriptor::clone(filedescriptor &f) {
 	setFileDescriptor(f.pvt->_fd);
 	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
 	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
@@ -421,7 +421,7 @@ filedescriptor::~filedescriptor() {
 	delete tmppvt;
 }
 
-bool filedescriptor::setWriteBufferSize(ssize_t size) const {
+bool filedescriptor::setWriteBufferSize(ssize_t size) {
 
 	// finagle size
 	if (size>SSIZE_MAX) {
@@ -441,7 +441,7 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 			unsetStorageWriteBuffer());
 }
 
-bool filedescriptor::setStreamWriteBufferSize(ssize_t size) const {
+bool filedescriptor::setStreamWriteBufferSize(ssize_t size) {
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: setStreamWriteBufferSize(%d,attempting %d bytes",
@@ -486,7 +486,7 @@ bool filedescriptor::setStreamWriteBufferSize(ssize_t size) const {
 	return true;
 }
 
-bool filedescriptor::setStorageWriteBufferSize(ssize_t size) const {
+bool filedescriptor::setStorageWriteBufferSize(ssize_t size) {
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: setStorageWriteBufferSize(%d,attempting %d bytes",
@@ -549,7 +549,7 @@ bool filedescriptor::setStorageWriteBufferSize(ssize_t size) const {
 	return true;
 }
 
-bool filedescriptor::unsetStreamWriteBuffer() const {
+bool filedescriptor::unsetStreamWriteBuffer() {
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: unsetStreamWriteBuffer(%d,",
@@ -593,7 +593,7 @@ bool filedescriptor::unsetStreamWriteBuffer() const {
 	return true;
 }
 
-bool filedescriptor::unsetStorageWriteBuffer() const {
+bool filedescriptor::unsetStorageWriteBuffer() {
 
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: unsetStorageWriteBuffer(%d,",
@@ -647,7 +647,7 @@ bool filedescriptor::unsetStorageWriteBuffer() const {
 	return true;
 }
 
-void filedescriptor::allocateWriteBuffer(ssize_t size) const {
+void filedescriptor::allocateWriteBuffer(ssize_t size) {
 
 	// If the file was opened with O_DIRECT then we can only copy data to
 	// an address that is aligned to a multiple of the fllesystem's block
@@ -666,11 +666,11 @@ void filedescriptor::allocateWriteBuffer(ssize_t size) const {
 		((((ssize_t)pvt->_writebufferunaligned)+extra)&~extra);
 }
 
-ssize_t filedescriptor::getWriteBufferSize() const {
+ssize_t filedescriptor::getWriteBufferSize() {
 	return pvt->_writeblocksize;
 }
 
-bool filedescriptor::setReadBufferSize(ssize_t size) const {
+bool filedescriptor::setReadBufferSize(ssize_t size) {
 
 	// finagle size
 	if (size>SSIZE_MAX) {
@@ -690,7 +690,7 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 			unsetStorageReadBuffer());
 }
 
-bool filedescriptor::setStreamReadBufferSize(ssize_t size) const {
+bool filedescriptor::setStreamReadBufferSize(ssize_t size) {
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: setStreamReadBufferSize(%d,attempting %d bytes",
@@ -715,7 +715,7 @@ bool filedescriptor::setStreamReadBufferSize(ssize_t size) const {
 	return true;
 }
 
-bool filedescriptor::setStorageReadBufferSize(ssize_t size) const {
+bool filedescriptor::setStorageReadBufferSize(ssize_t size) {
 
 	// for storage filedescriptors, we only
 	// use one buffer, the write buffer
@@ -733,7 +733,7 @@ bool filedescriptor::setStorageReadBufferSize(ssize_t size) const {
 	return setWriteBufferSize(size);
 }
 
-bool filedescriptor::unsetStreamReadBuffer() const {
+bool filedescriptor::unsetStreamReadBuffer() {
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 	debugPrintf("%d: unsetStreamReadBufferSize(%d,",
@@ -758,7 +758,7 @@ bool filedescriptor::unsetStreamReadBuffer() const {
 	return true;
 }
 
-bool filedescriptor::unsetStorageReadBuffer() const {
+bool filedescriptor::unsetStorageReadBuffer() {
 
 	// for storage filedescriptors, we only
 	// use one buffer, the write buffer
@@ -776,7 +776,7 @@ bool filedescriptor::unsetStorageReadBuffer() const {
 	return unsetStorageWriteBuffer();
 }
 
-ssize_t filedescriptor::getReadBufferSize() const {
+ssize_t filedescriptor::getReadBufferSize() {
 	return (pvt->_isstream)?
 			(pvt->_readbufferend-pvt->_readbuffer):
 			pvt->_writeblocksize;
@@ -803,7 +803,7 @@ ssize_t filedescriptor::getBytesBuffered() {
 			pvt->_writebuffertail-pvt->_writebuffer:0;
 }
 
-int32_t filedescriptor::getFileDescriptor() const {
+int32_t filedescriptor::getFileDescriptor() {
 	return pvt->_fd;
 }
 
@@ -823,7 +823,7 @@ bool filedescriptor::getIsStream() {
 	return pvt->_isstream;
 }
 
-int32_t filedescriptor::duplicate() const {
+int32_t filedescriptor::duplicate() {
 	int32_t	result;
 	error::clearError();
 	do {
@@ -839,7 +839,7 @@ int32_t filedescriptor::duplicate() const {
 	return result;
 }
 
-bool filedescriptor::duplicate(int32_t newfd) const {
+bool filedescriptor::duplicate(int32_t newfd) {
 	int32_t	result;
 	error::clearError();
 	do {
@@ -872,7 +872,7 @@ bool filedescriptor::supportsBlockingNonBlockingModes() {
 	#endif
 }
 
-bool filedescriptor::useNonBlockingMode() const {
+bool filedescriptor::useNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
 		return (fCntl(F_SETFL,fCntl(F_GETFL,0)|O_NONBLOCK)!=-1);
@@ -881,7 +881,7 @@ bool filedescriptor::useNonBlockingMode() const {
 	#endif
 }
 
-bool filedescriptor::useBlockingMode() const {
+bool filedescriptor::useBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
 		return (fCntl(F_SETFL,fCntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
@@ -890,7 +890,7 @@ bool filedescriptor::useBlockingMode() const {
 	#endif
 }
 
-bool filedescriptor::isUsingNonBlockingMode() const {
+bool filedescriptor::isUsingNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && defined(F_GETFL)
 		return (fCntl(F_GETFL,0)&O_NONBLOCK);
 	#else
@@ -898,19 +898,19 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#endif
 }
 
-off64_t filedescriptor::setPositionRelativeToBeginning(off64_t offset) const {
+off64_t filedescriptor::setPositionRelativeToBeginning(off64_t offset) {
 	return setPosition(offset,SEEK_SET);
 }
 
-off64_t filedescriptor::setPositionRelativeToCurrent(off64_t offset) const {
+off64_t filedescriptor::setPositionRelativeToCurrent(off64_t offset) {
 	return setPosition(offset,SEEK_CUR);
 }
 
-off64_t filedescriptor::setPositionRelativeToEnd(off64_t offset) const {
+off64_t filedescriptor::setPositionRelativeToEnd(off64_t offset) {
 	return setPosition(offset,SEEK_END);
 }
 
-off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
+off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 
 	// for stream filedescriptors, we can't set the position, just return
 	// the current offset, which should always be 0
@@ -1008,7 +1008,7 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) const {
 	return offset;
 }
 
-off64_t filedescriptor::getSize() const {
+off64_t filedescriptor::getSize() {
 	file	f;
 	f.setFileDescriptor(pvt->_fd);
 	bool	success=f.getCurrentProperties();
@@ -1019,7 +1019,7 @@ off64_t filedescriptor::getSize() const {
 	return f.getSize();
 }
 
-off64_t filedescriptor::getCurrentPosition() const {
+off64_t filedescriptor::getCurrentPosition() {
 
 	// for stream filedescriptors, the position is always 0
 	if (pvt->_isstream) {
@@ -1037,7 +1037,7 @@ off64_t filedescriptor::getCurrentPosition() const {
 	return pvt->_offset;
 }
 
-off64_t filedescriptor::lseek(off64_t offset, int32_t whence) const {
+off64_t filedescriptor::lseek(off64_t offset, int32_t whence) {
 	int32_t	result;
 	error::clearError();
 	do {
@@ -1629,7 +1629,7 @@ void filedescriptor::dontRetryInterruptedReads() {
 	pvt->_retryinterruptedreads=false;
 }
 
-bool filedescriptor::getRetryInterruptedReads() const {
+bool filedescriptor::getRetryInterruptedReads() {
 	return pvt->_retryinterruptedreads;
 }
 
@@ -1641,7 +1641,7 @@ void filedescriptor::dontRetryInterruptedWrites() {
 	pvt->_retryinterruptedwrites=false;
 }
 
-bool filedescriptor::getRetryInterruptedWrites() const {
+bool filedescriptor::getRetryInterruptedWrites() {
 	return pvt->_retryinterruptedwrites;
 }
 
@@ -1653,7 +1653,7 @@ void filedescriptor::dontRetryInterruptedWaits() {
 	pvt->_retryinterruptedwaits=false;
 }
 
-bool filedescriptor::getRetryInterruptedWaits() const {
+bool filedescriptor::getRetryInterruptedWaits() {
 	return pvt->_retryinterruptedwaits;
 }
 
@@ -1665,7 +1665,7 @@ void filedescriptor::dontRetryInterruptedFcntl() {
 	pvt->_retryinterruptedfcntl=true;
 }
 
-bool filedescriptor::getRetryInterruptedFcntl() const {
+bool filedescriptor::getRetryInterruptedFcntl() {
 	return pvt->_retryinterruptedfcntl;
 }
 
@@ -1677,7 +1677,7 @@ void filedescriptor::dontRetryInterruptedIoctl() {
 	pvt->_retryinterruptedioctl=true;
 }
 
-bool filedescriptor::getRetryInterruptedIoctl() const {
+bool filedescriptor::getRetryInterruptedIoctl() {
 	return pvt->_retryinterruptedioctl;
 }
 
@@ -2539,7 +2539,7 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) {
 }
 
 int32_t filedescriptor::waitForNonBlockingRead(
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	if (!pvt->_lstnr) {
 		pvt->_lstnr=new listener();
 	} else {
@@ -2550,7 +2550,7 @@ int32_t filedescriptor::waitForNonBlockingRead(
 }
 
 int32_t filedescriptor::waitForNonBlockingWrite(
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	if (!pvt->_lstnr) {
 		pvt->_lstnr=new listener();
 	} else {
@@ -2756,7 +2756,7 @@ uint64_t filedescriptor::littleEndianToHost(uint64_t value) {
 	#endif
 }
 
-int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
+int32_t filedescriptor::fCntl(int32_t cmd, long arg) {
 	#ifdef RUDIMENTS_HAVE_FCNTL
 		int32_t	result;
 		error::clearError();
@@ -2771,7 +2771,7 @@ int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
 	#endif
 }
 
-int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
+int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) {
 	#ifdef RUDIMENTS_HAVE_IOCTL
 		int32_t	result;
 		error::clearError();
@@ -3263,11 +3263,11 @@ bool filedescriptor::enableIPv4() {
 #endif
 }
 
-const char *filedescriptor::getType() const {
+const char *filedescriptor::getType() {
 	return pvt->_type;
 }
 
-char *filedescriptor::getPeerAddress() const {
+char *filedescriptor::getPeerAddress() {
 
 	// initialize a socket address structure
 	struct sockaddr_in		clientsin;
@@ -3341,7 +3341,7 @@ int32_t filedescriptor::setSockOpt(int32_t level, int32_t optname,
 	return result;
 }
 
-const char *filedescriptor::type() const {
+const char *filedescriptor::type() {
 	return pvt->_type;
 }
 
@@ -3349,7 +3349,7 @@ void filedescriptor::type(const char *tp) {
 	pvt->_type=tp;
 }
 
-int32_t filedescriptor::fd() const {
+int32_t filedescriptor::fd() {
 	return pvt->_fd;
 }
 

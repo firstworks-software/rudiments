@@ -60,15 +60,15 @@ void bytebuffer::init(unsigned char *initialcontents, size_t initialsize) {
 	pvt->_initialsize=initialsize;
 }
 
-bytebuffer::bytebuffer(const bytebuffer &v) {
-	bytebufferClone(v);
+bytebuffer::bytebuffer(bytebuffer &v) {
+	clone(v);
 }
 
-bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
+bytebuffer &bytebuffer::operator=(bytebuffer &v) {
 	if (this!=&v) {
 		delete[] pvt->_buffer;
 		delete pvt;
-		bytebufferClone(v);
+		clone(v);
 	}
 	return *this;
 }
@@ -78,7 +78,7 @@ bytebuffer::~bytebuffer() {
 	delete pvt;
 }
 
-void bytebuffer::bytebufferClone(const bytebuffer &v) {
+void bytebuffer::clone(bytebuffer &v) {
 	pvt=new bytebufferprivate;
 	pvt->_buffer=(unsigned char *)bytestring::duplicate(
 					v.pvt->_buffer,v.pvt->_size);

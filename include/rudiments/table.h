@@ -20,20 +20,20 @@ class table : public tablecollection<valuetype> {
 
 		/** Creates an instance of the table class
 		 *  that is a copy of "a". */
-		table(const table<valuetype> &a);
+		table(table<valuetype> &a);
 
 		/** Creates an instance of the table class
 		 *  that is a copy of "a". */
-		table(const tablecollection<valuetype> &a);
+		table(tablecollection<valuetype> &a);
 
 		/** Makes this instance of the table class
 		 *  identical to "a". */
-		table<valuetype>	&operator=(const table<valuetype> &a);
+		table<valuetype>	&operator=(table<valuetype> &a);
 
 		/** Makes this instance of the table class
 		 *  identical to "a". */
 		table<valuetype>	&operator=(
-					const tablecollection<valuetype> &a);
+					tablecollection<valuetype> &a);
 
 		/** Deletes this instance of the table class. */
 		~table();
@@ -50,19 +50,19 @@ class table : public tablecollection<valuetype> {
  		 *  passed in to setColumnName().
 		 *
 		 *  Returns true if it is and false if it is not. */
-		bool	getCopyColumnNames() const;
+		bool	getCopyColumnNames();
 
 		/** Sets the name of column "col" to "name" */
 		void		setColumnName(uint64_t col, const char *name);
 
 		/** Returns the name of column "col". */
-		const char	*getColumnName(uint64_t col) const;
+		const char	*getColumnName(uint64_t col);
 
 		/** Returns the current number of columns in the table.
 		 *  
 		 *  Returns larger and larger values as calls to setColumnName()
 		 *  or setValue() extend the table. */
-		uint64_t	getColumnCount() const;
+		uint64_t	getColumnCount();
 
 		/** Indicates whether or not this instance of the table
 		 *  class should delete the values that are stored at each
@@ -87,7 +87,7 @@ class table : public tablecollection<valuetype> {
 		 *  location in the table when clear() is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		bool	getManageValues() const;
+		bool	getManageValues();
 
 		/** Indicates whether or not this instance of the table
 		 *  class should array-delete the values that are stored at each
@@ -112,7 +112,7 @@ class table : public tablecollection<valuetype> {
 		 *  each location in the table when clear() is called.
 		 *
 		 *  Returns true if it is and false if it is not. */
-		bool	getManageArrayValues() const;
+		bool	getManageArrayValues();
 
 		/** Sets the value at "row", "col" to "value". */
 		void		setValue(uint64_t row, uint64_t col,
@@ -121,21 +121,21 @@ class table : public tablecollection<valuetype> {
 		/** Returns the value at "row", "col".  Returns NULL or 0 if
 		 *  there is no value at that address. */
 		valuetype	getValue(uint64_t row,
-						uint64_t col) const;
+						uint64_t col);
 
 		/** Returns the value at "row", "colname".  Returns NULL or 0
 		 *  if there is no value at that address. */
 		valuetype	getValue(uint64_t row,
-						const char *colname) const;
+						const char *colname);
 
 		/** Returns the current number of rows in the table.
 		 *
 		 *  Returns larger and larger values as calls to setValue()
 		 *  extend the table. */
-		uint64_t	getRowCount() const;
+		uint64_t	getRowCount();
 
 		/** Returns true. */
-		bool		getAllRowsAvailable() const;
+		bool		getAllRowsAvailable();
 
 		/** Removes all values currently stored in the table, such that
 		 *  getValue() will return NULL or 0. */

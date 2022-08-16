@@ -11,7 +11,7 @@ class RUDIMENTS_DLLSPEC cgihttpserverapi : public httpserverapi {
 		cgihttpserverapi();
 		~cgihttpserverapi();
 
-		const char	*getType() const;
+		const char	*getType();
 
 	#include <rudiments/private/cgihttpserverapi.h>
 };

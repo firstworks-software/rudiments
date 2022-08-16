@@ -20,11 +20,11 @@ class RUDIMENTS_DLLSPEC filesystem : virtual public object {
 
 		/** Creates an instance of the filesystem class
  		 *  that is a copy of "f". */
-		filesystem(const filesystem &f);
+		filesystem(filesystem &f);
 
 		/** Makes this instance of the filesystem class
 		 *  identical to "f". */
-		filesystem	&operator=(const filesystem &f);
+		filesystem	&operator=(filesystem &f);
 
 		/** Deletes this instance of the filesystem class. */
 		virtual		~filesystem();
@@ -51,80 +51,80 @@ class RUDIMENTS_DLLSPEC filesystem : virtual public object {
 		bool	getCurrentProperties();
 
 		/** Returns a number representing the filesystem type. */
-		int64_t		getType() const;
+		int64_t		getType();
 
 		/** Returns the fundamental block size of the filesystem. */
-		int64_t		getBlockSize() const;
+		int64_t		getBlockSize();
 
 		/** Returns the optimum transfer block size. */
-		int64_t		getOptimumTransferBlockSize() const;
+		int64_t		getOptimumTransferBlockSize();
 
 		/** Returns the total number of blocks allocated for the
 		 *  filesystem. */
-		int64_t		getTotalBlocks() const;
+		int64_t		getTotalBlocks();
 
 		/** Returns the number of free blocks in the filesystem. */
-		int64_t		getFreeBlocks() const;
+		int64_t		getFreeBlocks();
 
 		/** Returns the number of blocks available to non-superuser
 		 *  accounts on the filesystem. */
-		int64_t		getAvailableBlocks() const;
+		int64_t		getAvailableBlocks();
 
 		/** Returns the number of blocks reserved for superuser
 		 *  accounts on the filesystem. */
-		int64_t		getReservedBlocks() const;
+		int64_t		getReservedBlocks();
 
 		/** Returns the number of file nodes on the filesystem. */
-		int64_t		getTotalFileNodes() const;
+		int64_t		getTotalFileNodes();
 
 		/** Returns the number of free file nodes. */
-		int64_t		getFreeFileNodes() const;
+		int64_t		getFreeFileNodes();
 
 		/** Returns the number of file nodes available to 
 		 *  non-superuser accounts. */
-		int64_t		getAvailableFileNodes() const;
+		int64_t		getAvailableFileNodes();
 
 		/** Returns the number of file nodes reserved for 
 		 *  superuser accounts. */
-		int64_t		getReservedFileNodes() const;
+		int64_t		getReservedFileNodes();
 
 		/** Returns the file system id. */
-		int64_t		getFileSystemId() const;
+		int64_t		getFileSystemId();
 
 		/** Returns the maximum character length of filenames on the
 		 *  filesystem. */
-		int64_t		getMaximumFileNameLength() const;
+		int64_t		getMaximumFileNameLength();
 
 		/** Returns the id of the user that mounted the filesystem. */
-		uid_t		getOwner() const;
+		uid_t		getOwner();
 
 		/** Returns the number of synchronous writes that
 		 *  have occurred since the filesytem was mounted. */
-		int64_t		getSyncWrites() const; 
+		int64_t		getSyncWrites(); 
 
 		/** Returns the number of asynchronous writes that
 		 *  have occurred since the filesytem was mounted. */
-		int64_t		getAsyncWrites() const;
+		int64_t		getAsyncWrites();
 
 		/** Returns the name of the filesystem type. */
-		const char	*getTypeName() const;
+		const char	*getTypeName();
 
 		/** Returns the mount point of the filesystem. */
-		const char	*getMountPoint() const;
+		const char	*getMountPoint();
 
 		/** Returns the number of synchronous reads that
 		 *  have occurred since the filesytem was mounted. */
-		int64_t		getSyncReads() const;
+		int64_t		getSyncReads();
 
 		/** Returns the number of asynchronous reads that
 		 *  have occurred since the filesytem was mounted. */
-		int64_t		getAsyncReads() const;
+		int64_t		getAsyncReads();
 
 		/** Returns the name of the device file for the filesystem. */
-		const char	*getDeviceName() const;
+		const char	*getDeviceName();
 
 		/** Returns the filesystem-specific string. */
-		const char	*getFilesystemSpecificString() const;
+		const char	*getFilesystemSpecificString();
 
 		/** Returns a pointer to the filesystem stats structure
 		 *  used internally.  (This is VERY system-specific and could

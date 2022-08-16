@@ -10,7 +10,7 @@ tablecollection<valuetype>::tablecollection() :
 
 template <class valuetype>
 inline
-tablecollection<valuetype>::tablecollection(const tablecollection &c) :
+tablecollection<valuetype>::tablecollection(tablecollection &c) :
 	collection(c),
 	copycolumnnames(c.copycolumnnames) {
 }
@@ -18,7 +18,7 @@ tablecollection<valuetype>::tablecollection(const tablecollection &c) :
 template <class valuetype>
 inline
 tablecollection<valuetype> &tablecollection<valuetype>::
-				operator=(const tablecollection &c) {
+					operator=(tablecollection &c) {
 	if (this!=&c) {
 		collection::operator=(c);
 		copycolumnnames=c.copycolumnnames;
@@ -33,7 +33,7 @@ tablecollection<valuetype>::~tablecollection() {
 
 template <class valuetype>
 inline
-const char *tablecollection<valuetype>::getType() const {
+const char *tablecollection<valuetype>::getType() {
 	return "table";
 }
 
@@ -45,43 +45,43 @@ void tablecollection<valuetype>::setCopyColumnNames(bool copy) {
 
 template <class valuetype>
 inline
-bool tablecollection<valuetype>::getCopyColumnNames() const {
+bool tablecollection<valuetype>::getCopyColumnNames() {
 	return copycolumnnames;
 }
 
 template <class valuetype>
 inline
-ssize_t tablecollection<valuetype>::write() const {
+ssize_t tablecollection<valuetype>::write() {
 	return write(&stdoutput);
 }
 
 template <class valuetype>
 inline
-ssize_t tablecollection<valuetype>::write(output *out) const {
+ssize_t tablecollection<valuetype>::write(output *out) {
 	return writeJson(out,true);
 }
 
 template< class valuetype >
 inline
-ssize_t tablecollection<valuetype>::writeJson() const {
+ssize_t tablecollection<valuetype>::writeJson() {
 	return writeJson(&stdoutput,true);
 }
 
 template< class valuetype >
 inline
-ssize_t tablecollection<valuetype>::writeJson(bool indent) const {
+ssize_t tablecollection<valuetype>::writeJson(bool indent) {
 	return writeJson(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
-ssize_t tablecollection<valuetype>::writeJson(output *out) const {
+ssize_t tablecollection<valuetype>::writeJson(output *out) {
 	return writeJson(out,true);
 }
 
 template< class valuetype >
 inline
-ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) const {
+ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 
 	ssize_t	retval=0;
 

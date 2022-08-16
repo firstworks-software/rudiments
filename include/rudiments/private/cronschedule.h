@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		cronschedule(cronschedule &x);
+		cronschedule	&operator=(cronschedule &x);
+
 	private:
 		void init(const char *years,
 				const char *months,
@@ -14,8 +17,5 @@
 		bool inPeriods(linkedlist< cronscheduleperiod * > *periods,
 						int32_t timepart);
 		bool inDayParts(int32_t hour, int32_t minute);
-
-				cronschedule(const cronschedule &x);
-		cronschedule	&operator=(const cronschedule &x);
 
 		cronscheduleprivate	*pvt;

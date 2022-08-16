@@ -20,16 +20,16 @@ client::client() : filedescriptor() {
 	initialize(NULL,-1,-1,0,0);
 }
 
-client::client(const client &c) : filedescriptor(c) {
+client::client(client &c) : filedescriptor(c) {
 	pvt=new clientprivate;
-	clientClone(c);
+	clone(c);
 }
 
-client &client::operator=(const client &c) {
+client &client::operator=(client &c) {
 	if (this!=&c) {
 		filedescriptor::operator=(c);
 		delete[] pvt->_connecterror;
-		clientClone(c);
+		clone(c);
 	}
 	return *this;
 }
@@ -50,7 +50,7 @@ void client::initialize(char *connecterror,
 	type("client");
 }
 
-void client::clientClone(const client &c) {
+void client::clone(client &c) {
 	initialize(NULL,c.pvt->_timeoutsec,c.pvt->_timeoutusec,
 				c.pvt->_retrywait,c.pvt->_tries);
 	pvt->_connecterror=charstring::duplicate(c.pvt->_connecterror);

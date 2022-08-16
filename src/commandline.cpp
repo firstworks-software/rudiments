@@ -19,6 +19,18 @@ commandline::commandline() : object() {
 	pvt->_argv=NULL;
 }
 
+commandline::commandline(commandline &c) : object() {
+	// FIXME: implement this
+}
+
+commandline &commandline::operator=(commandline &c) {
+	if (this!=&c) {
+		object::operator=(c);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 commandline::commandline(int32_t argc, const char **argv) : object() {
 	pvt=new commandlineprivate;
 	pvt->_argc=argc;
@@ -34,7 +46,7 @@ void commandline::initialize(int32_t argc, const char **argv) {
 	pvt->_argv=(char **)argv;
 }
 
-const char *commandline::getValue(const char *arg) const {
+const char *commandline::getValue(const char *arg) {
 
 	if (!charstring::isNullOrEmpty(arg)) {
 
@@ -84,7 +96,7 @@ const char *commandline::getValue(const char *arg) const {
 	return "";
 }
 
-const char *commandline::getValue(const char *arg, const char *abbr) const {
+const char *commandline::getValue(const char *arg, const char *abbr) {
 	const char	*value=getValue(arg);
 	if (charstring::isNullOrEmpty(value)) {
 		value=getValue(abbr);
@@ -92,7 +104,7 @@ const char *commandline::getValue(const char *arg, const char *abbr) const {
 	return value;
 }
 
-bool commandline::found(const char *arg) const {
+bool commandline::found(const char *arg) {
 
 	if (!charstring::isNullOrEmpty(arg)) {
 
@@ -135,7 +147,7 @@ bool commandline::found(const char *arg) const {
 	return false;
 }
 
-bool commandline::found(const char *arg, const char *abbr) const {
+bool commandline::found(const char *arg, const char *abbr) {
 	return (found(arg) || found(abbr));
 }
 

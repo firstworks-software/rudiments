@@ -3,7 +3,7 @@
 
 #include <rudiments/object.h>
 
-bool object::incOrErr(ssize_t *retval, ssize_t val) const {
+bool object::incOrErr(ssize_t *retval, ssize_t val) {
 
 	// add val to *retval unless:
 	// * retval is already negative, indicating that an error condition
@@ -24,7 +24,7 @@ bool object::incOrErr(ssize_t *retval, ssize_t val) const {
 	return false;
 }
 
-bool object::incOrErr(ssize_t *retval, ssize_t val, ssize_t expected) const {
+bool object::incOrErr(ssize_t *retval, ssize_t val, ssize_t expected) {
 
 	// like incOrErr above, but if val!=expected (eg. in a short read/write
 	// condition), then increment retval but also return false

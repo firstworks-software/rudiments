@@ -6,6 +6,6 @@
 		const char	*_acceptscript();
 		const char	*_disconnectscript();
 
-		void	modemserverClone(const modemserver &m);
+		void	clone(modemserver &m);
 	private:
 		modemserverprivate	*pvt;

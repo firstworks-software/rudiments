@@ -5,20 +5,20 @@
 		void	insert(treenode<valuetype> *top,
 				treenode<valuetype> *node,
 				treenode<valuetype> **treetop);
-		void	clone(const treecollection<valuetype> *tree);
-		void	clone(const nodecollection<valuetype> *coll);
+		void	clone(treecollection<valuetype> *tree);
+		void	clone(nodecollection<valuetype> *coll);
 		treenode<valuetype>	*cloneNode(treenode<valuetype> *node);
 
 		ssize_t	writeNodeXml(output *out,
-					const treenode<valuetype> *node,
+					treenode<valuetype> *node,
 					const char *name,
 					uint16_t *indentlevel,
 					bool details,
-					bool indent) const;
+					bool indent);
 		ssize_t	writeNodeJson(output *out,
-					const treenode<valuetype> *node,
+					treenode<valuetype> *node,
 					uint16_t *indentlevel,
-					bool indent) const;
+					bool indent);
 
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;

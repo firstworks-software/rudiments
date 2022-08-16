@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		void	clone(const nodecollection<valuetype> *coll);
+		void	clone(nodecollection<valuetype> *coll);
 		void	move(listnode<valuetype> *node,
 				listnode<valuetype> *nodetomove,
 				bool before);

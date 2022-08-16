@@ -6,13 +6,13 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
-			ssize_t	writeNode(const domnode *dn,
+			ssize_t	writeNode(domnode *dn,
 						output *out,
 						bool indent,
-						uint16_t *indentlevel) const;
+						uint16_t *indentlevel);
 
-				inidom(const inidom &x);
-			inidom	&operator=(const inidom &x);
+				inidom(inidom &x);
+			inidom	&operator=(inidom &x);
 
 	private:
 			bool	parse(input *in, domnode *parent,
@@ -24,7 +24,7 @@
 						domnode *parent,
 						uint64_t position);
 			domnode	*whichNode();
-			const char	*getType(const domnode *dn) const;
-			const char	*getValue(const domnode *dn) const;
+			const char	*getType(domnode *dn);
+			const char	*getValue(domnode *dn);
 
 			inidomprivate	*pvt;

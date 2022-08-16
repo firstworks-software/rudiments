@@ -24,11 +24,11 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 
 		/** Creates an instance of the modemserver class
 		 *  that is a copy of "m". */
-		modemserver(const modemserver &m);
+		modemserver(modemserver &m);
 
 		/** Makes this instance of the modemserver class
 		 *  identical to "m". */
-		modemserver	&operator=(const modemserver &m);
+		modemserver	&operator=(modemserver &m);
 
 		/** Deletes this instance of the modemserver class. */
 		virtual		~modemserver();

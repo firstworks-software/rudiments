@@ -33,7 +33,7 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *
 		 *  Returns an empty string if just -arg or --arg is found, or
 		 *  NULL if neither are found. */
-		const char	*getValue(const char *arg) const;
+		const char	*getValue(const char *arg);
 
 		/** Looks for the argument or an abbreviated version of it on
 		 *  the command line and returns the value.
@@ -57,13 +57,13 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *  Returns an empty string if just -name, --name, -n, or --n
 		 *  is found, or NULL if none are found. */
 		const char	*getValue(const char *arg,
-						const char *abbr) const;
+						const char *abbr);
 
 		/** Returns true if "-arg", "--arg" or "--arg=value" was found
 		 *  on the command line and false if it was not found.
 		 *
 		 *  This is useful for processing command line switches. */
-		bool	found(const char *arg) const;
+		bool	found(const char *arg);
 
 		/** Returns true if the argument or an abbreviated version of
 		 *  it was found on the command line and false if neither were
@@ -74,7 +74,7 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *  "--r" was found on the command line.
 		 *
 		 *  This is useful for processing command line switches. */
-		bool	found(const char *arg, const char *abbr) const;
+		bool	found(const char *arg, const char *abbr);
 
 		/** Parses the command line into the supplied dictionary.
 		 *

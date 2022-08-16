@@ -7,23 +7,23 @@
 	protected:
 
 		void	filedescriptorInit();
-		void	filedescriptorClone(const filedescriptor &f);
+		void	clone(filedescriptor &f);
 
-		bool	setStreamWriteBufferSize(ssize_t size) const;
-		bool	setStorageWriteBufferSize(ssize_t size) const;
-		bool	unsetStreamWriteBuffer() const;
-		bool	unsetStorageWriteBuffer() const;
+		bool	setStreamWriteBufferSize(ssize_t size);
+		bool	setStorageWriteBufferSize(ssize_t size);
+		bool	unsetStreamWriteBuffer();
+		bool	unsetStorageWriteBuffer();
 
-		bool	setStreamReadBufferSize(ssize_t size) const;
-		bool	setStorageReadBufferSize(ssize_t size) const;
-		bool	unsetStreamReadBuffer() const;
-		bool	unsetStorageReadBuffer() const;
+		bool	setStreamReadBufferSize(ssize_t size);
+		bool	setStorageReadBufferSize(ssize_t size);
+		bool	unsetStreamReadBuffer();
+		bool	unsetStorageReadBuffer();
 
-		void	allocateWriteBuffer(ssize_t size) const;
+		void	allocateWriteBuffer(ssize_t size);
 
-		off64_t	setPosition(off64_t offset, int32_t whence) const;
-		off64_t	getSize() const;
-		off64_t	lseek(off64_t offset, int32_t whence) const;
+		off64_t	setPosition(off64_t offset, int32_t whence);
+		off64_t	getSize();
+		off64_t	lseek(off64_t offset, int32_t whence);
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
 
@@ -65,10 +65,10 @@
 						ssize_t count);
 		virtual int32_t	lowLevelClose();
 
-		const char	*type() const;
+		const char	*type();
 		void		type(const char *tp);
 
-		int32_t	fd() const;
+		int32_t	fd();
 		void	fd(int32_t filedes);
 
 		socketlayer	*socklr();

@@ -18,12 +18,11 @@ class resourcepool {
 
 		/** Creates an instance of the resourcepool class
 		 *  that is a copy of "a". */
-		resourcepool(const resourcepool<valuetype> &r);
+		resourcepool(resourcepool<valuetype> &r);
 
 		/** Makes this instance of the resourcepool class
 		 *  identical to "a". */
-		resourcepool<valuetype>	&operator=(
-					const resourcepool<valuetype> &r);
+		resourcepool<valuetype>	&operator=(resourcepool<valuetype> &r);
 
 		/** Deletes this instance of the resourcepool class and all
 		 *  resources in the pool. */
@@ -37,7 +36,7 @@ class resourcepool {
 
 		/** Returns the number of resources that will be created when
 		 *  the pool is initialized. */
-		uint64_t	getMin() const;
+		uint64_t	getMin();
 
 		/** Sets the maximum number of resources that the pool can grow
 		 *  to on-demand.
@@ -47,7 +46,7 @@ class resourcepool {
 
 		/** Returns the number of resources that the pool can grow to
 		 *  on-demand. */
-		uint64_t	getMax() const;
+		uint64_t	getMax();
 
 		/** Sets the number of resources that will be created when the
 		 *  pool grows on-demand.
@@ -57,7 +56,7 @@ class resourcepool {
 
 		/** Returns the number of resources that will be created when
 		 *  the pool grows on-demand. */
-		uint64_t	getGrowBy() const;
+		uint64_t	getGrowBy();
 
 		/** Initializes the resourcepool, creating the number of
 		 *  resources configured by setMin().

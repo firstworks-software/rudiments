@@ -32,14 +32,14 @@
 
 			void	trimFields(bool left, bool right);
 
-			ssize_t	writeNode(const domnode *dn,
+			ssize_t	writeNode(domnode *dn,
 						output *out,
 						bool indent,
-						uint16_t *indentlevel) const;
-			ssize_t	writeValue(output *out, domnode *value) const;
+						uint16_t *indentlevel);
+			ssize_t	writeValue(output *out, domnode *value);
 
-				csvdom(const csvdom &x);
-			csvdom	&operator=(const csvdom &x);
+				csvdom(csvdom &x);
+			csvdom	&operator=(csvdom &x);
 
 	private:
 			csvdomprivate	*pvt;

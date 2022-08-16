@@ -32,6 +32,18 @@ jsonsax::jsonsax() : sax() {
 	#endif
 }
 
+jsonsax::jsonsax(jsonsax &j) : sax(j) {
+	// FIXME: implement this
+}
+
+jsonsax &jsonsax::operator=(jsonsax &j) {
+	if (this!=&j) {
+		sax::operator=(j);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 jsonsax::~jsonsax() {
 	delete pvt;
 }

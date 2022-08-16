@@ -32,13 +32,13 @@ unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
 	type("unixsocketclient");
 }
 
-unixsocketclient::unixsocketclient(const unixsocketclient &u) :
+unixsocketclient::unixsocketclient(unixsocketclient &u) :
 					socketclient(u), unixsocketutil(u) {
 	pvt=new unixsocketclientprivate;
 	type("unixsocketclient");
 }
 
-unixsocketclient &unixsocketclient::operator=(const unixsocketclient &u) {
+unixsocketclient &unixsocketclient::operator=(unixsocketclient &u) {
 	if (this!=&u) {
 		socketclient::operator=(u);
 		unixsocketutil::operator=(u);

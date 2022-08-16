@@ -11,7 +11,7 @@ class RUDIMENTS_DLLSPEC apachehttpserverapi : public httpserverapi {
 		apachehttpserverapi(void *apistruct);
 		~apachehttpserverapi();
 
-		const char	*getType() const;
+		const char	*getType();
 
 	#include <rudiments/private/apachehttpserverapi.h>
 };

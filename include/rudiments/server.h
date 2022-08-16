@@ -16,11 +16,11 @@ class RUDIMENTS_DLLSPEC server : public filedescriptor {
 
 		/** Creates an instance of the server class
 		 *  that is a copy of "s". */
-		server(const server &s);
+		server(server &s);
 
 		/** Makes this instance of the server class
 		 *  identical to "s". */
-		server	&operator=(const server &s);
+		server	&operator=(server &s);
 
 		/** Deletes this instance of the server class. */
 		virtual	~server();

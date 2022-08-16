@@ -17,11 +17,11 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Creates an instance of the filedescriptor class
 		 *  that is a copy of "f". */
-		filedescriptor(const filedescriptor &f);
+		filedescriptor(filedescriptor &f);
 
 		/** Makes this instance of the filedescriptor class
 		 *  identical to "f". */
-		filedescriptor	&operator=(const filedescriptor &f);
+		filedescriptor	&operator=(filedescriptor &f);
 
 		/** Deletes this instance of the filedescriptor class.
 		 *  Calls close() if it hasn't already been called. */
@@ -32,7 +32,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		virtual	bool	close();
 
 		/** Returns the file descriptor. */
-		int32_t	getFileDescriptor() const;
+		int32_t	getFileDescriptor();
 
 		/** Sets the file descriptor associated with
 		 *  the class to "filedesc". */
@@ -77,7 +77,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 * 
 		 *  Returns the lowest-numbered unused descriptor
 		 *  on success or -1 on failure. */
-		int32_t	duplicate() const;
+		int32_t	duplicate();
 
 		/** Sets file descriptor handle "newfd" to be a
 		 *  duplicate of this file descriptor.  If
@@ -85,7 +85,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  first.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	duplicate(int32_t newfd) const;
+		bool	duplicate(int32_t newfd);
 
 		/** Associates a socketlayer "layer" with the filedescriptor.
 		 *  To remove the current layer, pass in a NULL for
@@ -104,34 +104,32 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Puts the file descriptor in non-blocking
 		 *  mode.  Returns true on success and false on
 		 *  failure. */
-		virtual bool	useNonBlockingMode() const;
+		virtual bool	useNonBlockingMode();
 
 		/** Puts the file descriptor in blocking mode.
 		 *  Returns true on success and false on
 		 *  failure. */
-		virtual bool	useBlockingMode() const;
+		virtual bool	useBlockingMode();
 
 		/** Returns true if the file descriptor is in
 		 *  non-blocking mode and false otherwise. */
-		virtual bool	isUsingNonBlockingMode() const;
+		virtual bool	isUsingNonBlockingMode();
 
 		/** Returns the position (relative to the beginning of the
 		 *  file descriptor) at which the next read or write will
 		 *  occur, or -1 on failure. */
-		virtual off64_t	getCurrentPosition() const;
+		virtual off64_t	getCurrentPosition();
 
 		/** Sets the position (relative to the beginning of the file
 		 *  descriptor) at which the next read or write will occur to
 		 *  "offset".  Returns that position on success or -1 on
 		 *  failure. */
-		virtual off64_t	setPositionRelativeToBeginning(off64_t offset)
-									const;
+		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
 
 		/** Advances the position at which the next read or write will
  		 *  occur by "offset" bytes.  Returns that position on success
  		 *  or -1 on failure. */
-		virtual off64_t	setPositionRelativeToCurrent(off64_t offset)
-									const;
+		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
 
 		/** Sets the position at which the next read or write will
 		 *  occur to the end of the file plus "offset" bytes.
@@ -140,7 +138,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  be accomplished by using a positive "offset" and then
 		 *  writing data at that position.  Returns the position on
 		 *  succes or -1 on failure. */
-		virtual off64_t	setPositionRelativeToEnd(off64_t offset) const;
+		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
@@ -754,8 +752,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  This will usually be 1, indicating that the
 		 *  file descriptor represented by the class is
 		 *  ready to be read from. */
-		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec)
-									const;
+		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec);
 
 		/** Causes the application to wait until a
 		 *  write() will proceed without blocking or
@@ -777,8 +774,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  This will usually be 1, indicating that the
 		 *  file descriptor represented by the class is
 		 *  ready to be written to. */
-		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec)
-									const;
+		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec);
 
 
 		/** Causes reads to automatically retry if interrupted by a
@@ -796,7 +792,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if interrupted reads will be retried and false
 		 *  otherwise. */
-		bool	getRetryInterruptedReads() const;
+		bool	getRetryInterruptedReads();
 
 		/** Causes writes to automatically retry if interrupted by a
 		 *  signal.  By default, if a write is occurring and a signal
@@ -813,7 +809,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if interrupted writes will be retried and false
 		 *  otherwise. */
-		bool	getRetryInterruptedWrites() const;
+		bool	getRetryInterruptedWrites();
 
 		/** Causes wait operations to be automatically retried if
 		 *  interrupted by a signal.  This is the default behavior.
@@ -831,7 +827,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if interrupted waits will be retried and false
 		 *  otherwise. */
-		bool	getRetryInterruptedWaits() const;
+		bool	getRetryInterruptedWaits();
 
 		/** Causes fcntl operations to be automatically retried if
 		 *  interrupted by a signal.  This is the default behavior.
@@ -849,7 +845,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if interrupted calls to fcntl will be retried
 		 *  and false otherwise. */
-		bool	getRetryInterruptedFcntl() const;
+		bool	getRetryInterruptedFcntl();
 
 		/** Causes ioctl operations to be automatically retried if
 		 *  interrupted by a signal.  This is the default behavior.
@@ -867,7 +863,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if interrupted calls to ioctl will be retried
 		 *  and false otherwise. */
-		bool	getRetryInterruptedIoctl() const;
+		bool	getRetryInterruptedIoctl();
 
 
 		/** By default, read() will attempt to read the specified number
@@ -952,11 +948,11 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Use the fcntl() system call to perform various low-level
 		 *  file descriptor operations. */
-		virtual int32_t	fCntl(int32_t command, long arg) const;
+		virtual int32_t	fCntl(int32_t command, long arg);
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
-		virtual int32_t	ioCtl(int32_t command, void *arg) const;
+		virtual int32_t	ioCtl(int32_t command, void *arg);
 
 		/** Causes small write()'s to be collected up and sent together
 		 *  when either the kernel's write buffer is full or when a
@@ -1011,7 +1007,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  filedescriptor.  This is "filedescriptor" by default but
 		 *  a child class may override this method and return
 		 *  something else. */
-		const char	*getType() const;
+		const char	*getType();
 
 		/** Returns the IP address of the client at the other end of the
 		 *  connection if the filedescriptor is an inet socket or NULL
@@ -1019,7 +1015,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 * 
 		 *  Note that the buffer for the address is allocated internally
 		 *  and must be freed by the calling program. */
-		char	*getPeerAddress() const;
+		char	*getPeerAddress();
 
 
 		/** If an application does many small writes, the overhead of
@@ -1043,10 +1039,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  A size of 0 (or less) means not to buffer writes at all.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	setWriteBufferSize(ssize_t size) const;
+		bool	setWriteBufferSize(ssize_t size);
 
 		/** Returns the current size of the write buffer. */
-		ssize_t	getWriteBufferSize() const;
+		ssize_t	getWriteBufferSize();
 
 		/** If an application does many small writes, the overhead of
 		 *  all of those system calls can slow the application down
@@ -1098,10 +1094,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  A size of 0 (or less) means not to buffer writes at all.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	setReadBufferSize(ssize_t size) const;
+		bool	setReadBufferSize(ssize_t size);
 
 		/** Returns the current size of the read buffer. */
-		ssize_t	getReadBufferSize() const;
+		ssize_t	getReadBufferSize();
 
 		/** If "enabled" is set true then mmap will be used when
 		 *  buffering a storage filedescriptor such as a file, raw

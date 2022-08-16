@@ -25,11 +25,11 @@ class singlylinkedlistnode : public listnode<valuetype> {
 		valuetype	getValue() const;
 
 		/** Always returns NULL. */
-		listnode<valuetype>	*getPrevious() const;
+		listnode<valuetype>	*getPrevious();
 
 		/** Returns the next node in the singlylinkedlist or NULL
 		 * if this node is the last node in the list. */
-		listnode<valuetype>	*getNext() const;
+		listnode<valuetype>	*getNext();
 
 	#include <rudiments/private/singlylinkedlistnode.h>
 };
@@ -55,21 +55,21 @@ class singlylinkedlist : public listcollection<valuetype> {
 
 		/** Creates an instance of the singlylinkedlist class
 		 *  that is a copy of "a". */
-		singlylinkedlist(const singlylinkedlist<valuetype> &a);
+		singlylinkedlist(singlylinkedlist<valuetype> &a);
 
 		/** Creates an instance of the singlylinkedlist class
 		 *  that is a copy of "a". */
-		singlylinkedlist(const listcollection<valuetype> &a);
+		singlylinkedlist(listcollection<valuetype> &a);
 
 		/** Makes this instance of the singlylinkedlist class
 		 *  identical to "a". */
 		singlylinkedlist<valuetype>	&operator=(
-					const singlylinkedlist<valuetype> &a);
+					singlylinkedlist<valuetype> &a);
 
 		/** Makes this instance of the singlylinkedlist class
 		 *  identical to "a". */
 		singlylinkedlist<valuetype>	&operator=(
-					const nodecollection<valuetype> &a);
+					nodecollection<valuetype> &a);
 
 		/** Deletes this instance of the singlylinkedlist class and all
 		 *  of its singlylinkedlistnodes.
@@ -161,29 +161,29 @@ class singlylinkedlist : public listcollection<valuetype> {
 		bool	remove(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the singlylinkedlist. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Returns the first node in the singlylinkedlist. */
-		listnode<valuetype>	*getFirst() const;
+		listnode<valuetype>	*getFirst();
 
 		/** Returns the last node in the singlylinkedlist. */
-		listnode<valuetype>	*getLast() const;
+		listnode<valuetype>	*getLast();
 
 		/** Returns the node after "node" or NULL if this node is the
 		 *  last node in the list. "node" is presumed to be in the
 		 *  list. */
 		listnode<valuetype>	*getNext(
-					listnode<valuetype> *node) const;
+					listnode<valuetype> *node);
 
 		/** Returns a pointer to the first singlylinkedlistnode
 		 *  containing "value" or NULL if "value" was not found. */
-		listnode<valuetype>	*find(valuetype value) const;
+		listnode<valuetype>	*find(valuetype value);
 
 		/** Returns a pointer to the first singlylinkedlistnode
 		 *  after "startnode" containing "value" or NULL
 		 *  if "value" was not found. */
 		listnode<valuetype> *find(listnode<valuetype> *startnode,
-							valuetype value) const;
+							valuetype value);
 
 		/** Sorts the singlylinkedlist in ascending order using a
 		 *  modified insertion sort algorithm.  This sort is slower

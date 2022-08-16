@@ -6,8 +6,8 @@
 			void	init(bool stringcacheenabled);
 			void	reset();
 
-				xmldom(const xmldom &x);
-			xmldom	&operator=(const xmldom &x);
+				xmldom(xmldom &x);
+			xmldom	&operator=(xmldom &x);
 
 	private:
 			bool	parse(input *in, domnode *parent,

@@ -23,7 +23,7 @@ void comparator::setReverse(bool reverse) {
 }
 
 inline
-bool comparator::getReverse() const {
+bool comparator::getReverse() {
 	return sense==-1;
 }
 
@@ -33,7 +33,7 @@ void comparator::setNatural(bool natural) {
 }
 
 inline
-bool comparator::getNatural() const {
+bool comparator::getNatural() {
 	return natural;
 }
 
@@ -43,7 +43,7 @@ void comparator::setNumberDelimiters(const char *delimiters) {
 }
 
 inline
-const char *comparator::getNumberDelimiters() const {
+const char *comparator::getNumberDelimiters() {
 	return delimiters;
 }
 
@@ -53,12 +53,12 @@ void comparator::setWideNumberDelimiters(const wchar_t *delimiters) {
 }
 
 inline
-const wchar_t *comparator::getWideNumberDelimiters() const {
+const wchar_t *comparator::getWideNumberDelimiters() {
 	return wdelimiters;
 }
 
 inline
-int32_t comparator::compare(char *value1, char *value2) const {
+int32_t comparator::compare(char *value1, char *value2) {
 	return ((natural)?
 		charstring::compareNatural(value1,value2,delimiters):
 		charstring::compare(value1,value2))*
@@ -66,7 +66,7 @@ int32_t comparator::compare(char *value1, char *value2) const {
 }
 
 inline
-int32_t comparator::compare(const char *value1, const char *value2) const {
+int32_t comparator::compare(const char *value1, const char *value2) {
 	return ((natural)?
 		charstring::compareNatural(value1,value2,delimiters):
 		charstring::compare(value1,value2))*
@@ -74,7 +74,7 @@ int32_t comparator::compare(const char *value1, const char *value2) const {
 }
 
 inline
-int32_t comparator::compare(wchar_t *value1, wchar_t *value2) const {
+int32_t comparator::compare(wchar_t *value1, wchar_t *value2) {
 	return ((natural)?
 		wcharstring::compareNatural(value1,value2,wdelimiters):
 		wcharstring::compare(value1,value2))*
@@ -83,7 +83,7 @@ int32_t comparator::compare(wchar_t *value1, wchar_t *value2) const {
 
 inline
 int32_t comparator::compare(const wchar_t *value1,
-				const wchar_t *value2) const {
+				const wchar_t *value2) {
 	return ((natural)?
 		wcharstring::compareNatural(value1,value2,wdelimiters):
 		wcharstring::compare(value1,value2))*
@@ -92,7 +92,7 @@ int32_t comparator::compare(const wchar_t *value1,
 
 inline
 int32_t comparator::compare(unsigned char *value1,
-				unsigned char *value2) const {
+				unsigned char *value2) {
 	return ((natural)?
 		charstring::compareNatural((const char *)value1,
 						(const char *)value2,
@@ -104,7 +104,7 @@ int32_t comparator::compare(unsigned char *value1,
 
 inline
 int32_t comparator::compare(const unsigned char *value1,
-				const unsigned char *value2) const {
+				const unsigned char *value2) {
 	return ((natural)?
 		charstring::compareNatural((const char *)value1,
 						(const char *)value2,
@@ -115,27 +115,27 @@ int32_t comparator::compare(const unsigned char *value1,
 }
 
 inline
-int32_t comparator::compare(char value1, char value2) const {
+int32_t comparator::compare(char value1, char value2) {
 	return (((int16_t)value1)-((int16_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(bool value1, bool value2) const {
+int32_t comparator::compare(bool value1, bool value2) {
 	return (((int16_t)value1)-((int16_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(int16_t value1, int16_t value2) const {
+int32_t comparator::compare(int16_t value1, int16_t value2) {
 	return (((int32_t)value1)-((int32_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(int32_t value1, int32_t value2) const {
+int32_t comparator::compare(int32_t value1, int32_t value2) {
 	return (((int64_t)value1)-((int64_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(int64_t value1, int64_t value2) const {
+int32_t comparator::compare(int64_t value1, int64_t value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -146,22 +146,22 @@ int32_t comparator::compare(int64_t value1, int64_t value2) const {
 }
 
 inline
-int32_t comparator::compare(unsigned char value1, unsigned char value2) const {
+int32_t comparator::compare(unsigned char value1, unsigned char value2) {
 	return (((int16_t)value1)-((int16_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(uint16_t value1, uint16_t value2) const {
+int32_t comparator::compare(uint16_t value1, uint16_t value2) {
 	return (((int32_t)value1)-((int32_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(uint32_t value1, uint32_t value2) const {
+int32_t comparator::compare(uint32_t value1, uint32_t value2) {
 	return (((int64_t)value1)-((int64_t)value2))*sense;
 }
 
 inline
-int32_t comparator::compare(uint64_t value1, uint64_t value2) const {
+int32_t comparator::compare(uint64_t value1, uint64_t value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -172,7 +172,7 @@ int32_t comparator::compare(uint64_t value1, uint64_t value2) const {
 }
 
 inline
-int32_t comparator::compare(float value1, float value2) const {
+int32_t comparator::compare(float value1, float value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -183,7 +183,7 @@ int32_t comparator::compare(float value1, float value2) const {
 }
 
 inline
-int32_t comparator::compare(double value1, double value2) const {
+int32_t comparator::compare(double value1, double value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -194,7 +194,7 @@ int32_t comparator::compare(double value1, double value2) const {
 }
 
 inline
-int32_t comparator::compare(long double value1, long double value2) const {
+int32_t comparator::compare(long double value1, long double value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -205,7 +205,7 @@ int32_t comparator::compare(long double value1, long double value2) const {
 }
 
 inline
-int32_t comparator::compare(void *value1, void *value2) const {
+int32_t comparator::compare(void *value1, void *value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -216,7 +216,7 @@ int32_t comparator::compare(void *value1, void *value2) const {
 }
 
 inline
-int32_t comparator::compare(object *value1, object *value2) const {
+int32_t comparator::compare(object *value1, object *value2) {
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {

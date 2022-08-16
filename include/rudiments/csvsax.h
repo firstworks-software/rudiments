@@ -24,14 +24,14 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 
 		/** Returns the character that optionally surrounds columns
 		 *  and fields. */
-		char	getQuote() const;
+		char	getQuote();
 
 		/** Sets the character that separates columns and fields to
 		 *  "delimiter". */
 		void	setDelimiter(char delimiter);
 
 		/** Returns the character that separates columns and fields. */
-		char	getDelimiter() const;
+		char	getDelimiter();
 
 	protected:
 

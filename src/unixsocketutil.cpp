@@ -18,13 +18,13 @@ unixsocketutil::unixsocketutil() {
 	initialize(NULL);
 }
 
-unixsocketutil::unixsocketutil(const unixsocketutil &u) {
+unixsocketutil::unixsocketutil(unixsocketutil &u) {
 	pvt=new unixsocketutilprivate;
 	pvt->_filename=u.pvt->_filename;
 	pvt->_sun=u.pvt->_sun;
 }
 
-unixsocketutil &unixsocketutil::operator=(const unixsocketutil &u) {
+unixsocketutil &unixsocketutil::operator=(unixsocketutil &u) {
 	if (this!=&u) {
 		pvt->_filename=u.pvt->_filename;
 		pvt->_sun=u.pvt->_sun;

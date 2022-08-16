@@ -45,7 +45,7 @@ inetsocketclient::inetsocketclient() : socketclient(), inetsocketutil() {
 	type("inetsocketclient");
 }
 
-inetsocketclient::inetsocketclient(const inetsocketclient &i) :
+inetsocketclient::inetsocketclient(inetsocketclient &i) :
 					socketclient(i), inetsocketutil(i) {
 	pvt=new inetsocketclientprivate;
 	pvt->_randomize=true;
@@ -55,7 +55,7 @@ inetsocketclient::inetsocketclient(const inetsocketclient &i) :
 	type("inetsocketclient");
 }
 
-inetsocketclient &inetsocketclient::operator=(const inetsocketclient &i) {
+inetsocketclient &inetsocketclient::operator=(inetsocketclient &i) {
 	if (this!=&i) {
 		socketclient::operator=(i);
 		inetsocketutil::operator=(i);

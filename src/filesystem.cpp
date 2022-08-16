@@ -99,19 +99,19 @@ filesystem::filesystem() : object() {
 	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 }
 
-filesystem::filesystem(const filesystem &f) : object(f) {
+filesystem::filesystem(filesystem &f) : object(f) {
 	pvt=new filesystemprivate;
-	filesystemClone(f);
+	clone(f);
 }
 
-filesystem &filesystem::operator=(const filesystem &f) {
+filesystem &filesystem::operator=(filesystem &f) {
 	if (this!=&f) {
-		filesystemClone(f);
+		clone(f);
 	}
 	return *this;
 }
 
-void filesystem::filesystemClone(const filesystem &f) {
+void filesystem::clone(filesystem &f) {
 	pvt->_fd=f.pvt->_fd;
 	pvt->_closeflag=f.pvt->_closeflag;
 	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
@@ -397,7 +397,7 @@ bool filesystem::getCurrentProperties() {
 	#endif
 }
 
-int64_t filesystem::getType() const {
+int64_t filesystem::getType() {
 	int64_t	result=0;
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
@@ -559,7 +559,7 @@ int64_t filesystem::getType() const {
 	return 0;
 }
 
-int64_t filesystem::getBlockSize() const {
+int64_t filesystem::getBlockSize() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
@@ -577,7 +577,7 @@ int64_t filesystem::getBlockSize() const {
 #endif
 }
 
-int64_t filesystem::getOptimumTransferBlockSize() const {
+int64_t filesystem::getOptimumTransferBlockSize() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
@@ -595,7 +595,7 @@ int64_t filesystem::getOptimumTransferBlockSize() const {
 #endif
 }
 
-int64_t filesystem::getTotalBlocks() const {
+int64_t filesystem::getTotalBlocks() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
@@ -613,7 +613,7 @@ int64_t filesystem::getTotalBlocks() const {
 #endif
 }
 
-int64_t filesystem::getFreeBlocks() const {
+int64_t filesystem::getFreeBlocks() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
@@ -631,7 +631,7 @@ int64_t filesystem::getFreeBlocks() const {
 #endif
 }
 
-int64_t filesystem::getAvailableBlocks() const {
+int64_t filesystem::getAvailableBlocks() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
@@ -648,7 +648,7 @@ int64_t filesystem::getAvailableBlocks() const {
 #endif
 }
 
-int64_t filesystem::getReservedBlocks() const {
+int64_t filesystem::getReservedBlocks() {
 #if defined(RUDIMENTS_HAVE_STATVFS_RESVD)
 	return pvt->_st.f_bresvd;
 #else
@@ -656,7 +656,7 @@ int64_t filesystem::getReservedBlocks() const {
 #endif
 }
 
-int64_t filesystem::getTotalFileNodes() const {
+int64_t filesystem::getTotalFileNodes() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
@@ -673,7 +673,7 @@ int64_t filesystem::getTotalFileNodes() const {
 #endif
 }
 
-int64_t filesystem::getFreeFileNodes() const {
+int64_t filesystem::getFreeFileNodes() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
@@ -690,7 +690,7 @@ int64_t filesystem::getFreeFileNodes() const {
 #endif
 }
 
-int64_t filesystem::getAvailableFileNodes() const {
+int64_t filesystem::getAvailableFileNodes() {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
@@ -700,7 +700,7 @@ int64_t filesystem::getAvailableFileNodes() const {
 #endif
 }
 
-int64_t filesystem::getReservedFileNodes() const {
+int64_t filesystem::getReservedFileNodes() {
 #if defined(RUDIMENTS_HAVE_STATVFS_RESVD)
 	return pvt->_st.f_fresvd;
 #else
@@ -708,7 +708,7 @@ int64_t filesystem::getReservedFileNodes() const {
 #endif
 }
 
-int64_t filesystem::getFileSystemId() const {
+int64_t filesystem::getFileSystemId() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS)
 	// fsid_t is an opaque struct, but it typically contains an array of
 	// some number of bytes which are collectively set to some unique value.
@@ -738,7 +738,7 @@ int64_t filesystem::getFileSystemId() const {
 #endif
 }
 
-int64_t filesystem::getMaximumFileNameLength() const {
+int64_t filesystem::getMaximumFileNameLength() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
@@ -753,7 +753,7 @@ int64_t filesystem::getMaximumFileNameLength() const {
 #endif
 }
 
-uid_t filesystem::getOwner() const {
+uid_t filesystem::getOwner() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -765,7 +765,7 @@ uid_t filesystem::getOwner() const {
 #endif
 }
 
-int64_t filesystem::getSyncWrites() const {
+int64_t filesystem::getSyncWrites() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -776,7 +776,7 @@ int64_t filesystem::getSyncWrites() const {
 #endif
 }
 
-int64_t filesystem::getAsyncWrites() const {
+int64_t filesystem::getAsyncWrites() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -787,7 +787,7 @@ int64_t filesystem::getAsyncWrites() const {
 #endif
 }
 
-const char *filesystem::getMountPoint() const {
+const char *filesystem::getMountPoint() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -803,7 +803,7 @@ const char *filesystem::getMountPoint() const {
 #endif
 }
 
-int64_t filesystem::getSyncReads() const {
+int64_t filesystem::getSyncReads() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_syncreads;
@@ -812,7 +812,7 @@ int64_t filesystem::getSyncReads() const {
 #endif
 }
 
-int64_t filesystem::getAsyncReads() const {
+int64_t filesystem::getAsyncReads() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_asyncreads;
@@ -821,7 +821,7 @@ int64_t filesystem::getAsyncReads() const {
 #endif
 }
 
-const char *filesystem::getDeviceName() const {
+const char *filesystem::getDeviceName() {
 #if defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -833,7 +833,7 @@ const char *filesystem::getDeviceName() const {
 #endif
 }
 
-const char *filesystem::getFilesystemSpecificString() const {
+const char *filesystem::getFilesystemSpecificString() {
 #ifdef RUDIMENTS_HAVE_STATVFS
 	return (pvt->_st.f_fstr[0])?
 			(const char *)pvt->_st.f_fstr:NULL;
@@ -849,7 +849,7 @@ void *filesystem::getInternalFilesystemStatisticsStructure() {
 	return (void *)&pvt->_st;
 }
 
-const char *filesystem::getTypeName() const {
+const char *filesystem::getTypeName() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \

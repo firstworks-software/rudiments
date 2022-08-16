@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		signalhandler(signalhandler &s);
+		signalhandler	&operator=(signalhandler &s);
+
 	private:
-		// FIXME: should be possible to copy a signalhandler
-				signalhandler(const signalhandler &s);
-		signalhandler	&operator=(const signalhandler &s);
 		signalhandlerprivate	*pvt;

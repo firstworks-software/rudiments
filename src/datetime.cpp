@@ -277,75 +277,75 @@ bool datetime::initialize(const void *tmstruct) {
 	return normalize();
 }
 
-int32_t datetime::getHour() const {
+int32_t datetime::getHour() {
 	return pvt->_hour;
 }
 
-int32_t datetime::getMinutes() const {
+int32_t datetime::getMinutes() {
 	return pvt->_min;
 }
 
-int32_t datetime::getSeconds() const {
+int32_t datetime::getSeconds() {
 	return pvt->_sec;
 }
 
-int32_t datetime::getMicroseconds() const {
+int32_t datetime::getMicroseconds() {
 	return pvt->_usec;
 }
 
-int32_t datetime::getMonth() const {
+int32_t datetime::getMonth() {
 	return pvt->_mon+1;
 }
 
-const char *datetime::getMonthName() const {
+const char *datetime::getMonthName() {
 	return _monthname[pvt->_mon];
 }
 
-const char *datetime::getMonthAbbreviation() const {
+const char *datetime::getMonthAbbreviation() {
 	return _monthabbr[pvt->_mon];
 }
 
-int32_t datetime::getDayOfMonth() const {
+int32_t datetime::getDayOfMonth() {
 	return pvt->_mday;
 }
 
-int32_t datetime::getDayOfWeek() const {
+int32_t datetime::getDayOfWeek() {
 	return pvt->_wday+1;
 }
 
-int32_t datetime::getDayOfYear() const {
+int32_t datetime::getDayOfYear() {
 	return pvt->_yday+1;
 }
 
-int32_t datetime::getWeekOfYear() const {
+int32_t datetime::getWeekOfYear() {
 	return pvt->_yweek;
 }
 
-int32_t datetime::getYear() const {
+int32_t datetime::getYear() {
 	return pvt->_year+1900;
 }
 
-int32_t datetime::getShortYear() const {
+int32_t datetime::getShortYear() {
 	return pvt->_year%100;
 }
 
-int32_t datetime::getCentury() const {
+int32_t datetime::getCentury() {
 	return (pvt->_year<100)?20:((pvt->_year/100)+20);
 }
 
-bool datetime::isDaylightSavingsTime() const {
+bool datetime::isDaylightSavingsTime() {
 	return pvt->_isdst!=0;
 }
 
-const char *datetime::getTimeZoneString() const {
+const char *datetime::getTimeZoneString() {
 	return pvt->_zone;
 }
 
-int32_t datetime::getTimeZoneOffset() const {
+int32_t datetime::getTimeZoneOffset() {
 	return pvt->_gmtoff;
 }
 
-time_t datetime::getEpoch() const {
+time_t datetime::getEpoch() {
 	return pvt->_epoch;
 }
 
@@ -1087,7 +1087,7 @@ const int32_t *datetime::getTimeZoneOffsets() {
 // through every zoneinfo file (on platforms that support them), but I've tried
 // that before and I get multiple hits for a given zone.  If anyone reads this
 // comment and knows the answer, please let me know.
-const char *datetime::lookupCombinedTimeZone(const char *zn) const {
+const char *datetime::lookupCombinedTimeZone(const char *zn) {
 
 	// if the zone name is longer than 4 chars, then it's a combined zone
 	if (charstring::length(zn)>4) {
@@ -1106,7 +1106,7 @@ const char *datetime::lookupCombinedTimeZone(const char *zn) const {
 	return zn;
 }
 
-bool datetime::daylightZone(const char *zn) const {
+bool datetime::daylightZone(const char *zn) {
 
 	// run through the list of timezones that observe daylight
 	// savings time, if "zn" is in that list, return true,

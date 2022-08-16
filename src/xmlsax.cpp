@@ -21,6 +21,18 @@ xmlsax::xmlsax() : sax() {
 	pvt=new xmlsaxprivate;
 }
 
+xmlsax::xmlsax(xmlsax &x) : sax(x) {
+	// FIXME: implement this
+}
+
+xmlsax &xmlsax::operator=(xmlsax &x) {
+	if (this!=&x) {
+		sax::operator=(x);
+		// FIXME: implement this
+	}
+	return *this;
+}
+
 xmlsax::~xmlsax() {
 	delete pvt;
 }

@@ -1,11 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
+		directory(directory &d);
+		directory	&operator=(directory &d);
+
 	private:
-		// how do we effectively make a copy of a DIR?
-		// since I don't know how, for now, these are private
-				directory(const directory &d);
-		directory	&operator=(const directory &d);
 
 		static	int64_t	pathConf(const char *pathname, int32_t name);
 

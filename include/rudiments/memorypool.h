@@ -45,14 +45,14 @@ class RUDIMENTS_DLLSPEC memorypool : public object {
 		~memorypool();
 
 		/** Returns the initial size of the pool. */
-		size_t	getInitialSize() const;
+		size_t	getInitialSize();
 
 		/** Returns the size that the pool will grow by when it needs
 		 *  to grow. */
-		size_t	getIncrementSize() const;
+		size_t	getIncrementSize();
 
 		/** Returns the pool's resize interval. */
-		size_t	getResizeInterval() const;
+		size_t	getResizeInterval();
 
 		/** Returns a pointer to a contiguous block of "size"
 		 *  bytes in the pool.  The pool will grow as necessary

@@ -14,14 +14,14 @@ resourcepool<valuetype>::resourcepool() : min(0), max(10),
 
 template <class valuetype>
 inline
-resourcepool<valuetype>::resourcepool(const resourcepool<valuetype> &r) {
+resourcepool<valuetype>::resourcepool(resourcepool<valuetype> &r) {
 	clone(&r);
 }
 
 template <class valuetype>
 inline
 resourcepool<valuetype> &resourcepool<valuetype>::operator=(
-					const resourcepool<valuetype> &r) {
+					resourcepool<valuetype> &r) {
 	if (this!=&r) {
 		clear();
 		clone(&r);
@@ -31,7 +31,7 @@ resourcepool<valuetype> &resourcepool<valuetype>::operator=(
 
 template <class valuetype>
 inline
-void resourcepool<valuetype>::clone(const resourcepool<valuetype> *r) {
+void resourcepool<valuetype>::clone(resourcepool<valuetype> *r) {
 	initialized=r->initialized;
 	min=r->min;
 	max=r->max;
@@ -59,7 +59,7 @@ void resourcepool<valuetype>::setMin(uint64_t min) {
 
 template <class valuetype>
 inline
-uint64_t resourcepool<valuetype>::getMin() const {
+uint64_t resourcepool<valuetype>::getMin() {
 	return min;
 }
 
@@ -71,7 +71,7 @@ void resourcepool<valuetype>::setMax(uint64_t max) {
 
 template <class valuetype>
 inline
-uint64_t resourcepool<valuetype>::getMax() const {
+uint64_t resourcepool<valuetype>::getMax() {
 	return max;
 }
 
@@ -83,7 +83,7 @@ void resourcepool<valuetype>::setGrowBy(uint64_t growby) {
 
 template <class valuetype>
 inline
-uint64_t resourcepool<valuetype>::getGrowBy() const {
+uint64_t resourcepool<valuetype>::getGrowBy() {
 	return growby;
 }
 

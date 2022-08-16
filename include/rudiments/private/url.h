@@ -1,15 +1,15 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-		url(const url &u);
-		url	&operator=(const url &u);
+		url(url &u);
+		url	&operator=(url &u);
 
 		bool	getCurrentProperties();
 
-		off64_t	getCurrentPosition() const;
-		off64_t	setPositionRelativeToBeginning(off64_t offset) const;
-		off64_t	setPositionRelativeToCurrent(off64_t offset) const;
-		off64_t	setPositionRelativeToEnd(off64_t offset) const;
+		off64_t	getCurrentPosition();
+		off64_t	setPositionRelativeToBeginning(off64_t offset);
+		off64_t	setPositionRelativeToCurrent(off64_t offset);
+		off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		char	*getContents();
 		ssize_t	getContents(unsigned char *buffer,size_t buffersize);

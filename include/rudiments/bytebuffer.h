@@ -29,11 +29,11 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 
 		/** Creates an instance of the bytebuffer class
 		 *  that is a copy of "v". */
-		bytebuffer(const bytebuffer &v);
+		bytebuffer(bytebuffer &v);
 
 		/** Makes this instance of the bytebuffer class
 		 *  identical to "v". */
-		bytebuffer	&operator=(const bytebuffer &v);
+		bytebuffer	&operator=(bytebuffer &v);
 
 		/** Deletes this instance of the bytebuffer class. */
 		virtual	~bytebuffer();

@@ -3,7 +3,18 @@
 
 template <class valuetype>
 inline
-const char *listcollection<valuetype>::getType() const {
+listcollection<valuetype>::listcollection() : nodecollection<valuetype>() {
+}
+
+template <class valuetype>
+inline
+listcollection<valuetype>::listcollection(nodecollection<valuetype> &n) :
+						nodecollection<valuetype>(n) {
+}
+
+template <class valuetype>
+inline
+const char *listcollection<valuetype>::getType() {
 	return "list";
 }
 
@@ -43,37 +54,37 @@ void listcollection<valuetype>::insertAfter(listnode<valuetype> *node,
 
 template <class valuetype>
 inline
-ssize_t listcollection<valuetype>::write() const {
+ssize_t listcollection<valuetype>::write() {
 	return write(&stdoutput);
 }
 
 template <class valuetype>
 inline
-ssize_t listcollection<valuetype>::write(output *out) const {
+ssize_t listcollection<valuetype>::write(output *out) {
 	return writeJson(out,true);
 }
 
 template< class valuetype >
 inline
-ssize_t listcollection<valuetype>::writeJson() const {
+ssize_t listcollection<valuetype>::writeJson() {
 	return writeJson(&stdoutput,true);
 }
 
 template< class valuetype >
 inline
-ssize_t listcollection<valuetype>::writeJson(bool indent) const {
+ssize_t listcollection<valuetype>::writeJson(bool indent) {
 	return writeJson(&stdoutput,indent);
 }
 
 template< class valuetype >
 inline
-ssize_t listcollection<valuetype>::writeJson(output *out) const {
+ssize_t listcollection<valuetype>::writeJson(output *out) {
 	return writeJson(out,true);
 }
 
 template< class valuetype >
 inline
-ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) const {
+ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) {
 	ssize_t			retval=0;
 	uint64_t		i=0;
 	listnode<valuetype>	*node=getFirst();

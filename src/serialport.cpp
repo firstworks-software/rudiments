@@ -22,12 +22,12 @@ serialport::serialport() : filedescriptor() {
 	type("serialport");
 }
 
-serialport::serialport(const serialport &s) : filedescriptor(s) {
+serialport::serialport(serialport &s) : filedescriptor(s) {
 	pvt=new serialportprivate;
 	type("serialport");
 }
 
-serialport &serialport::operator=(const serialport &s) {
+serialport &serialport::operator=(serialport &s) {
 	if (this!=&s) {
 		filedescriptor::operator=(s);
 	}

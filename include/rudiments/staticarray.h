@@ -54,21 +54,21 @@ class staticarray : public arraycollection<valuetype> {
 
 		/** Creates an instance of the staticarray class
 		 *  that is a copy of "v". */
-		staticarray(const staticarray<valuetype,length> &v);
+		staticarray(staticarray<valuetype,length> &v);
 
 		/** Creates an instance of the staticarray class
 		 *  that is a copy of "v". */
-		staticarray(const arraycollection<valuetype> &v);
+		staticarray(arraycollection<valuetype> &v);
 
 		/** Makes this instance of the staticarray class
 		 *  identical to "v". */
 		staticarray<valuetype,length>	&operator=(
-				const staticarray<valuetype,length> &v);
+				staticarray<valuetype,length> &v);
 
 		/** Makes this instance of the staticarray class
 		 *  identical to "v". */
 		staticarray<valuetype,length>	&operator=(
-				const arraycollection<valuetype> &v);
+				arraycollection<valuetype> &v);
 
 		/** Deletes this instance of the staticarray class. */
 		~staticarray();
@@ -82,7 +82,7 @@ class staticarray : public arraycollection<valuetype> {
 		valuetype	operator[](uint64_t index) const;
 
 		/** Returns the number of elements in the array. */
-		uint64_t	getLength() const;
+		uint64_t	getLength();
 
 		/** Clears the array. */
 		void	clear();
