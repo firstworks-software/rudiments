@@ -97,6 +97,10 @@ class tablecollection : public collection {
 		virtual	valuetype	getValue(uint64_t row,
 						uint64_t col)=0;
 
+		/** Returns a reference to the value at "row", "col". */
+		virtual	valuetype	&getReference(uint64_t row,
+							uint64_t col)=0;
+
 		/** Returns the value at "row", "colname".  Returns NULL or 0
 		 *  if there is no value at that address. */
 		virtual	valuetype	getValue(uint64_t row,

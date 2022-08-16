@@ -50,7 +50,7 @@ scalar<valuetype> &scalar<valuetype>::operator=(
 template <class valuetype>
 inline
 void scalar<valuetype>::clone(scalarcollection<valuetype> *a) {
-	v=node_duplicate_value(a->getValue(),
+	v=node_duplicate_value(&(a->getReference()),
 				this->getManageValues(),
 				this->getManageArrayValues());
 }
@@ -71,6 +71,12 @@ void scalar<valuetype>::setValue(valuetype v) {
 template <class valuetype>
 inline
 valuetype scalar<valuetype>::getValue() {
+	return v;
+}
+
+template <class valuetype>
+inline
+valuetype &scalar<valuetype>::getReference() {
 	return v;
 }
 

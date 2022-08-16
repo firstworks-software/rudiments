@@ -64,7 +64,8 @@ void table<valuetype>::clone(tablecollection<valuetype> *t) {
 		row++) {
 		for (uint64_t col=0; col<t->getColumnCount(); col++) {
 			setValue(row,col,
-				node_duplicate_value(t->getValue(row,col),
+				node_duplicate_value(
+						&(t->getReference(row,col)),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 		}
@@ -157,6 +158,12 @@ template <class valuetype>
 inline
 valuetype table<valuetype>::getValue(uint64_t row, uint64_t col) {
 	return (row<rows && col<cols)?values[row][col]:((valuetype)0);
+}
+
+template <class valuetype>
+inline
+valuetype &table<valuetype>::getReference(uint64_t row, uint64_t col) {
+	return values[row][col];
 }
 
 template <class valuetype>

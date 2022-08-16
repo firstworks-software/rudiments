@@ -7,28 +7,28 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/stdio.h>
 
+
 // Ideally we'd use explicit specialization here but old enough
 // compilers don't support it and this isn't any less efficient.
 
 
-// delete methods...
-
-// Why do all of the node_delete_value() functions take pointers, just to
-// dereference them?
+// Why do the node_delete_value() and node_duplicate_value() functions take
+// pointers, just to dereference them?
 //
-// Older compilers (SCO CC on uw-7.0.1) seem to have trouble determining which
-// function to call when passing a reference rather than passing a pointer.
+// Older compilers (SCO CC on uw-7.0.1, gcc 2.95.3 on solaris 9 x86, probably
+// others...) seem to have trouble determining which function to call when
+// passing a reference rather than passing a pointer.
 //
 // Eg. If there are a bunch of node_delete_value() methods for primitives and
 // templated ones for const valuetype & (which does nothing),
 // valuetype & (which also does nothing) and valuetype * (which actually
-// deletes), then a call like:
+// deletes), then when compiling code like:
 //
 // someclass	a;
 // node_delete_value(a,true,false);
 //
-// get confused whether to call the const valuetype &, valuetype & or
-// valuetype * version.
+// the compiler get confused whether to call the const valuetype &, valuetype &,
+// or valuetype * version.
 //
 // It's not clear why except just that there's a bug in the compiler.  Newer
 // compilers work as expected.
@@ -41,6 +41,12 @@
 // node_delete_value(&a,true,false);
 //
 // So, for now at least, we'll do it this way.
+
+
+
+
+
+// delete methods...
 
 inline
 void node_delete_value(const char **value, bool managed, bool managedarray) {
@@ -262,168 +268,168 @@ void node_zero_value(valuetype *value) {
 // duplicate methods...
 
 inline
-char *node_duplicate_value(const char *value,
+char *node_duplicate_value(const char **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
-		return charstring::duplicate(value);
+		return charstring::duplicate(*value);
 	} else {
 		return (char *)value;
 	}
 }
 
 inline
-char *node_duplicate_value(char *value,
+char *node_duplicate_value(char **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
-		return charstring::duplicate(value);
+		return charstring::duplicate(*value);
 	} else {
-		return value;
+		return *value;
 	}
 }
 
 inline
-const wchar_t *node_duplicate_value(const wchar_t *value,
+const wchar_t *node_duplicate_value(const wchar_t **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
-		return wcharstring::duplicate(value);
+		return wcharstring::duplicate(*value);
 	} else {
-		return (wchar_t *)value;
+		return (wchar_t *)*value;
 	}
 }
 
 inline
-wchar_t *node_duplicate_value(wchar_t *value,
+wchar_t *node_duplicate_value(wchar_t **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
-		return wcharstring::duplicate(value);
+		return wcharstring::duplicate(*value);
 	} else {
-		return value;
+		return *value;
 	}
 }
 
 inline
-char node_duplicate_value(char value,
+char node_duplicate_value(char *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-wchar_t node_duplicate_value(wchar_t value,
+wchar_t node_duplicate_value(wchar_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-int16_t node_duplicate_value(int16_t value,
+int16_t node_duplicate_value(int16_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-int32_t node_duplicate_value(int32_t value,
+int32_t node_duplicate_value(int32_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-int64_t node_duplicate_value(int64_t value,
+int64_t node_duplicate_value(int64_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
 unsigned char *node_duplicate_value(
-				const unsigned char *value,
+				const unsigned char **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
 		// this isn't a true duplicate, but it's
 		// the best we can do without a size
 		return (unsigned char *)
-			charstring::duplicate((const char *)value);
+			charstring::duplicate((const char *)*value);
 	} else {
-		return (unsigned char *)value;
+		return (unsigned char *)*value;
 	}
 }
 
 inline
-unsigned char *node_duplicate_value(unsigned char *value,
+unsigned char *node_duplicate_value(unsigned char **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
 		// this isn't a true duplicate, but it's
 		// the best we can do without a size
-		return (unsigned char *)charstring::duplicate((char *)value);
+		return (unsigned char *)charstring::duplicate((char *)*value);
 	} else {
-		return value;
+		return *value;
 	}
 }
 
 inline
-unsigned char node_duplicate_value(unsigned char value,
+unsigned char node_duplicate_value(unsigned char *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-uint16_t node_duplicate_value(uint16_t value,
+uint16_t node_duplicate_value(uint16_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-uint32_t node_duplicate_value(uint32_t value,
+uint32_t node_duplicate_value(uint32_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-uint64_t node_duplicate_value(uint64_t value,
+uint64_t node_duplicate_value(uint64_t *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-float node_duplicate_value(float value,
+float node_duplicate_value(float *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-double node_duplicate_value(double value,
+double node_duplicate_value(double *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 inline
-long double node_duplicate_value(long double value,
+long double node_duplicate_value(long double *value,
 				bool managed, bool managedarray) {
-	return value;
+	return *value;
 }
 
 template <class valuetype>
 inline
-valuetype *node_duplicate_value(valuetype *value,
+valuetype *node_duplicate_value(valuetype **value,
 				bool managed, bool managedarray) {
 	if (managed) {
-		return new valuetype(*value);
+		return new valuetype(**value);
 	} else if (managedarray) {
 		// no way to do this without a length
-		return value;
+		return *value;
 	} else {
-		return value;
+		return *value;
 	}
 }
 
 template <class valuetype>
 inline
-const valuetype &node_duplicate_value(valuetype &value,
+valuetype &node_duplicate_value(valuetype *value,
 				bool managed, bool managedarray) {
 	if (managed) {
-		return *(new valuetype(value));
+		return *(new valuetype(*value));
 	} else if (managedarray) {
 		// no way to do this without a length
-		return value;
+		return *value;
 	} else {
-		return value;
+		return *value;
 	}
 }
 

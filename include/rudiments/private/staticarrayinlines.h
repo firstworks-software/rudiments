@@ -56,7 +56,7 @@ template< class valuetype, uint64_t length >
 inline
 void staticarray<valuetype,length>::clone(arraycollection<valuetype> &v) {
 	for (uint64_t i=0; i<length && i<v.getLength(); i++) {
-		data[i]=node_duplicate_value(v[i],
+		data[i]=node_duplicate_value(&(v[i]),
 					this->getManageValues(),
 					this->getManageArrayValues());
 	}

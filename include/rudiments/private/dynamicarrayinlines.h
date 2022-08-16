@@ -89,7 +89,7 @@ void dynamicarray<valuetype>::clone(dynamicarray<valuetype> &v) {
 
 	// clone the data
 	for (uint64_t i=0; i<v.getLength(); i++) {
-		find(i)=node_duplicate_value(v.find(i),
+		find(i)=node_duplicate_value(&(v.find(i)),
 					this->getManageValues(),
 					this->getManageArrayValues());
 	}
@@ -107,7 +107,7 @@ inline
 void dynamicarray<valuetype>::clone(arraycollection<valuetype> &v) {
 	lastlen=v.getLength();
 	for (uint64_t i=0; i<lastlen; i++) {
-		find(i)=node_duplicate_value(v[i],
+		find(i)=node_duplicate_value(&(v[i]),
 					this->getManageValues(),
 					this->getManageArrayValues());
 	}

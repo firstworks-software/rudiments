@@ -109,7 +109,7 @@ void avltree<valuetype>::clone(nodecollection<valuetype> *coll) {
 		// clone the collection...
 		for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
-			insert(node_duplicate_value(node->getReference(),
+			insert(node_duplicate_value(&(node->getReference()),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 		}
@@ -135,7 +135,7 @@ treenode<valuetype> *avltree<valuetype>::cloneNode(
 	avltreenode<valuetype>	*newnode=new avltreenode<valuetype>(NULL);
 
 	// copy the value
-	newnode->setValue(node_duplicate_value(node->getReference(),
+	newnode->setValue(node_duplicate_value(&(node->getReference()),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 

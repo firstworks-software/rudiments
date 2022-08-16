@@ -18,9 +18,12 @@ class scalarcollection : public collection {
 		/** Sets the value stored in this instance to "v". */
 		virtual	void		setValue(valuetype v)=0;
 
-		/** Returns the value stored in this intance.  Returns NULL or
+		/** Returns the value stored in this instance.  Returns NULL or
 		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue()=0;
+
+		/** Returns a reference to the value stored in this instance. */
+		virtual	valuetype	&getReference()=0;
 
 		/** Writes a representation of the scalarcollection to
 		 *  standard output. */

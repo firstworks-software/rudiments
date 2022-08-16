@@ -38,9 +38,12 @@ class scalar : public scalarcollection<valuetype> {
 		/** Sets the value stored in this instance to "v". */
 		void		setValue(valuetype v);
 
-		/** Returns the value stored in this intance. Returns NULL or
+		/** Returns the value stored in this instance. Returns NULL or
 		 *  0 if no value has been stored. */
 		valuetype	getValue();
+
+		/** Returns a reference to the value stored in this instance. */
+		valuetype	&getReference();
 
 		/** Removes the value currently stored in this instance, such
 		 *  that getValue() will return NULL or 0.

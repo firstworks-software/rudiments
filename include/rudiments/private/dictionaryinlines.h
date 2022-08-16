@@ -136,11 +136,11 @@ void dictionary<keytype,valuetype>::clone(dictionary<keytype,valuetype> *a) {
 	for (treenode<dictionarypair<keytype,valuetype> *>
 			*node=a->tree.getFirst(); node; node=node->getNext()) {
 		setValue(node_duplicate_value(
-				node->getValue()->getKeyRef(),
+				&(node->getValue()->getKeyRef()),
 				this->getManageKeys(),
 				this->getManageArrayKeys()),
 			node_duplicate_value(
-				node->getValue()->getValueRef(),
+				&(node->getValue()->getValueRef()),
 				this->getManageValues(),
 				this->getManageArrayValues()));
 	}
@@ -165,10 +165,10 @@ void dictionary<keytype,valuetype>::clone(
 					node; node=node->getNext()) {
 		keytype		key=node->getValue();
 		valuetype	value=a->getValue(key);
-		setValue(node_duplicate_value(key,
+		setValue(node_duplicate_value(&key,
 				this->getManageKeys(),
 				this->getManageArrayKeys()),
-			node_duplicate_value(value,
+			node_duplicate_value(&value,
 				this->getManageValues(),
 				this->getManageArrayValues()));
 	}

@@ -84,7 +84,7 @@ void linkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 	length=0;
 	for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
-		append(node_duplicate_value(node->getReference(),
+		append(node_duplicate_value(&(node->getReference()),
 						this->getManageValues(),
 						this->getManageArrayValues()));
 	}
