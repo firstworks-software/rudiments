@@ -1549,6 +1549,9 @@
 /* Some systems have wcsspn */
 /* #undef RUDIMENTS_HAVE_WCSSPN */
 
+/* Some systems have wcsstr */
+/* #undef RUDIMENTS_HAVE_WCSSTR */
+
 /* Some systems have wcstold */
 /* #undef RUDIMENTS_HAVE_WCSTOLD */
 

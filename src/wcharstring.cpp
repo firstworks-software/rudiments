@@ -1790,7 +1790,20 @@ bool wcharstring::endsWith(const wchar_t *haystack, const wchar_t *needle) {
 const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 					const wchar_t *needle) {
 #ifdef RUDIMENTS_HAVE_WCHAR_H
-	return (haystack && needle)?wcsstr(haystack,needle):NULL;
+	#ifdef RUDIMENTS_HAVE_WCSSTR
+		return (haystack && needle)?wcsstr(haystack,needle):NULL;
+	#else
+		size_t	haystacklen=wcharstring::length(haystack);
+		size_t	needlelen=wcharstring::length(needle);
+		for (const wchar_t *ptr=haystack;
+				ptr<=haystack+haystacklen-needlelen;
+				ptr++) {
+			if (!wcharstring::compare(ptr,needle,needlelen)) {
+				return ptr;
+			}
+		}
+		return NULL;
+	#endif
 #else
 	return NULL;
 #endif
