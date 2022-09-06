@@ -24,12 +24,12 @@ int main(int argc, const char **argv) {
 	const uint32_t	iterations=5;
 	uint32_t	members;
 	size_t		strl;
-	if (sys::getPhysicalMemorySize()>256*1024*1024) {
-		// for systems with more than 256M of memory...
+	if (sys::getPhysicalMemorySize()>1024*1024*1024) {
+		// for systems with more than 1G of memory...
 		members=1024;
 		strl=300000;
 	} else {
-		// for systems with less than 256M of memory...
+		// for systems with less than 1G of memory...
 		members=64;
 		strl=20000;
 	}
