@@ -350,43 +350,36 @@ time_t datetime::getEpoch() {
 }
 
 bool datetime::setMicrosecond(int32_t microsecond) {
-stdoutput.printf("setMicrosecond...\n");
 	pvt->_usec=microsecond;
 	return normalize();
 }
 
 bool datetime::setSecond(int32_t second) {
-stdoutput.printf("setSecond...\n");
 	pvt->_sec=second;
 	return normalize();
 }
 
 bool datetime::setMinute(int32_t minute) {
-stdoutput.printf("setMinute...\n");
 	pvt->_min=minute;
 	return normalize();
 }
 
 bool datetime::setHour(int32_t hour) {
-stdoutput.printf("setHour...\n");
 	pvt->_hour=hour;
 	return normalize();
 }
 
 bool datetime::setDayOfMonth(int32_t day) {
-stdoutput.printf("setDayOfMonth...\n");
 	pvt->_mday=day;
 	return normalize();
 }
 
 bool datetime::setMonth(int32_t month) {
-stdoutput.printf("setMonth...\n");
 	pvt->_mon=month-1;
 	return normalize();
 }
 
 bool datetime::setYear(int32_t year) {
-stdoutput.printf("setYear...\n");
 	pvt->_year=year-1900;
 	return normalize();
 }
@@ -797,9 +790,7 @@ bool datetime::normalize() {
 
 	// call mktime() to get the epoch, set wday, yday and isdst
 	// and normalize other values
-stdoutput.printf("before mktime: %02d/%02d(%02d,%02d))/%02d %02d:%02d:%02d\n",tms.tm_mon,tms.tm_mday,tms.tm_yday,tms.tm_wday,tms.tm_year,tms.tm_hour,tms.tm_min,tms.tm_sec);
 	pvt->_epoch=mktime(&tms);
-stdoutput.printf("after mktime:  %02d/%02d(%02d,%02d)/%02d %02d:%02d:%02d\n",tms.tm_mon,tms.tm_mday,tms.tm_yday,tms.tm_wday,tms.tm_year,tms.tm_hour,tms.tm_min,tms.tm_sec);
 
 	// copy values back out of struct tm
 	pvt->_sec=tms.tm_sec;
