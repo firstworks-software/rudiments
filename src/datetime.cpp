@@ -105,11 +105,11 @@ void datetime::init() {
 	pvt->_sec=0;
 	pvt->_min=0;
 	pvt->_hour=0;
-	pvt->_mday=1;
+	pvt->_mday=0;
 	pvt->_mon=0;
 	pvt->_year=0;
 	pvt->_wday=1;
-	pvt->_yday=1;
+	pvt->_yday=0;
 	pvt->_yweek=0;
 	pvt->_isdst=0;
 	pvt->_zone=NULL;
@@ -138,7 +138,7 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_mday=charstring::toInteger(ptr);
+	pvt->_mday=charstring::toInteger(ptr)-1;
 	ptr=charstring::findFirst(ptr,'/');
 	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
@@ -306,11 +306,11 @@ const char *datetime::getMonthAbbreviation() {
 }
 
 int32_t datetime::getDayOfMonth() {
-	return pvt->_mday;
+	return pvt->_mday+1;
 }
 
 int32_t datetime::getDayOfWeek() {
-	return pvt->_wday+1;
+	return pvt->_wday;
 }
 
 int32_t datetime::getDayOfYear() {
@@ -350,46 +350,43 @@ time_t datetime::getEpoch() {
 }
 
 bool datetime::setMicrosecond(int32_t microsecond) {
+stdoutput.printf("setMicrosecond...\n");
 	pvt->_usec=microsecond;
 	return normalize();
 }
 
 bool datetime::setSecond(int32_t second) {
+stdoutput.printf("setSecond...\n");
 	pvt->_sec=second;
 	return normalize();
 }
 
 bool datetime::setMinute(int32_t minute) {
+stdoutput.printf("setMinute...\n");
 	pvt->_min=minute;
 	return normalize();
 }
 
 bool datetime::setHour(int32_t hour) {
+stdoutput.printf("setHour...\n");
 	pvt->_hour=hour;
 	return normalize();
 }
 
 bool datetime::setDayOfMonth(int32_t day) {
-	pvt->_mday=day;
-	return normalize();
-}
-
-bool datetime::setDayOfWeek(int32_t day) {
-	pvt->_wday=day;
-	return normalize();
-}
-
-bool datetime::setDayOfYear(int32_t day) {
-	pvt->_yday=day;
+stdoutput.printf("setDayOfMonth...\n");
+	pvt->_mday=day-1;
 	return normalize();
 }
 
 bool datetime::setMonth(int32_t month) {
+stdoutput.printf("setMonth...\n");
 	pvt->_mon=month-1;
 	return normalize();
 }
 
 bool datetime::setYear(int32_t year) {
+stdoutput.printf("setYear...\n");
 	pvt->_year=year-1900;
 	return normalize();
 }
@@ -794,11 +791,15 @@ bool datetime::normalize() {
 	tms.tm_mday=pvt->_mday;
 	tms.tm_mon=pvt->_mon;
 	tms.tm_year=pvt->_year;
+	tms.tm_wday=0;
+	tms.tm_yday=0;
 	tms.tm_isdst=pvt->_isdst;
 
 	// call mktime() to get the epoch, set wday, yday and isdst
 	// and normalize other values
+stdoutput.printf("before mktime: %02d/%02d(%02d,%02d))/%02d %02d:%02d:%02d\n",tms.tm_mon,tms.tm_mday,tms.tm_yday,tms.tm_wday,tms.tm_year,tms.tm_hour,tms.tm_min,tms.tm_sec);
 	pvt->_epoch=mktime(&tms);
+stdoutput.printf("after mktime:  %02d/%02d(%02d,%02d)/%02d %02d:%02d:%02d\n",tms.tm_mon,tms.tm_mday,tms.tm_yday,tms.tm_wday,tms.tm_year,tms.tm_hour,tms.tm_min,tms.tm_sec);
 
 	// copy values back out of struct tm
 	pvt->_sec=tms.tm_sec;
@@ -807,9 +808,9 @@ bool datetime::normalize() {
 	pvt->_mday=tms.tm_mday;
 	pvt->_mon=tms.tm_mon;
 	pvt->_year=tms.tm_year;
-	pvt->_isdst=tms.tm_isdst;
 	pvt->_wday=tms.tm_wday;
 	pvt->_yday=tms.tm_yday;
+	pvt->_isdst=tms.tm_isdst;
 	processTZ((void *)&tms);
 
 	bool	retval=(pvt->_epoch!=-1);

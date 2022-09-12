@@ -222,14 +222,6 @@ class RUDIMENTS_DLLSPEC datetime : public object {
  		 *  represented in the instance of the class to "day". */
 		bool	setDayOfMonth(int32_t day);
 
-		/** Sets the day-of-the-week component (1-7) of the date/time
- 		 *  represented in the instance of the class to "day". */
-		bool	setDayOfWeek(int32_t day);
-
-		/** Sets the day-of-the-year component (1-365) of the date/time
- 		 *  represented in the instance of the class to "day". */
-		bool	setDayOfYear(int32_t day);
-
 		/** Sets the month component (1-12) of the date/time
  		 *  represented in the instance of the class to "month". */
 		bool	setMonth(int32_t month);
