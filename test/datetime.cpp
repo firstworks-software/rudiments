@@ -521,7 +521,7 @@ int main(int argc, const char **argv) {
 	// set
 	stdoutput.printf("set:\n");
 	datetime	d;
-	// set these in random order...
+	// set these in random order (use a month that isn't in DST)...
 	d.setHour(2);
 	d.setYear(2002);
 	d.setSecond(2);
