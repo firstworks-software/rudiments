@@ -285,25 +285,25 @@ void codetree::setDebugLevel(uint8_t debuglevel) {
 	pvt->_debuglevel=debuglevel;
 }
 
-bool codetree::parse(const char *input,
+bool codetree::parse(const char *in,
 			const char *grammar,
 			const char *startsymbol,
-			domnode *output,
+			domnode *out,
 			const char **codeposition) {
 
-	// load the input grammar
+	// load the grammar
 	if (!pvt->_grammar.parseString(grammar)) {
 		return false;
 	}
 
 	// parse
-	return parse(input,&pvt->_grammar,startsymbol,output,codeposition);
+	return parse(in,&pvt->_grammar,startsymbol,out,codeposition);
 }
 
-bool codetree::parse(const char *input,
+bool codetree::parse(const char *in,
 			codetreegrammar *grammar,
 			const char *startsymbol,
-			domnode *output,
+			domnode *out,
 			const char **codeposition) {
 
 	// verify the grammar
@@ -321,8 +321,8 @@ bool codetree::parse(const char *input,
 						getDefinition(startsymbol));
 
 	// initialize a node for processing exceptions
-	pvt->_excnode=new domnode(output->getTree(),
-					output->getNullNode(),
+	pvt->_excnode=new domnode(out->getTree(),
+					out->getNullNode(),
 					TAG_DOMNODETYPE,
 					NULL,"excnode",NULL);
 
@@ -333,14 +333,14 @@ bool codetree::parse(const char *input,
 	pvt->_endofstring=false;
 
 	// parse, starting with the specified start symbol
-	const char	*codepos=input;
-	pvt->_beginningofinput=input;
+	const char	*codepos=in;
+	pvt->_beginningofinput=in;
 	if (codeposition) {
 		pvt->_finalcodeposition=*codeposition;
 	}
 
-	bool	retval=(parseNonTerminal(pvt->_grammartag,
-					output,&codepos,NULL) && !pvt->_error);
+	bool	retval=(parseNonTerminal(pvt->_grammartag,out,
+						&codepos,NULL) && !pvt->_error);
 	if (codeposition) {
 		*codeposition=pvt->_finalcodeposition;
 	}
@@ -1222,16 +1222,16 @@ bool codetree::parseBreakStack(const char **codeposition) {
 	return false;
 }
 
-bool codetree::write(domnode *input,
+bool codetree::write(domnode *in,
 			const char *grammar,
-			stringbuffer *output) {
+			output *out) {
 
-	// if we have an empty input, just return
-	if (!input || input->isNullNode()) {
+	// if we have an empty in, just return
+	if (!in || in->isNullNode()) {
 		return false;
 	}
 
-	// load the input grammar
+	// load the grammar
 	if (!pvt->_grammar.parseString(grammar)) {
 		return false;
 	}
@@ -1242,15 +1242,15 @@ bool codetree::write(domnode *input,
 			getAttributeValue(NAMESPACE);
 
 	// parse
-	return write(input,&pvt->_grammar,output);
+	return write(in,&pvt->_grammar,out);
 }
 
-bool codetree::write(domnode *input,
+bool codetree::write(domnode *in,
 			codetreegrammar *grammar,
-			stringbuffer *output) {
+			output *out) {
 
-	// if we have an empty input, just return
-	if (!input || input->isNullNode()) {
+	// if we have an empty in, just return
+	if (!in || in->isNullNode()) {
 		return false;
 	}
 
@@ -1269,10 +1269,10 @@ bool codetree::write(domnode *input,
 	pvt->_indentlength=charstring::length(pvt->_indentstring);
 
 	// write the nodes
-	return writeNode(input,output);
+	return writeNode(in,out);
 }
 
-bool codetree::writeNode(domnode *node, stringbuffer *output) {
+bool codetree::writeNode(domnode *node, output *out) {
 
 	// we're done
 	if (node->isNullNode()) {
@@ -1293,7 +1293,7 @@ bool codetree::writeNode(domnode *node, stringbuffer *output) {
 		for (domnode *child=node->getFirstTagChild();
 				!child->isNullNode();
 				child=child->getNextTagSibling()) {
-			if (!writeNode(child,output)) {
+			if (!writeNode(child,out)) {
 				return false;
 			}
 		}
@@ -1325,33 +1325,34 @@ bool codetree::writeNode(domnode *node, stringbuffer *output) {
 	// write the start
 	const char	*start=def->getAttributeValue(START);
 	if (line || (block && (tag || !charstring::isNullOrEmpty(start)))) {
-		indent(output);
+		indent(out);
 	}
-	writeStartEnd(output,start);
+	writeStartEnd(out,start);
 	if (tag) {
-		output->append("<")->append(node->getName());
+		out->write("<");
+		out->write(node->getName());
 		for (domnode *att=node->getAttribute((uint64_t)0);
 				!att->isNullNode(); att=att->getNextSibling()) {
 			if (charstring::compare(att->getName(),"value")) {
-				output->append(' ');
-				output->append(att->getName());
-				output->append("=\"");
-				output->append(att->getValue());
-				output->append('\"');
+				out->write(' ');
+				out->write(att->getName());
+				out->write("=\"");
+				out->write(att->getValue());
+				out->write('\"');
 			}
 		}
 		if (haschildren) {
-			output->append('>');
+			out->write('>');
 		}
 	}
 	if (block && (tag || !charstring::isNullOrEmpty(start))) {
-		output->append('\n');
+		out->write('\n');
 	}
 
 	// if the node has a value, just write that,
 	// otherwise write its children
 	if (!charstring::isNullOrEmpty(value)) {
-		output->append(value);
+		out->write(value);
 	} else {
 
 		// increase pvt->_depth
@@ -1363,7 +1364,7 @@ bool codetree::writeNode(domnode *node, stringbuffer *output) {
 		for (domnode *child=node->getFirstTagChild();
 				!child->isNullNode();
 				child=child->getNextTagSibling()) {
-			if (!writeNode(child,output)) {
+			if (!writeNode(child,out)) {
 				return false;
 			}
 		}
@@ -1377,34 +1378,38 @@ bool codetree::writeNode(domnode *node, stringbuffer *output) {
 	// write the end
 	const char	*end=def->getAttributeValue(END);
 	if (block && (tag || !charstring::isNullOrEmpty(end))) {
-		if (output->getString()[output->getStringLength()-1]!='\n') {
-			output->append('\n');
+#if 0
+		if (out->getString()[out->getStringLength()-1]!='\n') {
+			out->write('\n');
 		}
-		indent(output);
+#else
+		out->write('\n');
+#endif
+		indent(out);
 	}
 	if (tag) {
 		if (haschildren) {
-			output->append("</");
-			output->append(node->getName());
-			output->append('>');
+			out->write("</");
+			out->write(node->getName());
+			out->write('>');
 		} else {
-			output->append("/>");
+			out->write("/>");
 		}
 	}
-	writeStartEnd(output,end);
+	writeStartEnd(out,end);
 	if (line || (block && (tag || !charstring::isNullOrEmpty(end)))) {
-		output->append('\n');
+		out->write('\n');
 	}
 	return true;
 }
 
-void codetree::indent(stringbuffer *output) {
+void codetree::indent(output *out) {
 	for (uint32_t i=0; i<pvt->_depth; i++) {
-		output->append(pvt->_indentstring);
+		out->write(pvt->_indentstring);
 	}
 }
 
-void codetree::writeStartEnd(stringbuffer *output, const char *string) {
+void codetree::writeStartEnd(output *out, const char *string) {
 
 	if (!string) {
 		return;
@@ -1413,6 +1418,7 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 	// save indent level
 	uint32_t	startdepth=pvt->_depth;
 
+#if 0
 	// if it started with a backspace then either remove the preceeding
 	// carriage-return/line-feed or back up one level of indention
 	if (*string=='\b') {
@@ -1422,28 +1428,29 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 			pvt->_depth--;
 		}
 
-		const char	*outstr=output->getString();
-		size_t		outpos=output->getPosition()-1;
+		const char	*outstr=out->getString();
+		size_t		outpos=out->getPosition()-1;
 
 		if (outstr[outpos]=='\n' || outstr[outpos]=='\r') { 
-			output->truncate(outpos);
+			out->truncate(outpos);
 		} else {
 			if (!charstring::compare(
-				outstr+output->getPosition()-pvt->_indentlength,
+				outstr+out->getPosition()-pvt->_indentlength,
 				pvt->_indentstring)) {
-				output->truncate(outpos-pvt->_indentlength+1);
+				out->truncate(outpos-pvt->_indentlength+1);
 			}
 		}
 
 		string++;
 	}
+#endif
 
 	// Print the start/end string. When \n's are encountered,
 	// bump down and indent
 	for (const char *c=string; *c; c++) {
-		output->append(*c);
+		out->write(*c);
 		if (*c=='\n' && *(c+1)!='\0') {
-			indent(output);
+			indent(out);
 		}
 	}
 

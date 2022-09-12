@@ -342,41 +342,39 @@ class RUDIMENTS_DLLSPEC codetree : public object {
 		/** Deletes this instance of the codetree class. */
 		~codetree();
 
-		/** Parses "input" using "grammar", starting with "startsymbol",
+		/** Parses "in" using "grammar", starting with "startsymbol",
 		 *  creates an XML representation of the code and appends it as
-		 *  children to "output".  Returns true if parsing succeeded
+		 *  children to "out".  Returns true if parsing succeeded
 		 *  and false otherwise.  If parsing fails, "codeposition" is
 		 *  set to the location in the code that parsing failed. */
-		bool	parse(const char *input,
+		bool	parse(const char *in,
 					const char *grammar,
 					const char *startsymbol,
-					domnode *output,
+					domnode *out,
 					const char **codeposition);
 
-		/** Parses "input" using "grammar", starting with "startsymbol",
+		/** Parses "in" using "grammar", starting with "startsymbol",
 		 *  creates an XML representation of the code and appends it as
-		 *  children to "output".  Returns true if parsing succeeded
+		 *  children to "out".  Returns true if parsing succeeded
 		 *  and false otherwise.  If parsing fails, "codeposition" is
 		 *  set to the location in the code that parsing failed. */
-		bool	parse(const char *input,
+		bool	parse(const char *in,
 					codetreegrammar *grammar,
 					const char *startsymbol,
-					domnode *output,
+					domnode *out,
 					const char **codeposition);
 
-		/** Interprets the XML representation of the code "input" using
-		 *  "grammar" and appends it as code to "output".  Returns true
+		/** Interprets the XML representation of the code "in" using
+		 *  "grammar" and appends it as code to "out".  Returns true
 		 *  if this succeeds and false otherwise. */
-		bool	write(domnode *input,
-					const char *grammar,
-					stringbuffer *output);
+		bool	write(domnode *in, const char *grammar,
+							output *out);
 
-		/** Interprets the XML representation of the code "input" using
-		 *  "grammar" and appends it as code to "output".  Returns true
+		/** Interprets the XML representation of the code "in" using
+		 *  "grammar" and appends it as code to "out".  Returns true
 		 *  if this succeeds and false otherwise. */
-		bool	write(domnode *input,
-					codetreegrammar *grammar,
-					stringbuffer *output);
+		bool	write(domnode *in, codetreegrammar *grammar,
+							output *out);
 
 		/** Sets the debug level.  Debug is written to standard out. */
 		void	setDebugLevel(uint8_t debuglevel);

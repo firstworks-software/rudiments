@@ -95,6 +95,7 @@
 	datetime initializes mday, wday, and yday to 1 now, fixing the
 		behavior of various setters
 	normalized datetime getter/setter names
+	codetree writes to an output rather than stringbuffer now
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

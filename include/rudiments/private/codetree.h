@@ -75,10 +75,8 @@
 		void	popBreakStack();
 		bool	parseBreakStack(const char **codeposition);
 
-		bool	writeNode(domnode *node,
-					stringbuffer *output);
-		void	indent(stringbuffer *output);
-		void	writeStartEnd(stringbuffer *output,
-					const char *string);
+		bool	writeNode(domnode *node, output *out);
+		void	indent(output *out);
+		void	writeStartEnd(output *out, const char *string);
 
 		codetreeprivate		*pvt;
