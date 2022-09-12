@@ -523,13 +523,13 @@ int main(int argc, const char **argv) {
 	datetime	d;
 	// set these in random order...
 	d.setHour(10);
-	d.setYear(10);
+	d.setYear(2010);
 	d.setSecond(10);
 	d.setMinute(10);
 	d.setMonth(10);
 	d.setMicrosecond(10);
 	d.setDayOfMonth(10);
-	test("years",d.getYear()==10);
+	test("years",d.getYear()==2010);
 	test("months",d.getMonth()==10);
 	test("days",d.getDayOfMonth()==10);
 	test("hours",d.getHour()==10);

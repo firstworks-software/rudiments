@@ -105,10 +105,10 @@ void datetime::init() {
 	pvt->_sec=0;
 	pvt->_min=0;
 	pvt->_hour=0;
-	pvt->_mday=0;
+	pvt->_mday=1;
 	pvt->_mon=0;
 	pvt->_year=0;
-	pvt->_wday=1;
+	pvt->_wday=0;
 	pvt->_yday=0;
 	pvt->_yweek=0;
 	pvt->_isdst=0;
@@ -138,7 +138,7 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_mday=charstring::toInteger(ptr)-1;
+	pvt->_mday=charstring::toInteger(ptr);
 	ptr=charstring::findFirst(ptr,'/');
 	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
@@ -306,11 +306,11 @@ const char *datetime::getMonthAbbreviation() {
 }
 
 int32_t datetime::getDayOfMonth() {
-	return pvt->_mday+1;
+	return pvt->_mday;
 }
 
 int32_t datetime::getDayOfWeek() {
-	return pvt->_wday;
+	return pvt->_wday+1;
 }
 
 int32_t datetime::getDayOfYear() {
@@ -375,7 +375,7 @@ stdoutput.printf("setHour...\n");
 
 bool datetime::setDayOfMonth(int32_t day) {
 stdoutput.printf("setDayOfMonth...\n");
-	pvt->_mday=day-1;
+	pvt->_mday=day;
 	return normalize();
 }
 
