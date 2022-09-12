@@ -92,6 +92,8 @@
 	fixed Content-Type in url class when using curl
 	removed cursordomnode class
 	de-consted most things
+	datetime initializes mday, wday, and yday to 1 now, fixing the
+		behavior of various setXXX() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

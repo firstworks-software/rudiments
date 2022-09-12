@@ -105,11 +105,11 @@ void datetime::init() {
 	pvt->_sec=0;
 	pvt->_min=0;
 	pvt->_hour=0;
-	pvt->_mday=0;
+	pvt->_mday=1;
 	pvt->_mon=0;
 	pvt->_year=0;
-	pvt->_wday=0;
-	pvt->_yday=0;
+	pvt->_wday=1;
+	pvt->_yday=1;
 	pvt->_yweek=0;
 	pvt->_isdst=0;
 	pvt->_zone=NULL;
@@ -375,12 +375,12 @@ bool datetime::setDays(int32_t days) {
 }
 
 bool datetime::setMonths(int32_t months) {
-	pvt->_mon=months;
+	pvt->_mon=months-1;
 	return normalize();
 }
 
 bool datetime::setYears(int32_t years) {
-	pvt->_year=years;
+	pvt->_year=years-1900;
 	return normalize();
 }
 

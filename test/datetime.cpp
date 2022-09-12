@@ -516,4 +516,25 @@ int main(int argc, const char **argv) {
 		test("microsecond",microsecond==-1);
 		test("isnegative",!isnegative);
 	}
+	stdoutput.printf("\n");
+
+	// set
+	stdoutput.printf("set:\n");
+	datetime	d;
+	// set these in random order...
+	d.setHours(10);
+	d.setYears(10);
+	d.setSeconds(10);
+	d.setMinutes(10);
+	d.setMonths(10);
+	d.setMicroseconds(10);
+	d.setDays(10);
+	test("years",d.getYear()==10);
+	test("months",d.getMonth()==10);
+	test("days",d.getDayOfMonth()==10);
+	test("hours",d.getHour()==10);
+	test("minutes",d.getMinutes()==10);
+	test("seconds",d.getSeconds()==10);
+	test("microseconds",d.getMicroseconds()==10);
+	stdoutput.printf("\n");
 }
