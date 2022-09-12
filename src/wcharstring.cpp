@@ -2755,29 +2755,32 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 
-		// vswprintf attempts to write formatted data into "buffer"
-		// and either returns the number of bytes that were written
-		// (excluding the null terminator) or -1 if an error occurs.
+		// On most platforms, vswprintf attempts to write formatted
+		// data into "buffer" and returns the number of bytes that were
+		// written (excluding the null terminator) if it's possible to
+		// fit them into the buffer.
 		//
-		// Most platforms consider truncation to be an error (note that
-		// this is inconsistent with vsnprintf, most implementations of
-		// which don't consider truncation to be an error) but there are
-		// some platforms (Solaris 7) that don't consider it to be an
-		// error and just return the number of bytes that were able to
-		// be written on truncation.
+		// If an error occurs, then vswprintf returns -1 and sets errno.
 		//
-		// We don't want either of these behaviors though.  In the case
-		// of truncation, we want to write tuncated data to "buffer"
+		// Platforms differ on what happens if trucation occurs though.
+		// Most platforms just return -1 and don't set errno.  Some
+		// platforms (freebsd) return -1 and set errno to EOVERFLOW.
+		// Some platforms (solaris 7) just return the number of bytes
+		// that were able to be written.
+		//
+		// We don't want any of these behaviors though.  In the case
+		// of truncation, we want to write truncated data to "buffer"
 		// and return the number of bytes that would have been written
 		// (excluding the NULL terminator) if truncation hadn't
 		// occurred, similar to the behavior of vsnprintf on
 		// well-behaved systems.
 		//
-		// So, we'll write to an ever-larger buffer until we achieve
+		// So, we'll write to ever-larger buffers until we achieve
 		// success, copy out what we can to the original buffer, and
 		// return the number of bytes that would have been written
 		// (excluding the NULL terminator) if truncation hadn't
 		// occurred.
+
 		size_t	buflen=length;
 		size_t	inc=16;
 		ssize_t	size=-1;
@@ -2806,6 +2809,19 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 				delete[] buf;
 				break;
 			}
+			#if defined(EINVAL) || \
+				defined(EOVERFLOW) || \
+				defined(EILSEQ)
+			// On freebsd-style platforms EINVAL is set if
+			// buflen==0 and EOVERFLOW or EILSEQ can be set when
+			// truncation occurs.  Ignore all of these.
+			else if (size==-1 &&
+				(error::getErrorNumber()==EINVAL ||
+				error::getErrorNumber()==EOVERFLOW ||
+				error::getErrorNumber()==EILSEQ)) {
+				error::clearError();
+			}
+			#endif
 
 			delete[] buf;
 			buflen+=inc;
