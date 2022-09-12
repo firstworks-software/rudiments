@@ -522,19 +522,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("set:\n");
 	datetime	d;
 	// set these in random order...
-	d.setHour(10);
-	d.setYear(2010);
-	d.setSecond(10);
-	d.setMinute(10);
-	d.setMonth(10);
-	d.setMicrosecond(10);
-	d.setDayOfMonth(10);
-	test("years",d.getYear()==2010);
-	test("months",d.getMonth()==10);
-	test("days",d.getDayOfMonth()==10);
-	test("hours",d.getHour()==10);
-	test("minutes",d.getMinute()==10);
-	test("seconds",d.getSecond()==10);
-	test("microseconds",d.getMicrosecond()==10);
+	d.setHour(2);
+	d.setYear(2002);
+	d.setSecond(2);
+	d.setMinute(2);
+	d.setMonth(2);
+	d.setMicrosecond(2);
+	d.setDayOfMonth(2);
+	test("years",d.getYear()==2002);
+	test("months",d.getMonth()==2);
+	test("days",d.getDayOfMonth()==2);
+	test("hours",d.getHour()==2);
+	test("minutes",d.getMinute()==2);
+	test("seconds",d.getSecond()==2);
+	test("microseconds",d.getMicrosecond()==2);
 	stdoutput.printf("\n");
 }
