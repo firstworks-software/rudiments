@@ -112,9 +112,9 @@ char *toString(int32_t number) {
 
 int main(int argc, char **argv) {
 
-	// 4096 nodes for systems with more than 256M of memory,
-	// 512 nodes for systems with less than 256M of memory
-	nodecount=(sys::getPhysicalMemorySize()>256*1024*1024)?4096:512;
+	// 4096 nodes for systems with more than 1G of memory,
+	// 512 nodes for systems with less than 1G of memory
+	nodecount=(sys::getPhysicalMemorySize()>1024*1024*1024)?4096:512;
 
 	header("avltree");
 
