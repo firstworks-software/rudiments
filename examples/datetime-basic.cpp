@@ -22,8 +22,8 @@ int main(int argc, const char **argv) {
 	stdoutput.write("date/time: ");
 	stdoutput.printf("%02d/%02d/%04d %02d:%02d:%02d.%06d %s (%d)\n\n",
 			dt.getMonth(),dt.getDayOfMonth(),dt.getYear(),
-			dt.getHour(),dt.getMinutes(),dt.getSeconds(),
-			dt.getMicroseconds(),
+			dt.getHour(),dt.getMinute(),dt.getSecond(),
+			dt.getMicrosecond(),
 			dt.getTimeZoneString(),dt.getTimeZoneOffset());
 
 	// additional date information
