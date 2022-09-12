@@ -281,15 +281,15 @@ int32_t datetime::getHour() {
 	return pvt->_hour;
 }
 
-int32_t datetime::getMinutes() {
+int32_t datetime::getMinute() {
 	return pvt->_min;
 }
 
-int32_t datetime::getSeconds() {
+int32_t datetime::getSecond() {
 	return pvt->_sec;
 }
 
-int32_t datetime::getMicroseconds() {
+int32_t datetime::getMicrosecond() {
 	return pvt->_usec;
 }
 
@@ -349,38 +349,48 @@ time_t datetime::getEpoch() {
 	return pvt->_epoch;
 }
 
-bool datetime::setMicroseconds(int32_t microseconds) {
-	pvt->_usec=microseconds;
+bool datetime::setMicrosecond(int32_t microsecond) {
+	pvt->_usec=microsecond;
 	return normalize();
 }
 
-bool datetime::setSeconds(int32_t seconds) {
-	pvt->_sec=seconds;
+bool datetime::setSecond(int32_t second) {
+	pvt->_sec=second;
 	return normalize();
 }
 
-bool datetime::setMinutes(int32_t minutes) {
-	pvt->_min=minutes;
+bool datetime::setMinute(int32_t minute) {
+	pvt->_min=minute;
 	return normalize();
 }
 
-bool datetime::setHours(int32_t hours) {
-	pvt->_hour=hours;
+bool datetime::setHour(int32_t hour) {
+	pvt->_hour=hour;
 	return normalize();
 }
 
-bool datetime::setDays(int32_t days) {
-	pvt->_mday=days;
+bool datetime::setDayOfMonth(int32_t day) {
+	pvt->_mday=day;
 	return normalize();
 }
 
-bool datetime::setMonths(int32_t months) {
-	pvt->_mon=months-1;
+bool datetime::setDayOfWeek(int32_t day) {
+	pvt->_wday=day;
 	return normalize();
 }
 
-bool datetime::setYears(int32_t years) {
-	pvt->_year=years-1900;
+bool datetime::setDayOfYear(int32_t day) {
+	pvt->_yday=day;
+	return normalize();
+}
+
+bool datetime::setMonth(int32_t month) {
+	pvt->_mon=month-1;
+	return normalize();
+}
+
+bool datetime::setYear(int32_t year) {
+	pvt->_year=year-1900;
 	return normalize();
 }
 
@@ -434,10 +444,10 @@ const char *datetime::getString(bool microseconds) {
 	timestr.append(getDayOfMonth(),2)->append('/');
 	timestr.append(getYear())->append(' ');
 	timestr.append(getHour(),2)->append(':');
-	timestr.append(getMinutes(),2)->append(':');
-	timestr.append(getSeconds(),2);
+	timestr.append(getMinute(),2)->append(':');
+	timestr.append(getSecond(),2);
 	if (microseconds) {
-		timestr.append(':')->append(getMicroseconds(),3);
+		timestr.append(':')->append(getMicrosecond(),3);
 	}
 	timestr.append(' ');
 	timestr.append(getTimeZoneString());
@@ -456,10 +466,10 @@ const char *datetime::getSqlString(bool microseconds) {
 	timestr.append(getMonth(),2)->append('-');
 	timestr.append(getDayOfMonth(),2)->append(' ');
 	timestr.append(getHour(),2)->append(':');
-	timestr.append(getMinutes(),2)->append(':');
-	timestr.append(getSeconds(),2);
+	timestr.append(getMinute(),2)->append(':');
+	timestr.append(getSecond(),2);
 	if (microseconds) {
-		timestr.append('.')->append(getMicroseconds(),3);
+		timestr.append('.')->append(getMicrosecond(),3);
 	}
 	pvt->_sqlstring=timestr.detachString();
 	return pvt->_sqlstring;

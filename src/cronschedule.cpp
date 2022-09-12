@@ -240,7 +240,7 @@ bool cronschedule::inSchedule(datetime *dt) {
 		inPeriods(&pvt->_months,dt->getMonth()) &&
 		inPeriods(&pvt->_daysofmonth,dt->getDayOfMonth()) &&
 		inPeriods(&pvt->_daysofweek,dt->getDayOfWeek()) &&
-		inDayParts(dt->getHour(),dt->getMinutes()));
+		inDayParts(dt->getHour(),dt->getMinute()));
 }
 
 bool cronschedule::inSchedule(const char *dt) {

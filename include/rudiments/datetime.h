@@ -108,15 +108,15 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 
 		/** Returns the minute component of the date/time currently
 		 *  represented in the instance of the class. */
-		int32_t	getMinutes();
+		int32_t	getMinute();
 
-		/** Returns the seconds component of the date/time currently
+		/** Returns the second component of the date/time currently
 		 *  represented in the instance of the class. */
-		int32_t	getSeconds();
+		int32_t	getSecond();
 
-		/** Returns the microseconds component of the date/time
+		/** Returns the microsecond component of the date/time
 		 *  currently represented in the instance of the class. */
-		int32_t	getMicroseconds();
+		int32_t	getMicrosecond();
 
 		/** Returns the month component (1-12) of the date/time
 		 *  currently represented in the instance of the class. */
@@ -132,22 +132,22 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  class. */
 		const char	*getMonthAbbreviation();
 
-		/** Returns the day of the month component (1-31) of the
+		/** Returns the day-of-the-month component (1-31) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
 		int32_t	getDayOfMonth();
 
-		/** Returns the day of the week component (1-7) of the
+		/** Returns the day-of-the-week component (1-7) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
 		int32_t	getDayOfWeek();
 
-		/** Returns the day of the year component (1-365) of the
+		/** Returns the day-of-the-year component (1-365) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
 		int32_t	getDayOfYear();
 
-		/** Returns the week of the year component (1-52) of the
+		/** Returns the week-of-the-year component (1-52) of the
 		 *  date/time currently represented in the instance of the
 		 *  class. */
 		int32_t	getWeekOfYear();
@@ -201,42 +201,50 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		bool	adjustTimeZone(const char *newtz, bool ignoredst);
 
 
-		/** Sets the seconds component of the date/time represented in
+		/** Sets the second component of the date/time represented in
 		 *  the instance of the class to "seconds". */
-		bool	setSeconds(int32_t seconds);
+		bool	setSecond(int32_t seconds);
 
-		/** Sets the microseconds component of the date/time
+		/** Sets the microsecond component of the date/time
 		 *  represented in the instance of the class to
 		 *  "microseconds". */
-		bool	setMicroseconds(int32_t microseconds);
+		bool	setMicrosecond(int32_t microseconds);
 
-		/** Sets the minutes component of the date/time represented in
+		/** Sets the minute component of the date/time represented in
 		 *  the instance of the class to "minutes". */
-		bool	setMinutes(int32_t minutes);
+		bool	setMinute(int32_t minute);
 
-		/** Sets the hours component of the date/time represented in
-		 *  the instance of the class to "hours". */
-		bool	setHours(int32_t hours);
+		/** Sets the hour component of the date/time represented in
+		 *  the instance of the class to "hour". */
+		bool	setHour(int32_t hour);
 
 		/** Sets the day-of-the-month component (1-31) of the date/time
- 		 *  represented in the instance of the class to "days". */
-		bool	setDays(int32_t days);
+ 		 *  represented in the instance of the class to "day". */
+		bool	setDayOfMonth(int32_t day);
+
+		/** Sets the day-of-the-week component (1-7) of the date/time
+ 		 *  represented in the instance of the class to "day". */
+		bool	setDayOfWeek(int32_t day);
+
+		/** Sets the day-of-the-year component (1-365) of the date/time
+ 		 *  represented in the instance of the class to "day". */
+		bool	setDayOfYear(int32_t day);
 
 		/** Sets the month component (1-12) of the date/time
- 		 *  represented in the instance of the class to "months". */
-		bool	setMonths(int32_t months);
+ 		 *  represented in the instance of the class to "month". */
+		bool	setMonth(int32_t month);
 
 		/** Sets the year component of the date/time represented in the
-		 *  instance of the class to "years". */
-		bool	setYears(int32_t years);
+		 *  instance of the class to "year". */
+		bool	setYear(int32_t year);
 
 		/** Adds "seconds" to the date/time represented in the
 		 *  instance of the class. */
-		bool	addSeconds(int32_t seconds);
+		bool	addSeconds(int32_t second);
 
 		/** Adds "microseconds" to the date/time represented in the
 		 *  instance of the class. */
-		bool	addMicroseconds(int32_t microseconds);
+		bool	addMicroseconds(int32_t microsecond);
 
 		/** Adds "minutes" to the date/time represented in the
 		 *  instance of the class. */

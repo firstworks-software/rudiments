@@ -69,7 +69,7 @@ int main(int argc, const char **argv) {
 	// (make sure we're not about to bump over to the next minute)
 	datetime	dt;
 	dt.getSystemDateAndTime();
-	if (dt.getSeconds()>=58) {
+	if (dt.getSecond()>=58) {
 		snooze::macrosnooze(5);
 		dt.getSystemDateAndTime();
 	}
@@ -80,7 +80,7 @@ int main(int argc, const char **argv) {
 	test("header day",charstring::toInteger(header+3)==dt.getDayOfMonth());
 	test("header year",charstring::toInteger(header+6)==dt.getYear());
 	test("header hour",charstring::toInteger(header+11)==dt.getHour());
-	test("header minute",charstring::toInteger(header+14)==dt.getMinutes());
+	test("header minute",charstring::toInteger(header+14)==dt.getMinute());
 	test("header program",
 		// (date string may or may not include the timezone)
 		!charstring::compare(header+24,"logtest ",8) ||

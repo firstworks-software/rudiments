@@ -1610,6 +1610,6 @@ void url::getOpenTimings(uint64_t *build,
 }
 
 uint64_t url::interval() {
-	return ((pvt->_end.getEpoch()*1000000+pvt->_end.getMicroseconds())-
-		(pvt->_start.getEpoch()*1000000+pvt->_start.getMicroseconds()));
+	return ((pvt->_end.getEpoch()*1000000+pvt->_end.getMicrosecond())-
+		(pvt->_start.getEpoch()*1000000+pvt->_start.getMicrosecond()));
 }

@@ -37,9 +37,9 @@ void test(const wchar_t *printstring, bool result) {
 void displayTime(datetime *start, datetime *end) {
 
 	uint32_t	millisec=(end->getEpoch()*1000+
-					end->getMicroseconds()/1000)-
+					end->getMicrosecond()/1000)-
 					(start->getEpoch()*1000+
-					start->getMicroseconds()/1000);
+					start->getMicrosecond()/1000);
 	long double	totalsec=(long double)millisec/1000.0;
 	stdoutput.printf("time: %0.2Lf\n",totalsec);
 }
