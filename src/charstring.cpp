@@ -12,6 +12,7 @@
 	#include <rudiments/file.h>
 #endif
 #include <rudiments/stringbuffer.h>
+#include <rudiments/error.h>
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -2950,18 +2951,18 @@ ssize_t charstring::printf(char *buffer, size_t len,
 	// number of bytes that would have been written if truncation
 	// hadn't occurred.
 
-	// But, implementations vary widely.
-
-	// Some implementations (like linux libc5) crash if "buffer" is NULL
-	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
-	// of at least two characters in either of those cases.
+	// Attempt to write directly to the provided buffer...
 	char	*buf=buffer;
 	size_t	buflen=len;
+	// Some implementations (like linux libc5) crash if "buffer" is NULL
+	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
+	// of at least two characters to manage those cases.
 	char	b[2];
 	if (!buf || buflen<2) {
 		buf=b;
-		buflen=sizeof(b);
+		buflen=2;
 	}
+	error::clearError();
 	#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
 		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
 	#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
@@ -2972,7 +2973,7 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
 	#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
-		// Solaris 2.5.1 (and maybe others) return buflen if
+		// Solaris 2.5.1 (and maybe others) return buflen-1 if
 		// truncation occurs.  In that case, simulate systems
 		// that return -1 if truncation occurs.
 		if (size==(ssize_t)buflen-1) {
@@ -2982,17 +2983,45 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		#error no vsnprintf or anything like it
 	#endif
 
+	// Return "size" if either:
+	// * "size" > -1 (no error occurred)
+	// * "size" <= -1 and there was an error
+	if (size>-1) {
+		// if we had to use that 2-byte buffer hack above,
+		// then copy out from it to the provided buffer
+		if (buf==b) {
+			if ((size_t)size>len) {
+				// just copy out what we can
+				charstring::copy(buffer,buf,len);
+			} else {
+				// copy out everything, including
+				// the NULL terminator
+				charstring::copy(buffer,buf,size+1);
+			}
+		}
+		return size;
+	} else if (error::getErrorNumber()) {
+		return size;
+	}
+
+	// If "size" <= -1 and there was no error though...
+
 	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
-	// -1 if truncation occurred though and don't write anything to
-	// "buffer".
-	//
-	// For systems like those, we'll simulate the expected behavior...
+	// -1 if truncation occurred and don't write anything to "buffer".  This
+	// must be one of those systems.
+
+	// To simulate the expected behavior of writing truncated data to
+	// "buffer" and returning the number of bytes that would have been
+	// written if truncation had not occured, we need to loop, attempting
+	// to write to ever-larger buffers until we achieve success, copy out
+	// what we can to the original buffer, and return the number of bytes
+	// that would have been written if truncation hadn't occurred.
 	buflen=len;
 	size_t	inc=16;
-	while (size==-1) {
-
-		buflen=buflen+inc;
-		buf=new char[buflen];
+	error::clearError();
+	do {
+		buflen+=inc;
+		buf=new char[buflen+1];
 
 		#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
 			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
@@ -3014,17 +3043,28 @@ ssize_t charstring::printf(char *buffer, size_t len,
 			#error no vsnprintf or anything like it
 		#endif
 		if (size>-1) {
-			charstring::copy(buffer,buf,len);
+			if ((size_t)(size+1)>len) {
+				// just copy out what we can
+				charstring::copy(buffer,buf,len);
+			} else {
+				// copy out everything, including
+				// the NULL terminator
+				charstring::copy(buffer,buf,size+1);
+			}
+			delete[] buf;
+			break;
 		}
+
+		// clean up
 		delete[] buf;
 
 		// adjust how quickly the buffer grows
 		// (this can certainly be optimized further)
-		inc=inc*2;
+		inc*=2;
 		if (inc>1024) {
 			inc=1024;
 		}
-	}
+	} while (!error::getErrorNumber());
 	return size;
 }
 

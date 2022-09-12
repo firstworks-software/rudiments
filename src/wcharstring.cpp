@@ -2755,38 +2755,68 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 
-		// vswprintf should write whatever will fit into "buffer" and
-		// either return the number of bytes that were written or -1
-		// if truncation occurs.
+		// vswprintf attempts to write formatted data into "buffer"
+		// and either returns the number of bytes that were written
+		// (excluding the null terminator) or -1 if an error occurs.
 		//
-		// Iterate, expanding the buffer as necessary.
+		// Most platforms consider truncation to be an error (note that
+		// this is inconsistent with vsnprintf, most implementations of
+		// which don't consider truncation to be an error) but there are
+		// some platforms (Solaris 7) that don't consider it to be an
+		// error and just return the number of bytes that were able to
+		// be written on truncation.
+		//
+		// We don't want either of these behaviors though.  In the case
+		// of truncation, we want to write tuncated data to "buffer"
+		// and return the number of bytes that would have been written
+		// (excluding the NULL terminator) if truncation hadn't
+		// occurred, similar to the behavior of vsnprintf on
+		// well-behaved systems.
+		//
+		// So, we'll write to an ever-larger buffer until we achieve
+		// success, copy out what we can to the original buffer, and
+		// return the number of bytes that would have been written
+		// (excluding the NULL terminator) if truncation hadn't
+		// occurred.
 		size_t	buflen=length;
 		size_t	inc=16;
 		ssize_t	size=-1;
+		error::clearError();
 		do {
 
-			// Windows doesn't like it if you delete[] a buffer
-			// that was allocated with 0 size, but doesn't mind
-			// delete[]ing a NULL.  vswprintf doesn't seem to mind
-			// being passed a NULL instead of a 0-sized buffer.
-			// So, we'll set buf=NULL if buflen is 0.
-			wchar_t	*buf=(buflen)?new wchar_t[buflen]:NULL;
+			wchar_t	*buf=new wchar_t[buflen];
 
 			size=vswprintf(buf,buflen,format,*argp);
-			if (size>-1) {
-				wcharstring::copy(buffer,buf,length);
-			}
-			delete[] buf;
 
-			buflen=buflen+inc;
+			// On most platforms, size-written equaling -1
+			// indicates truncation.
+			// On solaris-7-style platforms, size-written exactly
+			// equaling the size of the buffer size indicates
+			// truncation.
+			// If neither of those happened, then we have success.
+			if (size>-1 && (size_t)size!=buflen) {
+				if ((size_t)(size+1)>length) {
+					// just copy out what we can
+					wcharstring::copy(buffer,buf,length);
+				} else {
+					// copy out everything, including
+					// the NULL terminator
+					wcharstring::copy(buffer,buf,size+1);
+				}
+				delete[] buf;
+				break;
+			}
+
+			delete[] buf;
+			buflen+=inc;
 
 			// adjust how quickly the buffer grows
 			// (this can certainly be optimized further)
-			inc=inc*2;
+			inc*=2;
 			if (inc>1024) {
 				inc=1024;
 			}
-		} while (size==-1);
+		} while (!error::getErrorNumber());
 		return size;
 	#else
 		RUDIMENTS_SET_ENOSYS
