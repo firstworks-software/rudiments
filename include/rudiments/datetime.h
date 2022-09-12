@@ -147,9 +147,13 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  class. */
 		int32_t	getDayOfYear();
 
-		/** Returns the week-of-the-year component (1-52) of the
+		/** Returns the week-of-the-year component (0-53) of the
 		 *  date/time currently represented in the instance of the
-		 *  class. */
+		 *  class.
+		 *
+		 *  Note that week 1 begins with the first Monday of the year,
+		 *  meaning that a year will have no week 0 if it starts on
+		 *  a Monday. */
 		int32_t	getWeekOfYear();
 
 		/** Returns the year component, including the century, of
