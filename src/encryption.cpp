@@ -118,6 +118,14 @@ bool encryption::append(const unsigned char *data, uint32_t size) {
 	return true;
 }
 
+uint64_t encryption::getRawDataSize() {
+	return pvt->_in.getSize();
+}
+
+const unsigned char *encryption::getRawData() {
+	return pvt->_in.getBuffer();
+}
+
 bytebuffer *encryption::getIn() {
 	return &pvt->_in;
 }

@@ -97,6 +97,7 @@
 	normalized datetime getter/setter names
 	codetree writes to an output rather than stringbuffer now
 	removed \b support from codetree
+	added encryption::getRawData() and getRawDataSize()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
