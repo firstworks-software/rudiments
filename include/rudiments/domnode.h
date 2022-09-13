@@ -173,12 +173,12 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 
 		/** Instructs the destructor to recursively delete all child
 		 *  nodes.  This is the default behavior. */
-		void		cascadeOnDelete();
+		void	cascadeOnDelete();
 
 		/** Instructs the destructor not to recursively delete all
 		 *  child nodes.  The default behavior is to delete all child
 		 *  nodes. */
-		void		dontCascadeOnDelete();
+		void	dontCascadeOnDelete();
 
 
 		/** Returns the type of the node. */

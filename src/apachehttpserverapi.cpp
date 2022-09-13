@@ -82,6 +82,15 @@ apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 	#endif
 }
 
+apachehttpserverapi::apachehttpserverapi(apachehttpserverapi &a) {
+	// do nothing, method is private/disabled
+}
+
+apachehttpserverapi &apachehttpserverapi::operator=(apachehttpserverapi &a) {
+	// do nothing, method is private/disabled
+	return *this;
+}
+
 apachehttpserverapi::~apachehttpserverapi() {
 	#ifdef APACHE_2
 		if (pvt->_brigade) {
@@ -97,100 +106,6 @@ const char *apachehttpserverapi::getType() {
 		return "apache1";
 	#endif
 }
-
-#if 0
-ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
-
-	// FIXME: collapse this and bufferedRead(char *) into a single method
-
-	char	*b=(char *)buf;
-	ssize_t	retval=0;
-	for (ssize_t i=0; i<count; i++) {
-		ssize_t	result=bufferedRead(b);
-		if (result<0) {
-			return result;
-		}
-		if (!result) {
-			break;
-		}
-		retval+=result;
-		b++;
-	}
-	return retval;
-}
-
-ssize_t apachehttpserverapi::bufferedRead(char *ch) {
-
-	// FIXME: implement this to read a specified number of bytes
-	// and collapse bufferedRead(void *,ssize_t) into it
-
-	if (!pvt->_stdinptr) {
-
-		request_rec	*r=(request_rec *)
-			((apacheapistruct *)pvt->_apistruct)->requestrec;
-		if (!r) {
-			return RESULT_ERROR;
-		}
-
-#ifdef APACHE_2
-		apr_bucket_brigade	*bb=apr_brigade_create(r->pool,
-						r->connection->bucket_alloc);
-		bool	done=false;
-		while (!done) {
-			if (ap_get_brigade(r->input_filters,bb,
-						AP_MODE_READBYTES,
-						APR_BLOCK_READ,
-						HUGE_STRING_LEN)!=APR_SUCCESS) {
-				break;
-			}
-			for (apr_bucket *bucket=APR_BRIGADE_FIRST(bb);
-					bucket!=APR_BRIGADE_SENTINEL(bb);
-					bucket=APR_BUCKET_NEXT(bucket)) {
-				if (APR_BUCKET_IS_EOS(bucket)) {
-					done=true;
-					break;
-				}
-				if (APR_BUCKET_IS_FLUSH(bucket)) {
-					continue;
-				}
-				const char	*data;
-				apr_size_t	len;
-				//apr_status_t	rv=
-					apr_bucket_read(bucket,&data,&len,
-								APR_BLOCK_READ);
-				pvt->_standardin.append(data,(size_t)len);
-			}
-			apr_brigade_cleanup(bb);
-		}
-#else
-		if (ap_setup_client_block(r,REQUEST_CHUNKED_ERROR)!=OK ||
-						!ap_should_client_block(r)) {
-			return RESULT_ERROR;
-		}
-		char	data[HUGE_STRING_LEN];
-		for (;;) {
-			int	len=ap_get_client_block(r,data,sizeof(data));
-			if (len) {
-				pvt->_standardin.append(data,(size_t)len);
-			} else {
-				break;
-			}
-		}
-#endif
-
-		pvt->_stdinptr=pvt->_standardin.getBuffer();
-		pvt->_stdinpos=0;
-	}
-	if (pvt->_stdinpos<pvt->_standardin.getSize()) {
-		*ch=(char)(*pvt->_stdinptr);
-		pvt->_stdinptr++;
-		pvt->_stdinpos++;
-		return sizeof(char);
-	}
-	return RESULT_ERROR;
-}
-
-#else
 
 ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 
@@ -465,7 +380,6 @@ ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 ssize_t apachehttpserverapi::bufferedRead(char *ch) {
 	return RESULT_ERROR;
 }
-#endif
 
 ssize_t apachehttpserverapi::read(unsigned char *buffer, size_t size) {
 	return bufferedRead(buffer,size);

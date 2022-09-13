@@ -51,6 +51,9 @@
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 
 	private:
+		apachehttpserverapi(apachehttpserverapi &a);
+		apachehttpserverapi	&operator=(apachehttpserverapi &a);
+
 		ssize_t	bufferedRead(void *buf, ssize_t count);
 		ssize_t	bufferedRead(char *ch);
 
