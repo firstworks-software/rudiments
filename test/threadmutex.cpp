@@ -141,5 +141,16 @@ int main(int argc, const char **argv) {
 	test("output",!charstring::compare(output.getString(),
 			"1234123412341234123412341234123412341234"));
 
-	stdoutput.printf("\n");
+	// copy
+	threadmutex	thrm1(thrm);
+	test("copy",thrm1.getInternalMutexStructure()==
+				thrm.getInternalMutexStructure());
+
+	// equals
+	threadmutex	thrm2;
+	test("before equals",thrm2.getInternalMutexStructure()!=
+				thrm.getInternalMutexStructure());
+	thrm2=thrm;
+	test("after equals",thrm2.getInternalMutexStructure()==
+				thrm.getInternalMutexStructure());
 }

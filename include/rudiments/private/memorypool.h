@@ -1,9 +1,6 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-		memorypool(memorypool &m);
-		memorypool	&operator=(memorypool &m);
-
 	private:
 		void	init(size_t initialsize,
 				size_t increment,

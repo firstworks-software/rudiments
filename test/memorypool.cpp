@@ -169,4 +169,22 @@ int main(int argc, const char **argv) {
 
 	mp.clear();
 	stdoutput.printf("\n");
+
+	stdoutput.printf("copy...\n");
+	memorypool	mp1(mp);
+	test("copy, getInitialSize()",mp1.getInitialSize()==32);
+	test("copy, getIncrementSize()",mp1.getIncrementSize()==16);
+	test("copy, getResizeInterval()",mp1.getResizeInterval()==10);
+	stdoutput.printf("\n");
+
+	stdoutput.printf("equal...\n");
+	memorypool	mp2;
+	test("before equal, getInitialSize()",mp2.getInitialSize()==512);
+	test("before equal, getIncrementSize()",mp2.getIncrementSize()==128);
+	test("before equal, getResizeInterval()",mp2.getResizeInterval()==100);
+	mp2=mp;
+	test("after equal, getInitialSize()",mp2.getInitialSize()==32);
+	test("after equal, getIncrementSize()",mp2.getIncrementSize()==16);
+	test("after equal, getResizeInterval()",mp2.getResizeInterval()==10);
+	stdoutput.printf("\n");
 }
