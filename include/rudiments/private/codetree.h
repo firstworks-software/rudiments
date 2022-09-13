@@ -78,5 +78,7 @@
 		bool	writeNode(domnode *node, output *out);
 		void	indent(output *out);
 		void	writeStartEnd(output *out, const char *string);
+		void	write(output *out, char ch);
+		void	write(output *out, const char *string);
 
 		codetreeprivate		*pvt;

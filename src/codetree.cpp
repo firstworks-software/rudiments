@@ -258,6 +258,8 @@ class codetreeprivate {
 		bool					_break;
 		linkedlist< linkedlist< break_t * > * >	_breakstack;
 		uint64_t				_breakcount;
+
+		char			_lastchar;
 };
 
 
@@ -275,6 +277,7 @@ codetree::codetree() : object() {
 	pvt->_endofstring=false;
 	pvt->_break=false;
 	pvt->_breakcount=0;
+	pvt->_lastchar='\0';
 }
 
 codetree::~codetree() {
@@ -1329,30 +1332,30 @@ bool codetree::writeNode(domnode *node, output *out) {
 	}
 	writeStartEnd(out,start);
 	if (tag) {
-		out->write("<");
-		out->write(node->getName());
+		write(out,"<");
+		write(out,node->getName());
 		for (domnode *att=node->getAttribute((uint64_t)0);
 				!att->isNullNode(); att=att->getNextSibling()) {
 			if (charstring::compare(att->getName(),"value")) {
-				out->write(' ');
-				out->write(att->getName());
-				out->write("=\"");
-				out->write(att->getValue());
-				out->write('\"');
+				write(out,' ');
+				write(out,att->getName());
+				write(out,"=\"");
+				write(out,att->getValue());
+				write(out,'\"');
 			}
 		}
 		if (haschildren) {
-			out->write('>');
+			write(out,'>');
 		}
 	}
 	if (block && (tag || !charstring::isNullOrEmpty(start))) {
-		out->write('\n');
+		write(out,'\n');
 	}
 
 	// if the node has a value, just write that,
 	// otherwise write its children
 	if (!charstring::isNullOrEmpty(value)) {
-		out->write(value);
+		write(out,value);
 	} else {
 
 		// increase pvt->_depth
@@ -1378,34 +1381,30 @@ bool codetree::writeNode(domnode *node, output *out) {
 	// write the end
 	const char	*end=def->getAttributeValue(END);
 	if (block && (tag || !charstring::isNullOrEmpty(end))) {
-#if 0
-		if (out->getString()[out->getStringLength()-1]!='\n') {
-			out->write('\n');
+		if (pvt->_lastchar!='\n') {
+			write(out,'\n');
 		}
-#else
-		out->write('\n');
-#endif
 		indent(out);
 	}
 	if (tag) {
 		if (haschildren) {
-			out->write("</");
-			out->write(node->getName());
-			out->write('>');
+			write(out,"</");
+			write(out,node->getName());
+			write(out,'>');
 		} else {
-			out->write("/>");
+			write(out,"/>");
 		}
 	}
 	writeStartEnd(out,end);
 	if (line || (block && (tag || !charstring::isNullOrEmpty(end)))) {
-		out->write('\n');
+		write(out,'\n');
 	}
 	return true;
 }
 
 void codetree::indent(output *out) {
 	for (uint32_t i=0; i<pvt->_depth; i++) {
-		out->write(pvt->_indentstring);
+		write(out,pvt->_indentstring);
 	}
 }
 
@@ -1418,37 +1417,10 @@ void codetree::writeStartEnd(output *out, const char *string) {
 	// save indent level
 	uint32_t	startdepth=pvt->_depth;
 
-#if 0
-	// if it started with a backspace then either remove the preceeding
-	// carriage-return/line-feed or back up one level of indention
-	if (*string=='\b') {
-
-		// make sure not to attempt to indent less than 0
-		if (pvt->_depth) {
-			pvt->_depth--;
-		}
-
-		const char	*outstr=out->getString();
-		size_t		outpos=out->getPosition()-1;
-
-		if (outstr[outpos]=='\n' || outstr[outpos]=='\r') { 
-			out->truncate(outpos);
-		} else {
-			if (!charstring::compare(
-				outstr+out->getPosition()-pvt->_indentlength,
-				pvt->_indentstring)) {
-				out->truncate(outpos-pvt->_indentlength+1);
-			}
-		}
-
-		string++;
-	}
-#endif
-
 	// Print the start/end string. When \n's are encountered,
 	// bump down and indent
 	for (const char *c=string; *c; c++) {
-		out->write(*c);
+		write(out,*c);
 		if (*c=='\n' && *(c+1)!='\0') {
 			indent(out);
 		}
@@ -1456,4 +1428,16 @@ void codetree::writeStartEnd(output *out, const char *string) {
 
 	// restore indent level
 	pvt->_depth=startdepth;
+}
+
+void codetree::write(output *out, char ch) {
+	pvt->_lastchar=ch;
+	out->write(ch);
+}
+
+void codetree::write(output *out, const char *string) {
+	ssize_t	count=out->write(string);
+	if (count>-1) {
+		pvt->_lastchar=*(string+count-1);
+	}
 }
