@@ -17,16 +17,27 @@ int main(int argc, const char **argv) {
 		NULL
 	};
 
+	crypt	c;
 	for (const char * const *salt=salts; *salt; salt++) {
 
 		stdoutput.printf("salt=%s\n",*salt);
 
 		for (const char * const *str=strings; *str; str++) {
 
-			char	*encrypted=crypt::encrypt(*str,*salt);
+			const unsigned char	*data=
+					(const unsigned char *)*str;
+			const unsigned char	*iv=
+					(const unsigned char *)*salt;
+
+			c.append(data,charstring::length(*str));
+			c.setIv(iv,c.getIvSize());
+
+			const char	*encrypted=
+					(const char *)c.getEncryptedData();
 
 			stdoutput.printf("  %s: %s\n",*str,encrypted);
-			delete[] encrypted;
+
+			c.clear();
 		}
 	}
 }

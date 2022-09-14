@@ -4608,7 +4608,7 @@ fi
 if ( test "$INCLUDE_CRYPT" = "1" )
 then
 	HEADERS1="$HEADERS1 crypt.h"
-	PRIVATEHEADERS1="$PRIVATEHEADERS1 cryptincludes.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 crypt.h cryptincludes.h"
 	SRCS="$SRCS crypt.cpp"
 	LOBJS="$LOBJS crypt.lo"
 fi

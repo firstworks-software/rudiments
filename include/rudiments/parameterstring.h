@@ -32,10 +32,10 @@ class RUDIMENTS_DLLSPEC parameterstring : public object {
 
 		/** Defines the delimiter separating the parameters.  The
 		 *  default is a semicolon. */
-		void		setDelimiter(char delim);
+		void	setDelimiter(char delim);
 
 		/** Parses "string" and extracts the names and values. */
-		bool		parse(const char *string);
+		bool	parse(const char *string);
 
 		/** Returns the corresponding value for "name".  parse() must
 		 *  have been called already or this method will return NULL. */
@@ -44,7 +44,7 @@ class RUDIMENTS_DLLSPEC parameterstring : public object {
 		/** Clears the stored set of names and values.  After a call
 		 *  to clear(), getValue() will return NULL until parse() is
 		 *  called again. */
-		void		clear();
+		void	clear();
 
 		/** Returns the dictionary used internally by this instance of
 		 *  the parameterstring class. */

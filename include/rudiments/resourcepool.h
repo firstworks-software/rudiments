@@ -17,11 +17,11 @@ class resourcepool {
 		resourcepool();
 
 		/** Creates an instance of the resourcepool class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "r". */
 		resourcepool(resourcepool<valuetype> &r);
 
 		/** Makes this instance of the resourcepool class
-		 *  identical to "a". */
+		 *  identical to "r". */
 		resourcepool<valuetype>	&operator=(resourcepool<valuetype> &r);
 
 		/** Deletes this instance of the resourcepool class and all

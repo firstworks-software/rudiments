@@ -358,6 +358,7 @@ privateheaders1="inttypes.h "+_
 	"clientincludes.h "+_
 	"commandline.h "+_
 	"commandlineincludes.h "+_
+	"crypt.h "+_
 	"cryptincludes.h "+_
 	"datetime.h "+_
 	"datetimeincludes.h "+_

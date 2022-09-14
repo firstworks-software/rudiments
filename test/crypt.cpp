@@ -44,6 +44,7 @@ int main(int argc, const char **argv) {
 			}
 		};
 
+		crypt	c;
 		uint16_t	i=0;
 		for (const char * const *salt=salts; *salt; salt++) {
 
@@ -51,10 +52,15 @@ int main(int argc, const char **argv) {
 
 			uint16_t	j=0;
 			for (const char * const *str=unencrypted; *str; str++) {
-				char	*enc=crypt::encrypt(*str,*salt);
-				test("",!charstring::compare(enc,
+				c.append((const unsigned char *)*str,
+						charstring::length(*str));
+				c.setIv((const unsigned char *)*salt,
+							c.getIvSize());
+				const char	*enc=
+					(const char *)c.getEncryptedData();
+				test(*str,!charstring::compare(enc,
 							encrypted[i][j]));
-				delete[] enc;
+				c.clear();
 				j++;
 			}
 			i++;

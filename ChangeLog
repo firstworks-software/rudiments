@@ -98,6 +98,7 @@
 	codetree writes to an output rather than stringbuffer now
 	removed \b support from codetree
 	added encryption::getRawData() and getRawDataSize()
+	refactored crypt as a child of encryption
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
