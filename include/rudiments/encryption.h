@@ -70,15 +70,6 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		virtual bool	append(const unsigned char *data,
 							uint32_t size);
 
-		/** Returns the number of bytes of data that have been appended
-		 *  since instantiation or since the most recent call to
-		 *  clear(). */
-		virtual uint64_t	getRawDataSize();
-
-		/** Returns the data that has been appended since instantiation
-		 *  or since the most recent call to clear(). */
-		virtual const unsigned char	*getRawData();
-
 		/** Interprets the current data as unencrypted.  Encrypts the
 		 *  current data.  Returns the encrypted data on success or
 		 *  NULL if an error occurred.  Note that the encrypted data
