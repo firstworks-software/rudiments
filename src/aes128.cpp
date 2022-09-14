@@ -109,9 +109,6 @@ const unsigned char *aes128::getData(bool encrypt) {
 				return NULL;
 			}
 		#endif
-
-		// reset the dirty flag
-		setDirty(false);
 	}
 
 	#if !defined(RUDIMENTS_HAS_SSL)
@@ -313,6 +310,9 @@ const unsigned char *aes128::getData(bool encrypt) {
 			getOut()->truncate();
 		}
 	#endif
+
+	// reset the dirty flag
+	setDirty(false);
 
 	return getOut()->getBuffer();
 }

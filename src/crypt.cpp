@@ -98,13 +98,25 @@ const unsigned char *crypt::getEncryptedData() {
 		// clean up
 		delete[] password;
 
+		// return error
+		if (error::getErrorNumber()) {
+			switch (error::getErrorNumber()) {
+				case ERANGE:
+				case ENOMEM:
+					setError(
+					ENCRYPTION_ERROR_INPUT_TOO_LONG);
+					break;
+				case EINVAL:
+				default:
+					setError(
+					ENCRYPTION_ERROR_UNSUPPORTED);
+			};
+			return NULL;
+		}
+
 		// reset the dirty flag
 		setDirty(false);
 
-		if (error::getErrorNumber()) {
-			setError(ENCRYPTION_ERROR_INPUT_TOO_LONG);
-			return NULL;
-		}
 		return getOut()->getBuffer();
 
 	#else
