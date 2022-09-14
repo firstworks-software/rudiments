@@ -63,6 +63,9 @@ const unsigned char *aes128::getDecryptedData() {
 
 const unsigned char *aes128::getData(bool encrypt) {
 
+	// reset the error
+	setError(ENCRYPTION_ERROR_SUCCESS);
+
 	// set the dirty flag true if we're doing a different operation
 	// (encryption vs. decryption) than we're currently configured to do
 	if (getEncrypted()!=encrypt) {
@@ -77,39 +80,33 @@ const unsigned char *aes128::getData(bool encrypt) {
 	// we don't need to reinit the context, we just need to
 	// reencrypt/decrypt the data.
 
+	// if the dirty flag isn't set then we can just return the
+	// existing output buffer
 	if (!getDirty()) {
-
-		// if the dirty flag isn't set then we can just return the
-		// existing output buffer
 		return getOut()->getBuffer();
-
-	} else {
-
-		// re-init if the dirty flag is set
-
-		// reset the error
-		setError(ENCRYPTION_ERROR_SUCCESS);
-
-		freeContext();
-		newContext();
-		#if defined(RUDIMENTS_HAS_SSL)
-			if (!EVP_CipherInit_ex(pvt->_context,
-						EVP_aes_128_cbc(),
-						NULL,
-						getKey(),
-						getIv(),
-						(encrypt)?1:0)) {
-				freeContext();
-				setError(ERR_GET_REASON(ERR_get_error()));
-				return NULL;
-			}
-		#else
-			if (!pvt->_context) {
-				// FIXME: set error
-				return NULL;
-			}
-		#endif
 	}
+
+	// re-init if the dirty flag is set
+
+	freeContext();
+	newContext();
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (!EVP_CipherInit_ex(pvt->_context,
+					EVP_aes_128_cbc(),
+					NULL,
+					getKey(),
+					getIv(),
+					(encrypt)?1:0)) {
+			freeContext();
+			setError(ERR_GET_REASON(ERR_get_error()));
+			return NULL;
+		}
+	#else
+		if (!pvt->_context) {
+			// FIXME: set error
+			return NULL;
+		}
+	#endif
 
 	#if !defined(RUDIMENTS_HAS_SSL)
 	// reset the cbc buffer
