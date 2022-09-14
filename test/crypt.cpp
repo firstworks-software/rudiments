@@ -60,6 +60,9 @@ int main(int argc, const char **argv) {
 					(const char *)c.getEncryptedData();
 				test(*str,!charstring::compare(enc,
 							encrypted[i][j]));
+				test("size",
+					c.getEncryptedDataSize()==
+					charstring::length(encrypted[i][j]));
 				c.clear();
 				j++;
 			}

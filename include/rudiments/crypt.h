@@ -24,10 +24,25 @@ class RUDIMENTS_DLLSPEC crypt : public encryption {
 		 *  current data using the des algorithm, and the initilization
 		 *  vector as the "salt" (which should be a 2 character string
 		 *  from the set [a-zA-Z0-9./].  Returns the encrypted data on
-		 *  success or NULL if an error occurred.  Note that the
-		 *  encrypted data returned will be an empty string if no data
-		 *  has been appended yet. */
+		 *  success or NULL if an error occurred.
+		 *
+		 *  Note that since crypt is typically used to encrypt
+		 *  passwords, and that the encrypted data that results from
+		 *  this type of encryption is always printable ascii, this
+		 *  method NULL-terminates the encrypted data, and the result
+		 *  can be interpreted as a NULL-terminated string.
+		 *
+		 *  Note that the encrypted data returned will be an empty
+		 *  string if no data has been appended yet. */
 		const unsigned char	*getEncryptedData();
+
+		/** Returns the number of bytes of encrypted data, not
+		 *  including the NULL-terminator.
+		 *
+		 *  Note that since the encrypted data that results from this
+		 *  type of encryption is always printable ascii, this size is
+		 *  equivalent to the string length. */
+		uint64_t	getEncryptedDataSize();
 
 		/** If your system doesn't support crypt_r() then this
 		 *  class needs a mutex to assure thread safety.

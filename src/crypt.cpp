@@ -126,6 +126,12 @@ const unsigned char *crypt::getEncryptedData() {
 	#endif
 }
 
+uint64_t crypt::getEncryptedDataSize() {
+	getEncryptedData();
+	return getOut()->getSize()-1;
+	
+}
+
 const unsigned char *crypt::getDecryptedData() {
 	return NULL;
 }
