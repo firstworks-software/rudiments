@@ -539,6 +539,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// copy
+	stdoutput.printf("copy/equal:\n");
 	datetime	d1;
 	datetime	d2(d1);
 	test("copy (unset)",
