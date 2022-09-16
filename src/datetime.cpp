@@ -17,7 +17,7 @@
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	// SCO OSR 5.0.0 appears to need this extern "C"
 	extern "C" {
-	#include <sys/time.h>
+		#include <sys/time.h>
 	}
 #endif
 #if defined(RUDIMENTS_HAVE_RTC_SET_TIME) || \
@@ -95,6 +95,19 @@ datetime::datetime() : object() {
 	init();
 }
 
+datetime::datetime(datetime &d) : object() {
+	pvt=new datetimeprivate;
+	init();
+	initialize(d.getString());
+}
+
+datetime &datetime::operator=(datetime &d) {
+	if (this!=&d) {
+		initialize(d.getString());
+	}
+	return *this;
+}
+
 datetime::~datetime() {
 	clear();
 	delete pvt;
@@ -117,6 +130,7 @@ void datetime::init() {
 	pvt->_timestring=NULL;
 	pvt->_sqlstring=NULL;
 	pvt->_epoch=0;
+	normalize();
 }
 
 void datetime::clear() {

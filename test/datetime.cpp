@@ -537,4 +537,23 @@ int main(int argc, const char **argv) {
 	test("seconds",d.getSecond()==2);
 	test("microseconds",d.getMicrosecond()==2);
 	stdoutput.printf("\n");
+
+	// copy
+	datetime	d1;
+	datetime	d2(d1);
+	test("copy (unset)",
+		!charstring::compare(d1.getString(),d2.getString()));
+	datetime	d3;
+	d3=d1;
+	test("equal (unset)",
+		!charstring::compare(d1.getString(),d3.getString()));
+	d1.getSystemDateAndTime();
+	datetime	d4(d1);
+	test("copy (set)",
+		!charstring::compare(d1.getString(),d4.getString()));
+	datetime	d5;
+	d5=d1;
+	test("equal (set)",
+		!charstring::compare(d1.getString(),d5.getString()));
+	stdoutput.printf("\n");
 }

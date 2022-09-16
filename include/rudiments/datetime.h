@@ -15,12 +15,23 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		/** Creates an instance of the datetime class. */
 		datetime();
 
+		/** Creates an instance of the datetime class
+		 *  that is a copy of "d". */
+		datetime(datetime &d);
+
+		/** Makes this instance of the datetime class
+		 *  identical to "d". */
+		datetime	&operator=(datetime &d);
+
 		/** Destroys this instance of the datetime class. */
 		~datetime();
 
 		/** Parses "tmstring" and sets the date and time
 		 *  represented in the class to that time.
-		 *  "tmstring" must be of the format: "mm/dd/yyyy hh:mm:ss TZN".
+		 *  "tmstring" must be of the format:
+		 *  	"mm/dd/yyyy hh:mm:ss TZN"
+		 *  or of the format
+		 *  	"mm/dd/yyyy hh:mm:ss:uuu TZN"
 		 * 
 		 *  Note that TZN must be a valid timezone.  Otherwise
 		 *  GMT is assumed.
