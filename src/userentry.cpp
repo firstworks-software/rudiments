@@ -195,18 +195,6 @@ userentry::userentry() : object() {
 	pvt->_sidsize=0;
 }
 
-userentry::userentry(userentry &u) : object(u) {
-	pvt=new userentryprivate;
-	initialize(u.getName());
-}
-
-userentry &userentry::operator=(userentry &u) {
-	if (this!=&u) {
-		initialize(u.getName());
-	}
-	return *this;
-}
-
 userentry::~userentry() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \

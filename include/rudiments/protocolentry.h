@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC protocolentry : public object {
 		/** Creates an instance of the protocolentry class. */
 		protocolentry();
 
-		/** Creates an instance of the protocolentry class.
-		 *  that is identical to "p". */
-		protocolentry(protocolentry &p);
-
-		/** Makes this instance of the protocolentry class
-		 *  identical to "p". */
-		protocolentry	&operator=(protocolentry &p);
-
 		/** Deletes this instance of the protocolentry class. */
 		~protocolentry();
 

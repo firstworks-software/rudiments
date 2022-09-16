@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		threadmutex(threadmutex &m) {};
+		threadmutex	&operator=(threadmutex &m) { return *this; };
+
 		threadmutexprivate	*pvt;

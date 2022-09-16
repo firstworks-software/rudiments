@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		signalset(signalset &s) {};
+		signalset	&operator=(signalset &s) { return *this; };
+
 		signalsetprivate	*pvt;

@@ -162,18 +162,6 @@ groupentry::groupentry() : object() {
 	pvt->_sidsize=0;
 }
 
-groupentry::groupentry(groupentry &g) : object(g) {
-	pvt=new groupentryprivate;
-	initialize(g.getName());
-}
-
-groupentry &groupentry::operator=(groupentry &g) {
-	if (this!=&g) {
-		initialize(g.getName());
-	}
-	return *this;
-}
-
 groupentry::~groupentry() {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \

@@ -122,18 +122,6 @@ semaphoreset::semaphoreset() : object() {
 	#endif
 }
 
-semaphoreset::semaphoreset(semaphoreset &s) : object() {
-	// FIXME: implement this
-}
-
-semaphoreset &semaphoreset::operator=(semaphoreset &s) {
-	if (this!=&s) {
-		object::operator=(s);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 semaphoreset::~semaphoreset() {
 
 	#if defined(RUDIMENTS_HAVE_SEMGET)

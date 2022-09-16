@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		sharedmemory(sharedmemory &s);
-		sharedmemory	&operator=(sharedmemory &s);
+		sharedmemory(sharedmemory &s) {};
+		sharedmemory	&operator=(sharedmemory &s) { return *this; };
 
 		sharedmemoryprivate	*pvt;

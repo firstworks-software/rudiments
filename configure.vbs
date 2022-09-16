@@ -571,9 +571,13 @@ privateheaders7="staticarray.h "+_
 	"httpserverapi.h "+_
 	"httpserverapiincludes.h "+_
 	"mvcincludes.h "+_
+	"mvcsecurity.h "+_
 	"mvcproperties.h "+_
 	"mvcresult.h "+_
 	"mvctier.h "+_
+	"mvccontroller.h "+_
+	"mvcservice.h "+_
+	"mvcdao.h "+_
 	"mvcview.h "+_
 	"httpbasicsecurity.h "+_
 	"cronscheduleincludes.h "+_

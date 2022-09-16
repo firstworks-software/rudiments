@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		mvctier(mvctier &m) {};
+		mvctier	&operator=(mvctier &m) { return *this; };
+
 		mvctierprivate	*pvt;

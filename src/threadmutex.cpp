@@ -46,27 +46,6 @@ threadmutex::threadmutex(void *mut) : object() {
 	pvt->_destroy=false;
 }
 
-threadmutex::threadmutex(threadmutex &t) : object() {
-	pvt=new threadmutexprivate;
-	pvt->_mut=(pthread_mutex_t *)t.pvt->_mut;
-	pvt->_destroy=false;
-}
-
-threadmutex &threadmutex::operator=(threadmutex &t) {
-	if (this!=&t) {
-		object::operator=(t);
-		if (pvt->_destroy) {
-			do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
-					error::getErrorNumber()==EINTR &&
-					!process::getShutDownFlag());
-			delete pvt->_mut;
-		}
-		pvt->_mut=(pthread_mutex_t *)t.pvt->_mut;
-		pvt->_destroy=false;
-	}
-	return *this;
-}
-
 threadmutex::~threadmutex() {
 
 	/* NOTE:

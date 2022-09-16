@@ -21,24 +21,6 @@ class RUDIMENTS_DLLSPEC threadmutex : public object {
 		 *  something else. */
 		threadmutex(void *mut);
 
-		/** Creates an instance of the threadmutex class that uses the
-		 *  same, alread-initialized, system-specific threadmutex
-		 *  structure used by "m".  This instance can then be used
-		 *  interchangeably with "m".  Note that if "m" is deleted
-		 *  then this instance should be deleted or set equal to
-		 *  another instance, as it will otherwise give unreliable
-		 *  results. */
-		threadmutex(threadmutex &m);
-
-		/** Sets this instance of the threadmutex class to use the
-		 *  same, alread-initialized, system-specific threadmutex
-		 *  structure used by "m".  This instance can then be used
-		 *  interchangeably with "m".  Note that if "m" is deleted
-		 *  then this instance should be deleted or set equal to
-		 *  another instance, as it will otherwise give unreliable
-		 *  results. */
-		threadmutex	&operator=(threadmutex &m);
-
 		/** Deletes this instance of the threadmutex class. */
 		~threadmutex();
 

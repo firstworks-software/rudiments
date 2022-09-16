@@ -436,18 +436,6 @@ signalhandler::signalhandler() : object() {
 	#endif
 }
 
-signalhandler::signalhandler(signalhandler &s) : object() {
-	// FIXME: implement this
-}
-
-signalhandler &signalhandler::operator=(signalhandler &s) {
-	if (this!=&s) {
-		object::operator=(s);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 signalhandler::~signalhandler() {
 	// set NOTE in ~threadmutex()
 	signalhandlerprivate	*tmppvt=pvt;

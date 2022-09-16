@@ -48,19 +48,6 @@ protocolentry::protocolentry() : object() {
 	#endif
 }
 
-protocolentry::protocolentry(protocolentry &p) : object(p) {
-	pvt=new protocolentryprivate;
-	winsock::initWinsock();
-	initialize(p.getName());
-}
-
-protocolentry &protocolentry::operator=(protocolentry &p) {
-	if (this!=&p) {
-		initialize(p.getName());
-	}
-	return *this;
-}
-
 protocolentry::~protocolentry() {
 	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)

@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
-		threadprivate	*pvt;
+		thread(thread &t) {};
+		thread	&operator=(thread &t) { return *this; };
 
 		bool	run(bool detached);
+
+		threadprivate	*pvt;

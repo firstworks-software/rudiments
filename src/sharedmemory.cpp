@@ -94,18 +94,6 @@ sharedmemory::sharedmemory() : object() {
 	#endif
 }
 
-sharedmemory::sharedmemory(sharedmemory &s) : object() {
-	// FIXME: implement this
-}
-
-sharedmemory &sharedmemory::operator=(sharedmemory &s) {
-	if (this!=&s) {
-		object::operator=(s);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 sharedmemory::~sharedmemory() {
 	delete[] pvt->_username;
 	delete[] pvt->_groupname;

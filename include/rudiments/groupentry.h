@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		/** Creates an instance of the groupentry class. */
 		groupentry();
 
-		/** Creates an instance of the groupentry class
-		 *  that is a copy of "g". */
-		groupentry(groupentry &g);
-
-		/** Makes this instance of the groupentry class
-		 *  identical to "g". */
-		groupentry	&operator=(groupentry &g);
-
 		/** Deletes this instance of the groupentry class. */
 		~groupentry();
 

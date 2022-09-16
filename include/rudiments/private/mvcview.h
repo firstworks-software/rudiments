@@ -2,4 +2,7 @@
 // See the COPYING file for more informations.
 
 	private:
+		mvcview(mvcview &m) {};
+		mvcview	&operator=(mvcview &m) { return *this; };
+
 		mvcviewprivate	*pvt;

@@ -2,6 +2,9 @@
 // See the COPYING file for more information
 
 	private:
+		comparator(comparator &c) {};
+		comparator	&operator=(comparator &c) { return *this; };
+
 		int32_t		sense;
 		bool		natural;
 		const char	*delimiters;

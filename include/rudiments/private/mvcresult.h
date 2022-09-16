@@ -2,4 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		mvcresult(mvcresult &m) {};
+		mvcresult	&operator=(mvcresult &m) {
+			return *this;
+		};
+
 		mvcresultprivate	*pvt;

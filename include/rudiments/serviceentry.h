@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC serviceentry : public object {
 		/** Creates an instance of the serviceentry class. */
 		serviceentry();
 
-		/** Creates an instance of the serviceentry class that is
-		 *  a copy of "s". */
-		serviceentry(serviceentry &s);
-
-		/** Makes this instance of the serviceentry class
-		 *  identical to "s". */
-		serviceentry	&operator=(serviceentry &s);
-
 		/** Deletes this instance of the serviceentry class. */
 		~serviceentry();
 

@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC inetsocketutil {
 		/** Creates an instance of the inetsocketutil class. */
 		inetsocketutil();
 
-		/** Creates an instance of the inetsocketutil class
-		 *  that is a copy of "i". */
-		inetsocketutil(inetsocketutil &i);
-
-		/** Makes this instance of the inetsocketutil class
-		 *  identical to "i". */
-		inetsocketutil	&operator=(inetsocketutil &i);
-
 		/** Deletes this instance of the inetsocketutil class. */
 		virtual		~inetsocketutil();
 

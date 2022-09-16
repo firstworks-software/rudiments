@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		semaphoreset(semaphoreset &s) {};
+		semaphoreset	&operator=(semaphoreset &s) { return *this; };
+
 		void	createOperations();
 
 		int32_t	semGet(key_t key, int32_t nsems,

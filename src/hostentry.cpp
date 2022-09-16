@@ -50,19 +50,6 @@ hostentry::hostentry() : object() {
 	#endif
 }
 
-hostentry::hostentry(hostentry &h) : object(h) {
-	pvt=new hostentryprivate;
-	winsock::initWinsock();
-	initialize(h.getName());
-}
-
-hostentry &hostentry::operator=(hostentry &h) {
-	if (this!=&h) {
-		initialize(h.getName());
-	}
-	return *this;
-}
-
 hostentry::~hostentry() {
 	#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)

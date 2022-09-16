@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 		/** Creates an instance of the unixsocketutil class. */
 		unixsocketutil();
 
-		/** Creates an instance of the unixsocketutil class
-		 *  that is a copy of "u". */
-		unixsocketutil(unixsocketutil &u);
-
-		/** Makes this instance of the unixsocketutil class
-		 *  identical to "u". */
-		unixsocketutil	&operator=(unixsocketutil &u);
-
 		/** Deletes this instance of the unixsocketutill class. */
 		virtual		~unixsocketutil();
 

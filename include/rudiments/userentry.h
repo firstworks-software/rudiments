@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		/** Creates an instance of the userentry class. */
 		userentry();
 
-		/** Creates an instance of the userentry class.
-		 *  that is a copy of "u". */
-		userentry(userentry &u);
-
-		/** Makes this instance of the userentry class
- 		 *  identical to "u". */
-		userentry	&operator=(userentry &u);
-
 		/** Deletes this instance of the userentry class. */
 		~userentry();
 

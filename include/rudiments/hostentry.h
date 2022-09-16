@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC hostentry : public object {
 		/** Creates an instance of the hostentry class. */
 		hostentry();
 
-		/** Creates an instance of the hostentry class
-		 *  that is a copy of "h". */
-		hostentry(hostentry &h);
-
-		/** Makes this instance of the hostentry class
-		 *  identical to "h". */
-		hostentry	&operator=(hostentry &h);
-
 		/** Deletes this instance of the hostentry class. */
 		~hostentry();
 

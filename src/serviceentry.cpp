@@ -53,19 +53,6 @@ serviceentry::serviceentry() : object() {
 	#endif
 }
 
-serviceentry::serviceentry(serviceentry &s) : object(s) {
-	pvt=new serviceentryprivate;
-	winsock::initWinsock();
-	initialize(s.getName(),s.getProtocol());
-}
-
-serviceentry &serviceentry::operator=(serviceentry &s) {
-	if (this!=&s) {
-		initialize(s.getName(),s.getProtocol());
-	}
-	return *this;
-}
-
 serviceentry::~serviceentry() {
 	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)

@@ -4,5 +4,9 @@
 	protected:
 		const char	*_filename();
 		sockaddr_un	*_sun();
+
 	private:
+		unixsocketutil(unixsocketutil &u) {};
+		unixsocketutil	&operator=(unixsocketutil &u) { return *this; };
+
 		unixsocketutilprivate	*pvt;

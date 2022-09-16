@@ -11,6 +11,8 @@ class RUDIMENTS_DLLSPEC mvcsecurity : virtual public object {
 		mvcsecurity() {};
 		virtual	~mvcsecurity() {};
 		virtual const char	*getUserName()=0;
+
+	#include <rudiments/private/mvcsecurity.h>
 };
 
 class RUDIMENTS_DLLSPEC httpbasicsecurity : public mvcsecurity {
@@ -55,6 +57,7 @@ class RUDIMENTS_DLLSPEC mvctier : virtual public object {
 };
 
 class RUDIMENTS_DLLSPEC mvccontroller : public mvctier {
+	#include <rudiments/private/mvccontroller.h>
 };
 
 class RUDIMENTS_DLLSPEC mvcview : public mvctier {
@@ -72,9 +75,11 @@ class RUDIMENTS_DLLSPEC mvcview : public mvctier {
 };
 
 class RUDIMENTS_DLLSPEC mvcservice : public mvctier {
+	#include <rudiments/private/mvcservice.h>
 };
 
 class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
+	#include <rudiments/private/mvcdao.h>
 };
 
 /** The mvccrud class defines an interface for child classes which implement

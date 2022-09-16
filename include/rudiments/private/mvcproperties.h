@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		mvcproperties(mvcproperties &m) {};
+		mvcproperties	&operator=(mvcproperties &m) { return *this; };
+
 		void	buildDictionary();
 
 		mvcpropertiesprivate	*pvt;

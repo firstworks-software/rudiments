@@ -47,14 +47,6 @@ class RUDIMENTS_DLLSPEC semaphoreset : public object {
 		/** Creates an instance of the semaphoreset class. */
 		semaphoreset();
 
-		/** Creates an instance of the semaphoreset class.
-		 *  that is a copy of "s". */
-		semaphoreset(semaphoreset &s);
-
-		/** Makes this instance of the semaphoreset class.
-		 *  identical to "s". */
-		semaphoreset	&operator=(semaphoreset &s);
-
 		/** Deletes this instance of the semaphoreset class.
 		 *  Removes the semaphoreset if it was created by this class.
 		 *  If it was only attached to, it is not removed. */
