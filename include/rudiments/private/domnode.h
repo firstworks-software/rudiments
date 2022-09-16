@@ -25,7 +25,7 @@
 	friend class codetreegrammar;
 	friend class domevents;
 	private:
-		void		init(dom *dom, domnode *nullnode);
+		void	construct(dom *dom, domnode *nullnode);
 		domnode	*getNode(domnode *first,
 					uint64_t position,
 					const char *ns,

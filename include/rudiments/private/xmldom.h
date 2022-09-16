@@ -3,7 +3,7 @@
 
 	friend class domnode;
 	protected:
-			void	init(bool stringcacheenabled);
+			void	construct(bool stringcacheenabled);
 			void	reset();
 
 				xmldom(xmldom &x);

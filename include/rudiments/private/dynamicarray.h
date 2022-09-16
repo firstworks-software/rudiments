@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		void		init(uint64_t initiallength,
+		void		construct(uint64_t initiallength,
 						uint64_t increment);
 		void		clone(dynamicarray<valuetype> &v);
 		void		clone(arraycollection<valuetype> &v);

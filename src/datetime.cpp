@@ -92,12 +92,12 @@ static const char _monthabbr[][4]={
 
 datetime::datetime() : object() {
 	pvt=new datetimeprivate;
-	init();
+	construct();
 }
 
 datetime::datetime(datetime &d) : object() {
 	pvt=new datetimeprivate;
-	init();
+	construct();
 	init(d.getString());
 }
 
@@ -113,7 +113,7 @@ datetime::~datetime() {
 	delete pvt;
 }
 
-void datetime::init() {
+void datetime::construct() {
 	pvt->_usec=0;
 	pvt->_sec=0;
 	pvt->_min=0;
@@ -142,7 +142,7 @@ void datetime::clear() {
 bool datetime::init(const char *tmstring) {
 
 	clear();
-	init();
+	construct();
 
 	// parse out the date
 	const char	*ptr=tmstring;
@@ -214,7 +214,7 @@ bool datetime::init(time_t seconds) {
 bool datetime::init(time_t seconds, time_t microseconds) {
 
 	clear();
-	init();
+	construct();
 
 	pvt->_epoch=seconds;
 	pvt->_usec=microseconds;
@@ -229,7 +229,7 @@ bool datetime::init(time_t seconds, time_t microseconds) {
 bool datetime::init(const void *tmstruct) {
 
 	clear();
-	init();
+	construct();
 
 	const struct tm	*tms=(const struct tm *)tmstruct;
 

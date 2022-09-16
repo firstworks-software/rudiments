@@ -72,13 +72,15 @@ class memorypoolprivate {
 #define MEMORYPOOLPAD(a) ((8-(a%8))%8)
 
 memorypool::memorypool() : object() {
-	init(DEFAULT_INITIALSIZE,DEFAULT_INCREMENTSIZE,DEFAULT_RESIZEINTERVAL);
+	construct(DEFAULT_INITIALSIZE,
+			DEFAULT_INCREMENTSIZE,
+			DEFAULT_RESIZEINTERVAL);
 }
 
 memorypool::memorypool(size_t initialsize,
 			size_t incrementsize,
 			size_t resizeinterval) : object() {
-	init(initialsize,incrementsize,resizeinterval);
+	construct(initialsize,incrementsize,resizeinterval);
 }
 
 memorypool::~memorypool() {
@@ -86,7 +88,7 @@ memorypool::~memorypool() {
 	delete pvt;
 }
 
-void memorypool::init(size_t initialsize,
+void memorypool::construct(size_t initialsize,
 			size_t incrementsize,
 			size_t resizeinterval) {
 

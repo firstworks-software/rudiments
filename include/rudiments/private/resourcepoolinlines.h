@@ -111,6 +111,27 @@ bool resourcepool<valuetype>::clear() {
 
 template <class valuetype>
 inline
+bool resourcepool<valuetype>::reset() {
+
+	// lock mutex
+	if (mtx && !mtx->lock()) {
+		return false;
+	}
+
+	clearDelegate();
+	min=0;
+	max=10;
+	growby=1;
+
+	// unlock mutex
+	if (mtx) {
+		mtx->unlock();
+	}
+	return true;
+}
+
+template <class valuetype>
+inline
 void resourcepool<valuetype>::clearDelegate() {
 
 	initiallist.setManageValues(true);

@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		void	init();
+		void	construct();
 		void	clear();
 
 		bool	getBrokenDownTimeFromEpoch();

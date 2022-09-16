@@ -5,12 +5,6 @@
 		cronschedule(cronschedule &c) {};
 		cronschedule	&operator=(cronschedule &c) { return *this; };
 
-		void	init(const char *years,
-				const char *months,
-				const char *daysofmonth,
-				const char *daysofweek,
-				const char *dayparts);
-		void	clear();
 		void	splitTimePart(
 				linkedlist< cronscheduleperiod * > *periods,
 				const char *timepartlist);

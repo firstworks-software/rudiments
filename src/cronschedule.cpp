@@ -29,15 +29,13 @@ cronschedule::~cronschedule() {
 
 void cronschedule::setSchedule(const char *when) {
 
-	clear();
-
 	char		**whenparts;
 	uint64_t	whenpartscount;
 	charstring::split(when," ",true,&whenparts,&whenpartscount);
 
 	if (whenpartscount==5) {
-		init(whenparts[0],whenparts[1],
-			whenparts[2],whenparts[3],whenparts[4]);
+		setSchedule(whenparts[0],whenparts[1],
+				whenparts[2],whenparts[3],whenparts[4]);
 	}
 
 	for (uint64_t i=0; i<whenpartscount; i++) {
@@ -52,14 +50,6 @@ void cronschedule::setSchedule(const char *years,
 					const char *daysofweek,
 					const char *dayparts) {
 	clear();
-	init(years,months,daysofmonth,daysofweek,dayparts);
-}
-
-void cronschedule::init(const char *years,
-				const char *months,
-				const char *daysofmonth,
-				const char *daysofweek,
-				const char *dayparts) {
 	splitTimePart(&(pvt->_years),years);
 	splitTimePart(&(pvt->_months),months);
 	splitTimePart(&(pvt->_daysofmonth),daysofmonth);

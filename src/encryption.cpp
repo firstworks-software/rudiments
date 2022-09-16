@@ -20,10 +20,10 @@ class encryptionprivate {
 
 encryption::encryption() : object() {
 	pvt=new encryptionprivate;
-	init();
+	construct();
 }
 
-void encryption::encryption::init() {
+void encryption::encryption::construct() {
 	pvt->_key=NULL;
 	pvt->_iv=NULL;
 	pvt->_dirty=true;
@@ -181,5 +181,5 @@ void encryption::reset() {
 	pvt->_out.clear();
 	delete[] pvt->_key;
 	delete[] pvt->_iv;
-	init();
+	construct();
 }

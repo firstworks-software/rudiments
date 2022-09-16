@@ -30,18 +30,18 @@ void indent(uint16_t ind) {
 #endif
 
 jsondom::jsondom() : jsonsax(), dom() {
-	init(true);
+	construct(true);
 	#ifdef DEBUG_MESSAGES
 	pvt->_indent=0;
 	#endif
 }
 
 jsondom::jsondom(bool stringcacheenabled) : jsonsax(), dom(stringcacheenabled) {
-	init(stringcacheenabled);
+	construct(stringcacheenabled);
 }
 
 jsondom::jsondom(jsondom &x) : jsonsax(), dom(x) {
-	init(stringCacheEnabled());
+	construct(stringCacheEnabled());
 }
 
 jsondom &jsondom::operator=(jsondom &x) {
@@ -52,7 +52,7 @@ jsondom &jsondom::operator=(jsondom &x) {
 	return *this;
 }
 
-void jsondom::init(bool stringcacheenabled) {
+void jsondom::construct(bool stringcacheenabled) {
 	pvt=new jsondomprivate;
 	pvt->_current=NULL;
 }

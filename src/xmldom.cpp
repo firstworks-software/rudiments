@@ -15,15 +15,15 @@ class xmldomprivate {
 };
 
 xmldom::xmldom() : xmlsax(), dom() {
-	init(true);
+	construct(true);
 }
 
 xmldom::xmldom(bool stringcacheenabled) : xmlsax(), dom(stringcacheenabled) {
-	init(stringcacheenabled);
+	construct(stringcacheenabled);
 }
 
 xmldom::xmldom(xmldom &x) : xmlsax(), dom(x) {
-	init(stringCacheEnabled());
+	construct(stringCacheEnabled());
 }
 
 xmldom &xmldom::operator=(xmldom &x) {
@@ -34,7 +34,7 @@ xmldom &xmldom::operator=(xmldom &x) {
 	return *this;
 }
 
-void xmldom::init(bool stringcacheenabled) {
+void xmldom::construct(bool stringcacheenabled) {
 	pvt=new xmldomprivate;
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;

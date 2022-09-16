@@ -29,18 +29,18 @@ void indent(uint16_t ind) {
 #endif
 
 propdom::propdom() : propsax(), dom() {
-	init(true);
+	construct(true);
 	#ifdef DEBUG_MESSAGES
 	pvt->_indent=0;
 	#endif
 }
 
 propdom::propdom(bool stringcacheenabled) : propsax(), dom(stringcacheenabled) {
-	init(stringcacheenabled);
+	construct(stringcacheenabled);
 }
 
 propdom::propdom(propdom &x) : propsax(), dom(x) {
-	init(stringCacheEnabled());
+	construct(stringCacheEnabled());
 }
 
 propdom &propdom::operator=(propdom &x) {
@@ -51,7 +51,7 @@ propdom &propdom::operator=(propdom &x) {
 	return *this;
 }
 
-void propdom::init(bool stringcacheenabled) {
+void propdom::construct(bool stringcacheenabled) {
 	pvt=new propdomprivate;
 	pvt->_current=NULL;
 }

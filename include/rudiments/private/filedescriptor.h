@@ -6,7 +6,7 @@
 	friend class tlscontext;
 	protected:
 
-		void	init();
+		void	construct();
 
 		bool	setStreamWriteBufferSize(ssize_t size);
 		bool	setStorageWriteBufferSize(ssize_t size);

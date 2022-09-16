@@ -3,7 +3,7 @@
 
 	friend class csvdomnode;
 	protected:
-			void	init(bool stringcacheenabled);
+			void	construct(bool stringcacheenabled);
 			void	reset();
 
 			domnode	*getColumn(uint64_t position);

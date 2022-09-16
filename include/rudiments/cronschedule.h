@@ -24,6 +24,8 @@ class RUDIMENTS_DLLSPEC cronschedule : virtual public object {
 		bool	inSchedule(datetime *dt);
 		bool	inSchedule(const char *dt);
 
+		void	clear();
+
 	#include <rudiments/private/cronschedule.h>
 };
 

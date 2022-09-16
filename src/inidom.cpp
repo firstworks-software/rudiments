@@ -28,18 +28,18 @@ void indent(uint16_t ind) {
 #endif
 
 inidom::inidom() : inisax(), dom() {
-	init(true);
+	construct(true);
 	#ifdef DEBUG_MESSAGES
 	pvt->_indent=0;
 	#endif
 }
 
 inidom::inidom(bool stringcacheenabled) : inisax(), dom(stringcacheenabled) {
-	init(stringcacheenabled);
+	construct(stringcacheenabled);
 }
 
 inidom::inidom(inidom &x) : inisax(), dom(x) {
-	init(stringCacheEnabled());
+	construct(stringCacheEnabled());
 }
 
 inidom &inidom::operator=(inidom &x) {
@@ -50,7 +50,7 @@ inidom &inidom::operator=(inidom &x) {
 	return *this;
 }
 
-void inidom::init(bool stringcacheenabled) {
+void inidom::construct(bool stringcacheenabled) {
 	pvt=new inidomprivate;
 	pvt->_current=NULL;
 }

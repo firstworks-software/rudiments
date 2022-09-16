@@ -10,7 +10,7 @@
 							bool indent);
 
 	protected:
-			void	init(bool stringcacheenabled);
+			void	construct(bool stringcacheenabled);
 			void	reset();
 
 			ssize_t	writeNode(domnode *dn,

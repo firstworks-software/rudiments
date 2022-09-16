@@ -56,15 +56,15 @@ class regularexpressionprivate {
 };
 
 regularexpression::regularexpression() : object() {
-	init();
+	construct();
 }
 
 regularexpression::regularexpression(const char *pattern) : object() {
-	init();
+	construct();
 	setPattern(pattern);
 }
 
-void regularexpression::init() {
+void regularexpression::construct() {
 	pvt=new regularexpressionprivate;
 	#ifdef RUDIMENTS_HAS_PCRE
 		pvt->_expr=NULL;

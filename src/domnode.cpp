@@ -37,7 +37,7 @@ class domnodeprivate {
 };
 
 domnode::domnode(dom *dom, domnode *nullnode) : object() {
-	init(dom,nullnode);
+	construct(dom,nullnode);
 	setType(NULL_DOMNODETYPE);
 }
 
@@ -45,7 +45,7 @@ domnode::domnode(dom *dom, domnode *nullnode,
 				domnodetype type,
 				const char *name,
 				const char *value) : object() {
-	init(dom,nullnode);
+	construct(dom,nullnode);
 	setType(type);
 	setName(name);
 	setValue(value);
@@ -56,14 +56,14 @@ domnode::domnode(dom *dom, domnode *nullnode,
 				const char *ns,
 				const char *name,
 				const char *value) : object() {
-	init(dom,nullnode);
+	construct(dom,nullnode);
 	setType(type);
 	setNamespace(ns);
 	setName(name);
 	setValue(value);
 }
 
-void domnode::init(dom *dom, domnode *nullnode) {
+void domnode::construct(dom *dom, domnode *nullnode) {
 	pvt=new domnodeprivate;
 	pvt->_dom=dom;
 	pvt->_nullnode=nullnode;

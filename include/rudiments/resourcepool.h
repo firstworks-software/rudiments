@@ -62,6 +62,12 @@ class resourcepool {
 		 *  Returns true on success and false if a mutex lock failed. */
 		bool	clear();
 
+		/** Clears the resourcepool, deleting all resources in the
+		 *  pool, and resets min, max, and growby to defaults.
+		 *
+		 *  Returns true on success and false if a mutex lock failed. */
+		bool	reset();
+
 		/** Returns a pointer to an instance of "valuetype" from the
 		 *  pool, or NULL if none are available or a mutex lock
 		 *  failed. */

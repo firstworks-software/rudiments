@@ -7,7 +7,7 @@
 			return *this;
 		};
 
-		void	init();
+		void	construct();
 		void	clear();
 
 		regularexpressionprivate	*pvt;

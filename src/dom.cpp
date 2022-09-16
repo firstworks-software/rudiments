@@ -20,15 +20,15 @@ class domprivate {
 };
 
 dom::dom() : collection() {
-	init(true);
+	construct(true);
 }
 
 dom::dom(bool stringcacheenabled) : collection() {
-	init(stringcacheenabled);
+	construct(stringcacheenabled);
 }
 
 dom::dom(dom &x) : collection(x) {
-	init(x.pvt->_stringcacheenabled);
+	construct(x.pvt->_stringcacheenabled);
 	pvt->_rootnode=x.pvt->_rootnode->clone(this);
 }
 
@@ -40,7 +40,7 @@ dom &dom::operator=(dom &x) {
 	return *this;
 }
 
-void dom::init(bool stringcacheenabled) {
+void dom::construct(bool stringcacheenabled) {
 	pvt=new domprivate;
 	pvt->_nullnode=domnode::createNullNode(this);
 	pvt->_rootnode=pvt->_nullnode;

@@ -30,19 +30,19 @@ class bytebufferprivate {
 };
 
 bytebuffer::bytebuffer() : object() {
-	init(NULL,DEFAULT_INITIALSIZE);
+	construct(NULL,DEFAULT_INITIALSIZE);
 }
 
 bytebuffer::bytebuffer(size_t initialsize) : object() {
-	init(NULL,initialsize);
+	construct(NULL,initialsize);
 }
 
 bytebuffer::bytebuffer(unsigned char *initialcontents, size_t initialsize) :
 								object() {
-	init(initialcontents,initialsize);
+	construct(initialcontents,initialsize);
 }
 
-void bytebuffer::init(unsigned char *initialcontents, size_t initialsize) {
+void bytebuffer::construct(unsigned char *initialcontents, size_t initialsize) {
 	if (!initialsize) {
 		initialsize=DEFAULT_INITIALSIZE;
 	}

@@ -5,12 +5,12 @@
 		memorypool(memorypool &m) {};
 		memorypool	&operator=(memorypool &m) { return *this; };
 
-		void	init(size_t initialsize,
-				size_t increment,
-				size_t resizeinterval);
+		void	construct(size_t initialsize,
+					size_t increment,
+					size_t resizeinterval);
 		void	clear(bool resetinitialsize,
-				size_t initialsize,
-				size_t increment,
-				size_t resizeinterval);
+					size_t initialsize,
+					size_t increment,
+					size_t resizeinterval);
 
 		memorypoolprivate	*pvt;

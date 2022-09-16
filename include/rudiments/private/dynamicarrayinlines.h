@@ -6,7 +6,7 @@
 template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray() : arraycollection<valuetype>() {
-	init(128,32);
+	construct(128,32);
 }
 
 template< class valuetype >
@@ -14,7 +14,7 @@ inline
 dynamicarray<valuetype>::dynamicarray(uint64_t initiallength,
 					uint64_t incrementlength) :
 						arraycollection<valuetype>() {
-	init((initiallength)?initiallength:128,
+	construct((initiallength)?initiallength:128,
 				(incrementlength)?incrementlength:32);
 }
 
@@ -22,7 +22,7 @@ template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray(dynamicarray<valuetype> &v) :
 						arraycollection<valuetype>(v) {
-	init(v.initlen,v.inclen);
+	construct(v.initlen,v.inclen);
 	clone(v);
 }
 
@@ -30,7 +30,7 @@ template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray(arraycollection<valuetype> &v) :
 						arraycollection<valuetype>(v) {
-	init(128,32);
+	construct(128,32);
 	clone(v);
 }
 
@@ -41,7 +41,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 	if (this!=&v) {
 		clear(v.initlen,v.inclen);
 		arraycollection<valuetype>::operator=(v);
-		init(v.initlen,v.inclen);
+		construct(v.initlen,v.inclen);
 		clone(v);
 	}
 	return *this;
@@ -54,7 +54,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
-		init(initlen,inclen);
+		construct(initlen,inclen);
 		clone(v);
 	}
 	return *this;
@@ -62,7 +62,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::init(uint64_t initiallength,
+void dynamicarray<valuetype>::construct(uint64_t initiallength,
 					uint64_t incrementlength) {
 	extents.setManageArrayValues(true);
 	totallen=0;

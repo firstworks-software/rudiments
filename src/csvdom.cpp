@@ -14,15 +14,15 @@ class csvdomprivate {
 };
 
 csvdom::csvdom() : csvsax(), dom() {
-	init(true);
+	construct(true);
 }
 
 csvdom::csvdom(bool stringcacheenabled) : csvsax(), dom(stringcacheenabled) {
-	init(stringcacheenabled);
+	construct(stringcacheenabled);
 }
 
 csvdom::csvdom(csvdom &x) : csvsax(), dom(x) {
-	init(stringCacheEnabled());
+	construct(stringCacheEnabled());
 }
 
 csvdom &csvdom::operator=(csvdom &x) {
@@ -33,7 +33,7 @@ csvdom &csvdom::operator=(csvdom &x) {
 	return *this;
 }
 
-void csvdom::init(bool stringcacheenabled) {
+void csvdom::construct(bool stringcacheenabled) {
 	pvt=new csvdomprivate;
 }
 

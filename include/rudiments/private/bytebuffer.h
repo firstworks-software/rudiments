@@ -5,8 +5,8 @@
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 
 	protected:
-		void		init(unsigned char *initialcontents,
-						size_t initialsize);
+		void		construct(unsigned char *initialcontents,
+							size_t initialsize);
 		void		clone(bytebuffer &v);
 		void		extend(size_t requiredsize);
 

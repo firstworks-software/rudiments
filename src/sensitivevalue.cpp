@@ -33,7 +33,7 @@ class sensitivevalueprivate {
 
 sensitivevalue::sensitivevalue() {
 	pvt=new sensitivevalueprivate;
-	init();
+	construct();
 }
 
 sensitivevalue::~sensitivevalue() {
@@ -41,7 +41,7 @@ sensitivevalue::~sensitivevalue() {
 	delete pvt;
 }
 
-void sensitivevalue::init() {
+void sensitivevalue::construct() {
 	bytestring::zero(pvt,sizeof(sensitivevalueprivate));
 	pvt->_includestart="[";
 	pvt->_includestartlen=1;
@@ -396,5 +396,5 @@ void sensitivevalue::clear() {
 
 void sensitivevalue::reset() {
 	delete[] pvt->_value;
-	init();
+	construct();
 }

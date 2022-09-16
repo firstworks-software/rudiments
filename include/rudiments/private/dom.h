@@ -11,7 +11,7 @@
 
 	friend class domnode;
 	protected:
-			virtual void	init(bool stringcacheenabled);
+			virtual void	construct(bool stringcacheenabled);
 			virtual void	reset();
 
 			const char	*cacheString(const char *string);
