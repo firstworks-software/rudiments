@@ -408,7 +408,7 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		ea[1].Trustee.TrusteeForm=TRUSTEE_IS_SID;
 		ea[1].Trustee.TrusteeType=TRUSTEE_IS_GROUP;
 		groupentry	grpent;
-		grpent.initialize(process::getGroupId());
+		grpent.init(process::getGroupId());
 		PSID	groupsid=(PSID)bytestring::duplicate(
 							grpent.getSid(),
 							grpent.getSidSize());
@@ -421,7 +421,7 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		ea[2].Trustee.TrusteeForm=TRUSTEE_IS_SID;
 		ea[2].Trustee.TrusteeType=TRUSTEE_IS_USER;
 		userentry	usrent;
-		usrent.initialize(process::getUserId());
+		usrent.init(process::getUserId());
 		PSID	ownersid=(PSID)bytestring::duplicate(
 							usrent.getSid(),
 							usrent.getSidSize());
@@ -491,7 +491,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 		// get the user and convert to an sid
 		userentry	usrent;
-		if (!usrent.initialize(process::getUserId())) {
+		if (!usrent.init(process::getUserId())) {
 			return perms;
 		}
 		PSID	usersid=(PSID)bytestring::duplicate(
@@ -500,7 +500,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 		// get the group and convert to an sid
 		groupentry	grpent;
-		if (!grpent.initialize(process::getGroupId())) {
+		if (!grpent.init(process::getGroupId())) {
 			return perms;
 		}
 		PSID	groupsid=(PSID)bytestring::duplicate(

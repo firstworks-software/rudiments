@@ -1170,7 +1170,7 @@ bool file::changeOwner(uid_t uid, gid_t gid) {
 		// get the user and group sid's
 		userentry	ue;
 		groupentry	ge;
-		if (!ue.initialize(uid) || !ge.initialize(gid)) {
+		if (!ue.init(uid) || !ge.init(gid)) {
 			return false;
 		}
 
