@@ -113,7 +113,7 @@ const char * const *gss::getAvailableMechanisms() {
 			gssmechanism	scratch;
 
 			for (size_t i=0; i<mechs->count; i++) {
-				scratch.initialize(&mechs->elements[i]);
+				scratch.init(&mechs->elements[i]);
 				pvt->_mechs[i]=charstring::duplicate(
 							scratch.getString());
 				#ifdef DEBUG_GSS
@@ -493,7 +493,7 @@ gssmechanism::~gssmechanism() {
 	delete pvt;
 }
 
-bool gssmechanism::initialize(const char *str) {
+bool gssmechanism::init(const char *str) {
 
 	clear();
 
@@ -521,7 +521,7 @@ bool gssmechanism::initialize(const char *str) {
 	#endif
 }
 
-bool gssmechanism::initialize(const void *oid) {
+bool gssmechanism::init(const void *oid) {
 
 	clear();
 
@@ -943,7 +943,7 @@ bool gsscredentials::acquire(const char *name,
 				i<pvt->_actualmechanisms->count; i++) {
 
 				gssmechanism	*mech=new gssmechanism;
-				mech->initialize(
+				mech->init(
 					&pvt->_actualmechanisms->elements[i]);
 				pvt->_amlist.append(mech);
 			}
@@ -1049,7 +1049,7 @@ bool gsscredentials::acquire(const char *name,
 
 		// save the actual mechanism
 		gssmechanism	*mech=new gssmechanism;
-		mech->initialize(mechname);
+		mech->init(mechname);
 		pvt->_amlist.append(mech);
 	#else
 		retval=false;
@@ -1806,7 +1806,7 @@ bool gsscontext::initiate(const char *name,
 			} else {
 
 				// populate actual mechanism
-				pvt->_actualmechanism.initialize(actualmechoid);
+				pvt->_actualmechanism.init(actualmechoid);
 
 				// break out if we've completed the process
 				break;
@@ -2382,7 +2382,7 @@ bool gsscontext::inquire() {
 		}
 
 		// set actual mechanism
-		pvt->_actualmechanism.initialize(mech);
+		pvt->_actualmechanism.init(mech);
 
 		// are we using kerberos or schannel?
 		if (!charstring::compareIgnoringCase(mech,"Kerberos")) {
@@ -2579,7 +2579,7 @@ bool gsscontext::accept() {
 		}
 
 		// populate actual mechanism
-		pvt->_actualmechanism.initialize(actualmechoid);
+		pvt->_actualmechanism.init(actualmechoid);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 

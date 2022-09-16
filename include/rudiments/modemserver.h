@@ -25,7 +25,7 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 		/** Deletes this instance of the modemserver class. */
 		virtual		~modemserver();
 
-		/** Convenience method that calls initialize(), bind(),
+		/** Convenience method that calls init(), bind(),
  		 *  and listen().  If you need to do anything special between
  		 *  those discrete steps, then you should use the methods
  		 *  individually.
@@ -47,7 +47,7 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 		 *  the client disconnects, "disconnecctscript" will be run.
  		 *
  		 *  Returns true on success and false on failure. */
-		void	initialize(const char *device, const char *baud,
+		void	init(const char *device, const char *baud,
 						const char *listenscript,
 						const char *acceptscript,
 						const char *disconnectscript);
@@ -60,13 +60,13 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 
 		/** Waits for a client connection.  When a client connects,
  		 *  it runs "acceptscript" which was set in the call to
- 		 *  initialize().
+ 		 *  init().
  		 *
  		 *  Returns true on success and false on failure. */
 		filedescriptor	*accept();
 
 		/** Runs "disconnectscript" which was set in the call to
-		 *  initialize() and closes the device.
+		 *  init() and closes the device.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	close();

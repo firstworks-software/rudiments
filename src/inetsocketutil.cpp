@@ -14,14 +14,14 @@ class inetsocketutilprivate {
 
 inetsocketutil::inetsocketutil() {
 	pvt=new inetsocketutilprivate;
-	initialize(NULL,0);
+	init(NULL,0);
 }
 
 inetsocketutil::~inetsocketutil() {
 	delete pvt;
 }
 
-void inetsocketutil::initialize(const char *address, uint16_t port) {
+void inetsocketutil::init(const char *address, uint16_t port) {
 	pvt->_address=address;
 	pvt->_port=port;
 	bytestring::zero(&pvt->_sin,sizeof(pvt->_sin));

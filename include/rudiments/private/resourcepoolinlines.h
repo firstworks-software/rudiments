@@ -59,7 +59,7 @@ uint64_t resourcepool<valuetype>::getGrowBy() {
 
 template <class valuetype>
 inline
-bool resourcepool<valuetype>::initialize() {
+bool resourcepool<valuetype>::init() {
 
 	// lock mutex
 	if (mtx && !mtx->lock()) {

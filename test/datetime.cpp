@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
 
 	// init from string
 	stdoutput.printf("non-dst date from string:\n");
-	dt.initialize(nondstdatestring);
+	dt.init(nondstdatestring);
 	test("hour",dt.getHour()==21);
 	test("minutes",dt.getMinute()==54);
 	test("seconds",dt.getSecond()==30);
@@ -73,7 +73,7 @@ int main(int argc, const char **argv) {
 
 	// init from string
 	stdoutput.printf("date from string:\n");
-	dt.initialize(datestringwithusec);
+	dt.init(datestringwithusec);
 	test("hour",dt.getHour()==21);
 	test("minutes",dt.getMinute()==54);
 	test("seconds",dt.getSecond()==30);
@@ -102,7 +102,7 @@ int main(int argc, const char **argv) {
 
 	// init from epoch
 	stdoutput.printf("date from epoch:\n");
-	dt.initialize(secsinceepoch);
+	dt.init(secsinceepoch);
 	test("hour",dt.getHour()==21);
 	test("minutes",dt.getMinute()==54);
 	test("seconds",dt.getSecond()==30);
@@ -132,7 +132,7 @@ int main(int argc, const char **argv) {
 
 	// init from epoch+usec
 	stdoutput.printf("date from epoch+usec:\n");
-	dt.initialize(secsinceepoch,500);
+	dt.init(secsinceepoch,500);
 	test("hour",dt.getHour()==21);
 	test("minutes",dt.getMinute()==54);
 	test("seconds",dt.getSecond()==30);
@@ -458,7 +458,7 @@ int main(int argc, const char **argv) {
 			
 	if (!notsupported) {
 		stdoutput.printf("switch time zones:\n");
-		dt.initialize(datestring);
+		dt.init(datestring);
 		dt.adjustTimeZone("CST6CDT");
 		test("CST",!charstring::compare(dt.getString(),cstdatestring));
 		dt.adjustTimeZone("MST7MDT");

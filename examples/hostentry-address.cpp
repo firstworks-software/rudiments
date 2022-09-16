@@ -8,7 +8,7 @@ int main(int argc, const char **argv) {
 	// get the host entry for IP address "127.0.0.1"
 	hostentry	he;
 	char	address[]={127,0,0,1};
-	he.initialize(address,4,AF_INET);
+	he.init(address,4,AF_INET);
 
 	// print out details
 	stdoutput.printf("	Name: %s\n",he.getName());

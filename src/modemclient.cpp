@@ -50,7 +50,7 @@ modemclient::~modemclient() {
 	delete pvt;
 }
 
-void modemclient::initialize(dictionary<const char *, const char *> *cd) {
+void modemclient::init(dictionary<const char *, const char *> *cd) {
 	if (cd) {
 		const char	*devicename=NULL;
 		cd->getValue("device",&devicename);
@@ -68,7 +68,7 @@ void modemclient::initialize(dictionary<const char *, const char *> *cd) {
 		cd->getValue("retrywait",&rwstr);
 		const char	*rcstr=NULL;
 		cd->getValue("tries",&rcstr);
-		initialize(devicename,baud,
+		init(devicename,baud,
 				customatcommands,
 				connectscript,
 				phonenumber,
@@ -78,7 +78,7 @@ void modemclient::initialize(dictionary<const char *, const char *> *cd) {
 	}
 }
 
-void modemclient::initialize(const char *devicename,
+void modemclient::init(const char *devicename,
 				const char *baud,
 				const char *customatcommands,
 				const char *connectscript,
@@ -87,12 +87,12 @@ void modemclient::initialize(const char *devicename,
 				uint32_t retrywait,
 				uint32_t tries) {
 	close();
-	modemutil::initialize(devicename,baud);
+	modemutil::init(devicename,baud);
 	pvt->_customatcommands=customatcommands;
 	pvt->_connectscript=connectscript;
 	pvt->_phonenumber=phonenumber;
 	pvt->_disconnectscript=disconnectscript;
-	client::initialize(NULL,-1,-1,retrywait,tries);
+	client::init(NULL,-1,-1,retrywait,tries);
 }
 
 int32_t modemclient::connect() {

@@ -33,12 +33,7 @@ int main(int argc, const char **argv) {
 
 	// print the list
 	stdoutput.write("Current contents:\n");
-	sll.print();
-	stdoutput.write('\n');
-
-	// print the first 3 values in the list
-	stdoutput.write("First 3 values:\n");
-	sll.print(3);
+	sll.write();
 	stdoutput.write('\n');
 
 	// clear the list

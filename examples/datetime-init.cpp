@@ -10,14 +10,14 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("system date/time: %s\n\n",dt.getString(true));
 
 	// initialize from a formatted string
-	dt.initialize("01/02/2000 03:04:05 EDT");
+	dt.init("01/02/2000 03:04:05 EDT");
 	stdoutput.printf("formatted string: %s\n\n",dt.getString(true));
 
 	// initialize from the number of seconds since 1970
-	dt.initialize(40000000);
+	dt.init(40000000);
 	stdoutput.printf("seconds since 1970: %s\n\n",dt.getString(true));
 
 	// initialize from the number of seconds and microseconds since 1970
-	dt.initialize(40000000,100);
+	dt.init(40000000,100);
 	stdoutput.printf("sec/usec since 1970: %s\n\n",dt.getString(true));
 }

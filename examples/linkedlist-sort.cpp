@@ -31,11 +31,11 @@ int main(int argc, const char **argv) {
 
 	// print the lists
 	stdoutput.printf("insertion sorted list\n");
-	llis.print(5);
+	llis.write();
 	stdoutput.write("...\n\n");
 
 	// print the list
 	stdoutput.printf("heap sorted list\n");
-	llhs.print(5);
+	llhs.write();
 	stdoutput.write("...\n\n");
 }

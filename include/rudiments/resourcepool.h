@@ -54,7 +54,7 @@ class resourcepool {
 		 *  resources configured by setMin().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	initialize();
+		bool	init();
 
 		/** Clears the resourcepool, deleting all resources in the
 		 *  pool.

@@ -9,7 +9,7 @@ int main(int argc, const char **argv) {
 	// get the service information for the service
 	// that would run on port 25, "tcp" protocol
 	serviceentry	se;
-	se.initialize(25,"tcp");
+	se.init(25,"tcp");
 
 	// print out details
 	stdoutput.printf("	Name:		%s\n",se.getName());

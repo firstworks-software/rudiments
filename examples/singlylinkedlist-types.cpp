@@ -30,32 +30,29 @@ int main(int argc, const char **argv) {
 
 	// print the lists of primitive types
 	stdoutput.printf("list of 16-bit integers:\n");
-	i16sll.print();
+	i16sll.write();
 	stdoutput.write('\n');
 
 	stdoutput.printf("list of 64-bit integers:\n");
-	i16sll.print();
+	i16sll.write();
 	stdoutput.write('\n');
 
 	stdoutput.printf("list of strings:\n");
-	i16sll.print();
+	i16sll.write();
 	stdoutput.write('\n');
 
 	// manually print the list of objects
 	stdoutput.printf("list of objects:\n");
-	for (singlylinkedlistnode< myclass * > *n=osll.getFirst();
-						n; n=n->getNext()) {
+	for (listnode< myclass * > *n=osll.getFirst(); n; n=n->getNext()) {
 		n->getValue()->print();
 	}
 	stdoutput.write('\n');
 
 	// clean up
-	for (singlylinkedlistnode< char * > *n=ssll.getFirst();
-						n; n=n->getNext()) {
+	for (listnode< char * > *n=ssll.getFirst(); n; n=n->getNext()) {
 		delete[] n->getValue();
 	}
-	for (singlylinkedlistnode< myclass * > *n=osll.getFirst();
-						n; n=n->getNext()) {
+	for (listnode< myclass * > *n=osll.getFirst(); n; n=n->getNext()) {
 		delete n->getValue();
 	}
 }

@@ -21,14 +21,14 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 		 *  "baud, "connectscript", "phonenumber",
 		 *  "disconnectscript", "retrywait" and
 		 *  "tries" when connect() is called. */
-		void	initialize(dictionary<const char *, const char *> *cd);
+		void	init(dictionary<const char *, const char *> *cd);
 
 		/** Initializes the class to use "device",
 		 *  "baud, "customatcommands",
 		 *  "connectscript", "phonenumber",
 		 *  "disconnectscript", "retrywait" and
 		 *  "tries" when connect() is called. */
-		void	initialize(const char *device,
+		void	init(const char *device,
 					const char *baud,
 					const char *customatcommands,
 					const char *connectscript,

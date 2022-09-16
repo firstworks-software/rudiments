@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
 
 	// get the user entry for a system user
 	stdoutput.printf("username: %s...\n",username);
-	uent.initialize(username);
+	uent.init(username);
 	test("name",!charstring::compare(uent.getName(),username));
 #ifndef _WIN32
 	test("password",uent.getPassword());
@@ -106,7 +106,7 @@ int main(int argc, const char **argv) {
 	// get the user entry for user id of the user we just looked up
 	uid_t	id=uent.getUserId();
 	stdoutput.printf("userid: %d...\n",id);
-	uent.initialize(id);
+	uent.init(id);
 	test("name",!charstring::compare(uent.getName(),username));
 #ifndef _WIN32
 	test("password",uent.getPassword());
@@ -160,7 +160,7 @@ int main(int argc, const char **argv) {
 
 	// invalid user
 	stdoutput.printf("username: invalidusername...\n");
-	uent.initialize("invalidusername");
+	uent.init("invalidusername");
 	test("name",!uent.getName());
 	test("password",!uent.getPassword());
 	test("user id",uent.getUserId()==(uid_t)-1);
@@ -186,7 +186,7 @@ int main(int argc, const char **argv) {
 	// invalid user id
 	id=uent.getUserId();
 	stdoutput.printf("userid: %d (invalid)...\n",id);
-	uent.initialize(id);
+	uent.init(id);
 	test("name",!uent.getName());
 	test("password",!uent.getPassword());
 	test("user id",uent.getUserId()==(uid_t)-1);
@@ -212,7 +212,7 @@ int main(int argc, const char **argv) {
 
 	// null-safety
 	stdoutput.printf("NULL...\n");
-	uent.initialize((const char *)NULL);
+	uent.init((const char *)NULL);
 	test("name",!uent.getName());
 	test("password",!uent.getPassword());
 	test("user id",uent.getUserId()==(uid_t)-1);

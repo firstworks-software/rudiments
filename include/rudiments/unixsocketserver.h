@@ -38,7 +38,7 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		/** Deletes this instance of the unixsocketserver class. */
 		virtual		~unixsocketserver();
 
-		/** Convenience method that calls initialize(), bind()
+		/** Convenience method that calls init(), bind()
 		 *  and listen().  If you need to set socket options or
 		 *  do anything else special between those discrete steps
 		 *  then you should use the methods individually.
@@ -61,7 +61,7 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		 *  "mask".
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *filename, mode_t mask);
+		bool	init(const char *filename, mode_t mask);
 
 		/** Associates the socket with an address.
 		 * 

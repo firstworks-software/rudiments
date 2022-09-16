@@ -11,8 +11,7 @@ int main(int argc, const char **argv) {
 	}
 
 	// print the list forwards, all on one line
-	for (singlylinkedlistnode<uint32_t> *n=sll.getFirst();
-						n; n=n->getNext()) {
+	for (listnode<uint32_t> *n=sll.getFirst(); n; n=n->getNext()) {
 		stdoutput.printf("%d ",n->getValue());
 	}
 	stdoutput.write("\n\n");

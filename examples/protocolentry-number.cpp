@@ -5,7 +5,7 @@ int main(int argc, const char **argv) {
 
 	// get the protocol entry for "protocol number 6"
 	protocolentry	pe;
-	pe.initialize(6);
+	pe.init(6);
 
 	// print out details
 	stdoutput.printf("	Name:		%s\n",pe.getName());

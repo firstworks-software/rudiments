@@ -18,13 +18,13 @@ class RUDIMENTS_DLLSPEC hostentry : public object {
 		~hostentry();
 
 		/** Looks up a host entry by name. */
-		bool	initialize(const char *hostname);
+		bool	init(const char *hostname);
 
 		/** Looks up a host entry by address.
 		 *
 		 *  Note that "address" must be a binary representation of the
 		 *  address.  This is why "len" and "type" are also required. */
-		bool	initialize(const char *address,
+		bool	init(const char *address,
 					int32_t len, int32_t type);
 
 		/** Returns the primary hostname of the host entry. */

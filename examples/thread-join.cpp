@@ -24,7 +24,7 @@ void count(void *args) {
 int main(int argc, const char **argv) {
 
 	// do we even support threads?
-	if (!thread::supportsThreads()) {
+	if (!thread::supported()) {
 		stdoutput.printf("thread are not supported\n");
 		process::exit(1);
 	}

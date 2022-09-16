@@ -15,19 +15,19 @@ class commandlineprivate {
 
 commandline::commandline() : object() {
 	pvt=new commandlineprivate;
-	initialize(0,NULL);
+	init(0,NULL);
 }
 
 commandline::commandline(int32_t argc, const char **argv) : object() {
 	pvt=new commandlineprivate;
-	initialize(argc,argv);
+	init(argc,argv);
 }
 
 commandline::~commandline() {
 	delete pvt;
 }
 
-void commandline::initialize(int32_t argc, const char **argv) {
+void commandline::init(int32_t argc, const char **argv) {
 	pvt->_argc=argc;
 	pvt->_argv=(char **)argv;
 }

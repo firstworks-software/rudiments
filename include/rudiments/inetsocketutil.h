@@ -15,13 +15,13 @@ class RUDIMENTS_DLLSPEC inetsocketutil {
 		inetsocketutil();
 
 		/** Deletes this instance of the inetsocketutil class. */
-		virtual		~inetsocketutil();
+		virtual	~inetsocketutil();
 
 		/** Initializes the class to use "address" and "port".
 		 *  This is not directly useful within this class but child
 		 *  classes may use these values to decide where to connect to
 		 *  or what to listen on. */
-		void		initialize(const char *address, uint16_t port);
+		void	init(const char *address, uint16_t port);
 
 	#include <rudiments/private/inetsocketutil.h>
 };

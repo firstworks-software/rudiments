@@ -98,12 +98,12 @@ datetime::datetime() : object() {
 datetime::datetime(datetime &d) : object() {
 	pvt=new datetimeprivate;
 	init();
-	initialize(d.getString());
+	init(d.getString());
 }
 
 datetime &datetime::operator=(datetime &d) {
 	if (this!=&d) {
-		initialize(d.getString());
+		init(d.getString());
 	}
 	return *this;
 }
@@ -139,7 +139,7 @@ void datetime::clear() {
 	delete[] pvt->_sqlstring;
 }
 
-bool datetime::initialize(const char *tmstring) {
+bool datetime::init(const char *tmstring) {
 
 	clear();
 	init();
@@ -207,11 +207,11 @@ bool datetime::initialize(const char *tmstring) {
 	return normalize();
 }
 
-bool datetime::initialize(time_t seconds) {
-	return initialize(seconds,0);
+bool datetime::init(time_t seconds) {
+	return init(seconds,0);
 }
 
-bool datetime::initialize(time_t seconds, time_t microseconds) {
+bool datetime::init(time_t seconds, time_t microseconds) {
 
 	clear();
 	init();
@@ -226,7 +226,7 @@ bool datetime::initialize(time_t seconds, time_t microseconds) {
 	return retval;
 }
 
-bool datetime::initialize(const void *tmstruct) {
+bool datetime::init(const void *tmstruct) {
 
 	clear();
 	init();
@@ -485,7 +485,7 @@ bool datetime::getSystemDateAndTime() {
 		if (gettimeofday(&tv,NULL)) {
 			return false;
 		}
-		return initialize(tv.tv_sec,tv.tv_usec);
+		return init(tv.tv_sec,tv.tv_usec);
 	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME)
 
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
@@ -505,7 +505,7 @@ bool datetime::getSystemDateAndTime() {
 			// subtract microseconds between 1601 and 1970
 			t-=11644473600000000ULL;
 
-			return initialize(t/1000000,t%1000000);
+			return init(t/1000000,t%1000000);
 		#else
 			SYSTEMTIME	st;
 			GetLocalTime(&st);
@@ -519,10 +519,10 @@ bool datetime::getSystemDateAndTime() {
 			str.append(st.wSecond)->append('.');
 			str.append(st.wMilliseconds*1000);
 
-			return initialize(str.getString());
+			return init(str.getString());
 		#endif
 	#else
-		return initialize(time(NULL));
+		return init(time(NULL));
 	#endif
 }
 
@@ -663,30 +663,30 @@ bool datetime::adjustTimeZone(const char *newtz, bool ignoredst) {
 
 char *datetime::getString(time_t seconds) {
 	datetime	dt;
-	return ((dt.initialize(seconds))?
+	return ((dt.init(seconds))?
 		charstring::duplicate(dt.getString()):NULL);
 }
 
 char *datetime::getString(time_t seconds, time_t microseconds) {
 	datetime	dt;
-	return ((dt.initialize(seconds,microseconds))?
+	return ((dt.init(seconds,microseconds))?
 		charstring::duplicate(dt.getString(true)):NULL);
 }
 
 char *datetime::getString(const void *tmstruct) {
 	datetime	dt;
-	return ((dt.initialize(tmstruct))?
+	return ((dt.init(tmstruct))?
 		charstring::duplicate(dt.getString()):NULL);
 }
 
 time_t datetime::getEpoch(const char *datestring) {
 	datetime	dt;
-	return ((dt.initialize(datestring))?dt.getEpoch():-1);
+	return ((dt.init(datestring))?dt.getEpoch():-1);
 }
 
 time_t datetime::getEpoch(const void *tmstruct) {
 	datetime	dt;
-	return ((dt.initialize(tmstruct))?dt.getEpoch():-1);
+	return ((dt.init(tmstruct))?dt.getEpoch():-1);
 }
 
 bool datetime::setTZ(const char *zone, char **oldzone, bool ignoredst) {
@@ -1150,7 +1150,7 @@ bool datetime::validDateTime(const char *string) {
 	// (ignoring the timezone).
 	// If they're the same then it was a valid date.
 	datetime	dt;
-	bool	result=(dt.initialize(newstring) &&
+	bool	result=(dt.init(newstring) &&
 			!charstring::compare(newstring,dt.getString(),19));
 	delete[] newstring;
 	return result;

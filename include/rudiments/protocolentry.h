@@ -19,11 +19,11 @@ class RUDIMENTS_DLLSPEC protocolentry : public object {
 
 		/** Looks up a protocol entry by name.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *protocolname);
+		bool	init(const char *protocolname);
 
 		/** Looks up a protocol entry by number.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(int32_t number);
+		bool	init(int32_t number);
 
 		/** Returns the name of the protocol entry. */
 		const char		*getName();

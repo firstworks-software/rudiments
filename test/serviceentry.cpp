@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
 
 	// get the service information for "smtp","tcp"
 	stdoutput.printf("smtp/tcp:\n");
-	se.initialize("smtp","tcp");
+	se.init("smtp","tcp");
 	test("name",!charstring::compare(se.getName(),"smtp"));
 	test("port",se.getPort()==25);
 	test("protcol",!charstring::compare(se.getProtocol(),"tcp"));
@@ -31,7 +31,7 @@ int main(int argc, const char **argv) {
 
 	// get the service information for the service on port 25, "tcp"
 	stdoutput.printf("25/tcp:\n");
-	se.initialize(25,"tcp");
+	se.init(25,"tcp");
 	test("name",!charstring::compare(se.getName(),"smtp"));
 	test("port",se.getPort()==25);
 	test("protcol",!charstring::compare(se.getProtocol(),"tcp"));
@@ -42,7 +42,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// null-safety
-	se.initialize((const char *)NULL,NULL);
+	se.init((const char *)NULL,NULL);
 	stdoutput.printf("NULL/NULL:\n");
 	test("name",!se.getName());
 	test("port",se.getPort()==-1);

@@ -22,12 +22,12 @@ int main(int argc, const char **argv) {
 		// owner user/group
 		uid_t	user=f.getOwnerUserId();
 		userentry	ou;
-		ou.initialize(user);
+		ou.init(user);
 		stdoutput.printf("Owner User:		%s\n",ou.getName());
 
 		gid_t	group=f.getOwnerGroupId();
 		groupentry	og;
-		og.initialize(group);
+		og.init(group);
 		stdoutput.printf("Owner Group:		%s\n",og.getName());
 
 		// sizes
@@ -57,12 +57,12 @@ int main(int argc, const char **argv) {
 		// access/modification times
 		time_t		access=f.getLastAccessTime();
 		datetime	da;
-		da.initialize(access);
+		da.init(access);
 		stdoutput.printf("Last Access:		%s\n",da.getString());
 
 		time_t	mod=f.getLastModificationTime();
 		datetime	dm;
-		dm.initialize(mod);
+		dm.init(mod);
 		stdoutput.printf("Last Modification:	%s\n",dm.getString());
 
 	} else {

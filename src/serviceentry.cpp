@@ -97,15 +97,15 @@ void serviceentry::setMutex(threadmutex *mtx) {
 	#endif
 }
 
-bool serviceentry::initialize(const char *servicename, const char *protocol) {
-	return initialize(servicename,-1,protocol);
+bool serviceentry::init(const char *servicename, const char *protocol) {
+	return init(servicename,-1,protocol);
 }
 
-bool serviceentry::initialize(int32_t port, const char *protocol) {
-	return initialize(NULL,port,protocol);
+bool serviceentry::init(int32_t port, const char *protocol) {
+	return init(NULL,port,protocol);
 }
 
-bool serviceentry::initialize(const char *servicename, int32_t port,
+bool serviceentry::init(const char *servicename, int32_t port,
 						const char *protocol) {
 
 	pvt->_se=NULL;
@@ -176,11 +176,11 @@ bool serviceentry::initialize(const char *servicename, int32_t port,
 
 int32_t serviceentry::getPort(const char *servicename, const char *protocol) {
 	serviceentry	se;
-	return (se.initialize(servicename,protocol))?se.getPort():-1;
+	return (se.init(servicename,protocol))?se.getPort():-1;
 }
 
 char	*serviceentry::getName(int32_t port, const char *protocol) {
 	serviceentry	se;
-	return (se.initialize(port,protocol))?
+	return (se.init(port,protocol))?
 			charstring::duplicate(se.getName()):NULL;
 }

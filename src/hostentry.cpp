@@ -100,15 +100,15 @@ void hostentry::setMutex(threadmutex *mtx) {
 	#endif
 }
 
-bool hostentry::initialize(const char *hostname) {
-	return initialize(hostname,NULL,0,0);
+bool hostentry::init(const char *hostname) {
+	return init(hostname,NULL,0,0);
 }
 
-bool hostentry::initialize(const char *address, int32_t len, int32_t type) {
-	return initialize(NULL,address,len,type);
+bool hostentry::init(const char *address, int32_t len, int32_t type) {
+	return init(NULL,address,len,type);
 }
 
-bool hostentry::initialize(const char *hostname, const char *address,
+bool hostentry::init(const char *hostname, const char *address,
 						int32_t len, int32_t type) {
 
 	pvt->_he=NULL;
@@ -190,13 +190,13 @@ char *hostentry::getAddressString(int32_t index) {
 char *hostentry::getAddressString(const char *hostname) {
 	hostentry	he;
 	// Minix 3.1.8 needs the int32_t cast.
-	return (he.initialize(hostname))?
+	return (he.init(hostname))?
 			he.getAddressString((int32_t)0):NULL;
 }
 
 char *hostentry::getName(const char *address, int32_t len, int32_t type) {
 	hostentry	he;
-	return he.initialize(address,len,type)?
+	return he.init(address,len,type)?
 			charstring::duplicate(he.getName()):NULL;
 }
 
@@ -204,6 +204,6 @@ char *hostentry::getAddressString(const char *address,
 					int32_t len, int32_t type) {
 	hostentry	he;
 	// Minix 3.1.8 needs the int32_t cast.
-	return (he.initialize(address,len,type))?
+	return (he.init(address,len,type))?
 			he.getAddressString((int32_t)0):NULL;
 }

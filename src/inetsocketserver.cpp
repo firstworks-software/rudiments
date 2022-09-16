@@ -58,15 +58,15 @@ uint16_t inetsocketserver::getPort() {
 
 bool inetsocketserver::listen(const char *address, uint16_t port,
 							int32_t backlog) {
-	initialize(address,port);
+	init(address,port);
 	reuseAddresses();
 	return (bind() && listen(backlog));
 }
 
-bool inetsocketserver::initialize(const char *address, uint16_t port) {
+bool inetsocketserver::init(const char *address, uint16_t port) {
 
 	close();
-	inetsocketutil::initialize(address,port);
+	inetsocketutil::init(address,port);
 
 	// initialize a socket address structure
 	bytestring::zero(_sin(),sizeof(sockaddr_in));

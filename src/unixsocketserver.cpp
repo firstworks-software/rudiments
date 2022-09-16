@@ -57,10 +57,10 @@ unixsocketserver::~unixsocketserver() {
 	delete pvt;
 }
 
-bool unixsocketserver::initialize(const char *filename, mode_t mask) {
+bool unixsocketserver::init(const char *filename, mode_t mask) {
 
 	close();
-	unixsocketutil::initialize(filename);
+	unixsocketutil::init(filename);
 	pvt->_mask=mask;
 
 	// if a null or blank port was specified, return an error
@@ -69,7 +69,7 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 	}
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-	if (pvt->_iss.initialize("127.0.0.1",filenameToPort(filename))) {
+	if (pvt->_iss.init("127.0.0.1",filenameToPort(filename))) {
 		fd(pvt->_iss.getFileDescriptor());
 		return true;
 	}
@@ -118,7 +118,7 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
 bool unixsocketserver::listen(const char *filename, mode_t mask,
 							int32_t backlog) {
-	initialize(filename,mask);
+	init(filename,mask);
 	return (bind() && listen(backlog));
 }
 

@@ -43,7 +43,7 @@ modemutil::~modemutil() {
 	delete pvt;
 }
 
-void modemutil::initialize(const char *device, const char *baud) {
+void modemutil::init(const char *device, const char *baud) {
 	pvt->_devicename=device;
 	pvt->_baud=baud;
 }

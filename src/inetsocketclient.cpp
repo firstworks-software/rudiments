@@ -73,22 +73,22 @@ int32_t inetsocketclient::connect(const char *host,
 						int32_t timeoutusec,
 						uint32_t retrywait,
 						uint32_t tries) {
-	initialize(host,port,timeoutsec,timeoutusec,retrywait,tries);
+	init(host,port,timeoutsec,timeoutusec,retrywait,tries);
 	return connect();
 }
 
-void inetsocketclient::initialize(const char *host,
-						uint16_t port,
-						int32_t timeoutsec,
-						int32_t timeoutusec,
-						uint32_t retrywait,
-						uint32_t tries) {
+void inetsocketclient::init(const char *host,
+					uint16_t port,
+					int32_t timeoutsec,
+					int32_t timeoutusec,
+					uint32_t retrywait,
+					uint32_t tries) {
 	close();
-	inetsocketutil::initialize(host,port);
-	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
+	inetsocketutil::init(host,port);
+	client::init(NULL,timeoutsec,timeoutusec,retrywait,tries);
 }
 
-void inetsocketclient::initialize(dictionary<const char *, const char *> *cd) {
+void inetsocketclient::init(dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
 
@@ -105,7 +105,7 @@ void inetsocketclient::initialize(dictionary<const char *, const char *> *cd) {
 		const char	*tries=NULL;
 		cd->getValue("tries",&tries);
 	
-		initialize(host?host:"",
+		init(host?host:"",
 			charstring::toInteger(port?port:"0"),
 			charstring::toInteger(timeoutsec?timeoutsec:"-1"),
 			charstring::toInteger(timeoutusec?timeoutusec:"-1"),
@@ -160,13 +160,13 @@ int32_t inetsocketclient::connect() {
 
 		// get the host entry
 		hostentry	he;
-		if (!he.initialize(_address())) {
+		if (!he.init(_address())) {
 			return RESULT_ERROR;
 		}
 
 		// use tcp protocol
 		protocolentry	pe;
-		if (!pe.initialize("tcp")) {
+		if (!pe.init("tcp")) {
 			return RESULT_ERROR;
 		}
 

@@ -5,6 +5,6 @@
 		serviceentry(serviceentry &s) {};
 		serviceentry	&operator=(serviceentry &s) { return *this; };
 
-		bool	initialize(const char *servicename, int32_t port,
+		bool	init(const char *servicename, int32_t port,
 							const char *protocol);
 		serviceentryprivate	*pvt;

@@ -20,14 +20,14 @@ class RUDIMENTS_DLLSPEC serviceentry : public object {
 		/** Looks up a service entry by "servicename" and "protocol"
 		 *  (tcp, udp, etc.).
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *servicename,
+		bool	init(const char *servicename,
 					const char *protocol);
 
 		/** Looks up a service entry by the "port" that a server for
 		 *  would listen on and the "protocol" that it would use
 		 *  (tcp, udp, etc.).
 		 *  Returns true on success and false on failure. */
-		bool	initialize(int32_t port, const char *protocol);
+		bool	init(int32_t port, const char *protocol);
 
 		/** Returns the name of the service entry. */
 		const char		*getName();

@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 	test("min (after set)",r.getMin()==10);
 	test("max (after set)",r.getMax()==20);
 	test("growby (after set)",r.getGrowBy()==3);
-	test("initialize",r.initialize());
+	test("initialize",r.init());
 	stdoutput.printf("\n");
 
 	testclass	**t=new testclass *[r.getMax()];

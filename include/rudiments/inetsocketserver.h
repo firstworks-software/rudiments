@@ -26,7 +26,7 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		/** Deletes this instance of the inetsocketserver class. */
 		virtual		~inetsocketserver();
 
-		/** Convenience method that calls initialize(),
+		/** Convenience method that calls init(),
 		 *  reuseAddresses(), bind() and listen().  If you need to set
 		 *  other socket options or do anything else special between
 		 *  those discrete steps then you should use the methods
@@ -51,11 +51,11 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 
 
 
-		/** Creates the actual socket and initializes the class
+		/** Creates the actual socket and inits the class
 		 *  to use "address" and "port" when bind() is called.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *address, uint16_t port);
+		bool	init(const char *address, uint16_t port);
 
 		/** Associates the socket with an address.
 		 * 

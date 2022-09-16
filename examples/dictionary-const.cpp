@@ -15,7 +15,7 @@ int main(int argc, const char **argv) {
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");
-	nvp.print();
+	nvp.write();
 	stdoutput.write('\n');
 
 	// replace some values
@@ -28,7 +28,7 @@ int main(int argc, const char **argv) {
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");
-	nvp.print();
+	nvp.write();
 	stdoutput.write('\n');
 
 	// clear the dictionary
@@ -42,7 +42,7 @@ int main(int argc, const char **argv) {
 	// print out the dictionary a different way
 	stdoutput.write("Current contents:\n");
 	linkedlist<const char *>	*keys=nvp.getKeys();
-	for (linkedlistnode<const char *> *kn=keys->getFirst();
+	for (listnode<const char *> *kn=keys->getFirst();
 						kn; kn=kn->getNext()) {
 		stdoutput.printf("%s=%s ",
 			kn->getValue(),nvp.getValue(kn->getValue()));

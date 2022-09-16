@@ -19,11 +19,11 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 
 		/** Looks up a user entry by name.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *username);
+		bool	init(const char *username);
 
 		/** Looks up a user entry by user id.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(uid_t userid);
+		bool	init(uid_t userid);
 
 		/** Returns the name of this user. */
 		const char	*getName();

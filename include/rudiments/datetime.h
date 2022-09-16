@@ -37,21 +37,21 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  GMT is assumed.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *tmstring);
+		bool	init(const char *tmstring);
 
 		/** Processes "seconds" and sets the date and time
 		 *  represented in the class to that time.
 		 *  "seconds" is the number of seconds since 1970 (the epoch).
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	initialize(time_t seconds);
+		bool	init(time_t seconds);
 
 		/** Processes "seconds" and "microseconds" and sets the date
 		 *  and time represented in the class to that time.
 		 *  "seconds" is the number of seconds since 1970 (the epoch).
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	initialize(time_t seconds, time_t microseconds);
+		bool	init(time_t seconds, time_t microseconds);
 
 		/** Processes "tmstruct" and sets the date and time
 		 *  represented in the class to that time.
@@ -64,7 +64,7 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  assumed.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const void *tmstruct);
+		bool	init(const void *tmstruct);
 
 
 		/** Sets the date and time represented in the class to

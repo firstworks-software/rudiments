@@ -286,15 +286,15 @@ void groupentry::setMutex(threadmutex *mtx) {
 	#endif
 }
 
-bool groupentry::initialize(const char *groupname) {
-	return initialize(groupname,(gid_t)-1);
+bool groupentry::init(const char *groupname) {
+	return init(groupname,(gid_t)-1);
 }
 
-bool groupentry::initialize(gid_t groupid) {
-	return initialize(NULL,groupid);
+bool groupentry::init(gid_t groupid) {
+	return init(NULL,groupid);
 }
 
-bool groupentry::initialize(const char *groupname, gid_t groupid) {
+bool groupentry::init(const char *groupname, gid_t groupid) {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 
 	// (re)init buffers
@@ -470,7 +470,7 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		// look up the gid in the map
 		namesid	*ns;
 		if (gidmap.getValue(groupid,&ns)) {
-			return initialize(ns->name);
+			return init(ns->name);
 		}
 		return false;
 	}
@@ -480,18 +480,18 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
 gid_t groupentry::getGroupId(const char *groupname) {
 	groupentry	grp;
-	return (grp.initialize(groupname))?grp.getGroupId():(gid_t)-1;
+	return (grp.init(groupname))?grp.getGroupId():(gid_t)-1;
 }
 
 char *groupentry::getName(gid_t groupid) {
 	groupentry	grp;
-	return (grp.initialize(groupid))?
+	return (grp.init(groupid))?
 			charstring::duplicate(grp.getName()):NULL;
 }
 
 char *groupentry::getSidString(const char *groupname) {
 	groupentry	grp;
-	return (grp.initialize(groupname))?
+	return (grp.init(groupname))?
 			charstring::duplicate(grp.getSidString()):NULL;
 }
 
@@ -537,15 +537,15 @@ bool groupentry::needsMutex() {
 void groupentry::setMutex(threadmutex *mtx) {
 }
 
-bool groupentry::initialize(const char *groupname) {
-	return initialize(groupname,0);
+bool groupentry::init(const char *groupname) {
+	return init(groupname,0);
 }
 
-bool groupentry::initialize(gid_t groupid) {
-	return initialize(NULL,groupid);
+bool groupentry::init(gid_t groupid) {
+	return init(NULL,groupid);
 }
 
-bool groupentry::initialize(const char *groupname, gid_t groupid) {
+bool groupentry::init(const char *groupname, gid_t groupid) {
 	return true;
 }
 

@@ -27,7 +27,7 @@ class RUDIMENTS_DLLSPEC gss : public object {
 		 *    { 1 3 6 1 5 5 2 }
 		 *
 		 *  These strings may be passed into
-		 *  gssmechanism::initialize(const char *str). */
+		 *  gssmechanism::init(const char *str). */
 		const char * const	*getAvailableMechanisms();
 
 		/** Returns true if rudiments was built with GSS support and
@@ -50,14 +50,14 @@ class RUDIMENTS_DLLSPEC gssmechanism : public object {
 		 *  using "str", which should be the string representation
 		 *  of the object id for an available security mechanism.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *str);
+		bool	init(const char *str);
 
 		/** Initializes this instance of the gssmechanism class
 		 *  using "oid", which should be the platform-spcific binary
 		 *  representation of the object id for an available security
 		 *  mechanism.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const void *oid);
+		bool	init(const void *oid);
 
 		/** Clears any previous initialization of this intstance. */
 		void	clear();

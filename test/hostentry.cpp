@@ -29,7 +29,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// localhost
-	he.initialize("localhost");
+	he.init("localhost");
 	stdoutput.printf("localhost:\n");
 	// this shouldn't be empty, but there's no
 	// guarantee it'll actually be "localhost"
@@ -45,7 +45,7 @@ int main(int argc, const char **argv) {
 	// 127.0.0.1
 	stdoutput.printf("127.0.0.1:\n");
 	char	address[]={127,0,0,1};
-	he.initialize(address,4,AF_INET);
+	he.init(address,4,AF_INET);
 	// this shouldn't be empty, but there's no
 	// guarantee it'll actually be "localhost"
 	test("name",he.getName());
@@ -59,7 +59,7 @@ int main(int argc, const char **argv) {
 
 	// null-safety
 	stdoutput.printf("NULL:\n");
-	he.initialize(NULL);
+	he.init(NULL);
 	test("name",!he.getName());
 	test("alias list",!he.getAliasList());
 	test("address type",he.getAddressType()==-1);

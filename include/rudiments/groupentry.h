@@ -19,11 +19,11 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 
 		/** Looks up a group entry by name.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *groupname);
+		bool	init(const char *groupname);
 
 		/** Looks up a group entry by group id.
 		 *  Returns true on success and false on failure. */
-		bool	initialize(gid_t groupid);
+		bool	init(gid_t groupid);
 
 		/** Returns the name of the group. */
 		const char		*getName();

@@ -218,7 +218,7 @@ bool cronschedule::inSchedule(datetime *dt) {
 
 bool cronschedule::inSchedule(const char *dt) {
 	datetime	d;
-	d.initialize(dt);
+	d.init(dt);
 	return inSchedule(&d);
 }
 

@@ -23,7 +23,7 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 
 		/** Sets the argument count and arguments to
 		 *  "argc" and "argv". */
-		void initialize(int32_t argc, const char **argv);
+		void init(int32_t argc, const char **argv);
 
 		/** Looks for either:
 		 * 	-arg value

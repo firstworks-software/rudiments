@@ -18,7 +18,9 @@ int main(int argc, const char **argv) {
 	linkedlist<int16_t>	i16ll;
 	linkedlist<int64_t>	i64ll;
 	linkedlist< char * >	sll;
+	sll.setManageArrayValues(true);
 	linkedlist< myclass * >	oll;
+	oll.setManageValues(true);
 
 	// populate the lists
 	for (int64_t i=0; i<20; i++) {
@@ -30,29 +32,25 @@ int main(int argc, const char **argv) {
 
 	// print the lists of primitive types
 	stdoutput.printf("list of 16-bit integers:\n");
-	i16ll.print();
+	i16ll.write();
 	stdoutput.write('\n');
 
 	stdoutput.printf("list of 64-bit integers:\n");
-	i16ll.print();
+	i16ll.write();
 	stdoutput.write('\n');
 
 	stdoutput.printf("list of strings:\n");
-	i16ll.print();
+	i16ll.write();
 	stdoutput.write('\n');
 
 	// manually print the list of objects
 	stdoutput.printf("list of objects:\n");
-	for (linkedlistnode< myclass * > *n=oll.getFirst(); n; n=n->getNext()) {
+	for (listnode< myclass * > *n=oll.getFirst(); n; n=n->getNext()) {
 		n->getValue()->print();
 	}
 	stdoutput.write('\n');
 
 	// clean up
-	for (linkedlistnode< char * > *n=sll.getFirst(); n; n=n->getNext()) {
-		delete[] n->getValue();
-	}
-	for (linkedlistnode< myclass * > *n=oll.getFirst(); n; n=n->getNext()) {
-		delete n->getValue();
-	}
+	sll.clear();
+	oll.clear();
 }

@@ -187,7 +187,7 @@ void tlscontext::initContext() {
 
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 
-		pvt->_gmech.initialize(UNISP_NAME_A);
+		pvt->_gmech.init(UNISP_NAME_A);
 
 		pvt->_gcred.clearDesiredMechanisms();
 		pvt->_gcred.addDesiredMechanism(&pvt->_gmech);
@@ -2104,7 +2104,7 @@ void asn1timeToDateTime(datetime *dt, ASN1_TIME *asn1t) {
 	str[19]=' ';
 	str[20]=asn1str[12];
 	str[21]='\0';
-	dt->initialize(str);
+	dt->init(str);
 }
 #endif
 
@@ -2286,7 +2286,7 @@ void tlscertificate::setCertificate(void *cert) {
 					11644473600000000ULL
 				#endif
 				;
-		pvt->_validfrom.initialize(t/1000000,t%1000000);
+		pvt->_validfrom.init(t/1000000,t%1000000);
 
 		// get valid-to
 		t=(((((uint64_t)c->NotAfter.dwHighDateTime)<<32)|
@@ -2298,7 +2298,7 @@ void tlscertificate::setCertificate(void *cert) {
 					11644473600000000ULL
 				#endif
 				;
-		pvt->_validto.initialize(t/1000000,t%1000000);
+		pvt->_validto.init(t/1000000,t%1000000);
 
 		// get the subject
 		size=CertNameToStr(X509_ASN_ENCODING,

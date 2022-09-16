@@ -5,5 +5,5 @@
 		groupentry(groupentry &g) {};
 		groupentry	&operator=(groupentry &g) { return *this; };
 
-		bool	initialize(const char *groupname, gid_t groupid);
+		bool	init(const char *groupname, gid_t groupid);
 		groupentryprivate	*pvt;

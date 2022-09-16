@@ -112,15 +112,15 @@ int main(int argc, const char **argv) {
 
 		// these aren't reliable over nfs/cifs...
 		/*datetime	atime;
-		atime.initialize(fl.getLastAccessTime());
+		atime.init(fl.getLastAccessTime());
 		test("access time",atime.getEpoch()-dt.getEpoch()<=1);
 
 		datetime	mtime;
-		mtime.initialize(fl.getLastModificationTime());
+		mtime.init(fl.getLastModificationTime());
 		test("modification time",mtime.getEpoch()-dt.getEpoch()<=1);
 
 		datetime	ctime;
-		mtime.initialize(fl.getLastChangeTime());
+		mtime.init(fl.getLastChangeTime());
 		test("change time",ctime.getEpoch()-dt.getEpoch()<=1);*/
 
 		test("inode",fl.getInode()!=0);

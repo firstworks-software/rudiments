@@ -15,13 +15,13 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 		unixsocketutil();
 
 		/** Deletes this instance of the unixsocketutill class. */
-		virtual		~unixsocketutil();
+		virtual	~unixsocketutil();
 
 		/** Initializes the class to use "filename".  This is not
 		 *  directly useful within this class but child classes may
 		 *  use the value to decide where to connect to or what to
 		 *  listen on. */
-		void		initialize(const char *filename);
+		void	init(const char *filename);
 
 		/** Converts "filename" to a port number for faking unix
 		 *  sockets.  If the filename starts with a number, then

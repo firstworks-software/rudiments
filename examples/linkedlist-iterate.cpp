@@ -12,14 +12,14 @@ int main(int argc, const char **argv) {
 
 	// print the list forwards, all on one line
 	stdoutput.write("forwards:\n");
-	for (linkedlistnode<uint32_t> *n=ll.getFirst(); n; n=n->getNext()) {
+	for (listnode<uint32_t> *n=ll.getFirst(); n; n=n->getNext()) {
 		stdoutput.printf("%d ",n->getValue());
 	}
 	stdoutput.write("\n\n");
 
 	// print the list backwards, all on one line
 	stdoutput.write("backwards:\n");
-	for (linkedlistnode<uint32_t> *n=ll.getLast(); n; n=n->getPrevious()) {
+	for (listnode<uint32_t> *n=ll.getLast(); n; n=n->getPrevious()) {
 		stdoutput.printf("%d ",n->getValue());
 	}
 	stdoutput.write("\n\n");
