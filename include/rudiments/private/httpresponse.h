@@ -5,4 +5,7 @@
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 
 	private:
+		httpresponse(httpresponse &h) {};
+		httpresponse	&operator=(httpresponse &h) { return *this; };
+
 		httpresponseprivate	*pvt;

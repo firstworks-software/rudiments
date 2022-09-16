@@ -6,6 +6,8 @@
 		const char	*_disconnectscript();
 		const char	*_phonenumber();
 
-		void	clone(modemclient &m);
 	private:
+		modemclient(modemclient &m) {};
+		modemclient	&operator=(modemclient &m) { return *this; };
+
 		modemclientprivate	*pvt;

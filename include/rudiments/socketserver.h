@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		/** Creates an instance of the socketserver class. */
 		socketserver();
 
-		/** Creates an instance of the socketserver class
- 		 *  that is a copy of "s". */
-		socketserver(socketserver &s);
-
-		/** Makes this instance of the socketserver class
-		 *  identical to "s". */
-		socketserver	&operator=(socketserver &s);
-
 		/** Deletes this instance of the socketserver class. */
 		virtual		~socketserver();
 

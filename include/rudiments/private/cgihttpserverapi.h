@@ -51,7 +51,9 @@
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 
 	private:
-		cgihttpserverapi(cgihttpserverapi &c);
-		cgihttpserverapi	&operator=(cgihttpserverapi &c);
+		cgihttpserverapi(cgihttpserverapi &c) {};
+		cgihttpserverapi	&operator=(cgihttpserverapi &c) {
+			return *this;
+		}
 
 		cgihttpserverapiprivate	*pvt;

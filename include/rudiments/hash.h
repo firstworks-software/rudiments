@@ -45,6 +45,8 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
 
 		/** Returns the most recent error. */
 		virtual	hasherror_t	getError()=0;
+
+	#include <rudiments/private/hash.h>
 };
 
 #endif

@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 		/** Creates an instance of the modemclient class. */
 		modemclient();
 
-		/** Creates an instance of the modemclient class
-		 *  that is a copy of "m". */
-		modemclient(modemclient &m);
-
-		/** Makes this instance of the modemclient class
-		 *  identical to "m". */
-		modemclient	&operator=(modemclient &m);
-
 		/** Deletes this instance of the modemclient class. */
 		virtual		~modemclient();
 

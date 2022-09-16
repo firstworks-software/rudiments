@@ -331,7 +331,7 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *  been detached will return 0. */
 		uint64_t	getTextValueLength();
 
-		/** Empties the internal buffer containing the value.
+		/** Clears the internal buffer containing the value.
 		 *
 		 *  Subsequent calls to getValue(), detachValue(),
 		 *  getTextValue(), and detachTextValue() will return NULL
@@ -339,11 +339,11 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *  to getValueSize() and getTextValueLength() will return 0
 		 *  until parse() is called again.
 		 *
-		 *  Note that clear() does not reset properties such as
-		 *  include delimiters, chomp behavior, etc. to defaults. */
+		 *  Does not reset properties such as include delimiters, chomp
+		 *  behavior, etc. to defaults. */
 		void	clear();
 
-		/** Empties the internal buffer containing the value and
+		/** Clears the internal buffer containing the value and
 		 *  resets properties such as include delimiters, chomp
 		 *  behavior, etc. to defaults. */
 		void	reset();

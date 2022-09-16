@@ -14,14 +14,6 @@ class RUDIMENTS_DLLSPEC socketclient : public client {
 		/** Creates an instance of the socketclient class. */
 		socketclient();
 
-		/** Creates an instance of the socketclient class
-		 *  that is a copy of "c". */
-		socketclient(socketclient &c);
-
-		/** Makes this instance of the socketclient class
-		 *  idenitcal to "c". */
-		socketclient	&operator=(socketclient &c);
-
 		/** Deletes this instance of the socketclient class. */
 		virtual	~socketclient();
 

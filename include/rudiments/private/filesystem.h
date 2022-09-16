@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 	private:
-		void	clone(filesystem &f);
+		filesystem(filesystem &f) {};
+		filesystem &operator=(filesystem &f) { return *this; };
 
 		filesystemprivate	*pvt;

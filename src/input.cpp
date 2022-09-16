@@ -5,6 +5,9 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/bytestring.h>
 
+input::input() {
+}
+
 input::~input() {
 }
 

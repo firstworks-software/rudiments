@@ -37,27 +37,6 @@ modemserver::modemserver() : server(), modemutil() {
 	type("modemserver");
 }
 
-modemserver::modemserver(modemserver &m) : server(m), modemutil(m) {
-	pvt=new modemserverprivate;
-	clone(m);
-	type("modemserver");
-}
-
-modemserver &modemserver::operator=(modemserver &m) {
-	if (this!=&m) {
-		server::operator=(m);
-		modemutil::operator=(m);
-		clone(m);
-	}
-	return *this;
-}
-
-void modemserver::clone(modemserver &m) {
-	pvt->_listenscript=m.pvt->_listenscript;
-	pvt->_acceptscript=m.pvt->_acceptscript;
-	pvt->_disconnectscript=m.pvt->_disconnectscript;
-}
-
 modemserver::~modemserver() {
 	close();
 	delete pvt;

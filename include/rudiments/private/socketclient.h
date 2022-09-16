@@ -9,4 +9,8 @@
 		ssize_t	lowLevelWrite(const void *buf, ssize_t count);
 		int32_t	lowLevelClose();
 
+	private:
+		socketclient(socketclient &c) {};
+		socketclient	&operator=(socketclient &c) { return *this; };
+
 		socketclientprivate	*pvt;

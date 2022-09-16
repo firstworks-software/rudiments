@@ -15,14 +15,6 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Creates an instance of the filedescriptor class. */
 		filedescriptor();
 
-		/** Creates an instance of the filedescriptor class
-		 *  that is a copy of "f". */
-		filedescriptor(filedescriptor &f);
-
-		/** Makes this instance of the filedescriptor class
-		 *  identical to "f". */
-		filedescriptor	&operator=(filedescriptor &f);
-
 		/** Deletes this instance of the filedescriptor class.
 		 *  Calls close() if it hasn't already been called. */
 		virtual	~filedescriptor();

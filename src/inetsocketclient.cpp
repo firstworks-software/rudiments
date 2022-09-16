@@ -45,28 +45,6 @@ inetsocketclient::inetsocketclient() : socketclient(), inetsocketutil() {
 	type("inetsocketclient");
 }
 
-inetsocketclient::inetsocketclient(inetsocketclient &i) :
-					socketclient(i), inetsocketutil(i) {
-	pvt=new inetsocketclientprivate;
-	pvt->_randomize=true;
-	pvt->_seed=0;
-	pvt->_seeded=false;
-	translateByteOrder();
-	type("inetsocketclient");
-}
-
-inetsocketclient &inetsocketclient::operator=(inetsocketclient &i) {
-	if (this!=&i) {
-		socketclient::operator=(i);
-		inetsocketutil::operator=(i);
-		pvt->_randomize=i.pvt->_randomize;
-		pvt->_seed=i.pvt->_seed;
-		pvt->_seeded=i.pvt->_seeded;
-		translateByteOrder();
-	}
-	return *this;
-}
-
 inetsocketclient::~inetsocketclient() {
 	// filedescriptor's destructor calls close(), why the close() call here?
 	// Destructors don't always call overridden methods, but rather the

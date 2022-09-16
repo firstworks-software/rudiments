@@ -2,7 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		server(server &s) {};
-		server	&operator=(server &s) { return *this; };
+		input(input &i) {};
+		input	&operator=(input &i) { return *this; };
 
-		serverprivate	*pvt;

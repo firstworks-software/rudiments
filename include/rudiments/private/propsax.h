@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-			propsax(propsax &x);
-			propsax	&operator=(propsax &x);
-
 	private:
+			propsax(propsax &x) {};
+			propsax	&operator=(propsax &x) { return *this; };
+
 			bool	parse();
 
 			bool	parseWhitespace(char current, char *next);

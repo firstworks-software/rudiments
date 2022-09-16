@@ -2,6 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
+		websocket(websocket &w) {};
+		websocket	&operator=(websocket &w) { return *this; };
 
 		bool	acceptInternal();
 		ssize_t	readInternal(void *buf, ssize_t size);

@@ -2,6 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
+		serialport(serialport &s) {};
+		serialport	&operator=(serialport &s) { return *this; };
 
 		bool	tcSetAttr(int32_t optional_actions,
 					termios *termios_p);

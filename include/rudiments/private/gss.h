@@ -4,6 +4,9 @@
 		static const char	*getSspiStatusString(uint32_t status);
 
 	private:
+		gss(gss &g) {};
+		gss	&operator=(gss &g) { return *this; };
+
 		void	clear();
 
 		gssprivate	*pvt;

@@ -19,14 +19,6 @@ class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 		/** Creates an instance of the syslogdestination class. */
 		syslogdestination();
 
-		/** Creates an instance of the syslogdestination class
-		 *  that is a copy of "f". */
-		syslogdestination(syslogdestination &f);
-
-		/** Makes this instance of the syslogdestination class
-		 *  identical to "f". */
-		syslogdestination	&operator=(syslogdestination &f);
-
 		/** Deletes this instance of the syslogdestination class. */
 		virtual		~syslogdestination();
 
@@ -38,6 +30,7 @@ class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 
 		/** Closes the syslog as a loggin destination. */
 		void	close();
+
 	#include <rudiments/private/syslogdestination.h>
 };
 
@@ -49,14 +42,6 @@ class RUDIMENTS_DLLSPEC filedestination : public logdestination {
 		/** Creates an instance of the filedestination class. */
 		filedestination();
 
-		/** Creates an instance of the filedestination class
-		 *  that is a copy of "f". */
-		filedestination(filedestination &f);
-
-		/** Makes this instance of the filedestination class
-		 *  identical to "f". */
-		filedestination	&operator=(filedestination &f);
-
 		/** Deletes this instance of the filedestination class. */
 		virtual		~filedestination();
 
@@ -66,6 +51,7 @@ class RUDIMENTS_DLLSPEC filedestination : public logdestination {
 
 		/** Closes the file as a logging destination. */
 		void	close();
+
 	#include <rudiments/private/filedestination.h>
 };
 

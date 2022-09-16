@@ -18,14 +18,6 @@ class RUDIMENTS_DLLSPEC filesystem : virtual public object {
 		/** Creates an instance of the filesystem class. */
 		filesystem();
 
-		/** Creates an instance of the filesystem class
- 		 *  that is a copy of "f". */
-		filesystem(filesystem &f);
-
-		/** Makes this instance of the filesystem class
-		 *  identical to "f". */
-		filesystem	&operator=(filesystem &f);
-
 		/** Deletes this instance of the filesystem class. */
 		virtual		~filesystem();
 

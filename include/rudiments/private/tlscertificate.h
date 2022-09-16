@@ -6,4 +6,7 @@
 		void	setCertificate(void *cert);
 
 	private:
+		tlscertificate(tlscertificate &t) {};
+		tlscertificate	&operator=(tlscertificate &t) { return *this; };
+
 		tlscertificateprivate	*pvt;

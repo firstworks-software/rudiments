@@ -39,18 +39,6 @@ sax::sax() : object() {
 	reset();
 }
 
-sax::sax(sax &s) : object(s) {
-	// FIXME: implement this
-}
-
-sax &sax::operator=(sax &s) {
-	if (this!=&s) {
-		object::operator=(s);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 sax::~sax() {
 	close();
 	delete pvt;

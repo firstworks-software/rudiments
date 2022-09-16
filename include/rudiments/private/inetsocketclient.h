@@ -2,4 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		inetsocketclient(inetsocketclient &i) {};
+		inetsocketclient	&operator=(inetsocketclient &i) {
+			return *this;
+		}
+
 		inetsocketclientprivate	*pvt;

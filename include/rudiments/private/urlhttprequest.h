@@ -5,6 +5,10 @@
 		void	buildAllVariables();
 
 	private:
+	private:
+		urlhttprequest(urlhttprequest &u) : httprequest(NULL) {};
+		urlhttprequest	&operator=(urlhttprequest &u) { return *this; };
+
 		void	initSkinVariables();
 		void	parseSkinVariableFile(const char *skinvarfilename);
 		void	cleanSkinVariables();

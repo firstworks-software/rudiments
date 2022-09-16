@@ -13,18 +13,6 @@ server::server() : filedescriptor() {
 	type("server");
 }
 
-server::server(server &s) : filedescriptor(s) {
-	pvt=new serverprivate;
-	type("server");
-}
-
-server &server::operator=(server &s) {
-	if (this!=&s) {
-		filedescriptor::operator=(s);
-	}
-	return *this;
-}
-
 server::~server() {
 	delete pvt;
 }

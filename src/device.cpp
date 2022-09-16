@@ -25,18 +25,6 @@ device::device() : file() {
 	type("device");
 }
 
-device::device(device &d) : file(d) {
-	pvt=new deviceprivate;
-	type("device");
-}
-
-device &device::operator=(device &d) {
-	if (this!=&d) {
-		file::operator=(d);
-	}
-	return *this;
-}
-
 device::~device() {
 	delete pvt;
 }

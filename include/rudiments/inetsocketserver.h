@@ -23,14 +23,6 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		/** Creates an instance of the inetsocketserver class. */
 		inetsocketserver();
 
-		/** Creates an instance of the inetsocketserver class
-		 *  that is a copy of "i". */
-		inetsocketserver(inetsocketserver &i);
-
-		/** Makes this instance of the inetsocketserver class
-		 *  identical to "i". */
-		inetsocketserver	&operator=(inetsocketserver &i);
-
 		/** Deletes this instance of the inetsocketserver class. */
 		virtual		~inetsocketserver();
 

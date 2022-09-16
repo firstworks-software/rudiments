@@ -2,4 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		unixsocketserver(unixsocketserver &u) {};
+		unixsocketserver	&operator=(unixsocketserver &u) {
+			return *this;
+		}
+
 		unixsocketserverprivate	*pvt;

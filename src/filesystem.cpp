@@ -99,28 +99,6 @@ filesystem::filesystem() : object() {
 	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 }
 
-filesystem::filesystem(filesystem &f) : object(f) {
-	pvt=new filesystemprivate;
-	clone(f);
-}
-
-filesystem &filesystem::operator=(filesystem &f) {
-	if (this!=&f) {
-		clone(f);
-	}
-	return *this;
-}
-
-void filesystem::clone(filesystem &f) {
-	pvt->_fd=f.pvt->_fd;
-	pvt->_closeflag=f.pvt->_closeflag;
-	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		delete[] pvt->_volume;
-		pvt->_volume=charstring::duplicate(f.pvt->_volume);
-	#endif
-	pvt->_st=f.pvt->_st;
-}
-
 filesystem::~filesystem() {
 	close();
 	delete pvt;

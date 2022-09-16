@@ -32,26 +32,6 @@ unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
 	type("unixsocketclient");
 }
 
-unixsocketclient::unixsocketclient(unixsocketclient &u) :
-					socketclient(u), unixsocketutil(u) {
-	pvt=new unixsocketclientprivate;
-	type("unixsocketclient");
-	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-		pvt->_isc=u.pvt->_isc;
-	#endif
-}
-
-unixsocketclient &unixsocketclient::operator=(unixsocketclient &u) {
-	if (this!=&u) {
-		socketclient::operator=(u);
-		unixsocketutil::operator=(u);
-		#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-			pvt->_isc=u.pvt->_isc;
-		#endif
-	}
-	return *this;
-}
-
 unixsocketclient::~unixsocketclient() {
 	// filedescriptor's destructor calls close(), why the close() call here?
 	// Destructors don't always call overridden methods, but rather the

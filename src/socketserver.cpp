@@ -35,25 +35,6 @@ socketserver::socketserver() : server() {
 	winsock::initWinsock();
 }
 
-socketserver::socketserver(socketserver &s) : server(s) {
-	pvt=new socketserverprivate;
-	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-	pvt->_nonblockingmode=s.pvt->_nonblockingmode;
-	#endif
-	type("socketserver");
-	winsock::initWinsock();
-}
-
-socketserver &socketserver::operator=(socketserver &s) {
-	if (this!=&s) {
-		server::operator=(s);
-		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-		pvt->_nonblockingmode=true;
-		#endif
-	}
-	return *this;
-}
-
 socketserver::~socketserver() {
 	delete pvt;
 }

@@ -142,35 +142,6 @@ file::file() : filedescriptor() {
 	type("file");
 }
 
-file::file(file &f) : filedescriptor(f) {
-	pvt=new fileprivate;
-	fileClone(f);
-	type("file");
-}
-
-file &file::operator=(file &f) {
-	if (this!=&f) {
-		filedescriptor::operator=(f);
-		fileClone(f);
-	}
-	return *this;
-}
-
-void file::fileClone(file &f) {
-	pvt->_st=f.pvt->_st;
-	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
-		pvt->_filetype=f.pvt->_filetype;
-	#endif
-	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
-		pvt->_inode=f.pvt->_inode;
-	#endif
-	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
-		pvt->_name=charstring::duplicate(f.pvt->_name);
-		pvt->_blocksize=f.pvt->_blocksize;
-	#endif
-	pvt->_getcurrentpropertiesonopen=f.pvt->_getcurrentpropertiesonopen;
-}
-
 file::~file() {
 
 	// set NOTE in ~threadmutex()

@@ -36,25 +36,6 @@ unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
 	type("unixsocketserver");
 }
 
-unixsocketserver::unixsocketserver(unixsocketserver &u) :
-					socketserver(u), unixsocketutil(u) {
-	pvt=new unixsocketserverprivate;
-	pvt->_mask=u.pvt->_mask;
-	type("unixsocketserver");
-}
-
-unixsocketserver &unixsocketserver::operator=(unixsocketserver &u) {
-	if (this!=&u) {
-		socketserver::operator=(u);
-		unixsocketutil::operator=(u);
-		pvt->_mask=u.pvt->_mask;
-		#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-			pvt->_iss=u.pvt->_iss;
-		#endif
-	}
-	return *this;
-}
-
 unixsocketserver::~unixsocketserver() {
 	// filedescriptor's destructor calls close(), why the close() call here?
 	// Destructors don't always call overridden methods, but rather the

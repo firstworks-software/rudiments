@@ -25,6 +25,8 @@
 		const char	***allVals();
 
 	private:
+		httprequest(httprequest &h) {};
+		httprequest	&operator=(httprequest &h) { return *this; };
 
 		void	initCookies();
 		void	initParameters();

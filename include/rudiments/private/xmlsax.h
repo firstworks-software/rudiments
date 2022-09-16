@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-			xmlsax(xmlsax &x);
-			xmlsax	&operator=(xmlsax &x);
-
 	private:
+			xmlsax(xmlsax &x) {};
+			xmlsax	&operator=(xmlsax &x) { return *this; };
+
 			bool	parse();
 			bool	parseTag(char current, char *next);
 			bool	parseTagName(char current,

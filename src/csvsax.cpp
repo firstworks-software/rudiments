@@ -35,18 +35,6 @@ csvsax::csvsax() : sax() {
 	reset();
 }
 
-csvsax::csvsax(csvsax &c) : sax(c) {
-	// FIXME: implement this
-}
-
-csvsax &csvsax::operator=(csvsax &c) {
-	if (this!=&c) {
-		sax::operator=(c);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 csvsax::~csvsax() {
 	delete pvt;
 }

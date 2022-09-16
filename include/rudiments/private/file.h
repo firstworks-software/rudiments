@@ -6,6 +6,9 @@
 						mode_t perms, bool useperms);
 
 	private:
+		file(file &f) {};
+		file	&operator=(file &f) { return *this; };
+
 		static	bool	stat(const char *filename, void *st);
 
 		ssize_t	getContents(unsigned char **buffer,
@@ -25,11 +28,9 @@
 		bool	unlock(int16_t whence,
 					off64_t start, off64_t len);
 
-		void	fileClone(file &f);
-
-
-			bool	posixFadvise(off64_t offset, off64_t len,
+		bool	posixFadvise(off64_t offset, off64_t len,
 							int32_t advice);
+
 		static	int64_t	pathConf(const char *path, int32_t name);
 			int64_t	fpathConf(int32_t name);
 

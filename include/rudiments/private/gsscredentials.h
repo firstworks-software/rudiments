@@ -4,6 +4,9 @@
 		void	setPackageSpecificData(void *psd);
 
 	private:
+		gsscredentials(gsscredentials &g) {};
+		gsscredentials	&operator=(gsscredentials &g) { return *this; };
+
 		bool	acquire(const char *name,
 					size_t namelen,
 					const void *nametype);

@@ -22,18 +22,6 @@ serialport::serialport() : filedescriptor() {
 	type("serialport");
 }
 
-serialport::serialport(serialport &s) : filedescriptor(s) {
-	pvt=new serialportprivate;
-	type("serialport");
-}
-
-serialport &serialport::operator=(serialport &s) {
-	if (this!=&s) {
-		filedescriptor::operator=(s);
-	}
-	return *this;
-}
-
 serialport::~serialport() {
 	delete pvt;
 }

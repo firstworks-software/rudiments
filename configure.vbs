@@ -449,6 +449,7 @@ privateheaders4="singlylinkedlist.h "+_
 privateheaders5="dictionary.h "+_
 	"dictionaryincludes.h "+_
 	"dictionaryinlines.h "+_
+	"hash.h "+_
 	"hashincludes.h "+_
 	"encryption.h "+_
 	"encryptionincludes.h "+_
@@ -518,6 +519,7 @@ privateheaders7="staticarray.h "+_
 	"outputincludes.h "+_
 	"output.h "+_
 	"outputinlines.h "+_
+	"input.h "+_
 	"inputincludes.h "+_
 	"inputinlines.h "+_
 	"wastebasketincludes.h "+_

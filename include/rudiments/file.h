@@ -22,14 +22,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Creates an instance of the file class. */
 		file();
 
-		/** Creates an instance of the file class
-		 *  that is a copy of "f". */
-		file(file &f);
-
-		/** Makes this instance of the file class
-		 *  identical to "f". */
-		file	&operator=(file &f);
-
 		/** Deletes this instance of the file class. */
 		virtual ~file();
 

@@ -8,6 +8,7 @@
 
 class RUDIMENTS_DLLSPEC input : virtual public object {
 	public:
+		input();
 		virtual	~input();
 
 		virtual	ssize_t	read(unsigned char *buffer, size_t size)=0;
@@ -124,6 +125,8 @@ class RUDIMENTS_DLLSPEC input : virtual public object {
 		ssize_t	read(char **buffer,
 				const char *terminator, size_t maxbytes,
 				char escapechar, int32_t sec, int32_t usec);
+
+	#include <rudiments/private/input.h>
 };
 
 #include <rudiments/private/inputinlines.h>

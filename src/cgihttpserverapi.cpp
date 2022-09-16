@@ -27,15 +27,6 @@ cgihttpserverapi::cgihttpserverapi() : httpserverapi() {
 	pvt->_envvals=NULL;
 }
 
-cgihttpserverapi::cgihttpserverapi(cgihttpserverapi &c) {
-	// do nothing, method is private/disabled
-}
-
-cgihttpserverapi &cgihttpserverapi::operator=(cgihttpserverapi &c) {
-	// do nothing, method is private/disabled
-	return *this;
-}
-
 cgihttpserverapi::~cgihttpserverapi() {
 	delete pvt;
 }

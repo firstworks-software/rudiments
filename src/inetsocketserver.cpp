@@ -40,22 +40,6 @@ inetsocketserver::inetsocketserver() : socketserver(), inetsocketutil() {
 	type("inetsocketserver");
 }
 
-inetsocketserver::inetsocketserver(inetsocketserver &i) :
-					socketserver(i), inetsocketutil(i) {
-	pvt=new inetsocketserverprivate;
-	translateByteOrder();
-	type("inetsocketserver");
-}
-
-inetsocketserver &inetsocketserver::operator=(inetsocketserver &i) {
-	if (this!=&i) {
-		socketserver::operator=(i);
-		inetsocketutil::operator=(i);
-		translateByteOrder();
-	}
-	return *this;
-}
-
 inetsocketserver::~inetsocketserver() {
 	// filedescriptor's destructor calls close(), why the close() call here?
 	// Destructors don't always call overridden methods, but rather the

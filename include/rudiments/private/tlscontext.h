@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		tlscontext(tlscontext &t) {};
+		tlscontext	&operator=(tlscontext &t) { return *this; };
+	
 		void	initContext();
 		void	initSubContext();
 		void	freeContext();

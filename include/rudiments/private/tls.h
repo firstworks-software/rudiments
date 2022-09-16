@@ -4,5 +4,8 @@
 		static void	initTLS();
 
 	private:
+		tls(tls &t) {};
+		tls	&operator=(tls &t) { return *this; };
+		
 		static threadmutex	_tlsmutex;
 		static bool		_initialized;

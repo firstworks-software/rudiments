@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		device(device &d) {};
+		device	&operator=(device &d) { return *this; };
+
 		deviceprivate	*pvt;

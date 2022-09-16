@@ -9,10 +9,10 @@
 class encryptionprivate {
 	friend class encryption;
 	private:
-		unsigned char		*_key;
-		unsigned char		*_iv;
 		bytebuffer		_in;
 		bytebuffer		_out;
+		unsigned char		*_key;
+		unsigned char		*_iv;
 		bool			_dirty;
 		bool			_encrypted;
 		encryptionerror_t	_err;
@@ -20,11 +20,20 @@ class encryptionprivate {
 
 encryption::encryption() : object() {
 	pvt=new encryptionprivate;
+	init();
+}
+
+void encryption::encryption::init() {
 	pvt->_key=NULL;
 	pvt->_iv=NULL;
 	pvt->_dirty=true;
 	pvt->_encrypted=true;
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
+}
+
+void encryption::clone(encryption &e) {
+	setKey(e.getKey(),e.getKeySize());
+	setIv(e.getIv(),e.getIvSize());
 }
 
 encryption::~encryption() {
@@ -36,7 +45,7 @@ encryption::~encryption() {
 bool encryption::setKey(const unsigned char *key, size_t keysize) {
 	initKey();
 	if (keysize!=getKeySize()) {
-		// FIXME: set wrong key-size error
+		setError(ENCRYPTION_ERROR_INVALID_KEY_SIZE);
 		return false;
 	}
 	bytestring::copy(pvt->_key,key,keysize);
@@ -59,7 +68,7 @@ void encryption::initKey() {
 bool encryption::setIv(const unsigned char *iv, size_t ivsize) {
 	initIv();
 	if (ivsize!=getIvSize()) {
-		// FIXME: set wrong iv-size error
+		setError(ENCRYPTION_ERROR_INVALID_IV_SIZE);
 		return false;
 	}
 	bytestring::copy(pvt->_iv,iv,ivsize);
@@ -136,14 +145,6 @@ uint64_t encryption::getDecryptedDataSize() {
 	return pvt->_out.getSize();
 }
 
-bool encryption::clear() {
-	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
-	pvt->_in.clear();
-	pvt->_out.clear();
-	pvt->_dirty=true;
-	return true;
-}
-
 encryptionerror_t encryption::getError() {
 	return pvt->_err;
 }
@@ -166,4 +167,19 @@ void encryption::setEncrypted(bool encrypted) {
 
 bool encryption::getEncrypted() {
 	return pvt->_encrypted;
+}
+
+void encryption::clear() {
+	pvt->_in.clear();
+	pvt->_out.clear();
+	pvt->_dirty=true;
+	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
+}
+
+void encryption::reset() {
+	pvt->_in.clear();
+	pvt->_out.clear();
+	delete[] pvt->_key;
+	delete[] pvt->_iv;
+	init();
 }

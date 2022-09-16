@@ -43,25 +43,6 @@ socketclient::socketclient() : client() {
 	winsock::initWinsock();
 }
 
-socketclient::socketclient(socketclient &c) : client(c) {
-	pvt=new socketclientprivate;
-	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-	pvt->_nonblockingmode=c.pvt->_nonblockingmode;
-	#endif
-	type("socketclient");
-	winsock::initWinsock();
-}
-
-socketclient &socketclient::operator=(socketclient &c) {
-	if (this!=&c) {
-		client::operator=(c);
-		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-		pvt->_nonblockingmode=c.pvt->_nonblockingmode;
-		#endif
-	}
-	return *this;
-}
-
 socketclient::~socketclient() {
 	// filedescriptor's destructor calls close(), why the close() call here?
 	// Destructors don't always call overridden methods, but rather the

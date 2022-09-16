@@ -57,18 +57,6 @@ memorymap::memorymap() : object() {
 	#endif
 }
 
-memorymap::memorymap(memorymap &m) : object() {
-	// FIXME: implement this
-}
-
-memorymap &memorymap::operator=(memorymap &m) {
-	if (this!=&m) {
-		object::operator=(m);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 memorymap::~memorymap() {
 	detach();
 	delete pvt;

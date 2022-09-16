@@ -17,14 +17,6 @@ class RUDIMENTS_DLLSPEC serialport : public filedescriptor {
 		/** Creates an instance of the serialport class. */
 		serialport();
 
-		/** Creates an instance of the serialport class
-		 *  that is identical to "s". */
-		serialport(serialport &s);
-
-		/** Makes this instance of the serialport class
-		 *  identical to "s". */
-		serialport	&operator=(serialport &s);
-
 		/** Deletes this instance of the serialport class. */
 		virtual		~serialport();
 

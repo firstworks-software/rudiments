@@ -6,6 +6,8 @@
 		const char	*_acceptscript();
 		const char	*_disconnectscript();
 
-		void	clone(modemserver &m);
 	private:
+		modemserver(modemserver &m) {};
+		modemserver	&operator=(modemserver &m) { return *this; };
+
 		modemserverprivate	*pvt;

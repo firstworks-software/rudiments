@@ -13,14 +13,6 @@ class RUDIMENTS_DLLSPEC client : public filedescriptor {
 		/** Creates an instance of the client class. */
 		client();
 
-		/** Creates an instance of the client class
-		 *  that is a copy of "c". */
-		client(client &c);
-
-		/** Makes this instance of the client class
-		 *  identical to "c". */
-		client	&operator=(client &c);
-
 		/** Deletes this instance of the client class. */
 		virtual ~client();
 

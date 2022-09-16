@@ -7,7 +7,6 @@
 	protected:
 
 		void	filedescriptorInit();
-		void	clone(filedescriptor &f);
 
 		bool	setStreamWriteBufferSize(ssize_t size);
 		bool	setStorageWriteBufferSize(ssize_t size);
@@ -74,6 +73,9 @@
 		socketlayer	*socklr();
 
 	private:
+		filedescriptor(filedescriptor &f) {};
+		filedescriptor	&operator=(filedescriptor &f) { return *this; };
+
 		filedescriptorprivate	*pvt;
 
 	public:

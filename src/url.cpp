@@ -131,18 +131,6 @@ url::url() : file() {
 	winsock::initWinsock();
 }
 
-url::url(url &u) : file(u) {
-	// no good way to do this
-	pvt=new urlprivate;
-	type("url");
-	setIsStream(true);
-}
-
-url &url::operator=(url &u) {
-	// no good way to do this
-	return *this;
-}
-
 url::~url() {
 	// filedescriptor's destructor calls close(), why the close() call here?
 	// Destructors don't always call overridden methods, but rather the

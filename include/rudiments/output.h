@@ -8,6 +8,7 @@
 
 class RUDIMENTS_DLLSPEC output : virtual public object {
 	public:
+		output();
 		virtual ~output();
 
 		virtual	ssize_t	write(const unsigned char *string,

@@ -13,7 +13,9 @@
 					int32_t timeoutusec,
 					uint32_t retrywait,
 					uint32_t tries);
-		void	clone(client &c);
 
 	private:
+		client(client &c) {};
+		client	&operator=(client &c) { return *this; };
+
 		clientprivate	*pvt;

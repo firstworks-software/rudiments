@@ -32,19 +32,6 @@ filedestination::filedestination() : logdestination() {
 	pvt=new filedestinationprivate;
 }
 
-filedestination::filedestination(filedestination &f) :
-						logdestination(f) {
-	pvt=new filedestinationprivate;
-	pvt->_logfile=f.pvt->_logfile;
-}
-
-filedestination &filedestination::operator=(filedestination &f) {
-	if (this!=&f) {
-		pvt->_logfile=f.pvt->_logfile;
-	}
-	return *this;
-}
-
 filedestination::~filedestination() {
 	close();
 	delete pvt;
@@ -110,18 +97,6 @@ class syslogdestinationprivate {
 
 syslogdestination::syslogdestination() : logdestination() {
 	pvt=new syslogdestinationprivate;
-}
-
-syslogdestination::syslogdestination(syslogdestination &s) :
-						logdestination(s) {
-	pvt=new syslogdestinationprivate;
-}
-
-syslogdestination &syslogdestination::operator=(syslogdestination &s) {
-	if (this!=&s) {
-		pvt->_priority=s.pvt->_priority;
-	}
-	return *this;
 }
 
 syslogdestination::~syslogdestination() {

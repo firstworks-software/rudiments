@@ -5,5 +5,10 @@
 		termios	*getTermios();
 
 	private:
+		serialportprofile(serialportprofile &s) {};
+		serialportprofile	&operator=(serialportprofile &s) {
+			return *this;
+		}
+
 		baudrate_t	translateBaudString(const char *baud);
 		serialportprofileprivate	*pvt;

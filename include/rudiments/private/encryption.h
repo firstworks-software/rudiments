@@ -13,6 +13,11 @@
 		bool		getEncrypted();
 
 	private:
+		encryption(encryption &e) {};
+		encryption	&operator=(encryption &e) { return *this; };
+
+		void	init();
+		void	clone(encryption &e);
 		void	initKey();
 		void	initIv();
 

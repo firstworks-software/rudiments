@@ -292,23 +292,6 @@ filedescriptor::filedescriptor(int32_t fd) : input(), output() {
 	setFileDescriptor(fd);
 }
 
-filedescriptor::filedescriptor(filedescriptor &f) : input(f), output(f) {
-	pvt=new filedescriptorprivate;
-	clone(f);
-}
-
-filedescriptor &filedescriptor::operator=(filedescriptor &f) {
-	if (this!=&f) {
-		if (pvt->_writebuffermap) {
-			delete pvt->_writebuffermap;
-		} else {
-			delete[] pvt->_writebufferunaligned;
-		}
-		clone(f);
-	}
-	return *this;
-}
-
 void filedescriptor::filedescriptorInit() {
 	setFileDescriptor(-1);
 	pvt->_retryinterruptedreads=false;
@@ -342,45 +325,6 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
 	pvt->_readbufferend=NULL;
-}
-
-void filedescriptor::clone(filedescriptor &f) {
-	setFileDescriptor(f.pvt->_fd);
-	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
-	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
-	pvt->_retryinterruptedwaits=f.pvt->_retryinterruptedwaits;
-	pvt->_retryinterruptedfcntl=f.pvt->_retryinterruptedfcntl;
-	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
-	pvt->_allowshortreads=f.pvt->_allowshortreads;
-	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
-	pvt->_translatebyteorder=f.pvt->_translatebyteorder;
-	pvt->_socklr=f.pvt->_socklr;
-	pvt->_type="filedescriptor";
-	pvt->_lstnr=NULL;
-	pvt->_isstream=f.pvt->_isstream;
-	pvt->_offset=f.pvt->_offset;
-	pvt->_writeblockoffset=f.pvt->_writeblockoffset;
-	pvt->_writeblocksize=f.pvt->_writeblocksize;
-	pvt->_readPtr=&filedescriptor::unBufferedRead;
-	pvt->_writePtr=&filedescriptor::unBufferedWrite;
-	pvt->_writebuffermap=NULL;
-	pvt->_writebufferunaligned=NULL;
-	pvt->_writebuffer=NULL;
-	pvt->_writebufferhead=NULL;
-	pvt->_writebuffertail=NULL;
-	pvt->_writebufferend=NULL;
-	pvt->_writebufferreadavail=0;
-	pvt->_writebufferwriteavail=0;
-	pvt->_writebufferdirty=false;
-	pvt->_writebuffermmapenabled=f.pvt->_writebuffermmapenabled;
-	pvt->_readbuffer=NULL;
-	pvt->_readbufferhead=NULL;
-	pvt->_readbuffertail=NULL;
-	pvt->_readbufferend=NULL;
-	setWriteBufferSize(f.pvt->_writeblocksize);
-	if (pvt->_isstream) {
-		setReadBufferSize(f.pvt->_readbufferend-f.pvt->_readbuffer);
-	}
 }
 
 filedescriptor::~filedescriptor() {

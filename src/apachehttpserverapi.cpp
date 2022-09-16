@@ -82,15 +82,6 @@ apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 	#endif
 }
 
-apachehttpserverapi::apachehttpserverapi(apachehttpserverapi &a) {
-	// do nothing, method is private/disabled
-}
-
-apachehttpserverapi &apachehttpserverapi::operator=(apachehttpserverapi &a) {
-	// do nothing, method is private/disabled
-	return *this;
-}
-
 apachehttpserverapi::~apachehttpserverapi() {
 	#ifdef APACHE_2
 		if (pvt->_brigade) {

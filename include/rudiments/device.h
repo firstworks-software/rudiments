@@ -19,14 +19,6 @@ class RUDIMENTS_DLLSPEC device : public file {
 		/** Creates an instance of the device class. */
 		device();
 
-		/** Creates an instance of the device class
-		 *  that is a copy of "d". */
-		device(device &d);
-
-		/** Makes this instance of the device class
-		 *  identical to "d". */
-		device	&operator=(device &d);
-
 		/** Deletes this instance of the device class. */
 		virtual	~device();
 

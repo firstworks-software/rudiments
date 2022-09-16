@@ -3,6 +3,9 @@
 
 #include <rudiments/output.h>
 
+output::output() {
+}
+
 output::~output() {
 }
 
