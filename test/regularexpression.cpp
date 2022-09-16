@@ -171,4 +171,6 @@ int main(int argc, const char **argv) {
 	test("match start",!re.getSubstringStart(0));
 	test("match end",!re.getSubstringEnd(0));
         stdoutput.printf("\n");
+
+	process::exit(0);
 }

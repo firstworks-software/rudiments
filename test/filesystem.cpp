@@ -222,4 +222,6 @@ int main(int argc, const char **argv) {
 				!fs.getFilesystemSpecificString());
 		stdoutput.printf("\n");
 	}
+
+	process::exit(0);
 }

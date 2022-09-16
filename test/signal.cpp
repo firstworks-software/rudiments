@@ -129,6 +129,8 @@ int main(int argc, const char **argv) {
 
 		delete[] osname;
 
+		process::exit(0);
+
 	} else {
 
 		// get the parent pid from the command line
@@ -154,4 +156,6 @@ int main(int argc, const char **argv) {
 		process::sendSignal(pid,SIGFPE);
 		#endif
 	}
+
+	process::exit(0);
 }

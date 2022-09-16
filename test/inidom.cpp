@@ -160,4 +160,6 @@ int main() {
 	}
 
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

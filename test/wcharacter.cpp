@@ -311,4 +311,6 @@ int main(int argc, const char **argv) {
 		test("\tduplicate",
 			wcharacter::duplicate((char)c)==(wchar_t)c);
 	}
+
+	process::exit(0);
 }

@@ -149,4 +149,6 @@ int main(int argc, const char **argv) {
 		// clean up
 		semout.close();
 	}
+
+	process::exit(0);
 }

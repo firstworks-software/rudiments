@@ -304,4 +304,6 @@ int main(int argc, const char **argv) {
 		test("\ttoAscii",
 			character::toAscii(c)==toascii[c]);
 	}
+
+	process::exit(0);
 }

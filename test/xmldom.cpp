@@ -322,4 +322,6 @@ int main(int argc, const char **argv) {
 
 	file::remove("normal.xml");
 	delete[] normaldotxml;
+
+	process::exit(0);
 }

@@ -142,4 +142,6 @@ int main(int argc, const char **argv) {
 			bytestring::findLast(data,10,"121",3),
 			"12120000",8));
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

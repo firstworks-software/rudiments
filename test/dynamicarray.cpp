@@ -366,4 +366,6 @@ int main(int argc, const char **argv) {
 		}
 	}
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

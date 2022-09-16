@@ -74,4 +74,6 @@ int main(int argc, const char **argv) {
         	test("read",!charstring::compare((char *)shm.getPointer(),str));
         	stdoutput.printf("\n");
 	}
+
+	process::exit(0);
 }

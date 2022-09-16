@@ -66,4 +66,6 @@ int main(int argc, const char **argv) {
 	test("address length",he.getAddressLength()==-1);
 	test("address list",!he.getAddressList());
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

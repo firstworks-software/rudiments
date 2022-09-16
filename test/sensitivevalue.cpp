@@ -200,4 +200,6 @@ int main(int argc, const char **argv) {
 			!bytestring::compare(textval,svstring,textvalsize));
 	delete[] textval;
 	stdoutput.printf("\n\n");
+
+	process::exit(0);
 }

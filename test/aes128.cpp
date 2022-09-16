@@ -104,4 +104,6 @@ int main(int argc, const char **argv) {
 			}
 		}
 	}
+
+	process::exit(0);
 }

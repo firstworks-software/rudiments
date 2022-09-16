@@ -121,4 +121,6 @@ int main(int argc, char **argv) {
 		}
 	}
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

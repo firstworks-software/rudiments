@@ -49,4 +49,6 @@ int main(int argc, const char **argv) {
 	test("protcol",!se.getProtocol());
 	test("alias list",!se.getAliasList());
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

@@ -185,4 +185,6 @@ int main(int argc, const char **argv) {
 	// chroot?
 
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

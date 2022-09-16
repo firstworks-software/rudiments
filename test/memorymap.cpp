@@ -73,4 +73,6 @@ int main(int argc, const char **argv) {
 
 	// clean up
 	file::remove("memorymap.txt");
+
+	process::exit(0);
 }

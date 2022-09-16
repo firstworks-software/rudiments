@@ -42,4 +42,6 @@ int main(int argc, const char **argv) {
 	test("alias list",!pe.getAliasList());
 	test("number",pe.getNumber()==-1);
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

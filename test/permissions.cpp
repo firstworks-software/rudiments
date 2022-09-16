@@ -61,4 +61,6 @@ int main(int argc, const char **argv) {
         fd.close();
         file::remove(permsfile);
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

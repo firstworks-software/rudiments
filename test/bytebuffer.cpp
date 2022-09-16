@@ -328,4 +328,6 @@ int main(int argc, const char **argv) {
 	bb.truncate();
 	test("truncate(), getSize",!bb.getSize());
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

@@ -1237,4 +1237,6 @@ int main(int argc, const char **argv) {
 	#endif
 	stdoutput.printBits(v8s,sizeof(v8s));
 	stdoutput.printf("\n");*/
+
+	process::exit(0);
 }

@@ -29,4 +29,6 @@ int main(int argc, const char **argv) {
 	test("interrupted",!snooze::macrosnooze(5,&timeleft));
 	test("timeleft",timeleft<5);
 #endif
+
+	process::exit(0);
 }

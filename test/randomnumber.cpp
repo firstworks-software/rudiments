@@ -74,4 +74,6 @@ int main(int argc, const char **argv) {
 					numbers,numbercount,bottom,top);
 		stdoutput.printf("\n");
 	}
+
+	process::exit(0);
 }

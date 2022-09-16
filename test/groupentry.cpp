@@ -92,4 +92,6 @@ int main(int argc, const char **argv) {
 	test("members",!grent.getMembers());
 	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

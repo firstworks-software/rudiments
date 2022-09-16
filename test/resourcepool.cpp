@@ -112,4 +112,6 @@ int main(int argc, char **argv) {
 	test("available on-demand after clear",
 			!r.getAvailableOnDemandResourceCount());
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

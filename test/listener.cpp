@@ -175,4 +175,6 @@ int main(int argc, const char **argv) {
 
 		unixclient();
 	}
+
+	process::exit(0);
 }

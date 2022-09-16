@@ -144,4 +144,6 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	delete[] str;
+
+	process::exit(0);
 }

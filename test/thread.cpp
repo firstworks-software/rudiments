@@ -112,4 +112,6 @@ int main(int argc, const char **argv) {
 						testcount.getString()));
 
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

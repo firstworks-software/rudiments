@@ -184,4 +184,6 @@ int main(int argc, const char **argv) {
 
 		handoff2();
 	}
+
+	process::exit(0);
 }

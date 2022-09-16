@@ -56,4 +56,6 @@ int main() {
 	file::remove("test.prop");
 
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

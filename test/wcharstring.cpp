@@ -1002,4 +1002,6 @@ int main(int argc, const char **argv) {
 	test("humanReadable -3",!wcharstring::compare(sval,L"-3"));
 	delete[] sval;
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

@@ -743,7 +743,8 @@ int main(int argc, char **argv) {
 	}
 	test("insertAfter[]/values",success);
 
-
 	stdoutput.printf("\n");
+
+	process::exit(0);
 
 }

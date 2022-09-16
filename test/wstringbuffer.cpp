@@ -155,4 +155,6 @@ int main(int argc, const char **argv) {
 		delete strb;
 	}
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

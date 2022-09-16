@@ -36,4 +36,6 @@ int main(int argc, const char **argv) {
 	};
 	test("clearError()/getErrorString()",
 		charstring::inSet(error::getErrorString(),success));
+
+	process::exit(0);
 }

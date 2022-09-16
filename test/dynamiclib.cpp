@@ -98,4 +98,6 @@ int main(int argc, const char **argv) {
 	delete[] f;
 
 	stdoutput.printf("\n");
+
+	process::exit(0);
 }

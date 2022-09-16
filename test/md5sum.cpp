@@ -28,4 +28,6 @@ int main(int argc, const char **argv) {
 	delete[] str;
 
 	delete[] contents;
+
+	process::exit(0);
 }

@@ -5,6 +5,7 @@
 #include <rudiments/singlylinkedlist.h>
 #include <rudiments/randomnumber.h>
 #include <rudiments/datetime.h>
+#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 //const int32_t	listsize=1024*72;
@@ -117,4 +118,6 @@ int main(int argc, char **argv) {
 					finish.getEpoch()-start.getEpoch());
 		}
 	}
+
+	process::exit(0);
 }
