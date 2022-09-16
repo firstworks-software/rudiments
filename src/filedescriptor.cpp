@@ -283,16 +283,16 @@ class filedescriptorprivate {
 
 filedescriptor::filedescriptor() : input(), output() {
 	pvt=new filedescriptorprivate;
-	filedescriptorInit();
+	init();
 }
 
 filedescriptor::filedescriptor(int32_t fd) : input(), output() {
 	pvt=new filedescriptorprivate;
-	filedescriptorInit();
+	init();
 	setFileDescriptor(fd);
 }
 
-void filedescriptor::filedescriptorInit() {
+void filedescriptor::init() {
 	setFileDescriptor(-1);
 	pvt->_retryinterruptedreads=false;
 	pvt->_retryinterruptedwrites=false;
