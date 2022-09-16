@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		commandline(commandline &c) {};
+		commandline	&operator=(commandline &c) { return *this; }
+
 		commandlineprivate	*pvt;

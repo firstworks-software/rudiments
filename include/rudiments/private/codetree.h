@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		codetree(codetree &c) {};
+		codetree	&operator=(codetree &c) { return *this; };
+
 		char	getSymbolType(domnode *nt);
 		bool	isTag(domnode *nt);
 		bool	parseChild(domnode *grammarnode,

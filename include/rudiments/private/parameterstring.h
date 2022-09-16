@@ -2,6 +2,11 @@
 // See the COPYING file for more information
 
 	private:
+		parameterstring(parameterstring &p) {};
+		parameterstring	&operator=(parameterstring &p) {
+			return *this;
+		};
+
 		int32_t		countPairs(const char *paramstring);
 		const char	*parseName(const char *data, char **outbuffer);
 		const char	*parseValue(const char *data, char **outbuffer);

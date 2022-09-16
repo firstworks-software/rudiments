@@ -99,27 +99,5 @@ int main(int argc, const char **argv) {
 		!charstring::compare(d.getValue((char *)"s"),""));
 	stdoutput.printf("\n");
 
-	// copy/equals
-	stdoutput.printf("copy...\n");
-	commandline	cmdline2(cmdline);
-	test("copy, getValue(), -one",
-		!charstring::compare(cmdline2.getValue("one"),"1"));
-	test("copy, getValue(), -three",
-		!charstring::compare(cmdline2.getValue("three"),"3"));
-	stdoutput.printf("\n");
-
-	stdoutput.printf("equals...\n");
-	commandline	cmdline3;
-	test("before equals, getValue(), -one",
-		!charstring::compare(cmdline3.getValue("one"),""));
-	test("before equals, getValue(), -three",
-		!charstring::compare(cmdline3.getValue("three"),""));
-	cmdline3=cmdline;
-	test("after equals, getValue(), -one",
-		!charstring::compare(cmdline3.getValue("one"),"1"));
-	test("after equals, getValue(), -three",
-		!charstring::compare(cmdline3.getValue("three"),"3"));
-	stdoutput.printf("\n");
-
 	process::exit(0);
 }

@@ -19,14 +19,6 @@ class RUDIMENTS_DLLSPEC parameterstring : public object {
 		/** Creates an instance of the parameterstring class. */
 		parameterstring();
 
-		/** Creates an instance of the parameterstring class that
-		 *  is a copy of "p". */
-		parameterstring(parameterstring &p);
-
-		/** Makes this instance of the parameterstring class
-		 *  identical to "p". */
-		parameterstring	&operator=(parameterstring &p);
-
 		/** Deletes this instance of the parameterstring class. */
 		~parameterstring();
 

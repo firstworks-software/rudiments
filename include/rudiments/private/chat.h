@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		chat(chat &c) {};
+		chat	&operator=(chat &c) { return *this; };
+
 		void	appendAbortString(const char *string);
 		void	clearAbortStrings();
 		int32_t	send(const char *string,

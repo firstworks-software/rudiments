@@ -18,19 +18,6 @@ commandline::commandline() : object() {
 	initialize(0,NULL);
 }
 
-commandline::commandline(commandline &c) : object() {
-	pvt=new commandlineprivate;
-	initialize(c.pvt->_argc,(const char **)c.pvt->_argv);
-}
-
-commandline &commandline::operator=(commandline &c) {
-	if (this!=&c) {
-		object::operator=(c);
-		initialize(c.pvt->_argc,(const char **)c.pvt->_argv);
-	}
-	return *this;
-}
-
 commandline::commandline(int32_t argc, const char **argv) : object() {
 	pvt=new commandlineprivate;
 	initialize(argc,argv);

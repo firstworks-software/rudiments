@@ -41,17 +41,6 @@ class RUDIMENTS_DLLSPEC memorypool : public object {
 				size_t incrementsize,
 				size_t resizeinterval);
 
-		/** Creates an instace of the memorypool class and sets its
-		 *  initial size, increment size, and resize interval to the
-		 *  initial size, increment size, and resize interval used by
-		 *  "m". */
-		memorypool(memorypool &m);
-
-		/** Clears this instance and sets its initial size, increment
-		 *  size, and resize interval to the initial size, increment
-		 *  size, and resize interval used by "m". */
-		memorypool	&operator=(memorypool &m);
-
 		/** Deletes this instance of the memorypool class. */
 		~memorypool();
 

@@ -23,33 +23,6 @@ cronschedule::cronschedule() : object() {
 	pvt->_dayparts.setManageValues(true);
 }
 
-cronschedule::cronschedule(cronschedule &c) : object() {
-	pvt=new cronscheduleprivate;
-	pvt->_years.setManageValues(true);
-	pvt->_months.setManageValues(true);
-	pvt->_daysofmonth.setManageValues(true);
-	pvt->_daysofweek.setManageValues(true);
-	pvt->_dayparts.setManageValues(true);
-	clone(c);
-}
-
-cronschedule &cronschedule::operator=(cronschedule &c) {
-	if (this!=&c) {
-		object::operator=(c);
-		clear();
-		clone(c);
-	}
-	return *this;
-}
-
-void cronschedule::clone(cronschedule &c) {
-	pvt->_years=c.pvt->_years;
-	pvt->_months=c.pvt->_months;
-	pvt->_daysofmonth=c.pvt->_daysofmonth;
-	pvt->_daysofweek=c.pvt->_daysofweek;
-	pvt->_dayparts=c.pvt->_dayparts;
-}
-
 cronschedule::~cronschedule() {
 	delete pvt;
 }

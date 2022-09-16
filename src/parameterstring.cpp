@@ -17,23 +17,6 @@ parameterstring::parameterstring() : object() {
 	pvt->_delim=';';
 }
 
-parameterstring::parameterstring(parameterstring &p) : object() {
-	pvt=new parameterstringprivate;
-	pvt->_nvp=p.pvt->_nvp;
-	pvt->_nvp.setManageArrayKeys(true);
-	pvt->_nvp.setManageArrayValues(true);
-	pvt->_delim=p.pvt->_delim;
-}
-
-parameterstring &parameterstring::operator=(parameterstring &p) {
-	if (this!=&p) {
-		pvt->_nvp.clear();
-		pvt->_nvp=p.pvt->_nvp;
-		pvt->_delim=p.pvt->_delim;
-	}
-	return *this;
-}
-
 parameterstring::~parameterstring() {
 	pvt->_nvp.clear();
 	delete pvt;

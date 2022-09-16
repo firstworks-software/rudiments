@@ -2,7 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
-		void	clone(cronschedule &c);
+		cronschedule(cronschedule &c) {};
+		cronschedule	&operator=(cronschedule &c) { return *this; };
+
 		void	init(const char *years,
 				const char *months,
 				const char *daysofmonth,

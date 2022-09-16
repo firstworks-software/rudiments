@@ -55,18 +55,6 @@ dynamiclib::dynamiclib() : object() {
 	#endif
 }
 
-dynamiclib::dynamiclib(dynamiclib &d) : object() {
-	// FIXME: implement this
-}
-
-dynamiclib &dynamiclib::operator=(dynamiclib &d) {
-	if (this!=&d) {
-		object::operator=(d);
-		// FIXME: implement this
-	}
-	return *this;
-}
-
 dynamiclib::~dynamiclib() {
 
 	// see NOTE in ~threadmutex()

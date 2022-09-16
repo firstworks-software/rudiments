@@ -2,9 +2,11 @@
 // See the COPYING file for more information
 
 	protected:
+		resourcepool(resourcepool &r) {};
+		resourcepool	&operator=(resourcepool &r) { return *this; };
+
 		virtual valuetype	*createResource();
 
-		void	clone(resourcepool<valuetype> *r);
 		void	clearDelegate();
 
 		uint64_t	min;

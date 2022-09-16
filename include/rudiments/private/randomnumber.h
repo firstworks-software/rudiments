@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		randomnumber(randomnumber &r) {};
+		randomnumber	&operator=(randomnumber &r) { return *this; };
+
 		randomnumberprivate	*pvt;

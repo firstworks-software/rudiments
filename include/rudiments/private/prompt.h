@@ -2,4 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		prompt(prompt &p) {};
+		prompt	&operator=(prompt &p) { return *this; };
+
 		promptprivate	*pvt;

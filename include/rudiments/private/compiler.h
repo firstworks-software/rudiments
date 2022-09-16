@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		compiler(compiler &c) {};
+		compiler	&operator=(compiler &c) { return *this; };
+
 		bool	appendModule(
 				const char *filename,
 				const char *classname,

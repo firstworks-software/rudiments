@@ -2,6 +2,8 @@
 // See the COPYING file for more information
 
 	private:
+		templateengine(templateengine &t) {};
+		templateengine	&operator=(templateengine &t) { return *this; };
 
 		bool	parse(bool justvariables,
 					output *out,

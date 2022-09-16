@@ -81,20 +81,6 @@ memorypool::memorypool(size_t initialsize,
 	init(initialsize,incrementsize,resizeinterval);
 }
 
-memorypool::memorypool(memorypool &m) : object() {
-	init(m.pvt->_initialsize,m.pvt->_incrementsize,m.pvt->_resizeinterval);
-}
-
-memorypool &memorypool::operator=(memorypool &m) {
-	if (this!=&m) {
-		object::operator=(m);
-		clear(true,m.pvt->_initialsize,
-				m.pvt->_incrementsize,
-				m.pvt->_resizeinterval);
-	}
-	return *this;
-}
-
 memorypool::~memorypool() {
 	pvt->_bufferlist.setManageValues(true);
 	delete pvt;

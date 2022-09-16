@@ -14,36 +14,6 @@ resourcepool<valuetype>::resourcepool() : min(0), max(10),
 
 template <class valuetype>
 inline
-resourcepool<valuetype>::resourcepool(resourcepool<valuetype> &r) {
-	clone(&r);
-}
-
-template <class valuetype>
-inline
-resourcepool<valuetype> &resourcepool<valuetype>::operator=(
-					resourcepool<valuetype> &r) {
-	if (this!=&r) {
-		clear();
-		clone(&r);
-	}
-	return *this;
-}
-
-template <class valuetype>
-inline
-void resourcepool<valuetype>::clone(resourcepool<valuetype> *r) {
-	initialized=r->initialized;
-	min=r->min;
-	max=r->max;
-	mtx=r->mtx;
-	growby=r->growby;
-	if (r->initialized) {
-		initialize();
-	}
-}
-
-template <class valuetype>
-inline
 resourcepool<valuetype>::~resourcepool() {
 	clear();
 }

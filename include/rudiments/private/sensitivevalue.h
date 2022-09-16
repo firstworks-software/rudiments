@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		sensitivevalue(sensitivevalue &s) {};
+		sensitivevalue	&operator=(sensitivevalue &s) { return *this; };
+
 		bool	getValueFromFile(const char *filename,
 						bool hexdecode,
 						bool chomp);

@@ -2,6 +2,11 @@
 // See the COPYING file for more information.
 
 	private:
+		regularexpression(regularexpression &r) {};
+		regularexpression	&operator=(regularexpression &r) {
+			return *this;
+		};
+
 		void	init();
 		void	clear();
 
