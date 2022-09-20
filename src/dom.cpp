@@ -205,9 +205,6 @@ ssize_t dom::writeXml(output *out, bool indent) {
 ssize_t dom::writeNode(domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) {
 
-	// NOTE: this method is written a little strangely
-	// to work correctly with cursordomnodes
-
 	ssize_t	retval=0;
 
 	domnode	*current;

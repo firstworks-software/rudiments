@@ -362,16 +362,9 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			}
 			pvt->_inarray.append(false);
 			bool	first=true;
-			// NOTE: this loop uses getFirstChild/getNextSibling
-			// and ignores non-tags rather than just calling
-			// getFirstTagChild/getNextTagSibling to work correctly
-			// with cursordomnodes
-			for (domnode *child=dn->getFirstChild();
+			for (domnode *child=dn->getFirstTagChild();
 					!child->isNullNode();
-					child=child->getNextSibling()) {
-				if (child->getType()!=TAG_DOMNODETYPE) {
-					continue;
-				}
+					child=child->getNextTagSibling()) {
 				if (first) {
 					first=false;
 				} else {
@@ -520,16 +513,9 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			}
 			pvt->_inarray.append(true);
 			bool	first=true;
-			// NOTE: this loop uses getFirstChild/getNextSibling
-			// and ignores non-tags rather than just calling
-			// getFirstTagChild/getNextTagSibling to work correctly
-			// with cursordomnodes
-			for (domnode *child=dn->getFirstChild();
+			for (domnode *child=dn->getFirstTagChild();
 					!child->isNullNode();
-					child=child->getNextSibling()) {
-				if (child->getType()!=TAG_DOMNODETYPE) {
-					continue;
-				}
+					child=child->getNextTagSibling()) {
 				if (first) {
 					first=false;
 				} else {
