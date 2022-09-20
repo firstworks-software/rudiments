@@ -7,7 +7,8 @@
 
 		bool	splitTimePart(
 				linkedlist< cronscheduleperiod * > *periods,
-				const char *timepartlist);
+				const char *timepartlist,
+				int64_t min, int64_t max);
 		bool	splitDayParts(const char *daypartlist);
 		bool	inPeriods(linkedlist< cronscheduleperiod * > *periods,
 						int32_t timepart);

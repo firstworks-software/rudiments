@@ -7,6 +7,8 @@
 class cronscheduleprivate {
 	friend class cronschedule;
 	private:
+		bool	_validschedule;
+
 		linkedlist< cronscheduleperiod * >	_years;
 		linkedlist< cronscheduleperiod * >	_months;
 		linkedlist< cronscheduleperiod * >	_daysofmonth;
@@ -16,6 +18,7 @@ class cronscheduleprivate {
 
 cronschedule::cronschedule() : object() {
 	pvt=new cronscheduleprivate;
+	pvt->_validschedule=false;
 	pvt->_years.setManageValues(true);
 	pvt->_months.setManageValues(true);
 	pvt->_daysofmonth.setManageValues(true);
@@ -29,17 +32,15 @@ cronschedule::~cronschedule() {
 
 bool cronschedule::setSchedule(const char *when) {
 
-	bool	success=true;
-
 	char		**whenparts;
 	uint64_t	whenpartscount;
 	charstring::split(when," ",true,&whenparts,&whenpartscount);
 
 	if (whenpartscount==5) {
-		success=setSchedule(whenparts[0],whenparts[1],
+		setSchedule(whenparts[0],whenparts[1],
 				whenparts[2],whenparts[3],whenparts[4]);
 	} else {
-		success=false;
+		pvt->_validschedule=false;
 	}
 
 	for (uint64_t i=0; i<whenpartscount; i++) {
@@ -47,7 +48,7 @@ bool cronschedule::setSchedule(const char *when) {
 	}
 	delete[] whenparts;
 
-	return success;
+	return pvt->_validschedule;
 }
 
 bool cronschedule::setSchedule(const char *years,
@@ -56,14 +57,20 @@ bool cronschedule::setSchedule(const char *years,
 					const char *daysofweek,
 					const char *dayparts) {
 	clear();
-	return splitTimePart(&(pvt->_years),years) &&
-		splitTimePart(&(pvt->_months),months) &&
-		splitTimePart(&(pvt->_daysofmonth),daysofmonth) &&
-		splitTimePart(&(pvt->_daysofweek),daysofweek) &&
-		splitDayParts(dayparts);
+	if (splitTimePart(&(pvt->_years),years,0,65535) &&
+		splitTimePart(&(pvt->_months),months,1,12) &&
+		splitTimePart(&(pvt->_daysofmonth),daysofmonth,1,31) &&
+		splitTimePart(&(pvt->_daysofweek),daysofweek,1,7) &&
+		splitDayParts(dayparts)) {
+		pvt->_validschedule=true;
+	} else {
+		pvt->_validschedule=false;
+	}
+	return pvt->_validschedule;
 }
 
 void cronschedule::clear() {
+	pvt->_validschedule=false;
 	pvt->_years.clear();
 	pvt->_months.clear();
 	pvt->_daysofmonth.clear();
@@ -72,27 +79,14 @@ void cronschedule::clear() {
 }
 
 bool cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
-						const char *timepartlist) {
+						const char *timepartlist,
+						int64_t	min, int64_t max) {
 
 	// handle *'s
 	if (!charstring::compare(timepartlist,"*")) {
 		cronscheduleperiod	*p=new cronscheduleperiod;
-		if (periods==&pvt->_years) {
-			p->start=0;
-			p->end=65535;
-		}
-		if (periods==&pvt->_months) {
-			p->start=1;
-			p->end=12;
-		}
-		if (periods==&pvt->_daysofmonth) {
-			p->start=1;
-			p->end=31;
-		}
-		if (periods==&pvt->_daysofweek) {
-			p->start=1;
-			p->end=7;
-		}
+		p->start=min;
+		p->end=max;
 		periods->append(p);
 		return true;
 	}
@@ -112,17 +106,28 @@ bool cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 					&timepartparts,
 					&timepartpartscount);
 
-		// FIXME: sanity check range, possibly return false;
-
-		// create a new period, set the start/end
-		// and add it to the list of periods
+		// create a new period
 		cronscheduleperiod	*p=new cronscheduleperiod;
-		p->start=charstring::toInteger(timepartparts[0]);
-		if (timepartpartscount>1) {
-			p->end=charstring::toInteger(timepartparts[1]);
-		} else {
-			p->end=p->start;
+
+		// set start
+		int64_t	start=charstring::toInteger(timepartparts[0]);
+		if (start<min) {
+			return false;
 		}
+		p->start=start;
+
+		// set end
+		if (timepartpartscount>1) {
+			int64_t	end=charstring::toInteger(timepartparts[1]);
+			if (end>max) {
+				return false;
+			}
+			p->end=end;
+		} else {
+			p->end=start;
+		}
+
+		// add period to the list of periods
 		periods->append(p);
 
 		// clean up
@@ -212,7 +217,8 @@ bool cronschedule::splitDayParts(const char *daypartlist) {
 }
 
 bool cronschedule::inSchedule(datetime *dt) {
-	return (inPeriods(&pvt->_years,dt->getYear()) &&
+	return (pvt->_validschedule &&
+		inPeriods(&pvt->_years,dt->getYear()) &&
 		inPeriods(&pvt->_months,dt->getMonth()) &&
 		inPeriods(&pvt->_daysofmonth,dt->getDayOfMonth()) &&
 		inPeriods(&pvt->_daysofweek,dt->getDayOfWeek()) &&
