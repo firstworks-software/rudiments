@@ -207,144 +207,175 @@ ssize_t dom::writeNode(domnode *dn, output *out,
 
 	ssize_t	retval=0;
 
-	domnode	*current;
-	if (dn->getType()==ROOT_DOMNODETYPE) {
-		current=dn->getFirstChild();
-		while (!current->isNullNode()) {
-			if (!incOrErr(&retval,dom::writeNode(current,out,
+	domnode		*current;
+	domnodetype	currenttype=dn->getType();
+	const char	*currentns;
+	const char	*currentname;
+	const char	*currentvalue;
+
+	switch (currenttype) {
+		case ROOT_DOMNODETYPE:
+			current=dn->getFirstChild();
+			while (!current->isNullNode()) {
+				if (!incOrErr(&retval,
+						dom::writeNode(current,out,
 							indent,indentlevel))) {
-				return retval;
+					return retval;
+				}
+				current=current->getNextSibling();
 			}
-			current=current->getNextSibling();
-		}
-	} else if (dn->getType()==TAG_DOMNODETYPE) {
-		if (indent && indentlevel) {
-			if (!incOrErr(&retval,writeIndent(out,*indentlevel))) {
-				return retval;
-			}
-		}
-		if (!incOrErr(&retval,out->write('<'),1)) {
-			return retval;
-		}
-		if (dn->getNamespace()) {
-			if (!incOrErr(&retval,
-					safeWrite(out,dn->getNamespace())) ||
-				!incOrErr(&retval,out->write(':'),1)) {
-				return retval;
-			}
-		}
-		if (!incOrErr(&retval,safeWrite(out,dn->getName()))) {
-			return retval;
-		}
-		current=dn->getAttribute((uint64_t)0);
-		while (current && !current->isNullNode()) {
-			if (!incOrErr(&retval,out->write(' '),1) ||
-				!incOrErr(&retval,
-					dom::writeNode(current,out,
-						indent,indentlevel))) {
-				return retval;
-			}
-			current=current->getNextSibling();
-		}
-		current=dn->getFirstChild();
-		if (!current->isNullNode()) {
-			if (!incOrErr(&retval,out->write('>'),1)) {
-				return retval;
-			}
+			break;
+		case TAG_DOMNODETYPE:
 			if (indent && indentlevel) {
-				if (current->getType()!=TEXT_DOMNODETYPE &&
-					current->getType()!=CDATA_DOMNODETYPE) {
+				if (!incOrErr(&retval,
+					writeIndent(out,*indentlevel))) {
+					return retval;
+				}
+			}
+			if (!incOrErr(&retval,out->write('<'),1)) {
+				return retval;
+			}
+			currentns=dn->getNamespace();
+			currentname=dn->getName();
+			if (currentns) {
+				if (!incOrErr(&retval,
+						safeWrite(out,currentns)) ||
+					!incOrErr(&retval,out->write(':'),1)) {
+					return retval;
+				}
+			}
+			if (!incOrErr(&retval,safeWrite(out,currentname))) {
+				return retval;
+			}
+			current=dn->getAttribute((uint64_t)0);
+			while (current && !current->isNullNode()) {
+				if (!incOrErr(&retval,out->write(' '),1) ||
+					!incOrErr(&retval,
+						dom::writeNode(current,out,
+							indent,indentlevel))) {
+					return retval;
+				}
+				current=current->getNextSibling();
+			}
+			current=dn->getFirstChild();
+			if (!current->isNullNode()) {
+				if (!incOrErr(&retval,out->write('>'),1)) {
+					return retval;
+				}
+				if (indent && indentlevel) {
+					if (current->getType()!=
+							TEXT_DOMNODETYPE &&
+						current->getType()!=
+							CDATA_DOMNODETYPE) {
+						if (!incOrErr(&retval,
+							out->write('\n'),1)) {
+							return retval;
+						}
+					}
+					*indentlevel=*indentlevel+2;
+				}
+				domnodetype	prevtype=current->getType();
+				while (!current->isNullNode()) {
+					if (!incOrErr(&retval,
+						dom::writeNode(current,out,
+							indent,indentlevel))) {
+						return retval;
+					}
+					prevtype=current->getType();
+					current=current->getNextSibling();
+				}
+				if (indent && indentlevel) {
+					*indentlevel=*indentlevel-2;
+					if (prevtype!=TEXT_DOMNODETYPE &&
+						prevtype!=CDATA_DOMNODETYPE) {
+						if (!incOrErr(&retval,
+							writeIndent(out,
+							*indentlevel))) {
+							return retval;
+						}
+					}
+				}
+				if (!incOrErr(&retval,out->write("</",2),2)) {
+					return retval;
+				}
+				if (currentns) {
+					if (!incOrErr(&retval,
+						safeWrite(out,currentns))) {
+						return retval;
+					}
+					if (!incOrErr(&retval,
+							out->write(':'),1)) {
+						return retval;
+					}
+				}
+				if (!incOrErr(&retval,
+					safeWrite(out,currentname)) ||
+						!incOrErr(&retval,
+							out->write('>'),1)) {
+					return retval;
+				}
+				if (indent && indentlevel) {
 					if (!incOrErr(&retval,
 							out->write('\n'),1)) {
 						return retval;
 					}
 				}
-				*indentlevel=*indentlevel+2;
-			}
-			domnodetype	prevtype=current->getType();
-			while (!current->isNullNode()) {
-				if (!incOrErr(&retval,
-						dom::writeNode(
-							current,out,
-							indent,indentlevel))) {
-					return retval;
-				}
-				prevtype=current->getType();
-				current=current->getNextSibling();
-			}
-			if (indent && indentlevel) {
-				*indentlevel=*indentlevel-2;
-				if (prevtype!=TEXT_DOMNODETYPE &&
-					prevtype!=CDATA_DOMNODETYPE) {
+			} else {
+				currentname=dn->getName();
+				if (*currentname=='?') {
 					if (!incOrErr(&retval,
-						writeIndent(out,
-							*indentlevel))) {
+							out->write("?>",2),2)) {
+						return retval;
+					}
+				} else if (*currentname=='!') {
+					if (!incOrErr(&retval,
+							out->write('>'),1)) {
+						return retval;
+					}
+				} else {
+					if (!incOrErr(&retval,
+							out->write("/>",2),2)) {
+						return retval;
+					}
+				}
+				if (indent && indentlevel) {
+					if (!incOrErr(&retval,
+							out->write('\n'),1)) {
 						return retval;
 					}
 				}
 			}
-			if (!incOrErr(&retval,out->write("</",2),2)) {
-				return retval;
-			}
-			if (dn->getNamespace()) {
-				if (!incOrErr(&retval,
-					safeWrite(out,dn->getNamespace()))) {
-					return retval;
-				}
-				if (!incOrErr(&retval,out->write(':'),1)) {
-					return retval;
-				}
-			}
-			if (!incOrErr(&retval,safeWrite(out,dn->getName())) ||
-					!incOrErr(&retval,out->write('>'),1)) {
-				return retval;
-			}
-			if (indent && indentlevel) {
-				if (!incOrErr(&retval,out->write('\n'),1)) {
-					return retval;
-				}
-			}
-		} else {
-			if (dn->getName()[0]=='?') {
-				if (!incOrErr(&retval,out->write("?>",2),2)) {
-					return retval;
-				}
-			} else if (dn->getName()[0]=='!') {
-				if (!incOrErr(&retval,out->write('>'),1)) {
-					return retval;
-				}
+			break;
+		case TEXT_DOMNODETYPE:
+			incOrErr(&retval,safeWrite(out,dn->getValue()));
+			break;
+		case ATTRIBUTE_DOMNODETYPE:
+			currentvalue=dn->getValue();
+			if (dn->getParent()->getName()[0]=='!') {
+				incOrErr(&retval,out->write('"'),1) &&
+				incOrErr(&retval,
+					safeWrite(out,currentvalue)) &&
+				incOrErr(&retval,out->write('"'),1);
 			} else {
-				if (!incOrErr(&retval,out->write("/>",2),2)) {
-					return retval;
-				}
+				incOrErr(&retval,
+					safeWrite(out,dn->getName())) &&
+				incOrErr(&retval,out->write("=\"",2),2) &&
+				incOrErr(&retval,safeWrite(out,currentvalue)) &&
+				incOrErr(&retval,out->write('"'),1);
 			}
-			if (indent && indentlevel) {
-				if (!incOrErr(&retval,out->write('\n'),1)) {
-					return retval;
-				}
-			}
-		}
-	} else if (dn->getType()==TEXT_DOMNODETYPE) {
-		incOrErr(&retval,safeWrite(out,dn->getValue()));
-	} else if (dn->getType()==ATTRIBUTE_DOMNODETYPE) {
-		if (dn->getParent()->getName()[0]=='!') {
-			incOrErr(&retval,out->write('"'),1) &&
+			break;
+		case COMMENT_DOMNODETYPE:
+			incOrErr(&retval,out->write("<!--",4),4) &&
 			incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-			incOrErr(&retval,out->write('"'),1);
-		} else {
-			incOrErr(&retval,safeWrite(out,dn->getName())) &&
-			incOrErr(&retval,out->write("=\"",2),2) &&
+			incOrErr(&retval,out->write("-->",3),3);
+			break;
+		case CDATA_DOMNODETYPE:
+			incOrErr(&retval,out->write("<![CDATA[",9),9) &&
 			incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-			incOrErr(&retval,out->write('"'),1);
-		}
-	} else if (dn->getType()==COMMENT_DOMNODETYPE) {
-		incOrErr(&retval,out->write("<!--",4),4) &&
-		incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-		incOrErr(&retval,out->write("-->",3),3);
-	} else if (dn->getType()==CDATA_DOMNODETYPE) {
-		incOrErr(&retval,out->write("<![CDATA[",9),9) &&
-		incOrErr(&retval,safeWrite(out,dn->getValue())) &&
-		incOrErr(&retval,out->write("]]>",3),3);
+			incOrErr(&retval,out->write("]]>",3),3);
+			break;
+		default:
+			break;
 	}
 	return retval;
 }
