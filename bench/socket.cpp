@@ -303,7 +303,7 @@ void session(socketclient *clnt) {
 		// loop, writing to the server
 		stdoutput.printf("		writing %d times...\n",
 								loopcount);
-		start.getSystemDateAndTime();
+		start.initFromSystemDateTime();
 		for (uint32_t i=0; i<loopcount; i++) {
 			uint32_t	byteswritten=0;
 			uint32_t	bytesremaining=bytecount;
@@ -338,7 +338,7 @@ void session(socketclient *clnt) {
 			}
 		}
 		clnt->flushWriteBuffer(-1,-1);
-		end.getSystemDateAndTime();
+		end.initFromSystemDateTime();
 
 		// Mbps
 		uint32_t	sec=end.getEpoch()-start.getEpoch();
@@ -362,7 +362,7 @@ void session(socketclient *clnt) {
 		// loop, reading back from the server
 		stdoutput.printf("		reading %d times...\n",
 								loopcount);
-		start.getSystemDateAndTime();
+		start.initFromSystemDateTime();
 		for (uint32_t i=0; i<loopcount; i++) {
 			uint32_t	bytesread=0;
 			uint32_t	bytesremaining=bytecount;
@@ -397,7 +397,7 @@ void session(socketclient *clnt) {
 				}
 			}
 		}
-		end.getSystemDateAndTime();
+		end.initFromSystemDateTime();
 
 		// Mbps
 		sec=end.getEpoch()-start.getEpoch();

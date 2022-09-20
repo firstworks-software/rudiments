@@ -6,7 +6,7 @@ int main(int argc, const char **argv) {
 	datetime	dt;
 
 	// initialize from system date/time
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	stdoutput.printf("current date/time: %s\n\n",dt.getString(true));
 
 	// add three years, months, days,

@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
 	stdoutput.printf("appending %d items (%d times)\n",ITEMS,ITERS);
 
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint64_t j=0; j<ITERS; j++) {
 
 		for (uint64_t k=0; k<ITEMS; k++) {
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 
 		stdoutput.printf(".");
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 
 	displayTime(&start,&end);
 }

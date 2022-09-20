@@ -100,6 +100,8 @@
 	added encryption::getRawData() and getRawDataSize()
 	refactored crypt as a child of encryption
 	datetime class sets timezone during instantiation now
+	renamed some datetime methods from get*() to initFrom*()
+	renamed some datetime methods from *DateAndTime() to *DateTime()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

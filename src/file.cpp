@@ -1581,7 +1581,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename) {
 		return !result;
 	#else
 		datetime	dt;
-		dt.getSystemDateAndTime();
+		dt.initFromSystemDateTime();
 		return setLastAccessAndModificationTimes(filename,
 							dt.getEpoch(),
 							dt.getEpoch());

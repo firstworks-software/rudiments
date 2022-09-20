@@ -294,8 +294,8 @@ int main(int argc, const char **argv) {
 
 	// get time
 	stdoutput.printf("dates from various sources:\n");
-	test("system clock",dt.getSystemDateAndTime());
-	// getHardwareDateAndTime/getAdjustedHardwareDateAndTime
+	test("system clock",dt.initFromSystemDateTime());
+	// initFromHardwareDateTime/initFromAdjustedHardwareDateTime
 	// aren't reliable on most systems
 	stdoutput.printf("\n");
 
@@ -459,13 +459,13 @@ int main(int argc, const char **argv) {
 	if (!notsupported) {
 		stdoutput.printf("switch time zones:\n");
 		dt.init(datestring);
-		dt.adjustTimeZone("CST6CDT");
+		dt.setTimeZone("CST6CDT");
 		test("CST",!charstring::compare(dt.getString(),cstdatestring));
-		dt.adjustTimeZone("MST7MDT");
+		dt.setTimeZone("MST7MDT");
 		test("MST",!charstring::compare(dt.getString(),mstdatestring));
-		dt.adjustTimeZone("PST8PDT");
+		dt.setTimeZone("PST8PDT");
 		test("PST",!charstring::compare(dt.getString(),pstdatestring));
-		dt.adjustTimeZone("EST5EDT");
+		dt.setTimeZone("EST5EDT");
 		test("EST",!charstring::compare(dt.getString(),estdatestring));
 		stdoutput.printf("\n");
 	}
@@ -548,7 +548,7 @@ int main(int argc, const char **argv) {
 	d3=d1;
 	test("equal (unset)",
 		!charstring::compare(d1.getString(),d3.getString()));
-	d1.getSystemDateAndTime();
+	d1.initFromSystemDateTime();
 	datetime	d4(d1);
 	test("copy (set)",
 		!charstring::compare(d1.getString(),d4.getString()));

@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 		for (uint16_t k=0; k<4; k++) {
 
 			stdoutput.printf("    %s\t",ordertitles[k]);
-			start.getSystemDateAndTime();
+			start.initFromSystemDateTime();
 			for (uint16_t l=0; l<iterations; l++) {
 				for (int32_t i=0; i<listsize; i++) {
 					if (k==0) {
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
 				}
 				uintll.clear();
 			}
-			finish.getSystemDateAndTime();
+			finish.initFromSystemDateTime();
 			stdoutput.printf("%d seconds\n",
 					finish.getEpoch()-start.getEpoch());
 		}
@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 		for (uint16_t k=0; k<4; k++) {
 
 			stdoutput.printf("    %s\t",ordertitles[k]);
-			start.getSystemDateAndTime();
+			start.initFromSystemDateTime();
 			for (uint16_t l=0; l<iterations; l++) {
 				for (int32_t i=0; i<listsize; i++) {
 					if (k==0) {
@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
 				}
 				uintsll.clear();
 			}
-			finish.getSystemDateAndTime();
+			finish.initFromSystemDateTime();
 			stdoutput.printf("%d seconds\n",
 					finish.getEpoch()-start.getEpoch());
 		}

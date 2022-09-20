@@ -108,7 +108,7 @@ int main(int argc, const char **argv) {
 		test("is a fifo",!fl.isFifo());
 
 		datetime	dt;
-		dt.getSystemDateAndTime();
+		dt.initFromSystemDateTime();
 
 		// these aren't reliable over nfs/cifs...
 		/*datetime	atime;

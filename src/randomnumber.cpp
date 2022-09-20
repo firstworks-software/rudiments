@@ -205,7 +205,7 @@ uint32_t randomnumber::getSeed() {
 
 	// if that fails, use epoch
 	datetime	dt;
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	return dt.getEpoch();
 }
 

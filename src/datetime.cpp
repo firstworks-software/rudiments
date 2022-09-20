@@ -479,7 +479,7 @@ const char *datetime::getSqlString(bool microseconds) {
 	return pvt->_sqlstring;
 }
 
-bool datetime::getSystemDateAndTime() {
+bool datetime::initFromSystemDateTime() {
 	#if defined(RUDIMENTS_HAVE_GETTIMEOFDAY)
 		struct timeval	tv;
 		if (gettimeofday(&tv,NULL)) {
@@ -526,7 +526,7 @@ bool datetime::getSystemDateAndTime() {
 	#endif
 }
 
-bool datetime::setSystemDateAndTime() {
+bool datetime::setSystemDateTime() {
 	// FIXME: should set /etc/localtime (or /etc/TZ) and TZ env var too...
 	#if defined(RUDIMENTS_HAVE_SETSYSTEMTIME)
 		SYSTEMTIME	st;
@@ -558,7 +558,7 @@ bool datetime::setSystemDateAndTime() {
 	#endif
 }
 
-bool datetime::getHardwareDateAndTime(const char *hwtz) {
+bool datetime::initFromHardwareDateTime(const char *hwtz) {
 
 	#ifdef RUDIMENTS_HAVE_RTC_SET_TIME
 		// open the rtc
@@ -592,11 +592,11 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 	#endif
 }
 
-bool datetime::getAdjustedHardwareDateAndTime(const char *hwtz) {
-	return (getHardwareDateAndTime(hwtz) && adjustTimeZone(NULL));
+bool datetime::initFromAdjustedHardwareDateTime(const char *hwtz) {
+	return (initFromHardwareDateTime(hwtz) && setTimeZone(NULL));
 }
 
-bool datetime::setHardwareDateAndTime(const char *hwtz) {
+bool datetime::setHardwareDateTime(const char *hwtz) {
 
 	#ifdef RUDIMENTS_HAVE_RTC_SET_TIME
 		// open the rtc
@@ -606,7 +606,7 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 		}
 
 		// adjust the time zone
-		if (!adjustTimeZone(hwtz)) {
+		if (!setTimeZone(hwtz)) {
 			devrtc.close();
 			return false;
 		}
@@ -633,11 +633,11 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 	#endif
 }
 
-bool datetime::adjustTimeZone(const char *newtz) {
-	return adjustTimeZone(newtz,false);
+bool datetime::setTimeZone(const char *newtz) {
+	return setTimeZone(newtz,false);
 }
 
-bool datetime::adjustTimeZone(const char *newtz, bool ignoredst) {
+bool datetime::setTimeZone(const char *newtz, bool ignoredst) {
 
 	if (!acquireLock()) {
 		return false;
@@ -1292,14 +1292,13 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 			charstring::contains(datedelimiters,':');
 
 	// dates can be formatted very differently
-	// there should be:
-	// one (date/time only),
-	// two (date and time),
-	// three (eg. Feb 02 2012) parts,
-	// three (eg. 2/2/2012 1:03:04 AM) parts,
-	// or four (eg. Feb 02 2012 01:03:04:000AM)
-	// or five (eg. Fri, Feb 02 2012 01:03:04:000AM)
-	// parts
+	// the number of parts could be:
+	// one (eg. date or time only),
+	// two (eg. date and time),
+	// three (eg. Feb 02 2012),
+	// three (eg. 2/2/2012 1:03:04 AM),
+	// four (eg. Feb 02 2012 01:03:04:000AM),
+	// five (eg. Fri, Feb 02 2012 01:03:04:000AM)
 
 	// in the case of a five-part date (starting with the day-of-week),
 	// just skip the day-of-week and handle as 4-part
@@ -1916,22 +1915,22 @@ char *datetime::formatAs(const char *format,
 	stringbuffer	output;
 
 	// work buffer
-	char		buf[5];
+	char		buf[7];
 
 	// run through the format string
 	const char	*ptr=format;
 	while (*ptr) {
 
 		if (!charstring::compare(ptr,"DD",2)) {
-			charstring::printf(buf,5,"%02d",day);
+			charstring::printf(buf,7,"%02d",day);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"D",1)) {
-			charstring::printf(buf,5,"%d",day);
+			charstring::printf(buf,7,"%d",day);
 			output.append(buf);
 			ptr=ptr+1;
 		} else if (!charstring::compare(ptr,"MM",2)) {
-			charstring::printf(buf,5,"%02d",month);
+			charstring::printf(buf,7,"%02d",month);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"MON",3)) {
@@ -1941,53 +1940,53 @@ char *datetime::formatAs(const char *format,
 			output.append(longmonths[month-1]);
 			ptr=ptr+5;
 		} else if (!charstring::compare(ptr,"YYYY",4)) {
-			charstring::printf(buf,5,"%04d",year);
+			charstring::printf(buf,7,"%04d",year);
 			output.append(buf);
 			ptr=ptr+4;
 		} else if (!charstring::compare(ptr,"YY",2)) {
-			charstring::printf(buf,5,"%04d",year);
+			charstring::printf(buf,7,"%04d",year);
 			output.append(buf+2);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"HH24",4)) {
-			charstring::printf(buf,5,"%02d",hour);
+			charstring::printf(buf,7,"%02d",hour);
 			output.append(buf);
 			ptr=ptr+4;
 		} else if (!charstring::compare(ptr,"HH",2)) {
-			charstring::printf(buf,5,"%s%02d",
+			charstring::printf(buf,7,"%s%02d",
 						(isnegative)?"-":"",
 						(hour<13)?hour:hour-12);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"MI",2)) {
-			charstring::printf(buf,5,"%02d",minute);
+			charstring::printf(buf,7,"%02d",minute);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"SS",2)) {
-			charstring::printf(buf,5,"%02d",second);
+			charstring::printf(buf,7,"%02d",second);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"FFFFFF",6)) {
-			charstring::printf(buf,5,"%06d",microsecond);
+			charstring::printf(buf,7,"%06d",microsecond);
 			output.append(buf);
 			ptr=ptr+6;
 		} else if (!charstring::compare(ptr,"FFFFF",5)) {
-			charstring::printf(buf,5,"%05d",microsecond/10);
+			charstring::printf(buf,7,"%05d",microsecond/10);
 			output.append(buf);
 			ptr=ptr+5;
 		} else if (!charstring::compare(ptr,"FFFF",4)) {
-			charstring::printf(buf,5,"%04d",microsecond/100);
+			charstring::printf(buf,7,"%04d",microsecond/100);
 			output.append(buf);
 			ptr=ptr+4;
 		} else if (!charstring::compare(ptr,"FFF",3)) {
-			charstring::printf(buf,5,"%03d",microsecond/1000);
+			charstring::printf(buf,7,"%03d",microsecond/1000);
 			output.append(buf);
 			ptr=ptr+3;
 		} else if (!charstring::compare(ptr,"FF",2)) {
-			charstring::printf(buf,5,"%02d",microsecond/10000);
+			charstring::printf(buf,7,"%02d",microsecond/10000);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"F",1)) {
-			charstring::printf(buf,5,"%01d",microsecond/100000);
+			charstring::printf(buf,7,"%01d",microsecond/100000);
 			output.append(buf);
 			ptr=ptr+2;
 		} else if (!charstring::compare(ptr,"AM",2)) {

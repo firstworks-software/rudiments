@@ -6,7 +6,7 @@ int main(int argc, const char **argv) {
 	datetime	dt;
 
 	// initialize from system date/time
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	stdoutput.printf("local time: %s\n\n",dt.getString());
 
 	// get time zone abbreviations and offsets
@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	while (*tzabbr && *tzabbr[0]) {
 
 		// convert timezone
-		dt.adjustTimeZone(*tzabbr);
+		dt.setTimeZone(*tzabbr);
 
 		stdoutput.printf("% 14s (% 6d sec from GMT): %s\n",
 					*tzabbr,*tzoff,dt.getString());

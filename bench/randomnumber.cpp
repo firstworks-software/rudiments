@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	datetime	start;
 	datetime	end;
 
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint64_t l=0; l<randmax; l++) {
 		uint32_t	result;
 		if (!r.generateNumber(&result)) {
@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 
 	displayTime(&start,&end);
 }

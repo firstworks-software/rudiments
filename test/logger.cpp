@@ -68,10 +68,10 @@ int main(int argc, const char **argv) {
 	// get the current date/time so we can verify the header
 	// (make sure we're not about to bump over to the next minute)
 	datetime	dt;
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	if (dt.getSecond()>=58) {
 		snooze::macrosnooze(5);
-		dt.getSystemDateAndTime();
+		dt.initFromSystemDateTime();
 	}
 
 	// create and verify the header

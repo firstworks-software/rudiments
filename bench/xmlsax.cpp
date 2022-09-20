@@ -107,12 +107,12 @@ int main(int argc, const char **argv) {
 	datetime	start;
 	datetime	end;
 	stdoutput.printf("parsing file...\n");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	bool		success=x.parseFile(filename.getString());
 	if (!success) {
 		stdoutput.printf("parse failed\n");
 	} else {
-		end.getSystemDateAndTime();
+		end.initFromSystemDateTime();
 		stdoutput.printf("parse success\n");
 		displayTime(&start,&end);
 	}

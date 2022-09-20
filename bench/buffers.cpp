@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 				"(%lld at a time, %d iterations)\n",
 				ITEMS,i,ITERS);
 
-		start.getSystemDateAndTime();
+		start.initFromSystemDateTime();
 		for (uint64_t j=0; j<ITERS; j++) {
 
 			for (uint64_t k=0; k<ITEMS/i; k++) {
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
 			}
 			str.clear();
 		}
-		end.getSystemDateAndTime();
+		end.initFromSystemDateTime();
 
 		displayTime(&start,&end);
 	}

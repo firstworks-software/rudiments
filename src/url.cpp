@@ -220,7 +220,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		pvt->_opensend=0;
 		pvt->_openwait=0;
 		pvt->_openrecv=0;
-		pvt->_start.getSystemDateAndTime();
+		pvt->_start.initFromSystemDateTime();
 	}
 
 	// skip leading whitespace
@@ -369,9 +369,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 		// timings
 		if (pvt->_opentimings) {
-			pvt->_end.getSystemDateAndTime();
+			pvt->_end.initFromSystemDateTime();
 			pvt->_openbuild+=interval();
-			pvt->_start.getSystemDateAndTime();
+			pvt->_start.initFromSystemDateTime();
 		}
 
 		// close any connection left open by a previous keepalive
@@ -400,9 +400,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 		// timings
 		if (pvt->_opentimings) {
-			pvt->_end.getSystemDateAndTime();
+			pvt->_end.initFromSystemDateTime();
 			pvt->_openconnect+=interval();
-			pvt->_start.getSystemDateAndTime();
+			pvt->_start.initFromSystemDateTime();
 		}
 
 	} else {
@@ -532,9 +532,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// timings
 	if (pvt->_opentimings) {
-		pvt->_end.getSystemDateAndTime();
+		pvt->_end.initFromSystemDateTime();
 		pvt->_openbuild+=interval();
-		pvt->_start.getSystemDateAndTime();
+		pvt->_start.initFromSystemDateTime();
 	}
 
 	// send the request
@@ -580,17 +580,17 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// timings
 	if (pvt->_opentimings) {
-		pvt->_end.getSystemDateAndTime();
+		pvt->_end.initFromSystemDateTime();
 		pvt->_opensend+=interval();
 
-		pvt->_start.getSystemDateAndTime();
+		pvt->_start.initFromSystemDateTime();
 		listener	lsnr;
 		lsnr.addReadFileDescriptor(this);
 		lsnr.listen();
-		pvt->_end.getSystemDateAndTime();
+		pvt->_end.initFromSystemDateTime();
 		pvt->_openwait+=interval();
 
-		pvt->_start.getSystemDateAndTime();
+		pvt->_start.initFromSystemDateTime();
 	}
 
 	// fetch and process the headers
@@ -620,9 +620,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 			// timings
 			if (pvt->_opentimings) {
-				pvt->_end.getSystemDateAndTime();
+				pvt->_end.initFromSystemDateTime();
 				pvt->_openrecv+=interval();
-				pvt->_start.getSystemDateAndTime();
+				pvt->_start.initFromSystemDateTime();
 			}
 
 			return httpOpen(urlname,userpwd);
@@ -729,7 +729,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 
 	// timings
 	if (pvt->_opentimings) {
-		pvt->_end.getSystemDateAndTime();
+		pvt->_end.initFromSystemDateTime();
 		pvt->_openrecv+=interval();
 	}
 

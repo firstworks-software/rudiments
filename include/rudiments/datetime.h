@@ -26,9 +26,8 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		/** Destroys this instance of the datetime class. */
 		~datetime();
 
-		/** Parses "tmstring" and sets the date and time
-		 *  represented in the class to that time.
-		 *  "tmstring" must be of the format:
+		/** Initializes this instance to the date/time represented
+		 *  by "tmstring" where "tmstring" is of the format:
 		 *  	"mm/dd/yyyy hh:mm:ss TZN"
 		 *  or of the format
 		 *  	"mm/dd/yyyy hh:mm:ss:uuu TZN"
@@ -39,25 +38,24 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  Returns true on success and false on failure. */
 		bool	init(const char *tmstring);
 
-		/** Processes "seconds" and sets the date and time
-		 *  represented in the class to that time.
-		 *  "seconds" is the number of seconds since 1970 (the epoch).
+		/** Initializes this intance to the date/time represented
+ 		 *  by "seconds" where "seconds" is the number of seconds since
+ 		 *  1970 (the epoch).
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	init(time_t seconds);
 
-		/** Processes "seconds" and "microseconds" and sets the date
-		 *  and time represented in the class to that time.
-		 *  "seconds" is the number of seconds since 1970 (the epoch).
+		/** Initializes this instance to the date/time represented
+		 *  by "seconds" and "microseconds", where "seconds" is the
+		 *  number of seconds since 1970 (the epoch) and "microseconds"
+		 *  is the number of microseconds after "seconds".
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	init(time_t seconds, time_t microseconds);
 
-		/** Processes "tmstruct" and sets the date and time
-		 *  represented in the class to that time.
-		 * 
-		 *  "tmstruct" should be a pointer to a platform-specific
-		 *  time structure (struct tm * on unix)
+		/** Initializes this instance to the date/time represented
+		 *  by "tmstruct" where "tmstruct" is a pointer to a
+		 *  platform-specific time structure (eg. struct tm * on unix)
 		 * 
 		 *  Note that in "tmstruct", the timezone and GMT offset
 		 *  must be set to valid values.  Otherwise GMT is
@@ -66,101 +64,197 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  Returns true on success and false on failure. */
 		bool	init(const void *tmstruct);
 
-
-		/** Sets the date and time represented in the class to
-		 *  the date and time stored in the system clock.
+		/** Initialies this instance to the date/time stored in the
+		 *  system clock.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	getSystemDateAndTime();
+		bool	initFromSystemDateTime();
 
 		/** This method only works if your system has a working
 		 *  real-time clock at /dev/rtc.
 		 * 
-		 *  Sets the date and time represented in the class to
-		 *  the date and time stored in the hardware clock.
+		 *  Initialies this instance to the date/time stored in the
+		 *  hardware clock.
 		 * 
 		 *  "hwtz" must be set to the timezone that the hardware
 		 *  clock is using.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	getHardwareDateAndTime(const char *hwtz);
+		bool	initFromHardwareDateTime(const char *hwtz);
 
 		/** This method only works if your system has a working
 		 *  real-time clock at /dev/rtc.
 		 *
-		 *  Gets the date and time from the hardware clock,
-		 *  then adjusts it to the timezone used by the system.
+		 *  Initialies this instance to the date/time stored in the
+		 *  hardware clock then adjusts it to the timezone used by the
+		 *  system.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	getAdjustedHardwareDateAndTime(const char *hwtz);
+		bool	initFromAdjustedHardwareDateTime(const char *hwtz);
 
-		/** Sets the system clock's date and time to the date
-		 *  and time currently represented in the class.
+
+		/** Sets the system clock's date/time to the date/time
+		 *  currently represented in this instance.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	setSystemDateAndTime();
+		bool	setSystemDateTime();
 
 		/** This method only works if your system has a working
 		 *  real-time clock at /dev/rtc.
 		 * 
-		 *  Sets the hardware clock's date and time to the date
-		 *  and time currently represented in the class.
+		 *  Sets the hardware clock's date/time to the date/time
+		 *  currently represented in this instance.
 		 * 
 		 *  "hwtz" must be set to the timezone that the system
 		 *  clock using.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	setHardwareDateAndTime(const char *hwtz);
+		bool	setHardwareDateTime(const char *hwtz);
+
+
+		/** Sets the microsecond component (0-999999) of the date/time
+		 *  represented in this instance to "microsecond" and
+		 *  recalculates the current date/time (eg. if
+		 *  "microsecondsecond" is greater than 999999 or less than
+		 *  0). */
+		bool	setMicrosecond(int32_t microsecond);
+
+		/** Sets the second component (0-59) of the date/time
+		 *  represented in this instance  "second" and recalculates the
+		 *  current date/time (eg. if "second" is greater than 59 or
+		 *  less than 0). */
+		bool	setSecond(int32_t second);
+
+		/** Sets the minute component (0-59) of the date/time
+		 *  represented in this instance to "minute" and recalculates
+		 *  the current date/time (eg. if "minute" is greater than 60
+		 *  or less than 0). */
+		bool	setMinute(int32_t minute);
+
+		/** Sets the hour component (0-24) of the date/time represented
+		 *  in this instance to "hour" and recalculates the current
+		 *  date/time (eg. if "hour" is greater than 24 or less than
+		 *  0). */
+		bool	setHour(int32_t hour);
+
+		/** Sets the day-of-the-month component (1-31) of the date/time
+ 		 *  represented in this instance to "day" and recalculates
+ 		 *  the current date/time (eg. if "day" is greater than 31 or
+ 		 *  less than 0). */
+		bool	setDayOfMonth(int32_t day);
+
+		/** Sets the month component (1-12) of the date/time
+ 		 *  represented in this instance to "month" and recalculates
+ 		 *  the current date/time (eg. if "month" is greater than 12 or
+ 		 *  less than 1). */
+		bool	setMonth(int32_t month);
+
+		/** Sets the year component of the date/time represented in this
+		 *  instance to "year". */
+		bool	setYear(int32_t year);
+
+		/** Sets the timezone of the date/time represented in this
+		 *  instance to "newtz" and recalculates the current date/time.
+		 *
+		 *  Eg. if the current timezone is EST, and "newtz" is CST then
+		 *  the hour will be decremented by 1.
+		 * 
+		 *  If, in the new timezone, daylight savings time is
+		 *  currently in effect, the time zone will be adjusted
+		 *  accordingly.  Ie.  if "newtz" = EST and daylight
+		 *  savings time is in effect in EST5EDT, then EDT
+		 *  will be used instead.
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	setTimeZone(const char *newtz);
+
+		/** Sets the timezone of the date/time represented in this
+		 *  instance to "newtz" and recalculates the current date/time.
+		 *
+		 *  Eg. if the current timezone is EST, and "newtz" is CST then
+		 *  the hour will be decremented by 1.
+		 * 
+		 *  If ignoredst is false, this method works like
+		 *  setTimezone(const char *newtz).  However if
+		 *  ignoredst is true, this method will not adjust
+		 *  EST to EDT if daylight savings time is in
+		 *  effect in EST5EDT.
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	setTimeZone(const char *newtz, bool ignoredst);
+
+
+		/** Adds "seconds" to the date/time represented in this
+		 *  instance.  "seconds" may be negative. */
+		bool	addSeconds(int32_t seconds);
+
+		/** Adds "microseconds" to the date/time represented in this
+		 *  instance.  "microseconds" may be negative. */
+		bool	addMicroseconds(int32_t microseconds);
+
+		/** Adds "minutes" to the date/time represented in this
+		 *  instance.  "minutes" may be negative. */
+		bool	addMinutes(int32_t minutes);
+
+		/** Adds "hours" to the date/time represented in this
+		 *  instance.  "hours" may be negative. */
+		bool	addHours(int32_t hours);
+
+		/** Adds "days" to the date/time represented in this
+		 *  instance.  "days" may be negative. */
+		bool	addDays(int32_t days);
+
+		/** Adds "months" to the date/time represented in this
+		 *  instance.  "months" may be negative. */
+		bool	addMonths(int32_t months);
+
+		/** Adds "years" to the date/time represented in this
+		 *  instance.  "years" may be negative. */
+		bool	addYears(int32_t years);
 
 
 		/** Returns the hour component of the date/time currently
-		 *  represented in the instance of the class. */
+		 *  represented in this instance. */
 		int32_t	getHour();
 
 		/** Returns the minute component of the date/time currently
-		 *  represented in the instance of the class. */
+		 *  represented in this instance. */
 		int32_t	getMinute();
 
 		/** Returns the second component of the date/time currently
-		 *  represented in the instance of the class. */
+		 *  represented in this instance. */
 		int32_t	getSecond();
 
 		/** Returns the microsecond component of the date/time
-		 *  currently represented in the instance of the class. */
+		 *  currently represented in this instance. */
 		int32_t	getMicrosecond();
 
 		/** Returns the month component (1-12) of the date/time
-		 *  currently represented in the instance of the class. */
+		 *  currently represented in this instance. */
 		int32_t	getMonth();
 
 		/** Returns the full name of the month component of the
-		 *  date/time currently represented in the instance of the
-		 *  class. */
+		 *  date/time currently represented in this instance. */
 		const char	*getMonthName();
 
 		/** Returns the abbreviated name of the month component of the
-		 *  date/time currently represented in the instance of the
-		 *  class. */
+		 *  date/time currently represented in this instance. */
 		const char	*getMonthAbbreviation();
 
 		/** Returns the day-of-the-month component (1-31) of the
-		 *  date/time currently represented in the instance of the
-		 *  class. */
+		 *  date/time currently represented in this instance. */
 		int32_t	getDayOfMonth();
 
 		/** Returns the day-of-the-week component (1-7) of the
-		 *  date/time currently represented in the instance of the
-		 *  class. */
+		 *  date/time currently represented in this instance. */
 		int32_t	getDayOfWeek();
 
 		/** Returns the day-of-the-year component (1-365) of the
-		 *  date/time currently represented in the instance of the
-		 *  class. */
+		 *  date/time currently represented in this instance. */
 		int32_t	getDayOfYear();
 
 		/** Returns the week-of-the-year component (0-53) of the
-		 *  date/time currently represented in the instance of the
-		 *  class.
+		 *  date/time currently represented in this instance.
 		 *
 		 *  Note that week 1 begins with the first Monday of the year,
 		 *  meaning that a year will have no week 0 if it starts on
@@ -168,17 +262,15 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		int32_t	getWeekOfYear();
 
 		/** Returns the year component, including the century, of
-		 *  the date/time currently represented in the instance of the
-		 *  class. */
+		 *  the date/time currently represented in this instance. */
 		int32_t	getYear();
 
 		/** Returns the year component, not including the century, of
-		 *  the date/time currently represented in the instance of the
-		 *  class. */
+		 *  the date/time currently represented in this instance. */
 		int32_t	getShortYear();
 
 		/** Returns the (one-based) century component of the date/time
- 		 *  currently represented in the instance of the class. */
+ 		 *  currently represented in this instance. */
 		int32_t	getCentury();
 
 		/** Returns true if daylight savings time is currently
@@ -190,100 +282,18 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 
 		/** Returns the offset from GMT in seconds */
 		int32_t	getTimeZoneOffset();
-			
-		/** Recalculates the time currently represented in the
-		 *  class to correspond to the time zone "newtz".
-		 * 
-		 *  If, in the new timezone, daylight savings time is
-		 *  currently in effect, the time zone will be adjusted
-		 *  accordingly.  Ie.  if "newtz" = EST and daylight
-		 *  savings time is in effect in EST5EDT, then EDT
-		 *  will be used instead.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	adjustTimeZone(const char *newtz);
-
-		/** Recalculates the time currently represented in the
-		 *  class to correspond to the time zone "newtz".
-		 * 
-		 *  If ignoredst is false, this method works like
-		 *  adjustTimezone(const char *newtz).  However if
-		 *  ignoredst is true, this method will not adjust
-		 *  EST to EDT if daylight savings time is in
-		 *  effect in EST5EDT.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	adjustTimeZone(const char *newtz, bool ignoredst);
-
-
-		/** Sets the second component of the date/time represented in
-		 *  the instance of the class to "seconds". */
-		bool	setSecond(int32_t seconds);
-
-		/** Sets the microsecond component of the date/time
-		 *  represented in the instance of the class to
-		 *  "microseconds". */
-		bool	setMicrosecond(int32_t microseconds);
-
-		/** Sets the minute component of the date/time represented in
-		 *  the instance of the class to "minutes". */
-		bool	setMinute(int32_t minute);
-
-		/** Sets the hour component of the date/time represented in
-		 *  the instance of the class to "hour". */
-		bool	setHour(int32_t hour);
-
-		/** Sets the day-of-the-month component (1-31) of the date/time
- 		 *  represented in the instance of the class to "day". */
-		bool	setDayOfMonth(int32_t day);
-
-		/** Sets the month component (1-12) of the date/time
- 		 *  represented in the instance of the class to "month". */
-		bool	setMonth(int32_t month);
-
-		/** Sets the year component of the date/time represented in the
-		 *  instance of the class to "year". */
-		bool	setYear(int32_t year);
-
-		/** Adds "seconds" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addSeconds(int32_t second);
-
-		/** Adds "microseconds" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addMicroseconds(int32_t microsecond);
-
-		/** Adds "minutes" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addMinutes(int32_t minutes);
-
-		/** Adds "hours" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addHours(int32_t hours);
-
-		/** Adds "days" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addDays(int32_t days);
-
-		/** Adds "months" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addMonths(int32_t months);
-
-		/** Adds "years" to the date/time represented in the
-		 *  instance of the class. */
-		bool	addYears(int32_t years);
 
 
 		/** Returns a string of the format: "mm/dd/yyyy hh:mm:ss TZN"
-		 *  for the date/time represented in the instance of the class.
+		 *  for the date/time represented in this instance.
 		 * 
 		 *  (Note that this method returns a pointer to an internal
-		 *  string which will be deleted if the class instance is
-		 *  deleted.) */
+		 *  string which will be deleted if this instance is deleted.)
+		 */
 		const char	*getString();
 
-		/** Returns a string representing the date/time in the instance
-		 *  of the class.
+		/** Returns a string representing the date/time in this
+		 *  instance.
 		 *
 		 *  If microseconds is false then the string is of the format:
 		 *  "mm/dd/yyyy hh:mm:ss TZN"
@@ -292,21 +302,21 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  "mm/dd/yyyy hh:mm:ss:uuu TZN"
 		 * 
 		 *  (Note that this method returns a pointer to an internal
-		 *  string which will be deleted if the class instance is
-		 *  deleted.) */
+		 *  string which will be deleted if this instance is deleted.)
+		 */
 		const char	*getString(bool microseconds);
 
 
 		/** Returns a string of the format: "yyyy-mm-dd hh:mm:ss"
-		 *  for the date/time represented in the instance of the class.
+		 *  for the date/time represented in this instance.
 		 * 
 		 *  (Note that this method returns a pointer to an internal
-		 *  string which will be deleted if the class instance is
+		 *  string which will be deleted if this instance is
 		 *  deleted.) */
 		const char	*getSqlString();
 
-		/** Returns a string representing the date/time in the instance
-		 *  of the class.
+		/** Returns a string representing the date/time in this
+		 *  instance.
 		 *
 		 *  If microseconds is false then the string is of the format:
 		 *  "yyyy-mm-dd hh:mm:ss"
@@ -315,8 +325,8 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  "yyyy-mm-dd hh:mm:ss.mmm"
 		 * 
 		 *  (Note that this method returns a pointer to an internal
-		 *  string which will be deleted if the class instance is
-		 *  deleted.) */
+		 *  string which will be deleted if this instance is deleted.)
+		 */
 		const char	*getSqlString(bool microseconds);
 
 
@@ -382,7 +392,44 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  be set to valid values.  Otherwise GMT is assumed. */
 		static time_t	getEpoch(const void *tmstruct);
 
-		/** FIXME: document... */
+		/** Attempts to parse "datetime" into its components setting
+		 *  "year", "month", "day", "hour", "minute", "second",
+		 *  "microsecond", and "isnegative" to the different parts, as
+		 *  appropriate.
+		 *
+		 *  Handles a wide variety of date/time formats.
+		 *
+		 *  If "ddmm" is set true then the date format is assumed to
+		 *  be dd/mm/yyyy rather than mm/dd/yyyy when a date with a
+		 *  trailing year is encountered.
+		 *
+		 *  If "yyyyddmm" is set true then the date format is assumed
+		 *  to be yyyy/dd/mm rather than yyyy/mm/dd when a date with
+		 *  a leading year is encountered.
+		 *
+		 *  "datedelimiters" may be set to a set of valid date
+		 *  delimiters and may contain any combination of '/', '-', '.',
+		 *  and ':'.  Eg. "/-" would mean that only '/' and '-' are
+		 *  valid date delimiters.  If left NULL then it defaults to
+		 *  "/-.:"
+		 *
+		 *  If a component isn't found, then it is set to -1.  Eg. if a
+		 *  date is given with no time, then "hour", "minute", "second",
+		 *  and "microsecond" are set to -1.
+		 *
+		 *  Any of "year", "month", "day", "hour", "minute", "second",
+		 *  "microsecond", and "isnegative" may be NULL.  In that case,
+		 *  that component is just not set.
+		 *
+		 *  "isnegative" is set true if the hour component is negative.
+		 *  Eg. if "-10:00" was encountered.  Note that if a negative
+		 *  hour component is encountered, then the "hour" will be set
+		 *  to a positive number, and "isnegative" will be set true.
+		 *  In the example above, "hour" would bet set to 10 and
+		 *  "isnegative" would be set true.
+		 *
+		 *  Returns true if the date/time was successfully parsed and
+		 *  false if it failed to parse the date/time. */
 		static bool	parse(const char *datetime,
 					bool ddmm, bool yyyyddmm,
 					const char *datedelimiters,
@@ -391,7 +438,38 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 					int16_t *minute, int16_t *second,
 					int32_t *microsecond, bool *isnegative);
 
-		/** FIXME: document... */
+		/** Allocates and returns a date/time string, composed of the
+		 *  components "year", "month", "day", "hour", "minute",
+		 *  "second", and "microsecond" as specified by the format
+		 *  string "format".  If "isnegative" is set true then the hour
+		 *  component will be negative.
+		 *
+		 *  "format" may contain any of the following format strings:
+		 *
+		 *  DD - 2 digit day, left padded with 0
+		 *  D - 1 or 2 digit day, not left padded with 0
+		 *  MM - 2 digit month, left padded with 0
+		 *  MON - uppercase, 3-character month abbreviation
+		 *  Month - mixed-case full name of the month
+		 *  YYYY - 4 digit year, left padded with 0
+		 *  YY - 2 digit year, left padded with 0
+		 *  HH24 - 2 digit hour, in 24-hour format, left padded with 0
+		 *  HH - 2 digit hour, in 12-hour format, left padded with 0
+		 *  MI - 2 digit minute, left padded with 0
+		 *  SS - 2 digit second, left padded with 0
+		 *  FFFFFF -  6 digit fractional second, left padded with 0
+		 *  FFFFF -  5 digit fractional second, left padded with 0
+		 *  FFFF -  4 digit fractional second, left padded with 0
+		 *  FFF -  3 digit fractional second, left padded with 0
+		 *  FF -  2 digit fractional second, left padded with 0
+		 *  F -  1 digit fractional second
+		 *  AM - AM or PM
+		 *
+		 *  Any other characters in "format" will be reprouduced
+		 *  verbatim.
+		 *
+		 *  Returns the formatted string or NULL if "format" was
+		 *  NULL. */
 		static char	*formatAs(const char *format,
 					int16_t year, int16_t month,
 					int16_t day, int16_t hour,

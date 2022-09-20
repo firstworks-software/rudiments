@@ -101,7 +101,7 @@ int main(int argc, const char **argv) {
 		}
 
 		delete[] hr;
-		start.getSystemDateAndTime();
+		start.initFromSystemDateTime();
 		for (uint64_t i=0; i<filesize; i++) {
 			if (f.write('1')!=sizeof(char)) {
 				stdoutput.printf("write failed at %lld\n",i);
@@ -112,7 +112,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 		f.flushWriteBuffer(-1,-1);
-		end.getSystemDateAndTime();
+		end.initFromSystemDateTime();
 		stdoutput.printf("done writing %lld bytes\n",filesize);
 		displayTime(&start,&end);
 		stdoutput.printf("\n");
@@ -166,7 +166,7 @@ int main(int argc, const char **argv) {
 				f.setMmapBufferingEnabled(true);
 			}
 
-			start.getSystemDateAndTime();
+			start.initFromSystemDateTime();
 			for (uint64_t j=0; j<filesize; j+=readsize) {
 				if (f.read(buf,readsize)!=readsize) {
 					stdoutput.printf(
@@ -180,7 +180,7 @@ int main(int argc, const char **argv) {
 					}
 				}
 			}
-			end.getSystemDateAndTime();
+			end.initFromSystemDateTime();
 
 			if (showprogress) {
 				stdoutput.printf("done reading %lld bytes\n",

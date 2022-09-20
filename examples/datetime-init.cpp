@@ -6,7 +6,7 @@ int main(int argc, const char **argv) {
 	datetime	dt;
 
 	// initialize from system date/time
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	stdoutput.printf("system date/time: %s\n\n",dt.getString(true));
 
 	// initialize from a formatted string

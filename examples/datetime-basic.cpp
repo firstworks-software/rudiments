@@ -5,7 +5,7 @@ int main(int argc, const char **argv) {
 
 	// initialize an instance of datetime to the current system date/time
 	datetime	dt;
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 
 	// the components of the date/time are avaialble in various formats...
 

@@ -116,12 +116,12 @@ int main(int argc, const char **argv) {
 		if (sem.supportsTimedSemaphoreOperations()) {
 
 			datetime	dt;
-			dt.getSystemDateAndTime();
+			dt.initFromSystemDateTime();
 			time_t	epoch=dt.getEpoch();
 
 			test("wait(0)",!sem.wait(0,2,0));
 
-			dt.getSystemDateAndTime();
+			dt.initFromSystemDateTime();
 			test("time",dt.getEpoch()-epoch>=1);
 		} else {
 			stdoutput.write("	not supported\n");

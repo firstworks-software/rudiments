@@ -59,48 +59,48 @@ int main() {
 	stdoutput.printf("uint8_t\n");
 	stdoutput.printf("	copy  in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	uint8_t	val8=0xFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val8)); i++) {
 			copy(bytes+(i*sizeof(val8)),&val8,sizeof(val8));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	val8=0xFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val8)); i++) {
 			copy8(bytes+(i*sizeof(val8)),&val8,sizeof(val8));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy  out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val8)); i++) {
 			copy(&val8,bytes+(i*sizeof(val8)),sizeof(val8));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val8)); i++) {
 			copy8(&val8,bytes+(i*sizeof(val8)),sizeof(val8));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 
@@ -108,48 +108,48 @@ int main() {
 	stdoutput.printf("uint16_t\n");
 	stdoutput.printf("	copy  in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	uint16_t	val16=0xFFFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val16)); i++) {
 			copy(bytes+(i*sizeof(val16)),&val16,sizeof(val16));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	val16=0xFFFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val16)); i++) {
 			copy8(bytes+(i*sizeof(val16)),&val16,sizeof(val16));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy  out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val16)); i++) {
 			copy(&val16,bytes+(i*sizeof(val16)),sizeof(val16));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val16)); i++) {
 			copy8(&val16,bytes+(i*sizeof(val16)),sizeof(val16));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 
@@ -157,48 +157,48 @@ int main() {
 	stdoutput.printf("uint32_t\n");
 	stdoutput.printf("	copy  in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	uint32_t	val32=0xFFFFFFFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val32)); i++) {
 			copy(bytes+(i*sizeof(val32)),&val32,sizeof(val32));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy  in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	val32=0xFFFFFFFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val32)); i++) {
 			copy8(bytes+(i*sizeof(val32)),&val32,sizeof(val32));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy  out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val32)); i++) {
 			copy(&val32,bytes+(i*sizeof(val32)),sizeof(val32));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val32)); i++) {
 			copy8(&val32,bytes+(i*sizeof(val32)),sizeof(val32));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 
@@ -206,47 +206,47 @@ int main() {
 	stdoutput.printf("uint64_t\n");
 	stdoutput.printf("	copy  in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	uint64_t	val64=0xFFFFFFFFFFFFFFFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val64)); i++) {
 			copy(bytes+(i*sizeof(val64)),&val64,sizeof(val64));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 in : ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	val64=0xFFFFFFFFFFFFFFFF;
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val64)); i++) {
 			copy8(bytes+(i*sizeof(val64)),&val64,sizeof(val64));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy  out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val64)); i++) {
 			copy(&val64,bytes+(i*sizeof(val64)),sizeof(val64));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("	copy8 out: ");
 	stdoutput.flush();
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint16_t j=0; j<ITERATIONS; j++) {
 		for (uint64_t i=0; i<(BUFFERSIZE/sizeof(val64)); i++) {
 			copy8(&val64,bytes+(i*sizeof(val64)),sizeof(val64));
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 }

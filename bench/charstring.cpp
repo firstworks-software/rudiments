@@ -16,7 +16,7 @@ int main() {
 	uint16_t	len;
 
 	stdoutput.printf("append(int64_t)\n");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	stringbuffer	str(1024);
 	for (uint64_t i=0; i<APPENDITERATIONS; i++) {
 		str.append((int64_t)1234567890123456789);
@@ -59,11 +59,11 @@ int main() {
 		str.append((int64_t)-1);
 		str.clear();
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("parseNumber(int64_t)\n");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint64_t i=0; i<PARSEITERATIONS; i++) {
 		delete[] charstring::parseNumber((int64_t)1234567890123456789);
 		delete[] charstring::parseNumber((int64_t)123456789012345678);
@@ -104,11 +104,11 @@ int main() {
 		delete[] charstring::parseNumber((int64_t)-12);
 		delete[] charstring::parseNumber((int64_t)-1);
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("integerLength(int64_t)\n");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint64_t i=0; i<LENGTHITERATIONS; i++) {
 		len=charstring::integerLength((int64_t)1234567890123456789);
 		len=charstring::integerLength((int64_t)123456789012345678);
@@ -149,11 +149,11 @@ int main() {
 		len=charstring::integerLength((int64_t)-12);
 		len=charstring::integerLength((int64_t)-1);
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("integerLength(int32_t)\n");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint64_t i=0; i<LENGTHITERATIONS; i++) {
 		len=charstring::integerLength((int32_t)1234567890);
 		len=charstring::integerLength((int32_t)123456789);
@@ -176,11 +176,11 @@ int main() {
 		len=charstring::integerLength((int32_t)-12);
 		len=charstring::integerLength((int32_t)-1);
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("integerLength(int32_t)\n");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (uint64_t i=0; i<LENGTHITERATIONS; i++) {
 		len=charstring::integerLength((int16_t)12345);
 		len=charstring::integerLength((int16_t)1234);
@@ -193,7 +193,7 @@ int main() {
 		len=charstring::integerLength((int16_t)-12);
 		len=charstring::integerLength((int16_t)-1);
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	displayTime(&start,&end);
 
 	stdoutput.printf("%d\n",len);

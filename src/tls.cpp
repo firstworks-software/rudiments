@@ -2275,7 +2275,7 @@ void tlscertificate::setCertificate(void *cert) {
 					pvt->_issuer,size);
 
 		// get valid-from
-		// (see datetime::getSystemDateAndTime)
+		// (see datetime::initFromSystemDateTime)
 		uint64_t	t=
 		(((((uint64_t)c->NotBefore.dwHighDateTime)<<32)|
 				c->NotBefore.dwLowDateTime)/10)-

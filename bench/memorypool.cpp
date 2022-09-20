@@ -22,28 +22,28 @@ int main(int argc, const char **argv) {
 	// allocate from the pool, clearng after each cycle...
 	stdoutput.printf("	memory pool... ");
 	memorypool	*mp=new memorypool(32,16,10);
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (i=0; i<stresscycles; i++) {
 		for (j=1; j<=stresssize; j++) {
 			mp->allocate(j);
 		}
 		mp->clear();
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 	delete mp;
 	displayTime(&start,&end);
 
 
 	// ...as opposed to allocating and clearng on-demand
 	stdoutput.printf("	on-demand...   ");
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (i=0; i<stresscycles; i++) {
 		for (j=0; j<stresssize; j++) {
 			char	*data=new char[j];
 			delete[] data;
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 
 	// should be about 3 times slower on modern Linux
 	// and about 10 times slower on modern Windows
@@ -57,7 +57,7 @@ int main(int argc, const char **argv) {
 	// and clearng all chunks after each cycle
 	stdoutput.printf("	chunk-list...  ");
 	char	*chunklist[stresssize];
-	start.getSystemDateAndTime();
+	start.initFromSystemDateTime();
 	for (i=0; i<stresscycles; i++) {
 		for (j=0; j<stresssize; j++) {
 			chunklist[j]=new char[j];
@@ -66,7 +66,7 @@ int main(int argc, const char **argv) {
 			delete[] chunklist[j];
 		}
 	}
-	end.getSystemDateAndTime();
+	end.initFromSystemDateTime();
 
 	// should be about 3 times slower on modern Linux
 	// and about 200 times slower on modern Windows

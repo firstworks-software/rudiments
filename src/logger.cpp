@@ -187,7 +187,7 @@ uint8_t logger::getLogLevel() {
 
 char *logger::logHeader(const char *name) {
 	datetime	dt;
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	stringbuffer	str;
 	str.append(dt.getString())->append(" ");
 	str.append(name)->append(" [");
@@ -197,7 +197,7 @@ char *logger::logHeader(const char *name) {
 
 wchar_t *logger::logHeader(const wchar_t *name) {
 	datetime	dt;
-	dt.getSystemDateAndTime();
+	dt.initFromSystemDateTime();
 	wstringbuffer	str;
 	str.append(dt.getString())->append(L" ");
 	str.append(name)->append(L" [");
