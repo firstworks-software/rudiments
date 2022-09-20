@@ -27,34 +27,40 @@ cronschedule::~cronschedule() {
 	delete pvt;
 }
 
-void cronschedule::setSchedule(const char *when) {
+bool cronschedule::setSchedule(const char *when) {
+
+	bool	success=true;
 
 	char		**whenparts;
 	uint64_t	whenpartscount;
 	charstring::split(when," ",true,&whenparts,&whenpartscount);
 
 	if (whenpartscount==5) {
-		setSchedule(whenparts[0],whenparts[1],
+		success=setSchedule(whenparts[0],whenparts[1],
 				whenparts[2],whenparts[3],whenparts[4]);
+	} else {
+		success=false;
 	}
 
 	for (uint64_t i=0; i<whenpartscount; i++) {
 		delete[] whenparts[i];
 	}
 	delete[] whenparts;
+
+	return success;
 }
 
-void cronschedule::setSchedule(const char *years,
+bool cronschedule::setSchedule(const char *years,
 					const char *months,
 					const char *daysofmonth,
 					const char *daysofweek,
 					const char *dayparts) {
 	clear();
-	splitTimePart(&(pvt->_years),years);
-	splitTimePart(&(pvt->_months),months);
-	splitTimePart(&(pvt->_daysofmonth),daysofmonth);
-	splitTimePart(&(pvt->_daysofweek),daysofweek);
-	splitDayParts(dayparts);
+	return splitTimePart(&(pvt->_years),years) &&
+		splitTimePart(&(pvt->_months),months) &&
+		splitTimePart(&(pvt->_daysofmonth),daysofmonth) &&
+		splitTimePart(&(pvt->_daysofweek),daysofweek) &&
+		splitDayParts(dayparts);
 }
 
 void cronschedule::clear() {
@@ -65,7 +71,7 @@ void cronschedule::clear() {
 	pvt->_dayparts.clear();
 }
 
-void cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
+bool cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 						const char *timepartlist) {
 
 	// handle *'s
@@ -73,7 +79,6 @@ void cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 		cronscheduleperiod	*p=new cronscheduleperiod;
 		if (periods==&pvt->_years) {
 			p->start=0;
-			// FIXME: is there a macro for this?
 			p->end=65535;
 		}
 		if (periods==&pvt->_months) {
@@ -89,7 +94,7 @@ void cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 			p->end=7;
 		}
 		periods->append(p);
-		return;
+		return true;
 	}
 
 	// split timepartlist on comma
@@ -106,6 +111,8 @@ void cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 		charstring::split(timeparts[i],"-",true,
 					&timepartparts,
 					&timepartpartscount);
+
+		// FIXME: sanity check range, possibly return false;
 
 		// create a new period, set the start/end
 		// and add it to the list of periods
@@ -128,9 +135,11 @@ void cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 
 	// clean up
 	delete[] timeparts;
+
+	return true;
 }
 
-void cronschedule::splitDayParts(const char *daypartlist) {
+bool cronschedule::splitDayParts(const char *daypartlist) {
 
 	// handle *'s
 	if (!charstring::compare(daypartlist,"*")) {
@@ -140,7 +149,7 @@ void cronschedule::splitDayParts(const char *daypartlist) {
 		dp->endhour=23;
 		dp->endminute=59;
 		pvt->_dayparts.append(dp);
-		return;
+		return true;
 	}
 
 	// split daypartlist on comma
@@ -157,6 +166,8 @@ void cronschedule::splitDayParts(const char *daypartlist) {
 		charstring::split(dayparts[i],"-",true,
 					&daypartparts,
 					&daypartpartscount);
+
+		// FIXME: sanity check range, possibly return false;
 
 		// create a new daypart, set the start/end
 		// hour/minute and add it to the list of periods
@@ -196,6 +207,8 @@ void cronschedule::splitDayParts(const char *daypartlist) {
 
 	// clean upc
 	delete[] dayparts;
+
+	return true;
 }
 
 bool cronschedule::inSchedule(datetime *dt) {

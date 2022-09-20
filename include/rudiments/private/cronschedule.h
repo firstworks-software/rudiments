@@ -5,10 +5,10 @@
 		cronschedule(cronschedule &c) {};
 		cronschedule	&operator=(cronschedule &c) { return *this; };
 
-		void	splitTimePart(
+		bool	splitTimePart(
 				linkedlist< cronscheduleperiod * > *periods,
 				const char *timepartlist);
-		void	splitDayParts(const char *daypartlist);
+		bool	splitDayParts(const char *daypartlist);
 		bool	inPeriods(linkedlist< cronscheduleperiod * > *periods,
 						int32_t timepart);
 		bool	inDayParts(int32_t hour, int32_t minute);
