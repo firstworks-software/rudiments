@@ -8,7 +8,7 @@
 		uint32_t	_retrywait();
 		uint32_t	_tries();
 
-		void	init(char *connecterror,
+		void	setParameters(char *connecterror,
 					int32_t timeoutsec,
 					int32_t timeoutusec,
 					uint32_t retrywait,

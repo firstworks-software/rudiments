@@ -66,7 +66,7 @@ bool inetsocketserver::listen(const char *address, uint16_t port,
 bool inetsocketserver::init(const char *address, uint16_t port) {
 
 	close();
-	inetsocketutil::init(address,port);
+	inetsocketutil::setParameters(address,port);
 
 	// initialize a socket address structure
 	bytestring::zero(_sin(),sizeof(sockaddr_in));

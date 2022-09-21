@@ -73,22 +73,23 @@ int32_t inetsocketclient::connect(const char *host,
 						int32_t timeoutusec,
 						uint32_t retrywait,
 						uint32_t tries) {
-	init(host,port,timeoutsec,timeoutusec,retrywait,tries);
+	setParameters(host,port,timeoutsec,timeoutusec,retrywait,tries);
 	return connect();
 }
 
-void inetsocketclient::init(const char *host,
+void inetsocketclient::setParameters(const char *host,
 					uint16_t port,
 					int32_t timeoutsec,
 					int32_t timeoutusec,
 					uint32_t retrywait,
 					uint32_t tries) {
 	close();
-	inetsocketutil::init(host,port);
-	client::init(NULL,timeoutsec,timeoutusec,retrywait,tries);
+	inetsocketutil::setParameters(host,port);
+	client::setParameters(NULL,timeoutsec,timeoutusec,retrywait,tries);
 }
 
-void inetsocketclient::init(dictionary<const char *, const char *> *cd) {
+void inetsocketclient::setParameters(
+			dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
 
@@ -105,7 +106,7 @@ void inetsocketclient::init(dictionary<const char *, const char *> *cd) {
 		const char	*tries=NULL;
 		cd->getValue("tries",&tries);
 	
-		init(host?host:"",
+		setParameters(host?host:"",
 			charstring::toInteger(port?port:"0"),
 			charstring::toInteger(timeoutsec?timeoutsec:"-1"),
 			charstring::toInteger(timeoutusec?timeoutusec:"-1"),

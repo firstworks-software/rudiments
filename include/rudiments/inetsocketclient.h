@@ -22,7 +22,7 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		/** Deletes this instance of the inetsocketclient class. */
 		virtual		~inetsocketclient();
 
-		/** This convenience method calls the init() and
+		/** This convenience method calls the setParameters() and
 		 *  connect() methods of the class.
 		 * 
 		 *  Returns RESULT_SUCCESS on success and RESULT_ERROR
@@ -40,14 +40,15 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 
 
 		/** Queries "cd" for "host", "port", "timeoutsec",
-		 *  "timeoutusec", "retrywait" and "tries".  Initializes the
-		 *  class to use the result when connect() is called. */
-		void	init(dictionary<const char *, const char *> *cd);
+		 *  "timeoutusec", "retrywait" and "tries" and configures this
+		 *  instance to use the result when connect() is called. */
+		void	setParameters(
+				dictionary<const char *, const char *> *cd);
 
-		/** Initializes the class to use "host", "port",
+		/** Configures this instance to use "host", "port",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and
 		 *  "tries" when connect() is called. */
-		void	init(const char *host,
+		void	setParameters(const char *host,
 					uint16_t port,
 					int32_t timeoutsec,
 					int32_t timeoutusec,
@@ -55,7 +56,7 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 					uint32_t tries);
 
 		/** Attempts to connect to the "host" and "port" set
-		 *  earlier using one of the init() methods.
+		 *  earlier using one of the setParameters() methods.
 		 *  If the connection fails, it will retry, for a total of
 		 *  "tries" attempts, waiting "retrywait" seconds
 		 *  between each attempt.

@@ -104,6 +104,7 @@
 	renamed some datetime methods from *DateAndTime() to *DateTime()
 	renamed some datetime methods from adjust*() to set*()
 	renamed *entry methods from init() to open()
+	renamed *client and *util methods from init() to setParameters()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

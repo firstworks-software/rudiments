@@ -47,7 +47,7 @@ void modemserver::init(const char *device, const char *baud,
 					const char *acceptscript,
 					const char *disconnectscript) {
 	close();
-	modemutil::init(device,baud);
+	modemutil::setParameters(device,baud);
 	pvt->_listenscript=listenscript;
 	pvt->_acceptscript=acceptscript;
 	pvt->_disconnectscript=disconnectscript;

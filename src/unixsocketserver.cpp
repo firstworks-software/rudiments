@@ -60,7 +60,7 @@ unixsocketserver::~unixsocketserver() {
 bool unixsocketserver::init(const char *filename, mode_t mask) {
 
 	close();
-	unixsocketutil::init(filename);
+	unixsocketutil::setParameters(filename);
 	pvt->_mask=mask;
 
 	// if a null or blank port was specified, return an error

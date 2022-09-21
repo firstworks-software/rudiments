@@ -17,16 +17,15 @@ class RUDIMENTS_DLLSPEC client : public filedescriptor {
 		virtual ~client();
 
 		/** This method may be implemented by a child class to
-		 *  initialize this instance with the parameters defined in
-		 *  "cd".
+		 *  configured this instance as defined in "cd".
 		 *
 		 *  This implementation does nothing. */
-		virtual void	init(
+		virtual void	setParameters(
 				dictionary<const char *, const char *> *cd);
 
 		/** This method may be implemnted by a child class to open a
 		 *  connection to a server, presumably specified in the "cd"
-		 *  parameter of the initalize() method.
+		 *  parameter of the setParameters() method.
 		 *
 		 *  This method return an int32_t instead of a bool so child
 		 *  classes that have non atomic connection procedures (such

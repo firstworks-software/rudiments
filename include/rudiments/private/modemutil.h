@@ -13,7 +13,7 @@ class RUDIMENTS_DLLSPEC modemutil {
 			modemutil();
 		virtual	~modemutil();
 
-		void	init(const char *device, const char *baud);
+		void	setParameters(const char *device, const char *baud);
 
 	protected:
 		const char	*_devicename();

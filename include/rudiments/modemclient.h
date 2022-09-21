@@ -17,18 +17,18 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 		/** Deletes this instance of the modemclient class. */
 		virtual		~modemclient();
 
-		/** Initializes the class to use "device",
-		 *  "baud, "connectscript", "phonenumber",
-		 *  "disconnectscript", "retrywait" and
-		 *  "tries" when connect() is called. */
-		void	init(dictionary<const char *, const char *> *cd);
+		/** Queries "cd" for "device", "baud", "connectscript",
+		 *  "phonenumber", "disconnectscript", "retrywait" and "tries"
+		 *  and configures this instance to use the results when
+		 *  connect() is called. */
+		void	setParameters(
+				dictionary<const char *, const char *> *cd);
 
-		/** Initializes the class to use "device",
-		 *  "baud, "customatcommands",
-		 *  "connectscript", "phonenumber",
-		 *  "disconnectscript", "retrywait" and
-		 *  "tries" when connect() is called. */
-		void	init(const char *device,
+		/** Configures this instance to use "device", "baud",
+		 *  "customatcommands", "connectscript", "phonenumber",
+		 *  "disconnectscript", "retrywait" and "tries" when connect()
+		 *  is called. */
+		void	setParameters(const char *device,
 					const char *baud,
 					const char *customatcommands,
 					const char *connectscript,

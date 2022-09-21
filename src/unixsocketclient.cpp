@@ -52,27 +52,28 @@ int32_t unixsocketclient::connect(const char *filename,
 					int32_t timeoutusec,
 					uint32_t retrywait,
 					uint32_t tries) {
-	init(filename,timeoutsec,timeoutusec,retrywait,tries);
+	setParameters(filename,timeoutsec,timeoutusec,retrywait,tries);
 	return connect();
 }
 
-void unixsocketclient::init(const char *filename,
+void unixsocketclient::setParameters(const char *filename,
 					int32_t timeoutsec,
 					int32_t timeoutusec,
 					uint32_t retrywait,
 					uint32_t tries) {
 	close();
-	unixsocketutil::init(filename);
-	client::init(NULL,timeoutsec,timeoutusec,retrywait,tries);
+	unixsocketutil::setParameters(filename);
+	client::setParameters(NULL,timeoutsec,timeoutusec,retrywait,tries);
 	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-		pvt->_isc.init("127.0.0.1",
+		pvt->_isc.setParameters("127.0.0.1",
 				filenameToPort(filename),
 				timeoutsec,timeoutusec,
 				retrywait,tries);
 	#endif
 }
 
-void unixsocketclient::init(dictionary<const char *, const char *> *cd) {
+void unixsocketclient::setParameters(
+			dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
 		const char	*filename=NULL;
@@ -86,7 +87,7 @@ void unixsocketclient::init(dictionary<const char *, const char *> *cd) {
 		const char	*tries=NULL;
 		cd->getValue("tries",&tries);
 
-		init(filename?filename:"",
+		setParameters(filename?filename:"",
 			charstring::toInteger(timeoutsec?timeoutsec:"0"),
 			charstring::toInteger(timeoutusec?timeoutusec:"0"),
 			charstring::toUnsignedInteger(retrywait?retrywait:"0"),

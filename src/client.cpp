@@ -17,7 +17,7 @@ class clientprivate {
 
 client::client() : filedescriptor() {
 	pvt=new clientprivate;
-	init(NULL,-1,-1,0,0);
+	setParameters(NULL,-1,-1,0,0);
 }
 
 client::~client() {
@@ -25,9 +25,9 @@ client::~client() {
 	delete pvt;
 }
 
-void client::init(char *connecterror,
-			int32_t timeoutsec, int32_t timeoutusec,
-			uint32_t retrywait, uint32_t tries) {
+void client::setParameters(char *connecterror,
+				int32_t timeoutsec, int32_t timeoutusec,
+				uint32_t retrywait, uint32_t tries) {
 	pvt->_connecterror=connecterror;
 	pvt->_timeoutsec=timeoutsec;
 	pvt->_timeoutusec=timeoutusec;
@@ -36,7 +36,7 @@ void client::init(char *connecterror,
 	type("client");
 }
 
-void client::init(dictionary<const char *, const char *> *cd) {
+void client::setParameters(dictionary<const char *, const char *> *cd) {
 	// by default, do nothing
 }
 

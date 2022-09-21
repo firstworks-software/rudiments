@@ -31,7 +31,7 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 		/** Deletes this instance of unixsocketclient. */
 		virtual		~unixsocketclient();
 
-		// This convenience method that calls the init() and
+		// This convenience method that calls the setParameters() and
 		// connect() methods of this class.
 		//
 		// Returns RESULT_SUCCESS on success and RESULT_ERROR
@@ -45,14 +45,15 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 
 
 		/** Queries "cd" for "filename", "timeoutsec", "timeoutusec",
-		 *  "retrywait" and "tries".  Initializes the class to use the
-		 *  result when connect() is called. */
-		void	init(dictionary<const char *, const char *> *cd);
+		 *  "retrywait" and "tries" and configures this instancec to
+		 *  use them when connect() is called. */
+		void	setParameters(
+				dictionary<const char *, const char *> *cd);
 
-		/** Initializes the class to use "filename",
-		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "tries" when connect() is called. */
-		void	init(const char *filename,
+		/** Configuress this instance to use "filename", "timeoutsec",
+		 *  "timeoutusec", "retrywait" and "tries" when connect() is
+		 *  called. */
+		void	setParameters(const char *filename,
 					int32_t timeoutsec,
 					int32_t timeoutusec,
 					uint32_t retrywait,
