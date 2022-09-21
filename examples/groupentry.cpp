@@ -11,7 +11,7 @@ int main(int argc, const char **argv) {
 
 	// get the group entry
 	groupentry	grent;
-	grent.init(groupname);
+	grent.open(groupname);
 
 	// print out details
 	stdoutput.printf("	Name:		%s\n",grent.getName());

@@ -5,7 +5,7 @@ int main(int argc, const char **argv) {
 
 	// get the protocol entry for the "tcp" protocol
 	protocolentry	pe;
-	pe.init("tcp");
+	pe.open("tcp");
 
 	// print out details
 	stdoutput.printf("	Name:		%s\n",pe.getName());

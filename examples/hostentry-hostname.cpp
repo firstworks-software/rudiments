@@ -7,7 +7,7 @@ int main(int argc, const char **argv) {
 
 	// get the host entry for hostname "localhost"
 	hostentry	he;
-	he.init("localhost");
+	he.open("localhost");
 
 	// print out details
 	stdoutput.printf("	Name: %s\n",he.getName());

@@ -8,7 +8,7 @@ int main(int argc, const char **argv) {
 
 	// get the service information for "smtp","tcp" protocol
 	serviceentry	se;
-	se.init("smtp","tcp");
+	se.open("smtp","tcp");
 
 	// print out details
 	stdoutput.printf("	Name:		%s\n",se.getName());

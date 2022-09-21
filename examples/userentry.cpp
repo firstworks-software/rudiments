@@ -5,7 +5,7 @@ int main(int argc, const char **argv) {
 
 	// get the user entry for "dmuse"
 	userentry	uent;
-	uent.init("dmuse");
+	uent.open("dmuse");
 
 	// print out details
 	stdoutput.printf("	Name:			%s\n",

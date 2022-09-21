@@ -22,12 +22,12 @@ int main(int argc, const char **argv) {
 		// owner user/group
 		uid_t	user=f.getOwnerUserId();
 		userentry	ou;
-		ou.init(user);
+		ou.open(user);
 		stdoutput.printf("Owner User:		%s\n",ou.getName());
 
 		gid_t	group=f.getOwnerGroupId();
 		groupentry	og;
-		og.init(group);
+		og.open(group);
 		stdoutput.printf("Owner Group:		%s\n",og.getName());
 
 		// sizes
