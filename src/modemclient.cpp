@@ -6,6 +6,7 @@
 
 #include <rudiments/device.h>
 #include <rudiments/charstring.h>
+#include <rudiments/process.h>
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
@@ -64,35 +65,47 @@ void modemclient::setParameters(dictionary<const char *, const char *> *cd) {
 		cd->getValue("phonenumber",&phonenumber);
 		const char	*disconnectscript=NULL;
 		cd->getValue("disconnectscript",&disconnectscript);
-		const char	*rwstr=NULL;
-		cd->getValue("retrywait",&rwstr);
-		const char	*rcstr=NULL;
-		cd->getValue("tries",&rcstr);
-		setParameters(devicename,baud,
-				customatcommands,
-				connectscript,
-				phonenumber,
-				disconnectscript,
-				charstring::toInteger(rwstr),
-				charstring::toInteger(rcstr));
+
+		setDevice(devicename);
+		setBaud(baud);
+		pvt->_customatcommands=customatcommands;
+		pvt->_connectscript=connectscript;
+		pvt->_phonenumber=phonenumber;
+		pvt->_disconnectscript=disconnectscript;
+		client::setParameters(cd);
 	}
 }
 
-void modemclient::setParameters(const char *devicename,
-				const char *baud,
-				const char *customatcommands,
-				const char *connectscript,
-				const char *phonenumber,
-				const char *disconnectscript,
-				uint32_t retrywait,
-				uint32_t tries) {
-	close();
-	modemutil::setParameters(devicename,baud);
+void modemclient::setCustomAtCommands(const char *customatcommands) {
 	pvt->_customatcommands=customatcommands;
+}
+
+void modemclient::setConnectScript(const char *connectscript) {
 	pvt->_connectscript=connectscript;
+}
+
+void modemclient::setPhoneNumber(const char *phonenumber) {
 	pvt->_phonenumber=phonenumber;
+}
+
+void modemclient::setDisconnectScript(const char *disconnectscript) {
 	pvt->_disconnectscript=disconnectscript;
-	client::setParameters(NULL,-1,-1,retrywait,tries);
+}
+
+const char *modemclient::getCustomAtCommands() {
+	return pvt->_customatcommands;
+}
+
+const char *modemclient::getConnectScript() {
+	return pvt->_connectscript;
+}
+
+const char *modemclient::getPhoneNumber() {
+	return pvt->_phonenumber;
+}
+
+const char *modemclient::getDisconnectScript() {
+	return pvt->_disconnectscript;
 }
 
 int32_t modemclient::connect() {
@@ -115,7 +128,7 @@ int32_t modemclient::connect() {
 		// this is kind of lame, this class should somehow
 		// inherit from device
 		device	modem;
-		if (!modem.open(_devicename(),O_RDWR|O_NOCTTY)) {
+		if (!modem.open(getDevice(),O_RDWR|O_NOCTTY)) {
 			return RESULT_ERROR;
 		}
 		setFileDescriptor(modem.getFileDescriptor());
@@ -124,7 +137,7 @@ int32_t modemclient::connect() {
 		modem.setFileDescriptor(-1);
 
 		// configure the serial port
-		if (!configureSerialPort(fd(),_baud())) {
+		if (!configureSerialPort(fd(),getBaud())) {
 			filedescriptor::close();
 			return RESULT_ERROR;
 		}

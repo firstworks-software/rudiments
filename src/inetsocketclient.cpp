@@ -67,51 +67,18 @@ void inetsocketclient::dontRandomizeAddresses() {
 	pvt->_randomize=false;
 }
 
-int32_t inetsocketclient::connect(const char *host,
-						uint16_t port,
-						int32_t timeoutsec,
-						int32_t timeoutusec,
-						uint32_t retrywait,
-						uint32_t tries) {
-	setParameters(host,port,timeoutsec,timeoutusec,retrywait,tries);
-	return connect();
-}
-
-void inetsocketclient::setParameters(const char *host,
-					uint16_t port,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries) {
-	close();
-	inetsocketutil::setParameters(host,port);
-	client::setParameters(NULL,timeoutsec,timeoutusec,retrywait,tries);
-}
-
 void inetsocketclient::setParameters(
 			dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
-
 		const char	*host=NULL;
 		cd->getValue("host",&host);
 		const char	*port=NULL;
 		cd->getValue("port",&port);
-		const char	*timeoutsec=NULL;
-		cd->getValue("timeoutsec",&timeoutsec);
-		const char	*timeoutusec=NULL;
-		cd->getValue("timeoutusec",&timeoutusec);
-		const char	*retrywait=NULL;
-		cd->getValue("retrywait",&retrywait);
-		const char	*tries=NULL;
-		cd->getValue("tries",&tries);
 	
-		setParameters(host?host:"",
-			charstring::toInteger(port?port:"0"),
-			charstring::toInteger(timeoutsec?timeoutsec:"-1"),
-			charstring::toInteger(timeoutusec?timeoutusec:"-1"),
-			charstring::toUnsignedInteger(retrywait?retrywait:"0"),
-			charstring::toUnsignedInteger(tries?tries:"0"));
+		setHost((host)?host:"");
+		setPort(charstring::toInteger((port)?port:"0"));
+		client::setParameters(cd);
 	}
 }
 
@@ -134,7 +101,7 @@ int32_t inetsocketclient::connect() {
 		hints.ai_socktype=SOCK_STREAM;
 
 		// get a string representing the port number
-		char	*portstr=charstring::parseNumber(*_port());
+		char	*portstr=charstring::parseNumber(getPort());
 
 		// get the address info for the given address/port
 		addrinfo	*ai=NULL;
@@ -142,7 +109,7 @@ int32_t inetsocketclient::connect() {
 		error::clearError();
 		do {
 			error::clearError();
-			result=getaddrinfo(_address(),portstr,&hints,&ai);
+			result=getaddrinfo(getHost(),portstr,&hints,&ai);
 		} while (result!=0 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 		// ...In theory, we should only loop back and try again if
@@ -161,7 +128,7 @@ int32_t inetsocketclient::connect() {
 
 		// get the host entry
 		hostentry	he;
-		if (!he.open(_address())) {
+		if (!he.open(getHost())) {
 			return RESULT_ERROR;
 		}
 
@@ -174,13 +141,13 @@ int32_t inetsocketclient::connect() {
 		// set the address type and port to connect to
 		bytestring::zero(_sin(),sizeof(sockaddr_in));
 		_sin()->sin_family=he.getAddressType();
-		_sin()->sin_port=hostToNet(*_port());
+		_sin()->sin_port=hostToNet(getPort());
 	#endif
 
 	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
-	for (uint32_t counter=0; counter<_tries() || !_tries(); counter++) {
+	for (uint32_t counter=0; counter<getTries() || !getTries(); counter++) {
 
 		if (process::getShutDownFlag()) {
 			return RESULT_ERROR;
@@ -189,7 +156,7 @@ int32_t inetsocketclient::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			snooze::macrosnooze(_retrywait());
+			snooze::macrosnooze(getRetryWait());
 		}
 
 		#ifdef RUDIMENTS_HAVE_GETADDRINFO
@@ -271,11 +238,10 @@ int32_t inetsocketclient::connect() {
 
 				// attempt to connect
 				retval=socketclient::connect(
-					reinterpret_cast
-					<struct sockaddr *>(ainfo->ai_addr),
+					(struct sockaddr *)ainfo->ai_addr,
 					ainfo->ai_addrlen,
-					_timeoutsec(),
-					_timeoutusec());
+					getTimeoutSeconds(),
+					getTimeoutMicroseconds());
 				if (retval==RESULT_SUCCESS) {
 					freeaddrinfo(ai);
 					return RESULT_SUCCESS;
@@ -379,8 +345,7 @@ int32_t inetsocketclient::connect() {
 	
 				// attempt to connect
 				retval=socketclient::connect(
-					reinterpret_cast
-					<struct sockaddr *>(_sin()),
+					(struct sockaddr *)_sin(),
 					sizeof(sockaddr_in),
 					_timeoutsec(),
 					_timeoutusec());

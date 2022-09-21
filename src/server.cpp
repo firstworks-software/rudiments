@@ -6,10 +6,12 @@
 class serverprivate {
 	friend class server;
 	private:
+		uint32_t	_backlog;
 };
 
 server::server() : filedescriptor() {
 	pvt=new serverprivate;
+	pvt->_backlog=15;
 	type("server");
 }
 
@@ -17,12 +19,20 @@ server::~server() {
 	delete pvt;
 }
 
+void server::setBacklog(uint32_t backlog) {
+	pvt->_backlog=backlog;
+}
+
+uint32_t server::getBacklog() {
+	return pvt->_backlog;
+}
+
 bool server::bind() {
 	// by default, just return success
 	return true;
 }
 
-bool server::listen(int32_t backlog) {
+bool server::listen() {
 	// by default, just return success
 	return true;
 }

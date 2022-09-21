@@ -17,7 +17,7 @@
  *  of sockets and other file descriptors, then you should use the
  *  inetsocketserver class in conjunction with the listener class. */
 class RUDIMENTS_DLLSPEC inetsocketserver :
-			public socketserver, private inetsocketutil {
+			public socketserver, public inetsocketutil {
 	public:
 
 		/** Creates an instance of the inetsocketserver class. */
@@ -47,9 +47,7 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		 *  Returns true on success and false on failure. */
 		bool	listen(const char *address,
 					uint16_t port,
-					int32_t backlog);
-
-
+					uint32_t backlog);
 
 		/** Creates the actual socket and inits the class
 		 *  to use "address" and "port" when bind() is called.
@@ -67,7 +65,7 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		 *  future conenctions are refused. 
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	listen(int32_t backlog);
+		bool	listen();
 
 		/** Removes the client connection from the queue and associates
 		 *  a new socket with that connection.  Communication with the
@@ -76,12 +74,6 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		 *  Returns an inetsocketclient on success and NULL on
 		 *  failure. */
 		filedescriptor	*accept();
-
-		/** Returns the inet port number that the socket is listening
-		 *  on.  If the port has not been set, 0 is returned instead.
-		 *  Writes the address of the client at the other end of "sock"
-		 *  to "buffer". */
-		uint16_t	getPort();
 
 	#include <rudiments/private/inetsocketserver.h>
 };

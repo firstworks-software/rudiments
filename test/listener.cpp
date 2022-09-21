@@ -94,10 +94,12 @@ void inetclient() {
 
 	// create an inet socket client
 	inetsocketclient	clnt;
+	clnt.setHost("127.0.0.1");
+	clnt.setPort(8000);
+	clnt.setTries(1);
 
 	// connect to the server
-	test("inet client - connect",
-			clnt.connect("127.0.0.1",8000,-1,-1,1,1)>=0);
+	test("inet client - connect",clnt.connect()>=0);
 
 	// write "inet" to the server
 	test("inet client - write \"inet\"",clnt.write("inet",4)==4);
@@ -117,10 +119,11 @@ void unixclient() {
 
 	// create an unix socket client
 	unixsocketclient	clnt;
+	clnt.setFilename(listenersck);
+	clnt.setTries(1);
 
 	// connect to the server
-	test("unix client - connect",
-			clnt.connect(listenersck,-1,-1,1,1)>=0);
+	test("unix client - connect",clnt.connect()>=0);
 
 	// write "hello" to the server
 	test("unix client - write \"unix\"",clnt.write("unix",4)==4);

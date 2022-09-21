@@ -33,9 +33,12 @@ int main(int argc, const char **argv) {
 
 	// create an inet socket client
 	inetsocketclient	clnt;
+	clnt.setHost("127.0.0.1");
+	clnt.setPort(8000);
+	clnt.setTries(1);
 
 	// connect to a server on localhost, listening on port 8000
-	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
+	if (clnt.connect()<0) {
 		stdoutput.printf("connect failed: %s\n",
 					error::getErrorString());
 		process::exit(1);

@@ -13,7 +13,7 @@
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
  *  writing data and closing connections. */
 class RUDIMENTS_DLLSPEC inetsocketclient :
-			public socketclient, private inetsocketutil  {
+			public socketclient, public inetsocketutil  {
 	public:
 
 		/** Creates an instance of the inetsocketclient class. */
@@ -22,38 +22,32 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		/** Deletes this instance of the inetsocketclient class. */
 		virtual		~inetsocketclient();
 
-		/** This convenience method calls the setParameters() and
-		 *  connect() methods of the class.
-		 * 
-		 *  Returns RESULT_SUCCESS on success and RESULT_ERROR
-		 *  on failure.
-		 * 
-		 *  See the other connect() method for a note about use in
-		 *  multithreaded applications. */
-		int32_t	connect(const char *host,
-					uint16_t port,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries);
-
-
-
 		/** Queries "cd" for "host", "port", "timeoutsec",
 		 *  "timeoutusec", "retrywait" and "tries" and configures this
 		 *  instance to use the result when connect() is called. */
 		void	setParameters(
 				dictionary<const char *, const char *> *cd);
 
-		/** Configures this instance to use "host", "port",
-		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "tries" when connect() is called. */
-		void	setParameters(const char *host,
-					uint16_t port,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries);
+		/** Instructs connect() to randomize the list of addresses
+ 		 *  that "host" resolves to using "seed".
+		 *  
+		 *  Randomization of addresses is the default behavior, but by
+		 *  default the random number generator used internally is
+		 *  seeded using randomnumber::getSeed().  This may or may not
+		 *  be suitable as it will fall back to seeding the generator
+		 *  with the time of day on platforms that don't support any
+		 *  other method.
+		 *
+		 *  This method allows you to provide a more suitable seed
+		 *  if necessary. */
+		void	randomizeAddresses(uint32_t seed);
+
+		/** Instructs connect() not to randomize the list of addresses
+ 		 *  that "host" resolves to.
+ 		 *
+ 		 *  See connect() for issues that this can cause on some
+ 		 *  platforms or environments. */
+		void	dontRandomizeAddresses();
 
 		/** Attempts to connect to the "host" and "port" set
 		 *  earlier using one of the setParameters() methods.
@@ -134,27 +128,6 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *  dontRandomizeAddresses() and randomizeAddresses().
 		 */
 		int32_t	connect();
-
-		/** Instructs connect() to randomize the list of addresses
- 		 *  that "host" resolves to using "seed".
-		 *  
-		 *  Randomization of addresses is the default behavior, but by
-		 *  default the random number generator used internally is
-		 *  seeded using randomnumber::getSeed().  This may or may not
-		 *  be suitable as it will fall back to seeding the generator
-		 *  with the time of day on platforms that don't support any
-		 *  other method.
-		 *
-		 *  This method allows you to provide a more suitable seed
-		 *  if necessary. */
-		void	randomizeAddresses(uint32_t seed);
-
-		/** Instructs connect() not to randomize the list of addresses
- 		 *  that "host" resolves to.
- 		 *
- 		 *  See connect() for issues that this can cause on some
- 		 *  platforms or environments. */
-		void	dontRandomizeAddresses();
 
 	#include <rudiments/private/inetsocketclient.h>
 };

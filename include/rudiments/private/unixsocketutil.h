@@ -2,8 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
-		const char	*_filename();
-		sockaddr_un	*_sun();
+		sockaddr_un	*getSun();
 
 	private:
 		unixsocketutil(unixsocketutil &u) {};

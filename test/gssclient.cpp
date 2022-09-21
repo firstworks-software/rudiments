@@ -213,6 +213,9 @@ int main(int argc, const char **argv) {
 
 	// create an inet socket client
 	inetsocketclient	fd;
+	fd.setHost(host);
+	fd.setPort(port);
+	fd.setTries(1);
 	fd.setWriteBufferSize(65536);
 	fd.setReadBufferSize(65536);
 
@@ -223,7 +226,7 @@ int main(int argc, const char **argv) {
 	for (int64_t i=0; i<ccount; i++) {
 
 		// connect
-		if (fd.connect(host,port,-1,-1,0,1)!=RESULT_SUCCESS) {
+		if (fd.connect()!=RESULT_SUCCESS) {
 			if (error::getErrorNumber()) {
 				stdoutput.printf("connect failed (1): %s\n",
 							error::getErrorString());

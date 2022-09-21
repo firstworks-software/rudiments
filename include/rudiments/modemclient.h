@@ -8,7 +8,7 @@
 
 /** The modemclient implements methods for connecting to and communicating with
  *  a remote host using a modem. */
-class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
+class RUDIMENTS_DLLSPEC modemclient : public client, public modemutil {
 	public:
 
 		/** Creates an instance of the modemclient class. */
@@ -24,18 +24,46 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 		void	setParameters(
 				dictionary<const char *, const char *> *cd);
 
-		/** Configures this instance to use "device", "baud",
-		 *  "customatcommands", "connectscript", "phonenumber",
-		 *  "disconnectscript", "retrywait" and "tries" when connect()
-		 *  is called. */
-		void	setParameters(const char *device,
-					const char *baud,
-					const char *customatcommands,
-					const char *connectscript,
-					const char *phonenumber,
-					const char *disconnectscript,
-					uint32_t retrywait,
-					uint32_t tries);
+		/** Sets the connect script (usually a set of AT commands) that 
+		 *  connect() will send to the modem during a connect attempt.
+		 *  The connect script may contain $(customatcommands) and
+		 *  $(phonenumber) substitution variables, which will be
+		 *  replaced with whatever values are set by
+		 *  setCustomAtCommands() and setPhoneNumber(). */
+		void	setConnectScript(const char *connectscript);
+
+		/** Sets a set of custom AT commands that will replace the
+		 *  $(customatcommands) substitution variable in the connect 
+		 *  script, if the connect script contains this variable. */
+		void	setCustomAtCommands(const char *customatcommands);
+
+		/** Sets a phone number that will replace the $(phonenumber)
+		 *  substitution variable in the connect script, if the connect
+		 *  script contains this variable. */
+		void	setPhoneNumber(const char *phonenumber);
+
+		/** Sets the disconnect script (usually a set of AT commands)
+		 *  that close() will send to the modem during close. */
+		void	setDisconnectScript(const char *disconnectscript);
+
+		/** Returns the connect script (usually a set of AT commands)
+		 *  that connect() will send to the modem during a connect
+		 *  attempt. */
+		const char	*getConnectScript();
+
+		/** Returns the set of custom AT commands that will replace the
+		 *  $(customatcommands) substitution variable in the connect 
+		 *  script, if the connect script contains this variable. */
+		const char	*getCustomAtCommands();
+
+		/** Returns the phone number that will replace the
+		 *  $(phonenumber) substitution variable in the connect script,
+		 *  if the connect script contains this variable. */
+		const char	*getPhoneNumber();
+
+		/** Returns the disconnect script (usually a set of AT commands)
+		 *  that close() will send to the modem during close. */
+		const char	*getDisconnectScript();
 
 		/** Dials the modem and attempt to establish a connection.
 		 *  If the connection fails, it will retry, for a total of

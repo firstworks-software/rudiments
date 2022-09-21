@@ -431,10 +431,12 @@ void inetclient(const char *host) {
 
 	// create an inet socket client
 	inetsocketclient	clnt;
+	clnt.setHost((charstring::isNullOrEmpty(host))?"127.0.0.1":host);
+	clnt.setPort(8000);
+	clnt.setTries(1);
 
 	// connect to the server
-	if (clnt.connect((charstring::isNullOrEmpty(host))?"127.0.0.1":host,
-							8000,-1,-1,1,1)<0) {
+	if (clnt.connect()<0) {
 		stdoutput.printf("	connect failed\n}\n");
 		return;
 	}
@@ -459,9 +461,11 @@ void unixclient() {
 
 	// create an unix socket client
 	unixsocketclient	clnt;
+	clnt.setFilename("listener.sck");
+	clnt.setTries(1);
 
 	// connect to the server
-	if (clnt.connect("listener.sck",-1,-1,1,1)<0) {
+	if (clnt.connect()<0) {
 		stdoutput.printf("	connect failed\n}\n");
 		return;
 	}

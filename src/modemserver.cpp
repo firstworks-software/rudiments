@@ -47,7 +47,8 @@ void modemserver::open(const char *device, const char *baud,
 					const char *acceptscript,
 					const char *disconnectscript) {
 	close();
-	modemutil::setParameters(device,baud);
+	setDevice(device);
+	setBaud(baud);
 	pvt->_listenscript=listenscript;
 	pvt->_acceptscript=acceptscript;
 	pvt->_disconnectscript=disconnectscript;
@@ -59,16 +60,16 @@ bool modemserver::listen(const char *device, const char *baud,
 					const char *disconnectscript) {
 
 	open(device,baud,listenscript,acceptscript,disconnectscript);
-	return listen(0);
+	return listen();
 }
 
-bool modemserver::listen(int32_t backlog) {
+bool modemserver::listen() {
 
 	// open the serial port
 	// this is kind of lame, this class should somehow
 	// inherit from device
 	device	modem;
-	if (!modem.open(_devicename(),O_RDWR|O_NOCTTY)) {
+	if (!modem.open(getDevice(),O_RDWR|O_NOCTTY)) {
 		return false;
 	}
 	setFileDescriptor(modem.getFileDescriptor());
@@ -77,7 +78,7 @@ bool modemserver::listen(int32_t backlog) {
 	modem.setFileDescriptor(-1);
 
 	// configure the serial port
-	if (!configureSerialPort(fd(),_baud())) {
+	if (!configureSerialPort(fd(),getBaud())) {
 		filedescriptor::close();
 		return false;
 	}

@@ -57,10 +57,20 @@ unixsocketserver::~unixsocketserver() {
 	delete pvt;
 }
 
+bool unixsocketserver::listen(const char *filename, mode_t mask,
+							uint32_t backlog) {
+	setBacklog(backlog);
+#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
+	pvt->_iss.setBacklog(getBacklog());
+#endif
+	open(filename,mask);
+	return bind() && listen();
+}
+
 bool unixsocketserver::open(const char *filename, mode_t mask) {
 
 	close();
-	unixsocketutil::setParameters(filename);
+	setFilename(filename);
 	pvt->_mask=mask;
 
 	// if a null or blank port was specified, return an error
@@ -78,9 +88,9 @@ bool unixsocketserver::open(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	file::remove(filename);
-	bytestring::zero(_sun(),sizeof(sockaddr_un));
-	_sun()->sun_family=AF_UNIX;
-	charstring::copy(_sun()->sun_path,filename);
+	bytestring::zero(getSun(),sizeof(sockaddr_un));
+	getSun()->sun_family=AF_UNIX;
+	charstring::copy(getSun()->sun_path,filename);
 
 	// create the socket
 	error::clearError();
@@ -116,12 +126,6 @@ bool unixsocketserver::open(const char *filename, mode_t mask) {
 #endif
 }
 
-bool unixsocketserver::listen(const char *filename, mode_t mask,
-							int32_t backlog) {
-	open(filename,mask);
-	return (bind() && listen(backlog));
-}
-
 bool unixsocketserver::bind() {
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
@@ -136,8 +140,7 @@ bool unixsocketserver::bind() {
 	error::clearError();
 	do {
 		result=::bind(fd(),
-			reinterpret_cast<struct sockaddr *>(_sun()),
-				sizeof(sockaddr_un));
+			(struct sockaddr *)getSun(),sizeof(sockaddr_un));
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	if (result==-1) {
@@ -151,15 +154,15 @@ bool unixsocketserver::bind() {
 #endif
 }
 
-bool unixsocketserver::listen(int32_t backlog) {
+bool unixsocketserver::listen() {
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-	return pvt->_iss.listen(backlog);
+	return pvt->_iss.listen();
 #else
 	int32_t	result;
 	error::clearError();
 	do {
-		result=::listen(fd(),backlog);
+		result=::listen(fd(),(int)getBacklog());
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	return !result;

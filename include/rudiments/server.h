@@ -17,6 +17,16 @@ class RUDIMENTS_DLLSPEC server : public filedescriptor {
 		/** Deletes this instance of the server class. */
 		virtual	~server();
 
+		/** Sets the number of connections that may be queued before
+		 *  future connections are refused. */
+		void	setBacklog(uint32_t backlog);
+
+		/** Returns the number of connections that may be queued before
+		 *  future connections are refused.
+		 *
+		 *  Defaults to 15. */
+		uint32_t	getBacklog();
+
 		/** This method may be implemented by a child class to
 		 *  associated the server with an address.
 		 *
@@ -28,7 +38,7 @@ class RUDIMENTS_DLLSPEC server : public filedescriptor {
 		 *  client connects.
 		 *
 		 *  This implementation just returns true. */
-		virtual	bool	listen(int32_t backlog);
+		virtual	bool	listen();
 
 		/** This method may be implemented by a child class to
 		 *  accept the client connection and return a file descriptor

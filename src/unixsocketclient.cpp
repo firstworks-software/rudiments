@@ -47,51 +47,15 @@ unixsocketclient::~unixsocketclient() {
 	#endif
 }
 
-int32_t unixsocketclient::connect(const char *filename,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries) {
-	setParameters(filename,timeoutsec,timeoutusec,retrywait,tries);
-	return connect();
-}
-
-void unixsocketclient::setParameters(const char *filename,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries) {
-	close();
-	unixsocketutil::setParameters(filename);
-	client::setParameters(NULL,timeoutsec,timeoutusec,retrywait,tries);
-	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-		pvt->_isc.setParameters("127.0.0.1",
-				filenameToPort(filename),
-				timeoutsec,timeoutusec,
-				retrywait,tries);
-	#endif
-}
-
 void unixsocketclient::setParameters(
 			dictionary<const char *, const char *> *cd) {
 
 	if (cd) {
 		const char	*filename=NULL;
 		cd->getValue("filename",&filename);
-		const char	*timeoutsec=NULL;
-		cd->getValue("timeoutsec",&timeoutsec);
-		const char	*timeoutusec=NULL;
-		cd->getValue("timeoutusec",&timeoutusec);
-		const char	*retrywait=NULL;
-		cd->getValue("retrywait",&retrywait);
-		const char	*tries=NULL;
-		cd->getValue("tries",&tries);
 
-		setParameters(filename?filename:"",
-			charstring::toInteger(timeoutsec?timeoutsec:"0"),
-			charstring::toInteger(timeoutusec?timeoutusec:"0"),
-			charstring::toUnsignedInteger(retrywait?retrywait:"0"),
-			charstring::toUnsignedInteger(tries?tries:"0"));
+		setFilename((filename)?filename:"");
+		client::setParameters(cd);
 	}
 }
 
@@ -100,7 +64,13 @@ int32_t unixsocketclient::connect() {
 	close();
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
+	pvt->_isc.setHost("127.0.0.1");
+	pvt->_isc.setPort(filenameToPort(getFilename()));
 	pvt->_isc.setSocketLayer(getSocketLayer());
+	pvt->_isc.setTimeoutSeconds(getTimeoutSeconds());
+	pvt->_isc.setTimeoutMicroeconds(getTimeoutMicroeconds());
+	pvt->_isc.setRetryWait(getRetryWait());
+	pvt->_isc.setTries(getTries());
 	int32_t	result=pvt->_isc.connect();
 	if (result>-1) {
 		fd(pvt->_isc.getFileDescriptor());
@@ -108,8 +78,8 @@ int32_t unixsocketclient::connect() {
 	return result;
 #else
 	// set the filename to connect to
-	_sun()->sun_family=AF_UNIX;
-	charstring::copy(_sun()->sun_path,_filename());
+	getSun()->sun_family=AF_UNIX;
+	charstring::copy(getSun()->sun_path,getFilename());
 
 	// create a unix socket
 	error::clearError();
@@ -145,7 +115,7 @@ int32_t unixsocketclient::connect() {
 	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
-	for (uint32_t counter=0; counter<_tries() || !_tries(); counter++) {
+	for (uint32_t counter=0; counter<getTries() || !getTries(); counter++) {
 
 		if (process::getShutDownFlag()) {
 			return RESULT_ERROR;
@@ -154,14 +124,13 @@ int32_t unixsocketclient::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			snooze::macrosnooze(_retrywait());
+			snooze::macrosnooze(getRetryWait());
 		}
 
 		// attempt to connect
 		retval=socketclient::connect(
-			reinterpret_cast<struct sockaddr *>(_sun()),
-			sizeof(sockaddr_un),
-			_timeoutsec(),_timeoutusec());
+			(struct sockaddr *)getSun(),sizeof(sockaddr_un),
+			getTimeoutSeconds(),getTimeoutMicroseconds());
 		if (retval==RESULT_SUCCESS) {
 			return RESULT_SUCCESS;
 		}

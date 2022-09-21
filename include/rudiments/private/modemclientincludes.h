@@ -3,7 +3,7 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/client.h>
-#include <rudiments/private/modemutil.h>
+#include <rudiments/modemutil.h>
 #include <rudiments/stringbuffer.h>
 
 class modemclientprivate;

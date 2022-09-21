@@ -51,9 +51,7 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		 *  Returns true on success and false on failure. */
 		bool	listen(const char *filename,
 					mode_t mask,
-					int32_t backlog);
-
-
+					uint32_t backlog);
 
 		/** Creates the actual socket and initializes the class
 		 *  to use "filename" when bind() is called.  The
@@ -73,8 +71,7 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		 *  future conenctions are refused.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	listen(int32_t backlog);
-
+		bool	listen();
 
 		/** Removes the client connection from the queue and associates
 		 *  a new socket with that connection.  Communication with the
@@ -83,7 +80,6 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		 *  Returns an unixsocketclient on success and NULL on
 		 *  failure. */
 		filedescriptor	*accept();
-
 
 		/** Closes the socket.
 		 *  Returns true on success and false on failure. */

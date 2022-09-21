@@ -7,34 +7,38 @@
 class inetsocketutilprivate {
 	friend class inetsocketutil;
 	private:
-		const char	*_address;
+		const char	*_host;
 		uint16_t	_port;
 		sockaddr_in	_sin;
 };
 
 inetsocketutil::inetsocketutil() {
 	pvt=new inetsocketutilprivate;
-	setParameters(NULL,0);
+	pvt->_host=NULL;
+	pvt->_port=0;
+	bytestring::zero(&pvt->_sin,sizeof(pvt->_sin));
 }
 
 inetsocketutil::~inetsocketutil() {
 	delete pvt;
 }
 
-void inetsocketutil::setParameters(const char *address, uint16_t port) {
-	pvt->_address=address;
+void inetsocketutil::setHost(const char *host) {
+	pvt->_host=host;
+}
+
+void inetsocketutil::setPort(uint16_t port) {
 	pvt->_port=port;
-	bytestring::zero(&pvt->_sin,sizeof(pvt->_sin));
 }
 
-const char *inetsocketutil::_address() {
-	return pvt->_address;
+const char *inetsocketutil::getHost() {
+	return pvt->_host;
 }
 
-uint16_t *inetsocketutil::_port() {
-	return &pvt->_port;
+uint16_t inetsocketutil::getPort() {
+	return pvt->_port;
 }
 
-sockaddr_in *inetsocketutil::_sin() {
+sockaddr_in *inetsocketutil::getSin() {
 	return &pvt->_sin;
 }

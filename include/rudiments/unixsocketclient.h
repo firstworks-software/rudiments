@@ -22,7 +22,7 @@
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
  *  writing data and closing connections. */
 class RUDIMENTS_DLLSPEC unixsocketclient :
-			public socketclient, private unixsocketutil {
+			public socketclient, public unixsocketutil {
 	public:
 
 		/** Creates an instance of the unixsocketclient class. */
@@ -31,33 +31,11 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 		/** Deletes this instance of unixsocketclient. */
 		virtual		~unixsocketclient();
 
-		// This convenience method that calls the setParameters() and
-		// connect() methods of this class.
-		//
-		// Returns RESULT_SUCCESS on success and RESULT_ERROR
-		// on failure.
-		int32_t	connect(const char *filename,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries);
-
-
-
 		/** Queries "cd" for "filename", "timeoutsec", "timeoutusec",
 		 *  "retrywait" and "tries" and configures this instancec to
 		 *  use them when connect() is called. */
 		void	setParameters(
 				dictionary<const char *, const char *> *cd);
-
-		/** Configuress this instance to use "filename", "timeoutsec",
-		 *  "timeoutusec", "retrywait" and "tries" when connect() is
-		 *  called. */
-		void	setParameters(const char *filename,
-					int32_t timeoutsec,
-					int32_t timeoutusec,
-					uint32_t retrywait,
-					uint32_t tries);
 
 		/** Attempts to connect to the "filename" set earlier.
 		 *  If the connection fails, it will retry, for a total of

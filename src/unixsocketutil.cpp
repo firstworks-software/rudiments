@@ -15,23 +15,23 @@ class unixsocketutilprivate {
 
 unixsocketutil::unixsocketutil() {
 	pvt=new unixsocketutilprivate;
-	setParameters(NULL);
+	pvt->_filename=NULL;
+	bytestring::zero(&pvt->_sun,sizeof(pvt->_sun));
 }
 
 unixsocketutil::~unixsocketutil() {
 	delete pvt;
 }
 
-void unixsocketutil::setParameters(const char *filename) {
+void unixsocketutil::setFilename(const char *filename) {
 	pvt->_filename=filename;
-	bytestring::zero(&pvt->_sun,sizeof(pvt->_sun));
 }
 
-const char *unixsocketutil::_filename() {
+const char *unixsocketutil::getFilename() {
 	return pvt->_filename;
 }
 
-sockaddr_un *unixsocketutil::_sun() {
+sockaddr_un *unixsocketutil::getSun() {
 	return &pvt->_sun;
 }
 

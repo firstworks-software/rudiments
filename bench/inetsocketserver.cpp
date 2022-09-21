@@ -13,11 +13,11 @@ uint32_t	buffersize;
 class myserver : public inetsocketserver {
 	public:
 			myserver() : inetsocketserver() {}
-		void	listen();
+		void	myListen();
 };
 
 
-void myserver::listen() {
+void myserver::myListen() {
 
 
 	// make sure that only one instance is running
@@ -38,7 +38,8 @@ void myserver::listen() {
 				permissions::ownerReadWrite());
 
 	// listen on inet socket port 8000
-	if (!inetsocketserver::listen(NULL,8000,15)) {
+	setPort(8000);
+	if (!listen()) {
 		stdoutput.printf("couldn't listen on port 8000\n");
 	}
 
@@ -89,5 +90,5 @@ int main(int argc, const char **argv) {
 	process::handleShutDown(shutDown);
 	process::handleCrash(shutDown);
 
-	mysvr->listen();
+	mysvr->myListen();
 }

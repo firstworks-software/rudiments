@@ -90,8 +90,9 @@ void handoff2() {
 
 	// connect to handoff1
 	unixsocketclient clnt;
-	test("handoff2 - connect",
-		clnt.connect(handoffsck,-1,-1,0,1)==RESULT_SUCCESS);
+	clnt.setFilename(handoffsck);
+	clnt.setTries(1);
+	test("handoff2 - connect",clnt.connect()==RESULT_SUCCESS);
 
 	// receive the file
 	int32_t	fd;
@@ -125,8 +126,10 @@ void handoffclient() {
 
 	// connect to handoff1
 	inetsocketclient	clnt;
-	test("handoffclient - connect",
-		clnt.connect("127.0.0.1",8001,-1,-1,0,1)==RESULT_SUCCESS);
+	clnt.setHost("127.0.0.1");
+	clnt.setPort(8001);
+	clnt.setTries(1);
+	test("handoffclient - connect",clnt.connect()==RESULT_SUCCESS);
 
 	// read hello
 	char	buffer[6];

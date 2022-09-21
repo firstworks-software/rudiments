@@ -17,11 +17,28 @@ class RUDIMENTS_DLLSPEC inetsocketutil {
 		/** Deletes this instance of the inetsocketutil class. */
 		virtual	~inetsocketutil();
 
-		/** Configures the class to use "address" and "port".
-		 *  This is not directly useful within this class but child
-		 *  classes may use these values to decide where to connect to
-		 *  or what to listen on. */
-		void	setParameters(const char *address, uint16_t port);
+		/** Sets the host (or address) that connect() will attempt
+		 *  to connect to or the address that listen() will listen on.
+		 *
+		 *  This is not directly useful within this instance but child
+		 *  classes may use this values. */
+		void	setHost(const char *host);
+
+		/** Sets the port that connect() will attempt to connect to or
+		 *  that listen() wil listen on.
+		 *
+		 *  This is not directly useful within this instance but child
+		 *  classes may use this value. */
+		void	setPort(uint16_t port);
+
+		/** Returns the host (or address) that connect() will attempt
+		 *  to connect to or the address that listen() will listen
+		 *  on. */
+		const char	*getHost();
+
+		/** Returns the port that connect() will attempt to connect
+		 *  to or that listen() will listen on. */
+		uint16_t	getPort();
 
 	#include <rudiments/private/inetsocketutil.h>
 };

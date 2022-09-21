@@ -2,9 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
-		const char	*_address();
-		uint16_t	*_port();
-		sockaddr_in	*_sin();
+		sockaddr_in	*getSin();
 
 	private:
 		inetsocketutil(inetsocketutil &i) {};

@@ -17,7 +17,12 @@ class clientprivate {
 
 client::client() : filedescriptor() {
 	pvt=new clientprivate;
-	setParameters(NULL,-1,-1,0,0);
+	pvt->_connecterror=NULL;
+	pvt->_timeoutsec=-1;
+	pvt->_timeoutusec=-1;
+	pvt->_retrywait=0;
+	pvt->_tries=0;
+	type("client");
 }
 
 client::~client() {
@@ -25,28 +30,43 @@ client::~client() {
 	delete pvt;
 }
 
-void client::setParameters(char *connecterror,
-				int32_t timeoutsec, int32_t timeoutusec,
-				uint32_t retrywait, uint32_t tries) {
-	pvt->_connecterror=connecterror;
-	pvt->_timeoutsec=timeoutsec;
-	pvt->_timeoutusec=timeoutusec;
-	pvt->_retrywait=retrywait;
-	pvt->_tries=tries;
-	type("client");
-}
-
 void client::setParameters(dictionary<const char *, const char *> *cd) {
-	// by default, do nothing
+
+	if (cd) {
+		const char	*timeoutsec=NULL;
+		cd->getValue("timeoutsec",&timeoutsec);
+		const char	*timeoutusec=NULL;
+		cd->getValue("timeoutusec",&timeoutusec);
+		const char	*retrywait=NULL;
+		cd->getValue("retrywait",&retrywait);
+		const char	*tries=NULL;
+		cd->getValue("tries",&tries);
+
+		setTimeoutSeconds(charstring::toInteger(
+					(timeoutsec)?timeoutsec:"0"));
+		setTimeoutMicroseconds(charstring::toInteger(
+					(timeoutusec)?timeoutusec:"0"));
+		setRetryWait(charstring::toUnsignedInteger(
+					(retrywait)?retrywait:"0"));
+		setTries(charstring::toUnsignedInteger(
+					(tries)?tries:"0"));
+	}
 }
 
-int32_t client::connect() {
-	// by default, do nothing, return success
-	return RESULT_SUCCESS;
+void client::setTimeoutSeconds(int32_t timeoutsec) {
+	pvt->_timeoutsec=timeoutsec;
 }
 
-const char *client::getVerboseConnectError() {
-	return pvt->_connecterror;
+void client::setTimeoutMicroseconds(int32_t timeoutusec) {
+	pvt->_timeoutusec=timeoutusec;
+}
+
+void client::setRetryWait(uint32_t retrywait) {
+	pvt->_retrywait=retrywait;
+}
+
+void client::setTries(uint32_t tries) {
+	pvt->_tries=tries;
 }
 
 void client::setVerboseConnectError(const char *error) {
@@ -54,22 +74,27 @@ void client::setVerboseConnectError(const char *error) {
 	pvt->_connecterror=charstring::duplicate(error);
 }
 
-char **client::_connecterror() {
-	return &pvt->_connecterror;
-}
-
-int32_t client::_timeoutsec() {
+int32_t client::getTimeoutSeconds() {
 	return pvt->_timeoutsec;
 }
 
-int32_t client::_timeoutusec() {
+int32_t client::getTimeoutMicroseconds() {
 	return pvt->_timeoutusec;
 }
 
-uint32_t client::_retrywait() {
+uint32_t client::getRetryWait() {
 	return pvt->_retrywait;
 }
 
-uint32_t client::_tries() {
+uint32_t client::getTries() {
 	return pvt->_tries;
+}
+
+const char *client::getVerboseConnectError() {
+	return pvt->_connecterror;
+}
+
+int32_t client::connect() {
+	// by default, do nothing, return success
+	return RESULT_SUCCESS;
 }

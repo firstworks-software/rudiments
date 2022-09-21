@@ -16,7 +16,7 @@
  *  If you need to listen on more than one modem at a time or a combination of
  *  modems and other file descriptors (such as sockets), then you should use the
  *  modemserver class in conjunction with the listener class. */
-class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
+class RUDIMENTS_DLLSPEC modemserver : public server, public modemutil {
 	public:
 
 		/** Creates an instance of the modemserver class. */
@@ -55,7 +55,7 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
  		 *  baud rate and runs "listenscript".
  		 *
  		 *  Returns true on success and false on failure. */
-		bool	listen(int32_t backlog);
+		bool	listen();
 
 		/** Waits for a client connection.  When a client connects,
  		 *  it runs "acceptscript" which was set in the call to

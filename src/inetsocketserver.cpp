@@ -52,26 +52,24 @@ inetsocketserver::~inetsocketserver() {
 	delete pvt;
 }
 
-uint16_t inetsocketserver::getPort() {
-	return *_port();
-}
-
 bool inetsocketserver::listen(const char *address, uint16_t port,
-							int32_t backlog) {
+							uint32_t backlog) {
+	setBacklog(backlog);
 	open(address,port);
 	reuseAddresses();
-	return (bind() && listen(backlog));
+	return bind() && listen();
 }
 
 bool inetsocketserver::open(const char *address, uint16_t port) {
 
 	close();
-	inetsocketutil::setParameters(address,port);
+	setHost(address);
+	setPort(port);
 
 	// initialize a socket address structure
-	bytestring::zero(_sin(),sizeof(sockaddr_in));
-	_sin()->sin_family=AF_INET;
-	_sin()->sin_port=hostToNet(port);
+	bytestring::zero(getSin(),sizeof(sockaddr_in));
+	getSin()->sin_family=AF_INET;
+	getSin()->sin_port=hostToNet(port);
 
 	// if a specific address was passed in, bind to it only,
 	// otherwise bind to all addresses
@@ -82,18 +80,18 @@ bool inetsocketserver::open(const char *address, uint16_t port) {
 			if (!inet_aton(address,&ia)) {
 				return false;
 			}
-			_sin()->sin_addr.s_addr=ia.s_addr;
+			getSin()->sin_addr.s_addr=ia.s_addr;
 		#elif defined(RUDIMENTS_HAVE_INET_ADDR)
 			in_addr_t	saddr=inet_addr(address);
 			if (saddr==INADDR_NONE) {
 				return false;
 			}
-			_sin()->sin_addr.s_addr=saddr;
+			getSin()->sin_addr.s_addr=saddr;
 		#else
 			#error no inet_aton or anything like it
 		#endif
 	} else {
-		_sin()->sin_addr.s_addr=hostToNet((uint32_t)INADDR_ANY);
+		getSin()->sin_addr.s_addr=hostToNet((uint32_t)INADDR_ANY);
 	}
 
 	// create the socket
@@ -136,8 +134,8 @@ bool inetsocketserver::bind() {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=::bind(fd(),reinterpret_cast<struct sockaddr *>(_sin()),
-							sizeof(sockaddr_in));
+		result=::bind(fd(),
+			(struct sockaddr *)getSin(),sizeof(sockaddr_in));
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	if (result==-1) {
@@ -145,7 +143,7 @@ bool inetsocketserver::bind() {
 	}
 
 	// get the actual port number if an arbitrary port was requested
-	if (!*_port()) {
+	if (!getPort()) {
 
 		// initialize a socket address structure
 		sockaddr_in			socknamesin;
@@ -156,24 +154,21 @@ bool inetsocketserver::bind() {
 		error::clearError();
 		do {
 			result=getsockname(fd(),
-				reinterpret_cast<struct sockaddr *>
-							(&socknamesin),
-				&size);
+				(struct sockaddr *)&socknamesin,&size);
 		} while (result==-1 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 		if (result!=-1) {
-			*_port()=static_cast<uint16_t>(
-						ntohs(socknamesin.sin_port));
+			setPort((uint16_t)ntohs(socknamesin.sin_port));
 		}
 	}
 	return true;
 }
 
-bool inetsocketserver::listen(int32_t backlog) {
+bool inetsocketserver::listen() {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=::listen(fd(),backlog);
+		result=::listen(fd(),(int)getBacklog());
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	return !result;
@@ -191,8 +186,7 @@ filedescriptor *inetsocketserver::accept() {
 	error::clearError();
 	do {
 		clientsock=::accept(fd(),
-				reinterpret_cast<struct sockaddr *>(&clientsin),
-				&size);
+				(struct sockaddr *)&clientsin,&size);
 	} while (clientsock==-1 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 	if (clientsock==-1) {

@@ -3,6 +3,6 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/server.h>
-#include <rudiments/private/modemutil.h>
+#include <rudiments/modemutil.h>
 
 class modemserverprivate;

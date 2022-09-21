@@ -43,9 +43,20 @@ modemutil::~modemutil() {
 	delete pvt;
 }
 
-void modemutil::setParameters(const char *device, const char *baud) {
+void modemutil::setDevice(const char *device) {
 	pvt->_devicename=device;
+}
+
+void modemutil::setBaud(const char *baud) {
 	pvt->_baud=baud;
+}
+
+const char *modemutil::getDevice() {
+	return pvt->_devicename;
+}
+
+const char *modemutil::getBaud() {
+	return pvt->_baud;
 }
 
 bool modemutil::configureSerialPort(int32_t fd, const char *baud) {
@@ -69,12 +80,4 @@ bool modemutil::configureSerialPort(int32_t fd, const char *baud) {
 	// closed when the instance of serialport goes away
 	sp.setFileDescriptor(-1);
 	return retval;
-}
-
-const char *modemutil::_devicename() {
-	return pvt->_devicename;
-}
-
-const char *modemutil::_baud() {
-	return pvt->_baud;
 }

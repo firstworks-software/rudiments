@@ -38187,7 +38187,8 @@ fi
 
 if ( test "$INCLUDE_MODEMCLIENT" = "1" -o  "$INCLUDE_MODEMSERVER" = "1" )
 then
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 modemutil.h"
+	HEADERS3="$HEADERS3 modemutil.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 modemutil.h modemutilincludes.h"
 	SRCS="$SRCS modemutil.cpp"
 	LOBJS="$LOBJS modemutil.lo"
 fi

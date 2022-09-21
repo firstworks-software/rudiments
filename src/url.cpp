@@ -385,8 +385,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("Connecting...\n\n");
 		#endif
-		if (!pvt->_isc.connect(host,charstring::toUnsignedInteger(port),
-								-1,-1,0,0)) {
+		pvt->_isc.setHost(host);
+		pvt->_isc.setPort(charstring::toUnsignedInteger(port));
+		if (!pvt->_isc.connect()) {
 			pvt->_error.append("http - connect failed: ");
 			char	*err=error::getErrorString();
 			pvt->_error.append(err);
