@@ -17,13 +17,13 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		/** Deletes this instance of the groupentry class. */
 		~groupentry();
 
-		/** Looks up a group entry by name.
+		/** Opens a group entry by name.
 		 *  Returns true on success and false on failure. */
-		bool	init(const char *groupname);
+		bool	open(const char *groupname);
 
-		/** Looks up a group entry by group id.
+		/** Opens a group entry by group id.
 		 *  Returns true on success and false on failure. */
-		bool	init(gid_t groupid);
+		bool	open(gid_t groupid);
 
 		/** Returns the name of the group. */
 		const char		*getName();

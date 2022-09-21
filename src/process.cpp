@@ -281,7 +281,7 @@ gid_t process::getGroupId() {
 		// but we can return the primary group of the user associated
 		// with the thread
 		userentry	uent;
-		uent.init(getUserId());
+		uent.open(getUserId());
 		return uent.getPrimaryGroupId();
 	#else
 		#error no getgid or anything like it

@@ -160,13 +160,13 @@ int32_t inetsocketclient::connect() {
 
 		// get the host entry
 		hostentry	he;
-		if (!he.init(_address())) {
+		if (!he.open(_address())) {
 			return RESULT_ERROR;
 		}
 
 		// use tcp protocol
 		protocolentry	pe;
-		if (!pe.init("tcp")) {
+		if (!pe.open("tcp")) {
 			return RESULT_ERROR;
 		}
 

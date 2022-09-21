@@ -5,5 +5,6 @@
 		protocolentry(protocolentry &p) {};
 		protocolentry	&operator=(protocolentry &p) { return *this; };
 
-		bool	init(const char *protocolname, int32_t number);
+		bool	open(const char *protocolname, int32_t number);
+
 		protocolentryprivate	*pvt;

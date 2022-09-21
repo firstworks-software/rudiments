@@ -5,5 +5,6 @@
 		userentry(userentry &u) {};
 		userentry	&operator=(userentry &u) { return *this; };
 
-		bool	init(const char *username, uid_t userid);
+		bool	open(const char *username, uid_t userid);
+
 		userentryprivate	*pvt;

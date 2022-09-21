@@ -423,15 +423,15 @@ void userentry::setMutex(threadmutex *mtx) {
 	#endif
 }
 
-bool userentry::init(const char *username) {
-	return init(username,(uid_t)-1);
+bool userentry::open(const char *username) {
+	return open(username,(uid_t)-1);
 }
 
-bool userentry::init(uid_t userid) {
-	return init(NULL,userid);
+bool userentry::open(uid_t userid) {
+	return open(NULL,userid);
 }
 
-bool userentry::init(const char *username, uid_t userid) {
+bool userentry::open(const char *username, uid_t userid) {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 
 	// init return value
@@ -658,7 +658,7 @@ bool userentry::init(const char *username, uid_t userid) {
 		// look up the uid in the map
 		namesid	*ns;
 		if (uidmap.getValue(userid,&ns)) {
-			return init(ns->name);
+			return open(ns->name);
 		}
 		return false;
 	}
@@ -668,17 +668,17 @@ bool userentry::init(const char *username, uid_t userid) {
 
 char *userentry::getName(uid_t userid) {
 	userentry	pwd;
-	return (pwd.init(userid))?
+	return (pwd.open(userid))?
 			charstring::duplicate(pwd.getName()):NULL;
 }
 
 uid_t userentry::getUserId(const char *username) {
 	userentry	pwd;
-	return (pwd.init(username))?pwd.getUserId():(uid_t)-1;
+	return (pwd.open(username))?pwd.getUserId():(uid_t)-1;
 }
 
 char *userentry::getSidString(const char *username) {
 	userentry	pwd;
-	return (pwd.init(username))?
+	return (pwd.open(username))?
 			charstring::duplicate(pwd.getSidString()):NULL;
 }

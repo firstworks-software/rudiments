@@ -17,28 +17,27 @@ class RUDIMENTS_DLLSPEC hostentry : public object {
 		/** Deletes this instance of the hostentry class. */
 		~hostentry();
 
-		/** Looks up a host entry by name. */
-		bool	init(const char *hostname);
+		/** Opens a host entry by name. */
+		bool	open(const char *hostname);
 
-		/** Looks up a host entry by address.
+		/** Opens a host entry by address.
 		 *
 		 *  Note that "address" must be a binary representation of the
 		 *  address.  This is why "len" and "type" are also required. */
-		bool	init(const char *address,
-					int32_t len, int32_t type);
+		bool	open(const char *address, int32_t len, int32_t type);
 
 		/** Returns the primary hostname of the host entry. */
-		const char		*getName();
+		const char	*getName();
 
 		/** Returns a NULL-terminated list of aliases for the
 		 *  host entry. */
 		const char * const	*getAliasList();
 
 		/** Returns the address type of the host entry. */
-		int32_t			getAddressType();
+		int32_t		getAddressType();
 
 		/** Returns the address length of the host entry. */
-		int32_t			getAddressLength();
+		int32_t		getAddressLength();
 
 		/** Returns a NULL-terminated list of addresses for the
 		 *  host entry. */

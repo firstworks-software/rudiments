@@ -5,7 +5,8 @@
 		hostentry(hostentry &h) {};
 		hostentry	&operator=(hostentry &h) { return *this; };
 
-		bool	init(const char *hostname,
+		bool	open(const char *hostname,
 					const char *address,
 					int32_t len, int32_t type);
+
 		hostentryprivate	*pvt;

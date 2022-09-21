@@ -87,15 +87,15 @@ void protocolentry::setMutex(threadmutex *mtx) {
 	#endif
 }
 
-bool protocolentry::init(const char *protocolname) {
-	return init(protocolname,-1);
+bool protocolentry::open(const char *protocolname) {
+	return open(protocolname,-1);
 }
 
-bool protocolentry::init(int32_t number) {
-	return init(NULL,number);
+bool protocolentry::open(int32_t number) {
+	return open(NULL,number);
 }
 
-bool protocolentry::init(const char *protocolname, int32_t number) {
+bool protocolentry::open(const char *protocolname, int32_t number) {
 
 	pvt->_pe=NULL;
 	if (!protocolname && number==-1) {
@@ -157,10 +157,10 @@ bool protocolentry::init(const char *protocolname, int32_t number) {
 
 int32_t protocolentry::getNumber(const char *protocolname) {
 	protocolentry	pe;
-	return (pe.init(protocolname))?pe.getNumber():-1;
+	return (pe.open(protocolname))?pe.getNumber():-1;
 }
 
 char *protocolentry::getName(int32_t number) {
 	protocolentry	pe;
-	return (pe.init(number))?charstring::duplicate(pe.getName()):NULL;
+	return (pe.open(number))?charstring::duplicate(pe.getName()):NULL;
 }

@@ -17,13 +17,13 @@ class RUDIMENTS_DLLSPEC protocolentry : public object {
 		/** Deletes this instance of the protocolentry class. */
 		~protocolentry();
 
-		/** Looks up a protocol entry by name.
+		/** Opens a protocol entry by name.
 		 *  Returns true on success and false on failure. */
-		bool	init(const char *protocolname);
+		bool	open(const char *protocolname);
 
-		/** Looks up a protocol entry by number.
+		/** Opens a protocol entry by number.
 		 *  Returns true on success and false on failure. */
-		bool	init(int32_t number);
+		bool	open(int32_t number);
 
 		/** Returns the name of the protocol entry. */
 		const char		*getName();

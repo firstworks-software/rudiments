@@ -17,17 +17,17 @@ class RUDIMENTS_DLLSPEC serviceentry : public object {
 		/** Deletes this instance of the serviceentry class. */
 		~serviceentry();
 
-		/** Looks up a service entry by "servicename" and "protocol"
+		/** Opens a service entry by "servicename" and "protocol"
 		 *  (tcp, udp, etc.).
 		 *  Returns true on success and false on failure. */
-		bool	init(const char *servicename,
+		bool	open(const char *servicename,
 					const char *protocol);
 
-		/** Looks up a service entry by the "port" that a server for
+		/** Opens a service entry by the "port" that a server for
 		 *  would listen on and the "protocol" that it would use
 		 *  (tcp, udp, etc.).
 		 *  Returns true on success and false on failure. */
-		bool	init(int32_t port, const char *protocol);
+		bool	open(int32_t port, const char *protocol);
 
 		/** Returns the name of the service entry. */
 		const char		*getName();
