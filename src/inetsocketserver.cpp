@@ -58,12 +58,12 @@ uint16_t inetsocketserver::getPort() {
 
 bool inetsocketserver::listen(const char *address, uint16_t port,
 							int32_t backlog) {
-	init(address,port);
+	open(address,port);
 	reuseAddresses();
 	return (bind() && listen(backlog));
 }
 
-bool inetsocketserver::init(const char *address, uint16_t port) {
+bool inetsocketserver::open(const char *address, uint16_t port) {
 
 	close();
 	inetsocketutil::setParameters(address,port);

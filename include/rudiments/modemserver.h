@@ -25,10 +25,9 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 		/** Deletes this instance of the modemserver class. */
 		virtual		~modemserver();
 
-		/** Convenience method that calls init(), bind(),
- 		 *  and listen().  If you need to do anything special between
- 		 *  those discrete steps, then you should use the methods
- 		 *  individually.
+		/** Convenience method that calls open() and listen().  If you
+		 *  need to do anything special between those discrete steps,
+		 *  then you should use the methods individually.
  		 *
  		 *  Opens "device", sets the baud rate to "baud", then
  		 *  runs "listenscript".  When a client connects,
@@ -47,12 +46,12 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 		 *  the client disconnects, "disconnecctscript" will be run.
  		 *
  		 *  Returns true on success and false on failure. */
-		void	init(const char *device, const char *baud,
+		void	open(const char *device, const char *baud,
 						const char *listenscript,
 						const char *acceptscript,
 						const char *disconnectscript);
 
-		/** Opens the device set in the call to initalize(), sets the
+		/** Opens the device set in the call to open(), sets the
  		 *  baud rate and runs "listenscript".
  		 *
  		 *  Returns true on success and false on failure. */
@@ -60,13 +59,13 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 
 		/** Waits for a client connection.  When a client connects,
  		 *  it runs "acceptscript" which was set in the call to
- 		 *  init().
+ 		 *  open().
  		 *
  		 *  Returns true on success and false on failure. */
 		filedescriptor	*accept();
 
 		/** Runs "disconnectscript" which was set in the call to
-		 *  init() and closes the device.
+		 *  open() and closes the device.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	close();

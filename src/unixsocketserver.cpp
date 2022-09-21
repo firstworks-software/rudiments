@@ -57,7 +57,7 @@ unixsocketserver::~unixsocketserver() {
 	delete pvt;
 }
 
-bool unixsocketserver::init(const char *filename, mode_t mask) {
+bool unixsocketserver::open(const char *filename, mode_t mask) {
 
 	close();
 	unixsocketutil::setParameters(filename);
@@ -69,7 +69,7 @@ bool unixsocketserver::init(const char *filename, mode_t mask) {
 	}
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-	if (pvt->_iss.init("127.0.0.1",filenameToPort(filename))) {
+	if (pvt->_iss.open("127.0.0.1",filenameToPort(filename))) {
 		fd(pvt->_iss.getFileDescriptor());
 		return true;
 	}
@@ -118,7 +118,7 @@ bool unixsocketserver::init(const char *filename, mode_t mask) {
 
 bool unixsocketserver::listen(const char *filename, mode_t mask,
 							int32_t backlog) {
-	init(filename,mask);
+	open(filename,mask);
 	return (bind() && listen(backlog));
 }
 

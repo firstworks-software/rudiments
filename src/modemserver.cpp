@@ -42,7 +42,7 @@ modemserver::~modemserver() {
 	delete pvt;
 }
 
-void modemserver::init(const char *device, const char *baud,
+void modemserver::open(const char *device, const char *baud,
 					const char *listenscript,
 					const char *acceptscript,
 					const char *disconnectscript) {
@@ -58,7 +58,7 @@ bool modemserver::listen(const char *device, const char *baud,
 					const char *acceptscript,
 					const char *disconnectscript) {
 
-	init(device,baud,listenscript,acceptscript,disconnectscript);
+	open(device,baud,listenscript,acceptscript,disconnectscript);
 	return listen(0);
 }
 

@@ -38,7 +38,7 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		/** Deletes this instance of the unixsocketserver class. */
 		virtual		~unixsocketserver();
 
-		/** Convenience method that calls init(), bind()
+		/** Convenience method that calls open(), bind()
 		 *  and listen().  If you need to set socket options or
 		 *  do anything else special between those discrete steps
 		 *  then you should use the methods individually.
@@ -61,7 +61,7 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		 *  "mask".
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	init(const char *filename, mode_t mask);
+		bool	open(const char *filename, mode_t mask);
 
 		/** Associates the socket with an address.
 		 * 
@@ -80,7 +80,8 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		 *  a new socket with that connection.  Communication with the
 		 *  client may be done over this new socket.  
 		 *
-		 *  Returns an inetsocket on success and NULL on failure. */
+		 *  Returns an unixsocketclient on success and NULL on
+		 *  failure. */
 		filedescriptor	*accept();
 
 
