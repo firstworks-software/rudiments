@@ -19,12 +19,12 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 
 		/** Sets the filename that connect() will attempt to connect
 		 *  to, or that listen() will listen on.
-
+		 *
 		 *  This is not directly useful within this instance but child
 		 *  classes may use this value. */
 		void	setFilename(const char *filename);
 
-		/** Retruns the filename that connect() will attempt to connect
+		/** Returns the filename that connect() will attempt to connect
 		 *  to, or that listen() will listen on. */
 		const char	*getFilename();
 

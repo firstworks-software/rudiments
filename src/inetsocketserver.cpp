@@ -54,17 +54,18 @@ inetsocketserver::~inetsocketserver() {
 
 bool inetsocketserver::listen(const char *address, uint16_t port,
 							uint32_t backlog) {
-	setBacklog(backlog);
-	open(address,port);
-	reuseAddresses();
-	return bind() && listen();
-}
-
-bool inetsocketserver::open(const char *address, uint16_t port) {
-
-	close();
 	setHost(address);
 	setPort(port);
+	setBacklog(backlog);
+	return open() && reuseAddresses() && bind() && listen();
+}
+
+bool inetsocketserver::open() {
+
+	close();
+
+	uint16_t	port=getPort();
+	const char	*address=getHost();
 
 	// initialize a socket address structure
 	bytestring::zero(getSin(),sizeof(sockaddr_in));

@@ -38,30 +38,37 @@ class RUDIMENTS_DLLSPEC unixsocketserver :
 		/** Deletes this instance of the unixsocketserver class. */
 		virtual		~unixsocketserver();
 
-		/** Convenience method that calls open(), bind()
-		 *  and listen().  If you need to set socket options or
-		 *  do anything else special between those discrete steps
-		 *  then you should use the methods individually.
+		/** Convenience method that calls open(), bind() and listen().
+		 *  If you need to set socket options or do anything else
+		 *  special between those discrete steps then you should use
+		 *  the methods individually.
 		 *
-		 *  Listen on "filename" and allow "backlog"
-		 *  connections to pile up before refusing them.
-		 *  Set the permissions on "filename" using
-		 *  umask "mask".
+		 *  Listen on "filename" and allow "backlog" connections to
+		 *  pile up before refusing them.  Set the permissions on
+		 *  "filename" using umask "mask".
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	listen(const char *filename,
 					mode_t mask,
 					uint32_t backlog);
 
-		/** Creates the actual socket and initializes the class
-		 *  to use "filename" when bind() is called.  The
-		 *  permissions on "filename" will be set using umask
-		 *  "mask".
+		/** Sets the umask that will be used when associating the
+		 *  socket with a file. */
+		void	setMask(mode_t mask);
+
+		/** Returns the umask that will be used when associating the
+		 *  socket with a file. */
+		mode_t	getMask();
+
+		/** Creates the actual socket and initializes the instance to
+		 *  use "filename" when bind() is called.  The permissions on
+		 *  "filename" will be set using umask "mask".
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	open(const char *filename, mode_t mask);
+		bool	open();
 
-		/** Associates the socket with an address.
+		/** Associates the socket with a file and sets permissions on
+ 		 *  that file.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	bind();

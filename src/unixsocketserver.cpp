@@ -59,21 +59,30 @@ unixsocketserver::~unixsocketserver() {
 
 bool unixsocketserver::listen(const char *filename, mode_t mask,
 							uint32_t backlog) {
+	setFilename(filename);
+	pvt->_mask=mask;
 	setBacklog(backlog);
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 	pvt->_iss.setBacklog(getBacklog());
 #endif
-	open(filename,mask);
-	return bind() && listen();
+	return open() && bind() && listen();
 }
 
-bool unixsocketserver::open(const char *filename, mode_t mask) {
+void unixsocketserver::setMask(mode_t mask) {
+	pvt->_mask=mask;
+}
+
+mode_t unixsocketserver::getMask() {
+	return pvt->_mask;
+}
+
+bool unixsocketserver::open() {
 
 	close();
-	setFilename(filename);
-	pvt->_mask=mask;
 
-	// if a null or blank port was specified, return an error
+	const char	*filename=getFilename();
+
+	// if a null or blank filename was specified, return an error
 	if (charstring::isNullOrEmpty(filename)) {
 		return false;
 	}

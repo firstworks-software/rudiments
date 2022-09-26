@@ -32,9 +32,8 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		 *  those discrete steps then you should use the methods
 		 *  individually.
 		 * 
-		 *  Listens on "address" and "port" and allow
-		 *  "backlog" connections to pile up before
-		 *  refusing them.
+		 *  Listens on "address" and "port" and allow "backlog"
+		 *  connections to pile up before refusing them.
 		 * 
 		 *  To listen on all addresses enter a NULL
 		 *  for "address".  Entering a value of 0 for
@@ -49,11 +48,10 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 					uint16_t port,
 					uint32_t backlog);
 
-		/** Creates the actual socket and inits the class
-		 *  to use "address" and "port" when bind() is called.
+		/** Opens the socket.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	open(const char *address, uint16_t port);
+		bool	open();
 
 		/** Associates the socket with an address.
 		 * 
@@ -61,8 +59,8 @@ class RUDIMENTS_DLLSPEC inetsocketserver :
 		bool	bind();
 
 		/** Waits until a client connects then places that connection
-		 *  in queue.  Up to "backlog" connections may be queued before
-		 *  future conenctions are refused. 
+		 *  in queue to be accept()ed.  Up to "backlog" connections may
+		 *  be queued before future conenctions are refused. 
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	listen();

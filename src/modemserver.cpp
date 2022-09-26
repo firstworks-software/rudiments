@@ -42,32 +42,53 @@ modemserver::~modemserver() {
 	delete pvt;
 }
 
-void modemserver::open(const char *device, const char *baud,
-					const char *listenscript,
-					const char *acceptscript,
-					const char *disconnectscript) {
-	close();
-	setDevice(device);
-	setBaud(baud);
-	pvt->_listenscript=listenscript;
-	pvt->_acceptscript=acceptscript;
-	pvt->_disconnectscript=disconnectscript;
-}
-
 bool modemserver::listen(const char *device, const char *baud,
 					const char *listenscript,
 					const char *acceptscript,
 					const char *disconnectscript) {
 
-	open(device,baud,listenscript,acceptscript,disconnectscript);
+	setDevice(device);
+	setBaud(baud);
+	pvt->_listenscript=listenscript;
+	pvt->_acceptscript=acceptscript;
+	pvt->_disconnectscript=disconnectscript;
+	open();
 	return listen();
+}
+
+void modemserver::setListenScript(const char *listenscript) {
+	pvt->_listenscript=listenscript;
+}
+
+void modemserver::setAcceptScript(const char *acceptscript) {
+	pvt->_acceptscript=acceptscript;
+}
+
+void modemserver::setDisconnectScript(const char *disconnectscript) {
+	pvt->_disconnectscript=disconnectscript;
+}
+
+const char *modemserver::setListenScript() {
+	return pvt->_listenscript;
+}
+
+const char *modemserver::setAcceptScript() {
+	return pvt->_acceptscript;
+}
+
+const char *modemserver::setDisconnectScript() {
+	return pvt->_disconnectscript;
+}
+
+void modemserver::open() {
+	close();
+	// nothing to actually do here, the serial port will actually be
+	// opened during listen()
 }
 
 bool modemserver::listen() {
 
 	// open the serial port
-	// this is kind of lame, this class should somehow
-	// inherit from device
 	device	modem;
 	if (!modem.open(getDevice(),O_RDWR|O_NOCTTY)) {
 		return false;
