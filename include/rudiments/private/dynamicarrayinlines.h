@@ -220,8 +220,8 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clear() {
-	clear(initlen,inclen);
+bool dynamicarray<valuetype>::clear() {
+	return clear(initlen,inclen);
 }
 
 template< class valuetype >
@@ -249,7 +249,7 @@ void dynamicarray<valuetype>::deleteManagedValues() {
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::clear(uint64_t initiallength,
+bool dynamicarray<valuetype>::clear(uint64_t initiallength,
 					uint64_t incrementlength) {
 
 	deleteManagedValues();
@@ -303,4 +303,6 @@ void dynamicarray<valuetype>::clear(uint64_t initiallength,
 
 	// reset current extent index
 	curind=0;
+
+	return true;
 }

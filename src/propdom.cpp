@@ -123,10 +123,9 @@ bool propdom::parseString(const char *string,
 	return retval;
 }
 
-void propdom::reset() {
+bool propdom::reset() {
 	pvt->_current=NULL;
-	dom::reset();
-	propsax::reset();
+	return dom::reset() && propsax::reset();
 }
 
 void propdom::createRootNode() {

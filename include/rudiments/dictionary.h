@@ -182,8 +182,10 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *
 		 *  The value stored in each pair is only deleted if
 		 *  setManageValues(true) or setManageArrayValues(true) has
-		 *  been called. */
-		void	clear();
+		 *  been called.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/dictionary.h>
 };

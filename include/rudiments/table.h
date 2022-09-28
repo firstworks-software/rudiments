@@ -142,8 +142,8 @@ class table : public tablecollection<valuetype> {
 		bool		getAllRowsAvailable();
 
 		/** Removes all values currently stored in the table, such that
-		 *  getValue() will return NULL or 0. */
-		void	clear();
+		 *  getValue() will return NULL or 0.  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/table.h>
 };

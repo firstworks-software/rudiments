@@ -5,4 +5,6 @@
 		commandline(commandline &c) {};
 		commandline	&operator=(commandline &c) { return *this; }
 
+		void	construct();
+
 		commandlineprivate	*pvt;

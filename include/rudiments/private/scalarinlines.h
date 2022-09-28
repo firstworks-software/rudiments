@@ -82,8 +82,9 @@ valuetype &scalar<valuetype>::getReference() {
 
 template <class valuetype>
 inline
-void scalar<valuetype>::clear() {
+bool scalar<valuetype>::clear() {
 	node_delete_value(&v,this->getManageValues(),
 					this->getManageArrayValues());
 	v=0;
+	return true;
 }

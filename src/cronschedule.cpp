@@ -69,13 +69,14 @@ bool cronschedule::setSchedule(const char *years,
 	return pvt->_validschedule;
 }
 
-void cronschedule::clear() {
+bool cronschedule::clear() {
 	pvt->_validschedule=false;
 	pvt->_years.clear();
 	pvt->_months.clear();
 	pvt->_daysofmonth.clear();
 	pvt->_daysofweek.clear();
 	pvt->_dayparts.clear();
+	return true;
 }
 
 bool cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,

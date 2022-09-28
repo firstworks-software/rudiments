@@ -192,11 +192,12 @@ bool table<valuetype>::getAllRowsAvailable() {
 
 template <class valuetype>
 inline
-void table<valuetype>::clear() {
+bool table<valuetype>::clear() {
 	for (uint64_t i=0; i<rows; i++) {
 		values[i].clear();
 	}
 	values.clear();
 	cols=0;
 	rows=0;
+	return true;
 }

@@ -157,5 +157,5 @@ int main(int argc, const char **argv) {
 		#endif
 	}
 
-	process::exit(0);
+	return 0;
 }

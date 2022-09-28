@@ -85,7 +85,7 @@ regularexpression::~regularexpression() {
 	delete pvt;
 }
 
-void regularexpression::clear() {
+bool regularexpression::clear() {
 	#ifdef RUDIMENTS_HAS_PCRE
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
@@ -97,6 +97,7 @@ void regularexpression::clear() {
 		regfree(&pvt->_expr);
 		delete[] pvt->_strcopy;
 	#endif
+	return true;
 }
 
 bool regularexpression::setPattern(const char *pattern) {

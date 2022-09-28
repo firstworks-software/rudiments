@@ -165,5 +165,5 @@ int main(int argc, const char **argv) {
 	delete[] header;
 	file::remove("test.log");
 
-	process::exit(0);
+	return 0;
 }

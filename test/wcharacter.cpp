@@ -312,5 +312,5 @@ int main(int argc, const char **argv) {
 			wcharacter::duplicate((char)c)==(wchar_t)c);
 	}
 
-	process::exit(0);
+	return 0;
 }

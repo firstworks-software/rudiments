@@ -2,7 +2,6 @@
 // See the file COPYING for more information
 
 #include <rudiments/stdio.h>
-#include <rudiments/process.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/commandline.h>
 #include <rudiments/error.h>
@@ -89,7 +88,7 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
 		usage();
-		process::exit(1);
+		return 1;
 	}
 	const char	*host="127.0.0.1";
 	if (cmdl.found("host")) {
@@ -116,21 +115,21 @@ int main(int argc, const char **argv) {
 	int64_t	ccount=charstring::toInteger(cmdl.getValue("ccount"));
 	if (ccount<0) {
 		usage();
-		process::exit(1);
+		return 1;
 	} else if (!ccount) {
 		ccount=1;
 	}
 	int64_t	mcount=charstring::toInteger(cmdl.getValue("mcount"));
 	if (mcount<0) {
 		usage();
-		process::exit(1);
+		return 1;
 	} else if (!mcount) {
 		mcount=1;
 	}
 	int64_t	dcount=charstring::toInteger(cmdl.getValue("dcount"));
 	if (dcount<0) {
 		usage();
-		process::exit(1);
+		return 1;
 	} else if (!dcount) {
 		dcount=1;
 	}
@@ -175,7 +174,7 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("acquireForUser():\n");
 			stdoutput.printf("%s\n",cred.getStatus());
 			stdoutput.printf("}\n");
-			process::exit(1);
+			return 1;
 		}
 
 		// print information about the credentials
@@ -430,5 +429,5 @@ int main(int argc, const char **argv) {
 	}
 }
 
-	process::exit(0);
+	return 0;
 }

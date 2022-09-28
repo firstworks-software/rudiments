@@ -605,7 +605,7 @@ void singlylinkedlist<valuetype>::heapSort() {
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::clear() {
+bool singlylinkedlist<valuetype>::clear() {
 	listnode<valuetype>	*next;
 	listnode<valuetype>	*current=first;
 	while (current) {
@@ -619,6 +619,7 @@ void singlylinkedlist<valuetype>::clear() {
 	first=NULL;
 	last=NULL;
 	length=0;
+	return true;
 }
 
 template <class valuetype>

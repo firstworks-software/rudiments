@@ -150,7 +150,7 @@ const char * const *gss::getAvailableMechanisms() {
 	return pvt->_mechs;
 }
 
-void gss::clear() {
+bool gss::clear() {
 	if (pvt->_mechs) {
 		for (char **m=pvt->_mechs; *m; m++) {
 			delete[] *m;
@@ -158,6 +158,7 @@ void gss::clear() {
 		delete[] pvt->_mechs;
 		pvt->_mechs=NULL;
 	}
+	return true;
 }
 
 const char *gss::getSspiStatusString(uint32_t status) {
@@ -568,7 +569,7 @@ bool gssmechanism::init(const void *oid) {
 	#endif
 }
 
-void gssmechanism::clear() {
+bool gssmechanism::clear() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_oid!=GSS_C_NO_OID) {
 			OM_uint32	minor;
@@ -582,6 +583,8 @@ void gssmechanism::clear() {
 
 	delete[] pvt->_str;
 	pvt->_str=NULL;
+
+	return true;
 }
 
 const char *gssmechanism::getString() {

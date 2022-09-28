@@ -110,13 +110,21 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		/** Clears the current encrypted/decrypted data and any data
 		 *  that had been appended.
 		 *
-		 *  Does not clear the key or initialization vector. */
-		virtual	void	clear();
+		 *  Does not clear the key or initialization vector.
+		 *
+		 *  This implementation always returns true, but a child class
+		 *  may override this method to return false if something
+		 *  fails, and possibly set an error. */
+		virtual	bool	clear();
 
 		/** Clears the current encrypted/decrypted data, any data
 		 *  that had been appended, any current error, key, and
-		 *  initialization vector. */
-		virtual	void	reset();
+		 *  initialization vector.
+		 *
+		 *  This implementation always returns true, but a child class
+		 *  may override this method to return false if something
+		 *  fails, and possibly set an error. */
+		virtual	bool	reset();
 	
 	#include <rudiments/private/encryption.h>
 };

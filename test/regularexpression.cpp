@@ -172,5 +172,5 @@ int main(int argc, const char **argv) {
 	test("match end",!re.getSubstringEnd(0));
         stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

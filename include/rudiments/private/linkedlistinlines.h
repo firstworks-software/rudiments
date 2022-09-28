@@ -602,7 +602,7 @@ void linkedlist<valuetype>::heapSort() {
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::clear() {
+bool linkedlist<valuetype>::clear() {
 	listnode<valuetype>	*next;
 	listnode<valuetype>	*current=first;
 	while (current) {
@@ -616,6 +616,7 @@ void linkedlist<valuetype>::clear() {
 	first=NULL;
 	last=NULL;
 	length=0;
+	return true;
 }
 
 template <class valuetype>

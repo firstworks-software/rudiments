@@ -60,10 +60,9 @@ bool csvdom::parseString(const char *string) {
 	return sax::parseString(string);
 }
 
-void csvdom::reset() {
+bool csvdom::reset() {
 	pvt->_currentparent=NULL;
-	dom::reset();
-	csvsax::reset();
+	return dom::reset() && csvsax::reset();
 }
 
 void csvdom::createRootNode() {

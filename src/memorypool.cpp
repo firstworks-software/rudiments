@@ -248,22 +248,22 @@ unsigned char *memorypool::allocate(size_t length) {
 	return buffer;
 }
 
-void memorypool::clear() {
-	clear(false,0,pvt->_incrementsize,pvt->_resizeinterval);
+bool memorypool::clear() {
+	return clear(false,0,pvt->_incrementsize,pvt->_resizeinterval);
 }
 
-void memorypool::clear(size_t incrementsize,
+bool memorypool::clear(size_t incrementsize,
 			size_t resizeinterval) {
-	clear(false,0,incrementsize,resizeinterval);
+	return clear(false,0,incrementsize,resizeinterval);
 }
 
-void memorypool::clear(size_t initialsize,
+bool memorypool::clear(size_t initialsize,
 			size_t incrementsize,
 			size_t resizeinterval) {
-	clear(true,initialsize,incrementsize,resizeinterval);
+	return clear(true,initialsize,incrementsize,resizeinterval);
 }
 
-void memorypool::clear(bool resetinitialsize,
+bool memorypool::clear(bool resetinitialsize,
 				size_t initialsize,
 				size_t incrementsize,
 				size_t resizeinterval) {
@@ -299,7 +299,7 @@ void memorypool::clear(bool resetinitialsize,
 		stdoutput.printf("}\n");
 		#endif
 
-		return;
+		return true;
 	}
 
 	// get the first buffer
@@ -419,4 +419,6 @@ void memorypool::clear(bool resetinitialsize,
 	stdoutput.printf("	node count: %d\n",pvt->_bufferlist.getLength());
 	stdoutput.printf("}\n");
 	#endif
+
+	return true;
 }

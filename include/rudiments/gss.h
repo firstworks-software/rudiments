@@ -59,8 +59,10 @@ class RUDIMENTS_DLLSPEC gssmechanism : public object {
 		 *  Returns true on success and false on failure. */
 		bool	init(const void *oid);
 
-		/** Clears any previous initialization of this intstance. */
-		void	clear();
+		/** Clears any previous initialization of this intstance.
+		 *  
+		 *  Always returns true. */
+		bool	clear();
 
 		/** Returns the string representation of the object id for the
 		 *  security mechanism represented by this instance, or NULL

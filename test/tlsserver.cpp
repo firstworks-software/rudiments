@@ -18,7 +18,7 @@ int main(int argc, const char **argv) {
 
 	if (cmdl.found("help") || !cmdl.found("cert")) {
 		stdoutput.printf("tlsserver [-port port] [-version version] -cert cert [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
-		process::exit(0);
+		return 0;
 	}
 
 	uint16_t	port=9000;
@@ -300,5 +300,5 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("error listening on port %d\n%s\n",
 				port,error::getErrorString());
-	process::exit(1);
+	return 1;
 }

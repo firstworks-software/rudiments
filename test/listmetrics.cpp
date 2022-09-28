@@ -119,5 +119,5 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	process::exit(0);
+	return 0;
 }

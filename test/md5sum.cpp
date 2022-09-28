@@ -4,19 +4,18 @@
 #include <rudiments/md5.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
-#include <rudiments/process.h>
 #include <rudiments/file.h>
 
 int main(int argc, const char **argv) {
 
 	if (argc<2) {
 		stdoutput.printf("usage: md5sum filename\n");
-		process::exit(0);
+		return 0;
 	}
 
 	file	f;
 	if (!f.open(argv[1],O_RDONLY)) {
-		process::exit(1);
+		return 1;
 	}
 
 	unsigned char	*contents=(unsigned char *)f.getContents();
@@ -29,5 +28,5 @@ int main(int argc, const char **argv) {
 
 	delete[] contents;
 
-	process::exit(0);
+	return 0;
 }

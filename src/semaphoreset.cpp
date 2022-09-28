@@ -182,7 +182,9 @@ semaphoreset::~semaphoreset() {
 bool semaphoreset::forceRemove() {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
-		return !semControl(pvt,0,IPC_RMID,&semctlun);
+		//return !semControl(pvt,0,IPC_RMID,&semctlun);
+		bool	success=!semControl(pvt,0,IPC_RMID,&semctlun);
+		return success;
 	#elif defined(RUDIMENTS_HAVE_SEM_INIT)
 		bool	success=true;
 		if (pvt->_sems) {

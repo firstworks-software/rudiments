@@ -4,7 +4,7 @@
 	friend class domnode;
 	protected:
 			void	construct(bool stringcacheenabled);
-			void	reset();
+			bool	reset();
 
 			ssize_t	writeNode(domnode *dn,
 						output *out,

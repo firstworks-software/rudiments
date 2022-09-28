@@ -170,5 +170,5 @@ int main(int argc, const char **argv) {
 	mp.clear();
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

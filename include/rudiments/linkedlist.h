@@ -207,8 +207,10 @@ class linkedlist : public listcollection<valuetype> {
 		 *
 		 *  The value stored in each linkedlistnode is only
 		 *  deleted if setManageValues(true) or
-		 *  setManageArrayValues(true) has been called. */
-		void	clear();
+		 *  setManageArrayValues(true) has been called.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/linkedlist.h>
 };

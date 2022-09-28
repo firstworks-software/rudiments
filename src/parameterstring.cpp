@@ -69,8 +69,9 @@ const char *parameterstring::getValue(const char *name) {
 								retval:NULL;
 }
 
-void parameterstring::clear() {
+bool parameterstring::clear() {
 	pvt->_nvp.clear();
+	return true;
 }
 
 int32_t parameterstring::countPairs(const char *paramstring) {

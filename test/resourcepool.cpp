@@ -113,5 +113,5 @@ int main(int argc, char **argv) {
 			!r.getAvailableOnDemandResourceCount());
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

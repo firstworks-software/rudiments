@@ -201,5 +201,5 @@ int main(int argc, const char **argv) {
 	delete[] textval;
 	stdoutput.printf("\n\n");
 
-	process::exit(0);
+	return 0;
 }

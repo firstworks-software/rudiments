@@ -193,8 +193,10 @@ class avltree : public treecollection<valuetype> {
 		 *
 		 *  The value stored in each avltreenode is only
 		 *  deleted if setManageValues(true) or
-		 *  setManageArrayValues(true) has been called. */
-		void	clear();
+		 *  setManageArrayValues(true) has been called.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/avltree.h>
 };

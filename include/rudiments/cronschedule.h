@@ -124,8 +124,10 @@ class RUDIMENTS_DLLSPEC cronschedule : virtual public object {
 		bool	inSchedule(const char *dt);
 
 		/** Clears any schedule previously set by setSchedule() such
-		 *  that any call to inSchedule() will return false. */
-		void	clear();
+		 *  that any call to inSchedule() will return false.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/cronschedule.h>
 };

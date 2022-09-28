@@ -35,8 +35,10 @@ class RUDIMENTS_DLLSPEC parameterstring : public object {
 
 		/** Clears the stored set of names and values.  After a call
 		 *  to clear(), getValue() will return NULL until parse() is
-		 *  called again. */
-		void	clear();
+		 *  called again.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 		/** Returns the dictionary used internally by this instance of
 		 *  the parameterstring class. */

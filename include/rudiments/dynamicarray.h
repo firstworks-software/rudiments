@@ -95,12 +95,14 @@ class dynamicarray : public arraycollection<valuetype> {
 		/** Returns the number of elements in the array. */
 		uint64_t	getLength();
 
-		/** Clears the array. */
-		void	clear();
+		/** Clears the array.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 		/** Clears the array and resets the lengths of the initial and
  		 *  incremental extents. */
-		void	clear(uint64_t initiallength, uint64_t incrementlength);
+		bool	clear(uint64_t initiallength, uint64_t incrementlength);
 
 	#include <rudiments/private/dynamicarray.h>
 };

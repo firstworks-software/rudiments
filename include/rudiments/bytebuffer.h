@@ -352,18 +352,24 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  bytes read. */
 		ssize_t	read(unsigned char *data, size_t size);
 
-		/** Empties the bytebuffer. */
-		void	clear();
+		/** Empties the bytebuffer.
+		 *  
+		 *  Always returns true. */
+		bool	clear();
 
 		/** Empties the bytebuffer and resets the specified
-		 *  "initialsize" parameter. */
-		void	clear(size_t initialsize);
+		 *  "initialsize" parameter.
+		 *  
+		 *  Always returns true. */
+		bool	clear(size_t initialsize);
 
 		/** Empties the bytebuffer and attaches the buffer
 		 *  "initialcontents" to the instance as the initial contents.
 		 *  This buffer should not be freed by the calling program.
-		 *  Also resets the specified "initialsize". */
-		void	clear(unsigned char *initialcontents,
+		 *  Also resets the specified "initialsize".
+		 *
+		 *  Always returns true. */
+		bool	clear(unsigned char *initialcontents,
 						size_t initialsize);
 
 		/** Returns the current data stored in the bytebuffer. */

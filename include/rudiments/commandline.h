@@ -21,9 +21,21 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		/** Deletes this instance of the commandline class. */
 		~commandline();
 
-		/** Sets the argument count and arguments to
-		 *  "argc" and "argv". */
-		void init(int32_t argc, const char **argv);
+		/** Sets the argument count to "argc". */
+		void setArgumentCount(int32_t argc);
+
+		/** Returns the argument count. */
+		int32_t	getArgumentCount();
+
+		/** Sets the argument values to "argv". */
+		void setArgumentValues(const char **argv);
+
+		/** Returns the argument values. */
+		const char **getArgumentValues();
+
+		/** Sets the argument count to "argc" and arguments to
+		 *  "argv". */
+		void setArguments(int32_t argc, const char **argv);
 
 		/** Looks for either:
 		 * 	-arg value
@@ -81,6 +93,10 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *  If an argument has no value, then the value for that
 		 *  key in the dictionary is set to an empty string. */
 		void	toDictionary(dictionary<char *,char *> *dict);
+
+		/** Clears the argument count and argument values.  Always
+		 *  returns true. */
+		bool	clear();
 
 	#include <rudiments/private/commandline.h>
 

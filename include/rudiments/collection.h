@@ -170,8 +170,8 @@ class collection : virtual public object {
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayKeys();
 
-		/** Emptyies the collection. */
-		virtual	void	clear()=0;
+		/** Empties the collection. */
+		virtual	bool	clear()=0;
 
 		/** Writes a representation of the collection to standard
 		 *  output. */

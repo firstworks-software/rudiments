@@ -122,10 +122,9 @@ bool inidom::parseString(const char *string,
 	return retval;
 }
 
-void inidom::reset() {
+bool inidom::reset() {
 	pvt->_current=NULL;
-	dom::reset();
-	inisax::reset();
+	return dom::reset() && inisax::reset();
 }
 
 void inidom::createRootNode() {

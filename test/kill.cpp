@@ -10,7 +10,7 @@ int main(int argc, const char **argv) {
 
 	if (argc<3) {
 		stdoutput.printf("usage: kill signal processid\n");
-		process::exit(1);
+		return 1;
 	}
 
 	int32_t	sig=SIGTERM;
@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
 
 	if (!process::sendSignal(pid,sig)) {
 		stdoutput.printf("kill failed: %s\n",error::getErrorString());
-		process::exit(1);
+		return 1;
 	}
-	process::exit(0);
+	return 0;
 }

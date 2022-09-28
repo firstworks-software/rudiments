@@ -4,7 +4,7 @@
 	friend class csvdomnode;
 	protected:
 			void	construct(bool stringcacheenabled);
-			void	reset();
+			bool	reset();
 
 			domnode	*getColumn(uint64_t position);
 			domnode	*getColumn(const char *name);

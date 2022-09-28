@@ -100,13 +100,12 @@ bool xmldom::parseString(const char *string,
 	return sax::parseString(string);
 }
 
-void xmldom::reset() {
+bool xmldom::reset() {
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
 	pvt->_top=NULL;
 	pvt->_topposition=0;
-	dom::reset();
-	xmlsax::reset();
+	return dom::reset() && xmlsax::reset();
 }
 
 void xmldom::createRootNode() {

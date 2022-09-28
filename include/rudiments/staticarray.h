@@ -80,8 +80,8 @@ class staticarray : public arraycollection<valuetype> {
 		/** Returns the number of elements in the array. */
 		uint64_t	getLength();
 
-		/** Clears the array. */
-		void	clear();
+		/** Clears the array.  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/staticarray.h>
 };

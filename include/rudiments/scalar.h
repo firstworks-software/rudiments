@@ -49,8 +49,10 @@ class scalar : public scalarcollection<valuetype> {
 		 *  that getValue() will return NULL or 0.
 		 *
 		 *  The value is only deleted if setManageValues(true) or
-		 *  setManageArrayValues(true) has been called. */
-		void	clear();
+		 *  setManageArrayValues(true) has been called.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 	#include <rudiments/private/scalar.h>
 };

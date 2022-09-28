@@ -39,9 +39,9 @@ csvsax::~csvsax() {
 	delete pvt;
 }
 
-void csvsax::reset() {
+bool csvsax::reset() {
 	pvt->_state=HEADER_START;
-	sax::reset();
+	return sax::reset();
 }
 
 void csvsax::setQuote(char quote) {

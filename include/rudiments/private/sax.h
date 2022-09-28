@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
-			void	reset();
+			bool	reset();
 			void	close();
 
 			virtual bool	parse()=0;

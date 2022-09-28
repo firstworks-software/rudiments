@@ -388,13 +388,15 @@ uint64_t sensitivevalue::getTextValueLength() {
 	return charstring::length(getTextValue());
 }
 
-void sensitivevalue::clear() {
+bool sensitivevalue::clear() {
 	delete[] pvt->_value;
 	pvt->_value=NULL;
 	pvt->_valuesize=0;
+	return true;
 }
 
-void sensitivevalue::reset() {
+bool sensitivevalue::reset() {
 	delete[] pvt->_value;
 	construct();
+	return true;
 }

@@ -4,7 +4,6 @@
 #include <rudiments/sys.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
-#include <rudiments/process.h>
 #include "test.cpp"
 
 #ifdef RUDIMENTS_HAVE_LONG_LONG
@@ -310,5 +309,5 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

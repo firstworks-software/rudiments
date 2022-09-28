@@ -32,5 +32,5 @@ int main(int argc, const char **argv) {
 	environment::clear();
 	test("clear()",!environment::getValue("TEST"));
 
-	process::exit(0);
+	return 0;
 }

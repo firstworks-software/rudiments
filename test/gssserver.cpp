@@ -80,7 +80,7 @@ int main(int argc, const char **argv) {
 
 	if (cmdl.found("help")) {
 		stdoutput.printf("gssserver [-port port] [-keytab keytab] [-service service] [-verbose]\n");
-		process::exit(0);
+		return 0;
 	}
 
 	uint16_t	port=9000;
@@ -120,14 +120,14 @@ int main(int argc, const char **argv) {
 	// set which keytab to use
 	if (!charstring::isNullOrEmpty(keytab) && !cred.setKeytab(keytab)) {
 		stdoutput.printf("failed to configure keytab\n");
-		process::exit(1);
+		return 1;
 	}
 
 	// acquire the credentials for this service
 	if (!cred.acquireForService(service)) {
 		stdoutput.printf("acquireForService():\n");
 		stdoutput.printf("%s\n",cred.getStatus());
-		process::exit(1);
+		return 1;
 	}
 
 	// print information about the credentials
@@ -372,5 +372,5 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("error listening on port %d\n%s\n",
 				port,error::getErrorString());
-	process::exit(1);
+	return 1;
 }

@@ -7,6 +7,6 @@
 		gss(gss &g) {};
 		gss	&operator=(gss &g) { return *this; };
 
-		void	clear();
+		bool	clear();
 
 		gssprivate	*pvt;

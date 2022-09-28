@@ -43,5 +43,5 @@ int main(int argc, const char **argv) {
 	test("number",pe.getNumber()==-1);
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

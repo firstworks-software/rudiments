@@ -62,5 +62,5 @@ int main(int argc, const char **argv) {
         file::remove(permsfile);
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

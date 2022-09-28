@@ -382,7 +382,7 @@ treenode<valuetype> *avltree<valuetype>::find(
 
 template <class valuetype>
 inline
-void avltree<valuetype>::clear() {
+bool avltree<valuetype>::clear() {
 
 	// start at the top
 	treenode<valuetype>	*node=top;
@@ -425,6 +425,8 @@ void avltree<valuetype>::clear() {
 	first=NULL;
 	last=NULL;
 	length=0;
+
+	return true;
 }
 
 template <class valuetype>

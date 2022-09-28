@@ -66,18 +66,18 @@ size_t wstringbuffer::getPosition() {
 }
 
 inline
-void wstringbuffer::clear() {
-	bytebuffer::clear();
+bool wstringbuffer::clear() {
+	return bytebuffer::clear();
 }
 
 inline
-void wstringbuffer::clear(size_t initialsize) {
-	bytebuffer::clear(initialsize);
+bool wstringbuffer::clear(size_t initialsize) {
+	return bytebuffer::clear(initialsize);
 }
 
 inline
-void wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
-	bytebuffer::clear((unsigned char *)initialcontents,
+bool wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
+	return bytebuffer::clear((unsigned char *)initialcontents,
 					initialsize*sizeof(wchar_t));
 }
 

@@ -102,12 +102,13 @@ uint64_t staticarray<valuetype,length>::getLength() {
 
 template< class valuetype, uint64_t length >
 inline
-void staticarray<valuetype,length>::clear() {
+bool staticarray<valuetype,length>::clear() {
 	deleteManagedValues();
 	for (uint64_t i=0; i<length; i++) {
 		((valuetype *)&data[i])->~valuetype();
 		new(&data[i]) valuetype;
 	}
+	return true;
 }
 
 template< class valuetype, uint64_t length >

@@ -6,7 +6,6 @@
 #include <rudiments/sys.h>
 #include <rudiments/charstring.h>
 #include <rudiments/memorymap.h>
-#include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
@@ -74,5 +73,5 @@ int main(int argc, const char **argv) {
 	// clean up
 	file::remove("memorymap.txt");
 
-	process::exit(0);
+	return 0;
 }

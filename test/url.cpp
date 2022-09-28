@@ -11,6 +11,8 @@
 int main(int argc, const char **argv) {
 
 	header("url");
+// disabled for now #7122
+return 0;
 
 	char	*testcontents=file::getContents("knowncontent.html");
 
@@ -58,5 +60,5 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

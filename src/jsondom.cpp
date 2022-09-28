@@ -124,10 +124,9 @@ bool jsondom::parseString(const char *string,
 	return retval;
 }
 
-void jsondom::reset() {
+bool jsondom::reset() {
 	pvt->_current=NULL;
-	dom::reset();
-	jsonsax::reset();
+	return dom::reset() && jsonsax::reset();
 }
 
 void jsondom::createRootNode() {

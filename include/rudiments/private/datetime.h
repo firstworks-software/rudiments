@@ -3,7 +3,7 @@
 
 	private:
 		void	construct();
-		void	clear();
+		bool	clear();
 
 		bool	getBrokenDownTimeFromEpoch();
 		void	setWeekOfYear(void *tms);

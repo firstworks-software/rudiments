@@ -133,10 +133,11 @@ void datetime::construct() {
 	normalize();
 }
 
-void datetime::clear() {
+bool datetime::clear() {
 	delete[] pvt->_zone;
 	delete[] pvt->_timestring;
 	delete[] pvt->_sqlstring;
+	return true;
 }
 
 bool datetime::init(const char *tmstring) {

@@ -93,5 +93,5 @@ int main(int argc, const char **argv) {
 	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

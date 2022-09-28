@@ -4,7 +4,7 @@
 	friend class domnode;
 	protected:
 			void	construct(bool stringcacheenabled);
-			void	reset();
+			bool	reset();
 
 				xmldom(xmldom &x);
 			xmldom	&operator=(xmldom &x);

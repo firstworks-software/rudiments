@@ -67,5 +67,5 @@ int main(int argc, const char **argv) {
 	test("address list",!he.getAddressList());
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

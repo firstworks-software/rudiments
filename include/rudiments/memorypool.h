@@ -65,8 +65,10 @@ class RUDIMENTS_DLLSPEC memorypool : public object {
 		 *  When clear() has been called "resizeinterval"
 		 *  times (see constructor), it evaluates the average amount
 		 *  of memory allocated (since the last time it did this) and
-		 *  resizes the initial buffer size to this size. */
-		void	clear();
+		 *  resizes the initial buffer size to this size.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 		/** Shrinks the pool back down to it's initial size
 		 *  and frees all previously allocated blocks.
@@ -77,8 +79,10 @@ class RUDIMENTS_DLLSPEC memorypool : public object {
 		 *  When clear() has been called "resizeinterval"
 		 *  times (see constructor), it evaluates the average amount
 		 *  of memory allocated (since the last time it did this) and
-		 *  resizes the initial buffer size to this size. */
-		void	clear(size_t incrementsize,
+		 *  resizes the initial buffer size to this size.
+		 *
+		 *  Always returns true. */
+		bool	clear(size_t incrementsize,
 				size_t resizeinterval);
 
 		/** Shrinks the pool back down to it's initial size
@@ -86,8 +90,10 @@ class RUDIMENTS_DLLSPEC memorypool : public object {
 		 *
 		 *  Also resets the increment size and the resize interval to
 		 *  the specified values, and immediately resets the initial
-		 *  buffer size to initialsize. */
-		void	clear(size_t initialsize,
+		 *  buffer size to initialsize.
+		 *
+		 *  Always returns true. */
+		bool	clear(size_t initialsize,
 				size_t incrementsize,
 				size_t resizeinterval);
 

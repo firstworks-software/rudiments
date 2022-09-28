@@ -558,5 +558,5 @@ int main(int argc, const char **argv) {
 		!charstring::compare(d1.getString(),d5.getString()));
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

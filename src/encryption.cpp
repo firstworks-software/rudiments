@@ -169,17 +169,19 @@ bool encryption::getEncrypted() {
 	return pvt->_encrypted;
 }
 
-void encryption::clear() {
+bool encryption::clear() {
 	pvt->_in.clear();
 	pvt->_out.clear();
 	pvt->_dirty=true;
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
+	return true;
 }
 
-void encryption::reset() {
+bool encryption::reset() {
 	pvt->_in.clear();
 	pvt->_out.clear();
 	delete[] pvt->_key;
 	delete[] pvt->_iv;
 	construct();
+	return true;
 }

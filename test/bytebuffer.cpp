@@ -329,5 +329,5 @@ int main(int argc, const char **argv) {
 	test("truncate(), getSize",!bb.getSize());
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

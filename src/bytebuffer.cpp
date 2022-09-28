@@ -261,27 +261,30 @@ ssize_t bytebuffer::printfDelegate(const wchar_t *format, va_list *argp) {
 	return size;
 }
 
-void bytebuffer::clear() {
+bool bytebuffer::clear() {
 	pvt->_size=0;
 	pvt->_pos=0;
+	return true;
 }
 
-void bytebuffer::clear(size_t initialsize) {
+bool bytebuffer::clear(size_t initialsize) {
 	delete[] pvt->_buffer;
 	pvt->_buffer=new unsigned char[initialsize];
 	pvt->_size=0;
 	pvt->_actualsize=initialsize;
 	pvt->_pos=0;
 	pvt->_initialsize=initialsize;
+	return true;
 }
 
-void bytebuffer::clear(unsigned char *initialcontents, size_t initialsize) {
+bool bytebuffer::clear(unsigned char *initialcontents, size_t initialsize) {
 	delete[] pvt->_buffer;
 	pvt->_buffer=initialcontents;
 	pvt->_size=initialsize;
 	pvt->_actualsize=initialsize;
 	pvt->_pos=initialsize;
 	pvt->_initialsize=initialsize;
+	return true;
 }
 
 const unsigned char *bytebuffer::getBuffer() {

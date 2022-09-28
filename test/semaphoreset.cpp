@@ -150,5 +150,5 @@ int main(int argc, const char **argv) {
 		semout.close();
 	}
 
-	process::exit(0);
+	return 0;
 }

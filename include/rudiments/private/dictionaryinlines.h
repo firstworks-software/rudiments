@@ -401,7 +401,7 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 
 template <class keytype, class valuetype>
 inline
-void dictionary<keytype,valuetype>::clear() {
+bool dictionary<keytype,valuetype>::clear() {
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		node_delete_value(&(node->getValue()->getKeyRef()),
@@ -416,6 +416,7 @@ void dictionary<keytype,valuetype>::clear() {
 	list.clear();
 	delete keylist;
 	keylist=NULL;
+	return true;
 }
 
 template <class keytype, class valuetype>

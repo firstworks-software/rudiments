@@ -9,27 +9,47 @@
 class commandlineprivate {
 	friend class commandline;
 	private:
-		int32_t	_argc;
-		char	**_argv;
+		int32_t		_argc;
+		const char	**_argv;
 };
 
 commandline::commandline() : object() {
 	pvt=new commandlineprivate;
-	init(0,NULL);
+	construct();
 }
 
 commandline::commandline(int32_t argc, const char **argv) : object() {
 	pvt=new commandlineprivate;
-	init(argc,argv);
+	setArguments(argc,argv);
 }
 
 commandline::~commandline() {
 	delete pvt;
 }
 
-void commandline::init(int32_t argc, const char **argv) {
+void commandline::construct() {
+	setArguments(0,NULL);
+}
+
+void commandline::setArgumentCount(int32_t argc) {
 	pvt->_argc=argc;
-	pvt->_argv=(char **)argv;
+}
+
+int32_t commandline::getArgumentCount() {
+	return pvt->_argc;
+}
+
+void commandline::setArgumentValues(const char **argv) {
+	pvt->_argv=argv;
+}
+
+const char **commandline::getArgumentValues() {
+	return pvt->_argv;
+}
+
+void commandline::setArguments(int32_t argc, const char **argv) {
+	setArgumentCount(argc);
+	setArgumentValues(argv);
 }
 
 const char *commandline::getValue(const char *arg) {
@@ -175,4 +195,9 @@ void commandline::toDictionary(dictionary<char *,char *> *dict) {
 					charstring::duplicate(value));
 		}
 	}
+}
+
+bool commandline::clear() {
+	setArguments(0,NULL);
+	return true;
 }

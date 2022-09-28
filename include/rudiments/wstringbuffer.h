@@ -436,18 +436,24 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		/** Trucnates the wstringbuffer at the current position. */
 		void	truncate();
 
-		/** Empties the wstringbuffer. */
-		void	clear();
+		/** Empties the wstringbuffer.
+ 		 *  
+ 		 *  Always returns true. */
+		bool	clear();
 
 		/** Empties the bytebuffer and resets the specified
-		 *  "initialsize" parameter. */
-		void	clear(size_t initialsize);
+		 *  "initialsize" parameter.
+		 *  
+		 *  Always returns true. */
+		bool	clear(size_t initialsize);
 
 		/** Empties the bytebuffer and attaches the buffer
 		 *  "initialcontents" to the instance as the initial contents.
 		 *  This buffer should not be freed by the calling program.
-		 *  Also resets the specified "initialsize" parameter. */
-		void	clear(wchar_t *initialcontents, size_t initialsize);
+		 *  Also resets the specified "initialsize" parameter.
+		 *
+		 *  Always returns true. */
+		bool	clear(wchar_t *initialcontents, size_t initialsize);
 
 		/** Returns the string currently stored in the wstringbuffer. */
 		const wchar_t	*getString();

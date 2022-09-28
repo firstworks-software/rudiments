@@ -143,5 +143,5 @@ int main(int argc, const char **argv) {
 			"12120000",8));
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

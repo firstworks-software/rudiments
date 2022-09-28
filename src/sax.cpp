@@ -36,7 +36,7 @@ sax::sax() : object() {
 	pvt=new saxprivate;
 	pvt->_ignoreheaderlines=0;
 	pvt->_ignorefooterlines=0;
-	reset();
+	sax::reset();
 }
 
 sax::~sax() {
@@ -44,7 +44,7 @@ sax::~sax() {
 	delete pvt;
 }
 
-void sax::reset() {
+bool sax::reset() {
 	pvt->_string=NULL;
 	pvt->_ptr=NULL;
 	pvt->_startptr=NULL;
@@ -56,6 +56,7 @@ void sax::reset() {
 	pvt->_offset=0;
 	pvt->_mmapped=false;
 	pvt->_line=1;
+	return true;
 }
 
 void sax::setIgnoreHeaderLines(uint64_t lines) {
@@ -81,11 +82,7 @@ bool sax::parse(input *in) {
 
 bool sax::parseFile(const char *filename) {
 
-	// reset string/line
-	reset();
-
-	// close any previously opened files, open the file, parse it, close
-	// it again
+	// close any previously opened files, reset string/line
 	close();
 
 	// skip leading whitespace
@@ -174,11 +171,8 @@ bool sax::parseRemoteFile(const char *filename) {
 
 bool sax::parseString(const char *string) {
 
-	// close any previously opened files
+	// close any previously opened files and reset fd/line
 	close();
-
-	// reset fd/line
-	reset();
 
 	// set string pointers
 	pvt->_string=string;
@@ -196,7 +190,7 @@ void sax::close() {
 	delete pvt->_fl;
 
 	// reset string/fd/line
-	reset();
+	sax::reset();
 }
 
 char sax::skipWhitespace(char current) {

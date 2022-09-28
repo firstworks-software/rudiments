@@ -141,5 +141,5 @@ int main(int argc, const char **argv) {
 	test("output",!charstring::compare(output.getString(),
 			"1234123412341234123412341234123412341234"));
 
-	process::exit(0);
+	return 0;
 }

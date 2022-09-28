@@ -340,13 +340,17 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *  until parse() is called again.
 		 *
 		 *  Does not reset properties such as include delimiters, chomp
-		 *  behavior, etc. to defaults. */
-		void	clear();
+		 *  behavior, etc. to defaults.
+		 *
+		 *  Always returns true. */
+		bool	clear();
 
 		/** Clears the internal buffer containing the value and
 		 *  resets properties such as include delimiters, chomp
-		 *  behavior, etc. to defaults. */
-		void	reset();
+		 *  behavior, etc. to defaults.
+		 *
+		 *  Always returns true. */
+		bool	reset();
 
 	#include <rudiments/private/sensitivevalue.h>
 };

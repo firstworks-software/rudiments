@@ -215,5 +215,5 @@ int main(int argc, const char **argv) {
 	nsai32.write();
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

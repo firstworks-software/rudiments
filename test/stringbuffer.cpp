@@ -145,5 +145,5 @@ int main(int argc, const char **argv) {
 
 	delete[] str;
 
-	process::exit(0);
+	return 0;
 }

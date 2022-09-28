@@ -305,5 +305,5 @@ int main(int argc, const char **argv) {
 			character::toAscii(c)==toascii[c]);
 	}
 
-	process::exit(0);
+	return 0;
 }

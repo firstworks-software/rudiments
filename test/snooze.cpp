@@ -30,5 +30,5 @@ int main(int argc, const char **argv) {
 	test("timeleft",timeleft<5);
 #endif
 
-	process::exit(0);
+	return 0;
 }
