@@ -3,23 +3,6 @@
 
 #include <rudiments/object.h>
 
-#ifdef PARADIGM
-void object::construct() {
-}
-
-bool object::clear() {
-	return true;
-}
-
-bool object::reset() {
-	if (!clear()) {
-		return false;
-	}
-	construct();
-	return true;
-}
-#endif
-
 bool object::incOrErr(ssize_t *retval, ssize_t val) {
 
 	// add val to *retval unless:
