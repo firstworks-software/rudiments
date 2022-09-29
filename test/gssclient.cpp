@@ -157,7 +157,7 @@ int main(int argc, const char **argv) {
 {
 	// configure mechanisms
 	gssmechanism		mech;
-	mech.init(mechanism);
+	mech.open(mechanism);
 
 	// configure the security context
 	gsscontext	ctx;

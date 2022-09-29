@@ -50,11 +50,11 @@ class resourcepool {
 		 *  the pool grows on-demand. */
 		uint64_t	getGrowBy();
 
-		/** Initializes the resourcepool, creating the number of
+		/** Creates a resource pool, containing the number of
 		 *  resources configured by setMin().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	init();
+		bool	create();
 
 		/** Clears the resourcepool, deleting all resources in the
 		 *  pool.

@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
 	// init
 	resourcepool<testclass>	r;
-	stdoutput.printf("init:\n");
+	stdoutput.printf("create:\n");
 	test("min (before set)",r.getMin()==0);
 	test("max (before set)",r.getMax()==10);
 	test("growby (before set)",r.getGrowBy()==1);
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 	test("min (after set)",r.getMin()==10);
 	test("max (after set)",r.getMax()==20);
 	test("growby (after set)",r.getGrowBy()==3);
-	test("initialize",r.init());
+	test("create",r.create());
 	stdoutput.printf("\n");
 
 	testclass	**t=new testclass *[r.getMax()];

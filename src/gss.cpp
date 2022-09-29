@@ -2788,7 +2788,7 @@ bool gsscontext::close() {
 	#else
 		pvt->_actuallifetime=0;
 	#endif
-	pvt->_actualmechanism.clear();
+	pvt->_actualmechanism.close();
 	pvt->_actualflags=0;
 
 	// reset states

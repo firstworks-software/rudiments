@@ -4,6 +4,8 @@
 #ifndef RUDIMENTS_OBJECT_H
 #define RUDIMENTS_OBJECT_H
 
+//#define PARADIGM 1
+
 #include <rudiments/private/objectincludes.h>
 
 /** The object class is the parent class for all rudiments classes. */
@@ -13,6 +15,7 @@ class object {
 		/** Deletes this instance of the object class. */
 		virtual	~object() {};
 
+#ifdef PARADIGM
 		/** Clears any current working data, but does not reset any
 		 *  parameters.
 		 *
@@ -40,6 +43,7 @@ class object {
 		 *  This degenerate implementation does nothing, but may be
 		 *  overridden by a child class to do something. */
 		virtual	void	construct();
+#endif
 
 	#include <rudiments/private/object.h>
 };

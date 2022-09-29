@@ -3,6 +3,7 @@
 
 #include <rudiments/object.h>
 
+#ifdef PARADIGM
 void object::construct() {
 }
 
@@ -17,6 +18,7 @@ bool object::reset() {
 	construct();
 	return true;
 }
+#endif
 
 bool object::incOrErr(ssize_t *retval, ssize_t val) {
 
