@@ -15,7 +15,7 @@ int main(int argc, const char **argv) {
 	for (uint16_t i=0; i<20000; i++) {
 
 		uint32_t	num;
-		rr.generateNumber(&num);
+		rr.generate(&num);
 
 		sllis.append(num);
 		sllhs.append(num);

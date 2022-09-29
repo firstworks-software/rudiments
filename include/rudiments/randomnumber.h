@@ -19,15 +19,15 @@
  *  divergnet series.
  *
  *  If there is only one running process generating random numbers using a
- *  highly divergent series, successive calls to generateNumber() will never
- *  return the same value until all numbers between 0 and the number returned
- *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or 2^15-1 on some
- *  systems) have been returned.  At that point, the entire sequence will
- *  repeat.
+ *  highly divergent series, successive calls to generate() will never return
+ *  the same value until all numbers between 0 and the number returned by
+ *  getRandMax() (usually 2^31-1 but could be 2^32-1 or 2^15-1 on some systems)
+ *  have been returned.  At that point, the entire sequence will repeat.
  *
- *  Calls to generateScaledNumber() may return the same value before all
- *  numbers in the range have been returned because it just scales the result
- *  of generateNumber() which operates on a larger range. */
+ *  Calls to generate() with lower/upper parameters may return the same value
+ *  before all numbers in the range have been returned because it just scales
+ *  the result of generate() without lower/upper parameters which operates on a
+ *  larger range. */
 class RUDIMENTS_DLLSPEC randomnumber : public object {
 	public:
 
@@ -45,15 +45,13 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 *  2^15-1) and sets "result" to this number.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	generateNumber(uint32_t *result);
+		bool	generate(uint32_t *result);
 
 		/** Generates a random number between "lower" and "upper"
 		 *  and sets "result" to this number.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	generateScaledNumber(int32_t lower,
-						int32_t upper,
-						int32_t *result);
+		bool	generate(int32_t *result, int32_t lower, int32_t upper);
 
 		/** Generates a random number seed by first attempting
 		 *  to get one from /dev/urandom and if that fails,
@@ -65,7 +63,7 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 * 
 		 *  It is ok to use the result of this method as the 
 		 *  seed for the next number. */
-		static	uint32_t	generateNumber(uint32_t seed);
+		static	uint32_t	generate(uint32_t seed);
 
 		/** Generates a random number between 0 and the number given
 		 *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or
@@ -74,8 +72,7 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 * 
 		 *  It is NOT ok to use the result of this method as 
 		 *  the seed for the next number. */
-		static	int32_t	generateScaledNumber(uint32_t seed, 
-							int32_t lower,
+		static	int32_t	generate(uint32_t seed, int32_t lower,
 							int32_t upper);
 
 		/** Scales "number" to be between "lower" and "upper" and 
@@ -83,11 +80,10 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 * 
 		 *  It is NOT ok to use the result of this method as 
 		 *  the seed for the next number. */
-		static	int32_t	scaleNumber(uint32_t number,
-						int32_t lower,
-						int32_t upper);
+		static	int32_t	scale(uint32_t number, int32_t lower,
+							int32_t upper);
 
-		/** Returns the largest number that generateNumber() could
+		/** Returns the largest number that generate() could
 		 *  possibly generate.  This is usually 2^31-1 on 32 or 64 bit
 		 *  machines but there are exceptions where it is 2^32-1 or
 		 *  2^15-1. */

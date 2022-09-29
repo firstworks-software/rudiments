@@ -38,8 +38,8 @@ int main(int argc, char **argv) {
 	scaledvalues=new int32_t[listsize];
 	unscldvalues=new int32_t[listsize];
 	for (int32_t i=0; i<listsize; i++) {
-		seed=randomnumber::generateNumber(seed);
-		scaledvalues[i]=randomnumber::scaleNumber(seed,0,10);
+		seed=randomnumber::generate(seed);
+		scaledvalues[i]=randomnumber::scale(seed,0,10);
 		unscldvalues[i]=seed;
 	}
 

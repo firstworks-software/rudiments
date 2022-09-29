@@ -23,7 +23,7 @@ template<class type>
 inline
 void generateRandom(randomnumber *r, type *number) {
 	int32_t	num=0;
-	r->generateScaledNumber(randomlow,randomhigh,&num);
+	r->generate(&num,randomlow,randomhigh);
 	*number=(type)num;
 }
 
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 		// go left a random amount
 		for (;;) {
 			int32_t	yes=0;
-			r.generateScaledNumber(0,1,&yes);
+			r.generate(&yes,0,1);
 			if (yes && node->getLeftChild()) {
 				node=node->getLeftChild();
 			} else {
@@ -184,7 +184,7 @@ int main(int argc, char **argv) {
 		// go right a random amount
 		for (;;) {
 			int32_t	yes=0;
-			r.generateScaledNumber(0,1,&yes);
+			r.generate(&yes,0,1);
 			if (yes && node->getRightChild()) {
 				node=node->getRightChild();
 			} else {
@@ -263,7 +263,7 @@ int main(int argc, char **argv) {
 		// go left a random amount
 		for (;;) {
 			int32_t	yes=0;
-			r.generateScaledNumber(0,1,&yes);
+			r.generate(&yes,0,1);
 			if (yes && node->getLeftChild()) {
 				node=node->getLeftChild();
 			} else {
@@ -274,7 +274,7 @@ int main(int argc, char **argv) {
 		// go right a random amount
 		for (;;) {
 			int32_t	yes=0;
-			r.generateScaledNumber(0,1,&yes);
+			r.generate(&yes,0,1);
 			if (yes && node->getRightChild()) {
 				node=node->getRightChild();
 			} else {
@@ -344,7 +344,7 @@ int main(int argc, char **argv) {
 		// go left a random amount
 		for (;;) {
 			int32_t	yes=0;
-			r.generateScaledNumber(0,1,&yes);
+			r.generate(&yes,0,1);
 			if (yes && node->getLeftChild()) {
 				node=node->getLeftChild();
 			} else {
@@ -355,7 +355,7 @@ int main(int argc, char **argv) {
 		// go right a random amount
 		for (;;) {
 			int32_t	yes=0;
-			r.generateScaledNumber(0,1,&yes);
+			r.generate(&yes,0,1);
 			if (yes && node->getRightChild()) {
 				node=node->getRightChild();
 			} else {

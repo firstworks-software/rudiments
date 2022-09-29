@@ -118,7 +118,7 @@ bool randomnumber::setSeed(uint32_t seed) {
 	#endif
 }
 
-bool randomnumber::generateNumber(uint32_t *result) {
+bool randomnumber::generate(uint32_t *result) {
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 		if (pvt->acquired &&
@@ -181,14 +181,12 @@ bool randomnumber::generateNumber(uint32_t *result) {
 	#endif
 }
 
-bool randomnumber::generateScaledNumber(int32_t lower,
-						int32_t upper,
-						int32_t *result) {
+bool randomnumber::generate(int32_t *result, int32_t lower, int32_t upper) {
 	uint32_t	res;
-	if (!generateNumber(&res)) {
+	if (!generate(&res)) {
 		return false;
 	}
-	*result=scaleNumber(res,lower,upper);
+	*result=scale(res,lower,upper);
 	return true;
 }
 
@@ -209,23 +207,21 @@ uint32_t randomnumber::getSeed() {
 	return dt.getEpoch();
 }
 
-uint32_t randomnumber::generateNumber(uint32_t seed) {
+uint32_t randomnumber::generate(uint32_t seed) {
 	randomnumber	r;
 	uint32_t	result;
 	return (r.setSeed(seed) &&
-		r.generateNumber(&result))?result:0;
+		r.generate(&result))?result:0;
 }
 
-int32_t randomnumber::generateScaledNumber(uint32_t seed,
-					int32_t lower, int32_t upper) {
+int32_t randomnumber::generate(uint32_t seed, int32_t lower, int32_t upper) {
 	randomnumber	r;
 	int32_t		result;
 	return (r.setSeed(seed) &&
-		r.generateScaledNumber(lower,upper,&result))?result:0;
+		r.generate(&result,lower,upper))?result:0;
 }
 
-int32_t randomnumber::scaleNumber(uint32_t number,
-					int32_t lower, int32_t upper) {
+int32_t randomnumber::scale(uint32_t number, int32_t lower, int32_t upper) {
 	float	originalrange=(int64_t)getRandMax()+1;
 	float	newrange=(float)abs(upper-lower)+1.0;
 	float	shrunk=((float)number)/originalrange;

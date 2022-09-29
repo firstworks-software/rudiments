@@ -55,7 +55,7 @@ int main(int argc, const char **argv) {
 			// fill a buffer with random data
 			unenc.clear();
 			for (uint64_t j=0; j<size; j++) {
-				rn.generateScaledNumber(0,255,&seed);
+				rn.generate(&seed,0,255);
 				unenc.append((unsigned char)seed);
 			}
 

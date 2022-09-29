@@ -182,9 +182,9 @@ int32_t inetsocketclient::connect() {
 							randomnumber::getSeed();
 						pvt->_seeded=true;
 					}
-					pvt->_seed=randomnumber::generateNumber(
+					pvt->_seed=randomnumber::generate(
 								pvt->_seed);
-					int32_t	skip=randomnumber::scaleNumber(
+					int32_t	skip=randomnumber::scale(
 							pvt->_seed,0,
 							addrlist.getLength()-1);
 					for (int32_t i=0; i<skip; i++) {
@@ -289,9 +289,9 @@ int32_t inetsocketclient::connect() {
 							randomnumber::getSeed();
 						pvt->_seeded=true;
 					}
-					pvt->_seed=randomnumber::generateNumber(
+					pvt->_seed=randomnumber::generate(
 								pvt->_seed);
-					int32_t	skip=randomnumber::scaleNumber(
+					int32_t	skip=randomnumber::scale(
 							pvt->_seed,0,
 							addrlist.getLength()-1);
 					for (int32_t i=0; i<skip; i++) {

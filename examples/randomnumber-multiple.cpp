@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 	for (uint16_t i=0; i<20; i++) {
 
 		uint32_t	unscalednum;
-		rn.generateNumber(&unscalednum);
+		rn.generate(&unscalednum);
 
 		stdoutput.printf("%d, ",unscalednum);
 	}
@@ -25,7 +25,7 @@ int main(int argc, const char **argv) {
 	for (uint16_t j=0; j<20; j++) {
 
 		int32_t		scalednum;
-		rn.generateScaledNumber(1,10,&scalednum);
+		rn.generate(&scalednum,1,10);
 
 		stdoutput.printf("%d, ",scalednum);
 	}

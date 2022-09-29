@@ -36,12 +36,10 @@ int main(int argc, const char **argv) {
 	for (uint16_t i=0; i<setcount; i++) {
 
 		// generate range
-		seed=randomnumber::generateNumber(seed);
-		int32_t	bottom=randomnumber::scaleNumber(
-						seed,lowerrange,upperrange);
-		seed=randomnumber::generateNumber(seed);
-		int32_t	top=randomnumber::scaleNumber(
-						seed,lowerrange,upperrange);
+		seed=randomnumber::generate(seed);
+		int32_t	bottom=randomnumber::scale(seed,lowerrange,upperrange);
+		seed=randomnumber::generate(seed);
+		int32_t	top=randomnumber::scale(seed,lowerrange,upperrange);
 		if (bottom>top) {
 			int32_t	temp=top;
 			top=bottom;
@@ -53,8 +51,7 @@ int main(int argc, const char **argv) {
 
 		// static methods
 		for (uint16_t j=0; j<numbercount; j++) {
-			numbers[j]=randomnumber::generateScaledNumber(
-							seed,bottom,top);
+			numbers[j]=randomnumber::generate(seed,bottom,top);
 			seed=numbers[j];
 		}
 		testRange("static methods - in range",
@@ -65,7 +62,7 @@ int main(int argc, const char **argv) {
 		bool	success=true;
 		for (uint16_t j=0; j<numbercount && success; j++) {
 			numbers[j]=0;
-        		if (!r.generateScaledNumber(bottom,top,&(numbers[j]))) {
+        		if (!r.generate(&(numbers[j]),bottom,top)) {
 				success=false;
 			}
 		}

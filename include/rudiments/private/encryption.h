@@ -17,7 +17,6 @@
 		encryption	&operator=(encryption &e) { return *this; };
 
 		void	construct();
-		void	clone(encryption &e);
 		void	initKey();
 		void	initIv();
 

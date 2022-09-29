@@ -20,8 +20,8 @@ int main(int argc, const char **argv) {
 	start.initFromSystemDateTime();
 	for (uint64_t l=0; l<randmax; l++) {
 		uint32_t	result;
-		if (!r.generateNumber(&result)) {
-        		stdoutput.printf("generateNumber failed: %lld\n",l);
+		if (!r.generate(&result)) {
+        		stdoutput.printf("generate failed: %lld\n",l);
 			break;
 		} else {
 			if (l<10) {

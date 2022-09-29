@@ -31,11 +31,6 @@ void encryption::encryption::construct() {
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
 }
 
-void encryption::clone(encryption &e) {
-	setKey(e.getKey(),e.getKeySize());
-	setIv(e.getIv(),e.getIvSize());
-}
-
 encryption::~encryption() {
 	delete[] pvt->_key;
 	delete[] pvt->_iv;
@@ -92,7 +87,7 @@ void encryption::setRandomBuffer(unsigned char *buffer, size_t buffersize) {
 	size_t		remaining=buffersize;
 	unsigned char	*ptr=buffer;
 	for (;;) {
-		seed=randomnumber::generateNumber(seed);
+		seed=randomnumber::generate(seed);
 		size_t	blocksize=remaining%sizeof(uint32_t);
 		if (!blocksize) {
 			blocksize=sizeof(uint32_t);

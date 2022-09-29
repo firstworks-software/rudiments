@@ -1638,8 +1638,8 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 		for (uint8_t i=0; i<6; i++) {
 
 			// get a random number, scale it to 0-60
-			seed=randomnumber::generateNumber(seed);
-			char	ch=(char)randomnumber::scaleNumber(seed,0,59);
+			seed=randomnumber::generate(seed);
+			char	ch=(char)randomnumber::scale(seed,0,59);
 
 			// translate...
 			//  0-9  -> '0' - '9'

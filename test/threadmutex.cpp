@@ -41,7 +41,7 @@ void syncronize(void *args) {
 	for (uint16_t i=0; i<10; i++) {
 		if (a->id==0) {
 			do {
-				r.generateScaledNumber(0,100,&ms);
+				r.generate(&ms,0,100);
 				snooze::microsnooze(0,ms);
 				thrm.lock();
 				if (next==1) {
@@ -55,7 +55,7 @@ void syncronize(void *args) {
 			} while (next!=2);
 
 			do {
-				r.generateScaledNumber(0,100,&ms);
+				r.generate(&ms,0,100);
 				snooze::microsnooze(0,ms);
 				thrm.lock();
 				if (next==3) {
@@ -68,7 +68,7 @@ void syncronize(void *args) {
 			} while (next!=4);
 		} else {
 			do {
-				r.generateScaledNumber(0,100,&ms);
+				r.generate(&ms,0,100);
 				snooze::microsnooze(0,ms);
 				thrm.lock();
 				if (next==2) {
@@ -81,7 +81,7 @@ void syncronize(void *args) {
 			} while (next!=3);
 
 			do {
-				r.generateScaledNumber(0,100,&ms);
+				r.generate(&ms,0,100);
 				snooze::microsnooze(0,ms);
 				thrm.lock();
 				if (next==4) {

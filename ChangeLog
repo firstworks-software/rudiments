@@ -105,6 +105,7 @@
 	renamed some datetime methods from adjust*() to set*()
 	renamed *entry methods from init() to open()
 	refactored *client and *util methods, removed convenience methods
+	renamed randomnumber::generate*() to generate(), etc.
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
