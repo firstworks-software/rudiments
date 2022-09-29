@@ -59,7 +59,7 @@ unixsocketserver::~unixsocketserver() {
 
 bool unixsocketserver::listen(const char *filename, mode_t mask,
 							uint32_t backlog) {
-	setFilename(filename);
+	setFileName(filename);
 	pvt->_mask=mask;
 	setBacklog(backlog);
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
@@ -80,7 +80,7 @@ bool unixsocketserver::open() {
 
 	close();
 
-	const char	*filename=getFilename();
+	const char	*filename=getFileName();
 
 	// if a null or blank filename was specified, return an error
 	if (charstring::isNullOrEmpty(filename)) {

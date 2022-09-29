@@ -23,11 +23,11 @@ unixsocketutil::~unixsocketutil() {
 	delete pvt;
 }
 
-void unixsocketutil::setFilename(const char *filename) {
+void unixsocketutil::setFileName(const char *filename) {
 	pvt->_filename=filename;
 }
 
-const char *unixsocketutil::getFilename() {
+const char *unixsocketutil::getFileName() {
 	return pvt->_filename;
 }
 
@@ -35,7 +35,7 @@ sockaddr_un *unixsocketutil::getSun() {
 	return &pvt->_sun;
 }
 
-uint16_t unixsocketutil::filenameToPort(const char *filename) {
+uint16_t unixsocketutil::fileNameToPort(const char *filename) {
 	uint16_t	port=charstring::toInteger(filename);
 	if (!port) {
 		port=10240;

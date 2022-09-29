@@ -86,11 +86,11 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 
 		/** Returns the filename passed in from file parameter
 		 *  "name". */
-		const char	*getFileParameterFilename(const char *name);
+		const char	*getFileParameterFileName(const char *name);
 
 		/** Returns the filename of the local file created when file
 		 *  parameter "name" was passed in. */
-		const char	*getFileParameterTempFilename(const char *name);
+		const char	*getFileParameterTempFileName(const char *name);
 
 		/** Returns the mime type of the file parameter "name". */
 		const char	*getFileParameterMimeType(const char *name);

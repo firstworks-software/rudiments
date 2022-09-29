@@ -90,7 +90,7 @@ void handoff2() {
 
 	// connect to handoff1
 	unixsocketclient clnt;
-	clnt.setFilename(handoffsck);
+	clnt.setFileName(handoffsck);
 	clnt.setTries(1);
 	test("handoff2 - connect",clnt.connect()==RESULT_SUCCESS);
 

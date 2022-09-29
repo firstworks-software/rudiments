@@ -121,16 +121,16 @@ static bool httpModuleMain(httpserverapi *sapi) {
 
 	// get a specific file entry
 	stdoutput.printf("Specific File Parameter:\n");
-	stdoutput.printf("	     file=%s\n",req.getFileParameterFilename("file"));
-	stdoutput.printf("	temp file=%s\n",req.getFileParameterTempFilename("file"));
+	stdoutput.printf("	     file=%s\n",req.getFileParameterFileName("file"));
+	stdoutput.printf("	temp file=%s\n",req.getFileParameterTempFileName("file"));
 	stdoutput.printf("	mime type=%s\n\n",req.getFileParameterMimeType("file"));
 
 	stdoutput.printf("Count of File Parameters: %d\n",req.getFileCount());
 
 	// new file entry
 	req.setFileParameter("newfile","filename","tempfilename","text/html");
-	stdoutput.printf("	     file=%s\n",req.getFileParameterFilename("newfile"));
-	stdoutput.printf("	temp file=%s\n",req.getFileParameterTempFilename("newfile"));
+	stdoutput.printf("	     file=%s\n",req.getFileParameterFileName("newfile"));
+	stdoutput.printf("	temp file=%s\n",req.getFileParameterTempFileName("newfile"));
 	stdoutput.printf("	mime type=%s\n",req.getFileParameterMimeType("newfile"));
 	stdoutput.printf("Count of File Parameters: %d\n",req.getFileCount());
 	stdoutput.printf("\n");

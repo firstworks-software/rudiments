@@ -892,13 +892,13 @@ void httprequest::buildParameterList() {
 	}
 }
 
-const char *httprequest::getFileParameterFilename(const char *name) {
+const char *httprequest::getFileParameterFileName(const char *name) {
 	fileparameter	*value;
 	return (pvt->_fileparameters.getValue((char *)name,&value))?
 						value->filename:NULL;
 }
 
-const char *httprequest::getFileParameterTempFilename(const char *name) {
+const char *httprequest::getFileParameterTempFileName(const char *name) {
 	fileparameter	*value;
 	return (pvt->_fileparameters.getValue((char *)name,&value))?
 						value->tempfilename:NULL;

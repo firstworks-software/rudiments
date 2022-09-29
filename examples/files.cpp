@@ -23,10 +23,10 @@ static bool stencilMain(void *apistruct) {
 	// display an individual file entry
 	resp.write("Specific File Parameter:\n");
 	resp.write("file1=");
-	resp.write(req.fileParameterFilename("file1"));
+	resp.write(req.fileParameterFileName("file1"));
 	resp.write("\n");
 	resp.write("temp file=");
-	resp.write(req.fileParameterTempFilename("file1"));
+	resp.write(req.fileParameterTempFileName("file1"));
 	resp.write("\n");
 	resp.write("mime type=");
 	resp.write(req.fileParameterMimeType("file1"));
@@ -37,10 +37,10 @@ static bool stencilMain(void *apistruct) {
 	for (uint64_t index=0; index<req.fileCount(); index++) {
 		const char	*name=req.fileNames()[index];
 		resp.write("file1=");
-		resp.write(req.fileParameterFilename(name));
+		resp.write(req.fileParameterFileName(name));
 		resp.write("\n");
 		resp.write("temp file=");
-		resp.write(req.fileParameterTempFilename(name));
+		resp.write(req.fileParameterTempFileName(name));
 		resp.write("\n");
 		resp.write("mime type=");
 		resp.write(req.fileParameterMimeType(name));
@@ -51,10 +51,10 @@ static bool stencilMain(void *apistruct) {
 	req.newFileParameter("newfile","filename","tempfilename","text/html");
 	resp.write("New File Parameter:\n");
 	resp.write("newfile=");
-	resp.write(req.fileParameterFilename("newfile"));
+	resp.write(req.fileParameterFileName("newfile"));
 	resp.write("\n");
 	resp.write("temp file=");
-	resp.write(req.fileParameterTempFilename("newfile"));
+	resp.write(req.fileParameterTempFileName("newfile"));
 	resp.write("\n");
 	resp.write("mime type=");
 	resp.write(req.fileParameterMimeType("newfile"));

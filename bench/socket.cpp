@@ -461,7 +461,7 @@ void unixclient() {
 
 	// create an unix socket client
 	unixsocketclient	clnt;
-	clnt.setFilename("listener.sck");
+	clnt.setFileName("listener.sck");
 	clnt.setTries(1);
 
 	// connect to the server

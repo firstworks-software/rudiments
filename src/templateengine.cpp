@@ -389,7 +389,7 @@ bool templateengine::parse(
 			// get the filename and parse the file,
 			// return false on failure
 			stringbuffer	filename;
-			if (!getIncludeFilename(&buffer,&filename,vars) ||
+			if (!getIncludeFileName(&buffer,&filename,vars) ||
 				!parse(out,filename.getString(),
 						blockparsers,vars)) {
 				return false;
@@ -564,7 +564,7 @@ bool templateengine::getBlockLength(const char *blockname,
 	}
 }
 
-bool templateengine::getIncludeFilename(
+bool templateengine::getIncludeFileName(
 			char **buffer,
 			stringbuffer *filename,
 			dictionary< const char *, const char * > *vars) {
@@ -576,7 +576,7 @@ bool templateengine::getIncludeFilename(
 	if (!getName(buffer,filename,vars,pvt->_incend,pvt->_incendlen)) {
 		if (!pvt->_err.getSize()) {
 			pvt->_err.appendFormatted(
-				"getIncludeFilename(%s) failed: "
+				"getIncludeFileName(%s) failed: "
 				"getName() failed\n",
 				filename->getString());
 		}

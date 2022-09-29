@@ -54,7 +54,7 @@ void unixsocketclient::setParameters(
 		const char	*filename=NULL;
 		cd->getValue("filename",&filename);
 
-		setFilename((filename)?filename:"");
+		setFileName((filename)?filename:"");
 		client::setParameters(cd);
 	}
 }
@@ -65,7 +65,7 @@ int32_t unixsocketclient::connect() {
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 	pvt->_isc.setHost("127.0.0.1");
-	pvt->_isc.setPort(filenameToPort(getFilename()));
+	pvt->_isc.setPort(filenameToPort(getFileName()));
 	pvt->_isc.setSocketLayer(getSocketLayer());
 	pvt->_isc.setTimeoutSeconds(getTimeoutSeconds());
 	pvt->_isc.setTimeoutMicroeconds(getTimeoutMicroeconds());
@@ -79,7 +79,7 @@ int32_t unixsocketclient::connect() {
 #else
 	// set the filename to connect to
 	getSun()->sun_family=AF_UNIX;
-	charstring::copy(getSun()->sun_path,getFilename());
+	charstring::copy(getSun()->sun_path,getFileName());
 
 	// create a unix socket
 	error::clearError();

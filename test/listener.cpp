@@ -119,7 +119,7 @@ void unixclient() {
 
 	// create an unix socket client
 	unixsocketclient	clnt;
-	clnt.setFilename(listenersck);
+	clnt.setFileName(listenersck);
 	clnt.setTries(1);
 
 	// connect to the server

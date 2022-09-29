@@ -22,11 +22,11 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 		 *
 		 *  This is not directly useful within this instance but child
 		 *  classes may use this value. */
-		void	setFilename(const char *filename);
+		void	setFileName(const char *filename);
 
 		/** Returns the filename that connect() will attempt to connect
 		 *  to, or that listen() will listen on. */
-		const char	*getFilename();
+		const char	*getFileName();
 
 		/** Converts "filename" to a port number for faking unix
 		 *  sockets.  If the filename starts with a number, then
@@ -34,7 +34,7 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 		 *  adds the ascii values of each character in the name.
 		 *  The port number is not guaranteed to be unique for unique
 		 *  names unless those names are based on unique numbers. */
-		uint16_t	filenameToPort(const char *filename);
+		uint16_t	fileNameToPort(const char *filename);
 
 	#include <rudiments/private/unixsocketutil.h>
 };
