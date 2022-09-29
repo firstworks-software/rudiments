@@ -46,34 +46,35 @@ class RUDIMENTS_DLLSPEC gssmechanism : public object {
 		/** Deletes this instance of the gssmechanism class. */
 		~gssmechanism();
 
-		/** Initializes this instance of the gssmechanism class
-		 *  using "str", which should be the string representation
-		 *  of the object id for an available security mechanism.
+		/** Opens the security mechanism identified by "str" which
+		 *  should be the string representation of the object id
+		 *  for the mechanism.
+		 *
 		 *  Returns true on success and false on failure. */
-		bool	init(const char *str);
+		bool	open(const char *str);
 
-		/** Initializes this instance of the gssmechanism class
-		 *  using "oid", which should be the platform-spcific binary
-		 *  representation of the object id for an available security
-		 *  mechanism.
+		/** Opens the security mechanism identified by "oid" which
+		 *  should be the platform-specific binary representation of
+		 *  the object id for the mechanism.
+		 *
 		 *  Returns true on success and false on failure. */
-		bool	init(const void *oid);
-
-		/** Clears any previous initialization of this intstance.
-		 *  
-		 *  Always returns true. */
-		bool	clear();
+		bool	open(const void *oid);
 
 		/** Returns the string representation of the object id for the
 		 *  security mechanism represented by this instance, or NULL
-		 *  if it has not been initialized or has been cleared. */
+		 *  if it has been closed or if none has been opened. */
 		const char	*getString();
 
 		/** Returns the platform-specific binary representation of the
 		 *  object id for the security mechanism represented by this
-		 *  instance, or NULL if it has not been initialized or has
-		 *  been cleared. */
+		 *  instance, or NULL if it has been closed or if none has been
+		 *  opened. */
 		const void	*getObjectId();
+
+		/** Closes any open security mechanism.
+		 *  
+		 *  Always returns true. */
+		bool	close();
 
 	#include <rudiments/private/gssmechanism.h>
 };

@@ -113,7 +113,7 @@ const char * const *gss::getAvailableMechanisms() {
 			gssmechanism	scratch;
 
 			for (size_t i=0; i<mechs->count; i++) {
-				scratch.init(&mechs->elements[i]);
+				scratch.open(&mechs->elements[i]);
 				pvt->_mechs[i]=charstring::duplicate(
 							scratch.getString());
 				#ifdef DEBUG_GSS
@@ -490,13 +490,13 @@ gssmechanism::gssmechanism() : object() {
 }
 
 gssmechanism::~gssmechanism() {
-	clear();
+	close();
 	delete pvt;
 }
 
-bool gssmechanism::init(const char *str) {
+bool gssmechanism::open(const char *str) {
 
-	clear();
+	close();
 
 	if (charstring::isNullOrEmpty(str)) {
 		return true;
@@ -522,9 +522,9 @@ bool gssmechanism::init(const char *str) {
 	#endif
 }
 
-bool gssmechanism::init(const void *oid) {
+bool gssmechanism::open(const void *oid) {
 
-	clear();
+	close();
 
 	#if defined(RUDIMENTS_HAS_GSS)
 		if ((gss_OID)oid==GSS_C_NO_OID) {
@@ -569,7 +569,15 @@ bool gssmechanism::init(const void *oid) {
 	#endif
 }
 
-bool gssmechanism::clear() {
+const char *gssmechanism::getString() {
+	return pvt->_str;
+}
+
+const void *gssmechanism::getObjectId() {
+	return pvt->_oid;
+}
+
+bool gssmechanism::close() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_oid!=GSS_C_NO_OID) {
 			OM_uint32	minor;
@@ -585,14 +593,6 @@ bool gssmechanism::clear() {
 	pvt->_str=NULL;
 
 	return true;
-}
-
-const char *gssmechanism::getString() {
-	return pvt->_str;
-}
-
-const void *gssmechanism::getObjectId() {
-	return pvt->_oid;
 }
 
 
@@ -946,7 +946,7 @@ bool gsscredentials::acquire(const char *name,
 				i<pvt->_actualmechanisms->count; i++) {
 
 				gssmechanism	*mech=new gssmechanism;
-				mech->init(
+				mech->open(
 					&pvt->_actualmechanisms->elements[i]);
 				pvt->_amlist.append(mech);
 			}
@@ -1809,7 +1809,7 @@ bool gsscontext::initiate(const char *name,
 			} else {
 
 				// populate actual mechanism
-				pvt->_actualmechanism.init(actualmechoid);
+				pvt->_actualmechanism.open(actualmechoid);
 
 				// break out if we've completed the process
 				break;
@@ -2582,7 +2582,7 @@ bool gsscontext::accept() {
 		}
 
 		// populate actual mechanism
-		pvt->_actualmechanism.init(actualmechoid);
+		pvt->_actualmechanism.open(actualmechoid);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
