@@ -82,7 +82,7 @@ const unsigned char *crypt::getEncryptedData() {
 				getOut()->append('\0');
 			}
 		#elif defined(RUDIMENTS_HAVE_CRYPT)
-			if (_cryptmutex && !_cryptmutex->lock()) {
+			if (pvt->_cryptmutex && !pvt->_cryptmutex->lock()) {
 				return NULL;
 			}
 			char	*encryptedpassword=::crypt(password,salt);
@@ -90,8 +90,8 @@ const unsigned char *crypt::getEncryptedData() {
 				getOut()->append(encryptedpassword);
 				getOut()->append('\0');
 			}
-			if (_cryptmutex) {
-				_cryptmutex->unlock();
+			if (pvt->_cryptmutex) {
+				pvt->_cryptmutex->unlock();
 			}
 		#endif
 
