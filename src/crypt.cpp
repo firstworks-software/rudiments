@@ -28,6 +28,9 @@ class cryptprivate {
 
 crypt::crypt() : encryption() {
 	pvt=new cryptprivate;
+	#if !defined(RUDIMENTS_HAVE_CRYPT_R)
+	pvt->_cryptmutex=NULL;
+	#endif
 }
 
 crypt::~crypt() {

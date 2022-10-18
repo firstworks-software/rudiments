@@ -107,6 +107,7 @@
 	refactored *client and *util methods, removed convenience methods
 	renamed randomnumber::generate*() to generate(), etc.
 	made Filename/FileName consistent to FileName
+	fixed ininitialized mutex in crypt class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
