@@ -696,7 +696,7 @@ bool datetime::setTZ(const char *zone, char **oldzone, bool ignoredst) {
 	// timezone.
 	//
 	// If a standard timezone was passed in, but we want to account for
-	// daylight savings time (ie. EST was passed in, but daylight savings
+	// daylight savings time (eg. EST was passed in, but daylight savings
 	// time is currently in effect, so we want to use EDT instead) then
 	// use the combined timezone.
 	const char	*combinedzone=lookupCombinedTimeZone(zone);
@@ -858,13 +858,29 @@ void datetime::processTZ(void *tms) {
 		_get_timezone(&seconds);
 		pvt->_gmtoff=-seconds;
 		// apparently _get_timezine doesn't take DST into account
-		if (pvt->_isdst) {
+		//
+		// isdst will be:
+		// * positive if daylight savings time is in effect
+		// * zero if not in effect
+		// * negative if the information is not available
+		//
+		// We'll assume that if the info is not available then daylight
+		// savings time is not in effect.
+		if (pvt->_isdst==1) {
 			pvt->_gmtoff+=3600;
 		}
 	#elif defined(RUDIMENTS_HAS_TIMEZONE)
 		pvt->_gmtoff=-timezone;
-		// apparently timezone doesn't takeDST into account
-		if (pvt->_isdst) {
+		// apparently timezone doesn't take DST into account
+		//
+		// isdst will be:
+		// * positive if daylight savings time is in effect
+		// * zero if not in effect
+		// * negative if the information is not available
+		//
+		// We'll assume that if the info is not available then daylight
+		// savings time is not in effect.
+		if (pvt->_isdst==1) {
 			pvt->_gmtoff+=3600;
 		}
 	#elif defined(RUDIMENTS_HAS__TIMEZONE)
@@ -874,18 +890,28 @@ void datetime::processTZ(void *tms) {
 	#endif
 }
 
-const char *datetime::getTzName(uint8_t index, void *tms) {
+const char *datetime::getTzName(int32_t isdst, void *tms) {
+
+	// isdst will be:
+	// * positive if daylight savings time is in effect
+	// * zero if not in effect
+	// * negative if the information is not available
+	//
+	// We'll assume that if the info is not available then daylight
+	// savings time is not in effect.  Also, we have to do the calculation
+	// in each branch to avoid unused variable warnings/errors.
+
 	#if defined(RUDIMENTS_HAS__GET_TZNAME)
 		size_t	timezonenamelen;
 		_get_tzname(&timezonenamelen,
 				pvt->_timezonename,
 				sizeof(pvt->_timezonename),
-				index);
+				(isdst==1)?1:0);
 		return pvt->_timezonename;
 	#elif defined(RUDIMENTS_HAS__TZNAME)
-		return _tzname[index];
+		return _tzname[(isdst==1)?1:0];
 	#elif defined(RUDIMENTS_HAS_TZNAME)
-		return tzname[index];
+		return tzname[(isdst==1)?1:0];
 	#elif defined(RUDIMENTS_HAS_TM_ZONE)
 		return ((struct tm *)tms)->tm_zone;
 	#else
