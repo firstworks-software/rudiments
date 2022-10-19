@@ -26,11 +26,16 @@ bool object::incOrErr(ssize_t *retval, ssize_t val) {
 
 bool object::incOrErr(ssize_t *retval, ssize_t val, ssize_t expected) {
 
-	// like incOrErr above, but if val!=expected (eg. in a short read/write
-	// condition), then increment retval but also return false
-	if (val!=expected) {
-		(*retval)+=val;
-		return false;
+	// like incOrErr above, but if val!=expected (eg. in
+	// a short read/write condition), then return false
+
+	if (*retval>-1) {
+		if (val>-1) {
+			(*retval)+=val;
+			return (val==expected);
+		} else {
+			(*retval)=val;
+		}
 	}
-	return incOrErr(retval,val);
+	return false;
 }
