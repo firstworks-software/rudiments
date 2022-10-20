@@ -33,3 +33,5 @@ clean:
 override_dh_auto_configure:
 	dh_auto_configure -- \
 		--enable-debug
+
+override_dh_strip:
