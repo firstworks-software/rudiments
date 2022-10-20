@@ -34,5 +34,5 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 		--enable-debug
 
-binary-arch:
-	dh_strip --dbg-package=rudiments
+#binary-arch:
+	#dh_strip --dbg-package=rudiments
