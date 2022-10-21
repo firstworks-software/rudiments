@@ -3,6 +3,7 @@
 
 #include <rudiments/xmlsax.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stdio.h>
 
 class xmlsaxprivate {
 	friend class xmlsax;

@@ -118,17 +118,14 @@ bool xmldom::tagStart(const char *ns, const char *name) {
 	if (getRootNode()->isNullNode()) {
 		createRootNode();
 	}
-	domnode	*tagnode=new domnode(this,getNullNode(),
-						TAG_DOMNODETYPE,
-						ns,name,NULL);
+	domnode	*tagnode=new domnode(this,TAG_DOMNODETYPE,ns,name,NULL);
 	insertChild(tagnode);
 	pvt->_currentparent=tagnode;
 	return true;
 }
 
 bool xmldom::attributeName(const char *name) {
-	pvt->_currentattribute=new domnode(this,getNullNode(),
-						ATTRIBUTE_DOMNODETYPE,
+	pvt->_currentattribute=new domnode(this,ATTRIBUTE_DOMNODETYPE,
 						NULL,name,NULL);
 	pvt->_currentparent->insertAttribute(pvt->_currentattribute,
 				pvt->_currentparent->getAttributeCount());
@@ -148,9 +145,7 @@ bool xmldom::attributeValue(const char *value) {
 
 bool xmldom::text(const char *string) {
 	pvt->_currentattribute=NULL;
-	insertChild(new domnode(this,getNullNode(),
-					TEXT_DOMNODETYPE,
-					NULL,"text",string));
+	insertChild(new domnode(this,TEXT_DOMNODETYPE,NULL,"text",string));
 	return true;
 }
 
@@ -162,17 +157,14 @@ bool xmldom::tagEnd(const char *ns, const char *name) {
 
 bool xmldom::comment(const char *string) {
 	pvt->_currentattribute=NULL;
-	insertChild(new domnode(this,getNullNode(),
-					COMMENT_DOMNODETYPE,
+	insertChild(new domnode(this,COMMENT_DOMNODETYPE,
 					NULL,"comment",string));
 	return true;
 }
 
 bool xmldom::cdata(const char *string) {
 	pvt->_currentattribute=NULL;
-	insertChild(new domnode(this,getNullNode(),
-					CDATA_DOMNODETYPE,
-					NULL,"cdata",string));
+	insertChild(new domnode(this,CDATA_DOMNODETYPE,NULL,"cdata",string));
 	return true;
 }
 

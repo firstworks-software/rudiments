@@ -121,42 +121,40 @@ class dom;
  *  		a list of child nodes - unused */
 class RUDIMENTS_DLLSPEC domnode : virtual public object {
 	public:
-			/** Creates a new node and intializes its
-			 *  member variables to NULL.
-			 * 
-			 *  Your application should pass in a special
-			 *  "nullnode" which may be created by the
-			 *  static method createNullNode() below.
-			 * 
-			 *  This will keep command chaining like this:
-			 * 
-			 *  mynode->getFirstChild("node1")->
-			 *  	getFirstChild("node2")->getName("node3");
-			 * 
-			 *  from causing the program to crash trying to
-			 *  dereference a NULL pointer if, for example,
-			 *  "node2" doesn't exist. */
-			domnode(dom *dom, domnode *nullnode);
+		/** Creates a new node and intializes its
+		 *  member variables to NULL.
+		 * 
+		 *  Your application should pass in a special
+		 *  "nullnode" which may be created by the
+		 *  static method createNullNode() below.
+		 * 
+		 *  This will keep command chaining like this:
+		 * 
+		 *  mynode->getFirstChild("node1")->
+		 *  	getFirstChild("node2")->getName("node3");
+		 * 
+		 *  from causing the program to crash trying to
+		 *  dereference a NULL pointer if, for example,
+		 *  "node2" doesn't exist. */
+		domnode(dom *dom);
 
-			/** Creates a new node (see
- 			 *  domnode(dom *, domnode *) and intializes
- 			 *  its member variables to the values passed in. */
-			domnode(dom *dom, domnode *nullnode,
-						domnodetype type,
-						const char *name,
-						const char *value);
+		/** Creates a new node (see
+ 		 *  domnode(dom *, domnode *) and intializes
+ 		 *  its member variables to the values passed in. */
+		domnode(dom *dom, domnodetype type,
+					const char *name,
+					const char *value);
 
-			/** Creates a new node (see
- 			 *  domnode(dom *, domnode *) and intializes
- 			 *  its member variables to the values passed in. */
-			domnode(dom *dom, domnode *nullnode,
-						domnodetype type,
-						const char *ns,
-						const char *name,
-						const char *value);
+		/** Creates a new node (see
+ 		 *  domnode(dom *, domnode *) and intializes
+ 		 *  its member variables to the values passed in. */
+		domnode(dom *dom, domnodetype type,
+					const char *ns,
+					const char *name,
+					const char *value);
 
-			/** Deletes the node, all attribute nodes and
-			 *  optionally all child nodes, recursively. */
+		/** Deletes the node, all attribute nodes and all
+		 *  child nodes, recursively. */
 		virtual	~domnode();
 
 
@@ -169,16 +167,6 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  pointer back.  The calling program must ultimately
 		 *  deallocate the node. */
 		static	domnode	*createNullNode(dom *dom);
-
-
-		/** Instructs the destructor to recursively delete all child
-		 *  nodes.  This is the default behavior. */
-		void	cascadeOnDelete();
-
-		/** Instructs the destructor not to recursively delete all
-		 *  child nodes.  The default behavior is to delete all child
-		 *  nodes. */
-		void	dontCascadeOnDelete();
 
 
 		/** Returns the type of the node. */

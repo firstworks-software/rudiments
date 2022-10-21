@@ -67,7 +67,6 @@ bool dom::clear() {
 
 bool dom::reset() {
 	if (!pvt->_rootnode->isNullNode()) {
-		pvt->_rootnode->cascadeOnDelete();
 		delete pvt->_rootnode;
 		pvt->_rootnode=pvt->_nullnode;
 	}
@@ -80,9 +79,7 @@ const char *dom::getType() {
 }
 
 void dom::createRootNode() {
-	pvt->_rootnode=new domnode(this,pvt->_nullnode,
-					ROOT_DOMNODETYPE,
-					NULL,"document",NULL);
+	pvt->_rootnode=new domnode(this,ROOT_DOMNODETYPE,NULL,"document",NULL);
 }
 
 domnode *dom::getRootNode() {

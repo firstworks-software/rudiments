@@ -14,72 +14,72 @@ class domnodeprivate {
 	friend class domnode;
 	private:
 		dom		*_dom;
-		bool		_cascade;
+
 		domnodetype	_type;
+
 		const char	*_namespace;
 		const char	*_name;
 		const char	*_value;
+
 		domnode		*_parent;
 		domnode		*_next;
-		domnode		*_nexttag;
 		domnode		*_previous;
+
+		domnode		*_nexttag;
+
 		uint64_t	_childcount;
 		domnode		*_firstchild;
-		domnode		*_firsttagchild;
 		domnode		*_lastchild;
+
+		domnode		*_firsttagchild;
+
 		uint64_t	_attributecount;
 		domnode		*_firstattribute;
 		domnode		*_lastattribute;
-		domnode		*_nullnode;
-		bool		_isnullnode;
+
 		void		*_data;
 		void		*_privatedata;
 };
 
-domnode::domnode(dom *dom, domnode *nullnode) : object() {
-	construct(dom,nullnode);
+domnode::domnode(dom *dom) : object() {
+	construct(dom);
 	setType(NULL_DOMNODETYPE);
 }
 
-domnode::domnode(dom *dom, domnode *nullnode,
-				domnodetype type,
+domnode::domnode(dom *dom, domnodetype type,
 				const char *name,
 				const char *value) : object() {
-	construct(dom,nullnode);
+	construct(dom);
 	setType(type);
 	setName(name);
 	setValue(value);
 }
 
-domnode::domnode(dom *dom, domnode *nullnode,
-				domnodetype type,
+domnode::domnode(dom *dom, domnodetype type,
 				const char *ns,
 				const char *name,
 				const char *value) : object() {
-	construct(dom,nullnode);
+	construct(dom);
 	setType(type);
 	setNamespace(ns);
 	setName(name);
 	setValue(value);
 }
 
-void domnode::construct(dom *dom, domnode *nullnode) {
+void domnode::construct(dom *dom) {
 	pvt=new domnodeprivate;
 	pvt->_dom=dom;
-	pvt->_nullnode=nullnode;
-	pvt->_parent=nullnode;
-	pvt->_next=nullnode;
-	pvt->_nexttag=nullnode;
-	pvt->_previous=nullnode;
-	pvt->_firstchild=nullnode;
-	pvt->_firsttagchild=nullnode;
-	pvt->_lastchild=nullnode;
+	pvt->_parent=dom->getNullNode();
+	pvt->_next=dom->getNullNode();
+	pvt->_nexttag=dom->getNullNode();
+	pvt->_previous=dom->getNullNode();
+	pvt->_firstchild=dom->getNullNode();
+	pvt->_firsttagchild=dom->getNullNode();
+	pvt->_lastchild=dom->getNullNode();
 	pvt->_childcount=0;
 	pvt->_firstattribute=NULL;
 	pvt->_lastattribute=NULL;
 	pvt->_attributecount=0;
-	pvt->_cascade=true;
-	pvt->_isnullnode=false;
 	pvt->_namespace=NULL;
 	pvt->_name=NULL;
 	pvt->_value=NULL;
@@ -88,16 +88,15 @@ void domnode::construct(dom *dom, domnode *nullnode) {
 }
 
 domnode::~domnode() {
-	domnode	*current;
-	if (pvt->_cascade) {
-		// delete child nodes
-		current=pvt->_firstchild;
-		while (current && !current->isNullNode()) {
-			pvt->_lastchild=current->getNextSibling();
-			delete current;
-			current=pvt->_lastchild;
-		}
+
+	// delete child nodes
+	domnode	*current=pvt->_firstchild;
+	while (current && !current->isNullNode()) {
+		pvt->_lastchild=current->getNextSibling();
+		delete current;
+		current=pvt->_lastchild;
 	}
+
 	// delete attributes
 	current=pvt->_firstattribute;
 	while (current && !current->isNullNode()) {
@@ -118,8 +117,7 @@ domnode::~domnode() {
 }
 
 domnode *domnode::createNullNode(dom *dom) {
-	domnode	*nn=new domnode(dom,NULL);
-	nn->pvt->_nullnode=nn;
+	domnode	*nn=new domnode(dom);
 	nn->setParent(nn);
 	nn->setNextSibling(nn);
 	nn->pvt->_nexttag=nn;
@@ -127,7 +125,6 @@ domnode *domnode::createNullNode(dom *dom) {
 	nn->pvt->_firstchild=nn;
 	nn->pvt->_firsttagchild=nn;
 	nn->pvt->_lastchild=nn;
-	nn->pvt->_isnullnode=true;
 	return nn;
 }
 
@@ -169,7 +166,7 @@ domnode *domnode::getPreviousTagSibling(const char *ns,
 			return current;
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getPreviousTagSibling(const char *name,
@@ -227,7 +224,7 @@ domnode *domnode::getPreviousTagSibling(const char *ns,
 			}
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getNextTagSibling() {
@@ -271,7 +268,7 @@ domnode *domnode::getNextTagSibling(const char *ns,
 			return current;
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getNextTagSibling(const char *name,
@@ -329,7 +326,7 @@ domnode *domnode::getNextTagSibling(const char *ns,
 			}
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getNextTagSiblingInSet(const char * const *set) {
@@ -345,7 +342,7 @@ domnode *domnode::getNextTagSiblingInSet(const char *ns,
 			return child;
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getFirstTagChild() {
@@ -486,7 +483,7 @@ domnode *domnode::getFirstChild(const char *ns,
 			}
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getFirstTagDescendent(const char *name) {
@@ -526,7 +523,7 @@ domnode *domnode::getFirstTagDescendent(const char *ns,
 			return desc;
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getFirstTagDescendent(const char *name,
@@ -589,7 +586,7 @@ domnode *domnode::getFirstTagDescendent(const char *ns,
 			return desc;
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getFirstTagDescendentInSet(
@@ -613,7 +610,7 @@ domnode *domnode::getFirstTagDescendentInSet(
 			return desc;
 		}
 	}
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 domnode *domnode::getNextTag() {
@@ -634,7 +631,7 @@ domnode *domnode::getNextTag(domnode *top) {
 	for (;;) {
 		ancestor=ancestor->getParent();
 		if (ancestor->isNullNode() || ancestor==top) {
-			return pvt->_nullnode;
+			return pvt->_dom->getNullNode();
 		}
 		domnode	*ancestorsib=ancestor->getNextTagSibling();
 		if (!ancestorsib->isNullNode()) {
@@ -657,7 +654,7 @@ domnode *domnode::getPreviousTag(domnode *top) {
 	for (;;) {
 		ancestor=ancestor->getParent();
 		if (ancestor->isNullNode() || ancestor==top) {
-			return pvt->_nullnode;
+			return pvt->_dom->getNullNode();
 		}
 		domnode	*ancestorsib=ancestor->getPreviousTagSibling();
 		if (!ancestorsib->isNullNode()) {
@@ -667,7 +664,7 @@ domnode *domnode::getPreviousTag(domnode *top) {
 }
 
 bool domnode::insertText(const char *value, uint64_t position) {
-	domnode	*text=new domnode(pvt->_dom,pvt->_nullnode);
+	domnode	*text=new domnode(pvt->_dom);
 	text->setName("text");
 	text->setValue(value);
 	return insertNode(text,position,
@@ -679,7 +676,7 @@ bool domnode::insertText(const char *value, uint64_t position) {
 
 bool domnode::insertAttribute(const char *name, const char *value,
 							uint64_t position) {
-	domnode	*attribute=new domnode(pvt->_dom,pvt->_nullnode);
+	domnode	*attribute=new domnode(pvt->_dom);
 	attribute->setName(name);
 	attribute->setValue(value);
 	return insertNode(attribute,position,
@@ -696,7 +693,7 @@ domnode *domnode::getNode(domnode *first,
 				bool ignorecase,
 				uint64_t count) {
 	if (!first || position>=count) {
-		return pvt->_nullnode;
+		return pvt->_dom->getNullNode();
 	}
 	domnode	*current=first;
 	if (name) {
@@ -727,20 +724,20 @@ bool domnode::insertNode(domnode *node,
 	node->setType(type);
 	if (*count==0) {
 		// optimize for empty
-		node->setNextSibling(pvt->_nullnode);
-		node->setPreviousSibling(pvt->_nullnode);
+		node->setNextSibling(pvt->_dom->getNullNode());
+		node->setPreviousSibling(pvt->_dom->getNullNode());
 		*first=node;
 		*last=node;
 	} else if (position==*count) {
 		// optimize for append
-		node->setNextSibling(pvt->_nullnode);
+		node->setNextSibling(pvt->_dom->getNullNode());
 		node->setPreviousSibling(*last);
 		(*last)->setNextSibling(node);
 		*last=node;
 	} else if (position==0) {
 		// optimize for prepend
 		node->setNextSibling(*first);
-		node->setPreviousSibling(pvt->_nullnode);
+		node->setPreviousSibling(pvt->_dom->getNullNode());
 		(*first)->setPreviousSibling(node);
 		*first=node;
 	} else {
@@ -888,7 +885,7 @@ bool domnode::appendAttribute(const char *name, const char *value) {
 
 dictionary<const char *, const char *> *domnode::getAttributes() {
 
-	if (pvt->_isnullnode) {
+	if (pvt->_type==NULL_DOMNODETYPE) {
 		return NULL;
 	}
 
@@ -923,14 +920,6 @@ void domnode::setAttributeValue(const char *name, uint64_t value) {
 	char	*valuestr=charstring::parseNumber(value);
 	setAttributeValue(name,valuestr);
 	delete[] valuestr;
-}
-
-void domnode::cascadeOnDelete() {
-	pvt->_cascade=true;
-}
-
-void domnode::dontCascadeOnDelete() {
-	pvt->_cascade=false;
 }
 
 domnodetype domnode::getType() {
@@ -983,11 +972,11 @@ domnode *domnode::getNextSibling() {
 }
 
 domnode *domnode::getNullNode() {
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 bool domnode::isNullNode() {
-	return pvt->_isnullnode;
+	return pvt->_type==NULL_DOMNODETYPE;
 }
 
 uint64_t domnode::getChildCount() {
@@ -1121,7 +1110,6 @@ domnode *domnode::insertTag(const char *ns,
 					const char *tag,
 					uint64_t position) {
 	domnode	*child=new domnode(pvt->_dom,
-					pvt->_nullnode,
 					TAG_DOMNODETYPE,
 					ns,tag,NULL);
 	if (insertNode(child,position,
@@ -1132,7 +1120,7 @@ domnode *domnode::insertTag(const char *ns,
 		return child;
 	}
 	delete child;
-	return pvt->_nullnode;
+	return pvt->_dom->getNullNode();
 }
 
 bool domnode::insertAttribute(domnode *attribute, uint64_t position) {
@@ -1831,7 +1819,7 @@ domnode *domnode::wrapChildren(domnode *startchild,
 
 	domnode	*newnode=insertTag(ns,name,startchild->getPosition());
 	if (newnode->isNullNode()) {
-		return pvt->_nullnode;
+		return pvt->_dom->getNullNode();
 	}
 
 	domnode	*currentchild=startchild;
@@ -1840,7 +1828,7 @@ domnode *domnode::wrapChildren(domnode *startchild,
 		domnode	*nextchild=currentchild->getNextSibling();
 
 		if (!moveChild(currentchild,newnode,newnode->getChildCount())) {
-			return pvt->_nullnode;
+			return pvt->_dom->getNullNode();
 		}
 
 		if (currentchild==endchild) {
@@ -1873,8 +1861,7 @@ domnode *domnode::clone() {
 domnode *domnode::clone(dom *dom) {
 
 	// clone this node
-	domnode	*clonednode=new domnode(dom,dom->getNullNode(),
-						getType(),getNamespace(),
+	domnode	*clonednode=new domnode(dom,getType(),getNamespace(),
 						getName(),getValue());
 
 	// clone attributes

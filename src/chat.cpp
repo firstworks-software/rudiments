@@ -105,7 +105,6 @@ int32_t chat::runScript(const char *script, char **abort,
 	if (root->isNullNode() || scriptnode->isNullNode()) {
 		return RESULT_ERROR;
 	}
-	root->cascadeOnDelete();
 
 	// run through the children of the <script> tag...
 	for (domnode *node=scriptnode->getFirstTagChild();

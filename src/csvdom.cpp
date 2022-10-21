@@ -303,8 +303,7 @@ bool csvdom::insertColumnAt(uint64_t position, const char *name, bool quoted) {
 	}
 
 	// insert the new column
-	domnode	*c=new domnode(this,getNullNode(),
-					TAG_DOMNODETYPE,NULL,"c",NULL);
+	domnode	*c=new domnode(this,TAG_DOMNODETYPE,NULL,"c",NULL);
 	setValue(c,name,quoted);
 	if (!h->insertChild(c,position)) {
 		return false;
@@ -313,8 +312,7 @@ bool csvdom::insertColumnAt(uint64_t position, const char *name, bool quoted) {
 	// insert blank fields
 	for (domnode *r=getRootNode()->getFirstTagChild("r");
 			!r->isNullNode(); r=r->getNextTagSibling("r")) {
-		domnode	*f=new domnode(this,getNullNode(),
-					TAG_DOMNODETYPE,NULL,"f",NULL);
+		domnode	*f=new domnode(this,TAG_DOMNODETYPE,NULL,"f",NULL);
 		setValue(f,"",false);
 		r->insertChild(f,position);
 	}
@@ -557,14 +555,11 @@ void csvdom::bothTrimFields() {
 }
 
 bool csvdom::insertRowAt(uint64_t position) {
-	domnode	*rownode=new domnode(this,getNullNode(),
-						TAG_DOMNODETYPE,
-						NULL,"r",NULL);
+	domnode	*rownode=new domnode(this,TAG_DOMNODETYPE,NULL,"r",NULL);
 	uint64_t	count=getColumnCount();
 	for (uint64_t i=0; i<count; i++) {
-		domnode	*fieldnode=new domnode(this,getNullNode(),
-							TAG_DOMNODETYPE,
-							NULL,"f",NULL);
+		domnode	*fieldnode=new domnode(
+					this,TAG_DOMNODETYPE,NULL,"f",NULL);
 		setValue(fieldnode,"",false);
 		rownode->appendChild(fieldnode);
 	}
@@ -747,18 +742,14 @@ bool csvdom::headerStart() {
 	if (getRootNode()->isNullNode()) {
 		createRootNode();
 	}
-	domnode	*headernode=new domnode(this,getNullNode(),
-						TAG_DOMNODETYPE,
-						NULL,"h",NULL);
+	domnode	*headernode=new domnode(this,TAG_DOMNODETYPE,NULL,"h",NULL);
 	pvt->_currentparent->appendChild(headernode);
 	pvt->_currentparent=headernode;
 	return true;
 }
 
 bool csvdom::column(const char *name, bool quoted) {
-	domnode	*columnnode=new domnode(this,getNullNode(),
-						TAG_DOMNODETYPE,
-						NULL,"c",NULL);
+	domnode	*columnnode=new domnode(this,TAG_DOMNODETYPE,NULL,"c",NULL);
 	setValue(columnnode,name,quoted);
 	pvt->_currentparent->appendChild(columnnode);
 	return true;
@@ -774,18 +765,14 @@ bool csvdom::bodyStart() {
 }
 
 bool csvdom::rowStart() {
-	domnode	*rownode=new domnode(this,getNullNode(),
-						TAG_DOMNODETYPE,
-						NULL,"r",NULL);
+	domnode	*rownode=new domnode(this,TAG_DOMNODETYPE,NULL,"r",NULL);
 	pvt->_currentparent->appendChild(rownode);
 	pvt->_currentparent=rownode;
 	return true;
 }
 
 bool csvdom::field(const char *value, bool quoted) {
-	domnode	*fieldnode=new domnode(this,getNullNode(),
-						TAG_DOMNODETYPE,
-						NULL,"f",NULL);
+	domnode	*fieldnode=new domnode(this,TAG_DOMNODETYPE,NULL,"f",NULL);
 	setValue(fieldnode,value,quoted);
 	pvt->_currentparent->appendChild(fieldnode);
 	return true;

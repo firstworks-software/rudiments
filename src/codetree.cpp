@@ -325,7 +325,6 @@ bool codetree::parse(const char *in,
 
 	// initialize a node for processing exceptions
 	pvt->_excnode=new domnode(out->getTree(),
-					out->getNullNode(),
 					TAG_DOMNODETYPE,
 					NULL,"excnode",NULL);
 
@@ -1099,7 +1098,6 @@ bool codetree::parseNonTerminal(domnode *grammarnode,
 			}
 
 			codenode=new domnode(treeparent->getTree(),
-						treeparent->getNullNode(),
 						TAG_DOMNODETYPE,
 						pvt->_ns,name,NULL);
 		}
