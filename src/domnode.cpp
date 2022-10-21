@@ -24,13 +24,11 @@ class domnodeprivate {
 		domnode		*_parent;
 		domnode		*_next;
 		domnode		*_previous;
-
 		domnode		*_nexttag;
 
 		uint64_t	_childcount;
 		domnode		*_firstchild;
 		domnode		*_lastchild;
-
 		domnode		*_firsttagchild;
 
 		uint64_t	_attributecount;
