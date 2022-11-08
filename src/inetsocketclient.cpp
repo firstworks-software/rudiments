@@ -139,9 +139,9 @@ int32_t inetsocketclient::connect() {
 		}
 
 		// set the address type and port to connect to
-		bytestring::zero(_sin(),sizeof(sockaddr_in));
-		_sin()->sin_family=he.getAddressType();
-		_sin()->sin_port=hostToNet(getPort());
+		bytestring::zero(getSin(),sizeof(sockaddr_in));
+		getSin()->sin_family=he.getAddressType();
+		getSin()->sin_port=hostToNet(getPort());
 	#endif
 
 	int32_t	retval=RESULT_ERROR;
@@ -304,7 +304,7 @@ int32_t inetsocketclient::connect() {
 				const char *addr=addrlistnode->getValue();
 
 				// set which host to connect to
-				bytestring::copy(&_sin()->sin_addr,
+				bytestring::copy(&getSin()->sin_addr,
 						addr,he.getAddressLength());
 
 				// create an inet socket
@@ -345,10 +345,10 @@ int32_t inetsocketclient::connect() {
 	
 				// attempt to connect
 				retval=socketclient::connect(
-					(struct sockaddr *)_sin(),
+					(struct sockaddr *)getSin(),
 					sizeof(sockaddr_in),
-					_timeoutsec(),
-					_timeoutusec());
+					getTimeoutSeconds(),
+					getTimeoutMicroseconds());
 				if (retval==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
 				} else {
