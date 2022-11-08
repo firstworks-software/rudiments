@@ -48,7 +48,7 @@ class RUDIMENTS_DLLSPEC client : public filedescriptor {
 		 *  connect forever.  If set to 1 then connect() will only
 		 *  attempt to connect once.
 		 *
-		 *  Defaults to 0. */
+		 *  Defaults to 1. */
 		void	setTries(uint32_t tries);
 
 		/** Sets the verbose connect error.  May be called by a child

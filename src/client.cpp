@@ -21,7 +21,7 @@ client::client() : filedescriptor() {
 	pvt->_timeoutsec=-1;
 	pvt->_timeoutusec=-1;
 	pvt->_retrywait=0;
-	pvt->_tries=0;
+	pvt->_tries=1;
 	type("client");
 }
 
