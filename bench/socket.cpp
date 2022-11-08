@@ -433,7 +433,6 @@ void inetclient(const char *host) {
 	inetsocketclient	clnt;
 	clnt.setHost((charstring::isNullOrEmpty(host))?"127.0.0.1":host);
 	clnt.setPort(8000);
-	clnt.setTries(1);
 
 	// connect to the server
 	if (clnt.connect()<0) {
@@ -462,7 +461,6 @@ void unixclient() {
 	// create an unix socket client
 	unixsocketclient	clnt;
 	clnt.setFileName("listener.sck");
-	clnt.setTries(1);
 
 	// connect to the server
 	if (clnt.connect()<0) {

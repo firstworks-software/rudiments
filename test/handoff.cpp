@@ -91,7 +91,6 @@ void handoff2() {
 	// connect to handoff1
 	unixsocketclient clnt;
 	clnt.setFileName(handoffsck);
-	clnt.setTries(1);
 	test("handoff2 - connect",clnt.connect()==RESULT_SUCCESS);
 
 	// receive the file
@@ -128,7 +127,6 @@ void handoffclient() {
 	inetsocketclient	clnt;
 	clnt.setHost("127.0.0.1");
 	clnt.setPort(8001);
-	clnt.setTries(1);
 	test("handoffclient - connect",clnt.connect()==RESULT_SUCCESS);
 
 	// read hello

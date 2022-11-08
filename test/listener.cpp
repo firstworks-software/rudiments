@@ -96,7 +96,6 @@ void inetclient() {
 	inetsocketclient	clnt;
 	clnt.setHost("127.0.0.1");
 	clnt.setPort(8000);
-	clnt.setTries(1);
 
 	// connect to the server
 	test("inet client - connect",clnt.connect()>=0);
@@ -120,7 +119,6 @@ void unixclient() {
 	// create an unix socket client
 	unixsocketclient	clnt;
 	clnt.setFileName(listenersck);
-	clnt.setTries(1);
 
 	// connect to the server
 	test("unix client - connect",clnt.connect()>=0);

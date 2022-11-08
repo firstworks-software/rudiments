@@ -35,7 +35,6 @@ int main(int argc, const char **argv) {
 	inetsocketclient	clnt;
 	clnt.setHost("127.0.0.1");
 	clnt.setPort(8000);
-	clnt.setTries(1);
 
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect()<0) {

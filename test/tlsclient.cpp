@@ -110,7 +110,6 @@ int main(int argc, const char **argv) {
 	inetsocketclient	fd;
 	fd.setHost(host);
 	fd.setPort(port);
-	fd.setTries(1);
 	fd.setWriteBufferSize(65536);
 	fd.setReadBufferSize(65536);
 
