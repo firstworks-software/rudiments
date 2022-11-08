@@ -44,7 +44,7 @@ int main(int argc, const char **argv) {
 			}
 		};
 
-		crypt	c;
+		class crypt	c;
 		uint16_t	i=0;
 		for (const char * const *salt=salts; *salt; salt++) {
 
