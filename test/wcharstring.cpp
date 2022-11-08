@@ -773,8 +773,14 @@ int main(int argc, const char **argv) {
 					break;
 				case 9:
 					pattern[0]=L'*';
-					wcharstring::copy(pattern+1,
-						L"0123456789abcdef"+i+1);
+                                        // do this rather than just
+                                        // L"0123456789abcdef"+i+1 directly in
+                                        // the copy to silence compiler warnings
+                                        // on freebsd 13.1 (and probably other
+                                        // platforms)
+					const wchar_t	*chars=
+						L"0123456789abcdef";
+					wcharstring::copy(pattern+1,chars+i+1);
 					break;
 			}
 
