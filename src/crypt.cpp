@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAVE_CRYPT_R) && !defined(__USE_GNU)
 	#define __USE_GNU
@@ -57,7 +58,6 @@ const unsigned char *crypt::getEncryptedData() {
 		// return the existing output buffer
 		if (!getDirty()) {
 			return getOut()->getBuffer();
-
 		}
 
 		// clear the output buffer
@@ -76,11 +76,12 @@ const unsigned char *crypt::getEncryptedData() {
 		password[insize]='\0';
 
 		// encrypt
+		char	*encryptedpassword=NULL;
 		#if defined(RUDIMENTS_HAVE_CRYPT_R)
 			crypt_data	cd;
 			bytestring::zero(&cd,sizeof(cd));
-			char	*encryptedpassword=crypt_r(password,salt,&cd);
-			if (!error::getErrorNumber()) {
+			encryptedpassword=crypt_r(password,salt,&cd);
+			if (encryptedpassword) {
 				getOut()->append(encryptedpassword);
 				getOut()->append('\0');
 			}
@@ -88,8 +89,8 @@ const unsigned char *crypt::getEncryptedData() {
 			if (pvt->_cryptmutex && !pvt->_cryptmutex->lock()) {
 				return NULL;
 			}
-			char	*encryptedpassword=::crypt(password,salt);
-			if (!error::getErrorNumber()) {
+			encryptedpassword=::crypt(password,salt);
+			if (encryptedpassword) {
 				getOut()->append(encryptedpassword);
 				getOut()->append('\0');
 			}
@@ -102,7 +103,7 @@ const unsigned char *crypt::getEncryptedData() {
 		delete[] password;
 
 		// return error
-		if (error::getErrorNumber()) {
+		if (!encryptedpassword) {
 			switch (error::getErrorNumber()) {
 				case ERANGE:
 				case ENOMEM:
