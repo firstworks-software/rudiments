@@ -91,7 +91,7 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns the character representation of wide
 		 *  character "c".
 		 *
-		 *  Returns '\0' if wide character "c" cannot be converted to a
+		 *  Returns '?' if wide character "c" cannot be converted to a
 		 *  character. */
 		static char	duplicate(wchar_t c);
 

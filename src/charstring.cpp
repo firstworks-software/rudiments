@@ -1853,7 +1853,7 @@ char *charstring::duplicate(const wchar_t *string, size_t length) {
 }
 
 char *charstring::duplicate(const wchar_t *string) {
-	return duplicate(string,wcharstring::length(string),'\0');
+	return duplicate(string,wcharstring::length(string),'?');
 }
 
 char *charstring::duplicate(const wchar_t *string, size_t length,

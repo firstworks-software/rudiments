@@ -139,7 +139,7 @@ bool character::inSet(char c, const char *set) {
 }
 
 char character::duplicate(wchar_t c) {
-	return duplicate(c,'\0');
+	return duplicate(c,'?');
 }
 
 char character::duplicate(wchar_t c, char replacement) {
