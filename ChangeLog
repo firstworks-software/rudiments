@@ -110,6 +110,8 @@
 	fixed ininitialized mutex in crypt class
 	fixed tm_isdst handling to deal with > 1 and < 0 cases
 	client connect tries defaults to 1 intead of 0 (infinite tries) now
+	character::duplicate() and charstring::duplicate() use ? as the default
+		replacement character now
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
