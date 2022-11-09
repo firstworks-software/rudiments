@@ -81,6 +81,9 @@
 /* libcurl has curl_multi_timeout */
 /* #undef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT */
 
+/* libcurl has curl_version_info */
+/* #undef RUDIMENTS_HAS_CURL_VERSION_INFO */
+
 /* SSL has EVP_CIPHER_CTX_NEW */
 /* #undef RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW */
 

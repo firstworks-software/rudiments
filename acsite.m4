@@ -494,6 +494,9 @@ then
  
 			AC_MSG_CHECKING(for curl_multi_timeout)
 			FW_TRY_LINK([#include <curl/curl.h>],[curl_multi_timeout(0,0)],[$CPPFLAGS $LIBCURLINCLUDES],[$LIBCURLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_CURL_MULTI_TIMEOUT,1,libcurl has curl_multi_timeout) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+ 
+			AC_MSG_CHECKING(for curl_version_info)
+			FW_TRY_LINK([#include <curl/curl.h>],[curl_version_info(CURLVERSION_NOW)],[$CPPFLAGS $LIBCURLINCLUDES],[$LIBCURLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_CURL_VERSION_INFO,1,libcurl has curl_version_info) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 

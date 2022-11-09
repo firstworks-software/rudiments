@@ -51,6 +51,8 @@ class RUDIMENTS_DLLSPEC url : public file {
 
 		const char	*getError();
 
+		static bool	isProtocolSupported(const char *protocol);
+
 	#include <rudiments/private/url.h>
 };
 

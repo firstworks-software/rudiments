@@ -11,8 +11,13 @@
 int main(int argc, const char **argv) {
 
 	header("url");
-// disabled for now #7122
-return 0;
+
+	// bail if https isn't supported, as the http url below is
+	// now forwarded to an https url
+	if (!url::isProtocolSupported("https")) {
+		stdoutput.printf("	not supported\n\n");
+		return 0;
+	}
 
 	char	*testcontents=file::getContents("knowncontent.html");
 

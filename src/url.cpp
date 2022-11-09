@@ -25,8 +25,8 @@
 	#include <string.h>
 #endif
 
-#define DEBUG_CURL 1
-#define DEBUG_HTTP 1
+//#define DEBUG_CURL 1
+//#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
@@ -69,7 +69,6 @@ class urlprivate {
 			CURL	*_curl;
 			CURLM	*_curlm;
 			bytebuffer	_bb;
-			//unsigned char	_b[CURL_MAX_WRITE_SIZE];
 			uint64_t	_breadpos;
 			bool		_eof;
 			int32_t		_stillrunning;
@@ -713,7 +712,14 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 	// if we got a location header, then try to open that
 	if (location) {
 		pvt->_isc.close();
-		retval=httpOpen(location,userpwd);
+
+		// if the location is https, then use curlOpen
+		if (!charstring::compare(location,"https://",8)) {
+			retval=curlOpen(location,userpwd);
+		} else {
+			retval=httpOpen(location,userpwd);
+		}
+
 		delete[] location;
 	}
 
@@ -737,14 +743,22 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 	delete[] host;
 
 	// set file descriptor on success
-	if (retval) {
+	// (need to check usingbuiltin as well because we might have had to
+	// curlOpen() to handle an https location above, and we don't want to
+	// set the file descriptor in that case)
+	if (retval && pvt->_usingbuiltin) {
 		fd(pvt->_isc.getFileDescriptor());
 	}
 
 	#ifdef DEBUG_HTTP
 	if (retval) {
-		stdoutput.printf("open succeeded, fd: %d\n",
-						getFileDescriptor());
+		// see note above for why we're checking usingbuiltin here
+		if (pvt->_usingbuiltin) {
+			stdoutput.printf("open succeeded, fd: %d\n",
+							getFileDescriptor());
+		} else {
+			stdoutput.printf("open succeeded\n");
+		}
 	} else {
 		stdoutput.printf("open failed\n");
 	}
@@ -1051,6 +1065,17 @@ bool url::curlOpen(const char *urlname, char *userpwd) {
 	}
 
 	curl_slist_free_all(headerlist);
+
+	#else
+
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl not supported\n");
+		#endif
+
+		#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+		#endif
+
 	#endif
 
 	#ifdef DEBUG_CURL
@@ -1601,4 +1626,42 @@ void url::getOpenTimings(uint64_t *build,
 uint64_t url::interval() {
 	return ((pvt->_end.getEpoch()*1000000+pvt->_end.getMicrosecond())-
 		(pvt->_start.getEpoch()*1000000+pvt->_start.getMicrosecond()));
+}
+
+bool url::isProtocolSupported(const char *protocol) {
+
+	bool	retval=false;
+
+	// http is always supported
+	if (!charstring::compareIgnoringCase(protocol,"http")) {
+		retval=true;
+	}
+
+	// if we support curl, ask it if it supports this protocol
+	#ifdef RUDIMENTS_HAS_LIBCURL
+	else {
+		#ifdef RUDIMENTS_HAS_CURL_VERSION_INFO
+		curl_version_info_data	*d=curl_version_info(CURLVERSION_NOW);
+		retval=charstring::inSetIgnoringCase(protocol,d->protocols);
+		#else
+		if (charstring::toInteger(LIBCURL_VERSION)<6) {
+			const char	*pr[]={
+				"ftp","gopher","dict",
+				"file","http","https",
+				NULL
+			};
+			retval=charstring::inSetIgnoringCase(protocol,pr);
+		} else {
+			const char	*pr[]={
+				"ftp","telnet","ldap","gopher",
+				"dict","file","http","https",
+				NULL
+			};
+			retval=charstring::inSetIgnoringCase(protocol,pr);
+		}
+		#endif
+	}
+	#endif
+
+	return retval;
 }
