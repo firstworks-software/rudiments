@@ -114,6 +114,8 @@
 		replacement character now
 	refactored FW_CHECK_HEADERS_AND_LIBS a bit
 	added peer validation options to url class
+	added getters to url class
+	url::useHttpPost/Get() -> url::setUseHttpPost()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
