@@ -112,6 +112,7 @@
 	client connect tries defaults to 1 intead of 0 (infinite tries) now
 	character::duplicate() and charstring::duplicate() use ? as the default
 		replacement character now
+	refactored FW_CHECK_HEADERS_AND_LIBS a bit
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
