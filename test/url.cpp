@@ -28,7 +28,7 @@ int main(int argc, const char **argv) {
 	u.setValidatePeer(false);
 	for (uint16_t i=0; i<4; i++) {
 
-		u.useHttpGet();
+		u.setUseHttpPost(false);
 		if (i%2) {
 			u.setHttpUserAgent("unknown/1.0");
 			u.setHttpHeaders("Foo: foo\r\n"

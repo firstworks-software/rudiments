@@ -73,10 +73,10 @@ class urlprivate {
 			bool		_eof;
 			int32_t		_stillrunning;
 			listener	_l;
-
-			bool		_validatepeer;
-			const char	*_capath;
 		#endif
+
+		bool		_validatepeer;
+		const char	*_capath;
 
 		bool		_opentimings;
 		uint64_t	_openbuild;
@@ -117,9 +117,10 @@ url::url() : file() {
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	pvt->_curl=NULL;
 	pvt->_curlm=NULL;
+	#endif
+
 	pvt->_validatepeer=true;
 	pvt->_capath=NULL;
-	#endif
 
 	pvt->_opentimings=false;
 	pvt->_openbuild=0;
@@ -178,12 +179,12 @@ void url::init() {
 	pvt->_error.clear();
 }
 
-void url::useHttpGet() {
-	pvt->_usehttppost=false;
+void url::setUseHttpPost(bool usehttppost) {
+	pvt->_usehttppost=usehttppost;
 }
 
-void url::useHttpPost() {
-	pvt->_usehttppost=true;
+bool url::getUseHttpPost() {
+	return pvt->_usehttppost;
 }
 
 void url::setHttpPostContentType(const char *contenttype) {
@@ -194,9 +195,21 @@ void url::setHttpPostContentType(const char *contenttype) {
 	}
 }
 
+const char *url::getHttpPostContentType() {
+	return pvt->_httppostcontenttype;
+}
+
 void url::setHttpPostData(const char *data, uint64_t size) {
 	pvt->_httppostdata=data;
 	pvt->_httppostdatasize=size;
+}
+
+const char *url::getHttpPostData() {
+	return pvt->_httppostdata;
+}
+
+uint64_t url::getHttpPostDataSize() {
+	return pvt->_httppostdatasize;
 }
 
 void url::setHttpUserAgent(const char *useragent) {
@@ -209,22 +222,34 @@ void url::setHttpUserAgent(const char *useragent) {
 	}
 }
 
+const char *url::getHttpUserAgent() {
+	return pvt->_httpuseragent;
+}
+
 void url::setHttpHeaders(const char *headers) {
 	delete[] pvt->_httpheaders;
 	pvt->_httpheaders=charstring::duplicate(headers);
 }
 
+const char *url::getHttpHeaders() {
+	return pvt->_httpheaders;
+}
+
 void url::setValidatePeer(bool validatepeer) {
-	#ifdef RUDIMENTS_HAS_LIBCURL
 	pvt->_validatepeer=validatepeer;
-	#endif
+}
+
+bool url::getValidatePeer() {
+	return pvt->_validatepeer;
 }
 
 void url::setCertificateAuthority(const char *ca) {
-	#ifdef RUDIMENTS_HAS_LIBCURL
 	delete[] pvt->_capath;
 	pvt->_capath=charstring::duplicate(ca);
-	#endif
+}
+
+const char *url::getCertificateAuthority() {
+	return pvt->_capath;
 }
 
 bool url::lowLevelOpen(const char *name, int32_t flags,

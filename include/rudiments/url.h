@@ -41,16 +41,27 @@ class RUDIMENTS_DLLSPEC url : public file {
 		/** Deletes this instance of the url class. */
 		virtual	~url();
 
-		void	useHttpGet();
-		void	useHttpPost();
+		void	setUseHttpPost(bool usehttppost);
+		bool	getUseHttpPost();
 
 		void	setHttpPostContentType(const char *contenttype);
+		const char	*getHttpPostContentType();
+
 		void	setHttpPostData(const char *data, uint64_t size);
+		const char	*getHttpPostData();
+		uint64_t	getHttpPostDataSize();
+
 		void	setHttpUserAgent(const char *useragent);
+		const char	*getHttpUserAgent();
+
 		void	setHttpHeaders(const char *headers);
+		const char	*getHttpHeaders();
 
 		void	setValidatePeer(bool validatepeer);
+		bool	getValidatePeer();
+
 		void	setCertificateAuthority(const char *ca);
+		const char	*getCertificateAuthority();
 
 		const char	*getError();
 
