@@ -25,6 +25,7 @@ int main(int argc, const char **argv) {
 			"http://rudiments.sourceforge.net/knowncontent.html";
 
 	url	u;
+	u.setValidatePeer(false);
 	for (uint16_t i=0; i<4; i++) {
 
 		u.useHttpGet();

@@ -49,6 +49,9 @@ class RUDIMENTS_DLLSPEC url : public file {
 		void	setHttpUserAgent(const char *useragent);
 		void	setHttpHeaders(const char *headers);
 
+		void	setValidatePeer(bool validatepeer);
+		void	setCertificateAuthority(const char *ca);
+
 		const char	*getError();
 
 		static bool	isProtocolSupported(const char *protocol);

@@ -73,6 +73,9 @@ class urlprivate {
 			bool		_eof;
 			int32_t		_stillrunning;
 			listener	_l;
+
+			bool		_validatepeer;
+			const char	*_capath;
 		#endif
 
 		bool		_opentimings;
@@ -114,6 +117,8 @@ url::url() : file() {
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	pvt->_curl=NULL;
 	pvt->_curlm=NULL;
+	pvt->_validatepeer=true;
+	pvt->_capath=NULL;
 	#endif
 
 	pvt->_opentimings=false;
@@ -207,6 +212,19 @@ void url::setHttpUserAgent(const char *useragent) {
 void url::setHttpHeaders(const char *headers) {
 	delete[] pvt->_httpheaders;
 	pvt->_httpheaders=charstring::duplicate(headers);
+}
+
+void url::setValidatePeer(bool validatepeer) {
+	#ifdef RUDIMENTS_HAS_LIBCURL
+	pvt->_validatepeer=validatepeer;
+	#endif
+}
+
+void url::setCertificateAuthority(const char *ca) {
+	#ifdef RUDIMENTS_HAS_LIBCURL
+	delete[] pvt->_capath;
+	pvt->_capath=charstring::duplicate(ca);
+	#endif
 }
 
 bool url::lowLevelOpen(const char *name, int32_t flags,
@@ -884,6 +902,23 @@ bool url::curlOpen(const char *urlname, char *userpwd) {
 		success=false;
 	}
 	#endif
+
+	// set certificate valiation options
+	if (success && curl_easy_setopt(pvt->_curl,
+				CURLOPT_SSL_VERIFYPEER,
+				(pvt->_validatepeer)?1:0)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set ssl verifypeer failed\n");
+		#endif
+		success=false;
+	}
+	if (success && pvt->_capath && curl_easy_setopt(pvt->_curl,
+				CURLOPT_CAPATH,pvt->_capath)!=CURLE_OK) {
+		#ifdef DEBUG_CURL
+		stdoutput.printf("curl set capath failed\n");
+		#endif
+		success=false;
+	}
 
 	if (success && isssh) {
 
