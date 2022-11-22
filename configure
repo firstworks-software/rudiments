@@ -28983,7 +28983,7 @@ crypt_data cd; crypt_r(NULL,NULL,NULL);
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  RUDIMENTS_HAVE_CRYPT_R="yes"; CRYPTLIB="$i";
+  HAVE_CRYPT_R="yes"; CRYPTLIB="$i";
 $as_echo "#define RUDIMENTS_HAVE_CRYPT_R 1" >>confdefs.h
 
 fi
