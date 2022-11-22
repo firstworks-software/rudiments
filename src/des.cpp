@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/crypt.h>
+#include <rudiments/des.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/error.h>
@@ -19,34 +19,34 @@
 	#include <stdlib.h>
 #endif
 
-class cryptprivate {
-	friend class crypt;
+class desprivate {
+	friend class des;
 	private:
 		#if !defined(RUDIMENTS_HAVE_CRYPT_R)
-			threadmutex	*_cryptmutex;
+			threadmutex	*_desmutex;
 		#endif
 };
 
-crypt::crypt() : encryption() {
-	pvt=new cryptprivate;
+des::des() : encryption() {
+	pvt=new desprivate;
 	#if !defined(RUDIMENTS_HAVE_CRYPT_R)
-	pvt->_cryptmutex=NULL;
+	pvt->_desmutex=NULL;
 	#endif
 }
 
-crypt::~crypt() {
+des::~des() {
 	delete pvt;
 }
 
-uint32_t crypt::getKeySize() {
+uint32_t des::getKeySize() {
 	return 0;
 }
 
-uint32_t crypt::getIvSize() {
+uint32_t des::getIvSize() {
 	return 2;
 }
 
-const unsigned char *crypt::getEncryptedData() {
+const unsigned char *des::getEncryptedData() {
 
 	#if defined(RUDIMENTS_HAVE_CRYPT_R) || defined(RUDIMENTS_HAVE_CRYPT)
 
@@ -130,17 +130,17 @@ const unsigned char *crypt::getEncryptedData() {
 	#endif
 }
 
-uint64_t crypt::getEncryptedDataSize() {
+uint64_t des::getEncryptedDataSize() {
 	getEncryptedData();
 	return getOut()->getSize()-1;
 	
 }
 
-const unsigned char *crypt::getDecryptedData() {
+const unsigned char *des::getDecryptedData() {
 	return NULL;
 }
 
-bool crypt::needsMutex() {
+bool des::needsMutex() {
 	#if defined(RUDIMENTS_HAVE_CRYPT_R)
 		return false;
 	#elif !defined(RUDIMENTS_HAVE_CRYPT)
@@ -150,8 +150,8 @@ bool crypt::needsMutex() {
 	#endif
 }
 
-void crypt::setMutex(threadmutex *mtx) {
+void des::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_CRYPT_R)
-		pvt->_cryptmutex=mtx;
+		pvt->_desmutex=mtx;
 	#endif
 }

@@ -39,7 +39,7 @@ srcs="winsock.cpp "+_
 	"chat.cpp "+_
 	"client.cpp "+_
 	"commandline.cpp "+_
-	"crypt.cpp "+_
+	"des.cpp "+_
 	"datetime.cpp "+_
 	"device.cpp "+_
 	"directory.cpp "+_
@@ -134,7 +134,7 @@ lobjs="winsock.obj "+_
 	"chat.obj "+_
 	"client.obj "+_
 	"commandline.obj "+_
-	"crypt.obj "+_
+	"des.obj "+_
 	"datetime.obj "+_
 	"device.obj "+_
 	"directory.obj "+_
@@ -235,7 +235,7 @@ headers1="table.h "+_
 	"chat.h "+_
 	"client.h "+_
 	"commandline.h "+_
-	"crypt.h "+_
+	"des.h "+_
 	"datetime.h "+_
 	"device.h "+_
 	"directory.h "+_
@@ -358,8 +358,8 @@ privateheaders1="inttypes.h "+_
 	"clientincludes.h "+_
 	"commandline.h "+_
 	"commandlineincludes.h "+_
-	"crypt.h "+_
-	"cryptincludes.h "+_
+	"des.h "+_
+	"desincludes.h "+_
 	"datetime.h "+_
 	"datetimeincludes.h "+_
 	"device.h "+_

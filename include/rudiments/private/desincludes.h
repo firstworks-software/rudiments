@@ -7,4 +7,4 @@
 #include <rudiments/encryption.h>
 #include <rudiments/threadmutex.h>
 
-class cryptprivate;
+class desprivate;

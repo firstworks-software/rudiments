@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the file COPYING for more information
 
-#include <rudiments/crypt.h>
+#include <rudiments/des.h>
 #include <rudiments/charstring.h>
 #include <rudiments/sys.h>
 #include <rudiments/stdio.h>
@@ -9,7 +9,7 @@
 
 int main(int argc, const char **argv) {
 
-	header("crypt");
+	header("des");
 
 	char	*osname=sys::getOperatingSystemName();
 	if (charstring::compare(osname,"Windows") &&
@@ -44,7 +44,7 @@ int main(int argc, const char **argv) {
 			}
 		};
 
-		class crypt	c;
+		class des	c;
 		uint16_t	i=0;
 		for (const char * const *salt=salts; *salt; salt++) {
 

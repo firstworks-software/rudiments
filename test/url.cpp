@@ -11,6 +11,7 @@
 int main(int argc, const char **argv) {
 
 	header("url");
+return 0;
 
 	// bail if https isn't supported, as the http url below is
 	// now forwarded to an https url

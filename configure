@@ -840,7 +840,7 @@ enable_wcharstring
 enable_chat
 enable_client
 enable_commandline
-enable_crypt
+enable_des
 enable_datetime
 enable_device
 enable_directory
@@ -1573,7 +1573,7 @@ Optional Features:
   --disable-chat           Build chat class
   --disable-client        Don't build client class
   --disable-commandline   Don't build commandline class
-  --disable-crypt         Don't build crypt class
+  --disable-des           Don't build des class
   --disable-datetime      Don't build datetime class
   --disable-device        Don't build device class
   --disable-directory     Don't build directory class
@@ -2798,11 +2798,11 @@ else
   INCLUDE_COMMANDLINE="1"
 fi
 
-# Check whether --enable-crypt was given.
-if test "${enable_crypt+set}" = set; then :
-  enableval=$enable_crypt; INCLUDE_CRYPT="0"
+# Check whether --enable-des was given.
+if test "${enable_des+set}" = set; then :
+  enableval=$enable_des; INCLUDE_DES="0"
 else
-  INCLUDE_CRYPT="1"
+  INCLUDE_DES="1"
 fi
 
 # Check whether --enable-datetime was given.
@@ -28854,7 +28854,7 @@ echo
 echo "***** Crypt Functions ********"
 
 
-if ( test "$INCLUDE_CRYPT" = 1 )
+if ( test "$INCLUDE_DES" = 1 )
 then
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for crypt.h" >&5
@@ -38656,12 +38656,12 @@ then
 	LOBJS="$LOBJS commandline.lo"
 fi
 
-if ( test "$INCLUDE_CRYPT" = "1" )
+if ( test "$INCLUDE_DES" = "1" )
 then
-	HEADERS1="$HEADERS1 crypt.h"
-	PRIVATEHEADERS1="$PRIVATEHEADERS1 crypt.h cryptincludes.h"
-	SRCS="$SRCS crypt.cpp"
-	LOBJS="$LOBJS crypt.lo"
+	HEADERS1="$HEADERS1 des.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 des.h desincludes.h"
+	SRCS="$SRCS des.cpp"
+	LOBJS="$LOBJS des.lo"
 fi
 
 if ( test "$INCLUDE_DATETIME" = "1" )

@@ -1500,7 +1500,7 @@ AC_DEFUN([FW_CHECK_CLOCK_NANOSLEEP],
 
 AC_DEFUN([FW_CHECK_CRYPT_R],
 [
-if ( test "$INCLUDE_CRYPT" = 1 )
+if ( test "$INCLUDE_DES" = 1 )
 then
 
 	AC_MSG_CHECKING(for crypt.h)

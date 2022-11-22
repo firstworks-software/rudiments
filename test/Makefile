@@ -37,7 +37,7 @@ PROGS1= dictionary \
 	stringbuffer \
 	wstringbuffer \
 	bytebuffer \
-	crypt
+	des
 
 PROGS2= dynamicarray \
 	staticarray \
@@ -214,8 +214,8 @@ bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 xmldom: xmldom.cpp xmldom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmldom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-crypt: crypt.cpp crypt.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) crypt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+des: des.cpp des.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) des.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 dynamicarray: dynamicarray.cpp dynamicarray.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dynamicarray.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

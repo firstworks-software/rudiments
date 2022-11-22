@@ -15,7 +15,7 @@ for program in \
 	charstring \
 	wcharstring \
 	commandline \
-	crypt \
+	des \
 	csvdom \
 	datetime \
 	dictionary \

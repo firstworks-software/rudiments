@@ -14,7 +14,7 @@ tests=Array(_
 	"charstring",_
 	"wcharstring",_
 	"commandline",_
-	"crypt",_
+	"des",_
 	"csvdom",_
 	"datetime",_
 	"dictionary",_

@@ -5,7 +5,7 @@
 		const unsigned char	*getDecryptedData();
 
 	private:
-		crypt(crypt &c) {};
-		crypt	&operator=(crypt &c) { return *this; };
+		des(des &c) {};
+		des	&operator=(des &c) { return *this; };
 
-		cryptprivate	*pvt;
+		desprivate	*pvt;

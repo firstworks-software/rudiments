@@ -1,20 +1,20 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_CRYPT_H
-#define RUDIMENTS_CRYPT_H
+#ifndef RUDIMENTS_DES_H
+#define RUDIMENTS_DES_H
 
-#include <rudiments/private/cryptincludes.h>
+#include <rudiments/private/desincludes.h>
 
-/** The crypt class provides a static encryption method that is commonly used
- *  for password encryption. */
-class RUDIMENTS_DLLSPEC crypt : public encryption {
+/** The des class provides the encryption method commonly used on unix and
+ *  unix-like platforms for for password encryption. */
+class RUDIMENTS_DLLSPEC des : public encryption {
 	public:
-		/** Creates an intance of the crypt class. */
-		crypt();
+		/** Creates an intance of the des class. */
+		des();
 
-		/** Deletes this instance of the crypt class. */
-		~crypt();
+		/** Deletes this instance of the des class. */
+		~des();
 
 		/** Returns the number of bytes in the initialization
 		 *  vector (salt) - 2 bytes. */
@@ -26,7 +26,7 @@ class RUDIMENTS_DLLSPEC crypt : public encryption {
 		 *  from the set [a-zA-Z0-9./].  Returns the encrypted data on
 		 *  success or NULL if an error occurred.
 		 *
-		 *  Note that since crypt is typically used to encrypt
+		 *  Note that since des is typically used to encrypt
 		 *  passwords, and that the encrypted data that results from
 		 *  this type of encryption is always printable ascii, this
 		 *  method NULL-terminates the encrypted data, and the result
@@ -44,8 +44,8 @@ class RUDIMENTS_DLLSPEC crypt : public encryption {
 		 *  equivalent to the string length. */
 		uint64_t	getEncryptedDataSize();
 
-		/** If your system doesn't support crypt_r() then this
-		 *  class needs a mutex to assure thread safety.
+		/** If your system doesn't support a reentrany crypt function
+		 *  then this class needs a mutex to assure thread safety.
 		 * 
 		 *  This method returns true if this class needs a mutex
 		 *  to operate safely in a threaded environment and false
@@ -57,7 +57,7 @@ class RUDIMENTS_DLLSPEC crypt : public encryption {
 		 *  there is no need to supply a mutex. */
 		void	setMutex(threadmutex *mtx);
 
-	#include <rudiments/private/crypt.h>
+	#include <rudiments/private/des.h>
 };
 
 #endif
