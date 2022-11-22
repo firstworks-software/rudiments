@@ -144,25 +144,22 @@ char character::duplicate(wchar_t c) {
 
 char character::duplicate(wchar_t c, char replacement) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		char	retval[4];
+		bytestring::zero(retval,sizeof(retval));
+		size_t	s;
 		#if defined(RUDIMENTS_HAVE_WCRTOMB)
-			char		retval;
 			mbstate_t	st;
 			bytestring::zero(&st,sizeof(st));
-			size_t	s=wcrtomb(&retval,c,&st);
-			if (s==(size_t)-1) {
-				return replacement;
-			}
-			return retval;
+			s=wcrtomb(retval,c,&st);
 		#elif defined(RUDIMENTS_HAVE_WCTOMB)
-			char		retval;
-			size_t	s=wctomb(&retval,c);
-			if (s==(size_t)-1) {
-				return replacement;
-			}
-			return retval;
+			s=wctomb(&retval,c);
 		#else
 			#error no wcrtomb or anything like it
 		#endif
+		if (s==(size_t)-1 || retval[0]>127 || retval[1]) {
+			return replacement;
+		}
+		return retval[0];
 	#else
 		return replacement;
 	#endif
