@@ -211,6 +211,10 @@ wchar_t wcharacter::duplicate(char c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		wchar_t	retval;
 		size_t	s;
+		// To convert a char to a wchar_t, we can pretend that
+		// "c" is a string of multi-byte characters, and use
+		// mbrtowc/mbtowc to convert it.  If we pass a 1 to these
+		// methods, then it will (safely) only read 1 byte from "c".
 		#if defined(RUDIMENTS_HAVE_MBRTOWC)
 			mbstate_t	st;
 			bytestring::zero(&st,sizeof(st));
