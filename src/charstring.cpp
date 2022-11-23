@@ -1873,10 +1873,6 @@ char *charstring::duplicate(const wchar_t *string, char replacement) {
 	return duplicate(string,wcharstring::length(string),replacement);
 }
 
-bool charstring::duplicateFromWideStringNeedsMutex() {
-	return character::duplicateFromWideCharacterNeedsMutex();
-}
-
 void charstring::rightTrim(char *str) {
 
 	if (!isNullOrEmpty(str)) {

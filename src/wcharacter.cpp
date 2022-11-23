@@ -209,27 +209,37 @@ bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
 
 wchar_t wcharacter::duplicate(char c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		wchar_t	retval;
+		size_t	s;
 		#if defined(RUDIMENTS_HAVE_MBRTOWC)
-			wchar_t		retval;
 			mbstate_t	st;
 			bytestring::zero(&st,sizeof(st));
-			size_t	s=mbrtowc(&retval,&c,1,&st);
-			if (s==(size_t)-1 || s==(size_t)-2) {
-				return (wchar_t)0;
-			}
-			return retval;
+			s=mbrtowc(&retval,&c,1,&st);
 		#elif defined(RUDIMENTS_HAVE_MBTOWC)
 			wchar_t		retval;
-			size_t	s=mbtowc(&retval,&c,1);
-			if (s==(size_t)-1) {
-				return (wchar_t)0;
-			}
-			return retval;
+			s=mbtowc(&retval,&c,1);
 		#else
 			#error no mbrtowc or anything like it
 		#endif
+		if (s==(size_t)-1 || s==(size_t)-2) {
+			return (wchar_t)0;
+		}
+		return retval;
 	#else
 		return (wchar_t)0;
+	#endif
+}
+
+bool wcharacter::duplicateFromCharacterNeedsMutex() {
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		#if defined(RUDIMENTS_HAVE_WCRTOMB)
+			return false;
+		#elif defined(RUDIMENTS_HAVE_WCTOMB)
+			return true;
+		#else
+			#error no wcrtomb or anything like it
+		#endif
+		return false;
 	#endif
 }
 

@@ -119,7 +119,7 @@
 	renamed crypt class to des
 	fixed configure test for crypt_r which always reported not found
 	fixed potential crash in charstring::duplicate(wchar_t)
-	added duplicateFromWide*NeedsMutex() methods
+	added duplicateFrom(Wide)CharacterNeedsMutex() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

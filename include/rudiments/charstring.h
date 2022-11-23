@@ -548,11 +548,6 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*duplicate(const wchar_t *str,
 							char replacement);
 
-		/** Returns true if the duplicate methods that convert to a
-		 *  char * from a wchar_t * require a mutex to operate safely
-		 *  in a threaded environment and false otherwise. */
-		static bool	duplicateFromWideStringNeedsMutex();
-
 		/** Converts "str" to uppercase. */
 		static	void	upper(char *str); 
 
