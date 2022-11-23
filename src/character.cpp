@@ -156,11 +156,21 @@ char character::duplicate(wchar_t c, char replacement) {
 		#else
 			#error no wcrtomb or anything like it
 		#endif
-		if (s==(size_t)-1 || retval[0]>127 || retval[1]) {
+		if (s==(size_t)-1 || retval[0]<0 || retval[1]) {
 			return replacement;
 		}
 		return retval[0];
 	#else
 		return replacement;
+	#endif
+}
+
+bool character::duplicateFromWideCharacterNeedsMutex() {
+	#if defined(RUDIMENTS_HAVE_WCRTOMB)
+		return false;
+	#elif defined(RUDIMENTS_HAVE_WCTOMB)
+		return true;
+	#else
+		#error no wcrtomb or anything like it
 	#endif
 }
