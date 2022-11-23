@@ -156,7 +156,12 @@ char character::duplicate(wchar_t c, char replacement) {
 		#else
 			#error no wcrtomb or anything like it
 		#endif
-		if (s==(size_t)-1 || retval[0]<0 || retval[1]) {
+		// We're attempting to convert a wide character to a regular
+		// character, but it's possible that the wide character was
+		// only representable by a multi-byte character.  If that
+		// ends up being the case, then just return the replacement
+		// character.
+		if (s==(size_t)-1 || retval[1] || retval[2] || retval[3]) {
 			return replacement;
 		}
 		return retval[0];
