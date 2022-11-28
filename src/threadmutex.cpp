@@ -203,16 +203,6 @@ threadmutex::threadmutex() {
 threadmutex::threadmutex(void *mut) {
 }
 
-threadmutex::threadmutex(threadmutex &t) : object() {
-}
-
-threadmutex &threadmutex::operator=(threadmutex &t) {
-	if (this!=&t) {
-		object::operator=(t);
-	}
-	return *this;
-}
-
 threadmutex::~threadmutex() {
 }
 
