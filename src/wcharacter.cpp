@@ -244,6 +244,8 @@ bool wcharacter::duplicateFromCharacterNeedsMutex() {
 			#error no wcrtomb or anything like it
 		#endif
 		return false;
+	#else
+		return false;
 	#endif
 }
 
