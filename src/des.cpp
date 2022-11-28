@@ -86,7 +86,7 @@ const unsigned char *des::getEncryptedData() {
 				getOut()->append('\0');
 			}
 		#elif defined(RUDIMENTS_HAVE_CRYPT)
-			if (pvt->_cryptmutex && !pvt->_cryptmutex->lock()) {
+			if (pvt->_desmutex && !pvt->_desmutex->lock()) {
 				return NULL;
 			}
 			encryptedpassword=::crypt(password,salt);
@@ -94,8 +94,8 @@ const unsigned char *des::getEncryptedData() {
 				getOut()->append(encryptedpassword);
 				getOut()->append('\0');
 			}
-			if (pvt->_cryptmutex) {
-				pvt->_cryptmutex->unlock();
+			if (pvt->_desmutex) {
+				pvt->_desmutex->unlock();
 			}
 		#endif
 
