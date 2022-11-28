@@ -1590,6 +1590,9 @@
 /* Some systems have WSADuplicateSocket */
 #define RUDIMENTS_HAVE_WSADUPLICATESOCKET 1
 
+/* Some systems have wcstr.h */
+/* #undef RUDIMENTS_HAVE_WCSTR_H */
+
 /* Some systems have XSI strerror_r */
 /* #undef RUDIMENTS_HAVE_XSI_STRERROR_R */
 

@@ -96,11 +96,6 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *  wchar_t from a char require a mutex to operate safely in
 		 *  a threaded environment and false otherwise. */
 		static bool	duplicateFromCharacterNeedsMutex();
-
-		/** Returns true if the platform supports wide characters and
-		 *  rudiments was build with wide character support and false
-		 *  otherwise. */
-		static bool	supported();
 };
 
 #endif

@@ -4,12 +4,16 @@
 #include <rudiments/wcharacter.h>
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -21,7 +25,7 @@ bool wcharacter::isAlphanumeric(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswalnum(c)!=0;
 	#else
-		return false;
+		return character::isAlphanumeric(character::duplicate(c));
 	#endif
 }
  
@@ -29,24 +33,19 @@ bool wcharacter::isAlphabetical(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswalpha(c)!=0;
 	#else
-		return false;
+		return character::isAlphabetical(character::duplicate(c));
 	#endif
 }
 
 bool wcharacter::isAlphabeticalExtended(int32_t c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		// FIXME...
-		return isAlphabetical(c);
-	#else
-		return false;
-	#endif
+	return character::isAlphabeticalExtended(character::duplicate(c));
 }
 
 bool wcharacter::isControlCharacter(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswcntrl(c)!=0;
 	#else
-		return false;
+		return character::isControlCharacter(character::duplicate(c));
 	#endif
 }
 
@@ -54,7 +53,7 @@ bool wcharacter::isDigit(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswdigit(c)!=0;
 	#else
-		return false;
+		return character::isDigit(character::duplicate(c));
 	#endif
 }
 
@@ -62,24 +61,19 @@ bool wcharacter::isLowerCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswlower(c)!=0;
 	#else
-		return false;
+		return character::isLowerCase(character::duplicate(c));
 	#endif
 }
 
 bool wcharacter::isLowerCaseExtended(int32_t c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		// FIXME...
-		return isLowerCase(c);
-	#else
-		return false;
-	#endif
+	return character::isLowerCaseExtended(character::duplicate(c));
 }
 
 bool wcharacter::isPrintableNonSpace(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswgraph(c)!=0;
 	#else
-		return false;
+		return character::isPrintableNonSpace(character::duplicate(c));
 	#endif
 }
 
@@ -87,7 +81,7 @@ bool wcharacter::isPrintable(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswprint(c)!=0;
 	#else
-		return false;
+		return character::isPrintable(character::duplicate(c));
 	#endif
 }
 
@@ -95,7 +89,7 @@ bool wcharacter::isPunctuation(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswpunct(c)!=0;
 	#else
-		return false;
+		return character::isPunctuation(character::duplicate(c));
 	#endif
 }
 
@@ -103,36 +97,28 @@ bool wcharacter::isUpperCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswupper(c)!=0;
 	#else
-		return false;
+		return character::isUpperCase(character::duplicate(c));
 	#endif
 }
 
 bool wcharacter::isUpperCaseExtended(int32_t c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		// FIXME...
-		return isUpperCase(c);
-	#else
-		return false;
-	#endif
+	return character::isUpperCaseExtended(character::duplicate(c));
 }
 
 bool wcharacter::isHexDigit(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswxdigit(c)!=0;
 	#else
-		return false;
+		return character::isHexDigit(character::duplicate(c));
 	#endif
 }
 
 bool wcharacter::isBlank(int32_t c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		#ifdef RUDIMENTS_HAVE_ISWBLANK
-			return iswblank(c)!=0;
-		#else
-			return character::isBlank(c);
-		#endif
+	#if defined(RUDIMENTS_HAVE_WCTYPE_H) && \
+			defined(RUDIMENTS_HAVE_ISWBLANK)
+		return iswblank(c)!=0;
 	#else
-		return false;
+		return character::isBlank(character::duplicate(c));
 	#endif
 }
 
@@ -140,19 +126,16 @@ bool wcharacter::isWhitespace(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswspace(c)!=0;
 	#else
-		return false;
+		return character::isWhitespace(character::duplicate(c));
 	#endif
 }
 
 bool wcharacter::isAscii(int32_t c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		#ifdef RUDIMENTS_HAVE_ISWASCII
-			return iswascii(c)!=0;
-		#else
-			return character::isAscii(c);
-		#endif
+	#if defined(RUDIMENTS_HAVE_WCTYPE_H) && \
+			defined(RUDIMENTS_HAVE_ISWASCII)
+		return iswascii(c)!=0;
 	#else
-		return false;
+		return character::isAscii(character::duplicate(c));
 	#endif
 }
 
@@ -174,7 +157,7 @@ int32_t wcharacter::toUpperCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towupper(c);
 	#else
-		return 0;
+		return character::toUpperCase(character::duplicate(c));
 	#endif
 }
 
@@ -182,75 +165,62 @@ int32_t wcharacter::toLowerCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towlower(c);
 	#else
-		return 0;
+		return character::toLowerCase(character::duplicate(c));
 	#endif
 }
 
 int32_t wcharacter::toAscii(int32_t c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		return character::toAscii(c);
-	#else
-		return 0;
-	#endif
+	return character::toAscii(character::duplicate(c));
 }
 
 bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		for (uint16_t i=0; set[i]; i++) {
-			if (set[i]==c) {
-				return true;
-			}
+	for (uint16_t i=0; set[i]; i++) {
+		if (set[i]==c) {
+			return true;
 		}
-		return false;
-	#else
-		return false;
-	#endif
+	}
+	return false;
 }
 
 wchar_t wcharacter::duplicate(char c) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		wchar_t	retval;
-		size_t	s;
-		// To convert a char to a wchar_t, we can pretend that
-		// "c" is a string of multi-byte characters, and use
-		// mbrtowc/mbtowc to convert it.  If we pass a 1 to these
-		// methods, then it will (safely) only read 1 byte from "c".
-		#if defined(RUDIMENTS_HAVE_MBRTOWC)
-			mbstate_t	st;
-			bytestring::zero(&st,sizeof(st));
-			s=mbrtowc(&retval,&c,1,&st);
-		#elif defined(RUDIMENTS_HAVE_MBTOWC)
-			wchar_t		retval;
+	wchar_t	retval;
+	size_t	s;
+	// To convert a char to a wchar_t, we can pretend that "c" is a string
+	// of multi-byte characters, and use mbrtowc/mbtowc to convert it.  If
+	// we pass a 1 to these methods, then it will (safely) only read 1 byte
+	// from "c".
+	#if defined(RUDIMENTS_HAVE_MBRTOWC)
+		mbstate_t	st;
+		bytestring::zero(&st,sizeof(st));
+		s=mbrtowc(&retval,&c,1,&st);
+	#elif defined(RUDIMENTS_HAVE_MBTOWC)
+		// mbtowc() doesn't like being passed '\0' on some platforms
+		// (eg. redhat 4.2 with libc5) 
+		if (c) {
 			s=mbtowc(&retval,&c,1);
-		#else
-			#error no mbrtowc or anything like it
-		#endif
-		if (s==(size_t)-1 || s==(size_t)-2) {
-			return (wchar_t)0;
+		} else {
+			s=0;
+			retval=(wchar_t)c;
 		}
-		return retval;
 	#else
-		return (wchar_t)0;
+		// This will only work if the first 256 characters of the
+		// source and target character set are equivalent.
+		// eg. Latin 1 and UCS-2/UCS-4.  This is usually the case
+		// on older paltforms that don't provide mbtowc()/mbrtowc(),
+		// but I bet I'll be back here tweaking this some day.
+		s=0;
+		retval=(wchar_t)c;
 	#endif
+	if (s==(size_t)-1 || s==(size_t)-2) {
+		return (wchar_t)0;
+	}
+	return retval;
 }
 
 bool wcharacter::duplicateFromCharacterNeedsMutex() {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		#if defined(RUDIMENTS_HAVE_WCRTOMB)
-			return false;
-		#elif defined(RUDIMENTS_HAVE_WCTOMB)
-			return true;
-		#else
-			#error no wcrtomb or anything like it
-		#endif
+	#if defined(RUDIMENTS_HAVE_WCRTOMB)
 		return false;
-	#else
-		return false;
-	#endif
-}
-
-bool wcharacter::supported() {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#elif defined(RUDIMENTS_HAVE_MBTOWC)
 		return true;
 	#else
 		return false;

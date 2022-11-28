@@ -13,6 +13,9 @@
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -143,31 +146,37 @@ char character::duplicate(wchar_t c) {
 }
 
 char character::duplicate(wchar_t c, char replacement) {
-	#ifdef RUDIMENTS_HAVE_WCTYPE_H
-		char	retval[4];
-		bytestring::zero(retval,sizeof(retval));
-		size_t	s;
-		#if defined(RUDIMENTS_HAVE_WCRTOMB)
-			mbstate_t	st;
-			bytestring::zero(&st,sizeof(st));
-			s=wcrtomb(retval,c,&st);
-		#elif defined(RUDIMENTS_HAVE_WCTOMB)
-			s=wctomb(&retval,c);
-		#else
-			#error no wcrtomb or anything like it
-		#endif
-		// We're attempting to convert a wide character to a regular
-		// character, but it's possible that the wide character was
-		// only representable by a multi-byte character.  If that
-		// ends up being the case, then just return the replacement
-		// character.
-		if (s==(size_t)-1 || retval[1] || retval[2] || retval[3]) {
-			return replacement;
-		}
-		return retval[0];
+	char	retval[4];
+	bytestring::zero(retval,sizeof(retval));
+	size_t	s;
+	#if defined(RUDIMENTS_HAVE_WCRTOMB)
+		mbstate_t	st;
+		bytestring::zero(&st,sizeof(st));
+		s=wcrtomb(retval,c,&st);
+	#elif defined(RUDIMENTS_HAVE_WCTOMB)
+		s=wctomb(retval,c);
 	#else
-		return replacement;
+		// This will only work if the first 256 characters of the
+		// source and target character set are equivalent.
+		// eg. UCS-2/UCS-4 and Latin 1.  This is usually the case
+		// on older platforms that don't provide wctomb()/wcrtomb(),
+		// but I bet I'll be back here tweaking this some day.
+		if (c<256) {
+			s=0;
+			retval[0]=c;
+		} else {
+			s=(size_t)-1;
+		}
 	#endif
+	// We're attempting to convert a wide character to a regular
+	// character, but it's possible that the wide character was
+	// only representable by a multi-byte character.  If that
+	// ends up being the case, then just return the replacement
+	// character.
+	if (s==(size_t)-1 || retval[1] || retval[2] || retval[3]) {
+		return replacement;
+	}
+	return retval[0];
 }
 
 bool character::duplicateFromWideCharacterNeedsMutex() {

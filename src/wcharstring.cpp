@@ -44,6 +44,9 @@
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_LOCALE_H
 	#include <locale.h>

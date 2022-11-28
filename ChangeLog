@@ -120,6 +120,7 @@
 	fixed configure test for crypt_r which always reported not found
 	fixed potential crash in charstring::duplicate(wchar_t)
 	added duplicateFrom(Wide)CharacterNeedsMutex() methods
+	implemented wcharacter methods for platforms with wstr.h
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

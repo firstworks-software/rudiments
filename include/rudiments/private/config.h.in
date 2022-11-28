@@ -1575,6 +1575,9 @@
 /* Some systems have wcstoull */
 #undef RUDIMENTS_HAVE_WCSTOULL
 
+/* Some systems have wcstr.h */
+#undef RUDIMENTS_HAVE_WCSTR_H
+
 /* Some systems have wctomb */
 #undef RUDIMENTS_HAVE_WCTOMB
 

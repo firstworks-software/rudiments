@@ -940,6 +940,10 @@ AC_MSG_CHECKING(for wchar.h)
 AC_TRY_COMPILE([#include <wchar.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WCHAR_H, 1, Some systems have wchar.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for wcstr.h)
+AC_TRY_COMPILE([#include <wcstr.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_WCSTR_H, 1, Some systems have wcstr.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for glob.h)
 AC_TRY_COMPILE([#include <glob.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_GLOB_H, 1, Some systems have glob.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -2429,6 +2433,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcscasecmp(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSCASECMP,1,Some systems have wcscasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2454,6 +2461,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcsncasecmp(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSNCASECMP,1,Some systems have wcsncasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2484,6 +2494,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcstold(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOLD,1,Some systems have wcstold) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2514,6 +2527,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcstoll(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOLL,1,Some systems have wcstoll) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2544,6 +2560,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcstoull(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOULL,1,Some systems have wcstoull) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2574,6 +2593,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcsspn(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSSPN,1,Some systems have wcsspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2604,6 +2626,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wcscspn(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSCSPN,1,Some systems have wcscspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -2634,6 +2659,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
 #endif],
 wchar_t *a=NULL; wcspbrk(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSPBRK,1,Some systems have wcspbrk) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
