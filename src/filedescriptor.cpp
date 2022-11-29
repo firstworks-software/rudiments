@@ -3501,7 +3501,6 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 		#endif
 
 		if (f) {
-stdoutput.printf("vfwprintf()...\n");
 			size=vfwprintf(f,format,*argp);
 			fflush(f);
 
@@ -3552,7 +3551,6 @@ stdoutput.printf("vfwprintf()...\n");
 
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
-stdoutput.printf("wcharstring::printf()\n");
 	size=wcharstring::printf(&buffer,format,argp);
 
 	// write the buffer to the file descriptor
