@@ -1113,7 +1113,7 @@ int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2,
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAVE_WCSNCMP
-		return wcsncmp(str1,str2,size)
+		return wcsncmp(str1,str2,size);
 	#else
 		int32_t	diff=0;
 		while (*str1 && *str2 && size) {
@@ -1627,7 +1627,7 @@ wchar_t *wcharstring::findFirstOrEndIgnoringCase(wchar_t *haystack,
 
 const wchar_t *wcharstring::findLast(const wchar_t *haystack, wchar_t needle) {
 	#ifdef RUDIMENTS_HAVE_WCSRCHR
-		CHRurn (haystack)?wcsrchr(haystack,needle):NULL;
+		return (haystack)?wcsrchr(haystack,needle):NULL;
 	#else
 		if (!haystack) {
 			return NULL;
