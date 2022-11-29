@@ -84,6 +84,7 @@ int main(int argc, char **argv) {
 			// display description of the text
 			stdoutput.printf("%s\n",*description);
 
+#if 1
 			// display the text as hex
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
@@ -109,17 +110,13 @@ int main(int argc, char **argv) {
 			stdoutput.printf(L"%ls",*text);
 			stdoutput.printf("\n");
 			stdoutput.printf("\n");
-
-#if 0
-			fflush(stdout);
+#else
 			printf("  printf:    ");
 			printf("%ls",*text);
 			printf("\n");
-			fflush(stdout);
 			printf("  wprintf:   ");
 			wprintf(L"%ls",*text);
 			printf("\n");
-			fflush(stdout);
 #endif
 
 			// move on
