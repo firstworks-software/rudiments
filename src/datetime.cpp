@@ -731,8 +731,14 @@ bool datetime::getBrokenDownTimeFromEpoch() {
 		// localtime_s appears to rely on one or more of:
 		// _daylight, _timezone or _tzname rather than just on TZ,
 		// so we have to call _tzset() before calling localtime_s.
+		//
+		// NOTE: We must zero our struct tm because it may have members
+		// other than the ones we're setting which mktime() may not set,
+		// but which strftime() attempts to use.  Eg. strftime() in
+		// glibc 2.0.7 (redhat 5.2) tries to access tm_zone.
 		_tzset();
 		struct tm	tm;
+		bytestring::zero(&tm,sizeof(tm));
 		if (localtime_s(&tm,&pvt->_epoch)) {
 			return false;
 		}
@@ -792,7 +798,13 @@ bool datetime::normalize() {
 	pvt->_usec%=1000000;
 
 	// copy relevent values into a struct tm
+	//
+	// NOTE: We must zero our struct tm because it may have members other
+	// than the ones we're setting which mktime() may not set, but which
+	// strftime() attempts to use.  Eg. strftime() in glibc 2.0.7
+	// (redhat 5.2) tries to access tm_zone.
 	struct tm	tms;
+	bytestring::zero(&tms,sizeof(tms));
 	tms.tm_sec=pvt->_sec;
 	tms.tm_min=pvt->_min;
 	tms.tm_hour=pvt->_hour;

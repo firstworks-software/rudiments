@@ -4,7 +4,6 @@
 #include <rudiments/wcharacter.h>
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
