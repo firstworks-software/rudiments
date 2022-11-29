@@ -110,6 +110,18 @@ int main(int argc, char **argv) {
 			stdoutput.printf("\n");
 			stdoutput.printf("\n");
 
+#if 0
+			fflush(stdout);
+			printf("  printf:    ");
+			printf("%ls",*text);
+			printf("\n");
+			fflush(stdout);
+			printf("  wprintf:   ");
+			wprintf(L"%ls",*text);
+			printf("\n");
+			fflush(stdout);
+#endif
+
 			// move on
 			counter++;
 			text++;

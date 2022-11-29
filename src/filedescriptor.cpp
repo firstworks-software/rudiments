@@ -3473,7 +3473,7 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	// If we're not buffering writes...
 	if (!pvt->_writebuffer) {
 
-		// otherwise use vfwprintf, if we can
+		// use vfwprintf, if we can
 		FILE	*f=NULL;
 		if (pvt->_fd==0) {
 			f=stdin;
