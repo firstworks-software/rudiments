@@ -18,7 +18,10 @@ int main(int argc, char **argv) {
 
 	// define some locales
 	const char *locales[]={
-		"","POSIX","en_US.ISO-8859-1","en_US.UTF-8",NULL
+		"",
+		"en_US.ISO-8859-1",
+		"en_US.UTF-8",
+		NULL
 	};
 
 	// define some text strings
@@ -68,13 +71,16 @@ int main(int argc, char **argv) {
 			header("initial locale");
 		}
 
+#if 0
 		// display locale
 		stdoutput.printf("  requested locale: %s\n",*locale);
 		stdoutput.printf("  actual locale:    %s\n",
 						setlocale(LC_CTYPE,NULL));
 		stdoutput.printf("\n");
+#endif
 
 
+#if 0
 		// display characters 32-255
 		stdoutput.printf("  characters:\n");
 		for (uint16_t i=32; i<256; i++) {
@@ -84,6 +90,7 @@ int main(int argc, char **argv) {
 			}
 		}
 		stdoutput.printf("\n\n");
+#endif
 
 
 		// iterate over text strings
@@ -96,6 +103,7 @@ int main(int argc, char **argv) {
 			stdoutput.printf("%s\n",*description);
 
 #if 1
+	#if 0
 			// display the text as hex
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
@@ -120,11 +128,14 @@ int main(int argc, char **argv) {
 				t++;
 			}
 			stdoutput.printf("\n");
+	#endif
 
 			// display the text as text, 3 different ways
+	#if 0
 			stdoutput.printf("  write:     ");
 			stdoutput.write(*text);
 			stdoutput.printf("\n");
+	#endif
 			stdoutput.printf("  vfprintf:  ");
 			stdoutput.printf("%ls",*text);
 			stdoutput.printf("\n");
@@ -143,8 +154,13 @@ int main(int argc, char **argv) {
 
 			// move on
 			counter++;
+#if 0
 			text++;
 			description++;
+#else
+			text=text+2;
+			description=description+2;
+#endif
 		}
 	}
 }
