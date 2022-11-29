@@ -469,11 +469,6 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		/** Returns the length of the string currently stored
 		 *  in the wstringbuffer. */
 		size_t	getStringLength();
-
-		/** Returns true if the platform supports wide characters and
-		 *  rudiments was build with wide character support and false
-		 *  otherwise. */
-		static bool	supported();
 };
 
 #include <rudiments/private/wstringbufferinlines.h>

@@ -2411,6 +2411,114 @@ dnl Checks for string functions
 echo
 echo "***** String Functions *******"
 
+AC_MSG_CHECKING(for wcslen)
+AC_TRY_LINK([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcslen(NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSLEN,1,Some systems have wcslen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcscmp)
+AC_TRY_LINK([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcscmp(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSCMP,1,Some systems have wcscmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcsncmp)
+AC_TRY_LINK([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcsncmp(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSNCMP,1,Some systems have wcsncmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcschr)
+AC_TRY_LINK([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcschr(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSCHR,1,Some systems have wcschr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcsrchr)
+AC_TRY_LINK([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcsrchr(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSRCHR,1,Some systems have wcsrchr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcsncpy)
+AC_TRY_LINK([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcsncpy(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSNCPY,1,Some systems have wcsncpy) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strcasecmp)
 AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -2500,6 +2608,24 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 wcstold(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOLD,1,Some systems have wcstold) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for wcstod)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcstod(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOD,1,Some systems have wcstod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strtoll)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 	#define __USE_GNU
@@ -2532,6 +2658,24 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <wcstr.h>
 #endif],
 wcstoll(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOLL,1,Some systems have wcstoll) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcstol)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcstol(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOL,1,Some systems have wcstol) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strtoull)
 AC_TRY_COMPILE([#ifndef __USE_GNU
@@ -2566,6 +2710,24 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 wcstoull(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOULL,1,Some systems have wcstoull) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for wcstoul)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCSTR_H
+	#include <wcstr.h>
+#endif],
+wcstoul(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSTOUL,1,Some systems have wcstoul) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strspn)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 	#define __USE_GNU
@@ -2582,7 +2744,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 strspn(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRSPN,1,Some systems have strspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for wcsspn)
-AC_TRY_COMPILE([#ifndef __USE_GNU
+AC_TRY_LINK([#ifndef __USE_GNU
 	#define __USE_GNU
 #endif
 #ifndef __USE_ISOC9X
@@ -2600,7 +2762,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 wcsspn(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_WCSSPN,1,Some systems have wcsspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strcspn)
-AC_TRY_COMPILE([#ifndef __USE_GNU
+AC_TRY_LINK([#ifndef __USE_GNU
 	#define __USE_GNU
 #endif
 #ifndef __USE_ISOC9X
@@ -2615,7 +2777,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 strcspn(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCSPN,1,Some systems have strcspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for wcscspn)
-AC_TRY_COMPILE([#ifndef __USE_GNU
+AC_TRY_LINK([#ifndef __USE_GNU
 	#define __USE_GNU
 #endif
 #ifndef __USE_ISOC9X
@@ -2648,7 +2810,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 char *a=NULL; strpbrk(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRPBRK,1,Some systems have strpbrk) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for wcspbrk)
-AC_TRY_COMPILE([#ifndef __USE_GNU
+AC_TRY_LINK([#ifndef __USE_GNU
 	#define __USE_GNU
 #endif
 #ifndef __USE_ISOC9X

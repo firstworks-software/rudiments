@@ -54,7 +54,6 @@
 
 const wchar_t *wcharstring::findLast(const wchar_t *haystack,
 					const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!haystack || !needle) {
 		return NULL;
@@ -74,14 +73,10 @@ const wchar_t *wcharstring::findLast(const wchar_t *haystack,
 		ptr--;
 	}
 	return NULL;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findLastIgnoringCase(const wchar_t *haystack,
 						const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!haystack || !needle) {
 		return NULL;
@@ -101,33 +96,25 @@ const wchar_t *wcharstring::findLastIgnoringCase(const wchar_t *haystack,
 		ptr--;
 	}
 	return NULL;
-#else
-	return NULL;
-#endif
 }
 
 void wcharstring::upper(wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (str) {
 		for (wchar_t *ch=str; *ch; ch++) {
 			*ch=wcharacter::toUpperCase(*ch);
 		}
 	}
-#endif
 }
 
 void wcharstring::lower(wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (str) {
 		for (wchar_t *ch=str; *ch; ch++) {
 			*ch=wcharacter::toLowerCase(*ch);
 		}
 	}
-#endif
 }
 
 void wcharstring::capitalize(wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (str) {
 		bool	cap=true;
 		for (wchar_t *ch=str; *ch; ch++) {
@@ -142,11 +129,9 @@ void wcharstring::capitalize(wchar_t *str) {
 			}
 		}
 	}
-#endif
 }
 
 void wcharstring::rightTrim(wchar_t *str, wchar_t character) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!isNullOrEmpty(str)) {
 
@@ -165,11 +150,9 @@ void wcharstring::rightTrim(wchar_t *str, wchar_t character) {
 		// terminate the string there
 		*str=L'\0';
 	}
-#endif
 }
 
 void wcharstring::leftTrim(wchar_t *str, wchar_t character) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!isNullOrEmpty(str)) {
 
@@ -190,11 +173,9 @@ void wcharstring::leftTrim(wchar_t *str, wchar_t character) {
 		// store a null to the new end of string
 		str[j]=L'\0';
 	}
-#endif
 }
 
 bool wcharstring::strip(wchar_t *str, wchar_t character) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return false;
@@ -217,13 +198,9 @@ bool wcharstring::strip(wchar_t *str, wchar_t character) {
 	}
 	str[index-total]=L'\0';
 	return retval;
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::strip(wchar_t *str1, const wchar_t *str2) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str1 || !str2) {
 		return false;
@@ -248,13 +225,9 @@ bool wcharstring::strip(wchar_t *str1, const wchar_t *str2) {
 	}
 	str1[index-total]=L'\0';
 	return retval;
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::stripSet(wchar_t *str, const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return false;
@@ -277,13 +250,9 @@ bool wcharstring::stripSet(wchar_t *str, const wchar_t *set) {
 	}
 	str[index-total]=L'\0';
 	return retval;
-#else
-	return false;
-#endif
 }
 
 void wcharstring::replace(wchar_t *str, wchar_t oldchar, wchar_t newchar) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (str) {
 		for (wchar_t *ptr=str; *ptr; ptr++) {
 			if (*ptr==oldchar) {
@@ -291,13 +260,11 @@ void wcharstring::replace(wchar_t *str, wchar_t oldchar, wchar_t newchar) {
 			}
 		}
 	}
-#endif
 }
 
 void wcharstring::replace(wchar_t *str,
 				const wchar_t *oldchars,
 				wchar_t newchar) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (str) {
 		for (wchar_t *ptr=str; *ptr; ptr++) {
 			if (wcharacter::inSet(*ptr,oldchars)) {
@@ -305,13 +272,11 @@ void wcharstring::replace(wchar_t *str,
 			}
 		}
 	}
-#endif
 }
 
 wchar_t *wcharstring::replace(const wchar_t *str,
 				const wchar_t *oldstr,
 				const wchar_t *newstr) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!str) {
 		return NULL;
 	}
@@ -320,7 +285,7 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	const wchar_t	*ptr=str;
 	const wchar_t	*start=ptr;
 	while (*ptr) {
-		if (!wcharstring::compare(ptr,oldstr,oldstrlen)) {
+		if (!compare(ptr,oldstr,oldstrlen)) {
 			newstring.append(start,ptr-start);
 			newstring.append(newstr);
 			ptr+=oldstrlen;
@@ -331,16 +296,12 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	}
 	newstring.append(start,ptr-start);
 	return newstring.detachString();
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::replace(const wchar_t *str,
 					const wchar_t * const *oldstrset,
 					size_t *oldstrlen,
 					const wchar_t * const *newstrset) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!str) {
 		return NULL;
 	}
@@ -354,8 +315,7 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 		uint64_t i=0;
 		for (const wchar_t * const *oldptr=oldstrset;
 						*oldptr; oldptr++) {
-			if (!wcharstring::compare(
-					ptr,oldstrset[i],oldstrlen[i])) {
+			if (!compare(ptr,oldstrset[i],oldstrlen[i])) {
 				newstring.append(start,ptr-start);
 				newstring.append(newstrset[i]);
 				ptr+=oldstrlen[i];
@@ -372,13 +332,9 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	newstring.append(start,ptr-start);
 
 	return newstring.detachString();
-#else
-	return NULL;
-#endif
 }
 
 bool wcharstring::isInteger(const wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (isNullOrEmpty(str)) {
 		return false;
@@ -394,13 +350,9 @@ bool wcharstring::isInteger(const wchar_t *str) {
 
 	// if the string ended in a - then it's not a number
 	return (*(ptr-1)!=L'-');
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::isInteger(const wchar_t *str, int32_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str || !size) {
 		return false;
@@ -417,13 +369,9 @@ bool wcharstring::isInteger(const wchar_t *str, int32_t size) {
 
 	// if the string ended in a - then it's not a number
 	return (*(ptr-1)!=L'-');
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::isNumber(const wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (isNullOrEmpty(str)) {
 		return false;
@@ -443,13 +391,9 @@ bool wcharstring::isNumber(const wchar_t *str) {
 
 	// if the string ended in a - or . then it's not a number
 	return (*(ptr-1)!=L'-' && *(ptr-1)!=L'.');
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::isNumber(const wchar_t *str, int32_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str || !size) {
 		return false;
@@ -470,13 +414,9 @@ bool wcharstring::isNumber(const wchar_t *str, int32_t size) {
 
 	// if the string ended in a - or . then it's not a number
 	return (*(ptr-1)!=L'-' && *(ptr-1)!=L'.');
-#else
-	return false;
-#endif
 }
 
 int64_t wcharstring::convertAmount(const wchar_t *amount) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!amount) {
 		return 0;
 	}
@@ -486,13 +426,9 @@ int64_t wcharstring::convertAmount(const wchar_t *amount) {
 	const wchar_t	*centsstr=findFirst(amount,L'.');
 	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
-#else
-	return 0;
-#endif
 }
 
 wchar_t *wcharstring::convertAmount(int64_t amount) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=integerLength(amount)+4;
 	if (length<6) {
 		length=6;
@@ -521,13 +457,9 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 		delete[] temp;
 	#endif
 	return amountstr;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::convertAmount(int64_t amount, uint16_t spaces) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*amt=convertAmount(amount);
 	size_t	amtlen=length(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
@@ -540,26 +472,18 @@ wchar_t *wcharstring::convertAmount(int64_t amount, uint16_t spaces) {
 	}
 	delete[] amt;
 	return buffer;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::escape(const wchar_t *input, const wchar_t *characters) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t		*output;
 	uint64_t	outputsize;
 	escape(input,length(input),&output,&outputsize,characters);
 	return output;
-#else
-	return NULL;
-#endif
 }
 
 void wcharstring::escape(const wchar_t *input, uint64_t inputsize,
 				wchar_t **output, uint64_t *outputsize,
 						const wchar_t *characters) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	(*output)=NULL;
 	(*outputsize)=0;
@@ -596,23 +520,17 @@ void wcharstring::escape(const wchar_t *input, uint64_t inputsize,
 			(*output)[(*outputsize)]=L'\0';
 		}
 	}
-#endif
 }
 
 wchar_t *wcharstring::unescape(const wchar_t *input) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t		*output;
 	uint64_t	outputsize;
 	unescape(input,length(input),&output,&outputsize);
 	return output;
-#else
-	return NULL;
-#endif
 }
 
 void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
 				wchar_t **output, uint64_t *outputsize) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	(*output)=NULL;
 	(*outputsize)=0;
@@ -645,11 +563,9 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
 			(*output)[(*outputsize)]=L'\0';
 		}
 	}
-#endif
 }
 
 void wcharstring::leftJustify(wchar_t *str, int32_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return;
@@ -672,11 +588,9 @@ void wcharstring::leftJustify(wchar_t *str, int32_t length) {
 	for (; index<length; index++) {
 		str[index]=L' ';
 	}
-#endif
 }
 
 void wcharstring::rightJustify(wchar_t *str, int32_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return;
@@ -699,11 +613,9 @@ void wcharstring::rightJustify(wchar_t *str, int32_t length) {
 	for (; index>-1; index--) {
 		str[index]=L' ';
 	}
-#endif
 }
 
 void wcharstring::center(wchar_t *str, int32_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return;
@@ -735,11 +647,9 @@ void wcharstring::center(wchar_t *str, int32_t length) {
 			str[index]=L' ';
 		}
 	}
-#endif
 }
 
 int32_t wcharstring::countLeadingSpaces(const wchar_t *str, int32_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return 0;
@@ -750,13 +660,9 @@ int32_t wcharstring::countLeadingSpaces(const wchar_t *str, int32_t length) {
 		leadingspaces++;
 	}
 	return leadingspaces;
-#else
-	return 0;
-#endif
 }
 
 int32_t wcharstring::countTrailingSpaces(const wchar_t *str, int32_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (!str) {
 		return 0;
@@ -767,86 +673,46 @@ int32_t wcharstring::countTrailingSpaces(const wchar_t *str, int32_t length) {
 		trailingspaces++;
 	}
 	return trailingspaces;
-#else
-	return 0;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(int16_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((int64_t)number,1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(int16_t number,
 				uint16_t zeropadding) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((int64_t)number,zeropadding);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(uint16_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((uint64_t)number,1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(uint16_t number, uint16_t zeropadding) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((uint64_t)number,zeropadding);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(int32_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((int64_t)number,1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(int32_t number, uint16_t zeropadding) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((int64_t)number,zeropadding);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(uint32_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((uint64_t)number,1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(uint32_t number, uint16_t zeropadding) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((uint64_t)number,zeropadding);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(int64_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber(number,1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(int64_t number, uint16_t zeropadding) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (number>=0) {
 		return parseNumber((uint64_t)number,zeropadding);
 	}
@@ -866,21 +732,13 @@ wchar_t *wcharstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	}
 	ptr--;
 	return ptr;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(uint64_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber(number,1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(uint64_t number, uint16_t zeropadding) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
 	wchar_t		*ptr=new wchar_t[strlength+1];
@@ -893,64 +751,36 @@ wchar_t *wcharstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 		strlength--;
 	}
 	return ptr;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(float number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((long double)number);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(float number, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((long double)number,scale);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(float number,
 				uint16_t precision, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((long double)number,precision,scale);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(double number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((long double)number);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(double number,
 				uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((long double)number,scale);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(double number,
 				uint16_t precision, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return parseNumber((long double)number,precision,scale);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(long double number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=new wchar_t[22];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
 		swprintf(str,22,L"%Lf",number);
@@ -960,13 +790,9 @@ wchar_t *wcharstring::parseNumber(long double number) {
 		delete[] temp;
 	#endif
 	return str;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=new wchar_t[22];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
 		swprintf(str,22,L"%.*Lf",scale,number);
@@ -976,14 +802,10 @@ wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
 		delete[] temp;
 	#endif
 	return str;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	size_t	strlength=precision+3;
 	wchar_t	*str=new wchar_t[strlength];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
@@ -994,124 +816,95 @@ wchar_t *wcharstring::parseNumber(long double number,
 		delete[] temp;
 	#endif
 	return str;
-#else
-	return NULL;
-#endif
 }
 
 void wcharstring::bothTrim(wchar_t *string, wchar_t character) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	leftTrim(string,character);
 	rightTrim(string,character);
-#endif
 }
 
 uint16_t wcharstring::integerLength(int16_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=(number>0)?0:1;
 	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
-#else
-	return 0;
-#endif
 }
 
 uint16_t wcharstring::integerLength(int32_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=(number>0)?0:1;
 	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
-#else
-	return 0;
-#endif
 }
 
 uint16_t wcharstring::integerLength(int64_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=(number>0)?0:1;
 	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
-#else
-	return 0;
-#endif
 }
 
 uint16_t wcharstring::integerLength(uint16_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
-#else
-	return 0;
-#endif
 }
 
 uint16_t wcharstring::integerLength(uint32_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
-#else
-	return 0;
-#endif
 }
 
 uint16_t wcharstring::integerLength(uint64_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	uint16_t	length=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
-#else
-	return 0;
-#endif
 }
 
 size_t wcharstring::length(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return (string)?wcslen(string):0;
-#else
-	return 0;
-#endif
+	if (!string) {
+		return 0;
+	}
+	#ifdef RUDIMENTS_HAVE_WCSLEN
+		return wcslen(string);
+	#else
+		// FIXME: only works with UCS-2/UCS-4
+		size_t	len=0;
+		for (const wchar_t *c=string; *c; c++) {
+			len++;
+		}
+		return len;
+	#endif
 }
 
 size_t wcharstring::size(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return (string)?wcslen(string)+sizeof(wchar_t):0;
-#else
-	return 0;
-#endif
+	// FIXME: only works with UCS-2/UCS-4
+	return (string)?((length(string)+1)*sizeof(wchar_t)):0;
 }
 
 bool wcharstring::isNullOrEmpty(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return !(string && string[0]);
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::isYes(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	next;
 	if (!string) {
 		return false;
-	} else if (!wcharstring::compareIgnoringCase(string,L"yes",3)) {
+	} else if (!compareIgnoringCase(string,L"yes",3)) {
 		next=string[3];
-	} else if (!wcharstring::compareIgnoringCase(string,L"true",4)) {
+	} else if (!compareIgnoringCase(string,L"true",4)) {
 		next=string[4];
-	} else if (!wcharstring::compareIgnoringCase(string,L"on",2)) {
+	} else if (!compareIgnoringCase(string,L"on",2)) {
 		next=string[2];
 	} else if (string[0]==L'y' || string[0]==L'Y' ||
 			string[0]==L't' || string[0]==L'T' ||
@@ -1122,21 +915,17 @@ bool wcharstring::isYes(const wchar_t *string) {
 	}
 	return (!next || (!wcharacter::isAlphanumeric(next) && 
 				!wcharacter::isAlphabeticalExtended(next)));
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::isNo(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	next;
 	if (!string) {
 		return false;
-	} else if (!wcharstring::compareIgnoringCase(string,L"no",2)) {
+	} else if (!compareIgnoringCase(string,L"no",2)) {
 		next=string[2];
-	} else if (!wcharstring::compareIgnoringCase(string,L"false",5)) {
+	} else if (!compareIgnoringCase(string,L"false",5)) {
 		next=string[5];
-	} else if (!wcharstring::compareIgnoringCase(string,L"off",3)) {
+	} else if (!compareIgnoringCase(string,L"off",3)) {
 		next=string[3];
 	} else if (string[0]==L'n' || string[0]==L'N' ||
 			string[0]==L'f' || string[0]==L'F' ||
@@ -1147,297 +936,251 @@ bool wcharstring::isNo(const wchar_t *string) {
 	}
 	return (!next || (!wcharacter::isAlphanumeric(next) && 
 				!wcharacter::isAlphabeticalExtended(next)));
-#else
-	return false;
-#endif
 }
 
 void wcharstring::zero(wchar_t *str, size_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	bytestring::set(str,0,length*sizeof(wchar_t));
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, const wchar_t *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return append(dest,source,length(source)+1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest,
 				const wchar_t *source, size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest+length(dest),source,size);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, int64_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=wcharstring::parseNumber(number);
 	wchar_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, uint64_t number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=wcharstring::parseNumber(number);
 	wchar_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, double number) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=wcharstring::parseNumber(number);
 	wchar_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, double number, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=wcharstring::parseNumber(number,scale);
 	wchar_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, double number,
 					uint16_t precision, uint16_t scale) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	wchar_t	*str=wcharstring::parseNumber(number,precision,scale);
 	wchar_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return copy(dest,source,length(source)+1);
-#else
-	return NULL;
-#endif
+	if (dest && source) {
+		while (*source) {
+			*dest=*source;
+			dest++;
+			source++;
+		}
+		*dest=L'\0';
+	}
+	return dest;
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, const char *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	wchar_t	*d=dest;
-	for (const char *s=source; *s; s++) {
-		*d=wcharacter::duplicate(*s);
-		d++;
+	if (dest && source) {
+		while (*source) {
+			*dest=wcharacter::duplicate(*source);
+			dest++;
+			source++;
+		}
+		*dest=L'\0';
 	}
-	*d=L'\0';
-	return d;
-#else
-	return NULL;
-#endif
+	return dest;
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!dest || !source) {
 		return dest;
 	}
-	return wcsncpy(dest,source,size);
-#else
-	return NULL;
-#endif
+	#ifdef RUDIMENTS_HAVE_WCSNCPY
+		return wcsncpy(dest,source,size);
+	#else
+		while (*source && size) {
+			*dest=*source;
+			dest++;
+			source++;
+			size--;
+		}
+		return dest;
+	#endif
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, const char *source, size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	wchar_t		*d=dest;
-	const char	*s=source;
-	for (size_t c=0; c<size && *s; c++) {
-		*d=wcharacter::duplicate(*s);
-		d++;
-		s++;
+	if (!dest || !source) {
+		return dest;
 	}
-	return d;
-#else
-	return NULL;
-#endif
+	while (*source && size) {
+		*dest=wcharacter::duplicate(*source);
+		dest++;
+		source++;
+		size--;
+	}
+	return dest;
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 						const wchar_t *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest+location,source);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 						const char *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest+location,source);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 					const wchar_t *source, size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest+location,source,size);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 					const char *source, size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest+location,source,size);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 						const wchar_t *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return safeCopy(dest,destlen,source,length(source)+1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 						const char *source) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return safeCopy(dest,destlen,source,charstring::length(source)+1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 				const wchar_t *source, size_t sourcelen) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 				const char *source, size_t sourcelen) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
-#else
-	return NULL;
-#endif
 }
 
 int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	// FIXME: use strcoll?
-	return (str1 && str2)?wcscmp(str1,str2):(str1!=str2);
-#else
-	return 0;
-#endif
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
+	#ifdef RUDIMENTS_HAVE_WCSCMP
+		return wcscmp(str1,str2);
+	#else
+		int32_t	diff=0;
+		while (*str1 && *str2) {
+			diff=(*str1-*str2);
+			if (diff) {
+				return diff;
+			}
+			str1++;
+			str2++;
+		}
+		return *str1-*str2;
+	#endif
 }
 
 int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2,
 							size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return (str1 && str2)?wcsncmp(str1,str2,size):(str1!=str2);
-#else
-	return 0;
-#endif
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
+	#ifdef RUDIMENTS_HAVE_WCSNCMP
+		return wcsncmp(str1,str2,size)
+	#else
+		int32_t	diff=0;
+		while (*str1 && *str2 && size) {
+			diff=(*str1-*str2);
+			if (diff) {
+				return diff;
+			}
+			str1++;
+			str2++;
+			size--;
+		}
+		return (size)?*str1-*str2:0;
+	#endif
 }
 
 int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 						const wchar_t *str2) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 	#ifdef RUDIMENTS_HAVE_WCSCASECMP
-		return (str1 && str2)?wcscasecmp(str1,str2):(str1!=str2);
+		return wcscasecmp(str1,str2);
 	#else
-		if (!str1 || !str2) {
-			return (str1!=str2);
-		}
-		const wchar_t	*ptr1=str1;
-		const wchar_t	*ptr2=str2;
-		int32_t		diff=0;
-		while (*ptr1 && *ptr2) {
-			diff=wcharacter::toUpperCase(*ptr1)-
-				wcharacter::toUpperCase(*ptr2);
+		int32_t	diff=0;
+		while (*str1 && *str2) {
+			diff=(wcharacter::toUpperCase(*str1)-
+				wcharacter::toUpperCase(*str2));
 			if (diff) {
 				return diff;
 			}
-			ptr1++;
-			ptr2++;
+			str1++;
+			str2++;
 		}
-		if (*ptr1) {
-			return *ptr1;
-		} else if (*ptr2) {
-			return -(*ptr2);
-		}
-		return 0;
+		return wcharacter::toUpperCase(*str1)-
+				wcharacter::toUpperCase(*str2);
 	#endif
-#else
-	return 0;
-#endif
 }
 
 int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 						const wchar_t *str2,
 						size_t size) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 	#ifdef RUDIMENTS_HAVE_WCSNCASECMP
-		return (str1 && str2)?wcsncasecmp(str1,str2,size):(str1!=str2);
+		return wcsncasecmp(str1,str2,size);
 	#else
-		if (!str1 || !str2) {
-			return (str1!=str2);
-		}
-		size_t		count=0;
-		const wchar_t	*ptr1=str1;
-		const wchar_t	*ptr2=str2;
-		int32_t		diff=0;
-		while (*ptr1 && *ptr2 && count<size) {
-			diff=wcharacter::toUpperCase(*ptr1)-
-				wcharacter::toUpperCase(*ptr2);
+		int32_t	diff=0;
+		while (*str1 && *str2 && size) {
+			diff=(wcharacter::toUpperCase(*str1)-
+				wcharacter::toUpperCase(*str2));
 			if (diff) {
 				return diff;
 			}
-			ptr1++;
-			ptr2++;
-			count++;
+			str1++;
+			str2++;
+			size--;
 		}
-		if (count<size) {
-			if (*ptr1 && !*ptr2) {
-				return *ptr1;
-			} else if (*ptr2 && !*ptr1) {
-				return -(*ptr2);
-			}
-		}
-		return 0;
+		return (size)?wcharacter::toUpperCase(*str1)-
+				wcharacter::toUpperCase(*str2):0;
 	#endif
-#else
-	return 0;
-#endif
 }
 
 int32_t wcharstring::compareNatural(const wchar_t *str1, const wchar_t *str2) {
@@ -1448,7 +1191,7 @@ int32_t wcharstring::compareNatural(const wchar_t *str1,
 					const wchar_t *str2,
 					const wchar_t *delimiters) {
 
-	int64_t	difference=0;
+	int64_t		difference=0;
 	const wchar_t	*start1=NULL;
 	const wchar_t	*start2=NULL;
 	wchar_t		*num1=NULL;
@@ -1508,8 +1251,7 @@ int32_t wcharstring::compareNatural(const wchar_t *str1,
 
 			// version-compare the numbers and add that
 			// to the running difference
-			difference+=wcharstring::compareVersions(
-						num1,num2,delimiters);
+			difference+=compareVersions(num1,num2,delimiters);
 
 			// clean up
 			delete[] num1;
@@ -1704,7 +1446,6 @@ bool wcharstring::compareWithWildcards(const wchar_t *string,
 }
 
 bool wcharstring::inSet(const wchar_t *str, const wchar_t * const *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!set || !set[0]) {
 		return !str;
 	}
@@ -1714,14 +1455,10 @@ bool wcharstring::inSet(const wchar_t *str, const wchar_t * const *set) {
 		}
 	}
 	return false;
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::inSetIgnoringCase(const wchar_t *str,
 					const wchar_t * const *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!set || !set[0]) {
 		return !str;
 	}
@@ -1731,68 +1468,39 @@ bool wcharstring::inSetIgnoringCase(const wchar_t *str,
 		}
 	}
 	return false;
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::contains(const wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (findFirst(haystack,needle)!=NULL);
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::containsIgnoringCase(const wchar_t *haystack,
 						const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (findFirstIgnoringCase(haystack,needle)!=NULL);
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::contains(const wchar_t *haystack, wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (findFirst(haystack,needle)!=NULL);
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::containsIgnoringCase(const wchar_t *haystack,
 							wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (findFirstIgnoringCase(haystack,needle)!=NULL);
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::startsWith(const wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return !wcharstring::compare(haystack,needle,
-					wcharstring::length(needle));
-#else
-	return false;
-#endif
+	return !compare(haystack,needle,wcharstring::length(needle));
 }
 
 bool wcharstring::endsWith(const wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	size_t	needlelen=wcharstring::length(needle);
 	size_t	haystacklen=wcharstring::length(haystack);
 	return (haystacklen>=needlelen &&
-		!wcharstring::compare(haystack+haystacklen-needlelen,needle));
-#else
-	return false;
-#endif
+			!compare(haystack+haystacklen-needlelen,needle));
 }
 
 const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 					const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_WCSSTR
 		return (haystack && needle)?wcsstr(haystack,needle):NULL;
 	#else
@@ -1801,47 +1509,47 @@ const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 		for (const wchar_t *ptr=haystack;
 				ptr<=haystack+haystacklen-needlelen;
 				ptr++) {
-			if (!wcharstring::compare(ptr,needle,needlelen)) {
+			if (!compare(ptr,needle,needlelen)) {
 				return ptr;
 			}
 		}
 		return NULL;
 	#endif
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
 							const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	size_t	haystacklen=wcharstring::length(haystack);
 	size_t	needlelen=wcharstring::length(needle);
 	for (const wchar_t *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
-		if (!wcharstring::compareIgnoringCase(ptr,needle,needlelen)) {
+		if (!compareIgnoringCase(ptr,needle,needlelen)) {
 			return ptr;
 		}
 	}
 	return NULL;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 							wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return (haystack)?wcschr(haystack,needle):NULL;
-#else
-	return NULL;
-#endif
+	#ifdef RUDIMENTS_HAVE_WCSCHR
+		return (haystack)?wcschr(haystack,needle):NULL;
+	#else
+		size_t	haystacklen=wcharstring::length(haystack);
+		for (const wchar_t *ptr=haystack;
+				ptr<haystack+haystacklen;
+				ptr++) {
+			if (*ptr==needle) {
+				return ptr;
+			}
+		}
+		return NULL;
+	#endif
 }
 
 const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
 							wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	size_t	haystacklen=wcharstring::length(haystack);
 	needle=wcharacter::toLowerCase(needle);
 	for (const wchar_t *ptr=haystack;
@@ -1852,35 +1560,27 @@ const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
 		}
 	}
 	return NULL;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
 							wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_WCSCHRNUL
-	return (haystack)?wcschrnul(haystack,needle):NULL;
+		return (haystack)?wcschrnul(haystack,needle):NULL;
 	#else
-	if (!haystack) {
-		return NULL;
-	}
-	const wchar_t	*retval=findFirst(haystack,needle);
-	if (!retval) {
-		retval=haystack+wcharstring::length(haystack);
-	}
-	return retval;
+		if (!haystack) {
+			return NULL;
+		}
+		const wchar_t	*retval=findFirst(haystack,needle);
+		if (!retval) {
+			retval=haystack+wcharstring::length(haystack);
+		}
+		return retval;
 	#endif
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstOrEndIgnoringCase(
 						const wchar_t *haystack,
 						wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!haystack) {
 		return NULL;
 	}
@@ -1889,14 +1589,10 @@ const wchar_t *wcharstring::findFirstOrEndIgnoringCase(
 		retval=haystack+wcharstring::length(haystack);
 	}
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
 						const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!haystack || !needle) {
 		return NULL;
 	}
@@ -1905,14 +1601,10 @@ const wchar_t *wcharstring::findFirstOrEnd(const wchar_t *haystack,
 		retval=haystack+wcharstring::length(haystack);
 	}
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstOrEndIgnoringCase(const wchar_t *haystack,
 							const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!haystack || !needle) {
 		return NULL;
 	}
@@ -1921,142 +1613,106 @@ const wchar_t *wcharstring::findFirstOrEndIgnoringCase(const wchar_t *haystack,
 		retval=haystack+wcharstring::length(haystack);
 	}
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirstOrEnd(wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstOrEnd((const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirstOrEndIgnoringCase(wchar_t *haystack,
 						const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstOrEndIgnoringCase(
 					(const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findLast(const wchar_t *haystack, wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return (haystack)?wcsrchr(haystack,needle):NULL;
-#else
-	return NULL;
-#endif
+	#ifdef RUDIMENTS_HAVE_WCSRCHR
+		CHRurn (haystack)?wcsrchr(haystack,needle):NULL;
+	#else
+		if (!haystack) {
+			return NULL;
+		}
+		const wchar_t	*c=haystack;
+		while (*c) {
+			c++;
+		}
+		while (c>haystack) {
+			if (*c==needle) {
+				return c;
+			}
+			c--;
+		}
+		if (*c==needle) {
+			return c;
+		}
+		return NULL;
+	#endif
 }
 
 const wchar_t *wcharstring::findLastIgnoringCase(const wchar_t *haystack,
 							wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstOrEndIgnoringCase(
 					(const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirst(wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirst((const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirstIgnoringCase(
 				wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstIgnoringCase(
 				(const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirst(wchar_t *haystack, wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirst((const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirstIgnoringCase(
 				wchar_t *haystack, wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstIgnoringCase(
 				(const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findLast(wchar_t *haystack, const wchar_t *needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findLast((const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findLast(wchar_t *haystack, wchar_t needle) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findLast((const wchar_t *)(haystack),needle));
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstOfSet(const wchar_t *haystack,
 							const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstOfSet((wchar_t *)(haystack),set));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirstOfSet(wchar_t *haystack, const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_WCSPBRK
-	return (haystack && set)?wcspbrk(haystack,set):NULL;
+		return (haystack && set)?wcspbrk(haystack,set):NULL;
 	#else
-	if (!haystack || !set) {
-		return NULL;
-	}
-	wchar_t	*retval=haystack;
-	while (*retval) {
-		if (contains(set,*retval)) {
-			return retval;
+		if (!haystack || !set) {
+			return NULL;
 		}
-		retval++;
-	}
-	return NULL;
+		wchar_t	*retval=haystack;
+		while (*retval) {
+			if (contains(set,*retval)) {
+				return retval;
+			}
+			retval++;
+		}
+		return NULL;
 	#endif
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findFirstOfSetOrEnd(const wchar_t *haystack,
 							const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findFirstOfSetOrEnd((wchar_t *)(haystack),set));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findFirstOfSetOrEnd(wchar_t *haystack,
 						const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!haystack || !set) {
 		return NULL;
 	}
@@ -2068,22 +1724,14 @@ wchar_t *wcharstring::findFirstOfSetOrEnd(wchar_t *haystack,
 		retval++;
 	}
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findLastOfSet(const wchar_t *haystack,
 						const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findLastOfSet((wchar_t *)(haystack),set));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findLastOfSet(wchar_t *haystack, const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!haystack || !set) {
 		return NULL;
 	}
@@ -2095,23 +1743,15 @@ wchar_t *wcharstring::findLastOfSet(wchar_t *haystack, const wchar_t *set) {
 		}
 	} while (retval>haystack);
 	return NULL;
-#else
-	return NULL;
-#endif
 }
 
 const wchar_t *wcharstring::findLastOfSetOrEnd(const wchar_t *haystack,
 							const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return (wchar_t *)(findLastOfSetOrEnd((wchar_t *)(haystack),set));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::findLastOfSetOrEnd(wchar_t *haystack,
 						const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!haystack || !set) {
 		return NULL;
 	}
@@ -2123,62 +1763,46 @@ wchar_t *wcharstring::findLastOfSetOrEnd(wchar_t *haystack,
 		}
 	} while (retval>haystack);
 	return haystack+wcharstring::length(haystack);
-#else
-	return NULL;
-#endif
 }
 
 size_t wcharstring::lengthContainingSet(const wchar_t *haystack,
 						const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#ifdef RUDIMENTS_HAVE_WCSSPN
-	return (haystack && set)?wcsspn(haystack,set):0;
-	#else
 	if (!haystack || !set) {
 		return 0;
 	}
-	size_t	index=0;
-	while (contains(set,haystack[index])) {
-		index++;
-	}
-	return index;
+	#ifdef RUDIMENTS_HAVE_WCSSPN
+		return wcsspn(haystack,set);
+	#else
+		size_t	index=0;
+		while (contains(set,haystack[index])) {
+			index++;
+		}
+		return index;
 	#endif
-#else
-	return 0;
-#endif
 }
 
 size_t wcharstring::lengthNotContainingSet(const wchar_t *haystack,
 						const wchar_t *set) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#ifdef RUDIMENTS_HAVE_WCSCSPN
-	return (haystack && set)?wcscspn(haystack,set):0;
-	#else
 	if (!haystack || !set) {
 		return 0;
 	}
-	size_t	index=0;
-	while (!contains(set,haystack[index])) {
-		index++;
-	}
-	return index;
+	#ifdef RUDIMENTS_HAVE_WCSCSPN
+		return wcscspn(haystack,set);
+	#else
+		size_t	index=0;
+		while (!contains(set,haystack[index])) {
+			index++;
+		}
+		return index;
 	#endif
-#else
-	return 0;
-#endif
 }
 
 wchar_t *wcharstring::before(const wchar_t *str, const wchar_t *delimiter) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return between(str,NULL,delimiter);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::between(const wchar_t *str, const wchar_t *start,
 							const wchar_t *end) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	// find the start (or use beginning of "str" if "start" is empty/NULL)
 	const wchar_t	*s=NULL;
@@ -2209,32 +1833,20 @@ wchar_t *wcharstring::between(const wchar_t *str, const wchar_t *start,
 
 	// copy out the string between s and e
 	return wcharstring::duplicate(s,e-s);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::after(const wchar_t *str, const wchar_t *delimiter) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return between(str,delimiter,NULL);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::duplicate(const wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!str) {
 		return NULL;
 	}
 	return duplicate(str,length(str));
-#else
-	return NULL;
-#endif
 }
 
 wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!string) {
 		return NULL;
 	}
@@ -2244,22 +1856,13 @@ wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
 	}
 	retval[length]=L'\0';
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t	*wcharstring::duplicate(const char *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return duplicate(string,charstring::length(string));
-#else
-	return NULL;
-#endif
 }
 
 void wcharstring::rightTrim(wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-
 	if (!isNullOrEmpty(str)) {
 
 		// advance to the last character in the string
@@ -2277,12 +1880,9 @@ void wcharstring::rightTrim(wchar_t *str) {
 		// terminate the string there
 		*str=L'\0';
 	}
-#endif
 }
 
 void wcharstring::leftTrim(wchar_t *str) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-
 	if (!isNullOrEmpty(str)) {
 
 		int32_t	i=0;
@@ -2302,101 +1902,73 @@ void wcharstring::leftTrim(wchar_t *str) {
 		// store a null to the new end of string
 		str[j]=L'\0';
 	}
-#endif
 }
 
 void wcharstring::bothTrim(wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	leftTrim(string);
 	rightTrim(string);
-#endif
 }
 
 int64_t wcharstring::toInteger(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toInteger(string,NULL,10);
-#else
-	return 0;
-#endif
 }
 
 int64_t wcharstring::toInteger(const wchar_t *string, const wchar_t **endptr) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toInteger(string,endptr,10);
-#else
-	return 0;
-#endif
 }
 
 int64_t wcharstring::toInteger(const wchar_t *string, int32_t base) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toInteger(string,NULL,base);
-#else
-	return 0;
-#endif
 }
 
 int64_t wcharstring::toInteger(const wchar_t *string,
 				const wchar_t **endptr, int32_t base) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#ifdef RUDIMENTS_HAVE_WCSTOLL
-	return (string)?wcstoll(string,(wchar_t **)endptr,base):0;
+	#if defined(RUDIMENTS_HAVE_WCSTOLL)
+		return (string)?wcstoll(string,(wchar_t **)endptr,base):0;
+	#elif defined(RUDIMENTS_HAVE_WCSTOL)
+		return (string)?wcstol(string,(wchar_t **)endptr,base):0;
 	#else
-	return (string)?wcstol(string,(wchar_t **)endptr,base):0;
+		char	*str=charstring::duplicate(string);
+		int64_t	retval=charstring::toInteger(str,NULL,base);
+		delete[] str;
+		// FIXME: set endptr
+		return retval;
 	#endif
-#else
-	return 0;
-#endif
 }
 
 uint64_t wcharstring::toUnsignedInteger(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toUnsignedInteger(string,NULL,10);
-#else
-	return 0;
-#endif
 }
 
 uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
 					const wchar_t **endptr) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toUnsignedInteger(string,endptr,10);
-#else
-	return 0;
-#endif
 }
 
 uint64_t wcharstring::toUnsignedInteger(const wchar_t *string, int32_t base) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toUnsignedInteger(string,NULL,base);
-#else
-	return 0;
-#endif
 }
 
 uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
 					const wchar_t **endptr, int32_t base) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#ifdef RUDIMENTS_HAVE_WCSTOULL
-	return (string)?wcstoull(string,(wchar_t **)endptr,base):0;
+	#if defined(RUDIMENTS_HAVE_WCSTOULL)
+		return (string)?wcstoull(string,(wchar_t **)endptr,base):0;
+	#elif defined(RUDIMENTS_HAVE_WCSTOUL)
+		return (string)?wcstoul(string,(wchar_t **)endptr,base):0;
 	#else
-	return (string)?wcstoul(string,(wchar_t **)endptr,base):0;
+		char	*str=charstring::duplicate(string);
+		int64_t	retval=charstring::toUnsignedInteger(str,NULL,base);
+		delete[] str;
+		// FIXME: set endptr
+		return retval;
 	#endif
-#else
-	return 0;
-#endif
 }
 
 long double wcharstring::toFloat(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return toFloat(string,NULL);
-#else
-	return 0.0;
-#endif
 }
 
 long double wcharstring::toFloatC(const wchar_t *string) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	/* This method is needed when the locale of the client is different
 	 * from the C/POSIX locale, but we still need to convert a string
@@ -2407,48 +1979,47 @@ long double wcharstring::toFloatC(const wchar_t *string) {
 	 * implements a workaround of converting the string from C locale
 	 * representation to one appropriate for the current locale. */
 
-#ifdef RUDIMENTS_HAVE_LOCALE_H
-	size_t		len=length(string);
-	wchar_t		stringinlocale[256];
-	const wchar_t	*decimalpointlocation;
-	struct	lconv	*currentlconv=localeconv();
-	if ((currentlconv!=NULL) &&
-		(currentlconv->decimal_point!=NULL) &&
-		(currentlconv->decimal_point[0]!=0) &&
-		(currentlconv->decimal_point[0]!=L'.') &&
-		(currentlconv->decimal_point[1]==0) &&
-		((decimalpointlocation=findFirst(string,L'.'))!=NULL) &&
-		(len<sizeof(stringinlocale))) {
+	#ifdef RUDIMENTS_HAVE_LOCALE_H
+		size_t		len=length(string);
+		wchar_t		stringinlocale[256];
+		const wchar_t	*decimalpointlocation;
+		struct	lconv	*currentlconv=localeconv();
+		if ((currentlconv!=NULL) &&
+			(currentlconv->decimal_point!=NULL) &&
+			(currentlconv->decimal_point[0]!=0) &&
+			(currentlconv->decimal_point[0]!=L'.') &&
+			(currentlconv->decimal_point[1]==0) &&
+			((decimalpointlocation=findFirst(string,L'.'))!=NULL) &&
+			(len<sizeof(stringinlocale))) {
 
-		bytestring::copy(stringinlocale,string,len+1);
+			bytestring::copy(stringinlocale,string,len+1);
 
-		stringinlocale[decimalpointlocation-string]=
-					currentlconv->decimal_point[0];
+			stringinlocale[decimalpointlocation-string]=
+						currentlconv->decimal_point[0];
 
-		return toFloat(stringinlocale,NULL);
-	}
-#endif
+			return toFloat(stringinlocale,NULL);
+		}
+	#endif
 	return toFloat(string,NULL);
-#else
-	return 0.0;
-#endif
 }
 
 long double wcharstring::toFloat(const wchar_t *string,
 					const wchar_t **endptr) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#ifdef RUDIMENTS_HAVE_WCSTOLD
-	return (string)?wcstold(string,(wchar_t **)endptr):0.0;
+	#if defined(RUDIMENTS_HAVE_WCSTOLD)
+		return (string)?wcstold(string,(wchar_t **)endptr):0.0;
+	#elif defined(RUDIMENTS_HAVE_WCSTOD)
+		return (string)?(long double)(wcstod(string,
+						(wchar_t **)endptr)):0.0;
 	#else
-	return (string)?(long double)(wcstod(string,(wchar_t **)endptr)):0.0;
+		char		*str=charstring::duplicate(string);
+		long double	retval=charstring::toFloat(str,NULL);
+		delete[] str;
+		// FIXME: set endptr
+		return retval;
 	#endif
-#else
-	return 0.0;
-#endif
 }
 
 wchar_t *wcharstring::duplicate(const wchar_t *str, size_t length) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	if (!str) {
 		return NULL;
 	}
@@ -2456,29 +2027,22 @@ wchar_t *wcharstring::duplicate(const wchar_t *str, size_t length) {
 	copy(buffer,str,length);
 	buffer[length]=L'\0';
 	return buffer;
-#else
-	return NULL;
-#endif
 }
 
 void wcharstring::split(const wchar_t *string, const wchar_t *delimiter,
 				bool collapse,
 				wchar_t ***list, uint64_t *listlength) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	split(string,length(string),
 			delimiter,length(delimiter),
 			collapse,list,listlength);
-#endif
 }
 
 void wcharstring::split(const wchar_t *string, size_t stringlength,
 				const wchar_t *delimiter, bool collapse,
 				wchar_t ***list, uint64_t *listlength) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	split(string,stringlength,
 			delimiter,length(delimiter),
 			collapse,list,listlength);
-#endif
 }
 
 void wcharstring::split(const wchar_t *string, 
@@ -2487,11 +2051,9 @@ void wcharstring::split(const wchar_t *string,
 				bool collapse,
 				wchar_t ***list,
 				uint64_t *listlength) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	split(string,length(string),
 			delimiter,delimiterlength,
 			collapse,list,listlength);
-#endif
 }
 
 void wcharstring::split(const wchar_t *string,
@@ -2501,7 +2063,6 @@ void wcharstring::split(const wchar_t *string,
 				bool collapse,
 				wchar_t ***list,
 				uint64_t *listlength) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	// handle degenerate cases
 	if (!list && !listlength) {
@@ -2547,8 +2108,7 @@ void wcharstring::split(const wchar_t *string,
 			// if we found a delimiter or ran into the end of
 			// the string...
 			if (current==end ||
-				!wcharstring::compare(current,delimiter,
-							delimiterlength)) {
+				!compare(current,delimiter,delimiterlength)) {
 
 				// handle cases of multiple delimiters in a row
 				if (current!=start || !collapse) {
@@ -2594,11 +2154,9 @@ void wcharstring::split(const wchar_t *string,
 	if (listlength) {
 		(*listlength)=ll;
 	}
-#endif
 }
 
 wchar_t *wcharstring::subString(const wchar_t *str, size_t start, size_t end) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	// handle end<start
 	if (end<start) {
@@ -2607,22 +2165,14 @@ wchar_t *wcharstring::subString(const wchar_t *str, size_t start, size_t end) {
 		start=temp;
 	}
 	return duplicate(str+start,end-start+1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::subString(const wchar_t *str, size_t start) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	return subString(str,start,length(str)-1);
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::insertString(const wchar_t *dest,
 				const wchar_t *src, uint64_t index) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	uint64_t	srcsize=length(src);
 	uint64_t	size=length(dest)+srcsize+1;
@@ -2638,14 +2188,10 @@ wchar_t *wcharstring::insertString(const wchar_t *dest,
 	}
 	retval[size-1]=L'\0';
 	return retval;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::pad(const wchar_t *str, wchar_t padchar,
 			int16_t direction, uint64_t totallength) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	if (totallength==0) {
 		return NULL;
@@ -2678,9 +2224,6 @@ wchar_t *wcharstring::pad(const wchar_t *str, wchar_t padchar,
 	}
 
 	return newstring;
-#else
-	return NULL;
-#endif
 }
 
 wchar_t *wcharstring::humanReadable(int64_t number) {
@@ -2704,7 +2247,6 @@ wchar_t *wcharstring::humanReadable(long double number) {
 }
 
 wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	long double	k=(onethousand)?1000.0:1024.0;
 	wchar_t		suffixes[]={
@@ -2735,27 +2277,19 @@ wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
 	wchar_t	*subbed=replace(buf,L".0",L"");
 	delete[] buf;
 	return subbed;
-#else
-	return NULL;
-#endif
 }
 
 ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, ...) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	va_list	args;
 	va_start(args,format);
 	size_t	result=printf(buffer,length,format,&args);
 	va_end(args);
 	return result;
-#else
-	return 0;
-#endif
 }
 
 ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, va_list *argp) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 
 		// On most platforms, vswprintf attempts to write formatted
@@ -2841,25 +2375,17 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
-#else
-	return 0;
-#endif
 }
 
 ssize_t wcharstring::printf(wchar_t **buffer, const wchar_t *format, ...) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 	va_list	args;
 	va_start(args,format);
 	// the printf() below will call va_end(args)
 	return printf(buffer,format,&args);
-#else
-	return 0;
-#endif
 }
 
 ssize_t wcharstring::printf(wchar_t **buffer,
 				const wchar_t *format, va_list *argp) {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
 
 	// sanity check
 	if (!buffer) {
@@ -2886,23 +2412,12 @@ ssize_t wcharstring::printf(wchar_t **buffer,
 	}
 	va_end(argp1);
 	return size;
-#else
-	return 0;
-#endif
-}
-
-bool wcharstring::supported() {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return true;
-#else
-	return false;
-#endif
 }
 
 bool wcharstring::supportsPrintf() {
-#if defined(RUDIMENTS_HAVE_WCHAR_H) && defined(RUDIMENTS_HAVE_VSWPRINTF)
-	return true;
-#else
-	return false;
-#endif
+	#ifdef RUDIMENTS_HAVE_VSWPRINTF
+		return true;
+	#else
+		return false;
+	#endif
 }

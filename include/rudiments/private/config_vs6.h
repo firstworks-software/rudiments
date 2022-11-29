@@ -1540,17 +1540,35 @@
 /* Some systems have wcscasecmp */
 /* #undef RUDIMENTS_HAVE_WCSCASECMP */
 
+/* Some systems have wcschr */
+/* #undef RUDIMENTS_HAVE_WCSCHR */
+
 /* Some systems have wcschrnul */
 /* #undef RUDIMENTS_HAVE_WCSCHRNUL */
+
+/* Some systems have wcscmp */
+/* #undef RUDIMENTS_HAVE_WCSCMP */
 
 /* Some systems have wcscspn */
 /* #undef RUDIMENTS_HAVE_WCSCSPN */
 
+/* Some systems have wcslen */
+/* #undef RUDIMENTS_HAVE_WCSLEN */
+
 /* Some systems have wcsncasecmp */
 /* #undef RUDIMENTS_HAVE_WCSNCASECMP */
 
+/* Some systems have wcsncmp */
+/* #undef RUDIMENTS_HAVE_WCSNCMP */
+
+/* Some systems have wcsncpy */
+/* #undef RUDIMENTS_HAVE_WCSNCPY */
+
 /* Some systems have wcspbrk */
 /* #undef RUDIMENTS_HAVE_WCSPBRK */
+
+/* Some systems have wcsrchr */
+/* #undef RUDIMENTS_HAVE_WCSRCHR */
 
 /* Some systems have wcsspn */
 /* #undef RUDIMENTS_HAVE_WCSSPN */
@@ -1561,8 +1579,17 @@
 /* Some systems have wcstold */
 /* #undef RUDIMENTS_HAVE_WCSTOLD */
 
+/* Some systems have wcstol */
+/* #undef RUDIMENTS_HAVE_WCSTOL */
+
+/* Some systems have wcstold */
+/* #undef RUDIMENTS_HAVE_WCSTOLD */
+
 /* Some systems have wcstoll */
 /* #undef RUDIMENTS_HAVE_WCSTOLL */
+
+/* Some systems have wcstoul */
+/* #undef RUDIMENTS_HAVE_WCSTOUL */
 
 /* Some systems have wcstoull */
 /* #undef RUDIMENTS_HAVE_WCSTOULL */

@@ -1149,11 +1149,6 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		/** Returns true if the platform supports wide characters and
 		 *  rudiments was build with wide character support and false
 		 *  otherwise. */
-		static bool	supported();
-
-		/** Returns true if the platform supports wide characters and
-		 *  rudiments was build with wide character support and false
-		 *  otherwise. */
 		static bool	supportsPrintf();
 
 	#include <rudiments/private/wcharstring.h>

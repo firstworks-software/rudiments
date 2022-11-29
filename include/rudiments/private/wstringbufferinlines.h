@@ -251,62 +251,147 @@ ssize_t wstringbuffer::write(wchar_t character) {
 
 inline
 ssize_t wstringbuffer::write(int16_t number) {
-	return printf(L"%hd",number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%hd",number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(int32_t number) {
-	return printf(L"%d",number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%d",number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(int64_t number) {
-	return printf(L"%lld",number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%lld",number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(uint16_t number) {
-	return printf(L"%hd",number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%hd",number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(uint32_t number) {
-	return printf(L"%d",number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%d",number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(uint64_t number) {
-	return bytebuffer::printf(L"%lld",number);
+	if (wcharstring::supportsPrintf()) {
+		return bytebuffer::printf(L"%lld",number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(float number) {
-	return write(number,4);
+	if (wcharstring::supportsPrintf()) {
+		return write(number,4);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(float number, uint16_t scale) {
-	return printf(L"%.*f",scale,number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%.*f",scale,number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number,scale);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(float number, uint16_t precision, uint16_t scale) {
-	return printf(L"%*.*f",precision,scale,number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%*.*f",precision,scale,number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number,precision,scale);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(double number) {
-	return write(number,4);
+	if (wcharstring::supportsPrintf()) {
+		return write(number,4);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
 ssize_t wstringbuffer::write(double number, uint16_t scale) {
-	return printf(L"%.*f",scale,number);
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%.*f",scale,number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number,scale);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
-ssize_t wstringbuffer::write(double number, uint16_t precision, uint16_t scale) {
-	return printf(L"%*.*f",precision,scale,number);
+ssize_t wstringbuffer::write(double number,
+				 uint16_t precision, uint16_t scale) {
+	if (wcharstring::supportsPrintf()) {
+		return printf(L"%*.*f",precision,scale,number);
+	} else {
+		wchar_t	*s=wcharstring::parseNumber(number,precision,scale);
+		ssize_t	retval=write(s);
+		delete[] s;
+		return retval;
+	}
 }
 
 inline
@@ -317,13 +402,4 @@ void wstringbuffer::truncate(size_t pos) {
 inline
 void wstringbuffer::truncate() {
 	bytebuffer::truncate();
-}
-
-inline
-bool wstringbuffer::supported() {
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	return true;
-#else
-	return false;
-#endif
 }

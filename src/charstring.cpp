@@ -286,7 +286,7 @@ char *charstring::replace(const char *str, const char *oldstr,
 	const char	*ptr=str;
 	const char	*start=ptr;
 	while (*ptr) {
-		if (!charstring::compare(ptr,oldstr,oldstrlen)) {
+		if (!compare(ptr,oldstr,oldstrlen)) {
 			newstring.append(start,ptr-start);
 			newstring.append(newstr);
 			ptr+=oldstrlen;
@@ -343,8 +343,7 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 		bool	found=false;
 		uint64_t i=0;
 		for (const char * const *oldptr=oldstrset; *oldptr; oldptr++) {
-			if (!charstring::compare(
-					ptr,oldstrset[i],oldstrlen[i])) {
+			if (!compare(ptr,oldstrset[i],oldstrlen[i])) {
 				newstring.append(start,ptr-start);
 				newstring.append(newstrset[i]);
 				ptr+=oldstrlen[i];
@@ -1042,11 +1041,11 @@ bool charstring::isYes(const char *string) {
 	char	next;
 	if (!string) {
 		return false;
-	} else if (!charstring::compareIgnoringCase(string,"yes",3)) {
+	} else if (!compareIgnoringCase(string,"yes",3)) {
 		next=string[3];
-	} else if (!charstring::compareIgnoringCase(string,"true",4)) {
+	} else if (!compareIgnoringCase(string,"true",4)) {
 		next=string[4];
-	} else if (!charstring::compareIgnoringCase(string,"on",2)) {
+	} else if (!compareIgnoringCase(string,"on",2)) {
 		next=string[2];
 	} else if (string[0]=='y' || string[0]=='Y' ||
 			string[0]=='t' || string[0]=='T' ||
@@ -1063,11 +1062,11 @@ bool charstring::isNo(const char *string) {
 	char	next;
 	if (!string) {
 		return false;
-	} else if (!charstring::compareIgnoringCase(string,"no",2)) {
+	} else if (!compareIgnoringCase(string,"no",2)) {
 		next=string[2];
-	} else if (!charstring::compareIgnoringCase(string,"false",5)) {
+	} else if (!compareIgnoringCase(string,"false",5)) {
 		next=string[5];
-	} else if (!charstring::compareIgnoringCase(string,"off",3)) {
+	} else if (!compareIgnoringCase(string,"off",3)) {
 		next=string[3];
 	} else if (string[0]=='n' || string[0]=='N' ||
 			string[0]=='f' || string[0]=='F' ||
@@ -1158,72 +1157,74 @@ char *charstring::safeCopy(char *dest, size_t destlen,
 }
 
 int32_t charstring::compare(const char *str1, const char *str2) {
-	// FIXME: use strcoll?
-	return (str1 && str2)?strcmp(str1,str2):(str1!=str2);
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
+	return strcmp(str1,str2);
 }
 
 int32_t charstring::compare(const char *str1, const char *str2, size_t len) {
-	return (str1 && str2)?strncmp(str1,str2,len):(str1!=str2);
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
+	return strncmp(str1,str2,len);
 }
 
 int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 	#ifdef RUDIMENTS_HAVE_STRCASECMP
-		return (str1 && str2)?strcasecmp(str1,str2):(str1!=str2);
+		return strcasecmp(str1,str2);
 	#else
-		if (!str1 || !str2) {
-			return (str1!=str2);
-		}
-		const char	*ptr1=str1;
-		const char	*ptr2=str2;
-		int32_t		diff=0;
-		while (*ptr1 && *ptr2) {
-			diff=character::toUpperCase(*ptr1)-
-				character::toUpperCase(*ptr2);
+		int32_t	diff=0;
+		while (*str1 && *str2) {
+			diff=(character::toUpperCase(*str1)-
+				character::toUpperCase(*str2));
 			if (diff) {
 				return diff;
 			}
-			ptr1++;
-			ptr2++;
+			str1++;
+			str2++;
 		}
-		if (*ptr1) {
-			return *ptr1;
-		} else if (*ptr2) {
-			return -(*ptr2);
-		}
-		return 0;
+		return character::toUpperCase(*str1)-
+				character::toUpperCase(*str2);
 	#endif
 }
 
 int32_t charstring::compareIgnoringCase(const char *str1,
 						const char *str2, size_t len) {
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 	#ifdef RUDIMENTS_HAVE_STRNCASECMP
-		return (str1 && str2)?strncasecmp(str1,str2,len):(str1!=str2);
+		return strncasecmp(str1,str2,len);
 	#else
-		if (!str1 || !str2) {
-			return (str1!=str2);
-		}
-		size_t		count=0;
-		const char	*ptr1=str1;
-		const char	*ptr2=str2;
-		int32_t		diff=0;
-		while (*ptr1 && *ptr2 && count<len) {
-			diff=character::toUpperCase(*ptr1)-
-				character::toUpperCase(*ptr2);
+		int32_t	diff=0;
+		while (*str1 && *str2 && size) {
+			diff=(wcharacter::toUpperCase(*str1)-
+				wcharacter::toUpperCase(*str2));
 			if (diff) {
 				return diff;
 			}
-			ptr1++;
-			ptr2++;
-			count++;
+			str1++;
+			str2++;
+			size--;
 		}
-		if (count<len) {
-			if (*ptr1 && !*ptr2) {
-				return *ptr1;
-			} else if (*ptr2 && !*ptr1) {
-				return -(*ptr2);
-			}
-		}
-		return 0;
+		return (size)?wcharacter::toUpperCase(*str1)-
+				wcharacter::toUpperCase(*str2):0;
 	#endif
 }
 
@@ -1235,7 +1236,7 @@ int32_t charstring::compareNatural(const char *str1,
 					const char *str2,
 					const char *delimiters) {
 
-	int64_t	difference=0;
+	int64_t		difference=0;
 	const char	*start1=NULL;
 	const char	*start2=NULL;
 	char		*num1=NULL;
@@ -1295,8 +1296,7 @@ int32_t charstring::compareNatural(const char *str1,
 
 			// version-compare the numbers and add that
 			// to the running difference
-			difference+=charstring::compareVersions(
-						num1,num2,delimiters);
+			difference+=compareVersions(num1,num2,delimiters);
 
 			// clean up
 			delete[] num1;
@@ -1532,14 +1532,14 @@ bool charstring::containsIgnoringCase(const char *haystack, char needle) {
 }
 
 bool charstring::startsWith(const char *haystack, const char *needle) {
-	return !charstring::compare(haystack,needle,charstring::length(needle));
+	return !compare(haystack,needle,charstring::length(needle));
 }
 
 bool charstring::endsWith(const char *haystack, const char *needle) {
 	size_t	needlelen=charstring::length(needle);
 	size_t	haystacklen=charstring::length(haystack);
 	return (haystacklen>=needlelen &&
-		!charstring::compare(haystack+haystacklen-needlelen,needle));
+		!compare(haystack+haystacklen-needlelen,needle));
 }
 
 const char *charstring::findFirst(const char *haystack, const char *needle) {
@@ -1553,7 +1553,7 @@ const char *charstring::findFirstIgnoringCase(const char *haystack,
 	for (const char *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
-		if (!charstring::compareIgnoringCase(ptr,needle,needlelen)) {
+		if (!compareIgnoringCase(ptr,needle,needlelen)) {
 			return ptr;
 		}
 	}
@@ -2086,8 +2086,7 @@ void charstring::split(const char *string, size_t stringlength,
 			// if we found a delimiter or ran into the end of
 			// the string...
 			if (current==end ||
-				!charstring::compare(current,delimiter,
-							delimiterlength)) {
+				!compare(current,delimiter,delimiterlength)) {
 
 				// handle cases of multiple delimiters in a row
 				if (current!=start || !collapse) {
