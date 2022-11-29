@@ -88,15 +88,26 @@ int main(int argc, char **argv) {
 			// display the text as hex
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
-			const wchar_t *t=*text;
-			for (; *t; t++) {
-				stdoutput.printf("0x%08x, ",*t);
+			uint16_t	nullcounter=0;
+			const unsigned char	*t=(const unsigned char *)*text;
+			for (;;) {
+				stdoutput.printf("%02x ",*t);
+				if (!*t) {
+					nullcounter++;
+					if (nullcounter==sizeof(wchar_t)) {
+						break;
+					}
+				}
 				hexcounter++;
-				if (!(hexcounter%4)) {
+				if (!(hexcounter%sizeof(wchar_t))) {
+					stdoutput.printf(" ");
+					nullcounter=0;
+				}
+				if (!(hexcounter%16)) {
 					stdoutput.printf("\n");
 				}
+				t++;
 			}
-			stdoutput.printf("0x%08x",*t);
 			stdoutput.printf("\n");
 
 			// display the text as text, 3 different ways
