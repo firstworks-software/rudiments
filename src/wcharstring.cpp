@@ -1923,15 +1923,23 @@ int64_t wcharstring::toInteger(const wchar_t *string, int32_t base) {
 
 int64_t wcharstring::toInteger(const wchar_t *string,
 				const wchar_t **endptr, int32_t base) {
+	if (!string) {
+		return 0;
+	}
 	#if defined(RUDIMENTS_HAVE_WCSTOLL)
-		return (string)?wcstoll(string,(wchar_t **)endptr,base):0;
+		return wcstoll(string,(wchar_t **)endptr,base);
 	#elif defined(RUDIMENTS_HAVE_WCSTOL)
-		return (string)?wcstol(string,(wchar_t **)endptr,base):0;
+		return wcstol(string,(wchar_t **)endptr,base);
 	#else
 		char	*str=charstring::duplicate(string);
 		int64_t	retval=charstring::toInteger(str,NULL,base);
 		delete[] str;
-		// FIXME: set endptr
+		if (endptr) {
+			while (wcharacter::isDigit(*string)) {
+				string++;
+			}
+			*endptr=string;
+		}
 		return retval;
 	#endif
 }
@@ -1951,15 +1959,23 @@ uint64_t wcharstring::toUnsignedInteger(const wchar_t *string, int32_t base) {
 
 uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
 					const wchar_t **endptr, int32_t base) {
+	if (!string) {
+		return 0;
+	}
 	#if defined(RUDIMENTS_HAVE_WCSTOULL)
-		return (string)?wcstoull(string,(wchar_t **)endptr,base):0;
+		return wcstoull(string,(wchar_t **)endptr,base);
 	#elif defined(RUDIMENTS_HAVE_WCSTOUL)
-		return (string)?wcstoul(string,(wchar_t **)endptr,base):0;
+		return wcstoul(string,(wchar_t **)endptr,base);
 	#else
 		char	*str=charstring::duplicate(string);
 		int64_t	retval=charstring::toUnsignedInteger(str,NULL,base);
 		delete[] str;
-		// FIXME: set endptr
+		if (endptr) {
+			while (wcharacter::isDigit(*string)) {
+				string++;
+			}
+			*endptr=string;
+		}
 		return retval;
 	#endif
 }
@@ -2005,16 +2021,33 @@ long double wcharstring::toFloatC(const wchar_t *string) {
 
 long double wcharstring::toFloat(const wchar_t *string,
 					const wchar_t **endptr) {
+	if (!string) {
+		return 0.0;
+	}
 	#if defined(RUDIMENTS_HAVE_WCSTOLD)
-		return (string)?wcstold(string,(wchar_t **)endptr):0.0;
+		return wcstold(string,(wchar_t **)endptr);
 	#elif defined(RUDIMENTS_HAVE_WCSTOD)
-		return (string)?(long double)(wcstod(string,
-						(wchar_t **)endptr)):0.0;
+		return (long double)(wcstod(string,(wchar_t **)endptr));
 	#else
 		char		*str=charstring::duplicate(string);
 		long double	retval=charstring::toFloat(str,NULL);
 		delete[] str;
-		// FIXME: set endptr
+		if (endptr) {
+			bool	found=false;
+			for (;;) {
+				if (wcharacter::isDigit(*string)) {
+					string++;
+				// FIXME: this test should really use the
+				// delimiter from the locale instead of just '.'
+				} else if (!found && *string=='.') {
+					string++;
+					found=true;
+				} else {
+					break;
+				}
+			}
+			*endptr=string;
+		}
 		return retval;
 	#endif
 }
