@@ -75,6 +75,17 @@ int main(int argc, char **argv) {
 		stdoutput.printf("\n");
 
 
+		// display characters 32-255
+		stdoutput.printf("  characters:\n");
+		for (uint16_t i=32; i<256; i++) {
+			stdoutput.printf("%c  ",i);
+			if (!((i-31)%25)) {
+				stdoutput.printf("\n");
+			}
+		}
+		stdoutput.printf("\n\n");
+
+
 		// iterate over text strings
 		uint16_t	counter=0;
 		const wchar_t	**text=texts;
