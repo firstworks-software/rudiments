@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 	// define some locales
 	const char *locales[]={
 		"",
-		"en_US.ISO-8859-1",
+		"en_US.ISO-8859-15",
 		"en_US.UTF-8",
 		NULL
 	};
@@ -148,8 +148,6 @@ int main(int argc, char **argv) {
 			counter++;
 			text++;
 			description++;
-			text=text+2;
-			description=description+2;
 		}
 	}
 }
