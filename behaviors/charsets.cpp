@@ -9,11 +9,17 @@
 
 #include "../test/test.cpp"
 
+int myprintfDelegate(FILE *f, const wchar_t *format, va_list *argp) {
+	int	retval=vfwprintf(f,format,*argp);
+	fflush(f);
+	return retval;
+}
+
 int myprintf(FILE *f, const wchar_t *format, ...) {
-	va_list	args;
-	va_start(args,format);
-	size_t	result=vfwprintf(f,format,args);
-	va_end(args);
+	va_list	argp;
+	va_start(argp,format);
+	size_t	result=myprintfDelegate(f,format,&argp);
+	va_end(argp);
 	return result;
 }
 
@@ -150,7 +156,7 @@ int main(int argc, char **argv) {
 			printf("  wprintf:     ");
 			wprintf(L"%ls",*text);
 			printf("\n");
-			printf("  fwprintf:    ")
+			printf("  fwprintf:    ");
 			fwprintf(stdout,L"%ls",*text);
 			printf("\n");
 			printf("  vfwprintf:   ");
