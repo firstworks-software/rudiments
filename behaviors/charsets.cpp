@@ -9,6 +9,14 @@
 
 #include "../test/test.cpp"
 
+int myprintf(FILE *f, const wchar_t *format, ...) {
+	va_list	args;
+	va_start(args,format);
+	size_t	result=vfwprintf(f,format,args);
+	va_end(args);
+	return result;
+}
+
 int main(int argc, char **argv) {
 
 	// wchar_t size on this platform
@@ -98,7 +106,7 @@ int main(int argc, char **argv) {
 			// display description of the text
 			stdoutput.printf("%s\n",*description);
 
-#if 1
+#if 0
 			// display the text as hex
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
@@ -141,6 +149,12 @@ int main(int argc, char **argv) {
 			printf("\n");
 			printf("  wprintf:   ");
 			wprintf(L"%ls",*text);
+			printf("\n");
+			printf("  fwprintf:   ");
+			fwprintf(stdout,L"%ls",*text);
+			printf("\n");
+			printf("  vfwprintf:   ");
+			myprintf(stdout,L"%ls",*text);
 			printf("\n");
 #endif
 
