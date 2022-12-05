@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
 			// display description of the text
 			stdoutput.printf("%s\n",*description);
 
-#if 0
+#if 1
 			// display the text as hex
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
@@ -133,24 +133,24 @@ int main(int argc, char **argv) {
 			stdoutput.printf("\n");
 
 			// display the text as text, 3 different ways
-			stdoutput.printf("  write:     ");
+			stdoutput.printf("  stdoutput.write:             ");
 			stdoutput.write(*text);
 			stdoutput.printf("\n");
-			stdoutput.printf("  vfprintf:  ");
+			stdoutput.printf("  stdoutput.printf(char *):    ");
 			stdoutput.printf("%ls",*text);
 			stdoutput.printf("\n");
-			stdoutput.printf("  vfwprintf: ");
+			stdoutput.printf("  stdoutput.printf(wchar_t *): ");
 			stdoutput.printf(L"%ls",*text);
 			stdoutput.printf("\n");
 			stdoutput.printf("\n");
 #else
-			printf("  printf:    ");
+			printf("  printf:      ");
 			printf("%ls",*text);
 			printf("\n");
-			printf("  wprintf:   ");
+			printf("  wprintf:     ");
 			wprintf(L"%ls",*text);
 			printf("\n");
-			printf("  fwprintf:   ");
+			printf("  fwprintf:    ")
 			fwprintf(stdout,L"%ls",*text);
 			printf("\n");
 			printf("  vfwprintf:   ");
