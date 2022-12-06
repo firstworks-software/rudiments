@@ -3372,17 +3372,18 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 			FILE	*f=NULL;
 			if (pvt->_fd==0) {
 				f=stdin;
-			} else if (pvt->_fd==1) {
+			} /*else if (pvt->_fd==1) {
 				f=stdout;
 			} else if (pvt->_fd==2) {
 				f=stderr;
-			}
+			}*/
 
 			// Use fdopen if it's available.  Unfortunately we
 			// can't (reliably) on Windows because it won't work
 			// if the filedescriptor is a socket.
 			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-				defined(FD) && !defined(_WIN32)
+				!defined(_WIN32) /*&& \
+				defined(FD)*/
 			else {
 				f=fdopen(pvt->_fd,"a");
 
@@ -3428,16 +3429,17 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 				// For consistency, we'll set mode back to 0
 				// here so that a change in locale is
 				// immediately reflected.
-				#if __GLIBC__==2
+				/*#if __GLIBC__==2
 				f->_mode=0;
-				#endif
+				#endif*/
 
 				size=vfprintf(f,format,*argp);
 				fflush(f);
 
 				#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-					defined(FD) && !defined(_WIN32)
-				if (f!=stdin && f!=stdout && f!=stderr) {
+					!defined(_WIN32) /*&& \
+					defined(FD)*/
+				if (f!=stdin /*&& f!=stdout && f!=stderr*/) {
 
 					// We need to free f but we don't want
 					// fclose() to close pvt->_fd.  There's
@@ -3513,17 +3515,18 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 		FILE	*f=NULL;
 		if (pvt->_fd==0) {
 			f=stdin;
-		} else if (pvt->_fd==1) {
+		} /*else if (pvt->_fd==1) {
 			f=stdout;
 		} else if (pvt->_fd==2) {
 			f=stderr;
-		}
+		}*/
 
 		// Use fdopen if it's available.  Unfortunately we
 		// can't (reliably) on Windows because it won't work
 		// if the filedescriptor is a socket.
 		#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-			defined(FD) && !defined(_WIN32)
+				!defined(_WIN32) /*&& \
+				defined(FD) &&*/
 		else {
 			f=fdopen(pvt->_fd,"a");
 
@@ -3566,7 +3569,7 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 			// For consistency, we'll set mode back to 0 here so
 			// that a change in locale is immediately reflected.
 			#if __GLIBC__==2
-			f->_mode=0;
+			//f->_mode=0;
 			#endif
 
 			size=vfwprintf(f,format,*argp);
@@ -3574,7 +3577,7 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 
 			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
 				defined(FD) && !defined(_WIN32)
-			if (f!=stdin && f!=stdout && f!=stderr) {
+			if (f!=stdin /*&& f!=stdout && f!=stderr*/) {
 
 				// We need to free f but we don't want
 				// fclose() to close pvt->_fd.  There's
