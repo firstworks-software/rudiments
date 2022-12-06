@@ -9,20 +9,6 @@
 
 #include "../test/test.cpp"
 
-int myprintfDelegate(FILE *f, const wchar_t *format, va_list *argp) {
-	int	retval=vfwprintf(f,format,*argp);
-	fflush(f);
-	return retval;
-}
-
-int myprintf(FILE *f, const wchar_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	size_t	result=myprintfDelegate(f,format,&argp);
-	va_end(argp);
-	return result;
-}
-
 int main(int argc, char **argv) {
 
 	// wchar_t size on this platform
