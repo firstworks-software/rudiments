@@ -122,6 +122,7 @@
 	added duplicateFrom(Wide)CharacterNeedsMutex() methods
 	implemented wcharacter/wcharstring/wstringbuffer methods for platforms
 		with wstr.h
+	added mode-reset prior to vfprintf/vfwprintf calls on glibc platforms
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
