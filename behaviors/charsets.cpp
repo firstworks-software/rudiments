@@ -141,4 +141,23 @@ int main(int argc, char **argv) {
 			description++;
 		}
 	}
+
+	header("Regarding the above");
+	stdoutput.printf("For C locale:\n");
+	stdoutput.printf("  printf(char *) may print blank for "
+						"greek/cyrillic\n");
+	stdoutput.printf("  printf(wchar_t *) may print blank or "
+						"transliterated characters\n");
+	stdoutput.printf("For ISO-8859-15 locale:\n");
+	stdoutput.printf("  printf(char *) may print blank for "
+							"greek/cyrillic\n");
+	stdoutput.printf("  printf(wchar_t *) should print ?'s for "
+							"greek/cyrillic\n");
+	stdoutput.printf("For UTF-8 locale:\n");
+	stdoutput.printf("  printf(char *) and printf(wchar_t *) "
+					"should both print greek/cyrillic\n");
+	stdoutput.printf("  If they don't then _mode, or _flags, or "
+				"_orientation, or something probably\n"
+				"  needs to be reset before calls to "
+				"vfprintf()/vfwprintf()\n");
 }
