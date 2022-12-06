@@ -80,9 +80,6 @@ int main(int argc, char **argv) {
 		// set locale
 		if (!charstring::isNullOrEmpty(*locale)) {
 			setlocale(LC_CTYPE,*locale);
-stdin->_mode=0;
-stdout->_mode=0;
-stderr->_mode=0;
 			header(*locale);
 		} else {
 			header("initial locale");

@@ -3396,6 +3396,42 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 			#endif
 
 			if (f) {
+
+				// glibc sets the "mode" (regular or wide-char)
+				// of a stream during the first call to one of
+				// the stream functions, and then the most
+				// persists until the stream is closed and
+				// reopened.
+				//
+				// This is quirky:
+				//
+				// If vfprintf() is called before vfwprintf(),
+				// then the stream is configured to be regular.
+				// If the locale is then changed from the
+				// default "C" locale to something multibyte
+				// (eg. UTF-8) and multibyte characters are
+				// written to the stream, then they will be
+				// converted to ascii, possibly to ?'s.
+				//
+				// It's not what would happen if you were
+				// vdprintf()ing to a file, or if a wide
+				// equivalent to vdprintf() existed, and you
+				// were using that.
+				//
+				// Also, while it kind-of makes sense when
+				// writing to a file, which could be closed and
+				// reopened when you switch locales, it doesn't
+				// make sense when writing to stdout/stderr,
+				// which can't be.
+				//
+				//
+				// For consistency, we'll set mode back to 0
+				// here so that a change in locale is
+				// immediately reflected.
+				#ifdef __GLIBC__
+				f->_mode=0;
+				#endif
+
 				size=vfprintf(f,format,*argp);
 				fflush(f);
 
@@ -3501,6 +3537,38 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 		#endif
 
 		if (f) {
+
+			// glibc sets the "mode" (regular or wide-char) of a
+			// stream during the first call to one of the stream
+			// functions, and then the most persists until the
+			// stream is closed and reopened.
+			//
+			// This is quirky:
+			//
+			// If vfprintf() is called before vfwprintf(), then the
+			// stream is configured to be regular.  If the locale
+			// is then changed from the default "C" locale to
+			// something multibyte (eg. UTF-8) and multibyte
+			// characters are written to the stream, then they will
+			// (unintuitively) be converted to ascii, possibly
+			// to ?'s.
+			//
+			// It's not what would happen if you were vdprintf()ing
+			// to a file, or if a wide equivalent to vdprintf()
+			// existed, and you were using that.
+			//
+			// Also, while it kind-of makes sense when writing to
+			// a file, which could be closed and reopened when you
+			// switch locales, it doesn't make sense when writing
+			// to stdout/stderr, which can't be.
+			//
+			//
+			// For consistency, we'll set mode back to 0 here so
+			// that a change in locale is immediately reflected.
+			#ifdef __GLIBC__
+			f->_mode=0;
+			#endif
+
 			size=vfwprintf(f,format,*argp);
 			fflush(f);
 
