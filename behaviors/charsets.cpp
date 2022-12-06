@@ -19,9 +19,9 @@ int main(int argc, char **argv) {
 	// define some locales
 	const char *locales[]={
 		"",
-		"ru_RU.ISO-8859-5",
-		"el_GR.ISO-8859-7",
-		"en_US.ISO-8859-15",
+		"ru_RU.ISO8859-5",
+		"el_GR.ISO8859-7",
+		"en_US.ISO8859-15",
 		"en_US.UTF-8",
 		NULL
 	};
