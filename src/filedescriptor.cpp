@@ -3428,7 +3428,7 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 				// For consistency, we'll set mode back to 0
 				// here so that a change in locale is
 				// immediately reflected.
-				#ifdef __GLIBC__
+				#if __GLIBC__==2
 				f->_mode=0;
 				#endif
 
@@ -3565,7 +3565,7 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 			//
 			// For consistency, we'll set mode back to 0 here so
 			// that a change in locale is immediately reflected.
-			#ifdef __GLIBC__
+			#if __GLIBC__==2
 			f->_mode=0;
 			#endif
 
