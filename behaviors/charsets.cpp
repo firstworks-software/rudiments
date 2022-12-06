@@ -145,23 +145,22 @@ int main(int argc, char **argv) {
 	}
 
 	header("Regarding the above");
-	stdoutput.printf("For C locale:\n");
-	stdoutput.printf("  printf(char *) may print blank for "
-						"greek/cyrillic\n");
+	stdoutput.printf("For C locale:  for greek/cyrillic...\n");
+	stdoutput.printf("  printf(char *) should print blank\n");
 	stdoutput.printf("  printf(wchar_t *) may print blank or "
 						"transliterated characters\n");
 	stdoutput.printf("For ISO-8859-5 locale (if supported):\n");
-	stdoutput.printf("  printf(char *) snd printf(wchar_t *) "
+	stdoutput.printf("  printf(char *) and printf(wchar_t *) "
 				"should print greek but not cyrillic\n");
 	stdoutput.printf("For ISO-8859-7 locale (if supported):\n");
-	stdoutput.printf("  printf(char *) snd printf(wchar_t *) "
-				"should print cyrillic but not greek\n");
-	stdoutput.printf("For ISO-8859-15 locale (if supported):\n");
-	stdoutput.printf("  printf(char *) may print blank for "
-							"greek/cyrillic\n");
-	stdoutput.printf("  printf(wchar_t *) should print blank or ?'s for "
-							"greek/cyrillic\n");
-	stdoutput.printf("For UTF-8 locale (if supported):\n");
 	stdoutput.printf("  printf(char *) and printf(wchar_t *) "
-					"should both print greek/cyrillic\n");
+				"should print cyrillic but not greek\n");
+	stdoutput.printf("For ISO-8859-15 locale (if supported):  "
+					"for greek/cyrillic...\n");
+	stdoutput.printf("  printf(char *) and printf(wchar_t *) "
+					"should print blank/?'s\n");
+	stdoutput.printf("For UTF-8 locale (if supported):  "
+					"for greek/cyrillic...\n");
+	stdoutput.printf("  printf(char *) and printf(wchar_t *) "
+					"should print native characters\n");
 }
