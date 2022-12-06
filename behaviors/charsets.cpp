@@ -80,6 +80,9 @@ int main(int argc, char **argv) {
 		// set locale
 		if (!charstring::isNullOrEmpty(*locale)) {
 			setlocale(LC_CTYPE,*locale);
+stdin->_mode=0;
+stdout->_mode=0;
+stderr->_mode=0;
 			header(*locale);
 		} else {
 			header("initial locale");
@@ -112,7 +115,6 @@ int main(int argc, char **argv) {
 			// display description of the text
 			stdoutput.printf("%s\n",*description);
 
-#if 1
 			// display the text as hex
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
@@ -149,20 +151,6 @@ int main(int argc, char **argv) {
 			stdoutput.printf(L"%ls",*text);
 			stdoutput.printf("\n");
 			stdoutput.printf("\n");
-#else
-			printf("  printf:      ");
-			printf("%ls",*text);
-			printf("\n");
-			printf("  wprintf:     ");
-			wprintf(L"%ls",*text);
-			printf("\n");
-			printf("  fwprintf:    ");
-			fwprintf(stdout,L"%ls",*text);
-			printf("\n");
-			printf("  vfwprintf:   ");
-			myprintf(stdout,L"%ls",*text);
-			printf("\n");
-#endif
 
 			// move on
 			counter++;
