@@ -23,7 +23,7 @@ encryption::encryption() : object() {
 	construct();
 }
 
-void encryption::encryption::construct() {
+void encryption::construct() {
 	pvt->_key=NULL;
 	pvt->_iv=NULL;
 	pvt->_dirty=true;
