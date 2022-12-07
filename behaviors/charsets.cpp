@@ -3,8 +3,6 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 
-#include <wchar.h>
-#include <stdio.h>
 #include <locale.h>
 
 #include "../test/test.cpp"
