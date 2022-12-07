@@ -5,6 +5,7 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/character.h>
+#include <rudiments/wcharacter.h>
 #if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
 	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
 	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
