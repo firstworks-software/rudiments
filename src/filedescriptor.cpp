@@ -3411,6 +3411,7 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 				// is the only way to handle
 				// all variations without the
 				// compiler throwing errors.
+				#ifdef FD
 				if (sizeof(FD)==1) {
 					int8_t	i8=-1;
 					bytestring::copy(&(FD),&i8,1);
@@ -3424,6 +3425,7 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 					int64_t i64=-1;
 					bytestring::copy(&(FD),&i64,8);
 				}
+				#endif
 
 				// ok, now close f
 				fclose(f);
@@ -3502,6 +3504,7 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 			// The size and signedness of FD varies a bit.  This is
 			// the only way to handle all variations without the
 			// compiler throwing errors.
+			#ifdef FD
 			if (sizeof(FD)==1) {
 				int8_t	i8=-1;
 				bytestring::copy(&(FD),&i8,1);
@@ -3515,6 +3518,7 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 				int64_t i64=-1;
 				bytestring::copy(&(FD),&i64,8);
 			}
+			#endif
 
 			// ok, now close f
 			fclose(f);
