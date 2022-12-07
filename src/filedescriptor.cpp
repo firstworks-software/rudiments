@@ -3368,113 +3368,69 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 
 		#else
 
-			// otherwise use vfprintf, if we can
-			FILE	*f=NULL;
-			if (pvt->_fd==0) {
-				f=stdin;
-			} /*else if (pvt->_fd==1) {
-				f=stdout;
-			} else if (pvt->_fd==2) {
-				f=stderr;
-			}*/
+			// otherwise use vfprintf, if we can...
+			#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
 
 			// Use fdopen if it's available.  Unfortunately we
 			// can't (reliably) on Windows because it won't work
 			// if the filedescriptor is a socket.
-			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-				!defined(_WIN32) /*&& \
-				defined(FD)*/
-			else {
-				f=fdopen(pvt->_fd,"a");
+			FILE	*f=fdopen(pvt->_fd,"a");
 
-				// Some platforms (Unixware) don't like "a"
-				// with some types of file descriptors, so if
-				// "a" fails, then try "w".
-				if (!f) {
-					f=fdopen(pvt->_fd,"w");
-				}
+			// Some platforms (Unixware) don't like "a"
+			// with some types of file descriptors, so if
+			// "a" fails, then try "w".
+			if (!f) {
+				f=fdopen(pvt->_fd,"w");
 			}
-			#endif
 
 			if (f) {
-
-				// glibc sets the "mode" (regular or wide-char)
-				// of a stream during the first call to one of
-				// the stream functions, and then the most
-				// persists until the stream is closed and
-				// reopened.
-				//
-				// This is quirky:
-				//
-				// If vfprintf() is called before vfwprintf(),
-				// then the stream is configured to be regular.
-				// If the locale is then changed from the
-				// default "C" locale to something multibyte
-				// (eg. UTF-8) and multibyte characters are
-				// written to the stream, then they will be
-				// converted to ascii, possibly to ?'s.
-				//
-				// It's not what would happen if you were
-				// vdprintf()ing to a file, or if a wide
-				// equivalent to vdprintf() existed, and you
-				// were using that.
-				//
-				// Also, while it kind-of makes sense when
-				// writing to a file, which could be closed and
-				// reopened when you switch locales, it doesn't
-				// make sense when writing to stdout/stderr,
-				// which can't be.
-				//
-				//
-				// For consistency, we'll set mode back to 0
-				// here so that a change in locale is
-				// immediately reflected.
-				/*#if __GLIBC__==2
-				f->_mode=0;
-				#endif*/
-
 				size=vfprintf(f,format,*argp);
 				fflush(f);
 
-				#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-					!defined(_WIN32) /*&& \
-					defined(FD)*/
-				if (f!=stdin /*&& f!=stdout && f!=stderr*/) {
+				// We need to free f but we don't want fclose()
+				// to close(pvt->_fd).
+				//
+				// Whether fclose() actually calls close()
+				// seems to depend whether or not the stream
+				// was fdopen()ed, and whether or not the file
+				// descriptor was 0, 1, or 2. The behavior is
+				// platform-dependent.
+				//
+				// For good measure, we'll try to set f's file
+				// descriptor member to -1, which is generally
+				// reliable at preventing a close() in cases
+				// where it would be called.  This is tricky
+				// though, and not possible on all platforms.
 
-					// We need to free f but we don't want
-					// fclose() to close pvt->_fd.  There's
-					// no standard way of doing this though.
-					//
-					// Setting f's file descriptor member
-					// to -1 is generally reliable, though
-					// that's tricky too...
+				// The size and signedness of FD varies a bit.
+				// This is the only way to handle all variations
+				// without the compiler throwing errors.
 
-					// The size and signedness of
-					// FD varies a bit.  This
-					// is the only way to handle
-					// all variations without the
-					// compiler throwing errors.
-					if (sizeof(FD)==1) {
-						int8_t	i8=-1;
-						bytestring::copy(&(FD),&i8,1);
-					} else if (sizeof(FD)==2) {
-						int16_t i16=-1;
-						bytestring::copy(&(FD),&i16,2);
-					} else if (sizeof(FD)==4) {
-						int32_t i32=-1;
-						bytestring::copy(&(FD),&i32,4);
-					} else if (sizeof(FD)==8) {
-						int64_t i64=-1;
-						bytestring::copy(&(FD),&i64,8);
-					}
-
-					// ok, now close f
-					fclose(f);
+				// The size and signedness of
+				// FD varies a bit.  This
+				// is the only way to handle
+				// all variations without the
+				// compiler throwing errors.
+				if (sizeof(FD)==1) {
+					int8_t	i8=-1;
+					bytestring::copy(&(FD),&i8,1);
+				} else if (sizeof(FD)==2) {
+					int16_t i16=-1;
+					bytestring::copy(&(FD),&i16,2);
+				} else if (sizeof(FD)==4) {
+					int32_t i32=-1;
+					bytestring::copy(&(FD),&i32,4);
+				} else if (sizeof(FD)==8) {
+					int64_t i64=-1;
+					bytestring::copy(&(FD),&i64,8);
 				}
-				#endif
+
+				// ok, now close f
+				fclose(f);
 
 				return size;
 			}
+			#endif
 		#endif
 	}
 
@@ -3511,108 +3467,61 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	// If we're not buffering writes...
 	if (!pvt->_writebuffer) {
 
-		// use vfwprintf, if we can
-		FILE	*f=NULL;
-		if (pvt->_fd==0) {
-			f=stdin;
-		} /*else if (pvt->_fd==1) {
-			f=stdout;
-		} else if (pvt->_fd==2) {
-			f=stderr;
-		}*/
+		// use vfwprintf, if we can...
+		#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
 
-		// Use fdopen if it's available.  Unfortunately we
-		// can't (reliably) on Windows because it won't work
-		// if the filedescriptor is a socket.
-		#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-				!defined(_WIN32) /*&& \
-				defined(FD) &&*/
-		else {
-			f=fdopen(pvt->_fd,"a");
+		// Use fdopen if it's available.  Unfortunately we can't
+		// (reliably) on Windows because it won't work if the
+		// filedescriptor is a socket.
+		FILE	*f=fdopen(pvt->_fd,"a");
 
-			// Some platforms (Unixware) don't like "a"
-			// with some types of file descriptors, so if
-			// "a" fails, then try "w".
-			if (!f) {
-				f=fdopen(pvt->_fd,"w");
-			}
+		// Some platforms (Unixware) don't like "a" with some types
+		// of file descriptors, so if "a" fails, then try "w".
+		if (!f) {
+			f=fdopen(pvt->_fd,"w");
 		}
-		#endif
 
 		if (f) {
-
-			// glibc sets the "mode" (regular or wide-char) of a
-			// stream during the first call to one of the stream
-			// functions, and then the most persists until the
-			// stream is closed and reopened.
-			//
-			// This is quirky:
-			//
-			// If vfprintf() is called before vfwprintf(), then the
-			// stream is configured to be regular.  If the locale
-			// is then changed from the default "C" locale to
-			// something multibyte (eg. UTF-8) and multibyte
-			// characters are written to the stream, then they will
-			// (unintuitively) be converted to ascii, possibly
-			// to ?'s.
-			//
-			// It's not what would happen if you were vdprintf()ing
-			// to a file, or if a wide equivalent to vdprintf()
-			// existed, and you were using that.
-			//
-			// Also, while it kind-of makes sense when writing to
-			// a file, which could be closed and reopened when you
-			// switch locales, it doesn't make sense when writing
-			// to stdout/stderr, which can't be.
-			//
-			//
-			// For consistency, we'll set mode back to 0 here so
-			// that a change in locale is immediately reflected.
-			#if __GLIBC__==2
-			//f->_mode=0;
-			#endif
-
 			size=vfwprintf(f,format,*argp);
 			fflush(f);
 
-			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-				defined(FD) && !defined(_WIN32)
-			if (f!=stdin /*&& f!=stdout && f!=stderr*/) {
+			// We need to free f but we don't want fclose() to
+			// close(pvt->_fd).
+			//
+			// Whether fclose() actually calls close() seems to
+			// depend whether or not the stream was fdopen()ed, and
+			// whether or not the file descriptor was 0, 1, or 2.
+			// The behavior is platform-dependent.
+			//
+			// For good measure, we'll try to set f's file
+			// descriptor member to -1, which is generally
+			// reliable at preventing a close() in cases where it
+			// would be called.  This is tricky though, and not
+			// possible on all platforms.
 
-				// We need to free f but we don't want
-				// fclose() to close pvt->_fd.  There's
-				// no standard way of doing this though.
-				//
-				// Setting f's file descriptor member
-				// to -1 is generally reliable, though
-				// that's tricky too...
-
-				// The size and signedness of
-				// FD varies a bit.  This
-				// is the only way to handle
-				// all variations without the
-				// compiler throwing errors.
-				if (sizeof(FD)==1) {
-					int8_t	i8=-1;
-					bytestring::copy(&(FD),&i8,1);
-				} else if (sizeof(FD)==2) {
-					int16_t i16=-1;
-					bytestring::copy(&(FD),&i16,2);
-				} else if (sizeof(FD)==4) {
-					int32_t i32=-1;
-					bytestring::copy(&(FD),&i32,4);
-				} else if (sizeof(FD)==8) {
-					int64_t i64=-1;
-					bytestring::copy(&(FD),&i64,8);
-				}
-
-				// ok, now close f
-				fclose(f);
+			// The size and signedness of FD varies a bit.  This is
+			// the only way to handle all variations without the
+			// compiler throwing errors.
+			if (sizeof(FD)==1) {
+				int8_t	i8=-1;
+				bytestring::copy(&(FD),&i8,1);
+			} else if (sizeof(FD)==2) {
+				int16_t i16=-1;
+				bytestring::copy(&(FD),&i16,2);
+			} else if (sizeof(FD)==4) {
+				int32_t i32=-1;
+				bytestring::copy(&(FD),&i32,4);
+			} else if (sizeof(FD)==8) {
+				int64_t i64=-1;
+				bytestring::copy(&(FD),&i64,8);
 			}
-			#endif
+
+			// ok, now close f
+			fclose(f);
 
 			return size;
 		}
+		#endif
 	}
 
 	#endif
