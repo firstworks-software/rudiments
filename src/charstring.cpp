@@ -1214,7 +1214,7 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 		return strncasecmp(str1,str2,len);
 	#else
 		int32_t	diff=0;
-		while (*str1 && *str2 && size) {
+		while (*str1 && *str2 && len) {
 			diff=(wcharacter::toUpperCase(*str1)-
 				wcharacter::toUpperCase(*str2));
 			if (diff) {
@@ -1222,9 +1222,9 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 			}
 			str1++;
 			str2++;
-			size--;
+			len--;
 		}
-		return (size)?wcharacter::toUpperCase(*str1)-
+		return (len)?wcharacter::toUpperCase(*str1)-
 				wcharacter::toUpperCase(*str2):0;
 	#endif
 }
