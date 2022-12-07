@@ -213,6 +213,12 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define FD f->_fd
 #endif
 
+// on some platforms, we should use the stdin/out/err stream directly rather
+// than fdopen()ing a new stream for it
+#if defined(__SGICXX) || defined(__FreeBSD__)
+	#define USESTDSTREAMS 1
+#endif
+
 #ifdef RUDIMENTS_HAVE_UNDEFINED_SENDMSG
 extern "C" ssize_t sendmsg(int, const struct msghdr *,int);
 #endif
@@ -3369,12 +3375,51 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 		#else
 
 			// otherwise use vfprintf, if we can...
-			#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
 
-			// Use fdopen if it's available.  Unfortunately we
-			// can't (reliably) on Windows because it won't work
-			// if the filedescriptor is a socket.
-			FILE	*f=fdopen(pvt->_fd,"a");
+			// Unfortunately we can't (reliably) on Windows because
+			// fdopen() won't work if the filedescriptor is a
+			// socket.  
+			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
+						!defined(_WIN32)
+			FILE	*f=NULL;
+
+			// On most platforms, a stream's "orientation"
+			// (wide/multibyte or regular character) gets set during
+			// the first call that writes to it and never gets
+			// reset.  So, if you change from a regular character
+			// set to a wide/multibyte character set (or vice-versa)
+			// after the first write, then you won't get the
+			// characters you expect.
+			//
+			// We manage that by fdopen()ing a new stream for each
+			// print.  However, below, we have to fclose() that
+			// stream, without actually closing the underlying file
+			// descriptor, which gets messy.
+			//
+			// Some platforms, however, either don't support
+			// wide/multibyte character sets, or somehow switch
+			// between them with no problems.  On those platforms,
+			// we can just use the preexisting stdin/stdout/stderr
+			// streams and make things easier for ourselves.
+			#ifdef USESTDSTREAMS
+			switch (pvt->_fd) {
+				case 0:
+					f=stdin;
+					break;
+				case 1:
+					f=stdout;
+					break;
+				case 2:
+					f=stderr;
+					break;
+			}
+			#endif
+
+			// if we're not using a standard stream,
+			// then fdopen a new one
+			if (!f) {
+				f=fdopen(pvt->_fd,"a");
+			}
 
 			// Some platforms (Unixware) don't like "a"
 			// with some types of file descriptors, so if
@@ -3384,6 +3429,7 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 			}
 
 			if (f) {
+				// print and flush the stream
 				size=vfprintf(f,format,*argp);
 				fflush(f);
 
@@ -3391,44 +3437,52 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 				// to close(pvt->_fd).
 				//
 				// Whether fclose() actually calls close()
-				// seems to depend whether or not the stream
-				// was fdopen()ed, and whether or not the file
-				// descriptor was 0, 1, or 2. The behavior is
+				// depends whether or not the stream was
+				// fdopen()ed, whether or not the file
+				// descriptor was 0, 1, or 2, and who knows
+				// what else?  The exact behavior is very
 				// platform-dependent.
 				//
-				// For good measure, we'll try to set f's file
-				// descriptor member to -1, which is generally
-				// reliable at preventing a close() in cases
-				// where it would be called.  This is tricky
-				// though, and not possible on all platforms.
+				// If we can, for good measure, we'll try to
+				// set f's file descriptor member to -1, which
+				// is generally reliable at preventing a close()
+				// in cases where it would be called.  This is
+				// tricky though, and not possible on all
+				// platforms.  Fortunately, so far, on platforms
+				// where you can't, it doesn't appear to be
+				// necessary.
+				//
+				// On platforms where we use the std streams
+				// directly, we can skip all of this.
+				#ifdef USESTDSTREAMS
+				if (pvt->_fd>2) {
+				#endif
+					// The size and signedness of
+					// FD varies a bit.  This
+					// is the only way to handle
+					// all variations without the
+					// compiler throwing errors.
+					#ifdef FD
+					if (sizeof(FD)==1) {
+						int8_t	i8=-1;
+						bytestring::copy(&(FD),&i8,1);
+					} else if (sizeof(FD)==2) {
+						int16_t i16=-1;
+						bytestring::copy(&(FD),&i16,2);
+					} else if (sizeof(FD)==4) {
+						int32_t i32=-1;
+						bytestring::copy(&(FD),&i32,4);
+					} else if (sizeof(FD)==8) {
+						int64_t i64=-1;
+						bytestring::copy(&(FD),&i64,8);
+					}
+					#endif
 
-				// The size and signedness of FD varies a bit.
-				// This is the only way to handle all variations
-				// without the compiler throwing errors.
-
-				// The size and signedness of
-				// FD varies a bit.  This
-				// is the only way to handle
-				// all variations without the
-				// compiler throwing errors.
-				#ifdef FD
-				if (sizeof(FD)==1) {
-					int8_t	i8=-1;
-					bytestring::copy(&(FD),&i8,1);
-				} else if (sizeof(FD)==2) {
-					int16_t i16=-1;
-					bytestring::copy(&(FD),&i16,2);
-				} else if (sizeof(FD)==4) {
-					int32_t i32=-1;
-					bytestring::copy(&(FD),&i32,4);
-				} else if (sizeof(FD)==8) {
-					int64_t i64=-1;
-					bytestring::copy(&(FD),&i64,8);
+					// ok, now close f
+					fclose(f);
+				#ifdef USESTDSTREAMS
 				}
 				#endif
-
-				// ok, now close f
-				fclose(f);
 
 				return size;
 			}
@@ -3470,12 +3524,48 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	if (!pvt->_writebuffer) {
 
 		// use vfwprintf, if we can...
-		#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
 
-		// Use fdopen if it's available.  Unfortunately we can't
-		// (reliably) on Windows because it won't work if the
-		// filedescriptor is a socket.
-		FILE	*f=fdopen(pvt->_fd,"a");
+		// Unfortunately we can't (reliably) on Windows because
+		// fdopen() won't work if the filedescriptor is a socket.  
+		#if defined(RUDIMENTS_HAVE_FDOPEN) && \
+					!defined(_WIN32)
+		FILE	*f=NULL;
+
+		// On most platforms, a stream's "orientation" (wide/multibyte
+		// or regular character) gets set during the first call that
+		// writes to it and never gets reset.  So, if you change from a
+		// regular character set to a wide/multibyte character set (or
+		// vice-versa) after the first write, then you won't get the
+		// characters you expect.
+		//
+		// We manage that by fdopen()ing a new stream for each print.
+		// However, below, we have to fclose() that stream, without
+		// actually closing the underlying file descriptor, which
+		// gets messy.
+		//
+		// Some platforms, however, either don't support wide/multibyte
+		// character sets, or somehow switch between them with no
+		// problems.  On those platforms, we can just use the
+		// preexisting stdin/stdout/stderr streams and make things
+		// easier for ourselves.
+		#ifdef USESTDSTREAMS
+		switch (pvt->_fd) {
+			case 0:
+				f=stdin;
+				break;
+			case 1:
+				f=stdout;
+				break;
+			case 2:
+				f=stderr;
+				break;
+		}
+		#endif
+
+		// if we're not using a standard stream, then fdopen a new one
+		if (!f) {
+			f=fdopen(pvt->_fd,"a");
+		}
 
 		// Some platforms (Unixware) don't like "a" with some types
 		// of file descriptors, so if "a" fails, then try "w".
@@ -3484,44 +3574,56 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 		}
 
 		if (f) {
+			// print and flush the stream
 			size=vfwprintf(f,format,*argp);
 			fflush(f);
 
 			// We need to free f but we don't want fclose() to
 			// close(pvt->_fd).
 			//
-			// Whether fclose() actually calls close() seems to
-			// depend whether or not the stream was fdopen()ed, and
-			// whether or not the file descriptor was 0, 1, or 2.
-			// The behavior is platform-dependent.
+			// Whether fclose() actually calls close() depends
+			// whether or not the stream was fdopen()ed, whether or
+			// not the file descriptor was 0, 1, or 2, and who
+			// knows what else?  The exact behavior is very
+			// platform-dependent.
 			//
-			// For good measure, we'll try to set f's file
-			// descriptor member to -1, which is generally
+			// If we can, for good measure, we'll try to set f's
+			// file descriptor member to -1, which is generally
 			// reliable at preventing a close() in cases where it
 			// would be called.  This is tricky though, and not
-			// possible on all platforms.
+			// possible on all platforms.  Fortunately, so far, on
+			// platforms where you can't, it doesn't appear to be
+			// necessary.
+			//
+			// On platforms where we use the std streams directly,
+			// we can skip all of this.
+			#ifdef USESTDSTREAMS
+			if (pvt->_fd>2) {
+			#endif
+				#ifdef FD
+				// The size and signedness of FD varies a bit.
+				// This is the only way to handle all variations
+				// without the compiler throwing errors.
+				if (sizeof(FD)==1) {
+					int8_t	i8=-1;
+					bytestring::copy(&(FD),&i8,1);
+				} else if (sizeof(FD)==2) {
+					int16_t i16=-1;
+					bytestring::copy(&(FD),&i16,2);
+				} else if (sizeof(FD)==4) {
+					int32_t i32=-1;
+					bytestring::copy(&(FD),&i32,4);
+				} else if (sizeof(FD)==8) {
+					int64_t i64=-1;
+					bytestring::copy(&(FD),&i64,8);
+				}
+				#endif
 
-			// The size and signedness of FD varies a bit.  This is
-			// the only way to handle all variations without the
-			// compiler throwing errors.
-			#ifdef FD
-			if (sizeof(FD)==1) {
-				int8_t	i8=-1;
-				bytestring::copy(&(FD),&i8,1);
-			} else if (sizeof(FD)==2) {
-				int16_t i16=-1;
-				bytestring::copy(&(FD),&i16,2);
-			} else if (sizeof(FD)==4) {
-				int32_t i32=-1;
-				bytestring::copy(&(FD),&i32,4);
-			} else if (sizeof(FD)==8) {
-				int64_t i64=-1;
-				bytestring::copy(&(FD),&i64,8);
+				// ok, now close f
+				fclose(f);
+			#ifdef USESTDSTREAMS
 			}
 			#endif
-
-			// ok, now close f
-			fclose(f);
 
 			return size;
 		}
