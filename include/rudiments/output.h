@@ -66,7 +66,16 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  standard printf formatting rules.
 		 *
 		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred. */
+		 *  occurred.
+		 *
+		 *  NOTE: The various implemententations of this method
+		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  available, which, as it turns out, yield fairly
+		 *  inconsistent results between each other, especially across
+		 *  platforms, when printing wide characters.  Don't be
+		 *  surprised if you get different results, when printf()ing
+		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
+		 *  buffered vs. unbuffered file descriptor. */
 		virtual	ssize_t	printf(const char *format, ...);
 
 		/** Writes "argp" using "format" which should comply with
@@ -75,14 +84,32 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written.
+		 *
+		 *  NOTE: The various implemententations of this method
+		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  available, which, as it turns out, yield fairly
+		 *  inconsistent results between each other, especially across
+		 *  platforms, when printing wide characters.  Don't be
+		 *  surprised if you get different results, when printf()ing
+		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
+		 *  buffered vs. unbuffered file descriptor. */
 		virtual	ssize_t	printf(const char *format, va_list *argp);
 
 		/** Writes "..." using "format" which should comply with
 		 *  standard wprintf formatting rules.
 		 *
 		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred. */
+		 *  occurred.
+		 *
+		 *  NOTE: The various implemententations of this method
+		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  available, which, as it turns out, yield fairly
+		 *  inconsistent results between each other, especially across
+		 *  platforms, when printing wide characters.  Don't be
+		 *  surprised if you get different results, when printf()ing
+		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
+		 *  buffered vs. unbuffered file descriptor. */
 		virtual	ssize_t	printf(const wchar_t *format, ...);
 
 		/** Writes "argp" using "format" which should comply with
@@ -91,7 +118,16 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written.
+		 *
+		 *  NOTE: The various implemententations of this method
+		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  available, which, as it turns out, yield fairly
+		 *  inconsistent results between each other, especially across
+		 *  platforms, when printing wide characters.  Don't be
+		 *  surprised if you get different results, when printf()ing
+		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
+		 *  buffered vs. unbuffered file descriptor. */
 		virtual	ssize_t	printf(const wchar_t *format, va_list *argp);
 
 	#include <rudiments/private/output.h>
