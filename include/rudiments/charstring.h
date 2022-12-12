@@ -512,7 +512,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const char *str, size_t len);
 
-		/** Creates a duplicate of the first "len" characters of
+		/** Creates a duplicate "str", converting each wide character
+ 		 *  to an ascii character, replacing characters that can't be
+ 		 *  represented in ascii with '?', and returns a pointer to it.
+ 		 *  Note that this method allocates a buffer for the duplicate
+ 		 *  string internally and returns it.  The calling program must
+ 		 *  deallocate this buffer. */
+		static	char	*duplicate(const wchar_t *str);
+
+		/** Creates a duplicate of the first "len" wide characters of
 		 *  "str", converting each wide character to an ascii
 		 *  character, replacing characters that can't be represented
 		 *  in ascii with '?', and returns a pointer to it.  Note that
@@ -522,14 +530,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*duplicate(const wchar_t *str, size_t len);
 
 		/** Creates a duplicate "str", converting each wide character
- 		 *  to an ascii character, replacing characters that can't be
- 		 *  represented in ascii with '?', and returns a pointer to it.
- 		 *  Note that this method allocates a buffer for the duplicate
- 		 *  string internally and returns it.  The calling program must
- 		 *  deallocate this buffer. */
-		static	char	*duplicate(const wchar_t *str);
+		 *  to an ascii character, replacing characters that can't be
+		 *  represented in ascii with "replacement", and returns a
+		 *  pointer to it.  Note that this method allocates a buffer
+		 *  for the duplicate string internally and returns it.  The
+		 *  calling program must deallocate this buffer. */
+		static	char	*duplicate(const wchar_t *str,
+							char replacement);
 
-		/** Creates a duplicate of the first "len" characters of
+		/** Creates a duplicate of the first "len" wide characters of
 		 *  "str", converting each wide character to an ascii character,
 		 *  replacing characters that can't be represented in ascii
 		 *  with "replacement", and returns a pointer to it.  Note that
@@ -537,15 +546,6 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const wchar_t *str, size_t len,
-							char replacement);
-
-		/** Creates a duplicate "str", converting each wide character
-		 *  to an ascii character, replacing characters that can't be
-		 *  represented in ascii with "replacement", and returns a
-		 *  pointer to it.  Note that this method allocates a buffer
-		 *  for the duplicate string internally and returns it.  The
-		 *  calling program must deallocate this buffer. */
-		static	char	*duplicate(const wchar_t *str,
 							char replacement);
 
 		/** Converts "str" to uppercase. */
@@ -1206,7 +1206,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: wide character sequences will be converted to
+		 *  sequence sof characters of the currently selected character
+		 *  set (eg. selected by the locale) which may be ascii,
+		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char *buffer, size_t len,
 						const char *format, ...);
 
@@ -1229,7 +1234,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: wide character sequences will be converted to
+		 *  sequences of characters of the currently selected character
+		 *  set (eg. selected by the locale) which may be ascii,
+		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char *buffer, size_t len,
 						const char *format,
 						va_list *argp);
@@ -1244,7 +1254,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  If "buffer" is NULL then nothing is written to "buffer" and
 		 *  0 is returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: wide character sequences will be converted to
+		 *  sequences of characters of the currently selected character
+		 *  set (eg. selected by the locale) which may be ascii,
+		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char **buffer,
 						const char *format, ...);
 
@@ -1258,7 +1273,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  If "buffer" is NULL then nothing is written to "buffer" and
 		 *  0 is returned.
 		 *
-		 *  Returns -1 if an error occurred. */
+		 *  Returns -1 if an error occurred.
+		 *
+		 *  NOTE: wide character sequences will be converted to
+		 *  sequences of characters of the currently selected character
+		 *  set (eg. selected by the locale) which may be ascii,
+		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char **buffer,
 						const char *format,
 						va_list *argp);

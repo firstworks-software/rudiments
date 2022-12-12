@@ -4,6 +4,8 @@
 #include <rudiments/stdio.h>
 
 #include <locale.h>
+#include <iconv.h>
+#include <stdio.h>
 
 #include "../test/test.cpp"
 

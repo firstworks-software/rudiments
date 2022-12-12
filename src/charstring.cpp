@@ -283,7 +283,7 @@ char *charstring::replace(const char *str, const char *oldstr,
 		return NULL;
 	}
 	stringbuffer	newstring;
-	size_t		oldstrlen=charstring::length(oldstr);
+	size_t		oldstrlen=length(oldstr);
 	const char	*ptr=str;
 	const char	*start=ptr;
 	while (*ptr) {
@@ -316,7 +316,7 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 	size_t	*oldstrlen=new size_t[i];
 	i=0;
 	for (const char * const *o=oldstrset; *o; o++) {
-		oldstrlen[i]=charstring::length(*o);
+		oldstrlen[i]=length(*o);
 		i++;
 	}
 
@@ -629,7 +629,7 @@ char *charstring::httpUnescape(const char *input) {
 					break;
 				}
 				hex[2]='\0';
-				char	ch=charstring::toInteger(hex,16);
+				char	ch=toInteger(hex,16);
 				(*outptr)=ch;
 			} else {
 				(*outptr)='%';
@@ -671,9 +671,8 @@ void charstring::escape(const char *input, uint64_t inputlength,
 		for (uint64_t inputindex=0;
 				inputindex<inputlength;
 				inputindex++) {
-			if (charstring::contains(characters,
-						input[inputindex]) ||
-					input[inputindex]=='\\') {
+			if (contains(characters,input[inputindex]) ||
+						input[inputindex]=='\\') {
 				if (pass==0) {
 					(*outputlength)++;
 				} else {
@@ -1093,28 +1092,28 @@ char *charstring::append(char *dest, const char *source, size_t len) {
 }
 
 char *charstring::append(char *dest, int64_t number) {
-	char	*str=charstring::parseNumber(number);
+	char	*str=parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
 char *charstring::append(char *dest, uint64_t number) {
-	char	*str=charstring::parseNumber(number);
+	char	*str=parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
 char *charstring::append(char *dest, double number) {
-	char	*str=charstring::parseNumber(number);
+	char	*str=parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
 char *charstring::append(char *dest, double number, uint16_t scale) {
-	char	*str=charstring::parseNumber(number,scale);
+	char	*str=parseNumber(number,scale);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
@@ -1122,7 +1121,7 @@ char *charstring::append(char *dest, double number, uint16_t scale) {
 
 char *charstring::append(char *dest, double number, uint16_t precision,
 							uint16_t scale) {
-	char	*str=charstring::parseNumber(number,precision,scale);
+	char	*str=parseNumber(number,precision,scale);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
@@ -1292,8 +1291,8 @@ int32_t charstring::compareNatural(const char *str1,
 			}
 
 			// copy out the numbers
-			num1=charstring::duplicate(start1,str1-start1);
-			num2=charstring::duplicate(start2,str2-start2);
+			num1=duplicate(start1,str1-start1);
+			num2=duplicate(start2,str2-start2);
 
 			// version-compare the numbers and add that
 			// to the running difference
@@ -1467,7 +1466,7 @@ bool charstring::compareWithWildcards(const char *string,
 					size_t patternlength,
 					char singlewildcard,
 					char multiwildcard) {
-	return compareWithWildcards(string,charstring::length(string),
+	return compareWithWildcards(string,length(string),
 					pattern,patternlength,
 					singlewildcard,multiwildcard);
 }
@@ -1478,7 +1477,7 @@ bool charstring::compareWithWildcards(const char *string,
 					char singlewildcard,
 					char multiwildcard) {
 	return compareWithWildcards(string,stringlength,
-					pattern,charstring::length(pattern),
+					pattern,length(pattern),
 					singlewildcard,multiwildcard);
 }
 
@@ -1486,8 +1485,8 @@ bool charstring::compareWithWildcards(const char *string,
 					const char *pattern,
 					char singlewildcard,
 					char multiwildcard) {
-	return compareWithWildcards(string,charstring::length(string),
-					pattern,charstring::length(pattern),
+	return compareWithWildcards(string,length(string),
+					pattern,length(pattern),
 					singlewildcard,multiwildcard);
 }
 
@@ -1533,12 +1532,12 @@ bool charstring::containsIgnoringCase(const char *haystack, char needle) {
 }
 
 bool charstring::startsWith(const char *haystack, const char *needle) {
-	return !compare(haystack,needle,charstring::length(needle));
+	return !compare(haystack,needle,length(needle));
 }
 
 bool charstring::endsWith(const char *haystack, const char *needle) {
-	size_t	needlelen=charstring::length(needle);
-	size_t	haystacklen=charstring::length(haystack);
+	size_t	needlelen=length(needle);
+	size_t	haystacklen=length(haystack);
 	return (haystacklen>=needlelen &&
 		!compare(haystack+haystacklen-needlelen,needle));
 }
@@ -1549,8 +1548,8 @@ const char *charstring::findFirst(const char *haystack, const char *needle) {
 
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							const char *needle) {
-	size_t	haystacklen=charstring::length(haystack);
-	size_t	needlelen=charstring::length(needle);
+	size_t	haystacklen=length(haystack);
+	size_t	needlelen=length(needle);
 	for (const char *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
@@ -1567,7 +1566,7 @@ const char *charstring::findFirst(const char *haystack, char needle) {
 
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							char needle) {
-	size_t	haystacklen=charstring::length(haystack);
+	size_t	haystacklen=length(haystack);
 	needle=character::toLowerCase(needle);
 	for (const char *ptr=haystack;
 			ptr<haystack+haystacklen;
@@ -1588,7 +1587,7 @@ const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	}
 	const char	*retval=findFirst(haystack,needle);
 	if (!retval) {
-		retval=haystack+charstring::length(haystack);
+		retval=haystack+length(haystack);
 	}
 	return retval;
 	#endif
@@ -1601,7 +1600,7 @@ const char *charstring::findFirstOrEndIgnoringCase(const char *haystack,
 	}
 	const char	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
-		retval=haystack+charstring::length(haystack);
+		retval=haystack+length(haystack);
 	}
 	return retval;
 }
@@ -1613,7 +1612,7 @@ const char *charstring::findFirstOrEnd(const char *haystack,
 	}
 	const char	*retval=findFirst(haystack,needle);
 	if (!retval) {
-		retval=haystack+charstring::length(haystack);
+		retval=haystack+length(haystack);
 	}
 	return retval;
 }
@@ -1625,7 +1624,7 @@ const char *charstring::findFirstOrEndIgnoringCase(const char *haystack,
 	}
 	const char	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
-		retval=haystack+charstring::length(haystack);
+		retval=haystack+length(haystack);
 	}
 	return retval;
 }
@@ -1750,14 +1749,14 @@ char *charstring::findLastOfSetOrEnd(char *haystack, const char *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char	*retval=haystack+charstring::length(haystack);
+	char	*retval=haystack+length(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
 			return retval;
 		}
 	} while (retval>haystack);
-	return haystack+charstring::length(haystack);
+	return haystack+length(haystack);
 }
 
 size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
@@ -1799,7 +1798,7 @@ char *charstring::between(const char *str, const char *start, const char *end) {
 
 	// find the start (or use beginning of "str" if "start" is empty/NULL)
 	const char	*s=NULL;
-	if (charstring::isNullOrEmpty(start)) {
+	if (isNullOrEmpty(start)) {
 		s=str;
 	} else {
 		s=findFirst(str,start);
@@ -1810,12 +1809,12 @@ char *charstring::between(const char *str, const char *start, const char *end) {
 
 	// bump past the start
 	if (s!=str) {
-		s+=charstring::length(start);
+		s+=length(start);
 	}
 
 	// find the end (or use end of "str" if "end" is empty/NULL)
 	const char	*e=NULL;
-	if (charstring::isNullOrEmpty(end)) {
+	if (isNullOrEmpty(end)) {
 		for (e=s; *e; e++) {}
 	} else {
 		e=findFirst(s,end);
@@ -1849,29 +1848,29 @@ char *charstring::duplicate(const char *str, size_t len) {
 	return buffer;
 }
 
-char *charstring::duplicate(const wchar_t *string, size_t length) {
-	return duplicate(string,length,'\0');
-}
-
 char *charstring::duplicate(const wchar_t *string) {
 	return duplicate(string,wcharstring::length(string),'?');
 }
 
-char *charstring::duplicate(const wchar_t *string, size_t length,
-							char replacement) {
-	if (!string) {
-		return NULL;
-	}
-	char	*retval=new char[length+1];
-	for (size_t i=0; i<length; i++) {
-		retval[i]=character::duplicate(string[i],replacement);
-	}
-	retval[length]='\0';
-	return retval;
+char *charstring::duplicate(const wchar_t *string, size_t len) {
+	return duplicate(string,len,'?');
 }
 
 char *charstring::duplicate(const wchar_t *string, char replacement) {
 	return duplicate(string,wcharstring::length(string),replacement);
+}
+
+char *charstring::duplicate(const wchar_t *string, size_t len,
+							char replacement) {
+	if (!string) {
+		return NULL;
+	}
+	char	*retval=new char[len+1];
+	for (size_t i=0; i<len; i++) {
+		retval[i]=character::duplicate(string[i],replacement);
+	}
+	retval[len]='\0';
+	return retval;
 }
 
 void charstring::rightTrim(char *str) {
@@ -2099,8 +2098,7 @@ void charstring::split(const char *string, size_t stringlength,
 						// between the last delimiter
 						// and here
 						(*list)[ll]=
-							charstring::duplicate(
-								start,
+							duplicate(start,
 								current-start);
 					}
 
@@ -2193,7 +2191,7 @@ void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
 
 	// handle 0-length input
 	if (!inputsize) {
-		*output=charstring::duplicate("");
+		*output=duplicate("");
 		*outputlength=0;
 		return;
 	}
@@ -2330,7 +2328,7 @@ void charstring::base64Decode(const char *input, uint64_t inputlength,
 
 	// handle 0-length input
 	if (!inputlength) {
-		*output=(unsigned char *)charstring::duplicate("");
+		*output=(unsigned char *)duplicate("");
 		*outputsize=0;
 		return;
 	}
@@ -2404,7 +2402,7 @@ void charstring::quotedPrintableEncode(const unsigned char *input,
 
 	// handle 0-length input
 	if (!inputsize) {
-		*output=charstring::duplicate("");
+		*output=duplicate("");
 		*outputlength=0;
 		return;
 	}
@@ -2461,7 +2459,7 @@ void charstring::quotedPrintableDecode(const char *input,
 
 	// handle 0-length input
 	if (!inputlength) {
-		*output=(unsigned char *)charstring::duplicate("");
+		*output=(unsigned char *)duplicate("");
 		*outputsize=0;
 		return;
 	}
@@ -2596,7 +2594,7 @@ void charstring::hexEncode(const unsigned char *input, uint64_t inputsize,
 
 	// handle 0-length input
 	if (!inputsize) {
-		*output=charstring::duplicate("");
+		*output=duplicate("");
 		*outputlength=0;
 		return;
 	}
@@ -2635,7 +2633,7 @@ void charstring::hexDecode(const char *input, uint64_t inputlength,
 
 	// handle 0-length input
 	if (!inputlength) {
-		*output=(unsigned char *)charstring::duplicate("");
+		*output=(unsigned char *)duplicate("");
 		*outputsize=0;
 		return;
 	}
@@ -2723,7 +2721,7 @@ char *charstring::pad(const char *str, char padchar,
 
 	newstring=new char[totallength+1];
 	if (strlen>=totallength) {
-		charstring::copy(newstring,str,totallength);
+		copy(newstring,str,totallength);
 		newstring[totallength]=0;
 		return newstring;
 	}
@@ -2733,13 +2731,13 @@ char *charstring::pad(const char *str, char padchar,
 
 	if (direction<0) {
 		// pad left
-		charstring::copy(&newstring[totallength-strlen],str,strlen);
+		copy(&newstring[totallength-strlen],str,strlen);
 	} else if (direction>0) {
 		// pad right
-		charstring::copy(newstring,str,strlen);
+		copy(newstring,str,strlen);
 	} else {
 		// pad center
-		charstring::copy(&newstring[(totallength-strlen)/2],str,strlen);
+		copy(&newstring[(totallength-strlen)/2],str,strlen);
 	}
 
 	return newstring;
@@ -2865,7 +2863,7 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 	if (!scratch) {
 
 		// first try the null device
-		scratchfile=charstring::duplicate(
+		scratchfile=duplicate(
 					#if defined(_WIN32)
 						"\Device\Null"
 					#elif defined(__VMS)
@@ -2890,9 +2888,8 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 		// if that fails then try /tmp/scratch.pid
 		if (!scratch) {
 			scratchfile=new char[20];
-			charstring::copy(scratchfile,"/tmp/scratch.");
-			charstring::append(scratchfile,
-					(uint64_t)process::getProcessId());
+			copy(scratchfile,"/tmp/scratch.");
+			append(scratchfile,(uint64_t)process::getProcessId());
 			scratch=fopen(scratchfile,"w+");
 			if (scratch) {
 				process::atExit((void (*)(void))removeScratch);
@@ -2928,7 +2925,7 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 					byteswritten+1:len;
 
 	// copy what we can back to "buffer"
-	charstring::copy(buffer,safebuffer,bytestocopy);
+	copy(buffer,safebuffer,bytestocopy);
 
 	// clean up
 	delete[] safebuffer;
@@ -2992,11 +2989,11 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		if (buf==b) {
 			if ((size_t)size>len) {
 				// just copy out what we can
-				charstring::copy(buffer,buf,len);
+				copy(buffer,buf,len);
 			} else {
 				// copy out everything, including
 				// the NULL terminator
-				charstring::copy(buffer,buf,size+1);
+				copy(buffer,buf,size+1);
 			}
 		}
 		return size;
@@ -3045,11 +3042,11 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		if (size>-1) {
 			if ((size_t)(size+1)>len) {
 				// just copy out what we can
-				charstring::copy(buffer,buf,len);
+				copy(buffer,buf,len);
 			} else {
 				// copy out everything, including
 				// the NULL terminator
-				charstring::copy(buffer,buf,size+1);
+				copy(buffer,buf,size+1);
 			}
 			delete[] buf;
 			break;
@@ -3094,11 +3091,11 @@ ssize_t charstring::printf(char **buffer, const char *format, va_list *argp) {
 	// yourself.  Using *buffer here works around that.
 	va_list	argp1;
 	va_copy(argp1,*argp);
-	ssize_t	size=charstring::printf(*buffer,0,format,argp);
+	ssize_t	size=printf(*buffer,0,format,argp);
 	va_end(*argp);
 	if (size!=-1) {
 		*buffer=new char[size+1];
-		size=charstring::printf(*buffer,size+1,format,&argp1);
+		size=printf(*buffer,size+1,format,&argp1);
 	}
 	va_end(argp1);
 	return size;

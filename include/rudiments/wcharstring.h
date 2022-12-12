@@ -544,19 +544,12 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  calling program must deallocate this buffer. */
 		static	wchar_t	*duplicate(const wchar_t *str);
 
-		/** Creates a duplicate of the first "len" characters of
+		/** Creates a duplicate of the first "len" wide characters of
 		 *  "str" and returns a pointer to it.  Note that this
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
 		static	wchar_t	*duplicate(const wchar_t *str, size_t len);
-
-		/** Creates a duplicate of the first "len" characters of
-		 *  "str", converts it to a wide string, and returns a pointer
-		 *  to it.  Note that this method allocates a buffer for the
-		 *  duplicate string internally and returns it.  The calling
-		 *  program must deallocate this buffer. */
-		static	wchar_t	*duplicate(const char *str, size_t len);
 
 		/** Creates a duplicate of "str", converts it to a wide string,
 		 *  and returns a pointer to it.  Note that this method
@@ -564,6 +557,13 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  and returns it.  The calling program must deallocate this
 		 *  buffer. */
 		static	wchar_t	*duplicate(const char *str);
+
+		/** Creates a duplicate of the first "len" wide characters of
+		 *  "str", converts it to a wide string, and returns a pointer
+		 *  to it.  Note that this method allocates a buffer for the
+		 *  duplicate string internally and returns it.  The calling
+		 *  program must deallocate this buffer. */
+		static	wchar_t	*duplicate(const char *str, size_t len);
 
 		/** Converts "str" to uppercase. */
 		static	void	upper(wchar_t *str); 
@@ -1075,6 +1075,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  NOTE: non-wide character sequences will be converted to
+		 *  sequences of wide characters.
+		 *
 		 *  NOTE: This method is unsupported on platforms where
 		 *  supportsPrintf() returns false.  On those platforms this
 		 *  method returns -1 and sets ENOSYS. */
@@ -1102,6 +1105,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  NOTE: non-wide character sequences will be converted to
+		 *  sequences of wide characters.
+		 *
 		 *  NOTE: This method is unsupported on platforms where
 		 *  supportsPrintf() returns false.  On those platforms this
 		 *  method returns -1 and sets ENOSYS. */
@@ -1121,6 +1127,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  NOTE: non-wide character sequences will be converted to
+		 *  sequences of wide characters.
+		 *
 		 *  NOTE: This method is unsupported on platforms where
 		 *  supportsPrintf() returns false.  On those platforms this
 		 *  method returns -1 and sets ENOSYS. */
@@ -1139,6 +1148,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  NOTE: non-wide character sequences will be converted to
+		 *  sequences of wide characters.
+		 *
 		 *  NOTE: This method is unsupported on platforms where
 		 *  supportsPrintf() returns false.  On those platforms this
 		 *  method returns -1 and sets ENOSYS. */
@@ -1147,7 +1159,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 						va_list *argp);
 
 		/** Returns true if the platform supports wide characters and
-		 *  rudiments was build with wide character support and false
+		 *  rudiments was built with wide character support and false
 		 *  otherwise. */
 		static bool	supportsPrintf();
 

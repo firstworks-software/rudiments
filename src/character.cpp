@@ -3,6 +3,8 @@
 
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/error.h>
+#include <rudiments/filedescriptor.h>
 
 #ifdef RUDIMENTS_HAVE_CTYPE_H
 	#include <ctype.h>
@@ -146,15 +148,23 @@ char character::duplicate(wchar_t c) {
 }
 
 char character::duplicate(wchar_t c, char replacement) {
-	char	retval[4];
-	bytestring::zero(retval,sizeof(retval));
+
+	// NOTE: MB_CUR_MAX is not a constant, but rather a macro that expands
+	// to an integer expression.  It also varies with the locale.  There
+	// are platforms that don't provide it though (platforms that don't
+	// provide wctomb/wcrtomb), and 4 is probably safe on those platforms.
+	#ifndef MB_CUR_MAX
+		#define MB_CUR_MAX 4
+	#endif
+	char	*mb=new char[MB_CUR_MAX];
+	bytestring::zero(mb,sizeof(mb));
 	size_t	s;
 	#if defined(RUDIMENTS_HAVE_WCRTOMB)
 		mbstate_t	st;
 		bytestring::zero(&st,sizeof(st));
-		s=wcrtomb(retval,c,&st);
+		s=wcrtomb(mb,c,&st);
 	#elif defined(RUDIMENTS_HAVE_WCTOMB)
-		s=wctomb(retval,c);
+		s=wctomb(mb,c);
 	#else
 		// This will only work if the first 256 characters of the
 		// source and target character set are equivalent.
@@ -163,20 +173,22 @@ char character::duplicate(wchar_t c, char replacement) {
 		// but I bet I'll be back here tweaking this some day.
 		if (c<256) {
 			s=0;
-			retval[0]=c;
+			mb[0]=c;
 		} else {
 			s=(size_t)-1;
 		}
 	#endif
 	// We're attempting to convert a wide character to a regular
 	// character, but it's possible that the wide character was
-	// only representable by a multi-byte character.  If that
-	// ends up being the case, then just return the replacement
+	// only representable by a multi-byte character in the current locale.
+	// If that ends up being the case, then just return the replacement
 	// character.
-	if (s==(size_t)-1 || retval[1] || retval[2] || retval[3]) {
+	char	retval=mb[0];
+	delete[] mb;
+	if (s==(size_t)-1 || s>1) {
 		return replacement;
 	}
-	return retval[0];
+	return retval;
 }
 
 bool character::duplicateFromWideCharacterNeedsMutex() {

@@ -3639,8 +3639,31 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	wchar_t	*buffer=NULL;
 	size=wcharstring::printf(&buffer,format,argp);
 
-	// write the buffer to the file descriptor
-	write(buffer,size);
+	// To emulate what vfwprintf() does, the buffer needs to be converted
+	// to the character set specified by the current locale, before being
+	// written out.  There are various options for doing this, but 
+	// unfortunately none of them give the exact same results as vfwprintf()
+	// on all platforms.  Eg. they don't transliterate characters or return
+	// ?'s for unconvertable characters.
+	//
+	// My charstring::duplicate() method currently only converts to ascii,
+	// rather than to proper multibyte sequences, so I can't really use it
+	// at the moment, but I'll save the code just in case.
+	//
+	// Using printf(const char *format,...) at least gives results that are
+	// consistent with calling printf(const char *format) directly, if not
+	// vfwprintf(), so we'll go with that for now.
+	#if 0
+	// convert the buffer to the current locale
+	// and write it to the file descriptor
+	char	*convertedbuffer=charstring::duplicate(buffer,(size_t)size,'?');
+	size=write(convertedbuffer);
+	delete[] convertedbuffer;
+	#else
+	// print the buffer to the filedescriptor
+	// (converting to the current locale during the process)
+	size=printf("%ls",buffer);
+	#endif
 
 	// clean up
 	delete[] buffer;
