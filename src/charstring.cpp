@@ -2863,7 +2863,7 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 	if (!scratch) {
 
 		// first try the null device
-		scratchfile=duplicate(
+		scratchfile=charstring::duplicate(
 					#if defined(_WIN32)
 						"\Device\Null"
 					#elif defined(__VMS)
@@ -2888,8 +2888,9 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 		// if that fails then try /tmp/scratch.pid
 		if (!scratch) {
 			scratchfile=new char[20];
-			copy(scratchfile,"/tmp/scratch.");
-			append(scratchfile,(uint64_t)process::getProcessId());
+			charstring::copy(scratchfile,"/tmp/scratch.");
+			charstring::append(scratchfile,
+					(uint64_t)process::getProcessId());
 			scratch=fopen(scratchfile,"w+");
 			if (scratch) {
 				process::atExit((void (*)(void))removeScratch);
@@ -2925,7 +2926,7 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 					byteswritten+1:len;
 
 	// copy what we can back to "buffer"
-	copy(buffer,safebuffer,bytestocopy);
+	charstring::copy(buffer,safebuffer,bytestocopy);
 
 	// clean up
 	delete[] safebuffer;
