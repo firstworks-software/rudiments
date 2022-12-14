@@ -53,11 +53,11 @@ int main(int argc, char **argv) {
 		NULL
 	};
 	const char	*descriptions[]={
-		"\"Hello!\" in english (UCS-2/4 encoded text)",
+		"\"Hello!\" in english (wide string)",
 		"\"Hello!\" in english (UCS-2/4 hex)",
-		"\"Chairete!\" in greek (UCS-2/4 encoded text)",
+		"\"Chairete!\" in greek (wide string)",
 		"\"Chairete!\" in greek (UCS-2/4 hex)",
-		"\"Privet!\" in cyrillic (UCS-2/4 encoded text)",
+		"\"Privet!\" in cyrillic (wide string)",
 		"\"Privet!\" in cyrillic (UCS-2/4 hex)",
 		NULL
 	};
