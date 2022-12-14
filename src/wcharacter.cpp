@@ -36,10 +36,6 @@ bool wcharacter::isAlphabetical(int32_t c) {
 	#endif
 }
 
-bool wcharacter::isAlphabeticalExtended(int32_t c) {
-	return character::isAlphabeticalExtended(character::duplicate(c));
-}
-
 bool wcharacter::isControlCharacter(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswcntrl(c)!=0;
@@ -62,10 +58,6 @@ bool wcharacter::isLowerCase(int32_t c) {
 	#else
 		return character::isLowerCase(character::duplicate(c));
 	#endif
-}
-
-bool wcharacter::isLowerCaseExtended(int32_t c) {
-	return character::isLowerCaseExtended(character::duplicate(c));
 }
 
 bool wcharacter::isPrintableNonSpace(int32_t c) {
@@ -98,10 +90,6 @@ bool wcharacter::isUpperCase(int32_t c) {
 	#else
 		return character::isUpperCase(character::duplicate(c));
 	#endif
-}
-
-bool wcharacter::isUpperCaseExtended(int32_t c) {
-	return character::isUpperCaseExtended(character::duplicate(c));
 }
 
 bool wcharacter::isHexDigit(int32_t c) {

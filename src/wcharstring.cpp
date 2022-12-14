@@ -912,8 +912,7 @@ bool wcharstring::isYes(const wchar_t *string) {
 	} else {
 		return false;
 	}
-	return (!next || (!wcharacter::isAlphanumeric(next) && 
-				!wcharacter::isAlphabeticalExtended(next)));
+	return (!next || !wcharacter::isAlphanumeric(next));
 }
 
 bool wcharstring::isNo(const wchar_t *string) {
@@ -933,8 +932,7 @@ bool wcharstring::isNo(const wchar_t *string) {
 	} else {
 		return false;
 	}
-	return (!next || (!wcharacter::isAlphanumeric(next) && 
-				!wcharacter::isAlphabeticalExtended(next)));
+	return (!next || !wcharacter::isAlphanumeric(next));
 }
 
 void wcharstring::zero(wchar_t *str, size_t length) {

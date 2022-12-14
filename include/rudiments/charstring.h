@@ -12,7 +12,11 @@
  *  In addition to some unique methods, analogs for the standard C string
  *  functions are provided.  However, unlike the standard C string functions,
  *  the charstring methods are NULL safe.  Your application will not crash if a
- *  NULL is passed in, and instead, will give intuitive results. */
+ *  NULL is passed in, and instead, will give intuitive results.
+ *
+ *  Note that some method of this class expect to operate on strings encoded
+ *  using ASCII or extended ASCII, and may give unexpected results for
+ *  differently-encoded strings. */
 class RUDIMENTS_DLLSPEC charstring {
 	public:
 
@@ -32,7 +36,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "1" and false otherwise.
 		 *
 		 *  (Eg. returns true for "Yes,", "True ", and "1 2 3" but
-		 *  returns false for "Yesterday", "Truest", and "123") */
+		 *  returns false for "Yesterday", "Truest", and "123")
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	bool	isYes(const char *string);
 
 		/** Returns true if "string" starts with the standalone word:
@@ -40,7 +48,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "0" and false otherwise.
 		 *
 		 *  (Eg. returns true for "No,", "False ", and "0 1 2" but
-		 *  returns false for "Nothing", "Falsest", and "012") */
+		 *  returns false for "Nothing", "Falsest", and "012")
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	bool	isNo(const char *string);
 
 		/** Sets "len" characters of "str" to NULL. */
@@ -152,7 +164,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 * less than "str2".
 		 *
 		 * Embedded (version) numbers will be interpreted "naturally"
-		 * (eg. 12 > 8) */
+		 * (eg. 12 > 8)
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	int32_t	compareNatural(const char *str1,
 						const char *str2);
 
@@ -165,14 +181,22 @@ class RUDIMENTS_DLLSPEC charstring {
 		 * "delimiters" should be set to the set of characters that
 		 * will be interpreted as equivalent delimiters.  Eg. "._"
 		 * means that either .'s or _'s may be used to delimit
-		 * numbers. */
+		 * numbers.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	int32_t	compareNatural(const char *str1,
 						const char *str2,
 						const char *delimiters);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2", where "str1" and "str2" are version
-		 * numbers with arbitrary numbers of decimal delimiters. */
+		 * numbers with arbitrary numbers of decimal delimiters.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	int32_t	compareVersions(const char *str1,
 						const char *str2);
 
@@ -183,7 +207,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 * "delimiters" should be set to the set of characters that
 		 * will be interpreted as equivalent delimiters.  Eg. "._"
 		 * means that either .'s or _'s may be used to delimiters
-		 * numbers. */
+		 * numbers.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	int32_t	compareVersions(const char *str1,
 						const char *str2,
 						const char *delimiters);
@@ -513,49 +541,67 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*duplicate(const char *str, size_t len);
 
 		/** Creates a duplicate "str", converting each wide character
- 		 *  to an ascii character, replacing characters that can't be
- 		 *  represented in ascii with '?', and returns a pointer to it.
- 		 *  Note that this method allocates a buffer for the duplicate
- 		 *  string internally and returns it.  The calling program must
- 		 *  deallocate this buffer. */
+ 		 *  to an ASCII character, replacing characters that can't be
+ 		 *  represented in ASCII with an ASCII '?', and returns a
+ 		 *  pointer to it.  Note that this method allocates a buffer
+ 		 *  for the duplicate string internally and returns it.  The
+ 		 *  calling program must deallocate this buffer. */
 		static	char	*duplicate(const wchar_t *str);
 
 		/** Creates a duplicate of the first "len" wide characters of
-		 *  "str", converting each wide character to an ascii
-		 *  character, replacing characters that can't be represented
-		 *  in ascii with '?', and returns a pointer to it.  Note that
-		 *  this method allocates a buffer for the duplicate string
-		 *  internally and returns it.  The calling program must
+		 *  "str", converting each wide character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented '?', and returns a
+		 *  pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const wchar_t *str, size_t len);
 
-		/** Creates a duplicate "str", converting each wide character
-		 *  to an ascii character, replacing characters that can't be
-		 *  represented in ascii with "replacement", and returns a
-		 *  pointer to it.  Note that this method allocates a buffer
-		 *  for the duplicate string internally and returns it.  The
-		 *  calling program must deallocate this buffer. */
+		/** Creates a duplicate of "str", converting each wide character
+		 *  to a character per the character set of the current locale,
+		 *  replacing characters that can't be represented with
+		 *  "replacement", and returns a pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
 		static	char	*duplicate(const wchar_t *str,
 							char replacement);
 
 		/** Creates a duplicate of the first "len" wide characters of
-		 *  "str", converting each wide character to an ascii character,
-		 *  replacing characters that can't be represented in ascii
-		 *  with "replacement", and returns a pointer to it.  Note that
-		 *  this method allocates a buffer for the duplicate string
-		 *  internally and returns it.  The calling program must
+		 *  "str", converting each wide character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented with "replacement",
+		 *  and returns a pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const wchar_t *str, size_t len,
 							char replacement);
 
-		/** Converts "str" to uppercase. */
+		/** Converts "str" to uppercase.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	void	upper(char *str); 
 
-		/** Converts "str" to lowercase. */
+		/** Converts "str" to lowercase.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	void	lower(char *str); 
 
 		/** Captitalizes "str", converting characters to upper
-		 *  or lower case as necessary. */
+		 *  or lower case as necessary.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static void	capitalize(char *str);
 
 		/** Trims all spaces off of the right hand side of "str". */
@@ -857,7 +903,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  (Currently only supported on linux/unix platforms that
 		 *  provide the locale.h header.  On other platforms, it just
 		 *  falls through to toFloat().)
-		 */
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	long double	toFloatC(const char *string);
 
 		/** Converts "string" to a floating point number.  If
@@ -867,18 +916,30 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char **endptr);
 
 		/** Converts "amount" which is assumed to be a dollar amount
-		 *  into pennies. */
+		 *  into pennies.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	int64_t	convertAmount(const char *amount);
 
 		/** Converts "amount" which is assumed to be a number of
- 		 *  pennies into a dollar amount string. */
+ 		 *  pennies into a dollar amount string.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	char	*convertAmount(int64_t amount);
 
 		/** Converts "amount" which is assumed to be a number of
  		 *  pennies into a dollar amount string where there
  		 *  are "padding" places between the dollar sign and decimal
  		 *  point.   These will be space padded if the amount is
- 		 *  small enough not to fill them.  */
+ 		 *  small enough not to fill them.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	char	*convertAmount(int64_t amount,
 						uint16_t padding);
 
@@ -1047,18 +1108,30 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Moves leading spaces to the end of "str" for
 		 *  "len" characters.
 		 *
-		 *  Example: "   hello   " -> "hello      " */
+		 *  Example: "   hello   " -> "hello      " 
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	void	leftJustify(char *str, int32_t len);
 
 		/** Moves trailing spaces to the beginning of "str" for
 		 *  "len" characters.
 		 *  
-		 *  Example: "   hello   " -> "      hello"  */
+		 *  Example: "   hello   " -> "      hello"
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	void	rightJustify(char *str, int32_t len);
 
 		/** Centers the text of "str" for "len" characters.
 		 *
-		 *  Example: "hello      " -> "   hello   "  */
+		 *  Example: "hello      " -> "   hello   "
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using ASCII or extended ASCII, and may give unexpected
+		 *  results for differently-encoded strings. */
 		static	void	center(char *str, int32_t len);
 
 		/** Returns a copy of "string", padded with "padchar" to a
@@ -1210,8 +1283,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  NOTE: wide character sequences will be converted to
 		 *  sequence sof characters of the currently selected character
-		 *  set (eg. selected by the locale) which may be ascii,
-		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
+		 *  set (eg. selected by the locale) which may be ASCII,
+		 *  extended ASCII (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char *buffer, size_t len,
 						const char *format, ...);
 
@@ -1238,8 +1311,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  NOTE: wide character sequences will be converted to
 		 *  sequences of characters of the currently selected character
-		 *  set (eg. selected by the locale) which may be ascii,
-		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
+		 *  set (eg. selected by the locale) which may be ASCII,
+		 *  extended ASCII (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char *buffer, size_t len,
 						const char *format,
 						va_list *argp);
@@ -1258,8 +1331,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  NOTE: wide character sequences will be converted to
 		 *  sequences of characters of the currently selected character
-		 *  set (eg. selected by the locale) which may be ascii,
-		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
+		 *  set (eg. selected by the locale) which may be ASCII,
+		 *  extended ASCII (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char **buffer,
 						const char *format, ...);
 
@@ -1277,8 +1350,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  NOTE: wide character sequences will be converted to
 		 *  sequences of characters of the currently selected character
-		 *  set (eg. selected by the locale) which may be ascii,
-		 *  extended ascii (eg. Latin 15), or multibyte (eg. UTF8). */
+		 *  set (eg. selected by the locale) which may be ASCII,
+		 *  extended ASCII (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char **buffer,
 						const char *format,
 						va_list *argp);

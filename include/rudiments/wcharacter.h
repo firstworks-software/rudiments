@@ -18,26 +18,11 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *  and false otherwise. */
 		static bool	isAlphabetical(int32_t c);
 
-		/** Returns true if "c" is alphabetical character, including
-		 *  accented alphabetical characters from the extended ascii
-		 *  character set, and false otherwise. */
-		static bool	isAlphabeticalExtended(int32_t c);
-
 		/** Returns true if "c" is lower case and false otherwise. */
 		static bool	isLowerCase(int32_t c);
 
-		/** Returns true if "c" is lower case, including
-		 *  accented alphabetical characters from the extended ascii
-		 *  character set, and false otherwise. */
-		static bool	isLowerCaseExtended(int32_t c);
-
 		/** Returns true if "c" is upper case and false otherwise. */
 		static bool	isUpperCase(int32_t c);
-
-		/** Returns true if "c" is upper case, including
-		 *  accented alphabetical characters from the extended ascii
-		 *  character set, and false otherwise. */
-		static bool	isUpperCaseExtended(int32_t c);
 
 		/** Returns true if "c" is a printable character that is not
 		 *  a space or alphanumeric character and false otherwise. */
@@ -71,7 +56,7 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		static bool	isWhitespace(int32_t c);
 
 		/** Returns true if "c" is one of the values
-		 *  in the ascii character set or false otherwise. */
+		 *  in the ASCII character set or false otherwise. */
 		static bool	isAscii(int32_t c);
 
 		/** Returns the upper case version of "c". */
@@ -88,8 +73,9 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *  characters in "set" and false otherwise. */
 		static bool	inSet(wchar_t c, const wchar_t *set);
 
-		/** Returns the wide character representation of
-		 *  character "c". */
+		/** Returns the wide character representation of character "c"
+		 *  as interpreted by the character set of the current
+		 *  locale. */
 		static wchar_t	duplicate(char c);
 
 		/** Returns true if the duplicate methods that convert to a
