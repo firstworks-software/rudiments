@@ -14,13 +14,17 @@
  *  the charstring methods are NULL safe.  Your application will not crash if a
  *  NULL is passed in, and instead, will give intuitive results.
  *
- *  Note that some method of this class expect to operate on strings encoded
+ *  Note that meny method of this class expect to operate on strings encoded
  *  using ASCII or extended ASCII, and may give unexpected results for
  *  differently-encoded strings. */
 class RUDIMENTS_DLLSPEC charstring {
 	public:
 
-		/** Returns the number of characters in "string". */
+		/** Returns the number of characters in "string".
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using a single-byte encoding, and will give unexpected
+		 *  results for multi-byte-encoded strings. */
 		static	size_t	length(const char *string);
 
 		/** Returns the number of bytes in "string", including the
@@ -55,7 +59,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  results for differently-encoded strings. */
 		static	bool	isNo(const char *string);
 
-		/** Sets "len" characters of "str" to NULL. */
+		/** Sets "len" characters of "str" to NULL.
+		 *
+		 *  Note that this method expects to operate on strings encoded
+		 *  using a single-byte encoding, and will give unexpected
+		 *  results for multi-byte-encoded strings. */
 		static	void	zero(char *str, size_t len);
 
 		/** Appends "source" to "dest".  Assumes that there is
