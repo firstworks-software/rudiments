@@ -3,6 +3,7 @@
 
 #include <rudiments/charstring.h>
 #include <rudiments/wcharstring.h>
+#include <rudiments/ucs2charstring.h>
 
 
 inline
@@ -33,6 +34,12 @@ ssize_t filedescriptor::write(wchar_t character) {
 }
 
 inline
+ssize_t filedescriptor::write(char16_t character) {
+	return highLevelWrite((const unsigned char *)&character,
+							sizeof(char16_t));
+}
+
+inline
 ssize_t filedescriptor::write(bool value) {
 	return highLevelWrite((const unsigned char *)&value,sizeof(bool));
 }
@@ -55,6 +62,12 @@ ssize_t filedescriptor::write(const wchar_t *string) {
 }
 
 inline
+ssize_t filedescriptor::write(const char16_t *string) {
+	return highLevelWrite((const unsigned char *)string,
+			ucs2charstring::length(string)*sizeof(char16_t));
+}
+
+inline
 ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
 	return highLevelWrite((const unsigned char *)string,size);
 }
@@ -68,6 +81,12 @@ inline
 ssize_t filedescriptor::write(const wchar_t *string, size_t length) {
 	return highLevelWrite((const unsigned char *)string,
 					length*sizeof(wchar_t));
+}
+
+inline
+ssize_t filedescriptor::write(const char16_t *string, size_t length) {
+	return highLevelWrite((const unsigned char *)string,
+					length*sizeof(char16_t));
 }
 
 inline
@@ -105,6 +124,12 @@ ssize_t filedescriptor::write(wchar_t character, int32_t sec, int32_t usec) {
 }
 
 inline
+ssize_t filedescriptor::write(char16_t character, int32_t sec, int32_t usec) {
+	return highLevelWrite((const unsigned char *)&character,
+					sizeof(char16_t),sec,usec);
+}
+
+inline
 ssize_t filedescriptor::write(bool value, int32_t sec, int32_t usec) {
 	return highLevelWrite((const unsigned char *)&value,
 					sizeof(bool),sec,usec);
@@ -130,6 +155,13 @@ ssize_t filedescriptor::write(const wchar_t *string, size_t length,
 }
 
 inline
+ssize_t filedescriptor::write(const char16_t *string, size_t length,
+						int32_t sec, int32_t usec) {
+	return highLevelWrite((const unsigned char *)string,
+					length*sizeof(char16_t),sec,usec);
+}
+
+inline
 ssize_t filedescriptor::write(const unsigned char *string,
 						int32_t sec, int32_t usec) {
 	return highLevelWrite(string,
@@ -147,6 +179,13 @@ ssize_t filedescriptor::write(const wchar_t *string,
 					int32_t sec, int32_t usec) {
 	return highLevelWrite((const unsigned char *)string,
 			wcharstring::length(string)*sizeof(wchar_t),sec,usec);
+}
+
+inline
+ssize_t filedescriptor::write(const char16_t *string,
+					int32_t sec, int32_t usec) {
+	return highLevelWrite((const unsigned char *)string,
+		ucs2charstring::length(string)*sizeof(char16_t),sec,usec);
 }
 
 inline
@@ -181,6 +220,11 @@ ssize_t filedescriptor::read(wchar_t *buffer) {
 }
 
 inline
+ssize_t filedescriptor::read(char16_t *buffer) {
+	return highLevelRead((unsigned char *)buffer,sizeof(char16_t));
+}
+
+inline
 ssize_t filedescriptor::read(bool *buffer) {
 	return highLevelRead((unsigned char *)buffer,sizeof(bool));
 }
@@ -198,6 +242,11 @@ ssize_t filedescriptor::read(char *buffer, size_t length) {
 inline
 ssize_t filedescriptor::read(wchar_t *buffer, size_t length) {
 	return highLevelRead((unsigned char *)buffer,length*sizeof(wchar_t));
+}
+
+inline
+ssize_t filedescriptor::read(char16_t *buffer, size_t length) {
+	return highLevelRead((unsigned char *)buffer,length*sizeof(char16_t));
 }
 
 inline
@@ -241,6 +290,11 @@ ssize_t filedescriptor::read(wchar_t *buffer, int32_t sec, int32_t usec) {
 }
 
 inline
+ssize_t filedescriptor::read(char16_t *buffer, int32_t sec, int32_t usec) {
+	return highLevelRead((unsigned char *)buffer,sizeof(char16_t),sec,usec);
+}
+
+inline
 ssize_t filedescriptor::read(bool *buffer, int32_t sec, int32_t usec) {
 	return highLevelRead((unsigned char *)buffer,sizeof(bool),sec,usec);
 }
@@ -262,6 +316,13 @@ ssize_t filedescriptor::read(wchar_t *buffer, size_t length,
 						int32_t sec, int32_t usec) {
 	return highLevelRead((unsigned char *)buffer,
 				length*sizeof(wchar_t),sec,usec);
+}
+
+inline
+ssize_t filedescriptor::read(char16_t *buffer, size_t length,
+						int32_t sec, int32_t usec) {
+	return highLevelRead((unsigned char *)buffer,
+				length*sizeof(char16_t),sec,usec);
 }
 
 inline

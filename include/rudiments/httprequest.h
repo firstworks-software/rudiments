@@ -230,6 +230,36 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  will have been processed internally. */
 		ssize_t	read(wchar_t *character);
 
+		/** Reads "length" characters from the data posted by the
+		 *  client into "buffer".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(char16_t *buffer, size_t length);
+
+		/** Reads a character from the data posted by the client into
+		 *  "character".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Note that all read() methods return 0 (EOF) when the
+		 *  REQUEST_METHOD environment vairable is "get" or "head", as
+		 *  no data will have been posted, or when the REQUEST_METHOD
+		 *  environment variable is "post" and the CONTENT_TYPE
+		 *  environment variable is either
+		 *  "application/x-www-form-urlencoded" or
+		 *  "multipart-form-data", as in those cases, the posted data
+		 *  will have been processed internally. */
+		ssize_t	read(char16_t *character);
+
 		/** Reads a 16-bit integer from the data posted by the client
 		 *  into "number".
 		 *  Returns the number of bytes that were successfully read or

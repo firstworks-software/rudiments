@@ -730,6 +730,14 @@ ssize_t	httprequest::read(wchar_t *character) {
 	return pvt->_sapi->read(character);
 }
 
+ssize_t	httprequest::read(char16_t *buffer, size_t length) {
+	return pvt->_sapi->read(buffer,length);
+}
+
+ssize_t	httprequest::read(char16_t *character) {
+	return pvt->_sapi->read(character);
+}
+
 ssize_t	httprequest::read(int16_t *number) {
 	return pvt->_sapi->read(number);
 }

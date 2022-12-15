@@ -55,6 +55,14 @@ ssize_t cgihttpserverapi::read(wchar_t *character) {
 	return stdinput.read(character);
 }
 
+ssize_t cgihttpserverapi::read(char16_t *buffer, size_t length) {
+	return stdinput.read(buffer,length);
+}
+
+ssize_t cgihttpserverapi::read(char16_t *character) {
+	return stdinput.read(character);
+}
+
 ssize_t cgihttpserverapi::read(int16_t *number) {
 	return stdinput.read(number);
 }
@@ -280,6 +288,18 @@ ssize_t	cgihttpserverapi::write(wchar_t character) {
 	return stdoutput.write(character);
 }
 
+ssize_t	cgihttpserverapi::write(const char16_t *string) {
+	return stdoutput.write(string);
+}
+
+ssize_t	cgihttpserverapi::write(const char16_t *string, size_t size) {
+	return stdoutput.write(string,size);
+}
+
+ssize_t	cgihttpserverapi::write(char16_t character) {
+	return stdoutput.write(character);
+}
+
 ssize_t	cgihttpserverapi::write(int16_t number) {
 	return stdoutput.printf("%hd",number);
 }
@@ -316,10 +336,17 @@ ssize_t	cgihttpserverapi::write(double number) {
 	return stdoutput.printf("%f",number);
 }
 
-ssize_t cgihttpserverapi::printfDelegate(const char *format, va_list *argp) {
+ssize_t cgihttpserverapi::printfDelegate(
+				const char *format, va_list *argp) {
 	return stdoutput.printf(format,argp);
 }
 
-ssize_t cgihttpserverapi::printfDelegate(const wchar_t *format, va_list *argp) {
+ssize_t cgihttpserverapi::printfDelegate(
+				const wchar_t *format, va_list *argp) {
+	return stdoutput.printf(format,argp);
+}
+
+ssize_t cgihttpserverapi::printfDelegate(
+				const char16_t *format, va_list *argp) {
 	return stdoutput.printf(format,argp);
 }

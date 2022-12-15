@@ -112,23 +112,23 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  pointer to "dest". */
 		static	char	*copy(char *dest, const char *source);
 
-		/** Replaces the first "length" characters of "dest" with
-		 *  "source".  Assumes that "dest" is at least "size" bytes
+		/** Replaces the first "len" characters of "dest" with
+		 *  "source".  Assumes that "dest" is at least "len" characters
 		 *  long.  Returns a pointer to "dest". */
 		static	char	*copy(char *dest,
 					const char *source, size_t len);
 
-		/** Replaces "dest" with "source", starting "location" bytes
-		 *  into "dest".  Assumes that there is enough room in "dest"
-		 *  (after "location" bytes) to accommodate "source".  Returns
-		 *  a pointer to "dest". */
+		/** Replaces "dest" with "source", starting "location"
+		 *  characters into "dest".  Assumes that there is enough room
+		 *  in "dest" (after "location" characters) to accommodate
+		 *  "source".  Returns a pointer to "dest". */
 		static	char	*copy(char *dest, size_t location,
 						const char *source);
 
 		/** Replaces "len" characters of "dest" with "source",
-		 *  starting "location" bytes into "dest".  Assumes that there
-		 *  are "size" bytes in "dest" (after "location" bytes).
-		 *  Returns a pointer to "dest". */
+		 *  starting "location" characters into "dest".  Assumes that
+		 *  there are "len" characters in "dest" (after "location"
+		 *  characters).  Returns a pointer to "dest". */
 		static	char	*copy(char *dest, size_t location,
 					const char *source, size_t len);
 
@@ -150,11 +150,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 * less than "str2". */
 		static	int32_t	compare(const char *str1, const char *str2);
 
-		/** Returns -1,0 or 1 if "length" characters of "str1" are
-		 *  greater than, equal to or less than "size" bytes of
+		/** Returns -1,0 or 1 if "len" characters of "str1" are
+		 *  greater than, equal to or less than "len" characters of
 		 *  "str2". */
 		static	int32_t	compare(const char *str1, const char *str2,
-								size_t length);
+								size_t len);
 
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2", ignoring case. */
@@ -162,7 +162,7 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *str2);
 
 		/** Returns -1,0 or 1 if "len" characters of "str1" are greater
-		 *  than, equal to or less than "size" bytes of "str2",
+		 *  than, equal to or less than "len" characters of "str2",
 		 *  ignoring case. */
 		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2,
@@ -224,8 +224,8 @@ class RUDIMENTS_DLLSPEC charstring {
 						const char *str2,
 						const char *delimiters);
 
-		/** Compares the first "stringlength" characters of "string"
-		 *  to the first "patternlength" characters of "pattern" which
+		/** Compares the first "stringlen" characters of "string"
+		 *  to the first "patternlen" characters of "pattern" which
 		 *  may contain instances of single-character wildcard markers
 		 *  "singlewildcard" or multi-character wildcard markers
 		 *  "multiwildcard".
@@ -235,13 +235,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Returns true if a match is found or false otherwise. */
 		static	bool	compareWithWildcards(const char *string,
-							size_t stringlength,
+							size_t stringlen,
 							const char *pattern,
-							size_t patternlength,
+							size_t patternlen,
 							char singlewildcard,
 							char multiwildcard);
 
-		/** Compares "string" to the first "patternlength" characters
+		/** Compares "string" to the first "patternlen" characters
 		 *  of "pattern" which may contain instances of single-character
 		 *  wildcard markers "singlewildcard" or multi-character
 		 *  wildcard markers "multiwildcard".
@@ -252,11 +252,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Returns true if a match is found or false otherwise. */
 		static	bool	compareWithWildcards(const char *string,
 							const char *pattern,
-							size_t patternlength,
+							size_t patternlen,
 							char singlewildcard,
 							char multiwildcard);
 
-		/** Compares the first "stringlength" characters of "string"
+		/** Compares the first "stringlen" characters of "string"
 		 *  to "pattern" which may contain instances of
 		 *  single-character wildcard markers "singlewildcard" or
 		 *  multi-character wildcard markers "multiwildcard".
@@ -266,7 +266,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Returns true if a match is found or false otherwise. */
 		static	bool	compareWithWildcards(const char *string,
-							size_t stringlength,
+							size_t stringlen,
 							const char *pattern,
 							char singlewildcard,
 							char multiwildcard);
@@ -548,7 +548,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const char *str, size_t len);
 
-		/** Creates a duplicate "str", converting each wide character
+		/** Creates a duplicate of "str", converting each wide character
  		 *  to an ASCII character, replacing characters that can't be
  		 *  represented in ASCII with an ASCII '?', and returns a
  		 *  pointer to it.  Note that this method allocates a buffer
@@ -588,6 +588,48 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
 		static	char	*duplicate(const wchar_t *str, size_t len,
+							char replacement);
+
+		/** Creates a duplicate of "str", converting each UCS-2
+ 		 *  character to an ASCII character, replacing characters that
+ 		 *  can't be represented in ASCII with an ASCII '?', and returns
+ 		 *  a pointer to it.  Note that this method allocates a buffer
+ 		 *  for the duplicate string internally and returns it.  The
+ 		 *  calling program must deallocate this buffer. */
+		static	char	*duplicate(const char16_t *str);
+
+		/** Creates a duplicate of the first "len" UCS-2 characters of
+		 *  "str", converting each UCS-2 character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented '?', and returns a
+		 *  pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicate(const char16_t *str, size_t len);
+
+		/** Creates a duplicate of "str", converting each UCS-2
+		 *  character to a character per the character set of the
+		 *  current locale, replacing characters that can't be
+		 *  represented with "replacement", and returns a pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicate(const char16_t *str,
+							char replacement);
+
+		/** Creates a duplicate of the first "len" UCS-2 characters of
+		 *  "str", converting each UCS-2 character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented with "replacement",
+		 *  and returns a pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicate(const char16_t *str, size_t len,
 							char replacement);
 
 		/** Converts "str" to uppercase.
@@ -975,22 +1017,22 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deleted by the calling program. */
 		static	char	*unescape(const char *input);
 
-		/** similar to escape() above, but takes an "inputlength"
+		/** similar to escape() above, but takes an "inputlen"
 		 *  parameter and returns the result in "output" and
-		 *  "outputlength" rather than in a return value */
+		 *  "outputlen" rather than in a return value */
 		static	void	escape(const char *input,
-						uint64_t inputlength,
+						uint64_t inputlen,
 						char **output,
-						uint64_t *outputlength,
+						uint64_t *outputlen,
 						const char *characters);
 
-		/** similar to unescape() above, but takes an "inputlength"
+		/** similar to unescape() above, but takes an "inputlen"
 		 *  parameter and returns the result in "output" and
-		 *  "outputlength" rather than in a return value */
+		 *  "outputlen" rather than in a return value */
 		static	void	unescape(const char *input,
-						uint64_t inputlength,
+						uint64_t inputlen,
 						char **output,
-						uint64_t *outputlength);
+						uint64_t *outputlen);
 
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1003,12 +1045,12 @@ class RUDIMENTS_DLLSPEC charstring {
 							uint64_t inputsize);
 
 		/** similar to base64Encode() above, but returns the
-		 *  result in "output" and "outputlength" (in characters)
+		 *  result in "output" and "outputlen" (in characters)
 		 *  rather than in a return value */
 		static	void	base64Encode(const unsigned char *input,
 							uint64_t inputsize,
 							char **output,
-							uint64_t *outputlength);
+							uint64_t *outputlen);
 
 		/** base64-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1016,15 +1058,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	unsigned char	*base64Decode(const char *input);
 
 		/** similar to base64Decode above but only decodes
-		 *  the first "inputlength" characters of "input" */
+		 *  the first "inputlen" characters of "input" */
 		static	unsigned char	*base64Decode(const char *input,
-							uint64_t inputlength);
+							uint64_t inputlen);
 
 		/** similar to base64Decode() above, but returns the
-		 *  result in "output" and "outputsize" (in bytes) rather than
-		 *  in a return value */
+		 *  result in "output" and "outputsize" (in bytes) rather
+		 *  than in a return value */
 		static	void	base64Decode(const char *input,
-						uint64_t inputlength,
+						uint64_t inputlen,
 						unsigned char **output,
 						uint64_t *outputsize);
 
@@ -1041,13 +1083,13 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint64_t inputsize);
 
 		/** similar to quotedPrintableEncode() above, but returns the
-		 *  result in "output" and "outputlength" (in characters)
+		 *  result in "output" and "outputlen" (in characters)
 		 *  rather than in a return value */
 		static	void	quotedPrintableEncode(
 						const unsigned char *input,
 						uint64_t inputsize,
 						char **output,
-						uint64_t *outputlength);
+						uint64_t *outputlen);
 
 		/** Quoted-printable-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1056,18 +1098,18 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *input);
 
 		/** similar to quotedPrintableDecode above but only decodes
-		 *  the first "inputlength" characters of "input" */
+		 *  the first "inputlen" characters of "input" */
 		static	unsigned char	*quotedPrintableDecode(
 							const char *input,
-							uint64_t inputlength);
+							uint64_t inputlen);
 
 		/** similar to quotedPrintableDecode() above, but returns the
-		 *  result in "output" and "outputsize" (in bytes) rather than
-		 *  in a return value */
+		 *  result in "output" and "outputlen" (in characters) rather
+		 *  than in a return value */
 		static	void	quotedPrintableDecode(const char *input,
-							uint64_t inputlength,
+							uint64_t inputlen,
 							unsigned char **output,
-							uint64_t *outputsize);
+							uint64_t *outputlen);
 
 
 		/** hex-encodes "input" and returns it in a buffer
@@ -1076,17 +1118,17 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*hexEncode(const unsigned char *input);
 
 		/** similar to hexEncode above but only encodes
-		 *  the first "inputsize" characters of "input" */
+		 *  the first "inputsize" bytes of "input" */
 		static	char	*hexEncode(const unsigned char *input,
 							uint64_t inputsize);
 
 		/** similar to hexEncode() above, but returns the
-		 *  result in "output" and "outputsize" (in characters) rather
+		 *  result in "output" and "outputlen" (in characters) rather
 		 *  than in a return value */
 		static	void	hexEncode(const unsigned char *input,
 						uint64_t inputsize,
 						char **output,
-						uint64_t *outputlength);
+						uint64_t *outputlen);
 
 		/** hex-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1094,15 +1136,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	unsigned char	*hexDecode(const char *input);
 
 		/** similar to hexDecode above but only decodes
-		 *  the first "inputlength" characters of "input" */
+		 *  the first "inputlen" characters of "input" */
 		static	unsigned char	*hexDecode(const char *input,
-							uint64_t inputlength);
+							uint64_t inputlen);
 
 		/** similar to hexDecode() above, but returns the
 		 *  result in "output" and "outputsize" rather than in a
 		 *  return value */
 		static	void	hexDecode(const char *input,
-						uint64_t inputlength,
+						uint64_t inputlen,
 						unsigned char **output,
 						uint64_t *outputsize);
 
@@ -1143,7 +1185,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	void	center(char *str, int32_t len);
 
 		/** Returns a copy of "string", padded with "padchar" to a
-		 *  character length of "totallength".  Set "direction"
+		 *  character length of "totallen".  Set "direction"
 		 *  to -1 to left-pad, 0 to center-pad and 1 to right-pad.
 		 *  Note that this method allocates a buffer internally and
 		 *  returns it.  The calling program must deallocate this
@@ -1151,54 +1193,54 @@ class RUDIMENTS_DLLSPEC charstring {
 		static char	*pad(const char *string,
 						char padchar,
 						int16_t direction,
-						uint64_t totallength);
+						uint64_t totallen);
 
-		/** Parses "string" of character length "stringlength"
+		/** Parses "string" of character length "stringlen"
 		 *  delimited by "delimiter" of character length
-		 *  "delimiterlength" and allocates "listlength" elements of
+		 *  "delimiterlen" and allocates "listlen" elements of
 		 *  "list" to return the parts.  If "collapse" is true then
 		 *  multiple instances of the delimiter in a row will be
 		 *  interpreted as one instance of the delimiter.  Each member
 		 *  of "list" and "list" itseslf must be deallocated by the
 		 *  calling program. */
 		static void	split(const char *string,
-					size_t stringlength,
+					size_t stringlen,
 					const char *delimiter,
-					size_t delimiterlength,
+					size_t delimiterlen,
 					bool collapse,
 					char ***list,
-					uint64_t *listlength);
+					uint64_t *listlen);
 
 		/** Parses NULL-terminated "string" delimited by "delimiter" of
-		 *  character length "delimiterlength" and allocates
-		 *  "listlength" elements of "list" to return the parts.  If
+		 *  character length "delimiterlen" and allocates
+		 *  "listlen" elements of "list" to return the parts.  If
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
 		 *  be deallocated by the calling program. */
 		static void	split(const char *string,
 					const char *delimiter,
-					size_t delimiterlength,
+					size_t delimiterlen,
 					bool collapse,
 					char ***list,
-					uint64_t *listlength);
+					uint64_t *listlen);
 
-		/** Parses "string" of character length "stringlength"
+		/** Parses "string" of character length "stringlen"
 		 *  delimited by NULL-terminated "delimiter" and allocates
-		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "listlen" elements of "list" to return the parts.  If
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
 		 *  be deallocated by the calling program. */
 		static void	split(const char *string,
-					size_t stringlength,
+					size_t stringlen,
 					const char *delimiter,
 					bool collapse,
 					char ***list,
-					uint64_t *listlength);
+					uint64_t *listlen);
 
 		/** Parses NULL-terminated "string" delimited by
-		 *  NULL-terminated "delimiter" and allocates "listlength"
+		 *  NULL-terminated "delimiter" and allocates "listlen"
 		 *  elements of "list" to return the parts.  If "collapse" is
 		 *  true then multiple instances of the delimiter in a row will
 		 *  be interpreted as one instance of the delimiter.  Each
@@ -1208,7 +1250,7 @@ class RUDIMENTS_DLLSPEC charstring {
 					const char *delimiter,
 					bool collapse,
 					char ***list,
-					uint64_t *listlength);
+					uint64_t *listlen);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",
@@ -1278,7 +1320,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Returns the number of characters written to "buffer"
 		 *  excluding the NULL terminator.  If string wasn't large
 		 *  enough to accommodate the data then it only writes
-		 *  "len" bytes to "buffer" but still returns the number
+		 *  "len" characters to "buffer" but still returns the number
 		 *  of characters that would have been written had "buffer"
 		 *  been large enough.
 		 *
@@ -1290,7 +1332,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Returns -1 if an error occurred.
 		 *
 		 *  NOTE: wide character sequences will be converted to
-		 *  sequence sof characters of the currently selected character
+		 *  sequences of characters of the currently selected character
 		 *  set (eg. selected by the locale) which may be ASCII,
 		 *  extended ASCII (eg. Latin 15), or multibyte (eg. UTF8). */
 		static ssize_t	printf(char *buffer, size_t len,
@@ -1306,7 +1348,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Returns the number of characters written to "buffer"
 		 *  excluding the NULL terminator.  If "buffer" wasn't large
 		 *  enough to accommodate the data then it only writes
-		 *  "len" bytes to "buffer" but still returns the number
+		 *  "len" characters to "buffer" but still returns the number
 		 *  of characters that would have been written had "buffer"
 		 *  been large enough.
 		 *

@@ -352,14 +352,14 @@ bool wcharstring::isInteger(const wchar_t *str) {
 	return (*(ptr-1)!=L'-');
 }
 
-bool wcharstring::isInteger(const wchar_t *str, int32_t size) {
+bool wcharstring::isInteger(const wchar_t *str, int32_t len) {
 
-	if (!str || !size) {
+	if (!str || !len) {
 		return false;
 	}
 
 	const wchar_t	*ptr=str;
-	for (int32_t index=0; index<size; index++) {
+	for (int32_t index=0; index<len; index++) {
 		if (((*ptr>L'9' || *ptr<L'0') && *ptr!=L'-') || 
 			(ptr>str && *ptr==L'-')) {
 			return false;
@@ -393,15 +393,15 @@ bool wcharstring::isNumber(const wchar_t *str) {
 	return (*(ptr-1)!=L'-' && *(ptr-1)!=L'.');
 }
 
-bool wcharstring::isNumber(const wchar_t *str, int32_t size) {
+bool wcharstring::isNumber(const wchar_t *str, int32_t len) {
 
-	if (!str || !size) {
+	if (!str || !len) {
 		return false;
 	}
 
 	const wchar_t	*ptr=str;
 	int32_t		decimal=0;
-	for (int32_t index=0; index<size; index++) {
+	for (int32_t index=0; index<len; index++) {
 		if (((*ptr>L'9' || *ptr<L'0') && *ptr!=L'-' && *ptr!=L'.') || 
 			(ptr>str && *ptr==L'-') || (decimal && *ptr==L'.')) {
 			return false;
@@ -476,17 +476,17 @@ wchar_t *wcharstring::convertAmount(int64_t amount, uint16_t spaces) {
 
 wchar_t *wcharstring::escape(const wchar_t *input, const wchar_t *characters) {
 	wchar_t		*output;
-	uint64_t	outputsize;
-	escape(input,length(input),&output,&outputsize,characters);
+	uint64_t	outputlen;
+	escape(input,length(input),&output,&outputlen,characters);
 	return output;
 }
 
-void wcharstring::escape(const wchar_t *input, uint64_t inputsize,
-				wchar_t **output, uint64_t *outputsize,
+void wcharstring::escape(const wchar_t *input, uint64_t inputlen,
+				wchar_t **output, uint64_t *outputlen,
 						const wchar_t *characters) {
 
 	(*output)=NULL;
-	(*outputsize)=0;
+	(*outputlen)=0;
 
 	if (!input) {
 		return;
@@ -496,43 +496,43 @@ void wcharstring::escape(const wchar_t *input, uint64_t inputsize,
 
 		uint64_t	outputindex=0;
 		for (uint64_t inputindex=0;
-				inputindex<inputsize;
+				inputindex<inputlen;
 				inputindex++) {
 			if (contains(characters,input[inputindex]) ||
 						input[inputindex]==L'\\') {
 				if (pass==0) {
-					(*outputsize)++;
+					(*outputlen)++;
 				} else {
 					(*output)[outputindex]=L'\\';
 					outputindex++;
 				}
 			}
 			if (pass==0) {
-				(*outputsize)++;
+				(*outputlen)++;
 			} else {
 				(*output)[outputindex]=input[inputindex];
 			}
 			outputindex++;
 		}
 		if (pass==0) {
-			(*output)=new wchar_t[(*outputsize)+1];
-			(*output)[(*outputsize)]=L'\0';
+			(*output)=new wchar_t[(*outputlen)+1];
+			(*output)[(*outputlen)]=L'\0';
 		}
 	}
 }
 
 wchar_t *wcharstring::unescape(const wchar_t *input) {
 	wchar_t		*output;
-	uint64_t	outputsize;
-	unescape(input,length(input),&output,&outputsize);
+	uint64_t	outputlen;
+	unescape(input,length(input),&output,&outputlen);
 	return output;
 }
 
-void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
-				wchar_t **output, uint64_t *outputsize) {
+void wcharstring::unescape(const wchar_t *input, uint64_t inputlen,
+				wchar_t **output, uint64_t *outputlen) {
 
 	(*output)=NULL;
-	(*outputsize)=0;
+	(*outputlen)=0;
 
 	if (!input) {
 		return;
@@ -543,14 +543,14 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
 		bool		escaped=false;
 		uint64_t	outputindex=0;
 		for (uint64_t inputindex=0;
-				inputindex<inputsize;
+				inputindex<inputlen;
 				inputindex++) {
 			if (!escaped && input[inputindex]==L'\\') {
 				escaped=true;
 				continue;
 			}
 			if (pass==0) {
-				(*outputsize)++;
+				(*outputlen)++;
 			} else {
 				(*output)[outputindex]=input[inputindex];
 			}
@@ -558,8 +558,8 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputsize,
 			escaped=false;
 		}
 		if (pass==0) {
-			(*output)=new wchar_t[(*outputsize)+1];
-			(*output)[(*outputsize)]=L'\0';
+			(*output)=new wchar_t[(*outputlen)+1];
+			(*output)[(*outputlen)]=L'\0';
 		}
 	}
 }
@@ -944,8 +944,8 @@ wchar_t *wcharstring::append(wchar_t *dest, const wchar_t *source) {
 }
 
 wchar_t *wcharstring::append(wchar_t *dest,
-				const wchar_t *source, size_t size) {
-	return copy(dest+length(dest),source,size);
+				const wchar_t *source, size_t len) {
+	return copy(dest+length(dest),source,len);
 }
 
 wchar_t *wcharstring::append(wchar_t *dest, int64_t number) {
@@ -1008,32 +1008,38 @@ wchar_t *wcharstring::copy(wchar_t *dest, const char *source) {
 	return dest;
 }
 
-wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t size) {
+wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t len) {
 	if (!dest || !source) {
 		return dest;
 	}
 	#ifdef RUDIMENTS_HAVE_WCSNCPY
-		return wcsncpy(dest,source,size);
+		return wcsncpy(dest,source,len);
 	#else
-		while (*source && size) {
+		while (*source && len) {
 			*dest=*source;
 			dest++;
 			source++;
-			size--;
+			len--;
+		}
+		if (len) {
+			*dest=L'\0';
 		}
 		return dest;
 	#endif
 }
 
-wchar_t *wcharstring::copy(wchar_t *dest, const char *source, size_t size) {
+wchar_t *wcharstring::copy(wchar_t *dest, const char *source, size_t len) {
 	if (!dest || !source) {
 		return dest;
 	}
-	while (*source && size) {
+	while (*source && len) {
 		*dest=wcharacter::duplicate(*source);
 		dest++;
 		source++;
-		size--;
+		len--;
+	}
+	if (len) {
+		*dest=L'\0';
 	}
 	return dest;
 }
@@ -1049,13 +1055,13 @@ wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
-					const wchar_t *source, size_t size) {
-	return copy(dest+location,source,size);
+					const wchar_t *source, size_t len) {
+	return copy(dest+location,source,len);
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
-					const char *source, size_t size) {
-	return copy(dest+location,source,size);
+					const char *source, size_t len) {
+	return copy(dest+location,source,len);
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
@@ -1102,7 +1108,7 @@ int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2) {
 }
 
 int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2,
-							size_t size) {
+							size_t len) {
 	if (!str2) {
 		return 1;
 	}
@@ -1110,19 +1116,19 @@ int32_t wcharstring::compare(const wchar_t *str1, const wchar_t *str2,
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAVE_WCSNCMP
-		return wcsncmp(str1,str2,size);
+		return wcsncmp(str1,str2,len);
 	#else
 		int32_t	diff=0;
-		while (*str1 && *str2 && size) {
+		while (*str1 && *str2 && len) {
 			diff=(*str1-*str2);
 			if (diff) {
 				return diff;
 			}
 			str1++;
 			str2++;
-			size--;
+			len--;
 		}
-		return (size)?*str1-*str2:0;
+		return (len)?*str1-*str2:0;
 	#endif
 }
 
@@ -1154,7 +1160,7 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 
 int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 						const wchar_t *str2,
-						size_t size) {
+						size_t len) {
 	if (!str2) {
 		return 1;
 	}
@@ -1162,10 +1168,10 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAVE_WCSNCASECMP
-		return wcsncasecmp(str1,str2,size);
+		return wcsncasecmp(str1,str2,len);
 	#else
 		int32_t	diff=0;
-		while (*str1 && *str2 && size) {
+		while (*str1 && *str2 && len) {
 			diff=(wcharacter::toUpperCase(*str1)-
 				wcharacter::toUpperCase(*str2));
 			if (diff) {
@@ -1173,9 +1179,9 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 			}
 			str1++;
 			str2++;
-			size--;
+			len--;
 		}
-		return (size)?wcharacter::toUpperCase(*str1)-
+		return (len)?wcharacter::toUpperCase(*str1)-
 				wcharacter::toUpperCase(*str2):0;
 	#endif
 }
@@ -1866,6 +1872,32 @@ wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
 		retval[i]=wcharacter::duplicate(string[i]);
 	}
 	retval[length]=L'\0';
+	return retval;
+}
+
+
+wchar_t *wcharstring::duplicate(const char16_t *string) {
+	return duplicate(string,ucs2charstring::length(string),'?');
+}
+
+wchar_t *wcharstring::duplicate(const char16_t *string, size_t len) {
+	return duplicate(string,len,'?');
+}
+
+wchar_t *wcharstring::duplicate(const char16_t *string, wchar_t replacement) {
+	return duplicate(string,ucs2charstring::length(string),replacement);
+}
+
+wchar_t *wcharstring::duplicate(const char16_t *string, size_t len,
+							wchar_t replacement) {
+	if (!string) {
+		return NULL;
+	}
+	wchar_t	*retval=new wchar_t[len+1];
+	for (size_t i=0; i<len; i++) {
+		retval[i]=wcharacter::duplicate(string[i],replacement);
+	}
+	retval[len]='\0';
 	return retval;
 }
 

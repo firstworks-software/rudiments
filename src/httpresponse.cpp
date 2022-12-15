@@ -142,6 +142,18 @@ ssize_t httpresponse::write(wchar_t character) {
 	return pvt->_sapi->write(character);
 }
 
+ssize_t httpresponse::write(const char16_t *string) {
+	return pvt->_sapi->write(string);
+}
+
+ssize_t httpresponse::write(const char16_t *string, size_t length) {
+	return pvt->_sapi->write(string,length);
+}
+
+ssize_t httpresponse::write(char16_t character) {
+	return pvt->_sapi->write(character);
+}
+
 ssize_t httpresponse::write(int16_t character) {
 	return pvt->_sapi->write(character);
 }
@@ -183,6 +195,10 @@ ssize_t httpresponse::printfDelegate(const char *format, va_list *argp) {
 }
 
 ssize_t httpresponse::printfDelegate(const wchar_t *format, va_list *argp) {
+	return pvt->_sapi->printf(format,argp);
+}
+
+ssize_t httpresponse::printfDelegate(const char16_t *format, va_list *argp) {
 	return pvt->_sapi->printf(format,argp);
 }
 

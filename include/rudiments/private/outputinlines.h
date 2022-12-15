@@ -28,3 +28,17 @@ inline
 ssize_t output::printf(const wchar_t *format, va_list *argp) {
 	return printfDelegate(format,argp);
 }
+
+inline
+ssize_t output::printf(const char16_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	ssize_t	retval=printfDelegate(format,&argp);
+	va_end(argp);
+	return retval;
+}
+
+inline
+ssize_t output::printf(const char16_t *format, va_list *argp) {
+	return printfDelegate(format,argp);
+}

@@ -14,9 +14,11 @@
 #include <rudiments/private/config.h>
 #include <rudiments/apachehttpserverapi.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/charstring.h>
 #include <rudiments/character.h>
+#include <rudiments/charstring.h>
 #include <rudiments/wstringbuffer.h>
+#include <rudiments/ucs2character.h>
+#include <rudiments/ucs2stringbuffer.h>
 
 #include <rudiments/private/apacheincludes.h>
 
@@ -392,6 +394,14 @@ ssize_t apachehttpserverapi::read(wchar_t *character) {
 	return bufferedRead(character,sizeof(wchar_t));
 }
 
+ssize_t apachehttpserverapi::read(char16_t *buffer, size_t length) {
+	return bufferedRead(buffer,length);
+}
+
+ssize_t apachehttpserverapi::read(char16_t *character) {
+	return bufferedRead(character,sizeof(char16_t));
+}
+
 ssize_t apachehttpserverapi::read(int16_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(int16_t));
 	*number=filedescriptor::netToHost((uint16_t)*number);
@@ -633,6 +643,29 @@ ssize_t	apachehttpserverapi::write(wchar_t ch) {
 	return (r)?ap_rputc(character::duplicate(ch,'?'),r):0;
 }
 
+ssize_t	apachehttpserverapi::write(const char16_t *string) {
+	// FIXME: This just converts to char * and writes.
+	// Is there an ar_rputwc or something like that?
+	return write(string,ucs2charstring::length(string));
+}
+
+ssize_t	apachehttpserverapi::write(const char16_t *string, size_t size) {
+	// FIXME: This just converts to char * and writes.
+	// Is there an ar_rputwc or something like that?
+	char	*s=charstring::duplicate(string,size,'?');
+	ssize_t	result=write(s,size);
+	delete[] s;
+	return result;
+}
+
+ssize_t	apachehttpserverapi::write(char16_t ch) {
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	// FIXME: This just converts to char and writes.
+	// Is there an ar_rputwc or something like that?
+	return (r)?ap_rputc(character::duplicate(ch,'?'),r):0;
+}
+
 ssize_t	apachehttpserverapi::write(int16_t number) {
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
@@ -697,6 +730,13 @@ ssize_t apachehttpserverapi::printfDelegate(const char *format,
 ssize_t apachehttpserverapi::printfDelegate(const wchar_t *format,
 							va_list *argp) {
 	wstringbuffer	b;
+	b.printf(format,argp);
+	return write(b.getString(),b.getStringLength());
+}
+
+ssize_t apachehttpserverapi::printfDelegate(const char16_t *format,
+							va_list *argp) {
+	ucs2stringbuffer	b;
 	b.printf(format,argp);
 	return write(b.getString(),b.getStringLength());
 }

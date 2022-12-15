@@ -24,7 +24,8 @@ bool wcharacter::isAlphanumeric(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswalnum(c)!=0;
 	#else
-		return character::isAlphanumeric(character::duplicate(c));
+		return character::isAlphanumeric(
+				character::duplicate((wchar_t)c));
 	#endif
 }
  
@@ -32,7 +33,8 @@ bool wcharacter::isAlphabetical(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswalpha(c)!=0;
 	#else
-		return character::isAlphabetical(character::duplicate(c));
+		return character::isAlphabetical(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -40,7 +42,8 @@ bool wcharacter::isControlCharacter(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswcntrl(c)!=0;
 	#else
-		return character::isControlCharacter(character::duplicate(c));
+		return character::isControlCharacter(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -48,7 +51,8 @@ bool wcharacter::isDigit(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswdigit(c)!=0;
 	#else
-		return character::isDigit(character::duplicate(c));
+		return character::isDigit(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -56,7 +60,8 @@ bool wcharacter::isLowerCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswlower(c)!=0;
 	#else
-		return character::isLowerCase(character::duplicate(c));
+		return character::isLowerCase(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -64,7 +69,8 @@ bool wcharacter::isPrintableNonSpace(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswgraph(c)!=0;
 	#else
-		return character::isPrintableNonSpace(character::duplicate(c));
+		return character::isPrintableNonSpace(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -72,7 +78,8 @@ bool wcharacter::isPrintable(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswprint(c)!=0;
 	#else
-		return character::isPrintable(character::duplicate(c));
+		return character::isPrintable(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -80,7 +87,8 @@ bool wcharacter::isPunctuation(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswpunct(c)!=0;
 	#else
-		return character::isPunctuation(character::duplicate(c));
+		return character::isPunctuation(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -88,7 +96,8 @@ bool wcharacter::isUpperCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswupper(c)!=0;
 	#else
-		return character::isUpperCase(character::duplicate(c));
+		return character::isUpperCase(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -96,7 +105,8 @@ bool wcharacter::isHexDigit(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswxdigit(c)!=0;
 	#else
-		return character::isHexDigit(character::duplicate(c));
+		return character::isHexDigit(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -105,7 +115,8 @@ bool wcharacter::isBlank(int32_t c) {
 			defined(RUDIMENTS_HAVE_ISWBLANK)
 		return iswblank(c)!=0;
 	#else
-		return character::isBlank(character::duplicate(c));
+		return character::isBlank(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -113,7 +124,8 @@ bool wcharacter::isWhitespace(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return iswspace(c)!=0;
 	#else
-		return character::isWhitespace(character::duplicate(c));
+		return character::isWhitespace(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -122,7 +134,8 @@ bool wcharacter::isAscii(int32_t c) {
 			defined(RUDIMENTS_HAVE_ISWASCII)
 		return iswascii(c)!=0;
 	#else
-		return character::isAscii(character::duplicate(c));
+		return character::isAscii(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -144,7 +157,8 @@ int32_t wcharacter::toUpperCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towupper(c);
 	#else
-		return character::toUpperCase(character::duplicate(c));
+		return character::toUpperCase(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
@@ -152,17 +166,18 @@ int32_t wcharacter::toLowerCase(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towlower(c);
 	#else
-		return character::toLowerCase(character::duplicate(c));
+		return character::toLowerCase(
+				character::duplicate((wchar_t)c));
 	#endif
 }
 
 int32_t wcharacter::toAscii(int32_t c) {
-	return character::toAscii(character::duplicate(c));
+	return character::toAscii(character::duplicate((wchar_t)c));
 }
 
 bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
-	for (uint16_t i=0; set[i]; i++) {
-		if (set[i]==c) {
+	for (const wchar_t *s=set; *s; s++) {
+		if (*s==c) {
 			return true;
 		}
 	}
@@ -202,6 +217,15 @@ wchar_t wcharacter::duplicate(char c) {
 		return (wchar_t)0;
 	}
 	return retval;
+}
+
+wchar_t wcharacter::duplicate(char16_t c) {
+	return duplicate(c,'?');
+}
+
+wchar_t wcharacter::duplicate(char16_t c, wchar_t replacement) {
+	// FIXME: implement this...
+	return 0;
 }
 
 bool wcharacter::duplicateFromCharacterNeedsMutex() {

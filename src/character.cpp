@@ -3,8 +3,6 @@
 
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/error.h>
-#include <rudiments/filedescriptor.h>
 
 #ifdef RUDIMENTS_HAVE_CTYPE_H
 	#include <ctype.h>
@@ -135,8 +133,8 @@ int32_t character::toAscii(int32_t c) {
 }
 
 bool character::inSet(char c, const char *set) {
-	for (uint16_t i=0; set[i]; i++) {
-		if (set[i]==c) {
+	for (const char *s=set; *s; s++) {
+		if (*s==c) {
 			return true;
 		}
 	}
@@ -189,6 +187,15 @@ char character::duplicate(wchar_t c, char replacement) {
 		return replacement;
 	}
 	return retval;
+}
+
+char character::duplicate(char16_t c) {
+	return duplicate(c,'?');
+}
+
+char character::duplicate(char16_t c, char replacement) {
+	// FIXME: implement this...
+	return 0;
 }
 
 bool character::duplicateFromWideCharacterNeedsMutex() {

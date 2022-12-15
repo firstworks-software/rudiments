@@ -78,6 +78,20 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *  locale. */
 		static wchar_t	duplicate(char c);
 
+		/** Returns the character representation of UCS-2 character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
+		 *  character. */
+		static wchar_t	duplicate(char16_t c);
+
+		/** Returns the character representation of UCS-2 character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  Returns "replacement" if UCS-2 character "c" cannot be
+		 *  converted to a character. */
+		static wchar_t	duplicate(char16_t c, wchar_t replacement);
+
 		/** Returns true if the duplicate methods that convert to a
 		 *  wchar_t from a char require a mutex to operate safely in
 		 *  a threaded environment and false otherwise. */

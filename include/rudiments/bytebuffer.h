@@ -92,6 +92,23 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Returns the number of bytes written. */
 		ssize_t	write(const wchar_t *string);
 
+		/** Writes the first "length" characters of "string" to the
+		 *  bytebuffer at the current position and increments the
+		 *  current position to the next byte after the data that was
+		 *  written.  If necessary, the internal buffer will grow to
+		 *  accommodate the new data.
+		 *
+		 *  Returns the number of bytes written. */
+		ssize_t	write(const char16_t *string, size_t length);
+
+		/** Writes "string" to the bytebuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns the number of bytes written. */
+		ssize_t	write(const char16_t *string);
+
 		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
@@ -107,6 +124,14 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns the number of bytes written. */
 		ssize_t	write(wchar_t character);
+
+		/** Writes "character" to the bytebuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns the number of bytes written. */
+		ssize_t	write(char16_t character);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -218,6 +243,21 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(const wchar_t *string);
 
+		/** Appends the first "length" characters of "string" to the
+		 *  bytebuffer, growing the internal buffer as necessary
+		 *  to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(const char16_t *string, size_t length);
+
+		/** Appends "string" to the bytebuffer, growing the
+		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(const char16_t *string);
+
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
@@ -231,6 +271,13 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(wchar_t character);
+
+		/** Appends "character" to the bytebuffer, growing the
+		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
+		bytebuffer	*append(char16_t character);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
@@ -337,6 +384,24 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  wcharstring::supportsPrintf() returns false.  On those
 		 *  platforms this method returns -1 and sets ENOSYS. */
 		bytebuffer	*appendFormatted(const wchar_t *format,
+							va_list *argp);
+
+		/** Appends "..." to the byte buffer using "format"
+		 *  which should comply with standard wprintf formatting
+		 *  rules.
+		 *
+		 *  Returns NULL if an error occurred. */
+		bytebuffer	*appendFormatted(const char16_t *format, ...);
+
+		/** Appends "argp" to the byte buffer using "format"
+		 *  which should comply with standard wprintf formatting
+		 *  rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list.
+		 *
+		 *  Returns NULL if an error occurred. */
+		bytebuffer	*appendFormatted(const char16_t *format,
 							va_list *argp);
 
 		/** Truncates the bytebuffer at position "pos". */
