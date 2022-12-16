@@ -35,8 +35,8 @@
 #include <stdio.h>
 
 #ifdef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
-extern "C" int __vsnprintf(char16_t *str, size_t size,
-				const char16_t *format, va_list ap);
+extern "C" int __vsnprintf(ucs2_t *str, size_t size,
+				const ucs2_t *format, va_list ap);
 #endif
 
 // MSVC 2010- doesn't define va_copy
@@ -58,8 +58,8 @@ extern "C" int __vsnprintf(char16_t *str, size_t size,
 	#include <locale.h>
 #endif
 
-const char16_t *ucs2charstring::findLast(const char16_t *haystack,
-						const char16_t *needle) {
+const ucs2_t *ucs2charstring::findLast(const ucs2_t *haystack,
+						const ucs2_t *needle) {
 
 	if (!haystack || !needle) {
 		return NULL;
@@ -71,7 +71,7 @@ const char16_t *ucs2charstring::findLast(const char16_t *haystack,
 		return NULL;
 	}
 	
-	const char16_t	*ptr=haystack+haystacklen-needlelen;
+	const ucs2_t	*ptr=haystack+haystacklen-needlelen;
 	while (ptr>haystack) {
 		if (!compare(ptr,needle,needlelen)) {
 			return ptr;
@@ -81,8 +81,8 @@ const char16_t *ucs2charstring::findLast(const char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findLastIgnoringCase(const char16_t *haystack,
-						const char16_t *needle) {
+const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
+						const ucs2_t *needle) {
 
 	if (!haystack || !needle) {
 		return NULL;
@@ -94,7 +94,7 @@ const char16_t *ucs2charstring::findLastIgnoringCase(const char16_t *haystack,
 		return NULL;
 	}
 	
-	const char16_t	*ptr=haystack+haystacklen-needlelen;
+	const ucs2_t	*ptr=haystack+haystacklen-needlelen;
 	while (ptr>haystack) {
 		if (!compareIgnoringCase(ptr,needle,needlelen)) {
 			return ptr;
@@ -104,34 +104,34 @@ const char16_t *ucs2charstring::findLastIgnoringCase(const char16_t *haystack,
 	return NULL;
 }
 
-void ucs2charstring::upper(char16_t *str) {
+void ucs2charstring::upper(ucs2_t *str) {
 	if (str) {
-		for (char16_t *ch=str; *ch; ch++) {
+		for (ucs2_t *ch=str; *ch; ch++) {
 			*ch=ucs2character::toUpperCase(*ch);
 		}
 	}
 }
 
-void ucs2charstring::lower(char16_t *str) {
+void ucs2charstring::lower(ucs2_t *str) {
 	if (str) {
-		for (char16_t *ch=str; *ch; ch++) {
+		for (ucs2_t *ch=str; *ch; ch++) {
 			*ch=ucs2character::toLowerCase(*ch);
 		}
 	}
 }
 
-void ucs2charstring::capitalize(char16_t *str) {
-	char16_t	delims[]={
-		(char16_t)' ',
-		(char16_t)'\'',
-		(char16_t)'"',
-		(char16_t)'-',
-		(char16_t)'(',
+void ucs2charstring::capitalize(ucs2_t *str) {
+	ucs2_t	delims[]={
+		(ucs2_t)' ',
+		(ucs2_t)'\'',
+		(ucs2_t)'"',
+		(ucs2_t)'-',
+		(ucs2_t)'(',
 		0
 	};
 	if (str) {
 		bool	cap=true;
-		for (char16_t *ch=str; *ch; ch++) {
+		for (ucs2_t *ch=str; *ch; ch++) {
 			if (cap) {
 				*ch=ucs2character::toUpperCase(*ch);
 				cap=false;
@@ -145,7 +145,7 @@ void ucs2charstring::capitalize(char16_t *str) {
 	}
 }
 
-void ucs2charstring::rightTrim(char16_t *str, char16_t character) {
+void ucs2charstring::rightTrim(ucs2_t *str, ucs2_t character) {
 
 	if (!isNullOrEmpty(str)) {
 
@@ -166,7 +166,7 @@ void ucs2charstring::rightTrim(char16_t *str, char16_t character) {
 	}
 }
 
-void ucs2charstring::leftTrim(char16_t *str, char16_t character) {
+void ucs2charstring::leftTrim(ucs2_t *str, ucs2_t character) {
 
 	if (!isNullOrEmpty(str)) {
 
@@ -189,7 +189,7 @@ void ucs2charstring::leftTrim(char16_t *str, char16_t character) {
 	}
 }
 
-bool ucs2charstring::strip(char16_t *str, char16_t character) {
+bool ucs2charstring::strip(ucs2_t *str, ucs2_t character) {
 
 	if (!str) {
 		return false;
@@ -214,7 +214,7 @@ bool ucs2charstring::strip(char16_t *str, char16_t character) {
 	return retval;
 }
 
-bool ucs2charstring::strip(char16_t *str1, const char16_t *str2) {
+bool ucs2charstring::strip(ucs2_t *str1, const ucs2_t *str2) {
 
 	if (!str1 || !str2) {
 		return false;
@@ -241,7 +241,7 @@ bool ucs2charstring::strip(char16_t *str1, const char16_t *str2) {
 	return retval;
 }
 
-bool ucs2charstring::stripSet(char16_t *str, const char16_t *set) {
+bool ucs2charstring::stripSet(ucs2_t *str, const ucs2_t *set) {
 
 	if (!str) {
 		return false;
@@ -266,9 +266,9 @@ bool ucs2charstring::stripSet(char16_t *str, const char16_t *set) {
 	return retval;
 }
 
-void ucs2charstring::replace(char16_t *str, char16_t oldchar, char16_t newchar) {
+void ucs2charstring::replace(ucs2_t *str, ucs2_t oldchar, ucs2_t newchar) {
 	if (str) {
-		for (char16_t *ptr=str; *ptr; ptr++) {
+		for (ucs2_t *ptr=str; *ptr; ptr++) {
 			if (*ptr==oldchar) {
 				*ptr=newchar;
 			}
@@ -276,10 +276,10 @@ void ucs2charstring::replace(char16_t *str, char16_t oldchar, char16_t newchar) 
 	}
 }
 
-void ucs2charstring::replace(char16_t *str,
-				const char16_t *oldchars, char16_t newchar) {
+void ucs2charstring::replace(ucs2_t *str,
+				const ucs2_t *oldchars, ucs2_t newchar) {
 	if (str) {
-		for (char16_t *ptr=str; *ptr; ptr++) {
+		for (ucs2_t *ptr=str; *ptr; ptr++) {
 			if (ucs2character::inSet(*ptr,oldchars)) {
 				*ptr=newchar;
 			}
@@ -287,15 +287,15 @@ void ucs2charstring::replace(char16_t *str,
 	}
 }
 
-char16_t *ucs2charstring::replace(const char16_t *str, const char16_t *oldstr,
-						const char16_t *newstr) {
+ucs2_t *ucs2charstring::replace(const ucs2_t *str, const ucs2_t *oldstr,
+						const ucs2_t *newstr) {
 	if (!str) {
 		return NULL;
 	}
 	ucs2stringbuffer	newstring;
 	size_t		oldstrlen=length(oldstr);
-	const char16_t	*ptr=str;
-	const char16_t	*start=ptr;
+	const ucs2_t	*ptr=str;
+	const ucs2_t	*start=ptr;
 	while (*ptr) {
 		if (!compare(ptr,oldstr,oldstrlen)) {
 			newstring.append(start,ptr-start);
@@ -310,29 +310,29 @@ char16_t *ucs2charstring::replace(const char16_t *str, const char16_t *oldstr,
 	return newstring.detachString();
 }
 
-char16_t *ucs2charstring::replace(const char16_t *str,
-					const char16_t * const *oldstrset,
-					const char16_t * const *newstrset) {
+ucs2_t *ucs2charstring::replace(const ucs2_t *str,
+					const ucs2_t * const *oldstrset,
+					const ucs2_t * const *newstrset) {
 	if (!str) {
 		return NULL;
 	}
 
 	// count members of oldstrset
 	uint64_t	i=0;
-	for (const char16_t * const *o=oldstrset; *o; o++) {
+	for (const ucs2_t * const *o=oldstrset; *o; o++) {
 		i++;
 	}
 
 	// create oldstrlen
 	size_t	*oldstrlen=new size_t[i];
 	i=0;
-	for (const char16_t * const *o=oldstrset; *o; o++) {
+	for (const ucs2_t * const *o=oldstrset; *o; o++) {
 		oldstrlen[i]=length(*o);
 		i++;
 	}
 
 	// replace
-	char16_t	*result=replace(str,oldstrset,oldstrlen,newstrset);
+	ucs2_t	*result=replace(str,oldstrset,oldstrlen,newstrset);
 
 	// clean up
 	delete[] oldstrlen;
@@ -340,22 +340,22 @@ char16_t *ucs2charstring::replace(const char16_t *str,
 	return result;
 }
 
-char16_t *ucs2charstring::replace(const char16_t *str,
-					const char16_t * const *oldstrset,
+ucs2_t *ucs2charstring::replace(const ucs2_t *str,
+					const ucs2_t * const *oldstrset,
 					size_t *oldstrlen,
-					const char16_t * const *newstrset) {
+					const ucs2_t * const *newstrset) {
 	if (!str) {
 		return NULL;
 	}
 
 	// search and replace
 	ucs2stringbuffer	newstring;
-	const char16_t	*ptr=str;
-	const char16_t	*start=ptr;
+	const ucs2_t	*ptr=str;
+	const ucs2_t	*start=ptr;
 	while (*ptr) {
 		bool	found=false;
 		uint64_t i=0;
-		for (const char16_t * const *oldptr=oldstrset;
+		for (const ucs2_t * const *oldptr=oldstrset;
 							*oldptr; oldptr++) {
 			if (!compare(ptr,oldstrset[i],oldstrlen[i])) {
 				newstring.append(start,ptr-start);
@@ -376,13 +376,13 @@ char16_t *ucs2charstring::replace(const char16_t *str,
 	return newstring.detachString();
 }
 
-bool ucs2charstring::isInteger(const char16_t *str) {
+bool ucs2charstring::isInteger(const ucs2_t *str) {
 
 	if (isNullOrEmpty(str)) {
 		return false;
 	}
 
-	const char16_t	*ptr=str;
+	const ucs2_t	*ptr=str;
 	for (; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
@@ -394,13 +394,13 @@ bool ucs2charstring::isInteger(const char16_t *str) {
 	return (*(ptr-1)!='-');
 }
 
-bool ucs2charstring::isInteger(const char16_t *str, int32_t len) {
+bool ucs2charstring::isInteger(const ucs2_t *str, int32_t len) {
 
 	if (!str || !len) {
 		return false;
 	}
 
-	const char16_t	*ptr=str;
+	const ucs2_t	*ptr=str;
 	for (int32_t index=0; index<len; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
@@ -413,13 +413,13 @@ bool ucs2charstring::isInteger(const char16_t *str, int32_t len) {
 	return (*(ptr-1)!='-');
 }
 
-bool ucs2charstring::isNumber(const char16_t *str) {
+bool ucs2charstring::isNumber(const ucs2_t *str) {
 
 	if (isNullOrEmpty(str)) {
 		return false;
 	}
 
-	const char16_t	*ptr=str;
+	const ucs2_t	*ptr=str;
 	int32_t		decimal=0;
 	for (; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
@@ -435,13 +435,13 @@ bool ucs2charstring::isNumber(const char16_t *str) {
 	return (*(ptr-1)!='-' && *(ptr-1)!='.');
 }
 
-bool ucs2charstring::isNumber(const char16_t *str, int32_t len) {
+bool ucs2charstring::isNumber(const ucs2_t *str, int32_t len) {
 
 	if (!str || !len) {
 		return false;
 	}
 
-	const char16_t	*ptr=str;
+	const ucs2_t	*ptr=str;
 	int32_t		decimal=0;
 	for (int32_t index=0; index<len; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
@@ -458,38 +458,38 @@ bool ucs2charstring::isNumber(const char16_t *str, int32_t len) {
 	return (*(ptr-1)!='-' && *(ptr-1)!='.');
 }
 
-int64_t ucs2charstring::convertAmount(const char16_t *amount) {
+int64_t ucs2charstring::convertAmount(const ucs2_t *amount) {
 	if (!amount) {
 		return 0;
 	}
-	const char16_t	*dollarsstr=findFirst(amount,'$');
+	const ucs2_t	*dollarsstr=findFirst(amount,'$');
 	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
 	uint64_t	dollars=toUnsignedInteger(dollarsstr);
-	const char16_t	*centsstr=findFirst(amount,'.');
+	const ucs2_t	*centsstr=findFirst(amount,'.');
 	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
 }
 
-char16_t *ucs2charstring::convertAmount(int64_t amount) {
+ucs2_t *ucs2charstring::convertAmount(int64_t amount) {
 	uint16_t	len=integerLength(amount)+4;
 	if (len<6) {
 		len=6;
 	}
-	char16_t	negative[2];
+	ucs2_t	negative[2];
 	if (amount<0) {
 		negative[0]='-';
 	} else {
 		negative[0]='\0';
 	}
 	negative[1]='\0';
-	char16_t	*amountstr=new char16_t[len];
+	ucs2_t	*amountstr=new ucs2_t[len];
 	int64_t		amt;
 	#ifdef RUDIMENTS_HAVE_LLABS
 		amt=llabs((long long)amount);
 	#else
 		amt=abs((long)amount);
 	#endif
-	char16_t	*format=duplicate("$%s%lld.%02lld");
+	ucs2_t	*format=duplicate("$%s%lld.%02lld");
 	printf(amountstr,len,
 			format,negative,
 			amt/100,amt-(amt/100*100));
@@ -497,11 +497,11 @@ char16_t *ucs2charstring::convertAmount(int64_t amount) {
 	return amountstr;
 }
 
-char16_t *ucs2charstring::convertAmount(int64_t amount, uint16_t spaces) {
-	char16_t	*amt=convertAmount(amount);
+ucs2_t *ucs2charstring::convertAmount(int64_t amount, uint16_t spaces) {
+	ucs2_t	*amt=convertAmount(amount);
 	ssize_t	amtlen=length(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
-	char16_t	*buffer=new char16_t[realspaces+1];
+	ucs2_t	*buffer=new ucs2_t[realspaces+1];
 	buffer[realspaces]='\0';
 	bytestring::set(buffer,' ',realspaces);
 	bytestring::copy(buffer+realspaces-amtlen,amt+1,amtlen);
@@ -512,17 +512,17 @@ char16_t *ucs2charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	return buffer;
 }
 
-char16_t *ucs2charstring::escape(const char16_t *input,
-					const char16_t *characters) {
-	char16_t		*output;
+ucs2_t *ucs2charstring::escape(const ucs2_t *input,
+					const ucs2_t *characters) {
+	ucs2_t		*output;
 	uint64_t	outputlength;
 	escape(input,length(input),&output,&outputlength,characters);
 	return output;
 }
 
-void ucs2charstring::escape(const char16_t *input, uint64_t inputlength,
-				char16_t **output, uint64_t *outputlength,
-						const char16_t *characters) {
+void ucs2charstring::escape(const ucs2_t *input, uint64_t inputlength,
+				ucs2_t **output, uint64_t *outputlength,
+						const ucs2_t *characters) {
 
 	(*output)=NULL;
 	(*outputlength)=0;
@@ -554,21 +554,21 @@ void ucs2charstring::escape(const char16_t *input, uint64_t inputlength,
 			outputindex++;
 		}
 		if (pass==0) {
-			(*output)=new char16_t[(*outputlength)+1];
+			(*output)=new ucs2_t[(*outputlength)+1];
 			(*output)[(*outputlength)]='\0';
 		}
 	}
 }
 
-char16_t *ucs2charstring::unescape(const char16_t *input) {
-	char16_t		*output;
+ucs2_t *ucs2charstring::unescape(const ucs2_t *input) {
+	ucs2_t		*output;
 	uint64_t	outputsize;
 	unescape(input,length(input),&output,&outputsize);
 	return output;
 }
 
-void ucs2charstring::unescape(const char16_t *input, uint64_t inputlength,
-				char16_t **output, uint64_t *outputlength) {
+void ucs2charstring::unescape(const ucs2_t *input, uint64_t inputlength,
+				ucs2_t **output, uint64_t *outputlength) {
 
 	(*output)=NULL;
 	(*outputlength)=0;
@@ -597,13 +597,13 @@ void ucs2charstring::unescape(const char16_t *input, uint64_t inputlength,
 			escaped=false;
 		}
 		if (pass==0) {
-			(*output)=new char16_t[(*outputlength)+1];
+			(*output)=new ucs2_t[(*outputlength)+1];
 			(*output)[(*outputlength)]='\0';
 		}
 	}
 }
 
-void ucs2charstring::leftJustify(char16_t *str, int32_t len) {
+void ucs2charstring::leftJustify(ucs2_t *str, int32_t len) {
 
 	if (!str) {
 		return;
@@ -628,7 +628,7 @@ void ucs2charstring::leftJustify(char16_t *str, int32_t len) {
 	}
 }
 
-void ucs2charstring::rightJustify(char16_t *str, int32_t len) {
+void ucs2charstring::rightJustify(ucs2_t *str, int32_t len) {
 
 	if (!str) {
 		return;
@@ -653,7 +653,7 @@ void ucs2charstring::rightJustify(char16_t *str, int32_t len) {
 	}
 }
 
-void ucs2charstring::center(char16_t *str, int32_t len) {
+void ucs2charstring::center(ucs2_t *str, int32_t len) {
 
 	if (!str) {
 		return;
@@ -687,7 +687,7 @@ void ucs2charstring::center(char16_t *str, int32_t len) {
 	}
 }
 
-int32_t ucs2charstring::countLeadingSpaces(const char16_t *str, int32_t len) {
+int32_t ucs2charstring::countLeadingSpaces(const ucs2_t *str, int32_t len) {
 
 	if (!str) {
 		return 0;
@@ -700,7 +700,7 @@ int32_t ucs2charstring::countLeadingSpaces(const char16_t *str, int32_t len) {
 	return leadingspaces;
 }
 
-int32_t ucs2charstring::countTrailingSpaces(const char16_t *str, int32_t len) {
+int32_t ucs2charstring::countTrailingSpaces(const ucs2_t *str, int32_t len) {
 
 	if (!str) {
 		return 0;
@@ -713,50 +713,50 @@ int32_t ucs2charstring::countTrailingSpaces(const char16_t *str, int32_t len) {
 	return trailingspaces;
 }
 
-char16_t *ucs2charstring::parseNumber(int16_t number) {
+ucs2_t *ucs2charstring::parseNumber(int16_t number) {
 	return parseNumber((int64_t)number,1);
 }
 
-char16_t *ucs2charstring::parseNumber(int16_t number,
+ucs2_t *ucs2charstring::parseNumber(int16_t number,
 				uint16_t zeropadding) {
 	return parseNumber((int64_t)number,zeropadding);
 }
 
-char16_t *ucs2charstring::parseNumber(uint16_t number) {
+ucs2_t *ucs2charstring::parseNumber(uint16_t number) {
 	return parseNumber((uint64_t)number,1);
 }
 
-char16_t *ucs2charstring::parseNumber(uint16_t number, uint16_t zeropadding) {
+ucs2_t *ucs2charstring::parseNumber(uint16_t number, uint16_t zeropadding) {
 	return parseNumber((uint64_t)number,zeropadding);
 }
 
-char16_t *ucs2charstring::parseNumber(int32_t number) {
+ucs2_t *ucs2charstring::parseNumber(int32_t number) {
 	return parseNumber((int64_t)number,1);
 }
 
-char16_t *ucs2charstring::parseNumber(int32_t number, uint16_t zeropadding) {
+ucs2_t *ucs2charstring::parseNumber(int32_t number, uint16_t zeropadding) {
 	return parseNumber((int64_t)number,zeropadding);
 }
 
-char16_t *ucs2charstring::parseNumber(uint32_t number) {
+ucs2_t *ucs2charstring::parseNumber(uint32_t number) {
 	return parseNumber((uint64_t)number,1);
 }
 
-char16_t *ucs2charstring::parseNumber(uint32_t number, uint16_t zeropadding) {
+ucs2_t *ucs2charstring::parseNumber(uint32_t number, uint16_t zeropadding) {
 	return parseNumber((uint64_t)number,zeropadding);
 }
 
-char16_t *ucs2charstring::parseNumber(int64_t number) {
+ucs2_t *ucs2charstring::parseNumber(int64_t number) {
 	return parseNumber(number,1);
 }
 
-char16_t *ucs2charstring::parseNumber(int64_t number, uint16_t zeropadding) {
+ucs2_t *ucs2charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	if (number>=0) {
 		return parseNumber((uint64_t)number,zeropadding);
 	}
 	uint16_t	len=integerLength(number);
 	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
-	char16_t	*ptr=new char16_t[strlen+1];
+	ucs2_t	*ptr=new ucs2_t[strlen+1];
 	*ptr='-';
 	ptr+=strlen;
 	*ptr='\0';
@@ -772,14 +772,14 @@ char16_t *ucs2charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	return ptr;
 }
 
-char16_t *ucs2charstring::parseNumber(uint64_t number) {
+ucs2_t *ucs2charstring::parseNumber(uint64_t number) {
 	return parseNumber(number,1);
 }
 
-char16_t *ucs2charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
+ucs2_t *ucs2charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
-	char16_t	*ptr=new char16_t[strlen+1];
+	ucs2_t	*ptr=new ucs2_t[strlen+1];
 	ptr+=strlen;
 	*ptr='\0';
 	while (strlen) {
@@ -791,60 +791,60 @@ char16_t *ucs2charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	return ptr;
 }
 
-char16_t *ucs2charstring::parseNumber(float number) {
+ucs2_t *ucs2charstring::parseNumber(float number) {
 	return parseNumber((long double)number);
 }
 
-char16_t *ucs2charstring::parseNumber(float number, uint16_t scale) {
+ucs2_t *ucs2charstring::parseNumber(float number, uint16_t scale) {
 	return parseNumber((long double)number,scale);
 }
 
-char16_t *ucs2charstring::parseNumber(float number,
+ucs2_t *ucs2charstring::parseNumber(float number,
 				uint16_t precision, uint16_t scale) {
 	return parseNumber((long double)number,precision,scale);
 }
 
-char16_t *ucs2charstring::parseNumber(double number) {
+ucs2_t *ucs2charstring::parseNumber(double number) {
 	return parseNumber((long double)number);
 }
 
-char16_t *ucs2charstring::parseNumber(double number,
+ucs2_t *ucs2charstring::parseNumber(double number,
 				uint16_t scale) {
 	return parseNumber((long double)number,scale);
 }
 
-char16_t *ucs2charstring::parseNumber(double number,
+ucs2_t *ucs2charstring::parseNumber(double number,
 				uint16_t precision, uint16_t scale) {
 	return parseNumber((long double)number,precision,scale);
 }
 
-char16_t *ucs2charstring::parseNumber(long double number) {
+ucs2_t *ucs2charstring::parseNumber(long double number) {
 	char		*str=new char[22];
 	charstring::printf(str,22,"%Lf",number);
-	char16_t	*retval=duplicate(str);
+	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::parseNumber(long double number, uint16_t scale) {
+ucs2_t *ucs2charstring::parseNumber(long double number, uint16_t scale) {
 	char		*str=new char[22];
 	charstring::printf(str,22,"%.*Lf",scale,number);
-	char16_t	*retval=duplicate(str);
+	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::parseNumber(long double number,
+ucs2_t *ucs2charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
 	size_t		strlen=precision+3;
 	char		*str=new char[strlen];
 	charstring::printf(str,strlen,"%*.*Lf",precision,scale,number);
-	char16_t	*retval=duplicate(str);
+	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
 }
 
-void ucs2charstring::bothTrim(char16_t *string, char16_t character) {
+void ucs2charstring::bothTrim(ucs2_t *string, ucs2_t character) {
 	leftTrim(string,character);
 	rightTrim(string,character);
 }
@@ -897,29 +897,29 @@ uint16_t ucs2charstring::integerLength(uint64_t number) {
 	return len;
 }
 
-size_t ucs2charstring::length(const char16_t *string) {
+size_t ucs2charstring::length(const ucs2_t *string) {
 	size_t	len=0;
 	if (string) {
-		for (const char16_t *s=string; *s; s++) {
+		for (const ucs2_t *s=string; *s; s++) {
 			len++;
 		}
 	}
 	return len;
 }
 
-size_t ucs2charstring::size(const char16_t *string) {
-	return (string)?length(string)+1:0;
+size_t ucs2charstring::size(const ucs2_t *string) {
+	return (string)?(length(string)+1)*sizeof(ucs2_t):0;
 }
 
-bool ucs2charstring::isNullOrEmpty(const char16_t *string) {
+bool ucs2charstring::isNullOrEmpty(const ucs2_t *string) {
 	return !(string && string[0]);
 }
 
-bool ucs2charstring::isYes(const char16_t *string) {
-	const char16_t	yes[]={'y','e','s',0};
-	const char16_t	truestr[]={'t','r','u','e',0};
-	const char16_t	on[]={'o','n',0};
-	char16_t	next;
+bool ucs2charstring::isYes(const ucs2_t *string) {
+	const ucs2_t	yes[]={'y','e','s',0};
+	const ucs2_t	truestr[]={'t','r','u','e',0};
+	const ucs2_t	on[]={'o','n',0};
+	ucs2_t	next;
 	if (!string) {
 		return false;
 	} else if (!compareIgnoringCase(string,yes,3)) {
@@ -938,11 +938,11 @@ bool ucs2charstring::isYes(const char16_t *string) {
 	return (!next || !ucs2character::isAlphanumeric(next));
 }
 
-bool ucs2charstring::isNo(const char16_t *string) {
-	const char16_t	no[]={'n','o',0};
-	const char16_t	falsestr[]={'f','a','l','s','e',0};
-	const char16_t	off[]={'o','f','f',0};
-	char16_t	next;
+bool ucs2charstring::isNo(const ucs2_t *string) {
+	const ucs2_t	no[]={'n','o',0};
+	const ucs2_t	falsestr[]={'f','a','l','s','e',0};
+	const ucs2_t	off[]={'o','f','f',0};
+	ucs2_t	next;
 	if (!string) {
 		return false;
 	} else if (!compareIgnoringCase(string,no,2)) {
@@ -961,61 +961,61 @@ bool ucs2charstring::isNo(const char16_t *string) {
 	return (!next || !ucs2character::isAlphanumeric(next));
 }
 
-void ucs2charstring::zero(char16_t *str, size_t len) {
-	bytestring::set(str,0,len);
+void ucs2charstring::zero(ucs2_t *str, size_t len) {
+	bytestring::set(str,0,len*sizeof(ucs2_t));
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, const char16_t *source) {
+ucs2_t *ucs2charstring::append(ucs2_t *dest, const ucs2_t *source) {
 	return append(dest,source,length(source)+1);
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, const char16_t *source, size_t len) {
+ucs2_t *ucs2charstring::append(ucs2_t *dest, const ucs2_t *source, size_t len) {
 	return copy(dest+length(dest),source,len);
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, int64_t number) {
-	char16_t	*str=parseNumber(number);
-	char16_t	*retval=append(dest,str);
+ucs2_t *ucs2charstring::append(ucs2_t *dest, int64_t number) {
+	ucs2_t	*str=parseNumber(number);
+	ucs2_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, uint64_t number) {
-	char16_t	*str=parseNumber(number);
-	char16_t	*retval=append(dest,str);
+ucs2_t *ucs2charstring::append(ucs2_t *dest, uint64_t number) {
+	ucs2_t	*str=parseNumber(number);
+	ucs2_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, double number) {
-	char16_t	*str=parseNumber(number);
-	char16_t	*retval=append(dest,str);
+ucs2_t *ucs2charstring::append(ucs2_t *dest, double number) {
+	ucs2_t	*str=parseNumber(number);
+	ucs2_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, double number,
+ucs2_t *ucs2charstring::append(ucs2_t *dest, double number,
 							uint16_t scale) {
-	char16_t	*str=parseNumber(number,scale);
-	char16_t	*retval=append(dest,str);
+	ucs2_t	*str=parseNumber(number,scale);
+	ucs2_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::append(char16_t *dest, double number,
+ucs2_t *ucs2charstring::append(ucs2_t *dest, double number,
 							uint16_t precision,
 							uint16_t scale) {
-	char16_t	*str=parseNumber(number,precision,scale);
-	char16_t	*retval=append(dest,str);
+	ucs2_t	*str=parseNumber(number,precision,scale);
+	ucs2_t	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char16_t *ucs2charstring::copy(char16_t *dest, const char16_t *source) {
+ucs2_t *ucs2charstring::copy(ucs2_t *dest, const ucs2_t *source) {
 	return copy(dest,source,length(source)+1);
 }
 
-char16_t *ucs2charstring::copy(char16_t *dest, const char16_t *source,
+ucs2_t *ucs2charstring::copy(ucs2_t *dest, const ucs2_t *source,
 								size_t len) {
 	if (!dest || !source) {
 		return dest;
@@ -1032,27 +1032,27 @@ char16_t *ucs2charstring::copy(char16_t *dest, const char16_t *source,
 	return dest;
 }
 
-char16_t *ucs2charstring::copy(char16_t *dest, size_t location,
-						const char16_t *source) {
+ucs2_t *ucs2charstring::copy(ucs2_t *dest, size_t location,
+						const ucs2_t *source) {
 	return copy(dest+location,source);
 }
 
-char16_t *ucs2charstring::copy(char16_t *dest, size_t location,
-					const char16_t *source, size_t len) {
+ucs2_t *ucs2charstring::copy(ucs2_t *dest, size_t location,
+					const ucs2_t *source, size_t len) {
 	return copy(dest+location,source,len);
 }
 
-char16_t *ucs2charstring::safeCopy(char16_t *dest, size_t destlen,
-						const char16_t *source) {
+ucs2_t *ucs2charstring::safeCopy(ucs2_t *dest, size_t destlen,
+						const ucs2_t *source) {
 	return safeCopy(dest,destlen,source,length(source)+1);
 }
 
-char16_t *ucs2charstring::safeCopy(char16_t *dest, size_t destlen,
-				const char16_t *source, size_t sourcelen) {
+ucs2_t *ucs2charstring::safeCopy(ucs2_t *dest, size_t destlen,
+				const ucs2_t *source, size_t sourcelen) {
 	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
 }
 
-int32_t ucs2charstring::compare(const char16_t *str1, const char16_t *str2) {
+int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2) {
 	if (!str2) {
 		return 1;
 	}
@@ -1071,7 +1071,7 @@ int32_t ucs2charstring::compare(const char16_t *str1, const char16_t *str2) {
 	return *str1-*str2;
 }
 
-int32_t ucs2charstring::compare(const char16_t *str1, const char16_t *str2,
+int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2,
 								size_t len) {
 	if (!str2) {
 		return 1;
@@ -1092,8 +1092,8 @@ int32_t ucs2charstring::compare(const char16_t *str1, const char16_t *str2,
 	return (len)?*str1-*str2:0;
 }
 
-int32_t ucs2charstring::compareIgnoringCase(const char16_t *str1,
-							const char16_t *str2) {
+int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
+							const ucs2_t *str2) {
 	if (!str2) {
 		return 1;
 	}
@@ -1114,8 +1114,8 @@ int32_t ucs2charstring::compareIgnoringCase(const char16_t *str1,
 			ucs2character::toUpperCase(*str2);
 }
 
-int32_t ucs2charstring::compareIgnoringCase(const char16_t *str1,
-						const char16_t *str2,
+int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
+						const ucs2_t *str2,
 						size_t len) {
 	if (!str2) {
 		return 1;
@@ -1138,21 +1138,21 @@ int32_t ucs2charstring::compareIgnoringCase(const char16_t *str1,
 			ucs2character::toUpperCase(*str2):0;
 }
 
-int32_t ucs2charstring::compareNatural(const char16_t *str1,
-					const char16_t *str2) {
-	const char16_t	dot[]={'.',0};
+int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
+					const ucs2_t *str2) {
+	const ucs2_t	dot[]={'.',0};
 	return compareNatural(str1,str2,dot);
 }
 
-int32_t ucs2charstring::compareNatural(const char16_t *str1,
-					const char16_t *str2,
-					const char16_t *delimiters) {
+int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
+					const ucs2_t *str2,
+					const ucs2_t *delimiters) {
 
 	int64_t		difference=0;
-	const char16_t	*start1=NULL;
-	const char16_t	*start2=NULL;
-	char16_t		*num1=NULL;
-	char16_t		*num2=NULL;
+	const ucs2_t	*start1=NULL;
+	const ucs2_t	*start2=NULL;
+	ucs2_t		*num1=NULL;
+	ucs2_t		*num2=NULL;
 	for (;;) {
 
 		// handle end-of-string cases...
@@ -1233,15 +1233,15 @@ int32_t ucs2charstring::compareNatural(const char16_t *str1,
 	}
 }
 
-int32_t ucs2charstring::compareVersions(const char16_t *str1,
-					const char16_t *str2) {
-	const char16_t	dot[]={'.',0};
+int32_t ucs2charstring::compareVersions(const ucs2_t *str1,
+					const ucs2_t *str2) {
+	const ucs2_t	dot[]={'.',0};
 	return compareVersions(str1,str2,dot);
 }
 
-int32_t ucs2charstring::compareVersions(const char16_t *str1,
-					const char16_t *str2,
-					const char16_t *delimiters) {
+int32_t ucs2charstring::compareVersions(const ucs2_t *str1,
+					const ucs2_t *str2,
+					const ucs2_t *delimiters) {
 
 	int64_t	difference=0;
 	for (;;) {
@@ -1284,20 +1284,20 @@ int32_t ucs2charstring::compareVersions(const char16_t *str1,
 	}
 }
 
-bool ucs2charstring::compareWithWildcards(const char16_t *string,
+bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 					size_t stringlength,
-					const char16_t *pattern,
+					const ucs2_t *pattern,
 					size_t patternlength,
-					char16_t singlewildcard,
-					char16_t multiwildcard) {
+					ucs2_t singlewildcard,
+					ucs2_t multiwildcard) {
 
 	// handle degenerate case
 	if (!string && !pattern) {
 		return true;
 	}
 
-	const char16_t	*stringend=string+stringlength;
-	const char16_t	*patternend=pattern+patternlength;
+	const ucs2_t	*stringend=string+stringlength;
+	const ucs2_t	*patternend=pattern+patternlength;
 
 	for (;;) {
 
@@ -1321,7 +1321,7 @@ bool ucs2charstring::compareWithWildcards(const char16_t *string,
 			return false;
 		}
 
-		// if we encountered a multi-char16_t wildcard...
+		// if we encountered a multi-ucs2_t wildcard...
 		if (multiwildcard && *pattern==multiwildcard) {
 
 			// skip to the next non-multi-character wildcarad
@@ -1375,40 +1375,40 @@ bool ucs2charstring::compareWithWildcards(const char16_t *string,
 	}
 }
 
-bool ucs2charstring::compareWithWildcards(const char16_t *string,
-					const char16_t *pattern,
+bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
+					const ucs2_t *pattern,
 					size_t patternlength,
-					char16_t singlewildcard,
-					char16_t multiwildcard) {
+					ucs2_t singlewildcard,
+					ucs2_t multiwildcard) {
 	return compareWithWildcards(string,length(string),
 					pattern,patternlength,
 					singlewildcard,multiwildcard);
 }
 
-bool ucs2charstring::compareWithWildcards(const char16_t *string,
+bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 					size_t stringlength,
-					const char16_t *pattern,
-					char16_t singlewildcard,
-					char16_t multiwildcard) {
+					const ucs2_t *pattern,
+					ucs2_t singlewildcard,
+					ucs2_t multiwildcard) {
 	return compareWithWildcards(string,stringlength,
 					pattern,length(pattern),
 					singlewildcard,multiwildcard);
 }
 
-bool ucs2charstring::compareWithWildcards(const char16_t *string,
-					const char16_t *pattern,
-					char16_t singlewildcard,
-					char16_t multiwildcard) {
+bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
+					const ucs2_t *pattern,
+					ucs2_t singlewildcard,
+					ucs2_t multiwildcard) {
 	return compareWithWildcards(string,length(string),
 					pattern,length(pattern),
 					singlewildcard,multiwildcard);
 }
 
-bool ucs2charstring::inSet(const char16_t *str, const char16_t * const *set) {
+bool ucs2charstring::inSet(const ucs2_t *str, const ucs2_t * const *set) {
 	if (!set || !set[0]) {
 		return !str;
 	}
-	for (const char16_t * const *s=set; *s; s++) {
+	for (const ucs2_t * const *s=set; *s; s++) {
 		if (!compare(str,*s)) {
 			return true;
 		}
@@ -1416,12 +1416,12 @@ bool ucs2charstring::inSet(const char16_t *str, const char16_t * const *set) {
 	return false;
 }
 
-bool ucs2charstring::inSetIgnoringCase(const char16_t *str,
-					const char16_t * const *set) {
+bool ucs2charstring::inSetIgnoringCase(const ucs2_t *str,
+					const ucs2_t * const *set) {
 	if (!set || !set[0]) {
 		return !str;
 	}
-	for (const char16_t * const *s=set; *s; s++) {
+	for (const ucs2_t * const *s=set; *s; s++) {
 		if (!compareIgnoringCase(str,*s)) {
 			return true;
 		}
@@ -1429,43 +1429,43 @@ bool ucs2charstring::inSetIgnoringCase(const char16_t *str,
 	return false;
 }
 
-bool ucs2charstring::contains(const char16_t *haystack,
-					const char16_t *needle) {
+bool ucs2charstring::contains(const ucs2_t *haystack,
+					const ucs2_t *needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
-bool ucs2charstring::containsIgnoringCase(const char16_t *haystack,
-						const char16_t *needle) {
+bool ucs2charstring::containsIgnoringCase(const ucs2_t *haystack,
+						const ucs2_t *needle) {
 	return (findFirstIgnoringCase(haystack,needle)!=NULL);
 }
 
-bool ucs2charstring::contains(const char16_t *haystack, char16_t needle) {
+bool ucs2charstring::contains(const ucs2_t *haystack, ucs2_t needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
-bool ucs2charstring::containsIgnoringCase(const char16_t *haystack,
-						char16_t needle) {
+bool ucs2charstring::containsIgnoringCase(const ucs2_t *haystack,
+						ucs2_t needle) {
 	return (findFirstIgnoringCase(haystack,needle)!=NULL);
 }
 
-bool ucs2charstring::startsWith(const char16_t *haystack,
-					const char16_t *needle) {
+bool ucs2charstring::startsWith(const ucs2_t *haystack,
+					const ucs2_t *needle) {
 	return !compare(haystack,needle,length(needle));
 }
 
-bool ucs2charstring::endsWith(const char16_t *haystack,
-					const char16_t *needle) {
+bool ucs2charstring::endsWith(const ucs2_t *haystack,
+					const ucs2_t *needle) {
 	size_t	needlelen=length(needle);
 	size_t	haystacklen=length(haystack);
 	return (haystacklen>=needlelen &&
 		!compare(haystack+haystacklen-needlelen,needle));
 }
 
-const char16_t *ucs2charstring::findFirst(const char16_t *haystack,
-						const char16_t *needle) {
+const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
+						const ucs2_t *needle) {
 	size_t	haystacklen=length(haystack);
 	size_t	needlelen=length(needle);
-	for (const char16_t *ptr=haystack;
+	for (const ucs2_t *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
 		if (!compare(ptr,needle,needlelen)) {
@@ -1475,11 +1475,11 @@ const char16_t *ucs2charstring::findFirst(const char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findFirstIgnoringCase(const char16_t *haystack,
-							const char16_t *needle) {
+const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
+							const ucs2_t *needle) {
 	size_t	haystacklen=length(haystack);
 	size_t	needlelen=length(needle);
-	for (const char16_t *ptr=haystack;
+	for (const ucs2_t *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
 		if (!compareIgnoringCase(ptr,needle,needlelen)) {
@@ -1489,10 +1489,10 @@ const char16_t *ucs2charstring::findFirstIgnoringCase(const char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findFirst(const char16_t *haystack,
-							char16_t needle) {
+const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
+							ucs2_t needle) {
 	size_t	haystacklen=length(haystack);
-	for (const char16_t *ptr=haystack;
+	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
 		if (*ptr==needle) {
@@ -1502,11 +1502,11 @@ const char16_t *ucs2charstring::findFirst(const char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findFirstIgnoringCase(const char16_t *haystack,
-							char16_t needle) {
+const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
+							ucs2_t needle) {
 	size_t	haystacklen=length(haystack);
 	needle=ucs2character::toLowerCase(needle);
-	for (const char16_t *ptr=haystack;
+	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
 		if (ucs2character::toLowerCase(*ptr)==needle) {
@@ -1516,74 +1516,74 @@ const char16_t *ucs2charstring::findFirstIgnoringCase(const char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findFirstOrEnd(const char16_t *haystack,
-							char16_t needle) {
+const ucs2_t *ucs2charstring::findFirstOrEnd(const ucs2_t *haystack,
+							ucs2_t needle) {
 	if (!haystack) {
 		return NULL;
 	}
-	const char16_t	*retval=findFirst(haystack,needle);
+	const ucs2_t	*retval=findFirst(haystack,needle);
 	if (!retval) {
 		retval=haystack+length(haystack);
 	}
 	return retval;
 }
 
-const char16_t *ucs2charstring::findFirstOrEndIgnoringCase(
-						const char16_t *haystack,
-						char16_t needle) {
+const ucs2_t *ucs2charstring::findFirstOrEndIgnoringCase(
+						const ucs2_t *haystack,
+						ucs2_t needle) {
 	if (!haystack) {
 		return NULL;
 	}
-	const char16_t	*retval=findFirstIgnoringCase(haystack,needle);
+	const ucs2_t	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
 		retval=haystack+length(haystack);
 	}
 	return retval;
 }
 
-const char16_t *ucs2charstring::findFirstOrEnd(const char16_t *haystack,
-						const char16_t *needle) {
+const ucs2_t *ucs2charstring::findFirstOrEnd(const ucs2_t *haystack,
+						const ucs2_t *needle) {
 	if (!haystack || !needle) {
 		return NULL;
 	}
-	const char16_t	*retval=findFirst(haystack,needle);
+	const ucs2_t	*retval=findFirst(haystack,needle);
 	if (!retval) {
 		retval=haystack+length(haystack);
 	}
 	return retval;
 }
 
-const char16_t *ucs2charstring::findFirstOrEndIgnoringCase(
-						const char16_t *haystack,
-						const char16_t *needle) {
+const ucs2_t *ucs2charstring::findFirstOrEndIgnoringCase(
+						const ucs2_t *haystack,
+						const ucs2_t *needle) {
 	if (!haystack || !needle) {
 		return NULL;
 	}
-	const char16_t	*retval=findFirstIgnoringCase(haystack,needle);
+	const ucs2_t	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
 		retval=haystack+length(haystack);
 	}
 	return retval;
 }
 
-char16_t *ucs2charstring::findFirstOrEnd(char16_t *haystack,
-						const char16_t *needle) {
-	return (char16_t *)(findFirstOrEnd(
-				(const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findFirstOrEnd(ucs2_t *haystack,
+						const ucs2_t *needle) {
+	return (ucs2_t *)(findFirstOrEnd(
+				(const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findFirstOrEndIgnoringCase(char16_t *haystack,
-						const char16_t *needle) {
-	return (char16_t *)(findFirstOrEndIgnoringCase(
-					(const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findFirstOrEndIgnoringCase(ucs2_t *haystack,
+						const ucs2_t *needle) {
+	return (ucs2_t *)(findFirstOrEndIgnoringCase(
+					(const ucs2_t *)(haystack),needle));
 }
 
-const char16_t *ucs2charstring::findLast(const char16_t *haystack,
-							char16_t needle) {
+const ucs2_t *ucs2charstring::findLast(const ucs2_t *haystack,
+							ucs2_t needle) {
 	if (!haystack) {
 		return NULL;
 	}
-	const char16_t	*c=haystack;
+	const ucs2_t	*c=haystack;
 	while (*c) {
 		c++;
 	}
@@ -1599,64 +1599,64 @@ const char16_t *ucs2charstring::findLast(const char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findLastIgnoringCase(const char16_t *haystack,
-							char16_t needle) {
-	return (char16_t *)(findFirstOrEndIgnoringCase(
-					(const char16_t *)(haystack),needle));
+const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
+							ucs2_t needle) {
+	return (ucs2_t *)(findFirstOrEndIgnoringCase(
+					(const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findFirst(char16_t *haystack,
-					const char16_t *needle) {
-	return (char16_t *)(findFirst((const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findFirst(ucs2_t *haystack,
+					const ucs2_t *needle) {
+	return (ucs2_t *)(findFirst((const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findFirstIgnoringCase(char16_t *haystack,
-						const char16_t *needle) {
-	return (char16_t *)(findFirstIgnoringCase(
-					(const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findFirstIgnoringCase(ucs2_t *haystack,
+						const ucs2_t *needle) {
+	return (ucs2_t *)(findFirstIgnoringCase(
+					(const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findFirst(char16_t *haystack, char16_t needle) {
-	return (char16_t *)(findFirst((const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findFirst(ucs2_t *haystack, ucs2_t needle) {
+	return (ucs2_t *)(findFirst((const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findFirstIgnoringCase(char16_t *haystack,
-							char16_t needle) {
-	return (char16_t *)(findFirstIgnoringCase(
-					(const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findFirstIgnoringCase(ucs2_t *haystack,
+							ucs2_t needle) {
+	return (ucs2_t *)(findFirstIgnoringCase(
+					(const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findLast(char16_t *haystack, const char16_t *needle) {
-	return (char16_t *)(findLast((const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findLast(ucs2_t *haystack, const ucs2_t *needle) {
+	return (ucs2_t *)(findLast((const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findLastIgnoringCase(char16_t *haystack,
-						const char16_t *needle) {
-	return (char16_t *)(findLastIgnoringCase(
-					(const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findLastIgnoringCase(ucs2_t *haystack,
+						const ucs2_t *needle) {
+	return (ucs2_t *)(findLastIgnoringCase(
+					(const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findLast(char16_t *haystack, char16_t needle) {
-	return (char16_t *)(findLast((const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findLast(ucs2_t *haystack, ucs2_t needle) {
+	return (ucs2_t *)(findLast((const ucs2_t *)(haystack),needle));
 }
 
-char16_t *ucs2charstring::findLastIgnoringCase(char16_t *haystack,
-							char16_t needle) {
-	return (char16_t *)(findLastIgnoringCase(
-					(const char16_t *)(haystack),needle));
+ucs2_t *ucs2charstring::findLastIgnoringCase(ucs2_t *haystack,
+							ucs2_t needle) {
+	return (ucs2_t *)(findLastIgnoringCase(
+					(const ucs2_t *)(haystack),needle));
 }
 
-const char16_t *ucs2charstring::findFirstOfSet(const char16_t *haystack,
-							const char16_t *set) {
-	return (char16_t *)(findFirstOfSet((char16_t *)(haystack),set));
+const ucs2_t *ucs2charstring::findFirstOfSet(const ucs2_t *haystack,
+							const ucs2_t *set) {
+	return (ucs2_t *)(findFirstOfSet((ucs2_t *)(haystack),set));
 }
 
-char16_t *ucs2charstring::findFirstOfSet(char16_t *haystack,
-							const char16_t *set) {
+ucs2_t *ucs2charstring::findFirstOfSet(ucs2_t *haystack,
+							const ucs2_t *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char16_t	*retval=haystack;
+	ucs2_t	*retval=haystack;
 	while (*retval) {
 		if (contains(set,*retval)) {
 			return retval;
@@ -1666,17 +1666,17 @@ char16_t *ucs2charstring::findFirstOfSet(char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findFirstOfSetOrEnd(const char16_t *haystack,
-							const char16_t *set) {
-	return (char16_t *)(findFirstOfSetOrEnd((char16_t *)(haystack),set));
+const ucs2_t *ucs2charstring::findFirstOfSetOrEnd(const ucs2_t *haystack,
+							const ucs2_t *set) {
+	return (ucs2_t *)(findFirstOfSetOrEnd((ucs2_t *)(haystack),set));
 }
 
-char16_t *ucs2charstring::findFirstOfSetOrEnd(char16_t *haystack,
-							const char16_t *set) {
+ucs2_t *ucs2charstring::findFirstOfSetOrEnd(ucs2_t *haystack,
+							const ucs2_t *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char16_t	*retval=haystack;
+	ucs2_t	*retval=haystack;
 	while (*retval) {
 		if (contains(set,*retval)) {
 			return retval;
@@ -1686,17 +1686,17 @@ char16_t *ucs2charstring::findFirstOfSetOrEnd(char16_t *haystack,
 	return retval;
 }
 
-const char16_t *ucs2charstring::findLastOfSet(const char16_t *haystack,
-							const char16_t *set) {
-	return (char16_t *)(findLastOfSet((char16_t *)(haystack),set));
+const ucs2_t *ucs2charstring::findLastOfSet(const ucs2_t *haystack,
+							const ucs2_t *set) {
+	return (ucs2_t *)(findLastOfSet((ucs2_t *)(haystack),set));
 }
 
-char16_t *ucs2charstring::findLastOfSet(char16_t *haystack,
-						const char16_t *set) {
+ucs2_t *ucs2charstring::findLastOfSet(ucs2_t *haystack,
+						const ucs2_t *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char16_t	*retval=haystack+ucs2charstring::length(haystack);
+	ucs2_t	*retval=haystack+ucs2charstring::length(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
@@ -1706,17 +1706,17 @@ char16_t *ucs2charstring::findLastOfSet(char16_t *haystack,
 	return NULL;
 }
 
-const char16_t *ucs2charstring::findLastOfSetOrEnd(const char16_t *haystack,
-							const char16_t *set) {
-	return (char16_t *)(findLastOfSetOrEnd((char16_t *)(haystack),set));
+const ucs2_t *ucs2charstring::findLastOfSetOrEnd(const ucs2_t *haystack,
+							const ucs2_t *set) {
+	return (ucs2_t *)(findLastOfSetOrEnd((ucs2_t *)(haystack),set));
 }
 
-char16_t *ucs2charstring::findLastOfSetOrEnd(char16_t *haystack,
-						const char16_t *set) {
+ucs2_t *ucs2charstring::findLastOfSetOrEnd(ucs2_t *haystack,
+						const ucs2_t *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char16_t	*retval=haystack+length(haystack);
+	ucs2_t	*retval=haystack+length(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
@@ -1726,8 +1726,8 @@ char16_t *ucs2charstring::findLastOfSetOrEnd(char16_t *haystack,
 	return haystack+length(haystack);
 }
 
-size_t ucs2charstring::lengthContainingSet(const char16_t *haystack,
-							const char16_t *set) {
+size_t ucs2charstring::lengthContainingSet(const ucs2_t *haystack,
+							const ucs2_t *set) {
 	if (!haystack || !set) {
 		return 0;
 	}
@@ -1738,8 +1738,8 @@ size_t ucs2charstring::lengthContainingSet(const char16_t *haystack,
 	return index;
 }
 
-size_t ucs2charstring::lengthNotContainingSet(const char16_t *haystack,
-							const char16_t *set) {
+size_t ucs2charstring::lengthNotContainingSet(const ucs2_t *haystack,
+							const ucs2_t *set) {
 	if (!haystack || !set) {
 		return 0;
 	}
@@ -1750,17 +1750,17 @@ size_t ucs2charstring::lengthNotContainingSet(const char16_t *haystack,
 	return index;
 }
 
-char16_t *ucs2charstring::before(const char16_t *str,
-					const char16_t *delimiter) {
+ucs2_t *ucs2charstring::before(const ucs2_t *str,
+					const ucs2_t *delimiter) {
 	return between(str,NULL,delimiter);
 }
 
-char16_t *ucs2charstring::between(const char16_t *str,
-					const char16_t *start,
-					const char16_t *end) {
+ucs2_t *ucs2charstring::between(const ucs2_t *str,
+					const ucs2_t *start,
+					const ucs2_t *end) {
 
 	// find the start (or use beginning of "str" if "start" is empty/NULL)
-	const char16_t	*s=NULL;
+	const ucs2_t	*s=NULL;
 	if (isNullOrEmpty(start)) {
 		s=str;
 	} else {
@@ -1776,7 +1776,7 @@ char16_t *ucs2charstring::between(const char16_t *str,
 	}
 
 	// find the end (or use end of "str" if "end" is empty/NULL)
-	const char16_t	*e=NULL;
+	const ucs2_t	*e=NULL;
 	if (isNullOrEmpty(end)) {
 		for (e=s; *e; e++) {}
 	} else {
@@ -1790,23 +1790,23 @@ char16_t *ucs2charstring::between(const char16_t *str,
 	return ucs2charstring::duplicate(s,e-s);
 }
 
-char16_t *ucs2charstring::after(const char16_t *str,
-					const char16_t *delimiter) {
+ucs2_t *ucs2charstring::after(const ucs2_t *str,
+					const ucs2_t *delimiter) {
 	return between(str,delimiter,NULL);
 }
 
-char16_t *ucs2charstring::duplicate(const char *str) {
+ucs2_t *ucs2charstring::duplicate(const char *str) {
 	if (!str) {
 		return NULL;
 	}
 	return duplicate(str,charstring::length(str));
 }
 
-char16_t *ucs2charstring::duplicate(const char *str, size_t len) {
+ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
 	if (!str) {
 		return NULL;
 	}
-	char16_t	*buffer=new char16_t[len+1];
+	ucs2_t	*buffer=new ucs2_t[len+1];
 	for (size_t i=0; i<len; i++) {
 		buffer[i]=ucs2character::duplicate(str[i]);
 	}
@@ -1814,42 +1814,42 @@ char16_t *ucs2charstring::duplicate(const char *str, size_t len) {
 	return buffer;
 }
 
-char16_t *ucs2charstring::duplicate(const char16_t *str) {
+ucs2_t *ucs2charstring::duplicate(const ucs2_t *str) {
 	if (!str) {
 		return NULL;
 	}
 	return duplicate(str,length(str));
 }
 
-char16_t *ucs2charstring::duplicate(const char16_t *str, size_t len) {
+ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
 	if (!str) {
 		return NULL;
 	}
-	char16_t	*buffer=new char16_t[len+1];
+	ucs2_t	*buffer=new ucs2_t[len+1];
 	copy(buffer,str,len);
 	buffer[len]='\0';
 	return buffer;
 }
 
-char16_t *ucs2charstring::duplicate(const wchar_t *string) {
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string) {
 	return duplicate(string,wcharstring::length(string),'?');
 }
 
-char16_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
 	return duplicate(string,len,'?');
 }
 
-char16_t *ucs2charstring::duplicate(const wchar_t *string,
-					char16_t replacement) {
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
+					ucs2_t replacement) {
 	return duplicate(string,wcharstring::length(string),replacement);
 }
 
-char16_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
-							char16_t replacement) {
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
+							ucs2_t replacement) {
 	if (!string) {
 		return NULL;
 	}
-	char16_t	*retval=new char16_t[len+1];
+	ucs2_t	*retval=new ucs2_t[len+1];
 	for (size_t i=0; i<len; i++) {
 		retval[i]=ucs2character::duplicate(string[i],replacement);
 	}
@@ -1857,7 +1857,7 @@ char16_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 	return retval;
 }
 
-void ucs2charstring::rightTrim(char16_t *str) {
+void ucs2charstring::rightTrim(ucs2_t *str) {
 
 	if (!isNullOrEmpty(str)) {
 
@@ -1878,7 +1878,7 @@ void ucs2charstring::rightTrim(char16_t *str) {
 	}
 }
 
-void ucs2charstring::leftTrim(char16_t *str) {
+void ucs2charstring::leftTrim(ucs2_t *str) {
 
 	if (!isNullOrEmpty(str)) {
 
@@ -1901,26 +1901,26 @@ void ucs2charstring::leftTrim(char16_t *str) {
 	}
 }
 
-void ucs2charstring::bothTrim(char16_t *string) {
+void ucs2charstring::bothTrim(ucs2_t *string) {
 	leftTrim(string);
 	rightTrim(string);
 }
 
-int64_t ucs2charstring::toInteger(const char16_t *string) {
+int64_t ucs2charstring::toInteger(const ucs2_t *string) {
 	return toInteger(string,NULL,10);
 }
 
-int64_t ucs2charstring::toInteger(const char16_t *string,
-					const char16_t **endptr) {
+int64_t ucs2charstring::toInteger(const ucs2_t *string,
+					const ucs2_t **endptr) {
 	return toInteger(string,endptr,10);
 }
 
-int64_t ucs2charstring::toInteger(const char16_t *string, int32_t base) {
+int64_t ucs2charstring::toInteger(const ucs2_t *string, int32_t base) {
 	return toInteger(string,NULL,base);
 }
 
-int64_t ucs2charstring::toInteger(const char16_t *string,
-				const char16_t **endptr, int32_t base) {
+int64_t ucs2charstring::toInteger(const ucs2_t *string,
+				const ucs2_t **endptr, int32_t base) {
 	char	*str=charstring::duplicate(string);
 	int64_t	retval=charstring::toInteger(str,NULL,base);
 	delete[] str;
@@ -1933,22 +1933,22 @@ int64_t ucs2charstring::toInteger(const char16_t *string,
 	return retval;
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const char16_t *string) {
+uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string) {
 	return toUnsignedInteger(string,NULL,10);
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const char16_t *string,
-					const char16_t **endptr) {
+uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
+					const ucs2_t **endptr) {
 	return toUnsignedInteger(string,endptr,10);
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const char16_t *string,
+uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
 							int32_t base) {
 	return toUnsignedInteger(string,NULL,base);
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const char16_t *string,
-						const char16_t **endptr,
+uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
+						const ucs2_t **endptr,
 						int32_t base) {
 	char	*str=charstring::duplicate(string);
 	int64_t	retval=charstring::toUnsignedInteger(str,NULL,base);
@@ -1962,11 +1962,11 @@ uint64_t ucs2charstring::toUnsignedInteger(const char16_t *string,
 	return retval;
 }
 
-long double ucs2charstring::toFloat(const char16_t *string) {
+long double ucs2charstring::toFloat(const ucs2_t *string) {
 	return toFloat(string,NULL);
 }
 
-long double ucs2charstring::toFloatC(const char16_t *string) {
+long double ucs2charstring::toFloatC(const ucs2_t *string) {
 
 	/* This method is needed when the locale of the client is different
 	 * from the C/POSIX locale, but we still need to convert a string
@@ -1979,8 +1979,8 @@ long double ucs2charstring::toFloatC(const char16_t *string) {
 
 #ifdef RUDIMENTS_HAVE_LOCALE_H
 	size_t		len=length(string);
-	char16_t	stringinlocale[256];
-	const char16_t	*decimalpointlocation;
+	ucs2_t	stringinlocale[256];
+	const ucs2_t	*decimalpointlocation;
 	struct	lconv	*currentlconv=localeconv();
 	if ((currentlconv!=NULL) &&
 		(currentlconv->decimal_point!=NULL) &&
@@ -2001,8 +2001,8 @@ long double ucs2charstring::toFloatC(const char16_t *string) {
 	return toFloat(string,NULL);
 }
 
-long double ucs2charstring::toFloat(const char16_t *string,
-					const char16_t **endptr) {
+long double ucs2charstring::toFloat(const ucs2_t *string,
+					const ucs2_t **endptr) {
 	char		*str=charstring::duplicate(string);
 	long double	retval=charstring::toFloat(str,NULL);
 	delete[] str;
@@ -2025,44 +2025,44 @@ long double ucs2charstring::toFloat(const char16_t *string,
 	return retval;
 }
 
-void ucs2charstring::split(const char16_t *string,
-				const char16_t *delimiter,
+void ucs2charstring::split(const ucs2_t *string,
+				const ucs2_t *delimiter,
 				bool collapse,
-				char16_t ***list,
+				ucs2_t ***list,
 				uint64_t *listlength) {
 	split(string,length(string),
 			delimiter,length(delimiter),
 			collapse,list,listlength);
 }
 
-void ucs2charstring::split(const char16_t *string,
+void ucs2charstring::split(const ucs2_t *string,
 				size_t stringlength,
-				const char16_t *delimiter,
+				const ucs2_t *delimiter,
 				bool collapse,
-				char16_t ***list,
+				ucs2_t ***list,
 				uint64_t *listlength) {
 	split(string,stringlength,
 			delimiter,length(delimiter),
 			collapse,list,listlength);
 }
 
-void ucs2charstring::split(const char16_t *string, 
-				const char16_t *delimiter,
+void ucs2charstring::split(const ucs2_t *string, 
+				const ucs2_t *delimiter,
 				size_t delimiterlength,
 				bool collapse,
-				char16_t ***list,
+				ucs2_t ***list,
 				uint64_t *listlength) {
 	split(string,length(string),
 			delimiter,delimiterlength,
 			collapse,list,listlength);
 }
 
-void ucs2charstring::split(const char16_t *string,
+void ucs2charstring::split(const ucs2_t *string,
 				size_t stringlength,
-				const char16_t *delimiter,
+				const ucs2_t *delimiter,
 				size_t delimiterlength,
 				bool collapse,
-				char16_t ***list,
+				ucs2_t ***list,
 				uint64_t *listlength) {
 
 	// handle degenerate cases
@@ -2089,14 +2089,14 @@ void ucs2charstring::split(const char16_t *string,
 	for (int32_t pass=0; pass<2; pass++) {
 
 		// set pointers to the beginning and end of the string
-		const char16_t	*start=string;
-		const char16_t	*end=string+stringlength;
+		const ucs2_t	*start=string;
+		const ucs2_t	*end=string+stringlength;
 
 		// initialize the list length
 		ll=0;
 
 		// loop through the string...
-		const char16_t	*current=start;
+		const ucs2_t	*current=start;
 		for (;;) {
 
 			// if there's not enough room left in the string for
@@ -2146,7 +2146,7 @@ void ucs2charstring::split(const char16_t *string,
 		// if we're done with the first pass,
 		// create the list and reset the counter
 		if (!pass && list) {
-			(*list)=new char16_t *[ll];
+			(*list)=new ucs2_t *[ll];
 		}
 	}
 
@@ -2156,7 +2156,7 @@ void ucs2charstring::split(const char16_t *string,
 	}
 }
 
-char16_t *ucs2charstring::subString(const char16_t *str,
+ucs2_t *ucs2charstring::subString(const ucs2_t *str,
 					size_t start,
 					size_t end) {
 
@@ -2169,17 +2169,17 @@ char16_t *ucs2charstring::subString(const char16_t *str,
 	return duplicate(str+start,end-start+1);
 }
 
-char16_t *ucs2charstring::subString(const char16_t *str, size_t start) {
+ucs2_t *ucs2charstring::subString(const ucs2_t *str, size_t start) {
 	return subString(str,start,length(str)-1);
 }
 
-char16_t *ucs2charstring::insertString(const char16_t *dest,
-					const char16_t *src,
+ucs2_t *ucs2charstring::insertString(const ucs2_t *dest,
+					const ucs2_t *src,
 					uint64_t index) {
 
 	uint64_t	srcsize=length(src);
 	uint64_t	size=length(dest)+srcsize+1;
-	char16_t		*retval=new char16_t[size];
+	ucs2_t		*retval=new ucs2_t[size];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
 			for (uint64_t k=0; k<srcsize; k++) {
@@ -2193,7 +2193,7 @@ char16_t *ucs2charstring::insertString(const char16_t *dest,
 	return retval;
 }
 
-char16_t *ucs2charstring::pad(const char16_t *str, char16_t padchar,
+ucs2_t *ucs2charstring::pad(const ucs2_t *str, ucs2_t padchar,
 			int16_t direction, uint64_t totallength) {
 
 	if (totallength==0) {
@@ -2201,9 +2201,9 @@ char16_t *ucs2charstring::pad(const char16_t *str, char16_t padchar,
 	}
 
 	uint64_t	strlen=((str==NULL)?0:length(str));
-	char16_t	*newstring=NULL;
+	ucs2_t	*newstring=NULL;
 
-	newstring=new char16_t[totallength+1];
+	newstring=new ucs2_t[totallength+1];
 	if (strlen>=totallength) {
 		copy(newstring,str,totallength);
 		newstring[totallength]=0;
@@ -2227,30 +2227,30 @@ char16_t *ucs2charstring::pad(const char16_t *str, char16_t padchar,
 	return newstring;
 }
 
-char16_t *ucs2charstring::humanReadable(int64_t number) {
+ucs2_t *ucs2charstring::humanReadable(int64_t number) {
 	return humanReadable(number,false);
 }
 
-char16_t *ucs2charstring::humanReadable(int64_t number, bool onethousand) {
+ucs2_t *ucs2charstring::humanReadable(int64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-char16_t *ucs2charstring::humanReadable(uint64_t number) {
+ucs2_t *ucs2charstring::humanReadable(uint64_t number) {
 	return humanReadable(number,false);
 }
 
-char16_t *ucs2charstring::humanReadable(uint64_t number, bool onethousand) {
+ucs2_t *ucs2charstring::humanReadable(uint64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-char16_t *ucs2charstring::humanReadable(long double number) {
+ucs2_t *ucs2charstring::humanReadable(long double number) {
 	return humanReadable(number,false);
 }
 
-char16_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
+ucs2_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
 
 	long double	k=(onethousand)?1000.0:1024.0;
-	char16_t		suffixes[]={
+	ucs2_t		suffixes[]={
 		'\0','K','M','G','T','P','Z','Y','B'
 	};
 	long double	num=(number>=0)?number:(number*-1.0);
@@ -2266,17 +2266,17 @@ char16_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
 	
 	char	*buf=NULL;
 	charstring::printf(&buf,"%0.1Lf%c",number/size,suffixes[i]);
-	char16_t	*buf2=duplicate(buf);
+	ucs2_t	*buf2=duplicate(buf);
 	delete[] buf;
-	const char16_t	dotzero[]={'.','0',0};
-	const char16_t	empty[]={0};
-	char16_t	*subbed=replace(buf2,dotzero,empty);
+	const ucs2_t	dotzero[]={'.','0',0};
+	const ucs2_t	empty[]={0};
+	ucs2_t	*subbed=replace(buf2,dotzero,empty);
 	delete[] buf2;
 	return subbed;
 }
 
-ssize_t ucs2charstring::printf(char16_t *buffer, size_t len,
-					const char16_t *format, ...) {
+ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
+					const ucs2_t *format, ...) {
 	va_list	args;
 	va_start(args,format);
 	size_t	result=printf(buffer,len,format,&args);
@@ -2333,7 +2333,7 @@ ssize_t ucs2charstring::printf(char16_t *buffer, size_t len,
 // only creates one scratch file per process and cleans it up at exit, unless
 // the program crashes or is killed with -9.
 
-static char16_t	*scratchfile=NULL;
+static ucs2_t	*scratchfile=NULL;
 static FILE	*scratch=NULL;
 
 static void removeScratch() {
@@ -2344,8 +2344,8 @@ static void removeScratch() {
 	}
 }
 
-static ssize_t vsnprintf(char16_t *buffer, size_t len,
-				const char16_t *format, va_list argp) {
+static ssize_t vsnprintf(ucs2_t *buffer, size_t len,
+				const ucs2_t *format, va_list argp) {
 
 	// open a scratch file if it's not already open
 	if (!scratch) {
@@ -2396,7 +2396,7 @@ static ssize_t vsnprintf(char16_t *buffer, size_t len,
 	ssize_t	safebuffersize=vfprintf(scratch,format,argp);
 
 	// create a big enough buffer for that
-	char16_t	*safebuffer=new char16_t[safebuffersize+1];
+	ucs2_t	*safebuffer=new ucs2_t[safebuffersize+1];
 
 	// vsprintf to safebuffer
 	ssize_t byteswritten=vsprintf(safebuffer,format,argp);
@@ -2429,21 +2429,21 @@ static ssize_t vsnprintf(char16_t *buffer, size_t len,
 
 #endif
 
-ssize_t ucs2charstring::printf(char16_t *buffer, size_t len,
-					const char16_t *format, va_list *argp) {
+ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
+					const ucs2_t *format, va_list *argp) {
 	// FIXME: implement this...
 	return 0;
 }
 
-ssize_t ucs2charstring::printf(char16_t **buffer, const char16_t *format, ...) {
+ssize_t ucs2charstring::printf(ucs2_t **buffer, const ucs2_t *format, ...) {
 	va_list	args;
 	va_start(args,format);
 	// the printf() below will call va_end(args)
 	return printf(buffer,format,&args);
 }
 
-ssize_t ucs2charstring::printf(char16_t **buffer,
-				const char16_t *format,
+ssize_t ucs2charstring::printf(ucs2_t **buffer,
+				const ucs2_t *format,
 				va_list *argp) {
 
 	// sanity check
@@ -2466,7 +2466,7 @@ ssize_t ucs2charstring::printf(char16_t **buffer,
 	ssize_t	size=printf(*buffer,0,format,argp);
 	va_end(*argp);
 	if (size!=-1) {
-		*buffer=new char16_t[size+1];
+		*buffer=new ucs2_t[size+1];
 		size=printf(*buffer,size+1,format,&argp1);
 	}
 	va_end(argp1);

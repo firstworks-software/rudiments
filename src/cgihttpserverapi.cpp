@@ -55,11 +55,11 @@ ssize_t cgihttpserverapi::read(wchar_t *character) {
 	return stdinput.read(character);
 }
 
-ssize_t cgihttpserverapi::read(char16_t *buffer, size_t length) {
+ssize_t cgihttpserverapi::read(ucs2_t *buffer, size_t length) {
 	return stdinput.read(buffer,length);
 }
 
-ssize_t cgihttpserverapi::read(char16_t *character) {
+ssize_t cgihttpserverapi::read(ucs2_t *character) {
 	return stdinput.read(character);
 }
 
@@ -288,15 +288,15 @@ ssize_t	cgihttpserverapi::write(wchar_t character) {
 	return stdoutput.write(character);
 }
 
-ssize_t	cgihttpserverapi::write(const char16_t *string) {
+ssize_t	cgihttpserverapi::write(const ucs2_t *string) {
 	return stdoutput.write(string);
 }
 
-ssize_t	cgihttpserverapi::write(const char16_t *string, size_t size) {
+ssize_t	cgihttpserverapi::write(const ucs2_t *string, size_t size) {
 	return stdoutput.write(string,size);
 }
 
-ssize_t	cgihttpserverapi::write(char16_t character) {
+ssize_t	cgihttpserverapi::write(ucs2_t character) {
 	return stdoutput.write(character);
 }
 
@@ -347,6 +347,6 @@ ssize_t cgihttpserverapi::printfDelegate(
 }
 
 ssize_t cgihttpserverapi::printfDelegate(
-				const char16_t *format, va_list *argp) {
+				const ucs2_t *format, va_list *argp) {
 	return stdoutput.printf(format,argp);
 }

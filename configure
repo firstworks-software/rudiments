@@ -835,8 +835,11 @@ enable_built_in_regex
 enable_threads
 enable_character
 enable_wcharacter
+enable_ucs2character
 enable_charstring
 enable_wcharstring
+enable_ucs2charstring
+enable_iconvert
 enable_chat
 enable_client
 enable_commandline
@@ -882,6 +885,7 @@ enable_signalclasses
 enable_snooze
 enable_stringbuffer
 enable_wstringbuffer
+enable_ucs2stringbuffer
 enable_sys
 enable_unixclient
 enable_unixserver
@@ -1568,8 +1572,11 @@ Optional Features:
   --disable-threads       Disable thread support
   --disable-character     Don't build character class
   --disable-wcharacter    Don't build wcharacter class
+  --disable-ucs2character Don't build ucs2character class
   --disable-charstring    Don't build charstring class
   --disable-wcharstring   Don't build wcharstring class
+  --disable-ucs2charstring Don't build ucs2charstring class
+  --disable-iconvert       Don't build iconvert class
   --disable-chat           Build chat class
   --disable-client        Don't build client class
   --disable-commandline   Don't build commandline class
@@ -1615,6 +1622,7 @@ Optional Features:
   --disable-snooze        Don't build snooze class
   --disable-stringbuffer  Don't build stringbuffer class
   --disable-wstringbuffer Don't build wstringbuffer class
+  --disable-ucs2stringbuffer Don't build ucs2stringbuffer class
   --disable-sys           Don't build sys class
   --disable-unixclient    Don't build unixclient class
   --disable-unixserver    Don't build unixserver class
@@ -2763,6 +2771,13 @@ else
   INCLUDE_WCHARACTER="1"
 fi
 
+# Check whether --enable-ucs2character was given.
+if test "${enable_ucs2character+set}" = set; then :
+  enableval=$enable_ucs2character; INCLUDE_UCS2CHARACTER="0"
+else
+  INCLUDE_UCS2CHARACTER="1"
+fi
+
 # Check whether --enable-charstring was given.
 if test "${enable_charstring+set}" = set; then :
   enableval=$enable_charstring; INCLUDE_CHARSTRING="0"
@@ -2775,6 +2790,20 @@ if test "${enable_wcharstring+set}" = set; then :
   enableval=$enable_wcharstring; INCLUDE_WCHARSTRING="0"
 else
   INCLUDE_WCHARSTRING="1"
+fi
+
+# Check whether --enable-ucs2charstring was given.
+if test "${enable_ucs2charstring+set}" = set; then :
+  enableval=$enable_ucs2charstring; INCLUDE_UCS2CHARSTRING="0"
+else
+  INCLUDE_UCS2CHARSTRING="1"
+fi
+
+# Check whether --enable-iconvert was given.
+if test "${enable_iconvert+set}" = set; then :
+  enableval=$enable_iconvert; INCLUDE_ICONVERT="0"
+else
+  INCLUDE_ICONVERT="1"
 fi
 
 # Check whether --enable-chat was given.
@@ -3091,6 +3120,13 @@ if test "${enable_wstringbuffer+set}" = set; then :
   enableval=$enable_wstringbuffer; INCLUDE_WSTRINGBUFFER="0"
 else
   INCLUDE_WSTRINGBUFFER="1"
+fi
+
+# Check whether --enable-ucs2stringbuffer was given.
+if test "${enable_ucs2stringbuffer+set}" = set; then :
+  enableval=$enable_ucs2stringbuffer; INCLUDE_UCS2STRINGBUFFER="0"
+else
+  INCLUDE_UCS2STRINGBUFFER="1"
 fi
 
 # Check whether --enable-sys was given.
@@ -19459,6 +19495,31 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv.h" >&5
+$as_echo_n "checking for iconv.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <iconv.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_ICONV_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 echo "******************************"
 
 
@@ -24002,6 +24063,46 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+RUDIMENTS_HAVE_CHAR16_T="no"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for char8_t type" >&5
+$as_echo_n "checking for char8_t type... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif
+int
+main ()
+{
+char8_t i;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CHAR8_T 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; RUDIMENTS_HAVE_CHAR8_T="yes"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for int16_t type" >&5
 $as_echo_n "checking for int16_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -24156,6 +24257,46 @@ if ac_fn_cxx_try_compile "$LINENO"; then :
 $as_echo "#define RUDIMENTS_HAVE_UINT32_T 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+RUDIMENTS_HAVE_CHAR32_T="no"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for char32_t type" >&5
+$as_echo_n "checking for char32_t type... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif
+int
+main ()
+{
+char32_t i;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CHAR32_T 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; RUDIMENTS_HAVE_CHAR32_T="yes"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -31701,6 +31842,33 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv" >&5
+$as_echo_n "checking for iconv... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif
+int
+main ()
+{
+iconv(0,0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+$as_echo "#define RUDIMENTS_HAVE_ICONV 1" >>confdefs.h
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 echo "******************************"
 
 
@@ -39016,6 +39184,14 @@ then
 	LOBJS="$LOBJS wcharacter.lo"
 fi
 
+if ( test "$INCLUDE_UCS2CHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 ucs2character.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 ucs2characterincludes.h"
+	SRCS="$SRCS ucs2character.cpp"
+	LOBJS="$LOBJS ucs2character.lo"
+fi
+
 if ( test "$INCLUDE_CHARSTRING" = "1" )
 then
 	HEADERS1="$HEADERS1 charstring.h"
@@ -39030,6 +39206,22 @@ then
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharstring.h wcharstringincludes.h"
 	SRCS="$SRCS wcharstring.cpp"
 	LOBJS="$LOBJS wcharstring.lo"
+fi
+
+if ( test "$INCLUDE_UCS2CHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 ucs2charstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 ucs2charstring.h ucs2charstringincludes.h"
+	SRCS="$SRCS ucs2charstring.cpp"
+	LOBJS="$LOBJS ucs2charstring.lo"
+fi
+
+if ( test "$INCLUDE_ICONVERT" = "1" )
+then
+	HEADERS1="$HEADERS1 iconvert.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 iconvert.h iconvertincludes.h"
+	SRCS="$SRCS iconvert.cpp"
+	LOBJS="$LOBJS iconvert.lo"
 fi
 
 if ( test "$INCLUDE_CHAT" = "1" )
@@ -39415,6 +39607,12 @@ if ( test "$INCLUDE_WSTRINGBUFFER" = "1" )
 then
 	HEADERS2="$HEADERS2 wstringbuffer.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 wstringbufferincludes.h wstringbufferinlines.h"
+fi
+
+if ( test "$INCLUDE_UCS2STRINGBUFFER" = "1" )
+then
+	HEADERS2="$HEADERS2 ucs2stringbuffer.h"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 ucs2stringbufferincludes.h ucs2stringbufferinlines.h"
 fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )

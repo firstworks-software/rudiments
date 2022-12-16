@@ -3,6 +3,9 @@
 
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#ifndef _WIN32
+	#include <rudiments/iconvert.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_CTYPE_H
 	#include <ctype.h>
@@ -21,6 +24,10 @@
 #endif
 
 #include <stdio.h>
+
+#ifndef MB_CUR_MAX
+	#define MB_CUR_MAX 4
+#endif
 
 bool character::isAlphanumeric(int32_t c) {
 	return isalnum(c)!=0;
@@ -148,12 +155,7 @@ char character::duplicate(wchar_t c) {
 char character::duplicate(wchar_t c, char replacement) {
 
 	// NOTE: MB_CUR_MAX is not a constant, but rather a macro that expands
-	// to an integer expression.  It also varies with the locale.  There
-	// are platforms that don't provide it though (platforms that don't
-	// provide wctomb/wcrtomb), and 4 is probably safe on those platforms.
-	#ifndef MB_CUR_MAX
-		#define MB_CUR_MAX 4
-	#endif
+	// to an integer expression.  It also varies with the locale.
 	char	*mb=new char[MB_CUR_MAX];
 	bytestring::zero(mb,sizeof(mb));
 	size_t	s;
@@ -189,13 +191,45 @@ char character::duplicate(wchar_t c, char replacement) {
 	return retval;
 }
 
-char character::duplicate(char16_t c) {
+char character::duplicate(ucs2_t c) {
 	return duplicate(c,'?');
 }
 
-char character::duplicate(char16_t c, char replacement) {
-	// FIXME: implement this...
-	return 0;
+char character::duplicate(ucs2_t c, char replacement) {
+	#ifdef _WIN32
+		// on windows, wchar_t's are encoded as UCS-2
+		return character::duplicate((wchar_t)c,replacement);
+	#else
+		// on non-windows, it's trickier...
+
+		// NOTE: MB_CUR_MAX is not a constant, but rather a macro that
+		// expands to an integer expression.  It also varies with the
+		// locale.
+		char		*mb=new char[MB_CUR_MAX];
+		iconvert	i;
+		i.setFromEncoding("UCS-2");
+		i.setFromBuffer((unsigned char *)&c);
+		i.setFromBufferSize(sizeof(ucs2_t));
+		i.setToBuffer((unsigned char *)mb);
+		i.setToBufferSize(MB_CUR_MAX);
+		if (!i.convert()) {
+			delete[] mb;
+			return replacement;
+		}
+		// We're attempting to convert a UCS-2 character to a regular
+		// character, but it's possible that the UCS-2 character was
+		// only representable by a multi-byte character in the current
+		// locale.  If that ends up being the case, then just return
+		// the replacement character.
+		if (i.getToBufferPosition()-i.getToBuffer()>1) {
+			delete[] mb;
+			return replacement;
+		}
+		// otherwise, return the character
+		char	retval=mb[0];
+		delete[] mb;
+		return retval;
+	#endif
 }
 
 bool character::duplicateFromWideCharacterNeedsMutex() {

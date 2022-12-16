@@ -3671,10 +3671,10 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	return size;
 }
 
-ssize_t filedescriptor::printfDelegate(const char16_t *format, va_list *argp) {
+ssize_t filedescriptor::printfDelegate(const ucs2_t *format, va_list *argp) {
 
 	// write the formatted data to a buffer
-	char16_t	*buffer=NULL;
+	ucs2_t	*buffer=NULL;
 	ssize_t		size=ucs2charstring::printf(&buffer,format,argp);
 
 	// My charstring::duplicate() method currently only converts to ascii,

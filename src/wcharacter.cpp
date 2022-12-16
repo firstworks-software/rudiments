@@ -219,13 +219,19 @@ wchar_t wcharacter::duplicate(char c) {
 	return retval;
 }
 
-wchar_t wcharacter::duplicate(char16_t c) {
+wchar_t wcharacter::duplicate(ucs2_t c) {
 	return duplicate(c,'?');
 }
 
-wchar_t wcharacter::duplicate(char16_t c, wchar_t replacement) {
-	// FIXME: implement this...
-	return 0;
+wchar_t wcharacter::duplicate(ucs2_t c, wchar_t replacement) {
+	#ifdef _WIN32
+		// on windows, wchar_t's are encoded as UCS-2
+		return (wchar_t)ucs2_t;
+	#else
+		// on non-windows, it's trickier
+		// FIXME: implement this...
+		return 0;
+	#endif
 }
 
 bool wcharacter::duplicateFromCharacterNeedsMutex() {

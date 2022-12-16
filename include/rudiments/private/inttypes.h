@@ -18,16 +18,12 @@
 #define NULL 0
 #endif
 
-
 // some platforms define types like char16_t in their new or new.h
 // (some firstworks C code uses inttypes.h to make sure types are defined
 // though, and we don't want that code to include new.h)
 #ifdef __cplusplus
 	#include <rudiments/private/new.h>
 #endif
-
-
-// define [u]int(8|16|32|64)_t...
 
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
@@ -45,6 +41,7 @@
 	#include <uchar.h>
 #endif
 
+// define [u]int(8|16|32|64)_t...
 #ifndef RUDIMENTS_HAVE_INT8_T
 	typedef	signed char		int8_t;
 #endif
@@ -56,10 +53,6 @@
 #endif
 #ifndef RUDIMENTS_HAVE_UINT16_T
 	typedef	unsigned short		uint16_t;
-#endif
-#if !defined(RUDIMENTS_HAVE_CHAR16_T) && \
-	defined(__cplusplus) && (__cplusplus<201103L)
-	typedef	unsigned short		char16_t;
 #endif
 #ifndef RUDIMENTS_HAVE_INT32_T
 	typedef	signed int		int32_t;
@@ -84,6 +77,23 @@
 	#endif
 #endif
 
+// define char(8|16|32)_t, ucs(2|4)_t, and utf(8|16)_t
+#ifndef RUDIMENTS_HAVE_CHAR8_T
+	typedef	uint8_t		char8_t;
+#endif
+#if !defined(RUDIMENTS_HAVE_CHAR16_T) && \
+	defined(__cplusplus) && (__cplusplus<201103L)
+	typedef	uint16_t	char16_t
+#endif
+#ifndef RUDIMENTS_HAVE_CHAR32_T
+	typedef	uint32_t	char32_t;
+#endif
+typedef char16_t	ucs2_t;
+typedef char32_t	ucs4_t;
+typedef char8_t		utf8_t;
+typedef char16_t	utf16_t;
+
+// define bool and true/false
 #ifndef RUDIMENTS_HAVE_BOOL
 	class bool {
 		public:

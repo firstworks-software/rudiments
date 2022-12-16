@@ -124,6 +124,7 @@
 		with wstr.h
 	filedescriptor::printf(const char */const wchar_t *) to stdout/stderr
 		respect locale now
+	added ucs2character/ucs2charstring/ucs2stringbuffer classes
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

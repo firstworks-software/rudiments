@@ -19,9 +19,9 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		virtual	ssize_t	write(const wchar_t *string)=0;
 		virtual	ssize_t	write(const wchar_t *string, size_t length)=0;
 		virtual	ssize_t	write(wchar_t character)=0;
-		virtual	ssize_t	write(const char16_t *string)=0;
-		virtual	ssize_t	write(const char16_t *string, size_t length)=0;
-		virtual	ssize_t	write(char16_t character)=0;
+		virtual	ssize_t	write(const ucs2_t *string)=0;
+		virtual	ssize_t	write(const ucs2_t *string, size_t length)=0;
+		virtual	ssize_t	write(ucs2_t character)=0;
 		virtual	ssize_t	write(int16_t number)=0;
 		virtual	ssize_t	write(int32_t number)=0;
 		virtual	ssize_t	write(int64_t number)=0;
@@ -46,11 +46,11 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	write(wchar_t character,
 						int32_t sec, int32_t usec);
-		virtual	ssize_t	write(const char16_t *string,
+		virtual	ssize_t	write(const ucs2_t *string,
 						int32_t sec, int32_t usec);
-		virtual	ssize_t	write(const char16_t *string, size_t length,
+		virtual	ssize_t	write(const ucs2_t *string, size_t length,
 						int32_t sec, int32_t usec);
-		virtual	ssize_t	write(char16_t character,
+		virtual	ssize_t	write(ucs2_t character,
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	write(int16_t number,
 						int32_t sec, int32_t usec);
@@ -153,7 +153,7 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  surprised if you get different results, when printf()ing
 		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
 		 *  buffered vs. unbuffered file descriptor. */
-		virtual	ssize_t	printf(const char16_t *format, ...);
+		virtual	ssize_t	printf(const ucs2_t *format, ...);
 
 		/** Writes "argp" using "format" which should comply with
 		 *  standard wprintf formatting rules.
@@ -171,7 +171,7 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  surprised if you get different results, when printf()ing
 		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
 		 *  buffered vs. unbuffered file descriptor. */
-		virtual	ssize_t	printf(const char16_t *format, va_list *argp);
+		virtual	ssize_t	printf(const ucs2_t *format, va_list *argp);
 
 	#include <rudiments/private/output.h>
 };

@@ -34,8 +34,11 @@ srcs="winsock.cpp "+_
 	"sensitivevalue.cpp "+_
 	"character.cpp "+_
 	"wcharacter.cpp "+_
+	"ucs2character.cpp "+_
 	"charstring.cpp "+_
 	"wcharstring.cpp "+_
+	"ucs2charstring.cpp "+_
+	"iconvert.cpp "+_
 	"chat.cpp "+_
 	"client.cpp "+_
 	"commandline.cpp "+_
@@ -129,8 +132,11 @@ lobjs="winsock.obj "+_
 	"sensitivevalue.obj "+_
 	"character.obj "+_
 	"wcharacter.obj "+_
+	"ucs2character.obj "+_
 	"charstring.obj "+_
 	"wcharstring.obj "+_
+	"ucs2charstring.obj "+_
+	"iconvert.obj "+_
 	"chat.obj "+_
 	"client.obj "+_
 	"commandline.obj "+_
@@ -230,8 +236,11 @@ headers1="table.h "+_
 	"scalar.h "+_
 	"character.h "+_
 	"wcharacter.h "+_
+	"ucs2character.h "+_
 	"charstring.h "+_
 	"wcharstring.h "+_
+	"ucs2charstring.h "+_
+	"iconvert.h "+_
 	"chat.h "+_
 	"client.h "+_
 	"commandline.h "+_
@@ -348,10 +357,15 @@ privateheaders1="inttypes.h "+_
 	"new.h "+_
 	"characterincludes.h "+_
 	"wcharacterincludes.h "+_
+	"ucs2characterincludes.h "+_
 	"charstring.h "+_
 	"charstringincludes.h "+_
 	"wcharstring.h "+_
 	"wcharstringincludes.h "+_
+	"ucs2charstring.h "+_
+	"ucs2charstringincludes.h "+_
+	"iconvert.h "+_
+	"iconvertincludes.h "+_
 	"chat.h "+_
 	"chatincludes.h "+_
 	"client.h "+_

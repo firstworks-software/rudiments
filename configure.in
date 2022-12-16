@@ -116,6 +116,10 @@ AC_ARG_ENABLE(wcharacter,
 	[  --disable-wcharacter    Don't build wcharacter class],
 	INCLUDE_WCHARACTER="0",
 	INCLUDE_WCHARACTER="1")
+AC_ARG_ENABLE(ucs2character,
+	[  --disable-ucs2character Don't build ucs2character class],
+	INCLUDE_UCS2CHARACTER="0",
+	INCLUDE_UCS2CHARACTER="1")
 AC_ARG_ENABLE(charstring,
 	[  --disable-charstring    Don't build charstring class],
 	INCLUDE_CHARSTRING="0",
@@ -124,6 +128,14 @@ AC_ARG_ENABLE(wcharstring,
 	[  --disable-wcharstring   Don't build wcharstring class],
 	INCLUDE_WCHARSTRING="0",
 	INCLUDE_WCHARSTRING="1")
+AC_ARG_ENABLE(ucs2charstring,
+	[  --disable-ucs2charstring Don't build ucs2charstring class],
+	INCLUDE_UCS2CHARSTRING="0",
+	INCLUDE_UCS2CHARSTRING="1")
+AC_ARG_ENABLE(iconvert,
+	[  --disable-iconvert       Don't build iconvert class],
+	INCLUDE_ICONVERT="0",
+	INCLUDE_ICONVERT="1")
 AC_ARG_ENABLE(chat,
 	[  --disable-chat           Build chat class],
 	INCLUDE_CHAT="0",
@@ -306,6 +318,10 @@ AC_ARG_ENABLE(wstringbuffer,
 	[  --disable-wstringbuffer Don't build wstringbuffer class],
 	INCLUDE_WSTRINGBUFFER="0",
 	INCLUDE_WSTRINGBUFFER="1")
+AC_ARG_ENABLE(ucs2stringbuffer,
+	[  --disable-ucs2stringbuffer Don't build ucs2stringbuffer class],
+	INCLUDE_UCS2STRINGBUFFER="0",
+	INCLUDE_UCS2STRINGBUFFER="1")
 AC_ARG_ENABLE(sys,
 	[  --disable-sys           Don't build sys class],
 	INCLUDE_SYSTEM="0",
@@ -965,6 +981,11 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif
 #include <sys/dl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_DL_H, 1, Some systems have sys/dl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for iconv.h)
+AC_TRY_COMPILE([#include <iconv.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_ICONV_H, 1, Some systems have iconv.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
@@ -1251,6 +1272,26 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #endif],
 [uint8_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT8_T,1,Some systems have uint8_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+RUDIMENTS_HAVE_CHAR16_T="no"
+AC_MSG_CHECKING(for char8_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif],
+[char8_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR8_T,1,Some systems have char8_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR8_T="yes", AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for int16_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
@@ -1310,6 +1351,26 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <inttypes.h>
 #endif],
 [uint32_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT32_T,1,Some systems have uint32_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+RUDIMENTS_HAVE_CHAR32_T="no"
+AC_MSG_CHECKING(for char32_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif],
+[char32_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR32_T,1,Some systems have char32_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR32_T="yes", AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for int64_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
@@ -3162,6 +3223,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 long long a; llabs(a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_LLABS,1,Some systems have llabs), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for iconv)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif],
+iconv(0,0,0,0,0);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV,1,Some systems have iconv), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
@@ -4754,6 +4821,14 @@ then
 	LOBJS="$LOBJS wcharacter.lo"
 fi
 
+if ( test "$INCLUDE_UCS2CHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 ucs2character.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 ucs2characterincludes.h"
+	SRCS="$SRCS ucs2character.cpp"
+	LOBJS="$LOBJS ucs2character.lo"
+fi
+
 if ( test "$INCLUDE_CHARSTRING" = "1" )
 then
 	HEADERS1="$HEADERS1 charstring.h"
@@ -4768,6 +4843,22 @@ then
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 wcharstring.h wcharstringincludes.h"
 	SRCS="$SRCS wcharstring.cpp"
 	LOBJS="$LOBJS wcharstring.lo"
+fi
+
+if ( test "$INCLUDE_UCS2CHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 ucs2charstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 ucs2charstring.h ucs2charstringincludes.h"
+	SRCS="$SRCS ucs2charstring.cpp"
+	LOBJS="$LOBJS ucs2charstring.lo"
+fi
+
+if ( test "$INCLUDE_ICONVERT" = "1" )
+then
+	HEADERS1="$HEADERS1 iconvert.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 iconvert.h iconvertincludes.h"
+	SRCS="$SRCS iconvert.cpp"
+	LOBJS="$LOBJS iconvert.lo"
 fi
 
 if ( test "$INCLUDE_CHAT" = "1" )
@@ -5153,6 +5244,12 @@ if ( test "$INCLUDE_WSTRINGBUFFER" = "1" )
 then
 	HEADERS2="$HEADERS2 wstringbuffer.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 wstringbufferincludes.h wstringbufferinlines.h"
+fi
+
+if ( test "$INCLUDE_UCS2STRINGBUFFER" = "1" )
+then
+	HEADERS2="$HEADERS2 ucs2stringbuffer.h"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 ucs2stringbufferincludes.h ucs2stringbufferinlines.h"
 fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )

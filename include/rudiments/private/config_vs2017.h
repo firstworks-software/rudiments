@@ -273,6 +273,12 @@
 /* Some systems have char16_t */
 #define RUDIMENTS_HAVE_CHAR16_T 1
 
+/* Some systems have char32_t */
+/* #undef RUDIMENTS_HAVE_CHAR32_T */
+
+/* Some systems have char8_t */
+/* #undef RUDIMENTS_HAVE_CHAR8_T */
+
 /* Some systems have chmod */
 /* #undef RUDIMENTS_HAVE_CHMOD */
 
@@ -689,6 +695,12 @@
 
 /* Some systems have htonll */
 /* #undef RUDIMENTS_HAVE_HTONLL */
+
+/* Some systems have iconv */
+/* #undef RUDIMENTS_HAVE_ICONV */
+
+/* Some systems have iconv.h */
+/* #undef RUDIMENTS_HAVE_ICONV_H */
 
 /* Some systems have inet_addr */
 #define RUDIMENTS_HAVE_INET_ADDR 1

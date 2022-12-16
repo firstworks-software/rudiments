@@ -30,7 +30,7 @@ ssize_t output::printf(const wchar_t *format, va_list *argp) {
 }
 
 inline
-ssize_t output::printf(const char16_t *format, ...) {
+ssize_t output::printf(const ucs2_t *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
 	ssize_t	retval=printfDelegate(format,&argp);
@@ -39,6 +39,6 @@ ssize_t output::printf(const char16_t *format, ...) {
 }
 
 inline
-ssize_t output::printf(const char16_t *format, va_list *argp) {
+ssize_t output::printf(const ucs2_t *format, va_list *argp) {
 	return printfDelegate(format,argp);
 }

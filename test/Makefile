@@ -19,6 +19,7 @@ PROGS0 = listener \
 	semaphoreset \
 	charstring \
 	wcharstring \
+	ucs2charstring \
 	datetime
 
 PROGS1= dictionary \
@@ -50,6 +51,7 @@ PROGS2= dynamicarray \
 	memorymap \
 	character \
 	wcharacter \
+	ucs2character \
 	bytestring \
 	tlsserver \
 	tlsclient
@@ -184,6 +186,9 @@ charstring: charstring.cpp charstring.$(OBJ)
 wcharstring: wcharstring.cpp wcharstring.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wcharstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
+ucs2charstring: ucs2charstring.cpp ucs2charstring.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) ucs2charstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
 datetime: datetime.cpp datetime.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) datetime.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
@@ -249,6 +254,9 @@ character: character.cpp character.$(OBJ)
 
 wcharacter: wcharacter.cpp wcharacter.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wcharacter.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+ucs2character: ucs2character.cpp ucs2character.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) ucs2character.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 bytestring: bytestring.cpp bytestring.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
