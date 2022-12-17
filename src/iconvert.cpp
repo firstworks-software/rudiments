@@ -7,10 +7,43 @@
 	#include <iconv.h>
 #endif
 
+// for testing
+//#undef RUDIMENTS_HAVE_ICONV
+//#undef RUDIMENTS_HAVE_WCRTOMB
+//#undef RUDIMENTS_HAVE_WCTOMB
+//#undef RUDIMENTS_HAVE_MBRTOWC
+//#undef RUDIMENTS_HAVE_MBTOWC
+
+#ifndef RUDIMENTS_HAVE_ICONV
+	#include <rudiments/charstring.h>
+	#include <rudiments/bytestring.h>
+	#include <rudiments/error.h>
+	#ifdef RUDIMENTS_HAVE_CTYPE_H
+		#include <ctype.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_WCTYPE_H
+		#include <wctype.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_WCHAR_H
+		#include <wchar.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_WCSTR_H
+		#include <wcstr.h>
+	#endif
+#endif
+
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+
 class iconvertprivate {
 	friend class iconvert;
 	private:
-		iconv_t		_i;
+		#ifdef RUDIMENTS_HAVE_ICONV
+			iconv_t		_i;
+		#else
+			uint8_t		_i;
+		#endif
 
 		const char		*_fromencoding;
 		const unsigned char	*_frombuffer;
@@ -138,8 +171,369 @@ bool iconvert::convert() {
 				&(pvt->_frombufferremaining),
 				(char **)&(pvt->_tobufferptr),
 				&(pvt->_tobufferremaining))!=(size_t)-1;
+
 	#else
-		#error no iconv or anything like it
+
+		// open, if we haven't already
+		if (!pvt->_i) {
+			pvt->_i=1;
+			pvt->_frombufferptr=pvt->_frombuffer;
+			pvt->_frombufferremaining=pvt->_frombuffersize;
+			pvt->_tobufferptr=pvt->_tobuffer;
+			pvt->_tobufferremaining=pvt->_tobuffersize;
+		}
+
+		// sanity check on from buffer
+		if (!pvt->_frombufferptr) {
+			error::setErrorNumber(EILSEQ);
+			return false;
+		}
+
+		// without iconv() and friends, we can still convert from
+		// wchar_t to the current locale and vice versa...
+
+		// determine from and to encodings
+		const char	*fromenc=pvt->_fromencoding;
+		const char	*toenc=pvt->_toencoding;
+		#ifdef _WIN32
+			// on windows, wchar_t's are encoded as UCS-2,
+			// so we can support UCS-2 by piggybacking
+			if (!charstring::compare(fromenc,"UCS-2")) {
+				fromenc="WCHAR_T";
+			}
+			if (!charstring::compare(toenc,"UCS-2")) {
+				toenc="WCHAR_T";
+			}
+		#endif
+
+		// initialize sizes and return value
+		size_t	fromsize=0;
+		size_t	tosize=0;
+
+		if (!charstring::compare(fromenc,"WCHAR_T") &&
+					!charstring::compare(toenc,"")) {
+
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<maxMultiByteSize()) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			fromsize=sizeof(wchar_t);
+			wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
+
+			// set up "to"
+			char	*to=(char *)pvt->_tobufferptr;
+			bytestring::zero(to,maxMultiByteSize());
+
+			// convert...
+			#if defined(RUDIMENTS_HAVE_WCRTOMB)
+				mbstate_t	st;
+				bytestring::zero(&st,sizeof(st));
+				tosize=wcrtomb(to,from,&st);
+			#elif defined(RUDIMENTS_HAVE_WCTOMB)
+				tosize=wctomb(to,from);
+			#else
+				// FIXME: Arguably we should verify that the
+				// character set of the current locale is ASCII
+				// or some kind of extended ASCII.  This is
+				// likely the case on platforms that don't
+				// provide wctomb/wcrtomb, but not guaranteed.
+				if (from<128) {
+					tosize=sizeof(char);
+					if (to) {
+						*to=(char)from;
+					}
+				} else {
+					tosize=(size_t)-1;
+					error::setErrorNumber(EILSEQ);
+				}
+			#endif
+
+			if (tosize==(size_t)-1) {
+				return false;
+			}
+
+		} else if (!charstring::compare(fromenc,"") &&
+				!charstring::compare(toenc,"WCHAR_T")) {
+
+			if (pvt->_frombufferremaining<sizeof(char) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			const char	*from=(const char *)pvt->_frombufferptr;
+
+			// set up "to"
+			tosize=sizeof(wchar_t);
+			wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
+			bytestring::zero(to,sizeof(wchar_t));
+
+			// convert...
+			#if defined(RUDIMENTS_HAVE_WCRTOMB)
+				mbstate_t	st;
+				bytestring::zero(&st,sizeof(st));
+				fromsize=mbrtowc(to,from,
+						pvt->_frombufferremaining,
+						&st);
+			#elif defined(RUDIMENTS_HAVE_WCTOMB)
+				// mbtowc() doesn't like being passed '\0' on
+				// some platforms (redhat 4.2 with libc5)
+				if (from) {
+					fromsize=mbtowc(to,from,
+						pvt->_frombufferremaining);
+				} else {
+					fromsize=sizeof(char);
+					if (to) {
+						*to=(wchar_t)0;
+					}
+				}
+			#else
+				// FIXME: Arguably we should verify that the
+				// character set of the current locale is ASCII
+				// or some kind of extended ASCII.  This is
+				// likely the case on platforms that don't
+				if (*from<128) {
+					fromsize=sizeof(char);
+					if (to) {
+						*to=(wchar_t)*from;
+					}
+				} else {
+					fromsize=(size_t)-1;
+					error::setErrorNumber(EILSEQ);
+				}
+			#endif
+
+			// bail on error
+			if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
+				return false;
+			}
+
+		} else if (!charstring::compare(fromenc,"UCS-2") &&
+					!charstring::compare(toenc,"")) {
+
+			// FIXME: verify that the character set of the current
+			// locale is ASCII or some kind of extended ASCII
+
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+
+			// set up "to"
+			tosize=sizeof(char);
+			char	*to=(char *)pvt->_tobufferptr;
+
+			// convert
+			if (from<128) {
+				if (to) {
+					*to=(char)from;
+				}
+			} else {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+		} else if (!charstring::compare(fromenc,"") &&
+					!charstring::compare(toenc,"UCS-2")) {
+
+			// FIXME: verify that the character set of the current
+			// locale is ASCII or some kind of extended ASCII
+
+			// set up "from"
+			fromsize=sizeof(char);
+			char	from=*((const char *)pvt->_frombufferptr);
+
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+
+			// convert
+			if (from<128) {
+				if (to) {
+					*to=(ucs2_t)from;
+				}
+			} else {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+		} else if (!charstring::compare(fromenc,"UCS-2") &&
+					!charstring::compare(toenc,"WCHAR_T")) {
+			
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+
+			// set up "to"
+			tosize=sizeof(wchar_t);
+			wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
+
+			// convert
+			// FIXME: this implementation is incorrect for
+			// chars >= 128 and for platforms where the wchar_t
+			// format is not the same as UCS-2 (Solaris 9-)
+			if (from<128) {
+				if (to) {
+					*to=(wchar_t)from;
+				}
+			} else {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+		} else if (!charstring::compare(fromenc,"WCHAR_T") &&
+					!charstring::compare(toenc,"UCS-2")) {
+			
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			fromsize=sizeof(wchar_t);
+			wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
+
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			bytestring::zero(to,tosize);
+
+			// convert
+			// FIXME: this implementation is incorrect for
+			// chars >= 128 and for platforms where the wchar_t
+			// format is not the same as UCS-2 (Solaris 9-)
+			if (from<128) {
+				if (to) {
+					*to=(ucs2_t)from;
+				}
+			} else {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+		} else if (!charstring::compare(fromenc,"UCS-2") &&
+					!charstring::compare(toenc,"UCS-2")) {
+			
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
+				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+
+			// copy
+			if (pvt->_tobufferptr) {
+				bytestring::copy(pvt->_tobufferptr,
+							pvt->_frombufferptr,
+							tosize);
+			}
+
+		} else if (!charstring::compare(fromenc,"WCHAR_T") &&
+					!charstring::compare(toenc,"WCHAR_T")) {
+
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			fromsize=sizeof(wchar_t);
+
+			// set up "to"
+			tosize=sizeof(wchar_t);
+
+			// copy
+			if (pvt->_tobufferptr) {
+				bytestring::copy(pvt->_tobufferptr,
+							pvt->_frombufferptr,
+							tosize);
+			}
+
+		} else if (!charstring::compare(fromenc,"") &&
+					!charstring::compare(toenc,"")) {
+
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(char) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// set up "from"
+			const char	*from=(const char *)pvt->_frombufferptr;
+
+			// set up "to"
+			char		*to=(char *)pvt->_tobufferptr;
+
+			// get the number of bytes to copy
+			#if defined(RUDIMENTS_HAVE_WCRTOMB)
+				mbstate_t	st;
+				bytestring::zero(&st,sizeof(st));
+				fromsize=mbrtowc(NULL,from,
+						pvt->_frombufferremaining,
+						&st);
+			#elif defined(RUDIMENTS_HAVE_WCTOMB)
+				// mbtowc() doesn't like being passed '\0' on
+				// some platforms (redhat 4.2 with libc5)
+				if (from) {
+					fromsize=mbtowc(NULL,from,
+						pvt->_frombufferremaining);
+				} else {
+					fromsize=sizeof(char);
+				}
+			#else
+				// FIXME: verify that the character set of the
+				// current locale is single-byte
+				fromsize=sizeof(char);
+			#endif
+
+			// bail on error
+			if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
+				return false;
+			}
+
+			// copy the bytes
+			if (to) {
+				bytestring::copy(to,from,fromsize);
+			}
+
+		} else {
+
+			error::setErrorNumber(ENOSYS);
+		}
+
+		// bump buffer pointers and remaining counts
+		if ((ssize_t)fromsize>-1) {
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
+		}
+
+		return true;
 	#endif
 }
 
@@ -160,7 +554,13 @@ size_t iconvert::getToBufferRemaining() {
 }
 
 bool iconvert::close() {
-	bool	result=!iconv_close(pvt->_i);
+
+	bool	result=
+	#ifdef RUDIMENTS_HAVE_ICONV
+		!iconv_close(pvt->_i);
+	#else
+		true;
+	#endif
 	pvt->_i=0;
 
 	pvt->_frombuffer=NULL;
@@ -180,4 +580,25 @@ bool iconvert::reset() {
 	pvt->_fromencoding="";
 	pvt->_toencoding="";
 	return result;
+}
+
+uint16_t iconvert::maxMultiByteSize() {
+	#ifdef MB_CUR_MAX
+		// NOTE: MB_CUR_MAX is not a constant, but rather a macro that
+		// expands to an integer expression.  It also varies with the
+		// locale.
+		return MB_CUR_MAX;
+	#else
+		return 4;
+	#endif
+}
+
+bool iconvert::convertNeedsMutex() {
+        #if defined(RUDIMENTS_HAVE_ICONV) || defined(RUDIMENTS_HAVE_WCRTOMB)
+                return false;
+        #elif defined(RUDIMENTS_HAVE_WCTOMB)
+                return true;
+        #else
+                #error no iconv, wcrtomb, wctomb or anything like it
+        #endif
 }

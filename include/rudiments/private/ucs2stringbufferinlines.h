@@ -42,7 +42,7 @@ void ucs2stringbuffer::setPosition(size_t pos) {
 
 inline
 const ucs2_t *ucs2stringbuffer::getString() {
-	bytebuffer::append('\0');
+	bytebuffer::append((ucs2_t)0);
 	const ucs2_t	*retval=(const ucs2_t *)getBuffer();
 	_position(_position()-1);
 	_size(_size()-1);
@@ -56,7 +56,7 @@ size_t ucs2stringbuffer::getStringLength() {
 
 inline
 ucs2_t *ucs2stringbuffer::detachString() {
-	bytebuffer::append('\0');
+	bytebuffer::append((ucs2_t)0);
 	return (ucs2_t *)detachBuffer();
 }
 
@@ -94,12 +94,12 @@ ucs2stringbuffer *ucs2stringbuffer::append(const unsigned char *string,
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string) {
-	return (ucs2stringbuffer *)bytebuffer::
-				append(string,ucs2charstring::length(string));
+	return append(string,ucs2charstring::length(string));
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string, size_t length) {
+ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string,
+							size_t length) {
 	return (ucs2stringbuffer *)bytebuffer::append(string,length);
 }
 

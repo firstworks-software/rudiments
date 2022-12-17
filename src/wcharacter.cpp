@@ -4,6 +4,7 @@
 #include <rudiments/wcharacter.h>
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/iconvert.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
@@ -185,61 +186,38 @@ bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
 }
 
 wchar_t wcharacter::duplicate(char c) {
-	wchar_t	retval;
-	size_t	s;
-	// To convert a char to a wchar_t, we can pretend that "c" is a string
-	// of multi-byte characters, and use mbrtowc/mbtowc to convert it.  If
-	// we pass a 1 to these methods, then it will (safely) only read 1 byte
-	// from "c".
-	#if defined(RUDIMENTS_HAVE_MBRTOWC)
-		mbstate_t	st;
-		bytestring::zero(&st,sizeof(st));
-		s=mbrtowc(&retval,&c,1,&st);
-	#elif defined(RUDIMENTS_HAVE_MBTOWC)
-		// mbtowc() doesn't like being passed '\0' on some platforms
-		// (eg. redhat 4.2 with libc5) 
-		if (c) {
-			s=mbtowc(&retval,&c,1);
-		} else {
-			s=0;
-			retval=(wchar_t)c;
-		}
-	#else
-		// This will only work if the first 256 characters of the
-		// source and target character set are equivalent.
-		// eg. Latin 1 and UCS-2/UCS-4.  This is usually the case
-		// on older paltforms that don't provide mbtowc()/mbrtowc(),
-		// but I bet I'll be back here tweaking this some day.
-		s=0;
-		retval=(wchar_t)c;
-	#endif
-	if (s==(size_t)-1 || s==(size_t)-2) {
-		return (wchar_t)0;
-	}
-	return retval;
+	return duplicate(c,L'?');
+}
+
+wchar_t wcharacter::duplicate(char c, wchar_t replacement) {
+	wchar_t		wc;
+	iconvert	i;
+	i.setFromBuffer((unsigned char *)&c);
+	i.setFromBufferSize(sizeof(char));
+	i.setToEncoding("WCHAR_T");
+	i.setToBuffer((unsigned char *)&wc);
+	i.setToBufferSize(sizeof(wchar_t));
+	return (i.convert())?wc:replacement;
 }
 
 wchar_t wcharacter::duplicate(ucs2_t c) {
-	return duplicate(c,'?');
+	return duplicate(c,L'?');
 }
 
 wchar_t wcharacter::duplicate(ucs2_t c, wchar_t replacement) {
 	#ifdef _WIN32
 		// on windows, wchar_t's are encoded as UCS-2
-		return (wchar_t)ucs2_t;
+		return (wchar_t)c;
 	#else
-		// on non-windows, it's trickier
-		// FIXME: implement this...
-		return 0;
-	#endif
-}
-
-bool wcharacter::duplicateFromCharacterNeedsMutex() {
-	#if defined(RUDIMENTS_HAVE_WCRTOMB)
-		return false;
-	#elif defined(RUDIMENTS_HAVE_MBTOWC)
-		return true;
-	#else
-		return false;
+		// on non-windows, use iconvert
+		wchar_t		wc;
+		iconvert	i;
+		i.setFromEncoding("UCS-2");
+		i.setFromBuffer((unsigned char *)&c);
+		i.setFromBufferSize(sizeof(ucs2_t));
+		i.setToEncoding("WCHAR_T");
+		i.setToBuffer((unsigned char *)&wc);
+		i.setToBufferSize(sizeof(wchar_t));
+		return (i.convert())?wc:replacement;
 	#endif
 }

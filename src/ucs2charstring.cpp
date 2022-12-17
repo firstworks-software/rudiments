@@ -287,8 +287,9 @@ void ucs2charstring::replace(ucs2_t *str,
 	}
 }
 
-ucs2_t *ucs2charstring::replace(const ucs2_t *str, const ucs2_t *oldstr,
-						const ucs2_t *newstr) {
+ucs2_t *ucs2charstring::replace(const ucs2_t *str,
+					const ucs2_t *oldstr,
+					const ucs2_t *newstr) {
 	if (!str) {
 		return NULL;
 	}
@@ -1796,13 +1797,11 @@ ucs2_t *ucs2charstring::after(const ucs2_t *str,
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str) {
-	if (!str) {
-		return NULL;
-	}
 	return duplicate(str,charstring::length(str));
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
+	// FIXME: use iconvert directly
 	if (!str) {
 		return NULL;
 	}
@@ -1815,9 +1814,6 @@ ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const ucs2_t *str) {
-	if (!str) {
-		return NULL;
-	}
 	return duplicate(str,length(str));
 }
 
@@ -1846,6 +1842,7 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 							ucs2_t replacement) {
+	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}
@@ -2272,6 +2269,7 @@ ucs2_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
 	const ucs2_t	empty[]={0};
 	ucs2_t	*subbed=replace(buf2,dotzero,empty);
 	delete[] buf2;
+//stdoutput.printf("%s\n",charstring::duplicate(subbed));
 	return subbed;
 }
 
@@ -2284,155 +2282,22 @@ ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
 	return result;
 }
 
-#if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
-	!defined(RUDIMENTS_HAVE__VSNPRINTF) && \
-	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
-	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF) && \
-	!defined(RUDIMENTS_HAVE_UNDEFINED_VSNPRINTF_S)
-// This is quite a hack...
-//
-// Old enough systems (like linux libc4) don't provide vsnprintf but do provide
-// vsprintf.  There's no safe way to use vsprintf though, especially the way
-// the bytebuffer class would like to use it.
-//
-// I could grab a vsnprintf implementation from any of the other
-// LGPL-compatible libraries.  Tried it.  Too much work.
-//
-// vsnprintf could be implemented using vsprintf but a large enough buffer to
-// vsprintf to safely must be created.  What is "large enough" though?
-//
-// I could implement a format string parser that calculates the buffer
-// size.  Tried it.  Also too much work.
-// 
-// Short of that, the only safe thing to do is vfprintf to a file, find out how
-// many characters were written and then do the same to a string.
-// 
-// That's taking the long way around for sure.
-//
-// The null device is the obvious choice, so we'll try that first.  But, some
-// implementations of vsprintf return 0 when writing to the null device.  Or,
-// maybe some implementations of the null device return 0 when anything is
-// written to them.  Either way, if using the null device fails, we fall back
-// to a scratch file.
-//
-// I'm not even going to benchmark to find out how poorly this performs.
-// Hopefully disk-caching will help it out.  Also, if you happen to be using
-// a ram-based temporary directory then that will help too.  Systems old enough
-// to need this probably aren't though.
-//
-// There are, of course, security concerns with the scratch file.  Anyone with
-// the right permissions can read the scratch file.  Someone could delete it,
-// and on some systems that could cause problems.
-//
-// The scratch file uses the PID of the current process for uniqueness.  This
-// could cause race conditions in multi-threaded programs, but chances are if
-// your system doesn't have vsnprintf, then it doesn't have thread support
-// either.
-//
-// While terribly inefficient, the scratch file process should be clean.  It
-// only creates one scratch file per process and cleans it up at exit, unless
-// the program crashes or is killed with -9.
-
-static ucs2_t	*scratchfile=NULL;
-static FILE	*scratch=NULL;
-
-static void removeScratch() {
-	file::remove(scratchfile);
-	if (scratch) {
-		fclose(scratch);
-		delete[] scratchfile;
-	}
-}
-
-static ssize_t vsnprintf(ucs2_t *buffer, size_t len,
-				const ucs2_t *format, va_list argp) {
-
-	// open a scratch file if it's not already open
-	if (!scratch) {
-
-		// first try the null device
-		scratchfile=ucs2charstring::duplicate(
-					#if defined(_WIN32)
-						"\Device\Null"
-					#elif defined(__VMS)
-						"NLA0:"
-					#else
-						"/dev/null"
-					#endif
-						);
-		scratch=fopen(scratchfile,"w");
-		if (scratch) {
-			// writing to the null device returns
-			// 0 or -1 on some platforms
-			if (fprintf(scratch,"test")!=4) {
-				fclose(scratch);
-				scratch=NULL;
-				delete[] scratchfile;
-			}
-		} else {
-			delete[] scratchfile;
-		}
-
-		// if that fails then try /tmp/scratch.pid
-		if (!scratch) {
-			scratchfile=new char[20];
-			ucs2charstring::copy(scratchfile,"/tmp/scratch.");
-			ucs2charstring::append(scratchfile,
-					(uint64_t)process::getProcessId());
-			scratch=fopen(scratchfile,"w+");
-			if (scratch) {
-				process::atExit((void (*)(void))removeScratch);
-				rewind(scratch);
-			} else {
-				delete[] scratchfile;
-				return -1;
-			}
-		}
-	}
-
-
-	// write to the scratch file so we can
-	// figure out how much space we need
-	ssize_t	safebuffersize=vfprintf(scratch,format,argp);
-
-	// create a big enough buffer for that
-	ucs2_t	*safebuffer=new ucs2_t[safebuffersize+1];
-
-	// vsprintf to safebuffer
-	ssize_t byteswritten=vsprintf(safebuffer,format,argp);
-
-	// bail on error
-	if (byteswritten==-1) {
-		delete[] safebuffer;
-		return -1;
-	}
-
-	// figure out how many bytes we can copy back to "buffer"
-	// (the +1 is because vsprintf returns the number of bytes written
-	// minus the NULL terminator)
-	size_t	bytestocopy=((size_t)byteswritten+1<len)?
-					byteswritten+1:len;
-
-	// copy what we can back to "buffer"
-	ucs2charstring::copy(buffer,safebuffer,bytestocopy);
-
-	// clean up
-	delete[] safebuffer;
-
-	// return the number of bytes we would like to have copied
-	// (except for the NULL terminator)
-	return safebuffersize;
-}
-
-// now we can say that we have vsnprintf
-#define RUDIMENTS_HAVE_VSNPRINTF 1
-
-#endif
-
 ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
 					const ucs2_t *format, va_list *argp) {
-	// FIXME: implement this...
-	return 0;
+	#ifdef _WIN32
+		// on windows, wchar_t's are encoded as UCS-2,
+		// so we can piggyback
+		return wcharstring::printf((wchar_t *)buffer,len,
+						(const wchar_t *)format,argp);
+	#else
+		// on non-windows, it's trickier...
+
+		// FIXME: implement this...
+		// make sure that %lc and %ls are interpreted as ucs2_t
+		// characters/strings rather than wide characters/strings
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
 
 ssize_t ucs2charstring::printf(ucs2_t **buffer, const ucs2_t *format, ...) {
@@ -2471,4 +2336,9 @@ ssize_t ucs2charstring::printf(ucs2_t **buffer,
 	}
 	va_end(argp1);
 	return size;
+}
+
+bool ucs2charstring::supportsPrintf() {
+	// FIXME: set this true eventually
+	return false;
 }

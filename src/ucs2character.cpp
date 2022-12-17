@@ -4,6 +4,7 @@
 #include <rudiments/ucs2character.h>
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/iconvert.h>
 
 bool ucs2character::isAlphanumeric(int32_t c) {
 	return character::isAlphanumeric(c);
@@ -79,8 +80,18 @@ bool ucs2character::inSet(ucs2_t c, const ucs2_t *set) {
 }
 
 ucs2_t ucs2character::duplicate(char c) {
-	// FIXME: implement this
-	return 0;
+	return duplicate(c,'?');
+}
+
+ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
+	ucs2_t		uc;
+	iconvert	i;
+	i.setFromBuffer((unsigned char *)&c);
+	i.setFromBufferSize(sizeof(c));
+	i.setToEncoding("UCS-2");
+	i.setToBuffer((unsigned char *)&uc);
+	i.setToBufferSize(sizeof(uc));
+	return (i.convert())?uc:replacement;
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c) {
@@ -88,11 +99,18 @@ ucs2_t ucs2character::duplicate(wchar_t c) {
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
-	// FIXME: implement this
-	return 0;
-}
-
-bool ucs2character::duplicateFromWideCharacterNeedsMutex() {
-	// FIXME: implement this
-	return false;
+	#ifdef _WIN32
+		// on windows, wchar_t's are encoded as UCS-2
+		return (ucs2_t)c;
+	#else
+		// on non-windows, use iconvert
+		ucs2_t		uc;
+		iconvert	i;
+		i.setFromBuffer((unsigned char *)&c);
+		i.setFromBufferSize(sizeof(c));
+		i.setToEncoding("UCS-2");
+		i.setToBuffer((unsigned char *)&uc);
+		i.setToBufferSize(sizeof(uc));
+		return (i.convert())?uc:replacement;
+	#endif
 }

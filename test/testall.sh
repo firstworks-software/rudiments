@@ -12,8 +12,10 @@ for program in \
 	bytestring \
 	character \
 	wcharacter \
+	ucs2character \
 	charstring \
 	wcharstring \
+	ucs2charstring \
 	commandline \
 	des \
 	csvdom \

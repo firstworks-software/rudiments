@@ -11,8 +11,10 @@ tests=Array(_
 	"bytestring",_
 	"character",_
 	"wcharacter",_
+	"ucs2character",_
 	"charstring",_
 	"wcharstring",_
+	"ucs2charstring",_
 	"commandline",_
 	"des",_
 	"csvdom",_

@@ -74,8 +74,18 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		static bool	inSet(ucs2_t c, const ucs2_t *set);
 
 		/** Returns the UCS-2 character representation of character "c"
-		 *  per the character set of the current locale. */
+		 *  per the character set of the current locale.
+		 *
+		 *  Returns '?' if character "c" cannot be converted to a
+		 *  UCS-2 character. */
 		static ucs2_t	duplicate(char c);
+
+		/** Returns the UCS-2 character representation of character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  Returns "replacement" if character "c" cannot be converted
+		 *  to a UCS-2 character. */
+		static ucs2_t	duplicate(char c, ucs2_t replacement);
 
 		/** Returns the UCS-2 character representation of wide
 		 *  character "c" per the character set of the current locale.
@@ -90,11 +100,6 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		 *  Returns "replacement" if wide character "c" cannot be
 		 *  converted to a UCS-2 character. */
 		static ucs2_t	duplicate(wchar_t c, ucs2_t replacement);
-
-		/** Returns true if the duplicate methods that convert to a
-		 *  char from a wchar_t require a mutex to operate safely in
-		 *  a threaded environment and false otherwise. */
-		static bool	duplicateFromWideCharacterNeedsMutex();
 };
 
 #endif

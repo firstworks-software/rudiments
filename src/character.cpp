@@ -25,10 +25,6 @@
 
 #include <stdio.h>
 
-#ifndef MB_CUR_MAX
-	#define MB_CUR_MAX 4
-#endif
-
 bool character::isAlphanumeric(int32_t c) {
 	return isalnum(c)!=0;
 }
@@ -154,40 +150,29 @@ char character::duplicate(wchar_t c) {
 
 char character::duplicate(wchar_t c, char replacement) {
 
-	// NOTE: MB_CUR_MAX is not a constant, but rather a macro that expands
-	// to an integer expression.  It also varies with the locale.
-	char	*mb=new char[MB_CUR_MAX];
-	bytestring::zero(mb,sizeof(mb));
-	size_t	s;
-	#if defined(RUDIMENTS_HAVE_WCRTOMB)
-		mbstate_t	st;
-		bytestring::zero(&st,sizeof(st));
-		s=wcrtomb(mb,c,&st);
-	#elif defined(RUDIMENTS_HAVE_WCTOMB)
-		s=wctomb(mb,c);
-	#else
-		// This will only work if the first 256 characters of the
-		// source and target character set are equivalent.
-		// eg. UCS-2/UCS-4 and Latin 1.  This is usually the case
-		// on older platforms that don't provide wctomb()/wcrtomb(),
-		// but I bet I'll be back here tweaking this some day.
-		if (c<256) {
-			s=0;
-			mb[0]=c;
-		} else {
-			s=(size_t)-1;
-		}
-	#endif
-	// We're attempting to convert a wide character to a regular
-	// character, but it's possible that the wide character was
-	// only representable by a multi-byte character in the current locale.
-	// If that ends up being the case, then just return the replacement
-	// character.
-	char	retval=mb[0];
-	delete[] mb;
-	if (s==(size_t)-1 || s>1) {
+	char		*mb= new char[iconvert::maxMultiByteSize()];
+	iconvert	i;
+	i.setFromEncoding("WCHAR_T");
+	i.setFromBuffer((unsigned char *)&c);
+	i.setFromBufferSize(sizeof(wchar_t));
+	i.setToBuffer((unsigned char *)mb);
+	i.setToBufferSize(iconvert::maxMultiByteSize());
+	if (!i.convert()) {
+		delete[] mb;
 		return replacement;
 	}
+	// We're attempting to convert a wide character to a regular
+	// character, but it's possible that the wide character was
+	// only representable by a multi-byte character in the current
+	// locale.  If that ends up being the case, then just return
+	// the replacement character.
+	if (i.getToBufferPosition()-i.getToBuffer()>1) {
+		delete[] mb;
+		return replacement;
+	}
+	// otherwise, return the character
+	char	retval=mb[0];
+	delete[] mb;
 	return retval;
 }
 
@@ -197,21 +182,18 @@ char character::duplicate(ucs2_t c) {
 
 char character::duplicate(ucs2_t c, char replacement) {
 	#ifdef _WIN32
-		// on windows, wchar_t's are encoded as UCS-2
+		// on windows, wchar_t's are encoded as UCS-2,
+		// so we can piggyback
 		return character::duplicate((wchar_t)c,replacement);
 	#else
-		// on non-windows, it's trickier...
-
-		// NOTE: MB_CUR_MAX is not a constant, but rather a macro that
-		// expands to an integer expression.  It also varies with the
-		// locale.
-		char		*mb=new char[MB_CUR_MAX];
+		// on non-windows, use iconvert
+		char		*mb= new char[iconvert::maxMultiByteSize()];
 		iconvert	i;
 		i.setFromEncoding("UCS-2");
 		i.setFromBuffer((unsigned char *)&c);
 		i.setFromBufferSize(sizeof(ucs2_t));
 		i.setToBuffer((unsigned char *)mb);
-		i.setToBufferSize(MB_CUR_MAX);
+		i.setToBufferSize(iconvert::maxMultiByteSize());
 		if (!i.convert()) {
 			delete[] mb;
 			return replacement;
@@ -229,15 +211,5 @@ char character::duplicate(ucs2_t c, char replacement) {
 		char	retval=mb[0];
 		delete[] mb;
 		return retval;
-	#endif
-}
-
-bool character::duplicateFromWideCharacterNeedsMutex() {
-	#if defined(RUDIMENTS_HAVE_WCRTOMB)
-		return false;
-	#elif defined(RUDIMENTS_HAVE_WCTOMB)
-		return true;
-	#else
-		#error no wcrtomb or anything like it
 	#endif
 }

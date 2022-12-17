@@ -1832,9 +1832,6 @@ char *charstring::after(const char *str, const char *delimiter) {
 }
 
 char *charstring::duplicate(const char *str) {
-	if (!str) {
-		return NULL;
-	}
 	return duplicate(str,length(str));
 }
 
@@ -1862,6 +1859,7 @@ char *charstring::duplicate(const wchar_t *string, char replacement) {
 
 char *charstring::duplicate(const wchar_t *string, size_t len,
 							char replacement) {
+	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}
@@ -1887,6 +1885,7 @@ char *charstring::duplicate(const ucs2_t *string, char replacement) {
 
 char *charstring::duplicate(const ucs2_t *string, size_t len,
 							char replacement) {
+	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}

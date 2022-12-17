@@ -1193,6 +1193,10 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 						const ucs2_t *format,
 						va_list *argp);
 
+		/** Returns true if the platform supports printf()ing UCS-2
+		 *  characters and false otherwise. */
+		static bool	supportsPrintf();
+
 	#include <rudiments/private/ucs2charstring.h>
 };
 

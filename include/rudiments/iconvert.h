@@ -58,6 +58,10 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 
 		bool	reset();
 
+		static	uint16_t	maxMultiByteSize();
+
+		static	bool	convertNeedsMutex();
+
 	#include <rudiments/private/iconvert.h>
 };
 
