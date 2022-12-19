@@ -168,6 +168,77 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
 		ssize_t	write(wchar_t character, char replacement);
 
+		/** Converts UCS-2 character string "string" to characters,
+		 *  replacing any characters that don't convert with "?", then
+		 *  writes the result to the stringbuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const ucs2_t *string);
+
+		/** Converts UCS-2 character string "string" to characters,
+		 *  replacing any characters that don't convert with
+		 *  "replacement", then writes the result to the stringbuffer
+		 *  at the current position and increments the current position
+		 *  to the next byte after the data that was written.  If
+		 *  necessary, the internal buffer will grow to accommodate the
+		 *  new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const ucs2_t *string, char replacement);
+
+		/** Converts the first "length" characters of the UCS-2
+		 *  character string "string" to characters, replacing any
+		 *  characters that don't convert with "?", then writes the
+		 *  stringbuffer at the current position and increments the
+		 *  current position to the next byte after the data that was
+		 *  written.  If necessary, the internal buffer will grow to
+		 *  accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const ucs2_t *string, size_t length);
+
+		/** Converts the first "length" characters of the UCS-2
+		 *  character string "string" to characters, replacing any
+		 *  characters that don't convert with "replacement", then
+		 *  writes the result to the stringbuffer at the current
+		 *  position and increments the current position to the next
+		 *  byte after the data that was written.  If necessary, the
+		 *  internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(const ucs2_t *string, size_t length,
+							char replacement);
+
+		/** Converts the UCS-2 character "character" to a character,
+		 *  replacing any characters that don't convert with
+		 *  "?", then writes the result to the stringbuffer at the
+		 *  current position and increments the current position to the
+		 *  next byte after the data that was written.  If necessary,
+		 *  the internal buffer will grow to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(ucs2_t character);
+
+		/** Converts the UCS-2 character "character" to a character,
+		 *  replacing any characters that don't convert with
+		 *  "replacement", then writes the result to the stringbuffer
+		 *  at the current position and increments the current position
+		 *  to the next byte after the data that was written.  If
+		 *  necessary, the internal buffer will grow to accommodate the
+		 *  new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		ssize_t	write(ucs2_t character, char replacement);
+
 		/** Converts "number" to a string and writes it to the
 		 *  stringbuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
@@ -400,6 +471,67 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
 		stringbuffer	*append(wchar_t character, char replacement);
+
+		/** Converts UCS-2 character string "string" to characters,
+		 *  replacing any characters that don't convert with "?", then
+		 *  appends the result to the stringbuffer, growing the internal
+		 *  buffer as necessary to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->append("numbers: ")->append(5)->append(5.5); */
+		stringbuffer	*append(const ucs2_t *string);
+
+		/** Converts UCS-2 character string "string" to characters,
+		 *  replacing any characters that don't convert with
+		 *  "replacement", then appends the result to the stringbuffer,
+		 *  growing the internal buffer as necessary to accommodate the
+		 *  new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->append("numbers: ")->append(5)->append(5.5); */
+		stringbuffer	*append(const ucs2_t *string,
+						char replacement);
+
+		/** Converts the first "length" characters of the UCS-2
+		 *  character string "string" to characters, replacing any
+		 *  characters that don't convert with "?", then appends the
+		 *  result to the stringbuffer, growing the *  internal buffer
+		 *  as necessary to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->append("numbers: ")->append(5)->append(5.5); */
+		stringbuffer	*append(const ucs2_t *string, size_t length);
+
+		/** Converts the first "length" characters of the UCS-2
+		 *  character string "string" to characters, replacing any
+		 *  characters that don't convert with "replacement", then
+		 *  append sthe result to the stringbuffer, growing the
+		 *  internal buffer as necessary to accommodate the new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->append("numbers: ")->append(5)->append(5.5); */
+		stringbuffer	*append(const ucs2_t *string, size_t length,
+							char replacement);
+
+		/** Converts the UCS-2 character "character" to a character,
+		 *  replacing any characters that don't convert with
+		 *  "?", then appends the result to the stringbuffer, growing
+		 *  the internal buffer as necessary to accommodate the new
+		 *  data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->append("numbers: ")->append(5)->append(5.5); */
+		stringbuffer	*append(ucs2_t character);
+
+		/** Converts the UCS-2 character "character" to a character,
+		 *  replacing any characters that don't convert with
+		 *  "replacement", then appends the result to the stringbuffer,
+		 *  growing the internal buffer as necessary to accommodate the
+		 *  new data.
+		 *
+		 *  Returns a pointer to "this" to enable chaining such as:
+		 *	sb->append("numbers: ")->append(5)->append(5.5); */
+		stringbuffer	*append(ucs2_t character, char replacement);
 
 		/** Converts "number" to a string and appends it to the
 		 *  stringbuffer, growing the internal buffer as necessary to

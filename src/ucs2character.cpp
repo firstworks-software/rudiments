@@ -106,6 +106,7 @@ ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
 		// on non-windows, use iconvert
 		ucs2_t		uc;
 		iconvert	i;
+		i.setFromEncoding("WCHAR_T");
 		i.setFromBuffer((unsigned char *)&c);
 		i.setFromBufferSize(sizeof(c));
 		i.setToEncoding("UCS-2");

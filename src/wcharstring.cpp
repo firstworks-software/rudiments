@@ -996,18 +996,6 @@ wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source) {
 	return dest;
 }
 
-wchar_t *wcharstring::copy(wchar_t *dest, const char *source) {
-	if (dest && source) {
-		while (*source) {
-			*dest=wcharacter::duplicate(*source);
-			dest++;
-			source++;
-		}
-		*dest=L'\0';
-	}
-	return dest;
-}
-
 wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t len) {
 	if (!dest || !source) {
 		return dest;
@@ -1028,39 +1016,13 @@ wchar_t *wcharstring::copy(wchar_t *dest, const wchar_t *source, size_t len) {
 	#endif
 }
 
-wchar_t *wcharstring::copy(wchar_t *dest, const char *source, size_t len) {
-	if (!dest || !source) {
-		return dest;
-	}
-	while (*source && len) {
-		*dest=wcharacter::duplicate(*source);
-		dest++;
-		source++;
-		len--;
-	}
-	if (len) {
-		*dest=L'\0';
-	}
-	return dest;
-}
-
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 						const wchar_t *source) {
 	return copy(dest+location,source);
 }
 
 wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
-						const char *source) {
-	return copy(dest+location,source);
-}
-
-wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
 					const wchar_t *source, size_t len) {
-	return copy(dest+location,source,len);
-}
-
-wchar_t *wcharstring::copy(wchar_t *dest, size_t location,
-					const char *source, size_t len) {
 	return copy(dest+location,source,len);
 }
 
@@ -1070,17 +1032,7 @@ wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 }
 
 wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
-						const char *source) {
-	return safeCopy(dest,destlen,source,charstring::length(source)+1);
-}
-
-wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
 				const wchar_t *source, size_t sourcelen) {
-	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
-}
-
-wchar_t *wcharstring::safeCopy(wchar_t *dest, size_t destlen,
-				const char *source, size_t sourcelen) {
 	return copy(dest,source,(sourcelen>destlen)?destlen:sourcelen);
 }
 

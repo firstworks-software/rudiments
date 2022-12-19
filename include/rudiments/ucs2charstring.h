@@ -6,6 +6,19 @@
 
 #include <rudiments/private/ucs2charstringincludes.h>
 
+#define ucs2literal(___ucs2strvar,___charstrvar) \
+	ucs2_t	___ucs2strvar[sizeof(___charstrvar)/sizeof(char)]; \
+	{ \
+		const char	*___charstrptr=___charstrvar; \
+		ucs2_t		*___ucs2strptr=___ucs2strvar; \
+		while (*___charstrptr) { \
+			*___ucs2strptr=*___charstrptr; \
+			___charstrptr++; \
+			___ucs2strptr++; \
+		} \
+		*___ucs2strptr=0; \
+	}
+
 /** The ucs2charstring class provides static methods for manipulating UCS-2
  *  encoded character strings. */
 class RUDIMENTS_DLLSPEC ucs2charstring {

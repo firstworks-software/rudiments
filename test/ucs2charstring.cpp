@@ -10,20 +10,6 @@
 #include <limits.h>
 #include "test.cpp"
 
-// FIXME: move to ucs2charstring.h and use ucs2character::duplicate()
-#define ucs2literal(___ucs2strvar,___charstrvar) \
-	ucs2_t	___ucs2strvar[sizeof(___charstrvar)/sizeof(char)]; \
-	{ \
-		const char	*___charstrptr=___charstrvar; \
-		ucs2_t		*___ucs2strptr=___ucs2strvar; \
-		while (*___charstrptr) { \
-			*___ucs2strptr=*___charstrptr; \
-			___charstrptr++; \
-			___ucs2strptr++; \
-		} \
-		*___ucs2strptr=0; \
-	}
-
 int main(int argc, const char **argv) {
 
 	header("ucs2charstring");
@@ -1201,6 +1187,27 @@ unimplemented...
 	test("humanReadable -3",!ucs2charstring::compare(sval,neg3));
 	delete[] sval;
 	stdoutput.printf("\n");
+
+
+	// conversions
+	stdoutput.printf("conversions...\n");
+	const char	*chars=" !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~";
+	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~";
+	ucs2literal(ucs2chars," !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~");
+	ucs2_t	*c=ucs2charstring::duplicate(chars);
+	test("from char",!ucs2charstring::compare(c,ucs2chars));
+	delete[] c;
+	c=ucs2charstring::duplicate(wchars);
+	test("from wchar_t",!ucs2charstring::compare(c,ucs2chars));
+	delete[] c;
+	stdoutput.printf("\n");
+
 
 	return 0;
 }

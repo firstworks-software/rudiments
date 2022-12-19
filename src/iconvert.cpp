@@ -594,11 +594,10 @@ uint16_t iconvert::maxMultiByteSize() {
 }
 
 bool iconvert::convertNeedsMutex() {
-        #if defined(RUDIMENTS_HAVE_ICONV) || defined(RUDIMENTS_HAVE_WCRTOMB)
-                return false;
-        #elif defined(RUDIMENTS_HAVE_WCTOMB)
-                return true;
-        #else
-                #error no iconv, wcrtomb, wctomb or anything like it
-        #endif
+	#if defined(RUDIMENTS_HAVE_WCTOMB) && \
+        	!defined(RUDIMENTS_HAVE_ICONV) && \
+		!defined(RUDIMENTS_HAVE_WCRTOMB)
+		return false;
+	#endif
+	return true;
 }

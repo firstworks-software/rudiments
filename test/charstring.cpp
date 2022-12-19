@@ -1201,6 +1201,26 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// conversions
+	stdoutput.printf("conversions...\n");
+	const char	*chars=" !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~";
+	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~";
+	ucs2literal(ucs2chars," !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~");
+	char	*c=charstring::duplicate(wchars);
+	test("from wchar_t",!charstring::compare(c,chars));
+	delete[] c;
+	c=charstring::duplicate(ucs2chars);
+	test("from ucs2",!charstring::compare(c,chars));
+	delete[] c;
+	stdoutput.printf("\n");
+
+
 	// hosttonet/nettohost (why are these here?)
 	/*unsigned char	v8=0xC0;
 	uint16_t	v16=filedescriptor::hostToNet(

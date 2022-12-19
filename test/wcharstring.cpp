@@ -1004,5 +1004,26 @@ int main(int argc, const char **argv) {
 	delete[] sval;
 	stdoutput.printf("\n");
 
+
+	// conversions
+	stdoutput.printf("conversions...\n");
+	const char	*chars=" !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~";
+	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~";
+	ucs2literal(ucs2chars," !\"#$&'()*+,-./01234567890:;<=>?@"
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+				"abcdefghijklmnopqrstuvwxyz{|}~");
+	wchar_t	*c=wcharstring::duplicate(chars);
+	test("from char",!wcharstring::compare(c,wchars));
+	delete[] c;
+	c=wcharstring::duplicate(ucs2chars);
+	test("from ucs2",!wcharstring::compare(c,wchars));
+	delete[] c;
+	stdoutput.printf("\n");
+
+
 	return 0;
 }
