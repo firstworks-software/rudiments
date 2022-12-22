@@ -51,37 +51,6 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the next write will occur. */
 		size_t	getPosition();
 
-		/** Converts "string" to wide characters and writes the result
-		 *  to the wstringbuffer at the current position and increments
-		 *  the current position to the next byte after the data that
-		 *  was written.  If necessary, the internal buffer will grow
-		 *  to accommodate the new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const char *string);
-
-		/** Converts the first "length" characters of "string" to wide
-		 *  characters and writes the result to the wstringbuffer at
-		 *  the current position and increments the current position to
-		 *  the next byte after the data that was written.  If
-		 *  necessary, the internal buffer will grow to accommodate the
-		 *  new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const char *string, size_t length);
-
-		/** Converts "character" to a wide character and writes the
-		 *  result to the wstringbuffer at the current position and
-		 *  increments the current position to the next byte after the
-		 *  data that was written.  If necessary, the internal buffer
-		 *  will grow to accommodate the new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(char character);
-
 		/** Writes "string" to the wstringbuffer at the current position
 		 *  and increments the current position to the next byte after
 		 *  the data that was written.  If necessary, the internal
@@ -234,31 +203,6 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		ssize_t	write(double number, uint16_t precision,
 							uint16_t scale);
 
-
-		/** Converts "string" to wide characters and appends the result
-		 *  to the wstringbuffer, growing the internal buffer as
-		 *  necessary to accommodate the new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		wstringbuffer	*append(const char *string);
-
-		/** Converts the first "length" characters of "string" to wide
-		 *  characters and appends the result to the wstringbuffer,
-		 *  growing the internal buffer as necessary to accommodate the
-		 *  new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		wstringbuffer	*append(const char *string, size_t length);
-
-		/** Converts "character" to a wide character and appends the
-		 *  result to the wstringbuffer, growing the internal buffer as
-		 *  necessary to accommodate the new data.
-		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		wstringbuffer	*append(char character);
 
 		/** Appends "string" to the wstringbuffer, growing the internal
 		 *  buffer as necessary to accommodate the new data.

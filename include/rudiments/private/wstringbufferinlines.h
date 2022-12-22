@@ -82,25 +82,6 @@ bool wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
 }
 
 inline
-wstringbuffer *wstringbuffer::append(const char *string) {
-	return append(string,charstring::length(string));
-}
-
-inline
-wstringbuffer *wstringbuffer::append(const char *string, size_t length) {
-	wchar_t	*s=wcharstring::duplicate(string,length);
-	wstringbuffer	*retval=append(s,length);
-	delete[] s;
-	return retval;
-}
-
-inline
-wstringbuffer *wstringbuffer::append(char character) {
-	return (wstringbuffer *)bytebuffer::append(
-				wcharacter::duplicate(character));
-}
-
-inline
 wstringbuffer *wstringbuffer::append(const wchar_t *string) {
 	return append(string,wcharstring::length(string));
 }
@@ -214,24 +195,6 @@ wstringbuffer *wstringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
 	return (wstringbuffer *)appendFormatted(L"%*.*f",
 						precision,scale,number);
-}
-
-inline
-ssize_t wstringbuffer::write(const char *string) {
-	return write(string,charstring::length(string));
-}
-
-inline
-ssize_t wstringbuffer::write(const char *string, size_t length) {
-	wchar_t	*s=wcharstring::duplicate(string,length);
-	ssize_t	retval=write(s,length);
-	delete[] s;
-	return retval;
-}
-
-inline
-ssize_t wstringbuffer::write(char character) {
-	return bytebuffer::write(wcharacter::duplicate(character));
 }
 
 inline

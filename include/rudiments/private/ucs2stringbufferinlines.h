@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/charstring.h>
-#include <rudiments/wcharstring.h>
 #include <rudiments/character.h>
 
 inline
@@ -106,47 +105,6 @@ ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string,
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(ucs2_t character) {
 	return (ucs2stringbuffer *)bytebuffer::append(character);
-}
-
-inline
-ucs2stringbuffer *ucs2stringbuffer::append(const wchar_t *string) {
-	return append(string,wcharstring::length(string));
-}
-
-inline
-ucs2stringbuffer *ucs2stringbuffer::append(const wchar_t *string,
-							ucs2_t replacement) {
-	return append(string,wcharstring::length(string),replacement);
-}
-
-inline
-ucs2stringbuffer *ucs2stringbuffer::append(const wchar_t *string,
-							size_t length) {
-	ucs2_t	*s=ucs2charstring::duplicate(string,length);
-	ucs2stringbuffer	*retval=append(s,length);
-	delete[] s;
-	return retval;
-}
-
-inline
-ucs2stringbuffer *ucs2stringbuffer::append(const wchar_t *string,
-							size_t length,
-							ucs2_t replacement) {
-	ucs2_t	*s=ucs2charstring::duplicate(string,length,replacement);
-	ucs2stringbuffer	*retval=append(s,length);
-	delete[] s;
-	return retval;
-}
-
-inline
-ucs2stringbuffer *ucs2stringbuffer::append(wchar_t character) {
-	return append(ucs2character::duplicate(character));
-}
-
-inline
-ucs2stringbuffer *ucs2stringbuffer::append(wchar_t character,
-						ucs2_t replacement) {
-	return append(ucs2character::duplicate(character,replacement));
 }
 
 inline
@@ -284,45 +242,6 @@ ssize_t ucs2stringbuffer::write(const ucs2_t *string, size_t length) {
 inline
 ssize_t ucs2stringbuffer::write(ucs2_t character) {
 	return bytebuffer::write(character);
-}
-
-inline
-ssize_t ucs2stringbuffer::write(const wchar_t *string) {
-	return write(string,wcharstring::length(string));
-}
-
-inline
-ssize_t ucs2stringbuffer::write(const wchar_t *string, ucs2_t replacement) {
-	return write(string,wcharstring::length(string),replacement);
-}
-
-inline
-ssize_t ucs2stringbuffer::write(const wchar_t *string, size_t length) {
-	ucs2_t	*s=ucs2charstring::duplicate(string,length);
-	ssize_t	retval=write(s,length);
-	delete[] s;
-	return retval;
-}
-
-inline
-ssize_t ucs2stringbuffer::write(const wchar_t *string, size_t length,
-							ucs2_t replacement) {
-	ucs2_t	*s=ucs2charstring::duplicate(string,length,replacement);
-	ssize_t	retval=write(s,length);
-	delete[] s;
-	return retval;
-}
-
-inline
-ssize_t ucs2stringbuffer::write(wchar_t character) {
-	return bytebuffer::write(
-			ucs2character::duplicate(character));
-}
-
-inline
-ssize_t ucs2stringbuffer::write(wchar_t character, ucs2_t replacement) {
-	return bytebuffer::write(
-			ucs2character::duplicate(character,replacement));
 }
 
 inline

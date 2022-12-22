@@ -126,6 +126,7 @@
 		respect locale now
 	added ucs2character/ucs2charstring/ucs2stringbuffer classes
 	added iconvert class
+	removed foreign append()/write() methods from *stringbuffer classes
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

@@ -199,7 +199,9 @@ wchar_t *logger::logHeader(const wchar_t *name) {
 	datetime	dt;
 	dt.initFromSystemDateTime();
 	wstringbuffer	str;
-	str.append(dt.getString())->append(L" ");
+	wchar_t	*wdt=wcharstring::duplicate(dt.getString());
+	str.append(wdt)->append(L" ");
+	delete[] wdt;
 	str.append(name)->append(L" [");
 	str.append((uint64_t)process::getProcessId())->append(L"]");
 	return str.detachString();
