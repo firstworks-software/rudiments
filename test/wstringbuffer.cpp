@@ -8,8 +8,6 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-wchar_t	alphabet[]=L"abcdefghijklmnopqrstuvwxyz";
-
 int main(int argc, const char **argv) {
 
 	header("wstringbuffer");

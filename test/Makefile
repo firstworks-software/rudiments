@@ -37,6 +37,7 @@ PROGS1= dictionary \
 	kill \
 	stringbuffer \
 	wstringbuffer \
+	ucs2stringbuffer \
 	bytebuffer \
 	des
 
@@ -209,6 +210,9 @@ stringbuffer: stringbuffer.cpp stringbuffer.$(OBJ)
 
 wstringbuffer: wstringbuffer.cpp wstringbuffer.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wstringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+ucs2stringbuffer: ucs2stringbuffer.cpp ucs2stringbuffer.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) ucs2stringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 handoff: handoff.cpp handoff.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

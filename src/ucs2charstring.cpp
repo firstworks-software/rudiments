@@ -2269,7 +2269,6 @@ ucs2_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
 	const ucs2_t	empty[]={0};
 	ucs2_t	*subbed=replace(buf2,dotzero,empty);
 	delete[] buf2;
-//stdoutput.printf("%s\n",charstring::duplicate(subbed));
 	return subbed;
 }
 

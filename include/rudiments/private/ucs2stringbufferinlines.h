@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/charstring.h>
-#include <rudiments/character.h>
+#include <rudiments/ucs2charstring.h>
+#include <rudiments/ucs2character.h>
 
 inline
 ucs2stringbuffer::ucs2stringbuffer() : bytebuffer() {
