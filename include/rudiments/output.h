@@ -11,8 +11,7 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		output();
 		virtual ~output();
 
-		virtual	ssize_t	write(const unsigned char *string,
-							size_t size)=0;
+		virtual	ssize_t	write(const byte_t *string, size_t size)=0;
 		virtual	ssize_t	write(const char *string)=0;
 		virtual	ssize_t	write(const char *string, size_t length)=0;
 		virtual	ssize_t	write(char character)=0;
@@ -25,14 +24,14 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		virtual	ssize_t	write(int16_t number)=0;
 		virtual	ssize_t	write(int32_t number)=0;
 		virtual	ssize_t	write(int64_t number)=0;
-		virtual	ssize_t	write(unsigned char character)=0;
+		virtual	ssize_t	write(byte_t character)=0;
 		virtual	ssize_t	write(uint16_t number)=0;
 		virtual	ssize_t	write(uint32_t number)=0;
 		virtual	ssize_t	write(uint64_t number)=0;
 		virtual	ssize_t	write(float number)=0;
 		virtual	ssize_t	write(double number)=0;
 
-		virtual	ssize_t	write(const unsigned char *string, size_t size,
+		virtual	ssize_t	write(const byte_t *string, size_t size,
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	write(const char *string,
 						int32_t sec, int32_t usec);
@@ -58,7 +57,7 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	write(int64_t number,
 						int32_t sec, int32_t usec);
-		virtual	ssize_t	write(unsigned char character,
+		virtual	ssize_t	write(byte_t character,
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	write(uint16_t number,
 						int32_t sec, int32_t usec);

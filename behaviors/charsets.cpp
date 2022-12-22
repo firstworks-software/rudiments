@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 			stdoutput.printf("  hex:\n");
 			uint16_t	hexcounter=0;
 			uint16_t	nullcounter=0;
-			const unsigned char	*t=(const unsigned char *)*text;
+			const byte_t	*t=(const byte_t *)*text;
 			for (;;) {
 				stdoutput.printf("%02x ",*t);
 				if (!*t) {

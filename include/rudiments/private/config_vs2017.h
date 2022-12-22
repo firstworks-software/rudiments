@@ -267,6 +267,9 @@
 /* Some systems have byteswap.h */
 /* #undef RUDIMENTS_HAVE_BYTESWAP_H */
 
+/* Some systems have byte_t */
+/* #undef RUDIMENTS_HAVE_BYTE_T */
+
 /* Some systems have CaptureStackBackTrace */
 #define RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE 1
 

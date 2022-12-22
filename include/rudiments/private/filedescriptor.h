@@ -26,29 +26,29 @@
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
 
-		ssize_t	highLevelRead(unsigned char *buf, ssize_t count);
-		ssize_t	highLevelRead(unsigned char *buf, ssize_t count,
+		ssize_t	highLevelRead(byte_t *buf, ssize_t count);
+		ssize_t	highLevelRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	highLevelWrite(const unsigned char *buf, ssize_t count);
-		ssize_t	highLevelWrite(const unsigned char *buf, ssize_t count,
+		ssize_t	highLevelWrite(const byte_t *buf, ssize_t count);
+		ssize_t	highLevelWrite(const byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	streamBufferedRead(unsigned char *buf, ssize_t count,
+		ssize_t	streamBufferedRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	streamBufferedWrite(const unsigned char *buf,
+		ssize_t	streamBufferedWrite(const byte_t *buf,
 						ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	storageBufferedRead(unsigned char *buf, ssize_t count,
+		ssize_t	storageBufferedRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	actualStorageBufferedRead(unsigned char *buf,
+		ssize_t	actualStorageBufferedRead(byte_t *buf,
 						ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	storageBufferedWrite(const unsigned char *buf,
+		ssize_t	storageBufferedWrite(const byte_t *buf,
 						ssize_t count,
 						int32_t sec, int32_t usec);
 
-		ssize_t	unBufferedRead(unsigned char *buf, ssize_t count,
+		ssize_t	unBufferedRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec);
-		ssize_t	unBufferedWrite(const unsigned char *buf, ssize_t count,
+		ssize_t	unBufferedWrite(const byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec);
 
 		bool	setNoDelay(int32_t onoff);

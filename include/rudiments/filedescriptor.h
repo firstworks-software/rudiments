@@ -175,7 +175,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Writes "character" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(unsigned char character);
+		ssize_t	write(byte_t character);
 
 		/** Writes "character" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
@@ -200,7 +200,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Writes NULL-terminated "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred. */
-		ssize_t	write(const unsigned char *string);
+		ssize_t	write(const byte_t *string);
 
 		/** Writes NULL-terminated "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
@@ -222,7 +222,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
  		 *  or RESULT_ERROR if an error occurred.  Note that it is
  		 *  possible to write beyond the string's NULL terminator
  		 *  using this method.  */
-		ssize_t	write(const unsigned char *string, size_t size);
+		ssize_t	write(const byte_t *string, size_t size);
 
 		/** Writes "length" characters of "string" to the file
  		 *  descriptor.  Returns the number of bytes that were
@@ -311,8 +311,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(unsigned char character,
-					int32_t sec, int32_t usec);
+		ssize_t	write(byte_t character, int32_t sec, int32_t usec);
 
 		/** Writes "character" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
@@ -347,8 +346,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  Returns the number of bytes that were successfully written
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
-		ssize_t	write(const unsigned char *string,
-					int32_t sec, int32_t usec);
+		ssize_t	write(const byte_t *string, int32_t sec, int32_t usec);
 
 		/** Writes NULL-terminated "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -380,7 +378,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred.  Note that it is possible to write beyond
 		 *  the string's NULL terminator using this method.  */
-		ssize_t	write(const unsigned char *string, size_t size,
+		ssize_t	write(const byte_t *string, size_t size,
 					int32_t sec, int32_t usec);
 
 		/** Writes "length" characters of "string" to the file
@@ -425,19 +423,19 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  non-printing character then it is printed as a hex value of
 		 *  the format: (0x0a).  Carriage returns, line feeds and tabs
 		 *  are printed as \n, \r and \t. */
-		void	safePrint(unsigned char c);
+		void	safePrint(byte_t c);
 
 		/** Prints "str" to the filedescriptor, however all non-printing
 		 *  characters are printed as hex values of the format: (0x0a)
 		 *  and carriage returns, line feeds and tabs are printed as
 		 *  \n, \r and \t. */
-		void	safePrint(const unsigned char *str);
+		void	safePrint(const byte_t *str);
 
 		/** Prints "length" characters of "str" to the filedescriptor,
 		 *  however all non-printing characters are printed as hex
 		 *  values of the format: (0x0a) and carriage returns, line
 		 *  feeds and tabs are printed as \n, \r and \t. */
-		void	safePrint(const unsigned char *str, int32_t length);
+		void	safePrint(const byte_t *str, int32_t length);
 
 		/** Prints "c" to the filedescriptor, however if "c" is
 		 *  non-printing character then it is printed as a hex value of
@@ -459,7 +457,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Prints "value" to the file descriptor
 		 *  as a string of ones and zeros. */
-		void	printBits(unsigned char value);
+		void	printBits(byte_t value);
 
 		/** Prints "value" to the file descriptor
 		 *  as a string of ones and zeros. */
@@ -491,7 +489,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Prints "value" to the file descriptor
 		 *  as a string of ones and zeros. */
-		void	printBits(const unsigned char *bits, uint64_t size);
+		void	printBits(const byte_t *bits, uint64_t size);
 
 		/** Reads an unsigned 16-bit integer from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
@@ -538,11 +536,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  occurred. */
 		ssize_t	read(double *buffer);
 
-		/** Reads an unsigned character from the file
-		 *  descriptor into "buffer".  Returns the number of bytes that
-		 *  were successfully read or RESULT_ERROR if an error
-		 *  occurred. */
-		ssize_t	read(unsigned char *buffer);
+		/** Reads a byte from the file descriptor into "buffer".
+		 *  Returns the number of bytes that were successfully read or
+		 *  RESULT_ERROR if an error occurred. */
+		ssize_t	read(byte_t *buffer);
 
 		/** Reads a character from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
@@ -567,7 +564,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Reads "size" bytes from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	read(unsigned char *buffer, size_t size);
+		ssize_t	read(byte_t *buffer, size_t size);
 
 		/** Reads "length" characters from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
@@ -669,12 +666,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(double *buffer, int32_t sec, int32_t usec);
 
-		/** Reads an unsigned character from the file
-		 *  descriptor into "buffer" with a timeout of "sec" seconds
-		 *  and "usec" microseconds.  Returns the number of bytes that
-		 *  were successfully read, RESULT_ERROR if an error
-		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(unsigned char *buffer, int32_t sec, int32_t usec);
+		/** Reads a byte from the file descriptor into "buffer" with a
+		 *  timeout of "sec" seconds and "usec" microseconds.  Returns
+		 *  the number of bytes that were successfully read,
+		 *  RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
+		 *  timeout occurred. */
+		ssize_t	read(byte_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a character from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -704,12 +701,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(bool *buffer, int32_t sec, int32_t usec);
 
-		/** Reads "size" unsigned characters from the file
-		 *  descriptor into "buffer" with a timeout of "sec" seconds
-		 *  and "usec" microseconds.  Returns the number of bytes that
-		 *  were successfully read, RESULT_ERROR if an error
-		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(unsigned char *buffer, size_t size,
+		/** Reads "size" bytes from the file descriptor into "buffer"
+ 		 *  with a timeout of "sec" seconds and "usec" microseconds.
+ 		 *  Returns the number of bytes that were successfully read,
+ 		 *  RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
+ 		 *  timeout occurred. */
+		ssize_t	read(byte_t *buffer, size_t size,
 					int32_t sec, int32_t usec);
 
 		/** Reads "length" characters from the file

@@ -50,8 +50,8 @@ void wastebasket::attach(wchar_t *value) {
 	ATTACHARRAY(wchar_t *,"wchar_t *",value);
 }
 
-void wastebasket::attach(unsigned char *value) {
-	ATTACHARRAY(unsigned char *,"unsigned char *",value);
+void wastebasket::attach(byte_t *value) {
+	ATTACHARRAY(byte_t *,"byte_t *",value);
 }
 
 void wastebasket::attach(int16_t *value) {

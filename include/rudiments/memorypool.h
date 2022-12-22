@@ -57,7 +57,7 @@ class RUDIMENTS_DLLSPEC memorypool : public object {
 		/** Returns a pointer to a contiguous block of "size"
 		 *  bytes in the pool.  The pool will grow as necessary
 		 *  to accomodate allocations. */
-		unsigned char	*allocate(size_t size);
+		byte_t	*allocate(size_t size);
 
 		/** Shrinks the pool back down to it's initial size
 		 *  and frees all previously allocated blocks.

@@ -325,8 +325,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  Note that not all filesystems support all of those options.
 		 * 
 		 *  Returns true on success and false on failure. */
-		static	bool	setProtection(unsigned char *ptr,
-							size_t size,
+		static	bool	setProtection(byte_t *ptr, size_t size,
 							int32_t protection);
 
 		/** Advises the kernel that you are going to access the region
@@ -337,8 +336,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	sequentialAccess(unsigned char *ptr,
-							size_t size);
+		static	bool	sequentialAccess(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of memory begining at byte "ptr", for "size" bytes, randomly
@@ -348,8 +346,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	randomAccess(unsigned char *ptr,
-							size_t size);
+		static	bool	randomAccess(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of memory begining at byte "ptr", for "size" bytes, in the
@@ -359,7 +356,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	willNeed(unsigned char *ptr, size_t size);
+		static	bool	willNeed(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are not going to access the
 		 *  region of memory begining at byte "ptr", for "size"
@@ -370,7 +367,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	wontNeed(unsigned char *ptr, size_t size);
+		static	bool	wontNeed(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the
 		 *  region of memory begining at byte "ptr", for "size" bytes,
@@ -381,7 +378,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	normalAccess(unsigned char *ptr, size_t size);
+		static	bool	normalAccess(byte_t *ptr, size_t size);
 
 		/** Disables paging of memory, starting at "ptr", for "size"
 		 *  bytes.
@@ -390,7 +387,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 * 
 		 *  On systems that don't support locking, this method
 		 *  returns false. */
-		static	bool	lock(unsigned char *ptr, size_t size);
+		static	bool	lock(byte_t *ptr, size_t size);
 
 		/** Enables paging of memory, starting at "ptr", for "size"
 		 *  bytes.
@@ -399,7 +396,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 * 
 		 *  On systems that don't support locking, this method
 		 *  returns false. */
-		static	bool	unlock(unsigned char *ptr, size_t size);
+		static	bool	unlock(byte_t *ptr, size_t size);
 
 		/** Returns true if all pages of memory starting at "ptr",
 		 *  for "size" bytes are not paged out.
@@ -409,7 +406,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  On systems that don't support checking whether
 		 *  pages of the memory map are currently cached
 		 *  in system ram, this method returns false. */
-		static	bool	notPagedOut(unsigned char *ptr, size_t size);
+		static	bool	notPagedOut(byte_t *ptr, size_t size);
 
 
 		/** Disables paging of the entire address space of the process,

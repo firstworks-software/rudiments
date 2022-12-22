@@ -12,7 +12,7 @@
 		uint32_t	c_oflag;
 		uint32_t	c_cflag;
 		uint32_t	c_lflag;
-		unsigned char	c_cc[NCCS];
+		byte_t		c_cc[NCCS];
 	};
 #endif
 

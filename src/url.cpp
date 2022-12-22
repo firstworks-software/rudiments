@@ -508,7 +508,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 	} else if (userpwd) {
 		pvt->_request->append("Authorization: Basic ");
 		char	*userpwd64=charstring::base64Encode(
-				(const unsigned char *)userpwd);
+					(const byte_t *)userpwd);
 		pvt->_request->append(userpwd64);
 		delete[] userpwd64;
 		pvt->_request->append("\r\n");
@@ -1560,7 +1560,7 @@ size_t url::curlReadData(void *buffer, size_t size, size_t nmemb, void *userp) {
 	size=size*nmemb;
 
 	// copy data into the buffer
-	u->pvt->_bb.append((unsigned char *)buffer,size);
+	u->pvt->_bb.append((byte_t *)buffer,size);
 
 	// did we fetch the entire file?
 	u->pvt->_eof=!size;
@@ -1628,7 +1628,7 @@ char *url::getContents() {
 	return file::getContents();
 }
 
-ssize_t url::getContents(unsigned char *buffer, size_t buffersize) {
+ssize_t url::getContents(byte_t *buffer, size_t buffersize) {
 	return file::getContents(buffer,buffersize);
 }
 
@@ -1640,7 +1640,7 @@ char *url::getContents(const char *name) {
 	return contents;
 }
 
-ssize_t url::getContents(const char *name, unsigned char *buffer,
+ssize_t url::getContents(const char *name, byte_t *buffer,
 						size_t buffersize) {
 	url	u;
 	u.open(name,O_RDONLY);

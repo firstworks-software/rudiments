@@ -265,45 +265,45 @@ int main(int argc, const char **argv) {
 
 
 	// from Thomas Hobbes's Leviathan...
-	unsigned char	hexstr1[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.";
-	unsigned char	hexstr2[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure";
-	unsigned char	hexstr3[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasur";
-	unsigned char	hexstr4[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasu";
+	byte_t	hexstr1[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.";
+	byte_t	hexstr2[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure";
+	byte_t	hexstr3[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasur";
+	byte_t	hexstr4[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasu";
 
 	// base64
 	stdoutput.printf("base64...\n");
 	char	*encoded1=charstring::base64Encode(hexstr1);
-	unsigned char	*decoded1=charstring::base64Decode(encoded1);
+	byte_t	*decoded1=charstring::base64Decode(encoded1);
 	test("base64 test 1",
 		!charstring::compare((char *)decoded1,(char *)hexstr1));
 	delete[] encoded1;
 	delete[] decoded1;
 
 	char	*encoded2=charstring::base64Encode(hexstr2);
-	unsigned char	*decoded2=charstring::base64Decode(encoded2);
+	byte_t	*decoded2=charstring::base64Decode(encoded2);
 	test("base64 test 2",
 		!charstring::compare((char *)decoded2,(char *)hexstr2));
 	delete[] encoded2;
 	delete[] decoded2;
 
 	char	*encoded3=charstring::base64Encode(hexstr3);
-	unsigned char	*decoded3=charstring::base64Decode(encoded3);
+	byte_t	*decoded3=charstring::base64Decode(encoded3);
 	test("base64 test 3",
 		!charstring::compare((char *)decoded3,(char *)hexstr3));
 	delete[] encoded3;
 	delete[] decoded3;
 
 	char	*encoded4=charstring::base64Encode(hexstr4);
-	unsigned char	*decoded4=charstring::base64Decode(encoded4);
+	byte_t	*decoded4=charstring::base64Decode(encoded4);
 	test("base64 test 4",
 		!charstring::compare((char *)decoded4,(char *)hexstr4));
 	delete[] encoded4;
 	delete[] decoded4;
 
-	unsigned char	bytes[6]={0x00,0x00,0x00,0x00,0x00,0x00};
+	byte_t		bytes[6]={0x00,0x00,0x00,0x00,0x00,0x00};
 	char		*encodedbytes;
 	uint64_t	encodedlen;
-	unsigned char	*decodedbytes;
+	byte_t		*decodedbytes;
 	uint64_t	decodedlen;
 	charstring::base64Encode(bytes,6,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
@@ -454,18 +454,18 @@ int main(int argc, const char **argv) {
 	stringbuffer	sb;
 	uint16_t 	index=0;
 	for (uint16_t i=0; i<256; i++) {
-		bb.append((unsigned char )i);
+		bb.append((byte_t)i);
 		if (index>=77) {
 			sb.append("=\r\n");
 			index=0;
 		}
-		if ((unsigned char)i<' ' ||
-			(unsigned char)i>'~' ||
-			(unsigned char)i=='=') {
-			sb.appendFormatted("=%02x",(unsigned char)i);
+		if ((byte_t)i<' ' ||
+			(byte_t)i>'~' ||
+			(byte_t)i=='=') {
+			sb.appendFormatted("=%02x",(byte_t)i);
 			index+=3;
 		} else {
-			sb.append((unsigned char)i);
+			sb.append((byte_t)i);
 			index++;
 		}
 	}
@@ -475,7 +475,7 @@ int main(int argc, const char **argv) {
 						&encoded,&encodedlength);
 	test("encoded length",encodedlength==sb.getStringLength());
 	test("encoded",!charstring::compare(encoded,sb.getString()));
-	unsigned char	*decoded=NULL;
+	byte_t		*decoded=NULL;
 	uint64_t	decodedlength=0;
 	charstring::quotedPrintableDecode(encoded,encodedlength,
 						&decoded,&decodedlength);
@@ -1222,7 +1222,7 @@ int main(int argc, const char **argv) {
 
 
 	// hosttonet/nettohost (why are these here?)
-	/*unsigned char	v8=0xC0;
+	/*byte_t	v8=0xC0;
 	uint16_t	v16=filedescriptor::hostToNet(
 						(uint16_t)0xC0C0);
 	uint32_t	v32=filedescriptor::hostToNet(
@@ -1240,7 +1240,7 @@ int main(int argc, const char **argv) {
 	int64_t	sv64=filedescriptor::hostToNet((uint64_t)
 					(int64_t)(-1*0x0101010101010101LL));
 	#endif
-	unsigned char	v8s[]={0xC0,0xC0,0xC0,0xC0};
+	byte_t	v8s[]={0xC0,0xC0,0xC0,0xC0};
 	stdoutput.printBits(v8);
 	stdoutput.printf("\n");
 	stdoutput.printBits(v16);

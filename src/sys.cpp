@@ -1323,7 +1323,7 @@ char sys::getDirectorySeparator() {
 	#endif
 }
 
-bool sys::setProtection(unsigned char *ptr, size_t size, int32_t protection) {
+bool sys::setProtection(byte_t *ptr, size_t size, int32_t protection) {
 	#ifdef RUDIMENTS_HAVE_MPROTECT
 		int32_t	result;
 		error::clearError();
@@ -1340,7 +1340,7 @@ bool sys::setProtection(unsigned char *ptr, size_t size, int32_t protection) {
 	#endif
 }
 
-bool sys::sequentialAccess(unsigned char *ptr, size_t size) {
+bool sys::sequentialAccess(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
 		return mAdvise(ptr,size,MADV_SEQUENTIAL);
 	#else
@@ -1349,7 +1349,7 @@ bool sys::sequentialAccess(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::randomAccess(unsigned char *ptr, size_t size) {
+bool sys::randomAccess(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_RANDOM)
 		return mAdvise(ptr,size,MADV_RANDOM);
 	#else
@@ -1358,7 +1358,7 @@ bool sys::randomAccess(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::willNeed(unsigned char *ptr, size_t size) {
+bool sys::willNeed(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_WILLNEED)
 		return mAdvise(ptr,size,MADV_WILLNEED);
 	#else
@@ -1367,7 +1367,7 @@ bool sys::willNeed(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::wontNeed(unsigned char *ptr, size_t size) {
+bool sys::wontNeed(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_DONTNEED)
 		return mAdvise(ptr,size,MADV_DONTNEED);
 	#else
@@ -1376,7 +1376,7 @@ bool sys::wontNeed(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::normalAccess(unsigned char *ptr, size_t size) {
+bool sys::normalAccess(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_NORMAL)
 		return mAdvise(ptr,size,MADV_NORMAL);
 	#else
@@ -1385,7 +1385,7 @@ bool sys::normalAccess(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::lock(unsigned char *ptr, size_t size) {
+bool sys::lock(byte_t *ptr, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MLOCK
 		int32_t	result;
 		error::clearError();
@@ -1402,7 +1402,7 @@ bool sys::lock(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::unlock(unsigned char *ptr, size_t size) {
+bool sys::unlock(byte_t *ptr, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MUNLOCK
 		int32_t	result;
 		error::clearError();
@@ -1419,16 +1419,16 @@ bool sys::unlock(unsigned char *ptr, size_t size) {
 	#endif
 }
 
-bool sys::notPagedOut(unsigned char *ptr, size_t size) {
+bool sys::notPagedOut(byte_t *ptr, size_t size) {
 
 	#ifdef RUDIMENTS_HAVE_MINCORE
 		// create an array of char's, 1 for each page
 		int32_t		pagesize=sys::getAllocationGranularity();
 		int32_t		tmpsize=(size+pagesize-1)/pagesize;
 		#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
-			char		*tmp=new char[tmpsize];
+			char	*tmp=new char[tmpsize];
 		#else
-			unsigned char	*tmp=new unsigned char[tmpsize];
+			byte_t	*tmp=new byte_t[tmpsize];
 		#endif
 
 		// call mincore to fill the array
@@ -1503,7 +1503,7 @@ bool sys::enablePaging() {
 	#endif
 }
 
-bool sys::mAdvise(unsigned char *start, size_t size, int32_t advice) {
+bool sys::mAdvise(byte_t *start, size_t size, int32_t advice) {
 	#if defined(RUDIMENTS_HAVE_MADVISE)
 		int32_t	result;
 		error::clearError();

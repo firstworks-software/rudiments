@@ -559,10 +559,10 @@ char *charstring::httpEscape(const char *input) {
 		return NULL;
 	}
 
-	size_t			outputlen=length(input)*3+1;
-	char			*output=new char[outputlen];
-	char			*outptr=output;
-	const unsigned char	*ptr=(unsigned char *)input;
+	size_t		outputlen=length(input)*3+1;
+	char		*output=new char[outputlen];
+	char		*outptr=output;
+	const byte_t	*ptr=(byte_t *)input;
 	
 	while (*ptr) {
 		if (*ptr==' ') {
@@ -574,7 +574,7 @@ char *charstring::httpEscape(const char *input) {
 			(*outptr)='%';
 			outptr++;
 			outputlen--;
-			unsigned char	upper=(*ptr)>>4;
+			byte_t	upper=(*ptr)>>4;
 			if (upper<10) {
 				*outptr=upper+'0';
 			} else {
@@ -582,7 +582,7 @@ char *charstring::httpEscape(const char *input) {
 			}
 			outptr++;
 			outputlen--;
-			unsigned char	lower=(*ptr)&0x0F;
+			byte_t	lower=(*ptr)&0x0F;
 			if (lower<10) {
 				*outptr=lower+'0';
 			} else {
@@ -2172,11 +2172,11 @@ char *charstring::subString(const char *str, size_t start) {
 	return subString(str,start,length(str)-1);
 }
 
-char *charstring::base64Encode(const unsigned char *input) {
+char *charstring::base64Encode(const byte_t *input) {
 	return base64Encode(input,length((const char *)input));
 }
 
-char *charstring::base64Encode(const unsigned char *input, uint64_t inputsize) {
+char *charstring::base64Encode(const byte_t *input, uint64_t inputsize) {
 	char		*retval=NULL;
 	uint64_t	retvalsize=0;
 	base64Encode(input,inputsize,&retval,&retvalsize);
@@ -2203,7 +2203,7 @@ static signed char	b64dcode[]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 0-9
 					39,40,41,42,43,44,45,46,47,48,
 					49,50,51,-1,-1,-1,-1,-1};
 
-void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
+void charstring::base64Encode(const byte_t *input, uint64_t inputsize,
 					char **output, uint64_t *outputlen) {
 
 	// handle null input
@@ -2298,7 +2298,7 @@ void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
 	*output=new char [(*outputlen)+1];
 
 	uint64_t	outputindex=0;
-	unsigned char	data[3];
+	byte_t		data[3];
 	uint64_t	bytesremaining=0;
 	for (uint64_t inputindex=0;
 			inputindex<inputsize;
@@ -2328,20 +2328,19 @@ void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
 	}
 }
 
-unsigned char *charstring::base64Decode(const char *input) {
+byte_t *charstring::base64Decode(const char *input) {
 	return base64Decode(input,length(input));
 }
 
-unsigned char *charstring::base64Decode(const char *input,
-						uint64_t inputlen) {
-	unsigned char	*retval=NULL;
+byte_t *charstring::base64Decode(const char *input, uint64_t inputlen) {
+	byte_t		*retval=NULL;
 	uint64_t	retvalsize=0;
 	base64Decode(input,inputlen,&retval,&retvalsize);
 	return retval;
 }
 
 void charstring::base64Decode(const char *input, uint64_t inputlen,
-				unsigned char **output, uint64_t *outputsize) {
+				byte_t **output, uint64_t *outputsize) {
 
 	// handle null input
 	if (!input) {
@@ -2352,16 +2351,16 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 
 	// handle 0-length input
 	if (!inputlen) {
-		*output=(unsigned char *)duplicate("");
+		*output=(byte_t *)duplicate("");
 		*outputsize=0;
 		return;
 	}
 
 	// handle real input...
 	*outputsize=inputlen*3/4;
-	*output=new unsigned char [(*outputsize)+1];
+	*output=new byte_t [(*outputsize)+1];
 	uint64_t	outputindex=0;
-	unsigned char	data[4];
+	byte_t		data[4];
 	uint64_t	inputindex=0;
 	while (inputindex<inputlen) {
 
@@ -2371,10 +2370,10 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 			continue;
 		}
 
-		data[0]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
-		data[1]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
-		data[2]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
-		data[3]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
+		data[0]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
+		data[1]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
+		data[2]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
+		data[3]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
 
 		(*output)[outputindex++]=data[0]<<2|data[1]>>4;
 		(*output)[outputindex++]=(data[1]&0x0F)<<4|data[2]>>2;
@@ -2400,11 +2399,11 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 				(input[inputlen-2]=='=');*/
 }
 
-char *charstring::quotedPrintableEncode(const unsigned char *input) {
+char *charstring::quotedPrintableEncode(const byte_t *input) {
 	return quotedPrintableEncode(input,length((const char *)input));
 }
 
-char *charstring::quotedPrintableEncode(const unsigned char *input,
+char *charstring::quotedPrintableEncode(const byte_t *input,
 						uint64_t inputsize) {
 	char		*retval=NULL;
 	uint64_t	retvalsize=0;
@@ -2412,7 +2411,7 @@ char *charstring::quotedPrintableEncode(const unsigned char *input,
 	return retval;
 }
 
-void charstring::quotedPrintableEncode(const unsigned char *input,
+void charstring::quotedPrintableEncode(const byte_t *input,
 						uint64_t inputsize,
 						char **output,
 						uint64_t *outputlen) {
@@ -2434,8 +2433,8 @@ void charstring::quotedPrintableEncode(const unsigned char *input,
 	// handle real input...
 	stringbuffer	out;
 	uint16_t	index=0;
-	const unsigned char	*end=input+inputsize;
-	for (const unsigned char *c=input; c<end; c++) {
+	const byte_t	*end=input+inputsize;
+	for (const byte_t *c=input; c<end; c++) {
 
 		if (index>=77) {
 			// append soft-eol
@@ -2457,13 +2456,13 @@ void charstring::quotedPrintableEncode(const unsigned char *input,
 	*output=out.detachString();
 }
 
-unsigned char *charstring::quotedPrintableDecode(const char *input) {
+byte_t *charstring::quotedPrintableDecode(const char *input) {
 	return quotedPrintableDecode(input,length(input));
 }
 
-unsigned char *charstring::quotedPrintableDecode(const char *input,
+byte_t *charstring::quotedPrintableDecode(const char *input,
 						uint64_t inputlen) {
-	unsigned char	*retval=NULL;
+	byte_t		*retval=NULL;
 	uint64_t	retvalsize=0;
 	quotedPrintableDecode(input,inputlen,&retval,&retvalsize);
 	return retval;
@@ -2471,7 +2470,7 @@ unsigned char *charstring::quotedPrintableDecode(const char *input,
 
 void charstring::quotedPrintableDecode(const char *input,
 					uint64_t inputlen,
-					unsigned char **output,
+					byte_t **output,
 					uint64_t *outputsize) {
 
 	// handle null input
@@ -2483,7 +2482,7 @@ void charstring::quotedPrintableDecode(const char *input,
 
 	// handle 0-length input
 	if (!inputlen) {
-		*output=(unsigned char *)duplicate("");
+		*output=(byte_t *)duplicate("");
 		*outputsize=0;
 		return;
 	}
@@ -2550,8 +2549,7 @@ void charstring::quotedPrintableDecode(const char *input,
 
 				bool	good=true;
 
-				unsigned char	sixteens=
-						character::toUpperCase(char1);
+				byte_t	sixteens=character::toUpperCase(char1);
 				if (sixteens>='A' && sixteens<='F') {
 					sixteens=sixteens-'A'+10;
 				} else if (sixteens>='0' && sixteens<='9') {
@@ -2560,8 +2558,7 @@ void charstring::quotedPrintableDecode(const char *input,
 					good=false;
 				}
 
-				unsigned char	ones=
-						character::toUpperCase(char2);
+				byte_t	ones=character::toUpperCase(char2);
 				if (ones>='A' && ones<='F') {
 					ones=ones-'A'+10;
 				} else if (ones>='0' && ones<='9') {
@@ -2574,8 +2571,7 @@ void charstring::quotedPrintableDecode(const char *input,
 				// append the hex value, otherwise ignore
 				// the encoding altogether
 				if (good) {
-					out.append((unsigned char)
-							(sixteens*16+ones));
+					out.append((byte_t)(sixteens*16+ones));
 				}
 
 				c++;
@@ -2595,18 +2591,18 @@ void charstring::quotedPrintableDecode(const char *input,
 	*output=out.detachBuffer();
 }
 
-char *charstring::hexEncode(const unsigned char *input) {
+char *charstring::hexEncode(const byte_t *input) {
 	return hexEncode(input,length((const char *)input));
 }
 
-char *charstring::hexEncode(const unsigned char *input, uint64_t inputsize) {
+char *charstring::hexEncode(const byte_t *input, uint64_t inputsize) {
 	char		*retval=NULL;
 	uint64_t	retvalsize=0;
 	hexEncode(input,inputsize,&retval,&retvalsize);
 	return retval;
 }
 
-void charstring::hexEncode(const unsigned char *input, uint64_t inputsize,
+void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
 					char **output, uint64_t *outputlen) {
 
 	// handle null input
@@ -2633,19 +2629,19 @@ void charstring::hexEncode(const unsigned char *input, uint64_t inputsize,
 	*oi='\0';
 }
 
-unsigned char *charstring::hexDecode(const char *input) {
+byte_t *charstring::hexDecode(const char *input) {
 	return hexDecode(input,length(input));
 }
 
-unsigned char *charstring::hexDecode(const char *input, uint64_t inputlen) {
-	unsigned char	*retval=NULL;
+byte_t *charstring::hexDecode(const char *input, uint64_t inputlen) {
+	byte_t		*retval=NULL;
 	uint64_t	retvalsize=0;
 	hexDecode(input,inputlen,&retval,&retvalsize);
 	return retval;
 }
 
 void charstring::hexDecode(const char *input, uint64_t inputlen,
-				unsigned char **output, uint64_t *outputsize) {
+				byte_t **output, uint64_t *outputsize) {
 
 	// handle null input
 	if (!input) {
@@ -2656,7 +2652,7 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 
 	// handle 0-length input
 	if (!inputlen) {
-		*output=(unsigned char *)duplicate("");
+		*output=(byte_t *)duplicate("");
 		*outputsize=0;
 		return;
 	}
@@ -2667,13 +2663,13 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 	}
 
 	// create output buffer and init output size
-	*output=new unsigned char[inputlen/2+1];
+	*output=new byte_t[inputlen/2+1];
 	*outputsize=0;
 
 	// convert...
 	const char	*end=input+inputlen;
 	while (input!=end) {
-		unsigned char	sixteens=*input;
+		byte_t	sixteens=*input;
 		if (sixteens>='A' && sixteens<='F') {
 			sixteens=sixteens-'A'+10;
 		} else if (sixteens>='a' && sixteens<='f') {
@@ -2684,7 +2680,7 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 			sixteens=0;
 		}
 		input++;
-		unsigned char	ones=*input;
+		byte_t	ones=*input;
 		if (ones>='A' && ones<='F') {
 			ones=ones-'A'+10;
 		} else if (ones>='a' && ones<='f') {

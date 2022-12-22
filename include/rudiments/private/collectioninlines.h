@@ -177,19 +177,17 @@ ssize_t collection::writeValue(output *out, int64_t value) {
 }
 
 inline
-ssize_t collection::writeValue(output *out,
-					const unsigned char *value) {
+ssize_t collection::writeValue(output *out, const byte_t *value) {
 	return out->printf("%s",value);
 }
 
 inline
-ssize_t collection::writeValue(output *out,
-					unsigned char *value) {
+ssize_t collection::writeValue(output *out, byte_t *value) {
 	return out->printf("%s",value);
 }
 
 inline
-ssize_t collection::writeValue(output *out, unsigned char value) {
+ssize_t collection::writeValue(output *out, byte_t value) {
 	return out->printf("%c",value);
 }
 
@@ -340,8 +338,7 @@ ssize_t collection::writeJsonValue(output *out, int64_t value) {
 }
 
 inline
-ssize_t collection::writeJsonValue(output *out,
-					const unsigned char *value) {
+ssize_t collection::writeJsonValue(output *out, const byte_t *value) {
 	if (!value) {
 		return out->write("null");
 	} else if (charstring::isNumber((const char *)value)) {
@@ -351,8 +348,7 @@ ssize_t collection::writeJsonValue(output *out,
 }
 
 inline
-ssize_t collection::writeJsonValue(output *out,
-					unsigned char *value) {
+ssize_t collection::writeJsonValue(output *out, byte_t *value) {
 	if (!value) {
 		return out->write("null");
 	} else if (charstring::isNumber((char *)value)) {
@@ -362,7 +358,7 @@ ssize_t collection::writeJsonValue(output *out,
 }
 
 inline
-ssize_t collection::writeJsonValue(output *out, unsigned char value) {
+ssize_t collection::writeJsonValue(output *out, byte_t value) {
 	if (character::isDigit(value)) {
 		return out->printf("%c",value);
 	}

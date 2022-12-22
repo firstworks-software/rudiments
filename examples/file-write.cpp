@@ -18,7 +18,7 @@ int main(int argc, const char **argv) {
 	char	c='a';
 	f.write(c);
 
-	unsigned char	uc='a';
+	byte_t	uc='a';
 	f.write(uc);
 
 
@@ -59,7 +59,7 @@ int main(int argc, const char **argv) {
 
 
 	// write some binary data
-	unsigned char	binary[]={1,2,3,4,5,6,7,8,9,0};
+	byte_t	binary[]={1,2,3,4,5,6,7,8,9,0};
 	f.write(binary,sizeof(binary));
 
 

@@ -45,11 +45,11 @@ class websocketprivate {
 		char		*_protocol;
 		char		*_ext;
 
-		unsigned char	*_buffer;
+		byte_t		*_buffer;
 		uint64_t	_buffersize;
 		uint64_t	_bufferpos;
 
-		unsigned char	*_pingbuffer;
+		byte_t		*_pingbuffer;
 		uint64_t	_pingbuffersize;
 };
 
@@ -314,7 +314,7 @@ bool websocket::acceptInternal() {
 		// FIXME: set error
 		return false;
 	} else {
-		unsigned char	*decodedkey;
+		byte_t		*decodedkey;
 		uint64_t	decodedkeylength;
 		charstring::base64Decode(pvt->_key,
 					charstring::length(pvt->_key),
@@ -466,7 +466,7 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 		// read header...
 
 		// read first byte
-		unsigned char	firstbyte=0;
+		byte_t	firstbyte=0;
 		if (pvt->_fd->read(&firstbyte)!=sizeof(firstbyte)) {
 			#ifdef DEBUG_READ
 				stdoutput.write("	firstbyte error\n}\n");
@@ -477,15 +477,15 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 
 		// first byte is 4 flags and 4-bit opcode
 		// FIXME: do something with these...
-		unsigned char	flags=firstbyte>>4;
-		unsigned char	opcode=firstbyte&0x0f;
+		byte_t	flags=firstbyte>>4;
+		byte_t	opcode=firstbyte&0x0f;
 
 		// parse flags
 		// FIXME: do something with these...
-		unsigned char	fin=(flags&0x08)>>3;
-		unsigned char	rsv1=(flags&0x04)>>2;
-		unsigned char	rsv2=(flags&0x02)>>1;
-		unsigned char	rsv3=flags&0x01;
+		byte_t	fin=(flags&0x08)>>3;
+		byte_t	rsv1=(flags&0x04)>>2;
+		byte_t	rsv2=(flags&0x02)>>1;
+		byte_t	rsv3=flags&0x01;
 		#ifdef DEBUG_READ
 			stdoutput.write("	firstbyte: ");
 			stdoutput.printBits(firstbyte);
@@ -511,7 +511,7 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 		}
 
 		// read payload length
-		unsigned char	payloadlen1=0;
+		byte_t		payloadlen1=0;
 		uint16_t	payloadlen2=0;
 		uint64_t	payloadlen3=0;
 		if (pvt->_fd->read(&payloadlen1)!=sizeof(payloadlen1)) {
@@ -524,7 +524,7 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 		}
 
 		// first bit is the mask, next 7 are actual payload length
-		unsigned char	mask=(payloadlen1&0x80)>>7;
+		byte_t	mask=(payloadlen1&0x80)>>7;
 		payloadlen1=payloadlen1&0x7f;
 
 		#ifdef DEBUG_READ
@@ -578,7 +578,7 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 		#endif
 
 		// read masking key
-		unsigned char	maskingkey[4];
+		byte_t	maskingkey[4];
 		if (mask) {
 			if (pvt->_fd->read(maskingkey,sizeof(maskingkey))!=
 							sizeof(maskingkey)) {
@@ -600,7 +600,7 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 
 		// read payload
 		delete[] pvt->_buffer;
-		pvt->_buffer=new unsigned char[pvt->_buffersize];
+		pvt->_buffer=new byte_t[pvt->_buffersize];
 		if (pvt->_fd->read(pvt->_buffer,pvt->_buffersize)!=
 						(ssize_t)pvt->_buffersize) {
 			#ifdef DEBUG_READ
@@ -685,8 +685,7 @@ ssize_t websocket::write(const void *buf, ssize_t size) {
 	return write(buf,size,OPCODE_TEXT_FRAME);
 }
 
-ssize_t websocket::write(const void *buf, ssize_t size,
-						unsigned char opcode) {
+ssize_t websocket::write(const void *buf, ssize_t size, byte_t opcode) {
 
 	// temporarily disable the socket layer so
 	// local writes don't use websocket::write();
@@ -705,8 +704,7 @@ ssize_t websocket::write(const void *buf, ssize_t size,
 	return retval;
 }
 
-ssize_t websocket::writeInternal(const void *buf, ssize_t size,
-							unsigned char opcode) {
+ssize_t websocket::writeInternal(const void *buf, ssize_t size, byte_t opcode) {
 
 	#ifdef DEBUG_WRITE
 		stdoutput.write("websocket::write() {\n");
@@ -715,12 +713,12 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size,
 	// write header...
 
 	// first byte is 4 flags and 4-bit opcode
-	unsigned char	fin=1;
-	unsigned char	rsv1=0;
-	unsigned char	rsv2=0;
-	unsigned char	rsv3=0;
-	unsigned char	flags=(fin<<3)|(rsv1<<2)|(rsv2<<1)|rsv3;
-	unsigned char	firstbyte=(flags<<4)|opcode;
+	byte_t	fin=1;
+	byte_t	rsv1=0;
+	byte_t	rsv2=0;
+	byte_t	rsv3=0;
+	byte_t	flags=(fin<<3)|(rsv1<<2)|(rsv2<<1)|rsv3;
+	byte_t	firstbyte=(flags<<4)|opcode;
 
 	#ifdef DEBUG_WRITE
 		stdoutput.write("	firstbyte: ");
@@ -743,14 +741,14 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size,
 	}
 
 	// set mask
-	unsigned char	mask=(pvt->_isclient)?1:0;
+	byte_t	mask=(pvt->_isclient)?1:0;
 
 	#ifdef DEBUG_WRITE
 		stdoutput.printf("	mask: %d\n",mask);
 	#endif
 
 	// set payload length parts
-	unsigned char	payloadlen1=0;
+	byte_t		payloadlen1=0;
 	uint16_t	payloadlen2=0;
 	uint64_t	payloadlen3=0;
 	if (size<126) {
@@ -808,11 +806,11 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size,
 	}
 
 	// handle payload masking
-	unsigned char	*payload=(unsigned char *)buf;
+	byte_t	*payload=(byte_t *)buf;
 	if (mask) {
 
 		// generate masking key
-		unsigned char	maskingkey[4];
+		byte_t	maskingkey[4];
 		// FIXME: set masking key to random bits
 		bytestring::zero(maskingkey,sizeof(maskingkey));
 		#ifdef DEBUG_WRITE
@@ -832,7 +830,7 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size,
 		}
 
 		// mask payload
-		payload=(unsigned char *)bytestring::duplicate(buf,size);
+		payload=(byte_t *)bytestring::duplicate(buf,size);
 		for (ssize_t i=0; i<size; i++) {
 			payload[i]=payload[i]^maskingkey[i%4];
 		}
@@ -840,7 +838,7 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size,
 
 	#ifdef DEBUG_READ
 		stdoutput.write("	payload:\n");
-		stdoutput.safePrint((const unsigned char *)buf,size);
+		stdoutput.safePrint((const byte_t *)buf,size);
 		stdoutput.write("\n");
 	#endif
 
@@ -877,9 +875,9 @@ ssize_t websocket::getSizeMax() {
 	return SSIZE_MAX;
 }
 
-bool websocket::ping(const unsigned char *buf, ssize_t size) {
+bool websocket::ping(const byte_t *buf, ssize_t size) {
 	delete[] pvt->_pingbuffer;
-	pvt->_pingbuffer=(unsigned char *)bytestring::duplicate(buf,size);
+	pvt->_pingbuffer=(byte_t *)bytestring::duplicate(buf,size);
 	pvt->_pingbuffersize=size;
 	return false;
 }

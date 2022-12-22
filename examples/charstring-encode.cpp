@@ -38,7 +38,7 @@ int main(int argc, const char **argv) {
 
 
 	// base-64 encoding...
-	const unsigned char	text[]="All along the untrodden "
+	const byte_t	text[]="All along the untrodden "
 					"paths of the future...";
 
 	stdoutput.printf("original text:\n  %s\n",text);
@@ -46,7 +46,7 @@ int main(int argc, const char **argv) {
 	char	*encodedtext=charstring::base64Encode(text);
 	stdoutput.printf("encoded text:\n  %s\n",encodedtext);
 
-	unsigned char	*decodedtext=charstring::base64Decode(encodedtext);
+	byte_t	*decodedtext=charstring::base64Decode(encodedtext);
 	stdoutput.printf("decoded text:\n  %s\n",decodedtext);
 	stdoutput.write('\n');
 

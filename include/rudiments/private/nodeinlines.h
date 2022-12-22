@@ -97,22 +97,21 @@ void node_delete_value(int64_t *value, bool managed, bool managedarray) {
 }
 
 inline
-void node_delete_value(const unsigned char **value,
-				bool managed, bool managedarray) {
+void node_delete_value(const byte_t **value, bool managed, bool managedarray) {
 	if (managedarray) {
-		delete[] (unsigned char *)*value;
+		delete[] (byte_t *)*value;
 	}
 }
 
 inline
-void node_delete_value(unsigned char **value, bool managed, bool managedarray) {
+void node_delete_value(byte_t **value, bool managed, bool managedarray) {
 	if (managedarray) {
 		delete[] *value;
 	}
 }
 
 inline
-void node_delete_value(unsigned char *value, bool managed, bool managedarray) {
+void node_delete_value(byte_t *value, bool managed, bool managedarray) {
 }
 
 inline
@@ -206,17 +205,17 @@ void node_zero_value(int64_t *value) {
 }
 
 inline
-void node_zero_value(const unsigned char **value) {
-	*((unsigned char **)value)=NULL;
+void node_zero_value(const byte_t **value) {
+	*((byte_t **)value)=NULL;
 }
 
 inline
-void node_zero_value(unsigned char **value) {
+void node_zero_value(byte_t **value) {
 	*value=NULL;
 }
 
 inline
-void node_zero_value(unsigned char *value) {
+void node_zero_value(byte_t *value) {
 	*value='\0';
 }
 
@@ -338,33 +337,31 @@ int64_t node_duplicate_value(int64_t *value,
 }
 
 inline
-unsigned char *node_duplicate_value(
-				const unsigned char **value,
+byte_t *node_duplicate_value(const byte_t **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
 		// this isn't a true duplicate, but it's
 		// the best we can do without a size
-		return (unsigned char *)
-			charstring::duplicate((const char *)*value);
+		return (byte_t *)charstring::duplicate((const char *)*value);
 	} else {
-		return (unsigned char *)*value;
+		return (byte_t *)*value;
 	}
 }
 
 inline
-unsigned char *node_duplicate_value(unsigned char **value,
+byte_t *node_duplicate_value(byte_t **value,
 				bool managed, bool managedarray) {
 	if (managedarray) {
 		// this isn't a true duplicate, but it's
 		// the best we can do without a size
-		return (unsigned char *)charstring::duplicate((char *)*value);
+		return (byte_t *)charstring::duplicate((char *)*value);
 	} else {
 		return *value;
 	}
 }
 
 inline
-unsigned char node_duplicate_value(unsigned char *value,
+byte_t node_duplicate_value(byte_t *value,
 				bool managed, bool managedarray) {
 	return *value;
 }

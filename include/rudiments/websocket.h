@@ -66,7 +66,7 @@ class RUDIMENTS_DLLSPEC websocket : public socketlayer {
 		 *  true if the peer responds with the same data or false if
 		 *  the peer doesn't respond or responds with different
 		 *  data. */
-		bool ping(const unsigned char *buf, ssize_t size);
+		bool ping(const byte_t *buf, ssize_t size);
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */

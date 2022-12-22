@@ -27,27 +27,27 @@ int main(int argc, const char **argv) {
 
 	// Append some string sequences to the buffer.
 	stdoutput.printf("append 12345...\n");
-	bb.append((unsigned char *)"12345",5);
+	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==5);
 	test("append(), getPosition()",bb.getPosition()==5);
 	//test("append(), getActualSize()",bb.getActualSize()==10);
 	stdoutput.printf("append 12345...\n");
-	bb.append((unsigned char *)"12345",5);
+	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==10);
 	test("append(), getPosition()",bb.getPosition()==10);
 	//test("append(), getActualSize()",bb.getActualSize()==10);
 	stdoutput.printf("append 12345...\n");
-	bb.append((unsigned char *)"12345",5);
+	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==15);
 	test("append(), getPosition()",bb.getPosition()==15);
 	//test("append(), getActualSize()",bb.getActualSize()==20);
 	stdoutput.printf("append 12345...\n");
-	bb.append((unsigned char *)"12345",5);
+	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==20);
 	test("append(), getPosition()",bb.getPosition()==20);
 	//test("append(), getActualSize()",bb.getActualSize()==20);
 	stdoutput.printf("append 12345...\n");
-	bb.append((unsigned char *)"12345",5);
+	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==25);
 	test("append(), getPosition()",bb.getPosition()==25);
 	//test("append(), getActualSize()",bb.getActualSize()==30);
@@ -65,7 +65,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("write 66666 at position 0...\n");
 	bb.setPosition(0);
 	test("setPosition(), getPosition()",bb.getPosition()==0);
-	bb.write((unsigned char *)"66666",5);
+	bb.write((byte_t *)"66666",5);
 	test("write(), getSize()",bb.getSize()==25);
 	test("write(), getPosition()",bb.getPosition()==5);
 	//test("write(), getActualSize()",bb.getActualSize()==25);
@@ -83,7 +83,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("write 66666 at position 30...\n");
 	bb.setPosition(30);
 	test("setPosition(), getPosition()",bb.getPosition()==30);
-	bb.write((unsigned char *)"66666",5);
+	bb.write((byte_t *)"66666",5);
 	test("write(), getSize()",bb.getSize()==35);
 	test("write(), getPosition()",bb.getPosition()==35);
 	//test("write(), getActualSize()",bb.getActualSize()==35);
@@ -102,7 +102,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("append 66666 after setting position to 50...\n");
 	bb.setPosition(50);
 	test("setPosition(), getPosition()",bb.getPosition()==50);
-	bb.append((unsigned char *)"12345",5);
+	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==40);
 	test("append(), getPosition()",bb.getPosition()==40);
 	//test("append(), getActualSize()",bb.getActualSize()==45);
@@ -118,7 +118,7 @@ int main(int argc, const char **argv) {
 	// we just appended.  So calling write() here is equivalent to calling
 	// append.
 	stdoutput.printf("write 12345 at current position...\n");
-	bb.write((unsigned char *)"12345",5);
+	bb.write((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==45);
 	test("append(), getPosition()",bb.getPosition()==45);
 	//test("append(), getActualSize()",bb.getActualSize()==50);
@@ -132,7 +132,7 @@ int main(int argc, const char **argv) {
 
 	// read 4 bytes from position 0 of the buffer
 	stdoutput.printf("read from position 0...\n");
-	unsigned char	buffer[5];
+	byte_t	buffer[5];
 	buffer[4]='\0';
 	bb.setPosition(0);
 	test("setPosition(), getPosition()",bb.getPosition()==0);
@@ -175,7 +175,7 @@ int main(int argc, const char **argv) {
 	test("append(), getSize()",bb.getSize()==100);
 	test("append(), getPosition()",bb.getPosition()==100);
 	//test("append(), getActualSize()",bb.getActualSize()==105);
-	unsigned char	*detachedbuffer=bb.detachBuffer();
+	byte_t	*detachedbuffer=bb.detachBuffer();
 	test("detach(), getSize()",bb.getSize()==0);
 	test("detach(), getPosition()",bb.getPosition()==0);
 	//test("detach(), getActualSize()",bb.getActualSize()==45);
@@ -207,7 +207,7 @@ int main(int argc, const char **argv) {
 	// read past the end
 	stdoutput.printf("read past the end\n");
 	bb.setPosition(0);
-	unsigned char	readbuf[100];
+	byte_t	readbuf[100];
 	test("read(), length",bb.read(readbuf,100)==16);
 	test("read(), data",
 		!bytestring::compare(readbuf,"12.1234512.12345",16));
@@ -237,12 +237,11 @@ int main(int argc, const char **argv) {
 
 	// initial contents
 	stdoutput.printf("initial contents\n");
-	unsigned char	*initialcontents=new unsigned char[100];
+	byte_t	*initialcontents=new byte_t[100];
 	for (uint16_t k=0; k<10; k=k+10) {
 		bytestring::copy(initialcontents+k,"1234567890",10);
 	}
-	unsigned char	*iccopy=
-		(unsigned char *)bytestring::duplicate(initialcontents,100);
+	byte_t	*iccopy=(byte_t *)bytestring::duplicate(initialcontents,100);
 	bytebuffer	ee(initialcontents,100);
 	test("initial contents, getSize()",ee.getSize()==100);
 	test("initial contents, getPosition()",ee.getPosition()==100);
@@ -265,7 +264,7 @@ int main(int argc, const char **argv) {
 	bb.clear();
 	uint16_t	count=10;
 	uint64_t	size=1024*100*10;
-	unsigned char	*data=(unsigned char *)"1234567890";
+	byte_t		*data=(byte_t *)"1234567890";
 	stdoutput.printf("%hd, %lld byte writes\n",count,size);
 	for (uint16_t l=0; l<count; l++) {
 
@@ -273,8 +272,8 @@ int main(int argc, const char **argv) {
 			bb.write(data,10);
 		}
 
-		const unsigned char	*buffer=bb.getBuffer();
-		bool	validdata=true;
+		const byte_t	*buffer=bb.getBuffer();
+		bool		validdata=true;
 		for (uint64_t n=0; n<size; n=n+10) {
 			if (bytestring::compare(buffer+n,data,10)) {
 				stdoutput.printf("	"
@@ -289,7 +288,7 @@ int main(int argc, const char **argv) {
 			//&& (bb.getActualSize()==size)
 			);
 
-		unsigned char	buf[10];
+		byte_t	buf[10];
 		validdata=true;
 		for (uint64_t o=0; o<size; o=o+10) {
 			bb.setPosition(o);

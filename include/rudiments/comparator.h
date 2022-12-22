@@ -79,14 +79,13 @@ class comparator {
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(unsigned char *value1,
-						unsigned char *value2);
+		virtual	int32_t compare(byte_t *value1, byte_t *value2);
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(const unsigned char *value1,
-					const unsigned char *value2);
+		virtual	int32_t compare(const byte_t *value1,
+					const byte_t *value2);
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
@@ -116,8 +115,7 @@ class comparator {
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
 		 *  than value2. */
-		virtual	int32_t compare(unsigned char value1,
-						unsigned char value2);
+		virtual	int32_t compare(byte_t value1, byte_t value2);
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater

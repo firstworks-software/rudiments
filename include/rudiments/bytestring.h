@@ -39,7 +39,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		 *  "src" and "dest" may NOT overlap.
 		 *  Returns a pointer to "dest". */
 		static void	*copyUntil(void *dest, const void *src,
-							unsigned char character,
+							byte_t character,
 							size_t size);
 
 		/** Copies "size" bytes from "src" into "dest"
@@ -54,7 +54,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 
 		/** Sets "size" bytes of "dest" to "character".
 		 *  Returns a pointer to "dest". */
-		static void	*set(void *dest, unsigned char character,
+		static void	*set(void *dest, byte_t character,
 							size_t size);
 
 		/** Sets "size" bytes of "dest" to NULL.
@@ -73,7 +73,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		 *  "haystack".
 		 *  Returns NULL if no match is found. */
 		static void	*findFirst(void *haystack,
-						unsigned char needle,
+						byte_t needle,
 						size_t size);
 
 		/** Returns a pointer to the last occurrance
@@ -81,7 +81,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		 *  "haystack".
 		 *  Returns NULL if no match is found. */
 		static void	*findLast(void *haystack,
-						unsigned char needle,
+						byte_t needle,
 						size_t size);
 
 		/** Returns a pointer to the first occurrance
@@ -107,7 +107,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		 *  "haystack".
 		 *  Returns NULL if no match is found. */
 		static const void	*findFirst(const void *haystack,
-							unsigned char needle,
+							byte_t needle,
 							size_t size);
 
 		/** Returns a pointer to the last occurrance
@@ -115,7 +115,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		 *  "haystack".
 		 *  Returns NULL if no match is found. */
 		static const void	*findLast(const void *haystack,
-							unsigned char needle,
+							byte_t needle,
 							size_t size);
 
 		/** Returns a pointer to the first occurrance

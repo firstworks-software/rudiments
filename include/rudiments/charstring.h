@@ -1037,17 +1037,17 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	char	*base64Encode(const unsigned char *input);
+		static	char	*base64Encode(const byte_t *input);
 
 		/** similar to base64Encode above but only encodes
 		 *  the first "inputsize" bytes of "input" */
-		static	char	*base64Encode(const unsigned char *input,
+		static	char	*base64Encode(const byte_t *input,
 							uint64_t inputsize);
 
 		/** similar to base64Encode() above, but returns the
 		 *  result in "output" and "outputlen" (in characters)
 		 *  rather than in a return value */
-		static	void	base64Encode(const unsigned char *input,
+		static	void	base64Encode(const byte_t *input,
 							uint64_t inputsize,
 							char **output,
 							uint64_t *outputlen);
@@ -1055,11 +1055,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** base64-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	unsigned char	*base64Decode(const char *input);
+		static	byte_t	*base64Decode(const char *input);
 
 		/** similar to base64Decode above but only decodes
 		 *  the first "inputlen" characters of "input" */
-		static	unsigned char	*base64Decode(const char *input,
+		static	byte_t	*base64Decode(const char *input,
 							uint64_t inputlen);
 
 		/** similar to base64Decode() above, but returns the
@@ -1067,26 +1067,26 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  than in a return value */
 		static	void	base64Decode(const char *input,
 						uint64_t inputlen,
-						unsigned char **output,
+						byte_t **output,
 						uint64_t *outputsize);
 
 		/** Quoted-printable-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
 		static	char	*quotedPrintableEncode(
-						const unsigned char *input);
+						const byte_t *input);
 
 		/** similar to quotedPrintableEncode above but only encodes
 		 *  the first "inputsize" bytes of "input" */
 		static	char	*quotedPrintableEncode(
-						const unsigned char *input,
+						const byte_t *input,
 						uint64_t inputsize);
 
 		/** similar to quotedPrintableEncode() above, but returns the
 		 *  result in "output" and "outputlen" (in characters)
 		 *  rather than in a return value */
 		static	void	quotedPrintableEncode(
-						const unsigned char *input,
+						const byte_t *input,
 						uint64_t inputsize,
 						char **output,
 						uint64_t *outputlen);
@@ -1094,13 +1094,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Quoted-printable-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	unsigned char	*quotedPrintableDecode(
-							const char *input);
+		static	byte_t	*quotedPrintableDecode(const char *input);
 
 		/** similar to quotedPrintableDecode above but only decodes
 		 *  the first "inputlen" characters of "input" */
-		static	unsigned char	*quotedPrintableDecode(
-							const char *input,
+		static	byte_t	*quotedPrintableDecode(const char *input,
 							uint64_t inputlen);
 
 		/** similar to quotedPrintableDecode() above, but returns the
@@ -1108,24 +1106,24 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  than in a return value */
 		static	void	quotedPrintableDecode(const char *input,
 							uint64_t inputlen,
-							unsigned char **output,
+							byte_t **output,
 							uint64_t *outputlen);
 
 
 		/** hex-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	char	*hexEncode(const unsigned char *input);
+		static	char	*hexEncode(const byte_t *input);
 
 		/** similar to hexEncode above but only encodes
 		 *  the first "inputsize" bytes of "input" */
-		static	char	*hexEncode(const unsigned char *input,
+		static	char	*hexEncode(const byte_t *input,
 							uint64_t inputsize);
 
 		/** similar to hexEncode() above, but returns the
 		 *  result in "output" and "outputlen" (in characters) rather
 		 *  than in a return value */
-		static	void	hexEncode(const unsigned char *input,
+		static	void	hexEncode(const byte_t *input,
 						uint64_t inputsize,
 						char **output,
 						uint64_t *outputlen);
@@ -1133,11 +1131,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** hex-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
-		static	unsigned char	*hexDecode(const char *input);
+		static	byte_t	*hexDecode(const char *input);
 
 		/** similar to hexDecode above but only decodes
 		 *  the first "inputlen" characters of "input" */
-		static	unsigned char	*hexDecode(const char *input,
+		static	byte_t	*hexDecode(const char *input,
 							uint64_t inputlen);
 
 		/** similar to hexDecode() above, but returns the
@@ -1145,7 +1143,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  return value */
 		static	void	hexDecode(const char *input,
 						uint64_t inputlen,
-						unsigned char **output,
+						byte_t **output,
 						uint64_t *outputsize);
 
 		/** Obfuscates "str" by adding 128 to each character. */

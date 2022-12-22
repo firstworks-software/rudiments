@@ -413,8 +413,7 @@ ssize_t dom::safeWrite(output *out, const char *str) {
 		} else if (*ch=='"') {
 			entity="&quot;";
 		} else if ((signed char)*ch<0) {
-			num=static_cast<uint16_t>(
-					static_cast<unsigned char>(*ch));
+			num=(uint16_t)((byte_t)*ch);
 		}
 		if (entity || num) {
 			incOrErr(&retval,out->write(start,ch-start),ch-start);

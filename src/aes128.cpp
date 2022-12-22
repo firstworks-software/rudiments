@@ -32,8 +32,8 @@ class aes128private {
 			void		*_context;
 			uint8_t		_cbc[AES_BLOCK_SIZE];
 		#endif
-		unsigned char	_out[AES_BLOCK_SIZE+EVP_MAX_BLOCK_LENGTH];
-		int		_outlen;
+		byte_t	_out[AES_BLOCK_SIZE+EVP_MAX_BLOCK_LENGTH];
+		int	_outlen;
 };
 
 aes128::aes128() : encryption() {
@@ -53,15 +53,15 @@ uint32_t aes128::getIvSize() {
 	return AES_BLOCK_SIZE;
 }
 
-const unsigned char *aes128::getEncryptedData() {
+const byte_t *aes128::getEncryptedData() {
 	return getData(true);
 }
 
-const unsigned char *aes128::getDecryptedData() {
+const byte_t *aes128::getDecryptedData() {
 	return getData(false);
 }
 
-const unsigned char *aes128::getData(bool encrypt) {
+const byte_t *aes128::getData(bool encrypt) {
 
 	// reset the error
 	setError(ENCRYPTION_ERROR_SUCCESS);
@@ -126,10 +126,10 @@ const unsigned char *aes128::getData(bool encrypt) {
 
 
 	// encrypt/decrypt the data in AES_BLOCK_SIZE-sized blocks
-	const unsigned char	*in=getIn()->getBuffer();
-	uint32_t		inremaining=getIn()->getSize();
+	const byte_t	*in=getIn()->getBuffer();
+	uint32_t	inremaining=getIn()->getSize();
 	#if !defined(RUDIMENTS_HAS_SSL)
-	unsigned char		padbytes;
+	byte_t		padbytes;
 	#endif
 	for (;;) {
 
@@ -183,7 +183,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 				// This is analogous to seeding a random number
 				// generator, then using the generated number
 				// as the next seed.
-				for (unsigned char i=0; i<readsize; i++) {
+				for (byte_t i=0; i<readsize; i++) {
 					pvt->_cbc[i]^=in[i];
 				}
 
@@ -204,8 +204,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 				// and XOR the remaining bytes of the CBC buffer
 				// against that number.
 				padbytes=AES_BLOCK_SIZE-readsize;
-				for (unsigned char i=readsize;
-							i<AES_BLOCK_SIZE; i++) {
+				for (byte_t i=readsize; i<AES_BLOCK_SIZE; i++) {
 					pvt->_cbc[i]^=padbytes;
 				}
 
@@ -221,7 +220,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 				aes_decrypt(pvt->_context,in,pvt->_out);
 
 				// un-CBC the output (see CBC description above)
-				for (unsigned char i=0; i<AES_BLOCK_SIZE; i++) {
+				for (byte_t i=0; i<AES_BLOCK_SIZE; i++) {
 					pvt->_out[i]^=pvt->_cbc[i];
 				}
 
@@ -282,7 +281,7 @@ const unsigned char *aes128::getData(bool encrypt) {
 			// Append a full block of 16's (AES_BLOCK_SIZE).
 			uint64_t	insize=getIn()->getSize();
 			if (insize && !(insize%AES_BLOCK_SIZE)) {
-				for (unsigned char i=0; i<AES_BLOCK_SIZE; i++) {
+				for (byte_t i=0; i<AES_BLOCK_SIZE; i++) {
 					pvt->_cbc[i]^=AES_BLOCK_SIZE;
 				}
 				aes_encrypt(pvt->_context,pvt->_cbc,pvt->_out);

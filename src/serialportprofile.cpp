@@ -27,8 +27,8 @@ serialportprofile::~serialportprofile() {
 	delete pvt;
 }
 
-void serialportprofile::setControlCharacters(const unsigned char *c_cc) {
-	bytestring::copy(&pvt->_tio.c_cc,c_cc,sizeof(unsigned char)*NCCS);
+void serialportprofile::setControlCharacters(const byte_t *c_cc) {
+	bytestring::copy(&pvt->_tio.c_cc,c_cc,sizeof(byte_t)*NCCS);
 }
 
 void serialportprofile::defaultControlOptions() {
@@ -989,37 +989,37 @@ serialportprofile::formfeeddelay_t
 	return ff_none;
 }
 
-void serialportprofile::interruptCharacter(unsigned char character) {
+void serialportprofile::interruptCharacter(byte_t character) {
 	SET_CHAR(VINTR,character)
 }
 
-void serialportprofile::quitCharacter(unsigned char character) {
+void serialportprofile::quitCharacter(byte_t character) {
 	SET_CHAR(VQUIT,character)
 }
 
-void serialportprofile::eraseCharacter(unsigned char character) {
+void serialportprofile::eraseCharacter(byte_t character) {
 	SET_CHAR(VERASE,character)
 }
 
-void serialportprofile::killCharacter(unsigned char character) {
+void serialportprofile::killCharacter(byte_t character) {
 	SET_CHAR(VKILL,character)
 }
 
-void serialportprofile::endOfFileCharacter(unsigned char character) {
+void serialportprofile::endOfFileCharacter(byte_t character) {
 	SET_CHAR(VEOF,character)
 }
 
-void serialportprofile::endOfLineCharacter(unsigned char character) {
+void serialportprofile::endOfLineCharacter(byte_t character) {
 	SET_CHAR(VEOL,character)
 }
 
-void serialportprofile::secondEndOfLineCharacter(unsigned char character) {
+void serialportprofile::secondEndOfLineCharacter(byte_t character) {
 	#ifdef VEOL2
 		SET_CHAR(VEOL2,character)
 	#endif
 }
 
-void serialportprofile::switchCharacer(unsigned char character) {
+void serialportprofile::switchCharacer(byte_t character) {
 	#if defined(VSWTCH)
 		SET_CHAR(VSWTCH,character)
 	#elif defined(VSWTC)
@@ -1027,88 +1027,88 @@ void serialportprofile::switchCharacer(unsigned char character) {
 	#endif
 }
 
-void serialportprofile::startCharacter(unsigned char character) {
+void serialportprofile::startCharacter(byte_t character) {
 	SET_CHAR(VSTART,character)
 }
 
-void serialportprofile::stopCharacter(unsigned char character) {
+void serialportprofile::stopCharacter(byte_t character) {
 	SET_CHAR(VSTOP,character)
 }
 
-void serialportprofile::suspendCharacter(unsigned char character) {
+void serialportprofile::suspendCharacter(byte_t character) {
 	SET_CHAR(VSUSP,character)
 }
 
-void serialportprofile::delayedSuspendCharacter(unsigned char character) {
+void serialportprofile::delayedSuspendCharacter(byte_t character) {
 	#ifdef VDSUSP
 		SET_CHAR(VDSUSP,character)
 	#endif
 }
 
-void serialportprofile::literalNextCharcter(unsigned char character) {
+void serialportprofile::literalNextCharcter(byte_t character) {
 	#ifdef VLNEXT
 		SET_CHAR(VLNEXT,character)
 	#endif
 }
 
-void serialportprofile::wordEraseCharcter(unsigned char character) {
+void serialportprofile::wordEraseCharcter(byte_t character) {
 	#ifdef VWERASE
 		SET_CHAR(VWERASE,character)
 	#endif
 }
 
 
-void serialportprofile::reprintCharacter(unsigned char character) {
+void serialportprofile::reprintCharacter(byte_t character) {
 	#ifdef VREPRINT
 		SET_CHAR(VREPRINT,character)
 	#endif
 }
 
-void serialportprofile::discardPendingOutputCharacter(unsigned char character) {
+void serialportprofile::discardPendingOutputCharacter(byte_t character) {
 	#ifdef VDISCARD
 		SET_CHAR(VDISCARD,character)
 	#endif
 }
 
-void serialportprofile::statusRequestCharacter(unsigned char character) {
+void serialportprofile::statusRequestCharacter(byte_t character) {
 	#ifdef VSTATUS
 		SET_CHAR(VSTATUS,character)
 	#endif
 }
 
-void serialportprofile::readThreshold(unsigned char count) {
+void serialportprofile::readThreshold(byte_t count) {
 	SET_CHAR(VMIN,count)
 }
 
-void serialportprofile::readTimeout(unsigned char deciseconds) {
+void serialportprofile::readTimeout(byte_t deciseconds) {
 	SET_CHAR(VTIME,deciseconds)
 }
 
-unsigned char serialportprofile::interruptCharacter() {
+byte_t serialportprofile::interruptCharacter() {
 	return GET_CHAR(VINTR);
 }
 
-unsigned char serialportprofile::quitCharacter() {
+byte_t serialportprofile::quitCharacter() {
 	return GET_CHAR(VQUIT);
 }
 
-unsigned char serialportprofile::eraseCharacter() {
+byte_t serialportprofile::eraseCharacter() {
 	return GET_CHAR(VERASE);
 }
 
-unsigned char serialportprofile::killCharacter() {
+byte_t serialportprofile::killCharacter() {
 	return GET_CHAR(VKILL);
 }
 
-unsigned char serialportprofile::endOfFileCharacter() {
+byte_t serialportprofile::endOfFileCharacter() {
 	return GET_CHAR(VEOF);
 }
 
-unsigned char serialportprofile::endOfLineCharacter() {
+byte_t serialportprofile::endOfLineCharacter() {
 	return GET_CHAR(VEOL);
 }
 
-unsigned char serialportprofile::secondEndOfLineCharacter() {
+byte_t serialportprofile::secondEndOfLineCharacter() {
 	#ifdef VEOL2
 		return GET_CHAR(VEOL2);
 	#else
@@ -1117,7 +1117,7 @@ unsigned char serialportprofile::secondEndOfLineCharacter() {
 	#endif
 }
 
-unsigned char serialportprofile::switchCharacer() {
+byte_t serialportprofile::switchCharacer() {
 	#if defined(VSWTCH)
 		return GET_CHAR(VSWTCH);
 	#elif defined(VSWTC)
@@ -1128,19 +1128,19 @@ unsigned char serialportprofile::switchCharacer() {
 	#endif
 }
 
-unsigned char serialportprofile::startCharacter() {
+byte_t serialportprofile::startCharacter() {
 	return GET_CHAR(VSTART);
 }
 
-unsigned char serialportprofile::stopCharacter() {
+byte_t serialportprofile::stopCharacter() {
 	return GET_CHAR(VSTOP);
 }
 
-unsigned char serialportprofile::suspendCharacter() {
+byte_t serialportprofile::suspendCharacter() {
 	return GET_CHAR(VSUSP);
 }
 
-unsigned char serialportprofile::delayedSuspendCharacter() {
+byte_t serialportprofile::delayedSuspendCharacter() {
 	#ifdef VDSUSP
 		return GET_CHAR(VDSUSP);
 	#else
@@ -1149,7 +1149,7 @@ unsigned char serialportprofile::delayedSuspendCharacter() {
 	#endif
 }
 
-unsigned char serialportprofile::literalNextCharcter() {
+byte_t serialportprofile::literalNextCharcter() {
 	#ifdef VLNEXT
 		return GET_CHAR(VLNEXT);
 	#else
@@ -1158,7 +1158,7 @@ unsigned char serialportprofile::literalNextCharcter() {
 	#endif
 }
 
-unsigned char serialportprofile::wordEraseCharcter() {
+byte_t serialportprofile::wordEraseCharcter() {
 	#ifdef VWERASE
 		return GET_CHAR(VWERASE);
 	#else
@@ -1167,7 +1167,7 @@ unsigned char serialportprofile::wordEraseCharcter() {
 	#endif
 }
 
-unsigned char serialportprofile::reprintCharacter() {
+byte_t serialportprofile::reprintCharacter() {
 	#ifdef VREPRINT
 		return GET_CHAR(VREPRINT);
 	#else
@@ -1176,7 +1176,7 @@ unsigned char serialportprofile::reprintCharacter() {
 	#endif
 }
 
-unsigned char serialportprofile::discardPendingOutputCharacter() {
+byte_t serialportprofile::discardPendingOutputCharacter() {
 	#ifdef VDISCARD
 		return GET_CHAR(VDISCARD);
 	#else
@@ -1185,7 +1185,7 @@ unsigned char serialportprofile::discardPendingOutputCharacter() {
 	#endif
 }
 
-unsigned char serialportprofile::statusRequestCharacter() {
+byte_t serialportprofile::statusRequestCharacter() {
 	#ifdef VSTATUS
 		return GET_CHAR(VSTATUS);
 	#else
@@ -1194,11 +1194,11 @@ unsigned char serialportprofile::statusRequestCharacter() {
 	#endif
 }
 
-unsigned char serialportprofile::readThreshold() {
+byte_t serialportprofile::readThreshold() {
 	return GET_CHAR(VMIN);
 }
 
-unsigned char serialportprofile::readTimeout() {
+byte_t serialportprofile::readTimeout() {
 	return GET_CHAR(VTIME);
 }
 

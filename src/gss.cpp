@@ -1324,7 +1324,7 @@ void gsscredentials::setStatus(uint32_t status, int32_t type) {
 				break;
 			}
 
-			pvt->_status.append((unsigned char *)
+			pvt->_status.append((byte_t *)
 						statusbuffer.value,
 						statusbuffer.length);
 			pvt->_status.append('\n');
@@ -1745,7 +1745,7 @@ bool gsscontext::initiate(const char *name,
 
 			// free inputtoken if necessary
 			if (inputtoken.length) {
-				delete[] (unsigned char *)inputtoken.value;
+				delete[] (byte_t *)inputtoken.value;
 			}
 
 			// bail on error
@@ -1798,8 +1798,7 @@ bool gsscontext::initiate(const char *name,
 						stdoutput.write(
 							"failed (receive)\n\n");
 					#endif
-					delete[] (unsigned char *)
-							inputtoken.value;
+					delete[] (byte_t *)inputtoken.value;
 					gss_release_buffer(&minor,&outputtoken);
 					close();
 					error=true;
@@ -2522,7 +2521,7 @@ bool gsscontext::accept() {
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
 				#endif
-				delete[] (unsigned char *)inputtoken.value;
+				delete[] (byte_t *)inputtoken.value;
 				close();
 				error=true;
 				break;
@@ -2543,7 +2542,7 @@ bool gsscontext::accept() {
 						NULL);
 
 			// clean up
-			delete[] (unsigned char *)inputtoken.value;
+			delete[] (byte_t *)inputtoken.value;
 
 			// bail on error
 			if (GSS_ERROR(pvt->_major)) {
@@ -2869,17 +2868,17 @@ bool gsscontext::getIsOpen() {
 	return pvt->_isopen;
 }
 
-bool gsscontext::wrap(const unsigned char *input,
+bool gsscontext::wrap(const byte_t *input,
 					size_t inputsize,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize) {
 	return wrap(input,inputsize,true,output,outputsize,NULL);
 }
 
-bool gsscontext::wrap(const unsigned char *input,
+bool gsscontext::wrap(const byte_t *input,
 					size_t inputsize,
 					bool useencryption,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize,
 					bool *encryptionused) {
 
@@ -2921,7 +2920,7 @@ bool gsscontext::wrap(const unsigned char *input,
 
 			// copy-out the wrapped 
 			if (output) {
-				*output=(unsigned char *)
+				*output=(byte_t *)
 					bytestring::duplicate(
 						outputbuffer.value,
 						outputbuffer.length);
@@ -3117,16 +3116,16 @@ bool gsscontext::wrap(const unsigned char *input,
 	return false;
 }
 
-bool gsscontext::unwrap(const unsigned char *input,
+bool gsscontext::unwrap(const byte_t *input,
 					size_t inputsize,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize) {
 	return unwrap(input,inputsize,output,outputsize,NULL);
 }
 
-bool gsscontext::unwrap(const unsigned char *input,
+bool gsscontext::unwrap(const byte_t *input,
 					size_t inputsize,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize,
 					bool *decryptionused) {
 
@@ -3162,7 +3161,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 			// copy-out the unwrapped 
 			if (output) {
-				*output=(unsigned char *)
+				*output=(byte_t *)
 					bytestring::duplicate(
 						outputbuffer.value,
 						outputbuffer.length);
@@ -3228,7 +3227,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 			// copy out the decrypted data
 			*outputsize=secbuf[1].cbBuffer;
-			*output=(unsigned char *)bytestring::duplicate(
+			*output=(byte_t *)bytestring::duplicate(
 							secbuf[1].pvBuffer,
 							*outputsize);
 			// FIXME: FreeContextBuffer(secbuf[1].pvBuffer) ???
@@ -3264,7 +3263,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 							SECBUFFER_DATA) {
 					// copy out the decrypted data
 					*outputsize=secbuf[i].cbBuffer;
-					*output=(unsigned char *)
+					*output=(byte_t *)
 						bytestring::duplicate(
 							secbuf[i].pvBuffer,
 							*outputsize);
@@ -3294,7 +3293,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 			// create a buffer to store the output and initialize
 			// it with the contents of the "data" buffer
-			*output=(unsigned char *)bytestring::duplicate(
+			*output=(byte_t *)bytestring::duplicate(
 							(input+sizeof(DWORD)),
 							*outputsize);
 
@@ -3349,9 +3348,9 @@ bool gsscontext::unwrap(const unsigned char *input,
 	return retval;
 }
 
-bool gsscontext::getMic(const unsigned char *message,
+bool gsscontext::getMic(const byte_t *message,
 					size_t messagesize,
-					unsigned char **mic,
+					byte_t **mic,
 					size_t *micsize) {
 
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -3375,7 +3374,7 @@ bool gsscontext::getMic(const unsigned char *message,
 
 			// copy-out the mic
 			if (mic) {
-				*mic=(unsigned char *)
+				*mic=(byte_t *)
 					bytestring::duplicate(
 						micbuffer.value,
 						micbuffer.length);
@@ -3403,9 +3402,9 @@ bool gsscontext::getMic(const unsigned char *message,
 	return false;
 }
 
-bool gsscontext::verifyMic(const unsigned char *message,
+bool gsscontext::verifyMic(const byte_t *message,
 					size_t messagesize,
-					const unsigned char *mic,
+					const byte_t *mic,
 					size_t micsize) {
 
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -3455,7 +3454,7 @@ ssize_t gsscontext::read(void *buf, ssize_t size) {
 			pvt->_readbuffer.clear();
 			pvt->_readbufferpos=0;
 			bytesread=pendingbytes;
-			buf=((unsigned char *)buf)+pendingbytes;
+			buf=((byte_t *)buf)+pendingbytes;
 			bytestoread-=pendingbytes;
 		} else {
 			bytestring::copy(
@@ -3463,7 +3462,7 @@ ssize_t gsscontext::read(void *buf, ssize_t size) {
 					pvt->_readbufferpos,bytestoread);
 			pvt->_readbufferpos+=bytestoread;
 			bytesread=bytestoread;
-			buf=((unsigned char *)buf)+bytestoread;
+			buf=((byte_t *)buf)+bytestoread;
 			bytestoread=0;
 		}
 	}
@@ -3485,20 +3484,20 @@ ssize_t gsscontext::read(void *buf, ssize_t size) {
 	size_t		tokensize=0;
 	ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
 	if (result<=0 || !checkFlags(tokenflags,TOKEN_FLAGS_TYPE_DATA)) {
-		delete[] (unsigned char *)tokendata;
+		delete[] (byte_t *)tokendata;
 		return result;
 	}
 
 	// unwrap
-	unsigned char	*data=NULL;
-	size_t		datasize=0;
-	if (!unwrap((unsigned char *)tokendata,tokensize,
+	byte_t	*data=NULL;
+	size_t	datasize=0;
+	if (!unwrap((byte_t *)tokendata,tokensize,
 					&data,&datasize)) {
-		delete[] (unsigned char *)tokendata;
+		delete[] (byte_t *)tokendata;
 		delete[] data;
 		return RESULT_ERROR;
 	}
-	delete[] (unsigned char *)tokendata;
+	delete[] (byte_t *)tokendata;
 
 	// copy data out...
 	if (datasize<=(size_t)bytestoread) {
@@ -3590,7 +3589,7 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 	// read data
 	*tokendata=NULL;
 	if (size) {
-		*tokendata=new unsigned char[size];
+		*tokendata=new byte_t[size];
 
 		// read token data
 		result=fullRead(*tokendata,size);
@@ -3603,7 +3602,7 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 	}
 	
 	#ifdef DEBUG_GSS_RECEIVE
-		stdoutput.safePrint((unsigned char *)*tokendata,*tokensize);
+		stdoutput.safePrint((byte_t *)*tokendata,*tokensize);
 		stdoutput.write(") success\n\n");
 	#endif
 	return result;
@@ -3622,8 +3621,8 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	// * record type - 1 byte
 	// * tls/ssl version - 2 bytes (network byte order)
 	// * data size - 2 bytes (network byte order)
-	unsigned char	header[5];
-	ssize_t		result=fullRead(header,sizeof(header));
+	byte_t	header[5];
+	ssize_t	result=fullRead(header,sizeof(header));
 	if (result!=sizeof(header)) {
 		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (header)\n");
@@ -3663,13 +3662,13 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	// read data
 	*tokendata=NULL;
 	if (size) {
-		*tokendata=new unsigned char[*tokensize];
+		*tokendata=new byte_t[*tokensize];
 
 		// include the header in the data
 		bytestring::copy(*tokendata,header,sizeof(header));
 
 		// read token data
-		result=fullRead(((unsigned char *)(*tokendata))+5,size);
+		result=fullRead(((byte_t *)(*tokendata))+5,size);
 		if (result!=(ssize_t)size) {
 			#ifdef DEBUG_GSS_RECEIVE
 				stdoutput.write(") failed (data)\n");
@@ -3679,7 +3678,7 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	}
 	
 	#ifdef DEBUG_GSS_RECEIVE
-		stdoutput.safePrint((unsigned char *)*tokendata,*tokensize);
+		stdoutput.safePrint((byte_t *)*tokendata,*tokensize);
 		stdoutput.printf(") success (%d bytes)\n\n",*tokensize);
 	#endif
 	return *tokensize;
@@ -3688,9 +3687,9 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 ssize_t gsscontext::write(const void *buf, ssize_t size) {
 
 	// create token
-	unsigned char	*tokendata=NULL;
-	size_t		tokensize=0;
-	if (!wrap((const unsigned char *)buf,size,&tokendata,&tokensize)) {
+	byte_t	*tokendata=NULL;
+	size_t	tokensize=0;
+	if (!wrap((const byte_t *)buf,size,&tokendata,&tokensize)) {
 		delete[] tokendata;
 		return RESULT_ERROR;
 	}
@@ -3723,7 +3722,7 @@ ssize_t gsscontext::sendKrbToken(uint32_t tokenflags,
 
 	#ifdef DEBUG_GSS_SEND
 		stdoutput.printf("sendKrbToken(%08x,%d,",tokenflags,tokensize);
-		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
+		stdoutput.safePrint((const byte_t *)tokendata,tokensize);
 		stdoutput.write(") ");
 	#endif
 
@@ -3768,7 +3767,7 @@ ssize_t gsscontext::sendTlsToken(uint32_t tokenflags,
 
 	#ifdef DEBUG_GSS_SEND
 		stdoutput.printf("sendTlsToken(%08x,%d,",tokenflags,tokensize);
-		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
+		stdoutput.safePrint((const byte_t *)tokendata,tokensize);
 		stdoutput.write(") ");
 	#endif
 
@@ -3800,7 +3799,7 @@ ssize_t gsscontext::fullRead(void *data, ssize_t size) {
 	ssize_t bytestoread=size;
 	while (bytestoread) {
 		ssize_t	result=pvt->_fd->lowLevelRead(
-					((unsigned char *)data)+bytesread,
+					((byte_t *)data)+bytesread,
 					bytestoread);
 		if (result<=0) {
 			return result;
@@ -3824,7 +3823,7 @@ ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
 	ssize_t bytestowrite=size;
 	while (bytestowrite) {
 		ssize_t	result=pvt->_fd->lowLevelWrite(
-				((const unsigned char *)data)+byteswritten,
+				((const byte_t *)data)+byteswritten,
 				bytestowrite);
 		if (result<=0) {
 			return result;
@@ -3946,7 +3945,7 @@ void gsscontext::setStatus(uint32_t status, int32_t type) {
 				break;
 			}
 
-			pvt->_status.append((unsigned char *)
+			pvt->_status.append((byte_t *)
 						statusbuffer.value,
 						statusbuffer.length);
 			pvt->_status.append('\n');

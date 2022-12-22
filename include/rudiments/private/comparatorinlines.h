@@ -91,8 +91,7 @@ int32_t comparator::compare(const wchar_t *value1,
 }
 
 inline
-int32_t comparator::compare(unsigned char *value1,
-				unsigned char *value2) {
+int32_t comparator::compare(byte_t *value1, byte_t *value2) {
 	return ((natural)?
 		charstring::compareNatural((const char *)value1,
 						(const char *)value2,
@@ -103,8 +102,8 @@ int32_t comparator::compare(unsigned char *value1,
 }
 
 inline
-int32_t comparator::compare(const unsigned char *value1,
-				const unsigned char *value2) {
+int32_t comparator::compare(const byte_t *value1,
+				const byte_t *value2) {
 	return ((natural)?
 		charstring::compareNatural((const char *)value1,
 						(const char *)value2,
@@ -146,7 +145,7 @@ int32_t comparator::compare(int64_t value1, int64_t value2) {
 }
 
 inline
-int32_t comparator::compare(unsigned char value1, unsigned char value2) {
+int32_t comparator::compare(byte_t value1, byte_t value2) {
 	return (((int16_t)value1)-((int16_t)value2))*sense;
 }
 

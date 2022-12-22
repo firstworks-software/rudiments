@@ -35,7 +35,7 @@ sha256::~sha256() {
 	delete pvt;
 }
 
-bool sha256::append(const unsigned char *data, uint32_t size) {
+bool sha256::append(const byte_t *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
@@ -53,7 +53,7 @@ bool sha256::append(const unsigned char *data, uint32_t size) {
 	#endif
 }
 
-const unsigned char *sha256::getHash() {
+const byte_t *sha256::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)

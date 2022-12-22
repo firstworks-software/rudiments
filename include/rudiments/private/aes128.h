@@ -5,7 +5,7 @@
 		aes128(aes128 &a) {};
 		aes128	&operator=(aes128 &a) { return *this; };
 
-		const unsigned char	*getData(bool encrypt);
+		const byte_t	*getData(bool encrypt);
 
 		void	newContext();
 		void	freeContext();

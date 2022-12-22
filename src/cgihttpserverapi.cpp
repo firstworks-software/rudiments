@@ -35,7 +35,7 @@ const char *cgihttpserverapi::getType() {
 	return "cgi";
 }
 
-ssize_t cgihttpserverapi::read(unsigned char *buffer, size_t size) {
+ssize_t cgihttpserverapi::read(byte_t *buffer, size_t size) {
 	return stdinput.read(buffer,size);
 }
 
@@ -75,7 +75,7 @@ ssize_t cgihttpserverapi::read(int64_t *number) {
 	return stdinput.read(number);
 }
 
-ssize_t cgihttpserverapi::read(unsigned char *character) {
+ssize_t cgihttpserverapi::read(byte_t *character) {
 	return stdinput.read(character);
 }
 
@@ -260,7 +260,7 @@ httpserverapi *cgihttpserverapi::header(const char *string) {
 	return this;
 }
 
-ssize_t	cgihttpserverapi::write(const unsigned char *string, size_t size) {
+ssize_t	cgihttpserverapi::write(const byte_t *string, size_t size) {
 	return stdoutput.write(string,size);
 }
 
@@ -312,7 +312,7 @@ ssize_t	cgihttpserverapi::write(int64_t number) {
 	return stdoutput.printf("%lld",number);
 }
 
-ssize_t	cgihttpserverapi::write(unsigned char character) {
+ssize_t	cgihttpserverapi::write(byte_t character) {
 	return stdoutput.write(character);
 }
 

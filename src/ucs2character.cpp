@@ -86,10 +86,10 @@ ucs2_t ucs2character::duplicate(char c) {
 ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
 	ucs2_t		uc;
 	iconvert	i;
-	i.setFromBuffer((unsigned char *)&c);
+	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(c));
 	i.setToEncoding("UCS-2");
-	i.setToBuffer((unsigned char *)&uc);
+	i.setToBuffer((byte_t *)&uc);
 	i.setToBufferSize(sizeof(uc));
 	return (i.convert())?uc:replacement;
 }
@@ -107,10 +107,10 @@ ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
 		ucs2_t		uc;
 		iconvert	i;
 		i.setFromEncoding("WCHAR_T");
-		i.setFromBuffer((unsigned char *)&c);
+		i.setFromBuffer((byte_t *)&c);
 		i.setFromBufferSize(sizeof(c));
 		i.setToEncoding("UCS-2");
-		i.setToBuffer((unsigned char *)&uc);
+		i.setToBuffer((byte_t *)&uc);
 		i.setToBufferSize(sizeof(uc));
 		return (i.convert())?uc:replacement;
 	#endif

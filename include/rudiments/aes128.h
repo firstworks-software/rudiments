@@ -26,14 +26,14 @@ class RUDIMENTS_DLLSPEC aes128 : public encryption {
 		 *  NULL if an error occurred.  Note that the encrypted data
 		 *  returned will be an empty string if no data has been
 		 *  appended yet. */
-		const unsigned char	*getEncryptedData();
+		const byte_t	*getEncryptedData();
 
 		/** Interprets the current data as encrypted.  Decrypts the
 		 *  current data.  Returns the decrypted data on success or
 		 *  NULL if an error occurred.  Note that the decrypted data
 		 *  returned will be an empty string if no data has been
 		 *  appended yet. */
-		const unsigned char	*getDecryptedData();
+		const byte_t	*getDecryptedData();
 
 	#include <rudiments/private/aes128.h>
 };

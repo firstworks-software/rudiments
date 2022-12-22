@@ -153,9 +153,9 @@ char character::duplicate(wchar_t c, char replacement) {
 	char		*mb= new char[iconvert::maxMultiByteSize()];
 	iconvert	i;
 	i.setFromEncoding("WCHAR_T");
-	i.setFromBuffer((unsigned char *)&c);
+	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(wchar_t));
-	i.setToBuffer((unsigned char *)mb);
+	i.setToBuffer((byte_t *)mb);
 	i.setToBufferSize(iconvert::maxMultiByteSize());
 	if (!i.convert()) {
 		delete[] mb;
@@ -190,9 +190,9 @@ char character::duplicate(ucs2_t c, char replacement) {
 		char		*mb= new char[iconvert::maxMultiByteSize()];
 		iconvert	i;
 		i.setFromEncoding("UCS-2");
-		i.setFromBuffer((unsigned char *)&c);
+		i.setFromBuffer((byte_t *)&c);
 		i.setFromBufferSize(sizeof(ucs2_t));
-		i.setToBuffer((unsigned char *)mb);
+		i.setToBuffer((byte_t *)mb);
 		i.setToBufferSize(iconvert::maxMultiByteSize());
 		if (!i.convert()) {
 			delete[] mb;

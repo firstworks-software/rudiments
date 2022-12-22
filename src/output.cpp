@@ -9,7 +9,7 @@ output::output() {
 output::~output() {
 }
 
-ssize_t output::write(const unsigned char *string, size_t size,
+ssize_t output::write(const byte_t *string, size_t size,
 						int32_t sec, int32_t usec) {
 	return write(string,size);
 }
@@ -65,7 +65,7 @@ ssize_t output::write(int64_t number, int32_t sec, int32_t usec) {
 	return write(number);
 }
 
-ssize_t output::write(unsigned char character, int32_t sec, int32_t usec) {
+ssize_t output::write(byte_t character, int32_t sec, int32_t usec) {
 	return write(character);
 }
 

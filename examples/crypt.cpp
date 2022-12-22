@@ -1,4 +1,4 @@
-#include <rudiments/crypt.h>
+#include <rudiments/des.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -17,17 +17,15 @@ int main(int argc, const char **argv) {
 		NULL
 	};
 
-	crypt	c;
+	des	c;
 	for (const char * const *salt=salts; *salt; salt++) {
 
 		stdoutput.printf("salt=%s\n",*salt);
 
 		for (const char * const *str=strings; *str; str++) {
 
-			const unsigned char	*data=
-					(const unsigned char *)*str;
-			const unsigned char	*iv=
-					(const unsigned char *)*salt;
+			const byte_t	*data=(const byte_t *)*str;
+			const byte_t	*iv=(const byte_t *)*salt;
 
 			c.append(data,charstring::length(*str));
 			c.setIv(iv,c.getIvSize());

@@ -385,7 +385,7 @@ class RUDIMENTS_DLLSPEC tlscertificate : public object {
 		const char	*getPublicKeyAlgorithm();
 
 		/** Returns the public key from the certificate. */
-		const unsigned char	*getPublicKey();
+		const byte_t	*getPublicKey();
 
 		/** Returns the size of the public key, in bytes,
 		 *  from the certificate. */

@@ -52,7 +52,7 @@ void myserver::myListen() {
 		clientsock->setReadBufferSize(buffersize);
 
 		// read from the client
-		unsigned char	buffer;
+		byte_t	buffer;
 		while (clientsock->read(&buffer)>0) {}
 
 		// close the socket and clean up

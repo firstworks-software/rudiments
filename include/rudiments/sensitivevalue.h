@@ -292,7 +292,7 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		void	parse(const char *in, uint64_t inlen);
 		
 		/** Returns the value stored by a previous call to parse(). */
-		const unsigned char	*getValue();
+		const byte_t	*getValue();
 
 		/** Returns the value stored by a previous call to parse().
 		 *  
@@ -301,7 +301,7 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *
 		 *  The calling program must deallocate the string returned
 		 *  from this method. */
-		unsigned char	*detachValue();
+		byte_t	*detachValue();
 
 		/** Returns the number of bytes that getValue() or
 		 *  detachValue() would return.

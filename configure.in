@@ -1272,7 +1272,7 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #endif],
 [uint8_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT8_T,1,Some systems have uint8_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-RUDIMENTS_HAVE_CHAR16_T="no"
+RUDIMENTS_HAVE_CHAR8_T="no"
 AC_MSG_CHECKING(for char8_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
@@ -1402,6 +1402,26 @@ else
 	AC_TRY_COMPILE([],
 [long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
+
+RUDIMENTS_HAVE_BYTE_T="no"
+AC_MSG_CHECKING(for byte_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif],
+[byte_t i;],AC_DEFINE(RUDIMENTS_HAVE_BYTE_T,1,Some systems have byte_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_BYTE_T="yes", AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for bool)
 AC_TRY_COMPILE([],

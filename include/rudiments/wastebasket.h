@@ -71,7 +71,7 @@ class RUDIMENTS_DLLSPEC wastebasket : virtual public object {
 
 		/** Attaches "value" such that it will be array-deleted when
 		 *  empty() is called. */
-		void	attach(unsigned char *value);
+		void	attach(byte_t *value);
 
 		/** Attaches "value" such that it will be array-deleted when
 		 *  empty() is called. */

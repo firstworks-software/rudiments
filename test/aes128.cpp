@@ -19,15 +19,15 @@ int main(int argc, const char **argv) {
 	b.setIv(a.getIv(),a.getIvSize());
 	size_t		keysize=a.getKeySize();
 	test("keysize",keysize==16);
-	unsigned char	*blankkey=new unsigned char[keysize];
+	byte_t	*blankkey=new byte_t[keysize];
 	bytestring::zero(blankkey,keysize);
-	unsigned char	*key=a.getKey();
+	byte_t	*key=a.getKey();
 	test("sane key",bytestring::compare(key,blankkey,keysize));
 	size_t		ivsize=a.getIvSize();
 	test("ivsize",ivsize==16);
-	unsigned char	*blankiv=new unsigned char[ivsize];
+	byte_t	*blankiv=new byte_t[ivsize];
 	bytestring::zero(blankiv,ivsize);
-	unsigned char	*iv=a.getIv();
+	byte_t	*iv=a.getIv();
 	test("sane iv",bytestring::compare(iv,blankiv,ivsize));
 	stdoutput.printf("\n");
 
@@ -56,23 +56,21 @@ int main(int argc, const char **argv) {
 			unenc.clear();
 			for (uint64_t j=0; j<size; j++) {
 				rn.generate(&seed,0,255);
-				unenc.append((unsigned char)seed);
+				unenc.append((byte_t)seed);
 			}
 
 			// encrypt
 			test("encrypt append",
 				a.append(unenc.getBuffer(),unenc.getSize()));
-			const unsigned char	*enc=a.getEncryptedData();
-			uint64_t		encsize=
-						a.getEncryptedDataSize();
+			const byte_t	*enc=a.getEncryptedData();
+			uint64_t	encsize=a.getEncryptedDataSize();
 			test("sane encrypted data",enc!=NULL);
 			test("sane encrypted size",encsize);
 
 			// decrypt
 			test ("decrypt append",b.append(enc,encsize));
-			const unsigned char	*dec=b.getDecryptedData();
-			uint64_t		decsize=
-						b.getDecryptedDataSize();
+			const byte_t	*dec=b.getDecryptedData();
+			uint64_t	decsize=b.getDecryptedDataSize();
 			test("sane decrypted data",dec!=NULL);
 			test("sane decrypted size",(size)?decsize:!decsize);
 

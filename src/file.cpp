@@ -363,8 +363,8 @@ bool file::open(const char *name, int32_t flags, mode_t perms) {
 }
 
 char *file::getContents() {
-	unsigned char	*buffer;
-	size_t		buffersize;
+	byte_t	*buffer;
+	size_t	buffersize;
 	getContents(&buffer,&buffersize,true);
 	return (char *)buffer;
 }
@@ -377,11 +377,11 @@ char *file::getContents(const char *name) {
 	return contents;
 }
 
-ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
+ssize_t file::getContents(byte_t *buffer, size_t buffersize) {
 	return read(buffer,buffersize);
 }
 
-ssize_t file::getContents(const char *name, unsigned char *buffer,
+ssize_t file::getContents(const char *name, byte_t *buffer,
 						size_t buffersize) {
 	file	fl;
 	fl.open(name,O_RDONLY|O_BINARY);
@@ -390,22 +390,21 @@ ssize_t file::getContents(const char *name, unsigned char *buffer,
 	return bytes;
 }
 
-ssize_t file::getContents(unsigned char **buffer, size_t *buffersize) {
+ssize_t file::getContents(byte_t **buffer, size_t *buffersize) {
 	return getContents(buffer,buffersize,false);
 }
 
-ssize_t file::getContents(unsigned char **buffer, size_t *buffersize,
+ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 							bool terminate) {
-	unsigned char	*intbuffer=NULL;
-	size_t		intbuffersize=0;
+	byte_t	*intbuffer=NULL;
+	size_t	intbuffersize=0;
 	if (fd()!=-1) {
 		getCurrentProperties();
 		off64_t	curpos=getCurrentPosition();
 		setPositionRelativeToBeginning(0);
 		if (pvt->_st.st_size) {
 			intbuffersize=pvt->_st.st_size;
-			intbuffer=new unsigned char[intbuffersize+
-							((terminate)?1:0)];
+			intbuffer=new byte_t[intbuffersize+((terminate)?1:0)];
 			if (terminate) {
 				intbuffer[intbuffersize]='\0';
 			}
@@ -421,7 +420,7 @@ ssize_t file::getContents(unsigned char **buffer, size_t *buffersize,
 			// FIXME: this is fine for url's but for actual files
 			// that we don't know the size of, we ought to use a
 			// more intelligent size.
-			unsigned char	buf[16*1024];
+			byte_t	buf[16*1024];
 			for (;;) {
 				ssize_t	s=read(buf,sizeof(buf));
 				cts.append(buf,s);
@@ -446,7 +445,7 @@ ssize_t file::getContents(unsigned char **buffer, size_t *buffersize,
 	return intbuffersize;
 }
 
-ssize_t file::getContents(const char *name, unsigned char **buffer,
+ssize_t file::getContents(const char *name, byte_t **buffer,
 						size_t *buffersize) {
 	file	fl;
 	fl.open(name,O_RDONLY|O_BINARY);

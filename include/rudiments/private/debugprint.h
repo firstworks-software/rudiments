@@ -19,8 +19,8 @@
 	static void debugFunction() {}
 	static void debugPrintf(const char *format, ...) {}
 	static void debugSafePrint(const char *data, int32_t length) {}
-	static void debugSafePrint(const unsigned char *data, int32_t length) {}
-	static void debugPrintBits(unsigned char value) {}
+	static void debugSafePrint(const byte_t *data, int32_t length) {}
+	static void debugPrintBits(byte_t value) {}
 	static void debugPrintBits(uint16_t value) {}
 	static void debugPrintBits(uint32_t value) {}
 	static void debugPrintBits(uint64_t value) {}

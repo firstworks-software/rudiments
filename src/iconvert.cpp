@@ -45,15 +45,15 @@ class iconvertprivate {
 			uint8_t		_i;
 		#endif
 
-		const char		*_fromencoding;
-		const unsigned char	*_frombuffer;
-		const unsigned char	*_frombufferptr;
-		size_t			_frombuffersize;
-		size_t			_frombufferremaining;
+		const char	*_fromencoding;
+		const byte_t	*_frombuffer;
+		const byte_t	*_frombufferptr;
+		size_t		_frombuffersize;
+		size_t		_frombufferremaining;
 
 		const char	*_toencoding;
-		unsigned char	*_tobuffer;
-		unsigned char	*_tobufferptr;
+		byte_t		*_tobuffer;
+		byte_t		*_tobufferptr;
 		size_t		_tobuffersize;
 		size_t		_tobufferremaining;
 		
@@ -117,11 +117,11 @@ const char *iconvert::getToEncoding() {
 	return pvt->_toencoding;
 }
 
-void iconvert::setFromBuffer(const unsigned char *buffer) {
+void iconvert::setFromBuffer(const byte_t *buffer) {
 	pvt->_frombuffer=buffer;
 }
 
-const unsigned char *iconvert::getFromBuffer() {
+const byte_t *iconvert::getFromBuffer() {
 	return pvt->_frombuffer;
 }
 
@@ -133,11 +133,11 @@ size_t iconvert::getFromBufferSize() {
 	return pvt->_frombuffersize;
 }
 
-void iconvert::setToBuffer(unsigned char *buffer) {
+void iconvert::setToBuffer(byte_t *buffer) {
 	pvt->_tobuffer=buffer;
 }
 
-unsigned char *iconvert::getToBuffer() {
+byte_t *iconvert::getToBuffer() {
 	return pvt->_tobuffer;
 }
 
@@ -537,7 +537,7 @@ bool iconvert::convert() {
 	#endif
 }
 
-const unsigned char *iconvert::getFromBufferPosition() {
+const byte_t *iconvert::getFromBufferPosition() {
 	return pvt->_frombufferptr;
 }
 
@@ -545,7 +545,7 @@ size_t iconvert::getFromBufferRemaining() {
 	return pvt->_frombufferremaining;
 }
 
-const unsigned char *iconvert::getToBufferPosition() {
+const byte_t *iconvert::getToBufferPosition() {
 	return pvt->_tobufferptr;
 }
 

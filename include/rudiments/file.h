@@ -120,7 +120,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */
-		virtual ssize_t	getContents(unsigned char *buffer,
+		virtual ssize_t	getContents(byte_t *buffer,
 							size_t buffersize);
 
 		/** Allocates "buffer" large enough to accommodate the
@@ -134,7 +134,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */
-		virtual ssize_t	getContents(unsigned char **buffer,
+		virtual ssize_t	getContents(byte_t **buffer,
 							size_t *buffersize);
 
 		/** Truncates all data in the file, resulting in a file of
@@ -951,7 +951,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */
 		static	ssize_t	getContents(const char *name,
-						unsigned char *buffer,
+						byte_t *buffer,
 						size_t buffersize);
 
 		/** Allocates "buffer" large enough to accommodate the
@@ -965,7 +965,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */
 		virtual ssize_t	getContents(const char *name,
-						unsigned char **buffer,
+						byte_t **buffer,
 						size_t *buffersize);
 
 

@@ -15,7 +15,7 @@ wstringbuffer::wstringbuffer(size_t initialsize) : bytebuffer(initialsize) {
 
 inline
 wstringbuffer::wstringbuffer(wchar_t *initialcontents, size_t initialsize) :
-		bytebuffer((unsigned char *)initialcontents,
+		bytebuffer((byte_t *)initialcontents,
 					initialsize*sizeof(wchar_t)) {
 }
 
@@ -77,7 +77,7 @@ bool wstringbuffer::clear(size_t initialsize) {
 
 inline
 bool wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
-	return bytebuffer::clear((unsigned char *)initialcontents,
+	return bytebuffer::clear((byte_t *)initialcontents,
 					initialsize*sizeof(wchar_t));
 }
 

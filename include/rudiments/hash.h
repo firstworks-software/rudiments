@@ -27,13 +27,12 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
 		/** Appends "size" bytes of "data" to the data to be
 		 *  hashed.  Returns true on success or false if an error
 		 *  occurred. */
-		virtual	bool	append(const unsigned char *data,
-							uint32_t size)=0;
+		virtual	bool	append(const byte_t *data, uint32_t size)=0;
 
 		/** Returns the current hash on success or NULL if an error
 		 *  occurred.  Note that the current hash will be an empty
 		 *  string if no data has been appended yet. */
-		virtual	const unsigned char	*getHash()=0;
+		virtual	const byte_t	*getHash()=0;
 
 		/** Returns the number of bytes in the hash. */
 		virtual	uint64_t	getHashSize()=0;

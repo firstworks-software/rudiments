@@ -15,7 +15,7 @@ ucs2stringbuffer::ucs2stringbuffer(size_t initialsize) :
 
 inline
 ucs2stringbuffer::ucs2stringbuffer(ucs2_t *initialcontents, size_t initialsize) :
-		bytebuffer((unsigned char *)initialcontents,initialsize) {
+		bytebuffer((byte_t *)initialcontents,initialsize) {
 }
 
 inline
@@ -76,18 +76,17 @@ bool ucs2stringbuffer::clear(size_t initialsize) {
 
 inline
 bool ucs2stringbuffer::clear(ucs2_t *initialcontents, size_t initialsize) {
-	return bytebuffer::clear((unsigned char *)initialcontents,initialsize);
+	return bytebuffer::clear((byte_t *)initialcontents,initialsize);
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const unsigned char *string) {
+ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string) {
 	return (ucs2stringbuffer *)bytebuffer::append(string,
 			ucs2charstring::length((const ucs2_t *)string));
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const unsigned char *string,
-							size_t size) {
+ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string, size_t size) {
 	return (ucs2stringbuffer *)bytebuffer::append(string,size);
 }
 
@@ -144,7 +143,7 @@ ucs2stringbuffer *ucs2stringbuffer::append(int64_t number,
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(unsigned char character) {
+ucs2stringbuffer *ucs2stringbuffer::append(byte_t character) {
 	return (ucs2stringbuffer *)bytebuffer::append(character);
 }
 
@@ -219,13 +218,13 @@ ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t precision,
 }
 
 inline
-ssize_t ucs2stringbuffer::write(const unsigned char *string) {
+ssize_t ucs2stringbuffer::write(const byte_t *string) {
 	return bytebuffer::write(string,
 			ucs2charstring::length((const ucs2_t *)string));
 }
 
 inline
-ssize_t ucs2stringbuffer::write(const unsigned char *string, size_t size) {
+ssize_t ucs2stringbuffer::write(const byte_t *string, size_t size) {
 	return bytebuffer::write(string,size);
 }
 
@@ -260,7 +259,7 @@ ssize_t ucs2stringbuffer::write(int64_t number) {
 }
 
 inline
-ssize_t ucs2stringbuffer::write(unsigned char character) {
+ssize_t ucs2stringbuffer::write(byte_t character) {
 	return bytebuffer::write(character);
 }
 

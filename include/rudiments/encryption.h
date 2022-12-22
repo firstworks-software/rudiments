@@ -34,8 +34,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *  The most common error is that "keysize" is not the
 		 *  correct number of bytes.  The method getKeySize() returns
 		 *  the correct number of bytes for the key. */
-		virtual bool	setKey(const unsigned char *key,
-							size_t keysize);
+		virtual bool	setKey(const byte_t *key, size_t keysize);
 
 		/** Sets the key used for encryption/decryption to random
 		 *  data.  The data used can be retrived using getKey(). */
@@ -43,7 +42,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 
 		/** Returns the key currently used for encryption/decryption.
 		 *  If no key has been set, then this will be a block of 0's. */
-		virtual unsigned char	*getKey();
+		virtual byte_t	*getKey();
 
 		/** Returns the number of bytes in the key. */
 		virtual uint32_t	getKeySize()=0;
@@ -56,7 +55,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *  The most common error is that "ivsize" is not the correct
 		 *  number of bytes.  The method getKeySize() returns the
 		 *  correct number of bytes for the key. */
-		virtual bool	setIv(const unsigned char *iv, size_t ivsize);
+		virtual bool	setIv(const byte_t *iv, size_t ivsize);
 
 		/** Sets the initialization vector used encryption/decryption
 		 *  to random data.  The data used can be retrived using
@@ -66,7 +65,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		/** Returns the initialization vector currently used for
 		 *  encryption/decryption.  If no initialization vector has
 		 *  been set, then this will be a block of 0's. */
-		virtual unsigned char	*getIv();
+		virtual byte_t	*getIv();
 
 		/** Returns the number of bytes in the initialization vector. */
 		virtual uint32_t	getIvSize()=0;
@@ -75,8 +74,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *  encrypted/decrypted.
 		 *
 		 *  Returns true on success or false if an error occurred. */
-		virtual bool	append(const unsigned char *data,
-							uint32_t size);
+		virtual bool	append(const byte_t *data, uint32_t size);
 
 		/** Interprets the current data as unencrypted.  Encrypts the
 		 *  current data.
@@ -86,7 +84,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *
 		 *  Note that the encrypted data returned will be an empty
 		 *  string if no data has been appended yet. */
-		virtual const unsigned char	*getEncryptedData()=0;
+		virtual const byte_t	*getEncryptedData()=0;
 
 		/** Returns the number of bytes of encrypted data. */
 		virtual	uint64_t	getEncryptedDataSize();
@@ -99,7 +97,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *
 		 *  Note that the decrypted data returned will be an empty
 		 *  string if no data has been appended yet. */
-		virtual const unsigned char	*getDecryptedData()=0;
+		virtual const byte_t	*getDecryptedData()=0;
 
 		/** Returns the number of bytes of decrypted data. */
 		virtual	uint64_t	getDecryptedDataSize();

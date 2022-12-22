@@ -710,7 +710,7 @@ bool httprequest::setFileParameter(const char *name,
 	return false;
 }
 
-ssize_t	httprequest::read(unsigned char *buffer, size_t size) {
+ssize_t	httprequest::read(byte_t *buffer, size_t size) {
 	return pvt->_sapi->read(buffer,size);
 }
 
@@ -750,7 +750,7 @@ ssize_t	httprequest::read(int64_t *number) {
 	return pvt->_sapi->read(number);
 }
 
-ssize_t	httprequest::read(unsigned char *character) {
+ssize_t	httprequest::read(byte_t *character) {
 	return pvt->_sapi->read(character);
 }
 

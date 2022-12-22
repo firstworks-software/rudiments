@@ -11,8 +11,8 @@ class encryptionprivate {
 	private:
 		bytebuffer		_in;
 		bytebuffer		_out;
-		unsigned char		*_key;
-		unsigned char		*_iv;
+		byte_t			*_key;
+		byte_t			*_iv;
 		bool			_dirty;
 		bool			_encrypted;
 		encryptionerror_t	_err;
@@ -37,7 +37,7 @@ encryption::~encryption() {
 	delete pvt;
 }
 
-bool encryption::setKey(const unsigned char *key, size_t keysize) {
+bool encryption::setKey(const byte_t *key, size_t keysize) {
 	initKey();
 	if (keysize!=getKeySize()) {
 		setError(ENCRYPTION_ERROR_INVALID_KEY_SIZE);
@@ -48,19 +48,19 @@ bool encryption::setKey(const unsigned char *key, size_t keysize) {
 	return true;
 }
 
-unsigned char *encryption::getKey() {
+byte_t *encryption::getKey() {
 	initKey();
 	return pvt->_key;
 }
 
 void encryption::initKey() {
 	if (!pvt->_key) {
-		pvt->_key=new unsigned char[getKeySize()];
+		pvt->_key=new byte_t[getKeySize()];
 		bytestring::zero(pvt->_key,getKeySize());
 	}
 }
 
-bool encryption::setIv(const unsigned char *iv, size_t ivsize) {
+bool encryption::setIv(const byte_t *iv, size_t ivsize) {
 	initIv();
 	if (ivsize!=getIvSize()) {
 		setError(ENCRYPTION_ERROR_INVALID_IV_SIZE);
@@ -81,18 +81,18 @@ void encryption::setRandomIv() {
 	setRandomBuffer(pvt->_iv,getIvSize());
 }
 
-void encryption::setRandomBuffer(unsigned char *buffer, size_t buffersize) {
+void encryption::setRandomBuffer(byte_t *buffer, size_t buffersize) {
 	randomnumber	r;
 	uint32_t	seed=randomnumber::getSeed();
 	size_t		remaining=buffersize;
-	unsigned char	*ptr=buffer;
+	byte_t		*ptr=buffer;
 	for (;;) {
 		seed=randomnumber::generate(seed);
 		size_t	blocksize=remaining%sizeof(uint32_t);
 		if (!blocksize) {
 			blocksize=sizeof(uint32_t);
 		}
-		bytestring::copy(ptr,(unsigned char *)&seed,blocksize);
+		bytestring::copy(ptr,(byte_t *)&seed,blocksize);
 		if (blocksize<sizeof(uint32_t)) {
 			break;
 		}
@@ -104,19 +104,19 @@ void encryption::setRandomBuffer(unsigned char *buffer, size_t buffersize) {
 	}
 }
 
-unsigned char *encryption::getIv() {
+byte_t *encryption::getIv() {
 	initIv();
 	return pvt->_iv;
 }
 
 void encryption::initIv() {
 	if (!pvt->_iv) {
-		pvt->_iv=new unsigned char[getIvSize()];
+		pvt->_iv=new byte_t[getIvSize()];
 		bytestring::zero(pvt->_iv,getIvSize());
 	}
 }
 
-bool encryption::append(const unsigned char *data, uint32_t size) {
+bool encryption::append(const byte_t *data, uint32_t size) {
 	pvt->_in.append(data,size);
 	pvt->_dirty=true;
 	return true;

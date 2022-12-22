@@ -19,13 +19,13 @@ int main(int argc, const char **argv) {
 
 
 	// clear the buffer and append more data to it
-	const unsigned char	data[]={1,2,3,4,5,6,7,8};
+	const byte_t	data[]={1,2,3,4,5,6,7,8};
 	bb.clear();
 	bb.append(data,sizeof(data));
 
 	// overwrite the first 5 numbers...
 	bb.setPosition(0);
-	const unsigned char	newdata[]={8,7,6,5};
+	const byte_t	newdata[]={8,7,6,5};
 	bb.write(newdata,sizeof(newdata));
 
 	stdoutput.write("after overwrite:\n");
@@ -48,8 +48,8 @@ int main(int argc, const char **argv) {
 
 
 	// detach the string
-	size_t		ddatasize=bb.getSize();
-	unsigned char	*ddata=bb.detachBuffer();
+	size_t	ddatasize=bb.getSize();
+	byte_t	*ddata=bb.detachBuffer();
 
 	stdoutput.write("after detach:\n");
 	stdoutput.write("       contents: ");

@@ -381,9 +381,9 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		 *  buffer in "output", and returns the number of bytes of the
 		 *  buffer in "outputsize".
 		 *  Returns true on success and false on failure. */
-		bool	wrap(const unsigned char *input,
+		bool	wrap(const byte_t *input,
 					size_t inputsize,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize);
 
 		/** Wraps "input" data of "inputsize" bytes, allocates a buffer
@@ -393,10 +393,10 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		 *  "useencryption" is set to true.  Returns whether encryption
 		 *  was performed or not in "encryptionused".
 		 *  Returns true on success and false on failure. */
-		bool	wrap(const unsigned char *input,
+		bool	wrap(const byte_t *input,
 					size_t inputsize,
 					bool useencryption,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize,
 					bool *encryptionused);
 
@@ -406,9 +406,9 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		 *  pointer the buffer in "output", and returns the number of
 		 *  bytes of the buffer in "outputsize".
 		 *  Returns true on success and false on failure. */
-		bool	unwrap(const unsigned char *input,
+		bool	unwrap(const byte_t *input,
 					size_t inputsize,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize);
 
 		/** Unwraps "input" data of "inputsize" bytes, allocates a
@@ -417,9 +417,9 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		 *  bytes of the buffer in "outputsize".  Returns whether
 		 *  decryption was performed or not in "decryptionused".
 		 *  Returns true on success and false on failure. */
-		bool	unwrap(const unsigned char *input,
+		bool	unwrap(const byte_t *input,
 					size_t inputsize,
-					unsigned char **output,
+					byte_t **output,
 					size_t *outputsize,
 					bool *decryptionused);
 
@@ -429,18 +429,18 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		 *  the code, returns a pointer the buffer in "mic", and
 		 *  returns the number of bytes of the buffer in "micsize".
 		 *  Returns true on success and false on failure. */
-		bool	getMic(const unsigned char *message,
+		bool	getMic(const byte_t *message,
 					size_t messagesize,
-					unsigned char **mic,
+					byte_t **mic,
 					size_t *micsize);
 
 		/** Performs a mechanism integrity code for "message" of
 		 *  "messagesize" bytes and compares it to the data in "mic"
 		 *  of "micsize" bytes.  Returns true if they match and false
 		 *  otherwise. */
-		bool	verifyMic(const unsigned char *message,
+		bool	verifyMic(const byte_t *message,
 					size_t messagesize,
-					const unsigned char *mic,
+					const byte_t *mic,
 					size_t micsize);
 
 

@@ -4,7 +4,7 @@
 int main(int argc, const char **argv) {
 
 	// initialize buffer
-	unsigned char	buffer[]={0,2,0,2,0,2,0};
+	byte_t	buffer[]={0,2,0,2,0,2,0};
 
 	stdoutput.write("buffer : ");
 	stdoutput.safePrint(buffer,sizeof(buffer));
@@ -12,9 +12,9 @@ int main(int argc, const char **argv) {
 
 
 	// find first and last 0
-	unsigned char	*firstzero=(unsigned char *)
+	byte_t	*firstzero=(byte_t *)
 			bytestring::findFirst(buffer,0,sizeof(buffer));
-	unsigned char	*lastzero=(unsigned char *)
+	byte_t	*lastzero=(byte_t *)
 			bytestring::findLast(buffer,0,sizeof(buffer));
 
 	stdoutput.write("first 0 : ");
@@ -27,12 +27,12 @@ int main(int argc, const char **argv) {
 
 
 	// find first and last 0,2,0 patterns
-	unsigned char	pattern[]={0,2,0};
+	byte_t	pattern[]={0,2,0};
 
-	unsigned char	*firstzerotwozero=(unsigned char *)
+	byte_t	*firstzerotwozero=(byte_t *)
 			bytestring::findFirst(buffer,sizeof(buffer),
 						pattern,sizeof(pattern));
-	unsigned char	*lastzerotwozero=(unsigned char *)
+	byte_t	*lastzerotwozero=(byte_t *)
 			bytestring::findLast(buffer,sizeof(buffer),
 						pattern,sizeof(pattern));
 

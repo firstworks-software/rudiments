@@ -16,7 +16,7 @@ int main(int argc, const char **argv) {
 	char	c;
 	f.read(&c);
 
-	unsigned char	uc;
+	byte_t	uc;
 	f.read(&uc);
 
 

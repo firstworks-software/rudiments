@@ -9,11 +9,11 @@
 		off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		char	*getContents();
-		ssize_t	getContents(unsigned char *buffer,size_t buffersize);
+		ssize_t	getContents(byte_t *buffer,size_t buffersize);
 
 		static	char	*getContents(const char *name);
 		static	ssize_t	getContents(const char *name,
-						unsigned char *buffer,
+						byte_t *buffer,
 						size_t buffersize);
 
 		void	enableOpenTimings();

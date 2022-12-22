@@ -3,7 +3,7 @@
 
 int main(int argc, const char **argv) {
 
-	unsigned char	buffer[9];
+	byte_t	buffer[9];
 
 
 	// zero the buffer
@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 
 
 	// copy some data into the buffer
-	unsigned char	data[]={0,1,2,3,4,5,6,7,8};
+	byte_t	data[]={0,1,2,3,4,5,6,7,8};
 	bytestring::copy(buffer,data,sizeof(data));
 
 	stdoutput.write("after copying 0-8:\n  ");
@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
 
 
 	// copy a string into the buffer
-	unsigned char	str[]="hello";
+	byte_t	str[]="hello";
 	bytestring::copyUntil(buffer,str,'\0',sizeof(str));
 
 	stdoutput.write("after copying \"hello\":\n  ");

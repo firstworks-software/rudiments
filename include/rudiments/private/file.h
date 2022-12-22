@@ -11,7 +11,7 @@
 
 		static	bool	stat(const char *filename, void *st);
 
-		ssize_t	getContents(unsigned char **buffer,
+		ssize_t	getContents(byte_t **buffer,
 						size_t *buffersize,
 						bool terminate);
 

@@ -4,7 +4,7 @@
 int main(int argc, const char **argv) {
 
 	// print information about all ascii characters
-	for (unsigned char uc=0; uc<128; uc++) {
+	for (byte_t uc=0; uc<128; uc++) {
 
 		char	c=(char)uc;
 		

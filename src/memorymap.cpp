@@ -181,22 +181,19 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 bool memorymap::sync(off64_t offset, size_t size,
 			bool immediate, bool invalidate) {
 	#ifdef RUDIMENTS_HAVE_MSYNC
-		unsigned char	*ptr=
-			(static_cast<unsigned char *>(pvt->_data))+offset;
+		byte_t	*ptr=((byte_t *)pvt->_data)+offset;
 		int32_t	result;
 		error::clearError();
 		do {
-			result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),size,
+			result=msync((MSYNC_ADDRCAST)ptr,size,
 					((immediate)?MS_SYNC:MS_ASYNC)|
 						((invalidate)?MS_INVALIDATE:0));
 		} while (result==-1 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
-		unsigned char	*ptr=
-			(static_cast<unsigned char *>(pvt->_data))+offset;
-		return (FlushViewOfFile(
-			reinterpret_cast<void *>(ptr),size)==TRUE);
+		byte_t	*ptr=((byte_t *)pvt->_data)+offset;
+		return (FlushViewOfFile((void *)ptr,size)==TRUE);
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return true;

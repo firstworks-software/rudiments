@@ -21,8 +21,8 @@ uint32_t	socketwritebuffer=65536;
 size_t		readbuffer=65536;
 size_t		writebuffer=65536;
 
-void populateBytes(unsigned char *bytes, uint32_t bytecount) {
-	unsigned char	c=0;
+void populateBytes(byte_t *bytes, uint32_t bytecount) {
+	byte_t	c=0;
 	for (uint32_t i=0; i<bytecount; i++) {
 		bytes[i]=c;
 		c++;
@@ -67,7 +67,7 @@ void listen(bool nonblocking) {
 	pool.addReadFileDescriptor(&unixsock);
 
 	// read/write buffer
-	unsigned char	bytes[65536];
+	byte_t	bytes[65536];
 
 	// loop, waiting for connections
 	for (;;) {
@@ -249,7 +249,7 @@ void session(socketclient *clnt) {
 
 	// read/write buffer
 	uint32_t	bytecount=65536;
-	unsigned char	bytes[65536];
+	byte_t		bytes[65536];
 	populateBytes(bytes,sizeof(bytes));
 
 	// send loop count

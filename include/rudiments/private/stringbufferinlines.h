@@ -14,7 +14,7 @@ stringbuffer::stringbuffer(size_t initialsize) : bytebuffer(initialsize) {
 
 inline
 stringbuffer::stringbuffer(char *initialcontents, size_t initialsize) :
-		bytebuffer((unsigned char *)initialcontents,initialsize) {
+		bytebuffer((byte_t *)initialcontents,initialsize) {
 }
 
 inline
@@ -75,17 +75,17 @@ bool stringbuffer::clear(size_t initialsize) {
 
 inline
 bool stringbuffer::clear(char *initialcontents, size_t initialsize) {
-	return bytebuffer::clear((unsigned char *)initialcontents,initialsize);
+	return bytebuffer::clear((byte_t *)initialcontents,initialsize);
 }
 
 inline
-stringbuffer *stringbuffer::append(const unsigned char *string) {
+stringbuffer *stringbuffer::append(const byte_t *string) {
 	return (stringbuffer *)bytebuffer::append(string,
 				charstring::length((const char *)string));
 }
 
 inline
-stringbuffer *stringbuffer::append(const unsigned char *string, size_t size) {
+stringbuffer *stringbuffer::append(const byte_t *string, size_t size) {
 	return (stringbuffer *)bytebuffer::append(string,size);
 }
 
@@ -139,7 +139,7 @@ stringbuffer *stringbuffer::append(int64_t number, uint16_t zeropadding) {
 }
 
 inline
-stringbuffer *stringbuffer::append(unsigned char character) {
+stringbuffer *stringbuffer::append(byte_t character) {
 	return (stringbuffer *)bytebuffer::append(character);
 }
 
@@ -209,13 +209,13 @@ stringbuffer *stringbuffer::append(double number, uint16_t precision,
 }
 
 inline
-ssize_t stringbuffer::write(const unsigned char *string) {
+ssize_t stringbuffer::write(const byte_t *string) {
 	return bytebuffer::write(string,
 				charstring::length((const char *)string));
 }
 
 inline
-ssize_t stringbuffer::write(const unsigned char *string, size_t size) {
+ssize_t stringbuffer::write(const byte_t *string, size_t size) {
 	return bytebuffer::write(string,size);
 }
 
@@ -250,7 +250,7 @@ ssize_t stringbuffer::write(int64_t number) {
 }
 
 inline
-ssize_t stringbuffer::write(unsigned char character) {
+ssize_t stringbuffer::write(byte_t character) {
 	return bytebuffer::write(character);
 }
 

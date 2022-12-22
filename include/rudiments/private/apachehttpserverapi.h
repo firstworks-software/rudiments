@@ -1,7 +1,7 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-		ssize_t	read(unsigned char *buffer, size_t size);
+		ssize_t	read(byte_t *buffer, size_t size);
 		ssize_t	read(char *buffer, size_t length);
 		ssize_t	read(char *character);
 		ssize_t	read(wchar_t *buffer, size_t length);
@@ -11,7 +11,7 @@
 		ssize_t	read(int16_t *number);
 		ssize_t	read(int32_t *number);
 		ssize_t	read(int64_t *number);
-		ssize_t	read(unsigned char *character);
+		ssize_t	read(byte_t *character);
 		ssize_t	read(uint16_t *number);
 		ssize_t	read(uint32_t *number);
 		ssize_t	read(uint64_t *number);
@@ -32,7 +32,7 @@
 						const char *value);
 		httpserverapi	*header(const char *string);
 
-		ssize_t	write(const unsigned char *string, size_t size);
+		ssize_t	write(const byte_t *string, size_t size);
 		ssize_t	write(const char *string);
 		ssize_t	write(const char *string, size_t size);
 		ssize_t	write(char ch);
@@ -45,7 +45,7 @@
 		ssize_t	write(int16_t number);
 		ssize_t	write(int32_t number);
 		ssize_t	write(int64_t number);
-		ssize_t	write(unsigned char ch);
+		ssize_t	write(byte_t ch);
 		ssize_t	write(uint16_t number);
 		ssize_t	write(uint32_t number);
 		ssize_t	write(uint64_t number);

@@ -22,7 +22,7 @@ class md5private {
 			MD5_CONTEXT	_context;
 			MD5		_md5;
 		#endif
-		unsigned char	_hash[16];
+		byte_t		_hash[16];
 		hasherror_t	_err;
 };
 
@@ -35,7 +35,7 @@ md5::~md5() {
 	delete pvt;
 }
 
-bool md5::append(const unsigned char *data, uint32_t size) {
+bool md5::append(const byte_t *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
@@ -53,13 +53,13 @@ bool md5::append(const unsigned char *data, uint32_t size) {
 	#endif
 }
 
-const unsigned char *md5::getHash() {
+const byte_t *md5::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
 			if (!MD5_Final(pvt->_hash,&pvt->_context)) {
 				setError(ERR_GET_REASON(ERR_get_error()));
-				return (const unsigned char *)"";
+				return (const byte_t *)"";
 			}
 		#else
 			MD5_Final(pvt->_hash,&pvt->_context);

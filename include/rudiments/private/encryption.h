@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
-		void		setRandomBuffer(unsigned char *buffer,
+		void		setRandomBuffer(byte_t *buffer,
 							size_t buffersize);
 		bytebuffer	*getIn();
 		bytebuffer	*getOut();

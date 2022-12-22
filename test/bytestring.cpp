@@ -12,17 +12,17 @@ int main(int argc, const char **argv) {
 
 	// duplicate
 	stdoutput.printf("duplicate...\n");
-	unsigned char	*dup=(unsigned char *)bytestring::duplicate(
-						(const void *)"1234567890",10);
+	byte_t	*dup=(byte_t *)bytestring::duplicate(
+					(const void *)"1234567890",10);
 	test("duplicate(), compare()",
 			!bytestring::compare(dup,"1234567890",10));
 	delete[] dup;
-	dup=(unsigned char *)bytestring::duplicate(
+	dup=(byte_t *)bytestring::duplicate(
 					(const void *)"2345678901",10);
 	test("duplicate(), compare()",
 			!bytestring::compare(dup,"2345678901",10));
 	delete[] dup;
-	dup=(unsigned char *)bytestring::duplicate(
+	dup=(byte_t *)bytestring::duplicate(
 					(const void *)"3456789012",10);
 	test("duplicate(), compare()",
 			!bytestring::compare(dup,"3456789012",10));
@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
 
 	// copy
 	stdoutput.printf("copy...\n");
-	unsigned char	data[10];
+	byte_t	data[10];
 	bytestring::copy(data,"1234567890",10);
 	test("copy(), compare()",!bytestring::compare(data,"1234567890",10));
 	bytestring::copy(data,"2345678901",10);
@@ -105,7 +105,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("zero...\n");
 	bytestring::set(data,'1',10);
 	bytestring::zero(data,5);
-	unsigned char	comp[]={0,0,0,0,0,'1','1','1','1','1'};
+	byte_t	comp[]={0,0,0,0,0,'1','1','1','1','1'};
 	test("set(), compare()",!bytestring::compare(data,comp,10));
 	stdoutput.printf("\n");
 

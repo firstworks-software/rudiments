@@ -3,8 +3,8 @@
 
 int main(int argc, const char **argv) {
 
-	unsigned char	buffer1[8];
-	unsigned char	buffer2[8];
+	byte_t	buffer1[8];
+	byte_t	buffer2[8];
 
 
 	// zero the buffers

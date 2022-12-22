@@ -267,7 +267,7 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("ucs2character:\n");
 
-	for (unsigned char c=0; c<128; c++) {
+	for (byte_t c=0; c<128; c++) {
 
 		stdoutput.printf("\t0x%02x \"%c\":\n",c,c);
 		test("\tisAlphanumeric",

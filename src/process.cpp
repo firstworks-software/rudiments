@@ -753,14 +753,14 @@ bool process::sendSignal(pid_t processid, int32_t signum) {
 		// helpful site:
 		// https://defuse.ca/online-x86-assembler.htm
 
-		const unsigned char	*updatedmachinecode=NULL;
-		size_t			machinecodesize=0;
+		const byte_t	*updatedmachinecode=NULL;
+		size_t		machinecodesize=0;
 
 		// FIXME: use better method of detecting x86 vs. x64
 		#ifdef _USE_32BIT_TIME_T
 
 			// for x86:
-			const unsigned char	machinecode32[]={
+			const byte_t	machinecode32[]={
 				// load second parameter (0)
 				// (we'll overwrite this in a minute)
 				0x68,			// push (word)
@@ -785,8 +785,8 @@ bool process::sendSignal(pid_t processid, int32_t signum) {
 
 			// copy the code into a buffer and
 			// replace the second parameter and call address
-			unsigned char		*updatedmachinecode32=
-				(unsigned char *)bytestring::duplicate(
+			byte_t	*updatedmachinecode32=
+				(byte_t *)bytestring::duplicate(
 							machinecode32,
 							machinecode32size);
 
@@ -803,7 +803,7 @@ bool process::sendSignal(pid_t processid, int32_t signum) {
 		#else
 
 			// for x64:
-			const unsigned char	machinecode64[]={
+			const byte_t	machinecode64[]={
 				// allocate shadow space of 32 bytes on the
 				// stack and align it to 16 bytes
 				0x48,0x83,0xEC,		// sub rsp
@@ -837,8 +837,8 @@ bool process::sendSignal(pid_t processid, int32_t signum) {
 
 			// copy the code into a buffer and
 			// replace the second parameter and call address
-			unsigned char		*updatedmachinecode64=
-				(unsigned char *)bytestring::duplicate(
+			byte_t	*updatedmachinecode64=
+				(byte_t *)bytestring::duplicate(
 							machinecode64,
 							machinecode64size);
 
@@ -1293,7 +1293,7 @@ bool process::getRetryFailedFork() {
 
 void process::backtrace(output *out, uint32_t maxframes) {
 	#if defined(RUDIMENTS_HAVE_BACKTRACE)
-		unsigned char	**btarray=new unsigned char *[maxframes];
+		byte_t	**btarray=new byte_t *[maxframes];
 		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
 		char	**btstrings=backtrace_symbols((void **)btarray,btsize);
 		for (size_t i=0; i<btsize; i++) {

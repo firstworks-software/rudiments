@@ -46,7 +46,7 @@ uint32_t des::getIvSize() {
 	return 2;
 }
 
-const unsigned char *des::getEncryptedData() {
+const byte_t *des::getEncryptedData() {
 
 	#if defined(RUDIMENTS_HAVE_CRYPT_R) || defined(RUDIMENTS_HAVE_CRYPT)
 
@@ -69,9 +69,9 @@ const unsigned char *des::getEncryptedData() {
 		salt[2]='\0';
 
 		// get the input buffer as a string
-		const unsigned char	*in=getIn()->getBuffer();
-		size_t			insize=getIn()->getSize();
-		char	*password=new char[insize+1];
+		const byte_t	*in=getIn()->getBuffer();
+		size_t		insize=getIn()->getSize();
+		char		*password=new char[insize+1];
 		bytestring::copy(password,in,insize);
 		password[insize]='\0';
 
@@ -136,7 +136,7 @@ uint64_t des::getEncryptedDataSize() {
 	
 }
 
-const unsigned char *des::getDecryptedData() {
+const byte_t *des::getDecryptedData() {
 	return NULL;
 }
 

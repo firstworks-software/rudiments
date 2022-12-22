@@ -51,7 +51,7 @@ void *copy8(void *dest, const void *src, size_t size) {
 
 int main() {
 
-	unsigned char	bytes[BUFFERSIZE];
+	byte_t	bytes[BUFFERSIZE];
 
 	datetime	start;
 	datetime	end;

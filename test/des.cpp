@@ -52,9 +52,9 @@ int main(int argc, const char **argv) {
 
 			uint16_t	j=0;
 			for (const char * const *str=unencrypted; *str; str++) {
-				c.append((const unsigned char *)*str,
+				c.append((const byte_t *)*str,
 						charstring::length(*str));
-				c.setIv((const unsigned char *)*salt,
+				c.setIv((const byte_t *)*salt,
 							c.getIvSize());
 				const char	*enc=
 					(const char *)c.getEncryptedData();

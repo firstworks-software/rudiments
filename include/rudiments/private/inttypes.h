@@ -92,6 +92,9 @@ typedef char16_t	ucs2_t;
 typedef char32_t	ucs4_t;
 typedef char8_t		utf8_t;
 typedef char16_t	utf16_t;
+#ifndef RUDIMENTS_HAVE_BYTE_T
+	typedef uint8_t	byte_t;
+#endif
 
 // define bool and true/false
 #ifndef RUDIMENTS_HAVE_BOOL

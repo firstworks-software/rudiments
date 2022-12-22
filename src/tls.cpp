@@ -1952,7 +1952,7 @@ class tlscertificateprivate {
 		char		*_subject;
 		char		*_commonname;
 		char		*_pkalg;
-		unsigned char	*_pk;
+		byte_t		*_pk;
 		uint64_t	_pklen;
 		uint64_t	_pkbits;
 		// FIXME: issuer unique id
@@ -2035,7 +2035,7 @@ const char *tlscertificate::getPublicKeyAlgorithm() {
 	return pvt->_pkalg;
 }
 
-const unsigned char *tlscertificate::getPublicKey() {
+const byte_t *tlscertificate::getPublicKey() {
 	return pvt->_pk;
 }
 
@@ -2183,7 +2183,7 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// get the public key
 		pvt->_pklen=EVP_PKEY_size(pubkey);
-		pvt->_pk=(unsigned char *)bytestring::duplicate(
+		pvt->_pk=(byte_t *)bytestring::duplicate(
 					#ifdef RUDIMENTS_HAS_EVP_PKEY_GET0
 						EVP_PKEY_get0(pubkey)
 					#else
@@ -2216,7 +2216,7 @@ void tlscertificate::setCertificate(void *cert) {
 					dnsia5=cur->d.ia5;
 				#endif
 				#ifdef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA
-					const unsigned char	*dnsname=
+					const byte_t	*dnsname=
 						ASN1_STRING_get0_data(dnsia5);
 				#else
 					char *dnsname=(char *)
@@ -2317,7 +2317,7 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// get the public key
 		pvt->_pklen=c->SubjectPublicKeyInfo.PublicKey.cbData;
-		pvt->_pk=(unsigned char *)bytestring::duplicate(
+		pvt->_pk=(byte_t *)bytestring::duplicate(
 				c->SubjectPublicKeyInfo.PublicKey.pbData,
 				pvt->_pklen);
 		pvt->_pkbits=(pvt->_pklen*8)-
@@ -2349,14 +2349,14 @@ void tlscertificate::setCertificate(void *cert) {
 
 				CERT_ALT_NAME_INFO	*ani=
 					(CERT_ALT_NAME_INFO *)
-						new unsigned char[anisize];
+						new byte_t[anisize];
 				if (CryptDecodeObject(
 					X509_ASN_ENCODING,
 					ext->pszObjId,
 					ext->Value.pbData,
 					ext->Value.cbData,
 					0,ani,&anisize)==FALSE) {
-					delete[] (unsigned char *)ani;
+					delete[] (byte_t *)ani;
 					continue;
 				}
 					
@@ -2371,7 +2371,7 @@ void tlscertificate::setCertificate(void *cert) {
 					}
 				}
 
-				delete[] (unsigned char *)ani;
+				delete[] (byte_t *)ani;
 			}
 		}
 	#else

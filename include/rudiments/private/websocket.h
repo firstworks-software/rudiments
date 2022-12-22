@@ -7,10 +7,9 @@
 
 		bool	acceptInternal();
 		ssize_t	readInternal(void *buf, ssize_t size);
-		ssize_t	write(const void *buf, ssize_t size,
-						unsigned char opcode);
+		ssize_t	write(const void *buf, ssize_t size, byte_t opcode);
 		ssize_t	writeInternal(const void *buf, ssize_t size,
-						unsigned char opcode);
+							byte_t opcode);
 		ssize_t	copyOut(void *buf, ssize_t size);
 		bool	pong();
 		bool	validatePong();

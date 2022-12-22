@@ -192,10 +192,10 @@ wchar_t wcharacter::duplicate(char c) {
 wchar_t wcharacter::duplicate(char c, wchar_t replacement) {
 	wchar_t		wc;
 	iconvert	i;
-	i.setFromBuffer((unsigned char *)&c);
+	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(char));
 	i.setToEncoding("WCHAR_T");
-	i.setToBuffer((unsigned char *)&wc);
+	i.setToBuffer((byte_t *)&wc);
 	i.setToBufferSize(sizeof(wchar_t));
 	return (i.convert())?wc:replacement;
 }
@@ -213,10 +213,10 @@ wchar_t wcharacter::duplicate(ucs2_t c, wchar_t replacement) {
 		wchar_t		wc;
 		iconvert	i;
 		i.setFromEncoding("UCS-2");
-		i.setFromBuffer((unsigned char *)&c);
+		i.setFromBuffer((byte_t *)&c);
 		i.setFromBufferSize(sizeof(ucs2_t));
 		i.setToEncoding("WCHAR_T");
-		i.setToBuffer((unsigned char *)&wc);
+		i.setToBuffer((byte_t *)&wc);
 		i.setToBufferSize(sizeof(wchar_t));
 		return (i.convert())?wc:replacement;
 	#endif

@@ -264,27 +264,27 @@ class filedescriptorprivate {
 		off64_t		_writeblockoffset;
 		ssize_t		_writeblocksize;
 		ssize_t 	(filedescriptor::*_readPtr)(
-						unsigned char *,ssize_t,
+						byte_t *,ssize_t,
 						int32_t,int32_t);
 		ssize_t 	(filedescriptor::*_writePtr)(
-						const unsigned char *,ssize_t,
+						const byte_t *,ssize_t,
 						int32_t,int32_t);
 
 		memorymap	*_writebuffermap;
-		unsigned char	*_writebufferunaligned;
-		unsigned char	*_writebuffer;
-		unsigned char	*_writebufferhead;
-		unsigned char	*_writebuffertail;
-		unsigned char	*_writebufferend;
+		byte_t		*_writebufferunaligned;
+		byte_t		*_writebuffer;
+		byte_t		*_writebufferhead;
+		byte_t		*_writebuffertail;
+		byte_t		*_writebufferend;
 		ssize_t		_writebufferreadavail;
 		ssize_t		_writebufferwriteavail;
 		bool		_writebufferdirty;
 		bool		_writebuffermmapenabled;
 
-		unsigned char	*_readbuffer;
-		unsigned char	*_readbufferhead;
-		unsigned char	*_readbuffertail;
-		unsigned char	*_readbufferend;
+		byte_t		*_readbuffer;
+		byte_t		*_readbufferhead;
+		byte_t		*_readbuffertail;
+		byte_t		*_readbufferend;
 };
 
 filedescriptor::filedescriptor() : input(), output() {
@@ -342,7 +342,7 @@ filedescriptor::~filedescriptor() {
 	}
 
 	// clean up read buffer
-	unsigned char	*tmpbuffer=pvt->_readbuffer;
+	byte_t	*tmpbuffer=pvt->_readbuffer;
 	pvt->_readbuffer=NULL;
 	delete[] tmpbuffer;
 
@@ -608,11 +608,11 @@ void filedescriptor::allocateWriteBuffer(ssize_t size) {
 	// inside of it can be aligned to an address that is a multiple of
 	// "size".
 	ssize_t	extra=size-1;
-	pvt->_writebufferunaligned=new unsigned char[size+extra];
+	pvt->_writebufferunaligned=new byte_t[size+extra];
 
 	// Set pvt->_writebuffer to the first address that is a multiple of
 	// "size" within pvt->_writebufferunaligned.
-	pvt->_writebuffer=(unsigned char *)
+	pvt->_writebuffer=(byte_t *)
 		((((ssize_t)pvt->_writebufferunaligned)+extra)&~extra);
 }
 
@@ -649,7 +649,7 @@ bool filedescriptor::setStreamReadBufferSize(ssize_t size) {
 
 	// clean up and create a new buffer
 	delete[] pvt->_readbuffer;
-	pvt->_readbuffer=new unsigned char[size];
+	pvt->_readbuffer=new byte_t[size];
 
 	// update the read buffer pointers
 	pvt->_readbufferhead=pvt->_readbuffer;
@@ -1183,7 +1183,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			}
 
 			// update the write buffer pointers and counts
-			pvt->_writebuffer=(unsigned char *)
+			pvt->_writebuffer=(byte_t *)
 					pvt->_writebuffermap->getData();
 			pvt->_writebufferhead=pvt->_writebuffer+
 					(pvt->_offset-pvt->_writeblockoffset);
@@ -1302,49 +1302,49 @@ ssize_t filedescriptor::write(uint16_t number) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
-	return highLevelWrite((const unsigned char *)&number,sizeof(uint16_t));
+	return highLevelWrite((const byte_t *)&number,sizeof(uint16_t));
 }
 
 ssize_t filedescriptor::write(uint32_t number) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
-	return highLevelWrite((const unsigned char *)&number,sizeof(uint32_t));
+	return highLevelWrite((const byte_t *)&number,sizeof(uint32_t));
 }
 
 ssize_t filedescriptor::write(uint64_t number) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
-	return highLevelWrite((const unsigned char *)&number,sizeof(uint64_t));
+	return highLevelWrite((const byte_t *)&number,sizeof(uint64_t));
 }
 
 ssize_t filedescriptor::write(int16_t number) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint16_t)number);
 	}
-	return highLevelWrite((const unsigned char *)&number,sizeof(int16_t));
+	return highLevelWrite((const byte_t *)&number,sizeof(int16_t));
 }
 
 ssize_t filedescriptor::write(int32_t number) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint32_t)number);
 	}
-	return highLevelWrite((const unsigned char *)&number,sizeof(int32_t));
+	return highLevelWrite((const byte_t *)&number,sizeof(int32_t));
 }
 
 ssize_t filedescriptor::write(int64_t number) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint64_t)number);
 	}
-	return highLevelWrite((const unsigned char *)&number,sizeof(int64_t));
+	return highLevelWrite((const byte_t *)&number,sizeof(int64_t));
 }
 
 ssize_t filedescriptor::write(uint16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
-	return highLevelWrite((const unsigned char *)&number,
+	return highLevelWrite((const byte_t *)&number,
 					sizeof(uint16_t),sec,usec);
 }
 
@@ -1352,7 +1352,7 @@ ssize_t filedescriptor::write(uint32_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
-	return highLevelWrite((const unsigned char *)&number,
+	return highLevelWrite((const byte_t *)&number,
 					sizeof(uint32_t),sec,usec);
 }
 
@@ -1360,7 +1360,7 @@ ssize_t filedescriptor::write(uint64_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
-	return highLevelWrite((const unsigned char *)&number,
+	return highLevelWrite((const byte_t *)&number,
 					sizeof(uint64_t),sec,usec);
 }
 
@@ -1368,7 +1368,7 @@ ssize_t filedescriptor::write(int16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint16_t)number);
 	}
-	return highLevelWrite((const unsigned char *)&number,
+	return highLevelWrite((const byte_t *)&number,
 					sizeof(int16_t),sec,usec);
 }
 
@@ -1376,7 +1376,7 @@ ssize_t filedescriptor::write(int32_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint32_t)number);
 	}
-	return highLevelWrite((const unsigned char *)&number,
+	return highLevelWrite((const byte_t *)&number,
 					sizeof(int32_t),sec,usec);
 }
 
@@ -1384,12 +1384,12 @@ ssize_t filedescriptor::write(int64_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet((uint64_t)number);
 	}
-	return highLevelWrite((const unsigned char *)&number,
+	return highLevelWrite((const byte_t *)&number,
 					sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(uint16_t *buffer) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,sizeof(uint16_t));
+	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(uint16_t));
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
 	}
@@ -1397,7 +1397,7 @@ ssize_t filedescriptor::read(uint16_t *buffer) {
 }
 
 ssize_t filedescriptor::read(uint32_t *buffer) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,sizeof(uint32_t));
+	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(uint32_t));
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
 	}
@@ -1405,7 +1405,7 @@ ssize_t filedescriptor::read(uint32_t *buffer) {
 }
 
 ssize_t filedescriptor::read(uint64_t *buffer) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,sizeof(uint64_t));
+	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(uint64_t));
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
 	}
@@ -1413,7 +1413,7 @@ ssize_t filedescriptor::read(uint64_t *buffer) {
 }
 
 ssize_t filedescriptor::read(int16_t *buffer) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,sizeof(int16_t));
+	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(int16_t));
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost((uint16_t)*buffer);
 	}
@@ -1421,7 +1421,7 @@ ssize_t filedescriptor::read(int16_t *buffer) {
 }
 
 ssize_t filedescriptor::read(int32_t *buffer) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,sizeof(int32_t));
+	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(int32_t));
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost((uint32_t)*buffer);
 	}
@@ -1429,7 +1429,7 @@ ssize_t filedescriptor::read(int32_t *buffer) {
 }
 
 ssize_t filedescriptor::read(int64_t *buffer) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,sizeof(int64_t));
+	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(int64_t));
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost((uint64_t)*buffer);
 	}
@@ -1438,7 +1438,7 @@ ssize_t filedescriptor::read(int64_t *buffer) {
 
 ssize_t filedescriptor::read(uint16_t *buffer,
 				int32_t sec, int32_t usec) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,
+	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(uint16_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -1448,7 +1448,7 @@ ssize_t filedescriptor::read(uint16_t *buffer,
 
 ssize_t filedescriptor::read(uint32_t *buffer,
 				int32_t sec, int32_t usec) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,
+	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(uint32_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -1458,7 +1458,7 @@ ssize_t filedescriptor::read(uint32_t *buffer,
 
 ssize_t filedescriptor::read(uint64_t *buffer,
 				int32_t sec, int32_t usec) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,
+	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(uint64_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -1468,7 +1468,7 @@ ssize_t filedescriptor::read(uint64_t *buffer,
 
 ssize_t filedescriptor::read(int16_t *buffer,
 				int32_t sec, int32_t usec) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,
+	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(int16_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost((uint16_t)*buffer);
@@ -1478,7 +1478,7 @@ ssize_t filedescriptor::read(int16_t *buffer,
 
 ssize_t filedescriptor::read(int32_t *buffer,
 				int32_t sec, int32_t usec) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,
+	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(int32_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost((uint32_t)*buffer);
@@ -1488,7 +1488,7 @@ ssize_t filedescriptor::read(int32_t *buffer,
 
 ssize_t filedescriptor::read(int64_t *buffer,
 				int32_t sec, int32_t usec) {
-	ssize_t	retval=highLevelRead((unsigned char *)buffer,
+	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(int64_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost((uint64_t)*buffer);
@@ -1647,16 +1647,16 @@ void filedescriptor::dontAllowShortWrites() {
 	pvt->_allowshortwrites=false;
 }
 
-ssize_t filedescriptor::highLevelRead(unsigned char *buf, ssize_t count) {
+ssize_t filedescriptor::highLevelRead(byte_t *buf, ssize_t count) {
 	return (this->*pvt->_readPtr)(buf,count,-1,-1);
 }
 
-ssize_t filedescriptor::highLevelRead(unsigned char *buf, ssize_t count,
+ssize_t filedescriptor::highLevelRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
 	return (this->*pvt->_readPtr)(buf,count,sec,usec);
 }
 
-ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
+ssize_t filedescriptor::streamBufferedRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
 
 	// degenerate case, bail immediately
@@ -1808,7 +1808,7 @@ ssize_t filedescriptor::streamBufferedRead(unsigned char *buf, ssize_t count,
 	}
 }
 
-ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
+ssize_t filedescriptor::storageBufferedRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
 
 	// degenerate cases, bail immediately
@@ -1891,7 +1891,7 @@ ssize_t filedescriptor::storageBufferedRead(unsigned char *buf, ssize_t count,
 	}
 }
 
-ssize_t filedescriptor::unBufferedRead(unsigned char *buf, ssize_t count,
+ssize_t filedescriptor::unBufferedRead(byte_t *buf, ssize_t count,
 						int32_t sec, int32_t usec) {
 
 	// degenerate case, bail immediately
@@ -1956,7 +1956,7 @@ ssize_t filedescriptor::unBufferedRead(unsigned char *buf, ssize_t count,
 		#ifdef DEBUG_READ
 		debugPrintf(",");
 		for (int32_t i=0; i<actualread; i++) {
-			debugSafePrint(((unsigned char *)ptr)[i]);
+			debugSafePrint(((byte_t *)ptr)[i]);
 		}
 		debugPrintf(",%ld bytes",(long)actualread);
 		if (actualread==-1) {
@@ -2038,18 +2038,18 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 }
 
 ssize_t filedescriptor::highLevelWrite(
-			const unsigned char *buf, ssize_t count) {
+			const byte_t *buf, ssize_t count) {
 	return (this->*pvt->_writePtr)(buf,count,-1,-1);
 }
 
 ssize_t filedescriptor::highLevelWrite(
-			const unsigned char *buf, ssize_t count,
+			const byte_t *buf, ssize_t count,
 			int32_t sec, int32_t usec) {
 	return (this->*pvt->_writePtr)(buf,count,sec,usec);
 }
 
 ssize_t filedescriptor::streamBufferedWrite(
-				const unsigned char *buf, ssize_t count,
+				const byte_t *buf, ssize_t count,
 				int32_t sec, int32_t usec) {
 
 	// degenerate case, bail immediately
@@ -2159,7 +2159,7 @@ ssize_t filedescriptor::streamBufferedWrite(
 }
 
 ssize_t filedescriptor::storageBufferedWrite(
-				const unsigned char *buf, ssize_t count,
+				const byte_t *buf, ssize_t count,
 				int32_t sec, int32_t usec) {
 
 	// degenerate cases, bail immediately
@@ -2339,7 +2339,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 }
 
 ssize_t filedescriptor::unBufferedWrite(
-				const unsigned char *buf, ssize_t count,
+				const byte_t *buf, ssize_t count,
 				int32_t sec, int32_t usec) {
 
 	// degenerate case, bail immediately
@@ -2406,7 +2406,7 @@ ssize_t filedescriptor::unBufferedWrite(
 		#ifdef DEBUG_WRITE
 		debugPrintf(",");
 		for (int32_t i=0; i<actualwrite; i++) {
-			debugSafePrint(((const unsigned char *)(ptr))[i]);
+			debugSafePrint(((const byte_t *)(ptr))[i]);
 		}
 		debugPrintf(",%ld bytes",(long)actualwrite);
 		if (actualwrite==-1) {
@@ -2769,8 +2769,7 @@ bool filedescriptor::passFileDescriptor(int32_t fd) {
 
 		// On OS X 10.7, CMSG_LEN ultimately makes a functon call, so
 		// this array must be dynamically allocated.
-		unsigned char	*control=new unsigned char[
-						CMSG_LEN(sizeof(int32_t))];
+		byte_t	*control=new byte_t[CMSG_LEN(sizeof(int32_t))];
 		messageheader.msg_control=(caddr_t)control;
 		messageheader.msg_controllen=CMSG_LEN(sizeof(int32_t));
 
@@ -2904,8 +2903,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 
 		// On OS X 10.7, CMSG_LEN ultimately makes a functon call, so
 		// this array must be dynamically allocated.
-		unsigned char	*control=new unsigned char[
-						CMSG_LEN(sizeof(int32_t))];
+		byte_t	*control=new byte_t[CMSG_LEN(sizeof(int32_t))];
 		messageheader.msg_control=(caddr_t)control;
 		messageheader.msg_controllen=CMSG_LEN(sizeof(int32_t));
 	#else
@@ -3699,20 +3697,20 @@ ssize_t filedescriptor::printfDelegate(const ucs2_t *format, va_list *argp) {
 }
 
 void filedescriptor::safePrint(char c) {
-	safePrint((unsigned char)c);
+	safePrint((byte_t)c);
 }
 
 void filedescriptor::safePrint(const char *string, int32_t length) {
-	safePrint((const unsigned char *)string,length);
+	safePrint((const byte_t *)string,length);
 }
 
 void filedescriptor::safePrint(const char *string) {
-	safePrint((const unsigned char *)string);
+	safePrint((const byte_t *)string);
 }
 
 static char hex[17]="0123456789ABCDEF";
 
-void filedescriptor::safePrint(unsigned char c) {
+void filedescriptor::safePrint(byte_t c) {
 	if (c=='\r') {
 		printf("\\r");
 	} else if (c=='\n') {
@@ -3722,57 +3720,57 @@ void filedescriptor::safePrint(unsigned char c) {
 	} else if (c>=' ' && c<='~') {
 		printf("%c",c);
 	} else {
-		unsigned int	uintc=(unsigned char)c;
+		unsigned int	uintc=(byte_t)c;
 		printf("(0x%c%c|%d)",hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
 	}
 }
 
-void filedescriptor::safePrint(const unsigned char *string, int32_t length) {
+void filedescriptor::safePrint(const byte_t *string, int32_t length) {
 	for (int32_t i=0; i<length; i++) {
 		safePrint(*string);
 		string++;
 	}
 }
 
-void filedescriptor::safePrint(const unsigned char *string) {
+void filedescriptor::safePrint(const byte_t *string) {
 	safePrint(string,charstring::length((const char *)string));
 }
 
-void filedescriptor::printBits(unsigned char value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+void filedescriptor::printBits(byte_t value) {
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(uint16_t value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(uint32_t value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(uint64_t value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(char value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(int16_t value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(int32_t value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(int64_t value) {
-	printBits((const unsigned char *)&value,sizeof(value));
+	printBits((const byte_t *)&value,sizeof(value));
 }
 
-void filedescriptor::printBits(const unsigned char *bits, uint64_t size) {
+void filedescriptor::printBits(const byte_t *bits, uint64_t size) {
 	for (uint64_t i=0; i<size; i++) {
-		unsigned char byte=bits[i];
+		byte_t byte=bits[i];
 		for (int8_t j=7; j>=0; j--) {
 			printf("%d",(byte>>j)&0x01);
 		}

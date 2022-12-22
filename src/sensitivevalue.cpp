@@ -27,7 +27,7 @@ class sensitivevalueprivate {
 		const char	*_hexext;
 		uint64_t	_hexextlen;
 		bool		_chomptextfile;
-		unsigned char	*_value;
+		byte_t		*_value;
 		uint64_t	_valuesize;
 };
 
@@ -305,7 +305,7 @@ void sensitivevalue::parse(const char *in, uint64_t inlen) {
 		charstring::hexDecode(in,inlen,
 				&(pvt->_value),&(pvt->_valuesize));
 	} else {
-		pvt->_value=(unsigned char *)charstring::duplicate(in,inlen);
+		pvt->_value=(byte_t *)charstring::duplicate(in,inlen);
 		pvt->_valuesize=inlen;
 	}
 }
@@ -321,7 +321,7 @@ bool sensitivevalue::getValueFromFile(const char *filename,
 							&(pvt->_valuesize));
 		} else {
 			pvt->_valuesize=f.getSize();
-			pvt->_value=(unsigned char *)f.getContents();
+			pvt->_value=(byte_t *)f.getContents();
 		}
 		if (chomp) {
 			if (pvt->_valuesize>=2) {
@@ -358,12 +358,12 @@ bool sensitivevalue::getValueFromFile(const char *filename,
 	return false;
 }
  
-const unsigned char *sensitivevalue::getValue() {
+const byte_t *sensitivevalue::getValue() {
 	return pvt->_value;
 }
 
-unsigned char *sensitivevalue::detachValue() {
-	unsigned char	*retval=pvt->_value;
+byte_t *sensitivevalue::detachValue() {
+	byte_t	*retval=pvt->_value;
 	pvt->_value=NULL;
 	pvt->_valuesize=0;
 	return retval;

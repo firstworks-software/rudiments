@@ -18,12 +18,12 @@ class RUDIMENTS_DLLSPEC sha1 : public hash {
 		/** Appends "size" bytes of "data" to the data to be
 		 *  hashed.  Returns true on success or false if an error
 		 *  occurred. */
-		bool	append(const unsigned char *data, uint32_t size);
+		bool	append(const byte_t *data, uint32_t size);
 
 		/** Returns the current hash on success or NULL if an error
 		 *  occurred.  Note that the current hash will be an empty
 		 *  string if no data has been appended yet. */
-		const unsigned char	*getHash();
+		const byte_t	*getHash();
 
 		/** Returns the number of bytes in the hash. */
 		uint64_t	getHashSize();

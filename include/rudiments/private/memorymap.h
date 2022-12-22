@@ -5,8 +5,7 @@
 		memorymap(memorymap &m) {};
 		memorymap	&operator=(memorymap &m) { return *this; };
 
-		bool	mAdvise(unsigned char *start,
-					size_t length, int32_t advice);
+		bool	mAdvise(byte_t *start, size_t length, int32_t advice);
 
 		static	bool	mLockAll(int32_t flags);
 

@@ -187,7 +187,7 @@ int main(int argc, const char **argv) {
 	sv.clear();
 	sv.parse(svstring);
 	uint64_t	valsize=sv.getValueSize();
-	unsigned char	*val=sv.detachValue();
+	byte_t		*val=sv.detachValue();
 	test("detachValue() (size)",valsize==charstring::length(svstring));
 	test("detachValue()",!bytestring::compare(val,svstring,valsize));
 	delete[] val;

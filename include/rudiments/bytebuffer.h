@@ -25,7 +25,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program. */
-		bytebuffer(unsigned char *initialcontents, size_t initialsize);
+		bytebuffer(byte_t *initialcontents, size_t initialsize);
 
 		/** Creates an instance of the bytebuffer class
 		 *  that is a copy of "v". */
@@ -56,7 +56,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  accommodate the new data.
 		 *
 		 *  Returns the number of bytes written. */
-		ssize_t	write(const unsigned char *data, size_t size);
+		ssize_t	write(const byte_t *data, size_t size);
 
 		/** Writes the first "length" characters of "string" to the
 		 *  bytebuffer at the current position and increments the
@@ -163,7 +163,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns the number of bytes written. */
-		ssize_t	write(unsigned char character);
+		ssize_t	write(byte_t character);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -211,7 +211,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		bytebuffer	*append(const unsigned char *data, size_t size);
+		bytebuffer	*append(const byte_t *data, size_t size);
 
 		/** Appends the first "length" characters of "string" to the
 		 *  bytebuffer, growing the internal buffer as necessary
@@ -305,7 +305,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		bytebuffer	*append(unsigned char character);
+		bytebuffer	*append(byte_t character);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
@@ -415,7 +415,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  current position into "data".  Also increments the
 		 *  current position by "size" bytes.  Returns the number of
 		 *  bytes read. */
-		ssize_t	read(unsigned char *data, size_t size);
+		ssize_t	read(byte_t *data, size_t size);
 
 		/** Empties the bytebuffer.
 		 *  
@@ -434,11 +434,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  Also resets the specified "initialsize".
 		 *
 		 *  Always returns true. */
-		bool	clear(unsigned char *initialcontents,
-						size_t initialsize);
+		bool	clear(byte_t *initialcontents, size_t initialsize);
 
 		/** Returns the current data stored in the bytebuffer. */
-		const unsigned char	*getBuffer();
+		const byte_t	*getBuffer();
 
 		/** Returns the number of bytes currently stored in the
 		 *  bytebuffer. */
@@ -460,7 +459,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 * 
 		 *  The calling program must deallocate the
 		 *  buffer returned from this method. */
-		unsigned char	*detachBuffer();
+		byte_t	*detachBuffer();
 
 	#include <rudiments/private/bytebuffer.h>
 };

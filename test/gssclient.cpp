@@ -384,7 +384,7 @@ int main(int argc, const char **argv) {
 			}
 
 			// read message
-			unsigned char	*msg=new unsigned char[msgsize];
+			byte_t	*msg=new byte_t[msgsize];
 			sizeread=fd.read(msg,msgsize);
 			if (sizeread<=0) {
 				if (sizeread==0) {

@@ -114,7 +114,7 @@ httpresponse *httpresponse::header(const char *header) {
 	return this;
 }
 
-ssize_t httpresponse::write(const unsigned char *string, size_t size) {
+ssize_t httpresponse::write(const byte_t *string, size_t size) {
 	return pvt->_sapi->write(string,size);
 }
 
@@ -166,7 +166,7 @@ ssize_t httpresponse::write(int64_t character) {
 	return pvt->_sapi->write(character);
 }
 
-ssize_t httpresponse::write(unsigned char character) {
+ssize_t httpresponse::write(byte_t character) {
 	return pvt->_sapi->write(character);
 }
 

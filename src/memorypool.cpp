@@ -30,14 +30,14 @@ class memorypoolbuffer {
 			~memorypoolbuffer();
 	private:
 
-		unsigned char	*_buffer;
-		size_t		_size;
-		size_t		_remaining;
-		size_t		_position;
+		byte_t	*_buffer;
+		size_t	_size;
+		size_t	_remaining;
+		size_t	_position;
 };
 
 memorypoolbuffer::memorypoolbuffer(size_t size) {
-	_buffer=new unsigned char[size];
+	_buffer=new byte_t[size];
 	_size=size;
 	_remaining=size;
 	_position=0;
@@ -127,7 +127,7 @@ size_t memorypool::getResizeInterval() {
 	return pvt->_resizeinterval;
 }
 
-unsigned char *memorypool::allocate(size_t length) { 
+byte_t *memorypool::allocate(size_t length) { 
 
 	#ifdef DEBUG_ALLOCATE
 	stdoutput.printf("allocate {\n");
@@ -195,7 +195,7 @@ unsigned char *memorypool::allocate(size_t length) {
 	#endif
 
 	// get the buffer to return
-	unsigned char	*buffer=membuf->_buffer+membuf->_position;
+	byte_t	*buffer=membuf->_buffer+membuf->_position;
 
 	// adjust position and bytes remaining in
 	// the node that the buffer came from
@@ -343,7 +343,7 @@ bool memorypool::clear(bool resetinitialsize,
 		#endif
 
 		delete[] firstmembuf->_buffer;
-		firstmembuf->_buffer=new unsigned char[pvt->_initialsize];
+		firstmembuf->_buffer=new byte_t[pvt->_initialsize];
 		firstmembuf->_size=pvt->_initialsize;
 
 		// reset counters
@@ -382,7 +382,7 @@ bool memorypool::clear(bool resetinitialsize,
 			// resize the first buffer to the average
 			// total allocation since the last resize
 			delete[] firstmembuf->_buffer;
-			firstmembuf->_buffer=new unsigned char[pvt->_average];
+			firstmembuf->_buffer=new byte_t[pvt->_average];
 			firstmembuf->_size=pvt->_average;
 
 			#ifdef DEBUG_RESIZE

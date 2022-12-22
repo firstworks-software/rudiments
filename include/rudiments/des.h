@@ -34,7 +34,7 @@ class RUDIMENTS_DLLSPEC des : public encryption {
 		 *
 		 *  Note that the encrypted data returned will be an empty
 		 *  string if no data has been appended yet. */
-		const unsigned char	*getEncryptedData();
+		const byte_t	*getEncryptedData();
 
 		/** Returns the number of bytes of encrypted data, not
 		 *  including the NULL-terminator.

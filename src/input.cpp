@@ -106,8 +106,7 @@ ssize_t input::read(char **buffer, const char *terminator,
 	return retval;
 }
 
-ssize_t input::read(unsigned char *string, size_t size,
-						int32_t sec, int32_t usec) {
+ssize_t input::read(byte_t *string, size_t size, int32_t sec, int32_t usec) {
 	return read(string,size);
 }
 
@@ -147,7 +146,7 @@ ssize_t input::read(int64_t *number, int32_t sec, int32_t usec) {
 	return read(number);
 }
 
-ssize_t input::read(unsigned char *character, int32_t sec, int32_t usec) {
+ssize_t input::read(byte_t *character, int32_t sec, int32_t usec) {
 	return read(character);
 }
 

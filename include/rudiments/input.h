@@ -11,7 +11,7 @@ class RUDIMENTS_DLLSPEC input : virtual public object {
 		input();
 		virtual	~input();
 
-		virtual	ssize_t	read(unsigned char *buffer, size_t size)=0;
+		virtual	ssize_t	read(byte_t *buffer, size_t size)=0;
 		virtual	ssize_t	read(char *buffer, size_t length)=0;
 		virtual	ssize_t	read(char *character)=0;
 		virtual	ssize_t	read(wchar_t *buffer, size_t length)=0;
@@ -21,7 +21,7 @@ class RUDIMENTS_DLLSPEC input : virtual public object {
 		virtual	ssize_t	read(int16_t *number)=0;
 		virtual	ssize_t	read(int32_t *number)=0;
 		virtual	ssize_t	read(int64_t *number)=0;
-		virtual	ssize_t	read(unsigned char *character)=0;
+		virtual	ssize_t	read(byte_t *character)=0;
 		virtual	ssize_t	read(uint16_t *number)=0;
 		virtual	ssize_t	read(uint32_t *number)=0;
 		virtual	ssize_t	read(uint64_t *number)=0;
@@ -52,7 +52,7 @@ class RUDIMENTS_DLLSPEC input : virtual public object {
 		ssize_t	read(char **buffer,
 				const char *terminator, size_t maxbytes);
 
-		virtual	ssize_t	read(unsigned char *buffer, size_t size,
+		virtual	ssize_t	read(byte_t *buffer, size_t size,
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	read(char *buffer, size_t length,
 						int32_t sec, int32_t usec);
@@ -72,7 +72,7 @@ class RUDIMENTS_DLLSPEC input : virtual public object {
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	read(int64_t *number,
 						int32_t sec, int32_t usec);
-		virtual	ssize_t	read(unsigned char *character,
+		virtual	ssize_t	read(byte_t *character,
 						int32_t sec, int32_t usec);
 		virtual	ssize_t	read(uint16_t *number,
 						int32_t sec, int32_t usec);

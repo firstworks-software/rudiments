@@ -6,7 +6,7 @@
 		ssize_t	printfDelegate(const ucs2_t *format, va_list *argp);
 
 	protected:
-		void		construct(unsigned char *initialcontents,
+		void		construct(byte_t *initialcontents,
 							size_t initialsize);
 		void		clone(bytebuffer &v);
 		void		extend(size_t requiredsize);

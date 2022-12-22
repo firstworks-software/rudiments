@@ -23,11 +23,11 @@
 class bytebufferprivate {
 	friend class bytebuffer;
 	private:
-		unsigned char *	_buffer;
-		size_t		_size;
-		size_t		_actualsize;
-		size_t		_pos;
-		size_t		_initialsize;
+		byte_t*	_buffer;
+		size_t	_size;
+		size_t	_actualsize;
+		size_t	_pos;
+		size_t	_initialsize;
 };
 
 bytebuffer::bytebuffer() : object() {
@@ -38,12 +38,12 @@ bytebuffer::bytebuffer(size_t initialsize) : object() {
 	construct(NULL,initialsize);
 }
 
-bytebuffer::bytebuffer(unsigned char *initialcontents, size_t initialsize) :
+bytebuffer::bytebuffer(byte_t *initialcontents, size_t initialsize) :
 								object() {
 	construct(initialcontents,initialsize);
 }
 
-void bytebuffer::construct(unsigned char *initialcontents, size_t initialsize) {
+void bytebuffer::construct(byte_t *initialcontents, size_t initialsize) {
 	if (!initialsize) {
 		initialsize=DEFAULT_INITIALSIZE;
 	}
@@ -53,7 +53,7 @@ void bytebuffer::construct(unsigned char *initialcontents, size_t initialsize) {
 		pvt->_size=initialsize;
 		pvt->_pos=initialsize;
 	} else {
-		pvt->_buffer=new unsigned char[initialsize];
+		pvt->_buffer=new byte_t[initialsize];
 		pvt->_size=0;
 		pvt->_pos=0;
 	}
@@ -81,7 +81,7 @@ bytebuffer::~bytebuffer() {
 
 void bytebuffer::clone(bytebuffer &v) {
 	pvt=new bytebufferprivate;
-	pvt->_buffer=(unsigned char *)bytestring::duplicate(
+	pvt->_buffer=(byte_t *)bytestring::duplicate(
 					v.pvt->_buffer,v.pvt->_size);
 	pvt->_size=v.pvt->_size;
 	pvt->_actualsize=v.pvt->_actualsize;
@@ -89,7 +89,7 @@ void bytebuffer::clone(bytebuffer &v) {
 	pvt->_initialsize=v.pvt->_initialsize;
 }
 
-ssize_t bytebuffer::read(unsigned char *data, size_t size) {
+ssize_t bytebuffer::read(byte_t *data, size_t size) {
 
 	if (size>pvt->_size-pvt->_pos) {
 		size=pvt->_size-pvt->_pos;
@@ -106,7 +106,7 @@ ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 	return size;
 }
 
-ssize_t bytebuffer::write(const unsigned char *data, size_t size) {
+ssize_t bytebuffer::write(const byte_t *data, size_t size) {
 	size_t	finalpos=pvt->_pos+size;
 	if (finalpos>pvt->_actualsize) {
 		extend(finalpos);
@@ -127,99 +127,84 @@ void bytebuffer::extend(size_t requiredsize) {
 
 	// FIXME: we need a growth cap
 
-	unsigned char	*newbuffer=new unsigned char[pvt->_actualsize];
+	byte_t	*newbuffer=new byte_t[pvt->_actualsize];
 	memcpy(newbuffer,pvt->_buffer,pvt->_size);
 	delete[] pvt->_buffer;
 	pvt->_buffer=newbuffer;
 }
 
 ssize_t bytebuffer::write(const char *string, size_t length) {
-	return write(reinterpret_cast<const unsigned char *>(string),length);
+	return write((const byte_t *)string,length);
 }
 
 ssize_t bytebuffer::write(const char *string) {
-	return write(reinterpret_cast<const unsigned char *>(string),
-					charstring::length(string));
+	return write((const byte_t *)string,charstring::length(string));
 }
 
 ssize_t bytebuffer::write(const wchar_t *string, size_t length) {
-	return write(reinterpret_cast<const unsigned char *>(string),
-						length*sizeof(wchar_t));
+	return write((const byte_t *)string,length*sizeof(wchar_t));
 }
 
 ssize_t bytebuffer::write(const wchar_t *string) {
-	return write(reinterpret_cast<const unsigned char *>(string),
+	return write((const byte_t *)string,
 				wcharstring::length(string)*sizeof(wchar_t));
 }
 
 ssize_t bytebuffer::write(const ucs2_t *string, size_t length) {
-	return write(reinterpret_cast<const unsigned char *>(string),
-						length*sizeof(ucs2_t));
+	return write((const byte_t *)string,length*sizeof(ucs2_t));
 }
 
 ssize_t bytebuffer::write(const ucs2_t *string) {
-	return write(reinterpret_cast<const unsigned char *>(string),
+	return write((const byte_t *)string,
 			ucs2charstring::length(string)*sizeof(ucs2_t));
 }
 
 ssize_t bytebuffer::write(char character) {
-	return write(reinterpret_cast<const unsigned char *>(&character),
-								sizeof(char));
+	return write((const byte_t *)&character,sizeof(char));
 }
 
 ssize_t bytebuffer::write(wchar_t character) {
-	return write(reinterpret_cast<const unsigned char *>(&character),
-							sizeof(wchar_t));
+	return write((const byte_t *)&character,sizeof(wchar_t));
 }
 
 ssize_t bytebuffer::write(ucs2_t character) {
-	return write(reinterpret_cast<const unsigned char *>(&character),
-							sizeof(ucs2_t));
+	return write((const byte_t *)&character,sizeof(ucs2_t));
 }
 
 ssize_t bytebuffer::write(int16_t number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(int16_t));
+	return write((const byte_t *)&number,sizeof(int16_t));
 }
 
 ssize_t bytebuffer::write(int32_t number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(int32_t));
+	return write((const byte_t *)&number,sizeof(int32_t));
 }
 
 ssize_t bytebuffer::write(int64_t number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(int64_t));
+	return write((const byte_t *)&number,sizeof(int64_t));
 }
 
-ssize_t bytebuffer::write(unsigned char character) {
-	return write(reinterpret_cast<const unsigned char *>(&character),
-							sizeof(unsigned char));
+ssize_t bytebuffer::write(byte_t character) {
+	return write((const byte_t *)&character,sizeof(byte_t));
 }
 
 ssize_t bytebuffer::write(uint16_t number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(uint16_t));
+	return write((const byte_t *)&number,sizeof(uint16_t));
 }
 
 ssize_t bytebuffer::write(uint32_t number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(uint32_t));
+	return write((const byte_t *)&number,sizeof(uint32_t));
 }
 
 ssize_t bytebuffer::write(uint64_t number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(uint64_t));
+	return write((const byte_t *)&number,sizeof(uint64_t));
 }
 
 ssize_t bytebuffer::write(float number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(float));
+	return write((const byte_t *)&number,sizeof(float));
 }
 
 ssize_t bytebuffer::write(double number) {
-	return write(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(double));
+	return write((const byte_t *)&number,sizeof(double));
 }
 
 ssize_t bytebuffer::printfDelegate(const char *format, va_list *argp) {
@@ -308,7 +293,7 @@ bool bytebuffer::clear() {
 
 bool bytebuffer::clear(size_t initialsize) {
 	delete[] pvt->_buffer;
-	pvt->_buffer=new unsigned char[initialsize];
+	pvt->_buffer=new byte_t[initialsize];
 	pvt->_size=0;
 	pvt->_actualsize=initialsize;
 	pvt->_pos=0;
@@ -316,7 +301,7 @@ bool bytebuffer::clear(size_t initialsize) {
 	return true;
 }
 
-bool bytebuffer::clear(unsigned char *initialcontents, size_t initialsize) {
+bool bytebuffer::clear(byte_t *initialcontents, size_t initialsize) {
 	delete[] pvt->_buffer;
 	pvt->_buffer=initialcontents;
 	pvt->_size=initialsize;
@@ -326,13 +311,13 @@ bool bytebuffer::clear(unsigned char *initialcontents, size_t initialsize) {
 	return true;
 }
 
-const unsigned char *bytebuffer::getBuffer() {
+const byte_t *bytebuffer::getBuffer() {
 	return pvt->_buffer;
 }
 
-unsigned char *bytebuffer::detachBuffer() {
-	unsigned char *buffer=pvt->_buffer;
-	pvt->_buffer=new unsigned char[pvt->_initialsize];
+byte_t *bytebuffer::detachBuffer() {
+	byte_t *buffer=pvt->_buffer;
+	pvt->_buffer=new byte_t[pvt->_initialsize];
 	pvt->_size=0;
 	pvt->_actualsize=pvt->_initialsize;
 	pvt->_pos=0;
@@ -359,7 +344,7 @@ void bytebuffer::setPosition(size_t pos) {
 	pvt->_pos=pos;
 }
 
-bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
+bytebuffer *bytebuffer::append(const byte_t *data, size_t size) {
 	if (pvt->_size+size>pvt->_actualsize) {
 		extend(pvt->_size+size);
 	}
@@ -380,88 +365,73 @@ bytebuffer *bytebuffer::append(const char *data, size_t length) {
 }
 
 bytebuffer *bytebuffer::append(const char *string) {
-	return append(reinterpret_cast<const unsigned char *>(string),
-						charstring::length(string));
+	return append((const byte_t *)string,charstring::length(string));
 }
 
 bytebuffer *bytebuffer::append(const wchar_t *string, size_t length) {
-	return append(reinterpret_cast<const unsigned char *>(string),
-						length*sizeof(wchar_t));
+	return append((const byte_t *)string,length*sizeof(wchar_t));
 }
 
 bytebuffer *bytebuffer::append(const wchar_t *string) {
-	return append(reinterpret_cast<const unsigned char *>(string),
+	return append((const byte_t *)string,
 				wcharstring::length(string)*sizeof(wchar_t));
 }
 
 bytebuffer *bytebuffer::append(const ucs2_t *string, size_t length) {
-	return append(reinterpret_cast<const unsigned char *>(string),
-						length*sizeof(ucs2_t));
+	return append((const byte_t *)string,length*sizeof(ucs2_t));
 }
 
 bytebuffer *bytebuffer::append(const ucs2_t *string) {
-	return append(reinterpret_cast<const unsigned char *>(string),
+	return append((const byte_t *)string,
 			ucs2charstring::length(string)*sizeof(ucs2_t));
 }
 
 bytebuffer *bytebuffer::append(char character) {
-	return append(reinterpret_cast<const unsigned char *>(&character),
-								sizeof(char));
+	return append((const byte_t *)&character,sizeof(char));
 }
 
 bytebuffer *bytebuffer::append(wchar_t character) {
-	return append(reinterpret_cast<const unsigned char *>(&character),
-							sizeof(wchar_t));
+	return append((const byte_t *)&character,sizeof(wchar_t));
 }
 
 bytebuffer *bytebuffer::append(ucs2_t character) {
-	return append(reinterpret_cast<const unsigned char *>(&character),
-							sizeof(ucs2_t));
+	return append((const byte_t *)&character,sizeof(ucs2_t));
 }
 
 bytebuffer *bytebuffer::append(int16_t number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(int16_t));
+	return append((const byte_t *)&number,sizeof(int16_t));
 }
 
 bytebuffer *bytebuffer::append(int32_t number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(int32_t));
+	return append((const byte_t *)&number,sizeof(int32_t));
 }
 
 bytebuffer *bytebuffer::append(int64_t number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(int64_t));
+	return append((const byte_t *)&number,sizeof(int64_t));
 }
 
-bytebuffer *bytebuffer::append(unsigned char character) {
-	return append(reinterpret_cast<const unsigned char *>(&character),
-							sizeof(unsigned char));
+bytebuffer *bytebuffer::append(byte_t character) {
+	return append((const byte_t *)&character,sizeof(byte_t));
 }
 
 bytebuffer *bytebuffer::append(uint16_t number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(uint16_t));
+	return append((const byte_t *)&number,sizeof(uint16_t));
 }
 
 bytebuffer *bytebuffer::append(uint32_t number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(uint32_t));
+	return append((const byte_t *)&number,sizeof(uint32_t));
 }
 
 bytebuffer *bytebuffer::append(uint64_t number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(uint64_t));
+	return append((const byte_t *)&number,sizeof(uint64_t));
 }
 
 bytebuffer *bytebuffer::append(float number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(float));
+	return append((const byte_t *)&number,sizeof(float));
 }
 
 bytebuffer *bytebuffer::append(double number) {
-	return append(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(double));
+	return append((const byte_t *)&number,sizeof(double));
 }
 
 bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {

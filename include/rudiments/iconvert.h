@@ -28,17 +28,17 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 
 		const char	*getToEncoding();
 
-		void	setFromBuffer(const unsigned char *buffer);
+		void	setFromBuffer(const byte_t *buffer);
 
-		const unsigned char	*getFromBuffer();
+		const byte_t	*getFromBuffer();
 
 		void	setFromBufferSize(size_t buffersize);
 
 		size_t	getFromBufferSize();
 
-		void	setToBuffer(unsigned char *buffer);
+		void	setToBuffer(byte_t *buffer);
 
-		unsigned char	*getToBuffer();
+		byte_t	*getToBuffer();
 
 		void	setToBufferSize(size_t buffersize);
 
@@ -46,11 +46,11 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 
 		bool	convert();
 
-		const unsigned char	*getFromBufferPosition();
+		const byte_t	*getFromBufferPosition();
 
 		size_t	getFromBufferRemaining();
 
-		const unsigned char	*getToBufferPosition();
+		const byte_t	*getToBufferPosition();
 
 		size_t	getToBufferRemaining();
 

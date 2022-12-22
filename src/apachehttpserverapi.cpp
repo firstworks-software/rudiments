@@ -116,9 +116,9 @@ ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 	#endif
 
 	// do an actual buffered read...
-	unsigned char	*data=(unsigned char *)buf;
-	ssize_t		bytesread=0;
-	ssize_t		bytesunread=count;
+	byte_t	*data=(byte_t *)buf;
+	ssize_t	bytesread=0;
+	ssize_t	bytesunread=count;
 
 	for (;;) {
 
@@ -374,7 +374,7 @@ ssize_t apachehttpserverapi::bufferedRead(char *ch) {
 	return RESULT_ERROR;
 }
 
-ssize_t apachehttpserverapi::read(unsigned char *buffer, size_t size) {
+ssize_t apachehttpserverapi::read(byte_t *buffer, size_t size) {
 	return bufferedRead(buffer,size);
 }
 
@@ -420,8 +420,8 @@ ssize_t apachehttpserverapi::read(int64_t *number) {
 	return retval;
 }
 
-ssize_t apachehttpserverapi::read(unsigned char *character) {
-	return bufferedRead(character,sizeof(unsigned char));
+ssize_t apachehttpserverapi::read(byte_t *character) {
+	return bufferedRead(character,sizeof(byte_t));
 }
 
 ssize_t apachehttpserverapi::read(uint16_t *number) {
@@ -596,7 +596,7 @@ httpserverapi *apachehttpserverapi::header(const char *string) {
 	return this;
 }
 
-ssize_t	apachehttpserverapi::write(const unsigned char *string, size_t size) {
+ssize_t	apachehttpserverapi::write(const byte_t *string, size_t size) {
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	return (r)?ap_rwrite(string,size,r):0;
@@ -684,7 +684,7 @@ ssize_t	apachehttpserverapi::write(int64_t number) {
 	return (r)?ap_rprintf(r,"%lld",(long long)number):0;
 }
 
-ssize_t	apachehttpserverapi::write(unsigned char ch) {
+ssize_t	apachehttpserverapi::write(byte_t ch) {
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	return (r)?ap_rputc((char)ch,r):0;

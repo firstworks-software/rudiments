@@ -33,7 +33,7 @@ sha1::~sha1() {
 	delete pvt;
 }
 
-bool sha1::append(const unsigned char *data, uint32_t size) {
+bool sha1::append(const byte_t *data, uint32_t size) {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
@@ -52,7 +52,7 @@ bool sha1::append(const unsigned char *data, uint32_t size) {
 	#endif
 }
 
-const unsigned char *sha1::getHash() {
+const byte_t *sha1::getHash() {
 	pvt->_err=HASH_ERROR_SUCCESS;
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)

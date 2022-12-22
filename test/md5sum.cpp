@@ -18,7 +18,7 @@ int main(int argc, const char **argv) {
 		return 1;
 	}
 
-	unsigned char	*contents=(unsigned char *)f.getContents();
+	byte_t	*contents=(byte_t *)f.getContents();
 
 	md5	m;
 	m.append(contents,f.getSize());
