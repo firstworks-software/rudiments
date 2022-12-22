@@ -83,7 +83,7 @@
 #endif
 #if !defined(RUDIMENTS_HAVE_CHAR16_T) && \
 	defined(__cplusplus) && (__cplusplus<201103L)
-	typedef	uint16_t	char16_t
+	typedef	uint16_t	char16_t;
 #endif
 #ifndef RUDIMENTS_HAVE_CHAR32_T
 	typedef	uint32_t	char32_t;
