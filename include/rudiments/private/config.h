@@ -59,7 +59,7 @@
 #define PACKAGE_VERSION ""
 
 /* Platform requires default TLS ciper of PROFILE=SYSTEM */
-#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1
+/* #undef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM */
 
 /* Enable runtime notification of methods that set ENOSYS */
 /* #undef RUDIMENTS_ENOSYS_NOTIFY */
@@ -68,7 +68,7 @@
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE void *
 
 /* SSL has ASN1_STRING_get0_data */
-#define RUDIMENTS_HAS_ASN1_STRING_GET0_DATA 1
+/* #undef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA */
 
 /* libcurl has CURLOPT_SSH_AUTH_TYPES */
 #define RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES 1
@@ -149,10 +149,10 @@
 #define RUDIMENTS_HAS_SSLV23_METHOD 1
 
 /* SSL has SSLv2_method */
-/* #undef RUDIMENTS_HAS_SSLV2_METHOD */
+#define RUDIMENTS_HAS_SSLV2_METHOD 1
 
 /* SSL has SSLv3_method */
-/* #undef RUDIMENTS_HAS_SSLV3_METHOD */
+#define RUDIMENTS_HAS_SSLV3_METHOD 1
 
 /* SSL has dNSName */
 #define RUDIMENTS_HAS_SSL_DNSNAME 1
@@ -167,16 +167,16 @@
 #define RUDIMENTS_HAS_TIMEZONE 1
 
 /* SSL has TLSv1_1_method */
-/* #undef RUDIMENTS_HAS_TLSV1_1_METHOD */
+#define RUDIMENTS_HAS_TLSV1_1_METHOD 1
 
 /* SSL has TLSv1_2_method */
-/* #undef RUDIMENTS_HAS_TLSV1_2_METHOD */
+#define RUDIMENTS_HAS_TLSV1_2_METHOD 1
 
 /* SSL has TLSv1_method */
-/* #undef RUDIMENTS_HAS_TLSV1_METHOD */
+#define RUDIMENTS_HAS_TLSV1_METHOD 1
 
 /* SSL has TLS_method */
-#define RUDIMENTS_HAS_TLS_METHOD 1
+/* #undef RUDIMENTS_HAS_TLS_METHOD */
 
 /* Some systems define tm_gmtoff in their struct tm */
 #define RUDIMENTS_HAS_TM_GMTOFF 1
@@ -698,7 +698,7 @@
 #define RUDIMENTS_HAVE_GRP_H 1
 
 /* Some systems have _G_config.h */
-/* #undef RUDIMENTS_HAVE_G_CONFIG_H */
+#define RUDIMENTS_HAVE_G_CONFIG_H 1
 
 /* Some systems have HANDLE_FLAG_INHERIT */
 /* #undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT */

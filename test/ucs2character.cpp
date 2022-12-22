@@ -298,11 +298,11 @@ int main(int argc, const char **argv) {
 		test("\tisAscii",
 			ucs2character::isAscii(c)==isascii[c]);
 		test("\ttoUpperCase",
-			ucs2character::toUpperCase(c)==touppercase[c]);
+			(ucs2_t)ucs2character::toUpperCase(c)==touppercase[c]);
 		test("\ttoLowerCase",
-			ucs2character::toLowerCase(c)==tolowercase[c]);
+			(ucs2_t)ucs2character::toLowerCase(c)==tolowercase[c]);
 		test("\ttoAscii",
-			ucs2character::toAscii(c)==toascii[c]);
+			(ucs2_t)ucs2character::toAscii(c)==toascii[c]);
 		test("\tduplicate",
 			ucs2character::duplicate((char)c)==(ucs2_t)c);
 	}

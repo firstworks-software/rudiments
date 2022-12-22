@@ -2,18 +2,20 @@
 // See the COPYING file for more information
 
 #include <rudiments/ucs2charstring.h>
-#include <rudiments/wcharstring.h>
-#include <rudiments/bytestring.h>
 #include <rudiments/ucs2character.h>
-#include <rudiments/wcharacter.h>
+#include <rudiments/ucs2stringbuffer.h>
+#include <rudiments/bytestring.h>
 #if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
 	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
 	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 	#include <rudiments/process.h>
 	#include <rudiments/file.h>
 #endif
-#include <rudiments/ucs2stringbuffer.h>
 #include <rudiments/error.h>
+
+#ifdef _WIN32
+	#include <rudiments/wcharstring.h>
+#endif
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -1090,7 +1092,7 @@ int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2,
 		str2++;
 		len--;
 	}
-	return (len)?*str1-*str2:0;
+	return (len)?*str1-*str2:(ucs2_t)0;
 }
 
 int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
@@ -1220,7 +1222,7 @@ int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
 			// subtract the next character of str2 from the next
 			// character of str1 and add the result to the running
 			// difference
-			difference+=(*str1)-(*str2);
+			difference+=(int64_t)((*str1)-(*str2));
 
 			// move on
 			str1++;
@@ -1510,7 +1512,7 @@ const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
 	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
-		if (ucs2character::toLowerCase(*ptr)==needle) {
+		if ((ucs2_t)ucs2character::toLowerCase(*ptr)==needle) {
 			return ptr;
 		}
 	}
@@ -2247,7 +2249,7 @@ ucs2_t *ucs2charstring::humanReadable(long double number) {
 ucs2_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
 
 	long double	k=(onethousand)?1000.0:1024.0;
-	ucs2_t		suffixes[]={
+	char		suffixes[]={
 		'\0','K','M','G','T','P','Z','Y','B'
 	};
 	long double	num=(number>=0)?number:(number*-1.0);
@@ -2263,13 +2265,11 @@ ucs2_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
 	
 	char	*buf=NULL;
 	charstring::printf(&buf,"%0.1Lf%c",number/size,suffixes[i]);
-	ucs2_t	*buf2=duplicate(buf);
+	char	*subbed=charstring::replace(buf,".0","");
 	delete[] buf;
-	const ucs2_t	dotzero[]={'.','0',0};
-	const ucs2_t	empty[]={0};
-	ucs2_t	*subbed=replace(buf2,dotzero,empty);
-	delete[] buf2;
-	return subbed;
+	ucs2_t	*converted=duplicate(subbed);
+	delete[] subbed;
+	return converted;
 }
 
 ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
