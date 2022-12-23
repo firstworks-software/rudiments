@@ -198,372 +198,374 @@
 
 // define ucs2_t
 #if 0
-class ucs2_t {
-	public:
-		ucs2_t() {
-		}
-		ucs2_t(const ucs2_t &v) {
-			value=v.value;
-		}
-		ucs2_t(const bool &v) {
-			value=v;
-		}
-		ucs2_t(const long long &v) {
-			value=v;
-		}
-		ucs2_t(const long &v) {
-			value=v;
-		}
-		ucs2_t(const int &v) {
-			value=v;
-		}
-		ucs2_t(const short &v) {
-			value=v;
-		}
-		ucs2_t(const char &v) {
-			value=v;
-		}
-		ucs2_t(const unsigned long long &v) {
-			value=v;
-		}
-		ucs2_t(const unsigned long &v) {
-			value=v;
-		}
-		ucs2_t(const unsigned int &v) {
-			value=v;
-		}
-		ucs2_t(const unsigned short &v) {
-			value=v;
-		}
-		ucs2_t(const unsigned char &v) {
-			value=v;
-		}
-
-		ucs2_t &operator=(const ucs2_t &v) {
-			value=v.value;
-			return *this;
-		}
-		ucs2_t &operator=(const bool &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const long long &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const long &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const int &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const short &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const char &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const unsigned long long &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const unsigned long &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const unsigned int &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const unsigned short &v) {
-			value=v;
-			return *this;
-		}
-		ucs2_t &operator=(const unsigned char &v) {
-			value=v;
-			return *this;
-		}
-
-		operator bool() const {
-			return value;
-		}
-		operator long long() const {
-			return value;
-		}
-		operator long() const {
-			return value;
-		}
-		operator int() const {
-			return value;
-		}
-		operator short() const {
-			return value;
-		}
-		operator char() const {
-			return value;
-		}
-		operator unsigned long long() const {
-			return value;
-		}
-		operator unsigned long() const {
-			return value;
-		}
-		operator unsigned int() const {
-			return value;
-		}
-		operator unsigned short() const {
-			return value;
-		}
-		operator unsigned char() const {
-			return value;
-		}
-
-		int operator!() {
-			return !value;
-		}
-
-		int operator==(const ucs2_t &v) const {
-			return value==v.value;
-		}
-		int operator==(bool b) const {
-			return value==b;
-		}
-		int operator==(long long b) const {
-			return value==b;
-		}
-		int operator==(long b) const {
-			return value==b;
-		}
-		int operator==(int b) const {
-			return value==b;
-		}
-		int operator==(short b) const {
-			return value==b;
-		}
-		int operator==(char b) const {
-			return value==b;
-		}
-		int operator==(unsigned long long b) const {
-			return value==b;
-		}
-		int operator==(unsigned long b) const {
-			return value==b;
-		}
-		int operator==(unsigned int b) const {
-			return value==b;
-		}
-		int operator==(unsigned short b) const {
-			return value==b;
-		}
-		int operator==(unsigned char b) const {
-			return value==b;
-		}
-
-		int operator!=(const ucs2_t &v) const {
-			return value!=v.value;
-		}
-		int operator!=(bool v) const {
-			return value!=v;
-		}
-		int operator!=(long long v) const {
-			return value!=v;
-		}
-		int operator!=(long v) const {
-			return value!=v;
-		}
-		int operator!=(int v) const {
-			return value!=v;
-		}
-		int operator!=(short v) const {
-			return value!=v;
-		}
-		int operator!=(char v) const {
-			return value!=v;
-		}
-		int operator!=(unsigned long long v) const {
-			return value!=v;
-		}
-		int operator!=(unsigned long v) const {
-			return value!=v;
-		}
-		int operator!=(unsigned int v) const {
-			return value!=v;
-		}
-		int operator!=(unsigned short v) const {
-			return value!=v;
-		}
-		int operator!=(unsigned char v) const {
-			return value!=v;
-		}
-
-		int operator>(const ucs2_t &v) const {
-			return value>v.value;
-		}
-		int operator>(bool v) const {
-			return value>v;
-		}
-		int operator>(long long v) const {
-			return value>v;
-		}
-		int operator>(long v) const {
-			return value>v;
-		}
-		int operator>(int v) const {
-			return value>v;
-		}
-		int operator>(short v) const {
-			return value>v;
-		}
-		int operator>(char v) const {
-			return value>v;
-		}
-		int operator>(unsigned long long v) const {
-			return value>v;
-		}
-		int operator>(unsigned long v) const {
-			return value>v;
-		}
-		int operator>(unsigned int v) const {
-			return value>v;
-		}
-		int operator>(unsigned short v) const {
-			return value>v;
-		}
-		int operator>(unsigned char v) const {
-			return value>v;
-		}
-
-		int operator<(const ucs2_t &v) const {
-			return value<v.value;
-		}
-		int operator<(bool v) const {
-			return value<v;
-		}
-		int operator<(long long v) const {
-			return value<v;
-		}
-		int operator<(long v) const {
-			return value<v;
-		}
-		int operator<(int v) const {
-			return value<v;
-		}
-		int operator<(short v) const {
-			return value<v;
-		}
-		int operator<(char v) const {
-			return value<v;
-		}
-		int operator<(unsigned long long v) const {
-			return value<v;
-		}
-		int operator<(unsigned long v) const {
-			return value<v;
-		}
-		int operator<(unsigned int v) const {
-			return value<v;
-		}
-		int operator<(unsigned short v) const {
-			return value<v;
-		}
-		int operator<(unsigned char v) const {
-			return value<v;
-		}
-
-		int operator>=(const ucs2_t &v) const {
-			return value>=v.value;
-		}
-		int operator>=(bool v) const {
-			return value>=v;
-		}
-		int operator>=(long long v) const {
-			return value>=v;
-		}
-		int operator>=(long v) const {
-			return value>=v;
-		}
-		int operator>=(int v) const {
-			return value>=v;
-		}
-		int operator>=(short v) const {
-			return value>=v;
-		}
-		int operator>=(char v) const {
-			return value>=v;
-		}
-		int operator>=(unsigned long long v) const {
-			return value>=v;
-		}
-		int operator>=(unsigned long v) const {
-			return value>=v;
-		}
-		int operator>=(unsigned int v) const {
-			return value>=v;
-		}
-		int operator>=(unsigned short v) const {
-			return value>=v;
-		}
-		int operator>=(unsigned char v) const {
-			return value>=v;
-		}
-
-		int operator<=(const ucs2_t &v) const {
-			return value<=v.value;
-		}
-		int operator<=(bool v) const {
-			return value<=v;
-		}
-		int operator<=(long long v) const {
-			return value<=v;
-		}
-		int operator<=(long v) const {
-			return value<=v;
-		}
-		int operator<=(int v) const {
-			return value<=v;
-		}
-		int operator<=(short v) const {
-			return value<=v;
-		}
-		int operator<=(char v) const {
-			return value<=v;
-		}
-		int operator<=(unsigned long long v) const {
-			return value<=v;
-		}
-		int operator<=(unsigned long v) const {
-			return value<=v;
-		}
-		int operator<=(unsigned int v) const {
-			return value<=v;
-		}
-		int operator<=(unsigned short v) const {
-			return value<=v;
-		}
-		int operator<=(unsigned char v) const {
-			return value<=v;
-		}
-
-		ucs2_t operator-(const ucs2_t &v) const {
-			ucs2_t	u;
-			u.value=value-v.value;
-			return u;
-		}
-
-		ucs2_t operator+(const ucs2_t &v) const {
-			ucs2_t	u;
-			u.value=value+v.value;
-			return u;
-		}
-	private:
-		unsigned short	value;
-};
+#ifdef __cplusplus
+	class ucs2_t {
+		public:
+			ucs2_t() {
+			}
+			ucs2_t(const ucs2_t &v) {
+				value=v.value;
+			}
+			ucs2_t(const bool &v) {
+				value=v;
+			}
+			ucs2_t(const long long &v) {
+				value=v;
+			}
+			ucs2_t(const long &v) {
+				value=v;
+			}
+			ucs2_t(const int &v) {
+				value=v;
+			}
+			ucs2_t(const short &v) {
+				value=v;
+			}
+			ucs2_t(const char &v) {
+				value=v;
+			}
+			ucs2_t(const unsigned long long &v) {
+				value=v;
+			}
+			ucs2_t(const unsigned long &v) {
+				value=v;
+			}
+			ucs2_t(const unsigned int &v) {
+				value=v;
+			}
+			ucs2_t(const unsigned short &v) {
+				value=v;
+			}
+			ucs2_t(const unsigned char &v) {
+				value=v;
+			}
+	
+			ucs2_t &operator=(const ucs2_t &v) {
+				value=v.value;
+				return *this;
+			}
+			ucs2_t &operator=(const bool &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const long long &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const long &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const int &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const short &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const char &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const unsigned long long &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const unsigned long &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const unsigned int &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const unsigned short &v) {
+				value=v;
+				return *this;
+			}
+			ucs2_t &operator=(const unsigned char &v) {
+				value=v;
+				return *this;
+			}
+	
+			operator bool() const {
+				return value;
+			}
+			operator long long() const {
+				return value;
+			}
+			operator long() const {
+				return value;
+			}
+			operator int() const {
+				return value;
+			}
+			operator short() const {
+				return value;
+			}
+			operator char() const {
+				return value;
+			}
+			operator unsigned long long() const {
+				return value;
+			}
+			operator unsigned long() const {
+				return value;
+			}
+			operator unsigned int() const {
+				return value;
+			}
+			operator unsigned short() const {
+				return value;
+			}
+			operator unsigned char() const {
+				return value;
+			}
+	
+			int operator!() {
+				return !value;
+			}
+	
+			int operator==(const ucs2_t &v) const {
+				return value==v.value;
+			}
+			int operator==(bool b) const {
+				return value==b;
+			}
+			int operator==(long long b) const {
+				return value==b;
+			}
+			int operator==(long b) const {
+				return value==b;
+			}
+			int operator==(int b) const {
+				return value==b;
+			}
+			int operator==(short b) const {
+				return value==b;
+			}
+			int operator==(char b) const {
+				return value==b;
+			}
+			int operator==(unsigned long long b) const {
+				return value==b;
+			}
+			int operator==(unsigned long b) const {
+				return value==b;
+			}
+			int operator==(unsigned int b) const {
+				return value==b;
+			}
+			int operator==(unsigned short b) const {
+				return value==b;
+			}
+			int operator==(unsigned char b) const {
+				return value==b;
+			}
+	
+			int operator!=(const ucs2_t &v) const {
+				return value!=v.value;
+			}
+			int operator!=(bool v) const {
+				return value!=v;
+			}
+			int operator!=(long long v) const {
+				return value!=v;
+			}
+			int operator!=(long v) const {
+				return value!=v;
+			}
+			int operator!=(int v) const {
+				return value!=v;
+			}
+			int operator!=(short v) const {
+				return value!=v;
+			}
+			int operator!=(char v) const {
+				return value!=v;
+			}
+			int operator!=(unsigned long long v) const {
+				return value!=v;
+			}
+			int operator!=(unsigned long v) const {
+				return value!=v;
+			}
+			int operator!=(unsigned int v) const {
+				return value!=v;
+			}
+			int operator!=(unsigned short v) const {
+				return value!=v;
+			}
+			int operator!=(unsigned char v) const {
+				return value!=v;
+			}
+	
+			int operator>(const ucs2_t &v) const {
+				return value>v.value;
+			}
+			int operator>(bool v) const {
+				return value>v;
+			}
+			int operator>(long long v) const {
+				return value>v;
+			}
+			int operator>(long v) const {
+				return value>v;
+			}
+			int operator>(int v) const {
+				return value>v;
+			}
+			int operator>(short v) const {
+				return value>v;
+			}
+			int operator>(char v) const {
+				return value>v;
+			}
+			int operator>(unsigned long long v) const {
+				return value>v;
+			}
+			int operator>(unsigned long v) const {
+				return value>v;
+			}
+			int operator>(unsigned int v) const {
+				return value>v;
+			}
+			int operator>(unsigned short v) const {
+				return value>v;
+			}
+			int operator>(unsigned char v) const {
+				return value>v;
+			}
+	
+			int operator<(const ucs2_t &v) const {
+				return value<v.value;
+			}
+			int operator<(bool v) const {
+				return value<v;
+			}
+			int operator<(long long v) const {
+				return value<v;
+			}
+			int operator<(long v) const {
+				return value<v;
+			}
+			int operator<(int v) const {
+				return value<v;
+			}
+			int operator<(short v) const {
+				return value<v;
+			}
+			int operator<(char v) const {
+				return value<v;
+			}
+			int operator<(unsigned long long v) const {
+				return value<v;
+			}
+			int operator<(unsigned long v) const {
+				return value<v;
+			}
+			int operator<(unsigned int v) const {
+				return value<v;
+			}
+			int operator<(unsigned short v) const {
+				return value<v;
+			}
+			int operator<(unsigned char v) const {
+				return value<v;
+			}
+	
+			int operator>=(const ucs2_t &v) const {
+				return value>=v.value;
+			}
+			int operator>=(bool v) const {
+				return value>=v;
+			}
+			int operator>=(long long v) const {
+				return value>=v;
+			}
+			int operator>=(long v) const {
+				return value>=v;
+			}
+			int operator>=(int v) const {
+				return value>=v;
+			}
+			int operator>=(short v) const {
+				return value>=v;
+			}
+			int operator>=(char v) const {
+				return value>=v;
+			}
+			int operator>=(unsigned long long v) const {
+				return value>=v;
+			}
+			int operator>=(unsigned long v) const {
+				return value>=v;
+			}
+			int operator>=(unsigned int v) const {
+				return value>=v;
+			}
+			int operator>=(unsigned short v) const {
+				return value>=v;
+			}
+			int operator>=(unsigned char v) const {
+				return value>=v;
+			}
+	
+			int operator<=(const ucs2_t &v) const {
+				return value<=v.value;
+			}
+			int operator<=(bool v) const {
+				return value<=v;
+			}
+			int operator<=(long long v) const {
+				return value<=v;
+			}
+			int operator<=(long v) const {
+				return value<=v;
+			}
+			int operator<=(int v) const {
+				return value<=v;
+			}
+			int operator<=(short v) const {
+				return value<=v;
+			}
+			int operator<=(char v) const {
+				return value<=v;
+			}
+			int operator<=(unsigned long long v) const {
+				return value<=v;
+			}
+			int operator<=(unsigned long v) const {
+				return value<=v;
+			}
+			int operator<=(unsigned int v) const {
+				return value<=v;
+			}
+			int operator<=(unsigned short v) const {
+				return value<=v;
+			}
+			int operator<=(unsigned char v) const {
+				return value<=v;
+			}
+	
+			ucs2_t operator-(const ucs2_t &v) const {
+				ucs2_t	u;
+				u.value=value-v.value;
+				return u;
+			}
+	
+			ucs2_t operator+(const ucs2_t &v) const {
+				ucs2_t	u;
+				u.value=value+v.value;
+				return u;
+			}
+		private:
+			unsigned short	value;
+	};
+#endif
 #else
-typedef char16_t	ucs2_t;
+typedef _char16_t	ucs2_t;
 #endif
 
 // define ucs4_t, and utf(8|16)_t
