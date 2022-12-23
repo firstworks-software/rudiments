@@ -196,8 +196,8 @@
 	typedef	uint32_t	char32_t;
 #endif
 
-#if 1
 // define ucs2_t
+#if 0
 class ucs2_t {
 	public:
 		ucs2_t() {
@@ -563,8 +563,7 @@ class ucs2_t {
 		unsigned short	value;
 };
 #else
-typedef char16_t	_char16_t;
-typedef _char16_t	ucs2_t;
+typedef char16_t	ucs2_t;
 #endif
 
 // define ucs4_t, and utf(8|16)_t
