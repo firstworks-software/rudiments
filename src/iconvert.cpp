@@ -167,7 +167,12 @@ bool iconvert::convert() {
 
 		// convert a character
 		return iconv(pvt->_i,
-				(char **)&(pvt->_frombufferptr),
+				#ifdef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF
+				(char **)
+				#else
+				(const char **)
+				#endif
+				&(pvt->_frombufferptr),
 				&(pvt->_frombufferremaining),
 				(char **)&(pvt->_tobufferptr),
 				&(pvt->_tobufferremaining))!=(size_t)-1;

@@ -706,6 +706,9 @@
 /* Some systems have iconv.h */
 /* #undef RUDIMENTS_HAVE_ICONV_H */
 
+/* Some systems have iconv with non-const inbuf */
+/* #undef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF */
+
 /* Some systems have inet_addr */
 #define RUDIMENTS_HAVE_INET_ADDR 1
 

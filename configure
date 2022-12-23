@@ -31882,6 +31882,7 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+ICONV_DEFINED=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv" >&5
 $as_echo_n "checking for iconv... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -31898,7 +31899,7 @@ iconv(0,0,0,0,0);
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  ICONV_DEFINED=yes; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 $as_echo "#define RUDIMENTS_HAVE_ICONV 1" >>confdefs.h
 
@@ -31908,6 +31909,36 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+
+if ( test -n "$ICONV_DEFINED" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv with non-const inbuf" >&5
+$as_echo_n "checking for iconv with non-const inbuf... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif
+int
+main ()
+{
+iconv(0,(char **)0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+$as_echo "#define RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF 1" >>confdefs.h
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
 
 echo "******************************"
 

@@ -3243,11 +3243,21 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 long long a; llabs(a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_LLABS,1,Some systems have llabs), AC_MSG_RESULT(no))
 
+ICONV_DEFINED=""
 AC_MSG_CHECKING(for iconv)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
 	#include <iconv.h>
 #endif],
-iconv(0,0,0,0,0);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV,1,Some systems have iconv), AC_MSG_RESULT(no))
+iconv(0,0,0,0,0);,ICONV_DEFINED=yes; AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV,1,Some systems have iconv), AC_MSG_RESULT(no))
+
+if ( test -n "$ICONV_DEFINED" )
+then
+	AC_MSG_CHECKING(for iconv with non-const inbuf)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif],
+iconv(0,(char **)0,0,0,0);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF,1,Some systems have iconv with non-const inbuf), AC_MSG_RESULT(no))
+fi
 
 echo "******************************"
 

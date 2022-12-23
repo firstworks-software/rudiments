@@ -48,6 +48,9 @@
 			bool(const bool &b) {
 				value=b.value;
 			}
+			bool(const long long &b) {
+				value=b;
+			}
 			bool(const long &b) {
 				value=b;
 			}
@@ -58,6 +61,9 @@
 				value=b;
 			}
 			bool(const char &b) {
+				value=b;
+			}
+			bool(const unsigned long long &b) {
 				value=b;
 			}
 			bool(const unsigned long &b) {
@@ -76,6 +82,10 @@
 				value=b.value;
 				return *this;
 			}
+			bool &operator=(const long long &b) {
+				value=b;
+				return *this;
+			}
 			bool &operator=(const long &b) {
 				value=b;
 				return *this;
@@ -89,6 +99,10 @@
 				return *this;
 			}
 			bool &operator=(const char &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const unsigned long long &b) {
 				value=b;
 				return *this;
 			}
@@ -112,8 +126,7 @@
 				return value;
 			}
 			int operator!() {
-				value=!value;
-				return value;
+				return !value;
 			}
 			int operator==(const bool &b) {
 				return value==b.value;
@@ -195,6 +208,9 @@ class ucs2_t {
 		ucs2_t(const bool &v) {
 			value=v;
 		}
+		ucs2_t(const long long &v) {
+			value=v;
+		}
 		ucs2_t(const long &v) {
 			value=v;
 		}
@@ -205,6 +221,9 @@ class ucs2_t {
 			value=v;
 		}
 		ucs2_t(const char &v) {
+			value=v;
+		}
+		ucs2_t(const unsigned long long &v) {
 			value=v;
 		}
 		ucs2_t(const unsigned long &v) {
@@ -228,6 +247,10 @@ class ucs2_t {
 			value=v;
 			return *this;
 		}
+		ucs2_t &operator=(const long long &v) {
+			value=v;
+			return *this;
+		}
 		ucs2_t &operator=(const long &v) {
 			value=v;
 			return *this;
@@ -241,6 +264,10 @@ class ucs2_t {
 			return *this;
 		}
 		ucs2_t &operator=(const char &v) {
+			value=v;
+			return *this;
+		}
+		ucs2_t &operator=(const unsigned long long &v) {
 			value=v;
 			return *this;
 		}
@@ -264,6 +291,9 @@ class ucs2_t {
 		operator bool() const {
 			return value;
 		}
+		operator long long() const {
+			return value;
+		}
 		operator long() const {
 			return value;
 		}
@@ -274,6 +304,9 @@ class ucs2_t {
 			return value;
 		}
 		operator char() const {
+			return value;
+		}
+		operator unsigned long long() const {
 			return value;
 		}
 		operator unsigned long() const {
@@ -299,6 +332,9 @@ class ucs2_t {
 		int operator==(bool b) const {
 			return value==b;
 		}
+		int operator==(long long b) const {
+			return value==b;
+		}
 		int operator==(long b) const {
 			return value==b;
 		}
@@ -309,6 +345,9 @@ class ucs2_t {
 			return value==b;
 		}
 		int operator==(char b) const {
+			return value==b;
+		}
+		int operator==(unsigned long long b) const {
 			return value==b;
 		}
 		int operator==(unsigned long b) const {
@@ -330,6 +369,9 @@ class ucs2_t {
 		int operator!=(bool v) const {
 			return value!=v;
 		}
+		int operator!=(long long v) const {
+			return value!=v;
+		}
 		int operator!=(long v) const {
 			return value!=v;
 		}
@@ -340,6 +382,9 @@ class ucs2_t {
 			return value!=v;
 		}
 		int operator!=(char v) const {
+			return value!=v;
+		}
+		int operator!=(unsigned long long v) const {
 			return value!=v;
 		}
 		int operator!=(unsigned long v) const {
@@ -361,6 +406,9 @@ class ucs2_t {
 		int operator>(bool v) const {
 			return value>v;
 		}
+		int operator>(long long v) const {
+			return value>v;
+		}
 		int operator>(long v) const {
 			return value>v;
 		}
@@ -371,6 +419,9 @@ class ucs2_t {
 			return value>v;
 		}
 		int operator>(char v) const {
+			return value>v;
+		}
+		int operator>(unsigned long long v) const {
 			return value>v;
 		}
 		int operator>(unsigned long v) const {
@@ -392,6 +443,9 @@ class ucs2_t {
 		int operator<(bool v) const {
 			return value<v;
 		}
+		int operator<(long long v) const {
+			return value<v;
+		}
 		int operator<(long v) const {
 			return value<v;
 		}
@@ -402,6 +456,9 @@ class ucs2_t {
 			return value<v;
 		}
 		int operator<(char v) const {
+			return value<v;
+		}
+		int operator<(unsigned long long v) const {
 			return value<v;
 		}
 		int operator<(unsigned long v) const {
@@ -423,6 +480,9 @@ class ucs2_t {
 		int operator>=(bool v) const {
 			return value>=v;
 		}
+		int operator>=(long long v) const {
+			return value>=v;
+		}
 		int operator>=(long v) const {
 			return value>=v;
 		}
@@ -433,6 +493,9 @@ class ucs2_t {
 			return value>=v;
 		}
 		int operator>=(char v) const {
+			return value>=v;
+		}
+		int operator>=(unsigned long long v) const {
 			return value>=v;
 		}
 		int operator>=(unsigned long v) const {
@@ -454,6 +517,9 @@ class ucs2_t {
 		int operator<=(bool v) const {
 			return value<=v;
 		}
+		int operator<=(long long v) const {
+			return value<=v;
+		}
 		int operator<=(long v) const {
 			return value<=v;
 		}
@@ -464,6 +530,9 @@ class ucs2_t {
 			return value<=v;
 		}
 		int operator<=(char v) const {
+			return value<=v;
+		}
+		int operator<=(unsigned long long v) const {
 			return value<=v;
 		}
 		int operator<=(unsigned long v) const {
