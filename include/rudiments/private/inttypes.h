@@ -565,7 +565,7 @@
 	};
 #endif
 #else
-typedef _char16_t	ucs2_t;
+typedef char16_t	ucs2_t;
 #endif
 
 // define ucs4_t, and utf(8|16)_t
