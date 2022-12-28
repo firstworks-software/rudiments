@@ -1,4 +1,4 @@
-#include <rudiments/stdio.h>
+#include <stdio.h>
 
 #include "../test/test.cpp"
 
@@ -14,9 +14,9 @@ int main(int argc, char **argv) {
 	test_t	s;
 	test_t	a[10];
 
-	header("pack behavior");
-	stdoutput.printf("  sizeof(test_t): %d\n",sizeof(test_t));
-	stdoutput.printf("  sizeof(s): %d\n",sizeof(s));
-	stdoutput.printf("  sizeof(a): %d\n",sizeof(a));
-	stdoutput.printf("\n");
+	printf("pack behavior");
+	printf("  sizeof(test_t): %d\n",(int)sizeof(test_t));
+	printf("  sizeof(s): %d\n",(int)sizeof(s));
+	printf("  sizeof(a): %d\n",(int)sizeof(a));
+	printf("\n");
 }

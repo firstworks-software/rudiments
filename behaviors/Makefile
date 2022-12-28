@@ -6,7 +6,8 @@ CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(LIBEDITLIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(MASLIB) $(DEBUGLIB)
 
 PROGS = charsets \
-	vswprintf
+	vswprintf \
+	pack
 
 .SUFFIXES: .lo .obj .cpp
 
@@ -27,3 +28,6 @@ charsets: charsets.cpp charsets.$(OBJ)
 
 vswprintf: vswprintf.cpp vswprintf.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) vswprintf.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+pack: pack.cpp pack.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pack.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
