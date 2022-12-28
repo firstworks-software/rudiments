@@ -304,7 +304,8 @@ int main(int argc, const char **argv) {
 		(ucs2_t)127
 	};
 
-	stdoutput.printf("ucs2character:\n");
+	test("sizeof(ucs2_t)==2",sizeof(ucs2_t)==2);
+	stdoutput.printf("\n");
 
 	for (byte_t c=0; c<128; c++) {
 

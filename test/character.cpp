@@ -266,8 +266,6 @@ int main(int argc, const char **argv) {
 		120,121,122,123,124,125,126,127
 	};
 
-	stdoutput.printf("character:\n");
-
 	for (byte_t c=0; c<128; c++) {
 
 		stdoutput.printf("\t0x%02x \"%c\":\n",c,c);
