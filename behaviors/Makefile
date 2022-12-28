@@ -30,4 +30,4 @@ vswprintf: vswprintf.cpp vswprintf.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) vswprintf.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 pack: pack.cpp pack.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pack.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pack.$(OBJ) $(ALLSTATIC) $(LDFLAGS)
