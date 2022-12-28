@@ -384,6 +384,8 @@ bool iconvert::convert() {
 			tosize=sizeof(wchar_t);
 			wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
 
+			// FIXME: use mbrtoc16/mbtoc16 if available
+
 			// convert
 			// FIXME: this implementation is incorrect for
 			// chars >= 128 and for platforms where the wchar_t
@@ -415,6 +417,8 @@ bool iconvert::convert() {
 			tosize=sizeof(ucs2_t);
 			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 			bytestring::zero(to,tosize);
+
+			// FIXME: use c16rtomb/c16tomb if available
 
 			// convert
 			// FIXME: this implementation is incorrect for

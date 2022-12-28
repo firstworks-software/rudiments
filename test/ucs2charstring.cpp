@@ -91,27 +91,27 @@ int main(int argc, const char **argv) {
 	test("findFirstOrEndIgnoringCase",
 		ucs2charstring::findFirstOrEndIgnoringCase(s,BLAH)==
 						s+ucs2charstring::length(s));
-	test("findFirst",ucs2charstring::findFirst(s,'l'));
+	test("findFirst",ucs2charstring::findFirst(s,(ucs2_t)'l'));
 	test("findFirstIgnoringCase",
-		ucs2charstring::findFirstIgnoringCase(s,'L'));
+		ucs2charstring::findFirstIgnoringCase(s,(ucs2_t)'L'));
 	test("findFirstOrEnd",
-		ucs2charstring::findFirstOrEnd(s,'z')==
+		ucs2charstring::findFirstOrEnd(s,(ucs2_t)'z')==
 				s+ucs2charstring::length(s));
-	test("findFirstOrEnd",ucs2charstring::findFirstOrEnd(s,'l'));
+	test("findFirstOrEnd",ucs2charstring::findFirstOrEnd(s,(ucs2_t)'l'));
 	test("findFirstOrEndIgnoringCase",
-		ucs2charstring::findFirstOrEndIgnoringCase(s,'Z')==
+		ucs2charstring::findFirstOrEndIgnoringCase(s,(ucs2_t)'Z')==
 						s+ucs2charstring::length(s));
 	test("findFirstOrEndIgnoringCase",
-			ucs2charstring::findFirstOrEndIgnoringCase(s,'l'));
+		ucs2charstring::findFirstOrEndIgnoringCase(s,(ucs2_t)'l'));
 	stdoutput.printf("\n");
 
 	// findLast
 	test("findLast",ucs2charstring::findLast(s,llo));
 	test("findLastIgnoringCase",
 			ucs2charstring::findLastIgnoringCase(s,LLO));
-	test("findLast",ucs2charstring::findLast(s,'l'));
+	test("findLast",ucs2charstring::findLast(s,(ucs2_t)'l'));
 	test("findLastIgnoringCase",
-			ucs2charstring::findLastIgnoringCase(s,'L'));
+			ucs2charstring::findLastIgnoringCase(s,(ucs2_t)'L'));
 	stdoutput.printf("\n");
 
 
@@ -376,7 +376,7 @@ int main(int argc, const char **argv) {
 	ucs2literal(unstripped1,"   hello      there   buddy  ");
 	stdoutput.printf("strip...\n");
 	ucs2charstring::copy(buffer,unstripped1);
-	ucs2charstring::strip(buffer,' ');
+	ucs2charstring::strip(buffer,(ucs2_t)' ');
 	ucs2literal(stripped1,"hellotherebuddy");
 	test("strip",!ucs2charstring::compare(buffer,stripped1));
 	ucs2literal(unstripped2,"   hello       there  buddy  ");
@@ -702,19 +702,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("replace...\n");
 	ucs2literal(original,"one:-two:-one:-three:-one:-four:-one:-five");
 	ucs2_t	*originalcopy=ucs2charstring::duplicate(original);
-	ucs2charstring::replace(originalcopy,'-','|');
+	ucs2charstring::replace(originalcopy,(ucs2_t)'-',(ucs2_t)'|');
 	ucs2literal(replacechar,"one:|two:|one:|three:|one:|four:|one:|five");
 	test("replace char",
 		!ucs2charstring::compare(originalcopy,replacechar));
-	ucs2charstring::replace(originalcopy,'-','|');
+	ucs2charstring::replace(originalcopy,(ucs2_t)'-',(ucs2_t)'|');
 	test("replace char (not found)",
 		!ucs2charstring::compare(originalcopy,replacechar));
 	ucs2literal(colonpipe,":|");
-	ucs2charstring::replace(originalcopy,colonpipe,'-');
+	ucs2charstring::replace(originalcopy,colonpipe,(ucs2_t)'-');
 	ucs2literal(replaceset,"one--two--one--three--one--four--one--five");
 	test("replace set",
 		!ucs2charstring::compare(originalcopy,replaceset));
-	ucs2charstring::replace(originalcopy,colonpipe,'-');
+	ucs2charstring::replace(originalcopy,colonpipe,(ucs2_t)'-');
 	test("replace set (not found)",
 		!ucs2charstring::compare(originalcopy,replaceset));
 	delete[] originalcopy;
@@ -799,19 +799,19 @@ unimplemented...
 	stdoutput.printf("compareWithWildcard...\n");
 	test("degenerate",
 		ucs2charstring::compareWithWildcards(
-				NULL,NULL,0,0));
+				NULL,NULL,(ucs2_t)'\0',(ucs2_t)'\0'));
 	ucs2literal(stringlit,"string");
 	test("string==string (no wildcards)",
 		ucs2charstring::compareWithWildcards(
-				stringlit,stringlit,0,0));
+				stringlit,stringlit,(ucs2_t)'\0',(ucs2_t)'\0'));
 	ucs2literal(strqng,"str?ng");
 	test("str?ng==str?ng (no wildcards)",
 		ucs2charstring::compareWithWildcards(
-				strqng,strqng,0,0));
+				strqng,strqng,(ucs2_t)'\0',(ucs2_t)'\0'));
 	ucs2literal(strsng,"strsng");
 	test("str*ng==str*ng (no wildcards)",
 		ucs2charstring::compareWithWildcards(
-				strsng,strsng,0,0));
+				strsng,strsng,(ucs2_t)'\0',(ucs2_t)'\0'));
 	ucs2_t	string[17];
 	ucs2literal(zerotof,"0123456789abcdef");
 	ucs2charstring::copy(string,zerotof);
@@ -861,42 +861,42 @@ unimplemented...
 			// swap in some set of wildcards
 			switch (iter) {
 				case 0:
-					pattern[i]='?';
+					pattern[i]=(ucs2_t)'?';
 					break;
 				case 1:
-					pattern[i]='*';
+					pattern[i]=(ucs2_t)'*';
 					break;
 				case 2:
 					for (uint16_t j=i;
 						j<count-1; j++) {
-						pattern[j]='?';
+						pattern[j]=(ucs2_t)'?';
 					}
 					break;
 				case 3:
 					for (uint16_t j=i;
 						j<count-1; j++) {
-						pattern[j]='*';
+						pattern[j]=(ucs2_t)'*';
 					}
 					break;
 				case 4:
 					for (uint16_t j=i;
 						j<count-1; j=j+2) {
-						pattern[j]='?';
+						pattern[j]=(ucs2_t)'?';
 					}
 					break;
 				case 5:
 					for (uint16_t j=i;
 						j<count-1; j=j+2) {
-						pattern[j]='*';
+						pattern[j]=(ucs2_t)'*';
 					}
 					break;
 				case 6:
 					for (uint16_t j=i;
 						j<count-1; j++) {
 						if (j%2) {
-							pattern[j]='?';
+							pattern[j]=(ucs2_t)'?';
 						} else {
-							pattern[j]='*';
+							pattern[j]=(ucs2_t)'*';
 						}
 					}
 					break;
@@ -904,18 +904,18 @@ unimplemented...
 					for (uint16_t j=i;
 						j<count-1; j++) {
 						if (j%2) {
-							pattern[j]='*';
+							pattern[j]=(ucs2_t)'*';
 						} else {
-							pattern[j]='?';
+							pattern[j]=(ucs2_t)'?';
 						}
 					}
 					break;
 				case 8:
-					pattern[i]='*';
-					pattern[i+1]='\0';
+					pattern[i]=(ucs2_t)'*';
+					pattern[i+1]=(ucs2_t)'\0';
 					break;
 				case 9:
-					pattern[0]='*';
+					pattern[0]=(ucs2_t)'*';
                                         // do this rather than just
                                         // "0123456789abcdef"+i+1 directly in
                                         // the copy to silence compiler warnings
@@ -929,12 +929,14 @@ unimplemented...
 
 			// build the title
 			title.clear();
-			title.append(string)->append('=')->append(pattern);
+			title.append(string)->append((ucs2_t)'=')->
+							append(pattern);
 
 			// run the test
 			char	*t=charstring::duplicate(title.getString());
 			test(t,ucs2charstring::compareWithWildcards(
-						string,pattern,'?','*'));
+						string,pattern,
+						(ucs2_t)'?',(ucs2_t)'*'));
 			delete[] t;
 		}
 	}

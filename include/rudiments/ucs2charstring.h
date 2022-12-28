@@ -12,11 +12,11 @@
 		const char	*___charstrptr=___charstrvar; \
 		ucs2_t		*___ucs2strptr=___ucs2charstrvar##array; \
 		while (*___charstrptr) { \
-			*___ucs2strptr=*___charstrptr; \
+			*___ucs2strptr=(ucs2_t)(*___charstrptr); \
 			___charstrptr++; \
 			___ucs2strptr++; \
 		} \
-		*___ucs2strptr=0; \
+		*___ucs2strptr=(ucs2_t)'\0'; \
 	} \
 	const ucs2_t	*___ucs2charstrvar=___ucs2charstrvar##array
 

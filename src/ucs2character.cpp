@@ -80,7 +80,7 @@ bool ucs2character::inSet(ucs2_t c, const ucs2_t *set) {
 }
 
 ucs2_t ucs2character::duplicate(char c) {
-	return duplicate(c,'?');
+	return duplicate(c,(ucs2_t)'?');
 }
 
 ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
@@ -95,7 +95,7 @@ ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c) {
-	return duplicate(c,'?');
+	return duplicate(c,(ucs2_t)'?');
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {

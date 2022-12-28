@@ -109,7 +109,7 @@ const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
 void ucs2charstring::upper(ucs2_t *str) {
 	if (str) {
 		for (ucs2_t *ch=str; *ch; ch++) {
-			*ch=ucs2character::toUpperCase(*ch);
+			*ch=(ucs2_t)ucs2character::toUpperCase(*ch);
 		}
 	}
 }
@@ -117,7 +117,7 @@ void ucs2charstring::upper(ucs2_t *str) {
 void ucs2charstring::lower(ucs2_t *str) {
 	if (str) {
 		for (ucs2_t *ch=str; *ch; ch++) {
-			*ch=ucs2character::toLowerCase(*ch);
+			*ch=(ucs2_t)ucs2character::toLowerCase(*ch);
 		}
 	}
 }
@@ -129,16 +129,17 @@ void ucs2charstring::capitalize(ucs2_t *str) {
 		(ucs2_t)'"',
 		(ucs2_t)'-',
 		(ucs2_t)'(',
-		0
+		(ucs2_t)'"',
+		(ucs2_t)'\0'
 	};
 	if (str) {
 		bool	cap=true;
 		for (ucs2_t *ch=str; *ch; ch++) {
 			if (cap) {
-				*ch=ucs2character::toUpperCase(*ch);
+				*ch=(ucs2_t)ucs2character::toUpperCase(*ch);
 				cap=false;
 			} else {
-				*ch=ucs2character::toLowerCase(*ch);
+				*ch=(ucs2_t)ucs2character::toLowerCase(*ch);
 			}
 			if (ucs2character::inSet(*ch,delims)) {
 				cap=true;
@@ -164,7 +165,7 @@ void ucs2charstring::rightTrim(ucs2_t *str, ucs2_t character) {
 		str++;
 
 		// terminate the string there
-		*str='\0';
+		*str=(ucs2_t)'\0';
 	}
 }
 
@@ -187,7 +188,7 @@ void ucs2charstring::leftTrim(ucs2_t *str, ucs2_t character) {
 			i++;
 		}
 		// store a null to the new end of string
-		str[j]='\0';
+		str[j]=(ucs2_t)'\0';
 	}
 }
 
@@ -212,7 +213,7 @@ bool ucs2charstring::strip(ucs2_t *str, ucs2_t character) {
 		}
 		index++;
 	}
-	str[index-total]='\0';
+	str[index-total]=(ucs2_t)'\0';
 	return retval;
 }
 
@@ -239,7 +240,7 @@ bool ucs2charstring::strip(ucs2_t *str1, const ucs2_t *str2) {
 			index++;
 		}
 	}
-	str1[index-total]='\0';
+	str1[index-total]=(ucs2_t)'\0';
 	return retval;
 }
 
@@ -264,7 +265,7 @@ bool ucs2charstring::stripSet(ucs2_t *str, const ucs2_t *set) {
 		}
 		index++;
 	}
-	str[index-total]='\0';
+	str[index-total]=(ucs2_t)'\0';
 	return retval;
 }
 
@@ -387,14 +388,15 @@ bool ucs2charstring::isInteger(const ucs2_t *str) {
 
 	const ucs2_t	*ptr=str;
 	for (; *ptr; ptr++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
-			(ptr>str && *ptr=='-')) {
+		if (((*ptr>(ucs2_t)'9' || *ptr<(ucs2_t)'0') &&
+			*ptr!=(ucs2_t)'-') || 
+			(ptr>str && *ptr==(ucs2_t)'-')) {
 			return false;
 		}
 	}
 
 	// if the string ended in a - then it's not a number
-	return (*(ptr-1)!='-');
+	return (*(ptr-1)!=(ucs2_t)'-');
 }
 
 bool ucs2charstring::isInteger(const ucs2_t *str, int32_t len) {
@@ -405,15 +407,16 @@ bool ucs2charstring::isInteger(const ucs2_t *str, int32_t len) {
 
 	const ucs2_t	*ptr=str;
 	for (int32_t index=0; index<len; index++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
-			(ptr>str && *ptr=='-')) {
+		if (((*ptr>(ucs2_t)'9' || *ptr<(ucs2_t)'0') &&
+			*ptr!=(ucs2_t)'-') || 
+			(ptr>str && *ptr==(ucs2_t)'-')) {
 			return false;
 		}
 		ptr++;
 	}
 
 	// if the string ended in a - then it's not a number
-	return (*(ptr-1)!='-');
+	return (*(ptr-1)!=(ucs2_t)'-');
 }
 
 bool ucs2charstring::isNumber(const ucs2_t *str) {
@@ -425,17 +428,19 @@ bool ucs2charstring::isNumber(const ucs2_t *str) {
 	const ucs2_t	*ptr=str;
 	int32_t		decimal=0;
 	for (; *ptr; ptr++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
-			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
+		if (((*ptr>(ucs2_t)'9' || *ptr<(ucs2_t)'0') &&
+			*ptr!=(ucs2_t)'-' && *ptr!=(ucs2_t)'.') || 
+			(ptr>str && *ptr==(ucs2_t)'-') ||
+			(decimal && *ptr==(ucs2_t)'.')) {
 			return false;
 		}
-		if (*ptr=='.') {
+		if (*ptr==(ucs2_t)'.') {
 			decimal=1;
 		}
 	}
 
 	// if the string ended in a - or . then it's not a number
-	return (*(ptr-1)!='-' && *(ptr-1)!='.');
+	return (*(ptr-1)!=(ucs2_t)'-' && *(ptr-1)!=(ucs2_t)'.');
 }
 
 bool ucs2charstring::isNumber(const ucs2_t *str, int32_t len) {
@@ -447,28 +452,30 @@ bool ucs2charstring::isNumber(const ucs2_t *str, int32_t len) {
 	const ucs2_t	*ptr=str;
 	int32_t		decimal=0;
 	for (int32_t index=0; index<len; index++) {
-		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
-			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
+		if (((*ptr>(ucs2_t)'9' || *ptr<(ucs2_t)'0') &&
+			*ptr!=(ucs2_t)'-' && *ptr!=(ucs2_t)'.') || 
+			(ptr>str && *ptr==(ucs2_t)'-') ||
+			(decimal && *ptr==(ucs2_t)'.')) {
 			return false;
 		}
-		if (*ptr=='.') {
+		if (*ptr==(ucs2_t)'.') {
 			decimal=1;
 		}
 		ptr++;
 	}
 
 	// if the string ended in a - or . then it's not a number
-	return (*(ptr-1)!='-' && *(ptr-1)!='.');
+	return (*(ptr-1)!=(ucs2_t)'-' && *(ptr-1)!=(ucs2_t)'.');
 }
 
 int64_t ucs2charstring::convertAmount(const ucs2_t *amount) {
 	if (!amount) {
 		return 0;
 	}
-	const ucs2_t	*dollarsstr=findFirst(amount,'$');
+	const ucs2_t	*dollarsstr=findFirst(amount,(ucs2_t)'$');
 	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
 	uint64_t	dollars=toUnsignedInteger(dollarsstr);
-	const ucs2_t	*centsstr=findFirst(amount,'.');
+	const ucs2_t	*centsstr=findFirst(amount,(ucs2_t)'.');
 	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
 }
@@ -480,11 +487,11 @@ ucs2_t *ucs2charstring::convertAmount(int64_t amount) {
 	}
 	ucs2_t	negative[2];
 	if (amount<0) {
-		negative[0]='-';
+		negative[0]=(ucs2_t)'-';
 	} else {
-		negative[0]='\0';
+		negative[0]=(ucs2_t)'\0';
 	}
-	negative[1]='\0';
+	negative[1]=(ucs2_t)'\0';
 	ucs2_t	*amountstr=new ucs2_t[len];
 	int64_t		amt;
 	#ifdef RUDIMENTS_HAVE_LLABS
@@ -505,11 +512,11 @@ ucs2_t *ucs2charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	ssize_t	amtlen=length(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	ucs2_t	*buffer=new ucs2_t[realspaces+1];
-	buffer[realspaces]='\0';
-	bytestring::set(buffer,' ',realspaces);
+	buffer[realspaces]=(ucs2_t)'\0';
+	bytestring::set(buffer,(ucs2_t)' ',realspaces);
 	bytestring::copy(buffer+realspaces-amtlen,amt+1,amtlen);
-	if (buffer[0]==' ') {
-		buffer[0]='$';
+	if (buffer[0]==(ucs2_t)' ') {
+		buffer[0]=(ucs2_t)'$';
 	}
 	delete[] amt;
 	return buffer;
@@ -541,11 +548,11 @@ void ucs2charstring::escape(const ucs2_t *input, uint64_t inputlength,
 				inputindex<inputlength;
 				inputindex++) {
 			if (contains(characters,input[inputindex]) ||
-						input[inputindex]=='\\') {
+					input[inputindex]==(ucs2_t)'\\') {
 				if (pass==0) {
 					(*outputlength)++;
 				} else {
-					(*output)[outputindex]='\\';
+					(*output)[outputindex]=(ucs2_t)'\\';
 					outputindex++;
 				}
 			}
@@ -558,7 +565,7 @@ void ucs2charstring::escape(const ucs2_t *input, uint64_t inputlength,
 		}
 		if (pass==0) {
 			(*output)=new ucs2_t[(*outputlength)+1];
-			(*output)[(*outputlength)]='\0';
+			(*output)[(*outputlength)]=(ucs2_t)'\0';
 		}
 	}
 }
@@ -587,7 +594,7 @@ void ucs2charstring::unescape(const ucs2_t *input, uint64_t inputlength,
 		for (uint64_t inputindex=0;
 				inputindex<inputlength;
 				inputindex++) {
-			if (!escaped && input[inputindex]=='\\') {
+			if (!escaped && input[inputindex]==(ucs2_t)'\\') {
 				escaped=true;
 				continue;
 			}
@@ -601,7 +608,7 @@ void ucs2charstring::unescape(const ucs2_t *input, uint64_t inputlength,
 		}
 		if (pass==0) {
 			(*output)=new ucs2_t[(*outputlength)+1];
-			(*output)[(*outputlength)]='\0';
+			(*output)[(*outputlength)]=(ucs2_t)'\0';
 		}
 	}
 }
@@ -627,7 +634,7 @@ void ucs2charstring::leftJustify(ucs2_t *str, int32_t len) {
 
 	// right-pad with spaces
 	for (; index<len; index++) {
-		str[index]=' ';
+		str[index]=(ucs2_t)' ';
 	}
 }
 
@@ -652,7 +659,7 @@ void ucs2charstring::rightJustify(ucs2_t *str, int32_t len) {
 
 	// right-pad with spaces
 	for (; index>-1; index--) {
-		str[index]=' ';
+		str[index]=(ucs2_t)' ';
 	}
 }
 
@@ -675,7 +682,7 @@ void ucs2charstring::center(ucs2_t *str, int32_t len) {
 			str[index]=str[index-difference];
 		}
 		for (; index>-1; index--) {
-			str[index]=' ';
+			str[index]=(ucs2_t)' ';
 		}
 	} else if (leftpad<leadingspaces) {
 		// shift everything left
@@ -685,7 +692,7 @@ void ucs2charstring::center(ucs2_t *str, int32_t len) {
 			str[index]=str[index+difference];
 		}
 		for (; index<len; index++) {
-			str[index]=' ';
+			str[index]=(ucs2_t)' ';
 		}
 	}
 }
@@ -697,7 +704,9 @@ int32_t ucs2charstring::countLeadingSpaces(const ucs2_t *str, int32_t len) {
 	}
 
 	int32_t	leadingspaces=0;
-	for (int32_t index=0; str[index]==' ' && index<len; index++) {
+	for (int32_t index=0;
+			str[index]==(ucs2_t)' ' && index<len;
+			index++) {
 		leadingspaces++;
 	}
 	return leadingspaces;
@@ -710,7 +719,9 @@ int32_t ucs2charstring::countTrailingSpaces(const ucs2_t *str, int32_t len) {
 	}
 
 	int32_t	trailingspaces=0;
-	for (int32_t index=len-1; str[index]==' ' && index>-1; index--) {
+	for (int32_t index=len-1;
+			str[index]==(ucs2_t)' ' && index>-1;
+			index--) {
 		trailingspaces++;
 	}
 	return trailingspaces;
@@ -760,14 +771,14 @@ ucs2_t *ucs2charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
 	ucs2_t	*ptr=new ucs2_t[strlen+1];
-	*ptr='-';
+	*ptr=(ucs2_t)'-';
 	ptr+=strlen;
-	*ptr='\0';
+	*ptr=(ucs2_t)'\0';
 	number*=-1;
 	strlen--;
 	while (strlen) {
 		ptr--;
-		*ptr='0'+number%10;
+		*ptr=(ucs2_t)('0'+number%10);
 		number/=10;
 		strlen--;
 	}
@@ -784,10 +795,10 @@ ucs2_t *ucs2charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
 	ucs2_t	*ptr=new ucs2_t[strlen+1];
 	ptr+=strlen;
-	*ptr='\0';
+	*ptr=(ucs2_t)'\0';
 	while (strlen) {
 		ptr--;
-		*ptr='0'+number%10;
+		*ptr=(ucs2_t)('0'+number%10);
 		number/=10;
 		strlen--;
 	}
@@ -919,9 +930,24 @@ bool ucs2charstring::isNullOrEmpty(const ucs2_t *string) {
 }
 
 bool ucs2charstring::isYes(const ucs2_t *string) {
-	const ucs2_t	yes[]={'y','e','s',0};
-	const ucs2_t	truestr[]={'t','r','u','e',0};
-	const ucs2_t	on[]={'o','n',0};
+	ucs2_t	yes[]={
+		(ucs2_t)'y',
+		(ucs2_t)'e',
+		(ucs2_t)'s',
+		(ucs2_t)'\0'
+	};
+	ucs2_t	truestr[]={
+		(ucs2_t)'t',
+		(ucs2_t)'r',
+		(ucs2_t)'u',
+		(ucs2_t)'e',
+		(ucs2_t)'\0'
+	};
+	ucs2_t	on[]={
+		(ucs2_t)'o',
+		(ucs2_t)'n',
+		(ucs2_t)'\0'
+	};
 	ucs2_t	next;
 	if (!string) {
 		return false;
@@ -931,9 +957,9 @@ bool ucs2charstring::isYes(const ucs2_t *string) {
 		next=string[4];
 	} else if (!compareIgnoringCase(string,on,2)) {
 		next=string[2];
-	} else if (string[0]=='y' || string[0]=='Y' ||
-			string[0]=='t' || string[0]=='T' ||
-			string[0]=='1') {
+	} else if (string[0]==(ucs2_t)'y' || string[0]==(ucs2_t)'Y' ||
+			string[0]==(ucs2_t)'t' || string[0]==(ucs2_t)'T' ||
+			string[0]==(ucs2_t)'1') {
 		next=string[1];
 	} else {
 		return false;
@@ -942,9 +968,25 @@ bool ucs2charstring::isYes(const ucs2_t *string) {
 }
 
 bool ucs2charstring::isNo(const ucs2_t *string) {
-	const ucs2_t	no[]={'n','o',0};
-	const ucs2_t	falsestr[]={'f','a','l','s','e',0};
-	const ucs2_t	off[]={'o','f','f',0};
+	ucs2_t	no[]={
+		(ucs2_t)'n',
+		(ucs2_t)'o',
+		(ucs2_t)'\0'
+	};
+	ucs2_t	falsestr[]={
+		(ucs2_t)'f',
+		(ucs2_t)'a',
+		(ucs2_t)'l',
+		(ucs2_t)'s',
+		(ucs2_t)'e',
+		(ucs2_t)'\0'
+	};
+	ucs2_t	off[]={
+		(ucs2_t)'o',
+		(ucs2_t)'f',
+		(ucs2_t)'f',
+		(ucs2_t)'\0'
+	};
 	ucs2_t	next;
 	if (!string) {
 		return false;
@@ -954,9 +996,9 @@ bool ucs2charstring::isNo(const ucs2_t *string) {
 		next=string[5];
 	} else if (!compareIgnoringCase(string,off,3)) {
 		next=string[3];
-	} else if (string[0]=='n' || string[0]=='N' ||
-			string[0]=='f' || string[0]=='F' ||
-			string[0]=='0') {
+	} else if (string[0]==(ucs2_t)'n' || string[0]==(ucs2_t)'N' ||
+			string[0]==(ucs2_t)'f' || string[0]==(ucs2_t)'F' ||
+			string[0]==(ucs2_t)'0') {
 		next=string[1];
 	} else {
 		return false;
@@ -1030,7 +1072,7 @@ ucs2_t *ucs2charstring::copy(ucs2_t *dest, const ucs2_t *source,
 		len--;
 	}
 	if (len) {
-		*dest='\0';
+		*dest=(ucs2_t)'\0';
 	}
 	return dest;
 }
@@ -1092,7 +1134,7 @@ int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2,
 		str2++;
 		len--;
 	}
-	return (len)?*str1-*str2:(ucs2_t)0;
+	return (len)?*str1-*str2:(ucs2_t)'\0';
 }
 
 int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
@@ -1143,7 +1185,10 @@ int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 
 int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
 					const ucs2_t *str2) {
-	const ucs2_t	dot[]={'.',0};
+	ucs2_t	dot[]={
+		(ucs2_t)'.',
+		(ucs2_t)'\0'
+	};
 	return compareNatural(str1,str2,dot);
 }
 
@@ -1238,7 +1283,10 @@ int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
 
 int32_t ucs2charstring::compareVersions(const ucs2_t *str1,
 					const ucs2_t *str2) {
-	const ucs2_t	dot[]={'.',0};
+	ucs2_t	dot[]={
+		(ucs2_t)'.',
+		(ucs2_t)'\0'
+	};
 	return compareVersions(str1,str2,dot);
 }
 
@@ -1508,7 +1556,7 @@ const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
 const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
 							ucs2_t needle) {
 	size_t	haystacklen=length(haystack);
-	needle=ucs2character::toLowerCase(needle);
+	needle=(ucs2_t)ucs2character::toLowerCase(needle);
 	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
@@ -1811,7 +1859,7 @@ ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
 	for (size_t i=0; i<len; i++) {
 		buffer[i]=ucs2character::duplicate(str[i]);
 	}
-	buffer[len]='\0';
+	buffer[len]=(ucs2_t)'\0';
 	return buffer;
 }
 
@@ -1825,16 +1873,16 @@ ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
 	}
 	ucs2_t	*buffer=new ucs2_t[len+1];
 	copy(buffer,str,len);
-	buffer[len]='\0';
+	buffer[len]=(ucs2_t)'\0';
 	return buffer;
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string) {
-	return duplicate(string,wcharstring::length(string),'?');
+	return duplicate(string,wcharstring::length(string),(ucs2_t)'?');
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
-	return duplicate(string,len,'?');
+	return duplicate(string,len,(ucs2_t)'?');
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
@@ -1852,7 +1900,7 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 	for (size_t i=0; i<len; i++) {
 		retval[i]=ucs2character::duplicate(string[i],replacement);
 	}
-	retval[len]='\0';
+	retval[len]=(ucs2_t)'\0';
 	return retval;
 }
 
@@ -1873,7 +1921,7 @@ void ucs2charstring::rightTrim(ucs2_t *str) {
 		str++;
 
 		// terminate the string there
-		*str='\0';
+		*str=(ucs2_t)'\0';
 	}
 }
 
@@ -1896,7 +1944,7 @@ void ucs2charstring::leftTrim(ucs2_t *str) {
 			i++;
 		}
 		// store a null to the new end of string
-		str[j]='\0';
+		str[j]=(ucs2_t)'\0';
 	}
 }
 
@@ -1984,15 +2032,15 @@ long double ucs2charstring::toFloatC(const ucs2_t *string) {
 	if ((currentlconv!=NULL) &&
 		(currentlconv->decimal_point!=NULL) &&
 		(currentlconv->decimal_point[0]!=0) &&
-		(currentlconv->decimal_point[0]!='.') &&
+		(currentlconv->decimal_point[0]!=(ucs2_t)'.') &&
 		(currentlconv->decimal_point[1]==0) &&
-		((decimalpointlocation=findFirst(string,'.'))!=NULL) &&
+		((decimalpointlocation=findFirst(string,(ucs2_t)'.'))!=NULL) &&
 		(len<sizeof(stringinlocale))) {
 
 		bytestring::copy(stringinlocale,string,len+1);
 
 		stringinlocale[decimalpointlocation-string]=
-					currentlconv->decimal_point[0];
+					(ucs2_t)currentlconv->decimal_point[0];
 
 		return toFloat(stringinlocale,NULL);
 	}
@@ -2012,7 +2060,7 @@ long double ucs2charstring::toFloat(const ucs2_t *string,
 				string++;
 			// FIXME: this test should really use the
 			// delimiter from the locale instead of just '.'
-			} else if (!found && *string=='.') {
+			} else if (!found && *string==(ucs2_t)'.') {
 				string++;
 				found=true;
 			} else {
@@ -2188,7 +2236,7 @@ ucs2_t *ucs2charstring::insertString(const ucs2_t *dest,
 			retval[i++]=dest[j++];
 		}
 	}
-	retval[size-1]='\0';
+	retval[size-1]=(ucs2_t)'\0';
 	return retval;
 }
 
@@ -2205,12 +2253,12 @@ ucs2_t *ucs2charstring::pad(const ucs2_t *str, ucs2_t padchar,
 	newstring=new ucs2_t[totallength+1];
 	if (strlen>=totallength) {
 		copy(newstring,str,totallength);
-		newstring[totallength]=0;
+		newstring[totallength]=(ucs2_t)'\0';
 		return newstring;
 	}
 
 	bytestring::set(newstring,padchar,totallength);
-	newstring[totallength]=0;
+	newstring[totallength]=(ucs2_t)'\0';
 
 	if (direction<0) {
 		// pad left

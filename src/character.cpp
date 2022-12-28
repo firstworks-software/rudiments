@@ -3,6 +3,7 @@
 
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/stdio.h>
 #ifndef _WIN32
 	#include <rudiments/iconvert.h>
 #endif
