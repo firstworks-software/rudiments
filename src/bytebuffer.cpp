@@ -150,13 +150,13 @@ ssize_t bytebuffer::write(const wchar_t *string) {
 				wcharstring::length(string)*sizeof(wchar_t));
 }
 
-ssize_t bytebuffer::write(const char16_t *string, size_t length) {
-	return write((const byte_t *)string,length*sizeof(char16_t));
+ssize_t bytebuffer::write(const ucs2_t *string, size_t length) {
+	return write((const byte_t *)string,length*sizeof(ucs2_t));
 }
 
-ssize_t bytebuffer::write(const char16_t *string) {
+ssize_t bytebuffer::write(const ucs2_t *string) {
 	return write((const byte_t *)string,
-			ucs2charstring::length(string)*sizeof(char16_t));
+			ucs2charstring::length(string)*sizeof(ucs2_t));
 }
 
 ssize_t bytebuffer::write(char character) {
@@ -167,8 +167,8 @@ ssize_t bytebuffer::write(wchar_t character) {
 	return write((const byte_t *)&character,sizeof(wchar_t));
 }
 
-ssize_t bytebuffer::write(char16_t character) {
-	return write((const byte_t *)&character,sizeof(char16_t));
+ssize_t bytebuffer::write(ucs2_t character) {
+	return write((const byte_t *)&character,sizeof(ucs2_t));
 }
 
 ssize_t bytebuffer::write(int16_t number) {
@@ -262,10 +262,10 @@ ssize_t bytebuffer::printfDelegate(const wchar_t *format, va_list *argp) {
 	return size;
 }
 
-ssize_t bytebuffer::printfDelegate(const char16_t *format, va_list *argp) {
+ssize_t bytebuffer::printfDelegate(const ucs2_t *format, va_list *argp) {
 
 	// write the formatted data to a buffer
-	char16_t	*buffer=NULL;
+	ucs2_t	*buffer=NULL;
 	ssize_t	size=ucs2charstring::printf(&buffer,format,argp);
 	if (size!=-1) {
 
@@ -377,13 +377,13 @@ bytebuffer *bytebuffer::append(const wchar_t *string) {
 				wcharstring::length(string)*sizeof(wchar_t));
 }
 
-bytebuffer *bytebuffer::append(const char16_t *string, size_t length) {
-	return append((const byte_t *)string,length*sizeof(char16_t));
+bytebuffer *bytebuffer::append(const ucs2_t *string, size_t length) {
+	return append((const byte_t *)string,length*sizeof(ucs2_t));
 }
 
-bytebuffer *bytebuffer::append(const char16_t *string) {
+bytebuffer *bytebuffer::append(const ucs2_t *string) {
 	return append((const byte_t *)string,
-			ucs2charstring::length(string)*sizeof(char16_t));
+			ucs2charstring::length(string)*sizeof(ucs2_t));
 }
 
 bytebuffer *bytebuffer::append(char character) {
@@ -394,8 +394,8 @@ bytebuffer *bytebuffer::append(wchar_t character) {
 	return append((const byte_t *)&character,sizeof(wchar_t));
 }
 
-bytebuffer *bytebuffer::append(char16_t character) {
-	return append((const byte_t *)&character,sizeof(char16_t));
+bytebuffer *bytebuffer::append(ucs2_t character) {
+	return append((const byte_t *)&character,sizeof(ucs2_t));
 }
 
 bytebuffer *bytebuffer::append(int16_t number) {
@@ -460,7 +460,7 @@ bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, va_list *argp) {
 	return (printf(format,argp)!=-1)?this:NULL;
 }
 
-bytebuffer *bytebuffer::appendFormatted(const char16_t *format, ...) {
+bytebuffer *bytebuffer::appendFormatted(const ucs2_t *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
 	bytebuffer	*retval=appendFormatted(format,&argp);
@@ -468,7 +468,7 @@ bytebuffer *bytebuffer::appendFormatted(const char16_t *format, ...) {
 	return retval;
 }
 
-bytebuffer *bytebuffer::appendFormatted(const char16_t *format, va_list *argp) {
+bytebuffer *bytebuffer::appendFormatted(const ucs2_t *format, va_list *argp) {
 	pvt->_pos=pvt->_size;
 	return (printf(format,argp)!=-1)?this:NULL;
 }

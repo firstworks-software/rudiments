@@ -596,7 +596,7 @@ class RUDIMENTS_DLLSPEC charstring {
  		 *  a pointer to it.  Note that this method allocates a buffer
  		 *  for the duplicate string internally and returns it.  The
  		 *  calling program must deallocate this buffer. */
-		static	char	*duplicate(const char16_t *str);
+		static	char	*duplicate(const ucs2_t *str);
 
 		/** Creates a duplicate of the first "len" UCS-2 characters of
 		 *  "str", converting each UCS-2 character to a character per
@@ -607,7 +607,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	char	*duplicate(const char16_t *str, size_t len);
+		static	char	*duplicate(const ucs2_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each UCS-2
 		 *  character to a character per the character set of the
@@ -617,7 +617,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	char	*duplicate(const char16_t *str,
+		static	char	*duplicate(const ucs2_t *str,
 							char replacement);
 
 		/** Creates a duplicate of the first "len" UCS-2 characters of
@@ -629,7 +629,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	char	*duplicate(const char16_t *str, size_t len,
+		static	char	*duplicate(const ucs2_t *str, size_t len,
 							char replacement);
 
 		/** Converts "str" to uppercase.

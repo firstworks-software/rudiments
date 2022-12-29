@@ -71,35 +71,35 @@ class RUDIMENTS_DLLSPEC ucs2character {
 
 		/** Returns true if "c" is in the set of
 		 *  characters in "set" and false otherwise. */
-		static bool	inSet(char16_t c, const char16_t *set);
+		static bool	inSet(ucs2_t c, const ucs2_t *set);
 
 		/** Returns the UCS-2 character representation of character "c"
 		 *  per the character set of the current locale.
 		 *
 		 *  Returns '?' if character "c" cannot be converted to a
 		 *  UCS-2 character. */
-		static char16_t	duplicate(char c);
+		static ucs2_t	duplicate(char c);
 
 		/** Returns the UCS-2 character representation of character "c"
 		 *  per the character set of the current locale.
 		 *
 		 *  Returns "replacement" if character "c" cannot be converted
 		 *  to a UCS-2 character. */
-		static char16_t	duplicate(char c, char16_t replacement);
+		static ucs2_t	duplicate(char c, ucs2_t replacement);
 
 		/** Returns the UCS-2 character representation of wide
 		 *  character "c" per the character set of the current locale.
 		 *
 		 *  Returns '?' if wide character "c" cannot be converted to a
 		 *  UCS-2 character. */
-		static char16_t	duplicate(wchar_t c);
+		static ucs2_t	duplicate(wchar_t c);
 
 		/** Returns the UCS-2 character representation of wide
 		 *  character "c" per the character set of the current locale.
 		 *
 		 *  Returns "replacement" if wide character "c" cannot be
 		 *  converted to a UCS-2 character. */
-		static char16_t	duplicate(wchar_t c, char16_t replacement);
+		static ucs2_t	duplicate(wchar_t c, ucs2_t replacement);
 };
 
 #endif

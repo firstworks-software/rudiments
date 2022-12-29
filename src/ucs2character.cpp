@@ -70,8 +70,8 @@ int32_t ucs2character::toAscii(int32_t c) {
 	return character::toAscii(c);
 }
 
-bool ucs2character::inSet(char16_t c, const char16_t *set) {
-	for (const char16_t *s=set; *s; s++) {
+bool ucs2character::inSet(ucs2_t c, const ucs2_t *set) {
+	for (const ucs2_t *s=set; *s; s++) {
 		if (*s==c) {
 			return true;
 		}
@@ -79,12 +79,12 @@ bool ucs2character::inSet(char16_t c, const char16_t *set) {
 	return false;
 }
 
-char16_t ucs2character::duplicate(char c) {
-	return duplicate(c,(char16_t)'?');
+ucs2_t ucs2character::duplicate(char c) {
+	return duplicate(c,(ucs2_t)'?');
 }
 
-char16_t ucs2character::duplicate(char c, char16_t replacement) {
-	char16_t		uc;
+ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
+	ucs2_t		uc;
 	iconvert	i;
 	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(c));
@@ -94,17 +94,17 @@ char16_t ucs2character::duplicate(char c, char16_t replacement) {
 	return (i.convert())?uc:replacement;
 }
 
-char16_t ucs2character::duplicate(wchar_t c) {
-	return duplicate(c,(char16_t)'?');
+ucs2_t ucs2character::duplicate(wchar_t c) {
+	return duplicate(c,(ucs2_t)'?');
 }
 
-char16_t ucs2character::duplicate(wchar_t c, char16_t replacement) {
+ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
 	#ifdef _WIN32
 		// on windows, wchar_t's are encoded as UCS-2
-		return (char16_t)c;
+		return (ucs2_t)c;
 	#else
 		// on non-windows, use iconvert
-		char16_t		uc;
+		ucs2_t		uc;
 		iconvert	i;
 		i.setFromEncoding("WCHAR_T");
 		i.setFromBuffer((byte_t *)&c);

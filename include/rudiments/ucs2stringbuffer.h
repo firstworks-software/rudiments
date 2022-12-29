@@ -26,7 +26,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program.  The initial
 		 *  size may be specified by the "initialsize" parameter. */
-		ucs2stringbuffer(char16_t *initialcontents, size_t initialsize);
+		ucs2stringbuffer(ucs2_t *initialcontents, size_t initialsize);
 
 		/** Creates an instance of the ucs2stringbuffer class
 		 *  that is a copy of "s". */
@@ -76,7 +76,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const char16_t *string);
+		ssize_t	write(const ucs2_t *string);
 
 		/** Writes the first "length" characters of "string" to the
 		 *  ucs2stringbuffer at the current position and increments the
@@ -86,7 +86,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const char16_t *string, size_t length);
+		ssize_t	write(const ucs2_t *string, size_t length);
 
 		/** Writes "character" to the ucs2stringbuffer at the current
 		 *  position and increments the current position to the next
@@ -95,7 +95,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(char16_t character);
+		ssize_t	write(ucs2_t character);
 
 		/** Converts "number" to a string and writes it to the
 		 *  ucs2stringbuffer at the current position and increments the
@@ -252,7 +252,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		ucs2stringbuffer	*append(const char16_t *string);
+		ucs2stringbuffer	*append(const ucs2_t *string);
 
 		/** Appends the first "length" characters of "string" to the
 		 *  ucs2stringbuffer, growing the internal buffer as necessary
@@ -260,7 +260,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		ucs2stringbuffer	*append(const char16_t *string,
+		ucs2stringbuffer	*append(const ucs2_t *string,
 							size_t length);
 
 		/** Appends "character" to the ucs2stringbuffer, growing the
@@ -268,7 +268,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		ucs2stringbuffer	*append(char16_t character);
+		ucs2stringbuffer	*append(ucs2_t character);
 
 		/** Converts "number" to a string and appends it to the
 		 *  ucs2stringbuffer, growing the internal buffer as necessary
@@ -462,11 +462,11 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *  Also resets the specified "initialsize" parameter.
 		 *
 		 *  Always returns true. */
-		bool	clear(char16_t *initialcontents, size_t initialsize);
+		bool	clear(ucs2_t *initialcontents, size_t initialsize);
 
 		/** Returns the string currently stored in the
 		 *  ucs2stringbuffer. */
-		const char16_t	*getString();
+		const ucs2_t	*getString();
 
 		/** Returns a pointer to the string currently stored
 		 *  in the ucs2stringbuffer, then resets the ucs2stringbuffer
@@ -474,7 +474,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 * 
 		 *  The calling program must deallocate the string
 		 *  returned from this method. */
-		char16_t	*detachString();
+		ucs2_t	*detachString();
 
 		/** Returns the length of the string currently stored
 		 *  in the ucs2stringbuffer. */

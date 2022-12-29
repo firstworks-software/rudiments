@@ -217,94 +217,94 @@ int main(int argc, const char **argv) {
 		true,true,true,true,true,true,true,true
 	};
 
-	char16_t	touppercase[]={
-		(char16_t)0,(char16_t)1,(char16_t)2,(char16_t)3,(char16_t)4,
-		(char16_t)5,(char16_t)6,(char16_t)7,(char16_t)8,(char16_t)9,
-		(char16_t)10,(char16_t)11,(char16_t)12,(char16_t)13,(char16_t)14,
-		(char16_t)15,(char16_t)16,(char16_t)17,(char16_t)18,(char16_t)19,
-		(char16_t)20,(char16_t)21,(char16_t)22,(char16_t)23,(char16_t)24,
-		(char16_t)25,(char16_t)26,(char16_t)27,(char16_t)28,(char16_t)29,
-		(char16_t)30,(char16_t)31,(char16_t)32,(char16_t)33,(char16_t)34,
-		(char16_t)35,(char16_t)36,(char16_t)37,(char16_t)38,(char16_t)39,
-		(char16_t)40,(char16_t)41,(char16_t)42,(char16_t)43,(char16_t)44,
-		(char16_t)45,(char16_t)46,(char16_t)47,(char16_t)48,(char16_t)49,
-		(char16_t)50,(char16_t)51,(char16_t)52,(char16_t)53,(char16_t)54,
-		(char16_t)55,(char16_t)56,(char16_t)57,(char16_t)58,(char16_t)59,
-		(char16_t)60,(char16_t)61,(char16_t)62,(char16_t)63,(char16_t)64,
-		(char16_t)65,(char16_t)66,(char16_t)67,(char16_t)68,(char16_t)69,
-		(char16_t)70,(char16_t)71,(char16_t)72,(char16_t)73,(char16_t)74,
-		(char16_t)75,(char16_t)76,(char16_t)77,(char16_t)78,(char16_t)79,
-		(char16_t)80,(char16_t)81,(char16_t)82,(char16_t)83,(char16_t)84,
-		(char16_t)85,(char16_t)86,(char16_t)87,(char16_t)88,(char16_t)89,
-		(char16_t)90,(char16_t)91,(char16_t)92,(char16_t)93,(char16_t)94,
-		(char16_t)95,(char16_t)96,(char16_t)'A',(char16_t)'B',(char16_t)'C',
-		(char16_t)'D',(char16_t)'E',(char16_t)'F',(char16_t)'G',(char16_t)'H',
-		(char16_t)'I',(char16_t)'J',(char16_t)'K',(char16_t)'L',(char16_t)'M',
-		(char16_t)'N',(char16_t)'O',(char16_t)'P',(char16_t)'Q',(char16_t)'R',
-		(char16_t)'S',(char16_t)'T',(char16_t)'U',(char16_t)'V',(char16_t)'W',
-		(char16_t)'X',(char16_t)'Y',(char16_t)'Z',(char16_t)123,(char16_t)124,
-		(char16_t)125,(char16_t)126,(char16_t)127
+	ucs2_t	touppercase[]={
+		(ucs2_t)0,(ucs2_t)1,(ucs2_t)2,(ucs2_t)3,(ucs2_t)4,
+		(ucs2_t)5,(ucs2_t)6,(ucs2_t)7,(ucs2_t)8,(ucs2_t)9,
+		(ucs2_t)10,(ucs2_t)11,(ucs2_t)12,(ucs2_t)13,(ucs2_t)14,
+		(ucs2_t)15,(ucs2_t)16,(ucs2_t)17,(ucs2_t)18,(ucs2_t)19,
+		(ucs2_t)20,(ucs2_t)21,(ucs2_t)22,(ucs2_t)23,(ucs2_t)24,
+		(ucs2_t)25,(ucs2_t)26,(ucs2_t)27,(ucs2_t)28,(ucs2_t)29,
+		(ucs2_t)30,(ucs2_t)31,(ucs2_t)32,(ucs2_t)33,(ucs2_t)34,
+		(ucs2_t)35,(ucs2_t)36,(ucs2_t)37,(ucs2_t)38,(ucs2_t)39,
+		(ucs2_t)40,(ucs2_t)41,(ucs2_t)42,(ucs2_t)43,(ucs2_t)44,
+		(ucs2_t)45,(ucs2_t)46,(ucs2_t)47,(ucs2_t)48,(ucs2_t)49,
+		(ucs2_t)50,(ucs2_t)51,(ucs2_t)52,(ucs2_t)53,(ucs2_t)54,
+		(ucs2_t)55,(ucs2_t)56,(ucs2_t)57,(ucs2_t)58,(ucs2_t)59,
+		(ucs2_t)60,(ucs2_t)61,(ucs2_t)62,(ucs2_t)63,(ucs2_t)64,
+		(ucs2_t)65,(ucs2_t)66,(ucs2_t)67,(ucs2_t)68,(ucs2_t)69,
+		(ucs2_t)70,(ucs2_t)71,(ucs2_t)72,(ucs2_t)73,(ucs2_t)74,
+		(ucs2_t)75,(ucs2_t)76,(ucs2_t)77,(ucs2_t)78,(ucs2_t)79,
+		(ucs2_t)80,(ucs2_t)81,(ucs2_t)82,(ucs2_t)83,(ucs2_t)84,
+		(ucs2_t)85,(ucs2_t)86,(ucs2_t)87,(ucs2_t)88,(ucs2_t)89,
+		(ucs2_t)90,(ucs2_t)91,(ucs2_t)92,(ucs2_t)93,(ucs2_t)94,
+		(ucs2_t)95,(ucs2_t)96,(ucs2_t)'A',(ucs2_t)'B',(ucs2_t)'C',
+		(ucs2_t)'D',(ucs2_t)'E',(ucs2_t)'F',(ucs2_t)'G',(ucs2_t)'H',
+		(ucs2_t)'I',(ucs2_t)'J',(ucs2_t)'K',(ucs2_t)'L',(ucs2_t)'M',
+		(ucs2_t)'N',(ucs2_t)'O',(ucs2_t)'P',(ucs2_t)'Q',(ucs2_t)'R',
+		(ucs2_t)'S',(ucs2_t)'T',(ucs2_t)'U',(ucs2_t)'V',(ucs2_t)'W',
+		(ucs2_t)'X',(ucs2_t)'Y',(ucs2_t)'Z',(ucs2_t)123,(ucs2_t)124,
+		(ucs2_t)125,(ucs2_t)126,(ucs2_t)127
 	};
 
-	char16_t	tolowercase[]={
-		(char16_t)0,(char16_t)1,(char16_t)2,(char16_t)3,(char16_t)4,(char16_t)5,
-		(char16_t)6,(char16_t)7,(char16_t)8,(char16_t)9,(char16_t)10,(char16_t)11,
-		(char16_t)12,(char16_t)13,(char16_t)14,(char16_t)15,(char16_t)16,
-		(char16_t)17,(char16_t)18,(char16_t)19,(char16_t)20,(char16_t)21,
-		(char16_t)22,(char16_t)23,(char16_t)24,(char16_t)25,(char16_t)26,
-		(char16_t)27,(char16_t)28,(char16_t)29,(char16_t)30,(char16_t)31,
-		(char16_t)32,(char16_t)33,(char16_t)34,(char16_t)35,(char16_t)36,
-		(char16_t)37,(char16_t)38,(char16_t)39,(char16_t)40,(char16_t)41,
-		(char16_t)42,(char16_t)43,(char16_t)44,(char16_t)45,(char16_t)46,
-		(char16_t)47,(char16_t)48,(char16_t)49,(char16_t)50,(char16_t)51,
-		(char16_t)52,(char16_t)53,(char16_t)54,(char16_t)55,(char16_t)56,
-		(char16_t)57,(char16_t)58,(char16_t)59,(char16_t)60,(char16_t)61,
-		(char16_t)62,(char16_t)63,(char16_t)64,(char16_t)'a',(char16_t)'b',
-		(char16_t)'c',(char16_t)'d',(char16_t)'e',(char16_t)'f',(char16_t)'g',
-		(char16_t)'h',(char16_t)'i',(char16_t)'j',(char16_t)'k',(char16_t)'l',
-		(char16_t)'m',(char16_t)'n',(char16_t)'o',(char16_t)'p',(char16_t)'q',
-		(char16_t)'r',(char16_t)'s',(char16_t)'t',(char16_t)'u',(char16_t)'v',
-		(char16_t)'w',(char16_t)'x',(char16_t)'y',(char16_t)'z',(char16_t)91,
-		(char16_t)92,(char16_t)93,(char16_t)94,(char16_t)95,(char16_t)96,
-		(char16_t)97,(char16_t)98,(char16_t)99,(char16_t)100,(char16_t)101,
-		(char16_t)102,(char16_t)103,(char16_t)104,(char16_t)105,(char16_t)106,
-		(char16_t)107,(char16_t)108,(char16_t)109,(char16_t)110,(char16_t)111,
-		(char16_t)112,(char16_t)113,(char16_t)114,(char16_t)115,(char16_t)116,
-		(char16_t)117,(char16_t)118,(char16_t)119,(char16_t)120,(char16_t)121,
-		(char16_t)122,(char16_t)123,(char16_t)124,(char16_t)125,(char16_t)126,
-		(char16_t)127
+	ucs2_t	tolowercase[]={
+		(ucs2_t)0,(ucs2_t)1,(ucs2_t)2,(ucs2_t)3,(ucs2_t)4,(ucs2_t)5,
+		(ucs2_t)6,(ucs2_t)7,(ucs2_t)8,(ucs2_t)9,(ucs2_t)10,(ucs2_t)11,
+		(ucs2_t)12,(ucs2_t)13,(ucs2_t)14,(ucs2_t)15,(ucs2_t)16,
+		(ucs2_t)17,(ucs2_t)18,(ucs2_t)19,(ucs2_t)20,(ucs2_t)21,
+		(ucs2_t)22,(ucs2_t)23,(ucs2_t)24,(ucs2_t)25,(ucs2_t)26,
+		(ucs2_t)27,(ucs2_t)28,(ucs2_t)29,(ucs2_t)30,(ucs2_t)31,
+		(ucs2_t)32,(ucs2_t)33,(ucs2_t)34,(ucs2_t)35,(ucs2_t)36,
+		(ucs2_t)37,(ucs2_t)38,(ucs2_t)39,(ucs2_t)40,(ucs2_t)41,
+		(ucs2_t)42,(ucs2_t)43,(ucs2_t)44,(ucs2_t)45,(ucs2_t)46,
+		(ucs2_t)47,(ucs2_t)48,(ucs2_t)49,(ucs2_t)50,(ucs2_t)51,
+		(ucs2_t)52,(ucs2_t)53,(ucs2_t)54,(ucs2_t)55,(ucs2_t)56,
+		(ucs2_t)57,(ucs2_t)58,(ucs2_t)59,(ucs2_t)60,(ucs2_t)61,
+		(ucs2_t)62,(ucs2_t)63,(ucs2_t)64,(ucs2_t)'a',(ucs2_t)'b',
+		(ucs2_t)'c',(ucs2_t)'d',(ucs2_t)'e',(ucs2_t)'f',(ucs2_t)'g',
+		(ucs2_t)'h',(ucs2_t)'i',(ucs2_t)'j',(ucs2_t)'k',(ucs2_t)'l',
+		(ucs2_t)'m',(ucs2_t)'n',(ucs2_t)'o',(ucs2_t)'p',(ucs2_t)'q',
+		(ucs2_t)'r',(ucs2_t)'s',(ucs2_t)'t',(ucs2_t)'u',(ucs2_t)'v',
+		(ucs2_t)'w',(ucs2_t)'x',(ucs2_t)'y',(ucs2_t)'z',(ucs2_t)91,
+		(ucs2_t)92,(ucs2_t)93,(ucs2_t)94,(ucs2_t)95,(ucs2_t)96,
+		(ucs2_t)97,(ucs2_t)98,(ucs2_t)99,(ucs2_t)100,(ucs2_t)101,
+		(ucs2_t)102,(ucs2_t)103,(ucs2_t)104,(ucs2_t)105,(ucs2_t)106,
+		(ucs2_t)107,(ucs2_t)108,(ucs2_t)109,(ucs2_t)110,(ucs2_t)111,
+		(ucs2_t)112,(ucs2_t)113,(ucs2_t)114,(ucs2_t)115,(ucs2_t)116,
+		(ucs2_t)117,(ucs2_t)118,(ucs2_t)119,(ucs2_t)120,(ucs2_t)121,
+		(ucs2_t)122,(ucs2_t)123,(ucs2_t)124,(ucs2_t)125,(ucs2_t)126,
+		(ucs2_t)127
 	};
 
-	char16_t	toascii[]={
-		(char16_t)0,(char16_t)1,(char16_t)2,(char16_t)3,(char16_t)4,(char16_t)5,
-		(char16_t)6,(char16_t)7,(char16_t)8,(char16_t)9,(char16_t)10,(char16_t)11,
-		(char16_t)12,(char16_t)13,(char16_t)14,(char16_t)15,(char16_t)16,
-		(char16_t)17,(char16_t)18,(char16_t)19,(char16_t)20,(char16_t)21,
-		(char16_t)22,(char16_t)23,(char16_t)24,(char16_t)25,(char16_t)26,
-		(char16_t)27,(char16_t)28,(char16_t)29,(char16_t)30,(char16_t)31,
-		(char16_t)32,(char16_t)33,(char16_t)34,(char16_t)35,(char16_t)36,
-		(char16_t)37,(char16_t)38,(char16_t)39,(char16_t)40,(char16_t)41,
-		(char16_t)42,(char16_t)43,(char16_t)44,(char16_t)45,(char16_t)46,
-		(char16_t)47,(char16_t)48,(char16_t)49,(char16_t)50,(char16_t)51,
-		(char16_t)52,(char16_t)53,(char16_t)54,(char16_t)55,(char16_t)56,
-		(char16_t)57,(char16_t)58,(char16_t)59,(char16_t)60,(char16_t)61,
-		(char16_t)62,(char16_t)63,(char16_t)64,(char16_t)65,(char16_t)66,
-		(char16_t)67,(char16_t)68,(char16_t)69,(char16_t)70,(char16_t)71,
-		(char16_t)72,(char16_t)73,(char16_t)74,(char16_t)75,(char16_t)76,
-		(char16_t)77,(char16_t)78,(char16_t)79,(char16_t)80,(char16_t)81,
-		(char16_t)82,(char16_t)83,(char16_t)84,(char16_t)85,(char16_t)86,
-		(char16_t)87,(char16_t)88,(char16_t)89,(char16_t)90,(char16_t)91,
-		(char16_t)92,(char16_t)93,(char16_t)94,(char16_t)95,(char16_t)96,
-		(char16_t)97,(char16_t)98,(char16_t)99,(char16_t)100,(char16_t)101,
-		(char16_t)102,(char16_t)103,(char16_t)104,(char16_t)105,(char16_t)106,
-		(char16_t)107,(char16_t)108,(char16_t)109,(char16_t)110,(char16_t)111,
-		(char16_t)112,(char16_t)113,(char16_t)114,(char16_t)115,(char16_t)116,
-		(char16_t)117,(char16_t)118,(char16_t)119,(char16_t)120,(char16_t)121,
-		(char16_t)122,(char16_t)123,(char16_t)124,(char16_t)125,(char16_t)126,
-		(char16_t)127
+	ucs2_t	toascii[]={
+		(ucs2_t)0,(ucs2_t)1,(ucs2_t)2,(ucs2_t)3,(ucs2_t)4,(ucs2_t)5,
+		(ucs2_t)6,(ucs2_t)7,(ucs2_t)8,(ucs2_t)9,(ucs2_t)10,(ucs2_t)11,
+		(ucs2_t)12,(ucs2_t)13,(ucs2_t)14,(ucs2_t)15,(ucs2_t)16,
+		(ucs2_t)17,(ucs2_t)18,(ucs2_t)19,(ucs2_t)20,(ucs2_t)21,
+		(ucs2_t)22,(ucs2_t)23,(ucs2_t)24,(ucs2_t)25,(ucs2_t)26,
+		(ucs2_t)27,(ucs2_t)28,(ucs2_t)29,(ucs2_t)30,(ucs2_t)31,
+		(ucs2_t)32,(ucs2_t)33,(ucs2_t)34,(ucs2_t)35,(ucs2_t)36,
+		(ucs2_t)37,(ucs2_t)38,(ucs2_t)39,(ucs2_t)40,(ucs2_t)41,
+		(ucs2_t)42,(ucs2_t)43,(ucs2_t)44,(ucs2_t)45,(ucs2_t)46,
+		(ucs2_t)47,(ucs2_t)48,(ucs2_t)49,(ucs2_t)50,(ucs2_t)51,
+		(ucs2_t)52,(ucs2_t)53,(ucs2_t)54,(ucs2_t)55,(ucs2_t)56,
+		(ucs2_t)57,(ucs2_t)58,(ucs2_t)59,(ucs2_t)60,(ucs2_t)61,
+		(ucs2_t)62,(ucs2_t)63,(ucs2_t)64,(ucs2_t)65,(ucs2_t)66,
+		(ucs2_t)67,(ucs2_t)68,(ucs2_t)69,(ucs2_t)70,(ucs2_t)71,
+		(ucs2_t)72,(ucs2_t)73,(ucs2_t)74,(ucs2_t)75,(ucs2_t)76,
+		(ucs2_t)77,(ucs2_t)78,(ucs2_t)79,(ucs2_t)80,(ucs2_t)81,
+		(ucs2_t)82,(ucs2_t)83,(ucs2_t)84,(ucs2_t)85,(ucs2_t)86,
+		(ucs2_t)87,(ucs2_t)88,(ucs2_t)89,(ucs2_t)90,(ucs2_t)91,
+		(ucs2_t)92,(ucs2_t)93,(ucs2_t)94,(ucs2_t)95,(ucs2_t)96,
+		(ucs2_t)97,(ucs2_t)98,(ucs2_t)99,(ucs2_t)100,(ucs2_t)101,
+		(ucs2_t)102,(ucs2_t)103,(ucs2_t)104,(ucs2_t)105,(ucs2_t)106,
+		(ucs2_t)107,(ucs2_t)108,(ucs2_t)109,(ucs2_t)110,(ucs2_t)111,
+		(ucs2_t)112,(ucs2_t)113,(ucs2_t)114,(ucs2_t)115,(ucs2_t)116,
+		(ucs2_t)117,(ucs2_t)118,(ucs2_t)119,(ucs2_t)120,(ucs2_t)121,
+		(ucs2_t)122,(ucs2_t)123,(ucs2_t)124,(ucs2_t)125,(ucs2_t)126,
+		(ucs2_t)127
 	};
 
-	test("sizeof(char16_t)==2",sizeof(char16_t)==2);
+	test("sizeof(ucs2_t)==2",sizeof(ucs2_t)==2);
 	stdoutput.printf("\n");
 
 	for (byte_t c=0; c<128; c++) {
@@ -338,13 +338,13 @@ int main(int argc, const char **argv) {
 		test("\tisAscii",
 			ucs2character::isAscii(c)==isascii[c]);
 		test("\ttoUpperCase",
-			(char16_t)ucs2character::toUpperCase(c)==touppercase[c]);
+			(ucs2_t)ucs2character::toUpperCase(c)==touppercase[c]);
 		test("\ttoLowerCase",
-			(char16_t)ucs2character::toLowerCase(c)==tolowercase[c]);
+			(ucs2_t)ucs2character::toLowerCase(c)==tolowercase[c]);
 		test("\ttoAscii",
-			(char16_t)ucs2character::toAscii(c)==toascii[c]);
+			(ucs2_t)ucs2character::toAscii(c)==toascii[c]);
 		test("\tduplicate",
-			ucs2character::duplicate((char)c)==(char16_t)c);
+			ucs2character::duplicate((char)c)==(ucs2_t)c);
 	}
 
 	return 0;

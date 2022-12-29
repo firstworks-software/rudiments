@@ -14,7 +14,7 @@ ucs2stringbuffer::ucs2stringbuffer(size_t initialsize) :
 }
 
 inline
-ucs2stringbuffer::ucs2stringbuffer(char16_t *initialcontents, size_t initialsize) :
+ucs2stringbuffer::ucs2stringbuffer(ucs2_t *initialcontents, size_t initialsize) :
 		bytebuffer((byte_t *)initialcontents,initialsize) {
 }
 
@@ -40,9 +40,9 @@ void ucs2stringbuffer::setPosition(size_t pos) {
 }
 
 inline
-const char16_t *ucs2stringbuffer::getString() {
-	bytebuffer::append((char16_t)0);
-	const char16_t	*retval=(const char16_t *)getBuffer();
+const ucs2_t *ucs2stringbuffer::getString() {
+	bytebuffer::append((ucs2_t)0);
+	const ucs2_t	*retval=(const ucs2_t *)getBuffer();
 	_position(_position()-1);
 	_size(_size()-1);
 	return retval;
@@ -54,9 +54,9 @@ size_t ucs2stringbuffer::getStringLength() {
 }
 
 inline
-char16_t *ucs2stringbuffer::detachString() {
-	bytebuffer::append((char16_t)0);
-	return (char16_t *)detachBuffer();
+ucs2_t *ucs2stringbuffer::detachString() {
+	bytebuffer::append((ucs2_t)0);
+	return (ucs2_t *)detachBuffer();
 }
 
 inline
@@ -75,14 +75,14 @@ bool ucs2stringbuffer::clear(size_t initialsize) {
 }
 
 inline
-bool ucs2stringbuffer::clear(char16_t *initialcontents, size_t initialsize) {
+bool ucs2stringbuffer::clear(ucs2_t *initialcontents, size_t initialsize) {
 	return bytebuffer::clear((byte_t *)initialcontents,initialsize);
 }
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string) {
 	return (ucs2stringbuffer *)bytebuffer::append(string,
-			ucs2charstring::length((const char16_t *)string));
+			ucs2charstring::length((const ucs2_t *)string));
 }
 
 inline
@@ -91,18 +91,18 @@ ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string, size_t size) {
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const char16_t *string) {
+ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string) {
 	return append(string,ucs2charstring::length(string));
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const char16_t *string,
+ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string,
 							size_t length) {
 	return (ucs2stringbuffer *)bytebuffer::append(string,length);
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(char16_t character) {
+ucs2stringbuffer *ucs2stringbuffer::append(ucs2_t character) {
 	return (ucs2stringbuffer *)bytebuffer::append(character);
 }
 
@@ -136,7 +136,7 @@ ucs2stringbuffer *ucs2stringbuffer::append(int32_t number,
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(int64_t number,
 						uint16_t zeropadding) {
-	char16_t	*num=ucs2charstring::parseNumber(number,zeropadding);
+	ucs2_t	*num=ucs2charstring::parseNumber(number,zeropadding);
 	append(num);
 	delete[] num;
 	return this;
@@ -177,7 +177,7 @@ ucs2stringbuffer *ucs2stringbuffer::append(uint32_t number,
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(uint64_t number,
 						uint16_t zeropadding) {
-	char16_t	*num=ucs2charstring::parseNumber(number,zeropadding);
+	ucs2_t	*num=ucs2charstring::parseNumber(number,zeropadding);
 	append(num);
 	delete[] num;
 	return this;
@@ -220,7 +220,7 @@ ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t precision,
 inline
 ssize_t ucs2stringbuffer::write(const byte_t *string) {
 	return bytebuffer::write(string,
-			ucs2charstring::length((const char16_t *)string));
+			ucs2charstring::length((const ucs2_t *)string));
 }
 
 inline
@@ -229,17 +229,17 @@ ssize_t ucs2stringbuffer::write(const byte_t *string, size_t size) {
 }
 
 inline
-ssize_t ucs2stringbuffer::write(const char16_t *string) {
+ssize_t ucs2stringbuffer::write(const ucs2_t *string) {
 	return bytebuffer::write(string,ucs2charstring::length(string));
 }
 
 inline
-ssize_t ucs2stringbuffer::write(const char16_t *string, size_t length) {
+ssize_t ucs2stringbuffer::write(const ucs2_t *string, size_t length) {
 	return bytebuffer::write(string,length);
 }
 
 inline
-ssize_t ucs2stringbuffer::write(char16_t character) {
+ssize_t ucs2stringbuffer::write(ucs2_t character) {
 	return bytebuffer::write(character);
 }
 

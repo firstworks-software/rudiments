@@ -1871,19 +1871,19 @@ char *charstring::duplicate(const wchar_t *string, size_t len,
 	return retval;
 }
 
-char *charstring::duplicate(const char16_t *string) {
+char *charstring::duplicate(const ucs2_t *string) {
 	return duplicate(string,ucs2charstring::length(string),'?');
 }
 
-char *charstring::duplicate(const char16_t *string, size_t len) {
+char *charstring::duplicate(const ucs2_t *string, size_t len) {
 	return duplicate(string,len,'?');
 }
 
-char *charstring::duplicate(const char16_t *string, char replacement) {
+char *charstring::duplicate(const ucs2_t *string, char replacement) {
 	return duplicate(string,ucs2charstring::length(string),replacement);
 }
 
-char *charstring::duplicate(const char16_t *string, size_t len,
+char *charstring::duplicate(const ucs2_t *string, size_t len,
 							char replacement) {
 	// FIXME: use iconvert directly
 	if (!string) {

@@ -3,7 +3,7 @@
 
 		ssize_t	printfDelegate(const char *format, va_list *argp);
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
-		ssize_t	printfDelegate(const char16_t *format, va_list *argp);
+		ssize_t	printfDelegate(const ucs2_t *format, va_list *argp);
 
 	protected:
 		void		construct(byte_t *initialcontents,

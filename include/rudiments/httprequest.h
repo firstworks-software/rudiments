@@ -243,7 +243,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  "application/x-www-form-urlencoded" or
 		 *  "multipart-form-data", as in those cases, the posted data
 		 *  will have been processed internally. */
-		ssize_t	read(char16_t *buffer, size_t length);
+		ssize_t	read(ucs2_t *buffer, size_t length);
 
 		/** Reads a character from the data posted by the client into
 		 *  "character".
@@ -258,7 +258,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  "application/x-www-form-urlencoded" or
 		 *  "multipart-form-data", as in those cases, the posted data
 		 *  will have been processed internally. */
-		ssize_t	read(char16_t *character);
+		ssize_t	read(ucs2_t *character);
 
 		/** Reads a 16-bit integer from the data posted by the client
 		 *  into "number".

@@ -196,4 +196,34 @@
 	typedef	uint32_t	char32_t;
 #endif
 
+// define ucs(2|4)_t and utf(8|16)_t
+#ifdef __cplusplus
+	#ifdef _WIN32
+		enum ucs2_t : unsigned short { ucs2_t_val };
+		enum ucs4_t : unsigned int { ucs4_t_val };
+		enum utf8_t : unsigned char { utf8_t_val };
+		enum utf16_t : unsigned short { utf16_t_val };
+	#elif defined(__GNUC__) || defined(__clang__)
+		enum ucs2_t { ucs2_t_val=32768 } __attribute__ ((packed));
+		enum ucs4_t { ucs4_t_val=2147483648 } __attribute__ ((packed));
+		enum utf8_t { utf8_t_val=128 } __attribute__ ((packed));
+		enum utf16_t { utf16_t_val=32768 } __attribute__ ((packed));
+	#else
+		// lets hope the compiler packs by default
+		enum ucs2_t { ucs2_t_val=32768 };
+		enum ucs4_t { ucs4_t_val=2147483648 };
+		enum utf8_t { utf8_t_val=128 };
+		enum utf16_t { utf16_t_val=32768 };
+	#endif
+#endif
+
+// define ucs4_t
+// ...
+
+// define utf8_t
+// ...
+
+// define utf16_t
+// ...
+
 #endif
