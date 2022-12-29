@@ -46,21 +46,21 @@ int main(int argc, const char **argv) {
 		for (uint16_t j=0; j<members; j++) {
 
 			// NULL
-			strb->append((const ucs2_t *)NULL);
+			strb->appendUcs2((const ucs2_t *)NULL);
 
 			// empty string
 			ucs2literal(empty,"");
-			strb->append(empty);
+			strb->appendUcs2(empty);
 
 			// strings
 			for (uint16_t k=1; k<=5; k++) {
-				strb->append(alphabet,k);
+				strb->appendUcs2(alphabet,k);
 				ucs2charstring::append(str,alphabet,k);
 			}
 
 			// integers
 			for (uint64_t k=1; k<10000; k*=10) {
-				strb->append((uint16_t)k);
+				strb->appendUcs2((uint16_t)k);
 				ucs2literal(format,"%hd");
 				ucs2charstring::printf(buf,
 						sizeof(buf)/sizeof(ucs2_t),
@@ -68,7 +68,7 @@ int main(int argc, const char **argv) {
 				ucs2charstring::append(str,buf);
 			}
 			for (uint64_t k=1; k<1000000000; k*=10) {
-				strb->append((uint32_t)k);
+				strb->appendUcs2((uint32_t)k);
 				ucs2literal(format,"%ld");
 				ucs2charstring::printf(buf,
 						sizeof(buf)/sizeof(ucs2_t),
@@ -77,7 +77,7 @@ int main(int argc, const char **argv) {
 			}
 			#ifdef RUDIMENTS_HAVE_LONG_LONG
 			for (uint64_t k=1; k<1000000000000000000ULL; k*=10) {
-				strb->append((uint64_t)k);
+				strb->appendUcs2((uint64_t)k);
 				ucs2literal(format,"%lld");
 				ucs2charstring::printf(buf,
 						sizeof(buf)/sizeof(ucs2_t),
@@ -128,7 +128,7 @@ int main(int argc, const char **argv) {
 			j<(strl/sizeof(ucs2_t))-5-1; j=j+10+i) {
 			strb->setPosition(j);
 			ucs2literal(sixes,"66666");
-			strb->write(sixes);
+			strb->writeUcs2(sixes);
 			ucs2charstring::copy(str+j,sixes,5);
 		}
 		test("contents",
@@ -155,7 +155,7 @@ int main(int argc, const char **argv) {
 		strb=new ucs2stringbuffer(data,
 					ucs2charstring::length(data));
 		for (uint16_t j=0; j<=(i+1)*100; j++) {
-			strb->append(numbersletters);
+			strb->appendUcs2(numbersletters);
 			ucs2charstring::append(str,numbersletters);
 		}
 

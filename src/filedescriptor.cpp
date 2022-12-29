@@ -3669,7 +3669,8 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	return size;
 }
 
-ssize_t filedescriptor::printfDelegate(const ucs2_t *format, va_list *argp) {
+ssize_t filedescriptor::printfUcs2Delegate(const ucs2_t *format,
+							va_list *argp) {
 
 	// write the formatted data to a buffer
 	ucs2_t	*buffer=NULL;

@@ -394,11 +394,11 @@ ssize_t apachehttpserverapi::read(wchar_t *character) {
 	return bufferedRead(character,sizeof(wchar_t));
 }
 
-ssize_t apachehttpserverapi::read(ucs2_t *buffer, size_t length) {
+ssize_t apachehttpserverapi::readUcs2(ucs2_t *buffer, size_t length) {
 	return bufferedRead(buffer,length);
 }
 
-ssize_t apachehttpserverapi::read(ucs2_t *character) {
+ssize_t apachehttpserverapi::readUcs2(ucs2_t *character) {
 	return bufferedRead(character,sizeof(ucs2_t));
 }
 
@@ -643,22 +643,22 @@ ssize_t	apachehttpserverapi::write(wchar_t ch) {
 	return (r)?ap_rputc(character::duplicate(ch,'?'),r):0;
 }
 
-ssize_t	apachehttpserverapi::write(const ucs2_t *string) {
+ssize_t	apachehttpserverapi::writeUcs2(const ucs2_t *string) {
 	// FIXME: This just converts to char * and writes.
 	// Is there an ar_rputwc or something like that?
-	return write(string,ucs2charstring::length(string));
+	return writeUcs2(string,ucs2charstring::length(string));
 }
 
-ssize_t	apachehttpserverapi::write(const ucs2_t *string, size_t size) {
+ssize_t	apachehttpserverapi::writeUcs2(const ucs2_t *string, size_t size) {
 	// FIXME: This just converts to char * and writes.
 	// Is there an ar_rputwc or something like that?
-	char	*s=charstring::duplicate(string,size,'?');
+	char	*s=charstring::duplicateUcs2(string,size,'?');
 	ssize_t	result=write(s,size);
 	delete[] s;
 	return result;
 }
 
-ssize_t	apachehttpserverapi::write(ucs2_t ch) {
+ssize_t	apachehttpserverapi::writeUcs2(ucs2_t ch) {
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	// FIXME: This just converts to char and writes.
@@ -734,9 +734,9 @@ ssize_t apachehttpserverapi::printfDelegate(const wchar_t *format,
 	return write(b.getString(),b.getStringLength());
 }
 
-ssize_t apachehttpserverapi::printfDelegate(const ucs2_t *format,
+ssize_t apachehttpserverapi::printfUcs2Delegate(const ucs2_t *format,
 							va_list *argp) {
 	ucs2stringbuffer	b;
-	b.printf(format,argp);
-	return write(b.getString(),b.getStringLength());
+	b.printfUcs2(format,argp);
+	return writeUcs2(b.getString(),b.getStringLength());
 }

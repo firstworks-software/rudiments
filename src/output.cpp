@@ -40,17 +40,17 @@ ssize_t output::write(wchar_t character, int32_t sec, int32_t usec) {
 	return write(character);
 }
 
-ssize_t output::write(const ucs2_t *string, int32_t sec, int32_t usec) {
-	return write(string);
+ssize_t output::writeUcs2(const ucs2_t *string, int32_t sec, int32_t usec) {
+	return writeUcs2(string);
 }
 
-ssize_t output::write(const ucs2_t *string, size_t size,
+ssize_t output::writeUcs2(const ucs2_t *string, size_t size,
 						int32_t sec, int32_t usec) {
-	return write(string,size);
+	return writeUcs2(string,size);
 }
 
-ssize_t output::write(ucs2_t character, int32_t sec, int32_t usec) {
-	return write(character);
+ssize_t output::writeUcs2(ucs2_t character, int32_t sec, int32_t usec) {
+	return writeUcs2(character);
 }
 
 ssize_t output::write(int16_t number, int32_t sec, int32_t usec) {

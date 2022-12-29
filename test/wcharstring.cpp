@@ -1019,7 +1019,7 @@ int main(int argc, const char **argv) {
 	wchar_t	*c=wcharstring::duplicate(chars);
 	test("from char",!wcharstring::compare(c,wchars));
 	delete[] c;
-	c=wcharstring::duplicate(ucs2chars);
+	c=wcharstring::duplicateUcs2(ucs2chars);
 	test("from ucs2",!wcharstring::compare(c,wchars));
 	delete[] c;
 	stdoutput.printf("\n");

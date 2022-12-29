@@ -32,7 +32,7 @@ ssize_t filedescriptor::write(wchar_t character) {
 }
 
 inline
-ssize_t filedescriptor::write(ucs2_t character) {
+ssize_t filedescriptor::writeUcs2(ucs2_t character) {
 	return highLevelWrite((const byte_t *)&character,sizeof(ucs2_t));
 }
 
@@ -59,7 +59,7 @@ ssize_t filedescriptor::write(const wchar_t *string) {
 }
 
 inline
-ssize_t filedescriptor::write(const ucs2_t *string) {
+ssize_t filedescriptor::writeUcs2(const ucs2_t *string) {
 	return highLevelWrite((const byte_t *)string,
 			ucs2charstring::length(string)*sizeof(ucs2_t));
 }
@@ -80,7 +80,7 @@ ssize_t filedescriptor::write(const wchar_t *string, size_t length) {
 }
 
 inline
-ssize_t filedescriptor::write(const ucs2_t *string, size_t length) {
+ssize_t filedescriptor::writeUcs2(const ucs2_t *string, size_t length) {
 	return highLevelWrite((const byte_t *)string,length*sizeof(ucs2_t));
 }
 
@@ -116,7 +116,7 @@ ssize_t filedescriptor::write(wchar_t character, int32_t sec, int32_t usec) {
 }
 
 inline
-ssize_t filedescriptor::write(ucs2_t character, int32_t sec, int32_t usec) {
+ssize_t filedescriptor::writeUcs2(ucs2_t character, int32_t sec, int32_t usec) {
 	return highLevelWrite((const byte_t *)&character,
 					sizeof(ucs2_t),sec,usec);
 }
@@ -147,7 +147,7 @@ ssize_t filedescriptor::write(const wchar_t *string, size_t length,
 }
 
 inline
-ssize_t filedescriptor::write(const ucs2_t *string, size_t length,
+ssize_t filedescriptor::writeUcs2(const ucs2_t *string, size_t length,
 						int32_t sec, int32_t usec) {
 	return highLevelWrite((const byte_t *)string,
 					length*sizeof(ucs2_t),sec,usec);
@@ -173,7 +173,7 @@ ssize_t filedescriptor::write(const wchar_t *string,
 }
 
 inline
-ssize_t filedescriptor::write(const ucs2_t *string,
+ssize_t filedescriptor::writeUcs2(const ucs2_t *string,
 					int32_t sec, int32_t usec) {
 	return highLevelWrite((const byte_t *)string,
 		ucs2charstring::length(string)*sizeof(ucs2_t),sec,usec);
@@ -211,7 +211,7 @@ ssize_t filedescriptor::read(wchar_t *buffer) {
 }
 
 inline
-ssize_t filedescriptor::read(ucs2_t *buffer) {
+ssize_t filedescriptor::readUcs2(ucs2_t *buffer) {
 	return highLevelRead((byte_t *)buffer,sizeof(ucs2_t));
 }
 
@@ -236,7 +236,7 @@ ssize_t filedescriptor::read(wchar_t *buffer, size_t length) {
 }
 
 inline
-ssize_t filedescriptor::read(ucs2_t *buffer, size_t length) {
+ssize_t filedescriptor::readUcs2(ucs2_t *buffer, size_t length) {
 	return highLevelRead((byte_t *)buffer,length*sizeof(ucs2_t));
 }
 
@@ -281,7 +281,7 @@ ssize_t filedescriptor::read(wchar_t *buffer, int32_t sec, int32_t usec) {
 }
 
 inline
-ssize_t filedescriptor::read(ucs2_t *buffer, int32_t sec, int32_t usec) {
+ssize_t filedescriptor::readUcs2(ucs2_t *buffer, int32_t sec, int32_t usec) {
 	return highLevelRead((byte_t *)buffer,sizeof(ucs2_t),sec,usec);
 }
 
@@ -310,7 +310,7 @@ ssize_t filedescriptor::read(wchar_t *buffer, size_t length,
 }
 
 inline
-ssize_t filedescriptor::read(ucs2_t *buffer, size_t length,
+ssize_t filedescriptor::readUcs2(ucs2_t *buffer, size_t length,
 						int32_t sec, int32_t usec) {
 	return highLevelRead((byte_t *)buffer,
 				length*sizeof(ucs2_t),sec,usec);

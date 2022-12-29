@@ -142,16 +142,16 @@ ssize_t httpresponse::write(wchar_t character) {
 	return pvt->_sapi->write(character);
 }
 
-ssize_t httpresponse::write(const ucs2_t *string) {
-	return pvt->_sapi->write(string);
+ssize_t httpresponse::writeUcs2(const ucs2_t *string) {
+	return pvt->_sapi->writeUcs2(string);
 }
 
-ssize_t httpresponse::write(const ucs2_t *string, size_t length) {
-	return pvt->_sapi->write(string,length);
+ssize_t httpresponse::writeUcs2(const ucs2_t *string, size_t length) {
+	return pvt->_sapi->writeUcs2(string,length);
 }
 
-ssize_t httpresponse::write(ucs2_t character) {
-	return pvt->_sapi->write(character);
+ssize_t httpresponse::writeUcs2(ucs2_t character) {
+	return pvt->_sapi->writeUcs2(character);
 }
 
 ssize_t httpresponse::write(int16_t character) {
@@ -198,8 +198,8 @@ ssize_t httpresponse::printfDelegate(const wchar_t *format, va_list *argp) {
 	return pvt->_sapi->printf(format,argp);
 }
 
-ssize_t httpresponse::printfDelegate(const ucs2_t *format, va_list *argp) {
-	return pvt->_sapi->printf(format,argp);
+ssize_t httpresponse::printfUcs2Delegate(const ucs2_t *format, va_list *argp) {
+	return pvt->_sapi->printfUcs2(format,argp);
 }
 
 ssize_t httpresponse::write(file *filebuffer) {

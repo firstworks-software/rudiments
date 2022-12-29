@@ -76,7 +76,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const ucs2_t *string);
+		ssize_t	writeUcs2(const ucs2_t *string);
 
 		/** Writes the first "length" characters of "string" to the
 		 *  ucs2stringbuffer at the current position and increments the
@@ -86,7 +86,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(const ucs2_t *string, size_t length);
+		ssize_t	writeUcs2(const ucs2_t *string, size_t length);
 
 		/** Writes "character" to the ucs2stringbuffer at the current
 		 *  position and increments the current position to the next
@@ -95,7 +95,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->write("numbers: ")->write(5)->write(5.5); */
-		ssize_t	write(ucs2_t character);
+		ssize_t	writeUcs2(ucs2_t character);
 
 		/** Converts "number" to a string and writes it to the
 		 *  ucs2stringbuffer at the current position and increments the
@@ -252,7 +252,7 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		ucs2stringbuffer	*append(const ucs2_t *string);
+		ucs2stringbuffer	*appendUcs2(const ucs2_t *string);
 
 		/** Appends the first "length" characters of "string" to the
 		 *  ucs2stringbuffer, growing the internal buffer as necessary
@@ -260,15 +260,15 @@ class RUDIMENTS_DLLSPEC ucs2stringbuffer : public bytebuffer {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		ucs2stringbuffer	*append(const ucs2_t *string,
-							size_t length);
+		ucs2stringbuffer	*appendUcs2(const ucs2_t *string,
+								size_t length);
 
 		/** Appends "character" to the ucs2stringbuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *	sb->append("numbers: ")->append(5)->append(5.5); */
-		ucs2stringbuffer	*append(ucs2_t character);
+		ucs2stringbuffer	*appendUcs2(ucs2_t character);
 
 		/** Converts "number" to a string and appends it to the
 		 *  ucs2stringbuffer, growing the internal buffer as necessary

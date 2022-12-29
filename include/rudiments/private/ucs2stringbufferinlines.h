@@ -91,19 +91,19 @@ ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string, size_t size) {
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string) {
-	return append(string,ucs2charstring::length(string));
+ucs2stringbuffer *ucs2stringbuffer::appendUcs2(const ucs2_t *string) {
+	return appendUcs2(string,ucs2charstring::length(string));
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(const ucs2_t *string,
+ucs2stringbuffer *ucs2stringbuffer::appendUcs2(const ucs2_t *string,
 							size_t length) {
-	return (ucs2stringbuffer *)bytebuffer::append(string,length);
+	return (ucs2stringbuffer *)bytebuffer::appendUcs2(string,length);
 }
 
 inline
-ucs2stringbuffer *ucs2stringbuffer::append(ucs2_t character) {
-	return (ucs2stringbuffer *)bytebuffer::append(character);
+ucs2stringbuffer *ucs2stringbuffer::appendUcs2(ucs2_t character) {
+	return (ucs2stringbuffer *)bytebuffer::appendUcs2(character);
 }
 
 inline
@@ -137,7 +137,7 @@ inline
 ucs2stringbuffer *ucs2stringbuffer::append(int64_t number,
 						uint16_t zeropadding) {
 	ucs2_t	*num=ucs2charstring::parseNumber(number,zeropadding);
-	append(num);
+	appendUcs2(num);
 	delete[] num;
 	return this;
 }
@@ -178,7 +178,7 @@ inline
 ucs2stringbuffer *ucs2stringbuffer::append(uint64_t number,
 						uint16_t zeropadding) {
 	ucs2_t	*num=ucs2charstring::parseNumber(number,zeropadding);
-	append(num);
+	appendUcs2(num);
 	delete[] num;
 	return this;
 }
@@ -229,18 +229,18 @@ ssize_t ucs2stringbuffer::write(const byte_t *string, size_t size) {
 }
 
 inline
-ssize_t ucs2stringbuffer::write(const ucs2_t *string) {
-	return bytebuffer::write(string,ucs2charstring::length(string));
+ssize_t ucs2stringbuffer::writeUcs2(const ucs2_t *string) {
+	return bytebuffer::writeUcs2(string,ucs2charstring::length(string));
 }
 
 inline
-ssize_t ucs2stringbuffer::write(const ucs2_t *string, size_t length) {
-	return bytebuffer::write(string,length);
+ssize_t ucs2stringbuffer::writeUcs2(const ucs2_t *string, size_t length) {
+	return bytebuffer::writeUcs2(string,length);
 }
 
 inline
-ssize_t ucs2stringbuffer::write(ucs2_t character) {
-	return bytebuffer::write(character);
+ssize_t ucs2stringbuffer::writeUcs2(ucs2_t character) {
+	return bytebuffer::writeUcs2(character);
 }
 
 inline

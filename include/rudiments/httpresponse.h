@@ -86,9 +86,9 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		ssize_t	write(const wchar_t *string);
 		ssize_t	write(const wchar_t *string, size_t length);
 		ssize_t	write(wchar_t character);
-		ssize_t	write(const ucs2_t *string);
-		ssize_t	write(const ucs2_t *string, size_t length);
-		ssize_t	write(ucs2_t character);
+		ssize_t	writeUcs2(const ucs2_t *string);
+		ssize_t	writeUcs2(const ucs2_t *string, size_t length);
+		ssize_t	writeUcs2(ucs2_t character);
 		ssize_t	write(int16_t number);
 		ssize_t	write(int32_t number);
 		ssize_t	write(int64_t number);

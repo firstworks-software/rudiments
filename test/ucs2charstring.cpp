@@ -929,11 +929,11 @@ unimplemented...
 
 			// build the title
 			title.clear();
-			title.append(string)->append((ucs2_t)'=')->
-							append(pattern);
+			title.appendUcs2(string)->appendUcs2((ucs2_t)'=')->
+							appendUcs2(pattern);
 
 			// run the test
-			char	*t=charstring::duplicate(title.getString());
+			char	*t=charstring::duplicateUcs2(title.getString());
 			test(t,ucs2charstring::compareWithWildcards(
 						string,pattern,
 						(ucs2_t)'?',(ucs2_t)'*'));

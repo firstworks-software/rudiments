@@ -1871,19 +1871,19 @@ char *charstring::duplicate(const wchar_t *string, size_t len,
 	return retval;
 }
 
-char *charstring::duplicate(const ucs2_t *string) {
-	return duplicate(string,ucs2charstring::length(string),'?');
+char *charstring::duplicateUcs2(const ucs2_t *string) {
+	return duplicateUcs2(string,ucs2charstring::length(string),'?');
 }
 
-char *charstring::duplicate(const ucs2_t *string, size_t len) {
-	return duplicate(string,len,'?');
+char *charstring::duplicateUcs2(const ucs2_t *string, size_t len) {
+	return duplicateUcs2(string,len,'?');
 }
 
-char *charstring::duplicate(const ucs2_t *string, char replacement) {
-	return duplicate(string,ucs2charstring::length(string),replacement);
+char *charstring::duplicateUcs2(const ucs2_t *string, char replacement) {
+	return duplicateUcs2(string,ucs2charstring::length(string),replacement);
 }
 
-char *charstring::duplicate(const ucs2_t *string, size_t len,
+char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
 							char replacement) {
 	// FIXME: use iconvert directly
 	if (!string) {
@@ -1891,7 +1891,7 @@ char *charstring::duplicate(const ucs2_t *string, size_t len,
 	}
 	char	*retval=new char[len+1];
 	for (size_t i=0; i<len; i++) {
-		retval[i]=character::duplicate(string[i],replacement);
+		retval[i]=character::duplicateUcs2(string[i],replacement);
 	}
 	retval[len]='\0';
 	return retval;

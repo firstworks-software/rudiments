@@ -200,11 +200,11 @@ wchar_t wcharacter::duplicate(char c, wchar_t replacement) {
 	return (i.convert())?wc:replacement;
 }
 
-wchar_t wcharacter::duplicate(ucs2_t c) {
-	return duplicate(c,L'?');
+wchar_t wcharacter::duplicateUcs2(ucs2_t c) {
+	return duplicateUcs2(c,L'?');
 }
 
-wchar_t wcharacter::duplicate(ucs2_t c, wchar_t replacement) {
+wchar_t wcharacter::duplicateUcs2(ucs2_t c, wchar_t replacement) {
 	#ifdef _WIN32
 		// on windows, wchar_t's are encoded as UCS-2
 		return (wchar_t)c;

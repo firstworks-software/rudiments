@@ -90,14 +90,14 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *
 		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
 		 *  character. */
-		static wchar_t	duplicate(ucs2_t c);
+		static wchar_t	duplicateUcs2(ucs2_t c);
 
 		/** Returns the character representation of UCS-2 character "c"
 		 *  per the character set of the current locale.
 		 *
 		 *  Returns "replacement" if UCS-2 character "c" cannot be
 		 *  converted to a character. */
-		static wchar_t	duplicate(ucs2_t c, wchar_t replacement);
+		static wchar_t	duplicateUcs2(ucs2_t c, wchar_t replacement);
 };
 
 #endif

@@ -107,14 +107,14 @@ class RUDIMENTS_DLLSPEC character {
 		 *
 		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
 		 *  character. */
-		static char	duplicate(ucs2_t c);
+		static char	duplicateUcs2(ucs2_t c);
 
 		/** Returns the character representation of UCS-2 character "c"
 		 *  per the character set of the current locale.
 		 *
 		 *  Returns "replacement" if UCS-2 character "c" cannot be
 		 *  converted to a character. */
-		static char	duplicate(ucs2_t c, char replacement);
+		static char	duplicateUcs2(ucs2_t c, char replacement);
 };
 
 #endif

@@ -730,12 +730,12 @@ ssize_t	httprequest::read(wchar_t *character) {
 	return pvt->_sapi->read(character);
 }
 
-ssize_t	httprequest::read(ucs2_t *buffer, size_t length) {
-	return pvt->_sapi->read(buffer,length);
+ssize_t	httprequest::readUcs2(ucs2_t *buffer, size_t length) {
+	return pvt->_sapi->readUcs2(buffer,length);
 }
 
-ssize_t	httprequest::read(ucs2_t *character) {
-	return pvt->_sapi->read(character);
+ssize_t	httprequest::readUcs2(ucs2_t *character) {
+	return pvt->_sapi->readUcs2(character);
 }
 
 ssize_t	httprequest::read(int16_t *number) {

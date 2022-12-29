@@ -1215,7 +1215,7 @@ int main(int argc, const char **argv) {
 	char	*c=charstring::duplicate(wchars);
 	test("from wchar_t",!charstring::compare(c,chars));
 	delete[] c;
-	c=charstring::duplicate(ucs2chars);
+	c=charstring::duplicateUcs2(ucs2chars);
 	test("from ucs2",!charstring::compare(c,chars));
 	delete[] c;
 	stdoutput.printf("\n");

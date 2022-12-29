@@ -302,15 +302,15 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 	const ucs2_t	*start=ptr;
 	while (*ptr) {
 		if (!compare(ptr,oldstr,oldstrlen)) {
-			newstring.append(start,ptr-start);
-			newstring.append(newstr);
+			newstring.appendUcs2(start,ptr-start);
+			newstring.appendUcs2(newstr);
 			ptr+=oldstrlen;
 			start=ptr;
 		} else {
 			ptr++;
 		}
 	}
-	newstring.append(start,ptr-start);
+	newstring.appendUcs2(start,ptr-start);
 	return newstring.detachString();
 }
 
@@ -362,8 +362,8 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 		for (const ucs2_t * const *oldptr=oldstrset;
 							*oldptr; oldptr++) {
 			if (!compare(ptr,oldstrset[i],oldstrlen[i])) {
-				newstring.append(start,ptr-start);
-				newstring.append(newstrset[i]);
+				newstring.appendUcs2(start,ptr-start);
+				newstring.appendUcs2(newstrset[i]);
 				ptr+=oldstrlen[i];
 				start=ptr;
 				found=true;
@@ -375,7 +375,7 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 			ptr++;
 		}
 	}
-	newstring.append(start,ptr-start);
+	newstring.appendUcs2(start,ptr-start);
 
 	return newstring.detachString();
 }
@@ -1968,7 +1968,7 @@ int64_t ucs2charstring::toInteger(const ucs2_t *string, int32_t base) {
 
 int64_t ucs2charstring::toInteger(const ucs2_t *string,
 				const ucs2_t **endptr, int32_t base) {
-	char	*str=charstring::duplicate(string);
+	char	*str=charstring::duplicateUcs2(string);
 	int64_t	retval=charstring::toInteger(str,NULL,base);
 	delete[] str;
 	if (endptr) {
@@ -1997,7 +1997,7 @@ uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
 uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
 						const ucs2_t **endptr,
 						int32_t base) {
-	char	*str=charstring::duplicate(string);
+	char	*str=charstring::duplicateUcs2(string);
 	int64_t	retval=charstring::toUnsignedInteger(str,NULL,base);
 	delete[] str;
 	if (endptr) {
@@ -2050,7 +2050,7 @@ long double ucs2charstring::toFloatC(const ucs2_t *string) {
 
 long double ucs2charstring::toFloat(const ucs2_t *string,
 					const ucs2_t **endptr) {
-	char		*str=charstring::duplicate(string);
+	char		*str=charstring::duplicateUcs2(string);
 	long double	retval=charstring::toFloat(str,NULL);
 	delete[] str;
 	if (endptr) {

@@ -55,12 +55,12 @@ ssize_t cgihttpserverapi::read(wchar_t *character) {
 	return stdinput.read(character);
 }
 
-ssize_t cgihttpserverapi::read(ucs2_t *buffer, size_t length) {
-	return stdinput.read(buffer,length);
+ssize_t cgihttpserverapi::readUcs2(ucs2_t *buffer, size_t length) {
+	return stdinput.readUcs2(buffer,length);
 }
 
-ssize_t cgihttpserverapi::read(ucs2_t *character) {
-	return stdinput.read(character);
+ssize_t cgihttpserverapi::readUcs2(ucs2_t *character) {
+	return stdinput.readUcs2(character);
 }
 
 ssize_t cgihttpserverapi::read(int16_t *number) {
@@ -288,16 +288,16 @@ ssize_t	cgihttpserverapi::write(wchar_t character) {
 	return stdoutput.write(character);
 }
 
-ssize_t	cgihttpserverapi::write(const ucs2_t *string) {
-	return stdoutput.write(string);
+ssize_t	cgihttpserverapi::writeUcs2(const ucs2_t *string) {
+	return stdoutput.writeUcs2(string);
 }
 
-ssize_t	cgihttpserverapi::write(const ucs2_t *string, size_t size) {
-	return stdoutput.write(string,size);
+ssize_t	cgihttpserverapi::writeUcs2(const ucs2_t *string, size_t size) {
+	return stdoutput.writeUcs2(string,size);
 }
 
-ssize_t	cgihttpserverapi::write(ucs2_t character) {
-	return stdoutput.write(character);
+ssize_t	cgihttpserverapi::writeUcs2(ucs2_t character) {
+	return stdoutput.writeUcs2(character);
 }
 
 ssize_t	cgihttpserverapi::write(int16_t number) {
@@ -346,7 +346,7 @@ ssize_t cgihttpserverapi::printfDelegate(
 	return stdoutput.printf(format,argp);
 }
 
-ssize_t cgihttpserverapi::printfDelegate(
+ssize_t cgihttpserverapi::printfUcs2Delegate(
 				const ucs2_t *format, va_list *argp) {
-	return stdoutput.printf(format,argp);
+	return stdoutput.printfUcs2(format,argp);
 }

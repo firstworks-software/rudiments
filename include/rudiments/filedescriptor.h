@@ -190,7 +190,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Writes "character" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(ucs2_t character);
+		ssize_t	writeUcs2(ucs2_t character);
 
 		/** Writes "value" to the file descriptor.  Returns the
 		 *  number of bytes that were successfully written or
@@ -215,7 +215,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Writes NULL-terminated "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
  		 *  or RESULT_ERROR if an error occurred. */
-		ssize_t	write(const ucs2_t *string);
+		ssize_t	writeUcs2(const ucs2_t *string);
 
 		/** Writes "size" bytes of "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
@@ -243,7 +243,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
  		 *  successfully written or RESULT_ERROR if an error occurred.
  		 *  Note that it is possible to write beyond the string's NULL
  		 *  terminator using this method.  */
-		ssize_t	write(const ucs2_t *string, size_t length);
+		ssize_t	writeUcs2(const ucs2_t *string, size_t length);
 
 		/** Writes "size" bytes of "buffer" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
@@ -332,7 +332,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(ucs2_t character, int32_t sec, int32_t usec);
+		ssize_t	writeUcs2(ucs2_t character, int32_t sec, int32_t usec);
 
 		/** Writes "value" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
@@ -369,7 +369,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  Returns the number of bytes that were successfully written
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
-		ssize_t	write(const ucs2_t *string,
+		ssize_t	writeUcs2(const ucs2_t *string,
 					int32_t sec, int32_t usec);
 
 		/** Writes "size" bytes of "string" to the file descriptor with
@@ -408,8 +408,8 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  or RESULT_TIMEOUT if a timeout occurred.  Note that it is
 		 *  possible to write beyond the string's NULL terminator using
 		 *  this method.  */
-		ssize_t	write(const ucs2_t *string, size_t length,
-					int32_t sec, int32_t usec);
+		ssize_t	writeUcs2(const ucs2_t *string, size_t length,
+						int32_t sec, int32_t usec);
 
 		/** Writes "size" bytes of "buffer" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -554,7 +554,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Reads a character from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	read(ucs2_t *buffer);
+		ssize_t	readUcs2(ucs2_t *buffer);
 
 		/** Reads a boolean value from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
@@ -579,7 +579,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Reads "length" characters from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(ucs2_t *buffer, size_t length);
+		ssize_t	readUcs2(ucs2_t *buffer, size_t length);
 
 		/** Reads "size" bytes from the file descriptor into "buf".
 		 *  Returns the number of bytes that were successfully read or
@@ -692,7 +692,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(ucs2_t *buffer, int32_t sec, int32_t usec);
+		ssize_t	readUcs2(ucs2_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a boolean value from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -730,7 +730,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(ucs2_t *buffer, size_t length,
+		ssize_t	readUcs2(ucs2_t *buffer, size_t length,
 					int32_t sec, int32_t usec);
 
 		/** Reads "size" bytes from the file
