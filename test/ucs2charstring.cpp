@@ -1196,9 +1196,9 @@ unimplemented...
 	const char	*chars=" !\"#$&'()*+,-./01234567890:;<=>?@"
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
 				"abcdefghijklmnopqrstuvwxyz{|}~";
-	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@"
-				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
-				"abcdefghijklmnopqrstuvwxyz{|}~";
+	// some compilers (SCO UW 7.0.1) won't let you split a wide character
+	// string over multiple lines
+	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 	ucs2literal(ucs2chars," !\"#$&'()*+,-./01234567890:;<=>?@"
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
 				"abcdefghijklmnopqrstuvwxyz{|}~");
