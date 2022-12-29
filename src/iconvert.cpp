@@ -302,7 +302,7 @@ bool iconvert::convert() {
 				// character set of the current locale is ASCII
 				// or some kind of extended ASCII.  This is
 				// likely the case on platforms that don't
-				if (*from<128) {
+				if ((unsigned char)*from<128) {
 					fromsize=sizeof(char);
 					if (to) {
 						*to=(wchar_t)*from;
@@ -357,7 +357,7 @@ bool iconvert::convert() {
 			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
 			// convert
-			if (from<128) {
+			if ((unsigned char)from<128) {
 				if (to) {
 					*to=(ucs2_t)from;
 				}
