@@ -453,8 +453,10 @@ wchar_t *wcharstring::convertAmount(int64_t amount) {
 			amt/100,amt-(amt/100*100));
 	#else
 		char	*temp=charstring::convertAmount(amount);
-		copy(amountstr,temp,length);
+		wchar_t	*wtemp=duplicate(temp);
 		delete[] temp;
+		copy(amountstr,wtemp,length);
+		delete[] wtemp;
 	#endif
 	return amountstr;
 }
@@ -785,8 +787,10 @@ wchar_t *wcharstring::parseNumber(long double number) {
 		swprintf(str,22,L"%Lf",number);
 	#else
 		char	*temp=charstring::parseNumber(number);
-		copy(str,temp,22);
+		wchar_t	*wtemp=duplicate(temp);
 		delete[] temp;
+		copy(str,wtemp,22);
+		delete[] wtemp;
 	#endif
 	return str;
 }
@@ -797,8 +801,10 @@ wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
 		swprintf(str,22,L"%.*Lf",scale,number);
 	#else
 		char	*temp=charstring::parseNumber(number,scale);
-		copy(str,temp,22);
+		wchar_t	*wtemp=duplicate(temp);
 		delete[] temp;
+		copy(str,wtemp,22);
+		delete[] wtemp;
 	#endif
 	return str;
 }
@@ -811,8 +817,10 @@ wchar_t *wcharstring::parseNumber(long double number,
 		swprintf(str,strlength,L"%*.*Lf",precision,scale,number);
 	#else
 		char	*temp=charstring::parseNumber(number,precision,scale);
-		copy(str,temp,strlength);
+		wchar_t	*wtemp=duplicate(temp);
 		delete[] temp;
+		copy(str,wtemp,strlength);
+		delete[] wtemp;
 	#endif
 	return str;
 }
