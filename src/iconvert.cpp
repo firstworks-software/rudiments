@@ -325,8 +325,8 @@ bool iconvert::convert() {
 			// locale is ASCII or some kind of extended ASCII
 
 			// set up "from"
-			fromsize=sizeof(ucs2_t);
-			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			fromsize=sizeof(char16_t);
+			char16_t	from=*((const char16_t *)pvt->_frombufferptr);
 
 			// set up "to"
 			tosize=sizeof(char);
@@ -353,13 +353,13 @@ bool iconvert::convert() {
 			char	from=*((const char *)pvt->_frombufferptr);
 
 			// set up "to"
-			tosize=sizeof(ucs2_t);
-			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			tosize=sizeof(char16_t);
+			char16_t	*to=(char16_t *)pvt->_tobufferptr;
 
 			// convert
 			if (from<128) {
 				if (to) {
-					*to=(ucs2_t)from;
+					*to=(char16_t)from;
 				}
 			} else {
 				error::setErrorNumber(EILSEQ);
@@ -370,15 +370,15 @@ bool iconvert::convert() {
 					!charstring::compare(toenc,"WCHAR_T")) {
 			
 			// sanity check on buffers
-			if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
+			if (pvt->_frombufferremaining<sizeof(char16_t) ||
 				pvt->_tobufferremaining<sizeof(wchar_t)) {
 				error::setErrorNumber(EILSEQ);
 				return false;
 			}
 
 			// set up "from"
-			fromsize=sizeof(ucs2_t);
-			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			fromsize=sizeof(char16_t);
+			char16_t	from=*((const char16_t *)pvt->_frombufferptr);
 
 			// set up "to"
 			tosize=sizeof(wchar_t);
@@ -404,7 +404,7 @@ bool iconvert::convert() {
 			
 			// sanity check on buffers
 			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				pvt->_tobufferremaining<sizeof(char16_t)) {
 				error::setErrorNumber(EILSEQ);
 				return false;
 			}
@@ -414,8 +414,8 @@ bool iconvert::convert() {
 			wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
 
 			// set up "to"
-			tosize=sizeof(ucs2_t);
-			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			tosize=sizeof(char16_t);
+			char16_t	*to=(char16_t *)pvt->_tobufferptr;
 			bytestring::zero(to,tosize);
 
 			// FIXME: use c16rtomb/c16tomb if available
@@ -426,7 +426,7 @@ bool iconvert::convert() {
 			// format is not the same as UCS-2 (Solaris 9-)
 			if (from<128) {
 				if (to) {
-					*to=(ucs2_t)from;
+					*to=(char16_t)from;
 				}
 			} else {
 				error::setErrorNumber(EILSEQ);
@@ -437,17 +437,17 @@ bool iconvert::convert() {
 					!charstring::compare(toenc,"UCS-2")) {
 			
 			// sanity check on buffers
-			if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
-				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			if (pvt->_frombufferremaining<sizeof(char16_t) ||
+				pvt->_tobufferremaining<sizeof(char16_t)) {
 				error::setErrorNumber(EILSEQ);
 				return false;
 			}
 
 			// set up "from"
-			fromsize=sizeof(ucs2_t);
+			fromsize=sizeof(char16_t);
 
 			// set up "to"
-			tosize=sizeof(ucs2_t);
+			tosize=sizeof(char16_t);
 
 			// copy
 			if (pvt->_tobufferptr) {

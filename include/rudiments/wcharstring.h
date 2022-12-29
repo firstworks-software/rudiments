@@ -531,7 +531,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
  		 *  allocates a buffer for the duplicate string internally and
  		 *  returns it.  The calling program must deallocate this
  		 *  buffer. */
-		static	wchar_t	*duplicate(const ucs2_t *str);
+		static	wchar_t	*duplicate(const char16_t *str);
 
 		/** Creates a duplicate of the first "len" UCS-2 characters of
 		 *  "str", converting each UCS-2 character to a character per
@@ -542,7 +542,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	wchar_t	*duplicate(const ucs2_t *str, size_t len);
+		static	wchar_t	*duplicate(const char16_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each UCS-2
 		 *  character to a character per the character set of the
@@ -552,7 +552,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	wchar_t	*duplicate(const ucs2_t *str,
+		static	wchar_t	*duplicate(const char16_t *str,
 							wchar_t replacement);
 
 		/** Creates a duplicate of the first "len" UCS-2 characters of
@@ -564,7 +564,7 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	wchar_t	*duplicate(const ucs2_t *str, size_t len,
+		static	wchar_t	*duplicate(const char16_t *str, size_t len,
 							wchar_t replacement);
 
 		/** Converts "str" to uppercase. */

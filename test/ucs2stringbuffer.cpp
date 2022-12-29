@@ -30,8 +30,8 @@ int main(int argc, const char **argv) {
 		members=64;
 		strl=20000;
 	}
-	ucs2_t	*str=new ucs2_t[strl];
-	ucs2_t	buf[64];
+	char16_t	*str=new char16_t[strl];
+	char16_t	buf[64];
 
 	// create a new string buffer
 	ucs2stringbuffer	*strb=new ucs2stringbuffer();
@@ -41,12 +41,12 @@ int main(int argc, const char **argv) {
 	for (uint16_t i=0; i<iterations; i++) {
 
 		strb->clear();
-		bytestring::zero(str,strl*sizeof(ucs2_t));
+		bytestring::zero(str,strl*sizeof(char16_t));
 
 		for (uint16_t j=0; j<members; j++) {
 
 			// NULL
-			strb->append((const ucs2_t *)NULL);
+			strb->append((const char16_t *)NULL);
 
 			// empty string
 			ucs2literal(empty,"");
@@ -63,7 +63,7 @@ int main(int argc, const char **argv) {
 				strb->append((uint16_t)k);
 				ucs2literal(format,"%hd");
 				ucs2charstring::printf(buf,
-						sizeof(buf)/sizeof(ucs2_t),
+						sizeof(buf)/sizeof(char16_t),
 						format,(uint16_t)k);
 				ucs2charstring::append(str,buf);
 			}
@@ -71,7 +71,7 @@ int main(int argc, const char **argv) {
 				strb->append((uint32_t)k);
 				ucs2literal(format,"%ld");
 				ucs2charstring::printf(buf,
-						sizeof(buf)/sizeof(ucs2_t),
+						sizeof(buf)/sizeof(char16_t),
 						format,(uint32_t)k);
 				ucs2charstring::append(str,buf);
 			}
@@ -80,7 +80,7 @@ int main(int argc, const char **argv) {
 				strb->append((uint64_t)k);
 				ucs2literal(format,"%lld");
 				ucs2charstring::printf(buf,
-						sizeof(buf)/sizeof(ucs2_t),
+						sizeof(buf)/sizeof(char16_t),
 						format,(uint64_t)k);
 				ucs2charstring::append(str,buf);
 			}
@@ -94,7 +94,7 @@ int main(int argc, const char **argv) {
 				strb->append(l,k+1,(uint16_t)l);
 				ucs2literal(format,"%*.*f");
 				ucs2charstring::printf(buf,
-						sizeof(buf)/sizeof(ucs2_t),
+						sizeof(buf)/sizeof(char16_t),
 						format,k+1,k,l);
 				ucs2charstring::append(str,buf);
 			}
@@ -107,7 +107,7 @@ int main(int argc, const char **argv) {
 				strb->append(l,k+1,k);
 				ucs2literal(format,"%*.*f");
 				ucs2charstring::printf(buf,
-						sizeof(buf)/sizeof(ucs2_t),
+						sizeof(buf)/sizeof(char16_t),
 						format,k+1,k,l);
 				ucs2charstring::append(str,buf);
 			}
@@ -125,7 +125,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("write...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 		for (uint32_t j=0;
-			j<(strl/sizeof(ucs2_t))-5-1; j=j+10+i) {
+			j<(strl/sizeof(char16_t))-5-1; j=j+10+i) {
 			strb->setPosition(j);
 			ucs2literal(sixes,"66666");
 			strb->write(sixes);
@@ -143,9 +143,9 @@ int main(int argc, const char **argv) {
 	ucs2literal(numbersletters,"0123456789abcdef");
 	for (uint16_t i=0; i<iterations; i++) {
 
-		bytestring::zero(str,strl*sizeof(ucs2_t));
+		bytestring::zero(str,strl*sizeof(char16_t));
 
-		ucs2_t	*data=new ucs2_t[1024*(i+1)+1];
+		char16_t	*data=new char16_t[1024*(i+1)+1];
 		ucs2charstring::zero(data,1024*(i+1)+1);
 		for (uint16_t j=0; j<1024*(i+1)/16; j++) {
 			ucs2charstring::append(data,numbersletters);

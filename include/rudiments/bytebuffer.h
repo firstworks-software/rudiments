@@ -99,7 +99,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  accommodate the new data.
 		 *
 		 *  Returns the number of bytes written. */
-		ssize_t	write(const ucs2_t *string, size_t length);
+		ssize_t	write(const char16_t *string, size_t length);
 
 		/** Writes "string" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -107,7 +107,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns the number of bytes written. */
-		ssize_t	write(const ucs2_t *string);
+		ssize_t	write(const char16_t *string);
 
 		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -131,7 +131,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns the number of bytes written. */
-		ssize_t	write(ucs2_t character);
+		ssize_t	write(char16_t character);
 
 		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
@@ -249,14 +249,14 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		bytebuffer	*append(const ucs2_t *string, size_t length);
+		bytebuffer	*append(const char16_t *string, size_t length);
 
 		/** Appends "string" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		bytebuffer	*append(const ucs2_t *string);
+		bytebuffer	*append(const char16_t *string);
 
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
@@ -277,7 +277,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		bytebuffer	*append(ucs2_t character);
+		bytebuffer	*append(char16_t character);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
@@ -391,7 +391,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  rules.
 		 *
 		 *  Returns NULL if an error occurred. */
-		bytebuffer	*appendFormatted(const ucs2_t *format, ...);
+		bytebuffer	*appendFormatted(const char16_t *format, ...);
 
 		/** Appends "argp" to the byte buffer using "format"
 		 *  which should comply with standard wprintf formatting
@@ -401,7 +401,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  va_list.
 		 *
 		 *  Returns NULL if an error occurred. */
-		bytebuffer	*appendFormatted(const ucs2_t *format,
+		bytebuffer	*appendFormatted(const char16_t *format,
 							va_list *argp);
 
 		/** Truncates the bytebuffer at position "pos". */

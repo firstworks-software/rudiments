@@ -177,11 +177,11 @@ char character::duplicate(wchar_t c, char replacement) {
 	return retval;
 }
 
-char character::duplicate(ucs2_t c) {
+char character::duplicate(char16_t c) {
 	return duplicate(c,'?');
 }
 
-char character::duplicate(ucs2_t c, char replacement) {
+char character::duplicate(char16_t c, char replacement) {
 	#ifdef _WIN32
 		// on windows, wchar_t's are encoded as UCS-2,
 		// so we can piggyback
@@ -192,7 +192,7 @@ char character::duplicate(ucs2_t c, char replacement) {
 		iconvert	i;
 		i.setFromEncoding("UCS-2");
 		i.setFromBuffer((byte_t *)&c);
-		i.setFromBufferSize(sizeof(ucs2_t));
+		i.setFromBufferSize(sizeof(char16_t));
 		i.setToBuffer((byte_t *)mb);
 		i.setToBufferSize(iconvert::maxMultiByteSize());
 		if (!i.convert()) {

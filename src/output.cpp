@@ -40,16 +40,16 @@ ssize_t output::write(wchar_t character, int32_t sec, int32_t usec) {
 	return write(character);
 }
 
-ssize_t output::write(const ucs2_t *string, int32_t sec, int32_t usec) {
+ssize_t output::write(const char16_t *string, int32_t sec, int32_t usec) {
 	return write(string);
 }
 
-ssize_t output::write(const ucs2_t *string, size_t size,
+ssize_t output::write(const char16_t *string, size_t size,
 						int32_t sec, int32_t usec) {
 	return write(string,size);
 }
 
-ssize_t output::write(ucs2_t character, int32_t sec, int32_t usec) {
+ssize_t output::write(char16_t character, int32_t sec, int32_t usec) {
 	return write(character);
 }
 

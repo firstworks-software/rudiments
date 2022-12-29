@@ -200,11 +200,11 @@ wchar_t wcharacter::duplicate(char c, wchar_t replacement) {
 	return (i.convert())?wc:replacement;
 }
 
-wchar_t wcharacter::duplicate(ucs2_t c) {
+wchar_t wcharacter::duplicate(char16_t c) {
 	return duplicate(c,L'?');
 }
 
-wchar_t wcharacter::duplicate(ucs2_t c, wchar_t replacement) {
+wchar_t wcharacter::duplicate(char16_t c, wchar_t replacement) {
 	#ifdef _WIN32
 		// on windows, wchar_t's are encoded as UCS-2
 		return (wchar_t)c;
@@ -214,7 +214,7 @@ wchar_t wcharacter::duplicate(ucs2_t c, wchar_t replacement) {
 		iconvert	i;
 		i.setFromEncoding("UCS-2");
 		i.setFromBuffer((byte_t *)&c);
-		i.setFromBufferSize(sizeof(ucs2_t));
+		i.setFromBufferSize(sizeof(char16_t));
 		i.setToEncoding("WCHAR_T");
 		i.setToBuffer((byte_t *)&wc);
 		i.setToBufferSize(sizeof(wchar_t));
