@@ -1010,9 +1010,9 @@ int main(int argc, const char **argv) {
 	const char	*chars=" !\"#$&'()*+,-./01234567890:;<=>?@"
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
 				"abcdefghijklmnopqrstuvwxyz{|}~";
-	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@"
-				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
-				"abcdefghijklmnopqrstuvwxyz{|}~";
+	// some platforms (SCO UW 7.0.1) don't like wchar_t
+	// literals to be split over multiple lines
+	const wchar_t	*wchars=L" !\"#$&'()*+,-./01234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 	ucs2literal(ucs2chars," !\"#$&'()*+,-./01234567890:;<=>?@"
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
 				"abcdefghijklmnopqrstuvwxyz{|}~");
