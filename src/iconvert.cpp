@@ -38,6 +38,15 @@
 	#include <stdlib.h>
 #endif
 
+// use EINVAL on platforms that don't have EILSEQ
+#ifndef EILSEQ
+	#ifdef EINVAL
+		#define EILSEQ EINVAL
+	#else
+		#error no EILSEQ, EINVAL, or anything like it...
+	#endif
+#endif
+
 class iconvertprivate {
 	friend class iconvert;
 	private:
