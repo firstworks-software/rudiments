@@ -4742,9 +4742,14 @@ then
 		fi
 	fi
 
-	AC_SUBST(LIBICONVINCLUDES)
-	AC_SUBST(LIBICONVLIBS)
+else
+	dnl if libiconv is installed, defining LIBICONV_PLUG
+	dnl effectively disables it, falling back to built-in iconv
+	LIBICONVINCLUDES="-DLIBICONV_PLUG"
 fi
+
+AC_SUBST(LIBICONVINCLUDES)
+AC_SUBST(LIBICONVLIBS)
 
 AC_MSG_CHECKING(for iconv.h)
 FW_TRY_COMPILE([#include <iconv.h>],
