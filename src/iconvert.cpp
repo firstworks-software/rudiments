@@ -3,6 +3,8 @@
 
 #include <rudiments/iconvert.h>
 #include <rudiments/error.h>
+//#define DEBUG_MESSAGES
+#include <rudiments/debugprint.h>
 
 #ifdef RUDIMENTS_HAVE_ICONV_H
 	#include <iconv.h>
@@ -14,6 +16,7 @@
 //#undef RUDIMENTS_HAVE_WCTOMB
 //#undef RUDIMENTS_HAVE_MBRTOWC
 //#undef RUDIMENTS_HAVE_MBTOWC
+
 
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
@@ -151,23 +154,57 @@ size_t iconvert::getToBufferSize() {
 bool iconvert::convert() {
 
 	#ifdef RUDIMENTS_HAVE_ICONV
+		size_t result=0;
 
 		// open, if we haven't already
 		if (!pvt->_open) {
+
+			error::clearError();
+
 			pvt->_i=iconv_open(pvt->_toencoding,pvt->_fromencoding);
-			if (pvt->_i==(iconv_t)-1) {
-				pvt->_i=0;
-				// Some platforms (SCO UW 7.0.1) don't support
-				// conversion to/from wchar_t.  For cases like
-				// that, and for other cases where iconv doesn't
-				// like the to/from character set, fall back to
-				// mbtowc()/wctomb() and/or other methods, we
-				// might have better luck with them.
-				if (error::getErrorNumber()==EINVAL) {
-					goto fallback;
+
+			// if the requested conversion isn't supported, then we
+			// should fall back to other methods
+			//
+			// Eg.
+			//
+			// SCO UW 7.0.1 iconv doesn't convert to/from
+			// wchar_t but its wctomb()/mbtowc() do
+			//
+			// Solaris 11 iconv doesn't appear to convert to/from
+			// UCS-2
+			if (error::getErrorNumber()==EINVAL) {
+
+				debugPrintf("iconv_open() failed with error %d "
+						"- attempting other "
+						"methods...\n",
+						error::getErrorNumber());
+				
+
+				// Solaris 11 misbehaves when it doesn't support
+				// a conversion.  Rather than returning -1, it
+				// returns a valid descriptor but still sets
+				// errno to EINVAL.  Lets close the descriptor.
+				if (pvt->_i!=(iconv_t)-1) {
+					iconv_close(pvt->_i);
 				}
+
+				pvt->_i=0;
+				goto fallback;
+			}
+
+			// if iconv_open() failed for some reason other than
+			// not supporting the conversion, then bail
+			if (pvt->_i==(iconv_t)-1) {
+				debugPrintf("iconv_open() failed with error %d "
+						"- not attempting other "
+						"methods.\n",
+						error::getErrorNumber());
+				pvt->_i=0;
 				return false;
 			}
+
+			// success
 			pvt->_open=true;
 			pvt->_frombufferptr=pvt->_frombuffer;
 			pvt->_frombufferremaining=pvt->_frombuffersize;
@@ -176,7 +213,7 @@ bool iconvert::convert() {
 		}
 
 		// convert a character
-		return iconv(pvt->_i,
+		result=iconv(pvt->_i,
 				#ifdef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF
 				(char **)
 				#else
@@ -185,10 +222,15 @@ bool iconvert::convert() {
 				&(pvt->_frombufferptr),
 				&(pvt->_frombufferremaining),
 				(char **)&(pvt->_tobufferptr),
-				&(pvt->_tobufferremaining))!=(size_t)-1;
-	#endif
+				&(pvt->_tobufferremaining));
+		if (result==(size_t)-1 ||
+			(result==0 && error::getErrorNumber())) {
+			return false;
+		}
+		return true;
 
 fallback:
+	#endif
 
 	// open, if we haven't already
 	if (!pvt->_open) {
