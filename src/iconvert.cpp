@@ -192,6 +192,8 @@ bool iconvert::convert() {
 				}
 
 				pvt->_i=0;
+				error::clearError();
+
 				goto fallback;
 			}
 
