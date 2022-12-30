@@ -675,9 +675,7 @@ uint16_t iconvert::maxMultiByteSize() {
 }
 
 bool iconvert::convertNeedsMutex() {
-	#if defined(RUDIMENTS_HAVE_WCTOMB) && \
-        	!defined(RUDIMENTS_HAVE_ICONV) && \
-		!defined(RUDIMENTS_HAVE_WCRTOMB)
+	#ifdef RUDIMENTS_HAVE_WCRTOMB
 		return false;
 	#endif
 	return true;

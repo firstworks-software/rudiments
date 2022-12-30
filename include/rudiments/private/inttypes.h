@@ -196,9 +196,8 @@
 	typedef	uint32_t	char32_t;
 #endif
 
-// define ucs(2|4)_t and utf(8|16)_t
+// define ucs2_t and utf(8|16)_t
 typedef uint16_t ucs2_t;
-typedef uint32_t ucs4_t;
 typedef uint8_t utf8_t;
 typedef uint16_t utf16_t;
 
