@@ -73,7 +73,9 @@ iconvert::iconvert(iconvert &i) : object() {
 void iconvert::construct() {
 	pvt=new iconvertprivate;
 
-	pvt->_i=0;
+	#ifdef RUDIMENTS_HAVE_ICONV
+		pvt->_i=0;
+	#endif
 	pvt->_open=false;
 
 	pvt->_fromencoding="";
