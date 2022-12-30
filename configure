@@ -664,6 +664,8 @@ APR_1_MT_CONFIG
 APR_CONFIG
 APXS2
 APXS
+LIBICONVLIBS
+LIBICONVINCLUDES
 LIBEDITLIBS
 LIBEDITINCLUDES
 MASLIB
@@ -831,6 +833,9 @@ with_pcre_libs
 enable_libcurl
 with_libcurl_includes
 with_libcurl_libs
+enable_libiconv
+with_libiconv_includes
+with_libiconv_libs
 enable_built_in_regex
 enable_threads
 enable_character
@@ -1568,6 +1573,7 @@ Optional Features:
   --disable-gss           Disable GSS support
   --disable-pcre          Don't use PCRE for regular expressions
   --disable-libcurl       Disable libcurl support
+  --disable-libiconv      Disable libiconv support
   --enable-built-in-regex Use the built-in regex
   --disable-threads       Disable thread support
   --disable-character     Don't build character class
@@ -1669,6 +1675,8 @@ Optional Packages:
   --with-pcre-libs        PCRE libraries
   --with-libcurl-includes libcurl includes
   --with-libcurl-libs     libcurl libraries
+  --with-libiconv-includes libiconv includes
+  --with-libiconv-libs     libiconv libraries
   --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
                           both]
   --with-aix-soname=aix|svr4|both
@@ -2740,6 +2748,29 @@ if test "${with_libcurl_libs+set}" = set; then :
   withval=$with_libcurl_libs; LIBCURLLIBS="$withval"
 else
   LIBCURLLIBS=""
+fi
+
+# Check whether --enable-libiconv was given.
+if test "${enable_libiconv+set}" = set; then :
+  enableval=$enable_libiconv; ENABLE_RUDIMENTS_LIBICONV="no"
+else
+  ENABLE_RUDIMENTS_LIBICONV="yes"
+fi
+
+
+# Check whether --with-libiconv-includes was given.
+if test "${with_libiconv_includes+set}" = set; then :
+  withval=$with_libiconv_includes; LIBICONVINCLUDES="$withval"
+else
+  LIBICONVINCLUDES=""
+fi
+
+
+# Check whether --with-libiconv-libs was given.
+if test "${with_libiconv_libs+set}" = set; then :
+  withval=$with_libiconv_libs; LIBICONVLIBS="$withval"
+else
+  LIBICONVLIBS=""
 fi
 
 # Check whether --enable-built-in-regex was given.
@@ -19496,30 +19527,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv.h" >&5
-$as_echo_n "checking for iconv.h... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <iconv.h>
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_ICONV_H 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
 echo "******************************"
 
 
@@ -31143,146 +31150,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mbrtowc" >&5
-$as_echo_n "checking for mbrtowc... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif
-int
-main ()
-{
-mbrtowc(0,0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_MBRTOWC 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mbtowc" >&5
-$as_echo_n "checking for mbtowc... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif
-int
-main ()
-{
-mbtowc(0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_MBTOWC 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcrtomb" >&5
-$as_echo_n "checking for wcrtomb... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif
-int
-main ()
-{
-wcrtomb(0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_WCRTOMB 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wctomb" >&5
-$as_echo_n "checking for wctomb... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif
-int
-main ()
-{
-wctomb(0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_WCTOMB 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for broken towctrans" >&5
 $as_echo_n "checking for broken towctrans... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -31881,64 +31748,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-ICONV_DEFINED=""
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv" >&5
-$as_echo_n "checking for iconv... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef RUDIMENTS_HAVE_ICONV_H
-	#include <iconv.h>
-#endif
-int
-main ()
-{
-iconv(0,0,0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ICONV_DEFINED=yes; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-$as_echo "#define RUDIMENTS_HAVE_ICONV 1" >>confdefs.h
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-if ( test -n "$ICONV_DEFINED" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv with non-const inbuf" >&5
-$as_echo_n "checking for iconv with non-const inbuf... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef RUDIMENTS_HAVE_ICONV_H
-	#include <iconv.h>
-#endif
-int
-main ()
-{
-iconv(0,(char **)0,0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-$as_echo "#define RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF 1" >>confdefs.h
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-fi
 
 echo "******************************"
 
@@ -38429,8 +38238,7 @@ fi
 
 		if ( test -n "$LIBEDITLIBS" )
 		then
-			LIBEDITLIBS="$LIBEDITLIBS"
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+						{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 		else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -38547,6 +38355,748 @@ $as_echo "#define ADD_NEWLINE_AFTER_READ_FROM_STDIN 1" >>confdefs.h
 			;;
 	esac
 fi
+
+echo "******************************"
+
+
+echo
+echo "***** Character Conversion ***"
+
+if ( test "$ENABLE_RUDIMENTS_LIBICONV" = "yes" )
+then
+
+	if ( test -z "$LIBICONVLIBS" -a -z "$LIBICONVINCLUDES" )
+	then
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libiconv" >&5
+$as_echo_n "checking for libiconv... " >&6; }
+
+
+SEARCHPATH=/usr
+NAME=iconv
+HEADER=iconv.h
+LIBNAME=iconv
+LINKSTATIC=""
+LINKRPATH=""
+USEFULLLIBPATH=
+INCLUDESTRING=""
+LIBSTRING=""
+LIBPATH=""
+STATIC=""
+HEADERSANDLIBSPATH=""
+
+eval "LIBICONVINCLUDES=\"\""
+eval "LIBICONVLIBS=\"\""
+eval "LIBICONVLIBPATH=\"\""
+eval "LIBICONVSTATIC=\"\""
+if ( test -n "" )
+then
+	eval "=\"\""
+fi
+
+
+EXTRAPATH="$SEARCHPATH"
+NAME="$NAME"
+SUFFIX=""
+
+SWPREFIXES="$EXTRAPATH / /usr"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/local/$NAME /opt/$NAME /usr/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/local /usr/pkg"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/pkg/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /opt/sfw"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /opt/sfw/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/sfw"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/sfw/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /opt/csw /sw /usr/freeware /boot/common /resources/index"
+SWPREFIXES="$SWPREFIXES /resources/firstworks"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /Library/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/local/firstworks"
+
+if ( test -n "$SUFFIX" )
+then
+	SWPATHS=""
+	for p in $SWPREFIXES
+	do
+		if ( test "$p" = "/" )
+		then
+			SWPATHS="$SWPATHS /$SUFFIX"
+		else
+			SWPATHS="$SWPATHS $p/$SUFFIX"
+		fi
+	done
+	eval "SEARCHPATHS=\"$SWPATHS\""
+else
+	eval "SEARCHPATHS=\"$SWPREFIXES\""
+fi
+
+for path in $SEARCHPATHS
+do
+
+		if ( test -z "$path" -o ! -d "$path" )
+	then
+		continue
+	fi
+
+		if ( test -n "$LIBARCHDIR" )
+	then
+
+		if ( test "$path" = "/" )
+		then
+
+
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBARCHDIR\"; LIBSTRING=\"-Wl,/$LIBARCHDIR/lib$LIBNAME.$SOSUFFIX\""
+	fi
+elif ( test -n "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/$LIBARCHDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBARCHDIR\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+elif ( test -n "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+		else
+
+						for libpath in \
+				"$path/$LIBARCHDIR" \
+				"$path/$LIBARCHDIR/$NAME" \
+				"$path/$LIBARCHDIR/opt" \
+				"$path/$LIBARCHDIR/$MULTIARCHDIR"
+			do
+				for includepath in "$path/include" "$path/include/$NAME"
+				do
+					if ( test "$USEFULLLIBPATH" = "yes" )
+					then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+					else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+					fi
+					if ( test -n "$LIBSTRING" )
+					then
+						break
+					fi
+				done
+				if ( test -n "$LIBSTRING" )
+				then
+					break
+				fi
+			done
+		fi
+
+				if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+	fi
+
+		if ( test -z "$LIBSTRING" )
+	then
+
+								if ( test "$LIBARCHDIR" = "lib" )
+		then
+			continue
+		fi
+
+										if ( test "$path" = "/" -o "$path" = "/usr" )
+		then
+			continue
+		fi
+
+				for libpath in \
+			"$path/lib" \
+			"$path/lib/$NAME" \
+			"$path/lib/opt" \
+			"$path/lib/$MULTIARCHDIR"
+		do
+			for includepath in "$path/include" "$path/include/$NAME"
+			do
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				fi
+				if ( test -n "$LIBSTRING" )
+				then
+					break
+				fi
+			done
+			if ( test -n "$LIBSTRING" )
+			then
+				break
+			fi
+		done
+
+				if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+	fi
+
+done
+
+INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
+
+eval "LIBICONVINCLUDES=\"$INCLUDESTRING\""
+eval "LIBICONVLIBS=\"$LIBSTRING\""
+eval "LIBICONVLIBPATH=\"$LIBPATH\""
+eval "LIBICONVSTATIC=\"$STATIC\""
+if ( test -n "" )
+then
+	eval "=\"$HEADERSANDLIBSPATH\""
+fi
+
+		if ( test -n "$LIBICONVLIBS" )
+		then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
+	fi
+
+
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv.h" >&5
+$as_echo_n "checking for iconv.h... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$LIBICONVINCLUDES"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <iconv.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_ICONV_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+
+
+ICONV_DEFINED=""
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv" >&5
+$as_echo_n "checking for iconv... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$LIBICONVINCLUDES"
+LIBS="$LIBICONVLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif
+int
+main ()
+{
+iconv(0,0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ICONV_DEFINED=yes; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+$as_echo "#define RUDIMENTS_HAVE_ICONV 1" >>confdefs.h
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+if ( test -n "$ICONV_DEFINED" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv with non-const inbuf" >&5
+$as_echo_n "checking for iconv with non-const inbuf... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$LIBICONVINCLUDES"
+LIBS="$LIBICONVLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif
+int
+main ()
+{
+iconv(0,(char **)0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+$as_echo "#define RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF 1" >>confdefs.h
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mbrtowc" >&5
+$as_echo_n "checking for mbrtowc... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+mbrtowc(0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_MBRTOWC 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mbtowc" >&5
+$as_echo_n "checking for mbtowc... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+mbtowc(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_MBTOWC 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcrtomb" >&5
+$as_echo_n "checking for wcrtomb... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wcrtomb(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCRTOMB 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wctomb" >&5
+$as_echo_n "checking for wctomb... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif
+int
+main ()
+{
+wctomb(0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WCTOMB 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 echo "******************************"
 
@@ -42483,6 +43033,11 @@ if ( test -n "$LIBEDITLIBS" )
 then
 	LIBEDITBUILD="yes"
 fi
+LIBICONVBUILD="no"
+if ( test -n "$LIBICONVLIBS" )
+then
+	LIBICONVBUILD="yes"
+fi
 CGIBUILD="no"
 if ( test "$INCLUDE_CGI" = "1")
 then
@@ -42505,6 +43060,7 @@ echo "                libcurl   $LIBCURLBUILD"
 echo "                TLS/SSL   $SSLBUILD"
 echo "                GSS       $GSSBUILD"
 echo "                libedit   $LIBEDITBUILD"
+echo "                libiconv  $LIBICONVBUILD"
 echo "                CGI       $CGIBUILD"
 echo "                Apache    $APACHEBUILD $APACHEWARNING"
 echo "*******************************"

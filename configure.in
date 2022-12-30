@@ -98,6 +98,18 @@ AC_ARG_WITH(libcurl-libs,
 	[  --with-libcurl-libs     libcurl libraries],
 	LIBCURLLIBS="$withval",
 	LIBCURLLIBS="")
+AC_ARG_ENABLE(libiconv,
+	[  --disable-libiconv      Disable libiconv support],
+	ENABLE_RUDIMENTS_LIBICONV="no",
+	ENABLE_RUDIMENTS_LIBICONV="yes")
+AC_ARG_WITH(libiconv-includes,
+	[  --with-libiconv-includes libiconv includes],
+	LIBICONVINCLUDES="$withval",
+	LIBICONVINCLUDES="")
+AC_ARG_WITH(libiconv-libs,
+	[  --with-libiconv-libs     libiconv libraries],
+	LIBICONVLIBS="$withval",
+	LIBICONVLIBS="")
 AC_ARG_ENABLE(built-in-regex,
 	[  --enable-built-in-regex Use the built-in regex],
 	USE_BUILT_IN_REGULAREXPRESSION="1",
@@ -981,10 +993,6 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif
 #include <sys/dl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_DL_H, 1, Some systems have sys/dl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for iconv.h)
-AC_TRY_COMPILE([#include <iconv.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_ICONV_H, 1, Some systems have iconv.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 
@@ -2968,66 +2976,6 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 iswblank(0);,AC_DEFINE(RUDIMENTS_HAVE_ISWBLANK,1,Some systems have iswblank) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for mbrtowc)
-AC_TRY_COMPILE([#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif],
-mbrtowc(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBRTOWC,1,Some systems have mbrtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for mbtowc)
-AC_TRY_COMPILE([#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif],
-mbtowc(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBTOWC,1,Some systems have mbtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for wcrtomb)
-AC_TRY_COMPILE([#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif],
-wcrtomb(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCRTOMB,1,Some systems have wcrtomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for wctomb)
-AC_TRY_COMPILE([#ifndef __USE_GNU
-	#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-	#define __USE_ISOC9X
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WCHAR_H
-	#include <wchar.h>
-#endif],
-wctomb(0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCTOMB,1,Some systems have wctomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for broken towctrans)
 AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
@@ -3242,22 +3190,6 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 long long a; llabs(a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_LLABS,1,Some systems have llabs), AC_MSG_RESULT(no))
-
-ICONV_DEFINED=""
-AC_MSG_CHECKING(for iconv)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
-	#include <iconv.h>
-#endif],
-iconv(0,0,0,0,0);,ICONV_DEFINED=yes; AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV,1,Some systems have iconv), AC_MSG_RESULT(no))
-
-if ( test -n "$ICONV_DEFINED" )
-then
-	AC_MSG_CHECKING(for iconv with non-const inbuf)
-	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
-	#include <iconv.h>
-#endif],
-iconv(0,(char **)0,0,0,0);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF,1,Some systems have iconv with non-const inbuf), AC_MSG_RESULT(no))
-fi
 
 echo "******************************"
 
@@ -4746,7 +4678,7 @@ then
 		FW_CHECK_HEADERS_AND_LIBS([/usr],[editline],[editline/readline.h],[edit],[""],[""],[LIBEDITINCLUDES],[LIBEDITLIBS],[LIBEDITLIBPATH],[LIBEDITSTATIC])
 		if ( test -n "$LIBEDITLIBS" )
 		then
-			LIBEDITLIBS="$LIBEDITLIBS"
+			dnl LIBEDITLIBS="$LIBEDITLIBS"
 			AC_MSG_RESULT(yes)
 		else
 			AC_MSG_RESULT(no)
@@ -4786,6 +4718,113 @@ then
 			;;
 	esac
 fi
+
+echo "******************************"
+
+
+dnl Checks for character conversion functions
+echo
+echo "***** Character Conversion ***"
+
+if ( test "$ENABLE_RUDIMENTS_LIBICONV" = "yes" )
+then
+
+	if ( test -z "$LIBICONVLIBS" -a -z "$LIBICONVINCLUDES" )
+	then
+
+		AC_MSG_CHECKING(for libiconv)
+		FW_CHECK_HEADERS_AND_LIBS([/usr],[iconv],[iconv.h],[iconv],[""],[""],[LIBICONVINCLUDES],[LIBICONVLIBS],[LIBICONVLIBPATH],[LIBICONVSTATIC])
+		if ( test -n "$LIBICONVLIBS" )
+		then
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+		fi
+	fi
+
+	AC_SUBST(LIBICONVINCLUDES)
+	AC_SUBST(LIBICONVLIBS)
+fi
+
+AC_MSG_CHECKING(for iconv.h)
+FW_TRY_COMPILE([#include <iconv.h>],
+[],[$LIBICONVINCLUDES],[AC_DEFINE(RUDIMENTS_HAVE_ICONV_H, 1, Some systems have iconv.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+ICONV_DEFINED=""
+AC_MSG_CHECKING(for iconv)
+FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif],
+[iconv(0,0,0,0,0);],[$LIBICONVINCLUDES],[$LIBICONVLIBS],[],[ICONV_DEFINED=yes; AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV,1,Some systems have iconv)],[AC_MSG_RESULT(no)])
+
+if ( test -n "$ICONV_DEFINED" )
+then
+	AC_MSG_CHECKING(for iconv with non-const inbuf)
+	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
+	#include <iconv.h>
+#endif],
+[iconv(0,(char **)0,0,0,0);],[$LIBICONVINCLUDES],[$LIBICONVLIBS],[],[AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF,1,Some systems have iconv with non-const inbuf)],[AC_MSG_RESULT(no)])
+fi
+
+AC_MSG_CHECKING(for mbrtowc)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+mbrtowc(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBRTOWC,1,Some systems have mbrtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for mbtowc)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+mbtowc(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBTOWC,1,Some systems have mbtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wcrtomb)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+wcrtomb(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCRTOMB,1,Some systems have wcrtomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for wctomb)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WCHAR_H
+	#include <wchar.h>
+#endif],
+wctomb(0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCTOMB,1,Some systems have wctomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
 
@@ -5659,6 +5698,11 @@ if ( test -n "$LIBEDITLIBS" )
 then
 	LIBEDITBUILD="yes"
 fi
+LIBICONVBUILD="no"
+if ( test -n "$LIBICONVLIBS" )
+then
+	LIBICONVBUILD="yes"
+fi
 CGIBUILD="no"
 if ( test "$INCLUDE_CGI" = "1")
 then
@@ -5681,6 +5725,7 @@ echo "                libcurl   $LIBCURLBUILD"
 echo "                TLS/SSL   $SSLBUILD"
 echo "                GSS       $GSSBUILD"
 echo "                libedit   $LIBEDITBUILD"
+echo "                libiconv  $LIBICONVBUILD"
 echo "                CGI       $CGIBUILD"
 echo "                Apache    $APACHEBUILD $APACHEWARNING"
 echo "*******************************"
