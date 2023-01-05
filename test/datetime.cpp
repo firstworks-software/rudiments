@@ -22,11 +22,9 @@ const char	*datestringwithzerousec="04/08/2016 21:54:30:000 EDT";
 time_t		secsinceepoch=1460166870;
 
 int main(int argc, const char **argv) {
-stdoutput.printf("TZ=%s\n",environment::getValue("TZ"));
 
 	// set timezone so epoch to string will work correctly
 	environment::setValue("TZ","EST5EDT");
-stdoutput.printf("TZ=%s\n",environment::getValue("TZ"));
 
 	header("datetime");
 
@@ -105,8 +103,6 @@ stdoutput.printf("TZ=%s\n",environment::getValue("TZ"));
 	// init from epoch
 	stdoutput.printf("date from epoch:\n");
 	dt.init(secsinceepoch);
-stdoutput.printf("secsinceepoch=%d\n",secsinceepoch);
-stdoutput.printf("time=%02d:%02d:%02d %s\n",dt.getHour(),dt.getMinute(),dt.getSecond(),dt.getTimeZoneString());
 	test("hour",dt.getHour()==21);
 	test("minutes",dt.getMinute()==54);
 	test("seconds",dt.getSecond()==30);
