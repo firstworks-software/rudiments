@@ -13,6 +13,7 @@
 struct args {
 	thread		*th;
 	int32_t		id;
+	uint32_t	seed;
 };
 
 stringbuffer	output;
@@ -34,7 +35,7 @@ void syncronize(void *args) {
 	// but it's basically the same thing.  Primitive, but it works.
 
 	randomnumber	r;
-	r.setSeed(randomnumber::getSeed());
+	r.setSeed(a->seed);
 
 	int32_t	ms;
 
@@ -112,6 +113,14 @@ int main(int argc, const char **argv) {
 	for (uint16_t i=0; i<2; i++) {
 		a[i].th=&t[i];
 		a[i].id=i;
+		// NOTE: Don't get seed inside of each thread.  On some
+		// platforms, it may come from seconds since the epoch.
+		// Getting that may maniuplate the environment.  On platforms
+		// with putenv, this introduces a race condition inside of the
+		// environment class re. initializing envstrings.  This needs
+		// to be addressed inside of the environment class, but for now,
+		// we'll handle it here.
+		a[i].seed=randomnumber::getSeed();
 	}
 
 	// run threads
