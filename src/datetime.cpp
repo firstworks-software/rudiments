@@ -647,17 +647,9 @@ bool datetime::setTimeZone(const char *newtz, bool ignoredst) {
 	// Change the time zone, get the broken down time relative to the
 	// current epoch, in the new time zone.
 	char	*oldzone=NULL;
-	bool	retval=true;
-	if (!charstring::isNullOrEmpty(newtz)) {
-		retval=setTZ(newtz,&oldzone,ignoredst);
-	}
-	if (retval) {
-		retval=getBrokenDownTimeFromEpoch();
-	}
-	if (!charstring::isNullOrEmpty(newtz)) {
-		retval=restoreTZ(oldzone);
-	}
-
+	bool	retval=setTZ(newtz,&oldzone,ignoredst) &&
+				getBrokenDownTimeFromEpoch() &&
+				restoreTZ(oldzone);
 	releaseLock();
 	return retval;
 }
@@ -705,17 +697,48 @@ bool datetime::setTZ(const char *zone, char **oldzone, bool ignoredst) {
 		realzone=combinedzone;
 	}
 
+	// get the current value of TZ
 	const char	*tz=environment::getValue("TZ");
-	if (tz) {
+	if (!charstring::isNullOrEmpty(tz)) {
 		*oldzone=charstring::duplicate(tz);
 	} else {
 		*oldzone=NULL;
 	}
-	return environment::setValue("TZ",realzone);
+
+	// If realzone is non-null/non-empty then set TZ to it.  If realzone is
+	// null/empty then ignore it and just keep whatever TZ is already set
+	// to.
+	//
+	// It's compilcated why we want to do this...
+	//
+	// Most platforms have an "internal timezone" set by /etc/localtime or
+	// /etc/TIMEZONE, or some other way (eg. on Windows, Solaris 11, etc.)
+	// but some (eg. UnixWare 7.0.1) just set the TZ environment variable.
+	//
+	// On all platforms, the TZ environment variable overrides the
+	// "internal timezone".  Setting it null/empty is undefined, but
+	// usually results in either it being ignored entirely and falling back
+	// to the "internal timezone", or GMT being used.  More often, the
+	// former.
+	//
+	// This method is called when normalizing the time, or when we
+	// specifically want to change the time zone.  Also, often,
+	// setTZ(pvt->_zone) gets called by construct() when pvt->_zone was
+	// just initialized to NULL.
+	//
+	// In all of these cases, if we're asked to set TZ to a null/empty
+	// value, then ignoring it and not setting TZ at all is really what we
+	// want to do - not set it to something with undefined results, and
+	// preserve the existing TZ on platforms that depend on it
+	// (eg. UnixWare).
+	if (!charstring::isNullOrEmpty(realzone)) {
+		return environment::setValue("TZ",realzone);
+	}
+	return true;
 }
 
 bool datetime::restoreTZ(char *oldzone) {
-	if (oldzone) {
+	if (!charstring::isNullOrEmpty(oldzone)) {
 		bool	retval=environment::setValue("TZ",oldzone);
 		delete[] oldzone;
 		return retval;
@@ -787,8 +810,7 @@ bool datetime::normalize() {
 
 	// If a time zone is set then use it
 	char	*oldzone=NULL;
-	if (!charstring::isNullOrEmpty(pvt->_zone) &&
-			!setTZ(pvt->_zone,&oldzone,false)) {
+	if (!setTZ(pvt->_zone,&oldzone,false)) {
 		releaseLock();
 		return false;
 	}
@@ -833,7 +855,9 @@ bool datetime::normalize() {
 
 	bool	retval=(pvt->_epoch!=-1);
 
-	restoreTZ(oldzone);
+	if (!charstring::isNullOrEmpty(pvt->_zone)) {
+		restoreTZ(oldzone);
+	}
 
 	releaseLock();
 
