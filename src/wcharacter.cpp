@@ -212,7 +212,7 @@ wchar_t wcharacter::duplicateUcs2(ucs2_t c, wchar_t replacement) {
 		// on non-windows, use iconvert
 		wchar_t		wc;
 		iconvert	i;
-		i.setFromEncoding("UCS-2");
+		i.setFromEncoding("UCS-2LE");
 		i.setFromBuffer((byte_t *)&c);
 		i.setFromBufferSize(sizeof(ucs2_t));
 		i.setToEncoding("WCHAR_T");

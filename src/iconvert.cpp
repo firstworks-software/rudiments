@@ -226,7 +226,6 @@ bool iconvert::convert() {
 		}
 
 		// convert a character
-stdoutput.printf("char=%08x\n",*(pvt->_frombufferptr));
 		result=iconv(pvt->_i,
 				#ifdef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF
 				(char **)
@@ -273,10 +272,10 @@ fallback:
 	#ifdef _WIN32
 		// on windows, wchar_t's are encoded as UCS-2,
 		// so we can support UCS-2 by piggybacking
-		if (!charstring::compare(fromenc,"UCS-2")) {
+		if (!charstring::compare(fromenc,"UCS-2LE")) {
 			fromenc="WCHAR_T";
 		}
-		if (!charstring::compare(toenc,"UCS-2")) {
+		if (!charstring::compare(toenc,"UCS-2LE")) {
 			toenc="WCHAR_T";
 		}
 	#endif
@@ -388,7 +387,7 @@ fallback:
 			return false;
 		}
 
-	} else if (!charstring::compare(fromenc,"UCS-2") &&
+	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
 				!charstring::compare(toenc,"")) {
 
 		// FIXME: verify that the character set of the current
@@ -413,7 +412,7 @@ fallback:
 		}
 
 	} else if (!charstring::compare(fromenc,"") &&
-				!charstring::compare(toenc,"UCS-2")) {
+				!charstring::compare(toenc,"UCS-2LE")) {
 
 		// FIXME: verify that the character set of the current
 		// locale is ASCII or some kind of extended ASCII
@@ -436,7 +435,7 @@ fallback:
 			return false;
 		}
 
-	} else if (!charstring::compare(fromenc,"UCS-2") &&
+	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
 				!charstring::compare(toenc,"WCHAR_T")) {
 		
 		// sanity check on buffers
@@ -470,7 +469,7 @@ fallback:
 		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
-				!charstring::compare(toenc,"UCS-2")) {
+				!charstring::compare(toenc,"UCS-2LE")) {
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
@@ -503,8 +502,8 @@ fallback:
 			return false;
 		}
 
-	} else if (!charstring::compare(fromenc,"UCS-2") &&
-				!charstring::compare(toenc,"UCS-2")) {
+	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
+				!charstring::compare(toenc,"UCS-2LE")) {
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||

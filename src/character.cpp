@@ -190,7 +190,7 @@ char character::duplicateUcs2(ucs2_t c, char replacement) {
 		// on non-windows, use iconvert
 		char		*mb= new char[iconvert::maxMultiByteSize()];
 		iconvert	i;
-		i.setFromEncoding("UCS-2");
+		i.setFromEncoding("UCS-2LE");
 		i.setFromBuffer((byte_t *)&c);
 		i.setFromBufferSize(sizeof(ucs2_t));
 		i.setToBuffer((byte_t *)mb);
