@@ -226,6 +226,7 @@ bool iconvert::convert() {
 		}
 
 		// convert a character
+stdoutput.printf("char=%08x\n",*(pvt->_frombufferptr));
 		result=iconv(pvt->_i,
 				#ifdef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF
 				(char **)
@@ -238,6 +239,9 @@ bool iconvert::convert() {
 				&(pvt->_tobufferremaining));
 		if (result==(size_t)-1 ||
 			(result==0 && error::getErrorNumber())) {
+			debugPrintf("iconv() failed with result %d "
+						"and error %d\n",
+						result,error::getErrorNumber());
 			return false;
 		}
 		return true;
