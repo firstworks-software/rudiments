@@ -14,6 +14,7 @@
 #endif
 #include <rudiments/stringbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/sys.h>
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -1872,26 +1873,51 @@ char *charstring::duplicate(const wchar_t *string, size_t len,
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string) {
-	return duplicateUcs2(string,ucs2charstring::length(string),'?');
+	return duplicateUcs2(string,ucs2charstring::length(string),
+						'?',sys::getIsBigEndian());
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string, size_t len) {
-	return duplicateUcs2(string,len,'?');
+	return duplicateUcs2(string,len,'?',sys::getIsBigEndian());
+}
+
+char *charstring::duplicateUcs2(const ucs2_t *string, bool bigendian) {
+	return duplicateUcs2(string,ucs2charstring::length(string),
+							'?',bigendian);
+}
+
+char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
+							bool bigendian) {
+	return duplicateUcs2(string,len,'?',bigendian);
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string, char replacement) {
-	return duplicateUcs2(string,ucs2charstring::length(string),replacement);
+	return duplicateUcs2(string,ucs2charstring::length(string),
+					replacement,sys::getIsBigEndian());
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
 							char replacement) {
+	return duplicateUcs2(string,len,replacement,sys::getIsBigEndian());
+}
+
+char *charstring::duplicateUcs2(const ucs2_t *string, char replacement,
+							bool bigendian) {
+	return duplicateUcs2(string,ucs2charstring::length(string),
+						replacement,bigendian);
+}
+
+char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
+					char replacement, bool bigendian) {
 	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}
 	char	*retval=new char[len+1];
 	for (size_t i=0; i<len; i++) {
-		retval[i]=character::duplicateUcs2(string[i],replacement);
+		retval[i]=character::duplicateUcs2(string[i],
+							replacement,
+							bigendian);
 	}
 	retval[len]='\0';
 	return retval;

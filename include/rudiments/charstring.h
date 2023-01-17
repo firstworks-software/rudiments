@@ -593,9 +593,14 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Creates a duplicate of "str", converting each UCS-2
  		 *  character to an ASCII character, replacing characters that
  		 *  can't be represented in ASCII with an ASCII '?', and returns
- 		 *  a pointer to it.  Note that this method allocates a buffer
- 		 *  for the duplicate string internally and returns it.  The
- 		 *  calling program must deallocate this buffer. */
+ 		 *  a pointer to it.
+ 		 *
+ 		 *  The UCS-2 characters in "str" are presumed to be in the
+ 		 *  byte-order of the system.
+ 		 *
+ 		 *  Note that this method allocates a buffer for the duplicate
+ 		 *  string internally and returns it.  The calling program must
+ 		 *  deallocate this buffer. */
 		static	char	*duplicateUcs2(const ucs2_t *str);
 
 		/** Creates a duplicate of the first "len" UCS-2 characters of
@@ -603,6 +608,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  the character set of the current locale, replacing
 		 *  characters that can't be represented '?', and returns a
 		 *  pointer to it.
+ 		 *
+ 		 *  The UCS-2 characters in "str" are presumed to be in the
+ 		 *  byte-order of the system.
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
@@ -610,9 +618,44 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*duplicateUcs2(const ucs2_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each UCS-2
+ 		 *  character to an ASCII character, replacing characters that
+ 		 *  can't be represented in ASCII with an ASCII '?', and returns
+ 		 *  a pointer to it.
+ 		 *
+ 		 *  If "bigendian" is true then "str" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "str" is presumed to
+		 *  be little endian.
+ 		 *
+ 		 *  Note that this method allocates a buffer for the duplicate
+ 		 *  string internally and returns it.  The calling program must
+ 		 *  deallocate this buffer. */
+		static	char	*duplicateUcs2(const ucs2_t *str,
+							bool bigendian);
+
+		/** Creates a duplicate of the first "len" UCS-2 characters of
+		 *  "str", converting each UCS-2 character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented '?', and returns a
+		 *  pointer to it.
+ 		 *
+ 		 *  If "bigendian" is true then "str" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "str" is presumed to
+		 *  be little endian.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicateUcs2(const ucs2_t *str,
+							size_t len,
+							bool bigendian);
+
+		/** Creates a duplicate of "str", converting each UCS-2
 		 *  character to a character per the character set of the
 		 *  current locale, replacing characters that can't be
 		 *  represented with "replacement", and returns a pointer to it.
+ 		 *
+ 		 *  The UCS-2 characters in "str" are presumed to be in the
+ 		 *  byte-order of the system.
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
@@ -625,6 +668,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  the character set of the current locale, replacing
 		 *  characters that can't be represented with "replacement",
 		 *  and returns a pointer to it.
+ 		 *
+ 		 *  The UCS-2 characters in "str" are presumed to be in the
+ 		 *  byte-order of the system.
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
@@ -632,6 +678,40 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							char replacement);
+
+		/** Creates a duplicate of "str", converting each UCS-2
+		 *  character to a character per the character set of the
+		 *  current locale, replacing characters that can't be
+		 *  represented with "replacement", and returns a pointer to it.
+ 		 *
+ 		 *  If "bigendian" is true then "str" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "str" is presumed to
+		 *  be little endian.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicateUcs2(const ucs2_t *str,
+							char replacement,
+							bool bigendian);
+
+		/** Creates a duplicate of the first "len" UCS-2 characters of
+		 *  "str", converting each UCS-2 character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented with "replacement",
+		 *  and returns a pointer to it.
+ 		 *
+ 		 *  If "bigendian" is true then "str" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "str" is presumed to
+		 *  be little endian.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	char	*duplicateUcs2(const ucs2_t *str,
+							size_t len,
+							char replacement,
+							bool bigendian);
 
 		/** Converts "str" to uppercase.
 		 *

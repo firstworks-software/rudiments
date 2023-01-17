@@ -8,6 +8,7 @@
 #include <rudiments/file.h>
 #include <rudiments/wstringbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/sys.h>
 
 #ifndef RUDIMENTS_HAVE_VSWPRINTF
 	#include <rudiments/charstring.h>
@@ -1833,28 +1834,51 @@ wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
 	return retval;
 }
 
-
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string) {
-	return duplicateUcs2(string,ucs2charstring::length(string),'?');
+	return duplicateUcs2(string,ucs2charstring::length(string),
+						'?',sys::getIsBigEndian());
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len) {
-	return duplicateUcs2(string,len,'?');
+	return duplicateUcs2(string,len,'?',sys::getIsBigEndian());
+}
+
+wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, bool bigendian) {
+	return duplicateUcs2(string,ucs2charstring::length(string),
+							'?',bigendian);
+}
+
+wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
+							bool bigendian) {
+	return duplicateUcs2(string,len,'?',bigendian);
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, wchar_t replacement) {
-	return duplicateUcs2(string,ucs2charstring::length(string),replacement);
+	return duplicateUcs2(string,ucs2charstring::length(string),
+					replacement,sys::getIsBigEndian());
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
 							wchar_t replacement) {
+	return duplicateUcs2(string,len,replacement,sys::getIsBigEndian());
+}
+
+wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string,
+					wchar_t replacement, bool bigendian) {
+	return duplicateUcs2(string,ucs2charstring::length(string),
+						replacement,bigendian);
+}
+
+wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
+					wchar_t replacement, bool bigendian) {
 	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}
 	wchar_t	*retval=new wchar_t[len+1];
 	for (size_t i=0; i<len; i++) {
-		retval[i]=wcharacter::duplicateUcs2(string[i],replacement);
+		retval[i]=wcharacter::duplicateUcs2(string[i],
+							replacement,bigendian);
 	}
 	retval[len]='\0';
 	return retval;
