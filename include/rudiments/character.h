@@ -105,6 +105,8 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns the character representation of UCS-2 character "c"
 		 *  per the character set of the current locale.
 		 *
+		 *  "c" is presumed to be in the byte-order of the system.
+		 *
 		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
 		 *  character. */
 		static char	duplicateUcs2(ucs2_t c);
@@ -112,9 +114,35 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns the character representation of UCS-2 character "c"
 		 *  per the character set of the current locale.
 		 *
+		 *  "c" is presumed to be in the byte-order of the system.
+		 *
 		 *  Returns "replacement" if UCS-2 character "c" cannot be
 		 *  converted to a character. */
 		static char	duplicateUcs2(ucs2_t c, char replacement);
+
+		/** Returns the character representation of UCS-2 character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  If "bigendian" is true then "c" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "c" is presumed to
+		 *  be little endian.
+		 *
+		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
+		 *  character. */
+		static char	duplicateUcs2(ucs2_t c, bool bigendian);
+
+		/** Returns the character representation of UCS-2 character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  If "bigendian" is true then "c" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "c" is presumed to
+		 *  be little endian.
+		 *
+		 *  Returns "replacement" if UCS-2 character "c" cannot be
+		 *  converted to a character. */
+		static char	duplicateUcs2(ucs2_t c,
+						char replacement,
+						bool bigendian);
 };
 
 #endif

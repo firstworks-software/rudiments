@@ -79,25 +79,53 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		static wchar_t	duplicate(char c);
 
 		/** Returns the wide character representation of character "c"
-		 *  as interpreted by thecharacter set of the current locale.
+		 *  as interpreted by the character set of the current locale.
 		 *
 		 *  Returns "replacement" if character "c" cannot be converted
 		 *  to a wide character. */
 		static wchar_t	duplicate(char c, wchar_t replacement);
 
-		/** Returns the character representation of UCS-2 character "c"
-		 *  per the character set of the current locale.
+		/** Returns the wide character representation of UCS-2
+		 *  character "c".
+		 *
+		 *  "c" is presumed to be in the byte-order of the system.
 		 *
 		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
 		 *  character. */
 		static wchar_t	duplicateUcs2(ucs2_t c);
 
-		/** Returns the character representation of UCS-2 character "c"
-		 *  per the character set of the current locale.
+		/** Returns the wide character representation of UCS-2
+		 *  character "c".
+		 *
+		 *  "c" is presumed to be in the byte-order of the system.
 		 *
 		 *  Returns "replacement" if UCS-2 character "c" cannot be
 		 *  converted to a character. */
 		static wchar_t	duplicateUcs2(ucs2_t c, wchar_t replacement);
+
+		/** Returns the wide character representation of UCS-2
+		 *  character "c".
+		 *
+		 *  If "bigendian" is true then "c" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "c" is presumed to
+		 *  be little endian.
+		 *
+		 *  Returns '?' if UCS-2 character "c" cannot be converted to a
+		 *  wide character. */
+		static wchar_t	duplicateUcs2(ucs2_t c, bool bigendian);
+
+		/** Returns the wide character representation of UCS-2
+		 *  character "c".
+		 *
+		 *  If "bigendian" is true then "c" is presumed to be big
+		 *  endian.  If "bigendian" is false, then "c" is presumed to
+		 *  be little endian.
+		 *
+		 *  Returns "replacement" if UCS-2 character "c" cannot be
+		 *  converted to a wide character. */
+		static wchar_t	duplicateUcs2(ucs2_t c,
+						wchar_t replacement,
+						bool bigendian);
 };
 
 #endif

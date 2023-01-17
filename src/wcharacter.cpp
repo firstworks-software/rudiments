@@ -5,6 +5,7 @@
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/iconvert.h>
+#include <rudiments/sys.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
 	#include <wctype.h>
@@ -201,23 +202,26 @@ wchar_t wcharacter::duplicate(char c, wchar_t replacement) {
 }
 
 wchar_t wcharacter::duplicateUcs2(ucs2_t c) {
-	return duplicateUcs2(c,L'?');
+	return duplicateUcs2(c,L'?',sys::getIsBigEndian());
 }
 
 wchar_t wcharacter::duplicateUcs2(ucs2_t c, wchar_t replacement) {
-	#ifdef _WIN32
-		// on windows, wchar_t's are encoded as UCS-2
-		return (wchar_t)c;
-	#else
-		// on non-windows, use iconvert
-		wchar_t		wc;
-		iconvert	i;
-		i.setFromEncoding("UCS-2LE");
-		i.setFromBuffer((byte_t *)&c);
-		i.setFromBufferSize(sizeof(ucs2_t));
-		i.setToEncoding("WCHAR_T");
-		i.setToBuffer((byte_t *)&wc);
-		i.setToBufferSize(sizeof(wchar_t));
-		return (i.convert())?wc:replacement;
-	#endif
+	return duplicateUcs2(c,replacement,sys::getIsBigEndian());
+}
+
+wchar_t wcharacter::duplicateUcs2(ucs2_t c, bool bigendian) {
+	return duplicateUcs2(c,L'?',bigendian);
+}
+
+wchar_t wcharacter::duplicateUcs2(ucs2_t c, wchar_t replacement,
+							bool bigendian) {
+	wchar_t		wc;
+	iconvert	i;
+	i.setFromEncoding((bigendian)?"UCS-2BE":"UCS-2LE");
+	i.setFromBuffer((byte_t *)&c);
+	i.setFromBufferSize(sizeof(ucs2_t));
+	i.setToEncoding("WCHAR_T");
+	i.setToBuffer((byte_t *)&wc);
+	i.setToBufferSize(sizeof(wchar_t));
+	return (i.convert())?wc:replacement;
 }

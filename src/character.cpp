@@ -3,7 +3,7 @@
 
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/stdio.h>
+#include <rudiments/sys.h>
 #ifndef _WIN32
 	#include <rudiments/iconvert.h>
 #endif
@@ -178,39 +178,40 @@ char character::duplicate(wchar_t c, char replacement) {
 }
 
 char character::duplicateUcs2(ucs2_t c) {
-	return duplicate(c,'?');
+	return duplicateUcs2(c,'?',sys::getIsBigEndian());
 }
 
 char character::duplicateUcs2(ucs2_t c, char replacement) {
-	#ifdef _WIN32
-		// on windows, wchar_t's are encoded as UCS-2,
-		// so we can piggyback
-		return character::duplicate((wchar_t)c,replacement);
-	#else
-		// on non-windows, use iconvert
-		char		*mb= new char[iconvert::maxMultiByteSize()];
-		iconvert	i;
-		i.setFromEncoding("UCS-2LE");
-		i.setFromBuffer((byte_t *)&c);
-		i.setFromBufferSize(sizeof(ucs2_t));
-		i.setToBuffer((byte_t *)mb);
-		i.setToBufferSize(iconvert::maxMultiByteSize());
-		if (!i.convert()) {
-			delete[] mb;
-			return replacement;
-		}
-		// We're attempting to convert a UCS-2 character to a regular
-		// character, but it's possible that the UCS-2 character was
-		// only representable by a multi-byte character in the current
-		// locale.  If that ends up being the case, then just return
-		// the replacement character.
-		if (i.getToBufferPosition()-i.getToBuffer()>1) {
-			delete[] mb;
-			return replacement;
-		}
-		// otherwise, return the character
-		char	retval=mb[0];
+	return duplicateUcs2(c,replacement,sys::getIsBigEndian());
+}
+
+char character::duplicateUcs2(ucs2_t c, bool bigendian) {
+	return duplicateUcs2(c,'?',bigendian);
+}
+
+char character::duplicateUcs2(ucs2_t c, char replacement, bool bigendian) {
+	char		*mb= new char[iconvert::maxMultiByteSize()];
+	iconvert	i;
+	i.setFromEncoding((bigendian)?"UCS-2BE":"UCS-2LE");
+	i.setFromBuffer((byte_t *)&c);
+	i.setFromBufferSize(sizeof(ucs2_t));
+	i.setToBuffer((byte_t *)mb);
+	i.setToBufferSize(iconvert::maxMultiByteSize());
+	if (!i.convert()) {
 		delete[] mb;
-		return retval;
-	#endif
+		return replacement;
+	}
+	// We're attempting to convert a UCS-2 character to a regular
+	// character, but it's possible that the UCS-2 character was
+	// only representable by a multi-byte character in the current
+	// locale.  If that ends up being the case, then just return
+	// the replacement character.
+	if (i.getToBufferPosition()-i.getToBuffer()>1) {
+		delete[] mb;
+		return replacement;
+	}
+	// otherwise, return the character
+	char	retval=mb[0];
+	delete[] mb;
+	return retval;
 }

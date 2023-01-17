@@ -137,6 +137,70 @@
 #endif
 
 
+#ifdef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
+	#include <machine/endian.h>
+#endif
+#ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
+	#include <libkern/OSByteOrder.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_BYTEORDER_H
+	#include <sys/byteorder.h>
+#endif
+#ifdef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H
+	#include <os/support/ByteOrder.h>
+#endif
+
+// apparently on windows, there are no byte-order macros of any kind
+#ifdef _WIN32
+	#define __LITTLE_ENDIAN	1234
+	#define __BIG_ENDIAN	4321
+	#define __BYTE_ORDER	__LITTLE_ENDIAN
+#endif
+
+// On solaris (and probably others), BYTE_ORDER is undefined (even with
+// underscore prefixes.  Either _BIG_ENDIAN or _LITTLE_ENDIAN is
+// defined, but it's just "defined", not set to any value.
+#if !defined(__BYTE_ORDER) && \
+	!defined(_BYTE_ORDER) && \
+	!defined(BYTE_ORDER) && \
+	(defined(_BIG_ENDIAN) || defined(_LITTLE_ENDIAN))
+
+	#define __LITTLE_ENDIAN 1234
+	#define __BIG_ENDIAN	4321
+
+	#ifdef _LITTLE_ENDIAN
+		#define __BYTE_ORDER	__LITTLE_ENDIAN
+	#else
+		#define __BYTE_ORDER	__BIG_ENDIAN
+	#endif
+#endif
+
+#ifndef __BYTE_ORDER
+	#if defined(BYTE_ORDER)
+		#define __BYTE_ORDER BYTE_ORDER
+	#elif defined (_BYTE_ORDER)
+		#define __BYTE_ORDER _BYTE_ORDER
+	#endif
+#endif
+
+#ifndef __BIG_ENDIAN
+	#if defined(BIG_ENDIAN)
+		#define __BIG_ENDIAN BIG_ENDIAN
+	#elif defined(_BIG_ENDIAN)
+		#define __BIG_ENDIAN _BIG_ENDIAN
+	#endif
+#endif
+
+#ifndef __LITTLE_ENDIAN
+	#if defined(LITTLE_ENDIAN)
+		#define __LITTLE_ENDIAN LITTLE_ENDIAN
+	#elif defined(_LITTLE_ENDIAN)
+		#define __LITTLE_ENDIAN _LITTLE_ENDIAN
+	#endif
+#endif
+
+
+
 char *sys::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
@@ -251,6 +315,14 @@ char *sys::getOperatingSystemArchitecture() {
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return NULL;
+	#endif
+}
+
+bool sys::getIsBigEndian() {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return false;
+	#else
+		return true;
 	#endif
 }
 

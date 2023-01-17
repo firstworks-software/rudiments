@@ -29,6 +29,11 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  the program is running in.  i386, x86_64, ppc, etc. */
 		static	char	*getOperatingSystemArchitecture();
 
+		/** Returns true if the byte order of the system is big
+		 *  endian and false if the byte order of the system is
+		 *  little endian. */
+		static	bool	getIsBigEndian();
+
 		/** Returns the version of the rudiments library. */
 		static	const char	*getRudimentsVersion();
 
