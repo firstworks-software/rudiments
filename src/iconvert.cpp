@@ -3,6 +3,7 @@
 
 #include <rudiments/iconvert.h>
 #include <rudiments/error.h>
+#include <rudiments/sys.h>
 #define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
@@ -263,15 +264,15 @@ fallback:
 		return false;
 	}
 
-	// without iconv() and friends, we can still convert from
-	// wchar_t to the current locale and vice versa...
+	// without iconv() and friends, we can still convert to and from
+	// the current locale, wchar_t, and ucs-2be/le...
 
 	// determine from and to encodings
 	const char	*fromenc=pvt->_fromencoding;
 	const char	*toenc=pvt->_toencoding;
 	#ifdef _WIN32
-		// on windows, wchar_t's are encoded as UCS-2,
-		// so we can support UCS-2 by piggybacking
+		// on windows, wchar_t's are encoded as UCS-2LE,
+		// so we can support UCS-2LE by piggybacking
 		if (!charstring::compare(fromenc,"UCS-2LE")) {
 			fromenc="WCHAR_T";
 		}
@@ -387,7 +388,7 @@ fallback:
 			return false;
 		}
 
-	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
+	} else if (!charstring::compare(fromenc,"UCS-2",5) &&
 				!charstring::compare(toenc,"")) {
 
 		// FIXME: verify that the character set of the current
@@ -404,7 +405,7 @@ fallback:
 		// convert
 		if (from<128) {
 			if (to) {
-				*to=(char)from;
+				*to=(char)byteswap(fromenc,from);
 			}
 		} else {
 			error::setErrorNumber(EILSEQ);
@@ -412,7 +413,7 @@ fallback:
 		}
 
 	} else if (!charstring::compare(fromenc,"") &&
-				!charstring::compare(toenc,"UCS-2LE")) {
+				!charstring::compare(toenc,"UCS-2",5)) {
 
 		// FIXME: verify that the character set of the current
 		// locale is ASCII or some kind of extended ASCII
@@ -428,14 +429,14 @@ fallback:
 		// convert
 		if ((unsigned char)from<128) {
 			if (to) {
-				*to=(ucs2_t)from;
+				*to=byteswap(toenc,(ucs2_t)from);
 			}
 		} else {
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
 
-	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
+	} else if (!charstring::compare(fromenc,"UCS-2",5) &&
 				!charstring::compare(toenc,"WCHAR_T")) {
 		
 		// sanity check on buffers
@@ -461,7 +462,7 @@ fallback:
 		// format is not the same as UCS-2 (Solaris 9-)
 		if (from<128) {
 			if (to) {
-				*to=(wchar_t)from;
+				*to=(wchar_t)byteswap(fromenc,from);
 			}
 		} else {
 			error::setErrorNumber(EILSEQ);
@@ -469,7 +470,7 @@ fallback:
 		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
-				!charstring::compare(toenc,"UCS-2LE")) {
+				!charstring::compare(toenc,"UCS-2",5)) {
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
@@ -495,15 +496,17 @@ fallback:
 		// format is not the same as UCS-2 (Solaris 9-)
 		if (from<128) {
 			if (to) {
-				*to=(ucs2_t)from;
+				*to=byteswap(toenc,(ucs2_t)from);
 			}
 		} else {
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
 
-	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
-				!charstring::compare(toenc,"UCS-2LE")) {
+	} else if ((!charstring::compare(fromenc,"UCS-2LE") &&
+				!charstring::compare(toenc,"UCS-2LE")) ||
+			(!charstring::compare(fromenc,"UCS-2BE") &&
+				!charstring::compare(toenc,"UCS-2BE"))) {
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
@@ -524,6 +527,51 @@ fallback:
 						pvt->_frombufferptr,
 						tosize);
 		}
+
+	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
+				!charstring::compare(toenc,"UCS-2BE")) {
+
+		// sanity check on buffers
+		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+			pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			error::setErrorNumber(EILSEQ);
+			return false;
+		}
+
+		// set up "from"
+		fromsize=sizeof(ucs2_t);
+		ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+
+		// set up "to"
+		tosize=sizeof(ucs2_t);
+		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+
+		// convert
+		*to=(ucs2_t)filedescriptor::hostToNet(
+				filedescriptor::littleEndianToHost(
+							(uint16_t)from));
+
+	} else if (!charstring::compare(fromenc,"UCS-2BE") &&
+				!charstring::compare(toenc,"UCS-2LE")) {
+
+		// sanity check on buffers
+		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+			pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			error::setErrorNumber(EILSEQ);
+			return false;
+		}
+
+		// set up "from"
+		fromsize=sizeof(ucs2_t);
+		ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+
+		// set up "to"
+		tosize=sizeof(ucs2_t);
+		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+
+		// convert
+		*to=(ucs2_t)filedescriptor::hostToLittleEndian(
+				filedescriptor::netToHost((uint16_t)from));
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"WCHAR_T")) {
@@ -612,6 +660,21 @@ fallback:
 	}
 
 	return true;
+}
+
+ucs2_t iconvert::byteswap(const char *enc, ucs2_t value) {
+	if (sys::getIsBigEndian()) {
+		if (!charstring::compare(enc,"UCS-2LE")) {
+			return (ucs2_t)filedescriptor::littleEndianToHost(
+							(uint16_t)value);
+		}
+	} else {
+		if (!charstring::compare(enc,"UCS-2BE")) {
+			return (ucs2_t)filedescriptor::netToHost(
+							(uint16_t)value);
+		}
+	}
+	return value;
 }
 
 const byte_t *iconvert::getFromBufferPosition() {
