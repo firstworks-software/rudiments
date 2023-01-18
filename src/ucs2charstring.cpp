@@ -12,6 +12,7 @@
 	#include <rudiments/file.h>
 #endif
 #include <rudiments/error.h>
+#include <rudiments/sys.h>
 
 #ifdef _WIN32
 	#include <rudiments/wcharstring.h>
@@ -1847,17 +1848,25 @@ ucs2_t *ucs2charstring::after(const ucs2_t *str,
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str) {
-	return duplicate(str,charstring::length(str));
+	return duplicate(str,charstring::length(str),sys::getIsBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
+	return duplicate(str,len,sys::getIsBigEndian());
+}
+
+ucs2_t *ucs2charstring::duplicate(const char *str, bool bigendian) {
+	return duplicate(str,charstring::length(str),bigendian);
+}
+
+ucs2_t *ucs2charstring::duplicate(const char *str, size_t len, bool bigendian) {
 	// FIXME: use iconvert directly
 	if (!str) {
 		return NULL;
 	}
 	ucs2_t	*buffer=new ucs2_t[len+1];
 	for (size_t i=0; i<len; i++) {
-		buffer[i]=ucs2character::duplicate(str[i]);
+		buffer[i]=ucs2character::duplicate(str[i],bigendian);
 	}
 	buffer[len]=(ucs2_t)'\0';
 	return buffer;
@@ -1878,27 +1887,41 @@ ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string) {
-	return duplicate(string,wcharstring::length(string),(ucs2_t)'?');
+	return duplicate(string,wcharstring::length(string),
+				(ucs2_t)'?',sys::getIsBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
-	return duplicate(string,len,(ucs2_t)'?');
+	return duplicate(string,len,(ucs2_t)'?',sys::getIsBigEndian());
+}
+
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string, bool bigendian) {
+	return duplicate(string,wcharstring::length(string),
+				(ucs2_t)'?',sys::getIsBigEndian());
+}
+
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
+							bool bigendian) {
+	return duplicate(string,len,(ucs2_t)'?',bigendian);
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
 					ucs2_t replacement) {
-	return duplicate(string,wcharstring::length(string),replacement);
+	return duplicate(string,wcharstring::length(string),
+				replacement,sys::getIsBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
-							ucs2_t replacement) {
+							ucs2_t replacement,
+							bool bigendian) {
 	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}
 	ucs2_t	*retval=new ucs2_t[len+1];
 	for (size_t i=0; i<len; i++) {
-		retval[i]=ucs2character::duplicate(string[i],replacement);
+		retval[i]=ucs2character::duplicate(string[i],replacement,
+								bigendian);
 	}
 	retval[len]=(ucs2_t)'\0';
 	return retval;

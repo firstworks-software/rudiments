@@ -5,6 +5,7 @@
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/iconvert.h>
+#include <rudiments/sys.h>
 
 bool ucs2character::isAlphanumeric(int32_t c) {
 	return character::isAlphanumeric(c);
@@ -80,38 +81,48 @@ bool ucs2character::inSet(ucs2_t c, const ucs2_t *set) {
 }
 
 ucs2_t ucs2character::duplicate(char c) {
-	return duplicate(c,(ucs2_t)'?');
+	return duplicate(c,(ucs2_t)'?',sys::getIsBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
+	return duplicate(c,replacement,sys::getIsBigEndian());
+}
+
+ucs2_t ucs2character::duplicate(char c, bool bigendian) {
+	return duplicate(c,(ucs2_t)'?',bigendian);
+}
+
+ucs2_t ucs2character::duplicate(char c, ucs2_t replacement, bool bigendian) {
 	ucs2_t		uc;
 	iconvert	i;
 	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(c));
-	i.setToEncoding("UCS-2LE");
+	i.setToEncoding((bigendian)?"UCS-2BE":"UCS-2LE");
 	i.setToBuffer((byte_t *)&uc);
 	i.setToBufferSize(sizeof(uc));
 	return (i.convert())?uc:replacement;
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c) {
-	return duplicate(c,(ucs2_t)'?');
+	return duplicate(c,(ucs2_t)'?',sys::getIsBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
-	#ifdef _WIN32
-		// on windows, wchar_t's are encoded as UCS-2
-		return (ucs2_t)c;
-	#else
-		// on non-windows, use iconvert
-		ucs2_t		uc;
-		iconvert	i;
-		i.setFromEncoding("WCHAR_T");
-		i.setFromBuffer((byte_t *)&c);
-		i.setFromBufferSize(sizeof(c));
-		i.setToEncoding("UCS-2LE");
-		i.setToBuffer((byte_t *)&uc);
-		i.setToBufferSize(sizeof(uc));
-		return (i.convert())?uc:replacement;
-	#endif
+	return duplicate(c,replacement,sys::getIsBigEndian());
+}
+
+ucs2_t ucs2character::duplicate(wchar_t c, bool bigendian) {
+	return duplicate(c,(ucs2_t)'?',sys::getIsBigEndian());
+}
+
+ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement, bool bigendian) {
+	ucs2_t		uc;
+	iconvert	i;
+	i.setFromEncoding("WCHAR_T");
+	i.setFromBuffer((byte_t *)&c);
+	i.setFromBufferSize(sizeof(c));
+	i.setToEncoding((bigendian)?"UCS-2BE":"UCS-2LE");
+	i.setToBuffer((byte_t *)&uc);
+	i.setToBufferSize(sizeof(uc));
+	return (i.convert())?uc:replacement;
 }

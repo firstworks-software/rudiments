@@ -77,29 +77,85 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		 *  per the character set of the current locale.
 		 *
 		 *  Returns '?' if character "c" cannot be converted to a
-		 *  UCS-2 character. */
+		 *  UCS-2 character.
+		 *
+		 *  The return value will be in the byte-order of the system. */
 		static ucs2_t	duplicate(char c);
 
 		/** Returns the UCS-2 character representation of character "c"
 		 *  per the character set of the current locale.
 		 *
 		 *  Returns "replacement" if character "c" cannot be converted
-		 *  to a UCS-2 character. */
+		 *  to a UCS-2 character.
+		 *
+		 *  The return value will be in the byte-order of the system. */
 		static ucs2_t	duplicate(char c, ucs2_t replacement);
+
+		/** Returns the UCS-2 character representation of character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  Returns '?' if character "c" cannot be converted to a
+		 *  UCS-2 character.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. */
+		static ucs2_t	duplicate(char c, bool bigendian);
+
+		/** Returns the UCS-2 character representation of character "c"
+		 *  per the character set of the current locale.
+		 *
+		 *  Returns "replacement" if character "c" cannot be converted
+		 *  to a UCS-2 character.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. */
+		static ucs2_t	duplicate(char c,
+					ucs2_t replacement,
+					bool bigendian);
 
 		/** Returns the UCS-2 character representation of wide
 		 *  character "c" per the character set of the current locale.
 		 *
 		 *  Returns '?' if wide character "c" cannot be converted to a
-		 *  UCS-2 character. */
+		 *  UCS-2 character.
+		 *
+		 *  The return value will be in the byte-order of the system. */
 		static ucs2_t	duplicate(wchar_t c);
 
 		/** Returns the UCS-2 character representation of wide
 		 *  character "c" per the character set of the current locale.
 		 *
 		 *  Returns "replacement" if wide character "c" cannot be
-		 *  converted to a UCS-2 character. */
+		 *  converted to a UCS-2 character.
+		 *
+		 *  The return value will be in the byte-order of the system. */
 		static ucs2_t	duplicate(wchar_t c, ucs2_t replacement);
+
+		/** Returns the UCS-2 character representation of wide
+		 *  character "c" per the character set of the current locale.
+		 *
+		 *  Returns '?' if wide character "c" cannot be converted to a
+		 *  UCS-2 character. 
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. */
+		static ucs2_t	duplicate(wchar_t c, bool bigendian);
+
+		/** Returns the UCS-2 character representation of wide
+		 *  character "c" per the character set of the current locale.
+		 *
+		 *  Returns "replacement" if wide character "c" cannot be
+		 *  converted to a UCS-2 character.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. */
+		static ucs2_t	duplicate(wchar_t c,
+						ucs2_t replacement,
+						bool bigendian);
 };
 
 #endif

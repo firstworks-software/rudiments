@@ -545,39 +545,77 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 							const ucs2_t *set);
 
 		/** Creates a duplicate of "str" and returns a pointer
-		 *  to it.  Note that this method allocates a buffer for
-		 *  the duplicate string internally and returns it.  The
-		 *  calling program must deallocate this buffer. */
+		 *  to it.
+		 *
+		 *  The return value will be in the byte-order of the system.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
 		static	ucs2_t	*duplicate(const char *str);
 
 		/** Creates a duplicate of the first "len" characters of
-		 *  "str" and returns a pointer to it.  Note that this
-		 *  method allocates a buffer for the duplicate string
-		 *  internally and returns it.  The calling program must
+		 *  "str" and returns a pointer to it.
+		 *
+		 *  The return value will be in the byte-order of the system.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	ucs2_t	*duplicate(const char *str,
-								size_t len);
+		static	ucs2_t	*duplicate(const char *str, size_t len);
 
 		/** Creates a duplicate of "str" and returns a pointer
-		 *  to it.  Note that this method allocates a buffer for
-		 *  the duplicate string internally and returns it.  The
-		 *  calling program must deallocate this buffer. */
+		 *  to it.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. 
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	ucs2_t	*duplicate(const char *str, bool bigendian);
+
+		/** Creates a duplicate of the first "len" characters of
+		 *  "str" and returns a pointer to it.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. 
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	ucs2_t	*duplicate(const char *str,
+						size_t len,
+						bool bigendian);
+
+		/** Creates a duplicate of "str" and returns a pointer
+		 *  to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
 		static	ucs2_t	*duplicate(const ucs2_t *str);
 
 		/** Creates a duplicate of the first "len" characters of
-		 *  "str" and returns a pointer to it.  Note that this
-		 *  method allocates a buffer for the duplicate string
-		 *  internally and returns it.  The calling program must
+		 *  "str" and returns a pointer to it.
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	ucs2_t	*duplicate(const ucs2_t *str,
-								size_t len);
+		static	ucs2_t	*duplicate(const ucs2_t *str, size_t len);
 
 		/** Creates a duplicate "str", converting each wide character
  		 *  to a UCS-2 character, replacing characters that can't be
  		 *  represented in UCS-2 with a UCS-2 '?', and returns a
- 		 *  pointer to it.  Note that this method allocates a buffer
- 		 *  for the duplicate string internally and returns it.  The
- 		 *  calling program must deallocate this buffer. */
+ 		 *  pointer to it.
+		 *
+		 *  The return value will be in the byte-order of the system.
+ 		 *
+ 		 *  Note that this method allocates a buffer for the duplicate
+ 		 *  string internally and returns it.  The calling program must
+ 		 *  deallocate this buffer. */
 		static	ucs2_t	*duplicate(const wchar_t *str);
 
 		/** Creates a duplicate of the first "len" wide characters of
@@ -586,16 +624,49 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  characters that can't be represented '?', and returns a
 		 *  pointer to it.
 		 *
+		 *  The return value will be in the byte-order of the system.
+		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
-		static	ucs2_t	*duplicate(const wchar_t *str,
-								size_t len);
+		static	ucs2_t	*duplicate(const wchar_t *str, size_t len);
+
+		/** Creates a duplicate "str", converting each wide character
+ 		 *  to a UCS-2 character, replacing characters that can't be
+ 		 *  represented in UCS-2 with a UCS-2 '?', and returns a
+ 		 *  pointer to it.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. 
+ 		 *
+ 		 *  Note that this method allocates a buffer for the duplicate
+ 		 *  string internally and returns it.  The calling program must
+ 		 *  deallocate this buffer. */
+		static	ucs2_t	*duplicate(const wchar_t *str, bool bigendian);
+
+		/** Creates a duplicate of the first "len" wide characters of
+		 *  "str", converting each wide character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented '?', and returns a
+		 *  pointer to it.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. 
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	ucs2_t	*duplicate(const wchar_t *str, size_t len,
+								bool bigendian);
 
 		/** Creates a duplicate of "str", converting each wide character
 		 *  to a character per the character set of the current locale,
 		 *  replacing characters that can't be represented with
 		 *  "replacement", and returns a pointer to it.
+		 *
+		 *  The return value will be in the byte-order of the system.
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
@@ -609,12 +680,48 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  characters that can't be represented with "replacement",
 		 *  and returns a pointer to it.
 		 *
+		 *  The return value will be in the byte-order of the system.
+		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
 		 *  deallocate this buffer. */
 		static	ucs2_t	*duplicate(const wchar_t *str,
 							size_t len,
 							ucs2_t replacement);
+
+		/** Creates a duplicate of "str", converting each wide character
+		 *  to a character per the character set of the current locale,
+		 *  replacing characters that can't be represented with
+		 *  "replacement", and returns a pointer to it.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. 
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	ucs2_t	*duplicate(const wchar_t *str,
+							ucs2_t replacement,
+							bool bigendian);
+
+		/** Creates a duplicate of the first "len" wide characters of
+		 *  "str", converting each wide character to a character per
+		 *  the character set of the current locale, replacing
+		 *  characters that can't be represented with "replacement",
+		 *  and returns a pointer to it.
+		 *
+		 *  If "bigendian" is true then the return value will be in big
+		 *  endian byte-order.  If "bigendian" is false then the return
+		 *  value will be in little endian byte-order. 
+		 *
+		 *  Note that this method allocates a buffer for the duplicate
+		 *  string internally and returns it.  The calling program must
+		 *  deallocate this buffer. */
+		static	ucs2_t	*duplicate(const wchar_t *str,
+							size_t len,
+							ucs2_t replacement,
+							bool bigendian);
 
 		/** Converts "str" to uppercase. */
 		static	void	upper(ucs2_t *str); 
