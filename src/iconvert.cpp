@@ -260,6 +260,7 @@ fallback:
 
 	// sanity check on from buffer
 	if (!pvt->_frombufferptr) {
+		debugPrintf("no from buffer\n");
 		error::setErrorNumber(EILSEQ);
 		return false;
 	}
@@ -291,6 +292,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
 			pvt->_tobufferremaining<maxMultiByteSize()) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -305,12 +307,15 @@ fallback:
 
 		// convert...
 		#if defined(RUDIMENTS_HAVE_WCRTOMB)
+			debugPrintf("wcrtomb()... ");
 			mbstate_t	st;
 			bytestring::zero(&st,sizeof(st));
 			tosize=wcrtomb(to,from,&st);
 		#elif defined(RUDIMENTS_HAVE_WCTOMB)
+			debugPrintf("wctomb()... ");
 			tosize=wctomb(to,from);
 		#else
+			debugPrintf("direct conversion... ");
 			// FIXME: Arguably we should verify that the
 			// character set of the current locale is ASCII
 			// or some kind of extended ASCII.  This is
@@ -328,14 +333,17 @@ fallback:
 		#endif
 
 		if (tosize==(size_t)-1) {
+			debugPrintf("failed\n");
 			return false;
 		}
 
 	} else if (!charstring::compare(fromenc,"") &&
 			!charstring::compare(toenc,"WCHAR_T")) {
 
+		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(char) ||
 			pvt->_tobufferremaining<sizeof(wchar_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -350,12 +358,14 @@ fallback:
 
 		// convert...
 		#if defined(RUDIMENTS_HAVE_WCRTOMB)
+			debugPrintf("mbrtowc()... ");
 			mbstate_t	st;
 			bytestring::zero(&st,sizeof(st));
 			fromsize=mbrtowc(to,from,
 					pvt->_frombufferremaining,
 					&st);
 		#elif defined(RUDIMENTS_HAVE_WCTOMB)
+			debugPrintf("mbtowc()... ");
 			// mbtowc() doesn't like being passed '\0' on
 			// some platforms (redhat 4.2 with libc5)
 			if (from) {
@@ -368,6 +378,7 @@ fallback:
 				}
 			}
 		#else
+			debugPrintf("direct conversion... ");
 			// FIXME: Arguably we should verify that the
 			// character set of the current locale is ASCII
 			// or some kind of extended ASCII.  This is
@@ -385,6 +396,7 @@ fallback:
 
 		// bail on error
 		if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
+			debugPrintf("failed\n");
 			return false;
 		}
 
@@ -403,11 +415,13 @@ fallback:
 		char	*to=(char *)pvt->_tobufferptr;
 
 		// convert
+		debugPrintf("direct conversion... ");
 		if (from<128) {
 			if (to) {
 				*to=(char)byteswap(fromenc,from);
 			}
 		} else {
+			debugPrintf("failed - invalid sequence\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -427,11 +441,13 @@ fallback:
 		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
 		// convert
+		debugPrintf("direct conversion... ");
 		if ((unsigned char)from<128) {
 			if (to) {
 				*to=byteswap(toenc,(ucs2_t)from);
 			}
 		} else {
+			debugPrintf("failed - invalid sequence\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -442,6 +458,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
 			pvt->_tobufferremaining<sizeof(wchar_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -460,11 +477,13 @@ fallback:
 		// FIXME: this implementation is incorrect for
 		// chars >= 128 and for platforms where the wchar_t
 		// format is not the same as UCS-2 (Solaris 9-)
+		debugPrintf("direct conversion... ");
 		if (from<128) {
 			if (to) {
 				*to=(wchar_t)byteswap(fromenc,from);
 			}
 		} else {
+			debugPrintf("failed - invalid sequence\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -475,6 +494,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
 			pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -494,11 +514,13 @@ fallback:
 		// FIXME: this implementation is incorrect for
 		// chars >= 128 and for platforms where the wchar_t
 		// format is not the same as UCS-2 (Solaris 9-)
+		debugPrintf("direct conversion... ");
 		if (from<128) {
 			if (to) {
 				*to=byteswap(toenc,(ucs2_t)from);
 			}
 		} else {
+			debugPrintf("failed - invalid sequence\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -511,6 +533,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
 			pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -522,6 +545,7 @@ fallback:
 		tosize=sizeof(ucs2_t);
 
 		// copy
+		debugPrintf("direct conversion... ");
 		if (pvt->_tobufferptr) {
 			bytestring::copy(pvt->_tobufferptr,
 						pvt->_frombufferptr,
@@ -534,6 +558,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
 			pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -547,9 +572,12 @@ fallback:
 		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
 		// convert
-		*to=(ucs2_t)filedescriptor::hostToNet(
+		debugPrintf("direct conversion... ");
+		if (to) {
+			*to=(ucs2_t)filedescriptor::hostToNet(
 				filedescriptor::littleEndianToHost(
 							(uint16_t)from));
+		}
 
 	} else if (!charstring::compare(fromenc,"UCS-2BE") &&
 				!charstring::compare(toenc,"UCS-2LE")) {
@@ -557,6 +585,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
 			pvt->_tobufferremaining<sizeof(ucs2_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -570,8 +599,11 @@ fallback:
 		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
 		// convert
-		*to=(ucs2_t)filedescriptor::hostToLittleEndian(
+		debugPrintf("direct conversion... ");
+		if (to) {
+			*to=(ucs2_t)filedescriptor::hostToLittleEndian(
 				filedescriptor::netToHost((uint16_t)from));
+		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"WCHAR_T")) {
@@ -579,6 +611,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
 			pvt->_tobufferremaining<sizeof(wchar_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -590,6 +623,7 @@ fallback:
 		tosize=sizeof(wchar_t);
 
 		// copy
+		debugPrintf("direct conversion... ");
 		if (pvt->_tobufferptr) {
 			bytestring::copy(pvt->_tobufferptr,
 						pvt->_frombufferptr,
@@ -602,6 +636,7 @@ fallback:
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(char) ||
 			pvt->_tobufferremaining<sizeof(wchar_t)) {
+			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
 		}
@@ -614,12 +649,14 @@ fallback:
 
 		// get the number of bytes to copy
 		#if defined(RUDIMENTS_HAVE_WCRTOMB)
+			debugPrintf("mbrtowc()... ");
 			mbstate_t	st;
 			bytestring::zero(&st,sizeof(st));
 			fromsize=mbrtowc(NULL,from,
 					pvt->_frombufferremaining,
 					&st);
 		#elif defined(RUDIMENTS_HAVE_WCTOMB)
+			debugPrintf("mbtowc()... ");
 			// mbtowc() doesn't like being passed '\0' on
 			// some platforms (redhat 4.2 with libc5)
 			if (from) {
@@ -629,6 +666,7 @@ fallback:
 				fromsize=sizeof(char);
 			}
 		#else
+			debugPrintf("direct conversion... ");
 			// FIXME: verify that the character set of the
 			// current locale is single-byte
 			fromsize=sizeof(char);
@@ -636,6 +674,7 @@ fallback:
 
 		// bail on error
 		if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
+			debugPrintf("failed\n");
 			return false;
 		}
 
@@ -646,7 +685,9 @@ fallback:
 
 	} else {
 
+		debugPrintf("unsupported conversion\n");
 		error::setErrorNumber(ENOSYS);
+		return false;
 	}
 
 	// bump buffer pointers and remaining counts
@@ -659,6 +700,7 @@ fallback:
 		}
 	}
 
+	debugPrintf("success\n");
 	return true;
 }
 
