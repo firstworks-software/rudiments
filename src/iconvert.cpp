@@ -55,6 +55,7 @@ class iconvertprivate {
 			iconv_t		_i;
 		#endif
 		bool		_open;
+		bool		_dirty;
 
 		const char	*_fromencoding;
 		const byte_t	*_frombuffer;
@@ -87,6 +88,7 @@ void iconvert::construct() {
 		pvt->_i=0;
 	#endif
 	pvt->_open=false;
+	pvt->_dirty=true;
 
 	pvt->_fromencoding="";
 	pvt->_frombuffer=NULL;
@@ -105,7 +107,16 @@ iconvert &iconvert::operator=(iconvert &i) {
 	if (this!=&i) {
 		close();
 		setFromEncoding(i.pvt->_fromencoding);
+		pvt->_frombuffer=NULL;
+		pvt->_frombufferptr=NULL;
+		pvt->_frombuffersize=0;
+		pvt->_frombufferremaining=0;
+
 		setToEncoding(i.pvt->_toencoding);
+		pvt->_tobuffer=NULL;
+		pvt->_tobufferptr=NULL;
+		pvt->_tobuffersize=0;
+		pvt->_tobufferremaining=0;
 	}
 	return *this;
 }
@@ -117,6 +128,7 @@ iconvert::~iconvert() {
 
 void iconvert::setFromEncoding(const char *fromencoding) {
 	pvt->_fromencoding=(fromencoding)?fromencoding:"";
+	pvt->_dirty=true;
 }
 
 const char *iconvert::getFromEncoding() {
@@ -125,6 +137,7 @@ const char *iconvert::getFromEncoding() {
 
 void iconvert::setToEncoding(const char *toencoding) {
 	pvt->_toencoding=(toencoding)?toencoding:"";
+	pvt->_dirty=true;
 }
 
 const char *iconvert::getToEncoding() {
@@ -165,10 +178,17 @@ size_t iconvert::getToBufferSize() {
 
 bool iconvert::convert() {
 
+	// if we changed the to/from encodings since the last
+	// call to convert() then close and force a re-open
+	if (pvt->_dirty) {
+		close();
+		pvt->_dirty=false;
+	}
+
 	#ifdef RUDIMENTS_HAVE_ICONV
 		size_t result=0;
 
-		// open, if we haven't already
+		// open, if we're not already open
 		if (!pvt->_open) {
 
 			error::clearError();
@@ -249,7 +269,7 @@ bool iconvert::convert() {
 fallback:
 	#endif
 
-	// open, if we haven't already
+	// open, if we're not already open
 	if (!pvt->_open) {
 		pvt->_open=true;
 		pvt->_frombufferptr=pvt->_frombuffer;
@@ -291,7 +311,7 @@ fallback:
 
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-			pvt->_tobufferremaining<maxMultiByteSize()) {
+			pvt->_tobufferremaining<getMaxMultiByteSize()) {
 			debugPrintf("buffer check failed\n");
 			error::setErrorNumber(EILSEQ);
 			return false;
@@ -303,7 +323,7 @@ fallback:
 
 		// set up "to"
 		char	*to=(char *)pvt->_tobufferptr;
-		bytestring::zero(to,maxMultiByteSize());
+		bytestring::zero(to,getMaxMultiByteSize());
 
 		// convert...
 		#if defined(RUDIMENTS_HAVE_WCRTOMB)
@@ -735,9 +755,7 @@ size_t iconvert::getToBufferRemaining() {
 	return pvt->_tobufferremaining;
 }
 
-bool iconvert::close() {
-
-	bool	result=true;
+void iconvert::close() {
 	if (pvt->_open) {
 		#ifdef RUDIMENTS_HAVE_ICONV
 			// NOTE: some platforms (SCO UW 7.0.1) crash if
@@ -746,32 +764,14 @@ bool iconvert::close() {
 			// should be set to false, so iconv_close(-1) should
 			// never be called, but it's worth mentioning in case
 			// any of this code gets changed in the future.
-			result=!iconv_close(pvt->_i);
+			iconv_close(pvt->_i);
 			pvt->_i=0;
 		#endif
 		pvt->_open=false;
 	}
-
-	pvt->_frombuffer=NULL;
-	pvt->_frombufferptr=NULL;
-	pvt->_frombuffersize=0;
-	pvt->_frombufferremaining=0;
-
-	pvt->_tobuffer=NULL;
-	pvt->_tobufferptr=NULL;
-	pvt->_tobuffersize=0;
-	pvt->_tobufferremaining=0;
-	return result;
 }
 
-bool iconvert::reset() {
-	bool	result=close();
-	pvt->_fromencoding="";
-	pvt->_toencoding="";
-	return result;
-}
-
-uint16_t iconvert::maxMultiByteSize() {
+uint16_t iconvert::getMaxMultiByteSize() {
 	#ifdef MB_CUR_MAX
 		// NOTE: MB_CUR_MAX is not a constant, but rather a macro that
 		// expands to an integer expression.  It also varies with the

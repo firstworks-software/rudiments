@@ -4,5 +4,6 @@
 	private:
 		void	construct();
 		ucs2_t	byteswap(const char *enc, ucs2_t value);
+		void	close();
 
 		iconvertprivate	*pvt;

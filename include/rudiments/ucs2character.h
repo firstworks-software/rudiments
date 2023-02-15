@@ -73,6 +73,17 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		 *  characters in "set" and false otherwise. */
 		static bool	inSet(ucs2_t c, const ucs2_t *set);
 
+		/** Returns true if "c" is a byte order mark and false if it
+		 *  is not. */
+		static bool	isBom(ucs2_t c);
+
+		/** Returns true if "c" is a big endian byte order mark and
+		 *  false if it is not.
+		 *
+		 *  NOTE: should be used in conjunction with isBom(), as this
+		 *  method will return false for non-BOM characters. */
+		static bool	isBigEndianBom(ucs2_t c);
+
 		/** Returns the UCS-2 character representation of character "c"
 		 *  per the character set of the current locale.
 		 *

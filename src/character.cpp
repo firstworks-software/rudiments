@@ -151,13 +151,13 @@ char character::duplicate(wchar_t c) {
 
 char character::duplicate(wchar_t c, char replacement) {
 
-	char		*mb= new char[iconvert::maxMultiByteSize()];
+	char		*mb= new char[iconvert::getMaxMultiByteSize()];
 	iconvert	i;
 	i.setFromEncoding("WCHAR_T");
 	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(wchar_t));
 	i.setToBuffer((byte_t *)mb);
-	i.setToBufferSize(iconvert::maxMultiByteSize());
+	i.setToBufferSize(iconvert::getMaxMultiByteSize());
 	if (!i.convert()) {
 		delete[] mb;
 		return replacement;
@@ -190,13 +190,13 @@ char character::duplicateUcs2(ucs2_t c, bool bigendian) {
 }
 
 char character::duplicateUcs2(ucs2_t c, char replacement, bool bigendian) {
-	char		*mb= new char[iconvert::maxMultiByteSize()];
+	char		*mb= new char[iconvert::getMaxMultiByteSize()];
 	iconvert	i;
 	i.setFromEncoding((bigendian)?"UCS-2BE":"UCS-2LE");
 	i.setFromBuffer((byte_t *)&c);
 	i.setFromBufferSize(sizeof(ucs2_t));
 	i.setToBuffer((byte_t *)mb);
-	i.setToBufferSize(iconvert::maxMultiByteSize());
+	i.setToBufferSize(iconvert::getMaxMultiByteSize());
 	if (!i.convert()) {
 		delete[] mb;
 		return replacement;
