@@ -140,7 +140,7 @@ const byte_t *des::getDecryptedData() {
 	return NULL;
 }
 
-bool des::needsMutex() {
+bool des::getNeedsMutex() {
 	#if defined(RUDIMENTS_HAVE_CRYPT_R)
 		return false;
 	#elif !defined(RUDIMENTS_HAVE_CRYPT)

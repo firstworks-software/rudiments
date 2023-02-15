@@ -405,7 +405,7 @@ bool userentry::platformSupportsFormalSid() {
 	#endif
 }
 
-bool userentry::needsMutex() {
+bool userentry::getNeedsMutex() {
 	#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
 		!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
 		defined(RUDIMENTS_HAVE_NETUSERGETINFO)

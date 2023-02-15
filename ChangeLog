@@ -129,6 +129,7 @@
 	removed foreign append()/write() methods from *stringbuffer classes
 	converted unsigned char to byte_t
 	fixed timezone issues on UnixWare/Irix
+	needsMutex -> getNeedsMutex
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

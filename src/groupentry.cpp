@@ -268,7 +268,7 @@ bool groupentry::platformSupportsFormalSid() {
 	#endif
 }
 
-bool groupentry::needsMutex() {
+bool groupentry::getNeedsMutex() {
 	#if (!defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
 		!defined(RUDIMENTS_HAVE_GETGRUID_R)) || \
 		defined(RUDIMENTS_HAVE_NETGROUPGETINFO)
@@ -530,7 +530,7 @@ bool groupentry::platformSupportsFormalSid() {
 	return false;
 }
 
-bool groupentry::needsMutex() {
+bool groupentry::getNeedsMutex() {
 	return true;
 }
 

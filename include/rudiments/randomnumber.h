@@ -91,10 +91,10 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
-		static	bool	needsMutex();
+		static	bool	getNeedsMutex();
 
 		/** Allows you to supply a mutex is the class needs it
-		 *  (see needsMutex()).  If your application is not
+		 *  (see getNeedsMutex()).  If your application is not
 		 *  multithreaded, then there is no need to supply a mutex. */
 		static	void	setMutex(threadmutex *mtx);
 

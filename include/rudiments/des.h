@@ -50,7 +50,7 @@ class RUDIMENTS_DLLSPEC des : public encryption {
 		 *  This method returns true if this class needs a mutex
 		 *  to operate safely in a threaded environment and false
 		 *  otherwise. */
-		bool	needsMutex();
+		bool	getNeedsMutex();
 
 		/** Allows you to supply a mutex is the class needs it.
 		 *  If your application is not multithreaded, then

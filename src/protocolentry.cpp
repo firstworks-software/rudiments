@@ -71,7 +71,7 @@ int32_t protocolentry::getNumber() {
 	return (pvt->_pe)?pvt->_pe->p_proto:-1;
 }
 
-bool protocolentry::needsMutex() {
+bool protocolentry::getNeedsMutex() {
 	#if !defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		return true;

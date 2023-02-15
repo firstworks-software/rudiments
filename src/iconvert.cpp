@@ -782,7 +782,7 @@ uint16_t iconvert::getMaxMultiByteSize() {
 	#endif
 }
 
-bool iconvert::convertNeedsMutex() {
+bool iconvert::getNeedsMutex() {
 	#ifdef RUDIMENTS_HAVE_WCRTOMB
 		return false;
 	#endif

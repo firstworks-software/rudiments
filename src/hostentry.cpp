@@ -84,7 +84,7 @@ const char * const *hostentry::getAddressList() {
 		pvt->_he->h_addr_list:NULL;
 }
 
-bool hostentry::needsMutex() {
+bool hostentry::getNeedsMutex() {
 	#if !defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
 		return true;

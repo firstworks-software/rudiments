@@ -239,7 +239,7 @@ uint32_t randomnumber::getRandMax() {
 	#endif
 }
 
-bool randomnumber::needsMutex() {
+bool randomnumber::getNeedsMutex() {
 	#if !defined(RUDIMENTS_HAVE_ARC4RANDOM) && \
 		!defined(RUDIMENTS_HAVE_RANDOM_R) && \
 		!defined(RUDIMENTS_HAVE_RAND_R) && \

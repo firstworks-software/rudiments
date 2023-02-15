@@ -81,7 +81,7 @@ const char * const *serviceentry::getAliasList() {
 		pvt->_se->s_aliases:NULL;
 }
 
-bool serviceentry::needsMutex() {
+bool serviceentry::getNeedsMutex() {
 	#if !defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		return true;

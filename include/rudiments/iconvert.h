@@ -148,7 +148,7 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 		 *  mutex (eg. because it might need to use non-reentrant
 		 *  functions) or false if it does not (eg. because it only
 		 *  uses reentrant functions). */
-		static	bool	convertNeedsMutex();
+		static	bool	getNeedsMutex();
 
 	#include <rudiments/private/iconvert.h>
 };
