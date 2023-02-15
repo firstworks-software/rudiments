@@ -130,6 +130,7 @@
 	converted unsigned char to byte_t
 	fixed timezone issues on UnixWare/Irix
 	needsMutex -> getNeedsMutex
+	refactored buffer class setPosition*() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

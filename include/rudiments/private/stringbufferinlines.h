@@ -34,8 +34,18 @@ stringbuffer::~stringbuffer() {
 }
 
 inline
-void stringbuffer::setPosition(size_t pos) {
-	bytebuffer::setPosition(pos);
+off64_t stringbuffer::setPositionRelativeToBeginning(off64_t offset) {
+	return bytebuffer::setPositionRelativeToBeginning(offset);
+}
+
+inline
+off64_t stringbuffer::setPositionRelativeToCurrent(off64_t offset) {
+	return bytebuffer::setPositionRelativeToCurrent(offset);
+}
+
+inline
+off64_t stringbuffer::setPositionRelativeToEnd(off64_t offset) {
+	return bytebuffer::setPositionRelativeToEnd(offset);
 }
 
 inline

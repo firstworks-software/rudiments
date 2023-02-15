@@ -2,6 +2,21 @@
 // See the COPYING file for more information.
 
 inline
+off64_t output::setPositionRelativeToBeginning(off64_t offset) {
+	return -1;
+}
+
+inline
+off64_t output::setPositionRelativeToCurrent(off64_t offset) {
+	return -1;
+}
+
+inline
+off64_t output::setPositionRelativeToEnd(off64_t offset) {
+	return -1;
+}
+
+inline
 ssize_t output::printf(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);

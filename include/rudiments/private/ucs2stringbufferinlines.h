@@ -35,8 +35,21 @@ ucs2stringbuffer::~ucs2stringbuffer() {
 }
 
 inline
-void ucs2stringbuffer::setPosition(size_t pos) {
-	bytebuffer::setPosition(pos);
+off64_t ucs2stringbuffer::setPositionRelativeToBeginning(off64_t offset) {
+	return bytebuffer::setPositionRelativeToBeginning(
+						offset*sizeof(ucs2_t));
+}
+
+inline
+off64_t ucs2stringbuffer::setPositionRelativeToCurrent(off64_t offset) {
+	return bytebuffer::setPositionRelativeToCurrent(
+						offset*sizeof(ucs2_t));
+}
+
+inline
+off64_t ucs2stringbuffer::setPositionRelativeToEnd(off64_t offset) {
+	return bytebuffer::setPositionRelativeToEnd(
+						offset*sizeof(ucs2_t));
 }
 
 inline

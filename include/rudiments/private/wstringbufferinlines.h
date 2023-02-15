@@ -36,8 +36,21 @@ wstringbuffer::~wstringbuffer() {
 }
 
 inline
-void wstringbuffer::setPosition(size_t pos) {
-	bytebuffer::setPosition(pos*sizeof(wchar_t));
+off64_t wstringbuffer::setPositionRelativeToBeginning(off64_t offset) {
+	return bytebuffer::setPositionRelativeToBeginning(
+					offset*sizeof(wchar_t));
+}
+
+inline
+off64_t wstringbuffer::setPositionRelativeToCurrent(off64_t offset) {
+	return bytebuffer::setPositionRelativeToCurrent(
+					offset*sizeof(wchar_t));
+}
+
+inline
+off64_t wstringbuffer::setPositionRelativeToEnd(off64_t offset) {
+	return bytebuffer::setPositionRelativeToEnd(
+					offset*sizeof(wchar_t));
 }
 
 inline

@@ -340,8 +340,19 @@ size_t bytebuffer::getInitialSize() {
 	return pvt->_initialsize;
 }
 
-void bytebuffer::setPosition(size_t pos) {
-	pvt->_pos=pos;
+off64_t bytebuffer::setPositionRelativeToBeginning(off64_t offset) {
+	pvt->_pos=offset;
+	return pvt->_pos;
+}
+
+off64_t bytebuffer::setPositionRelativeToCurrent(off64_t offset) {
+	pvt->_pos+=offset;
+	return pvt->_pos;
+}
+
+off64_t bytebuffer::setPositionRelativeToEnd(off64_t offset) {
+	pvt->_pos=pvt->_size+offset;
+	return pvt->_pos;
 }
 
 bytebuffer *bytebuffer::append(const byte_t *data, size_t size) {
@@ -495,5 +506,5 @@ size_t bytebuffer::_position() {
 }
 
 void bytebuffer::_position(size_t pos) {
-	setPosition(pos);
+	setPositionRelativeToBeginning(pos);
 }

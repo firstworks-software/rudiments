@@ -63,8 +63,8 @@ int main(int argc, const char **argv) {
 	// Write 66666 to the buffer at position 0.
 	// (the first 5 bytes should be overwritten)
 	stdoutput.printf("write 66666 at position 0...\n");
-	bb.setPosition(0);
-	test("setPosition(), getPosition()",bb.getPosition()==0);
+	bb.setPositionRelativeToBeginning(0);
+	test("setPositionRelativeToBeginning(), getPosition()",bb.getPosition()==0);
 	bb.write((byte_t *)"66666",5);
 	test("write(), getSize()",bb.getSize()==25);
 	test("write(), getPosition()",bb.getPosition()==5);
@@ -81,8 +81,8 @@ int main(int argc, const char **argv) {
 	// Write 66666 to the buffer at position 30.
 	// (there should be a gap in the buffer now containing random data)
 	stdoutput.printf("write 66666 at position 30...\n");
-	bb.setPosition(30);
-	test("setPosition(), getPosition()",bb.getPosition()==30);
+	bb.setPositionRelativeToBeginning(30);
+	test("setPositionRelativeToBeginning(), getPosition()",bb.getPosition()==30);
 	bb.write((byte_t *)"66666",5);
 	test("write(), getSize()",bb.getSize()==35);
 	test("write(), getPosition()",bb.getPosition()==35);
@@ -100,8 +100,8 @@ int main(int argc, const char **argv) {
 	// written at position 50, but rather just at the current end of
 	// the buffer.
 	stdoutput.printf("append 66666 after setting position to 50...\n");
-	bb.setPosition(50);
-	test("setPosition(), getPosition()",bb.getPosition()==50);
+	bb.setPositionRelativeToBeginning(50);
+	test("setPositionRelativeToBeginning(), getPosition()",bb.getPosition()==50);
 	bb.append((byte_t *)"12345",5);
 	test("append(), getSize()",bb.getSize()==40);
 	test("append(), getPosition()",bb.getPosition()==40);
@@ -134,8 +134,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("read from position 0...\n");
 	byte_t	buffer[5];
 	buffer[4]='\0';
-	bb.setPosition(0);
-	test("setPosition(), getPosition()",bb.getPosition()==0);
+	bb.setPositionRelativeToBeginning(0);
+	test("setPositionRelativeToBeginning(), getPosition()",bb.getPosition()==0);
 	ssize_t	sizeread=bb.read(buffer,4);
 	test("read(), size",sizeread==4);
 	test("read(), data",bytestring::compare(buffer,"6666",4)==0);
@@ -143,8 +143,8 @@ int main(int argc, const char **argv) {
 
 	// read 4 bytes from position 5 of the buffer
 	stdoutput.printf("read from position 5...\n");
-	bb.setPosition(5);
-	test("setPosition(), getPosition()",bb.getPosition()==5);
+	bb.setPositionRelativeToBeginning(5);
+	test("setPositionRelativeToBeginning(), getPosition()",bb.getPosition()==5);
 	sizeread=bb.read(buffer,4);
 	test("read(), size",sizeread==4);
 	test("read(), data",bytestring::compare(buffer,"1234",4)==0);
@@ -153,8 +153,8 @@ int main(int argc, const char **argv) {
 	// read 4 bytes from position 60 of the buffer
 	// (since this is off of the end of the buffer, nothing should be read)
 	stdoutput.printf("read from position 80 (off the end)...\n");
-	bb.setPosition(80);
-	test("setPosition(), getPosition()",bb.getPosition()==80);
+	bb.setPositionRelativeToBeginning(80);
+	test("setPositionRelativeToBeginning(), getPosition()",bb.getPosition()==80);
 	sizeread=bb.read(buffer,4);
 	test("read(), size",sizeread==0);
 	stdoutput.printf("\n");
@@ -206,7 +206,7 @@ int main(int argc, const char **argv) {
 
 	// read past the end
 	stdoutput.printf("read past the end\n");
-	bb.setPosition(0);
+	bb.setPositionRelativeToBeginning(0);
 	byte_t	readbuf[100];
 	test("read(), length",bb.read(readbuf,100)==16);
 	test("read(), data",
@@ -291,7 +291,7 @@ int main(int argc, const char **argv) {
 		byte_t	buf[10];
 		validdata=true;
 		for (uint64_t o=0; o<size; o=o+10) {
-			bb.setPosition(o);
+			bb.setPositionRelativeToBeginning(o);
 			bb.read(buf,10);
 			if (bytestring::compare(buf,data,10)) {
 				stdoutput.printf("	"
@@ -323,7 +323,7 @@ int main(int argc, const char **argv) {
 	test("truncate(3), getSize",bb.getSize()==3);
 	test("truncate(3), compare",
 			!bytestring::compare(bb.getBuffer(),"123",3));
-	bb.setPosition(0);
+	bb.setPositionRelativeToBeginning(0);
 	bb.truncate();
 	test("truncate(), getSize",!bb.getSize());
 	stdoutput.printf("\n");

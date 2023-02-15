@@ -38,12 +38,27 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Deletes this instance of the bytebuffer class. */
 		virtual	~bytebuffer();
 
-		/** Sets the position in the internal buffer at which the next
-		 *  read or write will occur to "pos".  If the position is set
-		 *  beyond the end of the buffer, the buffer will grow but the
-		 *  data between the current end of the buffer and the new
-		 *  position will be undefined. */
-		void	setPosition(size_t pos);
+		/** Sets the position (relative to the beginning of the buffer)
+		 *  at which the next read or write will occur to "offset".
+		 *  If the position is set beyond the end of the buffer, the
+		 *  buffer will grow but the data between the current end of
+		 *  the buffer and the new position will be undefined. */
+		off64_t	setPositionRelativeToBeginning(off64_t offset);
+
+		/** Advances the position at which the next read or write will
+		 *  occur by "offset" bytes.  If the position is set beyond the
+		 *  end of the buffer, the buffer will grow but the data between
+		 *  the current end of the buffer and the new position will be
+		 *  undefined. */
+		off64_t	setPositionRelativeToCurrent(off64_t offset);
+
+		/** Sets the position at which the next read or write will
+		 *  occur to the end of the buffer plus "offset" bytes.
+		 *  Generally, offset will be negative.  If it is positive
+		 *  then the buffer will grow, but the data between the current
+		 *  buffer will grow but the data between the current end of
+		 *  the buffer and the new position will be undefined. */
+		off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		/** Returns the position in the buffer at which
 		 *  the next write will occur. */

@@ -11,6 +11,10 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		output();
 		virtual ~output();
 
+		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
+		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
+		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
+
 		virtual	ssize_t	write(const byte_t *string, size_t size)=0;
 		virtual	ssize_t	write(const char *string)=0;
 		virtual	ssize_t	write(const char *string, size_t length)=0;

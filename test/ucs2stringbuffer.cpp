@@ -126,7 +126,7 @@ int main(int argc, const char **argv) {
 	for (uint16_t i=0; i<iterations; i++) {
 		for (uint32_t j=0;
 			j<(strl/sizeof(ucs2_t))-5-1; j=j+10+i) {
-			strb->setPosition(j);
+			strb->setPositionRelativeToBeginning(j);
 			ucs2literal(sixes,"66666");
 			strb->writeUcs2(sixes);
 			ucs2charstring::copy(str+j,sixes,5);
