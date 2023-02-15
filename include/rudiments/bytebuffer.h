@@ -358,67 +358,6 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(double number);
 
-		/** Appends "..." to the byte buffer using "format"
-		 *  which should comply with standard printf formatting
-		 *  rules.
-		 *
-		 *  Returns NULL if an error occurred. */
-		bytebuffer	*appendFormatted(const char *format, ...);
-
-		/** Appends "argp" to the byte buffer using "format"
-		 *  which should comply with standard printf formatting
-		 *  rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list.
-		 *
-		 *  Returns NULL if an error occurred. */
-		bytebuffer	*appendFormatted(const char *format,
-							va_list *argp);
-
-		/** Appends "..." to the byte buffer using "format"
-		 *  which should comply with standard wprintf formatting
-		 *  rules.
-		 *
-		 *  Returns NULL if an error occurred.
-		 *
-		 *  NOTE: This method is unsupported on platforms where
-		 *  wcharstring::supportsPrintf() returns false.  On those
-		 *  platforms this method returns -1 and sets ENOSYS. */
-		bytebuffer	*appendFormatted(const wchar_t *format, ...);
-
-		/** Appends "argp" to the byte buffer using "format"
-		 *  which should comply with standard wprintf formatting
-		 *  rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list.
-		 *
-		 *  Returns NULL if an error occurred.
-		 *
-		 *  NOTE: This method is unsupported on platforms where
-		 *  wcharstring::supportsPrintf() returns false.  On those
-		 *  platforms this method returns -1 and sets ENOSYS. */
-		bytebuffer	*appendFormatted(const wchar_t *format,
-							va_list *argp);
-
-		/** Appends "..." to the byte buffer using "format"
-		 *  which should comply with standard wprintf formatting
-		 *  rules.
-		 *
-		 *  Returns NULL if an error occurred. */
-		bytebuffer	*appendUcs2Formatted(const ucs2_t *format, ...);
-
-		/** Appends "argp" to the byte buffer using "format"
-		 *  which should comply with standard wprintf formatting
-		 *  rules.
-		 *
-		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list.
-		 *
-		 *  Returns NULL if an error occurred. */
-		bytebuffer	*appendUcs2Formatted(const ucs2_t *format,
-								va_list *argp);
 
 		/** Truncates the bytebuffer at position "pos". */
 		virtual void	truncate(size_t pos);

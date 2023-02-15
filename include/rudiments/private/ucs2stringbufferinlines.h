@@ -203,14 +203,15 @@ ucs2stringbuffer *ucs2stringbuffer::append(float number) {
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(float number, uint16_t scale) {
-	return (ucs2stringbuffer *)appendFormatted("%.*f",scale,number);
+	printf("%.*f",scale,number);
+	return this;
 }
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	return (ucs2stringbuffer *)appendFormatted(
-					"%*.*f",precision,scale,number);
+	printf("%*.*f",precision,scale,number);
+	return this;
 }
 
 inline
@@ -220,14 +221,15 @@ ucs2stringbuffer *ucs2stringbuffer::append(double number) {
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t scale) {
-	return (ucs2stringbuffer *)appendFormatted("%.*f",scale,number);
+	printf("%.*f",scale,number);
+	return this;
 }
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	return (ucs2stringbuffer *)appendFormatted(
-					"%*.*f",precision,scale,number);
+	printf("%*.*f",precision,scale,number);
+	return this;
 }
 
 inline

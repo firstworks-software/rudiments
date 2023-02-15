@@ -131,6 +131,7 @@
 	fixed timezone issues on UnixWare/Irix
 	needsMutex -> getNeedsMutex
 	refactored buffer class setPosition*() methods
+	removed *buffer::appendFormatted() methods, preferring printf()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

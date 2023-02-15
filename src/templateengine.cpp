@@ -218,7 +218,7 @@ bool templateengine::parse(
 				charstring::length(fileparsers[index].file),
 				NULL,vars)) {
 			if (!pvt->_err.getSize()) {
-				pvt->_err.appendFormatted(
+				pvt->_err.printf(
 					"parse(%s) failed: "
 					"filename replacements failed\n",
 					filename);
@@ -235,7 +235,7 @@ bool templateengine::parse(
 				return true;
 			} else {
 				if (!pvt->_err.getSize()) {
-					pvt->_err.appendFormatted(
+					pvt->_err.printf(
 						"parse(%s) failed: "
 						"file handler returned false\n",
 						filename);
@@ -245,7 +245,7 @@ bool templateengine::parse(
 		}
 	}
 	if (!pvt->_err.getSize()) {
-		pvt->_err.appendFormatted(
+		pvt->_err.printf(
 			"parse(%s) failed: no matching file parser\n",filename);
 	}
 	return false;
@@ -296,8 +296,7 @@ bool templateengine::parse(
 	} else {
 		char	*err=error::getErrorString();
 		if (!pvt->_err.getSize()) {
-			pvt->_err.appendFormatted(
-				"parse(%s) failed: %s\n",filename,err);
+			pvt->_err.printf("parse(%s) failed: %s\n",filename,err);
 		}
 		delete[] err;
 	}
@@ -484,7 +483,7 @@ bool templateengine::getBlockName(
 				pvt->_blockstartend,
 				pvt->_blockstartendlen)) {
 		if (!pvt->_err.getSize()) {
-			pvt->_err.appendFormatted(
+			pvt->_err.printf(
 				"getBlockName(%s) failed: getName() failed\n",
 				blockname->getString());
 		}
@@ -531,7 +530,7 @@ bool templateengine::getBlockLength(const char *blockname,
 					// someone forgot the end of the
 					// block-end marker then return failure
 					if (!pvt->_err.getSize()) {
-						pvt->_err.appendFormatted(
+						pvt->_err.printf(
 							"getBlockLength(%s) "
 							"failed: no "
 							"end-of-block marker\n",
@@ -551,7 +550,7 @@ bool templateengine::getBlockLength(const char *blockname,
 		// end-block marker, so return false
 		if (!**buffer) {
 			if (!pvt->_err.getSize()) {
-				pvt->_err.appendFormatted(
+				pvt->_err.printf(
 					"getBlockLength(%s) failed: "
 					"no end-of-block marker\n",blockname);
 			}
@@ -575,7 +574,7 @@ bool templateengine::getIncludeFileName(
 	// get the filename and perform replacements on it
 	if (!getName(buffer,filename,vars,pvt->_incend,pvt->_incendlen)) {
 		if (!pvt->_err.getSize()) {
-			pvt->_err.appendFormatted(
+			pvt->_err.printf(
 				"getIncludeFileName(%s) failed: "
 				"getName() failed\n",
 				filename->getString());
@@ -640,7 +639,7 @@ bool templateengine::parseBlock(
 					return true;
 				} else {
 					if (!pvt->_err.getSize()) {
-						pvt->_err.appendFormatted(
+						pvt->_err.printf(
 							"parse(%s) failed: "
 							"block handler "
 							"returned false\n",

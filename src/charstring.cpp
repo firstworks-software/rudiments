@@ -2470,7 +2470,7 @@ void charstring::quotedPrintableEncode(const byte_t *input,
 
 		if (*c<' ' || *c>'~' || *c=='=') {
 			// hex encode
-			out.appendFormatted("=%02x",*c);
+			out.printf("=%02x",*c);
 			index+=3;
 		} else {
 			out.append(*c);

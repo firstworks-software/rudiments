@@ -195,8 +195,8 @@ int main(int argc, const char **argv) {
 
 	// formatted writes
 	stdoutput.printf("formatted writes\n");
-	bb.appendFormatted("%0.5f",12.12345);
-	test("appendFormatted(), data",
+	bb.printf("%0.5f",12.12345);
+	test("printf(), data",
 		!bytestring::compare(bb.getBuffer(),"12.12345",8));
 	bb.printf("%0.5f",12.12345);
 	test("printf(), data",

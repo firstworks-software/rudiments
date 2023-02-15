@@ -445,46 +445,6 @@ bytebuffer *bytebuffer::append(double number) {
 	return append((const byte_t *)&number,sizeof(double));
 }
 
-bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	bytebuffer	*retval=appendFormatted(format,&argp);
-	va_end(argp);
-	return retval;
-}
-
-bytebuffer *bytebuffer::appendFormatted(const char *format, va_list *argp) {
-	pvt->_pos=pvt->_size;
-	return (printf(format,argp)!=-1)?this:NULL;
-}
-
-bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	bytebuffer	*retval=appendFormatted(format,&argp);
-	va_end(argp);
-	return retval;
-}
-
-bytebuffer *bytebuffer::appendFormatted(const wchar_t *format, va_list *argp) {
-	pvt->_pos=pvt->_size;
-	return (printf(format,argp)!=-1)?this:NULL;
-}
-
-bytebuffer *bytebuffer::appendUcs2Formatted(const ucs2_t *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	bytebuffer	*retval=appendUcs2Formatted(format,&argp);
-	va_end(argp);
-	return retval;
-}
-
-bytebuffer *bytebuffer::appendUcs2Formatted(const ucs2_t *format,
-							va_list *argp) {
-	pvt->_pos=pvt->_size;
-	return (printfUcs2(format,argp)!=-1)?this:NULL;
-}
-
 void bytebuffer::truncate(size_t pos) {
 	pvt->_size=pos;
 }

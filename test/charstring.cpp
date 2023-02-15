@@ -462,7 +462,7 @@ int main(int argc, const char **argv) {
 		if ((byte_t)i<' ' ||
 			(byte_t)i>'~' ||
 			(byte_t)i=='=') {
-			sb.appendFormatted("=%02x",(byte_t)i);
+			sb.printf("=%02x",(byte_t)i);
 			index+=3;
 		} else {
 			sb.append((byte_t)i);

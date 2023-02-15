@@ -1324,7 +1324,7 @@ bool url::getChunkSize(bool bof) {
 			return false;
 		}
 		if (charstring::compare(crlf,"\r\n",2)) {
-			pvt->_error.appendFormatted("http -   "
+			pvt->_error.printf("http -   "
 						"unexpected characters "
 						"in trailing crlf: "
 						"0x%02x 0x%02x",
@@ -1340,9 +1340,9 @@ bool url::getChunkSize(bool bof) {
 	char	*csstring=NULL;
 	ssize_t	bytesread=pvt->_isc.read(&csstring,"\r\n",MAX_HEADER_SIZE);
 	if (bytesread<3) {
-		pvt->_error.appendFormatted("http -   "
-						"invalid chunk size: %.*s",
-						bytesread,csstring);
+		pvt->_error.printf("http -   "
+					"invalid chunk size: %.*s",
+					bytesread,csstring);
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("%s\n",pvt->_error.getString());
 		#endif
@@ -1369,7 +1369,7 @@ bool url::getChunkSize(bool bof) {
 		} else if (*c>='A' && *c<='F') {
 			base='A'-10;
 		} else {
-			pvt->_error.appendFormatted("http -   "
+			pvt->_error.printf("http -   "
 						"invalid chunk size: %.*s",
 						bytesread,csstring);
 			#ifdef DEBUG_HTTP
@@ -1412,7 +1412,7 @@ bool url::getChunkSize(bool bof) {
 			return false;
 		}
 		if (charstring::compare(crlf,"\r\n",2)) {
-			pvt->_error.appendFormatted("http -   "
+			pvt->_error.printf("http -   "
 						"unexpected characters "
 						"in trailing crlf: "
 						"0x%02x 0x%02x",

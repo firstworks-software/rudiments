@@ -193,13 +193,15 @@ stringbuffer *stringbuffer::append(float number) {
 
 inline
 stringbuffer *stringbuffer::append(float number, uint16_t scale) {
-	return (stringbuffer *)appendFormatted("%.*f",scale,number);
+	printf("%.*f",scale,number);
+	return this;
 }
 
 inline
 stringbuffer *stringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	return (stringbuffer *)appendFormatted("%*.*f",precision,scale,number);
+	printf("%*.*f",precision,scale,number);
+	return this;
 }
 
 inline
@@ -209,13 +211,15 @@ stringbuffer *stringbuffer::append(double number) {
 
 inline
 stringbuffer *stringbuffer::append(double number, uint16_t scale) {
-	return (stringbuffer *)appendFormatted("%.*f",scale,number);
+	printf("%.*f",scale,number);
+	return this;
 }
 
 inline
 stringbuffer *stringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	return (stringbuffer *)appendFormatted("%*.*f",precision,scale,number);
+	printf("%*.*f",precision,scale,number);
+	return this;
 }
 
 inline

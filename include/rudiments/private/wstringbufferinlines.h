@@ -182,15 +182,15 @@ wstringbuffer *wstringbuffer::append(float number) {
 
 inline
 wstringbuffer *wstringbuffer::append(float number, uint16_t scale) {
-	return (wstringbuffer *)appendFormatted(L"%.*f",
-						scale,number);
+	printf(L"%.*f",scale,number);
+	return this;
 }
 
 inline
 wstringbuffer *wstringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	return (wstringbuffer *)appendFormatted(L"%*.*f",
-						precision,scale,number);
+	printf(L"%*.*f",precision,scale,number);
+	return this;
 }
 
 inline
@@ -200,14 +200,15 @@ wstringbuffer *wstringbuffer::append(double number) {
 
 inline
 wstringbuffer *wstringbuffer::append(double number, uint16_t scale) {
-	return (wstringbuffer *)appendFormatted(L"%.*f",scale,number);
+	printf(L"%.*f",scale,number);
+	return this;
 }
 
 inline
 wstringbuffer *wstringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	return (wstringbuffer *)appendFormatted(L"%*.*f",
-						precision,scale,number);
+	printf(L"%*.*f",precision,scale,number);
+	return this;
 }
 
 inline
