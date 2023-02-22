@@ -177,6 +177,83 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffered vs. unbuffered file descriptor. */
 		virtual	ssize_t	printfUcs2(const ucs2_t *format, va_list *argp);
 
+		/** Prints "c" to the output, however if "c" is non-printing
+		 *  character then it is printed as a hex value of the format:
+		 *  (0x0a).  Carriage returns, line feeds and tabs are printed
+		 *  as \n, \r and \t. */
+		void	safePrint(byte_t c);
+
+		/** Prints "str" to the output, however all non-printing
+		 *  characters are printed as hex values of the format: (0x0a)
+		 *  and carriage returns, line feeds and tabs are printed as
+		 *  \n, \r and \t. */
+		void	safePrint(const byte_t *str);
+
+		/** Prints "length" characters of "str" to the output,
+		 *  however all non-printing characters are printed as hex
+		 *  values of the format: (0x0a) and carriage returns, line
+		 *  feeds and tabs are printed as \n, \r and \t. */
+		void	safePrint(const byte_t *str, int32_t length);
+
+		/** Prints "c" to the output, however if "c" is non-printing
+		 *  character then it is printed as a hex value of the format:
+		 *  (0x0a).  Carriage returns, line feeds and tabs are printed
+		 *  as \n, \r and \t. */
+		void	safePrint(char c);
+
+		/** Prints "str" to the output, however all non-printing
+		 *  characters are printed as hex values of the format: (0x0a)
+		 *  and carriage returns, line feeds and tabs are printed as
+		 *  \n, \r and \t. */
+		void	safePrint(const char *str);
+
+		/** Prints "length" characters of "str" to the output, however
+		 *  all non-printing characters are printed as hex values of the
+		 *  format: (0x0a) and carriage returns, line feeds and tabs
+		 *  are printed as \n, \r and \t. */
+		void	safePrint(const char *str, int32_t length);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(byte_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(uint16_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(uint32_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(uint64_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(char value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(int16_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(int32_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(int64_t value);
+
+		/** Prints "value" to the output as a string of ones and
+		 *  zeros. */
+		void	printBits(const byte_t *bits, uint64_t size);
+
+		void	printHex(const byte_t *data, uint64_t size);
+
+		void	printHex(const byte_t *data,
+					uint64_t size, uint16_t indent);
+
 	#include <rudiments/private/output.h>
 };
 

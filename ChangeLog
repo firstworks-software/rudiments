@@ -132,6 +132,8 @@
 	needsMutex -> getNeedsMutex
 	refactored buffer class setPosition*() methods
 	removed *buffer::appendFormatted() methods, preferring printf()
+	moved safePrint() and printBits() to output class
+	added printHex() to output class
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
