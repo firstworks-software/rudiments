@@ -129,7 +129,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  allow the creation of files with holes in them and that can
 		 *  be accomplished by using a positive "offset" and then
 		 *  writing data at that position.  Returns the position on
-		 *  succes or -1 on failure. */
+		 *  success or -1 on failure. */
 		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		/** Writes "number" to the file descriptor.  Returns the number
@@ -219,9 +219,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Writes "size" bytes of "string" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
- 		 *  or RESULT_ERROR if an error occurred.  Note that it is
- 		 *  possible to write beyond the string's NULL terminator
- 		 *  using this method.  */
+ 		 *  or RESULT_ERROR if an error occurred. */
 		ssize_t	write(const byte_t *string, size_t size);
 
 		/** Writes "length" characters of "string" to the file

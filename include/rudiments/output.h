@@ -6,72 +6,365 @@
 
 #include <rudiments/private/outputincludes.h>
 
+/** The output class provides a base class for things to which output can be
+ *  directed (file descriptors, files, sockets, string buffers, etc.) */
 class RUDIMENTS_DLLSPEC output : virtual public object {
 	public:
+
+		/** Creates an instance of the output class. */
 		output();
+
+		/** Deletes this instance of the output class. */
 		virtual ~output();
 
+		/** Sets the position (relative to the beginning of the file
+		 *  descriptor) at which the next read or write will occur to
+		 *  "offset".  Returns that position on success or -1 on
+		 *  failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
 		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
+
+		/** Advances the position at which the next read or write will
+ 		 *  occur by "offset" bytes.  Returns that position on success
+ 		 *  or -1 on failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
 		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
+
+		/** Sets the position at which the next read or write will
+		 *  occur to the end of the file plus "offset" bytes.
+		 *  Generally, "offset" will be negative though most filesystems
+		 *  allow the creation of files with holes in them and that can
+		 *  be accomplished by using a positive "offset" and then
+		 *  writing data at that position.  Returns the position on
+		 *  success or -1 on failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
 		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
 
+
+		/** Writes "size" bytes of "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	write(const byte_t *string, size_t size)=0;
+
+		/** Writes NULL-terminated "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	write(const char *string)=0;
+
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.  */
 		virtual	ssize_t	write(const char *string, size_t length)=0;
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	write(char character)=0;
+
+		/** Writes NULL-terminated "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	write(const wchar_t *string)=0;
+
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.  */
 		virtual	ssize_t	write(const wchar_t *string, size_t length)=0;
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	write(wchar_t character)=0;
+
+		/** Writes NULL-terminated "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	writeUcs2(const ucs2_t *string)=0;
+
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.  */
 		virtual	ssize_t	writeUcs2(const ucs2_t *string,
 							size_t length)=0;
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	writeUcs2(ucs2_t character)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(int16_t number)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(int32_t number)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(int64_t number)=0;
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred. */
 		virtual	ssize_t	write(byte_t character)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(uint16_t number)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(uint32_t number)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(uint64_t number)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(float number)=0;
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred. */
 		virtual	ssize_t	write(double number)=0;
 
+
+		/** Writes "size" bytes of "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(const byte_t *string, size_t size,
 						int32_t sec, int32_t usec);
+
+		/** Writes NULL-terminated "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(const char *string,
 						int32_t sec, int32_t usec);
+
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(const char *string, size_t length,
 						int32_t sec, int32_t usec);
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(char character,
 						int32_t sec, int32_t usec);
+
+		/** Writes NULL-terminated "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(const wchar_t *string,
 						int32_t sec, int32_t usec);
+
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(const wchar_t *string, size_t length,
 						int32_t sec, int32_t usec);
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(wchar_t character,
 						int32_t sec, int32_t usec);
+
+		/** Writes NULL-terminated "string" to the file descriptor.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	writeUcs2(const ucs2_t *string,
 						int32_t sec, int32_t usec);
+
+		/** Writes "length" characters of "string" to the file
+ 		 *  descriptor.  Returns the number of bytes that were
+ 		 *  successfully written or RESULT_ERROR if an error occurred.
+ 		 *  Note that it is possible to write beyond the string's NULL
+ 		 *  terminator using this method.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	writeUcs2(const ucs2_t *string, size_t length,
 						int32_t sec, int32_t usec);
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	writeUcs2(ucs2_t character,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(int16_t number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(int32_t number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(int64_t number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "character" to the file descriptor.  Returns the
+		 *  number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(byte_t character,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(uint16_t number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(uint32_t number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(uint64_t number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(float number,
 						int32_t sec, int32_t usec);
+
+		/** Writes "number" to the file descriptor.  Returns the number
+		 *  of bytes that were successfully written or RESULT_ERROR if
+		 *  an error occurred.
+ 		 * 
+ 		 *  In this implementation of the method, "sec" and "usec" are
+		 *  ignored, however a child class might implement a timeout
+		 *  using them.  In that case, the method would return
+		 *  RESULT_TIMEOUT if a timeout occurred. */
 		virtual	ssize_t	write(double number,
 						int32_t sec, int32_t usec);
 
@@ -249,8 +542,12 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  zeros. */
 		void	printBits(const byte_t *bits, uint64_t size);
 
+		/** Prints a hex/character representation "size" bytes of
+		 *  "data" to the output. */
 		void	printHex(const byte_t *data, uint64_t size);
 
+		/** Prints a hex/character representation "size" bytes of
+		 *  "data" to the output, indented by "indent" tabs. */
 		void	printHex(const byte_t *data,
 					uint64_t size, uint16_t indent);
 

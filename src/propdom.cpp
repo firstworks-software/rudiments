@@ -315,7 +315,7 @@ ssize_t propdom::writeNode(domnode *dn, output *out,
 			const char	*val=dn->getAttributeValue("v");
 			ssize_t		vlen=charstring::length(val);
 			switch (*name) {
-				case 'c':
+				case 'e':
 					if (!incOrErr(&retval,
 							out->write('!'),1) ||
 						!incOrErr(&retval,
