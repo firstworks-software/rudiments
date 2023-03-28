@@ -47,6 +47,6 @@ void mvcproperties::buildDictionary() {
 	}
 }
 
-const char *mvcproperties::getValue(const char *parameter) {
-	return pvt->_dict.getValue(parameter);
+const char *mvcproperties::getValue(const char *property) {
+	return pvt->_dict.getValue(property);
 }

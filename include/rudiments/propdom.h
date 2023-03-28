@@ -10,12 +10,17 @@
  *  properties file.
  *
  *  It parses a file or string of property-file-formatted data and produces a
- *  dom tree representing the data.  It creates "k" elements for each key, "p" elements for each pound-delimited comment, and "c" elements for each semicolon-delimited comments.  It adds a "v" attribute to each element, containing the value.  For each "k" element, it also adds a "k" attribute, containing the name of the key.  Text dom nodes (nodes of type TEXT_DOMNODETYPE) are used to preserve whitespace.
+ *  dom tree representing the data.  It creates "k" elements for each key, "p"
+ *  elements for each pound-delimited comment, and "c" elements for each
+ *  exclamation-delimited comment.  It adds a "v" attribute to each element,
+ *  containing the value.  For each "k" element, it also adds a "k" attribute,
+ *  containing the name of the key.  Text dom nodes (nodes of type
+ *  TEXT_DOMNODETYPE) are used to preserve whitespace.
  *
- *  For example, the following INI:
+ *  For example, the following property file:
  *
  *  #pound comment
- *  ;semicolon comment
+ *  !exclamation comment
  *  key1=value1
  *  key2=value2
  *
@@ -25,7 +30,7 @@
  *  would produce the following dom tree:
  *
  *    <p v="pound comment"/>
- *    <s v="semicolon comment"/>
+ *    <e v="exclamation comment"/>
  *    <k k="key1" v="value1"/>
  *    <k k="key2" v="value2"/>
  *

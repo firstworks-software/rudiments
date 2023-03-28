@@ -182,7 +182,7 @@ bool propdom::exclamationComment(const char *c) {
 	indent(pvt->_indent);
 	debugPrintf("%s\n",c);
 #endif
-	pvt->_current->appendTag("c")->appendAttribute("v",c);
+	pvt->_current->appendTag("e")->appendAttribute("v",c);
 	return true;
 }
 

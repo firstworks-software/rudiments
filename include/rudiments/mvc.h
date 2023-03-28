@@ -6,93 +6,372 @@
 
 #include <rudiments/private/mvcincludes.h>
 
+
+/** The mvcsecurity class provides a base class for obtaining the current user.
+ *
+ *  This class cannot be used directly, rather it must be overridden by a child
+ *  class that can fetch the current user from a specific security framework,
+ *  for example, the httpbasicsecurity class can fetch the current user from
+ *  the HTTP Basic Authentication framework. */
 class RUDIMENTS_DLLSPEC mvcsecurity : virtual public object {
 	public:
+
+		/** Creates an instance of the mvcsecurity class. */
 		mvcsecurity() {};
+
+		/** Deletes this instance of the mvcsecurity class. */
 		virtual	~mvcsecurity() {};
+
+		/** Defines a pure-virtual method for obtaining the user
+		 *  name.  Must be overridden by a child class. */
 		virtual const char	*getUserName()=0;
 
 	#include <rudiments/private/mvcsecurity.h>
 };
 
+
+/** The httpbasicsecurity class provides an implementation of the mvcsecurity
+ *  class which can fetch the current user from the HTTP Basic Authentication
+ *  framework. */
 class RUDIMENTS_DLLSPEC httpbasicsecurity : public mvcsecurity {
 	public:
+
+		/** Creates an instance of the httpbasicsecurity class. */
 		httpbasicsecurity();
+
+		/** Deletes this instance of the httpbasicsecurity class. */
 		virtual ~httpbasicsecurity();
 
+		/** Sets the httprequest to use when getUserName() is called. */
 		void	setRequest(httprequest *req);
+
+		/** Returns the httprequest set by a previous call to
+		 *  setRequest() or NULL if none has been set. */
 		httprequest	*getRequest();
+
+		/** Returns the REMOTE_USER provided by the httprequest set by
+		 *  a previous call to setRequest(), NULL if no httprequest has
+		 *  been, or an empty string if the httprequest didn't include
+		 *  a REMOTE_USER. */
 		const char	*getUserName();
 
 	#include <rudiments/private/httpbasicsecurity.h>
 };
 
+
+/** The mvcproperties class provides methods for parsing java-style properties
+ *  files or strings, and returning property values.
+ *
+ *  The format of the property file or string should follow this example:
+ *
+ *  #pound comment
+ *  !exclamation comment
+ *  key1=value1
+ *  key2=value2
+ *
+ *  key 3=value 3
+ *  key 4=value 4
+ */
 class RUDIMENTS_DLLSPEC mvcproperties : virtual public object {
 	public:
+
+		/** Creates an instance of the mvcproperties class. */
 		mvcproperties();
+
+		/** Deletes this instance of the mvcproperties class. */
 		virtual	~mvcproperties();
 
-		bool		parseFile(const char *filename);
-		bool		parseString(const char *string);
+		/** Parses the properties file "filename", discarding
+		 *  properties from any previously parsed file or string. */
+		bool	parseFile(const char *filename);
 
-		const char	*getValue(const char *parameter);
+		/** Parses the properties string "string", discarding
+		 *  properties from any previously parsed file or string. */
+		bool	parseString(const char *string);
+
+		/** Returns the value of "property" as provided by the most
+		 *  recently prased file or string. */
+		const char	*getValue(const char *property);
 
 	#include <rudiments/private/mvcproperties.h>
 };
 
+
+/** The mvctier class provides a base class for the tiers of an MVC (Model View
+ *  Controller) application, and provides methods and functionality that is
+ *  common to all tiers.
+ *
+ *  This class is not intended to be used directly, nor are its direct
+ *  children: mvcservice, mvcdao, mvcview, and mvccontroller.  Rather, you
+ *  should create children of those classes implementing specific MVC
+ *  functionality for your application, and use them directly. */
 class RUDIMENTS_DLLSPEC mvctier : virtual public object {
 	public:
+
+		/** Creates an instance of the mvctier class. */
 		mvctier();
+
+		/** Deletes this instance of the mvctier class. */
 		virtual ~mvctier();
 
+		/** Returns "mvctier" but should be overridden by child classes
+		 *  to return a more specific type. */
 		virtual const char	*getType();
 
+		/** Sets the instance of mvcproperties to use. */
 		void		setProperties(mvcproperties *prop);
+
+		/** Returns the instance of mvcproperties set by a previous
+		 *  call to setProperties(). */
 		mvcproperties	*getProperties();
 
+		/** Sets the instance of mvcsecurity to use. */
 		void		setSecurity(mvcsecurity *sec);
+
+		/** Returns the instance of mvcsecurity set by a previous
+		 *  call to setSecurity(). */
 		mvcsecurity	*getSecurity();
 
 	#include <rudiments/private/mvctier.h>
 };
 
+
+/** The mvccontroller class provides a base class for MVC (Model View
+ *  Controller) controllers.
+ *
+ *  This class is not intended to be used directly, rather you should create
+ *  children of this class that implements specific controller tier
+ *  functionality for your application, and use them directly. */
 class RUDIMENTS_DLLSPEC mvccontroller : public mvctier {
 	public:
+
+		/** Creates an instance of the mvccontroller class. */
 		mvccontroller() {};
+
+		/** Deletes this instance of the mvccontroller class. */
 		virtual ~mvccontroller() {};
 
 	#include <rudiments/private/mvccontroller.h>
 };
 
+
+/** The mvcview class provides a base class for MVC (Model View Controller)
+ *  views.
+ *
+ *  This class is not intended to be used directly, rather you should create
+ *  children of this class that implements specific view tier functionality for
+ *  your application, and use them directly. */
 class RUDIMENTS_DLLSPEC mvcview : public mvctier {
 	public:
+
+		/** Creates an instance of the mvcview class. */
 		mvcview();
+
+		/** Deletes this instance of the mvcview class. */
 		virtual ~mvcview();
 
+		/** Sets the instance of httprequest to use. */
 		void	setRequest(httprequest *req);
+
+		/** Returns the instance of httprequest set by a previous call
+		 *  to setRequest(). */
 		httprequest	*getRequest();
 
+		/** Sets the instance of httpresponse to use. */
 		void	setResponse(httpresponse *resp);
+
+		/** Returns the instance of httpresponse set by a previous call
+		 *  to setResponse(). */
 		httpresponse	*getResponse();
 
 	#include <rudiments/private/mvcview.h>
 };
 
+
+/** The mvcservice class provides a base class for MVC (Model View Controller)
+ *  services.
+ *
+ *  This class is not intended to be used directly, rather you should create
+ *  children of this class that implements specific service tier functionality
+ *  for your application, and use them directly. */
 class RUDIMENTS_DLLSPEC mvcservice : public mvctier {
 	public:
+
+		/** Creates an instance of the mvcservice class. */
 		mvcservice() {};
+
+		/** Deletes this instance of the mvcservice class. */
 		virtual ~mvcservice() {};
 		
 	#include <rudiments/private/mvcservice.h>
 };
 
+
+/** The mvcdao class provides a base class for MVC (Model View Controller)
+ *  DAOs (Data Access Objects).
+ *
+ *  This class is not intended to be used directly, rather you should create
+ *  children of this class that implements specific DAO tier functionality
+ *  for your application, and use them directly. */
 class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
 	public:
+
+		/** Creates an instance of the mvcdao class. */
 		mvcdao() {};
+
+		/** Deletes this instance of the mvcdao class. */
 		virtual ~mvcdao() {};
 		
 	#include <rudiments/private/mvcdao.h>
 };
+
+
+/** The mvcresult class provides an object to which "results" can be attached
+ *  and passed up from the DAO tier to other MVC tiers.
+ *
+ *  In the Rudiments MVC framework, collections (lists, dictionaries, trees,
+ *  scalars, doms, etc.) are passed around between tiers instead of DTOs and/or
+ *  domain objects.  mvcresult objects provide a convenient object to attach
+ *  collections to, as well as status, status codes and status messages.
+ *
+ *  Internally, each instance of mvcresult has:
+ *
+ *  status - true if the operation succeeded, and false if it failed
+ *  status code - a specific success or error code
+ *  status message - a specific success or error message
+ *  data - a dictionary where each key is a string and each value
+ *  		is a collection
+ *  wastebasket - an instance of the wastebasked class to which parent obejcts
+ *  		of the collections, or of members of the collections can be
+ *  		attached for future disposal
+ */
+class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
+	public:
+
+		/** Creates an instance of the mvcresult class. */
+		mvcresult();
+
+		/** Deletes this instance of the mvcresult class. */
+		virtual ~mvcresult();
+
+		/** Sets the status to "success", status code to 0, and status
+		 *  message to NULL. */
+		void	setStatus(bool success);
+
+		/** Sets the status to "success", status code to "code", and
+		 *  status message to NULL. */
+		void	setStatus(bool success, uint32_t code);
+
+		/** Sets the status to "success", status code to "code", and
+		 *  status message to "message". */
+		void	setStatus(bool success, uint32_t code,
+						const char *message);
+
+		/** Sets the status to true (success), status code to 0, and
+		 *  status message to NULL. */
+		void	setSuccess();
+
+		/** Sets the status to true (success), status code to "code",
+		 *  and status message to NULL. */
+		void	setSuccess(uint32_t code);
+
+		/** Sets the status to true (success), status code to "code",
+		 *  and status message to "message". */
+		void	setSuccess(uint32_t code, const char *message);
+
+		/** Sets the status to false (failure), status code to 0, and
+		 *  status message to NULL. */
+		void	setFailed();
+
+		/** Sets the status to false (failure), status code to "code",
+		 *  and status message to NULL. */
+		void	setFailed(uint32_t code);
+
+		/** Sets the status to false (failure), status code to "code",
+		 *  and status message to "message". */
+		void	setFailed(uint32_t code, const char *message);
+
+		/** Sets the status "success" but does not change the
+		 *  status code or status message. */
+		void		setSuccess(bool success);
+
+		/** Returns the status as set by a previous call to
+		 *  setStatus(), setSuccess(), setFailed(), or setSuccess(). */
+		bool		getSuccess();
+
+		/** Sets the status code to "code" but does not change the
+		 *  status or status message. */
+		void		setCode(uint32_t code);
+
+		/** Returns the status code as set by a previous call to
+		 *  setStatus(), setSuccess(), setFailed(), or setCode(). */
+		uint32_t	getCode();
+
+		/** Sets the status message to "message" but does not change
+		 *  the status or status code. */
+		void		setMessage(const char *message);
+
+		/** Returns the status message as set by a previous call to
+		 *  setStatus(), setSuccess(), setFailed(), or setMessage(). */
+		const char	*getMessage();
+
+		/** Associates with collection "data" with string "key".
+		 *
+		 *  When using this method, "data" will not be deleted when
+		 *  this instance of mvcresult is deleted. */
+		void		setData(const char *key,
+						collection *data);
+
+		/** Associates with collection "data" with string "key".
+		 *
+		 *  When using this method, "data" will be deleted when this
+		 *  instance of mvcresult is deleted. */
+		void		attachData(const char *key,
+						collection *data);
+
+		/** Returns the list of keys previously associated with
+		 *  collections using setData() or attachData(). */
+		linkedlist<char *>	*getKeys();
+
+		/** Returns the collection associated with "key". */
+		collection		*getData(const char *key);
+
+		/** Writes a representation (currently JSON) of the contents of
+		 *  the instance to standard output. */
+		ssize_t	write();
+
+		/** Writes a representation (currently JSON) of the contents of
+		 *  the instance to "out". */
+		ssize_t	write(output *out);
+
+		/** Writes an indented JSON representation of the contents of
+		 *  the instance to standard output. */
+		ssize_t	writeJson();
+
+		/** Writes a JSON representation of the contents of the
+		 *  instance to standard output.
+		 *
+		 *  The representation is indented if "indent" is true and not
+		 *  indented if "indent" is false.*/
+		ssize_t	writeJson(bool indent);
+
+		/** Writes an indented JSON representation of the contents of
+		 *  the instance to "out". */
+		ssize_t	writeJson(output *out);
+
+		/** Writes a JSON representation of the contents of the
+		 *  instance to "out".
+		 *
+		 *  The representation is indented if "indent" is true and not
+		 *  indented if "indent" is false.*/
+		ssize_t	writeJson(output *out, bool indent);
+
+		/** Returns the wastebasket. */
+		wastebasket	*getWastebasket();
+
+	#include <rudiments/private/mvcresult.h>
+};
+
 
 /** The mvccrud class defines an interface for child classes which implement
  *  the CRUD (create, read, update, and delete) paradigm.
@@ -358,54 +637,6 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  most recently called. */
 		virtual tablecollection<const char *>
 					*getResultSetTable()=0;
-};
-
-class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
-	public:
-		mvcresult();
-		virtual ~mvcresult();
-
-		void	setStatus(bool success);
-		void	setStatus(bool success, uint32_t code);
-		void	setStatus(bool success, uint32_t code,
-						const char *message);
-
-		void	setSuccess();
-		void	setSuccess(uint32_t code);
-		void	setSuccess(uint32_t code, const char *message);
-
-		void	setFailed();
-		void	setFailed(uint32_t code);
-		void	setFailed(uint32_t code, const char *message);
-
-		void		setSuccess(bool success);
-		bool		getSuccess();
-
-		void		setCode(uint32_t code);
-		uint32_t	getCode();
-
-		void		setMessage(const char *message);
-		const char	*getMessage();
-
-		void		setData(const char *key,
-						collection *data);
-		void		attachData(const char *key,
-						collection *data);
-
-		linkedlist<char *>	*getKeys();
-		collection		*getData(const char *key);
-
-		ssize_t	write();
-		ssize_t	write(output *out);
-
-		ssize_t	writeJson();
-		ssize_t	writeJson(bool indent);
-		ssize_t	writeJson(output *out);
-		ssize_t	writeJson(output *out, bool indent);
-
-		wastebasket	*getWastebasket();
-
-	#include <rudiments/private/mvcresult.h>
 };
 
 #endif
