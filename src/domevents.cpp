@@ -48,19 +48,25 @@ domevents::domevents() : object() {
 domevents::~domevents() {
 }
 
-bool domevents::setEvents(const char *events) {
+bool domevents::setEvents(domnode *events) {
 
 	debugPrintf(1,"setting events... ");
 
 	pvt->_eventsnode=NULL;
 
-	if (!pvt->_etree.parseString(events)) {
+	if (!charstring::compare(events->getNamespace(),"events") &&
+			!charstring::compare(events->getName(),"events")) {
+		pvt->_eventsnode=events;
+	} else {
+		pvt->_eventsnode=events->getFirstTagDescendent(
+						"events","events");
+	}
+
+	if (pvt->_eventsnode->isNullNode()) {
+		pvt->_eventsnode=NULL;
 		debugPrintf(1,"failed\n");
 		return false;
 	}
-
-	pvt->_eventsnode=pvt->_etree.getRootNode()->
-					getFirstTagChild("events","events");
 
 	debugPrintf(1,"success\n");
 	return true;
@@ -100,31 +106,31 @@ bool domevents::setData(void *data) {
 	return true;
 }
 
-bool domevents::process(domnode *codetreenode) {
+bool domevents::process(domnode *xmltreenode) {
 
 	debugPrintf(1,"process {\n");
 
 	// walk the code tree...
-	while (!codetreenode->isNullNode()) {
+	while (!xmltreenode->isNullNode()) {
 
 		// find the corresponding node in the event tree
-		domnode	*etnode=findEvent(codetreenode);
+		domnode	*etnode=findEvent(xmltreenode);
 
 		// avoid loops...
 		// If this event tree node is already set as the private
 		// data of this code tree node, then the node has already
 		// been processed by this event.  Move on.
-		if (codetreenode->getPrivateData()==etnode) {
-			codetreenode=codetreenode->getNextTag();
+		if (xmltreenode->getPrivateData()==etnode) {
+			xmltreenode=xmltreenode->getNextTag();
 			continue;
 		}
 
 		// attach the event tree node to the code tree node
-		codetreenode->setPrivateData(etnode);
+		xmltreenode->setPrivateData(etnode);
 
 		// if there is no corresponding node, then move on
 		if (etnode->isNullNode()) {
-			codetreenode=codetreenode->getNextTag();
+			xmltreenode=xmltreenode->getNextTag();
 			continue;
 		}
 
@@ -134,8 +140,8 @@ bool domevents::process(domnode *codetreenode) {
 
 		// call the event handler
 		domnode	*next=(handler)?
-					handler(codetreenode,etnode,pvt->_data):
-					codetreenode;
+					handler(xmltreenode,etnode,pvt->_data):
+					xmltreenode;
 
 		// if there are a set of event handlers then call those too,
 		// but skip the check if we're at the top of the event node
@@ -150,9 +156,9 @@ bool domevents::process(domnode *codetreenode) {
 
 				// we can only continue to process events if
 				// the previous event returned the same
-				// codetreenode, so bail if we got something
+				// xmltreenode, so bail if we got something
 				// else back
-				if (next!=codetreenode) {
+				if (next!=xmltreenode) {
 					break;
 				}
 
@@ -173,7 +179,7 @@ bool domevents::process(domnode *codetreenode) {
 				}
 
 				// call the event handler
-				next=handler(codetreenode,etnode,pvt->_data);
+				next=handler(xmltreenode,etnode,pvt->_data);
 				if (!next) {
 					break;
 				}
@@ -187,35 +193,34 @@ bool domevents::process(domnode *codetreenode) {
 		}
 
 		// continue walking
-		codetreenode=next;
+		xmltreenode=next;
 	}
 
 	debugPrintf(1,"} success\n");
 	return true;
 }
 
-domnode *domevents::findEvent(domnode *codetreenode) {
+domnode *domevents::findEvent(domnode *xmltreenode) {
 
 	// get the name of the current code tree node, we'll need them later...
-	const char	*ctnodens=codetreenode->getNamespace();
-	const char	*ctnodename=codetreenode->getName();
-	const char	*ctnodevalue=codetreenode->getAttributeValue("value");
+	const char	*xmlnodens=xmltreenode->getNamespace();
+	const char	*xmlnodename=xmltreenode->getName();
+	const char	*xmlnodevalue=xmltreenode->getAttributeValue("value");
 
 	debugPrintf(1,"  <%s%s%s%s%s%s%s> - ",
-				(ctnodens)?ctnodens:"",
-				(ctnodens)?":":"",
-				ctnodename,
-				(ctnodevalue)?" ":"",
-				(ctnodevalue)?"value=\"":"",
-				(ctnodevalue)?ctnodevalue:"",
-				(ctnodevalue)?"\"":"");
+				(xmlnodens)?xmlnodens:"",
+				(xmlnodens)?":":"",
+				xmlnodename,
+				(xmlnodevalue)?" ":"",
+				(xmlnodevalue)?"value=\"":"",
+				(xmlnodevalue)?xmlnodevalue:"",
+				(xmlnodevalue)?"\"":"");
 
 	// We need to figure out where to start in the event tree.  If the
-	// parent of this codetreenode has an event tree node attached to it,
+	// parent of this xmltreenode has an event tree node attached to it,
 	// then start there.  If it doesn't, then start at the top of the 
 	// event node tree.
-	domnode	*p=(domnode *)codetreenode->
-					getParent()->getPrivateData();
+	domnode	*p=(domnode *)xmltreenode->getParent()->getPrivateData();
 	if (!p || p->isNullNode()) {
 		p=pvt->_eventsnode;
 	}
@@ -226,18 +231,18 @@ domnode *domevents::findEvent(domnode *codetreenode) {
 			p->getName());
 
 	// walk the children of the parent event tree node...
-	domnode *c=p->getFirstTagChild(ctnodens,ctnodename);
+	domnode *c=p->getFirstTagChild(xmlnodens,xmlnodename);
 	while (!c->isNullNode()) {
 
 		// test values too, if necessary...
 		const char	*v=c->getAttributeValue("value");
 		if (charstring::isNullOrEmpty(v) ||
-			!charstring::compare(v,ctnodevalue)) {
+			!charstring::compare(v,xmlnodevalue)) {
 			break;
 		}
 
 		// move on
- 		c=c->getNextTagSibling(ctnodens,ctnodename);
+ 		c=c->getNextTagSibling(xmlnodens,xmlnodename);
 	}
 
 	// if we didn't find an event yet, try again from the top of the
@@ -252,18 +257,18 @@ domnode *domevents::findEvent(domnode *codetreenode) {
 				p->getName());
 
 		// walk the children of the parent event tree node...
-		c=p->getFirstTagChild(ctnodens,ctnodename);
+		c=p->getFirstTagChild(xmlnodens,xmlnodename);
 		while (!c->isNullNode()) {
 
 			// test values too, if necessary...
 			const char	*v=c->getAttributeValue("value");
 			if (charstring::isNullOrEmpty(v) ||
-				!charstring::compare(v,ctnodevalue)) {
+				!charstring::compare(v,xmlnodevalue)) {
 				break;
 			}
 
 			// move on
- 			c=c->getNextTagSibling(ctnodens,ctnodename);
+ 			c=c->getNextTagSibling(xmlnodens,xmlnodename);
 		}
 	}
 
