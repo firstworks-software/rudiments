@@ -222,7 +222,7 @@ class RUDIMENTS_DLLSPEC domevents : public object {
 		 *
 		 *  Returns true on success and false on failure, eg. if an
 		 *  <events:events> tag wasn't found. */
-		bool	setEvents(const char *events);
+		bool	setEvents(domnode *events);
 
 		/** Associates function "handler" with "event".
 		 *
