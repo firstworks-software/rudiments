@@ -82,7 +82,8 @@ PROGS3= handoff \
 	scalar \
 	sensitivevalue \
 	resourcepool \
-	collectionprint
+	domevents \
+	collectionprint \
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -331,6 +332,9 @@ sensitivevalue: sensitivevalue.cpp sensitivevalue.$(OBJ)
 
 resourcepool: resourcepool.cpp resourcepool.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) resourcepool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+domevents: domevents.cpp domevents.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) domevents.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 collectionprint: collectionprint.cpp collectionprint.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) collectionprint.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

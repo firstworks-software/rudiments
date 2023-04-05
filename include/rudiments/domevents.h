@@ -16,7 +16,7 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *  Lets say we have the following XML:
  *
  *  <p>Hello there <b>Dave</b> check out this photo:
- *  <img src="coolphoto.jpg"> It's <i>pretty cool</i>.</p>
+ *  <img src="coolphoto.jpg"/> It&apos;s <i>pretty cool</i>.</p>
  *
  *  ...and, inside paragraphs, we'd like to remove any italics and convert bold
  *  text to emphasized text.  We'd also like to change any refrence to
@@ -61,12 +61,12 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *  int main(int argc, const char **argv) {
  *
  *      // parse the xml
- *  	domtree		xml;
+ *  	xmldom	xml;
  *  	xml.parseString("<p>Hello there...");
  *
  *
  * 	// parse the events
- *  	domtree		events;
+ *  	xmldom	events;
  *  	events.parseString("<events:events>...");
  *
  *
@@ -86,13 +86,13 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *
  *
  * 	// write out the processed xml
- *  	xml.write();
+ *  	xml.write(false);
  *  }
  *
  *  // rename the xml tag to the value of the event tag's "to" attribute
  *  domnode	*rename(domnode *xmltreenode, domnode *eventtreenode,
  *  								void *data) {
- *  	xmltreenode->setName(eventtreenode->getAttributeValue("to");
+ *  	xmltreenode->setName(eventtreenode->getAttributeValue("to"));
  *  	return xmltreenode;
  *  }
  *
@@ -100,7 +100,15 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *  domnode	*ignore(domnode *xmltreenode, domnode *eventtreenode,
  *  								void *data) {
  *  	domnode	*parent=xmltreenode->getParent();
- *	parent->unwrapFirstChild(eventtreenode->getName());
+ *  	// when using terse syntax:
+ *  	//	get the tag name from the event node
+ *  	// when using verbose syntax:
+ *  	//	get the tag name from the event node parent
+ *  	const char	*tag=
+ *  		(!charstring::compare(eventtreenode->getNamespace(),"events"))?
+ *  			eventtreenode->getParent()->getName():
+ *  			eventtreenode->getName();
+ *  	parent->unwrapFirstChild(tag);
  *	return parent->getFirstTagChild();
  *  }
  *
@@ -113,7 +121,7 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *  	const char	*from=eventtreenode->getAttributeValue("from");
  *  	const char	*to=eventtreenode->getAttributeValue("to");
  *  	if (!charstring::compare(src,from)) {
- *  		eventtreenode->setAttributeValue("src",to);
+ *  		xmltreenode->setAttributeValue("src",to);
  *  	}
  *  	return xmltreenode;
  *  }
@@ -122,7 +130,7 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *  When run, this program should output:
  *
  *  <p>Hello there <em>Dave</em> check out this photo:
- *  <img src="coolerphoto.jpg"> It's pretty cool.</p>
+ *  <img src="coolerphoto.jpg"/> It&apos's pretty cool.</p>
  *
  *
  *  Note that each of the event handlers return the node at which processing
@@ -132,6 +140,8 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *
  *  	<b event="rename" to="i"/>
  *  	<i event="rename" to="b"/>
+ *
+ *  If an event handler returns NULL, process() will immediately return failure.
  *
  *  The rules in the example above are very simple, but complex rules, which
  *  perform much more involved restructuring of the dom tree, can be defined.
@@ -171,7 +181,7 @@ typedef domnode *(*domeventhandler_t)(domnode *xmltreenode,
  *      </b>
  *      <i>
  *        <events:ignore/>
- *	</i>
+ *      </i>
  *    </p>
  *
  *    <img>
@@ -220,13 +230,20 @@ class RUDIMENTS_DLLSPEC domevents : public object {
 		 *  descendent that is an <events:events> tag, with children
 		 *  as defined in the class description.
 		 *
+		 *  NOTE: calling setEvents() removes any existing event
+		 *  handlers set by previous calls to setEventHandler().
+		 *
 		 *  Returns true on success and false on failure, eg. if an
 		 *  <events:events> tag wasn't found. */
 		bool	setEvents(domnode *events);
 
 		/** Associates function "handler" with "event".
 		 *
-		 *  Returns true on success and false on failure. */
+		 *  NOTE: calling setEvents() removes any existing event
+		 *  handlers set by previous calls to setEventHandler().
+		 *
+		 *  Returns true on success and false if the set of events
+		 *  previously set using setEvents() doesn't contain "event". */
 		bool	setEventHandler(const char *event,
 					domeventhandler_t handler);
 
