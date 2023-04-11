@@ -180,13 +180,12 @@ int main(int argc, const char **argv) {
 		test("type name",
 			!charstring::compare(fs1.getTypeName(),
 						fs2.getTypeName()));
-		// believe it or not, these aren't known on most systems...
-		//test("mount point",
-			//!charstring::compare(fs1.getMountPoint(),
-						//fs2.getMountPoint()));
-		//test("device name",
-			//!charstring::compare(fs1.getDeviceName(),
-						//fs2.getDeviceName()));
+		test("mount point",
+			!charstring::compare(fs1.getMountPoint(),
+						fs2.getMountPoint()));
+		test("device name",
+			!charstring::compare(fs1.getDeviceName(),
+						fs2.getDeviceName()));
 		test("filesystem specific string",
 			!charstring::compare(
 				fs1.getFilesystemSpecificString(),
