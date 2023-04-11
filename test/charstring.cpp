@@ -26,6 +26,18 @@ int main(int argc, const char **argv) {
 	test("zeros",zeros);
 	stdoutput.printf("\n");
 
+
+	// comparisons
+	stdoutput.printf("compare...\n");
+	test("compare(a,a)",!charstring::compare("a","a"));
+	test("compare(a,b)",charstring::compare("a","b")<0);
+	test("compare(b,a)",charstring::compare("b","a")>0);
+	test("compare(NULL,NULL)",!charstring::compare(NULL,NULL));
+	test("compare(NULL,a)",charstring::compare(NULL,"a")<0);
+	test("compare(a,NULL)",charstring::compare("a",NULL)>0);
+	stdoutput.printf("\n");
+
+
 	// append
 	stdoutput.printf("append...\n");
 	charstring::append(s,"hello ");

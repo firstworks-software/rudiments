@@ -83,10 +83,13 @@ int32_t bytestring::compare(const void *s1, const void *s2, size_t size) {
 	if (!s1 && !s2) {
 		return 0;
 	}
-	if (s1 && s2) {
-		return memcmp(s1,s2,size);
+	if (!s2) {
+		return 1;
 	}
-	return 1;
+	if (!s1) {
+		return -1;
+	}
+	return memcmp(s1,s2,size);
 }
 
 const void *bytestring::findFirst(const void *haystack,

@@ -27,6 +27,20 @@ int main(int argc, const char **argv) {
 	test("zeros",zeros);
 	stdoutput.printf("\n");
 
+
+	// comparisons
+	stdoutput.printf("compare...\n");
+	ucs2literal(a,"a");
+	ucs2literal(b,"b");
+	test("compare(a,a)",!ucs2charstring::compare(a,a));
+	test("compare(a,b)",ucs2charstring::compare(a,b)<0);
+	test("compare(b,a)",ucs2charstring::compare(b,a)>0);
+	test("compare(NULL,NULL)",!ucs2charstring::compare(NULL,NULL));
+	test("compare(NULL,a)",ucs2charstring::compare(NULL,a)<0);
+	test("compare(a,NULL)",ucs2charstring::compare(a,NULL)>0);
+	stdoutput.printf("\n");
+
+
 	// append
 	stdoutput.printf("append...\n");
 	ucs2literal(hellosp,"hello ");

@@ -134,6 +134,9 @@
 	removed *buffer::appendFormatted() methods, preferring printf()
 	moved safePrint() and printBits() to output class
 	added printHex() to output class
+	fixed longstanding bug with *string::compare(NULL,NULL)
+	bytestring::compare(NULL,x) and compare(x,NULL) is consistent with
+		charstring::compare() behavior now
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

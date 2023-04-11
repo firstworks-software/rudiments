@@ -1099,6 +1099,9 @@ ucs2_t *ucs2charstring::safeCopy(ucs2_t *dest, size_t destlen,
 }
 
 int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2) {
+	if (!str1 && !str2) {
+		return 0;
+	}
 	if (!str2) {
 		return 1;
 	}
@@ -1119,6 +1122,9 @@ int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2) {
 
 int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2,
 								size_t len) {
+	if (!str1 && !str2) {
+		return 0;
+	}
 	if (!str2) {
 		return 1;
 	}
@@ -1140,6 +1146,9 @@ int32_t ucs2charstring::compare(const ucs2_t *str1, const ucs2_t *str2,
 
 int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 							const ucs2_t *str2) {
+	if (!str1 && !str2) {
+		return 0;
+	}
 	if (!str2) {
 		return 1;
 	}
@@ -1163,6 +1172,9 @@ int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 						const ucs2_t *str2,
 						size_t len) {
+	if (!str1 && !str2) {
+		return 0;
+	}
 	if (!str2) {
 		return 1;
 	}
@@ -1196,6 +1208,15 @@ int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
 int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
 					const ucs2_t *str2,
 					const ucs2_t *delimiters) {
+	if (!str1 && !str2) {
+		return 0;
+	}
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 
 	int64_t		difference=0;
 	const ucs2_t	*start1=NULL;
