@@ -184,7 +184,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n\n");
 
 	stdoutput.printf("detach\n");
-	sv.clear();
+	sv.reset();
 	sv.parse(svstring);
 	uint64_t	valsize=sv.getValueSize();
 	byte_t		*val=sv.detachValue();

@@ -5,28 +5,21 @@ if instr(lcase(WScript.FullName),"cscript")=0 Then
 end if
 
 tests=Array(_
-	"aes128",_
-	"avltree",_
-	"bytebuffer",_
-	"bytestring",_
 	"character",_
-	"wcharacter",_
-	"ucs2character",_
 	"charstring",_
-	"wcharstring",_
-	"ucs2charstring",_
 	"commandline",_
-	"des",_
 	"csvdom",_
 	"datetime",_
+	"des",_
 	"dictionary",_
 	"directory",_
+	"domevents",_
 	"dynamicarray",_
-	"table",_
 	"dynamiclib",_
 	"environment",_
 	"error",_
 	"file",_
+	"filesystem",_
 	"groupentry",_
 	"handoff",_
 	"hostentry",_
@@ -46,7 +39,10 @@ tests=Array(_
 	"protocolentry",_
 	"randomnumber",_
 	"regularexpression",_
+	"resourcepool",_
 	"scalar",_
+	"semaphoreset",_
+	"sensitivevalue",_
 	"serviceentry",_
 	"sharedmemory",_
 	"signal",_
@@ -54,12 +50,18 @@ tests=Array(_
 	"snooze",_
 	"staticarray",_
 	"stringbuffer",_
-	"wstringbuffer",_
 	"sys",_
+	"table",_
 	"thread",_
 	"threadmutex",_
+	"ucs2character",_
+	"ucs2charstring",_
+	"ucs2stringbuffer",_
 	"url",_
 	"userentry",_
+	"wcharacter",_
+	"wcharstring",_
+	"wstringbuffer",_
 	"xmldom"_
 )
 

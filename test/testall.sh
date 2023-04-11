@@ -6,28 +6,21 @@ echo >> testresults.log
 exitcode=0
 
 for program in \
-	aes128 \
-	avltree \
-	bytebuffer \
-	bytestring \
 	character \
-	wcharacter \
-	ucs2character \
 	charstring \
-	wcharstring \
-	ucs2charstring \
 	commandline \
-	des \
 	csvdom \
 	datetime \
+	des \
 	dictionary \
 	directory \
+	domevents \
 	dynamicarray \
-	table \
 	dynamiclib \
 	environment \
 	error \
 	file \
+	filesystem \
 	groupentry \
 	handoff \
 	hostentry \
@@ -47,8 +40,10 @@ for program in \
 	protocolentry \
 	randomnumber \
 	regularexpression \
+	resourcepool \
 	scalar \
 	semaphoreset \
+	sensitivevalue \
 	serviceentry \
 	sharedmemory \
 	signal \
@@ -56,12 +51,18 @@ for program in \
 	snooze \
 	staticarray \
 	stringbuffer \
-	wstringbuffer \
 	sys \
+	table \
 	thread \
 	threadmutex \
+	ucs2character \
+	ucs2charstring \
+	ucs2stringbuffer \
 	url \
 	userentry \
+	wcharacter \
+	wcharstring \
+	wstringbuffer \
 	xmldom
 do
 	./$program
