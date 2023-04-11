@@ -242,8 +242,11 @@ class RUDIMENTS_DLLSPEC domevents : public object {
 		 *  NOTE: calling setEvents() removes any existing event
 		 *  handlers set by previous calls to setEventHandler().
 		 *
-		 *  Returns true on success and false if the set of events
-		 *  previously set using setEvents() doesn't contain "event". */
+		 *  Returns true on success and false on failure.
+		 *
+		 *  NOTE: it is not considered a failure if the set of events
+		 *  previously set using setEvents() does not contain any
+		 *  instances of "event". */
 		bool	setEventHandler(const char *event,
 					domeventhandler_t handler);
 

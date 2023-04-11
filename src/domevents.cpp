@@ -97,7 +97,7 @@ bool domevents::setEventHandler(const char *event,
 
 	debugPrintf(1,"%lld instances\n",count);
 
-	return count;
+	return true;
 }
 
 bool domevents::setData(void *data) {
