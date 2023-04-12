@@ -10,6 +10,14 @@ int main(int argc, const char **argv) {
 
 	header("bytestring");
 
+	// NULL comparisons
+	stdoutput.printf("NULL comparisons...\n");
+	test("compare(NULL,NULL)",!bytestring::compare(NULL,NULL,0));
+	test("compare(NULL,a)",bytestring::compare(NULL,(const void *)"a",1)<0);
+	test("compare(a,NULL)",bytestring::compare((const void *)"a",NULL,1)>0);
+	stdoutput.printf("\n");
+
+
 	// duplicate
 	stdoutput.printf("duplicate...\n");
 	byte_t	*dup=(byte_t *)bytestring::duplicate(
