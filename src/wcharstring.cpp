@@ -1268,6 +1268,15 @@ int32_t wcharstring::compareVersions(const wchar_t *str1, const wchar_t *str2) {
 int32_t wcharstring::compareVersions(const wchar_t *str1,
 					const wchar_t *str2,
 					const wchar_t *delimiters) {
+	if (!str1 && !str2) {
+		return 0;
+	}
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 
 	int64_t	difference=0;
 	for (;;) {

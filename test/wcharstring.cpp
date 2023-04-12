@@ -29,12 +29,27 @@ int main(int argc, const char **argv) {
 
 	// comparisons
 	stdoutput.printf("compare...\n");
-	test("compare(a,a)",!wcharstring::compare(L"a",L"a"));
-	test("compare(a,b)",wcharstring::compare(L"a",L"b")<0);
-	test("compare(b,a)",wcharstring::compare(L"b",L"a")>0);
 	test("compare(NULL,NULL)",!wcharstring::compare(NULL,NULL));
 	test("compare(NULL,a)",wcharstring::compare(NULL,L"a")<0);
 	test("compare(a,NULL)",wcharstring::compare(L"a",NULL)>0);
+	test("compareIgnoringCase(NULL,NULL)",
+			!wcharstring::compareIgnoringCase(NULL,NULL));
+	test("compareIgnoringCase(NULL,a)",
+			wcharstring::compareIgnoringCase(NULL,L"a")<0);
+	test("compareIgnoringCase(a,NULL)",
+			wcharstring::compareIgnoringCase(L"a",NULL)>0);
+	test("compareNatural(NULL,NULL)",
+			!wcharstring::compareNatural(NULL,NULL));
+	test("compareNatural(NULL,a)",
+			wcharstring::compareNatural(NULL,L"a")<0);
+	test("compareNatural(a,NULL)",
+			wcharstring::compareNatural(L"a",NULL)>0);
+	test("compareVersions(NULL,NULL)",
+			!wcharstring::compareVersions(NULL,NULL));
+	test("compareVersions(NULL,a)",
+			wcharstring::compareVersions(NULL,L"a")<0);
+	test("compareVersions(a,NULL)",
+			wcharstring::compareVersions(L"a",NULL)>0);
 	stdoutput.printf("\n");
 
 

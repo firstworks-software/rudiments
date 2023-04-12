@@ -1315,6 +1315,15 @@ int32_t ucs2charstring::compareVersions(const ucs2_t *str1,
 int32_t ucs2charstring::compareVersions(const ucs2_t *str1,
 					const ucs2_t *str2,
 					const ucs2_t *delimiters) {
+	if (!str1 && !str2) {
+		return 0;
+	}
+	if (!str2) {
+		return 1;
+	}
+	if (!str1) {
+		return -1;
+	}
 
 	int64_t	difference=0;
 	for (;;) {

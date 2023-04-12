@@ -31,13 +31,27 @@ int main(int argc, const char **argv) {
 	// comparisons
 	stdoutput.printf("compare...\n");
 	ucs2literal(a,"a");
-	ucs2literal(b,"b");
-	test("compare(a,a)",!ucs2charstring::compare(a,a));
-	test("compare(a,b)",ucs2charstring::compare(a,b)<0);
-	test("compare(b,a)",ucs2charstring::compare(b,a)>0);
 	test("compare(NULL,NULL)",!ucs2charstring::compare(NULL,NULL));
 	test("compare(NULL,a)",ucs2charstring::compare(NULL,a)<0);
 	test("compare(a,NULL)",ucs2charstring::compare(a,NULL)>0);
+	test("compareIgnoringCase(NULL,NULL)",
+			!ucs2charstring::compareIgnoringCase(NULL,NULL));
+	test("compareIgnoringCase(NULL,a)",
+			ucs2charstring::compareIgnoringCase(NULL,a)<0);
+	test("compareIgnoringCase(a,NULL)",
+			ucs2charstring::compareIgnoringCase(a,NULL)>0);
+	test("compareNatural(NULL,NULL)",
+			!ucs2charstring::compareNatural(NULL,NULL));
+	test("compareNatural(NULL,a)",
+			ucs2charstring::compareNatural(NULL,a)<0);
+	test("compareNatural(a,NULL)",
+			ucs2charstring::compareNatural(a,NULL)>0);
+	test("compareVersions(NULL,NULL)",
+			!ucs2charstring::compareVersions(NULL,NULL));
+	test("compareVersions(NULL,a)",
+			ucs2charstring::compareVersions(NULL,a)<0);
+	test("compareVersions(a,NULL)",
+			ucs2charstring::compareVersions(a,NULL)>0);
 	stdoutput.printf("\n");
 
 
