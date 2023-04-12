@@ -32,12 +32,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Set "isstream" to true (the default) if this filedescriptor
 		 *  is a stream such as a socket, serial port, fifo, etc. or
-		 *  false if this filedescriptor is storage such as a file,
-		 *  raw block device, etc.  This setting impacts how buffering
+		 *  false if this filedescriptor is storage such as a file or
+		 *  raw block device.  This setting impacts how buffering
 		 *  works, as well as how the various setPosition() and
 		 *  getPosition() methods work.
 		 *
-		 *  Note that if the filedescriptor is as stream, but this is
+		 *  Note that if the file descriptor is a stream, but this is
 		 *  set false, or vice versa, then unexpected results may
 		 *  occur if buffering is used, and/or the
 		 *  setPosition()/getPosition() methods are called.
@@ -1000,25 +1000,71 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		char	*getPeerAddress();
 
 
-		/** If an application does many small writes, the overhead of
-		 *  all of those system calls can slow the application down
-		 *  substantially.  To address that issue, the filedescriptor
-		 *  class can buffer data passed in to any of it's write()
-		 *  methods and only make system calls when the buffer is full
-		 *  or when it's flushed manually.  Note that when using
-		 *  buffered writes, no data is actually written to the file
-		 *  descriptor until the buffer is full or until it's flushed
-		 *  manually.
-		 *
-		 *  Do not confuse this buffer with the tcp write buffer.  The
-		 *  tcp write buffer resides in kernel space, is populated by
-		 *  the write() system call and is used to minimize network
-		 *  latency, not application latency due to system calls.
-		 *  This buffer is in user space and populated prior to the
-		 *  write() system call.
+		/** If an application performs many small writes, the overhead
+		 *  of the system calls can slow the application down
+		 *  substantially.  To address this, the filedescriptor class
+		 *  supports traditional and mmap write buffering.
 		 *
 		 *  This method sets the write buffer size to "size" bytes.
 		 *  A size of 0 (or less) means not to buffer writes at all.
+		 *
+		 *
+		 *  Traditional buffering is enabled by default, but mmap
+		 *  buffering can be enabled by calling:
+		 *  setMmapBufferingEnabled(true).
+		 *
+		 *
+		 *  When the underlying file descriptor is storage, such as a
+		 *  file or raw block device, "size" should be a multiple of
+		 *  the block size of the underlying file system or device so
+		 *  that block-aligned writes can be performed.
+		 *
+		 *  When the underlying file descriptor is a stream, such as a
+		 *  socket, any "size" can be used.
+		 *
+		 *
+		 *  When traditional buffering is enabled, data passed in to
+		 *  any of the write() methods is buffered in user-space, and
+		 *  system calls are only made when the buffer is full or when
+		 *  it's flushed manually.  Note that this also means that no
+		 *  data is actually written to the file descriptor until the
+		 *  buffer is full or until it's flushed manually.
+		 *
+		 *  When using sockets, note that the user-space buffer
+		 *  described above is not the same as the tcp write buffer.
+		 *  The tcp write buffer is analogous, but resides in kernel
+		 *  space, is populated by the write() system call, and is used
+		 *  to minimize network latency.
+		 *
+		 *
+		 *  When mmap buffering is enabled, the underlying storage is
+		 *  memory mapped, and data is written to memory (and thus to
+		 *  the file descriptor) without making system calls.
+		 *
+		 *  Note the following...
+		 *
+		 *  Mmap buffering can typically only be used with storage file
+		 *  descriptors such as file or raw block devices, and cannot
+		 *  typically be used with streaming file descriptors such as
+		 *  sockets.  See setIsStream()/getIsStream().
+		 *
+		 *  When mmap buffering is enabled, the read and write buffer
+		 *  sizes must be the same.  Calling this method sets both.
+		 *
+		 *  On platforms with modern file caching, traditional buffering
+		 *  tends to outperform mmap buffering except in very specific
+		 *  situations such as when O_DIRECT is used to bypass the
+		 *  cache, when using large buffer sizes, or when randomly
+		 *  accessing small parts of large files.
+		 *
+		 *  Sometimes a block cannot be memory-mapped.  For example:
+		 *  * on file systems that don't support mmap
+		 *  * if "size" is not a multiple of the underlying file
+		 *    system's block size
+		 *  In these and other cases, the class will fall back to
+		 *  traditional buffering for any blocks that cannot be mmaped
+		 *  and return to mmap buffering when possible.
+		 *
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	setWriteBufferSize(ssize_t size);
@@ -1026,25 +1072,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Returns the current size of the write buffer. */
 		ssize_t	getWriteBufferSize();
 
-		/** If an application does many small writes, the overhead of
-		 *  all of those system calls can slow the application down
-		 *  substantially.  To address that issue, the filedescriptor
-		 *  class can buffer data passed in to any of it's write()
-		 *  methods and only make system calls when the buffer is full
-		 *  or when it's flushed manually.  Note that when using
-		 *  buffered writes, no data is actually written to the file
-		 *  descriptor until the buffer is full or until it's flushed
-		 *  manually.
-		 *
-		 *  Do not confuse this buffer with the tcp write buffer.  The
-		 *  tcp write buffer resides in kernel space, is populated by
-		 *  the write() system call in an analagous manner and is used
-		 *  to minimize network latency, not application latency due to
-		 *  system calls.  This buffer is in user space and populated
-		 *  prior to the write() system call.
-		 *
-		 *  This method causes the contents of the write buffer to
-		 *  be written to the filedescriptor immediately.
+		/** When write buffering enabled, this method causes the
+		 *  contents of the write buffer to be written to the file
+		 *  descriptor immediately.  See setWriteBufferSize().
 		 *
 		 *  Returns true on success and false on failure.
 		 *
@@ -1055,25 +1085,75 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		bool	flushWriteBuffer(int32_t sec, int32_t usec);
 
 
-		/** If an application does many small reads, the overhead of
-		 *  all of those system calls can slow the application down
-		 *  substantially.  To address that issue, the filedescriptor
-		 *  class can create a read buffer and attempt to keep it full.
-		 *  When the first read is attempted, it will attempt to read
-		 *  "size" bytes into the buffer and only return the number of
-		 *  bytes specified in the read.  Subsequent reads will just
-		 *  return data from the buffer without doing additional
-		 *  system calls unless the buffer is empty.
-		 *
-		 *  Do not confuse this buffer with the tcp read buffer.  The
-		 *  tcp read buffer resides in kernel space, is populated by
-		 *  the read() system call in an analagous manner and is used
-		 *  to minimize network latency, not application latency due to
-		 *  system calls.  This buffer is in user space and populated
-		 *  in the manner described above.
+		/** If an application performs many small reads, the overhead
+		 *  of the system calls can slow the application down
+		 *  substantially.  To address this, the filedescriptor class
+		 *  supports traditional and mmap read buffering.
 		 *
 		 *  This method sets the read buffer size to "size" bytes.
-		 *  A size of 0 (or less) means not to buffer writes at all.
+		 *  A size of 0 (or less) means not to buffer reads at all.
+		 *
+		 *
+		 *  Traditional buffering is enabled by default, but mmap
+		 *  buffering can be enabled by calling:
+		 *  setMmapBufferingEnabled(true).
+		 *
+		 *
+		 *  When the underlying file descriptor is storage, such as a
+		 *  file or raw block device, "size" should be a multiple of
+		 *  the block size of the underlying file system or device so
+		 *  that block-aligned reads can be performed.
+		 *
+		 *  When the underlying file descriptor is a stream, such as a
+		 *  socket, any "size" can be used.
+		 *
+		 *
+		 *  When traditional buffering is enabled, the class maintains
+		 *  a buffer in user-space and attempts to keep it full.  When
+		 *  the buffer is empty, th first read will attempt to read
+		 *  "size" bytes into the buffer but only return the number of
+		 *  bytes specified in the read.  Subsequent reads will just
+		 *  return data from the buffer without doing additional system
+		 *  calls unless the buffer is empty.
+		 *
+		 *  When using sockets, note that the user-space buffer
+		 *  described above is not the same as the tcp read buffer.
+		 *  The tcp read buffer is analogous, but resides in kernel
+		 *  space, is populated by the read() system call, and is used
+		 *  to minimize network latency.
+		 *
+		 *
+		 *  When mmap buffering is enabled, the underlying storage is
+		 *  memory mapped, and data is read from memory (and thus to
+		 *  the file descriptor) without making system calls.
+		 *
+		 *  Note the following...
+		 *
+		 *  Mmap buffering can typically only be used with storage file
+		 *  descriptors such as file or raw block devices, and cannot
+		 *  typically be used with streaming file descriptors such as
+		 *  sockets.  See setIsStream()/getIsStream().
+		 *
+		 *  When mmap buffering is enabled, the read and write buffer
+		 *  sizes must be the same.  Calling this method sets both.
+		 *
+		 *  On platforms with modern file caching, traditional buffering
+		 *  tends to outperform mmap buffering except in very specific
+		 *  situations such as when O_DIRECT is used to bypass the
+		 *  cache, when using large buffer sizes, or when randomly
+		 *  accessing small parts of large files.
+		 *
+		 *  Sometimes a block cannot be memory-mapped.  For example:
+		 *  * on file systems that don't support mmap
+		 *  * if "size" is not a multiple of the underlying file
+		 *    system's block size
+		 *  * if the last block of a file is smaller than the block
+		 *    size of the underlying filesystem, and the file is opened
+		 *    read-only
+		 *  In these and other cases, the class will fall back to
+		 *  traditional buffering for any blocks that cannot be mmaped
+		 *  and return to mmap buffering when possible.
+		 *
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	setReadBufferSize(ssize_t size);
@@ -1082,15 +1162,15 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		ssize_t	getReadBufferSize();
 
 		/** If "enabled" is set true then mmap will be used when
-		 *  buffering a storage filedescriptor such as a file, raw
-		 *  block device, etc.  If set false, then traditional
-		 *  buffering will be used.
+		 *  buffering a storage filedescriptor such as a file or raw
+		 *  block device.  If set false, then traditional buffering
+		 *  will be used.  See setWriteBufferSize()/setReadBufferSize().
 		 *
-		 *  On platforms with modern file caching, traditional buffers
-		 *  tend to outperform mmap-buffering except when O_DIRECT is
-		 *  used to bypass the cache, when using large buffer sizes,
-		 *  when randomly accessing small parts of large files, and
-		 *  possibly other very specific situations.
+		 *  Note that on platforms with modern file caching,
+		 *  traditional buffering tends to outperform mmap buffering
+		 *  except in very specific situations such as when O_DIRECT is
+		 *  used to bypass the cache, when using large buffer sizes, or
+		 *  when randomly accessing small parts of large files.
 		 *
 		 *  NOTE: if memorymap::supported() returns false, then calling
 		 *  this method with "enabled" set to true has no effect.
@@ -1099,8 +1179,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		void	setMmapBufferingEnabled(bool enabled);
 
 		/** Returns true if mmap will be used when buffering a storage
-		 *  filedescriptor such as a file, raw block device, etc. or
-		 *  false otherwise. */
+		 *  filedescriptor such as a file or raw block device, or
+		 *  false otherwise.  See setWriteBufferSize()/
+		 *  setReadBufferSize(). */
 		bool	getMmapBufferingEnabled();
 
 		/** Returns true if this is a storage filedescriptor such as a
@@ -1109,7 +1190,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		bool	getIsCurrentBlockMmapBuffered();
 
 		/** If buffering is enabled, and this is a storage
-		 *  filedescriptor such as a file, raw block device, etc. then
+		 *  filedescriptor such as a file or raw block device. then
 		 *  this returns the offset of the currently buffered block, or
 		 *  0 otherwise. */
 		off64_t	getCurrentBlockOffset();
