@@ -51,109 +51,123 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="classlistcollection.html#ace273078f6546b4c0ac513fb3bafeb2c">    6</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classlistcollection.html#ace273078f6546b4c0ac513fb3bafeb2c">listcollection&lt;valuetype&gt;::getType</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;list&quot;</span>;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;}</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classlistcollection.html#ac6f36be5b53b743e54ddcd5a1a822c44">   12</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#a0c940d40cbec8ea376fad31b0f6db866">listcollection&lt;valuetype&gt;::prepend</a>(valuetype *values, uint64_t count) {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=count; i&gt;0; i--) {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                prepend(values[i-1]);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        }</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;}</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classlistcollection.html#a1b2d5d1f20d59b99302a79779cfbfb5c">   20</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#acce7d34faf91751178b6c0330d30fc02">listcollection&lt;valuetype&gt;::append</a>(valuetype *values, uint64_t count) {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=0; i&lt;count; i++) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                append(values[i]);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classlistcollection.html#a9c8df7fd19a84351f20b5ecdc817c155">   28</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#a92952ac5006b0752b4c74c1ada6092a5">listcollection&lt;valuetype&gt;::insertBefore</a>(<a class="code" href="classlistnode.html">listnode&lt;valuetype&gt;</a> *node,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                                        valuetype *values, uint64_t count) {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=0; i&lt;count; i++) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                insertBefore(node,values[i]);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classlistcollection.html#aa1a91157e93b04127ff08d811cb6a6ed">   37</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#a9cb19c9dd6596c9eec5dc8c64cde00f4">listcollection&lt;valuetype&gt;::insertAfter</a>(<a class="code" href="classlistnode.html">listnode&lt;valuetype&gt;</a> *node,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                                        valuetype *values, uint64_t count) {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=count; i&gt;0; i--) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                insertAfter(node,values[i-1]);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classlistcollection.html#a8af090caac102f3b3e6b3d1bb5cf3009">   46</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a8af090caac102f3b3e6b3d1bb5cf3009">listcollection&lt;valuetype&gt;::write</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">return</span> write(&amp;stdoutput);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classlistcollection.html#a4017f45ee297e45a9fad4f7b741e0244">   52</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a8af090caac102f3b3e6b3d1bb5cf3009">listcollection&lt;valuetype&gt;::write</a>(<a class="code" href="classoutput.html">output</a> *out)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> writeJson(out,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classlistcollection.html#a0129ac339d02a396f70d33b953689c33">   58</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a0129ac339d02a396f70d33b953689c33">listcollection&lt;valuetype&gt;::writeJson</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classlistcollection.html#ae0d1387b0891e971f68e1fde551ddf6f">   64</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a0129ac339d02a396f70d33b953689c33">listcollection&lt;valuetype&gt;::writeJson</a>(<span class="keywordtype">bool</span> indent)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,indent);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classlistcollection.html#a4199babc084d41b47d8372e305a7a362">   70</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a0129ac339d02a396f70d33b953689c33">listcollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> writeJson(out,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classlistcollection.html#aa928eef31b09ecb35b6427172bf86c97">   76</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a0129ac339d02a396f70d33b953689c33">listcollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        ssize_t                 retval=0;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        uint64_t                i=0;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="code" href="classlistnode.html">listnode&lt;valuetype&gt;</a>     *node=getFirst();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        this-&gt;incOrErr(&amp;retval,out-&gt;write(<span class="charliteral">&#39;[&#39;</span>),1);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">while</span> (node &amp;&amp; retval&gt;-1) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                ((i)?this-&gt;incOrErr(&amp;retval,out-&gt;write(<span class="charliteral">&#39;,&#39;</span>),1):<span class="keyword">true</span>) &amp;&amp;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                ((indent)?this-&gt;incOrErr(&amp;retval,out-&gt;write(<span class="stringliteral">&quot;\n &quot;</span>,2),2):<span class="keyword">true</span>) &amp;&amp;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                this-&gt;incOrErr(&amp;retval,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                        this-&gt;writeJsonValue(out,node-&gt;<a class="code" href="classlistnode.html#acf5f832a6fa5b51f7ae420384daa9cc4">getValue</a>()));</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                node=node-&gt;<a class="code" href="classlistnode.html#a97b495cfb3afe803266aa96f44fac49e">getNext</a>();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                i++;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        ((indent)?this-&gt;incOrErr(&amp;retval,out-&gt;write(<span class="charliteral">&#39;\n&#39;</span>),1):<span class="keyword">true</span>) &amp;&amp;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        this-&gt;incOrErr(&amp;retval,out-&gt;write(<span class="charliteral">&#39;]&#39;</span>),1) &amp;&amp;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        ((indent)?this-&gt;incOrErr(&amp;retval,out-&gt;write(<span class="charliteral">&#39;\n&#39;</span>),1):<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">return</span> retval;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
-<div class="ttc" id="aclasslistcollection_html_a0129ac339d02a396f70d33b953689c33"><div class="ttname"><a href="classlistcollection.html#a0129ac339d02a396f70d33b953689c33">listcollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson() const</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:58</div></div>
+<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="classlistcollection.html#ad235c30ef46281e3fbfee210a4d14c3a">    6</a></span>&#160;<a class="code" href="classlistcollection.html#ad235c30ef46281e3fbfee210a4d14c3a">listcollection&lt;valuetype&gt;::listcollection</a>() : <a class="code" href="classnodecollection.html">nodecollection</a>&lt;valuetype&gt;() {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;}</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classlistcollection.html#a79205876c46689bd3fea01df8c8e5dcc">   11</a></span>&#160;<a class="code" href="classlistcollection.html#ad235c30ef46281e3fbfee210a4d14c3a">listcollection&lt;valuetype&gt;::listcollection</a>(<a class="code" href="classnodecollection.html">nodecollection&lt;valuetype&gt;</a> &amp;n) :</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                                                <a class="code" href="classnodecollection.html">nodecollection</a>&lt;valuetype&gt;(n) {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classlistcollection.html#aeb59deef0e0938966527c503031fd2b1">   17</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classlistcollection.html#aeb59deef0e0938966527c503031fd2b1">listcollection&lt;valuetype&gt;::getType</a>() {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;list&quot;</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classlistcollection.html#ac6f36be5b53b743e54ddcd5a1a822c44">   23</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#a0c940d40cbec8ea376fad31b0f6db866">listcollection&lt;valuetype&gt;::prepend</a>(valuetype *values, uint64_t count) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=count; i&gt;0; i--) {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                prepend(values[i-1]);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        }</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classlistcollection.html#a1b2d5d1f20d59b99302a79779cfbfb5c">   31</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#acce7d34faf91751178b6c0330d30fc02">listcollection&lt;valuetype&gt;::append</a>(valuetype *values, uint64_t count) {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=0; i&lt;count; i++) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                append(values[i]);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        }</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classlistcollection.html#a9c8df7fd19a84351f20b5ecdc817c155">   39</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#a92952ac5006b0752b4c74c1ada6092a5">listcollection&lt;valuetype&gt;::insertBefore</a>(<a class="code" href="classlistnode.html">listnode&lt;valuetype&gt;</a> *node,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                                        valuetype *values, uint64_t count) {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=0; i&lt;count; i++) {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                insertBefore(node,values[i]);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classlistcollection.html#aa1a91157e93b04127ff08d811cb6a6ed">   48</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classlistcollection.html#a9cb19c9dd6596c9eec5dc8c64cde00f4">listcollection&lt;valuetype&gt;::insertAfter</a>(<a class="code" href="classlistnode.html">listnode&lt;valuetype&gt;</a> *node,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                        valuetype *values, uint64_t count) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=count; i&gt;0; i--) {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                insertAfter(node,values[i-1]);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classlistcollection.html#a28d071a52c75f7e483aee2f193a18973">   57</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a28d071a52c75f7e483aee2f193a18973">listcollection&lt;valuetype&gt;::write</a>() {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span> write(&amp;stdoutput);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classlistcollection.html#a0aeb2e79a05d3db6f8d8504706d7bb84">   63</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a28d071a52c75f7e483aee2f193a18973">listcollection&lt;valuetype&gt;::write</a>(<a class="code" href="classoutput.html">output</a> *out) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">return</span> writeJson(out,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classlistcollection.html#a99d9473f94e505774df46f8b67efb872">   69</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a99d9473f94e505774df46f8b67efb872">listcollection&lt;valuetype&gt;::writeJson</a>() {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classlistcollection.html#a3b38ed49278eddb8ba93a82bcbcf31da">   75</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a99d9473f94e505774df46f8b67efb872">listcollection&lt;valuetype&gt;::writeJson</a>(<span class="keywordtype">bool</span> indent) {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,indent);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classlistcollection.html#af56f2d11cd0d8a146cb10cc9755389d6">   81</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a99d9473f94e505774df46f8b67efb872">listcollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> writeJson(out,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classlistcollection.html#ad9ec90353851615ac202c360b4084303">   87</a></span>&#160;ssize_t <a class="code" href="classlistcollection.html#a99d9473f94e505774df46f8b67efb872">listcollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        ssize_t                 retval=0;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        uint64_t                i=0;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="classlistnode.html">listnode&lt;valuetype&gt;</a>     *node=getFirst();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        this-&gt;incOrErr(&amp;retval,out-&gt;<a class="code" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a>(<span class="charliteral">&#39;[&#39;</span>),1);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">while</span> (node &amp;&amp; retval&gt;-1) {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                ((i)?this-&gt;incOrErr(&amp;retval,out-&gt;<a class="code" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a>(<span class="charliteral">&#39;,&#39;</span>),1):<span class="keyword">true</span>) &amp;&amp;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                ((indent)?this-&gt;incOrErr(&amp;retval,out-&gt;<a class="code" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a>(<span class="stringliteral">&quot;\n &quot;</span>,2),2):<span class="keyword">true</span>) &amp;&amp;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                this-&gt;incOrErr(&amp;retval,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                        this-&gt;writeJsonValue(out,node-&gt;<a class="code" href="classlistnode.html#ad90ae46b77baa1628493ed2da9660f71">getValue</a>()));</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                node=node-&gt;<a class="code" href="classlistnode.html#a1756595da9c6559cab67790297e4b83c">getNext</a>();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                i++;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        ((indent)?this-&gt;incOrErr(&amp;retval,out-&gt;<a class="code" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a>(<span class="charliteral">&#39;\n&#39;</span>),1):<span class="keyword">true</span>) &amp;&amp;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        this-&gt;incOrErr(&amp;retval,out-&gt;<a class="code" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a>(<span class="charliteral">&#39;]&#39;</span>),1) &amp;&amp;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        ((indent)?this-&gt;incOrErr(&amp;retval,out-&gt;<a class="code" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a>(<span class="charliteral">&#39;\n&#39;</span>),1):<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> retval;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
 <div class="ttc" id="aclasslistcollection_html_a0c940d40cbec8ea376fad31b0f6db866"><div class="ttname"><a href="classlistcollection.html#a0c940d40cbec8ea376fad31b0f6db866">listcollection::prepend</a></div><div class="ttdeci">virtual void prepend(valuetype value)=0</div></div>
-<div class="ttc" id="aclasslistcollection_html_a8af090caac102f3b3e6b3d1bb5cf3009"><div class="ttname"><a href="classlistcollection.html#a8af090caac102f3b3e6b3d1bb5cf3009">listcollection::write</a></div><div class="ttdeci">virtual ssize_t write() const</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:46</div></div>
+<div class="ttc" id="aclasslistcollection_html_a28d071a52c75f7e483aee2f193a18973"><div class="ttname"><a href="classlistcollection.html#a28d071a52c75f7e483aee2f193a18973">listcollection::write</a></div><div class="ttdeci">virtual ssize_t write()</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:57</div></div>
 <div class="ttc" id="aclasslistcollection_html_a92952ac5006b0752b4c74c1ada6092a5"><div class="ttname"><a href="classlistcollection.html#a92952ac5006b0752b4c74c1ada6092a5">listcollection::insertBefore</a></div><div class="ttdeci">virtual void insertBefore(listnode&lt; valuetype &gt; *node, valuetype value)=0</div></div>
+<div class="ttc" id="aclasslistcollection_html_a99d9473f94e505774df46f8b67efb872"><div class="ttname"><a href="classlistcollection.html#a99d9473f94e505774df46f8b67efb872">listcollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson()</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:69</div></div>
 <div class="ttc" id="aclasslistcollection_html_a9cb19c9dd6596c9eec5dc8c64cde00f4"><div class="ttname"><a href="classlistcollection.html#a9cb19c9dd6596c9eec5dc8c64cde00f4">listcollection::insertAfter</a></div><div class="ttdeci">virtual void insertAfter(listnode&lt; valuetype &gt; *node, valuetype value)=0</div></div>
 <div class="ttc" id="aclasslistcollection_html_acce7d34faf91751178b6c0330d30fc02"><div class="ttname"><a href="classlistcollection.html#acce7d34faf91751178b6c0330d30fc02">listcollection::append</a></div><div class="ttdeci">virtual void append(valuetype value)=0</div></div>
-<div class="ttc" id="aclasslistcollection_html_ace273078f6546b4c0ac513fb3bafeb2c"><div class="ttname"><a href="classlistcollection.html#ace273078f6546b4c0ac513fb3bafeb2c">listcollection::getType</a></div><div class="ttdeci">virtual const char * getType() const</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:6</div></div>
+<div class="ttc" id="aclasslistcollection_html_ad235c30ef46281e3fbfee210a4d14c3a"><div class="ttname"><a href="classlistcollection.html#ad235c30ef46281e3fbfee210a4d14c3a">listcollection::listcollection</a></div><div class="ttdeci">listcollection()</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:6</div></div>
+<div class="ttc" id="aclasslistcollection_html_aeb59deef0e0938966527c503031fd2b1"><div class="ttname"><a href="classlistcollection.html#aeb59deef0e0938966527c503031fd2b1">listcollection::getType</a></div><div class="ttdeci">virtual const char * getType()</div><div class="ttdef"><b>Definition:</b> listcollectioninlines.h:17</div></div>
 <div class="ttc" id="aclasslistnode_html"><div class="ttname"><a href="classlistnode.html">listnode</a></div><div class="ttdef"><b>Definition:</b> listcollection.h:12</div></div>
-<div class="ttc" id="aclasslistnode_html_a97b495cfb3afe803266aa96f44fac49e"><div class="ttname"><a href="classlistnode.html#a97b495cfb3afe803266aa96f44fac49e">listnode::getNext</a></div><div class="ttdeci">virtual listnode&lt; valuetype &gt; * getNext() const =0</div></div>
-<div class="ttc" id="aclasslistnode_html_acf5f832a6fa5b51f7ae420384daa9cc4"><div class="ttname"><a href="classlistnode.html#acf5f832a6fa5b51f7ae420384daa9cc4">listnode::getValue</a></div><div class="ttdeci">virtual valuetype getValue() const =0</div></div>
-<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:9</div></div>
+<div class="ttc" id="aclasslistnode_html_a1756595da9c6559cab67790297e4b83c"><div class="ttname"><a href="classlistnode.html#a1756595da9c6559cab67790297e4b83c">listnode::getNext</a></div><div class="ttdeci">virtual listnode&lt; valuetype &gt; * getNext()=0</div></div>
+<div class="ttc" id="aclasslistnode_html_ad90ae46b77baa1628493ed2da9660f71"><div class="ttname"><a href="classlistnode.html#ad90ae46b77baa1628493ed2da9660f71">listnode::getValue</a></div><div class="ttdeci">virtual valuetype getValue()=0</div></div>
+<div class="ttc" id="aclassnodecollection_html"><div class="ttname"><a href="classnodecollection.html">nodecollection</a></div><div class="ttdef"><b>Definition:</b> nodecollection.h:31</div></div>
+<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:11</div></div>
+<div class="ttc" id="aclassoutput_html_a97891155ebd4b7dd1f18d0e6fd281a86"><div class="ttname"><a href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">output::write</a></div><div class="ttdeci">virtual ssize_t write(const byte_t *string, size_t size)=0</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

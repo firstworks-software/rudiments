@@ -5,7 +5,6 @@
 		void	buildAllVariables();
 
 	private:
-	private:
 		urlhttprequest(urlhttprequest &u) : httprequest(NULL) {};
 		urlhttprequest	&operator=(urlhttprequest &u) { return *this; };
 

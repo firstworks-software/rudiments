@@ -6,6 +6,9 @@
 
 #include <rudiments/private/tlsincludes.h>
 
+
+/** The tls class provides a method to determine whether rudiments was built
+ *  with TLS/SSL support. */
 class RUDIMENTS_DLLSPEC tls {
 	public:
 		/** Returns true if rudiments was built with TLS/SSL support
@@ -15,6 +18,9 @@ class RUDIMENTS_DLLSPEC tls {
 	#include <rudiments/private/tls.h>
 };
 
+
+/** The tlscontext class implements the securitycontext interface for
+ *  TLS/SSL. */
 class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 	public:
 		/** Creates a new instance of the tlscontext class. */
@@ -349,6 +355,9 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 	#include <rudiments/private/tlscontext.h>
 };
 
+
+/** The tlscertificate class provides methods for inspecting TLS
+ *  certificates. */
 class RUDIMENTS_DLLSPEC tlscertificate : public object {
 	public:
 		/** Creates a new instance of the tlscertificate class. */

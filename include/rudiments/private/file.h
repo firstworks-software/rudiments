@@ -32,6 +32,6 @@
 							int32_t advice);
 
 		static	int64_t	pathConf(const char *path, int32_t name);
-			int64_t	fpathConf(int32_t name);
+		int64_t	fpathConf(int32_t name);
 
 		fileprivate	*pvt;

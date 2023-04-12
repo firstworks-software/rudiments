@@ -8,8 +8,8 @@
 
 class listener;
 
-/** The filedescriptor class is a base class for other classes that utilize
- *  file descriptors. */
+/** The filedescriptor class extends the input and output classes, providing
+ *  a base class for child classes that utilize file descriptors. */
 class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 	public:
 		/** Creates an instance of the filedescriptor class. */

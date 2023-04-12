@@ -6,7 +6,7 @@
 
 #include <rudiments/private/errorincludes.h>
 
-/** The error class provides an interface to system errors. */
+/** The error class provides access to system errors. */
 class RUDIMENTS_DLLSPEC error {
 	public:
 		/** Set the current posix system error to 0, "Success". */

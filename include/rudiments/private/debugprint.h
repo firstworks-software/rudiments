@@ -16,6 +16,7 @@
 	// degenerate debug macros for really incapable compilers
 	// (old microsoft compilers, unixware native compiler,
 	// openvms compiler, sgi native compiler...)
+
 	static void debugFunction() {}
 	static void debugPrintf(const char *format, ...) {}
 	static void debugSafePrint(const char *data, int32_t length) {}

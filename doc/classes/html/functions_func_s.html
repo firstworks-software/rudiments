@@ -43,10 +43,11 @@ $(function() {
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>safeCopy()
 : <a class="el" href="classcharstring.html#a3b1d09f3d59f8f544ad007318c720d6f">charstring</a>
-, <a class="el" href="classwcharstring.html#a679f2128b300ffa618b9093b3575a635">wcharstring</a>
+, <a class="el" href="classucs2charstring.html#a1d0cb19b35149b25d65c066990f4671a">ucs2charstring</a>
+, <a class="el" href="classwcharstring.html#af973c003ffd165d2dcb213735a81c0ac">wcharstring</a>
 </li>
 <li>safePrint()
-: <a class="el" href="classfiledescriptor.html#a32c3f71354b52187c7ec3694c852dfb5">filedescriptor</a>
+: <a class="el" href="classoutput.html#a10bf2a7503a37457167b3469f521323e">output</a>
 </li>
 <li>saveInSwapSpace()
 : <a class="el" href="classpermissions.html#af5bf0fff68a76c1d55333260a9f3e982">permissions</a>
@@ -57,11 +58,11 @@ $(function() {
 <li>scalar()
 : <a class="el" href="classscalar.html#a07646e8c8b2862b6647753b9010029e0">scalar&lt; valuetype &gt;</a>
 </li>
-<li>scaleNumber()
-: <a class="el" href="classrandomnumber.html#a896371ed27d6ae7237595bf0603ee999">randomnumber</a>
+<li>scale()
+: <a class="el" href="classrandomnumber.html#ababe421213891032abd1716e913ceaf3">randomnumber</a>
 </li>
 <li>secondEndOfLineCharacter()
-: <a class="el" href="classserialportprofile.html#a6dae2c3f4d66efe3a61b433692e52432">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#a896647c7fffd86b91e7c6899775a9579">serialportprofile</a>
 </li>
 <li>section()
 : <a class="el" href="classinidom.html#a52cee451134bd434565a23d481ba2aac">inidom</a>
@@ -106,8 +107,8 @@ $(function() {
 : <a class="el" href="classsensitivevalue.html#a37f3f18670cb16ce84c428c704241476">sensitivevalue</a>
 </li>
 <li>sequentialAccess()
-: <a class="el" href="classfile.html#aa4be96f824d575d8f3f0e52332510501">file</a>
-, <a class="el" href="classsys.html#a37055e6c70163c40fe26dc4c38d06748">sys</a>
+: <a class="el" href="classfile.html#a498f8d11508888255de181aee54c2d06">file</a>
+, <a class="el" href="classsys.html#a8e6bb7f74dc49c2c355be124ca425fa1">sys</a>
 </li>
 <li>serialport()
 : <a class="el" href="classserialport.html#a4c7af797fa20c5b6cd803132bb94efda">serialport</a>
@@ -122,10 +123,22 @@ $(function() {
 : <a class="el" href="classserviceentry.html#a6b18d953dbdbc996e63bcf79c1871885">serviceentry</a>
 </li>
 <li>set()
-: <a class="el" href="classbytestring.html#af9ca6fe21c4af1d3add48defffb5de81">bytestring</a>
+: <a class="el" href="classbytestring.html#a5f1d47ce1a91f15d9d1beaa6cbbeba7c">bytestring</a>
+</li>
+<li>setArgumentCount()
+: <a class="el" href="classcommandline.html#afe460d4459f97556542f0aff317347b0">commandline</a>
+</li>
+<li>setArguments()
+: <a class="el" href="classcommandline.html#aa1b3c1b8c471be75d97495d6471625a4">commandline</a>
+</li>
+<li>setArgumentValues()
+: <a class="el" href="classcommandline.html#a6c04aa2176151c84d3aa4c68bf34216f">commandline</a>
 </li>
 <li>setAttributeValue()
 : <a class="el" href="classdomnode.html#aed5223110a263269290a18cb3074266c">domnode</a>
+</li>
+<li>setBacklog()
+: <a class="el" href="classserver.html#ab567495aa29666b94888283e2ef434d8">server</a>
 </li>
 <li>setBinaryExtension()
 : <a class="el" href="classsensitivevalue.html#a8b3eaf5e37b59c261bc11f116656d559">sensitivevalue</a>
@@ -144,6 +157,7 @@ $(function() {
 </li>
 <li>setCertificateAuthority()
 : <a class="el" href="classtlscontext.html#a199a848806bddb7ebb2ba59a959b2de1">tlscontext</a>
+, <a class="el" href="classurl.html#acb92416741bb41dbb00b73f9b690e8bc">url</a>
 </li>
 <li>setCertificateChainFile()
 : <a class="el" href="classtlscontext.html#a6195bc26845204fa5a2ea30e97f38913">tlscontext</a>
@@ -154,6 +168,9 @@ $(function() {
 <li>setCiphers()
 : <a class="el" href="classtlscontext.html#afd1555876488f36d8ded65c1ee26d7d9">tlscontext</a>
 </li>
+<li>setCode()
+: <a class="el" href="classmvcresult.html#affe68934fd23f88a5cf2783d8f3b4789">mvcresult</a>
+</li>
 <li>setColumnName()
 : <a class="el" href="classtable.html#a4e65bd098794a2f00f105bf22bc89556">table&lt; valuetype &gt;</a>
 , <a class="el" href="classtablecollection.html#a042bae2a33ba1c165ba31331202a325d">tablecollection&lt; valuetype &gt;</a>
@@ -161,8 +178,11 @@ $(function() {
 <li>setComparator()
 : <a class="el" href="classcollection.html#a14bcb0d4300b2cdc5a7945cfaf092c7e">collection</a>
 </li>
+<li>setConnectScript()
+: <a class="el" href="classmodemclient.html#a945be55dade63734cb130b4e694c93eb">modemclient</a>
+</li>
 <li>setControlCharacters()
-: <a class="el" href="classserialportprofile.html#a970a6a3ce3c114c5d33a64936d9fe392">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#abc7d55cf93a19096c2a4c3f632529468">serialportprofile</a>
 </li>
 <li>setCookie()
 : <a class="el" href="classhttprequest.html#a85f8bf0162bc0faa7dba9fd6cc86df1a">httprequest</a>
@@ -175,22 +195,28 @@ $(function() {
 <li>setCredentials()
 : <a class="el" href="classgsscontext.html#a92b82822cb67ec24a61af19fc00db96a">gsscontext</a>
 </li>
-<li>setData()
-: <a class="el" href="classdomnode.html#a9d7ffc4a1fca12002373ea7a54a77636">domnode</a>
+<li>setCustomAtCommands()
+: <a class="el" href="classmodemclient.html#ac6fa1e035fff8f73d2c2e67a50d0b4ef">modemclient</a>
 </li>
-<li>setDays()
-: <a class="el" href="classdatetime.html#a865e7c74ca4d46d11acd814cd4e39d75">datetime</a>
+<li>setData()
+: <a class="el" href="classdomevents.html#a62047af342aea3b58b270bb15a97e707">domevents</a>
+, <a class="el" href="classdomnode.html#a9d7ffc4a1fca12002373ea7a54a77636">domnode</a>
+, <a class="el" href="classmvcresult.html#a8aead675dc2271588b0ef310398e4caf">mvcresult</a>
+</li>
+<li>setDayOfMonth()
+: <a class="el" href="classdatetime.html#ac32cbf7b12038e9ac6ee449179ffa188">datetime</a>
 </li>
 <li>setDebugLevel()
 : <a class="el" href="classcodetree.html#a7002d26f36e0b3fa462a3a5ebad4c43f">codetree</a>
 , <a class="el" href="classcompiler.html#ac0ff8b449fa8ff2f9a3b501b09ad135b">compiler</a>
+, <a class="el" href="classdomevents.html#ab7306df88d4229511068ce801f9d6e8a">domevents</a>
 </li>
 <li>setDelimiter()
 : <a class="el" href="classcsvsax.html#a50af6d996fdb91e3a2ebb4f7360826ae">csvsax</a>
 , <a class="el" href="classparameterstring.html#a38ef30424059ee8f46b67a55fa5594b1">parameterstring</a>
 </li>
 <li>setDesiredFlags()
-: <a class="el" href="classgsscontext.html#a341f70c2de27873f5cd886810026f39f">gsscontext</a>
+: <a class="el" href="classgsscontext.html#acc280687b9fbd334ef7e092c88d153ee">gsscontext</a>
 </li>
 <li>setDesiredLifetime()
 : <a class="el" href="classgsscontext.html#aabcdc0377c260856706f39c8d37260e8">gsscontext</a>
@@ -198,6 +224,9 @@ $(function() {
 </li>
 <li>setDesiredMechanism()
 : <a class="el" href="classgsscontext.html#a4e26cf982d88f47acff83d7079488d18">gsscontext</a>
+</li>
+<li>setDisconnectScript()
+: <a class="el" href="classmodemclient.html#a648100ef0ff77a5625aabc21136a1264">modemclient</a>
 </li>
 <li>setDoubleQuotedVariableEnd()
 : <a class="el" href="classtemplateengine.html#aa024f7013c195b0f59d26f0ccd4bc2fe">templateengine</a>
@@ -229,6 +258,15 @@ $(function() {
 <li>setEscapeCharacter()
 : <a class="el" href="classtemplateengine.html#a68105bcc6a111c48ec3f47c55d964a14">templateengine</a>
 </li>
+<li>setEventHandler()
+: <a class="el" href="classdomevents.html#a33c32a28ba4a153e3400cb0136f54e3b">domevents</a>
+</li>
+<li>setEvents()
+: <a class="el" href="classdomevents.html#ae76217efffa15fb72a48fa27c33c1dc1">domevents</a>
+</li>
+<li>setFailed()
+: <a class="el" href="classmvcresult.html#a54a84f641562de4acb57436996ba241a">mvcresult</a>
+</li>
 <li>setField()
 : <a class="el" href="classcsvdom.html#a2636d2f2c3e2c33c4e4f319888051642">csvdom</a>
 </li>
@@ -244,11 +282,23 @@ $(function() {
 <li>setFileFormat()
 : <a class="el" href="classsensitivevalue.html#aca4b0b65cc2539649b4061d72b7caa3c">sensitivevalue</a>
 </li>
+<li>setFileName()
+: <a class="el" href="classunixsocketutil.html#a264c429f4c26f2acc1647c593a94bbd1">unixsocketutil</a>
+</li>
 <li>setFileParameter()
 : <a class="el" href="classhttprequest.html#ae07a03eb63fed468d2c3e9a95cc2ca69">httprequest</a>
 </li>
 <li>setFilePermissions()
 : <a class="el" href="classpermissions.html#ab876722c84bb380d87569519bcf167dd">permissions</a>
+</li>
+<li>setFromBuffer()
+: <a class="el" href="classiconvert.html#af1f291b5b6163abfd8b519314fc8527d">iconvert</a>
+</li>
+<li>setFromBufferSize()
+: <a class="el" href="classiconvert.html#ad0d32f971a6061fe68639cf84e3c794f">iconvert</a>
+</li>
+<li>setFromEncoding()
+: <a class="el" href="classiconvert.html#aa889173a66e4300f8ba0ed02a099297c">iconvert</a>
 </li>
 <li>setGroup()
 : <a class="el" href="classprocess.html#a66f65aebae16fd3c42211f7ceeafd271">process</a>
@@ -269,8 +319,8 @@ $(function() {
 <li>setHandler()
 : <a class="el" href="classsignalhandler.html#a055ebdeb39f018cc7274055a9477e56d">signalhandler</a>
 </li>
-<li>setHardwareDateAndTime()
-: <a class="el" href="classdatetime.html#a3125fd7d2ad7515bcc634a3e755872dd">datetime</a>
+<li>setHardwareDateTime()
+: <a class="el" href="classdatetime.html#a9da1a4c31b7eb03903c0fda1e9108ca9">datetime</a>
 </li>
 <li>setHexExtension()
 : <a class="el" href="classsensitivevalue.html#afbc5c298fe7c55d673aeee515698b760">sensitivevalue</a>
@@ -278,11 +328,26 @@ $(function() {
 <li>setHistoryFile()
 : <a class="el" href="classprompt.html#a848b0bf2acf992399b886c92310e4b27">prompt</a>
 </li>
+<li>setHost()
+: <a class="el" href="classinetsocketutil.html#a3e5fc91814fd21754407107742cc5046">inetsocketutil</a>
+</li>
 <li>setHostName()
 : <a class="el" href="classsys.html#ab006beca29d9acddc0daad1a4787653d">sys</a>
 </li>
-<li>setHours()
-: <a class="el" href="classdatetime.html#a24b6c12a988c6c65e896a19b4ca22851">datetime</a>
+<li>setHour()
+: <a class="el" href="classdatetime.html#ad51fc2be153fc6e46d451096731be324">datetime</a>
+</li>
+<li>setHttpHeaders()
+: <a class="el" href="classurl.html#a9b0ee218a9d589ab7566b4bd905d633e">url</a>
+</li>
+<li>setHttpPostContentType()
+: <a class="el" href="classurl.html#ab59896fe9df25aba357db3bee4a99ef3">url</a>
+</li>
+<li>setHttpPostData()
+: <a class="el" href="classurl.html#a5ba6c65e7b4c54dd4daf1e96376364f4">url</a>
+</li>
+<li>setHttpUserAgent()
+: <a class="el" href="classurl.html#a123645b49efceff236a344878e56a8f4">url</a>
 </li>
 <li>setId()
 : <a class="el" href="classcompilermodule.html#ac0821217557684a5c2e9f304c4f097b3">compilermodule</a>
@@ -311,10 +376,10 @@ $(function() {
 : <a class="el" href="classfiledescriptor.html#a1929fea15fdf122127c773d38161d6c1">filedescriptor</a>
 </li>
 <li>setIv()
-: <a class="el" href="classencryption.html#abd79e8f234e87a6c35f942243f30101f">encryption</a>
+: <a class="el" href="classencryption.html#acaf48f3c2cc4d9db90e8fb21e4c02030">encryption</a>
 </li>
 <li>setKey()
-: <a class="el" href="classencryption.html#a294aee4c81f5b1615a8c22ee81729a28">encryption</a>
+: <a class="el" href="classencryption.html#a26927c8a1ae38988c76297313f9c383d">encryption</a>
 </li>
 <li>setKeytab()
 : <a class="el" href="classgsscredentials.html#ab2e7c9b7e248704ea271092d60ad718e">gsscredentials</a>
@@ -346,7 +411,8 @@ $(function() {
 , <a class="el" href="classtable.html#a5e5dfdfe908177eee0e53f82b1d7d05e">table&lt; valuetype &gt;</a>
 </li>
 <li>setMask()
-: <a class="el" href="classsignalhandler.html#af7e14a0a5490e09170aebf15cf316248">signalhandler</a>
+: <a class="el" href="classsignalhandler.html#a76e2516706c487e8c62c23f57bb5275d">signalhandler</a>
+, <a class="el" href="classunixsocketserver.html#a477c1bda02b69c686449fde13354eae8">unixsocketserver</a>
 </li>
 <li>setMax()
 : <a class="el" href="classresourcepool.html#ae09ae20b799bcd2a7a4f241e8e483abd">resourcepool&lt; valuetype &gt;</a>
@@ -357,26 +423,29 @@ $(function() {
 <li>setMaxHistoryQueue()
 : <a class="el" href="classprompt.html#a2f969ecfe7b53e296a8a4edeb4f9c47b">prompt</a>
 </li>
+<li>setMessage()
+: <a class="el" href="classmvcresult.html#a48fb3e81d04e462b6b859a06cb5caf10">mvcresult</a>
+</li>
 <li>setMetaData()
 : <a class="el" href="classcompiler.html#a10b32e9c3efe459434ccb897830328a7">compiler</a>
 </li>
-<li>setMicroseconds()
-: <a class="el" href="classdatetime.html#ae21defc94e5e4b7fc78b84f88861ceb0">datetime</a>
+<li>setMicrosecond()
+: <a class="el" href="classdatetime.html#ace8222b51809d4762434b8c9c3fb1374">datetime</a>
 </li>
 <li>setMin()
 : <a class="el" href="classresourcepool.html#af2f1de403f257913966674135dbc8000">resourcepool&lt; valuetype &gt;</a>
 </li>
-<li>setMinutes()
-: <a class="el" href="classdatetime.html#a158b2b7509ceff088a831f7c0b104be8">datetime</a>
+<li>setMinute()
+: <a class="el" href="classdatetime.html#ae3eb1514c9163629892991bdbe3d7723">datetime</a>
 </li>
 <li>setMmapBufferingEnabled()
 : <a class="el" href="classfiledescriptor.html#ab7d949b18912ec1334f1a864bafdff4c">filedescriptor</a>
 </li>
-<li>setMonths()
-: <a class="el" href="classdatetime.html#aac6321e6d22a5a72aadeff8adf86d682">datetime</a>
+<li>setMonth()
+: <a class="el" href="classdatetime.html#af888d07957a768dfe8fd210402f396a8">datetime</a>
 </li>
 <li>setMutex()
-: <a class="el" href="classcrypt.html#a255c1ee648399d5c25a7d68bcfbd2eeb">crypt</a>
+: <a class="el" href="classdes.html#aece5ed241bfb9a989d72d72a353c9027">des</a>
 , <a class="el" href="classenvironment.html#a8448e411a5f361d4d6a585cbc9bcce0c">environment</a>
 , <a class="el" href="classgroupentry.html#a775b5119bcc96f5b092cab4693f3d2ae">groupentry</a>
 , <a class="el" href="classhostentry.html#a587374c787abf24799d0e961b80a6f44">hostentry</a>
@@ -411,7 +480,11 @@ $(function() {
 : <a class="el" href="classhttprequest.html#a0d29558956e9f931723629645b2a2280">httprequest</a>
 </li>
 <li>setParameters()
-: <a class="el" href="classcompilermodule.html#a41e21ee1e485500d86a4b5cf0ab281a0">compilermodule</a>
+: <a class="el" href="classclient.html#af58ca7e349b01d3a3bceec8f9be7218d">client</a>
+, <a class="el" href="classcompilermodule.html#a41e21ee1e485500d86a4b5cf0ab281a0">compilermodule</a>
+, <a class="el" href="classinetsocketclient.html#a48f16e235815abf07f3b09fea6884169">inetsocketclient</a>
+, <a class="el" href="classmodemclient.html#a1388a69c92ca20e2843ae38538d074c8">modemclient</a>
+, <a class="el" href="classunixsocketclient.html#a1e4c0fd164ef31d90bbadf82ac9fee27">unixsocketclient</a>
 </li>
 <li>setParent()
 : <a class="el" href="classdomnode.html#a946c68188e5ae6d095d8450a1ba967aa">domnode</a>
@@ -423,23 +496,39 @@ $(function() {
 : <a class="el" href="classregularexpression.html#a479508cdd0083cdf5bbf63db51c9e169">regularexpression</a>
 </li>
 <li>setPermissions()
-: <a class="el" href="classfile.html#aa042ab6c3ec5b3aaaf36b81ee32e1181">file</a>
+: <a class="el" href="classfile.html#a3615c0ecb2ff8b35b852b37d96c20b96">file</a>
 , <a class="el" href="classsemaphoreset.html#a331a23bd4d7cf647bdb72a532bcabd6e">semaphoreset</a>
 , <a class="el" href="classsharedmemory.html#a360dd5fd76d0a1ba189eb4baeec510a3">sharedmemory</a>
 </li>
-<li>setPosition()
-: <a class="el" href="classbytebuffer.html#a37ad20a802e0ea502c38f902a644031b">bytebuffer</a>
-, <a class="el" href="classstringbuffer.html#a943186ab46d8f078a0af7945e23eb651">stringbuffer</a>
-, <a class="el" href="classwstringbuffer.html#ad25153fe4b41f0bf90485a395100032a">wstringbuffer</a>
+<li>setPhoneNumber()
+: <a class="el" href="classmodemclient.html#a68e68374e6e948c36485226deea1f737">modemclient</a>
+</li>
+<li>setPort()
+: <a class="el" href="classinetsocketutil.html#ae7cea70aa3b32a78fdc7c69c87b146ca">inetsocketutil</a>
 </li>
 <li>setPositionRelativeToBeginning()
-: <a class="el" href="classfiledescriptor.html#ac5755e13db01a89ac704e378bef0fcd2">filedescriptor</a>
+: <a class="el" href="classbytebuffer.html#a875fe4eff3186514b53c8434206a3c25">bytebuffer</a>
+, <a class="el" href="classfiledescriptor.html#a99e466741fe2e54e106ebfdc0d64970d">filedescriptor</a>
+, <a class="el" href="classoutput.html#ace854fac7af8ee87d959f20b3a2465dc">output</a>
+, <a class="el" href="classstringbuffer.html#abc76eb330aa9ff943cc673a36f8e2099">stringbuffer</a>
+, <a class="el" href="classucs2stringbuffer.html#a01060940ba2c6d54ef176cd3bf31a632">ucs2stringbuffer</a>
+, <a class="el" href="classwstringbuffer.html#a633ca44251eee4c39e4e9155e0138e40">wstringbuffer</a>
 </li>
 <li>setPositionRelativeToCurrent()
-: <a class="el" href="classfiledescriptor.html#ae6c1829ab5d36211b79f1b8969bb3b5c">filedescriptor</a>
+: <a class="el" href="classbytebuffer.html#a3f980d00d25aba7d5e1969ea068a4680">bytebuffer</a>
+, <a class="el" href="classfiledescriptor.html#a15b3aecab80ee264f7d861496692d5ab">filedescriptor</a>
+, <a class="el" href="classoutput.html#a967264a72caed19f6dbdfa45892ee2cb">output</a>
+, <a class="el" href="classstringbuffer.html#a65176d458a0fea50ca39b74b9122bf7d">stringbuffer</a>
+, <a class="el" href="classucs2stringbuffer.html#a8e2edf5c2561f97f798d0689fd19b695">ucs2stringbuffer</a>
+, <a class="el" href="classwstringbuffer.html#a3bea67ac0ce1f9e0ead0239cf2bdaef1">wstringbuffer</a>
 </li>
 <li>setPositionRelativeToEnd()
-: <a class="el" href="classfiledescriptor.html#a4737567a154eb7cd515072015c7e1aaa">filedescriptor</a>
+: <a class="el" href="classbytebuffer.html#ae9ebf36aff4560f0f08dd3c4defa36b7">bytebuffer</a>
+, <a class="el" href="classfiledescriptor.html#a98ca00c97609fa08745fa6751c47c2ee">filedescriptor</a>
+, <a class="el" href="classoutput.html#a1ad0986f54bfcd3411fec3f66fbe512e">output</a>
+, <a class="el" href="classstringbuffer.html#adb8333fd87aaa0dbf584f99c60173e6c">stringbuffer</a>
+, <a class="el" href="classucs2stringbuffer.html#a4cc348722e14a6df54c6a3bdcab6311b">ucs2stringbuffer</a>
+, <a class="el" href="classwstringbuffer.html#ab0c697a7c4ee7e4c835ef55cb84b06d7">wstringbuffer</a>
 </li>
 <li>setPreviousSibling()
 : <a class="el" href="classdomnode.html#a79a2a0c9ca959e9da9aa16994903b7e5">domnode</a>
@@ -465,8 +554,11 @@ $(function() {
 <li>setPrompt()
 : <a class="el" href="classprompt.html#ae2484abe69138d939b0c7a0b6d2972e2">prompt</a>
 </li>
+<li>setProperties()
+: <a class="el" href="classmvctier.html#aec65454ba3958a7d86b81e7f5f121650">mvctier</a>
+</li>
 <li>setProtection()
-: <a class="el" href="classsys.html#af2ee5a2946db7782cb40fd18c31a94cb">sys</a>
+: <a class="el" href="classsys.html#ae28727f2d4e77bcbbf89000591b2ee40">sys</a>
 </li>
 <li>setProtocolVersion()
 : <a class="el" href="classtlscontext.html#a0dca0fa0302bdd2567174e5034436d66">tlscontext</a>
@@ -487,7 +579,7 @@ $(function() {
 : <a class="el" href="classencryption.html#ad7c448d397b5ac682a030b1bf41545c3">encryption</a>
 </li>
 <li>setReadBufferSize()
-: <a class="el" href="classfiledescriptor.html#a40da65b66a3de154ce15181487e30ad7">filedescriptor</a>
+: <a class="el" href="classfiledescriptor.html#a46104a69487f614041ec23806f5d9703">filedescriptor</a>
 </li>
 <li>setRealAndEffectiveGroupId()
 : <a class="el" href="classprocess.html#a21ce2b4a8f6f30938870c1e8974d7f5c">process</a>
@@ -495,11 +587,27 @@ $(function() {
 <li>setRealAndEffectiveUserId()
 : <a class="el" href="classprocess.html#ab27d7305b9410a7997bea32bcd4a710d">process</a>
 </li>
+<li>setRequest()
+: <a class="el" href="classhttpbasicsecurity.html#a1ca0c832e91a71383a60bd2c2ece908e">httpbasicsecurity</a>
+, <a class="el" href="classmvcview.html#ac4e7763072ba6706073afee021623032">mvcview</a>
+</li>
+<li>setResponse()
+: <a class="el" href="classmvcview.html#ae8fdf54aaf636174ad37c1a6b90f7ba0">mvcview</a>
+</li>
+<li>setRetryWait()
+: <a class="el" href="classclient.html#a2dcd0c484db1e953b55c94478f1accce">client</a>
+</li>
 <li>setReverse()
 : <a class="el" href="classcomparator.html#a096a960ee638c5fe618db60a9bf8c13d">comparator</a>
 </li>
-<li>setSeconds()
-: <a class="el" href="classdatetime.html#a1ffaab8a85374741a087d6b30e242aad">datetime</a>
+<li>setSchedule()
+: <a class="el" href="classcronschedule.html#a11ab891674b42b2f6c0bea90f79732b2">cronschedule</a>
+</li>
+<li>setSecond()
+: <a class="el" href="classdatetime.html#a54be1175fed9efe78e124d92ba0fbfbb">datetime</a>
+</li>
+<li>setSecurity()
+: <a class="el" href="classmvctier.html#aa605cce13fa51f6d2c48f74bd6a07921">mvctier</a>
 </li>
 <li>setSeed()
 : <a class="el" href="classrandomnumber.html#ab155de902dfe4d347436ca0d93292b4d">randomnumber</a>
@@ -537,20 +645,50 @@ $(function() {
 <li>setStackSize()
 : <a class="el" href="classthread.html#a709334d14fbb3e7eecc73262cf19bce7">thread</a>
 </li>
-<li>setSystemDateAndTime()
-: <a class="el" href="classdatetime.html#aeff48804a5801ef7be3bf1f50316242b">datetime</a>
+<li>setStatus()
+: <a class="el" href="classmvcresult.html#aba9476dc2aec49de7b5f5a3d014b49ec">mvcresult</a>
+</li>
+<li>setSuccess()
+: <a class="el" href="classmvcresult.html#a68a5f5d87a3e94ac49c7862fdb5df1ec">mvcresult</a>
+</li>
+<li>setSystemDateTime()
+: <a class="el" href="classdatetime.html#a9f83fcbc9cd4b73c3074a42d7077c77e">datetime</a>
 </li>
 <li>setTextExtension()
-: <a class="el" href="classsensitivevalue.html#ab1b7dc82c3b7415ae1dc2a0586492fbd">sensitivevalue</a>
+: <a class="el" href="classsensitivevalue.html#a83a870a21a060d10d46fd3dee7b7b0bd">sensitivevalue</a>
 </li>
 <li>setTimeMutex()
 : <a class="el" href="classdatetime.html#a573ba341f232146a75ea789cccaf59c4">datetime</a>
 </li>
+<li>setTimeoutMicroseconds()
+: <a class="el" href="classclient.html#aa1895397ad96dda9b87e9efa5aabf244">client</a>
+</li>
+<li>setTimeoutSeconds()
+: <a class="el" href="classclient.html#a1278e215fe30d9b55530ea03af528a6b">client</a>
+</li>
+<li>setTimeZone()
+: <a class="el" href="classdatetime.html#a61072d77dbd680b932bde2bcb8f06a6d">datetime</a>
+</li>
+<li>setToBuffer()
+: <a class="el" href="classiconvert.html#aed7e147b73a945df53f6c39fdc2b26e1">iconvert</a>
+</li>
+<li>setToBufferSize()
+: <a class="el" href="classiconvert.html#a5f8c3a4ce97d017e34c3786bd499f08d">iconvert</a>
+</li>
+<li>setToEncoding()
+: <a class="el" href="classiconvert.html#a0824339d9f15fcda23c5b1220c4213f3">iconvert</a>
+</li>
 <li>setTrackInsertionOrder()
 : <a class="el" href="classdictionary.html#a1741f68e036eb414b48c99cd54b98f8f">dictionary&lt; keytype, valuetype &gt;</a>
 </li>
+<li>setTries()
+: <a class="el" href="classclient.html#a24d16724d00f10bc155d3d9dcc9c1d10">client</a>
+</li>
 <li>setType()
 : <a class="el" href="classdomnode.html#ab43c46994a16e99a0e054eb165ea0124">domnode</a>
+</li>
+<li>setUseHttpPost()
+: <a class="el" href="classurl.html#a93e5c4e106bb2a32c406c7ac5eaed6be">url</a>
 </li>
 <li>setUser()
 : <a class="el" href="classprocess.html#a2c18282a2afe6345c576655c80457620">process</a>
@@ -567,6 +705,7 @@ $(function() {
 </li>
 <li>setValidatePeer()
 : <a class="el" href="classtlscontext.html#aae8ac469661d4d3a19c452a6988b70b1">tlscontext</a>
+, <a class="el" href="classurl.html#ae042a017809645f8652b92afc7c2074d">url</a>
 </li>
 <li>setValidationDepth()
 : <a class="el" href="classtlscontext.html#a51c39b5df1d6c9e19d55a17ea308044e">tlscontext</a>
@@ -589,7 +728,7 @@ $(function() {
 , <a class="el" href="classtreenode.html#a7ebaf41b904118d032b67f9f5b278166">treenode&lt; valuetype &gt;</a>
 </li>
 <li>setValues()
-: <a class="el" href="classdictionary.html#ad4e2fc9a2257e1df0407298d236cc448">dictionary&lt; keytype, valuetype &gt;</a>
+: <a class="el" href="classdictionary.html#a76f5ac435b80cd5c4cbccb7a008175bc">dictionary&lt; keytype, valuetype &gt;</a>
 , <a class="el" href="classdictionarycollection.html#a88515c9a241cf6e715826fa81ff27068">dictionarycollection&lt; keytype, valuetype &gt;</a>
 </li>
 <li>setVariableEnd()
@@ -602,7 +741,7 @@ $(function() {
 : <a class="el" href="classsensitivevalue.html#a3eaecadb23b2776aaa219ebd32545d6e">sensitivevalue</a>
 </li>
 <li>setVerboseConnectError()
-: <a class="el" href="classclient.html#a3c213e784bcd69783356199834fa925f">client</a>
+: <a class="el" href="classclient.html#acd53be8385a4ba2c72365cec3c341b5c">client</a>
 </li>
 <li>setWideIndent()
 : <a class="el" href="classlogger.html#a4a6fd4d1731e44ff808e23a6c2f6bca2">logger</a>
@@ -611,10 +750,10 @@ $(function() {
 : <a class="el" href="classcomparator.html#ab23156651a77945ac592a131d64e53c4">comparator</a>
 </li>
 <li>setWriteBufferSize()
-: <a class="el" href="classfiledescriptor.html#a867801eb16cda1afcef0a9e36e8b2e8f">filedescriptor</a>
+: <a class="el" href="classfiledescriptor.html#adb804d15d88a722dc0b44f869c6ad5d8">filedescriptor</a>
 </li>
-<li>setYears()
-: <a class="el" href="classdatetime.html#a3b432c42c263f686065c08853ae254a8">datetime</a>
+<li>setYear()
+: <a class="el" href="classdatetime.html#a6fe54ac1cd4697ee52d546810b325042">datetime</a>
 </li>
 <li>sha1()
 : <a class="el" href="classsha1.html#ac7c1d17ea017226bc87f4a11e196e6f7">sha1</a>
@@ -635,7 +774,7 @@ $(function() {
 : <a class="el" href="classsignalhandler.html#a06c52fd682c7a300872ca8f369700d3f">signalhandler</a>
 </li>
 <li>signalIsInSet()
-: <a class="el" href="classsignalset.html#a0fa151048590196fe6a2257586dd374d">signalset</a>
+: <a class="el" href="classsignalset.html#a3c4ff1b4d2f92f045423f2d3a12c4ec8">signalset</a>
 </li>
 <li>signalset()
 : <a class="el" href="classsignalset.html#af4cecbfbfbb1400278b60ad6dd3ebfa5">signalset</a>
@@ -654,6 +793,7 @@ $(function() {
 </li>
 <li>size()
 : <a class="el" href="classcharstring.html#ab40e5553d6f02e14cb706108baf0cc37">charstring</a>
+, <a class="el" href="classucs2charstring.html#a3f1f352d2cb92d90495f0d1d05543fb1">ucs2charstring</a>
 , <a class="el" href="classwcharstring.html#a9d2d2a80d9b415bb1511be29c35fe222">wcharstring</a>
 </li>
 <li>skin()
@@ -685,17 +825,19 @@ $(function() {
 , <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">thread</a>
 </li>
 <li>split()
-: <a class="el" href="classcharstring.html#ab0b65b9df7220bb352a6dd52838f9b7f">charstring</a>
-, <a class="el" href="classwcharstring.html#a1ee10163f10f481381f40d9247b03c0d">wcharstring</a>
+: <a class="el" href="classcharstring.html#ab07d472c9aae843a63e74d23cef37085">charstring</a>
+, <a class="el" href="classucs2charstring.html#aaa56276037040073f7eb672b4f037122">ucs2charstring</a>
+, <a class="el" href="classwcharstring.html#a1876cfa74a005130c4b743abc48cfffa">wcharstring</a>
 </li>
 <li>start()
-: <a class="el" href="classlogger.html#ad5112fe527edfff39b50bcab9e4a0e36">logger</a>
+: <a class="el" href="classlogger.html#a6804f395be21db7efdf8e1bec721a857">logger</a>
 </li>
 <li>startCharacter()
-: <a class="el" href="classserialportprofile.html#ae46cad819305d8c127b2a0f0e6bd54b6">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#a516814922d9bca31e23a93603659fcaa">serialportprofile</a>
 </li>
 <li>startsWith()
 : <a class="el" href="classcharstring.html#a3b7d63b29cad616b81d322937b056565">charstring</a>
+, <a class="el" href="classucs2charstring.html#aed11e2d8848892bb8c3248974613c1c2">ucs2charstring</a>
 , <a class="el" href="classwcharstring.html#a3bb97fac0aabf7e05d27a548acb4e355">wcharstring</a>
 </li>
 <li>staticarray()
@@ -705,10 +847,10 @@ $(function() {
 : <a class="el" href="classhttpresponse.html#a875f4979c65a4cb49e0ecc1979f18a94">httpresponse</a>
 </li>
 <li>statusRequestCharacter()
-: <a class="el" href="classserialportprofile.html#a751f583423620370718ec88866e43adf">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#a00990e3f6f3847332c1455108fe074ff">serialportprofile</a>
 </li>
 <li>stopCharacter()
-: <a class="el" href="classserialportprofile.html#a8c99ceb9ca32643cc97a99dbcb9338d9">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#acb6e3f3c4c6543e3679b152b9dea87f7">serialportprofile</a>
 </li>
 <li>stringbuffer()
 : <a class="el" href="classstringbuffer.html#a41770a154b0fdbfcb0d960c0198076af">stringbuffer</a>
@@ -721,14 +863,16 @@ $(function() {
 , <a class="el" href="classjsonsax.html#abf60d6a159e96d89309c8d974cd16bc9">jsonsax</a>
 </li>
 <li>strip()
-: <a class="el" href="classcharstring.html#ad28d99425efe7998c19a69ab340a24a5">charstring</a>
-, <a class="el" href="classwcharstring.html#ae99081a104ba7383410ca26d684a5b6c">wcharstring</a>
+: <a class="el" href="classcharstring.html#a772cf23dcb879ca502a13768eec26df0">charstring</a>
+, <a class="el" href="classucs2charstring.html#a5d2ddfbf97756d51acb5068563aeaa59">ucs2charstring</a>
+, <a class="el" href="classwcharstring.html#a29404b08b5d0b16cd4cb3f4a624c7ca4">wcharstring</a>
 </li>
 <li>stripParityBits()
-: <a class="el" href="classserialportprofile.html#a71a13758dafc76d6ee4a68446fb0a389">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#aa3aff3d0f0792481ea58d461156e627f">serialportprofile</a>
 </li>
 <li>stripSet()
 : <a class="el" href="classcharstring.html#a8325e608561681528c682ff241f93898">charstring</a>
+, <a class="el" href="classucs2charstring.html#a6f78fbf845c443799247606ccf5c4dd1">ucs2charstring</a>
 , <a class="el" href="classwcharstring.html#ad3f791a94d693f429b7fe4e05348e299">wcharstring</a>
 </li>
 <li>study()
@@ -736,7 +880,8 @@ $(function() {
 </li>
 <li>subString()
 : <a class="el" href="classcharstring.html#a03ce88d5f30bc06b3aca332548ae9026">charstring</a>
-, <a class="el" href="classwcharstring.html#a93ca927b083b658a4eb84e36758df24f">wcharstring</a>
+, <a class="el" href="classucs2charstring.html#ab0f8f42f853ac034360fe5d75d09b6e9">ucs2charstring</a>
+, <a class="el" href="classwcharstring.html#a4a1ec01b2be55525fbeabd911ecaa487">wcharstring</a>
 </li>
 <li>supported()
 : <a class="el" href="classgss.html#afb534b34d084d95d71dc503f63799548">gss</a>
@@ -745,9 +890,6 @@ $(function() {
 , <a class="el" href="classsharedmemory.html#a52db2c008fe41c39c8cb541378fd27cb">sharedmemory</a>
 , <a class="el" href="classthread.html#a448e33d24dc2b0292b6f9e1ff5a63378">thread</a>
 , <a class="el" href="classtls.html#a4b66c1debf3d43913c12946c522057da">tls</a>
-, <a class="el" href="classwcharacter.html#a80326ec386b986315aa85bee05e357ca">wcharacter</a>
-, <a class="el" href="classwcharstring.html#af10cd8cc568655df84ffaa9bc9f81d29">wcharstring</a>
-, <a class="el" href="classwstringbuffer.html#a4084043b1d8332cc9ef945fa29b031a0">wstringbuffer</a>
 </li>
 <li>supportsBlockingNonBlockingModes()
 : <a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">filedescriptor</a>
@@ -767,7 +909,8 @@ $(function() {
 : <a class="el" href="classfiledescriptor.html#aaa93cf632eb8776a3e589d4ecba08005">filedescriptor</a>
 </li>
 <li>supportsPrintf()
-: <a class="el" href="classwcharstring.html#a1878616299bc7feb3f518e927a8228dd">wcharstring</a>
+: <a class="el" href="classucs2charstring.html#ad4d3d32dfff0665a59f4511f71d094b0">ucs2charstring</a>
+, <a class="el" href="classwcharstring.html#a1878616299bc7feb3f518e927a8228dd">wcharstring</a>
 </li>
 <li>supportsSignalHandlerParameter()
 : <a class="el" href="classsignalhandler.html#ae679902701ebf71de5f8207a0ee96410">signalhandler</a>
@@ -779,16 +922,16 @@ $(function() {
 : <a class="el" href="classsemaphoreset.html#a1dfc583fff6340ab3b5697fa69c04ac6">semaphoreset</a>
 </li>
 <li>suspendCharacter()
-: <a class="el" href="classserialportprofile.html#a3b9ee9aef199b0be661265916961e8bd">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#a2ed72710d0ed6175efd56ad9daeab599">serialportprofile</a>
 </li>
 <li>suspendOutput()
 : <a class="el" href="classserialport.html#a0e0bc03dcb0459934df56d13c1c767b0">serialport</a>
 </li>
 <li>switchCharacer()
-: <a class="el" href="classserialportprofile.html#a9fb1a18dcd19fef678e643982b410d69">serialportprofile</a>
+: <a class="el" href="classserialportprofile.html#a042dd6858ecef4cba1790a77db8a81e6">serialportprofile</a>
 </li>
 <li>sync()
-: <a class="el" href="classfile.html#a26d44cbf4c365fba628c73084488aa5c">file</a>
+: <a class="el" href="classfile.html#a35caaad26a6f8ed1bf65fcc67d641506">file</a>
 , <a class="el" href="classmemorymap.html#a56fefb03160907092f2f2239dc249204">memorymap</a>
 , <a class="el" href="classsys.html#a8c3441d42aa2ea988175e8dbdc118e64">sys</a>
 </li>
@@ -802,7 +945,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:29 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

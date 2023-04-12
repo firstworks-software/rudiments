@@ -68,32 +68,33 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classhash.html#a4864865d222af59729710355477e7953">   25</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classhash.html#a4864865d222af59729710355477e7953">~hash</a>() {};</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhash.html#a18a1f83ea4a1ad98179682ea72d1a954">   30</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classhash.html#a18a1f83ea4a1ad98179682ea72d1a954">append</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data,</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                                                        uint32_t size)=0;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhash.html#ad104a6852ebfea2a81ceba2762aa1608">   36</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>     *<a class="code" href="classhash.html#ad104a6852ebfea2a81ceba2762aa1608">getHash</a>()=0;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">   39</a></span>&#160;                <span class="keyword">virtual</span> uint64_t        <a class="code" href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">getHashSize</a>()=0;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhash.html#ab797e3776c4c6a70972c453ad9962af7">   44</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classhash.html#ab797e3776c4c6a70972c453ad9962af7">clear</a>()=0;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classhash.html#a9908ec60588019dfde05bf632efd4541">   47</a></span>&#160;                <span class="keyword">virtual</span> hasherror_t     <a class="code" href="classhash.html#a9908ec60588019dfde05bf632efd4541">getError</a>()=0;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;};</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhash.html#a8277506593ba881de5b6c4fa32bdc351">   30</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classhash.html#a8277506593ba881de5b6c4fa32bdc351">append</a>(<span class="keyword">const</span> byte_t *data, uint32_t size)=0;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classhash.html#a68a7c30db1259aa54e2927fae03f1ee8">   35</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> byte_t    *<a class="code" href="classhash.html#a68a7c30db1259aa54e2927fae03f1ee8">getHash</a>()=0;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">   38</a></span>&#160;                <span class="keyword">virtual</span> uint64_t        <a class="code" href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">getHashSize</a>()=0;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classhash.html#ab797e3776c4c6a70972c453ad9962af7">   43</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classhash.html#ab797e3776c4c6a70972c453ad9962af7">clear</a>()=0;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classhash.html#a9908ec60588019dfde05bf632efd4541">   46</a></span>&#160;                <span class="keyword">virtual</span> hasherror_t     <a class="code" href="classhash.html#a9908ec60588019dfde05bf632efd4541">getError</a>()=0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/hash.h&gt;</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;};</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasshash_html"><div class="ttname"><a href="classhash.html">hash</a></div><div class="ttdef"><b>Definition:</b> hash.h:19</div></div>
 <div class="ttc" id="aclasshash_html_a178456fca0bc4439f4ca844d59c9b40e"><div class="ttname"><a href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">hash::getHashSize</a></div><div class="ttdeci">virtual uint64_t getHashSize()=0</div></div>
-<div class="ttc" id="aclasshash_html_a18a1f83ea4a1ad98179682ea72d1a954"><div class="ttname"><a href="classhash.html#a18a1f83ea4a1ad98179682ea72d1a954">hash::append</a></div><div class="ttdeci">virtual bool append(const unsigned char *data, uint32_t size)=0</div></div>
 <div class="ttc" id="aclasshash_html_a4864865d222af59729710355477e7953"><div class="ttname"><a href="classhash.html#a4864865d222af59729710355477e7953">hash::~hash</a></div><div class="ttdeci">virtual ~hash()</div><div class="ttdef"><b>Definition:</b> hash.h:25</div></div>
+<div class="ttc" id="aclasshash_html_a68a7c30db1259aa54e2927fae03f1ee8"><div class="ttname"><a href="classhash.html#a68a7c30db1259aa54e2927fae03f1ee8">hash::getHash</a></div><div class="ttdeci">virtual const byte_t * getHash()=0</div></div>
+<div class="ttc" id="aclasshash_html_a8277506593ba881de5b6c4fa32bdc351"><div class="ttname"><a href="classhash.html#a8277506593ba881de5b6c4fa32bdc351">hash::append</a></div><div class="ttdeci">virtual bool append(const byte_t *data, uint32_t size)=0</div></div>
 <div class="ttc" id="aclasshash_html_a9908ec60588019dfde05bf632efd4541"><div class="ttname"><a href="classhash.html#a9908ec60588019dfde05bf632efd4541">hash::getError</a></div><div class="ttdeci">virtual hasherror_t getError()=0</div></div>
 <div class="ttc" id="aclasshash_html_ab797e3776c4c6a70972c453ad9962af7"><div class="ttname"><a href="classhash.html#ab797e3776c4c6a70972c453ad9962af7">hash::clear</a></div><div class="ttdeci">virtual bool clear()=0</div></div>
 <div class="ttc" id="aclasshash_html_ad000ceb3c5a6cf01af1f497275fc608c"><div class="ttname"><a href="classhash.html#ad000ceb3c5a6cf01af1f497275fc608c">hash::hash</a></div><div class="ttdeci">hash()</div><div class="ttdef"><b>Definition:</b> hash.h:22</div></div>
-<div class="ttc" id="aclasshash_html_ad104a6852ebfea2a81ceba2762aa1608"><div class="ttname"><a href="classhash.html#ad104a6852ebfea2a81ceba2762aa1608">hash::getHash</a></div><div class="ttdeci">virtual const unsigned char * getHash()=0</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

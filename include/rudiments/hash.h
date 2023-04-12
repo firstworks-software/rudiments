@@ -15,7 +15,7 @@ enum hasherror_t {
 	HASH_ERROR_UNSUPPORTED
 };
 
-/** The hash class provides a simple hash interface. */
+/** The hash class defines an interface for hashing. */
 class RUDIMENTS_DLLSPEC hash : virtual public object {
 	public:
 		/** Creates an instance of the hash class. */

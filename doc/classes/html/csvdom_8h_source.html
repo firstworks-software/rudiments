@@ -63,7 +63,7 @@ $(function() {
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classcsvdom.html#aee97ad725a9b222a36d553dc31d98587">   78</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classcsvdom.html#aee97ad725a9b222a36d553dc31d98587">~csvdom</a>();</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classcsvdom.html#a3f327f88bdb4f3682e0b7b5b63ea281a">   81</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classcsvdom.html#a3f327f88bdb4f3682e0b7b5b63ea281a">getType</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classcsvdom.html#a6ee51f3e8db02c35098445e6a0c20055">   81</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classcsvdom.html#a6ee51f3e8db02c35098445e6a0c20055">getType</a>();</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classcsvdom.html#adc13953ddfc856aab07fe800cdbcd824">   84</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classcsvdom.html#adc13953ddfc856aab07fe800cdbcd824">parse</a>(<a class="code" href="classinput.html">input</a> *in);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
@@ -244,7 +244,6 @@ $(function() {
 <div class="ttc" id="aclasscsvdom_html_a367682ecb8afc22947ecf19fd3aa23d8"><div class="ttname"><a href="classcsvdom.html#a367682ecb8afc22947ecf19fd3aa23d8">csvdom::getField</a></div><div class="ttdeci">const char * getField(uint64_t row, const char *column)</div></div>
 <div class="ttc" id="aclasscsvdom_html_a38b9a731466d2b7e9d2e1831b53befce"><div class="ttname"><a href="classcsvdom.html#a38b9a731466d2b7e9d2e1831b53befce">csvdom::bothTrimColumns</a></div><div class="ttdeci">bool bothTrimColumns()</div></div>
 <div class="ttc" id="aclasscsvdom_html_a3999af2d901c4f68a3c277542edf7c1c"><div class="ttname"><a href="classcsvdom.html#a3999af2d901c4f68a3c277542edf7c1c">csvdom::rightTrimColumns</a></div><div class="ttdeci">bool rightTrimColumns()</div></div>
-<div class="ttc" id="aclasscsvdom_html_a3f327f88bdb4f3682e0b7b5b63ea281a"><div class="ttname"><a href="classcsvdom.html#a3f327f88bdb4f3682e0b7b5b63ea281a">csvdom::getType</a></div><div class="ttdeci">virtual const char * getType() const</div></div>
 <div class="ttc" id="aclasscsvdom_html_a4136df59e8ab5bbe92bcb20eec5d5cac"><div class="ttname"><a href="classcsvdom.html#a4136df59e8ab5bbe92bcb20eec5d5cac">csvdom::parseFile</a></div><div class="ttdeci">bool parseFile(const char *filename)</div></div>
 <div class="ttc" id="aclasscsvdom_html_a42c213709cbf2a4e9e4e890db3a73d36"><div class="ttname"><a href="classcsvdom.html#a42c213709cbf2a4e9e4e890db3a73d36">csvdom::leftTrimField</a></div><div class="ttdeci">bool leftTrimField(uint64_t row, uint64_t column)</div></div>
 <div class="ttc" id="aclasscsvdom_html_a4a1006c8cf3150d543b10f53a3cfd3df"><div class="ttname"><a href="classcsvdom.html#a4a1006c8cf3150d543b10f53a3cfd3df">csvdom::insertColumnBefore</a></div><div class="ttdeci">bool insertColumnBefore(uint64_t position, const char *name, bool quoted)</div></div>
@@ -257,6 +256,7 @@ $(function() {
 <div class="ttc" id="aclasscsvdom_html_a6410f2784572bcf740013d8310573efc"><div class="ttname"><a href="classcsvdom.html#a6410f2784572bcf740013d8310573efc">csvdom::rowEnd</a></div><div class="ttdeci">virtual bool rowEnd()</div></div>
 <div class="ttc" id="aclasscsvdom_html_a65a670658e06fa40b72bb01343774a1c"><div class="ttname"><a href="classcsvdom.html#a65a670658e06fa40b72bb01343774a1c">csvdom::bodyEnd</a></div><div class="ttdeci">virtual bool bodyEnd()</div></div>
 <div class="ttc" id="aclasscsvdom_html_a678878cfb146e87052841f799becfd81"><div class="ttname"><a href="classcsvdom.html#a678878cfb146e87052841f799becfd81">csvdom::getField</a></div><div class="ttdeci">const char * getField(uint64_t row, uint64_t column)</div></div>
+<div class="ttc" id="aclasscsvdom_html_a6ee51f3e8db02c35098445e6a0c20055"><div class="ttname"><a href="classcsvdom.html#a6ee51f3e8db02c35098445e6a0c20055">csvdom::getType</a></div><div class="ttdeci">virtual const char * getType()</div></div>
 <div class="ttc" id="aclasscsvdom_html_a723dfc50bee429231c2d94d2eef8ade1"><div class="ttname"><a href="classcsvdom.html#a723dfc50bee429231c2d94d2eef8ade1">csvdom::rightTrimFields</a></div><div class="ttdeci">void rightTrimFields()</div></div>
 <div class="ttc" id="aclasscsvdom_html_a73f01864b0b75724d021fdfe3369afd0"><div class="ttname"><a href="classcsvdom.html#a73f01864b0b75724d021fdfe3369afd0">csvdom::lowerCaseColumn</a></div><div class="ttdeci">bool lowerCaseColumn(uint64_t position)</div></div>
 <div class="ttc" id="aclasscsvdom_html_a7a7d8e60e93ce45276a5057a7b61c78a"><div class="ttname"><a href="classcsvdom.html#a7a7d8e60e93ce45276a5057a7b61c78a">csvdom::bothTrimColumn</a></div><div class="ttdeci">bool bothTrimColumn(uint64_t position)</div></div>
@@ -300,11 +300,11 @@ $(function() {
 <div class="ttc" id="aclasscsvsax_html"><div class="ttname"><a href="classcsvsax.html">csvsax</a></div><div class="ttdef"><b>Definition:</b> csvsax.h:12</div></div>
 <div class="ttc" id="aclassdom_html"><div class="ttname"><a href="classdom.html">dom</a></div><div class="ttdef"><b>Definition:</b> dom.h:10</div></div>
 <div class="ttc" id="aclassdomnode_html"><div class="ttname"><a href="classdomnode.html">domnode</a></div><div class="ttdef"><b>Definition:</b> domnode.h:122</div></div>
-<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:9</div></div>
+<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

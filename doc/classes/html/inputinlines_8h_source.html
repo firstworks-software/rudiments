@@ -54,30 +54,31 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// they are used.</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classinput.html#a4f5082c7753ec343eb2577839015e422">    9</a></span>&#160;ssize_t input::read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator,</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classinput.html#a4f5082c7753ec343eb2577839015e422">    9</a></span>&#160;ssize_t <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">input::read</a>(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator,</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;                                                int32_t sec, int32_t usec) {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keywordflow">return</span> read(buffer,terminator,0,<span class="charliteral">&#39;\0&#39;</span>,sec,usec);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">read</a>(buffer,terminator,0,<span class="charliteral">&#39;\0&#39;</span>,sec,usec);</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classinput.html#a8ebf94a1151cafc2505116ea8b870f83">   15</a></span>&#160;ssize_t input::read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator,</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classinput.html#a8ebf94a1151cafc2505116ea8b870f83">   15</a></span>&#160;ssize_t <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">input::read</a>(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator,</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                                <span class="keywordtype">size_t</span> maxbytes, int32_t sec, int32_t usec) {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordflow">return</span> read(buffer,terminator,maxbytes,<span class="charliteral">&#39;\0&#39;</span>,sec,usec);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">read</a>(buffer,terminator,maxbytes,<span class="charliteral">&#39;\0&#39;</span>,sec,usec);</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;}</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classinput.html#a4772f56569dc64bbe8dbc55c165bda1a">   21</a></span>&#160;ssize_t input::read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordflow">return</span> read(buffer,terminator,0,<span class="charliteral">&#39;\0&#39;</span>,-1,-1);</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classinput.html#a4772f56569dc64bbe8dbc55c165bda1a">   21</a></span>&#160;ssize_t <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">input::read</a>(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator) {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">read</a>(buffer,terminator,0,<span class="charliteral">&#39;\0&#39;</span>,-1,-1);</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classinput.html#adf5416ca9927a06034824c1fe45db0f9">   26</a></span>&#160;ssize_t input::read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes) {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">return</span> read(buffer,terminator,maxbytes,<span class="charliteral">&#39;\0&#39;</span>,-1,-1);</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classinput.html#adf5416ca9927a06034824c1fe45db0f9">   26</a></span>&#160;ssize_t <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">input::read</a>(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes) {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">read</a>(buffer,terminator,maxbytes,<span class="charliteral">&#39;\0&#39;</span>,-1,-1);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}</div>
+<div class="ttc" id="aclassinput_html_ac23f620f6efa1cbe595a6ac619cdba2d"><div class="ttname"><a href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">input::read</a></div><div class="ttdeci">virtual ssize_t read(byte_t *buffer, size_t size)=0</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

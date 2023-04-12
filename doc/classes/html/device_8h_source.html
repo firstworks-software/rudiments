@@ -59,33 +59,27 @@ $(function() {
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classdevice.html#a95ab42e0b2e738637d3414347fa5559c">   20</a></span>&#160;                <a class="code" href="classdevice.html#a95ab42e0b2e738637d3414347fa5559c">device</a>();</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classdevice.html#ac442fef47031c0f2fa01cdf85c8c7492">   24</a></span>&#160;                <a class="code" href="classdevice.html#ac442fef47031c0f2fa01cdf85c8c7492">device</a>(<span class="keyword">const</span> <a class="code" href="classdevice.html">device</a> &amp;d);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classdevice.html#a4f625393317ebd45f0aaba31970e557d">   28</a></span>&#160;                <a class="code" href="classdevice.html">device</a>  &amp;<a class="code" href="classdevice.html#a4f625393317ebd45f0aaba31970e557d">operator=</a>(<span class="keyword">const</span> <a class="code" href="classdevice.html">device</a> &amp;d);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classdevice.html#af6871bd75e8863bac4e43bb9a20598ba">   31</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classdevice.html#af6871bd75e8863bac4e43bb9a20598ba">~device</a>();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classdevice.html#a79869beaa0fea3837dc9dbfc96078006">   39</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">bool</span>     <a class="code" href="classdevice.html#a79869beaa0fea3837dc9dbfc96078006">createDeviceNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                                                <span class="keywordtype">bool</span> blockdevice,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                                                uint16_t major,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                                                uint16_t minor,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                                                mode_t perms);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/device.h&gt;</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classdevice.html#af6871bd75e8863bac4e43bb9a20598ba">   23</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classdevice.html#af6871bd75e8863bac4e43bb9a20598ba">~device</a>();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classdevice.html#a79869beaa0fea3837dc9dbfc96078006">   31</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">bool</span>     <a class="code" href="classdevice.html#a79869beaa0fea3837dc9dbfc96078006">createDeviceNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                                                <span class="keywordtype">bool</span> blockdevice,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                                                uint16_t major,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                                                uint16_t minor,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                                                mode_t perms);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/device.h&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;};</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassdevice_html"><div class="ttname"><a href="classdevice.html">device</a></div><div class="ttdef"><b>Definition:</b> device.h:16</div></div>
-<div class="ttc" id="aclassdevice_html_a4f625393317ebd45f0aaba31970e557d"><div class="ttname"><a href="classdevice.html#a4f625393317ebd45f0aaba31970e557d">device::operator=</a></div><div class="ttdeci">device &amp; operator=(const device &amp;d)</div></div>
 <div class="ttc" id="aclassdevice_html_a79869beaa0fea3837dc9dbfc96078006"><div class="ttname"><a href="classdevice.html#a79869beaa0fea3837dc9dbfc96078006">device::createDeviceNode</a></div><div class="ttdeci">static bool createDeviceNode(const char *filename, bool blockdevice, uint16_t major, uint16_t minor, mode_t perms)</div></div>
 <div class="ttc" id="aclassdevice_html_a95ab42e0b2e738637d3414347fa5559c"><div class="ttname"><a href="classdevice.html#a95ab42e0b2e738637d3414347fa5559c">device::device</a></div><div class="ttdeci">device()</div></div>
-<div class="ttc" id="aclassdevice_html_ac442fef47031c0f2fa01cdf85c8c7492"><div class="ttname"><a href="classdevice.html#ac442fef47031c0f2fa01cdf85c8c7492">device::device</a></div><div class="ttdeci">device(const device &amp;d)</div></div>
 <div class="ttc" id="aclassdevice_html_af6871bd75e8863bac4e43bb9a20598ba"><div class="ttname"><a href="classdevice.html#af6871bd75e8863bac4e43bb9a20598ba">device::~device</a></div><div class="ttdeci">virtual ~device()</div></div>
 <div class="ttc" id="aclassfile_html"><div class="ttname"><a href="classfile.html">file</a></div><div class="ttdef"><b>Definition:</b> file.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

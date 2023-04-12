@@ -92,9 +92,17 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aa182f46a1f1ababdfb5c081eb76f18c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5e44a0ad2fbf7cf3b83ed7ba6457f05"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#ab5e44a0ad2fbf7cf3b83ed7ba6457f05">duplicate</a> (wchar_t c, char replacement)</td></tr>
 <tr class="separator:ab5e44a0ad2fbf7cf3b83ed7ba6457f05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ffd0d23935e51a6d11898742716f11"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#ad2ffd0d23935e51a6d11898742716f11">duplicateUcs2</a> (ucs2_t c)</td></tr>
+<tr class="separator:ad2ffd0d23935e51a6d11898742716f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a7ef536d846df5783de3c58a55e343"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a78a7ef536d846df5783de3c58a55e343">duplicateUcs2</a> (ucs2_t c, char replacement)</td></tr>
+<tr class="separator:a78a7ef536d846df5783de3c58a55e343"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a518e0550b2f2da15fd05a68e94dde50e"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a518e0550b2f2da15fd05a68e94dde50e">duplicateUcs2</a> (ucs2_t c, <a class="el" href="classbool.html">bool</a> bigendian)</td></tr>
+<tr class="separator:a518e0550b2f2da15fd05a68e94dde50e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c459831178a38defa3a2c3ad72976d9"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a6c459831178a38defa3a2c3ad72976d9">duplicateUcs2</a> (ucs2_t c, char replacement, <a class="el" href="classbool.html">bool</a> bigendian)</td></tr>
+<tr class="separator:a6c459831178a38defa3a2c3ad72976d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The character class provides static methods for evaluating and manipulating ascii characters. </p>
+<div class="textblock"><p>The character class provides static methods for evaluating and manipulating ASCII characters. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa182f46a1f1ababdfb5c081eb76f18c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa182f46a1f1ababdfb5c081eb76f18c5">&#9670;&nbsp;</a></span>duplicate() <span class="overload">[1/2]</span></h2>
@@ -119,8 +127,8 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the character representation of wide character "c".</p>
-<p>Returns '\0' if wide character "c" cannot be converted to a character. </p>
+<p>Returns the character representation of wide character "c" per the character set of the current locale.</p>
+<p>Returns '?' if wide character "c" cannot be converted to a character. </p>
 
 </div>
 </div>
@@ -157,8 +165,160 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the character representation of wide character "c".</p>
+<p>Returns the character representation of wide character "c" per the character set of the current locale.</p>
 <p>Returns "replacement" if wide character "c" cannot be converted to a character. </p>
+
+</div>
+</div>
+<a id="ad2ffd0d23935e51a6d11898742716f11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2ffd0d23935e51a6d11898742716f11">&#9670;&nbsp;</a></span>duplicateUcs2() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char character::duplicateUcs2 </td>
+          <td>(</td>
+          <td class="paramtype">ucs2_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the character representation of UCS-2 character "c" per the character set of the current locale.</p>
+<p>"c" is presumed to be in the byte-order of the system.</p>
+<p>Returns '?' if UCS-2 character "c" cannot be converted to a character. </p>
+
+</div>
+</div>
+<a id="a518e0550b2f2da15fd05a68e94dde50e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a518e0550b2f2da15fd05a68e94dde50e">&#9670;&nbsp;</a></span>duplicateUcs2() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char character::duplicateUcs2 </td>
+          <td>(</td>
+          <td class="paramtype">ucs2_t&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>bigendian</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the character representation of UCS-2 character "c" per the character set of the current locale.</p>
+<p>If "bigendian" is true then "c" is presumed to be big endian. If "bigendian" is false, then "c" is presumed to be little endian.</p>
+<p>Returns '?' if UCS-2 character "c" cannot be converted to a character. </p>
+
+</div>
+</div>
+<a id="a78a7ef536d846df5783de3c58a55e343"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78a7ef536d846df5783de3c58a55e343">&#9670;&nbsp;</a></span>duplicateUcs2() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char character::duplicateUcs2 </td>
+          <td>(</td>
+          <td class="paramtype">ucs2_t&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>replacement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the character representation of UCS-2 character "c" per the character set of the current locale.</p>
+<p>"c" is presumed to be in the byte-order of the system.</p>
+<p>Returns "replacement" if UCS-2 character "c" cannot be converted to a character. </p>
+
+</div>
+</div>
+<a id="a6c459831178a38defa3a2c3ad72976d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c459831178a38defa3a2c3ad72976d9">&#9670;&nbsp;</a></span>duplicateUcs2() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char character::duplicateUcs2 </td>
+          <td>(</td>
+          <td class="paramtype">ucs2_t&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>replacement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>bigendian</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the character representation of UCS-2 character "c" per the character set of the current locale.</p>
+<p>If "bigendian" is true then "c" is presumed to be big endian. If "bigendian" is false, then "c" is presumed to be little endian.</p>
+<p>Returns "replacement" if UCS-2 character "c" cannot be converted to a character. </p>
 
 </div>
 </div>
@@ -249,7 +409,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if "c" is alphabetical character, including accented alphabetical characters from the extended ascii character set, and false otherwise. </p>
+<p>Returns true if "c" is alphabetical character, including accented alphabetical characters from the IBM PC Extended ASCII character set (Code page 437), and false otherwise. </p>
 
 </div>
 </div>
@@ -303,7 +463,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if "c" is one of the values in the ascii character set or false otherwise. </p>
+<p>Returns true if "c" is one of the values in the ASCII character set or false otherwise. </p>
 
 </div>
 </div>
@@ -465,7 +625,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if "c" is lower case, including accented alphabetical characters from the extended ascii character set, and false otherwise. </p>
+<p>Returns true if "c" is lower case, including accented alphabetical characters from the IBM PC Extended ASCII character set (Code page 437), and false otherwise. </p>
 
 </div>
 </div>
@@ -600,7 +760,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if "c" is upper case, including accented alphabetical characters from the extended ascii character set, and false otherwise. </p>
+<p>Returns true if "c" is upper case, including accented alphabetical characters from the IBM PC Extended ASCII character set (Code page 437), and false otherwise. </p>
 
 </div>
 </div>
@@ -715,7 +875,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

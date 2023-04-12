@@ -6,6 +6,8 @@
 
 #include <rudiments/socketlayer.h>
 
+/** The securitycontext class extends socketlayer, defining an interface for
+ *  security contexts such as TLS and GSS. */
 class RUDIMENTS_DLLSPEC securitycontext : public socketlayer {
 };
 

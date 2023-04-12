@@ -63,7 +63,7 @@ $(function() {
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
 <div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classinidom.html#afdeea7e78cddd6530ce011da58b8dccb">   77</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classinidom.html#afdeea7e78cddd6530ce011da58b8dccb">~inidom</a>();</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classinidom.html#a9e37db49c138e63457e9839576dc8acf">   80</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classinidom.html#a9e37db49c138e63457e9839576dc8acf">getType</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classinidom.html#acf3c090541ea412b9015ce0816d6758f">   80</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classinidom.html#acf3c090541ea412b9015ce0816d6758f">getType</a>();</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classinidom.html#a4ee00e044d59a4ef2253d8f13184cb9f">   83</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinidom.html#a4ee00e044d59a4ef2253d8f13184cb9f">parse</a>(<a class="code" href="classinput.html">input</a> *in);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
@@ -132,8 +132,8 @@ $(function() {
 <div class="ttc" id="aclassinidom_html_a7f74838104b29782a81bb93881a1df4c"><div class="ttname"><a href="classinidom.html#a7f74838104b29782a81bb93881a1df4c">inidom::parseFile</a></div><div class="ttdeci">bool parseFile(const char *filename)</div></div>
 <div class="ttc" id="aclassinidom_html_a9837ac39c8d56d914e43df8264c4aca7"><div class="ttname"><a href="classinidom.html#a9837ac39c8d56d914e43df8264c4aca7">inidom::parseString</a></div><div class="ttdeci">bool parseString(const char *string)</div></div>
 <div class="ttc" id="aclassinidom_html_a991fad5d3569674c468154335781fcf1"><div class="ttname"><a href="classinidom.html#a991fad5d3569674c468154335781fcf1">inidom::whitespaceStart</a></div><div class="ttdeci">virtual bool whitespaceStart()</div></div>
-<div class="ttc" id="aclassinidom_html_a9e37db49c138e63457e9839576dc8acf"><div class="ttname"><a href="classinidom.html#a9e37db49c138e63457e9839576dc8acf">inidom::getType</a></div><div class="ttdeci">virtual const char * getType() const</div></div>
 <div class="ttc" id="aclassinidom_html_aa0687b988a9ddfc9f1e1a5ea0835f5cd"><div class="ttname"><a href="classinidom.html#aa0687b988a9ddfc9f1e1a5ea0835f5cd">inidom::valueStart</a></div><div class="ttdeci">virtual bool valueStart()</div></div>
+<div class="ttc" id="aclassinidom_html_acf3c090541ea412b9015ce0816d6758f"><div class="ttname"><a href="classinidom.html#acf3c090541ea412b9015ce0816d6758f">inidom::getType</a></div><div class="ttdeci">virtual const char * getType()</div></div>
 <div class="ttc" id="aclassinidom_html_ad2066917cfad612916981ff64f2a1855"><div class="ttname"><a href="classinidom.html#ad2066917cfad612916981ff64f2a1855">inidom::keyStart</a></div><div class="ttdeci">virtual bool keyStart()</div></div>
 <div class="ttc" id="aclassinidom_html_ad3bbf7cbdf3bec902b6d9b68784dc381"><div class="ttname"><a href="classinidom.html#ad3bbf7cbdf3bec902b6d9b68784dc381">inidom::whitespace</a></div><div class="ttdeci">virtual bool whitespace(const char *w)</div></div>
 <div class="ttc" id="aclassinidom_html_ad564da1ae6f6aee687d7b8f930e1648f"><div class="ttname"><a href="classinidom.html#ad564da1ae6f6aee687d7b8f930e1648f">inidom::inidom</a></div><div class="ttdeci">inidom(bool stringcacheenabled)</div></div>
@@ -144,11 +144,11 @@ $(function() {
 <div class="ttc" id="aclassinidom_html_af7be5062cba008b6849b4965192f70df"><div class="ttname"><a href="classinidom.html#af7be5062cba008b6849b4965192f70df">inidom::sectionStart</a></div><div class="ttdeci">virtual bool sectionStart()</div></div>
 <div class="ttc" id="aclassinidom_html_afdeea7e78cddd6530ce011da58b8dccb"><div class="ttname"><a href="classinidom.html#afdeea7e78cddd6530ce011da58b8dccb">inidom::~inidom</a></div><div class="ttdeci">virtual ~inidom()</div></div>
 <div class="ttc" id="aclassinisax_html"><div class="ttname"><a href="classinisax.html">inisax</a></div><div class="ttdef"><b>Definition:</b> inisax.h:12</div></div>
-<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:9</div></div>
+<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

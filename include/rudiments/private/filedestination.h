@@ -10,4 +10,5 @@
 
 		void	write(const char *string);
 		void	write(const wchar_t *string);
+
 		filedestinationprivate	*pvt;

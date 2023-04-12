@@ -56,10 +56,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad000ceb3c5a6cf01af1f497275fc608c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4864865d222af59729710355477e7953"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a4864865d222af59729710355477e7953">~hash</a> ()</td></tr>
 <tr class="separator:a4864865d222af59729710355477e7953"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18a1f83ea4a1ad98179682ea72d1a954"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a18a1f83ea4a1ad98179682ea72d1a954">append</a> (const unsigned char *data, uint32_t size)=0</td></tr>
-<tr class="separator:a18a1f83ea4a1ad98179682ea72d1a954"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad104a6852ebfea2a81ceba2762aa1608"><td class="memItemLeft" align="right" valign="top">virtual const unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#ad104a6852ebfea2a81ceba2762aa1608">getHash</a> ()=0</td></tr>
-<tr class="separator:ad104a6852ebfea2a81ceba2762aa1608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8277506593ba881de5b6c4fa32bdc351"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a8277506593ba881de5b6c4fa32bdc351">append</a> (const byte_t *data, uint32_t size)=0</td></tr>
+<tr class="separator:a8277506593ba881de5b6c4fa32bdc351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68a7c30db1259aa54e2927fae03f1ee8"><td class="memItemLeft" align="right" valign="top">virtual const byte_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a68a7c30db1259aa54e2927fae03f1ee8">getHash</a> ()=0</td></tr>
+<tr class="separator:a68a7c30db1259aa54e2927fae03f1ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a178456fca0bc4439f4ca844d59c9b40e"><td class="memItemLeft" align="right" valign="top">virtual uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a178456fca0bc4439f4ca844d59c9b40e">getHashSize</a> ()=0</td></tr>
 <tr class="separator:a178456fca0bc4439f4ca844d59c9b40e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab797e3776c4c6a70972c453ad9962af7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#ab797e3776c4c6a70972c453ad9962af7">clear</a> ()=0</td></tr>
@@ -71,7 +71,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The hash class provides a simple hash interface. </p>
+<div class="textblock"><p>The hash class defines an interface for hashing. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad000ceb3c5a6cf01af1f497275fc608c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad000ceb3c5a6cf01af1f497275fc608c">&#9670;&nbsp;</a></span>hash()</h2>
@@ -126,8 +126,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a18a1f83ea4a1ad98179682ea72d1a954"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18a1f83ea4a1ad98179682ea72d1a954">&#9670;&nbsp;</a></span>append()</h2>
+<a id="a8277506593ba881de5b6c4fa32bdc351"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8277506593ba881de5b6c4fa32bdc351">&#9670;&nbsp;</a></span>append()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -138,7 +138,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="classbool.html">bool</a> hash::append </td>
           <td>(</td>
-          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramtype">const byte_t *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
@@ -161,7 +161,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Appends "size" bytes of "data" to the data to be hashed. Returns true on success or false if an error occurred. </p>
 
-<p>Implemented in <a class="el" href="classsha256.html#a807001856c7c95cd424c9a1abacc87b7">sha256</a>, <a class="el" href="classsha1.html#a2c9bbe4cb4545c52bff4e225124016bc">sha1</a>, and <a class="el" href="classmd5.html#a102265a96447d22f7769a2f62c0c4b8d">md5</a>.</p>
+<p>Implemented in <a class="el" href="classsha256.html#a88999200f4132ab9620652fdea8cf684">sha256</a>, <a class="el" href="classsha1.html#a577e776bdc555afcae81f60111be4b47">sha1</a>, and <a class="el" href="classmd5.html#a33af16d7e326183c2b6b73b096ae1333">md5</a>.</p>
 
 </div>
 </div>
@@ -221,8 +221,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad104a6852ebfea2a81ceba2762aa1608"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad104a6852ebfea2a81ceba2762aa1608">&#9670;&nbsp;</a></span>getHash()</h2>
+<a id="a68a7c30db1259aa54e2927fae03f1ee8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68a7c30db1259aa54e2927fae03f1ee8">&#9670;&nbsp;</a></span>getHash()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -231,7 +231,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const unsigned char* hash::getHash </td>
+          <td class="memname">virtual const byte_t* hash::getHash </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -245,7 +245,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the current hash on success or NULL if an error occurred. Note that the current hash will be an empty string if no data has been appended yet. </p>
 
-<p>Implemented in <a class="el" href="classsha256.html#a2d11f529e47bce994a533c6256e5df3e">sha256</a>, <a class="el" href="classsha1.html#acaa95e8faa53c485c88d52e6f5438058">sha1</a>, and <a class="el" href="classmd5.html#a28919f02667314d3dc5f0dd580d3deec">md5</a>.</p>
+<p>Implemented in <a class="el" href="classsha256.html#a2d4d9d2e403f16eb56ed1820dc21ca6c">sha256</a>, <a class="el" href="classsha1.html#abc56c7791e8ec8695bdcd0c3e03c8bc9">sha1</a>, and <a class="el" href="classmd5.html#a5c19d382f8c9ac2d87a9bafd1da51f2d">md5</a>.</p>
 
 </div>
 </div>
@@ -280,7 +280,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

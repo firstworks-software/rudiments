@@ -25,6 +25,9 @@
 	friend class codetreegrammar;
 	friend class domevents;
 	private:
+		domnode(domnode &x);
+		domnode	&operator=(domnode &x);
+
 		void	construct(dom *dom);
 		domnode	*getNode(domnode *first,
 					uint64_t position,
@@ -32,25 +35,20 @@
 					const char *name,
 					bool ignorecase,
 					uint64_t count);
-		domnode	*getAttribute(
+		domnode	*getAttribute(const char *name,
+					bool ignorecase);
+		domnode	*getFirstChild(const char *ns,
 					const char *name,
 					bool ignorecase);
-		domnode	*getFirstChild(
-					const char *ns,
-					const char *name,
-					bool ignorecase);
-		domnode	*getFirstChild(
-					const char *ns,
+		domnode	*getFirstChild(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase);
-		domnode	*getFirstTagChild(
-					const char *ns,
+		domnode	*getFirstTagChild(const char *ns,
 					const char *name,
 					bool ignorecase);
-		domnode	*getFirstTagChild(
-					const char *ns,
+		domnode	*getFirstTagChild(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
@@ -85,76 +83,62 @@
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase);
-		bool		deleteFirstChild(
-					const char *ns,
+		bool	deleteFirstChild(const char *ns,
 					const char *name,
 					bool ignorecase);
-		bool		deleteChildren(
-					const char *ns,
+		bool	deleteChildren(const char *ns,
 					const char *name,
 					bool ignorecase);
-		bool		deleteChildren(
-					const char *ns,
+		bool	deleteChildren(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase);
-		bool		deleteDescendents(
-					const char *ns,
+		bool	deleteDescendents(const char *ns,
 					const char *name,
 					bool ignorecase);
-		bool		deleteDescendents(
-					const char *ns,
+		bool	deleteDescendents(const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase);
-		bool		unwrapFirstChild(
-					const char *ns,
+		bool	unwrapFirstChild(const char *ns,
 					const char *name,
 					bool ignorecase);
-		bool		unwrapChildren(
-					const char *ns,
+		bool	unwrapChildren(const char *ns,
 					const char *name,
 					bool ignorecase);
-		bool		unwrapDescendents(
-					const char *ns,
+		bool	unwrapDescendents(const char *ns,
 					const char *name,
 					bool ignorecase);
-		bool		renameFirstChild(
-					const char *oldns,
+		bool	renameFirstChild(const char *oldns,
 					const char *oldname,
 					const char *newns,
 					const char *newname,
 					bool ignorecase);
-		bool		renameChildren(
-					const char *oldns,
+		bool	renameChildren(const char *oldns,
 					const char *oldname,
 					const char *newns,
 					const char *newname,
 					bool ignorecase);
-		bool		renameDescendents(
-					const char *oldns,
+		bool	renameDescendents(const char *oldns,
 					const char *oldname,
 					const char *newns,
 					const char *newname,
 					bool ignorecase);
-		void		write(output *out,
+		void	write(output *out,
 					bool indent,
 					uint16_t *indentlevel);
-		void		safeWrite(output *out, const char *str);
-		bool		match(domnode *node,
-						const char *ns,
-						const char *name,
-						bool ignorecase);
-		bool		match(domnode *node,
-						const char *ns,
-						const char * const *set);
+		void	safeWrite(output *out, const char *str);
+		bool	match(domnode *node,
+					const char *ns,
+					const char *name,
+					bool ignorecase);
+		bool	match(domnode *node,
+					const char *ns,
+					const char * const *set);
 
 		void	setPrivateData(void *privatedata);
 		void	*getPrivateData();
-
-				domnode(domnode &x);
-		domnode	&operator=(domnode &x);
 
 		domnodeprivate	*pvt;

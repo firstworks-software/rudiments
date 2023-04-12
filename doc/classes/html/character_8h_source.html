@@ -99,9 +99,19 @@ $(function() {
 <div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classcharacter.html#aa182f46a1f1ababdfb5c081eb76f18c5">   96</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     <a class="code" href="classcharacter.html#aa182f46a1f1ababdfb5c081eb76f18c5">duplicate</a>(<span class="keywordtype">wchar_t</span> c);</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
 <div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classcharacter.html#ab5e44a0ad2fbf7cf3b83ed7ba6457f05">  103</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     <a class="code" href="classcharacter.html#ab5e44a0ad2fbf7cf3b83ed7ba6457f05">duplicate</a>(<span class="keywordtype">wchar_t</span> c, <span class="keywordtype">char</span> replacement);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classcharacter.html#ad2ffd0d23935e51a6d11898742716f11">  112</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     <a class="code" href="classcharacter.html#ad2ffd0d23935e51a6d11898742716f11">duplicateUcs2</a>(ucs2_t c);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="classcharacter.html#a78a7ef536d846df5783de3c58a55e343">  121</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     <a class="code" href="classcharacter.html#a78a7ef536d846df5783de3c58a55e343">duplicateUcs2</a>(ucs2_t c, <span class="keywordtype">char</span> replacement);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classcharacter.html#a518e0550b2f2da15fd05a68e94dde50e">  132</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     <a class="code" href="classcharacter.html#a518e0550b2f2da15fd05a68e94dde50e">duplicateUcs2</a>(ucs2_t c, <span class="keywordtype">bool</span> bigendian);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="classcharacter.html#a6c459831178a38defa3a2c3ad72976d9">  143</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     <a class="code" href="classcharacter.html#a6c459831178a38defa3a2c3ad72976d9">duplicateUcs2</a>(ucs2_t c,</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                                                <span class="keywordtype">char</span> replacement,</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                                <span class="keywordtype">bool</span> bigendian);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;};</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasscharacter_html"><div class="ttname"><a href="classcharacter.html">character</a></div><div class="ttdef"><b>Definition:</b> character.h:11</div></div>
 <div class="ttc" id="aclasscharacter_html_a092f6f7f9a9917c1af7b8a4ace670659"><div class="ttname"><a href="classcharacter.html#a092f6f7f9a9917c1af7b8a4ace670659">character::isUpperCase</a></div><div class="ttdeci">static bool isUpperCase(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_a1d4e5d4cf40430545fe58876b0c1f40a"><div class="ttname"><a href="classcharacter.html#a1d4e5d4cf40430545fe58876b0c1f40a">character::isUpperCaseExtended</a></div><div class="ttdeci">static bool isUpperCaseExtended(int32_t c)</div></div>
@@ -110,9 +120,12 @@ $(function() {
 <div class="ttc" id="aclasscharacter_html_a467ecf7fee9ba7c9f1888a6789f2c324"><div class="ttname"><a href="classcharacter.html#a467ecf7fee9ba7c9f1888a6789f2c324">character::isAscii</a></div><div class="ttdeci">static bool isAscii(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_a4731e39ebf85bd5edd9ae7ffadb45c38"><div class="ttname"><a href="classcharacter.html#a4731e39ebf85bd5edd9ae7ffadb45c38">character::isHexDigit</a></div><div class="ttdeci">static bool isHexDigit(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_a4b8a789f0ecbf6194ee701d7ade9828d"><div class="ttname"><a href="classcharacter.html#a4b8a789f0ecbf6194ee701d7ade9828d">character::isPrintable</a></div><div class="ttdeci">static bool isPrintable(int32_t c)</div></div>
+<div class="ttc" id="aclasscharacter_html_a518e0550b2f2da15fd05a68e94dde50e"><div class="ttname"><a href="classcharacter.html#a518e0550b2f2da15fd05a68e94dde50e">character::duplicateUcs2</a></div><div class="ttdeci">static char duplicateUcs2(ucs2_t c, bool bigendian)</div></div>
 <div class="ttc" id="aclasscharacter_html_a539b24796fee0b69804b874ce4e3e7e1"><div class="ttname"><a href="classcharacter.html#a539b24796fee0b69804b874ce4e3e7e1">character::isWhitespace</a></div><div class="ttdeci">static bool isWhitespace(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_a56e03e4fd7a1bbbf40595bfdb669ec33"><div class="ttname"><a href="classcharacter.html#a56e03e4fd7a1bbbf40595bfdb669ec33">character::isAlphabeticalExtended</a></div><div class="ttdeci">static bool isAlphabeticalExtended(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_a5a49f415b57b40cdaddb76458392532c"><div class="ttname"><a href="classcharacter.html#a5a49f415b57b40cdaddb76458392532c">character::toLowerCase</a></div><div class="ttdeci">static int32_t toLowerCase(int32_t c)</div></div>
+<div class="ttc" id="aclasscharacter_html_a6c459831178a38defa3a2c3ad72976d9"><div class="ttname"><a href="classcharacter.html#a6c459831178a38defa3a2c3ad72976d9">character::duplicateUcs2</a></div><div class="ttdeci">static char duplicateUcs2(ucs2_t c, char replacement, bool bigendian)</div></div>
+<div class="ttc" id="aclasscharacter_html_a78a7ef536d846df5783de3c58a55e343"><div class="ttname"><a href="classcharacter.html#a78a7ef536d846df5783de3c58a55e343">character::duplicateUcs2</a></div><div class="ttdeci">static char duplicateUcs2(ucs2_t c, char replacement)</div></div>
 <div class="ttc" id="aclasscharacter_html_a85ef5e5488549ce9f944606805183a17"><div class="ttname"><a href="classcharacter.html#a85ef5e5488549ce9f944606805183a17">character::inSet</a></div><div class="ttdeci">static bool inSet(char c, const char *set)</div></div>
 <div class="ttc" id="aclasscharacter_html_a89ef7c27749cff7cbd3bc93390bddf91"><div class="ttname"><a href="classcharacter.html#a89ef7c27749cff7cbd3bc93390bddf91">character::isLowerCase</a></div><div class="ttdeci">static bool isLowerCase(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_aa182f46a1f1ababdfb5c081eb76f18c5"><div class="ttname"><a href="classcharacter.html#aa182f46a1f1ababdfb5c081eb76f18c5">character::duplicate</a></div><div class="ttdeci">static char duplicate(wchar_t c)</div></div>
@@ -124,11 +137,12 @@ $(function() {
 <div class="ttc" id="aclasscharacter_html_abe067139abd5df6a78d598735e349fcb"><div class="ttname"><a href="classcharacter.html#abe067139abd5df6a78d598735e349fcb">character::toUpperCase</a></div><div class="ttdeci">static int32_t toUpperCase(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_abe4f8ba4ff6f50d808c1dd3e6e57f7d5"><div class="ttname"><a href="classcharacter.html#abe4f8ba4ff6f50d808c1dd3e6e57f7d5">character::isAlphanumeric</a></div><div class="ttdeci">static bool isAlphanumeric(int32_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_ac8d2f1e83a804d0f1e5fce9f89a457c8"><div class="ttname"><a href="classcharacter.html#ac8d2f1e83a804d0f1e5fce9f89a457c8">character::isDigit</a></div><div class="ttdeci">static bool isDigit(int32_t c)</div></div>
+<div class="ttc" id="aclasscharacter_html_ad2ffd0d23935e51a6d11898742716f11"><div class="ttname"><a href="classcharacter.html#ad2ffd0d23935e51a6d11898742716f11">character::duplicateUcs2</a></div><div class="ttdeci">static char duplicateUcs2(ucs2_t c)</div></div>
 <div class="ttc" id="aclasscharacter_html_aee1cf7a77b481e4a0e0fc2883d4641a0"><div class="ttname"><a href="classcharacter.html#aee1cf7a77b481e4a0e0fc2883d4641a0">character::isAlphabetical</a></div><div class="ttdeci">static bool isAlphabetical(int32_t c)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -2,26 +2,26 @@
 // See the COPYING file for more information.
 
 	protected:
-			bool	reset();
-			void	close();
+		bool	reset();
+		void	close();
 
-			virtual bool	parse()=0;
+		virtual bool	parse()=0;
 
-			char	skipWhitespace(char current);
-			char	getCharacter();
-			void	parseFailed(const char *thing, const char *why);
+		char	skipWhitespace(char current);
+		char	getCharacter();
+		void	parseFailed(const char *thing, const char *why);
 
 	private:
-			sax(sax &s) {}
-			sax	&operator=(sax &s) { return *this; };
+		sax(sax &s) {}
+		sax	&operator=(sax &s) { return *this; };
 
-			bool	parseLocalFile(const char *filename);
-			bool	parseRemoteFile(const char *filename);
+		bool	parseLocalFile(const char *filename);
+		bool	parseRemoteFile(const char *filename);
 
-			char	getCharacter(bool processignores);
-			char	getCharacterBackwards();
-			void	ignoreHeaderLines();
-			void	ignoreFooterLines();
-			bool	mapFile();
+		char	getCharacter(bool processignores);
+		char	getCharacterBackwards();
+		void	ignoreHeaderLines();
+		void	ignoreFooterLines();
+		bool	mapFile();
 
-			saxprivate	*pvt;
+		saxprivate	*pvt;

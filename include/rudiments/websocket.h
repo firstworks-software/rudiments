@@ -6,6 +6,7 @@
 
 #include <rudiments/private/websocketincludes.h>
 
+/** The websocket class implements the socketlayer interface for web sockets. */
 class RUDIMENTS_DLLSPEC websocket : public socketlayer {
 	public:
 		/** Creates a new instance of the websocket class. */

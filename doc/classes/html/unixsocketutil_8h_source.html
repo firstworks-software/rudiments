@@ -59,31 +59,28 @@ $(function() {
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#a8312bd325541b297ad626b1b7bd589c8">   15</a></span>&#160;                <a class="code" href="classunixsocketutil.html#a8312bd325541b297ad626b1b7bd589c8">unixsocketutil</a>();</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#a7e96b7c42416b7084cff14cf26024fa6">   19</a></span>&#160;                <a class="code" href="classunixsocketutil.html#a7e96b7c42416b7084cff14cf26024fa6">unixsocketutil</a>(<span class="keyword">const</span> <a class="code" href="classunixsocketutil.html">unixsocketutil</a> &amp;u);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#a8c52764bb364db6fda1865bd3ff64366">   23</a></span>&#160;                <a class="code" href="classunixsocketutil.html">unixsocketutil</a>  &amp;<a class="code" href="classunixsocketutil.html#a8c52764bb364db6fda1865bd3ff64366">operator=</a>(<span class="keyword">const</span> <a class="code" href="classunixsocketutil.html">unixsocketutil</a> &amp;u);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#af2c75e6e099eaf25b9a0c4ea2016d5db">   26</a></span>&#160;                <span class="keyword">virtual</span>         <a class="code" href="classunixsocketutil.html#af2c75e6e099eaf25b9a0c4ea2016d5db">~unixsocketutil</a>();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#a0b083e284440e21ed361d55ee4893cc2">   32</a></span>&#160;                <span class="keywordtype">void</span>            <a class="code" href="classunixsocketutil.html#a0b083e284440e21ed361d55ee4893cc2">initialize</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#ac2069faaf13fced50cc0ccbe1f95d5c3">   40</a></span>&#160;                uint16_t        <a class="code" href="classunixsocketutil.html#ac2069faaf13fced50cc0ccbe1f95d5c3">filenameToPort</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#af2c75e6e099eaf25b9a0c4ea2016d5db">   18</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classunixsocketutil.html#af2c75e6e099eaf25b9a0c4ea2016d5db">~unixsocketutil</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#a264c429f4c26f2acc1647c593a94bbd1">   25</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classunixsocketutil.html#a264c429f4c26f2acc1647c593a94bbd1">setFileName</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#a1d1064ee64ae1d420faca1ea59fc6bf8">   29</a></span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classunixsocketutil.html#a1d1064ee64ae1d420faca1ea59fc6bf8">getFileName</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classunixsocketutil.html#abf79ea9c76f057d8b250a1b718849e66">   37</a></span>&#160;                uint16_t        <a class="code" href="classunixsocketutil.html#abf79ea9c76f057d8b250a1b718849e66">fileNameToPort</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/unixsocketutil.h&gt;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/unixsocketutil.h&gt;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassunixsocketutil_html"><div class="ttname"><a href="classunixsocketutil.html">unixsocketutil</a></div><div class="ttdef"><b>Definition:</b> unixsocketutil.h:11</div></div>
-<div class="ttc" id="aclassunixsocketutil_html_a0b083e284440e21ed361d55ee4893cc2"><div class="ttname"><a href="classunixsocketutil.html#a0b083e284440e21ed361d55ee4893cc2">unixsocketutil::initialize</a></div><div class="ttdeci">void initialize(const char *filename)</div></div>
-<div class="ttc" id="aclassunixsocketutil_html_a7e96b7c42416b7084cff14cf26024fa6"><div class="ttname"><a href="classunixsocketutil.html#a7e96b7c42416b7084cff14cf26024fa6">unixsocketutil::unixsocketutil</a></div><div class="ttdeci">unixsocketutil(const unixsocketutil &amp;u)</div></div>
+<div class="ttc" id="aclassunixsocketutil_html_a1d1064ee64ae1d420faca1ea59fc6bf8"><div class="ttname"><a href="classunixsocketutil.html#a1d1064ee64ae1d420faca1ea59fc6bf8">unixsocketutil::getFileName</a></div><div class="ttdeci">const char * getFileName()</div></div>
+<div class="ttc" id="aclassunixsocketutil_html_a264c429f4c26f2acc1647c593a94bbd1"><div class="ttname"><a href="classunixsocketutil.html#a264c429f4c26f2acc1647c593a94bbd1">unixsocketutil::setFileName</a></div><div class="ttdeci">void setFileName(const char *filename)</div></div>
 <div class="ttc" id="aclassunixsocketutil_html_a8312bd325541b297ad626b1b7bd589c8"><div class="ttname"><a href="classunixsocketutil.html#a8312bd325541b297ad626b1b7bd589c8">unixsocketutil::unixsocketutil</a></div><div class="ttdeci">unixsocketutil()</div></div>
-<div class="ttc" id="aclassunixsocketutil_html_a8c52764bb364db6fda1865bd3ff64366"><div class="ttname"><a href="classunixsocketutil.html#a8c52764bb364db6fda1865bd3ff64366">unixsocketutil::operator=</a></div><div class="ttdeci">unixsocketutil &amp; operator=(const unixsocketutil &amp;u)</div></div>
-<div class="ttc" id="aclassunixsocketutil_html_ac2069faaf13fced50cc0ccbe1f95d5c3"><div class="ttname"><a href="classunixsocketutil.html#ac2069faaf13fced50cc0ccbe1f95d5c3">unixsocketutil::filenameToPort</a></div><div class="ttdeci">uint16_t filenameToPort(const char *filename)</div></div>
+<div class="ttc" id="aclassunixsocketutil_html_abf79ea9c76f057d8b250a1b718849e66"><div class="ttname"><a href="classunixsocketutil.html#abf79ea9c76f057d8b250a1b718849e66">unixsocketutil::fileNameToPort</a></div><div class="ttdeci">uint16_t fileNameToPort(const char *filename)</div></div>
 <div class="ttc" id="aclassunixsocketutil_html_af2c75e6e099eaf25b9a0c4ea2016d5db"><div class="ttname"><a href="classunixsocketutil.html#af2c75e6e099eaf25b9a0c4ea2016d5db">unixsocketutil::~unixsocketutil</a></div><div class="ttdeci">virtual ~unixsocketutil()</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

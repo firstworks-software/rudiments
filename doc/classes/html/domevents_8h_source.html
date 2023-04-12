@@ -54,51 +54,46 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/domeventsincludes.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">typedef</span> <a class="code" href="classdomnode.html">domnode</a> *(*domeventhandler_t)(<a class="code" href="classdomnode.html">domnode</a> *codetreenode,</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">typedef</span> <a class="code" href="classdomnode.html">domnode</a> *(*domeventhandler_t)(<a class="code" href="classdomnode.html">domnode</a> *xmltreenode,</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;                                                <a class="code" href="classdomnode.html">domnode</a> *eventtreenode,</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                                                <span class="keywordtype">void</span> *data);</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classdomevents.html">   13</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classdomevents.html">domevents</a> : <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <a class="code" href="classdomevents.html">domevents</a>();</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                ~<a class="code" href="classdomevents.html">domevents</a>();</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keywordtype">bool</span>    setEvents(<span class="keyword">const</span> <span class="keywordtype">char</span> *events);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keywordtype">bool</span>    setEventHandler(<span class="keyword">const</span> <span class="keywordtype">char</span> *event,</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                                        domeventhandler_t handler);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keywordtype">bool</span>    setData(<span class="keywordtype">void</span> *data);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classprocess.html">process</a>(<a class="code" href="classdomnode.html">domnode</a> *codetreenode);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keywordtype">void</span>    setDebugLevel(uint8_t debuglevel);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keyword">static</span>  <a class="code" href="classdomnode.html">domnode</a> *ignore(<a class="code" href="classdomnode.html">domnode</a> *codetreenode,</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                                                <a class="code" href="classdomnode.html">domnode</a> *eventtreenode,</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                                                <span class="keywordtype">void</span> *data);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <span class="keyword">static</span>  <a class="code" href="classdomnode.html">domnode</a> *rename(<a class="code" href="classdomnode.html">domnode</a> *codetreenode,</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                                                <a class="code" href="classdomnode.html">domnode</a> *eventtreenode,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                                                <span class="keywordtype">void</span> *data);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <span class="keyword">static</span>  <a class="code" href="classdomnode.html">domnode</a> *revalue(<a class="code" href="classdomnode.html">domnode</a> *codetreenode,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                                                <a class="code" href="classdomnode.html">domnode</a> *eventtreenode,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                                                <span class="keywordtype">void</span> *data);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/domevents.h&gt;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassdomevents_html"><div class="ttname"><a href="classdomevents.html">domevents</a></div><div class="ttdef"><b>Definition:</b> domevents.h:13</div></div>
+<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="classdomevents.html">  219</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classdomevents.html">domevents</a> : <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="classdomevents.html#a9da21a0aab9b9374f89ab5b9995d946d">  223</a></span>&#160;                <a class="code" href="classdomevents.html#a9da21a0aab9b9374f89ab5b9995d946d">domevents</a>();</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="classdomevents.html#a5e089499f68e4c670e40fb19ff9724da">  226</a></span>&#160;                <a class="code" href="classdomevents.html#a5e089499f68e4c670e40fb19ff9724da">~domevents</a>();</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="classdomevents.html#ae76217efffa15fb72a48fa27c33c1dc1">  238</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdomevents.html#ae76217efffa15fb72a48fa27c33c1dc1">setEvents</a>(<a class="code" href="classdomnode.html">domnode</a> *events);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="classdomevents.html#a33c32a28ba4a153e3400cb0136f54e3b">  250</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdomevents.html#a33c32a28ba4a153e3400cb0136f54e3b">setEventHandler</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *event,</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                                        domeventhandler_t handler);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="classdomevents.html#a62047af342aea3b58b270bb15a97e707">  257</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdomevents.html#a62047af342aea3b58b270bb15a97e707">setData</a>(<span class="keywordtype">void</span> *data);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="classdomevents.html#aa9e8d15730e76283dc93d8bf1ec4d7b2">  269</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdomevents.html#aa9e8d15730e76283dc93d8bf1ec4d7b2">process</a>(<a class="code" href="classdomnode.html">domnode</a> *xmltreenode);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="classdomevents.html#ab7306df88d4229511068ce801f9d6e8a">  275</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdomevents.html#ab7306df88d4229511068ce801f9d6e8a">setDebugLevel</a>(uint8_t debuglevel);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/domevents.h&gt;</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;};</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassdomevents_html"><div class="ttname"><a href="classdomevents.html">domevents</a></div><div class="ttdef"><b>Definition:</b> domevents.h:219</div></div>
+<div class="ttc" id="aclassdomevents_html_a33c32a28ba4a153e3400cb0136f54e3b"><div class="ttname"><a href="classdomevents.html#a33c32a28ba4a153e3400cb0136f54e3b">domevents::setEventHandler</a></div><div class="ttdeci">bool setEventHandler(const char *event, domeventhandler_t handler)</div></div>
+<div class="ttc" id="aclassdomevents_html_a5e089499f68e4c670e40fb19ff9724da"><div class="ttname"><a href="classdomevents.html#a5e089499f68e4c670e40fb19ff9724da">domevents::~domevents</a></div><div class="ttdeci">~domevents()</div></div>
+<div class="ttc" id="aclassdomevents_html_a62047af342aea3b58b270bb15a97e707"><div class="ttname"><a href="classdomevents.html#a62047af342aea3b58b270bb15a97e707">domevents::setData</a></div><div class="ttdeci">bool setData(void *data)</div></div>
+<div class="ttc" id="aclassdomevents_html_a9da21a0aab9b9374f89ab5b9995d946d"><div class="ttname"><a href="classdomevents.html#a9da21a0aab9b9374f89ab5b9995d946d">domevents::domevents</a></div><div class="ttdeci">domevents()</div></div>
+<div class="ttc" id="aclassdomevents_html_aa9e8d15730e76283dc93d8bf1ec4d7b2"><div class="ttname"><a href="classdomevents.html#aa9e8d15730e76283dc93d8bf1ec4d7b2">domevents::process</a></div><div class="ttdeci">bool process(domnode *xmltreenode)</div></div>
+<div class="ttc" id="aclassdomevents_html_ab7306df88d4229511068ce801f9d6e8a"><div class="ttname"><a href="classdomevents.html#ab7306df88d4229511068ce801f9d6e8a">domevents::setDebugLevel</a></div><div class="ttdeci">void setDebugLevel(uint8_t debuglevel)</div></div>
+<div class="ttc" id="aclassdomevents_html_ae76217efffa15fb72a48fa27c33c1dc1"><div class="ttname"><a href="classdomevents.html#ae76217efffa15fb72a48fa27c33c1dc1">domevents::setEvents</a></div><div class="ttdeci">bool setEvents(domnode *events)</div></div>
 <div class="ttc" id="aclassdomnode_html"><div class="ttname"><a href="classdomnode.html">domnode</a></div><div class="ttdef"><b>Definition:</b> domnode.h:122</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
-<div class="ttc" id="aclassprocess_html"><div class="ttname"><a href="classprocess.html">process</a></div><div class="ttdef"><b>Definition:</b> process.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

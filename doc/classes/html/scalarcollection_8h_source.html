@@ -58,40 +58,43 @@ $(function() {
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classscalarcollection.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classscalarcollection.html">scalarcollection</a> : <span class="keyword">public</span> <a class="code" href="classcollection.html">collection</a> {</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classscalarcollection.html#aa7cba815772a853634a822d5b0494bd4">getType</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classscalarcollection.html#a74accaa606245d7f91a86962c11e1cdd">getType</a>();</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">   19</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code" href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">setValue</a>(valuetype v)=0;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">   23</a></span>&#160;                <span class="keyword">virtual</span> valuetype       <a class="code" href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">getValue</a>() <span class="keyword">const</span>=0;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classscalarcollection.html#adfdf113f1f24edf4a3f2bf1256ac8fc4">   23</a></span>&#160;                <span class="keyword">virtual</span> valuetype       <a class="code" href="classscalarcollection.html#adfdf113f1f24edf4a3f2bf1256ac8fc4">getValue</a>()=0;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a83cdb1429f366e0d83f5aa540788746c">write</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a83cdb1429f366e0d83f5aa540788746c">write</a>(<a class="code" href="classoutput.html">output</a> *out) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classscalarcollection.html#ac4ddce1ca8d1a75904a3a9bed72f8004">   26</a></span>&#160;                <span class="keyword">virtual</span> valuetype       &amp;<a class="code" href="classscalarcollection.html#ac4ddce1ca8d1a75904a3a9bed72f8004">getReference</a>()=0;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a1b220212a09c5784fe9792718d64f653">write</a>();</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a9654859a3047010ee059b659a509a3ba">writeJson</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a9654859a3047010ee059b659a509a3ba">writeJson</a>(<span class="keywordtype">bool</span> indent) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a9654859a3047010ee059b659a509a3ba">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a9654859a3047010ee059b659a509a3ba">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/scalarcollectioninlines.h&gt;</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#a1b220212a09c5784fe9792718d64f653">write</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#ad08b08f955ab5b8ab457407d4f17e6b8">writeJson</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#ad08b08f955ab5b8ab457407d4f17e6b8">writeJson</a>(<span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#ad08b08f955ab5b8ab457407d4f17e6b8">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classscalarcollection.html#ad08b08f955ab5b8ab457407d4f17e6b8">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/scalarcollectioninlines.h&gt;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition:</b> collection.h:11</div></div>
-<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:9</div></div>
+<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:11</div></div>
 <div class="ttc" id="aclassscalarcollection_html"><div class="ttname"><a href="classscalarcollection.html">scalarcollection</a></div><div class="ttdef"><b>Definition:</b> scalarcollection.h:13</div></div>
+<div class="ttc" id="aclassscalarcollection_html_a1b220212a09c5784fe9792718d64f653"><div class="ttname"><a href="classscalarcollection.html#a1b220212a09c5784fe9792718d64f653">scalarcollection::write</a></div><div class="ttdeci">virtual ssize_t write()</div><div class="ttdef"><b>Definition:</b> scalarcollectioninlines.h:12</div></div>
 <div class="ttc" id="aclassscalarcollection_html_a57d013b7dbd8e46e39736ff40a1a6603"><div class="ttname"><a href="classscalarcollection.html#a57d013b7dbd8e46e39736ff40a1a6603">scalarcollection::setValue</a></div><div class="ttdeci">virtual void setValue(valuetype v)=0</div></div>
-<div class="ttc" id="aclassscalarcollection_html_a83cdb1429f366e0d83f5aa540788746c"><div class="ttname"><a href="classscalarcollection.html#a83cdb1429f366e0d83f5aa540788746c">scalarcollection::write</a></div><div class="ttdeci">virtual ssize_t write() const</div><div class="ttdef"><b>Definition:</b> scalarcollectioninlines.h:12</div></div>
-<div class="ttc" id="aclassscalarcollection_html_a9654859a3047010ee059b659a509a3ba"><div class="ttname"><a href="classscalarcollection.html#a9654859a3047010ee059b659a509a3ba">scalarcollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson() const</div><div class="ttdef"><b>Definition:</b> scalarcollectioninlines.h:24</div></div>
-<div class="ttc" id="aclassscalarcollection_html_a9ec2c6a6f26969e90377e307de0111c2"><div class="ttname"><a href="classscalarcollection.html#a9ec2c6a6f26969e90377e307de0111c2">scalarcollection::getValue</a></div><div class="ttdeci">virtual valuetype getValue() const =0</div></div>
-<div class="ttc" id="aclassscalarcollection_html_aa7cba815772a853634a822d5b0494bd4"><div class="ttname"><a href="classscalarcollection.html#aa7cba815772a853634a822d5b0494bd4">scalarcollection::getType</a></div><div class="ttdeci">virtual const char * getType() const</div><div class="ttdef"><b>Definition:</b> scalarcollectioninlines.h:6</div></div>
+<div class="ttc" id="aclassscalarcollection_html_a74accaa606245d7f91a86962c11e1cdd"><div class="ttname"><a href="classscalarcollection.html#a74accaa606245d7f91a86962c11e1cdd">scalarcollection::getType</a></div><div class="ttdeci">virtual const char * getType()</div><div class="ttdef"><b>Definition:</b> scalarcollectioninlines.h:6</div></div>
+<div class="ttc" id="aclassscalarcollection_html_ac4ddce1ca8d1a75904a3a9bed72f8004"><div class="ttname"><a href="classscalarcollection.html#ac4ddce1ca8d1a75904a3a9bed72f8004">scalarcollection::getReference</a></div><div class="ttdeci">virtual valuetype &amp; getReference()=0</div></div>
+<div class="ttc" id="aclassscalarcollection_html_ad08b08f955ab5b8ab457407d4f17e6b8"><div class="ttname"><a href="classscalarcollection.html#ad08b08f955ab5b8ab457407d4f17e6b8">scalarcollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson()</div><div class="ttdef"><b>Definition:</b> scalarcollectioninlines.h:24</div></div>
+<div class="ttc" id="aclassscalarcollection_html_adfdf113f1f24edf4a3f2bf1256ac8fc4"><div class="ttname"><a href="classscalarcollection.html#adfdf113f1f24edf4a3f2bf1256ac8fc4">scalarcollection::getValue</a></div><div class="ttdeci">virtual valuetype getValue()=0</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -3,8 +3,6 @@
 
 	private:
 		mvcresult(mvcresult &m) {};
-		mvcresult	&operator=(mvcresult &m) {
-			return *this;
-		};
+		mvcresult	&operator=(mvcresult &m) { return *this; };
 
 		mvcresultprivate	*pvt;

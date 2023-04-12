@@ -50,23 +50,132 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a301b05ee431253edc4fa373589921ef7"><td class="memItemLeft" align="right" valign="top"><a id="a301b05ee431253edc4fa373589921ef7"></a>
-<a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parseFile</b> (const char *filename)</td></tr>
+<tr class="memitem:af53c9605ba7190893c0da71312be45e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmvcproperties.html#af53c9605ba7190893c0da71312be45e4">mvcproperties</a> ()</td></tr>
+<tr class="separator:af53c9605ba7190893c0da71312be45e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35402f44e614bdc43779fb645ae74115"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmvcproperties.html#a35402f44e614bdc43779fb645ae74115">~mvcproperties</a> ()</td></tr>
+<tr class="separator:a35402f44e614bdc43779fb645ae74115"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a301b05ee431253edc4fa373589921ef7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmvcproperties.html#a301b05ee431253edc4fa373589921ef7">parseFile</a> (const char *filename)</td></tr>
 <tr class="separator:a301b05ee431253edc4fa373589921ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a2c98deade0cd2344f4f7e19978cb25"><td class="memItemLeft" align="right" valign="top"><a id="a6a2c98deade0cd2344f4f7e19978cb25"></a>
-<a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parseString</b> (const char *string)</td></tr>
+<tr class="memitem:a6a2c98deade0cd2344f4f7e19978cb25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmvcproperties.html#a6a2c98deade0cd2344f4f7e19978cb25">parseString</a> (const char *string)</td></tr>
 <tr class="separator:a6a2c98deade0cd2344f4f7e19978cb25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a994b4107adcb4ccaeb81e926b62f3a"><td class="memItemLeft" align="right" valign="top"><a id="a9a994b4107adcb4ccaeb81e926b62f3a"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getValue</b> (const char *parameter)</td></tr>
-<tr class="separator:a9a994b4107adcb4ccaeb81e926b62f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df00289aa603f8a24d280397bdf61bd"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmvcproperties.html#a5df00289aa603f8a24d280397bdf61bd">getValue</a> (const char *property)</td></tr>
+<tr class="separator:a5df00289aa603f8a24d280397bdf61bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classobject.html">object</a></td></tr>
 <tr class="memitem:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classobject.html#a6233244b77a2794b456e5eee6964806d">~object</a> ()</td></tr>
 <tr class="separator:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The mvcproperties class provides methods for parsing java-style properties files or strings, and returning property values.</p>
+<p>The format of the property file or string should follow this example:</p>
+<p>#pound comment !exclamation comment key1=value1 key2=value2</p>
+<p>key 3=value 3 key 4=value 4 </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af53c9605ba7190893c0da71312be45e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af53c9605ba7190893c0da71312be45e4">&#9670;&nbsp;</a></span>mvcproperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mvcproperties::mvcproperties </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates an instance of the mvcproperties class. </p>
+
+</div>
+</div>
+<a id="a35402f44e614bdc43779fb645ae74115"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35402f44e614bdc43779fb645ae74115">&#9670;&nbsp;</a></span>~mvcproperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual mvcproperties::~mvcproperties </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Deletes this instance of the mvcproperties class. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5df00289aa603f8a24d280397bdf61bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5df00289aa603f8a24d280397bdf61bd">&#9670;&nbsp;</a></span>getValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mvcproperties::getValue </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>property</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the value of "property" as provided by the most recently prased file or string. </p>
+
+</div>
+</div>
+<a id="a301b05ee431253edc4fa373589921ef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a301b05ee431253edc4fa373589921ef7">&#9670;&nbsp;</a></span>parseFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> mvcproperties::parseFile </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parses the properties file "filename", discarding properties from any previously parsed file or string. </p>
+
+</div>
+</div>
+<a id="a6a2c98deade0cd2344f4f7e19978cb25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a2c98deade0cd2344f4f7e19978cb25">&#9670;&nbsp;</a></span>parseString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> mvcproperties::parseString </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parses the properties string "string", discarding properties from any previously parsed file or string. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

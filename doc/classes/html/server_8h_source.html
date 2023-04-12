@@ -59,35 +59,35 @@ $(function() {
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classserver.html#a30853862a28dda8c4c9b57b4e8f7de1a">   15</a></span>&#160;                <a class="code" href="classserver.html#a30853862a28dda8c4c9b57b4e8f7de1a">server</a>();</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classserver.html#a340c243465eb75116d90216a1c2718cf">   19</a></span>&#160;                <a class="code" href="classserver.html#a340c243465eb75116d90216a1c2718cf">server</a>(<span class="keyword">const</span> <a class="code" href="classserver.html">server</a> &amp;s);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classserver.html#a13bfea88afe9eb37f525a65956eaf7bd">   23</a></span>&#160;                <a class="code" href="classserver.html">server</a>  &amp;<a class="code" href="classserver.html#a13bfea88afe9eb37f525a65956eaf7bd">operator=</a>(<span class="keyword">const</span> <a class="code" href="classserver.html">server</a> &amp;s);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classserver.html#ac2cf4b7b689d7161eb7c217ef06f92e1">   26</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classserver.html#ac2cf4b7b689d7161eb7c217ef06f92e1">~server</a>();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classserver.html#a8e2054b75165d210e426f1607a029fb1">   32</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classserver.html#a8e2054b75165d210e426f1607a029fb1">bind</a>();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classserver.html#add560512e5359772545fca92ed45b2e7">   39</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classserver.html#add560512e5359772545fca92ed45b2e7">listen</a>(int32_t backlog);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classserver.html#a31f71c8de8cc94018c67bf242d13ac1a">   48</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classfiledescriptor.html">filedescriptor</a>  *<a class="code" href="classserver.html#a31f71c8de8cc94018c67bf242d13ac1a">accept</a>();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/server.h&gt;</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classserver.html#ac2cf4b7b689d7161eb7c217ef06f92e1">   18</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classserver.html#ac2cf4b7b689d7161eb7c217ef06f92e1">~server</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classserver.html#ab567495aa29666b94888283e2ef434d8">   22</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classserver.html#ab567495aa29666b94888283e2ef434d8">setBacklog</a>(uint32_t backlog);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classserver.html#afcd6d586f818f9a4eabfe3d4e315bf04">   28</a></span>&#160;                uint32_t        <a class="code" href="classserver.html#afcd6d586f818f9a4eabfe3d4e315bf04">getBacklog</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classserver.html#a8e2054b75165d210e426f1607a029fb1">   34</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classserver.html#a8e2054b75165d210e426f1607a029fb1">bind</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classserver.html#a315fb55748422e6a73693a121dd6c237">   41</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classserver.html#a315fb55748422e6a73693a121dd6c237">listen</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classserver.html#a31f71c8de8cc94018c67bf242d13ac1a">   50</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classfiledescriptor.html">filedescriptor</a>  *<a class="code" href="classserver.html#a31f71c8de8cc94018c67bf242d13ac1a">accept</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/server.h&gt;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 <div class="ttc" id="aclassserver_html"><div class="ttname"><a href="classserver.html">server</a></div><div class="ttdef"><b>Definition:</b> server.h:11</div></div>
-<div class="ttc" id="aclassserver_html_a13bfea88afe9eb37f525a65956eaf7bd"><div class="ttname"><a href="classserver.html#a13bfea88afe9eb37f525a65956eaf7bd">server::operator=</a></div><div class="ttdeci">server &amp; operator=(const server &amp;s)</div></div>
 <div class="ttc" id="aclassserver_html_a30853862a28dda8c4c9b57b4e8f7de1a"><div class="ttname"><a href="classserver.html#a30853862a28dda8c4c9b57b4e8f7de1a">server::server</a></div><div class="ttdeci">server()</div></div>
+<div class="ttc" id="aclassserver_html_a315fb55748422e6a73693a121dd6c237"><div class="ttname"><a href="classserver.html#a315fb55748422e6a73693a121dd6c237">server::listen</a></div><div class="ttdeci">virtual bool listen()</div></div>
 <div class="ttc" id="aclassserver_html_a31f71c8de8cc94018c67bf242d13ac1a"><div class="ttname"><a href="classserver.html#a31f71c8de8cc94018c67bf242d13ac1a">server::accept</a></div><div class="ttdeci">virtual filedescriptor * accept()</div></div>
-<div class="ttc" id="aclassserver_html_a340c243465eb75116d90216a1c2718cf"><div class="ttname"><a href="classserver.html#a340c243465eb75116d90216a1c2718cf">server::server</a></div><div class="ttdeci">server(const server &amp;s)</div></div>
 <div class="ttc" id="aclassserver_html_a8e2054b75165d210e426f1607a029fb1"><div class="ttname"><a href="classserver.html#a8e2054b75165d210e426f1607a029fb1">server::bind</a></div><div class="ttdeci">virtual bool bind()</div></div>
+<div class="ttc" id="aclassserver_html_ab567495aa29666b94888283e2ef434d8"><div class="ttname"><a href="classserver.html#ab567495aa29666b94888283e2ef434d8">server::setBacklog</a></div><div class="ttdeci">void setBacklog(uint32_t backlog)</div></div>
 <div class="ttc" id="aclassserver_html_ac2cf4b7b689d7161eb7c217ef06f92e1"><div class="ttname"><a href="classserver.html#ac2cf4b7b689d7161eb7c217ef06f92e1">server::~server</a></div><div class="ttdeci">virtual ~server()</div></div>
-<div class="ttc" id="aclassserver_html_add560512e5359772545fca92ed45b2e7"><div class="ttname"><a href="classserver.html#add560512e5359772545fca92ed45b2e7">server::listen</a></div><div class="ttdeci">virtual bool listen(int32_t backlog)</div></div>
+<div class="ttc" id="aclassserver_html_afcd6d586f818f9a4eabfe3d4e315bf04"><div class="ttname"><a href="classserver.html#afcd6d586f818f9a4eabfe3d4e315bf04">server::getBacklog</a></div><div class="ttdeci">uint32_t getBacklog()</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

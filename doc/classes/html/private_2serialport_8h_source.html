@@ -50,18 +50,21 @@ $(function() {
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;                <span class="keywordtype">bool</span>    tcSetAttr(int32_t optional_actions,</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;                                        <a class="code" href="structtermios.html">termios</a> *termios_p);</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                <span class="keywordtype">bool</span>    tcFlush(int32_t queue_selector);</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                <span class="keywordtype">bool</span>    tcFlow(int32_t action);</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                serialportprivate       *pvt;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <a class="code" href="classserialport.html">serialport</a>(<a class="code" href="classserialport.html">serialport</a> &amp;s) {};</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;                <a class="code" href="classserialport.html">serialport</a>      &amp;operator=(<a class="code" href="classserialport.html">serialport</a> &amp;s) { <span class="keywordflow">return</span> *<span class="keyword">this</span>; };</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                <span class="keywordtype">bool</span>    tcSetAttr(int32_t optional_actions,</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                                        <a class="code" href="structtermios.html">termios</a> *termios_p);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;                <span class="keywordtype">bool</span>    tcFlush(int32_t queue_selector);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                <span class="keywordtype">bool</span>    tcFlow(int32_t action);</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                serialportprivate       *pvt;</div>
+<div class="ttc" id="aclassserialport_html"><div class="ttname"><a href="classserialport.html">serialport</a></div><div class="ttdef"><b>Definition:</b> serialport.h:14</div></div>
 <div class="ttc" id="astructtermios_html"><div class="ttname"><a href="structtermios.html">termios</a></div><div class="ttdef"><b>Definition:</b> serialportprofileincludes.h:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -64,43 +64,43 @@ $(function() {
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classmemorypool.html#a5f2157ae604ab35cea05fa69d7bfa40c">   45</a></span>&#160;                <a class="code" href="classmemorypool.html#a5f2157ae604ab35cea05fa69d7bfa40c">~memorypool</a>();</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classmemorypool.html#a224a19b6fd4f4c43d805653880ab65c7">   48</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classmemorypool.html#a224a19b6fd4f4c43d805653880ab65c7">getInitialSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classmemorypool.html#a805b47367bc790333108738e08530dc2">   48</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classmemorypool.html#a805b47367bc790333108738e08530dc2">getInitialSize</a>();</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classmemorypool.html#af1f1be0b5924263f8fb48734a94155c6">   52</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classmemorypool.html#af1f1be0b5924263f8fb48734a94155c6">getIncrementSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classmemorypool.html#ac4dcdcb3b19229be60f40480f9d1f00f">   52</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classmemorypool.html#ac4dcdcb3b19229be60f40480f9d1f00f">getIncrementSize</a>();</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classmemorypool.html#a587f7df6fabd2a62242fcd28657fc051">   55</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classmemorypool.html#a587f7df6fabd2a62242fcd28657fc051">getResizeInterval</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classmemorypool.html#a5ddb9960933cfd8f073c5ba86e3adfbe">   55</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classmemorypool.html#a5ddb9960933cfd8f073c5ba86e3adfbe">getResizeInterval</a>();</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classmemorypool.html#a63103948cab76bc1e5fc4c741b56acbd">   60</a></span>&#160;                <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>   *<a class="code" href="classmemorypool.html#a63103948cab76bc1e5fc4c741b56acbd">allocate</a>(<span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classmemorypool.html#af19423cf6aff31ae2f0fc2ea69c879bd">   60</a></span>&#160;                byte_t  *<a class="code" href="classmemorypool.html#af19423cf6aff31ae2f0fc2ea69c879bd">allocate</a>(<span class="keywordtype">size_t</span> size);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classmemorypool.html#a2de95afbe5529b62df5b229d0d4d4cb0">   69</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classmemorypool.html#a2de95afbe5529b62df5b229d0d4d4cb0">clear</a>();</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classmemorypool.html#ae9a7defeff067c8e993e0585e8508698">   81</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classmemorypool.html#ae9a7defeff067c8e993e0585e8508698">clear</a>(<span class="keywordtype">size_t</span> incrementsize,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                                <span class="keywordtype">size_t</span> resizeinterval);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="classmemorypool.html#a5f13edaa3cb934210c4fcb308a96312f">   90</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classmemorypool.html#a5f13edaa3cb934210c4fcb308a96312f">clear</a>(<span class="keywordtype">size_t</span> initialsize,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                                <span class="keywordtype">size_t</span> incrementsize,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                                <span class="keywordtype">size_t</span> resizeinterval);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/memorypool.h&gt;</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;};</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classmemorypool.html#a80171f6c57858b7576fed572ef60e4e5">   71</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classmemorypool.html#a80171f6c57858b7576fed572ef60e4e5">clear</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classmemorypool.html#a6d6563af473c9c62590c30564b649739">   85</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classmemorypool.html#a6d6563af473c9c62590c30564b649739">clear</a>(<span class="keywordtype">size_t</span> incrementsize,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                                <span class="keywordtype">size_t</span> resizeinterval);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classmemorypool.html#a7a391da7657c091884817cbd317b43c2">   96</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classmemorypool.html#a7a391da7657c091884817cbd317b43c2">clear</a>(<span class="keywordtype">size_t</span> initialsize,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                                <span class="keywordtype">size_t</span> incrementsize,</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                                <span class="keywordtype">size_t</span> resizeinterval);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/memorypool.h&gt;</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;};</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassmemorypool_html"><div class="ttname"><a href="classmemorypool.html">memorypool</a></div><div class="ttdef"><b>Definition:</b> memorypool.h:16</div></div>
-<div class="ttc" id="aclassmemorypool_html_a224a19b6fd4f4c43d805653880ab65c7"><div class="ttname"><a href="classmemorypool.html#a224a19b6fd4f4c43d805653880ab65c7">memorypool::getInitialSize</a></div><div class="ttdeci">size_t getInitialSize() const</div></div>
-<div class="ttc" id="aclassmemorypool_html_a2de95afbe5529b62df5b229d0d4d4cb0"><div class="ttname"><a href="classmemorypool.html#a2de95afbe5529b62df5b229d0d4d4cb0">memorypool::clear</a></div><div class="ttdeci">void clear()</div></div>
 <div class="ttc" id="aclassmemorypool_html_a4076462d8538f4b7f57975aedb2c2a13"><div class="ttname"><a href="classmemorypool.html#a4076462d8538f4b7f57975aedb2c2a13">memorypool::memorypool</a></div><div class="ttdeci">memorypool()</div></div>
-<div class="ttc" id="aclassmemorypool_html_a587f7df6fabd2a62242fcd28657fc051"><div class="ttname"><a href="classmemorypool.html#a587f7df6fabd2a62242fcd28657fc051">memorypool::getResizeInterval</a></div><div class="ttdeci">size_t getResizeInterval() const</div></div>
-<div class="ttc" id="aclassmemorypool_html_a5f13edaa3cb934210c4fcb308a96312f"><div class="ttname"><a href="classmemorypool.html#a5f13edaa3cb934210c4fcb308a96312f">memorypool::clear</a></div><div class="ttdeci">void clear(size_t initialsize, size_t incrementsize, size_t resizeinterval)</div></div>
+<div class="ttc" id="aclassmemorypool_html_a5ddb9960933cfd8f073c5ba86e3adfbe"><div class="ttname"><a href="classmemorypool.html#a5ddb9960933cfd8f073c5ba86e3adfbe">memorypool::getResizeInterval</a></div><div class="ttdeci">size_t getResizeInterval()</div></div>
 <div class="ttc" id="aclassmemorypool_html_a5f2157ae604ab35cea05fa69d7bfa40c"><div class="ttname"><a href="classmemorypool.html#a5f2157ae604ab35cea05fa69d7bfa40c">memorypool::~memorypool</a></div><div class="ttdeci">~memorypool()</div></div>
-<div class="ttc" id="aclassmemorypool_html_a63103948cab76bc1e5fc4c741b56acbd"><div class="ttname"><a href="classmemorypool.html#a63103948cab76bc1e5fc4c741b56acbd">memorypool::allocate</a></div><div class="ttdeci">unsigned char * allocate(size_t size)</div></div>
 <div class="ttc" id="aclassmemorypool_html_a68d7ecbdac72773118c81b77b17f0baf"><div class="ttname"><a href="classmemorypool.html#a68d7ecbdac72773118c81b77b17f0baf">memorypool::memorypool</a></div><div class="ttdeci">memorypool(size_t initialsize, size_t incrementsize, size_t resizeinterval)</div></div>
-<div class="ttc" id="aclassmemorypool_html_ae9a7defeff067c8e993e0585e8508698"><div class="ttname"><a href="classmemorypool.html#ae9a7defeff067c8e993e0585e8508698">memorypool::clear</a></div><div class="ttdeci">void clear(size_t incrementsize, size_t resizeinterval)</div></div>
-<div class="ttc" id="aclassmemorypool_html_af1f1be0b5924263f8fb48734a94155c6"><div class="ttname"><a href="classmemorypool.html#af1f1be0b5924263f8fb48734a94155c6">memorypool::getIncrementSize</a></div><div class="ttdeci">size_t getIncrementSize() const</div></div>
+<div class="ttc" id="aclassmemorypool_html_a6d6563af473c9c62590c30564b649739"><div class="ttname"><a href="classmemorypool.html#a6d6563af473c9c62590c30564b649739">memorypool::clear</a></div><div class="ttdeci">bool clear(size_t incrementsize, size_t resizeinterval)</div></div>
+<div class="ttc" id="aclassmemorypool_html_a7a391da7657c091884817cbd317b43c2"><div class="ttname"><a href="classmemorypool.html#a7a391da7657c091884817cbd317b43c2">memorypool::clear</a></div><div class="ttdeci">bool clear(size_t initialsize, size_t incrementsize, size_t resizeinterval)</div></div>
+<div class="ttc" id="aclassmemorypool_html_a80171f6c57858b7576fed572ef60e4e5"><div class="ttname"><a href="classmemorypool.html#a80171f6c57858b7576fed572ef60e4e5">memorypool::clear</a></div><div class="ttdeci">bool clear()</div></div>
+<div class="ttc" id="aclassmemorypool_html_a805b47367bc790333108738e08530dc2"><div class="ttname"><a href="classmemorypool.html#a805b47367bc790333108738e08530dc2">memorypool::getInitialSize</a></div><div class="ttdeci">size_t getInitialSize()</div></div>
+<div class="ttc" id="aclassmemorypool_html_ac4dcdcb3b19229be60f40480f9d1f00f"><div class="ttname"><a href="classmemorypool.html#ac4dcdcb3b19229be60f40480f9d1f00f">memorypool::getIncrementSize</a></div><div class="ttdeci">size_t getIncrementSize()</div></div>
+<div class="ttc" id="aclassmemorypool_html_af19423cf6aff31ae2f0fc2ea69c879bd"><div class="ttname"><a href="classmemorypool.html#af19423cf6aff31ae2f0fc2ea69c879bd">memorypool::allocate</a></div><div class="ttdeci">byte_t * allocate(size_t size)</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

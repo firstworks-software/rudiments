@@ -67,9 +67,9 @@ $(function() {
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classdynamiclib.html#a04f10080e355334384ebdcdf5ff7a6b2">   33</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdynamiclib.html#a04f10080e355334384ebdcdf5ff7a6b2">close</a>();</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classdynamiclib.html#ae115b2ab1a1ae627245573039dd14c3c">   38</a></span>&#160;                <span class="keywordtype">void</span>    *<a class="code" href="classdynamiclib.html#ae115b2ab1a1ae627245573039dd14c3c">getSymbol</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *symbol) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classdynamiclib.html#a156d8f30640c2ae09849c663ec80c745">   38</a></span>&#160;                <span class="keywordtype">void</span>    *<a class="code" href="classdynamiclib.html#a156d8f30640c2ae09849c663ec80c745">getSymbol</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *symbol);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">   47</a></span>&#160;                <span class="keywordtype">char</span>    *<a class="code" href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">getError</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">   47</a></span>&#160;                <span class="keywordtype">char</span>    *<a class="code" href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">getError</a>();</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                </div>
 <div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classdynamiclib.html#a271cbe5a07c6f24c8eb02d5fce50a565">   56</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">void</span>    <a class="code" href="classdynamiclib.html#a271cbe5a07c6f24c8eb02d5fce50a565">setErrorMutex</a>(<a class="code" href="classthreadmutex.html">threadmutex</a> *mtx);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
@@ -79,18 +79,18 @@ $(function() {
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassdynamiclib_html"><div class="ttname"><a href="classdynamiclib.html">dynamiclib</a></div><div class="ttdef"><b>Definition:</b> dynamiclib.h:11</div></div>
 <div class="ttc" id="aclassdynamiclib_html_a04f10080e355334384ebdcdf5ff7a6b2"><div class="ttname"><a href="classdynamiclib.html#a04f10080e355334384ebdcdf5ff7a6b2">dynamiclib::close</a></div><div class="ttdeci">bool close()</div></div>
+<div class="ttc" id="aclassdynamiclib_html_a156d8f30640c2ae09849c663ec80c745"><div class="ttname"><a href="classdynamiclib.html#a156d8f30640c2ae09849c663ec80c745">dynamiclib::getSymbol</a></div><div class="ttdeci">void * getSymbol(const char *symbol)</div></div>
 <div class="ttc" id="aclassdynamiclib_html_a271cbe5a07c6f24c8eb02d5fce50a565"><div class="ttname"><a href="classdynamiclib.html#a271cbe5a07c6f24c8eb02d5fce50a565">dynamiclib::setErrorMutex</a></div><div class="ttdeci">static void setErrorMutex(threadmutex *mtx)</div></div>
+<div class="ttc" id="aclassdynamiclib_html_a410ad0b92dceedbdfbcfc6686333136e"><div class="ttname"><a href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">dynamiclib::getError</a></div><div class="ttdeci">char * getError()</div></div>
 <div class="ttc" id="aclassdynamiclib_html_a62440de7e1d9dff30716a1780f0fbe7a"><div class="ttname"><a href="classdynamiclib.html#a62440de7e1d9dff30716a1780f0fbe7a">dynamiclib::open</a></div><div class="ttdeci">bool open(const char *library, bool loaddependencies, bool global)</div></div>
 <div class="ttc" id="aclassdynamiclib_html_ac3bba274080f47d197ef9b0db6eae28f"><div class="ttname"><a href="classdynamiclib.html#ac3bba274080f47d197ef9b0db6eae28f">dynamiclib::~dynamiclib</a></div><div class="ttdeci">~dynamiclib()</div></div>
-<div class="ttc" id="aclassdynamiclib_html_ae115b2ab1a1ae627245573039dd14c3c"><div class="ttname"><a href="classdynamiclib.html#ae115b2ab1a1ae627245573039dd14c3c">dynamiclib::getSymbol</a></div><div class="ttdeci">void * getSymbol(const char *symbol) const</div></div>
-<div class="ttc" id="aclassdynamiclib_html_ae83c7379f29f4a378cdef3faeaf679a7"><div class="ttname"><a href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">dynamiclib::getError</a></div><div class="ttdeci">char * getError() const</div></div>
 <div class="ttc" id="aclassdynamiclib_html_af54be5f327e01d33a9278d8986aef0a9"><div class="ttname"><a href="classdynamiclib.html#af54be5f327e01d33a9278d8986aef0a9">dynamiclib::dynamiclib</a></div><div class="ttdeci">dynamiclib()</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 <div class="ttc" id="aclassthreadmutex_html"><div class="ttname"><a href="classthreadmutex.html">threadmutex</a></div><div class="ttdef"><b>Definition:</b> threadmutex.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

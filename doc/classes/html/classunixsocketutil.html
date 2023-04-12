@@ -46,28 +46,26 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Inherited by <a class="el" href="classunixsocketclient.html">unixsocketclient</a><code> [private]</code>, and <a class="el" href="classunixsocketserver.html">unixsocketserver</a><code> [private]</code>.</p>
+<p>Inherited by <a class="el" href="classunixsocketclient.html">unixsocketclient</a>, and <a class="el" href="classunixsocketserver.html">unixsocketserver</a><code> [private]</code>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8312bd325541b297ad626b1b7bd589c8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#a8312bd325541b297ad626b1b7bd589c8">unixsocketutil</a> ()</td></tr>
 <tr class="separator:a8312bd325541b297ad626b1b7bd589c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e96b7c42416b7084cff14cf26024fa6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#a7e96b7c42416b7084cff14cf26024fa6">unixsocketutil</a> (const <a class="el" href="classunixsocketutil.html">unixsocketutil</a> &amp;u)</td></tr>
-<tr class="separator:a7e96b7c42416b7084cff14cf26024fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c52764bb364db6fda1865bd3ff64366"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classunixsocketutil.html">unixsocketutil</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#a8c52764bb364db6fda1865bd3ff64366">operator=</a> (const <a class="el" href="classunixsocketutil.html">unixsocketutil</a> &amp;u)</td></tr>
-<tr class="separator:a8c52764bb364db6fda1865bd3ff64366"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2c75e6e099eaf25b9a0c4ea2016d5db"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#af2c75e6e099eaf25b9a0c4ea2016d5db">~unixsocketutil</a> ()</td></tr>
 <tr class="separator:af2c75e6e099eaf25b9a0c4ea2016d5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b083e284440e21ed361d55ee4893cc2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#a0b083e284440e21ed361d55ee4893cc2">initialize</a> (const char *filename)</td></tr>
-<tr class="separator:a0b083e284440e21ed361d55ee4893cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2069faaf13fced50cc0ccbe1f95d5c3"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#ac2069faaf13fced50cc0ccbe1f95d5c3">filenameToPort</a> (const char *filename)</td></tr>
-<tr class="separator:ac2069faaf13fced50cc0ccbe1f95d5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a264c429f4c26f2acc1647c593a94bbd1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#a264c429f4c26f2acc1647c593a94bbd1">setFileName</a> (const char *filename)</td></tr>
+<tr class="separator:a264c429f4c26f2acc1647c593a94bbd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d1064ee64ae1d420faca1ea59fc6bf8"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#a1d1064ee64ae1d420faca1ea59fc6bf8">getFileName</a> ()</td></tr>
+<tr class="separator:a1d1064ee64ae1d420faca1ea59fc6bf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf79ea9c76f057d8b250a1b718849e66"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixsocketutil.html#abf79ea9c76f057d8b250a1b718849e66">fileNameToPort</a> (const char *filename)</td></tr>
+<tr class="separator:abf79ea9c76f057d8b250a1b718849e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The unixsocketutil class is just a base class for other classes that use unix sockets. It is unlikely to need to be used directly. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8312bd325541b297ad626b1b7bd589c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8312bd325541b297ad626b1b7bd589c8">&#9670;&nbsp;</a></span>unixsocketutil() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8312bd325541b297ad626b1b7bd589c8">&#9670;&nbsp;</a></span>unixsocketutil()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -81,25 +79,6 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Creates an instance of the unixsocketutil class. </p>
-
-</div>
-</div>
-<a id="a7e96b7c42416b7084cff14cf26024fa6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e96b7c42416b7084cff14cf26024fa6">&#9670;&nbsp;</a></span>unixsocketutil() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unixsocketutil::unixsocketutil </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classunixsocketutil.html">unixsocketutil</a> &amp;&#160;</td>
-          <td class="paramname"><em>u</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Creates an instance of the unixsocketutil class that is a copy of "u". </p>
 
 </div>
 </div>
@@ -130,14 +109,14 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac2069faaf13fced50cc0ccbe1f95d5c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2069faaf13fced50cc0ccbe1f95d5c3">&#9670;&nbsp;</a></span>filenameToPort()</h2>
+<a id="abf79ea9c76f057d8b250a1b718849e66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf79ea9c76f057d8b250a1b718849e66">&#9670;&nbsp;</a></span>fileNameToPort()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t unixsocketutil::filenameToPort </td>
+          <td class="memname">uint16_t unixsocketutil::fileNameToPort </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
@@ -149,14 +128,32 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0b083e284440e21ed361d55ee4893cc2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b083e284440e21ed361d55ee4893cc2">&#9670;&nbsp;</a></span>initialize()</h2>
+<a id="a1d1064ee64ae1d420faca1ea59fc6bf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d1064ee64ae1d420faca1ea59fc6bf8">&#9670;&nbsp;</a></span>getFileName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void unixsocketutil::initialize </td>
+          <td class="memname">const char* unixsocketutil::getFileName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the filename that connect() will attempt to connect to, or that listen() will listen on. </p>
+
+</div>
+</div>
+<a id="a264c429f4c26f2acc1647c593a94bbd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a264c429f4c26f2acc1647c593a94bbd1">&#9670;&nbsp;</a></span>setFileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void unixsocketutil::setFileName </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
@@ -164,33 +161,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initializes the class to use "filename". This is not directly useful within this class but child classes may use the value to decide where to connect to or what to listen on. </p>
-
-</div>
-</div>
-<a id="a8c52764bb364db6fda1865bd3ff64366"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c52764bb364db6fda1865bd3ff64366">&#9670;&nbsp;</a></span>operator=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classunixsocketutil.html">unixsocketutil</a>&amp; unixsocketutil::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classunixsocketutil.html">unixsocketutil</a> &amp;&#160;</td>
-          <td class="paramname"><em>u</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Makes this instance of the unixsocketutil class identical to "u". </p>
+<p>Sets the filename that connect() will attempt to connect to, or that listen() will listen on.</p>
+<p>This is not directly useful within this instance but child classes may use this value. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

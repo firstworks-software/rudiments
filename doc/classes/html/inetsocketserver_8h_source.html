@@ -55,55 +55,44 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/inetsocketserverincludes.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classinetsocketserver.html">   19</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classinetsocketserver.html">inetsocketserver</a> :</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                        <span class="keyword">public</span> <a class="code" href="classsocketserver.html">socketserver</a>, <span class="keyword">private</span> <a class="code" href="classinetsocketutil.html">inetsocketutil</a> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                        <span class="keyword">public</span> <a class="code" href="classsocketserver.html">socketserver</a>, <span class="keyword">public</span> <a class="code" href="classinetsocketutil.html">inetsocketutil</a> {</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a2d62250ef1503b6d3bd0e2ecd1835c05">   24</a></span>&#160;                <a class="code" href="classinetsocketserver.html#a2d62250ef1503b6d3bd0e2ecd1835c05">inetsocketserver</a>();</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a27741b076dfc4d1a55ed41411734f55e">   28</a></span>&#160;                <a class="code" href="classinetsocketserver.html#a27741b076dfc4d1a55ed41411734f55e">inetsocketserver</a>(<span class="keyword">const</span> <a class="code" href="classinetsocketserver.html">inetsocketserver</a> &amp;i);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#ad2443a761a916da73294e9352ec3ace6">   32</a></span>&#160;                <a class="code" href="classinetsocketserver.html">inetsocketserver</a>        &amp;<a class="code" href="classinetsocketserver.html#ad2443a761a916da73294e9352ec3ace6">operator=</a>(<span class="keyword">const</span> <a class="code" href="classinetsocketserver.html">inetsocketserver</a> &amp;i);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a3ae5b4e2ec5542fc1746b82e0ad8ddba">   35</a></span>&#160;                <span class="keyword">virtual</span>         <a class="code" href="classinetsocketserver.html#a3ae5b4e2ec5542fc1746b82e0ad8ddba">~inetsocketserver</a>();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a5efc38c04b1ae81e87fc0f8592776c02">   56</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#a5efc38c04b1ae81e87fc0f8592776c02">listen</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *address,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                        uint16_t port,</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                                        int32_t backlog);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a3ae5b4e2ec5542fc1746b82e0ad8ddba">   27</a></span>&#160;                <span class="keyword">virtual</span>         <a class="code" href="classinetsocketserver.html#a3ae5b4e2ec5542fc1746b82e0ad8ddba">~inetsocketserver</a>();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#aa2cfa9dd0f4c8e1370cff0ccdc1a9c0d">   47</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#aa2cfa9dd0f4c8e1370cff0ccdc1a9c0d">listen</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *address,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                        uint16_t port,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                        uint32_t backlog);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#acb3d4da7af456a7f30a26683d84985ac">   54</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#acb3d4da7af456a7f30a26683d84985ac">open</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a8e2353de1d1174f779e0ea46af22cc19">   59</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#a8e2353de1d1174f779e0ea46af22cc19">bind</a>();</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#ac5cfe9a22e4b3221908eeeb0fc02d16c">   66</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#ac5cfe9a22e4b3221908eeeb0fc02d16c">initialize</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *address, uint16_t port);</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#acd9ffc97076827960f76d969dde40e26">   66</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#acd9ffc97076827960f76d969dde40e26">listen</a>();</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a8e2353de1d1174f779e0ea46af22cc19">   71</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#a8e2353de1d1174f779e0ea46af22cc19">bind</a>();</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#a1d992b386d0d908309e8bf46ae79b749">   78</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classinetsocketserver.html#a1d992b386d0d908309e8bf46ae79b749">listen</a>(int32_t backlog);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#adb956d673ebf0d4975961ffce2b07518">   85</a></span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>  *<a class="code" href="classinetsocketserver.html#adb956d673ebf0d4975961ffce2b07518">accept</a>();</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#aebd8eccd391d973cfef3c990a03fc6bf">   91</a></span>&#160;                uint16_t        <a class="code" href="classinetsocketserver.html#aebd8eccd391d973cfef3c990a03fc6bf">getPort</a>();</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/inetsocketserver.h&gt;</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;};</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classinetsocketserver.html#adb956d673ebf0d4975961ffce2b07518">   74</a></span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>  *<a class="code" href="classinetsocketserver.html#adb956d673ebf0d4975961ffce2b07518">accept</a>();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/inetsocketserver.h&gt;</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;};</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 <div class="ttc" id="aclassinetsocketserver_html"><div class="ttname"><a href="classinetsocketserver.html">inetsocketserver</a></div><div class="ttdef"><b>Definition:</b> inetsocketserver.h:20</div></div>
-<div class="ttc" id="aclassinetsocketserver_html_a1d992b386d0d908309e8bf46ae79b749"><div class="ttname"><a href="classinetsocketserver.html#a1d992b386d0d908309e8bf46ae79b749">inetsocketserver::listen</a></div><div class="ttdeci">bool listen(int32_t backlog)</div></div>
-<div class="ttc" id="aclassinetsocketserver_html_a27741b076dfc4d1a55ed41411734f55e"><div class="ttname"><a href="classinetsocketserver.html#a27741b076dfc4d1a55ed41411734f55e">inetsocketserver::inetsocketserver</a></div><div class="ttdeci">inetsocketserver(const inetsocketserver &amp;i)</div></div>
 <div class="ttc" id="aclassinetsocketserver_html_a2d62250ef1503b6d3bd0e2ecd1835c05"><div class="ttname"><a href="classinetsocketserver.html#a2d62250ef1503b6d3bd0e2ecd1835c05">inetsocketserver::inetsocketserver</a></div><div class="ttdeci">inetsocketserver()</div></div>
 <div class="ttc" id="aclassinetsocketserver_html_a3ae5b4e2ec5542fc1746b82e0ad8ddba"><div class="ttname"><a href="classinetsocketserver.html#a3ae5b4e2ec5542fc1746b82e0ad8ddba">inetsocketserver::~inetsocketserver</a></div><div class="ttdeci">virtual ~inetsocketserver()</div></div>
-<div class="ttc" id="aclassinetsocketserver_html_a5efc38c04b1ae81e87fc0f8592776c02"><div class="ttname"><a href="classinetsocketserver.html#a5efc38c04b1ae81e87fc0f8592776c02">inetsocketserver::listen</a></div><div class="ttdeci">bool listen(const char *address, uint16_t port, int32_t backlog)</div></div>
 <div class="ttc" id="aclassinetsocketserver_html_a8e2353de1d1174f779e0ea46af22cc19"><div class="ttname"><a href="classinetsocketserver.html#a8e2353de1d1174f779e0ea46af22cc19">inetsocketserver::bind</a></div><div class="ttdeci">bool bind()</div></div>
-<div class="ttc" id="aclassinetsocketserver_html_ac5cfe9a22e4b3221908eeeb0fc02d16c"><div class="ttname"><a href="classinetsocketserver.html#ac5cfe9a22e4b3221908eeeb0fc02d16c">inetsocketserver::initialize</a></div><div class="ttdeci">bool initialize(const char *address, uint16_t port)</div></div>
-<div class="ttc" id="aclassinetsocketserver_html_ad2443a761a916da73294e9352ec3ace6"><div class="ttname"><a href="classinetsocketserver.html#ad2443a761a916da73294e9352ec3ace6">inetsocketserver::operator=</a></div><div class="ttdeci">inetsocketserver &amp; operator=(const inetsocketserver &amp;i)</div></div>
+<div class="ttc" id="aclassinetsocketserver_html_aa2cfa9dd0f4c8e1370cff0ccdc1a9c0d"><div class="ttname"><a href="classinetsocketserver.html#aa2cfa9dd0f4c8e1370cff0ccdc1a9c0d">inetsocketserver::listen</a></div><div class="ttdeci">bool listen(const char *address, uint16_t port, uint32_t backlog)</div></div>
+<div class="ttc" id="aclassinetsocketserver_html_acb3d4da7af456a7f30a26683d84985ac"><div class="ttname"><a href="classinetsocketserver.html#acb3d4da7af456a7f30a26683d84985ac">inetsocketserver::open</a></div><div class="ttdeci">bool open()</div></div>
+<div class="ttc" id="aclassinetsocketserver_html_acd9ffc97076827960f76d969dde40e26"><div class="ttname"><a href="classinetsocketserver.html#acd9ffc97076827960f76d969dde40e26">inetsocketserver::listen</a></div><div class="ttdeci">bool listen()</div></div>
 <div class="ttc" id="aclassinetsocketserver_html_adb956d673ebf0d4975961ffce2b07518"><div class="ttname"><a href="classinetsocketserver.html#adb956d673ebf0d4975961ffce2b07518">inetsocketserver::accept</a></div><div class="ttdeci">filedescriptor * accept()</div></div>
-<div class="ttc" id="aclassinetsocketserver_html_aebd8eccd391d973cfef3c990a03fc6bf"><div class="ttname"><a href="classinetsocketserver.html#aebd8eccd391d973cfef3c990a03fc6bf">inetsocketserver::getPort</a></div><div class="ttdeci">uint16_t getPort()</div></div>
 <div class="ttc" id="aclassinetsocketutil_html"><div class="ttname"><a href="classinetsocketutil.html">inetsocketutil</a></div><div class="ttdef"><b>Definition:</b> inetsocketutil.h:11</div></div>
 <div class="ttc" id="aclasssocketserver_html"><div class="ttname"><a href="classsocketserver.html">socketserver</a></div><div class="ttdef"><b>Definition:</b> socketserver.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

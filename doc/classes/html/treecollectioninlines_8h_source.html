@@ -51,90 +51,103 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="classtreecollection.html#ad4e75d66a4adae1c93e62c0d6307e6a5">    6</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classtreecollection.html#ad4e75d66a4adae1c93e62c0d6307e6a5">treecollection&lt;valuetype&gt;::getType</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;tree&quot;</span>;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;}</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classtreecollection.html#af16e832b898345d88c6a05d775459365">   12</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classtreecollection.html#a502c46e0fc5284588f242b53846f6aca">treecollection&lt;valuetype&gt;::insert</a>(valuetype *values, uint64_t count) {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=0; i&lt;count; i++) {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                insert(values[i]);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        }</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;}</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classtreecollection.html#a43a8d34326942c7d47b33acace086a7c">   20</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a43a8d34326942c7d47b33acace086a7c">treecollection&lt;valuetype&gt;::write</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">return</span> write(&amp;stdoutput);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classtreecollection.html#aeeefd74f90cd224141e152652220d216">   26</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a43a8d34326942c7d47b33acace086a7c">treecollection&lt;valuetype&gt;::write</a>(<a class="code" href="classoutput.html">output</a> *out)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        uint16_t        indentlevel=0;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordflow">return</span> writeNodeXml(out,getTop(),<span class="stringliteral">&quot;t&quot;</span>,&amp;indentlevel,<span class="keyword">true</span>,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classtreecollection.html#ad27a40434d68a0ed174ed238be464bf9">   33</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#ad27a40434d68a0ed174ed238be464bf9">treecollection&lt;valuetype&gt;::writeJson</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classtreecollection.html#aaf4ef501cb5d41b3ede9958d95e4839c">   39</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#ad27a40434d68a0ed174ed238be464bf9">treecollection&lt;valuetype&gt;::writeJson</a>(<span class="keywordtype">bool</span> indent)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,indent);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classtreecollection.html#a6216dbec1deb5431a56b1f50c59b9bc6">   45</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#ad27a40434d68a0ed174ed238be464bf9">treecollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> writeJson(out,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classtreecollection.html#a93dc47108a2c781e35405414fceab595">   51</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#ad27a40434d68a0ed174ed238be464bf9">treecollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        uint16_t        indentlevel=0;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> writeNodeJson(out,getTop(),&amp;indentlevel,indent);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classtreecollection.html#a075b93a20d9d6dfd8b6d5dcef59a37a6">   58</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a075b93a20d9d6dfd8b6d5dcef59a37a6">treecollection&lt;valuetype&gt;::writeXml</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">return</span> writeXml(&amp;stdoutput,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classtreecollection.html#a56280f2224a175e199f843c80eab0353">   64</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a075b93a20d9d6dfd8b6d5dcef59a37a6">treecollection&lt;valuetype&gt;::writeXml</a>(<span class="keywordtype">bool</span> indent)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> writeXml(&amp;stdoutput,indent);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classtreecollection.html#aaa7c1ffc933b5086bda7ca23af54ba6a">   70</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a075b93a20d9d6dfd8b6d5dcef59a37a6">treecollection&lt;valuetype&gt;::writeXml</a>(<a class="code" href="classoutput.html">output</a> *out)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> writeXml(out,<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classtreecollection.html#a97da7ccf557917011eadf4d1764693c4">   76</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a075b93a20d9d6dfd8b6d5dcef59a37a6">treecollection&lt;valuetype&gt;::writeXml</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        uint16_t        indentlevel=0;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">return</span> writeNodeXml(out,getTop(),<span class="stringliteral">&quot;t&quot;</span>,&amp;indentlevel,<span class="keyword">false</span>,indent);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
-<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:9</div></div>
-<div class="ttc" id="aclasstreecollection_html_a075b93a20d9d6dfd8b6d5dcef59a37a6"><div class="ttname"><a href="classtreecollection.html#a075b93a20d9d6dfd8b6d5dcef59a37a6">treecollection::writeXml</a></div><div class="ttdeci">virtual ssize_t writeXml() const</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:58</div></div>
-<div class="ttc" id="aclasstreecollection_html_a43a8d34326942c7d47b33acace086a7c"><div class="ttname"><a href="classtreecollection.html#a43a8d34326942c7d47b33acace086a7c">treecollection::write</a></div><div class="ttdeci">virtual ssize_t write() const</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:20</div></div>
+<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="classtreecollection.html#a005919db505c3dd20383618dd05a8e89">    6</a></span>&#160;<a class="code" href="classtreecollection.html#a005919db505c3dd20383618dd05a8e89">treecollection&lt;valuetype&gt;::treecollection</a>() : <a class="code" href="classnodecollection.html">nodecollection</a>&lt;valuetype&gt;() {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;}</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classtreecollection.html#a89e87598a80b54a26c96fa3e650a63fa">   11</a></span>&#160;<a class="code" href="classtreecollection.html#a005919db505c3dd20383618dd05a8e89">treecollection&lt;valuetype&gt;::treecollection</a>(<a class="code" href="classnodecollection.html">nodecollection&lt;valuetype&gt;</a> &amp;n) :</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                                                <a class="code" href="classnodecollection.html">nodecollection</a>&lt;valuetype&gt;(n) {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classtreecollection.html#ad57ea7a5299ef6aa940759ea1fffbd3f">   17</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classtreecollection.html#ad57ea7a5299ef6aa940759ea1fffbd3f">treecollection&lt;valuetype&gt;::getType</a>() {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;tree&quot;</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classtreecollection.html#af16e832b898345d88c6a05d775459365">   23</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classtreecollection.html#a502c46e0fc5284588f242b53846f6aca">treecollection&lt;valuetype&gt;::insert</a>(valuetype *values, uint64_t count) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordflow">for</span> (uint64_t i=0; i&lt;count; i++) {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                insert(values[i]);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        }</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classtreecollection.html#ad124198e4b74315c98edd4cbc727a17a">   31</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#ad124198e4b74315c98edd4cbc727a17a">treecollection&lt;valuetype&gt;::write</a>() {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">return</span> write(&amp;stdoutput);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classtreecollection.html#a1ca770eeb308bb882bf916cb30a7ea0d">   37</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#ad124198e4b74315c98edd4cbc727a17a">treecollection&lt;valuetype&gt;::write</a>(<a class="code" href="classoutput.html">output</a> *out) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        uint16_t        indentlevel=0;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> writeNodeXml(out,getTop(),<span class="stringliteral">&quot;t&quot;</span>,&amp;indentlevel,<span class="keyword">true</span>,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classtreecollection.html#a71242115c702ff26b8168c8a8c33a21e">   44</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a71242115c702ff26b8168c8a8c33a21e">treecollection&lt;valuetype&gt;::writeJson</a>() {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classtreecollection.html#a9202ce55f3857d229919e03343d5034c">   50</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a71242115c702ff26b8168c8a8c33a21e">treecollection&lt;valuetype&gt;::writeJson</a>(<span class="keywordtype">bool</span> indent) {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">return</span> writeJson(&amp;stdoutput,indent);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classtreecollection.html#aa1475e6bcec117a7095150f531e08e14">   56</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a71242115c702ff26b8168c8a8c33a21e">treecollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">return</span> writeJson(out,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classtreecollection.html#af0c010df39c9304f16408fbecfa87ae2">   62</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a71242115c702ff26b8168c8a8c33a21e">treecollection&lt;valuetype&gt;::writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        uint16_t        indentlevel=0;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">return</span> writeNodeJson(out,getTop(),&amp;indentlevel,indent);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classtreecollection.html#a3ba2783fe2ac73cb8880ec4cc3f6722e">   69</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a3ba2783fe2ac73cb8880ec4cc3f6722e">treecollection&lt;valuetype&gt;::writeXml</a>() {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> writeXml(&amp;stdoutput,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classtreecollection.html#ab86fbc0671cc76c3a44993091f3983d4">   75</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a3ba2783fe2ac73cb8880ec4cc3f6722e">treecollection&lt;valuetype&gt;::writeXml</a>(<span class="keywordtype">bool</span> indent) {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> writeXml(&amp;stdoutput,indent);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classtreecollection.html#ab152e3a8dcbb1a59caf394a6bfd51df2">   81</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a3ba2783fe2ac73cb8880ec4cc3f6722e">treecollection&lt;valuetype&gt;::writeXml</a>(<a class="code" href="classoutput.html">output</a> *out) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> writeXml(out,<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> valuetype &gt;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classtreecollection.html#a0126c6359a54a159511beb439af95a48">   87</a></span>&#160;ssize_t <a class="code" href="classtreecollection.html#a3ba2783fe2ac73cb8880ec4cc3f6722e">treecollection&lt;valuetype&gt;::writeXml</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        uint16_t        indentlevel=0;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> writeNodeXml(out,getTop(),<span class="stringliteral">&quot;t&quot;</span>,&amp;indentlevel,<span class="keyword">false</span>,indent);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
+<div class="ttc" id="aclassnodecollection_html"><div class="ttname"><a href="classnodecollection.html">nodecollection</a></div><div class="ttdef"><b>Definition:</b> nodecollection.h:31</div></div>
+<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:11</div></div>
+<div class="ttc" id="aclasstreecollection_html_a005919db505c3dd20383618dd05a8e89"><div class="ttname"><a href="classtreecollection.html#a005919db505c3dd20383618dd05a8e89">treecollection::treecollection</a></div><div class="ttdeci">treecollection()</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:6</div></div>
+<div class="ttc" id="aclasstreecollection_html_a3ba2783fe2ac73cb8880ec4cc3f6722e"><div class="ttname"><a href="classtreecollection.html#a3ba2783fe2ac73cb8880ec4cc3f6722e">treecollection::writeXml</a></div><div class="ttdeci">virtual ssize_t writeXml()</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:69</div></div>
 <div class="ttc" id="aclasstreecollection_html_a502c46e0fc5284588f242b53846f6aca"><div class="ttname"><a href="classtreecollection.html#a502c46e0fc5284588f242b53846f6aca">treecollection::insert</a></div><div class="ttdeci">virtual void insert(valuetype value)=0</div></div>
-<div class="ttc" id="aclasstreecollection_html_ad27a40434d68a0ed174ed238be464bf9"><div class="ttname"><a href="classtreecollection.html#ad27a40434d68a0ed174ed238be464bf9">treecollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson() const</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:33</div></div>
-<div class="ttc" id="aclasstreecollection_html_ad4e75d66a4adae1c93e62c0d6307e6a5"><div class="ttname"><a href="classtreecollection.html#ad4e75d66a4adae1c93e62c0d6307e6a5">treecollection::getType</a></div><div class="ttdeci">virtual const char * getType() const</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:6</div></div>
+<div class="ttc" id="aclasstreecollection_html_a71242115c702ff26b8168c8a8c33a21e"><div class="ttname"><a href="classtreecollection.html#a71242115c702ff26b8168c8a8c33a21e">treecollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson()</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:44</div></div>
+<div class="ttc" id="aclasstreecollection_html_ad124198e4b74315c98edd4cbc727a17a"><div class="ttname"><a href="classtreecollection.html#ad124198e4b74315c98edd4cbc727a17a">treecollection::write</a></div><div class="ttdeci">virtual ssize_t write()</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:31</div></div>
+<div class="ttc" id="aclasstreecollection_html_ad57ea7a5299ef6aa940759ea1fffbd3f"><div class="ttname"><a href="classtreecollection.html#ad57ea7a5299ef6aa940759ea1fffbd3f">treecollection::getType</a></div><div class="ttdeci">virtual const char * getType()</div><div class="ttdef"><b>Definition:</b> treecollectioninlines.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

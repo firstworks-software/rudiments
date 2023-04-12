@@ -59,10 +59,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a62440de7e1d9dff30716a1780f0fbe7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04f10080e355334384ebdcdf5ff7a6b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamiclib.html#a04f10080e355334384ebdcdf5ff7a6b2">close</a> ()</td></tr>
 <tr class="separator:a04f10080e355334384ebdcdf5ff7a6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae115b2ab1a1ae627245573039dd14c3c"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamiclib.html#ae115b2ab1a1ae627245573039dd14c3c">getSymbol</a> (const char *symbol) const</td></tr>
-<tr class="separator:ae115b2ab1a1ae627245573039dd14c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae83c7379f29f4a378cdef3faeaf679a7"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">getError</a> () const</td></tr>
-<tr class="separator:ae83c7379f29f4a378cdef3faeaf679a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a156d8f30640c2ae09849c663ec80c745"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamiclib.html#a156d8f30640c2ae09849c663ec80c745">getSymbol</a> (const char *symbol)</td></tr>
+<tr class="separator:a156d8f30640c2ae09849c663ec80c745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a410ad0b92dceedbdfbcfc6686333136e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">getError</a> ()</td></tr>
+<tr class="separator:a410ad0b92dceedbdfbcfc6686333136e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classobject.html">object</a></td></tr>
 <tr class="memitem:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classobject.html#a6233244b77a2794b456e5eee6964806d">~object</a> ()</td></tr>
 <tr class="separator:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,8 +130,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae83c7379f29f4a378cdef3faeaf679a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae83c7379f29f4a378cdef3faeaf679a7">&#9670;&nbsp;</a></span>getError()</h2>
+<a id="a410ad0b92dceedbdfbcfc6686333136e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a410ad0b92dceedbdfbcfc6686333136e">&#9670;&nbsp;</a></span>getError()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -140,7 +140,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">char* dynamiclib::getError </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -149,8 +149,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae115b2ab1a1ae627245573039dd14c3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae115b2ab1a1ae627245573039dd14c3c">&#9670;&nbsp;</a></span>getSymbol()</h2>
+<a id="a156d8f30640c2ae09849c663ec80c745"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a156d8f30640c2ae09849c663ec80c745">&#9670;&nbsp;</a></span>getSymbol()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,7 +160,7 @@ Static Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>symbol</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -227,15 +227,15 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p><a class="el" href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">getError()</a> is not reentrant and thus not thread safe. If your application is multi-threaded and you use <a class="el" href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">getError()</a>, you must use this method to supply a mutex and ensure thread safety.</p>
-<p>If you don't supply a mutex, <a class="el" href="classdynamiclib.html#ae83c7379f29f4a378cdef3faeaf679a7">getError()</a> will still work, but will not be thread-safe. </p>
+<p><a class="el" href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">getError()</a> is not reentrant and thus not thread safe. If your application is multi-threaded and you use <a class="el" href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">getError()</a>, you must use this method to supply a mutex and ensure thread safety.</p>
+<p>If you don't supply a mutex, <a class="el" href="classdynamiclib.html#a410ad0b92dceedbdfbcfc6686333136e">getError()</a> will still work, but will not be thread-safe. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:28 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

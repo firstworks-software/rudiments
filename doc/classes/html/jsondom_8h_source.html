@@ -63,7 +63,7 @@ $(function() {
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
 <div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classjsondom.html#a3ea75e7476b9ef8869deb1e2954e95d3">  101</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classjsondom.html#a3ea75e7476b9ef8869deb1e2954e95d3">~jsondom</a>();</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classjsondom.html#abc2f1d7d7b7a6d4f56e2c6bd31e0b656">  104</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classjsondom.html#abc2f1d7d7b7a6d4f56e2c6bd31e0b656">getType</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classjsondom.html#a702afe6a872227734477a568b46e0642">  104</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classjsondom.html#a702afe6a872227734477a568b46e0642">getType</a>();</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classjsondom.html#a7faf1cabdc25c796fb8a179ecc9c29da">  107</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classjsondom.html#a7faf1cabdc25c796fb8a179ecc9c29da">parse</a>(<a class="code" href="classinput.html">input</a> *in);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
@@ -108,7 +108,7 @@ $(function() {
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassdom_html"><div class="ttname"><a href="classdom.html">dom</a></div><div class="ttdef"><b>Definition:</b> dom.h:10</div></div>
-<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:9</div></div>
+<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:11</div></div>
 <div class="ttc" id="aclassjsondom_html"><div class="ttname"><a href="classjsondom.html">jsondom</a></div><div class="ttdef"><b>Definition:</b> jsondom.h:76</div></div>
 <div class="ttc" id="aclassjsondom_html_a05a10a4083adcf5555d68cfa56d6e8ea"><div class="ttname"><a href="classjsondom.html#a05a10a4083adcf5555d68cfa56d6e8ea">jsondom::jsondom</a></div><div class="ttdeci">jsondom()</div></div>
 <div class="ttc" id="aclassjsondom_html_a076b9158fc783ebc4c9d5048e22f43a6"><div class="ttname"><a href="classjsondom.html#a076b9158fc783ebc4c9d5048e22f43a6">jsondom::stringValue</a></div><div class="ttdeci">virtual bool stringValue(const char *value)</div></div>
@@ -117,6 +117,7 @@ $(function() {
 <div class="ttc" id="aclassjsondom_html_a3e0501a58d927e4ee5cb83d0c1face0b"><div class="ttname"><a href="classjsondom.html#a3e0501a58d927e4ee5cb83d0c1face0b">jsondom::memberName</a></div><div class="ttdeci">virtual bool memberName(const char *name)</div></div>
 <div class="ttc" id="aclassjsondom_html_a3ea75e7476b9ef8869deb1e2954e95d3"><div class="ttname"><a href="classjsondom.html#a3ea75e7476b9ef8869deb1e2954e95d3">jsondom::~jsondom</a></div><div class="ttdeci">virtual ~jsondom()</div></div>
 <div class="ttc" id="aclassjsondom_html_a6e8211571e0b60126b2b1ec2c9c6caaa"><div class="ttname"><a href="classjsondom.html#a6e8211571e0b60126b2b1ec2c9c6caaa">jsondom::valueEnd</a></div><div class="ttdeci">virtual bool valueEnd()</div></div>
+<div class="ttc" id="aclassjsondom_html_a702afe6a872227734477a568b46e0642"><div class="ttname"><a href="classjsondom.html#a702afe6a872227734477a568b46e0642">jsondom::getType</a></div><div class="ttdeci">virtual const char * getType()</div></div>
 <div class="ttc" id="aclassjsondom_html_a71b044384618d2e792cecd2f0ee4d0ec"><div class="ttname"><a href="classjsondom.html#a71b044384618d2e792cecd2f0ee4d0ec">jsondom::numberValue</a></div><div class="ttdeci">virtual bool numberValue(const char *value)</div></div>
 <div class="ttc" id="aclassjsondom_html_a741d6ac74097770f63eb62dda98900b5"><div class="ttname"><a href="classjsondom.html#a741d6ac74097770f63eb62dda98900b5">jsondom::parseString</a></div><div class="ttdeci">bool parseString(const char *string)</div></div>
 <div class="ttc" id="aclassjsondom_html_a76011aad28e04a98c3e642c034c0f15a"><div class="ttname"><a href="classjsondom.html#a76011aad28e04a98c3e642c034c0f15a">jsondom::valueStart</a></div><div class="ttdeci">virtual bool valueStart()</div></div>
@@ -126,7 +127,6 @@ $(function() {
 <div class="ttc" id="aclassjsondom_html_a9e587d1b6b471783456276aec005816f"><div class="ttname"><a href="classjsondom.html#a9e587d1b6b471783456276aec005816f">jsondom::createRootNode</a></div><div class="ttdeci">void createRootNode()</div></div>
 <div class="ttc" id="aclassjsondom_html_ab7fadf2edc7de046a6fe77e2a18fa9e7"><div class="ttname"><a href="classjsondom.html#ab7fadf2edc7de046a6fe77e2a18fa9e7">jsondom::objectStart</a></div><div class="ttdeci">virtual bool objectStart()</div></div>
 <div class="ttc" id="aclassjsondom_html_ab848a5e37daa9be897016bdb89ba15d5"><div class="ttname"><a href="classjsondom.html#ab848a5e37daa9be897016bdb89ba15d5">jsondom::memberEnd</a></div><div class="ttdeci">virtual bool memberEnd()</div></div>
-<div class="ttc" id="aclassjsondom_html_abc2f1d7d7b7a6d4f56e2c6bd31e0b656"><div class="ttname"><a href="classjsondom.html#abc2f1d7d7b7a6d4f56e2c6bd31e0b656">jsondom::getType</a></div><div class="ttdeci">virtual const char * getType() const</div></div>
 <div class="ttc" id="aclassjsondom_html_ac705e047d1a0d4b006105b50d8916ad2"><div class="ttname"><a href="classjsondom.html#ac705e047d1a0d4b006105b50d8916ad2">jsondom::jsondom</a></div><div class="ttdeci">jsondom(bool stringcacheenabled)</div></div>
 <div class="ttc" id="aclassjsondom_html_ace0871dfab162bfe621a2f1f0e172709"><div class="ttname"><a href="classjsondom.html#ace0871dfab162bfe621a2f1f0e172709">jsondom::arrayStart</a></div><div class="ttdeci">virtual bool arrayStart()</div></div>
 <div class="ttc" id="aclassjsondom_html_af3b5792ace7d2f3773b6de42b25892e4"><div class="ttname"><a href="classjsondom.html#af3b5792ace7d2f3773b6de42b25892e4">jsondom::nullValue</a></div><div class="ttdeci">virtual bool nullValue()</div></div>
@@ -136,7 +136,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -58,41 +58,59 @@ $(function() {
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classclient.html#a4684cdbcdc4a3bd61631d974d0ce3dea">   14</a></span>&#160;                <a class="code" href="classclient.html#a4684cdbcdc4a3bd61631d974d0ce3dea">client</a>();</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classclient.html#a8e34dd32e8d63143f575a7ec1f8cc2a6">   18</a></span>&#160;                <a class="code" href="classclient.html#a8e34dd32e8d63143f575a7ec1f8cc2a6">client</a>(<span class="keyword">const</span> <a class="code" href="classclient.html">client</a> &amp;c);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classclient.html#a52ac8478d25acbdc13e5d6025ee74855">   22</a></span>&#160;                <a class="code" href="classclient.html">client</a>  &amp;<a class="code" href="classclient.html#a52ac8478d25acbdc13e5d6025ee74855">operator=</a>(<span class="keyword">const</span> <a class="code" href="classclient.html">client</a> &amp;c);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classclient.html#a90e45669016db350d74f38947c5d7d87">   25</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classclient.html#a90e45669016db350d74f38947c5d7d87">~client</a>();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classclient.html#a90464de57aef8833b826d91a639db7a9">   32</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    <a class="code" href="classclient.html#a90464de57aef8833b826d91a639db7a9">initialize</a>(</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                                <a class="code" href="classdictionary.html">dictionary&lt;const char *, const char *&gt;</a> *cd);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classclient.html#ad0b87fc17daedbf1b450b44aeece1044">   45</a></span>&#160;                <span class="keyword">virtual</span> int32_t <a class="code" href="classclient.html#ad0b87fc17daedbf1b450b44aeece1044">connect</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classclient.html#ad24fcd9a63c0f1a2bbccb80a059edcfb">   50</a></span>&#160;                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classclient.html#ad24fcd9a63c0f1a2bbccb80a059edcfb">getVerboseConnectError</a>();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classclient.html#a3c213e784bcd69783356199834fa925f">   53</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    <a class="code" href="classclient.html#a3c213e784bcd69783356199834fa925f">setVerboseConnectError</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classerror.html">error</a>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/client.h&gt;</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classclient.html#a90e45669016db350d74f38947c5d7d87">   17</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classclient.html#a90e45669016db350d74f38947c5d7d87">~client</a>();</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classclient.html#af58ca7e349b01d3a3bceec8f9be7218d">   22</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    <a class="code" href="classclient.html#af58ca7e349b01d3a3bceec8f9be7218d">setParameters</a>(</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                                <a class="code" href="classdictionary.html">dictionary&lt;const char *, const char *&gt;</a> *cd);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classclient.html#a1278e215fe30d9b55530ea03af528a6b">   30</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classclient.html#a1278e215fe30d9b55530ea03af528a6b">setTimeoutSeconds</a>(int32_t timeoutsec);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classclient.html#aa1895397ad96dda9b87e9efa5aabf244">   38</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classclient.html#aa1895397ad96dda9b87e9efa5aabf244">setTimeoutMicroseconds</a>(int32_t timeoutusec);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classclient.html#a2dcd0c484db1e953b55c94478f1accce">   44</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classclient.html#a2dcd0c484db1e953b55c94478f1accce">setRetryWait</a>(uint32_t retrywait);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classclient.html#a24d16724d00f10bc155d3d9dcc9c1d10">   52</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classclient.html#a24d16724d00f10bc155d3d9dcc9c1d10">setTries</a>(uint32_t tries);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classclient.html#acd53be8385a4ba2c72365cec3c341b5c">   59</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classclient.html#acd53be8385a4ba2c72365cec3c341b5c">setVerboseConnectError</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classerror.html">error</a>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classclient.html#a5e1cdd3521573f0490e6a485236dcdab">   63</a></span>&#160;                int32_t <a class="code" href="classclient.html#a5e1cdd3521573f0490e6a485236dcdab">getTimeoutSeconds</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classclient.html#a17fca081e15d44c44669439466c61c4c">   68</a></span>&#160;                int32_t <a class="code" href="classclient.html#a17fca081e15d44c44669439466c61c4c">getTimeoutMicroseconds</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classclient.html#a5bfb23160708b4157a101bc8ee059764">   72</a></span>&#160;                uint32_t        <a class="code" href="classclient.html#a5bfb23160708b4157a101bc8ee059764">getRetryWait</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classclient.html#aaad15d6b8d9e1643aaa93a02879bb09a">   76</a></span>&#160;                uint32_t        <a class="code" href="classclient.html#aaad15d6b8d9e1643aaa93a02879bb09a">getTries</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classclient.html#a52e01e4c8026da65b4e231a3db5e9027">   79</a></span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classclient.html#a52e01e4c8026da65b4e231a3db5e9027">getVerboseConnectError</a>();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classclient.html#ad0b87fc17daedbf1b450b44aeece1044">   91</a></span>&#160;                <span class="keyword">virtual</span> int32_t <a class="code" href="classclient.html#ad0b87fc17daedbf1b450b44aeece1044">connect</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/client.h&gt;</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;};</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassclient_html"><div class="ttname"><a href="classclient.html">client</a></div><div class="ttdef"><b>Definition:</b> client.h:11</div></div>
-<div class="ttc" id="aclassclient_html_a3c213e784bcd69783356199834fa925f"><div class="ttname"><a href="classclient.html#a3c213e784bcd69783356199834fa925f">client::setVerboseConnectError</a></div><div class="ttdeci">virtual void setVerboseConnectError(const char *error)</div></div>
+<div class="ttc" id="aclassclient_html_a1278e215fe30d9b55530ea03af528a6b"><div class="ttname"><a href="classclient.html#a1278e215fe30d9b55530ea03af528a6b">client::setTimeoutSeconds</a></div><div class="ttdeci">void setTimeoutSeconds(int32_t timeoutsec)</div></div>
+<div class="ttc" id="aclassclient_html_a17fca081e15d44c44669439466c61c4c"><div class="ttname"><a href="classclient.html#a17fca081e15d44c44669439466c61c4c">client::getTimeoutMicroseconds</a></div><div class="ttdeci">int32_t getTimeoutMicroseconds()</div></div>
+<div class="ttc" id="aclassclient_html_a24d16724d00f10bc155d3d9dcc9c1d10"><div class="ttname"><a href="classclient.html#a24d16724d00f10bc155d3d9dcc9c1d10">client::setTries</a></div><div class="ttdeci">void setTries(uint32_t tries)</div></div>
+<div class="ttc" id="aclassclient_html_a2dcd0c484db1e953b55c94478f1accce"><div class="ttname"><a href="classclient.html#a2dcd0c484db1e953b55c94478f1accce">client::setRetryWait</a></div><div class="ttdeci">void setRetryWait(uint32_t retrywait)</div></div>
 <div class="ttc" id="aclassclient_html_a4684cdbcdc4a3bd61631d974d0ce3dea"><div class="ttname"><a href="classclient.html#a4684cdbcdc4a3bd61631d974d0ce3dea">client::client</a></div><div class="ttdeci">client()</div></div>
-<div class="ttc" id="aclassclient_html_a52ac8478d25acbdc13e5d6025ee74855"><div class="ttname"><a href="classclient.html#a52ac8478d25acbdc13e5d6025ee74855">client::operator=</a></div><div class="ttdeci">client &amp; operator=(const client &amp;c)</div></div>
-<div class="ttc" id="aclassclient_html_a8e34dd32e8d63143f575a7ec1f8cc2a6"><div class="ttname"><a href="classclient.html#a8e34dd32e8d63143f575a7ec1f8cc2a6">client::client</a></div><div class="ttdeci">client(const client &amp;c)</div></div>
-<div class="ttc" id="aclassclient_html_a90464de57aef8833b826d91a639db7a9"><div class="ttname"><a href="classclient.html#a90464de57aef8833b826d91a639db7a9">client::initialize</a></div><div class="ttdeci">virtual void initialize(dictionary&lt; const char *, const char * &gt; *cd)</div></div>
+<div class="ttc" id="aclassclient_html_a52e01e4c8026da65b4e231a3db5e9027"><div class="ttname"><a href="classclient.html#a52e01e4c8026da65b4e231a3db5e9027">client::getVerboseConnectError</a></div><div class="ttdeci">const char * getVerboseConnectError()</div></div>
+<div class="ttc" id="aclassclient_html_a5bfb23160708b4157a101bc8ee059764"><div class="ttname"><a href="classclient.html#a5bfb23160708b4157a101bc8ee059764">client::getRetryWait</a></div><div class="ttdeci">uint32_t getRetryWait()</div></div>
+<div class="ttc" id="aclassclient_html_a5e1cdd3521573f0490e6a485236dcdab"><div class="ttname"><a href="classclient.html#a5e1cdd3521573f0490e6a485236dcdab">client::getTimeoutSeconds</a></div><div class="ttdeci">int32_t getTimeoutSeconds()</div></div>
 <div class="ttc" id="aclassclient_html_a90e45669016db350d74f38947c5d7d87"><div class="ttname"><a href="classclient.html#a90e45669016db350d74f38947c5d7d87">client::~client</a></div><div class="ttdeci">virtual ~client()</div></div>
+<div class="ttc" id="aclassclient_html_aa1895397ad96dda9b87e9efa5aabf244"><div class="ttname"><a href="classclient.html#aa1895397ad96dda9b87e9efa5aabf244">client::setTimeoutMicroseconds</a></div><div class="ttdeci">void setTimeoutMicroseconds(int32_t timeoutusec)</div></div>
+<div class="ttc" id="aclassclient_html_aaad15d6b8d9e1643aaa93a02879bb09a"><div class="ttname"><a href="classclient.html#aaad15d6b8d9e1643aaa93a02879bb09a">client::getTries</a></div><div class="ttdeci">uint32_t getTries()</div></div>
+<div class="ttc" id="aclassclient_html_acd53be8385a4ba2c72365cec3c341b5c"><div class="ttname"><a href="classclient.html#acd53be8385a4ba2c72365cec3c341b5c">client::setVerboseConnectError</a></div><div class="ttdeci">void setVerboseConnectError(const char *error)</div></div>
 <div class="ttc" id="aclassclient_html_ad0b87fc17daedbf1b450b44aeece1044"><div class="ttname"><a href="classclient.html#ad0b87fc17daedbf1b450b44aeece1044">client::connect</a></div><div class="ttdeci">virtual int32_t connect()</div></div>
-<div class="ttc" id="aclassclient_html_ad24fcd9a63c0f1a2bbccb80a059edcfb"><div class="ttname"><a href="classclient.html#ad24fcd9a63c0f1a2bbccb80a059edcfb">client::getVerboseConnectError</a></div><div class="ttdeci">virtual const char * getVerboseConnectError()</div></div>
+<div class="ttc" id="aclassclient_html_af58ca7e349b01d3a3bceec8f9be7218d"><div class="ttname"><a href="classclient.html#af58ca7e349b01d3a3bceec8f9be7218d">client::setParameters</a></div><div class="ttdeci">virtual void setParameters(dictionary&lt; const char *, const char * &gt; *cd)</div></div>
 <div class="ttc" id="aclassdictionary_html"><div class="ttname"><a href="classdictionary.html">dictionary</a></div><div class="ttdef"><b>Definition:</b> dictionary.h:12</div></div>
 <div class="ttc" id="aclasserror_html"><div class="ttname"><a href="classerror.html">error</a></div><div class="ttdef"><b>Definition:</b> error.h:10</div></div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

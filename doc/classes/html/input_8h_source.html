@@ -54,82 +54,157 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/inputincludes.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classinput.html">    9</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classinput.html">input</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                <span class="keyword">virtual</span> ~<a class="code" href="classinput.html">input</a>();</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">size_t</span> size)=0;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">char</span> *buffer, <span class="keywordtype">size_t</span> length)=0;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">char</span> *<a class="code" href="classcharacter.html">character</a>)=0;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">wchar_t</span> *buffer, <span class="keywordtype">size_t</span> length)=0;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">wchar_t</span> *<a class="code" href="classcharacter.html">character</a>)=0;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keyword">virtual</span> ssize_t read(int16_t *number)=0;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <span class="keyword">virtual</span> ssize_t read(int32_t *number)=0;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keyword">virtual</span> ssize_t read(int64_t *number)=0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code" href="classcharacter.html">character</a>)=0;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                <span class="keyword">virtual</span> ssize_t read(uint16_t *number)=0;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keyword">virtual</span> ssize_t read(uint32_t *number)=0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">virtual</span> ssize_t read(uint64_t *number)=0;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">float</span> *number)=0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">double</span> *number)=0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">size_t</span> size,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">char</span> *buffer, <span class="keywordtype">size_t</span> length,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">char</span> *<a class="code" href="classcharacter.html">character</a>,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">wchar_t</span> *buffer, <span class="keywordtype">size_t</span> length,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">wchar_t</span> *<a class="code" href="classcharacter.html">character</a>,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keyword">virtual</span> ssize_t read(int16_t *number,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keyword">virtual</span> ssize_t read(int32_t *number,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keyword">virtual</span> ssize_t read(int64_t *number,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code" href="classcharacter.html">character</a>,</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                <span class="keyword">virtual</span> ssize_t read(uint16_t *number,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="keyword">virtual</span> ssize_t read(uint32_t *number,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keyword">virtual</span> ssize_t read(uint64_t *number,</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">float</span> *number,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">double</span> *number,</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                                        int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer,</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes,</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                                int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classinput.html#a9fdda67dbc93d9388501314420bd22d7">  124</a></span>&#160;                ssize_t <a class="code" href="classinput.html#a9fdda67dbc93d9388501314420bd22d7">read</a>(<span class="keywordtype">char</span> **buffer,</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes,</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                                <span class="keywordtype">char</span> escapechar, int32_t sec, int32_t usec);</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;};</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/inputinlines.h&gt;</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclasscharacter_html"><div class="ttname"><a href="classcharacter.html">character</a></div><div class="ttdef"><b>Definition:</b> character.h:11</div></div>
-<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:9</div></div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classinput.html">   11</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classinput.html">input</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classinput.html#adac0ea346c43d7762baef3e3f387eebd">   15</a></span>&#160;                <a class="code" href="classinput.html#adac0ea346c43d7762baef3e3f387eebd">input</a>();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classinput.html#ac7b87bf6191c8606ad249ff75de10ac2">   18</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classinput.html#ac7b87bf6191c8606ad249ff75de10ac2">~input</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">   24</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">read</a>(byte_t *buffer, <span class="keywordtype">size_t</span> size)=0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classinput.html#a92efd6847733259938d58a9bab8adffb">   29</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a92efd6847733259938d58a9bab8adffb">read</a>(<span class="keywordtype">char</span> *buffer, <span class="keywordtype">size_t</span> length)=0;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classinput.html#a092e826f9993bdf824a6bc05860ae258">   34</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a092e826f9993bdf824a6bc05860ae258">read</a>(<span class="keywordtype">char</span> *buffer)=0;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classinput.html#a68ee61520e968b51b3a9b50a68e22de4">   39</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a68ee61520e968b51b3a9b50a68e22de4">read</a>(<span class="keywordtype">wchar_t</span> *buffer, <span class="keywordtype">size_t</span> length)=0;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classinput.html#a71494b8b97cd6381413bc314f8e2391e">   44</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a71494b8b97cd6381413bc314f8e2391e">read</a>(<span class="keywordtype">wchar_t</span> *buffer)=0;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classinput.html#ab88bdeae8efab19d3e5a6db32ba6ed59">   49</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ab88bdeae8efab19d3e5a6db32ba6ed59">readUcs2</a>(ucs2_t *buffer, <span class="keywordtype">size_t</span> length)=0;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classinput.html#a43777a610e2d1e55310f3bb5fafc336e">   54</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a43777a610e2d1e55310f3bb5fafc336e">readUcs2</a>(ucs2_t *buffer)=0;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classinput.html#ab983755c36eab1bb62bbf62c980a4ffa">   59</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ab983755c36eab1bb62bbf62c980a4ffa">read</a>(int16_t *buffer)=0;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classinput.html#a6a322ba2ad1cef59baecb2d0684d08c9">   64</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a6a322ba2ad1cef59baecb2d0684d08c9">read</a>(int32_t *buffer)=0;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classinput.html#a85f9361bda7aeae768f3f9d03bb902bd">   69</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a85f9361bda7aeae768f3f9d03bb902bd">read</a>(int64_t *buffer)=0;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classinput.html#a1e5a772e65872ae33ad72484a50b990c">   74</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a1e5a772e65872ae33ad72484a50b990c">read</a>(byte_t *buffer)=0;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classinput.html#a5cd52f7967bbed2b9558357979479bf2">   80</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a5cd52f7967bbed2b9558357979479bf2">read</a>(uint16_t *buffer)=0;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classinput.html#a5ec376f1a28473b4f21ac6116befca74">   86</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a5ec376f1a28473b4f21ac6116befca74">read</a>(uint32_t *buffer)=0;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classinput.html#a9e2f030433982722db17fec1cdf4cad6">   92</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a9e2f030433982722db17fec1cdf4cad6">read</a>(uint64_t *buffer)=0;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classinput.html#a843d325dadbb8a1ed80bae847ccf561b">   98</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a843d325dadbb8a1ed80bae847ccf561b">read</a>(<span class="keywordtype">float</span> *buffer)=0;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classinput.html#a212b80abaf852b95a9fa816f9d4af0a4">  104</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a212b80abaf852b95a9fa816f9d4af0a4">read</a>(<span class="keywordtype">double</span> *buffer)=0;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer,</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classinput.html#ab9c3bbfef5ce46e64694eafc41de11b0">  138</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ab9c3bbfef5ce46e64694eafc41de11b0">read</a>(byte_t *buffer, <span class="keywordtype">size_t</span> size,</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="classinput.html#a3b60a98b44344df675a947026cacf4cd">  149</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a3b60a98b44344df675a947026cacf4cd">read</a>(<span class="keywordtype">char</span> *buffer, <span class="keywordtype">size_t</span> length,</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="classinput.html#a258ecdfabeb4fc45cb1bf49c7526011a">  160</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a258ecdfabeb4fc45cb1bf49c7526011a">read</a>(<span class="keywordtype">char</span> *buffer,</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="classinput.html#acdf1cb8701c381cfcf85b340d94d81bc">  171</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#acdf1cb8701c381cfcf85b340d94d81bc">read</a>(<span class="keywordtype">wchar_t</span> *buffer, <span class="keywordtype">size_t</span> length,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="classinput.html#a57c04a76e9276a93fc33864a0f2cc16a">  182</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a57c04a76e9276a93fc33864a0f2cc16a">read</a>(<span class="keywordtype">wchar_t</span> *buffer,</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="classinput.html#ae621deab802a83445cc661a8332d0b0b">  193</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ae621deab802a83445cc661a8332d0b0b">readUcs2</a>(ucs2_t *buffer, <span class="keywordtype">size_t</span> length,</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno"><a class="line" href="classinput.html#a27d05f933002b168096210f63b281aa4">  204</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a27d05f933002b168096210f63b281aa4">readUcs2</a>(ucs2_t *buffer,</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="classinput.html#a386cfe347085ba377c6785e40e6a5b6f">  215</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a386cfe347085ba377c6785e40e6a5b6f">read</a>(int16_t *buffer,</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="classinput.html#a868920f05b193c8310700317ca4ef3a7">  226</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a868920f05b193c8310700317ca4ef3a7">read</a>(int32_t *buffer,</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno"><a class="line" href="classinput.html#ad8ee94c1abf6ef321e05747cf2bfc9cc">  237</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ad8ee94c1abf6ef321e05747cf2bfc9cc">read</a>(int64_t *buffer,</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="classinput.html#a07e7f77d5a0fb4683ab15b7466ad5ba2">  248</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a07e7f77d5a0fb4683ab15b7466ad5ba2">read</a>(byte_t *buffer,</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
+<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="classinput.html#a4ffc4bb780065c50e7feb611abd28d8a">  260</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#a4ffc4bb780065c50e7feb611abd28d8a">read</a>(uint16_t *buffer,</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classinput.html#ab38d12dacfccd0238f69d25fbd9687a2">  272</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ab38d12dacfccd0238f69d25fbd9687a2">read</a>(uint32_t *buffer,</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
+<div class="line"><a name="l00284"></a><span class="lineno"><a class="line" href="classinput.html#ab97cb8376cb0e35d05094bb1b0eef940">  284</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#ab97cb8376cb0e35d05094bb1b0eef940">read</a>(uint64_t *buffer,</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno"><a class="line" href="classinput.html#aa76712b94dee33ef766ef28c9f2c2524">  296</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#aa76712b94dee33ef766ef28c9f2c2524">read</a>(<span class="keywordtype">float</span> *buffer,</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00308"></a><span class="lineno"><a class="line" href="classinput.html#aab4dba3d14e22c5d300000c9181ed306">  308</a></span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classinput.html#aab4dba3d14e22c5d300000c9181ed306">read</a>(<span class="keywordtype">double</span> *buffer,</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer, <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator,</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                                        int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                ssize_t read(<span class="keywordtype">char</span> **buffer,</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes,</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                                int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno"><a class="line" href="classinput.html#a9fdda67dbc93d9388501314420bd22d7">  354</a></span>&#160;                ssize_t <a class="code" href="classinput.html#a9fdda67dbc93d9388501314420bd22d7">read</a>(<span class="keywordtype">char</span> **buffer,</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">char</span> *terminator, <span class="keywordtype">size_t</span> maxbytes,</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                                <span class="keywordtype">char</span> escapechar, int32_t sec, int32_t usec);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/input.h&gt;</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;};</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/inputinlines.h&gt;</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition:</b> input.h:11</div></div>
+<div class="ttc" id="aclassinput_html_a07e7f77d5a0fb4683ab15b7466ad5ba2"><div class="ttname"><a href="classinput.html#a07e7f77d5a0fb4683ab15b7466ad5ba2">input::read</a></div><div class="ttdeci">virtual ssize_t read(byte_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a092e826f9993bdf824a6bc05860ae258"><div class="ttname"><a href="classinput.html#a092e826f9993bdf824a6bc05860ae258">input::read</a></div><div class="ttdeci">virtual ssize_t read(char *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a1e5a772e65872ae33ad72484a50b990c"><div class="ttname"><a href="classinput.html#a1e5a772e65872ae33ad72484a50b990c">input::read</a></div><div class="ttdeci">virtual ssize_t read(byte_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a212b80abaf852b95a9fa816f9d4af0a4"><div class="ttname"><a href="classinput.html#a212b80abaf852b95a9fa816f9d4af0a4">input::read</a></div><div class="ttdeci">virtual ssize_t read(double *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a258ecdfabeb4fc45cb1bf49c7526011a"><div class="ttname"><a href="classinput.html#a258ecdfabeb4fc45cb1bf49c7526011a">input::read</a></div><div class="ttdeci">virtual ssize_t read(char *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a27d05f933002b168096210f63b281aa4"><div class="ttname"><a href="classinput.html#a27d05f933002b168096210f63b281aa4">input::readUcs2</a></div><div class="ttdeci">virtual ssize_t readUcs2(ucs2_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a386cfe347085ba377c6785e40e6a5b6f"><div class="ttname"><a href="classinput.html#a386cfe347085ba377c6785e40e6a5b6f">input::read</a></div><div class="ttdeci">virtual ssize_t read(int16_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a3b60a98b44344df675a947026cacf4cd"><div class="ttname"><a href="classinput.html#a3b60a98b44344df675a947026cacf4cd">input::read</a></div><div class="ttdeci">virtual ssize_t read(char *buffer, size_t length, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a43777a610e2d1e55310f3bb5fafc336e"><div class="ttname"><a href="classinput.html#a43777a610e2d1e55310f3bb5fafc336e">input::readUcs2</a></div><div class="ttdeci">virtual ssize_t readUcs2(ucs2_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a4ffc4bb780065c50e7feb611abd28d8a"><div class="ttname"><a href="classinput.html#a4ffc4bb780065c50e7feb611abd28d8a">input::read</a></div><div class="ttdeci">virtual ssize_t read(uint16_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a57c04a76e9276a93fc33864a0f2cc16a"><div class="ttname"><a href="classinput.html#a57c04a76e9276a93fc33864a0f2cc16a">input::read</a></div><div class="ttdeci">virtual ssize_t read(wchar_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a5cd52f7967bbed2b9558357979479bf2"><div class="ttname"><a href="classinput.html#a5cd52f7967bbed2b9558357979479bf2">input::read</a></div><div class="ttdeci">virtual ssize_t read(uint16_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a5ec376f1a28473b4f21ac6116befca74"><div class="ttname"><a href="classinput.html#a5ec376f1a28473b4f21ac6116befca74">input::read</a></div><div class="ttdeci">virtual ssize_t read(uint32_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a68ee61520e968b51b3a9b50a68e22de4"><div class="ttname"><a href="classinput.html#a68ee61520e968b51b3a9b50a68e22de4">input::read</a></div><div class="ttdeci">virtual ssize_t read(wchar_t *buffer, size_t length)=0</div></div>
+<div class="ttc" id="aclassinput_html_a6a322ba2ad1cef59baecb2d0684d08c9"><div class="ttname"><a href="classinput.html#a6a322ba2ad1cef59baecb2d0684d08c9">input::read</a></div><div class="ttdeci">virtual ssize_t read(int32_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a71494b8b97cd6381413bc314f8e2391e"><div class="ttname"><a href="classinput.html#a71494b8b97cd6381413bc314f8e2391e">input::read</a></div><div class="ttdeci">virtual ssize_t read(wchar_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a843d325dadbb8a1ed80bae847ccf561b"><div class="ttname"><a href="classinput.html#a843d325dadbb8a1ed80bae847ccf561b">input::read</a></div><div class="ttdeci">virtual ssize_t read(float *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a85f9361bda7aeae768f3f9d03bb902bd"><div class="ttname"><a href="classinput.html#a85f9361bda7aeae768f3f9d03bb902bd">input::read</a></div><div class="ttdeci">virtual ssize_t read(int64_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_a868920f05b193c8310700317ca4ef3a7"><div class="ttname"><a href="classinput.html#a868920f05b193c8310700317ca4ef3a7">input::read</a></div><div class="ttdeci">virtual ssize_t read(int32_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_a92efd6847733259938d58a9bab8adffb"><div class="ttname"><a href="classinput.html#a92efd6847733259938d58a9bab8adffb">input::read</a></div><div class="ttdeci">virtual ssize_t read(char *buffer, size_t length)=0</div></div>
+<div class="ttc" id="aclassinput_html_a9e2f030433982722db17fec1cdf4cad6"><div class="ttname"><a href="classinput.html#a9e2f030433982722db17fec1cdf4cad6">input::read</a></div><div class="ttdeci">virtual ssize_t read(uint64_t *buffer)=0</div></div>
 <div class="ttc" id="aclassinput_html_a9fdda67dbc93d9388501314420bd22d7"><div class="ttname"><a href="classinput.html#a9fdda67dbc93d9388501314420bd22d7">input::read</a></div><div class="ttdeci">ssize_t read(char **buffer, const char *terminator, size_t maxbytes, char escapechar, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_aa76712b94dee33ef766ef28c9f2c2524"><div class="ttname"><a href="classinput.html#aa76712b94dee33ef766ef28c9f2c2524">input::read</a></div><div class="ttdeci">virtual ssize_t read(float *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_aab4dba3d14e22c5d300000c9181ed306"><div class="ttname"><a href="classinput.html#aab4dba3d14e22c5d300000c9181ed306">input::read</a></div><div class="ttdeci">virtual ssize_t read(double *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_ab38d12dacfccd0238f69d25fbd9687a2"><div class="ttname"><a href="classinput.html#ab38d12dacfccd0238f69d25fbd9687a2">input::read</a></div><div class="ttdeci">virtual ssize_t read(uint32_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_ab88bdeae8efab19d3e5a6db32ba6ed59"><div class="ttname"><a href="classinput.html#ab88bdeae8efab19d3e5a6db32ba6ed59">input::readUcs2</a></div><div class="ttdeci">virtual ssize_t readUcs2(ucs2_t *buffer, size_t length)=0</div></div>
+<div class="ttc" id="aclassinput_html_ab97cb8376cb0e35d05094bb1b0eef940"><div class="ttname"><a href="classinput.html#ab97cb8376cb0e35d05094bb1b0eef940">input::read</a></div><div class="ttdeci">virtual ssize_t read(uint64_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_ab983755c36eab1bb62bbf62c980a4ffa"><div class="ttname"><a href="classinput.html#ab983755c36eab1bb62bbf62c980a4ffa">input::read</a></div><div class="ttdeci">virtual ssize_t read(int16_t *buffer)=0</div></div>
+<div class="ttc" id="aclassinput_html_ab9c3bbfef5ce46e64694eafc41de11b0"><div class="ttname"><a href="classinput.html#ab9c3bbfef5ce46e64694eafc41de11b0">input::read</a></div><div class="ttdeci">virtual ssize_t read(byte_t *buffer, size_t size, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_ac23f620f6efa1cbe595a6ac619cdba2d"><div class="ttname"><a href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">input::read</a></div><div class="ttdeci">virtual ssize_t read(byte_t *buffer, size_t size)=0</div></div>
+<div class="ttc" id="aclassinput_html_ac7b87bf6191c8606ad249ff75de10ac2"><div class="ttname"><a href="classinput.html#ac7b87bf6191c8606ad249ff75de10ac2">input::~input</a></div><div class="ttdeci">virtual ~input()</div></div>
+<div class="ttc" id="aclassinput_html_acdf1cb8701c381cfcf85b340d94d81bc"><div class="ttname"><a href="classinput.html#acdf1cb8701c381cfcf85b340d94d81bc">input::read</a></div><div class="ttdeci">virtual ssize_t read(wchar_t *buffer, size_t length, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_ad8ee94c1abf6ef321e05747cf2bfc9cc"><div class="ttname"><a href="classinput.html#ad8ee94c1abf6ef321e05747cf2bfc9cc">input::read</a></div><div class="ttdeci">virtual ssize_t read(int64_t *buffer, int32_t sec, int32_t usec)</div></div>
+<div class="ttc" id="aclassinput_html_adac0ea346c43d7762baef3e3f387eebd"><div class="ttname"><a href="classinput.html#adac0ea346c43d7762baef3e3f387eebd">input::input</a></div><div class="ttdeci">input()</div></div>
+<div class="ttc" id="aclassinput_html_ae621deab802a83445cc661a8332d0b0b"><div class="ttname"><a href="classinput.html#ae621deab802a83445cc661a8332d0b0b">input::readUcs2</a></div><div class="ttdeci">virtual ssize_t readUcs2(ucs2_t *buffer, size_t length, int32_t sec, int32_t usec)</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

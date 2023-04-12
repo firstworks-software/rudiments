@@ -6,6 +6,9 @@
 
 #include <rudiments/private/gssincludes.h>
 
+/** The gss class provides methods for determining whether rudiments was built
+ *  with GSS (Generic Security Services API/Kerberos) support and for
+ *  determining the available security mechanisms. */
 class RUDIMENTS_DLLSPEC gss : public object {
 	public:
 		/** Creates a new instance of the gss framework. */
@@ -38,6 +41,8 @@ class RUDIMENTS_DLLSPEC gss : public object {
 };
 
 
+/** The gssmechanism class provides methods for working with GSS (Generic
+ *  Security Services API/Kerberos) mechanisms. */
 class RUDIMENTS_DLLSPEC gssmechanism : public object {
 	public:
 		/** Creates a new instance of the gssmechanism class. */
@@ -80,6 +85,8 @@ class RUDIMENTS_DLLSPEC gssmechanism : public object {
 };
 
 
+/** The gsscredentials class provides methods for working with GSS (Generic
+ *  Security Services API/Kerberos) credentials. */
 class RUDIMENTS_DLLSPEC gsscredentials : public object {
 	public:
 		/** Creates an instance of the gsscredentials class. */
@@ -230,6 +237,8 @@ class RUDIMENTS_DLLSPEC gsscredentials : public object {
 };
 
 
+/** The gsscontext class implements the securitycontext interface for GSS
+ *  (Generic Security Services API/Kerberos). */
 class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 	public:
 		/** Creates an instance of the gsscontext class. */

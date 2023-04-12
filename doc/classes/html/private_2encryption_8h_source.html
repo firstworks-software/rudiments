@@ -50,7 +50,7 @@ $(function() {
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;        <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <span class="keywordtype">void</span>            setRandomBuffer(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer,</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <span class="keywordtype">void</span>            setRandomBuffer(byte_t *buffer,</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;                                                        <span class="keywordtype">size_t</span> buffersize);</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;                <a class="code" href="classbytebuffer.html">bytebuffer</a>      *getIn();</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                <a class="code" href="classbytebuffer.html">bytebuffer</a>      *getOut();</div>
@@ -61,15 +61,20 @@ $(function() {
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                <span class="keywordtype">bool</span>            getEncrypted();</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keywordtype">void</span>    initKey();</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keywordtype">void</span>    initIv();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <a class="code" href="classencryption.html">encryption</a>(<a class="code" href="classencryption.html">encryption</a> &amp;e) {};</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <a class="code" href="classencryption.html">encryption</a>      &amp;operator=(<a class="code" href="classencryption.html">encryption</a> &amp;e) { <span class="keywordflow">return</span> *<span class="keyword">this</span>; };</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                encryptionprivate       *pvt;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <span class="keywordtype">void</span>    construct();</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keywordtype">void</span>    initKey();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                <span class="keywordtype">void</span>    initIv();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                encryptionprivate       *pvt;</div>
 <div class="ttc" id="aclassbytebuffer_html"><div class="ttname"><a href="classbytebuffer.html">bytebuffer</a></div><div class="ttdef"><b>Definition:</b> bytebuffer.h:13</div></div>
+<div class="ttc" id="aclassencryption_html"><div class="ttname"><a href="classencryption.html">encryption</a></div><div class="ttdef"><b>Definition:</b> encryption.h:21</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

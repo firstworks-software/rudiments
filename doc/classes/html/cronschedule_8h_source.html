@@ -56,31 +56,42 @@ $(function() {
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classcronschedule.html">   12</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classcronschedule.html">cronschedule</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                <a class="code" href="classcronschedule.html">cronschedule</a>();</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keyword">virtual</span> ~<a class="code" href="classcronschedule.html">cronschedule</a>();</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keywordtype">void</span>    setSchedule(<span class="keyword">const</span> <span class="keywordtype">char</span> *when);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <span class="keywordtype">void</span>    setSchedule(<span class="keyword">const</span> <span class="keywordtype">char</span> *years,</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *months,</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *daysofmonth,</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *daysofweek,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *dayparts);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keywordtype">bool</span>    inSchedule(<a class="code" href="classdatetime.html">datetime</a> *dt);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keywordtype">bool</span>    inSchedule(<span class="keyword">const</span> <span class="keywordtype">char</span> *dt);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/cronschedule.h&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;};</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classcronschedule.html#a1fe1f3152e5aa150e691c8476d8e7a6d">   15</a></span>&#160;                <a class="code" href="classcronschedule.html#a1fe1f3152e5aa150e691c8476d8e7a6d">cronschedule</a>();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classcronschedule.html#a7256b22c1bfe0de13be83e00f2a14276">   18</a></span>&#160;                <a class="code" href="classcronschedule.html#a7256b22c1bfe0de13be83e00f2a14276">~cronschedule</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classcronschedule.html#a11ab891674b42b2f6c0bea90f79732b2">   68</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classcronschedule.html#a11ab891674b42b2f6c0bea90f79732b2">setSchedule</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *when);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classcronschedule.html#a3e97e8d7ff3f083127566f75c6b69cdb">  112</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classcronschedule.html#a3e97e8d7ff3f083127566f75c6b69cdb">setSchedule</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *years,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *months,</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *daysofmonth,</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *daysofweek,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *dayparts);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="classcronschedule.html#a9c1a9bb196f4785d6c4bb88341fe9b41">  120</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classcronschedule.html#a9c1a9bb196f4785d6c4bb88341fe9b41">inSchedule</a>(<a class="code" href="classdatetime.html">datetime</a> *dt);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classcronschedule.html#a5d30acfc6695ce34c8334ab613ccf87f">  124</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classcronschedule.html#a5d30acfc6695ce34c8334ab613ccf87f">inSchedule</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *dt);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classcronschedule.html#acd2dce0c9062198f4f59cf6f63313dc9">  130</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classcronschedule.html#acd2dce0c9062198f4f59cf6f63313dc9">clear</a>();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/cronschedule.h&gt;</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;};</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasscronschedule_html"><div class="ttname"><a href="classcronschedule.html">cronschedule</a></div><div class="ttdef"><b>Definition:</b> cronschedule.h:12</div></div>
+<div class="ttc" id="aclasscronschedule_html_a11ab891674b42b2f6c0bea90f79732b2"><div class="ttname"><a href="classcronschedule.html#a11ab891674b42b2f6c0bea90f79732b2">cronschedule::setSchedule</a></div><div class="ttdeci">bool setSchedule(const char *when)</div></div>
+<div class="ttc" id="aclasscronschedule_html_a1fe1f3152e5aa150e691c8476d8e7a6d"><div class="ttname"><a href="classcronschedule.html#a1fe1f3152e5aa150e691c8476d8e7a6d">cronschedule::cronschedule</a></div><div class="ttdeci">cronschedule()</div></div>
+<div class="ttc" id="aclasscronschedule_html_a3e97e8d7ff3f083127566f75c6b69cdb"><div class="ttname"><a href="classcronschedule.html#a3e97e8d7ff3f083127566f75c6b69cdb">cronschedule::setSchedule</a></div><div class="ttdeci">bool setSchedule(const char *years, const char *months, const char *daysofmonth, const char *daysofweek, const char *dayparts)</div></div>
+<div class="ttc" id="aclasscronschedule_html_a5d30acfc6695ce34c8334ab613ccf87f"><div class="ttname"><a href="classcronschedule.html#a5d30acfc6695ce34c8334ab613ccf87f">cronschedule::inSchedule</a></div><div class="ttdeci">bool inSchedule(const char *dt)</div></div>
+<div class="ttc" id="aclasscronschedule_html_a7256b22c1bfe0de13be83e00f2a14276"><div class="ttname"><a href="classcronschedule.html#a7256b22c1bfe0de13be83e00f2a14276">cronschedule::~cronschedule</a></div><div class="ttdeci">~cronschedule()</div></div>
+<div class="ttc" id="aclasscronschedule_html_a9c1a9bb196f4785d6c4bb88341fe9b41"><div class="ttname"><a href="classcronschedule.html#a9c1a9bb196f4785d6c4bb88341fe9b41">cronschedule::inSchedule</a></div><div class="ttdeci">bool inSchedule(datetime *dt)</div></div>
+<div class="ttc" id="aclasscronschedule_html_acd2dce0c9062198f4f59cf6f63313dc9"><div class="ttname"><a href="classcronschedule.html#acd2dce0c9062198f4f59cf6f63313dc9">cronschedule::clear</a></div><div class="ttdeci">bool clear()</div></div>
 <div class="ttc" id="aclassdatetime_html"><div class="ttname"><a href="classdatetime.html">datetime</a></div><div class="ttdef"><b>Definition:</b> datetime.h:12</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 12 2022 00:56:27 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
