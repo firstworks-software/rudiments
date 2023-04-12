@@ -540,6 +540,8 @@ privateheaders7="staticarray.h "+_
 	"wastebasket.h "+_
 	"sensitivevalueincludes.h "+_
 	"sensitivevalue.h "+_
+	"socketlayerincludes.h "+_
+	"socketlayer.h "+_
 	"gss.h "+_
 	"gssmechanism.h "+_
 	"gsscredentials.h "+_

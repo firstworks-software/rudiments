@@ -39953,6 +39953,7 @@ then
 
 	#include socketlayer and securitycontext too
 	HEADERS3="$HEADERS3 socketlayer.h securitycontext.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 socketlayerincludes.h socketlayer.h"
 
 	# include GSS too
 	HEADERS3="$HEADERS3 gss.h"
