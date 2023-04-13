@@ -74,7 +74,7 @@ class datetimeprivate {
 		#endif
 };
 
-static threadmutex	*_timemutex=NULL;
+static threadmutex	*_datetimemutex=NULL;
 
 static const char _monthname[][10]={
 	"January","February","March",
@@ -434,8 +434,8 @@ bool datetime::addYears(int32_t years) {
 	return normalize();
 }
 
-void datetime::setTimeMutex(threadmutex *mtx) {
-	_timemutex=mtx;
+void datetime::setMutex(threadmutex *mtx) {
+	_datetimemutex=mtx;
 }
 
 const char *datetime::getString() {
@@ -956,11 +956,11 @@ const char *datetime::getTzName(int32_t isdst, void *tms) {
 }
 
 bool datetime::acquireLock() {
-	return !(_timemutex && !_timemutex->lock());
+	return !(_datetimemutex && !_datetimemutex->lock());
 }
 
 bool datetime::releaseLock() {
-	return !(_timemutex && !_timemutex->unlock());
+	return !(_datetimemutex && !_datetimemutex->unlock());
 }
 
 static const char * const _timezones[]={

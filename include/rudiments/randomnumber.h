@@ -55,7 +55,17 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 
 		/** Generates a random number seed by first attempting
 		 *  to get one from /dev/urandom and if that fails,
-		 *  getting the number of seconds since 1970. */
+		 *  getting the number of seconds since 1970.
+		 *
+		 *  NOTE: If your application is multi-threaded, /dev/urandom
+		 *  is not accessible, and separate threads can call getSeed(),
+		 *  unsynchronized, then be sure to give the datetime and
+		 *  environment classes individual mutexes using
+		 *  datetime::setMutex() and environemnt::setMutex(), as on
+		 *  some platforms, getting the number of seconds since 1970
+		 *  involves calling non-thread safe date/time-related functions
+		 *  as well as getting, and possibly setting, the TZ environment
+		 *  variable. */
 		static	uint32_t	getSeed();
 
 		/** Generates a random number between 0 and 2^32, based
