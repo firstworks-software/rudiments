@@ -62,110 +62,257 @@ class collection : virtual public object {
 		 *  Returns false by default. */
 		virtual bool		getIsSequentialAccess();
 
-		/** Indicates whether or not this instance of the collection
-		 *  class should delete the values that are stored at each
-		 *  location in the collection when a clear()/remove() method
-		 *  is called.
+		/** Indicates whether or not this instance should "manage" the
+		 *  values that are stored at each location in the collection.
 		 *
-		 *  Setting "manage" to true causes the instance to delete the
-		 *  values that are stored at each location in the collection
-		 *  when a clear() or remove() method is called.
-		 *
-		 *  Setting "manage" to false causes the instance not to delete
-		 *  the values that are stored at each location in the
-		 *  collection when a clear() or remove() method is called.
+		 *  "manage" should only be set true if the values stored in
+		 *  the collections are pointers to objects.
 		 *
 		 *  Defaults to "false".
+		 *
+		 *  If "manage" is set to true then:
+		 *  * When remove() is called, the object stored as the value
+		 *    at that location in the collection will be deleted.
+		 *  * When clear() is called, the object stored as the value at
+		 *    each location in the collection will be deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    attempt to create a copy of the object stored as the value
+		 *    in each location of the rvalue instance.  Note that this
+		 *    can crash, fail, or even fail to compile if the objects
+		 *    being stored don't have properly implemented copy
+		 *    constructors.
+		 *  * When the copy constructor is called, the new instance
+		 *    will attempt to create a copy of the object stored as the
+		 *    value in each location of the instance that is being
+		 *    copied.  Note that this can crash, fail, or even fail to
+		 *    compile if the objects being stored don't have properly
+		 *    implemented copy constructors.
+		 *
+		 *  If "manage" is set to false then:
+		 *  * When remove() is called, the object stored as the value
+		 *    at that location in the collection will not be deleted.
+		 *  * When clear() is called, the object stored as the value a
+		 *    each location in the collection will not be deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    not attempt to create a copy of the object stored as the
+		 *    value in each location of the rvalue instance, rather it
+		 *    will just copy the value or pointer.
+		 *  * When the copy constructor is called, the new instance
+		 *    will not attempt to create a copy of the object stored as
+		 *    the value in each location of the instance that is being
+		 *    copied, rather it will just copy the value or pointer.
 		 *
 		 *  Note that setting this true implies
 		 *  setManageArrayValues(false); */
 		virtual	void	setManageValues(bool manage);
 
 		/** Returns whether or not this instance of the collection class
-		 *  is configured to delete the values that are stored at each
-		 *  location in the collection when a clear()/remove() method
-		 *  is called.
+		 *  is configured to manage the objects that are stored as the
+		 *  values at each location in the collection.
+		 *
+		 *  See setManageValues().
 		 *
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageValues();
 
-		/** Indicates whether or not this instance of the collection
-		 *  class should array-delete the values that are stored at each
-		 *  location in the collection when a clear()/remove() method
-		 *  is called.
+		/** Indicates whether or not this instance should "manage" the
+		 *  values that are stored at each location in the collection
+		 *  as arrays.
 		 *
-		 *  Setting "manage" to true causes the instance to
-		 *  array-delete the values that are stored at each location in
-		 *  the collection when a clear() or remove() method is called.
-		 *
-		 *  Setting "manage" to false causes the instance not to
-		 *  array-delete the values that are stored at each location in
-		 *  the collection when a clear() or remove() method is called.
+		 *  "manage" should only be set true if the values stored in
+		 *  the collections are pointers to arrays of primitive types.
 		 *
 		 *  Defaults to "false".
+		 *
+		 *  If "manage" is set to true then:
+		 *  * When remove() is called, the array stored as the value at
+		 *    that location in the collection will be array-deleted.
+		 *  * When clear() is called, the array stored as the value at
+		 *    each location in the collection will be array-deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    attempt to create a copy of the array stored as the value
+		 *    in each location of the rvalue instance.
+		 *  * When the copy constructor is called, the new instance
+		 *    will attempt to create a copy of the array stored as the
+		 *    value in each location of the instance that is being
+		 *    copied.
+		 *
+		 *  If "manage" is set to false then:
+		 *  * When remove() is called, the array stored as the value at
+		 *    that location in the collection will not be array-deleted.
+		 *  * When clear() is called, the array stored as the value at
+		 *    each location in the collection will not be array-deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    not attempt to create a copy of the array stored as the
+		 *    value in each location of the rvalue instance, rather it
+		 *    will just copy the value or pointer.
+		 *  * When the copy constructor is called, the new instance
+		 *    will not attempt to create a copy of the array stored as
+		 *    the value in each location of the instance that is being
+		 *    copied, rather it will just copy the value or pointer.
+		 *
+		 *  To store managed arrays of non-primitive types as values,
+		 *  consider using a managed collection of managed staticarrays.
+		 *  For example:
+		 *
+		 *  	linkedlist< staticarray< myobject * > *>	l;
+		 *  	l.setManageValues(true);
+		 *
+		 *  	staticarray< myobject * >	*s1=
+		 *  			new staticarray< myobject * >();
+		 *  	s1.setManageValues(true);
+		 *  	s1[0]=new myobject(...);
+		 *  	s1[1]=new myobject(...);
+		 *  	s1[2]=new myobject(...);
+		 *  	l.append(s1);
+		 *
+		 *  	staticarray< myobject * >	*s2=
+		 *  			new staticarray< myobject * >();
+		 *  	s2.setManageValues(true);
+		 *  	s2[0]=new myobject(...);
+		 *  	s2[1]=new myobject(...);
+		 *  	s2[2]=new myobject(...);
+		 *  	l.append(s2);
+		 *
+		 *  	...
 		 *
 		 *  Note that setting this true implies
 		 *  setManageValues(false); */
 		virtual	void	setManageArrayValues(bool manage);
 
 		/** Returns whether or not this instance of the collection class
-		 *  is configured to array-delete the values that are stored at
-		 *  each location in the collection when a clear()/remove()
-		 *  method is called.
+		 *  is configured to manage the arrays that are stored as the
+		 *  values at each location in the collection.
+		 *
+		 *  See setManageArrayValues().
 		 *
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayValues();
 
-		/** Indicates whether or not this instance of the collection
-		 *  class should delete the keys that are stored at each
-		 *  location in the collection when a clear()/remove() method
-		 *  is called.
+		/** Indicates whether or not this instance should "manage" the
+		 *  keys that are stored at each location in the collection.
 		 *
-		 *  Setting "manage" to true causes the instance to delete the
-		 *  keys that are stored at each location in the collection
-		 *  when a clear() or remove() method is called.
-		 *
-		 *  Setting "manage" to false causes the instance not to delete
-		 *  the keys that are stored at each location in the
-		 *  collection when a clear() or remove() method is called.
+		 *  "manage" should only be set true if the keys stored in
+		 *  the collections are pointers to objects.
 		 *
 		 *  Defaults to "false".
 		 *
+		 *  If "manage" is set to true then:
+		 *  * When remove() is called, the object stored as the key
+		 *    at that location in the collection will be deleted.
+		 *  * When clear() is called, the object stored as the key at
+		 *    each location in the collection will be deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    attempt to create a copy of the object stored as the key
+		 *    in each location of the rvalue instance.  Note that this
+		 *    can crash, fail, or even fail to compile if the objects
+		 *    being stored don't have properly implemented copy
+		 *    constructors.
+		 *  * When the copy constructor is called, the new instance
+		 *    will attempt to create a copy of the object stored as the
+		 *    key in each location of the instance that is being
+		 *    copied.  Note that this can crash, fail, or even fail to
+		 *    compile if the objects being stored don't have properly
+		 *    implemented copy constructors.
+		 *
+		 *  If "manage" is set to false then:
+		 *  * When remove() is called, the object stored as the key
+		 *    at that location in the collection will not be deleted.
+		 *  * When clear() is called, the object stored as the key a
+		 *    each location in the collection will not be deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    not attempt to create a copy of the object stored as the
+		 *    key in each location of the rvalue instance, rather it
+		 *    will just copy the value or pointer.
+		 *  * When the copy constructor is called, the new instance
+		 *    will not attempt to create a copy of the object stored as
+		 *    the key in each location of the instance that is being
+		 *    copied, rather it will just copy the value or pointer.
+		 *
 		 *  Note that setting this true implies
-		 *  setManageArrayValues(false); */
+		 *  setManageArrayKeys(false); */
 		virtual	void	setManageKeys(bool manage);
 
 		/** Returns whether or not this instance of the collection class
-		 *  is configured to delete the keys that are stored at each
-		 *  location in the collection when a clear()/remove() method
-		 *  is called.
+		 *  is configured to manage the objects that are stored as the
+		 *  keys at each location in the collection.
+		 *
+		 *  See setManageKeys().
 		 *
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageKeys();
 
-		/** Indicates whether or not this instance of the collection
-		 *  class should array-delete the keys that are stored at each
-		 *  location in the collection when a clear()/remove() method
-		 *  is called.
+		/** Indicates whether or not this instance should "manage" the
+		 *  keys that are stored at each location in the collection
+		 *  as arrays.
 		 *
-		 *  Setting "manage" to true causes the instance to
-		 *  array-delete the keys that are stored at each location in
-		 *  the collection when a clear() or remove() method is called.
-		 *
-		 *  Setting "manage" to false causes the instance not to
-		 *  array-delete the keys that are stored at each location in
-		 *  the collection when a clear() or remove() method is called.
+		 *  "manage" should only be set true if the keys stored in
+		 *  the collections are pointers to arrays of primitive types.
 		 *
 		 *  Defaults to "false".
 		 *
+		 *  If "manage" is set to true then:
+		 *  * When remove() is called, the array stored as the key at
+		 *    that location in the collection will be array-deleted.
+		 *  * When clear() is called, the array stored as the key at
+		 *    each location in the collection will be array-deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    attempt to create a copy of the array stored as the key
+		 *    in each location of the rvalue instance.
+		 *  * When the copy constructor is called, the new instance
+		 *    will attempt to create a copy of the array stored as the
+		 *    key in each location of the instance that is being
+		 *    copied.
+		 *
+		 *  If "manage" is set to false then:
+		 *  * When remove() is called, the array stored as the key at
+		 *    that location in the collection will not be array-deleted.
+		 *  * When clear() is called, the array stored as the key at
+		 *    each location in the collection will not be array-deleted.
+		 *  * When the = operator is called, the lvalue instance will
+		 *    not attempt to create a copy of the array stored as the
+		 *    key in each location of the rvalue instance, rather it
+		 *    will just copy the value or pointer.
+		 *  * When the copy constructor is called, the new instance
+		 *    will not attempt to create a copy of the array stored as
+		 *    the key in each location of the instance that is being
+		 *    copied, rather it will just copy the value or pointer.
+		 *
+		 *  To store managed arrays of non-primitive types as keys,
+		 *  consider using a managed collection of managed staticarrays.
+		 *  For example:
+		 *
+		 *  	dictionary<staticarray< myobject * > *,
+		 *  					uint32_t >	d;
+		 *  	d.setManageKeys(true);
+		 *
+		 *  	staticarray< myobject * >	*s1=
+		 *  			new staticarray< myobject * >();
+		 *  	s1.setManageKeys(true);
+		 *  	s1[0]=new myobject(...);
+		 *  	s1[1]=new myobject(...);
+		 *  	s1[2]=new myobject(...);
+		 *  	d.setValue(s1,1);
+		 *
+		 *  	staticarray< myobject * >	*s2=
+		 *  			new staticarray< myobject * >();
+		 *  	s2.setManageKeys(true);
+		 *  	s2[0]=new myobject(...);
+		 *  	s2[1]=new myobject(...);
+		 *  	s2[2]=new myobject(...);
+		 *  	d.setValue(s2,2);
+		 *
+		 *  	...
+		 *
 		 *  Note that setting this true implies
-		 *  setManageValues(false); */
+		 *  setManageKeys(false); */
 		virtual	void	setManageArrayKeys(bool manage);
 
 		/** Returns whether or not this instance of the collection class
-		 *  is configured to array-delete the keys that are stored at
-		 *  each location in the collection when a clear()/remove()
-		 *  method is called.
+		 *  is configured to manage the arrays that are stored as the
+		 *  keys at each location in the collection.
+		 *
+		 *  See setManageArrayValues().
 		 *
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayKeys();
