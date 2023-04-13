@@ -97,12 +97,12 @@ void environment::exit() {
 }
 
 bool environment::setValue(const char *variable, const char *value) {
-	if (!_envstrings) {
-		init();
-	}
 	bool	retval=false;
 	if (_envmutex && !_envmutex->lock()) {
 		return retval;
+	}
+	if (!_envstrings) {
+		init();
 	}
 	size_t	pestrlen=charstring::length(variable)+
 				charstring::length(value)+2;
@@ -205,16 +205,16 @@ bool environment::setValue(const char *variable, const char *value) {
 #endif
 
 bool environment::remove(const char *variable) {
-#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
-	if (!_envstrings) {
-		init();
-	}
-#endif
 #ifdef RUDIMENTS_HAVE_UNSETENV
 	bool	retval=false;
 	if (_envmutex && !_envmutex->lock()) {
 		return retval;
 	}
+	#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
+		if (!_envstrings) {
+			init();
+		}
+	#endif
 	unsetenv(variable);
 	#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 		char *pestr;

@@ -117,9 +117,9 @@ int main(int argc, const char **argv) {
 		// platforms, it may come from seconds since the epoch.
 		// Getting that may maniuplate the environment.  On platforms
 		// with putenv, this introduces a race condition inside of the
-		// environment class re. initializing envstrings.  This needs
-		// to be addressed inside of the environment class, but for now,
-		// we'll handle it here.
+		// environment class re. initializing envstrings.  This can be
+		// addressed by giving the environment class a mutext, but
+		// it's easier just to do this.
 		a[i].seed=randomnumber::getSeed();
 	}
 
