@@ -23319,11 +23319,6 @@ $as_echo "#define RUDIMENTS_IOV_BASE_TYPE char *" >>confdefs.h
 $as_echo "char *" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-if ( test "$HADWERROR" = "no" )
-then
-	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
-	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
-fi
 
 if ( test "$HADWERROR" = "no" )
 then
@@ -29357,6 +29352,15 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mincore with unsigned char * argument" >&5
 $as_echo_n "checking for mincore with unsigned char * argument... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -29389,6 +29393,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
+
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if mincore takes caddr_t argument" >&5
 $as_echo_n "checking if mincore takes caddr_t argument... " >&6; }
@@ -29950,6 +29961,15 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XSI strerror_r" >&5
 $as_echo_n "checking for XSI strerror_r... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -29986,6 +30006,22 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
+
+
+
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNU strerror_r" >&5
 $as_echo_n "checking for GNU strerror_r... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -30019,6 +30055,13 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for strerror_s" >&5
 $as_echo_n "checking for strerror_s... " >&6; }
@@ -38920,6 +38963,15 @@ export LD_LIBRARY_PATH
 
 if ( test -n "$ICONV_DEFINED" )
 then
+
+HADWERROR="yes"
+if ( test -z "`echo $CPPFLAGS | grep Werror`" )
+then
+	CPPFLAGS="$CPPFLAGS $WERROR"
+	CXXFLAGS="$CXXFLAGS $WERROR"
+	HADWERROR="no"
+fi
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv with non-const inbuf" >&5
 $as_echo_n "checking for iconv with non-const inbuf... " >&6; }
 
@@ -38958,6 +39010,13 @@ CPPFLAGS="$SAVECPPFLAGS"
 LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
+
+
+if ( test "$HADWERROR" = "no" )
+then
+	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+fi
 
 fi
 

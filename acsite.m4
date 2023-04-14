@@ -916,6 +916,7 @@ void *ptr; munmap(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MUNMAP_CAD
 #include <sys/mman.h>],
 char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(RUDIMENTS_HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(RUDIMENTS_HAVE_MINCORE_CHAR,1,Some systems have mincore with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+	FW_ENABLE_WERROR
 	AC_MSG_CHECKING(for mincore with unsigned char * argument)
 	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -925,6 +926,7 @@ char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(RUDIMENTS_HAVE_MINCORE,1,Some systems 
 #endif
 #include <sys/mman.h>],
 unsigned char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(RUDIMENTS_HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(RUDIMENTS_HAVE_MINCORE_UCHAR,1,Some systems have mincore with unsigned char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+	FW_RESTORE_WERROR
 
 	AC_MSG_CHECKING(if mincore takes caddr_t argument)
 	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H

@@ -1208,11 +1208,6 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/uio.h>
 #endif],
 struct iovec iov; iov.iov_base=(void *)" ";,AC_DEFINE(RUDIMENTS_IOV_BASE_TYPE,void *,iov_base is void *) AC_MSG_RESULT(void *), AC_DEFINE(RUDIMENTS_IOV_BASE_TYPE,char *,iov_base is char *) AC_MSG_RESULT(char *))
-if ( test "$HADWERROR" = "no" )
-then
-	CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
-	CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[[^ ]]*||g" -e "s|-Wall||g"`
-fi
 FW_RESTORE_WERROR
 
 FW_STATFS
@@ -2445,6 +2440,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 strerror(0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR,1,Some systems have strerror) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+FW_ENABLE_WERROR
 AC_MSG_CHECKING(for XSI strerror_r)
 AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -2460,7 +2456,9 @@ AC_TRY_COMPILE([
 	#include <string.h>
 #endif],
 int a=strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_XSI_STRERROR_R,1,Some systems have XSI strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+FW_RESTORE_WERROR
 
+FW_ENABLE_WERROR
 AC_MSG_CHECKING(for GNU strerror_r)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -2474,6 +2472,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <string.h>
 #endif],
 char *a=strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GNU_STRERROR_R,1,Some systems have GNU strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+FW_RESTORE_WERROR
 
 AC_MSG_CHECKING(for strerror_s)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -4764,11 +4763,13 @@ FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
 
 if ( test -n "$ICONV_DEFINED" )
 then
+	FW_ENABLE_WERROR
 	AC_MSG_CHECKING(for iconv with non-const inbuf)
 	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
 	#include <iconv.h>
 #endif],
 [iconv(0,(char **)0,0,0,0);],[$LIBICONVINCLUDES],[$LIBICONVLIBS],[],[AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF,1,Some systems have iconv with non-const inbuf)],[AC_MSG_RESULT(no)])
+	FW_RESTORE_WERROR
 fi
 
 AC_MSG_CHECKING(for mbrtowc)
