@@ -4,7 +4,7 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
-#include <rudiments/encryption.h>
+#include <rudiments/hash.h>
 #include <rudiments/threadmutex.h>
 
 class desprivate;

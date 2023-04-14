@@ -135,6 +135,7 @@
 	moved safePrint() and printBits() to output class
 	added printHex() to output class
 	fixed various longstanding NULL-related bugs in compare*() methods
+	des class inherits from hash instead of encryption now
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

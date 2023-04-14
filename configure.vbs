@@ -23,6 +23,7 @@ next
 ' source, object and header files
 srcs="winsock.cpp "+_
 	"object.cpp "+_
+	"hash.cpp "+_
 	"sha1.cpp "+_
 	"sha256.cpp "+_
 	"md5.cpp "+_

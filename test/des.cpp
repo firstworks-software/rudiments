@@ -49,23 +49,21 @@ int main(int argc, const char **argv) {
 		for (const char * const *salt=salts; *salt; salt++) {
 
 			stdoutput.printf("salt=%s\n",*salt);
+			c.setSalt((const byte_t *)*salt,c.getSaltSize());
 
 			uint16_t	j=0;
 			for (const char * const *str=unencrypted; *str; str++) {
 				c.append((const byte_t *)*str,
 						charstring::length(*str));
-				c.setIv((const byte_t *)*salt,
-							c.getIvSize());
-				const char	*enc=
-					(const char *)c.getEncryptedData();
+				const char	*enc=(const char *)c.getHash();
 				test(*str,!charstring::compare(enc,
 							encrypted[i][j]));
-				test("size",
-					c.getEncryptedDataSize()==
+				test("size",c.getHashSize()==
 					charstring::length(encrypted[i][j]));
 				c.clear();
 				j++;
 			}
+			c.reset();
 			i++;
 		}
 

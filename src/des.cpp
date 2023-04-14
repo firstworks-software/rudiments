@@ -27,7 +27,7 @@ class desprivate {
 		#endif
 };
 
-des::des() : encryption() {
+des::des() : hash() {
 	pvt=new desprivate;
 	#if !defined(RUDIMENTS_HAVE_CRYPT_R)
 	pvt->_desmutex=NULL;
@@ -38,20 +38,16 @@ des::~des() {
 	delete pvt;
 }
 
-uint32_t des::getKeySize() {
-	return 0;
-}
-
-uint32_t des::getIvSize() {
+size_t des::getSaltSize() {
 	return 2;
 }
 
-const byte_t *des::getEncryptedData() {
+const byte_t *des::getHash() {
 
 	#if defined(RUDIMENTS_HAVE_CRYPT_R) || defined(RUDIMENTS_HAVE_CRYPT)
 
 		// reset the error
-		setError(ENCRYPTION_ERROR_SUCCESS);
+		setError(HASH_ERROR_SUCCESS);
 		error::clearError();
 
 		// if the dirty flag isn't set then we can just
@@ -65,7 +61,7 @@ const byte_t *des::getEncryptedData() {
 
 		// get the salt as a string
 		char	salt[3];
-		bytestring::copy(salt,getIv(),2);
+		bytestring::copy(salt,getSalt(),2);
 		salt[2]='\0';
 
 		// get the input buffer as a string
@@ -108,12 +104,12 @@ const byte_t *des::getEncryptedData() {
 				case ERANGE:
 				case ENOMEM:
 					setError(
-					ENCRYPTION_ERROR_INPUT_TOO_LONG);
+					HASH_ERROR_INPUT_TOO_LONG);
 					break;
 				case EINVAL:
 				default:
 					setError(
-					ENCRYPTION_ERROR_UNSUPPORTED);
+					HASH_ERROR_UNSUPPORTED);
 			};
 			return NULL;
 		}
@@ -124,20 +120,16 @@ const byte_t *des::getEncryptedData() {
 		return getOut()->getBuffer();
 
 	#else
-		setError(ENCRYPTION_ERROR_UNSUPPORTED);
+		setError(HASH_ERROR_UNSUPPORTED);
 		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
 
-uint64_t des::getEncryptedDataSize() {
-	getEncryptedData();
+uint64_t des::getHashSize() {
+	getHash();
 	return getOut()->getSize()-1;
 	
-}
-
-const byte_t *des::getDecryptedData() {
-	return NULL;
 }
 
 bool des::getNeedsMutex() {

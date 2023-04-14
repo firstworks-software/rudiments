@@ -4875,8 +4875,8 @@ PRIVATEHEADERS4="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlisti
 PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h hash.h hashincludes.h encryption.h encryptionincludes.h sha1.h sha1includes.h sha256.h sha256includes.h md5.h md5includes.h aes128.h aes128includes.h"
 PRIVATEHEADERS6="arraycollectioninlines.h dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h"
 PRIVATEHEADERS7="staticarray.h staticarrayinlines.h outputincludes.h output.h outputinlines.h input.h inputincludes.h inputinlines.h wastebasketincludes.h wastebasket.h sensitivevalueincludes.h sensitivevalue.h resourcepool.h resourcepoolincludes.h resourcepoolinlines.h"
-SRCS="winsock.cpp object.cpp sha1.cpp sha256.cpp md5.cpp encryption.cpp aes128.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
-LOBJS="winsock.lo object.lo sha1.lo sha256.lo md5.lo encryption.lo aes128.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
+SRCS="winsock.cpp object.cpp hash.cpp sha1.cpp sha256.cpp md5.cpp encryption.cpp aes128.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
+LOBJS="winsock.lo object.lo hash.lo sha1.lo sha256.lo md5.lo encryption.lo aes128.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )

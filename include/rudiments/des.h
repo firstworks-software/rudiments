@@ -6,9 +6,9 @@
 
 #include <rudiments/private/desincludes.h>
 
-/** The des class provides the encryption method commonly used on unix and
- *  unix-like platforms for for password encryption. */
-class RUDIMENTS_DLLSPEC des : public encryption {
+/** The des class provides the hash method commonly used on unix and unix-like
+ *  platforms for for password encryption. */
+class RUDIMENTS_DLLSPEC des : public hash {
 	public:
 		/** Creates an intance of the des class. */
 		des();
@@ -16,9 +16,8 @@ class RUDIMENTS_DLLSPEC des : public encryption {
 		/** Deletes this instance of the des class. */
 		~des();
 
-		/** Returns the number of bytes in the initialization
-		 *  vector (salt) - 2 bytes. */
-		uint32_t	getIvSize();
+		/** Returns the number of bytes in the salt. */
+		size_t	getSaltSize();
 
 		/** Interprets the current data as unencrypted.  Encrypts
 		 *  current data using the des algorithm, and the initilization
@@ -34,7 +33,7 @@ class RUDIMENTS_DLLSPEC des : public encryption {
 		 *
 		 *  Note that the encrypted data returned will be an empty
 		 *  string if no data has been appended yet. */
-		const byte_t	*getEncryptedData();
+		const byte_t	*getHash();
 
 		/** Returns the number of bytes of encrypted data, not
 		 *  including the NULL-terminator.
@@ -42,7 +41,7 @@ class RUDIMENTS_DLLSPEC des : public encryption {
 		 *  Note that since the encrypted data that results from this
 		 *  type of encryption is always printable ascii, this size is
 		 *  equivalent to the string length. */
-		uint64_t	getEncryptedDataSize();
+		uint64_t	getHashSize();
 
 		/** If your system doesn't support a reentrany crypt function
 		 *  then this class needs a mutex to assure thread safety.
