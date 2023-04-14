@@ -249,7 +249,6 @@ bool iconvert::convert() {
 		// convert a character
 		result=iconv(pvt->_i,
 				#ifdef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF
-#error here
 				(char **)
 				#else
 				(const char **)
