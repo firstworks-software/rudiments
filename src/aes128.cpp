@@ -295,14 +295,14 @@ const byte_t *aes128::getData(bool encrypt) {
 			// Grab the last byte, which is guaranteed to be a
 			// pad-byte (see above).  Then move back that many
 			// bytes from the end and truncate the buffer there.
-			getOut()->setPosition(getOut()->getSize()-1);
+			getOut()->setPositionRelativeToEnd(-1);
 			getOut()->read(&padbytes,sizeof(padbytes));
 			if (padbytes>AES_BLOCK_SIZE) {
 				setError(ENCRYPTION_ERROR_INVALID_PADDING);
 				getOut()->clear();
 				return NULL;
 			}
-			getOut()->setPosition(getOut()->getSize()-padbytes);
+			getOut()->setPositionRelativeToEnd(-padbytes);
 			getOut()->truncate();
 		}
 	#endif
