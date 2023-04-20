@@ -74,7 +74,7 @@ wchar_t *wstringbuffer::detachString() {
 }
 
 inline
-size_t wstringbuffer::getPosition() {
+off64_t wstringbuffer::getPosition() {
 	return bytebuffer::getPosition()/sizeof(wchar_t);
 }
 

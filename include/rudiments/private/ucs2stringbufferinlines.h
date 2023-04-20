@@ -73,7 +73,7 @@ ucs2_t *ucs2stringbuffer::detachString() {
 }
 
 inline
-size_t ucs2stringbuffer::getPosition() {
+off64_t ucs2stringbuffer::getPosition() {
 	return bytebuffer::getPosition();
 }
 

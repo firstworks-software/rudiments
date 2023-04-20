@@ -1753,7 +1753,7 @@ bool tlscontext::close() {
 	#endif
 }
 
-ssize_t tlscontext::getSizeMax() {
+size_t tlscontext::getSizeMax() {
 	#if defined(RUDIMENTS_HAS_SSPI)
 		return pvt->_gctx.getSizeMax();
 	#else

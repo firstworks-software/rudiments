@@ -62,7 +62,7 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 
 		/** Returns the position in the buffer at which
 		 *  the next write will occur. */
-		size_t	getPosition();
+		off64_t	getPosition();
 
 		/** Writes the first "size" bytes of "data" to the
 		 *  bytebuffer at the current position and increments the

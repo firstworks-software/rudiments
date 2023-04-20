@@ -1,6 +1,26 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
+inline
+off64_t input::setPositionRelativeToBeginning(off64_t offset) {
+	return -1;
+}
+
+inline
+off64_t input::setPositionRelativeToCurrent(off64_t offset) {
+	return -1;
+}
+
+inline
+off64_t input::setPositionRelativeToEnd(off64_t offset) {
+	return -1;
+}
+
+inline
+off64_t input::getPosition() {
+	return -1;
+}
+
 // NOTE: these methods are defined out-of-order from their declarations because
 // some compilers (eg. gcc 2.7.x) prefer for inline methods to be defined before
 // they are used.

@@ -34,13 +34,13 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  is a stream such as a socket, serial port, fifo, etc. or
 		 *  false if this filedescriptor is storage such as a file or
 		 *  raw block device.  This setting impacts how buffering
-		 *  works, as well as how the various setPosition() and
+		 *  works, as well as how the various setPosition*() and
 		 *  getPosition() methods work.
 		 *
 		 *  Note that if the file descriptor is a stream, but this is
 		 *  set false, or vice versa, then unexpected results may
 		 *  occur if buffering is used, and/or the
-		 *  setPosition()/getPosition() methods are called.
+		 *  setPosition*()/getPosition() methods are called.
 		 *
 		 *  Note that this method to have any effect, it must be called
 		 *  when buffering is disabled.  It must be called immedaiately
@@ -110,7 +110,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Returns the position (relative to the beginning of the
 		 *  file descriptor) at which the next read or write will
 		 *  occur, or -1 on failure. */
-		virtual off64_t	getCurrentPosition();
+		virtual off64_t	getPosition();
 
 		/** Sets the position (relative to the beginning of the file
 		 *  descriptor) at which the next read or write will occur to

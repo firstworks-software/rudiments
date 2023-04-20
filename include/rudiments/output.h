@@ -17,37 +17,42 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		/** Deletes this instance of the output class. */
 		virtual ~output();
 
+
 		/** Sets the position (relative to the beginning of the file
-		 *  descriptor) at which the next read or write will occur to
-		 *  "offset".  Returns that position on success or -1 on
-		 *  failure.
+		 *  descriptor) at which the next write will occur to "offset".
+		 *  Returns that position on success or -1 on failure.
 		 *
 		 *  This implementation of the method ignores "offset" and
 		 *  always returns -1, however a child class might implement
 		 *  this method to actually set the position. */
 		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
 
-		/** Advances the position at which the next read or write will
- 		 *  occur by "offset" bytes.  Returns that position on success
- 		 *  or -1 on failure.
+		/** Advances the position at which the next write will occur by
+		 *  "offset" bytes.  Returns that position on success or -1 on
+		 *  failure.
 		 *
 		 *  This implementation of the method ignores "offset" and
 		 *  always returns -1, however a child class might implement
 		 *  this method to actually set the position. */
 		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
 
-		/** Sets the position at which the next read or write will
-		 *  occur to the end of the file plus "offset" bytes.
-		 *  Generally, "offset" will be negative though most filesystems
-		 *  allow the creation of files with holes in them and that can
-		 *  be accomplished by using a positive "offset" and then
-		 *  writing data at that position.  Returns the position on
-		 *  success or -1 on failure.
+		/** Sets the position at which the next write will occur to the
+		 *  end of the file plus "offset" bytes.  Generally, "offset"
+		 *  will be negative.  Returns the position on success or -1 on
+		 *  failure.
 		 *
 		 *  This implementation of the method ignores "offset" and
 		 *  always returns -1, however a child class might implement
 		 *  this method to actually set the position. */
 		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
+
+		/** Returns the position at which the next write will occur or
+		 *  -1 on failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
+		virtual off64_t getPosition();
 
 
 		/** Writes "size" bytes of "string" to the file descriptor.

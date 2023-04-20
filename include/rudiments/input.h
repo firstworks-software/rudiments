@@ -18,6 +18,43 @@ class RUDIMENTS_DLLSPEC input : virtual public object {
 		virtual	~input();
 
 
+		/** Sets the position (relative to the beginning of the file
+		 *  descriptor) at which the next read will occur to "offset".
+		 *  Returns that position on success or -1 on failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
+		virtual off64_t	setPositionRelativeToBeginning(off64_t offset);
+
+		/** Advances the position at which the next read will occur by
+		 *  "offset" bytes.  Returns that position on success or -1 on
+		 *  failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
+		virtual off64_t	setPositionRelativeToCurrent(off64_t offset);
+
+		/** Sets the position at which the next read will occur to the
+		 *  end of the file plus "offset" bytes.  Generally, "offset"
+		 *  will be negative.  Returns the position on success or -1 on
+		 *  failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
+		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
+
+		/** Returns the position at which the next read will occur or
+		 *  -1 on failure.
+		 *
+		 *  This implementation of the method ignores "offset" and
+		 *  always returns -1, however a child class might implement
+		 *  this method to actually set the position. */
+		virtual off64_t getPosition();
+
+
 		/** Reads "size" bytes from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */

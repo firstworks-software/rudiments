@@ -2799,7 +2799,7 @@ bool gsscontext::close() {
 	return true;
 }
 
-ssize_t gsscontext::getSizeMax() {
+size_t gsscontext::getSizeMax() {
 	// FIXME: there's probably an intelligent
 	// way of deciding what this should be
 	return 65536;

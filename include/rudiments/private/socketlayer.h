@@ -7,4 +7,4 @@
 		virtual	ssize_t	write(const void *buf, ssize_t size)=0;
 		virtual	ssize_t pending()=0;
 		virtual	bool	close()=0;
-		virtual ssize_t	getSizeMax()=0;
+		virtual size_t	getSizeMax()=0;

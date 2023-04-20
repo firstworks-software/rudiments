@@ -69,7 +69,7 @@ char *stringbuffer::detachString() {
 }
 
 inline
-size_t stringbuffer::getPosition() {
+off64_t stringbuffer::getPosition() {
 	return bytebuffer::getPosition();
 }
 

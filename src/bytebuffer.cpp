@@ -328,7 +328,7 @@ size_t bytebuffer::getSize() {
 	return pvt->_size;
 }
 
-size_t bytebuffer::getPosition() {
+off64_t bytebuffer::getPosition() {
 	return pvt->_pos;
 }
 

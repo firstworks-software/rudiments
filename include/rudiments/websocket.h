@@ -80,7 +80,7 @@ class RUDIMENTS_DLLSPEC websocket : public socketlayer {
 
 		/** Returns the maximum number of bytes that can be written or
 		 *  read in a single call to write() or read(). */
-		ssize_t	getSizeMax();
+		size_t	getSizeMax();
 
 	#include <rudiments/private/websocket.h>
 };

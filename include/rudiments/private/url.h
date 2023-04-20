@@ -3,11 +3,6 @@
 
 		bool	getCurrentProperties();
 
-		off64_t	getCurrentPosition();
-		off64_t	setPositionRelativeToBeginning(off64_t offset);
-		off64_t	setPositionRelativeToCurrent(off64_t offset);
-		off64_t	setPositionRelativeToEnd(off64_t offset);
-
 		char	*getContents();
 		ssize_t	getContents(byte_t *buffer,size_t buffersize);
 

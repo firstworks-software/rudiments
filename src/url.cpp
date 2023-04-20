@@ -1292,7 +1292,7 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 		bytesread=size;
 
 		// clear the buffer, if we read all of it
-		if (pvt->_breadpos==pvt->_bb.getPosition()) {
+		if (pvt->_breadpos==(uint64_t)pvt->_bb.getPosition()) {
 			pvt->_bb.clear();
 			pvt->_breadpos=0;
 		}
@@ -1606,22 +1606,6 @@ void url::shutDownUrl() {
 
 bool url::getCurrentProperties() {
 	return false;
-}
-
-off64_t url::getCurrentPosition() {
-	return -1;
-}
-
-off64_t url::setPositionRelativeToBeginning(off64_t offset) {
-	return -1;
-}
-
-off64_t url::setPositionRelativeToCurrent(off64_t offset) {
-	return -1;
-}
-
-off64_t url::setPositionRelativeToEnd(off64_t offset) {
-	return -1;
 }
 
 char *url::getContents() {

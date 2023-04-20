@@ -17,6 +17,11 @@ off64_t output::setPositionRelativeToEnd(off64_t offset) {
 }
 
 inline
+off64_t output::getPosition() {
+	return -1;
+}
+
+inline
 ssize_t output::printf(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);

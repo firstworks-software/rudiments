@@ -284,7 +284,8 @@ int main(int argc, const char **argv) {
 		}
 
 		test("write(), get various stats",validdata &&
-			(bb.getSize()==size) && (bb.getPosition()==size)
+			(bb.getSize()==size) &&
+			(bb.getPosition()==(off64_t)size)
 			//&& (bb.getActualSize()==size)
 			);
 

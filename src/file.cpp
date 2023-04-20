@@ -400,7 +400,7 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 	size_t	intbuffersize=0;
 	if (fd()!=-1) {
 		getCurrentProperties();
-		off64_t	curpos=getCurrentPosition();
+		off64_t	curpos=getPosition();
 		setPositionRelativeToBeginning(0);
 		if (pvt->_st.st_size) {
 			intbuffersize=pvt->_st.st_size;
@@ -1048,7 +1048,7 @@ bool file::lock(int32_t method, int16_t type,
 		lck.l_len=len;
 		return !fCntl(method,reinterpret_cast<long>(&lck));
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
-		off64_t	cur=getCurrentPosition();
+		off64_t	cur=getPosition();
 		if (cur==-1) {
 			return false;
 		}
@@ -1114,7 +1114,7 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) {
 		lck.l_len=len;
 		return !fCntl(F_SETLK,reinterpret_cast<long>(&lck));
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
-		off64_t	cur=getCurrentPosition();
+		off64_t	cur=getPosition();
 		if (cur==-1) {
 			return false;
 		}

@@ -64,7 +64,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 
 		/** Returns the position in the internal buffer at which
 		 *  the next write will occur. */
-		size_t	getPosition();
+		off64_t	getPosition();
 
 		/** Writes "string" to the wstringbuffer at the current position
 		 *  and increments the current position to the next byte after

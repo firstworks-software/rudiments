@@ -871,7 +871,7 @@ bool websocket::close() {
 	return true;
 }
 
-ssize_t websocket::getSizeMax() {
+size_t websocket::getSizeMax() {
 	return SSIZE_MAX;
 }
 

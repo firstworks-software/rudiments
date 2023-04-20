@@ -451,7 +451,7 @@ bool filedescriptor::setStorageWriteBufferSize(ssize_t size) {
 	// If we have been buffering then pvt->_offset ought to already be
 	// valid.
 	if (!pvt->_writebuffer) {
-		off64_t	pos=getCurrentPosition();
+		off64_t	pos=getPosition();
 		if (pos==-1) {
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 			debugPrintf(",error: lseek failed)\n");
@@ -969,7 +969,7 @@ off64_t filedescriptor::getSize() {
 	return f.getSize();
 }
 
-off64_t filedescriptor::getCurrentPosition() {
+off64_t filedescriptor::getPosition() {
 
 	// for stream filedescriptors, the position is always 0
 	if (pvt->_isstream) {
