@@ -230,12 +230,6 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Max off64_t"
 			"				: %lld\n",
 			(int64_t)sys::getMaxOff64T());
-	stdoutput.printf("Min int16_t"
-			"				: %lld\n",
-			(int64_t)sys::getMinInt16T());
-	stdoutput.printf("Max int16_t"
-			"				: %lld\n",
-			(int64_t)sys::getMaxInt16T());
 
 	// these should be non-empty/non-null
 	test("OS Name",!charstring::isNullOrEmpty(osname));
