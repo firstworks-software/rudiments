@@ -212,6 +212,30 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Max Process ID"
 			"				: %lld\n",
 			(LONG_LONG)sys::getMaxProcessId());
+	stdoutput.printf("Min size_t"
+			"				: %s\n",
+			charstring::parseNumber((uint64_t)sys::getMinSizeT()));
+	stdoutput.printf("Max size_t"
+			"				: %s\n",
+			charstring::parseNumber((uint64_t)sys::getMaxSizeT()));
+	stdoutput.printf("Min ssize_t"
+			"				: %lld\n",
+			(int64_t)sys::getMinSSizeT());
+	stdoutput.printf("Max ssize_t"
+			"				: %lld\n",
+			(int64_t)sys::getMaxSSizeT());
+	stdoutput.printf("Min off64_t"
+			"				: %lld\n",
+			(int64_t)sys::getMinOff64T());
+	stdoutput.printf("Max off64_t"
+			"				: %lld\n",
+			(int64_t)sys::getMaxOff64T());
+	stdoutput.printf("Min int16_t"
+			"				: %lld\n",
+			(int64_t)sys::getMinInt16T());
+	stdoutput.printf("Max int16_t"
+			"				: %lld\n",
+			(int64_t)sys::getMaxInt16T());
 
 	// these should be non-empty/non-null
 	test("OS Name",!charstring::isNullOrEmpty(osname));

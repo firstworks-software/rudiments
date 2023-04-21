@@ -4,4 +4,8 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+
 class sysprivate;

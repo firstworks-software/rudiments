@@ -451,7 +451,34 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  this method returns false; */
 		static	bool	enablePaging();
 
+
+		/** Returns the minimum value that a size_t can store on this
+		 *  platform. */
+		static	size_t	getMinSizeT();
+
+		/** Returns the maximum value that a size_t can store on this
+		 *  platform. */
+		static	size_t	getMaxSizeT();
+
+		/** Returns the minimum value that a ssize_t can store on this
+		 *  platform. */
+		static	ssize_t	getMinSSizeT();
+
+		/** Returns the maximum value that a ssize_t can store on this
+		 *  platform. */
+		static	ssize_t	getMaxSSizeT();
+
+		/** Returns the minimum value that a off64_t can store on this
+		 *  platform. */
+		static	off64_t	getMinOff64T();
+
+		/** Returns the maximum value that a off64_t can store on this
+		 *  platform. */
+		static	off64_t	getMaxOff64T();
+
 	#include <rudiments/private/sys.h>
 };
+
+#include <rudiments/private/sysinlines.h>
 
 #endif

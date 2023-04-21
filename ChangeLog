@@ -136,6 +136,7 @@
 	added printHex() to output class
 	fixed various longstanding NULL-related bugs in compare*() methods
 	des class inherits from hash instead of encryption now
+	added sys::getMin/Max*() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
