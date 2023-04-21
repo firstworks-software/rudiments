@@ -468,11 +468,11 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  platform. */
 		static	ssize_t	getMaxSSizeT();
 
-		/** Returns the minimum value that a off64_t can store on this
+		/** Returns the minimum value that an off64_t can store on this
 		 *  platform. */
 		static	off64_t	getMinOff64T();
 
-		/** Returns the maximum value that a off64_t can store on this
+		/** Returns the maximum value that an off64_t can store on this
 		 *  platform. */
 		static	off64_t	getMaxOff64T();
 
