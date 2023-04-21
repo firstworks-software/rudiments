@@ -55,23 +55,23 @@ class RUDIMENTS_DLLSPEC websocket : public socketlayer {
 		 *  setFileDescriptor() into "buf" until "size" bytes have
 		 *  been read.  Returns the number of bytes that were written
 		 *  to "buf" or RESULT_ERROR if an error occurred. */
-		ssize_t	read(void *buf, ssize_t size);
+		ssize_t	read(void *buf, size_t size);
 
 		/** Writes "size" bytes from "buf" to the file descriptor
 		 *  previously configured by setFileDescriptor().
 		 *  Returns the number of bytes that were written or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	write(const void *buf, ssize_t size);
+		ssize_t	write(const void *buf, size_t size);
 
 		/** Pings the peer with "size" bytes of "buf" data.  Returns
 		 *  true if the peer responds with the same data or false if
 		 *  the peer doesn't respond or responds with different
 		 *  data. */
-		bool ping(const byte_t *buf, ssize_t size);
+		bool ping(const byte_t *buf, size_t size);
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */
-		ssize_t pending();
+		size_t pending();
 
 		/** Releases any security context established during the
 		 *  previous call to connect() or accept(). */

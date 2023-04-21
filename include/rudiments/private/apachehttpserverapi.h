@@ -62,7 +62,7 @@
 			return *this;
 		};
 
-		ssize_t	bufferedRead(void *buf, ssize_t count);
+		ssize_t	bufferedRead(void *buf, size_t count);
 		ssize_t	bufferedRead(char *ch);
 
 		apachehttpserverapiprivate	*pvt;

@@ -426,10 +426,10 @@ bool websocket::acceptInternal() {
 	return true;
 }
 
-ssize_t websocket::read(void *buf, ssize_t size) {
+ssize_t websocket::read(void *buf, size_t size) {
 
 	// copy out any existing buffered data
-	ssize_t	bytescopiedout=copyOut(buf,size);
+	size_t	bytescopiedout=copyOut(buf,size);
 	if (bytescopiedout==size) {
 		return size;
 	}
@@ -454,7 +454,7 @@ ssize_t websocket::read(void *buf, ssize_t size) {
 	return retval;
 }
 
-ssize_t websocket::readInternal(void *buf, ssize_t size) {
+ssize_t websocket::readInternal(void *buf, size_t size) {
 
 	#ifdef DEBUG_READ
 		stdoutput.write("websocket::read() {\n");
@@ -663,10 +663,10 @@ ssize_t websocket::readInternal(void *buf, ssize_t size) {
 	return copyOut(buf,size);
 }
 
-ssize_t websocket::copyOut(void *buf, ssize_t size) {
+size_t websocket::copyOut(void *buf, size_t size) {
 
-	ssize_t	bytestocopy=size;
-	if (bytestocopy>(ssize_t)(pvt->_buffersize-pvt->_bufferpos)) {
+	size_t	bytestocopy=size;
+	if (bytestocopy>pvt->_buffersize-pvt->_bufferpos) {
 		bytestocopy=pvt->_buffersize-pvt->_bufferpos;
 	}
 
@@ -680,12 +680,12 @@ ssize_t websocket::copyOut(void *buf, ssize_t size) {
 	return bytestocopy;
 }
 
-ssize_t websocket::write(const void *buf, ssize_t size) {
+ssize_t websocket::write(const void *buf, size_t size) {
 	// FIXME: Select text/binary somehow...
 	return write(buf,size,OPCODE_TEXT_FRAME);
 }
 
-ssize_t websocket::write(const void *buf, ssize_t size, byte_t opcode) {
+ssize_t websocket::write(const void *buf, size_t size, byte_t opcode) {
 
 	// temporarily disable the socket layer so
 	// local writes don't use websocket::write();
@@ -704,7 +704,7 @@ ssize_t websocket::write(const void *buf, ssize_t size, byte_t opcode) {
 	return retval;
 }
 
-ssize_t websocket::writeInternal(const void *buf, ssize_t size, byte_t opcode) {
+ssize_t websocket::writeInternal(const void *buf, size_t size, byte_t opcode) {
 
 	#ifdef DEBUG_WRITE
 		stdoutput.write("websocket::write() {\n");
@@ -831,7 +831,7 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size, byte_t opcode) {
 
 		// mask payload
 		payload=(byte_t *)bytestring::duplicate(buf,size);
-		for (ssize_t i=0; i<size; i++) {
+		for (size_t i=0; i<size; i++) {
 			payload[i]=payload[i]^maskingkey[i%4];
 		}
 	}
@@ -847,7 +847,7 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size, byte_t opcode) {
 	if (mask) {
 		delete[] payload;
 	}
-	if (retval!=size) {
+	if (retval!=(ssize_t)size) {
 		#ifdef DEBUG_WRITE
 			stdoutput.write("	payload error\n}\n");
 		#endif
@@ -863,7 +863,7 @@ ssize_t websocket::writeInternal(const void *buf, ssize_t size, byte_t opcode) {
 	return retval;
 }
 
-ssize_t websocket::pending() {
+size_t websocket::pending() {
 	return (pvt->_buffersize-pvt->_bufferpos);
 }
 
@@ -875,7 +875,7 @@ size_t websocket::getSizeMax() {
 	return SSIZE_MAX;
 }
 
-bool websocket::ping(const byte_t *buf, ssize_t size) {
+bool websocket::ping(const byte_t *buf, size_t size) {
 	delete[] pvt->_pingbuffer;
 	pvt->_pingbuffer=(byte_t *)bytestring::duplicate(buf,size);
 	pvt->_pingbuffersize=size;

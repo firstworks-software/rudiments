@@ -3438,16 +3438,16 @@ bool gsscontext::verifyMic(const byte_t *message,
 	return false;
 }
 
-ssize_t gsscontext::read(void *buf, ssize_t size) {
+ssize_t gsscontext::read(void *buf, size_t size) {
 
 	// first, return any buffered data
-	ssize_t bytestoread=size;
-	ssize_t	bytesread=0;
+	size_t	bytestoread=size;
+	size_t	bytesread=0;
 	size_t	pendingbytes=pending();
 	if (pendingbytes) {
 
 		// copy data out...
-		if (pendingbytes<=(size_t)bytestoread) {
+		if (pendingbytes<=bytestoread) {
 			bytestring::copy(
 				buf,pvt->_readbuffer.getBuffer()+
 					pvt->_readbufferpos,pendingbytes);
@@ -3684,7 +3684,7 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	return *tokensize;
 }
 
-ssize_t gsscontext::write(const void *buf, ssize_t size) {
+ssize_t gsscontext::write(const void *buf, size_t size) {
 
 	// create token
 	byte_t	*tokendata=NULL;
@@ -3786,7 +3786,7 @@ ssize_t gsscontext::sendTlsToken(uint32_t tokenflags,
 	return result;
 }
 
-ssize_t gsscontext::fullRead(void *data, ssize_t size) {
+ssize_t gsscontext::fullRead(void *data, size_t size) {
 
 	if (!pvt->_fd) {
 		return RESULT_ERROR;
@@ -3795,8 +3795,10 @@ ssize_t gsscontext::fullRead(void *data, ssize_t size) {
 	// read, retrying if we got a short read,
 	// until we've read "size" bytes...
 
-	ssize_t	bytesread=0;
-	ssize_t bytestoread=size;
+	size_t	bytesread=0;
+	size_t bytestoread=size;
+	// FIXME: bytestoread needs to be limited to SSIZE_MAX and we need to
+	// loop until size bytes have been read
 	while (bytestoread) {
 		ssize_t	result=pvt->_fd->lowLevelRead(
 					((byte_t *)data)+bytesread,
@@ -3810,7 +3812,7 @@ ssize_t gsscontext::fullRead(void *data, ssize_t size) {
 	return bytesread;
 }
 
-ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
+ssize_t gsscontext::fullWrite(const void *data, size_t size) {
 
 	if (!pvt->_fd) {
 		return RESULT_ERROR;
@@ -3819,8 +3821,10 @@ ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
 	// write, retrying if we got a short write,
 	// until we've written "size" bytes...
 
-	ssize_t	byteswritten=0;
-	ssize_t bytestowrite=size;
+	size_t	byteswritten=0;
+	size_t bytestowrite=size;
+	// FIXME: bytestowrite needs to be limited to SSIZE_MAX and we need to
+	// loop until size bytes have been written
 	while (bytestowrite) {
 		ssize_t	result=pvt->_fd->lowLevelWrite(
 				((const byte_t *)data)+byteswritten,
@@ -3843,7 +3847,7 @@ bool gsscontext::checkFlags(uint32_t actualflags, uint32_t desiredflags) {
 	}
 }
 
-ssize_t gsscontext::pending() {
+size_t gsscontext::pending() {
 	return (pvt->_readbuffer.getSize()-pvt->_readbufferpos);
 }
 

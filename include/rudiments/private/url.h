@@ -24,7 +24,7 @@
 						mode_t perms, bool useperms);
 		int32_t	lowLevelClose();
 
-		ssize_t	lowLevelRead(void *buffer, ssize_t size);
+		ssize_t	lowLevelRead(void *buffer, size_t size);
 	private:
 		url(url &u) {};
 		url	&operator=(url &u) { return *this; };

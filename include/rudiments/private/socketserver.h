@@ -4,8 +4,8 @@
 	protected:
 		bool	socketLayerAccept(filedescriptor *sock);
 
-		ssize_t	lowLevelRead(void *buf, ssize_t count);
-		ssize_t	lowLevelWrite(const void *buf, ssize_t count);
+		ssize_t	lowLevelRead(void *buf, size_t count);
+		ssize_t	lowLevelWrite(const void *buf, size_t count);
 		int32_t	lowLevelClose();
 
 	private:

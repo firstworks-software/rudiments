@@ -221,8 +221,10 @@ int main(int argc, const char **argv) {
 			blocksize=1024;
 		}
 		fl.setWriteBufferSize(blocksize);
-		test("getWriteBufferSize",fl.getWriteBufferSize()==blocksize);
-		test("getReadBufferSize",fl.getReadBufferSize()==blocksize);
+		test("getWriteBufferSize",
+			fl.getWriteBufferSize()==(size_t)blocksize);
+		test("getReadBufferSize",
+			fl.getReadBufferSize()==(size_t)blocksize);
 
 		// sequential writes/reads
 		// write 400 a's, followed by 400 b's, followed by 400 c's, etc.

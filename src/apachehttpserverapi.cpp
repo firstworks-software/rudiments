@@ -100,10 +100,7 @@ const char *apachehttpserverapi::getType() {
 	#endif
 }
 
-ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
-
-	// FIXME: implement this to read a specified number of bytes
-	// and collapse bufferedRead(void *,ssize_t) into it
+ssize_t apachehttpserverapi::bufferedRead(void *buf, size_t count) {
 
 	request_rec	*r=(request_rec *)
 		((apacheapistruct *)pvt->_apistruct)->requestrec;
@@ -117,13 +114,13 @@ ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 
 	// do an actual buffered read...
 	byte_t	*data=(byte_t *)buf;
-	ssize_t	bytesread=0;
-	ssize_t	bytesunread=count;
+	size_t	bytesread=0;
+	size_t	bytesunread=count;
 
 	for (;;) {
 
 		// copy out what we can from the buffer...
-		ssize_t	bytesavailable=pvt->_buffertail-pvt->_bufferptr;
+		size_t	bytesavailable=pvt->_buffertail-pvt->_bufferptr;
 		if (bytesavailable) {
 
 			#if defined(DEBUG_BUFFERING)
@@ -132,7 +129,7 @@ ssize_t apachehttpserverapi::bufferedRead(void *buf, ssize_t count) {
 			#endif
 
 			// calculate how many bytes to copy out
-			ssize_t	bytestocopy=(bytesavailable<bytesunread)?
+			size_t	bytestocopy=(bytesavailable<bytesunread)?
 						bytesavailable:bytesunread;
 
 			#if defined(DEBUG_BUFFERING)

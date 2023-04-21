@@ -1067,10 +1067,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	setWriteBufferSize(ssize_t size);
+		bool	setWriteBufferSize(size_t size);
 
 		/** Returns the current size of the write buffer. */
-		ssize_t	getWriteBufferSize();
+		size_t	getWriteBufferSize();
 
 		/** When write buffering enabled, this method causes the
 		 *  contents of the write buffer to be written to the file
@@ -1156,10 +1156,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	setReadBufferSize(ssize_t size);
+		bool	setReadBufferSize(size_t size);
 
 		/** Returns the current size of the read buffer. */
-		ssize_t	getReadBufferSize();
+		size_t	getReadBufferSize();
 
 		/** If "enabled" is set true then mmap will be used when
 		 *  buffering a storage filedescriptor such as a file or raw

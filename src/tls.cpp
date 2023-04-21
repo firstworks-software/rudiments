@@ -1656,7 +1656,7 @@ bool tlscontext::loadPeerCert() {
 	#endif
 }
 
-ssize_t tlscontext::read(void *buf, ssize_t size) {
+ssize_t tlscontext::read(void *buf, size_t size) {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
@@ -1683,7 +1683,7 @@ ssize_t tlscontext::read(void *buf, ssize_t size) {
 	#endif
 }
 
-ssize_t tlscontext::write(const void *buf, ssize_t size) {
+ssize_t tlscontext::write(const void *buf, size_t size) {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
@@ -1710,15 +1710,13 @@ ssize_t tlscontext::write(const void *buf, ssize_t size) {
 	#endif
 }
 
-ssize_t tlscontext::pending() {
+size_t tlscontext::pending() {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
 			return RESULT_ERROR;
 		}
-		int	ret=SSL_pending(pvt->_ssl);
-		setError(ret);
-		return (ret==1);
+		return SSL_pending(pvt->_ssl);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return pvt->_gctx.pending();
 	#else

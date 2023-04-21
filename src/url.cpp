@@ -50,8 +50,8 @@ class urlprivate {
 
 		bool			_chunked;
 		bool			_bof;
-		ssize_t			_chunksize;
-		ssize_t			_chunkpos;
+		size_t			_chunksize;
+		size_t			_chunkpos;
 
 		bool			_keepalive;
 		char			*_previousproto;
@@ -1178,9 +1178,9 @@ int32_t url::lowLevelClose() {
 	return retval;
 }
 
-ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
+ssize_t url::lowLevelRead(void *buffer, size_t size) {
 
-	ssize_t	bytesread=0;
+	size_t	bytesread=0;
 
 	if (pvt->_usingbuiltin) {
 

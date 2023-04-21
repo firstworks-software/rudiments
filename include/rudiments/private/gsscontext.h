@@ -34,8 +34,8 @@
 					const void *tokendata,
 					size_t tokensize);
 
-		ssize_t	fullRead(void *data, ssize_t count);
-		ssize_t	fullWrite(const void *data, ssize_t count);
+		ssize_t	fullRead(void *data, size_t count);
+		ssize_t	fullWrite(const void *data, size_t count);
 
 		bool	checkFlags(uint32_t actualflags,
 					uint32_t desiredflags);

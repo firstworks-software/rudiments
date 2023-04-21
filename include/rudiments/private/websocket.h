@@ -6,11 +6,11 @@
 		websocket	&operator=(websocket &w) { return *this; };
 
 		bool	acceptInternal();
-		ssize_t	readInternal(void *buf, ssize_t size);
-		ssize_t	write(const void *buf, ssize_t size, byte_t opcode);
-		ssize_t	writeInternal(const void *buf, ssize_t size,
+		ssize_t	readInternal(void *buf, size_t size);
+		ssize_t	write(const void *buf, size_t size, byte_t opcode);
+		ssize_t	writeInternal(const void *buf, size_t size,
 							byte_t opcode);
-		ssize_t	copyOut(void *buf, ssize_t size);
+		size_t	copyOut(void *buf, size_t size);
 		bool	pong();
 		bool	validatePong();
 

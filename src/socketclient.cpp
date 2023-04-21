@@ -446,7 +446,7 @@ wsacleanup:
 	return retval;
 }
 
-ssize_t socketclient::lowLevelRead(void *buf, ssize_t count) {
+ssize_t socketclient::lowLevelRead(void *buf, size_t count) {
 	return ::recv(fd(),
 			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
 			buf,
@@ -456,7 +456,7 @@ ssize_t socketclient::lowLevelRead(void *buf, ssize_t count) {
 			count,0);
 }
 
-ssize_t socketclient::lowLevelWrite(const void *buf, ssize_t count) {
+ssize_t socketclient::lowLevelWrite(const void *buf, size_t count) {
 	return ::send(fd(),
 			#ifdef RUDIMENTS_HAVE_SEND_WITH_VOID
 			buf,
