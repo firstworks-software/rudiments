@@ -26,7 +26,7 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		bool	open(gid_t groupid);
 
 		/** Returns the name of the group. */
-		const char		*getName();
+		const char	*getName();
 
 		/** Returns the id of the group.
 		 *
