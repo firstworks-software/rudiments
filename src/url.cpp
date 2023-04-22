@@ -94,7 +94,7 @@ class urlprivate {
 url::url() : file() {
 
 	pvt=new urlprivate;
-	dontGetCurrentPropertiesOnOpen();
+	setGetCurrentPropertiesOnOpen(false);
 
 	pvt->_isc.allowShortReads();
 	pvt->_isc.setWriteBufferSize(65536);

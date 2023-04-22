@@ -21,7 +21,7 @@ class deviceprivate {
 
 device::device() : file() {
 	pvt=new deviceprivate;
-	dontGetCurrentPropertiesOnOpen();
+	setGetCurrentPropertiesOnOpen(false);
 	type("device");
 }
 

@@ -721,25 +721,25 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  enabled, this method only assures that the changes
 		 *  has been copied into the disk's write cache, not
 		 *  necessarily to the disk itself. */
-		virtual bool	dataSync();
+		virtual bool	syncData();
 
 
-		/** Causes the open() and create() methods to call
-		 *  getCurrentProperties() internally so other methods of this
-		 *  class such as getSize() will return valid data about the
-		 *  file immediately.  This is the default behavior. */
-		virtual void	dontGetCurrentPropertiesOnOpen();
-
-		/** Causes the open() and create() methods to not to call
-		 *  getCurrentProperties() internally.  This offers a small
-		 *  performance improvement which can become significant if you
-		 *  intend to open lots of files but don't need to know the size
-		 *  or any other properties about them.
+		/** If "getcurrentpropertiesonopen" is true, then open() and
+		 *  create() methods will call getCurrentProperties()
+		 *  internally so other methods of this class such as getSize()
+		 *  will return valid data about the file immediately.  
 		 *
-		 *  If this method is called and a method such as getSize() is
-		 *  called afterwards, then it will call getCurrentProperties()
-		 *  internally. */
-		virtual void	getCurrentPropertiesOnOpen();
+		 *  If "getcurrentpropertiesonopen" is false, then open() and
+		 *  create() methods will not call getCurrentProperties()
+		 *  internally.  This offers a small performance improvement
+		 *  which can become significant if you intend to open lots of
+		 *  files but don't need to know the size or any other
+		 *  properties about them.  If this method is called with false
+		 *  and a method such as getSize() is called afterwards, then
+		 *  it will call getCurrentProperties() internally.
+		 *
+		 *  Defaults to true. */
+		virtual void	setGetCurrentPropertiesOnOpen(bool set);
 
 		/** Refreshes the current file properties as returned by
 		 *  getSize(), getPermissions(), etc.
@@ -770,31 +770,31 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns 1 if the file is a socket,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isSocket();
+		virtual int32_t		getIsSocket();
 
 		/** Returns 1 if the file is a symbolic link,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isSymbolicLink();
+		virtual int32_t		getIsSymbolicLink();
 
 		/** Returns 1 if the file is a regular file,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isRegularFile();
+		virtual int32_t		getIsRegularFile();
 
 		/** Returns 1 if the file is a block device,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isBlockDevice();
+		virtual int32_t		getIsBlockDevice();
 
 		/** Returns 1 if the file is a directory,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isDirectory();
+		virtual int32_t		getIsDirectory();
 
 		/** Returns 1 if the file is a character device,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isCharacterDevice();
+		virtual int32_t		getIsCharacterDevice();
 
 		/** Returns 1 if the file is a fifo,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		isFifo();
+		virtual int32_t		getIsFifo();
 
 		/** Returns the time of last access of the file. */
 		virtual time_t		getLastAccessTime();
@@ -841,11 +841,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Returns true if any of the changeOwner()
 		 *  methods are allowed on "filename" and
 		 *  false otherwise. */
-		virtual bool	canChangeOwner();
+		virtual bool	getCanChangeOwner();
 
 		/** Returns the maximum number of links that can be
 		 *  created to "filename". */
-		virtual int64_t	maxLinks();
+		virtual int64_t	getMaxLinks();
 
 
 		/** Returns a pointer to the file stats structure
@@ -970,19 +970,19 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 
 		/** Returns true if the file exists and false otherwise. */
-		static bool	exists(const char *filename);
+		static bool	getExists(const char *filename);
 
 		/** Returns true if "filename" is readable by the user
 		 *  or false otherwise. */
-		static bool	readable(const char *filename);
+		static bool	getIsReadable(const char *filename);
 
 		/** Returns true if "filename" is writeable by the user
 		 *  or false otherwise. */
-		static bool	writeable(const char *filename);
+		static bool	getIsWriteable(const char *filename);
 
 		/** Returns true if "filename" is executable by the user
 		 *  or false otherwise. */
-		static bool	executable(const char *filename);
+		static bool	getIsExecutable(const char *filename);
 
 		/** Checks to see if "filename" exists, is readable,
 		 *  is writeable and/or is executable by the user, based
@@ -992,7 +992,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns true if the file meets the conditions set
 		 *  by the mode and false otherwise. */
-		static bool	accessible(const char *filename, int32_t mode);
+		static bool	getIsAccessible(const char *filename,
+							int32_t mode);
 
 		/** Sets "ctime" to the last change time of "filename".
 		 *  Returns true on success and false on failure.
@@ -1020,7 +1021,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns true if any of the changeOwner methods are
  		 *  allowed on "filename" and false otherwise. */
-		static bool	canChangeOwner(const char *filename);
+		static bool	getCanChangeOwner(const char *filename);
 
 
 		/** Overrides the last access time of the file, setting it to
@@ -1055,33 +1056,33 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  This method allocates a buffer internally
 		 *  and returns it.  The calling program must
 		 *  deallocate the buffer. */
-		static char	*dirname(const char *filename);
+		static char	*getDirName(const char *filename);
 
 		/** Returns the non-directory portion of "filename".
 		 *  This method allocates a buffer internally and returns it.
 		 *  The calling program must deallocate the buffer. */
-		static char	*basename(const char *filename);
+		static char	*getBaseName(const char *filename);
 
 		/** Returns the non-directory portion of
 		 *  "filename", truncating "ext".
 		 *  This method allocates a buffer internally
 		 *  and returns it.  The calling program must
 		 *  deallocate the buffer. */
-		static char	*basename(const char *filename,
+		static char	*getBaseName(const char *filename,
 						const char *ext);
 
 		/** Returns the portion of "filename" after the last dot,
  		 *  including the dot, or an empty string if the filename
  		 *  contains no dot.  The output should be suitable to be
  		 *  passed in as the "ext" parameter when calling basename().*/
-		static char	*extension(const char *filename);
+		static char	*getExtension(const char *filename);
 
 		/** Translates the basename of "filename" to an 8.3 format,
 		 *  performing substitutions in the same way that Windows
 		 *  does.  This method allocates a buffer internally and
 		 *  returns it.  The calling program must deallocate the
 		 *  buffer. */
-		static char	*eightDotThree(const char *filename);
+		static char	*getEightDotThree(const char *filename);
 
 
 		/** Generates a key based on "filename" and the
@@ -1093,7 +1094,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns the maximum number of links that
 		 *  can be created to "filename". */
-		static int64_t	maxLinks(const char *filename);
+		static int64_t	getMaxLinks(const char *filename);
 
 		/** Populates "matches" with the set of files whos names match
  		 *  "pattern".

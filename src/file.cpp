@@ -771,23 +771,23 @@ bool file::unlockRemainderFromEnd(off64_t start) {
 	return unlock(SEEK_END,start,0);
 }
 
-bool file::exists(const char *filename) {
-	return accessible(filename,F_OK);
+bool file::getExists(const char *filename) {
+	return getIsAccessible(filename,F_OK);
 }
 
-bool file::readable(const char *filename) {
-	return accessible(filename,R_OK);
+bool file::getIsReadable(const char *filename) {
+	return getIsAccessible(filename,R_OK);
 }
 
-bool file::writeable(const char *filename) {
-	return accessible(filename,W_OK);
+bool file::getIsWriteable(const char *filename) {
+	return getIsAccessible(filename,W_OK);
 }
 
-bool file::executable(const char *filename) {
-	return accessible(filename,X_OK);
+bool file::getIsExecutable(const char *filename) {
+	return getIsAccessible(filename,X_OK);
 }
 
-bool file::accessible(const char *filename, int32_t mode) {
+bool file::getIsAccessible(const char *filename, int32_t mode) {
 	int32_t	result;
 	error::clearError();
 	do {
@@ -912,7 +912,7 @@ blkcnt_t file::getBlockCount() {
 	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
 #endif
 
-int32_t file::isSocket() {
+int32_t file::getIsSocket() {
 	#if defined(_S_IFSOCK)
 		return ((pvt->_st.st_mode&_S_IFSOCK)==_S_IFSOCK);
 	#elif defined(S_IFSOCK)
@@ -926,7 +926,7 @@ int32_t file::isSocket() {
 	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
 #endif
 
-int32_t file::isSymbolicLink() {
+int32_t file::getIsSymbolicLink() {
 	#if defined(_S_IFLNK)
 		return ((pvt->_st.st_mode&_S_IFLNK)==_S_IFLNK);
 	#elif defined(S_IFLNK)
@@ -936,7 +936,7 @@ int32_t file::isSymbolicLink() {
 	#endif
 }
 
-int32_t file::isRegularFile() {
+int32_t file::getIsRegularFile() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_DISK);
 	#elif defined(_S_IFREG)
@@ -952,7 +952,7 @@ int32_t file::isRegularFile() {
 	#define S_ISBLK(m) (((m&0060000)==0060000)?1:0)
 #endif
 
-int32_t file::isBlockDevice() {
+int32_t file::getIsBlockDevice() {
 	#if defined(_S_IFBLK)
 		return ((pvt->_st.st_mode&_S_IFBLK)==_S_IFBLK);
 	#elif defined(S_IFBLK)
@@ -962,7 +962,7 @@ int32_t file::isBlockDevice() {
 	#endif
 }
 
-int32_t file::isDirectory() {
+int32_t file::getIsDirectory() {
 	#if defined(_S_IFDIR)
 		return ((pvt->_st.st_mode&_S_IFDIR)==_S_IFDIR);
 	#elif defined(S_IFDIR)
@@ -972,7 +972,7 @@ int32_t file::isDirectory() {
 	#endif
 }
 
-int32_t file::isCharacterDevice() {
+int32_t file::getIsCharacterDevice() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_CHAR);
 	#elif defined(_S_IFCHR)
@@ -984,7 +984,7 @@ int32_t file::isCharacterDevice() {
 	#endif
 }
 
-int32_t file::isFifo() {
+int32_t file::getIsFifo() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_PIPE);
 	#elif defined(_S_IFIFO)
@@ -1030,12 +1030,8 @@ nlink_t file::getNumberOfHardLinks() {
 	return pvt->_st.st_nlink;
 }
 
-void file::getCurrentPropertiesOnOpen() {
-	pvt->_getcurrentpropertiesonopen=true;
-}
-
-void file::dontGetCurrentPropertiesOnOpen() {
-	pvt->_getcurrentpropertiesonopen=false;
+void file::setGetCurrentPropertiesOnOpen(bool getcurrentpropertiesonopen) {
+	pvt->_getcurrentpropertiesonopen=getcurrentpropertiesonopen;
 }
 
 bool file::lock(int32_t method, int16_t type,
@@ -1306,11 +1302,11 @@ bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
 	return (fl.open(filename,O_RDWR) && fl.changeOwner(uid,gid));
 }
 
-bool file::canChangeOwner(const char *filename) {
+bool file::getCanChangeOwner(const char *filename) {
 	return !pathConf(filename,_PC_CHOWN_RESTRICTED);
 }
 
-bool file::canChangeOwner() {
+bool file::getCanChangeOwner() {
 	return !fpathConf(_PC_CHOWN_RESTRICTED);
 }
 
@@ -1452,7 +1448,7 @@ bool file::sync() {
 	#endif
 }
 
-bool file::dataSync() {
+bool file::syncData() {
 	#ifdef RUDIMENTS_HAVE_FDATASYNC
 		int32_t	result;
 		error::clearError();
@@ -1688,7 +1684,7 @@ void *file::getInternalFileStatisticsStructure() {
 	return (void *)&(pvt->_st);
 }
 
-char *file::dirname(const char *filename) {
+char *file::getDirName(const char *filename) {
 
 	if (!filename) {
 		return NULL;
@@ -1712,7 +1708,7 @@ char *file::dirname(const char *filename) {
 	return retval;
 }
 
-char *file::basename(const char *filename) {
+char *file::getBaseName(const char *filename) {
 
 	if (!filename) {
 		return NULL;
@@ -1732,8 +1728,8 @@ char *file::basename(const char *filename) {
 	return retval;
 }
 
-char *file::basename(const char *filename, const char *ext) {
-	char	*retval=basename(filename);
+char *file::getBaseName(const char *filename, const char *ext) {
+	char	*retval=getBaseName(filename);
 	char	*ptr=charstring::findLast(retval,ext);
 	if (!(*(ptr+charstring::length(ext)))) {
 		(*ptr)='\0';
@@ -1741,7 +1737,7 @@ char *file::basename(const char *filename, const char *ext) {
 	return retval;
 }
 
-char *file::extension(const char *filename) {
+char *file::getExtension(const char *filename) {
 	const char	*ext="";
 	const char	*dot=charstring::findLast(filename,'.');
 	if (dot) {
@@ -1750,18 +1746,18 @@ char *file::extension(const char *filename) {
 	return charstring::duplicate(ext);
 }
 
-char *file::eightDotThree(const char *filename) {
+char *file::getEightDotThree(const char *filename) {
 
 	// FIXME: I'm sure there's an infinitely more efficient way of
 	// doing this using a static buffer...
 
 	// get the base name
-	char	*base=basename(filename);
+	char	*base=getBaseName(filename);
 
 	// get the directory name unless no directory was specified
 	char	*dir=NULL;
 	if (charstring::compare(base,filename)) {
-		dir=dirname(filename);
+		dir=getDirName(filename);
 	}
 
 	// get the suffix and terminate the base at the final dot
@@ -1827,7 +1823,7 @@ char *file::eightDotThree(const char *filename) {
 		// filename or if a file with the name we've come up with
 		// doesn't exist, then go ahead and use the name
 		if (!charstring::compare(fullname.getString(),filename) ||
-						!exists(fullname.getString())) {
+					!getExists(fullname.getString())) {
 			break;
 		}
 
@@ -1877,11 +1873,11 @@ key_t file::generateKey(const char *filename, int32_t id) {
 #endif
 }
 
-int64_t file::maxLinks(const char *filename) {
+int64_t file::getMaxLinks(const char *filename) {
 	return pathConf(filename,_PC_LINK_MAX);
 }
 
-int64_t file::maxLinks() {
+int64_t file::getMaxLinks() {
 	return fpathConf(_PC_LINK_MAX);
 }
 
