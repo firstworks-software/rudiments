@@ -153,8 +153,8 @@ int main(int argc, const char **argv) {
 			}
 
 			f.setPositionRelativeToBeginning(0);
-			f.sequentialAccess(0,filesize);
-			f.willNeed(0,filesize);
+			f.adviseSequentialAccess(0,filesize);
+			f.adviseWillNeed(0,filesize);
 
 			if (i==0) {
 				f.setReadBufferSize(0);

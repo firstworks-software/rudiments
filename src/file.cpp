@@ -654,7 +654,7 @@ bool file::checkLockRemainderFromEnd(int16_t type, off64_t start,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::sequentialAccess(off64_t start, size_t len) {
+bool file::adviseSequentialAccess(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_SEQUENTIAL)
 		return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
@@ -663,7 +663,7 @@ bool file::sequentialAccess(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::randomAccess(off64_t start, size_t len) {
+bool file::adviseRandomAccess(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_RANDOM)
 		return posixFadvise(start,len,POSIX_FADV_RANDOM);
@@ -672,7 +672,7 @@ bool file::randomAccess(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::onlyOnce(off64_t start, size_t len) {
+bool file::adviseOnlyOnce(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NOREUSE)
 		return posixFadvise(start,len,POSIX_FADV_NOREUSE);
@@ -681,7 +681,7 @@ bool file::onlyOnce(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::willNeed(off64_t start, size_t len) {
+bool file::adviseWillNeed(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_WILLNEED)
 		return posixFadvise(start,len,POSIX_FADV_WILLNEED);
@@ -690,7 +690,7 @@ bool file::willNeed(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::wontNeed(off64_t start, size_t len) {
+bool file::adviseWontNeed(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_DONTNEED)
 		return posixFadvise(start,len,POSIX_FADV_DONTNEED);
@@ -699,7 +699,7 @@ bool file::wontNeed(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::normalAccess(off64_t start, size_t len) {
+bool file::adviseNormalAccess(off64_t start, size_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NORMAL)
 		return posixFadvise(start,len,POSIX_FADV_NORMAL);

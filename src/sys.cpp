@@ -1377,7 +1377,7 @@ int64_t sys::sysConf(int32_t name) {
 	#endif
 }
 
-bool sys::signalsInterruptSystemCalls() {
+bool sys::getSignalsInterruptSystemCalls() {
 	#ifdef _WIN32
 		return false;
 	#else
@@ -1412,7 +1412,7 @@ bool sys::setProtection(byte_t *ptr, size_t size, int32_t protection) {
 	#endif
 }
 
-bool sys::sequentialAccess(byte_t *ptr, size_t size) {
+bool sys::adviseSequentialAccess(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
 		return mAdvise(ptr,size,MADV_SEQUENTIAL);
 	#else
@@ -1421,7 +1421,7 @@ bool sys::sequentialAccess(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::randomAccess(byte_t *ptr, size_t size) {
+bool sys::adviseRandomAccess(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_RANDOM)
 		return mAdvise(ptr,size,MADV_RANDOM);
 	#else
@@ -1430,7 +1430,7 @@ bool sys::randomAccess(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::willNeed(byte_t *ptr, size_t size) {
+bool sys::adviseWillNeed(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_WILLNEED)
 		return mAdvise(ptr,size,MADV_WILLNEED);
 	#else
@@ -1439,7 +1439,7 @@ bool sys::willNeed(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::wontNeed(byte_t *ptr, size_t size) {
+bool sys::adviseWontNeed(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_DONTNEED)
 		return mAdvise(ptr,size,MADV_DONTNEED);
 	#else
@@ -1448,7 +1448,7 @@ bool sys::wontNeed(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::normalAccess(byte_t *ptr, size_t size) {
+bool sys::adviseNormalAccess(byte_t *ptr, size_t size) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_NORMAL)
 		return mAdvise(ptr,size,MADV_NORMAL);
 	#else
@@ -1457,7 +1457,7 @@ bool sys::normalAccess(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::lock(byte_t *ptr, size_t size) {
+bool sys::disablePaging(byte_t *ptr, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MLOCK
 		int32_t	result;
 		error::clearError();
@@ -1474,7 +1474,7 @@ bool sys::lock(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::unlock(byte_t *ptr, size_t size) {
+bool sys::enablePaging(byte_t *ptr, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MUNLOCK
 		int32_t	result;
 		error::clearError();
@@ -1491,7 +1491,7 @@ bool sys::unlock(byte_t *ptr, size_t size) {
 	#endif
 }
 
-bool sys::notPagedOut(byte_t *ptr, size_t size) {
+bool sys::getNotPagedOut(byte_t *ptr, size_t size) {
 
 	#ifdef RUDIMENTS_HAVE_MINCORE
 		// create an array of char's, 1 for each page

@@ -308,7 +308,7 @@ class RUDIMENTS_DLLSPEC sys {
 		/** Returns true if signals interrupt system calls on this
 		 *  platform and false if signals do not interrupt system
 		 *  calls.  */
-		static	bool	signalsInterruptSystemCalls();
+		static	bool	getSignalsInterruptSystemCalls();
 
 		/** Returns the character used to separate directories in a
 		 *  path. */
@@ -341,7 +341,8 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	sequentialAccess(byte_t *ptr, size_t size);
+		static	bool	adviseSequentialAccess(
+					byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of memory begining at byte "ptr", for "size" bytes, randomly
@@ -351,7 +352,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	randomAccess(byte_t *ptr, size_t size);
+		static	bool	adviseRandomAccess(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of memory begining at byte "ptr", for "size" bytes, in the
@@ -361,7 +362,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	willNeed(byte_t *ptr, size_t size);
+		static	bool	adviseWillNeed(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are not going to access the
 		 *  region of memory begining at byte "ptr", for "size"
@@ -372,7 +373,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	wontNeed(byte_t *ptr, size_t size);
+		static	bool	adviseWontNeed(byte_t *ptr, size_t size);
 
 		/** Advises the kernel that you are going to access the
 		 *  region of memory begining at byte "ptr", for "size" bytes,
@@ -383,25 +384,25 @@ class RUDIMENTS_DLLSPEC sys {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		static	bool	normalAccess(byte_t *ptr, size_t size);
+		static	bool	adviseNormalAccess(byte_t *ptr, size_t size);
 
 		/** Disables paging of memory, starting at "ptr", for "size"
 		 *  bytes.
 		 *
 		 *  Returns true on success and false on failure.
 		 * 
-		 *  On systems that don't support locking, this method
+		 *  On systems that don't support disabling paging, this method
 		 *  returns false. */
-		static	bool	lock(byte_t *ptr, size_t size);
+		static	bool	disablePaging(byte_t *ptr, size_t size);
 
 		/** Enables paging of memory, starting at "ptr", for "size"
 		 *  bytes.
 		 *
 		 *  Returns true on success and false on failure.
 		 * 
-		 *  On systems that don't support locking, this method
+		 *  On systems that don't support disabling paging, this method
 		 *  returns false. */
-		static	bool	unlock(byte_t *ptr, size_t size);
+		static	bool	enablePaging(byte_t *ptr, size_t size);
 
 		/** Returns true if all pages of memory starting at "ptr",
 		 *  for "size" bytes are not paged out.
@@ -411,7 +412,7 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  On systems that don't support checking whether
 		 *  pages of the memory map are currently cached
 		 *  in system ram, this method returns false. */
-		static	bool	notPagedOut(byte_t *ptr, size_t size);
+		static	bool	getNotPagedOut(byte_t *ptr, size_t size);
 
 
 		/** Disables paging of the entire address space of the process,

@@ -623,7 +623,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	sequentialAccess(off64_t start,
+		virtual bool	adviseSequentialAccess(off64_t start,
 							size_t len);
 
 		/** Advises the kernel that you are going to access the region
@@ -635,7 +635,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	randomAccess(off64_t start, size_t len);
+		virtual bool	adviseRandomAccess(off64_t start, size_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -646,7 +646,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	onlyOnce(off64_t start, size_t len);
+		virtual bool	adviseOnlyOnce(off64_t start, size_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -657,7 +657,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	willNeed(off64_t start, size_t len);
+		virtual bool	adviseWillNeed(off64_t start, size_t len);
 
 		/** Advises the kernel that you are not going to access the
 		 *  region of the currently open file begining at byte "start",
@@ -668,7 +668,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	wontNeed(off64_t start, size_t len);
+		virtual bool	adviseWontNeed(off64_t start, size_t len);
 
 		/** Advises the kernel that you are going to access the
 		 *  region of the currently open file begining at byte "start",
@@ -679,7 +679,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	normalAccess(off64_t start, size_t len);
+		virtual bool	adviseNormalAccess(off64_t start, size_t len);
 
 
 		/** Reserves space on the storage medium such that a

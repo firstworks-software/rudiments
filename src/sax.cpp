@@ -134,8 +134,8 @@ bool sax::parseLocalFile(const char *filename) {
 
 		// optimize...
 		pvt->_fl->setReadBufferSize(pvt->_optblocksize);
-		pvt->_fl->sequentialAccess(0,pvt->_filesize);
-		pvt->_fl->onlyOnce(0,pvt->_filesize);
+		pvt->_fl->adviseSequentialAccess(0,pvt->_filesize);
+		pvt->_fl->adviseOnlyOnce(0,pvt->_filesize);
 
 		// Try to memorymap the file.  If it fails, that's ok, pvt->_ptr
 		// will be set to NULL from the previous call to reset() and
