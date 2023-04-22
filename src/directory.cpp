@@ -478,7 +478,7 @@ bool directory::changeRoot(const char *path) {
 	#endif
 }
 
-int64_t directory::maxFileNameLength(const char *pathname) {
+int64_t directory::getMaxFileNameLength(const char *pathname) {
 	int64_t	retval=pathConf(pathname,_PC_NAME_MAX);
 	#if defined(NAME_MAX)
 	if (retval==-1) {
@@ -488,11 +488,11 @@ int64_t directory::maxFileNameLength(const char *pathname) {
 	return retval;
 }
 
-int64_t directory::maxPathLength(const char *pathname) {
+int64_t directory::getMaxPathLength(const char *pathname) {
 	return pathConf(pathname,_PC_PATH_MAX);
 }
 
-bool directory::canExceedMaxFileNameLength(const char *pathname) {
+bool directory::getCanExceedMaxFileNameLength(const char *pathname) {
 	return !pathConf(pathname,_PC_NO_TRUNC);
 }
 
@@ -516,7 +516,7 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 	#endif
 }
 
-int64_t directory::maxFileNameLength() {
+int64_t directory::getMaxFileNameLength() {
 	int64_t	retval=fpathConf(_PC_NAME_MAX);
 	#if defined(NAME_MAX)
 	if (retval==-1) {
@@ -526,11 +526,11 @@ int64_t directory::maxFileNameLength() {
 	return retval;
 }
 
-int64_t directory::maxPathLength() {
+int64_t directory::getMaxPathLength() {
 	return fpathConf(_PC_PATH_MAX);
 }
 
-bool directory::canExceedMaxFileNameLength() {
+bool directory::getCanExceedMaxFileNameLength() {
 	return !fpathConf(_PC_NO_TRUNC);
 }
 

@@ -1388,7 +1388,7 @@ bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 char *file::resolveSymbolicLink(const char *filename) {
 
 	#if defined(RUDIMENTS_HAVE_READLINK)
-		size_t	inc=directory::maxPathLength(filename);
+		size_t	inc=directory::getMaxPathLength(filename);
 		size_t	max=inc*10;
 		for (size_t size=inc; size<max; size=size+inc) {
 

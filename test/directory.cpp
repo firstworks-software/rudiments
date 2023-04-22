@@ -157,26 +157,26 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("path-related...\n");
 	cwd=directory::getCurrentWorkingDirectory();
 	// not always valid with nfs/cifs
-	/*test("maxFileNameLength valid",
-			directory::maxFileNameLength(cwd)>0);
-	test("maxPathLength valid",
-			directory::maxPathLength(cwd)>0);*/
+	/*test("getMaxFileNameLength valid",
+			directory::getMaxFileNameLength(cwd)>0);
+	test("getMaxPathLength valid",
+			directory::getMaxPathLength(cwd)>0);*/
 	d.open(cwd);
 
 	// Syllable and Irix have bugs
 	char	*osname=sys::getOperatingSystemName();
 	if (charstring::compare(osname,"IRIX")) {
 		if (charstring::compare(osname,"syllable")) {
-			test("maxFileNameLength cross-check",
-				directory::maxFileNameLength(cwd)==
-				d.maxFileNameLength());
+			test("getMaxFileNameLength cross-check",
+				directory::getMaxFileNameLength(cwd)==
+				d.getMaxFileNameLength());
 		}
-		test("maxPathLength cross-check",
-				directory::maxPathLength(cwd)==
-				d.maxPathLength());
-		test("canExceedMaxFileNameLength cross-check",
-				directory::canExceedMaxFileNameLength(cwd)==
-				d.canExceedMaxFileNameLength());
+		test("getMaxPathLength cross-check",
+				directory::getMaxPathLength(cwd)==
+				d.getMaxPathLength());
+		test("getCanExceedMaxFileNameLength cross-check",
+				directory::getCanExceedMaxFileNameLength(cwd)==
+				d.getCanExceedMaxFileNameLength());
 	}
 	delete[] osname;
 	d.close();

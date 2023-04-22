@@ -50,18 +50,18 @@ class RUDIMENTS_DLLSPEC directory : public object {
 
 		/** Returns the character length of the longest file name that
 		 *  can be created in the currently open directory . */
-		int64_t	maxFileNameLength();
+		int64_t	getMaxFileNameLength();
 
 		/** Returns the character length of the longest relative path
 		 *  name that can be created in the currently open
 		 *  directory . */
-		int64_t	maxPathLength();
+		int64_t	getMaxPathLength();
 
 		/** Returns true if an attempt to access a file in directory
 		 *  "pathname" longer than the character length returned by
 		 *  maxFileNameLength() will succeed and false if it will
 		 *  fail. */
-		bool	canExceedMaxFileNameLength();
+		bool	getCanExceedMaxFileNameLength();
 
 		/** Creates a new directory "path" with permissions "perms". */
 		static bool	create(const char *path, mode_t perms);
@@ -99,17 +99,17 @@ class RUDIMENTS_DLLSPEC directory : public object {
 
 		/** Returns the character length of the longest file name that
 		 *  can be created in directory "pathname". */
-		static int64_t	maxFileNameLength(const char *pathname);
+		static int64_t	getMaxFileNameLength(const char *pathname);
 
 		/** Returns the character length of the longest relative path
 		 *  name that can be created under the directory "pathname". */
-		static int64_t	maxPathLength(const char *pathname);
+		static int64_t	getMaxPathLength(const char *pathname);
 
 		/** Returns true if an attempt to access a file in directory
 		 *  "pathname" longer than the character length returned by
 		 *  maxFileNameLength() will succeed and false if it will
 		 *  fail. */
-		static bool	canExceedMaxFileNameLength(
+		static bool	getCanExceedMaxFileNameLength(
 						const char *pathname);
 
 	#include <rudiments/private/directory.h>
