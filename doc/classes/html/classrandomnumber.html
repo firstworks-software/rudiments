@@ -329,7 +329,8 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generates a random number seed by first attempting to get one from /dev/urandom and if that fails, getting the number of seconds since 1970. </p>
+<p>Generates a random number seed by first attempting to get one from /dev/urandom and if that fails, getting the number of seconds since 1970.</p>
+<p>NOTE: If your application is multi-threaded, /dev/urandom is not accessible, and separate threads can call <a class="el" href="classrandomnumber.html#ab02c33404892be23c12a89671fa43f1b">getSeed()</a>, unsynchronized, then be sure to give the datetime and environment classes individual mutexes using <a class="el" href="classdatetime.html#a27feeb3c87ef0f8abeb1b9716bea33fb">datetime::setMutex()</a> and environemnt::setMutex(), as on some platforms, getting the number of seconds since 1970 involves calling non-thread safe date/time-related functions as well as getting, and possibly setting, the TZ environment variable. </p>
 
 </div>
 </div>
@@ -426,7 +427,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

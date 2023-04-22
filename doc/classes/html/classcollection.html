@@ -375,7 +375,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns whether or not this instance of the collection class is configured to array-delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
+<p>Returns whether or not this instance of the collection class is configured to manage the arrays that are stored as the keys at each location in the collection.</p>
+<p>See <a class="el" href="classcollection.html#a644686d8b4f4bf58fdb0a763566ace01">setManageArrayValues()</a>.</p>
 <p>Returns true if it is and false if it is not. </p>
 
 </div>
@@ -402,7 +403,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns whether or not this instance of the collection class is configured to array-delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
+<p>Returns whether or not this instance of the collection class is configured to manage the arrays that are stored as the values at each location in the collection.</p>
+<p>See <a class="el" href="classcollection.html#a644686d8b4f4bf58fdb0a763566ace01">setManageArrayValues()</a>.</p>
 <p>Returns true if it is and false if it is not. </p>
 
 <p>Reimplemented in <a class="el" href="classtable.html#a5ac123b192a72fccc3ac9951e653a997">table&lt; valuetype &gt;</a>.</p>
@@ -431,7 +433,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns whether or not this instance of the collection class is configured to delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
+<p>Returns whether or not this instance of the collection class is configured to manage the objects that are stored as the keys at each location in the collection.</p>
+<p>See <a class="el" href="classcollection.html#aa8d030acf87703cdef3b22b3d73a1006">setManageKeys()</a>.</p>
 <p>Returns true if it is and false if it is not. </p>
 
 </div>
@@ -458,7 +461,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns whether or not this instance of the collection class is configured to delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
+<p>Returns whether or not this instance of the collection class is configured to manage the objects that are stored as the values at each location in the collection.</p>
+<p>See <a class="el" href="classcollection.html#a95fe22a12fb3fb96c39be949041e7410">setManageValues()</a>.</p>
 <p>Returns true if it is and false if it is not. </p>
 
 <p>Reimplemented in <a class="el" href="classtable.html#ac581a4461c0d8d0822ca2f48802193ba">table&lt; valuetype &gt;</a>.</p>
@@ -570,11 +574,43 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Indicates whether or not this instance of the collection class should array-delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
-<p>Setting "manage" to true causes the instance to array-delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
-<p>Setting "manage" to false causes the instance not to array-delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
+<p>Indicates whether or not this instance should "manage" the keys that are stored at each location in the collection as arrays.</p>
+<p>"manage" should only be set true if the keys stored in the collections are pointers to arrays of primitive types.</p>
 <p>Defaults to "false".</p>
-<p>Note that setting this true implies setManageValues(false); </p>
+<p>If "manage" is set to true then:</p><ul>
+<li>When remove() is called, the array stored as the key at that location in the collection will be array-deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the array stored as the key at each location in the collection will be array-deleted.</li>
+<li>When the = operator is called, the lvalue instance will attempt to create a copy of the array stored as the key in each location of the rvalue instance.</li>
+<li>When the copy constructor is called, the new instance will attempt to create a copy of the array stored as the key in each location of the instance that is being copied.</li>
+</ul>
+<p>If "manage" is set to false then:</p><ul>
+<li>When remove() is called, the array stored as the key at that location in the collection will not be array-deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the array stored as the key at each location in the collection will not be array-deleted.</li>
+<li>When the = operator is called, the lvalue instance will not attempt to create a copy of the array stored as the key in each location of the rvalue instance, rather it will just copy the value or pointer.</li>
+<li>When the copy constructor is called, the new instance will not attempt to create a copy of the array stored as the key in each location of the instance that is being copied, rather it will just copy the value or pointer.</li>
+</ul>
+<p>To store managed arrays of non-primitive types as keys, consider using a managed collection of managed staticarrays. For example: </p><pre class="fragment">    dictionary&lt;staticarray&lt; myobject * &gt; *,
+                                    uint32_t &gt;      d;
+    d.setManageKeys(true);
+
+    staticarray&lt; myobject * &gt;       *s1=
+                    new staticarray&lt; myobject * &gt;();
+    s1.setManageKeys(true);
+    s1[0]=new myobject(...);
+    s1[1]=new myobject(...);
+    s1[2]=new myobject(...);
+    d.setValue(s1,1);
+
+    staticarray&lt; myobject * &gt;       *s2=
+                    new staticarray&lt; myobject * &gt;();
+    s2.setManageKeys(true);
+    s2[0]=new myobject(...);
+    s2[1]=new myobject(...);
+    s2[2]=new myobject(...);
+    d.setValue(s2,2);
+
+    ...
+</pre><p> Note that setting this true implies setManageKeys(false); </p>
 
 </div>
 </div>
@@ -601,11 +637,42 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Indicates whether or not this instance of the collection class should array-delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
-<p>Setting "manage" to true causes the instance to array-delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
-<p>Setting "manage" to false causes the instance not to array-delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
+<p>Indicates whether or not this instance should "manage" the values that are stored at each location in the collection as arrays.</p>
+<p>"manage" should only be set true if the values stored in the collections are pointers to arrays of primitive types.</p>
 <p>Defaults to "false".</p>
-<p>Note that setting this true implies setManageValues(false); </p>
+<p>If "manage" is set to true then:</p><ul>
+<li>When remove() is called, the array stored as the value at that location in the collection will be array-deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the array stored as the value at each location in the collection will be array-deleted.</li>
+<li>When the = operator is called, the lvalue instance will attempt to create a copy of the array stored as the value in each location of the rvalue instance.</li>
+<li>When the copy constructor is called, the new instance will attempt to create a copy of the array stored as the value in each location of the instance that is being copied.</li>
+</ul>
+<p>If "manage" is set to false then:</p><ul>
+<li>When remove() is called, the array stored as the value at that location in the collection will not be array-deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the array stored as the value at each location in the collection will not be array-deleted.</li>
+<li>When the = operator is called, the lvalue instance will not attempt to create a copy of the array stored as the value in each location of the rvalue instance, rather it will just copy the value or pointer.</li>
+<li>When the copy constructor is called, the new instance will not attempt to create a copy of the array stored as the value in each location of the instance that is being copied, rather it will just copy the value or pointer.</li>
+</ul>
+<p>To store managed arrays of non-primitive types as values, consider using a managed collection of managed staticarrays. For example: </p><pre class="fragment">    linkedlist&lt; staticarray&lt; myobject * &gt; *&gt;        l;
+    l.setManageValues(true);
+
+    staticarray&lt; myobject * &gt;       *s1=
+                    new staticarray&lt; myobject * &gt;();
+    s1.setManageValues(true);
+    s1[0]=new myobject(...);
+    s1[1]=new myobject(...);
+    s1[2]=new myobject(...);
+    l.append(s1);
+
+    staticarray&lt; myobject * &gt;       *s2=
+                    new staticarray&lt; myobject * &gt;();
+    s2.setManageValues(true);
+    s2[0]=new myobject(...);
+    s2[1]=new myobject(...);
+    s2[2]=new myobject(...);
+    l.append(s2);
+
+    ...
+</pre><p> Note that setting this true implies setManageValues(false); </p>
 
 <p>Reimplemented in <a class="el" href="classtable.html#a5d103079b85afa3dff8fc1d2a57d913b">table&lt; valuetype &gt;</a>.</p>
 
@@ -634,11 +701,22 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Indicates whether or not this instance of the collection class should delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
-<p>Setting "manage" to true causes the instance to delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
-<p>Setting "manage" to false causes the instance not to delete the keys that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
+<p>Indicates whether or not this instance should "manage" the keys that are stored at each location in the collection.</p>
+<p>"manage" should only be set true if the keys stored in the collections are pointers to objects.</p>
 <p>Defaults to "false".</p>
-<p>Note that setting this true implies setManageArrayValues(false); </p>
+<p>If "manage" is set to true then:</p><ul>
+<li>When remove() is called, the object stored as the key at that location in the collection will be deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the object stored as the key at each location in the collection will be deleted.</li>
+<li>When the = operator is called, the lvalue instance will attempt to create a copy of the object stored as the key in each location of the rvalue instance. Note that this can crash, fail, or even fail to compile if the objects being stored don't have properly implemented copy constructors.</li>
+<li>When the copy constructor is called, the new instance will attempt to create a copy of the object stored as the key in each location of the instance that is being copied. Note that this can crash, fail, or even fail to compile if the objects being stored don't have properly implemented copy constructors.</li>
+</ul>
+<p>If "manage" is set to false then:</p><ul>
+<li>When remove() is called, the object stored as the key at that location in the collection will not be deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the object stored as the key a each location in the collection will not be deleted.</li>
+<li>When the = operator is called, the lvalue instance will not attempt to create a copy of the object stored as the key in each location of the rvalue instance, rather it will just copy the value or pointer.</li>
+<li>When the copy constructor is called, the new instance will not attempt to create a copy of the object stored as the key in each location of the instance that is being copied, rather it will just copy the value or pointer.</li>
+</ul>
+<p>Note that setting this true implies setManageArrayKeys(false); </p>
 
 </div>
 </div>
@@ -665,10 +743,21 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Indicates whether or not this instance of the collection class should delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a>/remove() method is called.</p>
-<p>Setting "manage" to true causes the instance to delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
-<p>Setting "manage" to false causes the instance not to delete the values that are stored at each location in the collection when a <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> or remove() method is called.</p>
+<p>Indicates whether or not this instance should "manage" the values that are stored at each location in the collection.</p>
+<p>"manage" should only be set true if the values stored in the collections are pointers to objects.</p>
 <p>Defaults to "false".</p>
+<p>If "manage" is set to true then:</p><ul>
+<li>When remove() is called, the object stored as the value at that location in the collection will be deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the object stored as the value at each location in the collection will be deleted.</li>
+<li>When the = operator is called, the lvalue instance will attempt to create a copy of the object stored as the value in each location of the rvalue instance. Note that this can crash, fail, or even fail to compile if the objects being stored don't have properly implemented copy constructors.</li>
+<li>When the copy constructor is called, the new instance will attempt to create a copy of the object stored as the value in each location of the instance that is being copied. Note that this can crash, fail, or even fail to compile if the objects being stored don't have properly implemented copy constructors.</li>
+</ul>
+<p>If "manage" is set to false then:</p><ul>
+<li>When remove() is called, the object stored as the value at that location in the collection will not be deleted.</li>
+<li>When <a class="el" href="classcollection.html#a03bf11f1bce9039e187562437870c2e9">clear()</a> is called, the object stored as the value a each location in the collection will not be deleted.</li>
+<li>When the = operator is called, the lvalue instance will not attempt to create a copy of the object stored as the value in each location of the rvalue instance, rather it will just copy the value or pointer.</li>
+<li>When the copy constructor is called, the new instance will not attempt to create a copy of the object stored as the value in each location of the instance that is being copied, rather it will just copy the value or pointer.</li>
+</ul>
 <p>Note that setting this true implies setManageArrayValues(false); </p>
 
 <p>Reimplemented in <a class="el" href="classtable.html#a5e5dfdfe908177eee0e53f82b1d7d05e">table&lt; valuetype &gt;</a>.</p>
@@ -862,7 +951,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

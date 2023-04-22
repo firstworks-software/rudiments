@@ -62,6 +62,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a967264a72caed19f6dbdfa45892ee2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad0986f54bfcd3411fec3f66fbe512e"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoutput.html#a1ad0986f54bfcd3411fec3f66fbe512e">setPositionRelativeToEnd</a> (off64_t offset)</td></tr>
 <tr class="separator:a1ad0986f54bfcd3411fec3f66fbe512e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace2a22c512ccf9a690674b34d1d0ebc1"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoutput.html#ace2a22c512ccf9a690674b34d1d0ebc1">getPosition</a> ()</td></tr>
+<tr class="separator:ace2a22c512ccf9a690674b34d1d0ebc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97891155ebd4b7dd1f18d0e6fd281a86"><td class="memItemLeft" align="right" valign="top">virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoutput.html#a97891155ebd4b7dd1f18d0e6fd281a86">write</a> (const byte_t *string, size_t size)=0</td></tr>
 <tr class="separator:a97891155ebd4b7dd1f18d0e6fd281a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06b63a2b89268219f724ba045cff3003"><td class="memItemLeft" align="right" valign="top">virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoutput.html#a06b63a2b89268219f724ba045cff3003">write</a> (const char *string)=0</td></tr>
@@ -236,6 +238,35 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ace2a22c512ccf9a690674b34d1d0ebc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace2a22c512ccf9a690674b34d1d0ebc1">&#9670;&nbsp;</a></span>getPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">off64_t output::getPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the position at which the next write will occur or -1 on failure.</p>
+<p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
+
+<p>Reimplemented in <a class="el" href="classwstringbuffer.html#a1fa0ebd117ec39bc7b08cd632ba3d23a">wstringbuffer</a>, <a class="el" href="classucs2stringbuffer.html#a8ef1678f1e854e676b1fa96b214ba287">ucs2stringbuffer</a>, <a class="el" href="classstringbuffer.html#a7e1ce864263786bd39404edb54d43dd3">stringbuffer</a>, <a class="el" href="classfiledescriptor.html#a324b121fbe0bd26fa5d6823edc3ccab2">filedescriptor</a>, and <a class="el" href="classbytebuffer.html#a60f92e1c7201594fc274858374cc0d3a">bytebuffer</a>.</p>
+
+</div>
+</div>
 <a id="a0567fdf39b40e68f5bc0efd322df080c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0567fdf39b40e68f5bc0efd322df080c">&#9670;&nbsp;</a></span>printBits() <span class="overload">[1/9]</span></h2>
 
@@ -881,7 +912,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets the position (relative to the beginning of the file descriptor) at which the next read or write will occur to "offset". Returns that position on success or -1 on failure.</p>
+<p>Sets the position (relative to the beginning of the file descriptor) at which the next write will occur to "offset". Returns that position on success or -1 on failure.</p>
 <p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
 
 <p>Reimplemented in <a class="el" href="classwstringbuffer.html#a633ca44251eee4c39e4e9155e0138e40">wstringbuffer</a>, <a class="el" href="classucs2stringbuffer.html#a01060940ba2c6d54ef176cd3bf31a632">ucs2stringbuffer</a>, <a class="el" href="classstringbuffer.html#abc76eb330aa9ff943cc673a36f8e2099">stringbuffer</a>, <a class="el" href="classfiledescriptor.html#a99e466741fe2e54e106ebfdc0d64970d">filedescriptor</a>, and <a class="el" href="classbytebuffer.html#a875fe4eff3186514b53c8434206a3c25">bytebuffer</a>.</p>
@@ -911,7 +942,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Advances the position at which the next read or write will occur by "offset" bytes. Returns that position on success or -1 on failure.</p>
+<p>Advances the position at which the next write will occur by "offset" bytes. Returns that position on success or -1 on failure.</p>
 <p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
 
 <p>Reimplemented in <a class="el" href="classwstringbuffer.html#a3bea67ac0ce1f9e0ead0239cf2bdaef1">wstringbuffer</a>, <a class="el" href="classucs2stringbuffer.html#a8e2edf5c2561f97f798d0689fd19b695">ucs2stringbuffer</a>, <a class="el" href="classstringbuffer.html#a65176d458a0fea50ca39b74b9122bf7d">stringbuffer</a>, <a class="el" href="classfiledescriptor.html#a15b3aecab80ee264f7d861496692d5ab">filedescriptor</a>, and <a class="el" href="classbytebuffer.html#a3f980d00d25aba7d5e1969ea068a4680">bytebuffer</a>.</p>
@@ -941,7 +972,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets the position at which the next read or write will occur to the end of the file plus "offset" bytes. Generally, "offset" will be negative though most filesystems allow the creation of files with holes in them and that can be accomplished by using a positive "offset" and then writing data at that position. Returns the position on success or -1 on failure.</p>
+<p>Sets the position at which the next write will occur to the end of the file plus "offset" bytes. Generally, "offset" will be negative. Returns the position on success or -1 on failure.</p>
 <p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
 
 <p>Reimplemented in <a class="el" href="classwstringbuffer.html#ab0c697a7c4ee7e4c835ef55cb84b06d7">wstringbuffer</a>, <a class="el" href="classucs2stringbuffer.html#a4cc348722e14a6df54c6a3bdcab6311b">ucs2stringbuffer</a>, <a class="el" href="classstringbuffer.html#adb8333fd87aaa0dbf584f99c60173e6c">stringbuffer</a>, <a class="el" href="classfiledescriptor.html#a98ca00c97609fa08745fa6751c47c2ee">filedescriptor</a>, and <a class="el" href="classbytebuffer.html#ae9ebf36aff4560f0f08dd3c4defa36b7">bytebuffer</a>.</p>
@@ -2443,7 +2474,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

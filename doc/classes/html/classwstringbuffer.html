@@ -68,8 +68,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3bea67ac0ce1f9e0ead0239cf2bdaef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0c697a7c4ee7e4c835ef55cb84b06d7"><td class="memItemLeft" align="right" valign="top">off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwstringbuffer.html#ab0c697a7c4ee7e4c835ef55cb84b06d7">setPositionRelativeToEnd</a> (off64_t pos)</td></tr>
 <tr class="separator:ab0c697a7c4ee7e4c835ef55cb84b06d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6a882880de0b1f70455acecab19ce5e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwstringbuffer.html#ac6a882880de0b1f70455acecab19ce5e">getPosition</a> ()</td></tr>
-<tr class="separator:ac6a882880de0b1f70455acecab19ce5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa0ebd117ec39bc7b08cd632ba3d23a"><td class="memItemLeft" align="right" valign="top">off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwstringbuffer.html#a1fa0ebd117ec39bc7b08cd632ba3d23a">getPosition</a> ()</td></tr>
+<tr class="separator:a1fa0ebd117ec39bc7b08cd632ba3d23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3f7089b18dbdedfeeb973ba81b712c0"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwstringbuffer.html#aa3f7089b18dbdedfeeb973ba81b712c0">write</a> (const wchar_t *string)</td></tr>
 <tr class="separator:aa3f7089b18dbdedfeeb973ba81b712c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf140bcfcfe8001caf276b8609d7989c"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwstringbuffer.html#aaf140bcfcfe8001caf276b8609d7989c">write</a> (const wchar_t *string, size_t length)</td></tr>
@@ -171,8 +171,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afba6482c0ba249a04b8b08a8a61c7a78 inherit pub_methods_classbytebuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ce97b11f871acd3db6cbf64fc1c4b01 inherit pub_methods_classbytebuffer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a1ce97b11f871acd3db6cbf64fc1c4b01">~bytebuffer</a> ()</td></tr>
 <tr class="separator:a1ce97b11f871acd3db6cbf64fc1c4b01 inherit pub_methods_classbytebuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe74cbd9f026e4dd708f446e43778376 inherit pub_methods_classbytebuffer"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#afe74cbd9f026e4dd708f446e43778376">getPosition</a> ()</td></tr>
-<tr class="separator:afe74cbd9f026e4dd708f446e43778376 inherit pub_methods_classbytebuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5beae1bb0b9267b029825cf6d0146c21 inherit pub_methods_classbytebuffer"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a5beae1bb0b9267b029825cf6d0146c21">write</a> (const byte_t *data, size_t size)</td></tr>
 <tr class="separator:a5beae1bb0b9267b029825cf6d0146c21 inherit pub_methods_classbytebuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f147cb8a0b94d3bf2fa1e2dd005ddd8 inherit pub_methods_classbytebuffer"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a8f147cb8a0b94d3bf2fa1e2dd005ddd8">write</a> (const char *string, size_t length)</td></tr>
@@ -1316,8 +1314,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac6a882880de0b1f70455acecab19ce5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6a882880de0b1f70455acecab19ce5e">&#9670;&nbsp;</a></span>getPosition()</h2>
+<a id="a1fa0ebd117ec39bc7b08cd632ba3d23a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fa0ebd117ec39bc7b08cd632ba3d23a">&#9670;&nbsp;</a></span>getPosition()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1326,7 +1324,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t wstringbuffer::getPosition </td>
+          <td class="memname">off64_t wstringbuffer::getPosition </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1334,11 +1332,13 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the position in the internal buffer at which the next write will occur. </p>
+
+<p>Reimplemented from <a class="el" href="classbytebuffer.html#a60f92e1c7201594fc274858374cc0d3a">bytebuffer</a>.</p>
 
 </div>
 </div>
@@ -2072,7 +2072,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

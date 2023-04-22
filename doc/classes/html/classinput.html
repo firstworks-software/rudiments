@@ -56,6 +56,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adac0ea346c43d7762baef3e3f387eebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7b87bf6191c8606ad249ff75de10ac2"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#ac7b87bf6191c8606ad249ff75de10ac2">~input</a> ()</td></tr>
 <tr class="separator:ac7b87bf6191c8606ad249ff75de10ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fdc825e16789e65f7fc0ccd32f673a9"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#a5fdc825e16789e65f7fc0ccd32f673a9">setPositionRelativeToBeginning</a> (off64_t offset)</td></tr>
+<tr class="separator:a5fdc825e16789e65f7fc0ccd32f673a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3faf9bc667e696c33cd6737190e25743"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#a3faf9bc667e696c33cd6737190e25743">setPositionRelativeToCurrent</a> (off64_t offset)</td></tr>
+<tr class="separator:a3faf9bc667e696c33cd6737190e25743"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae696d9ad93a8394a4ab7453d72b90cc9"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#ae696d9ad93a8394a4ab7453d72b90cc9">setPositionRelativeToEnd</a> (off64_t offset)</td></tr>
+<tr class="separator:ae696d9ad93a8394a4ab7453d72b90cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45afaabed174d7556eccc918acc666ed"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#a45afaabed174d7556eccc918acc666ed">getPosition</a> ()</td></tr>
+<tr class="separator:a45afaabed174d7556eccc918acc666ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac23f620f6efa1cbe595a6ac619cdba2d"><td class="memItemLeft" align="right" valign="top">virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#ac23f620f6efa1cbe595a6ac619cdba2d">read</a> (byte_t *buffer, size_t size)=0</td></tr>
 <tr class="separator:ac23f620f6efa1cbe595a6ac619cdba2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92efd6847733259938d58a9bab8adffb"><td class="memItemLeft" align="right" valign="top">virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#a92efd6847733259938d58a9bab8adffb">read</a> (char *buffer, size_t length)=0</td></tr>
@@ -182,6 +190,35 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a45afaabed174d7556eccc918acc666ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45afaabed174d7556eccc918acc666ed">&#9670;&nbsp;</a></span>getPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">off64_t input::getPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the position at which the next read will occur or -1 on failure.</p>
+<p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
+
+<p>Reimplemented in <a class="el" href="classfiledescriptor.html#a324b121fbe0bd26fa5d6823edc3ccab2">filedescriptor</a>.</p>
+
+</div>
+</div>
 <a id="a1e5a772e65872ae33ad72484a50b990c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1e5a772e65872ae33ad72484a50b990c">&#9670;&nbsp;</a></span>read() <span class="overload">[1/33]</span></h2>
 
@@ -1697,10 +1734,100 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a5fdc825e16789e65f7fc0ccd32f673a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fdc825e16789e65f7fc0ccd32f673a9">&#9670;&nbsp;</a></span>setPositionRelativeToBeginning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">off64_t input::setPositionRelativeToBeginning </td>
+          <td>(</td>
+          <td class="paramtype">off64_t&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the position (relative to the beginning of the file descriptor) at which the next read will occur to "offset". Returns that position on success or -1 on failure.</p>
+<p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
+
+<p>Reimplemented in <a class="el" href="classfiledescriptor.html#a99e466741fe2e54e106ebfdc0d64970d">filedescriptor</a>.</p>
+
+</div>
+</div>
+<a id="a3faf9bc667e696c33cd6737190e25743"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3faf9bc667e696c33cd6737190e25743">&#9670;&nbsp;</a></span>setPositionRelativeToCurrent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">off64_t input::setPositionRelativeToCurrent </td>
+          <td>(</td>
+          <td class="paramtype">off64_t&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Advances the position at which the next read will occur by "offset" bytes. Returns that position on success or -1 on failure.</p>
+<p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
+
+<p>Reimplemented in <a class="el" href="classfiledescriptor.html#a15b3aecab80ee264f7d861496692d5ab">filedescriptor</a>.</p>
+
+</div>
+</div>
+<a id="ae696d9ad93a8394a4ab7453d72b90cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae696d9ad93a8394a4ab7453d72b90cc9">&#9670;&nbsp;</a></span>setPositionRelativeToEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">off64_t input::setPositionRelativeToEnd </td>
+          <td>(</td>
+          <td class="paramtype">off64_t&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the position at which the next read will occur to the end of the file plus "offset" bytes. Generally, "offset" will be negative. Returns the position on success or -1 on failure.</p>
+<p>This implementation of the method ignores "offset" and always returns -1, however a child class might implement this method to actually set the position. </p>
+
+<p>Reimplemented in <a class="el" href="classfiledescriptor.html#a98ca00c97609fa08745fa6751c47c2ee">filedescriptor</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

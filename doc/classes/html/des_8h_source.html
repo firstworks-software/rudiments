@@ -54,40 +54,40 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/desincludes.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classdes.html">   11</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classdes.html">des</a> : <span class="keyword">public</span> <a class="code" href="classencryption.html">encryption</a> {</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classdes.html">   11</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classdes.html">des</a> : <span class="keyword">public</span> <a class="code" href="classhash.html">hash</a> {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classdes.html#a0f33fc77d3a3d7f125232e1f2c3ca732">   14</a></span>&#160;                <a class="code" href="classdes.html#a0f33fc77d3a3d7f125232e1f2c3ca732">des</a>();</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classdes.html#a00d58a44d053e433b294398eb6206b4b">   17</a></span>&#160;                <a class="code" href="classdes.html#a00d58a44d053e433b294398eb6206b4b">~des</a>();</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classdes.html#afe70185df90179429af9174fbb073006">   21</a></span>&#160;                uint32_t        <a class="code" href="classdes.html#afe70185df90179429af9174fbb073006">getIvSize</a>();</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classdes.html#ace055313d662785f0d00bd25acd06fd0">   37</a></span>&#160;                <span class="keyword">const</span> byte_t    *<a class="code" href="classdes.html#ace055313d662785f0d00bd25acd06fd0">getEncryptedData</a>();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classdes.html#a3739dc8ceca4e8ec827a01636ec13fd0">   45</a></span>&#160;                uint64_t        <a class="code" href="classdes.html#a3739dc8ceca4e8ec827a01636ec13fd0">getEncryptedDataSize</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classdes.html#a9bdd8f684f4fb5e30a0db228344a854f">   53</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdes.html#a9bdd8f684f4fb5e30a0db228344a854f">getNeedsMutex</a>();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classdes.html#aece5ed241bfb9a989d72d72a353c9027">   58</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdes.html#aece5ed241bfb9a989d72d72a353c9027">setMutex</a>(<a class="code" href="classthreadmutex.html">threadmutex</a> *mtx);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/des.h&gt;</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;};</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classdes.html#a8a02200420756f378512caae019f93d8">   20</a></span>&#160;                <span class="keywordtype">size_t</span>  <a class="code" href="classdes.html#a8a02200420756f378512caae019f93d8">getSaltSize</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classdes.html#a43cd6d117ea313468de9880c09f20b72">   36</a></span>&#160;                <span class="keyword">const</span> byte_t    *<a class="code" href="classdes.html#a43cd6d117ea313468de9880c09f20b72">getHash</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classdes.html#a7d7ee1746459ed8f4df28bcb4eb608b1">   44</a></span>&#160;                uint64_t        <a class="code" href="classdes.html#a7d7ee1746459ed8f4df28bcb4eb608b1">getHashSize</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classdes.html#a9bdd8f684f4fb5e30a0db228344a854f">   52</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classdes.html#a9bdd8f684f4fb5e30a0db228344a854f">getNeedsMutex</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classdes.html#aece5ed241bfb9a989d72d72a353c9027">   57</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classdes.html#aece5ed241bfb9a989d72d72a353c9027">setMutex</a>(<a class="code" href="classthreadmutex.html">threadmutex</a> *mtx);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/des.h&gt;</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;};</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassdes_html"><div class="ttname"><a href="classdes.html">des</a></div><div class="ttdef"><b>Definition:</b> des.h:11</div></div>
 <div class="ttc" id="aclassdes_html_a00d58a44d053e433b294398eb6206b4b"><div class="ttname"><a href="classdes.html#a00d58a44d053e433b294398eb6206b4b">des::~des</a></div><div class="ttdeci">~des()</div></div>
 <div class="ttc" id="aclassdes_html_a0f33fc77d3a3d7f125232e1f2c3ca732"><div class="ttname"><a href="classdes.html#a0f33fc77d3a3d7f125232e1f2c3ca732">des::des</a></div><div class="ttdeci">des()</div></div>
-<div class="ttc" id="aclassdes_html_a3739dc8ceca4e8ec827a01636ec13fd0"><div class="ttname"><a href="classdes.html#a3739dc8ceca4e8ec827a01636ec13fd0">des::getEncryptedDataSize</a></div><div class="ttdeci">uint64_t getEncryptedDataSize()</div></div>
+<div class="ttc" id="aclassdes_html_a43cd6d117ea313468de9880c09f20b72"><div class="ttname"><a href="classdes.html#a43cd6d117ea313468de9880c09f20b72">des::getHash</a></div><div class="ttdeci">const byte_t * getHash()</div></div>
+<div class="ttc" id="aclassdes_html_a7d7ee1746459ed8f4df28bcb4eb608b1"><div class="ttname"><a href="classdes.html#a7d7ee1746459ed8f4df28bcb4eb608b1">des::getHashSize</a></div><div class="ttdeci">uint64_t getHashSize()</div></div>
+<div class="ttc" id="aclassdes_html_a8a02200420756f378512caae019f93d8"><div class="ttname"><a href="classdes.html#a8a02200420756f378512caae019f93d8">des::getSaltSize</a></div><div class="ttdeci">size_t getSaltSize()</div></div>
 <div class="ttc" id="aclassdes_html_a9bdd8f684f4fb5e30a0db228344a854f"><div class="ttname"><a href="classdes.html#a9bdd8f684f4fb5e30a0db228344a854f">des::getNeedsMutex</a></div><div class="ttdeci">bool getNeedsMutex()</div></div>
-<div class="ttc" id="aclassdes_html_ace055313d662785f0d00bd25acd06fd0"><div class="ttname"><a href="classdes.html#ace055313d662785f0d00bd25acd06fd0">des::getEncryptedData</a></div><div class="ttdeci">const byte_t * getEncryptedData()</div></div>
 <div class="ttc" id="aclassdes_html_aece5ed241bfb9a989d72d72a353c9027"><div class="ttname"><a href="classdes.html#aece5ed241bfb9a989d72d72a353c9027">des::setMutex</a></div><div class="ttdeci">void setMutex(threadmutex *mtx)</div></div>
-<div class="ttc" id="aclassdes_html_afe70185df90179429af9174fbb073006"><div class="ttname"><a href="classdes.html#afe70185df90179429af9174fbb073006">des::getIvSize</a></div><div class="ttdeci">uint32_t getIvSize()</div></div>
-<div class="ttc" id="aclassencryption_html"><div class="ttname"><a href="classencryption.html">encryption</a></div><div class="ttdef"><b>Definition:</b> encryption.h:21</div></div>
+<div class="ttc" id="aclasshash_html"><div class="ttname"><a href="classhash.html">hash</a></div><div class="ttdef"><b>Definition:</b> hash.h:20</div></div>
 <div class="ttc" id="aclassthreadmutex_html"><div class="ttname"><a href="classthreadmutex.html">threadmutex</a></div><div class="ttdef"><b>Definition:</b> threadmutex.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

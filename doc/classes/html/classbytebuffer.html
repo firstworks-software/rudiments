@@ -70,8 +70,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3f980d00d25aba7d5e1969ea068a4680"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9ebf36aff4560f0f08dd3c4defa36b7"><td class="memItemLeft" align="right" valign="top">off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#ae9ebf36aff4560f0f08dd3c4defa36b7">setPositionRelativeToEnd</a> (off64_t offset)</td></tr>
 <tr class="separator:ae9ebf36aff4560f0f08dd3c4defa36b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe74cbd9f026e4dd708f446e43778376"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#afe74cbd9f026e4dd708f446e43778376">getPosition</a> ()</td></tr>
-<tr class="separator:afe74cbd9f026e4dd708f446e43778376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60f92e1c7201594fc274858374cc0d3a"><td class="memItemLeft" align="right" valign="top">off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a60f92e1c7201594fc274858374cc0d3a">getPosition</a> ()</td></tr>
+<tr class="separator:a60f92e1c7201594fc274858374cc0d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5beae1bb0b9267b029825cf6d0146c21"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a5beae1bb0b9267b029825cf6d0146c21">write</a> (const byte_t *data, size_t size)</td></tr>
 <tr class="separator:a5beae1bb0b9267b029825cf6d0146c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f147cb8a0b94d3bf2fa1e2dd005ddd8"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbytebuffer.html#a8f147cb8a0b94d3bf2fa1e2dd005ddd8">write</a> (const char *string, size_t length)</td></tr>
@@ -941,21 +941,33 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afe74cbd9f026e4dd708f446e43778376"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe74cbd9f026e4dd708f446e43778376">&#9670;&nbsp;</a></span>getPosition()</h2>
+<a id="a60f92e1c7201594fc274858374cc0d3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60f92e1c7201594fc274858374cc0d3a">&#9670;&nbsp;</a></span>getPosition()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t bytebuffer::getPosition </td>
+          <td class="memname">off64_t bytebuffer::getPosition </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Returns the position in the buffer at which the next write will occur. </p>
+
+<p>Reimplemented from <a class="el" href="classoutput.html#ace2a22c512ccf9a690674b34d1d0ebc1">output</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classwstringbuffer.html#a1fa0ebd117ec39bc7b08cd632ba3d23a">wstringbuffer</a>, <a class="el" href="classucs2stringbuffer.html#a8ef1678f1e854e676b1fa96b214ba287">ucs2stringbuffer</a>, and <a class="el" href="classstringbuffer.html#a7e1ce864263786bd39404edb54d43dd3">stringbuffer</a>.</p>
 
 </div>
 </div>
@@ -1826,7 +1838,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

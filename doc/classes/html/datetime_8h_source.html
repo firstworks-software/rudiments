@@ -197,7 +197,7 @@ $(function() {
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;                                        int16_t minute, int16_t second,</div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;                                        int32_t microsecond, <span class="keywordtype">bool</span> isnegative);</div>
 <div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160; </div>
-<div class="line"><a name="l00489"></a><span class="lineno"><a class="line" href="classdatetime.html#a573ba341f232146a75ea789cccaf59c4">  489</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">void</span>    <a class="code" href="classdatetime.html#a573ba341f232146a75ea789cccaf59c4">setTimeMutex</a>(<a class="code" href="classthreadmutex.html">threadmutex</a> *mtx);</div>
+<div class="line"><a name="l00489"></a><span class="lineno"><a class="line" href="classdatetime.html#a27feeb3c87ef0f8abeb1b9716bea33fb">  489</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">void</span>    <a class="code" href="classdatetime.html#a27feeb3c87ef0f8abeb1b9716bea33fb">setMutex</a>(<a class="code" href="classthreadmutex.html">threadmutex</a> *mtx);</div>
 <div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
 <div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/datetime.h&gt;</span></div>
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;};</div>
@@ -214,6 +214,7 @@ $(function() {
 <div class="ttc" id="aclassdatetime_html_a244b65304aeb5dfdd50c0a493c61f6ac"><div class="ttname"><a href="classdatetime.html#a244b65304aeb5dfdd50c0a493c61f6ac">datetime::getWeekOfYear</a></div><div class="ttdeci">int32_t getWeekOfYear()</div></div>
 <div class="ttc" id="aclassdatetime_html_a26e43af25dc713aa4ae61eb41c6254e1"><div class="ttname"><a href="classdatetime.html#a26e43af25dc713aa4ae61eb41c6254e1">datetime::addMonths</a></div><div class="ttdeci">bool addMonths(int32_t months)</div></div>
 <div class="ttc" id="aclassdatetime_html_a27ecaae41c5f27844bd67bcd639d38e3"><div class="ttname"><a href="classdatetime.html#a27ecaae41c5f27844bd67bcd639d38e3">datetime::getSecond</a></div><div class="ttdeci">int32_t getSecond()</div></div>
+<div class="ttc" id="aclassdatetime_html_a27feeb3c87ef0f8abeb1b9716bea33fb"><div class="ttname"><a href="classdatetime.html#a27feeb3c87ef0f8abeb1b9716bea33fb">datetime::setMutex</a></div><div class="ttdeci">static void setMutex(threadmutex *mtx)</div></div>
 <div class="ttc" id="aclassdatetime_html_a30c58915a5cb142f366e26b79b48ffca"><div class="ttname"><a href="classdatetime.html#a30c58915a5cb142f366e26b79b48ffca">datetime::initFromSystemDateTime</a></div><div class="ttdeci">bool initFromSystemDateTime()</div></div>
 <div class="ttc" id="aclassdatetime_html_a32649edb901e1f0113cac3a55428b6c7"><div class="ttname"><a href="classdatetime.html#a32649edb901e1f0113cac3a55428b6c7">datetime::datetime</a></div><div class="ttdeci">datetime()</div></div>
 <div class="ttc" id="aclassdatetime_html_a3361c0c745a5cbab27fe2e611aca64ff"><div class="ttname"><a href="classdatetime.html#a3361c0c745a5cbab27fe2e611aca64ff">datetime::init</a></div><div class="ttdeci">bool init(time_t seconds)</div></div>
@@ -225,7 +226,6 @@ $(function() {
 <div class="ttc" id="aclassdatetime_html_a5333f3de36b196e98c6e4a79f41cbef6"><div class="ttname"><a href="classdatetime.html#a5333f3de36b196e98c6e4a79f41cbef6">datetime::datetime</a></div><div class="ttdeci">datetime(datetime &amp;d)</div></div>
 <div class="ttc" id="aclassdatetime_html_a54be1175fed9efe78e124d92ba0fbfbb"><div class="ttname"><a href="classdatetime.html#a54be1175fed9efe78e124d92ba0fbfbb">datetime::setSecond</a></div><div class="ttdeci">bool setSecond(int32_t second)</div></div>
 <div class="ttc" id="aclassdatetime_html_a5694dadcaa062bc8df3aa08d09ababa1"><div class="ttname"><a href="classdatetime.html#a5694dadcaa062bc8df3aa08d09ababa1">datetime::getString</a></div><div class="ttdeci">static char * getString(const void *tmstruct)</div></div>
-<div class="ttc" id="aclassdatetime_html_a573ba341f232146a75ea789cccaf59c4"><div class="ttname"><a href="classdatetime.html#a573ba341f232146a75ea789cccaf59c4">datetime::setTimeMutex</a></div><div class="ttdeci">static void setTimeMutex(threadmutex *mtx)</div></div>
 <div class="ttc" id="aclassdatetime_html_a5a966f96b21709be81b8ca07fbead868"><div class="ttname"><a href="classdatetime.html#a5a966f96b21709be81b8ca07fbead868">datetime::getMonth</a></div><div class="ttdeci">int32_t getMonth()</div></div>
 <div class="ttc" id="aclassdatetime_html_a61072d77dbd680b932bde2bcb8f06a6d"><div class="ttname"><a href="classdatetime.html#a61072d77dbd680b932bde2bcb8f06a6d">datetime::setTimeZone</a></div><div class="ttdeci">bool setTimeZone(const char *newtz)</div></div>
 <div class="ttc" id="aclassdatetime_html_a61b789e58f6a2407837b3ac3913f95f5"><div class="ttname"><a href="classdatetime.html#a61b789e58f6a2407837b3ac3913f95f5">datetime::getHour</a></div><div class="ttdeci">int32_t getHour()</div></div>
@@ -271,7 +271,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:54 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

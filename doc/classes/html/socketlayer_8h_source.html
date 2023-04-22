@@ -52,36 +52,28 @@ $(function() {
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#ifndef RUDIMENTS_SOCKETLAYER_H</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#define RUDIMENTS_SOCKETLAYER_H</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/object.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/socketlayerincludes.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#ifdef RUDIMENTS_HAVE_SYS_TYPES_H</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">        #include &lt;sys/types.h&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">class   </span><a class="code" href="classfiledescriptor.html">filedescriptor</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classsocketlayer.html">   15</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classsocketlayer.html">socketlayer</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    setFileDescriptor(<a class="code" href="classfiledescriptor.html">filedescriptor</a> *fd)=0;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classfiledescriptor.html">filedescriptor</a>  *getFileDescriptor()=0;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    connect()=0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    accept()=0;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                <span class="keyword">virtual</span> ssize_t read(<span class="keywordtype">void</span> *buf, ssize_t size)=0;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keyword">virtual</span> ssize_t write(<span class="keyword">const</span> <span class="keywordtype">void</span> *buf, ssize_t size)=0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">virtual</span> ssize_t pending()=0;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    close()=0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keyword">virtual</span> ssize_t getSizeMax()=0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;};</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classsocketlayer.html">   11</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classsocketlayer.html">socketlayer</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classobject.html">object</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classsocketlayer.html#a01d9633b28e542a69eb5222e33833257">   15</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    <a class="code" href="classsocketlayer.html#a01d9633b28e542a69eb5222e33833257">setFileDescriptor</a>(<a class="code" href="classfiledescriptor.html">filedescriptor</a> *fd)=0;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classsocketlayer.html#a420a16817f9522b859d3e38c41ab10e9">   19</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classfiledescriptor.html">filedescriptor</a>  *<a class="code" href="classsocketlayer.html#a420a16817f9522b859d3e38c41ab10e9">getFileDescriptor</a>()=0;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/socketlayer.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
-<div class="ttc" id="aclasssocketlayer_html"><div class="ttname"><a href="classsocketlayer.html">socketlayer</a></div><div class="ttdef"><b>Definition:</b> socketlayer.h:15</div></div>
+<div class="ttc" id="aclasssocketlayer_html"><div class="ttname"><a href="classsocketlayer.html">socketlayer</a></div><div class="ttdef"><b>Definition:</b> socketlayer.h:11</div></div>
+<div class="ttc" id="aclasssocketlayer_html_a01d9633b28e542a69eb5222e33833257"><div class="ttname"><a href="classsocketlayer.html#a01d9633b28e542a69eb5222e33833257">socketlayer::setFileDescriptor</a></div><div class="ttdeci">virtual void setFileDescriptor(filedescriptor *fd)=0</div></div>
+<div class="ttc" id="aclasssocketlayer_html_a420a16817f9522b859d3e38c41ab10e9"><div class="ttname"><a href="classsocketlayer.html#a420a16817f9522b859d3e38c41ab10e9">socketlayer::getFileDescriptor</a></div><div class="ttdeci">virtual filedescriptor * getFileDescriptor()=0</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

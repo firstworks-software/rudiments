@@ -179,8 +179,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a43d99db007cdb7e72b0de33dc69ab83f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a241bfabad0f77244fd36b634603dc166"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#a241bfabad0f77244fd36b634603dc166">formatAs</a> (const char *format, int16_t year, int16_t month, int16_t day, int16_t hour, int16_t minute, int16_t second, int32_t microsecond, <a class="el" href="classbool.html">bool</a> isnegative)</td></tr>
 <tr class="separator:a241bfabad0f77244fd36b634603dc166"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a573ba341f232146a75ea789cccaf59c4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#a573ba341f232146a75ea789cccaf59c4">setTimeMutex</a> (<a class="el" href="classthreadmutex.html">threadmutex</a> *mtx)</td></tr>
-<tr class="separator:a573ba341f232146a75ea789cccaf59c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27feeb3c87ef0f8abeb1b9716bea33fb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#a27feeb3c87ef0f8abeb1b9716bea33fb">setMutex</a> (<a class="el" href="classthreadmutex.html">threadmutex</a> *mtx)</td></tr>
+<tr class="separator:a27feeb3c87ef0f8abeb1b9716bea33fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The datetime class represents a date/time combination and provides methods for getting and setting dates and times, converting date/time formats and accessing various date/time values. </p>
@@ -1461,6 +1461,35 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a27feeb3c87ef0f8abeb1b9716bea33fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27feeb3c87ef0f8abeb1b9716bea33fb">&#9670;&nbsp;</a></span>setMutex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void datetime::setMutex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classthreadmutex.html">threadmutex</a> *&#160;</td>
+          <td class="paramname"><em>mtx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Many of the functions that the datetime class uses internally are not reentrant and thus not thread-safe. Indeed, for some functions, there is no thread-safe version available on any platform.</p>
+<p>If your application is multi-threaded, you must use this method to supply a mutex and ensure thread safety.</p>
+<p>If you don't supply a mutex, the methods in the class will still work, but will not be thread-safe. </p>
+
+</div>
+</div>
 <a id="a54be1175fed9efe78e124d92ba0fbfbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a54be1175fed9efe78e124d92ba0fbfbb">&#9670;&nbsp;</a></span>setSecond()</h2>
 
@@ -1496,35 +1525,6 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Sets the system clock's date/time to the date/time currently represented in this instance.</p>
 <p>Returns true on success and false on failure. </p>
-
-</div>
-</div>
-<a id="a573ba341f232146a75ea789cccaf59c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a573ba341f232146a75ea789cccaf59c4">&#9670;&nbsp;</a></span>setTimeMutex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void datetime::setTimeMutex </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classthreadmutex.html">threadmutex</a> *&#160;</td>
-          <td class="paramname"><em>mtx</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Many of the functions that the datetime class uses internally are not reentrant and thus not thread-safe. Indeed, for some functions, there is no thread-safe version available on any platform.</p>
-<p>If your application is multi-threaded, you must use this method to supply a mutex and ensure thread safety.</p>
-<p>If you don't supply a mutex, the methods in the class will still work, but will not be thread-safe. </p>
 
 </div>
 </div>
@@ -1632,7 +1632,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 12 2023 15:21:55 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
