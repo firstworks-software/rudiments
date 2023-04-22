@@ -139,6 +139,7 @@
 	replaced all ssize_t parameters with size_t
 	added get/set and advise to many sys methods
 	renamed sys::lock/unlock to disablePaging/enablePaging
+	added get to some directory methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()
