@@ -110,7 +110,7 @@ const char *commandline::getValue(const char *arg, const char *abbr) {
 	return value;
 }
 
-bool commandline::found(const char *arg) {
+bool commandline::getWasFound(const char *arg) {
 
 	if (!charstring::isNullOrEmpty(arg)) {
 
@@ -153,11 +153,11 @@ bool commandline::found(const char *arg) {
 	return false;
 }
 
-bool commandline::found(const char *arg, const char *abbr) {
-	return (found(arg) || found(abbr));
+bool commandline::getWasFound(const char *arg, const char *abbr) {
+	return (getWasFound(arg) || getWasFound(abbr));
 }
 
-void commandline::toDictionary(dictionary<char *,char *> *dict) {
+void commandline::convertToDictionary(dictionary<char *,char *> *dict) {
 
 	for (int32_t i=1; i<pvt->_argc; i++) {
 

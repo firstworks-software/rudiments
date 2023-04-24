@@ -86,30 +86,30 @@ int main(int argc, const char **argv) {
 
 	// process the command line
 	commandline	cmdl(argc,argv);
-	if (cmdl.found("help")) {
+	if (cmdl.getWasFound("help")) {
 		usage();
 		return 1;
 	}
 	const char	*host="127.0.0.1";
-	if (cmdl.found("host")) {
+	if (cmdl.getWasFound("host")) {
 		host=cmdl.getValue("host");
 	}
 	uint16_t	port=9000;
-	if (cmdl.found("port")) {
+	if (cmdl.getWasFound("port")) {
 		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
 	}
 	const char	*service="gssserver";
-	if (cmdl.found("service")) {
+	if (cmdl.getWasFound("service")) {
 		service=cmdl.getValue("service");
 	}
 	const char	*msg="hello";
-	if (cmdl.found("message")) {
+	if (cmdl.getWasFound("message")) {
 		msg=cmdl.getValue("message");
 	}
 	const char	*username=cmdl.getValue("user");
 	const char	*mechanism=cmdl.getValue("mech");
 	const char	*flags="GSS_C_REPLAY_FLAG,GSS_C_MUTUAL_FLAG";
-	if (cmdl.found("flags")) {
+	if (cmdl.getWasFound("flags")) {
 		flags=cmdl.getValue("flags");
 	}
 	int64_t	ccount=charstring::toInteger(cmdl.getValue("ccount"));
@@ -133,7 +133,7 @@ int main(int argc, const char **argv) {
 	} else if (!dcount) {
 		dcount=1;
 	}
-	bool	verbose=cmdl.found("verbose");
+	bool	verbose=cmdl.getWasFound("verbose");
 
 
 	// duplicate the message the
