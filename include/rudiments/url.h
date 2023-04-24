@@ -132,7 +132,7 @@ class RUDIMENTS_DLLSPEC url : public file {
 
 		/** Returns true if "protocol" is supported and false if it
 		 *  is not supported. */
-		static bool	isProtocolSupported(const char *protocol);
+		static bool	getProtocolIsSupported(const char *protocol);
 
 	#include <rudiments/private/url.h>
 };

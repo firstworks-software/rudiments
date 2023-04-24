@@ -217,22 +217,22 @@ bool cronschedule::splitDayParts(const char *daypartlist) {
 	return true;
 }
 
-bool cronschedule::inSchedule(datetime *dt) {
+bool cronschedule::getIsInSchedule(datetime *dt) {
 	return (pvt->_validschedule &&
-		inPeriods(&pvt->_years,dt->getYear()) &&
-		inPeriods(&pvt->_months,dt->getMonth()) &&
-		inPeriods(&pvt->_daysofmonth,dt->getDayOfMonth()) &&
-		inPeriods(&pvt->_daysofweek,dt->getDayOfWeek()) &&
-		inDayParts(dt->getHour(),dt->getMinute()));
+		getIsInPeriods(&pvt->_years,dt->getYear()) &&
+		getIsInPeriods(&pvt->_months,dt->getMonth()) &&
+		getIsInPeriods(&pvt->_daysofmonth,dt->getDayOfMonth()) &&
+		getIsInPeriods(&pvt->_daysofweek,dt->getDayOfWeek()) &&
+		getIsInDayParts(dt->getHour(),dt->getMinute()));
 }
 
-bool cronschedule::inSchedule(const char *dt) {
+bool cronschedule::getIsInSchedule(const char *dt) {
 	datetime	d;
 	d.init(dt);
-	return inSchedule(&d);
+	return getIsInSchedule(&d);
 }
 
-bool cronschedule::inPeriods(
+bool cronschedule::getIsInPeriods(
 			linkedlist< cronscheduleperiod * > *periods,
 			int32_t timepart) {
 
@@ -269,7 +269,7 @@ bool cronschedule::inPeriods(
 	return false;
 }
 
-bool cronschedule::inDayParts(int32_t hour, int32_t minute) {
+bool cronschedule::getIsInDayParts(int32_t hour, int32_t minute) {
 
 	debugPrintf("dayparts...\n");
 

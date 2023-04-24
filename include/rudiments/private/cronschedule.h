@@ -10,8 +10,9 @@
 				const char *timepartlist,
 				int64_t min, int64_t max);
 		bool	splitDayParts(const char *daypartlist);
-		bool	inPeriods(linkedlist< cronscheduleperiod * > *periods,
-						int32_t timepart);
-		bool	inDayParts(int32_t hour, int32_t minute);
+		bool	getIsInPeriods(
+				linkedlist< cronscheduleperiod * > *periods,
+				int32_t timepart);
+		bool	getIsInDayParts(int32_t hour, int32_t minute);
 
 		cronscheduleprivate	*pvt;

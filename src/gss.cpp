@@ -1112,7 +1112,7 @@ bool gsscredentials::acquire(const char *name,
 	return retval;
 }
 
-bool gsscredentials::acquired() {
+bool gsscredentials::getAreAcquired() {
 	return pvt->_acquired;
 }
 
@@ -1164,7 +1164,7 @@ uint32_t gsscredentials::getActualLifetime() {
 	#endif
 }
 
-bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
+bool gsscredentials::getIsInActualMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -1876,7 +1876,7 @@ bool gsscontext::initiate(const char *name,
 						pvt->_desiredmechanism);
 			pvt->_freecredentials=true;
 		}
-		if (!pvt->_credentials->acquired()) {
+		if (!pvt->_credentials->getAreAcquired()) {
 			pvt->_credentials->acquireForUser(NULL);
 		} 
 		CredHandle	*credentials=

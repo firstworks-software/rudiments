@@ -1672,7 +1672,7 @@ uint64_t url::interval() {
 		(pvt->_start.getEpoch()*1000000+pvt->_start.getMicrosecond()));
 }
 
-bool url::isProtocolSupported(const char *protocol) {
+bool url::getProtocolIsSupported(const char *protocol) {
 
 	bool	retval=false;
 

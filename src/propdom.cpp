@@ -40,7 +40,7 @@ propdom::propdom(bool stringcacheenabled) : propsax(), dom(stringcacheenabled) {
 }
 
 propdom::propdom(propdom &x) : propsax(), dom(x) {
-	construct(stringCacheEnabled());
+	construct(getStringCacheIsEnabled());
 }
 
 propdom &propdom::operator=(propdom &x) {

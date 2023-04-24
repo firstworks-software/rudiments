@@ -185,7 +185,7 @@ uint8_t logger::getLogLevel() {
 	return pvt->_level;
 }
 
-char *logger::logHeader(const char *name) {
+char *logger::getLogHeader(const char *name) {
 	datetime	dt;
 	dt.initFromSystemDateTime();
 	stringbuffer	str;
@@ -195,7 +195,7 @@ char *logger::logHeader(const char *name) {
 	return str.detachString();
 }
 
-wchar_t *logger::logHeader(const wchar_t *name) {
+wchar_t *logger::getLogHeader(const wchar_t *name) {
 	datetime	dt;
 	dt.initFromSystemDateTime();
 	wstringbuffer	str;

@@ -35,7 +35,7 @@ sockaddr_un *unixsocketutil::getSun() {
 	return &pvt->_sun;
 }
 
-uint16_t unixsocketutil::fileNameToPort(const char *filename) {
+uint16_t unixsocketutil::convertFileNameToPort(const char *filename) {
 	uint16_t	port=charstring::toInteger(filename);
 	if (!port) {
 		port=10240;

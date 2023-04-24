@@ -158,7 +158,7 @@ class RUDIMENTS_DLLSPEC gsscredentials : public object {
 
 		/** Returns true if credentials are currently
 		 *  acquired and false otherwise. */
-		bool	acquired();
+		bool	getAreAcquired();
 
 
 		/** Releases any previously acquired credentials. */
@@ -182,7 +182,7 @@ class RUDIMENTS_DLLSPEC gsscredentials : public object {
 		 *  security mechanisms that was actually used during the
 		 *  most recent call to one of the acquire methods and false
 		 *  otherwise. */
-		bool		inActualMechanisms(gssmechanism *mech);
+		bool		getIsInActualMechanisms(gssmechanism *mech);
 
 		/** Returns the number of security mechanisms in the list of
 		 *  security mechanisms that were actually used during the

@@ -34,7 +34,7 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 		 *  adds the ascii values of each character in the name.
 		 *  The port number is not guaranteed to be unique for unique
 		 *  names unless those names are based on unique numbers. */
-		uint16_t	fileNameToPort(const char *filename);
+		uint16_t	convertFileNameToPort(const char *filename);
 
 	#include <rudiments/private/unixsocketutil.h>
 };

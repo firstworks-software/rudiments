@@ -209,7 +209,7 @@ void cgihttpserverapi::updateEnvironmentVariables() {
 
 	// update counter
 	for (pvt->_envcount=0;
-		environment::variables()[pvt->_envcount];
+		environment::getVariables()[pvt->_envcount];
 		pvt->_envcount++) {}
 
 	// create new lists
@@ -222,14 +222,14 @@ void cgihttpserverapi::updateEnvironmentVariables() {
 	for (uint64_t index=0; index<pvt->_envcount; index++) {
 
 		const char	*equal=charstring::
-				findFirst(environment::variables()[index],'=');
+			findFirst(environment::getVariables()[index],'=');
 		if (equal) {
 			size_t	bytes=equal-
-					environment::variables()[index];
+					environment::getVariables()[index];
 			pvt->_envvars[index]=new char[bytes+1];
 			pvt->_envvars[index][bytes]='\0';
 			charstring::copy(pvt->_envvars[index],
-					environment::variables()[index],
+					environment::getVariables()[index],
 					bytes);
 			pvt->_envvals[index]=charstring::duplicate(equal+1);
 		} else {

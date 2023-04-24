@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
 
 	// Print all environment variable/value pairs.
 	stdoutput.write("All Variables:\n");
-	for (const char * const *v=environment::variables(); v && *v; v++) {
+	for (const char * const *v=environment::getVariables(); v && *v; v++) {
 		stdoutput.printf("%s\n",*v);
 	}
 	stdoutput.write('\n');
@@ -29,7 +29,7 @@ int main(int argc, const char **argv) {
 	// environment variable/value pairs.  Should print nothing.
 	environment::clear();
 	stdoutput.write("All Variables (should be empty now):\n");
-	for (const char * const *v=environment::variables(); v && *v; v++) {
+	for (const char * const *v=environment::getVariables(); v && *v; v++) {
 		stdoutput.printf("%s\n",*v);
 	}
 	stdoutput.write('\n');

@@ -238,7 +238,7 @@ bool environment::remove(const char *variable) {
 #endif
 }
 
-const char * const *environment::variables() {
+const char * const *environment::getVariables() {
 	return environ;
 }
 

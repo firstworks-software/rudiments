@@ -27,7 +27,7 @@ class RUDIMENTS_DLLSPEC environment {
 		/** Returns a NULL terminated list of all
 		 *  environment variables.  Each entry in the list is
 		 *  of the form NAME=VALUE. */
-		static	const char * const	*variables();
+		static	const char * const	*getVariables();
 
 		/** Clears the environment of all name-value
 		 *  pairs.  After calling this, variables()

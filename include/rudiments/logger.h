@@ -135,10 +135,10 @@ class RUDIMENTS_DLLSPEC logger : public object {
 		 * 
 		 *  Note that this method uses getSystemDateAndTime()
 		 *  from the datetime class.  If you are using
-		 *  logHeader() in a multi-threaded application, you
+		 *  getLogHeader() in a multi-threaded application, you
 		 *  must supply a mutex to the datetime class using it's
-		 *  setTimeMutex() method. */
-		static char	*logHeader(const char *name);
+		 *  setMutex() method. */
+		static char	*getLogHeader(const char *name);
 
 		/** Returns a string containing the current date,
 		 *  followed by "name", followed by the process id in
@@ -152,10 +152,10 @@ class RUDIMENTS_DLLSPEC logger : public object {
 		 * 
 		 *  Note that this method uses getSystemDateAndTime()
 		 *  from the datetime class.  If you are using
-		 *  logHeader() in a multi-threaded application, you
+		 *  getLogHeader() in a multi-threaded application, you
 		 *  must supply a mutex to the datetime class using it's
-		 *  setTimeMutex() method. */
-		static wchar_t	*logHeader(const wchar_t *name);
+		 *  setMutex() method. */
+		static wchar_t	*getLogHeader(const wchar_t *name);
 
 
 		/** If the current logging level is equal to or greater than
