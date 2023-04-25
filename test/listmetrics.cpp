@@ -21,8 +21,8 @@ const char *ordertitles[]={
 };
 
 const char *sorttitles[]={
-	"heap",
-	"insertion",
+	"quickly",
+	"inexpensively",
 	NULL
 };
 
@@ -69,9 +69,9 @@ int main(int argc, char **argv) {
 					}
 				}
 				if (j==0) {
-					uintll.heapSort();
+					uintll.sortQuickly();
 				} else {
-					uintll.insertionSort();
+					uintll.sortInexpensively();
 				}
 				uintll.clear();
 			}
@@ -107,9 +107,9 @@ int main(int argc, char **argv) {
 					}
 				}
 				if (j==0) {
-					uintsll.heapSort();
+					uintsll.sortQuickly();
 				} else {
-					uintsll.insertionSort();
+					uintsll.sortInexpensively();
 				}
 				uintsll.clear();
 			}

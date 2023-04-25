@@ -21,21 +21,19 @@ int main(int argc, const char **argv) {
 		sllhs.append(num);
 	}
 
-	// sort one list using insertion sort
-	stdoutput.printf("sorting using insertion sort...\n");
-	sllis.insertionSort();
+	// sort one list inexpensively
+	stdoutput.printf("sorting inexpensively...\n");
+	sllis.sortInexpensively();
 
-	// sort one list using heap sort
-	stdoutput.printf("sorting using heap sort...\n");
-	sllhs.heapSort();
+	// sort one list quickly
+	stdoutput.printf("sorting quickly...\n");
+	sllhs.sortQuickly();
 
 	// print the lists
-	stdoutput.printf("insertion sorted list\n");
+	stdoutput.printf("inexpensively sorted list\n");
 	sllis.write();
 	stdoutput.write("...\n\n");
-
-	// print the list
-	stdoutput.printf("heap sorted list\n");
+	stdoutput.printf("quickly sorted list\n");
 	sllhs.write();
 	stdoutput.write("...\n\n");
 }

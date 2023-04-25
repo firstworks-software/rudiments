@@ -150,15 +150,15 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 
-	// heap sort
-	stdoutput.printf("heapSort() (from exactly backwards)\n");
+	// sort quickly
+	stdoutput.printf("sortQuickly() (from exactly backwards)\n");
 	strl.append("5");
 	strl.append("4");
 	strl.append("3");
 	strl.append("2");
 	strl.append("1");
 	strl.append("0");
-	strl.heapSort();
+	strl.sortQuickly();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
 				"0"));
@@ -183,8 +183,8 @@ int main(int argc, char **argv) {
 					getValue(),
 				"5"));
 
-	stdoutput.printf("heapSort() (after sorted from backwards)\n");
-	strl.heapSort();
+	stdoutput.printf("sortQuickly() (after sorted from backwards)\n");
+	strl.sortQuickly();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
 				"0"));
@@ -212,7 +212,7 @@ int main(int argc, char **argv) {
 
 
 	strl.clear();
-	stdoutput.printf("heapSort() (from random order)\n");
+	stdoutput.printf("sortQuickly() (from random order)\n");
 	strl.append("4");
 	strl.append("5");
 	strl.append("2");
@@ -221,7 +221,7 @@ int main(int argc, char **argv) {
 	strl.append("7");
 	strl.append("3");
 	strl.append("0");
-	strl.heapSort();
+	strl.sortQuickly();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
 				"0"));
@@ -246,8 +246,8 @@ int main(int argc, char **argv) {
 					getValue(),
 				"5"));
 
-	stdoutput.printf("heapSort() (after sorted from random order)\n");
-	strl.heapSort();
+	stdoutput.printf("sortQuickly() (after sorted from random order)\n");
+	strl.sortQuickly();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
 				"0"));
@@ -272,9 +272,9 @@ int main(int argc, char **argv) {
 					getValue(),
 				"5"));
 
-	stdoutput.printf("heapSort() (reverse comparator)\n");
+	stdoutput.printf("sortQuickly() (reverse comparator)\n");
 	strl.getComparator()->setReverse(true);
-	strl.heapSort();
+	strl.sortQuickly();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
 				"7"));
@@ -299,9 +299,9 @@ int main(int argc, char **argv) {
 					getValue(),
 				"2"));
 
-	stdoutput.printf("heapSort() (forward comparator)\n");
+	stdoutput.printf("sortQuickly() (forward comparator)\n");
 	strl.getComparator()->setReverse(false);
-	strl.heapSort();
+	strl.sortQuickly();
 	test("0",!charstring::compare(
 				strl.getFirst()->getValue(),
 				"0"));

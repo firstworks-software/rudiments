@@ -403,7 +403,7 @@ char *sys::getHostName() {
 		// sort the list...
 		// fortunately we care about hostname, nodename, then nodename.*
 		// in that order, which also happens to be alphabetical order
-		nodenames.heapSort();
+		nodenames.sortQuickly();
 
 		// get the contents of the first file
 		stringbuffer	fname;

@@ -168,7 +168,7 @@ int main(int argc, const char **argv) {
 		matches.setManageArrayValues(true);
 		test("getMatchingFileNames",
 			file::getMatchingFileNames(&patterns,&matches));
-		matches.heapSort();
+		matches.sortQuickly();
 		listnode<char *>	*node=matches.getFirst();
 		test("getMatchingFileNames: match 1",
 			charstring::endsWith(node->getValue(),

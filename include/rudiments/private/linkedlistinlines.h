@@ -347,7 +347,7 @@ listnode<valuetype> *linkedlist<valuetype>::find(
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::insertionSort() {
+void linkedlist<valuetype>::sortInexpensively() {
 
 	// insertion sort with a few optimizations...
 
@@ -461,7 +461,7 @@ void linkedlist<valuetype>::insertionSort() {
 
 template <class valuetype>
 inline
-void linkedlist<valuetype>::heapSort() {
+void linkedlist<valuetype>::sortQuickly() {
 
 	// if there are 0 or 1 items in the list then it's already sorted
 	if (length<2) {

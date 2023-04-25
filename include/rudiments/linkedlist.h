@@ -192,16 +192,36 @@ class linkedlist : public listcollection<valuetype> {
 		listnode<valuetype>	*find(listnode<valuetype> *startnode,
 							valuetype value);
 
-		/** Sorts the linkedlist in ascending order using a modified
-		 *  insertion sort algorithm.  This sort is slower than
-		 *  heapSort() but uses no additional memory. */
-		void	insertionSort();
+		/** Sorts the listcollection.
+		 *
+		 *  This sort is potentially much slower than sortQuickly() but
+		 *  uses no additional memory.
+		 *
+		 *  The order that the items are sorted into depends on the
+		 *  comparator that is being used, and how that comparator is
+		 *  configured.  The default comparator, in its default
+		 *  configuration causes the list to be sorted in ascending
+		 *  order.
+		 *
+		 *  See collection::setComparator() and the
+		 *  comparator class for more detail. */
+		void	sortInexpensively();
 
-		/** Sorts the linkedlist in ascending order using a heap
-		 *  sort algorithm.  This sort is faster than heapSort() but
-		 *  uses additional memory in proportion to the size of the
-		 *  list. */
-		void	heapSort();
+		/** Sorts the listcollection.
+		 *
+		 *  This sort is potentially much faster than
+		 *  sortInexpensively() but uses additional memory in
+		 *  proportion to the size of the list.
+		 *
+		 *  The order that the items are sorted into depends on the
+		 *  comparator that is being used, and how that comparator is
+		 *  configured.  The default comparator, in its default
+		 *  configuration causes the list to be sorted in ascending
+		 *  order.
+		 *
+		 *  See collection::setComparator() and the
+		 *  comparator class for more detail. */
+		void	sortQuickly();
 
 		/** Deletes all linkedlistnodes currently in the linkedlist.
 		 *

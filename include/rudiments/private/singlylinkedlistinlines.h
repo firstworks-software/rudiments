@@ -382,7 +382,7 @@ listnode<valuetype> *singlylinkedlist<valuetype>::find(
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::insertionSort() {
+void singlylinkedlist<valuetype>::sortInexpensively() {
 
 	// insertion sort with a few optimization...
 
@@ -466,7 +466,7 @@ void singlylinkedlist<valuetype>::insertionSort() {
 
 template <class valuetype>
 inline
-void singlylinkedlist<valuetype>::heapSort() {
+void singlylinkedlist<valuetype>::sortQuickly() {
 
 	// if there are 0 or 1 items in the list then it's already sorted
 	if (length<2) {
