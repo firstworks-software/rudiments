@@ -348,7 +348,7 @@ int32_t datetime::getCentury() {
 	return (pvt->_year<100)?20:((pvt->_year/100)+20);
 }
 
-bool datetime::isDaylightSavingsTime() {
+bool datetime::getIsDaylightSavingsTime() {
 	return pvt->_isdst!=0;
 }
 
@@ -1198,7 +1198,7 @@ bool datetime::daylightZone(const char *zn) {
 	return false;
 }
 
-bool datetime::validDateTime(const char *string) {
+bool datetime::getIsValidDateTime(const char *string) {
 
 	// must at least be 19 chars long (format: "00/00/0000 00:00:00")
 	if (charstring::length(string)<19) {

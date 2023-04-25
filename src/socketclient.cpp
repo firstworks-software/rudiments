@@ -55,15 +55,16 @@ socketclient::~socketclient() {
 	delete pvt;
 }
 
-bool socketclient::supportsBlockingNonBlockingModes() {
+bool socketclient::getBlockingAndNonBlockingModesAreSupported() {
 	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
-		return filedescriptor::supportsBlockingNonBlockingModes();
+		return filedescriptor::
+			getBlockingAndNonBlockingModesAreSupported();
 	#endif
 }
 
-bool socketclient::useNonBlockingMode() {
+bool socketclient::setUseNonBlockingMode(bool usenonblockingmode) {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -73,7 +74,7 @@ bool socketclient::useNonBlockingMode() {
 	// * "Device not configured"
 	// * "Operation not supported"
 	#if defined(FIONBIO)
-		int32_t	nonblocking=1;
+		int32_t	nonblocking=(usenonblockingmode)?1:0;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
 		if (!retval && (error::getErrorNumber()==ENOTTY
 				#if defined(ENXIO)
@@ -83,53 +84,22 @@ bool socketclient::useNonBlockingMode() {
 				|| error::getErrorNumber()==EOPNOTSUPP
 				#endif
 				)) {
-			retval=filedescriptor::useNonBlockingMode();
+			retval=filedescriptor::setUseNonBlockingMode(
+							usenonblockingmode);
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
-			pvt->_nonblockingmode=true;
+			pvt->_nonblockingmode=usenonblockingmode
 		}
 		#endif
 		return retval;
 	#else
-		return filedescriptor::useNonBlockingMode();
+		return filedescriptor::setUseNonBlockingMode(
+						usenonblockingmode);
 	#endif
 }
 
-bool socketclient::useBlockingMode() {
-	// The posix way of setting blocking/non-blocking mode is to use
-	// fcntl(), which is what the filedescriptor class does, but this
-	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
-	// then we'll try that with an ioctl first, and fall back to fcntl() if
-	// that fails with one of:
-	// * "Inappropriate ioctl for device"
-	// * "Device not configured"
-	// * "Operation not supported"
-	#if defined(FIONBIO)
-		int32_t	nonblocking=0;
-		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
-		if (!retval && (error::getErrorNumber()==ENOTTY
-				#if defined(ENXIO)
-				|| error::getErrorNumber()==ENXIO
-				#endif
-				#if defined(EOPNOTSUPP)
-				|| error::getErrorNumber()==EOPNOTSUPP
-				#endif
-				)) {
-			retval=filedescriptor::useBlockingMode();
-		}
-		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-		if (retval) {
-			pvt->_nonblockingmode=false;
-		}
-		#endif
-		return retval;
-	#else
-		return filedescriptor::useBlockingMode();
-	#endif
-}
-
-bool socketclient::isUsingNonBlockingMode() {
+bool socketclient::getIsUsingNonBlockingMode() {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -139,7 +109,7 @@ bool socketclient::isUsingNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		return pvt->_nonblockingmode;
 	#else
-		return filedescriptor::isUsingNonBlockingMode();
+		return filedescriptor::getIsUsingNonBlockingMode();
 	#endif
 }
 
@@ -202,9 +172,9 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 	// complex stuff...
 
 	// put the socket in non-blocking mode, if necessary
-	wasusingnonblockingmode=isUsingNonBlockingMode();
+	wasusingnonblockingmode=getIsUsingNonBlockingMode();
 	if (!wasusingnonblockingmode &&
-			!useNonBlockingMode() &&
+			!setUseNonBlockingMode(true) &&
 			error::getErrorNumber()
 			#ifdef ENOTSUP
 			&& error::getErrorNumber()!=ENOTSUP
@@ -304,13 +274,13 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 
 cleanup:
 
-	// save any error that might have occurred, as a
-	// successful call to useBlockingMode() will mask it
+	// save any error that might have occurred, as a successful call to
+	// setUseNonBlockingMode(false) will mask it
 	int32_t	err=error::getErrorNumber();
 
 	// restore blocking mode, if necessary
 	if (!wasusingnonblockingmode &&
-			!useBlockingMode() &&
+			!setUseNonBlockingMode(false) &&
 			error::getErrorNumber()
 			#ifdef ENOTSUP
 			&& error::getErrorNumber()!=ENOTSUP
@@ -343,7 +313,7 @@ cleanup:
 		// complex stuff...
 
 		// find out if the socket was in non-blocking mode already
-		bool	wasusingnonblockingmode=isUsingNonBlockingMode();
+		bool	wasusingnonblockingmode=getIsUsingNonBlockingMode();
 
 		// declare some variables
 		WSAEVENT		ev;
@@ -419,7 +389,7 @@ wsacleanup:
 		// non-blocking mode.  If necessary, we need to set it back to
 		// blocking mode here.
 		if (!wasusingnonblockingmode &&
-				!useBlockingMode() &&
+				!setUseNonBlockingMode(false) &&
 				error::getErrorNumber()
 				#ifdef ENOTSUP
 				&& error::getErrorNumber()!=ENOTSUP

@@ -28,11 +28,16 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		void	setParameters(
 				dictionary<const char *, const char *> *cd);
 
-		/** Instructs connect() to randomize the list of addresses
- 		 *  that "host" resolves to using "seed".
+		/** Instructs connect() whether or not to randomize the list of
+		 *  addresses that "host" resolves to.  Defaults to true.
+ 		 *
+ 		 *  See connect() for issues that this can cause on some
+ 		 *  platforms or environments. */
+		void	randomizeAddresses(bool randomize);
+
+		/** Sets thte seed used when randomizing addresses to "seed".
 		 *  
-		 *  Randomization of addresses is the default behavior, but by
-		 *  default the random number generator used internally is
+		 *  By default the random number generator used internally is
 		 *  seeded using randomnumber::getSeed().  This may or may not
 		 *  be suitable as it will fall back to seeding the generator
 		 *  with the time of day on platforms that don't support any
@@ -40,14 +45,7 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *
 		 *  This method allows you to provide a more suitable seed
 		 *  if necessary. */
-		void	randomizeAddresses(uint32_t seed);
-
-		/** Instructs connect() not to randomize the list of addresses
- 		 *  that "host" resolves to.
- 		 *
- 		 *  See connect() for issues that this can cause on some
- 		 *  platforms or environments. */
-		void	dontRandomizeAddresses();
+		void	setRandomSeed(uint32_t seed);
 
 		/** Attempts to connect to the "host" and "port" set
 		 *  earlier using one of the setParameters() methods.
@@ -125,7 +123,7 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *
 		 *
 		 *  Randomization can be disabled and configured using
-		 *  dontRandomizeAddresses() and randomizeAddresses().
+		 *  randomizeAddresses(false).
 		 */
 		int32_t	connect();
 

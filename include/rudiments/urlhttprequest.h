@@ -181,7 +181,7 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  ip-based security. */
-		virtual bool	methodAllowed();
+		virtual bool	getMethodIsAllowed();
 
 		/** Matches the REMOTE_ADDR environment variable against
 		 *  the "denied-ips" and "allowed-ips" skin
@@ -191,7 +191,7 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  ip-based security. */
-		virtual bool	ipAllowed();
+		virtual bool	getIpIsAllowed();
 
 		/** Matches the HTTP_REFERER environment variable against
 		 *  the "denied-referers" and "allowed-referers" 
@@ -201,7 +201,7 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  referer-based security. */
-		virtual bool	refererAllowed();
+		virtual bool	getRefererIsAllowed();
 
 
 	#include <rudiments/private/urlhttprequest.h>

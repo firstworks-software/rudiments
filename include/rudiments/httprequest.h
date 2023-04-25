@@ -403,8 +403,9 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  request-method-based security. */
-		virtual bool	methodAllowed(const char *deniedmethods,
-						const char *allowedmethods);
+		virtual bool	getMethodIsAllowed(
+					const char *deniedmethods,
+					const char *allowedmethods);
 
 		/** Matches the CONTENT_TYPE environment variable against
 		 *  "deniedcontenttypes" and "allowedcontenttypes" (in that
@@ -414,7 +415,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  content-type-based security. */
-		virtual bool	contentTypeAllowed(
+		virtual bool	getContentTypeIsAllowed(
 					const char *deniedcontenttypes,
 					const char *allowedcontenttypes);
 
@@ -425,8 +426,9 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  ip-based security. */
-		virtual	bool	ipAllowed(const char *deniedips,
-						const char *allowedips);
+		virtual	bool	getIpIsAllowed(
+					const char *deniedips,
+					const char *allowedips);
 
 		/** Matches the HTTP_REFERER environment variable against
 		 *  "deniedreferers" and "allowedreferers" (in that order)
@@ -435,8 +437,9 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  referrer-based security. */
-		virtual	bool	refererAllowed(const char *deniedreferers,
-						const char *allowedreferers);
+		virtual	bool	getRefererIsAllowed(
+					const char *deniedreferers,
+					const char *allowedreferers);
 
 
 		struct parameterrequirement {
@@ -465,7 +468,8 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 				{"phone",false},
 		 * 				NULL};
 		 *  success=requiredParameters(pr); */
-		bool	requiredParameters(parameterrequirement **pr);
+		bool	getRequiredParametersWereProvided(
+					parameterrequirement **pr);
 
 	#include <rudiments/private/httprequest.h>
 };

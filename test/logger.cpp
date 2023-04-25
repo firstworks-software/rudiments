@@ -75,7 +75,7 @@ int main(int argc, const char **argv) {
 	}
 
 	// create and verify the header
-	char	*header=logger::logHeader("logtest");
+	char	*header=logger::getLogHeader("logtest");
 	test("header month",charstring::toInteger(header)==dt.getMonth());
 	test("header day",charstring::toInteger(header+3)==dt.getDayOfMonth());
 	test("header year",charstring::toInteger(header+6)==dt.getYear());

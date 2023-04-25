@@ -1131,16 +1131,17 @@ void httprequest::buildAllVariables() {
 	pvt->_dirtyallvars=false;
 }
 
-bool httprequest::methodAllowed(const char *deniedmethods,
+bool httprequest::getMethodIsAllowed(const char *deniedmethods,
 					const char *allowedmethods) {
-	return allowedThing(getEnvironmentVariable("REQUEST_METHOD"),true,
-						deniedmethods,allowedmethods);
+	return getThingIsAllowed(
+			getEnvironmentVariable("REQUEST_METHOD"),true,
+			deniedmethods,allowedmethods);
 }
 
-bool httprequest::allowedThing(const char *thing,
-				bool allowemptything,
-				const char *deniedthings,
-				const char *allowedthings) {
+bool httprequest::getThingIsAllowed(const char *thing,
+					bool allowemptything,
+					const char *deniedthings,
+					const char *allowedthings) {
 
 	// if the thing itself is empty then we may just allow it
 	if (allowemptything && charstring::isNullOrEmpty(thing)) {
@@ -1161,25 +1162,26 @@ bool httprequest::allowedThing(const char *thing,
 	return false;
 }
 
-bool httprequest::contentTypeAllowed(const char *deniedcontenttypes,
-					const char *allowedcontenttypes) {
-	return allowedThing(getEnvironmentVariable("CONTENT_TYPE"),true,
+bool httprequest::getContentTypeIsAllowed(
+				const char *deniedcontenttypes,
+				const char *allowedcontenttypes) {
+	return getThingIsAllowed(getEnvironmentVariable("CONTENT_TYPE"),true,
 					deniedcontenttypes,allowedcontenttypes);
 }
 
-bool httprequest::ipAllowed(const char *deniedips,
+bool httprequest::getIpIsAllowed(const char *deniedips,
 					const char *allowedips) {
-	return allowedThing(getEnvironmentVariable("REMOTE_ADDR"),false,
+	return getThingIsAllowed(getEnvironmentVariable("REMOTE_ADDR"),false,
 							deniedips,allowedips);
 }
 
-bool httprequest::refererAllowed(const char *deniedreferers,
+bool httprequest::getRefererIsAllowed(const char *deniedreferers,
 					const char *allowedreferers) {
-	return allowedThing(getEnvironmentVariable("HTTP_REFERER"),true,
+	return getThingIsAllowed(getEnvironmentVariable("HTTP_REFERER"),true,
 						deniedreferers,allowedreferers);
 }
 
-bool httprequest::requiredParameters(parameterrequirement **pr) {
+bool httprequest::getRequiredParametersWereProvided(parameterrequirement **pr) {
 
 	for (uint64_t index=0; pr[index]; index++) {
 		const char	*fe=getParameter(pr[index]->variable);

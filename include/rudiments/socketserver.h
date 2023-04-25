@@ -17,28 +17,27 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		/** Deletes this instance of the socketserver class. */
 		virtual		~socketserver();
 
-		/** Returns false if the system doesn't support
-		 *  blocking/nonblocking modes and true
-		 *  otherwise. */
-		virtual bool	supportsBlockingNonBlockingModes();
+		/** Returns true if the system supports blocking/nonblocking
+		 *  modes and false otherwise. */
+		virtual bool	getBlockingAndNonBlockingModesAreSupported();
 
-		/** Puts the file descriptor in non-blocking
-		 *  mode.  Returns true on success and false on
-		 *  failure.
+		/** If "usenonblockingmode" is true then the socket put into in
+		 *  non-blocking mode.  If "usenonblockingmode" is false then
+		 *  the socket is put into blocking mode.
+		 *
+		 *  The default for most sockets is to be in blocking mode,
+		 *  however this is not guaranteed.  It is good practice to
+		 *  specifically set the mode.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
 		 *  Returns false if the system doesn't support
 		 *  blocking/nonblocking modes. */
-		virtual bool	useNonBlockingMode();
+		virtual bool	setUseNonBlockingMode(bool usenonblockingmode);
 
-		/** Puts the file descriptor in blocking mode.
-		 *  Returns true on success and false on
-		 *  failure.
-		 *  Returns false if the system doesn't support
-		 *  blocking/nonblocking modes. */
-		virtual bool	useBlockingMode();
-
-		/** Returns true if the file descriptor is in
-		 *  non-blocking mode and false otherwise. */
-		virtual bool	isUsingNonBlockingMode();
+		/** Returns true if the socket is in non-blocking mode and
+		 *  false otherwise. */
+		virtual bool	getIsUsingNonBlockingMode();
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
@@ -62,17 +61,12 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		 *  Returns true on success and false on failure. */
 		bool	dontLingerOnClose();
 
-		/** Allows sockets in the TIME_WAIT state to be
-		 *  reused.  The default is to allocate a new socket.
+		/** If "reuse" is true then sockets in the TIME_WAIT state are
+		 *  allowed to be reused.  If "reuse" is false, then sockets in
+		 *  the TIME_WAIT state are not reused.  Defaults to false.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	reuseAddresses();
-
-		/** Prevents sockets in the TIME_WAIT state from
-		 *  being reused.  This is the default.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	dontReuseAddresses();
+		bool	setReuseAddresses(bool reuse);
 
 		/** Waits until a client connects then places
 		 *  that connection in queue.  Up to "backlog"

@@ -78,9 +78,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// toDictionary
-	stdoutput.printf("toDictionary...\n");
+	stdoutput.printf("convertToDictionary...\n");
 	dictionary<char *,char *>	d;
-	cmdline.toDictionary(&d);
+	cmdline.convertToDictionary(&d);
 	test("getValue(), -one",
 		!charstring::compare(d.getValue((char *)"one"),"1"));
 	test("getValue(), -two",

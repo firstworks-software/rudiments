@@ -469,7 +469,7 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */
-		size_t pending();
+		size_t getPendingSize();
 
 
 		/** Releases any security context established during the

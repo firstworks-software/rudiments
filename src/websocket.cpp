@@ -863,7 +863,7 @@ ssize_t websocket::writeInternal(const void *buf, size_t size, byte_t opcode) {
 	return retval;
 }
 
-size_t websocket::pending() {
+size_t websocket::getPendingSize() {
 	return (pvt->_buffersize-pvt->_bufferpos);
 }
 

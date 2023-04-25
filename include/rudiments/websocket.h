@@ -71,7 +71,7 @@ class RUDIMENTS_DLLSPEC websocket : public socketlayer {
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */
-		size_t pending();
+		size_t getPendingSize();
 
 		/** Releases any security context established during the
 		 *  previous call to connect() or accept(). */

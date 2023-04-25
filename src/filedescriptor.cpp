@@ -809,7 +809,7 @@ socketlayer *filedescriptor::getSocketLayer() {
 	return pvt->_socklr;
 }
 
-bool filedescriptor::supportsBlockingNonBlockingModes() {
+bool filedescriptor::getBlockingAndNonBlockingModesAreSupported() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
 		return true;
@@ -818,25 +818,22 @@ bool filedescriptor::supportsBlockingNonBlockingModes() {
 	#endif
 }
 
-bool filedescriptor::useNonBlockingMode() {
+bool filedescriptor::setUseNonBlockingMode(bool usenonblockingmode) {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
-		return (fCntl(F_SETFL,fCntl(F_GETFL,0)|O_NONBLOCK)!=-1);
+		if (usenonblockingmode) {
+			return (fCntl(F_SETFL,
+				fCntl(F_GETFL,0)|O_NONBLOCK)!=-1);
+		} else {
+			return (fCntl(F_SETFL,
+				fCntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
+		}
 	#else
 		return false;
 	#endif
 }
 
-bool filedescriptor::useBlockingMode() {
-	#if defined(RUDIMENTS_HAVE_FCNTL) && \
-		defined(F_SETFL) && defined (F_GETFL)
-		return (fCntl(F_SETFL,fCntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
-	#else
-		return false;
-	#endif
-}
-
-bool filedescriptor::isUsingNonBlockingMode() {
+bool filedescriptor::getIsUsingNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && defined(F_GETFL)
 		return (fCntl(F_GETFL,0)&O_NONBLOCK);
 	#else
@@ -1924,7 +1921,7 @@ ssize_t filedescriptor::unBufferedRead(byte_t *buf, size_t count,
 	size_t	sizetoread;
 	ssize_t	actualread;
 	size_t	sizemax=(pvt->_socklr)?pvt->_socklr->getSizeMax():SSIZE_MAX;
-	bool	isusingnonblockingmode=isUsingNonBlockingMode();
+	bool	isusingnonblockingmode=getIsUsingNonBlockingMode();
 	while (totalread<count) {
 
 		// limit size of individual reads
@@ -2385,7 +2382,7 @@ ssize_t filedescriptor::unBufferedWrite(
 	size_t	sizetowrite;
 	ssize_t	actualwrite;
 	size_t	sizemax=(pvt->_socklr)?pvt->_socklr->getSizeMax():SSIZE_MAX;
-	bool	isusingnonblockingmode=isUsingNonBlockingMode();
+	bool	isusingnonblockingmode=getIsUsingNonBlockingMode();
 	while (totalwrite<count) {
 
 		// limit size of individual writes

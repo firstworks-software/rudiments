@@ -47,7 +47,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==39);
 	test("week of year",dt.getWeekOfYear()==6);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",!dt.isDaylightSavingsTime());
+	test("daylight savings time",!dt.getIsDaylightSavingsTime());
 
 	// some platforms (haiku) convert EST to EST5EDT,
 	// so we have to allow that
@@ -88,7 +88,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",dt.isDaylightSavingsTime());
+	test("daylight savings time",dt.getIsDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);
@@ -117,7 +117,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",dt.isDaylightSavingsTime());
+	test("daylight savings time",dt.getIsDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);
@@ -147,7 +147,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",dt.isDaylightSavingsTime());
+	test("daylight savings time",dt.getIsDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);
@@ -474,13 +474,13 @@ int main(int argc, const char **argv) {
 	// valid/invalid dates
 	stdoutput.printf("valid/invalid dates:\n");
 	const char	*str="02/20/1974 12:00:00";
-	test(str,datetime::validDateTime(str));
+	test(str,datetime::getIsValidDateTime(str));
 	str="02/30/1974 12:00:00";
-	test(str,!datetime::validDateTime(str));
+	test(str,!datetime::getIsValidDateTime(str));
 	str="02/20/1974 12:00:00 EST5EDT";
-	test(str,datetime::validDateTime(str));
+	test(str,datetime::getIsValidDateTime(str));
 	str="02/30/1974 12:00:00 EST5EDT";
-	test(str,!datetime::validDateTime(str));
+	test(str,!datetime::getIsValidDateTime(str));
 	stdoutput.printf("\n");
 
 	// parse

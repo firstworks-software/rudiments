@@ -171,13 +171,13 @@ void chat::flush() {
 	#ifdef DEBUG_CHAT
 	stdoutput.printf("flushing...\n");
 	#endif
-	bool	wasusingnonblocking=pvt->_readfd->isUsingNonBlockingMode();
+	bool	wasusingnonblocking=pvt->_readfd->getIsUsingNonBlockingMode();
 	if (wasusingnonblocking) {
-		pvt->_readfd->useNonBlockingMode();
+		pvt->_readfd->setUseNonBlockingMode(true);
 	}
 	// some devices don't support non-blocking mode,
 	// bail if we have encountered one of them
-	if (!pvt->_readfd->isUsingNonBlockingMode()) {
+	if (!pvt->_readfd->getIsUsingNonBlockingMode()) {
 		#ifdef DEBUG_CHAT
 		stdoutput.printf("device doesn't support "
 					"non-blocking mode, bailing\n");
@@ -196,7 +196,7 @@ void chat::flush() {
 		}
 	}
 	if (!wasusingnonblocking) {
-		pvt->_readfd->useBlockingMode();
+		pvt->_readfd->setUseNonBlockingMode(false);
 	}
 }
 

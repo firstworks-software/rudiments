@@ -39,15 +39,16 @@ socketserver::~socketserver() {
 	delete pvt;
 }
 
-bool socketserver::supportsBlockingNonBlockingModes() {
+bool socketserver::getBlockingAndNonBlockingModesAreSupported() {
 	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
-		return filedescriptor::supportsBlockingNonBlockingModes();
+		return filedescriptor::
+			getBlockingAndNonBlockingModesAreSupported();
 	#endif
 }
 
-bool socketserver::useNonBlockingMode() {
+bool socketserver::setUseNonBlockingMode(bool usenonblockingmode) {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -57,7 +58,7 @@ bool socketserver::useNonBlockingMode() {
 	// * "Device not configured"
 	// * "Operation not supported"
 	#if defined(FIONBIO)
-		int32_t	nonblocking=1;
+		int32_t	nonblocking=(usenonblockingmode)?1:0;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
 		if (!retval && (error::getErrorNumber()==ENOTTY
 				#if defined(ENXIO)
@@ -67,53 +68,22 @@ bool socketserver::useNonBlockingMode() {
 				|| error::getErrorNumber()==EOPNOTSUPP
 				#endif
 				)) {
-			retval=filedescriptor::useNonBlockingMode();
+			retval=filedescriptor::setUseNonBlockingMode(
+							usenonblockingmode);
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
-			pvt->_nonblockingmode=true;
+			pvt->_nonblockingmode=usenonblockingmode
 		}
 		#endif
 		return retval;
 	#else
-		return filedescriptor::useNonBlockingMode();
+		return filedescriptor::setUseNonBlockingMode(
+						usenonblockingmode);
 	#endif
 }
 
-bool socketserver::useBlockingMode() {
-	// The posix way of setting blocking/non-blocking mode is to use
-	// fcntl(), which is what the filedescriptor class does, but this
-	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
-	// then we'll try that with an ioctl first, and fall back to fcntl() if
-	// that fails with one of:
-	// * "Inappropriate ioctl for device"
-	// * "Device not configured"
-	// * "Operation not supported"
-	#if defined(FIONBIO)
-		int32_t	nonblocking=0;
-		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
-		if (!retval && (error::getErrorNumber()==ENOTTY
-				#if defined(ENXIO)
-				|| error::getErrorNumber()==ENXIO
-				#endif
-				#if defined(EOPNOTSUPP)
-				|| error::getErrorNumber()==EOPNOTSUPP
-				#endif
-				)) {
-			retval=filedescriptor::useBlockingMode();
-		}
-		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-		if (retval) {
-			pvt->_nonblockingmode=false;
-		}
-		#endif
-		return retval;
-	#else
-		return filedescriptor::useBlockingMode();
-	#endif
-}
-
-bool socketserver::isUsingNonBlockingMode() {
+bool socketserver::getIsUsingNonBlockingMode() {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -123,7 +93,7 @@ bool socketserver::isUsingNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		return pvt->_nonblockingmode;
 	#else
-		return filedescriptor::isUsingNonBlockingMode();
+		return filedescriptor::getIsUsingNonBlockingMode();
 	#endif
 }
 
@@ -151,12 +121,8 @@ bool socketserver::dontLingerOnClose() {
 	return setLingerOnClose(0,0);
 }
 
-bool socketserver::reuseAddresses() {
-	return setReuseAddresses(1);
-}
-
-bool socketserver::dontReuseAddresses() {
-	return setReuseAddresses(0);
+bool socketserver::setReuseAddresses(bool reuse) {
+	return setReuseAddresses((reuse)?1:0);
 }
 
 bool socketserver::setLingerOnClose(int32_t timeout, int32_t onoff) {

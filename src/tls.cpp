@@ -1710,7 +1710,7 @@ ssize_t tlscontext::write(const void *buf, size_t size) {
 	#endif
 }
 
-size_t tlscontext::pending() {
+size_t tlscontext::getPendingSize() {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
@@ -1718,7 +1718,7 @@ size_t tlscontext::pending() {
 		}
 		return SSL_pending(pvt->_ssl);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return pvt->_gctx.pending();
+		return pvt->_gctx.getPendingSize();
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return 0;

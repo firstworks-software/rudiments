@@ -3443,7 +3443,7 @@ ssize_t gsscontext::read(void *buf, size_t size) {
 	// first, return any buffered data
 	size_t	bytestoread=size;
 	size_t	bytesread=0;
-	size_t	pendingbytes=pending();
+	size_t	pendingbytes=getPendingSize();
 	if (pendingbytes) {
 
 		// copy data out...
@@ -3847,7 +3847,7 @@ bool gsscontext::checkFlags(uint32_t actualflags, uint32_t desiredflags) {
 	}
 }
 
-size_t gsscontext::pending() {
+size_t gsscontext::getPendingSize() {
 	return (pvt->_readbuffer.getSize()-pvt->_readbufferpos);
 }
 

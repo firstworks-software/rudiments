@@ -151,12 +151,8 @@ void listener::cleanUp() {
 	#endif
 }
 
-void listener::retryInterruptedWaits() {
-	pvt->_retryinterruptedwaits=true;
-}
-
-void listener::dontRetryInterruptedWaits() {
-	pvt->_retryinterruptedwaits=false;
+void listener::retryInterruptedWaits(bool retry) {
+	pvt->_retryinterruptedwaits=retry;
 }
 
 void listener::addFileDescriptor(filedescriptor *fd) {
@@ -225,7 +221,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 					node; node=node->getNext()) {
 		socketlayer	*slr=
 			node->getValue()->fd->getSocketLayer();
-		if (slr && slr->pending()) {
+		if (slr && slr->getPendingSize()) {
 			pvt->_readreadylist.append(node->getValue()->fd);
 			result++;
 		}
@@ -420,7 +416,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 					socketlayer	*slr=
 						node->getValue()->fd->
 							getSocketLayer();
-					if (slr && slr->pending()) {
+					if (slr && slr->getPendingSize()) {
 						pvt->_readreadylist.append(
 							node->getValue()->fd);
 						result++;

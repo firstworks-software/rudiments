@@ -77,14 +77,12 @@ class RUDIMENTS_DLLSPEC listener : virtual public object {
 		singlylinkedlist<filedescriptor *>	*getWriteReadyList();
 
 
-		/** Causes waits to automatically retry if interrupted by a
-		 *  signal.  This is the default. */
-		void	retryInterruptedWaits();
-
-		/** Causes waits not to automatically retry if
-		 *  interrupted by a signal.  The default is to retry
-		 *  automatically. */
-		void	dontRetryInterruptedWaits();
+		/** If "retry" is true then waits are automatically retried if
+		 *  interrupted by a signal.  If "retry" is false then waits
+		 *  are not automatically retried if interrupted by a signel.
+		 *
+		 *  Defaults to true. */
+		void	retryInterruptedWaits(bool retry);
 
 	#include <rudiments/private/listener.h>
 };

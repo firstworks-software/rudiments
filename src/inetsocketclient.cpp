@@ -57,14 +57,13 @@ inetsocketclient::~inetsocketclient() {
 	delete pvt;
 }
 
-void inetsocketclient::randomizeAddresses(uint32_t seed) {
-	pvt->_randomize=true;
-	pvt->_seed=seed;
-	pvt->_seeded=true;
+void inetsocketclient::randomizeAddresses(bool randomize) {
+	pvt->_randomize=randomize;
 }
 
-void inetsocketclient::dontRandomizeAddresses() {
-	pvt->_randomize=false;
+void inetsocketclient::setRandomSeed(uint32_t seed) {
+	pvt->_seed=seed;
+	pvt->_seeded=true;
 }
 
 void inetsocketclient::setParameters(
@@ -222,7 +221,7 @@ int32_t inetsocketclient::connect() {
 				// default but OpenBSD doesn't appear to (at
 				// least in version 4.9) so we'll force it to
 				// blocking-mode to be consistent.
-				if (!useBlockingMode() &&
+				if (!setUseNonBlockingMode(false) &&
 					error::getErrorNumber()
 					#ifdef ENOTSUP
 					&& error::getErrorNumber()!=ENOTSUP
@@ -330,7 +329,7 @@ int32_t inetsocketclient::connect() {
 				// default but OpenBSD doesn't appear to (at
 				// least in version 4.9) so we'll force it to
 				// blocking-mode to be consistent.
-				if (!useBlockingMode() &&
+				if (!setUseNonBlockingMode(false) &&
 					error::getErrorNumber()
 					#ifdef ENOTSUP
 					&& error::getErrorNumber()!=ENOTSUP

@@ -17,23 +17,27 @@ class RUDIMENTS_DLLSPEC socketclient : public client {
 		/** Deletes this instance of the socketclient class. */
 		virtual	~socketclient();
 
-		/** Returns true if the client socket supports
-		 *  blocking/nonblocking modes and false otherwise. */
-		virtual bool	supportsBlockingNonBlockingModes();
+		/** Returns true if the system supports blocking/nonblocking
+		 *  modes and false otherwise. */
+		virtual bool	getBlockingAndNonBlockingModesAreSupported();
 
-		/** Puts the client socket in non-blocking mode.  Returns true
-		 *  on success and false on failure.  Returns false if the
-		 *  system doesn't support blocking/nonblocking modes. */
-		virtual bool	useNonBlockingMode();
+		/** If "usenonblockingmode" is true then the socket put into in
+		 *  non-blocking mode.  If "usenonblockingmode" is false then
+		 *  the socket is put into blocking mode.
+		 *
+		 *  The default for most sockets is to be in blocking mode,
+		 *  however this is not guaranteed.  It is good practice to
+		 *  specifically set the mode.
+		 *
+		 *  Returns true on success and false on failure.
+		 *
+		 *  Returns false if the system doesn't support
+		 *  blocking/nonblocking modes. */
+		virtual bool	setUseNonBlockingMode(bool usenonblockingmode);
 
-		/** Puts the client socket in blocking mode.  Returns true on
-		 *  success and false on failure.  Returns false if the system
-		 *  doesn't support blocking/nonblocking modes. */
-		virtual bool	useBlockingMode();
-
-		/** Returns true if the file descriptor is in
-		 *  non-blocking mode and false otherwise. */
-		virtual bool	isUsingNonBlockingMode();
+		/** Returns true if the socket is in non-blocking mode and
+		 *  false otherwise. */
+		virtual bool	getIsUsingNonBlockingMode();
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
