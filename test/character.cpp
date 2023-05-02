@@ -296,12 +296,12 @@ int main(int argc, const char **argv) {
 			character::isWhitespace(c)==iswhitespace[c]);
 		test("\tisAscii",
 			character::isAscii(c)==isascii[c]);
-		test("\ttoUpperCase",
-			character::toUpperCase(c)==touppercase[c]);
-		test("\ttoLowerCase",
-			character::toLowerCase(c)==tolowercase[c]);
-		test("\ttoAscii",
-			character::toAscii(c)==toascii[c]);
+		test("\tupper",
+			character::upper(c)==touppercase[c]);
+		test("\tlower",
+			character::lower(c)==tolowercase[c]);
+		test("\tconvertToAscii",
+			character::convertToAscii(c)==toascii[c]);
 		test("\tduplicate",character::duplicate((wchar_t)c)==c);
 	}
 

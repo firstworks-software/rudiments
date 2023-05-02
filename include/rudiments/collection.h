@@ -42,13 +42,13 @@ class collection : virtual public object {
 		 *  read-write implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsReadOnly();
+		virtual bool		isReadOnly();
 
 		/** Returns true for block-based implementations and false for
 		 *  monolithic implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsBlockBased();
+		virtual bool		isBlockBased();
 
 		/** Returns the block size for block-based implementations and
 		 *  0 for monolithic implementations.
@@ -60,7 +60,7 @@ class collection : virtual public object {
 		 *  false for random-access implementations.
 		 *
 		 *  Returns false by default. */
-		virtual bool		getIsSequentialAccess();
+		virtual bool		isSequentialAccess();
 
 		/** Indicates whether or not this instance should "manage" the
 		 *  values that are stored at each location in the collection.

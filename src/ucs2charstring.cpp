@@ -110,7 +110,7 @@ const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
 void ucs2charstring::upper(ucs2_t *str) {
 	if (str) {
 		for (ucs2_t *ch=str; *ch; ch++) {
-			*ch=(ucs2_t)ucs2character::toUpperCase(*ch);
+			*ch=(ucs2_t)ucs2character::upper(*ch);
 		}
 	}
 }
@@ -118,7 +118,7 @@ void ucs2charstring::upper(ucs2_t *str) {
 void ucs2charstring::lower(ucs2_t *str) {
 	if (str) {
 		for (ucs2_t *ch=str; *ch; ch++) {
-			*ch=(ucs2_t)ucs2character::toLowerCase(*ch);
+			*ch=(ucs2_t)ucs2character::lower(*ch);
 		}
 	}
 }
@@ -137,12 +137,12 @@ void ucs2charstring::capitalize(ucs2_t *str) {
 		bool	cap=true;
 		for (ucs2_t *ch=str; *ch; ch++) {
 			if (cap) {
-				*ch=(ucs2_t)ucs2character::toUpperCase(*ch);
+				*ch=(ucs2_t)ucs2character::upper(*ch);
 				cap=false;
 			} else {
-				*ch=(ucs2_t)ucs2character::toLowerCase(*ch);
+				*ch=(ucs2_t)ucs2character::lower(*ch);
 			}
-			if (ucs2character::inSet(*ch,delims)) {
+			if (ucs2character::isInSet(*ch,delims)) {
 				cap=true;
 			}
 		}
@@ -256,7 +256,7 @@ bool ucs2charstring::stripSet(ucs2_t *str, const ucs2_t *set) {
 	bool	retval=false;
 
 	while (str[index]) {
-		if (ucs2character::inSet(str[index],set)) {
+		if (ucs2character::isInSet(str[index],set)) {
 			total++;
 			retval=true;
 		} else {
@@ -284,7 +284,7 @@ void ucs2charstring::replace(ucs2_t *str,
 				const ucs2_t *oldchars, ucs2_t newchar) {
 	if (str) {
 		for (ucs2_t *ptr=str; *ptr; ptr++) {
-			if (ucs2character::inSet(*ptr,oldchars)) {
+			if (ucs2character::isInSet(*ptr,oldchars)) {
 				*ptr=newchar;
 			}
 		}
@@ -1157,16 +1157,16 @@ int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 	}
 	int32_t	diff=0;
 	while (*str1 && *str2) {
-		diff=(ucs2character::toUpperCase(*str1)-
-			ucs2character::toUpperCase(*str2));
+		diff=(ucs2character::upper(*str1)-
+			ucs2character::upper(*str2));
 		if (diff) {
 			return diff;
 		}
 		str1++;
 		str2++;
 	}
-	return ucs2character::toUpperCase(*str1)-
-			ucs2character::toUpperCase(*str2);
+	return ucs2character::upper(*str1)-
+			ucs2character::upper(*str2);
 }
 
 int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
@@ -1183,8 +1183,8 @@ int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 	}
 	int32_t	diff=0;
 	while (*str1 && *str2 && len) {
-		diff=(ucs2character::toUpperCase(*str1)-
-			ucs2character::toUpperCase(*str2));
+		diff=(ucs2character::upper(*str1)-
+			ucs2character::upper(*str2));
 		if (diff) {
 			return diff;
 		}
@@ -1192,8 +1192,8 @@ int32_t ucs2charstring::compareIgnoringCase(const ucs2_t *str1,
 		str2++;
 		len--;
 	}
-	return (len)?ucs2character::toUpperCase(*str1)-
-			ucs2character::toUpperCase(*str2):0;
+	return (len)?ucs2character::upper(*str1)-
+			ucs2character::upper(*str2):0;
 }
 
 int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
@@ -1263,12 +1263,12 @@ int32_t ucs2charstring::compareNatural(const ucs2_t *str1,
 			// move to after the number in both strings
 			start1=str1;
 			while (*str1 && (ucs2character::isDigit(*str1) ||
-				ucs2character::inSet(*str1,delimiters))) {
+				ucs2character::isInSet(*str1,delimiters))) {
 				str1++;
 			}
 			start2=str2;
 			while (*str2 && (ucs2character::isDigit(*str2) ||
-				ucs2character::inSet(*str2,delimiters))) {
+				ucs2character::isInSet(*str2,delimiters))) {
 				str2++;
 			}
 
@@ -1486,7 +1486,7 @@ bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 					singlewildcard,multiwildcard);
 }
 
-bool ucs2charstring::inSet(const ucs2_t *str, const ucs2_t * const *set) {
+bool ucs2charstring::isInSet(const ucs2_t *str, const ucs2_t * const *set) {
 	if (!set || !set[0]) {
 		return !str;
 	}
@@ -1498,7 +1498,7 @@ bool ucs2charstring::inSet(const ucs2_t *str, const ucs2_t * const *set) {
 	return false;
 }
 
-bool ucs2charstring::inSetIgnoringCase(const ucs2_t *str,
+bool ucs2charstring::isInSetIgnoringCase(const ucs2_t *str,
 					const ucs2_t * const *set) {
 	if (!set || !set[0]) {
 		return !str;
@@ -1587,11 +1587,11 @@ const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
 const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
 							ucs2_t needle) {
 	size_t	haystacklen=length(haystack);
-	needle=(ucs2_t)ucs2character::toLowerCase(needle);
+	needle=(ucs2_t)ucs2character::lower(needle);
 	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
-		if ((ucs2_t)ucs2character::toLowerCase(*ptr)==needle) {
+		if ((ucs2_t)ucs2character::lower(*ptr)==needle) {
 			return ptr;
 		}
 	}

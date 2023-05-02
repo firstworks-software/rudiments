@@ -350,7 +350,7 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  For this methods to return true, "string" must be
 		 *  formatted like: "00/00/0000 00:00:00" optionally
 		 *  followed by a space and a timezone. */
-		static bool	getIsValidDateTime(const char *string);
+		static bool	isValidDateTime(const char *string);
 
 		/** Takes "seconds" since the epoch (the number of seconds
 		 *  since 1970) and returns a string in

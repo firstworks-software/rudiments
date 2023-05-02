@@ -328,7 +328,7 @@ bool jsonsax::parseValue(char current, char *next) {
 		success=parseObject(ch,next);
 	} else if (ch=='[') {
 		success=parseArray(ch,next);
-	} else if (character::isDigit(ch) || character::inSet(ch,"-+,")) {
+	} else if (character::isDigit(ch) || character::isInSet(ch,"-+,")) {
 		pvt->_str.clear();
 		if ((success=parseNumber(&pvt->_str,ch,next))) {
 			if (!numberValue(pvt->_str.getString())) {

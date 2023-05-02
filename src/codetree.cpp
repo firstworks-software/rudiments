@@ -980,7 +980,7 @@ bool codetree::parseSet(domnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::inSet((int32_t)(**codeposition),value)) {
+	if (character::isInSet((int32_t)(**codeposition),value)) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {

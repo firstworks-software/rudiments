@@ -1686,7 +1686,7 @@ bool url::getProtocolIsSupported(const char *protocol) {
 	else {
 		#ifdef RUDIMENTS_HAS_CURL_VERSION_INFO
 		curl_version_info_data	*d=curl_version_info(CURLVERSION_NOW);
-		retval=charstring::inSetIgnoringCase(protocol,d->protocols);
+		retval=charstring::isInSetIgnoringCase(protocol,d->protocols);
 		#else
 		if (charstring::toInteger(LIBCURL_VERSION)<6) {
 			const char	*pr[]={
@@ -1694,14 +1694,14 @@ bool url::getProtocolIsSupported(const char *protocol) {
 				"file","http","https",
 				NULL
 			};
-			retval=charstring::inSetIgnoringCase(protocol,pr);
+			retval=charstring::isInSetIgnoringCase(protocol,pr);
 		} else {
 			const char	*pr[]={
 				"ftp","telnet","ldap","gopher",
 				"dict","file","http","https",
 				NULL
 			};
-			retval=charstring::inSetIgnoringCase(protocol,pr);
+			retval=charstring::isInSetIgnoringCase(protocol,pr);
 		}
 		#endif
 	}

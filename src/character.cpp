@@ -124,19 +124,19 @@ bool character::isAscii(int32_t c) {
 	return isascii(c)!=0;
 }
 
-int32_t character::toUpperCase(int32_t c) {
+int32_t character::upper(int32_t c) {
 	return toupper(c);
 }
 
-int32_t character::toLowerCase(int32_t c) {
+int32_t character::lower(int32_t c) {
 	return tolower(c);
 }
 
-int32_t character::toAscii(int32_t c) {
+int32_t character::convertToAscii(int32_t c) {
 	return toascii(c);
 }
 
-bool character::inSet(char c, const char *set) {
+bool character::isInSet(char c, const char *set) {
 	for (const char *s=set; *s; s++) {
 		if (*s==c) {
 			return true;

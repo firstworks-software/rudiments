@@ -60,18 +60,18 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		static bool	isAscii(int32_t c);
 
 		/** Returns the upper case version of "c". */
-		static int32_t	toUpperCase(int32_t c);
+		static int32_t	upper(int32_t c);
 
 		/** Returns the lower case version of "c". */
-		static int32_t	toLowerCase(int32_t c);
+		static int32_t	lower(int32_t c);
 
 		/** Converts "c" to a 7-bit value by clearing
 		 *  the higher order bits. */
-		static int32_t	toAscii(int32_t c);
+		static int32_t	convertToAscii(int32_t c);
 
 		/** Returns true if "c" is in the set of
 		 *  characters in "set" and false otherwise. */
-		static bool	inSet(ucs2_t c, const ucs2_t *set);
+		static bool	isInSet(ucs2_t c, const ucs2_t *set);
 
 		/** Returns true if "c" is a byte order mark and false if it
 		 *  is not. */

@@ -256,14 +256,14 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  NULL-terminated array "set".  Also returns true if "str"
 		 *  is NULL and set is NULL or contains only a NULL-terminator.
 		 *  Otherwise returns false. */
-		static	bool	inSet(const wchar_t *str,
+		static	bool	isInSet(const wchar_t *str,
 					const wchar_t * const *set);
 
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set", ignoring case.  Also returns
 		 *  true if "str" is NULL and set is NULL or contains only a
 		 *  NULL-terminator.  Otherwise returns false. */
-		static	bool	inSetIgnoringCase(const wchar_t *str,
+		static	bool	isInSetIgnoringCase(const wchar_t *str,
 						const wchar_t * const *set);
 
 		/** Returns true if "haystack" contains "needle" or

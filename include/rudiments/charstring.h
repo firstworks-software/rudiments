@@ -288,13 +288,14 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  NULL-terminated array "set".  Also returns true if "str"
 		 *  is NULL and set is NULL or contains only a NULL-terminator.
 		 *  Otherwise returns false. */
-		static	bool	inSet(const char *str, const char * const *set);
+		static	bool	isInSet(const char *str,
+						const char * const *set);
 
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set", ignoring case.  Also returns
 		 *  true if "str" is NULL and set is NULL or contains only a
 		 *  NULL-terminator.  Otherwise returns false. */
-		static	bool	inSetIgnoringCase(const char *str,
+		static	bool	isInSetIgnoringCase(const char *str,
 						const char * const *set);
 
 		/** Returns true if "haystack" contains "needle" or

@@ -282,14 +282,14 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  NULL-terminated array "set".  Also returns true if "str"
 		 *  is NULL and set is NULL or contains only a NULL-terminator.
 		 *  Otherwise returns false. */
-		static	bool	inSet(const ucs2_t *str,
+		static	bool	isInSet(const ucs2_t *str,
 						const ucs2_t * const *set);
 
 		/** Returns true if "str" is found among the values in the
 		 *  NULL-terminated array "set", ignoring case.  Also returns
 		 *  true if "str" is NULL and set is NULL or contains only a
 		 *  NULL-terminator.  Otherwise returns false. */
-		static	bool	inSetIgnoringCase(const ucs2_t *str,
+		static	bool	isInSetIgnoringCase(const ucs2_t *str,
 						const ucs2_t * const *set);
 
 		/** Returns true if "haystack" contains "needle" or

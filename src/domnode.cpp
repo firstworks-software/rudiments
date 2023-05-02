@@ -1917,7 +1917,7 @@ bool domnode::match(domnode *node,
 	if (ns && charstring::compare(node->getNamespace(),ns)) {
 		return false;
 	}
-	if (set && !charstring::inSet(node->getName(),set)) {
+	if (set && !charstring::isInSet(node->getName(),set)) {
 		return false;
 	}
 	return true;

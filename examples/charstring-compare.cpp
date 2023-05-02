@@ -55,14 +55,14 @@ int main(int argc, const char **argv) {
 	stdoutput.write("considering case...\n");
 	for (const char * const *le=lowercaseexpressions; *le; le++) {
 		stdoutput.printf("  is \"%s\" a greeting?  %s\n",*le,
-			(charstring::inSet(*le,greetings))?"yes":"no");
+			(charstring::isInSet(*le,greetings))?"yes":"no");
 	}
 	stdoutput.write('\n');
 
 	stdoutput.write("ignoring case...\n");
 	for (const char * const *ue=uppercaseexpressions; *ue; ue++) {
 		stdoutput.printf("  is \"%s\" a greeting?  %s\n",*ue,
-			(charstring::inSetIgnoringCase(*ue,greetings))?
+			(charstring::isInSetIgnoringCase(*ue,greetings))?
 								"yes":"no");
 	}
 	stdoutput.write('\n');

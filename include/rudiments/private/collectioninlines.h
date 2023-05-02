@@ -65,12 +65,12 @@ void collection::setManageValues(bool manage) {
 }
 
 inline
-bool collection::getIsReadOnly() {
+bool collection::isReadOnly() {
 	return false;
 }
 
 inline
-bool collection::getIsBlockBased() {
+bool collection::isBlockBased() {
 	return false;
 }
 
@@ -80,7 +80,7 @@ uint64_t collection::getBlockSize() {
 }
 
 inline
-bool collection::getIsSequentialAccess() {
+bool collection::isSequentialAccess() {
 	return false;
 }
 

@@ -155,29 +155,27 @@ static wint_t localtowctrans(wint_t wc, const int *desc) {
 
 #endif
 
-int32_t wcharacter::toUpperCase(int32_t c) {
+int32_t wcharacter::upper(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towupper(c);
 	#else
-		return character::toUpperCase(
-				character::duplicate((wchar_t)c));
+		return character::upper(character::duplicate((wchar_t)c));
 	#endif
 }
 
-int32_t wcharacter::toLowerCase(int32_t c) {
+int32_t wcharacter::lower(int32_t c) {
 	#ifdef RUDIMENTS_HAVE_WCTYPE_H
 		return towlower(c);
 	#else
-		return character::toLowerCase(
-				character::duplicate((wchar_t)c));
+		return character::lower(character::duplicate((wchar_t)c));
 	#endif
 }
 
-int32_t wcharacter::toAscii(int32_t c) {
-	return character::toAscii(character::duplicate((wchar_t)c));
+int32_t wcharacter::convertToAscii(int32_t c) {
+	return character::convertToAscii(character::duplicate((wchar_t)c));
 }
 
-bool wcharacter::inSet(wchar_t c, const wchar_t *set) {
+bool wcharacter::isInSet(wchar_t c, const wchar_t *set) {
 	for (const wchar_t *s=set; *s; s++) {
 		if (*s==c) {
 			return true;

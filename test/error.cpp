@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
 		NULL
 	};
 	test("getErrorString()",
-		charstring::inSet(error::getErrorString(),intr));
+		charstring::isInSet(error::getErrorString(),intr));
 
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
@@ -35,7 +35,7 @@ int main(int argc, const char **argv) {
 		NULL
 	};
 	test("clearError()/getErrorString()",
-		charstring::inSet(error::getErrorString(),success));
+		charstring::isInSet(error::getErrorString(),success));
 
 	return 0;
 }

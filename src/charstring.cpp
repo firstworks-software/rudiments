@@ -107,7 +107,7 @@ const char *charstring::findLastIgnoringCase(const char *haystack,
 void charstring::upper(char *str) {
 	if (str) {
 		for (char *ch=str; *ch; ch++) {
-			*ch=character::toUpperCase(*ch);
+			*ch=character::upper(*ch);
 		}
 	}
 }
@@ -115,7 +115,7 @@ void charstring::upper(char *str) {
 void charstring::lower(char *str) {
 	if (str) {
 		for (char *ch=str; *ch; ch++) {
-			*ch=character::toLowerCase(*ch);
+			*ch=character::lower(*ch);
 		}
 	}
 }
@@ -125,12 +125,12 @@ void charstring::capitalize(char *str) {
 		bool	cap=true;
 		for (char *ch=str; *ch; ch++) {
 			if (cap) {
-				*ch=character::toUpperCase(*ch);
+				*ch=character::upper(*ch);
 				cap=false;
 			} else {
-				*ch=character::toLowerCase(*ch);
+				*ch=character::lower(*ch);
 			}
-			if (character::inSet(*ch," '\"-(")) {
+			if (character::isInSet(*ch," '\"-(")) {
 				cap=true;
 			}
 		}
@@ -244,7 +244,7 @@ bool charstring::stripSet(char *str, const char *set) {
 	bool	retval=false;
 
 	while (str[index]) {
-		if (character::inSet(str[index],set)) {
+		if (character::isInSet(str[index],set)) {
 			total++;
 			retval=true;
 		} else {
@@ -271,7 +271,7 @@ void charstring::replace(char *str, char oldchar, char newchar) {
 void charstring::replace(char *str, const char *oldchars, char newchar) {
 	if (str) {
 		for (char *ptr=str; *ptr; ptr++) {
-			if (character::inSet(*ptr,oldchars)) {
+			if (character::isInSet(*ptr,oldchars)) {
 				*ptr=newchar;
 			}
 		}
@@ -569,7 +569,7 @@ char *charstring::httpEscape(const char *input) {
 		if (*ptr==' ') {
 			(*outptr)='+';
 		} else if (character::isAlphanumeric(*ptr) ||
-				character::inSet(*ptr,"$-_.!*'(),")) {
+				character::isInSet(*ptr,"$-_.!*'(),")) {
 			(*outptr)=*ptr;
 		} else {
 			(*outptr)='%';
@@ -1198,16 +1198,16 @@ int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
 	#else
 		int32_t	diff=0;
 		while (*str1 && *str2) {
-			diff=(character::toUpperCase(*str1)-
-				character::toUpperCase(*str2));
+			diff=(character::upper(*str1)-
+				character::upper(*str2));
 			if (diff) {
 				return diff;
 			}
 			str1++;
 			str2++;
 		}
-		return character::toUpperCase(*str1)-
-				character::toUpperCase(*str2);
+		return character::upper(*str1)-
+				character::upper(*str2);
 	#endif
 }
 
@@ -1227,8 +1227,8 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 	#else
 		int32_t	diff=0;
 		while (*str1 && *str2 && len) {
-			diff=(wcharacter::toUpperCase(*str1)-
-				wcharacter::toUpperCase(*str2));
+			diff=(wcharacter::upper(*str1)-
+				wcharacter::upper(*str2));
 			if (diff) {
 				return diff;
 			}
@@ -1236,8 +1236,8 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 			str2++;
 			len--;
 		}
-		return (len)?wcharacter::toUpperCase(*str1)-
-				wcharacter::toUpperCase(*str2):0;
+		return (len)?wcharacter::upper(*str1)-
+				wcharacter::upper(*str2):0;
 	#endif
 }
 
@@ -1303,12 +1303,12 @@ int32_t charstring::compareNatural(const char *str1,
 			// move to after the number in both strings
 			start1=str1;
 			while (*str1 && (character::isDigit(*str1) ||
-					character::inSet(*str1,delimiters))) {
+					character::isInSet(*str1,delimiters))) {
 				str1++;
 			}
 			start2=str2;
 			while (*str2 && (character::isDigit(*str2) ||
-					character::inSet(*str2,delimiters))) {
+					character::isInSet(*str2,delimiters))) {
 				str2++;
 			}
 
@@ -1521,7 +1521,7 @@ bool charstring::compareWithWildcards(const char *string,
 					singlewildcard,multiwildcard);
 }
 
-bool charstring::inSet(const char *str, const char * const *set) {
+bool charstring::isInSet(const char *str, const char * const *set) {
 	if (!set || !set[0]) {
 		return !str;
 	}
@@ -1533,7 +1533,7 @@ bool charstring::inSet(const char *str, const char * const *set) {
 	return false;
 }
 
-bool charstring::inSetIgnoringCase(const char *str, const char * const *set) {
+bool charstring::isInSetIgnoringCase(const char *str, const char * const *set) {
 	if (!set || !set[0]) {
 		return !str;
 	}
@@ -1598,11 +1598,11 @@ const char *charstring::findFirst(const char *haystack, char needle) {
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							char needle) {
 	size_t	haystacklen=length(haystack);
-	needle=character::toLowerCase(needle);
+	needle=character::lower(needle);
 	for (const char *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
-		if (character::toLowerCase(*ptr)==needle) {
+		if (character::lower(*ptr)==needle) {
 			return ptr;
 		}
 	}
@@ -2605,7 +2605,7 @@ void charstring::quotedPrintableDecode(const char *input,
 
 				bool	good=true;
 
-				byte_t	sixteens=character::toUpperCase(char1);
+				byte_t	sixteens=character::upper(char1);
 				if (sixteens>='A' && sixteens<='F') {
 					sixteens=sixteens-'A'+10;
 				} else if (sixteens>='0' && sixteens<='9') {
@@ -2614,7 +2614,7 @@ void charstring::quotedPrintableDecode(const char *input,
 					good=false;
 				}
 
-				byte_t	ones=character::toUpperCase(char2);
+				byte_t	ones=character::upper(char2);
 				if (ones>='A' && ones<='F') {
 					ones=ones-'A'+10;
 				} else if (ones>='0' && ones<='9') {

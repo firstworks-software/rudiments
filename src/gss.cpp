@@ -2389,7 +2389,7 @@ bool gsscontext::inquire() {
 		// are we using kerberos or schannel?
 		if (!charstring::compareIgnoringCase(mech,"Kerberos")) {
 			pvt->_mech=GSS_MECH_KRB;
-		} else if (charstring::inSetIgnoringCase(mech,schannels)) {
+		} else if (charstring::isInSetIgnoringCase(mech,schannels)) {
 			pvt->_mech=GSS_MECH_SCHANNEL;
 		}
 

@@ -59,19 +59,19 @@ bool ucs2character::isAscii(int32_t c) {
 	return character::isAscii(c);
 }
 
-int32_t ucs2character::toUpperCase(int32_t c) {
-	return character::toUpperCase(c);
+int32_t ucs2character::upper(int32_t c) {
+	return character::upper(c);
 }
 
-int32_t ucs2character::toLowerCase(int32_t c) {
-	return character::toLowerCase(c);
+int32_t ucs2character::lower(int32_t c) {
+	return character::lower(c);
 }
 
-int32_t ucs2character::toAscii(int32_t c) {
-	return character::toAscii(c);
+int32_t ucs2character::convertToAscii(int32_t c) {
+	return character::convertToAscii(c);
 }
 
-bool ucs2character::inSet(ucs2_t c, const ucs2_t *set) {
+bool ucs2character::isInSet(ucs2_t c, const ucs2_t *set) {
 	for (const ucs2_t *s=set; *s; s++) {
 		if (*s==c) {
 			return true;

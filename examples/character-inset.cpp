@@ -9,7 +9,6 @@ int main(int argc, const char **argv) {
 	// loop through the alphabet...
 	for (char c='a'; c<='z'; c++) {
 		stdoutput.printf("is %c is in the set \"%s\"?  %s\n",
-				c,set,
-				(character::inSet(c,set))?"yes":"no");
+				c,set,(character::isInSet(c,set))?"yes":"no");
 	}
 }

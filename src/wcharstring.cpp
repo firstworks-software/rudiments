@@ -102,7 +102,7 @@ const wchar_t *wcharstring::findLastIgnoringCase(const wchar_t *haystack,
 void wcharstring::upper(wchar_t *str) {
 	if (str) {
 		for (wchar_t *ch=str; *ch; ch++) {
-			*ch=wcharacter::toUpperCase(*ch);
+			*ch=wcharacter::upper(*ch);
 		}
 	}
 }
@@ -110,7 +110,7 @@ void wcharstring::upper(wchar_t *str) {
 void wcharstring::lower(wchar_t *str) {
 	if (str) {
 		for (wchar_t *ch=str; *ch; ch++) {
-			*ch=wcharacter::toLowerCase(*ch);
+			*ch=wcharacter::lower(*ch);
 		}
 	}
 }
@@ -120,12 +120,12 @@ void wcharstring::capitalize(wchar_t *str) {
 		bool	cap=true;
 		for (wchar_t *ch=str; *ch; ch++) {
 			if (cap) {
-				*ch=wcharacter::toUpperCase(*ch);
+				*ch=wcharacter::upper(*ch);
 				cap=false;
 			} else {
-				*ch=wcharacter::toLowerCase(*ch);
+				*ch=wcharacter::lower(*ch);
 			}
-			if (wcharacter::inSet(*ch,L" '\"-(")) {
+			if (wcharacter::isInSet(*ch,L" '\"-(")) {
 				cap=true;
 			}
 		}
@@ -239,7 +239,7 @@ bool wcharstring::stripSet(wchar_t *str, const wchar_t *set) {
 	bool	retval=false;
 
 	while (str[index]) {
-		if (wcharacter::inSet(str[index],set)) {
+		if (wcharacter::isInSet(str[index],set)) {
 			total++;
 			retval=true;
 		} else {
@@ -268,7 +268,7 @@ void wcharstring::replace(wchar_t *str,
 				wchar_t newchar) {
 	if (str) {
 		for (wchar_t *ptr=str; *ptr; ptr++) {
-			if (wcharacter::inSet(*ptr,oldchars)) {
+			if (wcharacter::isInSet(*ptr,oldchars)) {
 				*ptr=newchar;
 			}
 		}
@@ -1115,16 +1115,16 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 	#else
 		int32_t	diff=0;
 		while (*str1 && *str2) {
-			diff=(wcharacter::toUpperCase(*str1)-
-				wcharacter::toUpperCase(*str2));
+			diff=(wcharacter::upper(*str1)-
+				wcharacter::upper(*str2));
 			if (diff) {
 				return diff;
 			}
 			str1++;
 			str2++;
 		}
-		return wcharacter::toUpperCase(*str1)-
-				wcharacter::toUpperCase(*str2);
+		return wcharacter::upper(*str1)-
+				wcharacter::upper(*str2);
 	#endif
 }
 
@@ -1145,8 +1145,8 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 	#else
 		int32_t	diff=0;
 		while (*str1 && *str2 && len) {
-			diff=(wcharacter::toUpperCase(*str1)-
-				wcharacter::toUpperCase(*str2));
+			diff=(wcharacter::upper(*str1)-
+				wcharacter::upper(*str2));
 			if (diff) {
 				return diff;
 			}
@@ -1154,8 +1154,8 @@ int32_t wcharstring::compareIgnoringCase(const wchar_t *str1,
 			str2++;
 			len--;
 		}
-		return (len)?wcharacter::toUpperCase(*str1)-
-				wcharacter::toUpperCase(*str2):0;
+		return (len)?wcharacter::upper(*str1)-
+				wcharacter::upper(*str2):0;
 	#endif
 }
 
@@ -1221,12 +1221,12 @@ int32_t wcharstring::compareNatural(const wchar_t *str1,
 			// move to after the number in both strings
 			start1=str1;
 			while (*str1 && (wcharacter::isDigit(*str1) ||
-					wcharacter::inSet(*str1,delimiters))) {
+				wcharacter::isInSet(*str1,delimiters))) {
 				str1++;
 			}
 			start2=str2;
 			while (*str2 && (wcharacter::isDigit(*str2) ||
-					wcharacter::inSet(*str2,delimiters))) {
+				wcharacter::isInSet(*str2,delimiters))) {
 				str2++;
 			}
 
@@ -1439,7 +1439,7 @@ bool wcharstring::compareWithWildcards(const wchar_t *string,
 					singlewildcard,multiwildcard);
 }
 
-bool wcharstring::inSet(const wchar_t *str, const wchar_t * const *set) {
+bool wcharstring::isInSet(const wchar_t *str, const wchar_t * const *set) {
 	if (!set || !set[0]) {
 		return !str;
 	}
@@ -1451,7 +1451,7 @@ bool wcharstring::inSet(const wchar_t *str, const wchar_t * const *set) {
 	return false;
 }
 
-bool wcharstring::inSetIgnoringCase(const wchar_t *str,
+bool wcharstring::isInSetIgnoringCase(const wchar_t *str,
 					const wchar_t * const *set) {
 	if (!set || !set[0]) {
 		return !str;
@@ -1545,11 +1545,11 @@ const wchar_t *wcharstring::findFirst(const wchar_t *haystack,
 const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
 							wchar_t needle) {
 	size_t	haystacklen=length(haystack);
-	needle=wcharacter::toLowerCase(needle);
+	needle=wcharacter::lower(needle);
 	for (const wchar_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
-		if (wcharacter::toLowerCase(*ptr)==needle) {
+		if (wcharacter::lower(*ptr)==needle) {
 			return ptr;
 		}
 	}

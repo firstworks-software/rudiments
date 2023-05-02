@@ -337,12 +337,12 @@ int main(int argc, const char **argv) {
 			ucs2character::isWhitespace(c)==iswhitespace[c]);
 		test("\tisAscii",
 			ucs2character::isAscii(c)==isascii[c]);
-		test("\ttoUpperCase",
-			(ucs2_t)ucs2character::toUpperCase(c)==touppercase[c]);
-		test("\ttoLowerCase",
-			(ucs2_t)ucs2character::toLowerCase(c)==tolowercase[c]);
-		test("\ttoAscii",
-			(ucs2_t)ucs2character::toAscii(c)==toascii[c]);
+		test("\tupper",
+			(ucs2_t)ucs2character::upper(c)==touppercase[c]);
+		test("\tlower",
+			(ucs2_t)ucs2character::lower(c)==tolowercase[c]);
+		test("\tconvertToAscii",
+			(ucs2_t)ucs2character::convertToAscii(c)==toascii[c]);
 		test("\tduplicate",
 			ucs2character::duplicate((char)c)==(ucs2_t)c);
 	}

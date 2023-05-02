@@ -418,7 +418,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 				pvt->_sapi->read(&charbuf);
 			}
 
-			sixteens=character::toUpperCase(charbuf);
+			sixteens=character::upper(charbuf);
 			if (sixteens>='0' && sixteens<='9') {
 				sixteens=(sixteens-48)*16;
 			} else {
@@ -433,7 +433,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 				pvt->_sapi->read(&charbuf);
 			}
 
-			ones=character::toUpperCase(charbuf);
+			ones=character::upper(charbuf);
 			if (ones>='0' && ones<='9') {
 				ones=ones-48;
 			} else {
@@ -993,8 +993,7 @@ void httprequest::initCookies() {
 	
 				// get next char in stream: sixteens place
 				index++;
-				sixteens=character::
-						toUpperCase(httpcookie[index]);
+				sixteens=character::upper(httpcookie[index]);
 				if (sixteens>='0' && sixteens<='9') {
 					sixteens=(sixteens-48)*16;
 				} else {
@@ -1004,7 +1003,7 @@ void httprequest::initCookies() {
 				// get next char in stream: ones place
 				index++;
 	
-				ones=character::toUpperCase(httpcookie[index]);
+				ones=character::upper(httpcookie[index]);
 				if (ones>='0' && ones<='9') {
 					ones=ones-48;
 				} else {

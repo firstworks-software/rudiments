@@ -1347,7 +1347,7 @@ serialportprofile::inputmode_t serialportprofile::inputMode() {
 void serialportprofile::evalOptionsString(const char *string) {
 
 	char	bitsperchar=string[0];
-	char	parity=character::toUpperCase(string[1]);
+	char	parity=character::upper(string[1]);
 	char	stopbits=string[2];
 
 	charsize_t	charsize=(charsize_t)cs_8;

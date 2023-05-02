@@ -295,12 +295,12 @@ int main(int argc, const char **argv) {
 			wcharacter::isWhitespace(c)==iswhitespace[c]);
 		test("\tisAscii",
 			wcharacter::isAscii(c)==isascii[c]);
-		test("\ttoUpperCase",
-			wcharacter::toUpperCase(c)==touppercase[c]);
-		test("\ttoLowerCase",
-			wcharacter::toLowerCase(c)==tolowercase[c]);
-		test("\ttoAscii",
-			wcharacter::toAscii(c)==toascii[c]);
+		test("\tupper",
+			wcharacter::upper(c)==touppercase[c]);
+		test("\tlower",
+			wcharacter::lower(c)==tolowercase[c]);
+		test("\tconvertToAscii",
+			wcharacter::convertToAscii(c)==toascii[c]);
 		test("\tduplicate",
 			wcharacter::duplicate((char)c)==(wchar_t)c);
 	}

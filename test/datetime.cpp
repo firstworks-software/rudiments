@@ -474,13 +474,13 @@ int main(int argc, const char **argv) {
 	// valid/invalid dates
 	stdoutput.printf("valid/invalid dates:\n");
 	const char	*str="02/20/1974 12:00:00";
-	test(str,datetime::getIsValidDateTime(str));
+	test(str,datetime::isValidDateTime(str));
 	str="02/30/1974 12:00:00";
-	test(str,!datetime::getIsValidDateTime(str));
+	test(str,!datetime::isValidDateTime(str));
 	str="02/20/1974 12:00:00 EST5EDT";
-	test(str,datetime::getIsValidDateTime(str));
+	test(str,datetime::isValidDateTime(str));
 	str="02/30/1974 12:00:00 EST5EDT";
-	test(str,!datetime::getIsValidDateTime(str));
+	test(str,!datetime::isValidDateTime(str));
 	stdoutput.printf("\n");
 
 	// parse

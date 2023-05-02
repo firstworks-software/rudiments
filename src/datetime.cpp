@@ -1198,7 +1198,7 @@ bool datetime::daylightZone(const char *zn) {
 	return false;
 }
 
-bool datetime::getIsValidDateTime(const char *string) {
+bool datetime::isValidDateTime(const char *string) {
 
 	// must at least be 19 chars long (format: "00/00/0000 00:00:00")
 	if (charstring::length(string)<19) {

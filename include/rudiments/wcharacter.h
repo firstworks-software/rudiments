@@ -60,18 +60,18 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		static bool	isAscii(int32_t c);
 
 		/** Returns the upper case version of "c". */
-		static int32_t	toUpperCase(int32_t c);
+		static int32_t	upper(int32_t c);
 
 		/** Returns the lower case version of "c". */
-		static int32_t	toLowerCase(int32_t c);
+		static int32_t	lower(int32_t c);
 
 		/** Converts "c" to a 7-bit value by clearing
 		 *  the higher order bits. */
-		static int32_t	toAscii(int32_t c);
+		static int32_t	convertToAscii(int32_t c);
 
 		/** Returns true if "c" is in the set of
 		 *  characters in "set" and false otherwise. */
-		static bool	inSet(wchar_t c, const wchar_t *set);
+		static bool	isInSet(wchar_t c, const wchar_t *set);
 
 		/** Returns the wide character representation of character "c"
 		 *  as interpreted by the character set of the current
