@@ -568,7 +568,7 @@ bool tlscontext::isPeerCertValid() {
 static int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]='\0';
-	return charstring::length(buf);
+	return charstring::getLength(buf);
 }
 #endif 
 
@@ -2223,7 +2223,7 @@ void tlscertificate::setCertificate(void *cert) {
 					size_t	asn1len=
 						ASN1_STRING_length(dnsia5);
 					size_t	strlen=
-						charstring::length(
+						charstring::getLength(
 							(const char *)dnsname);
 					if (asn1len==strlen) {
 						pvt->_san.append(

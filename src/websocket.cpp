@@ -317,7 +317,7 @@ bool websocket::acceptInternal() {
 		byte_t		*decodedkey;
 		uint64_t	decodedkeylength;
 		charstring::base64Decode(pvt->_key,
-					charstring::length(pvt->_key),
+					charstring::getLength(pvt->_key),
 					&decodedkey,
 					&decodedkeylength);
 		delete[] decodedkey;

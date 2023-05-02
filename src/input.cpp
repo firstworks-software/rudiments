@@ -24,7 +24,7 @@ ssize_t input::read(char **buffer, const char *terminator,
 	stringbuffer	temp;
 
 	// initialize termination detector
-	int32_t	termlen=charstring::length(terminator);
+	int32_t	termlen=charstring::getLength(terminator);
 	char	*term=new char[termlen];
 	bytestring::zero(term,termlen);
 

@@ -61,8 +61,8 @@ int main() {
 			test("create file",f.create("test.csv",
 				permissions::evalPermString("rw-r--r--")));
 			test("write to file",
-				f.write(testcsv,charstring::length(testcsv))==
-					(ssize_t)charstring::length(testcsv));
+				f.write(testcsv,charstring::getLength(testcsv))==
+					(ssize_t)charstring::getLength(testcsv));
 			test("parse file",c.parseFile("test.csv"));
 			file::remove("test.csv");
 		}

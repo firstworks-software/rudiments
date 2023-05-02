@@ -309,7 +309,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			return retval;
 		}
 		const char	*name=dn->getName();
-		ssize_t		len=charstring::length(name);
+		ssize_t		len=charstring::getLength(name);
 		if (!incOrErr(&retval,out->write(name,len),len)) {
 			return retval;
 		}
@@ -461,7 +461,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			{
 			const char	*v=getValue(dn);
 			if (!charstring::isNullOrEmpty(v)) {
-				ssize_t	len=charstring::length(v);
+				ssize_t	len=charstring::getLength(v);
 				if (!incOrErr(&retval,out->write(v,len),len)) {
 					return retval;
 				}

@@ -64,7 +64,7 @@ const wchar_t *wstringbuffer::getString() {
 
 inline
 size_t wstringbuffer::getStringLength() {
-	return wcharstring::length(getString());
+	return wcharstring::getLength(getString());
 }
 
 inline
@@ -96,7 +96,7 @@ bool wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
 
 inline
 wstringbuffer *wstringbuffer::append(const wchar_t *string) {
-	return append(string,wcharstring::length(string));
+	return append(string,wcharstring::getLength(string));
 }
 
 inline
@@ -213,7 +213,7 @@ wstringbuffer *wstringbuffer::append(double number, uint16_t precision,
 
 inline
 ssize_t wstringbuffer::write(const wchar_t *string) {
-	return write(string,wcharstring::length(string));
+	return write(string,wcharstring::getLength(string));
 }
 
 inline

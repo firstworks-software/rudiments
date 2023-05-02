@@ -54,12 +54,12 @@ int main(int argc, const char **argv) {
 			uint16_t	j=0;
 			for (const char * const *str=unencrypted; *str; str++) {
 				c.append((const byte_t *)*str,
-						charstring::length(*str));
+						charstring::getLength(*str));
 				const char	*enc=(const char *)c.getHash();
 				test(*str,!charstring::compare(enc,
 							encrypted[i][j]));
 				test("size",c.getHashSize()==
-					charstring::length(encrypted[i][j]));
+					charstring::getLength(encrypted[i][j]));
 				c.clear();
 				j++;
 			}

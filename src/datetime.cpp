@@ -1169,7 +1169,7 @@ const int32_t *datetime::getTimeZoneOffsets() {
 const char *datetime::lookupCombinedTimeZone(const char *zn) {
 
 	// if the zone name is longer than 4 chars, then it's a combined zone
-	if (charstring::length(zn)>4) {
+	if (charstring::getLength(zn)>4) {
 		return zn;
 	}
 
@@ -1201,7 +1201,7 @@ bool datetime::daylightZone(const char *zn) {
 bool datetime::isValidDateTime(const char *string) {
 
 	// must at least be 19 chars long (format: "00/00/0000 00:00:00")
-	if (charstring::length(string)<19) {
+	if (charstring::getLength(string)<19) {
 		return false;
 	}
 
@@ -1268,7 +1268,7 @@ int32_t datetime::fractionToMicroseconds(const char *fraction) {
 		return 0;
 	}
 
-	size_t	len=charstring::length(fraction);
+	size_t	len=charstring::getLength(fraction);
 	while (len<6) {
 		val=val*10;
 		len++;
@@ -1528,7 +1528,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				// then it's a date (firebird uses
 				// colon-delimited dates) otherwise it's a time
 				if (supportcolondelimiteddate &&
-					charstring::length(timeparts[0])==4) {
+					charstring::getLength(timeparts[0])==4) {
 					*year=charstring::toInteger(
 								timeparts[0]);
 					if (ddmm) {
@@ -1543,7 +1543,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 								timeparts[2]);
 					}
 				} else if (supportcolondelimiteddate &&
-					charstring::length(timeparts[2])==4) {
+					charstring::getLength(timeparts[2])==4) {
 					if (ddmm) {
 						*day=charstring::toInteger(
 								timeparts[0]);
@@ -1722,7 +1722,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				charstring::isNumber(dateparts[2])) {
 
 				// it could be yyyy/xx/xx or xx/xx/yyyy
-				if (charstring::length(dateparts[0])==4) {
+				if (charstring::getLength(dateparts[0])==4) {
 					*year=charstring::toInteger(
 								dateparts[0]);
 					if (ddmm) {
@@ -1801,7 +1801,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				} else {
 
 					// it could be yyyy.xx.xx or xx.xx.yyyy
-					if (charstring::length(
+					if (charstring::getLength(
 							dateparts[0])==4) {
 						*year=charstring::toInteger(
 								dateparts[0]);
@@ -1893,7 +1893,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				} else {
 
 					// it could be yyyy-xx-xx or xx-xx-yyyy
-					if (charstring::length(
+					if (charstring::getLength(
 							dateparts[0])==4) {
 						*year=charstring::toInteger(
 								dateparts[0]);

@@ -107,7 +107,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 
-		test("length",wcharstring::length(str)==
+		test("length",wcharstring::getLength(str)==
 					strb->getStringLength());
 		test("contents",!wcharstring::compare(str,strb->getString()));
 	}
@@ -142,7 +142,7 @@ int main(int argc, const char **argv) {
 			wcharstring::append(str,L"0123456789abcdef");
 		}
 
-		strb=new wstringbuffer(data,wcharstring::length(data));
+		strb=new wstringbuffer(data,wcharstring::getLength(data));
 		for (uint16_t j=0; j<=(i+1)*100; j++) {
 			strb->append(L"0123456789abcdef");
 			wcharstring::append(str,L"0123456789abcdef");

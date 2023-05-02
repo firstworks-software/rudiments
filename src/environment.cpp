@@ -104,8 +104,8 @@ bool environment::setValue(const char *variable, const char *value) {
 	if (!_envstrings) {
 		init();
 	}
-	size_t	pestrlen=charstring::length(variable)+
-				charstring::length(value)+2;
+	size_t	pestrlen=charstring::getLength(variable)+
+				charstring::getLength(value)+2;
 	char	*pestr=(char *)malloc(pestrlen*sizeof(char));
 	charstring::copy(pestr,variable);
 	charstring::append(pestr,"=");

@@ -63,7 +63,7 @@ const ucs2_t *ucs2stringbuffer::getString() {
 
 inline
 size_t ucs2stringbuffer::getStringLength() {
-	return ucs2charstring::length(getString());
+	return ucs2charstring::getLength(getString());
 }
 
 inline
@@ -95,7 +95,7 @@ bool ucs2stringbuffer::clear(ucs2_t *initialcontents, size_t initialsize) {
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string) {
 	return (ucs2stringbuffer *)bytebuffer::append(string,
-			ucs2charstring::length((const ucs2_t *)string));
+			ucs2charstring::getLength((const ucs2_t *)string));
 }
 
 inline
@@ -105,7 +105,7 @@ ucs2stringbuffer *ucs2stringbuffer::append(const byte_t *string, size_t size) {
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::appendUcs2(const ucs2_t *string) {
-	return appendUcs2(string,ucs2charstring::length(string));
+	return appendUcs2(string,ucs2charstring::getLength(string));
 }
 
 inline
@@ -235,7 +235,7 @@ ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t precision,
 inline
 ssize_t ucs2stringbuffer::write(const byte_t *string) {
 	return bytebuffer::write(string,
-			ucs2charstring::length((const ucs2_t *)string));
+			ucs2charstring::getLength((const ucs2_t *)string));
 }
 
 inline
@@ -245,7 +245,7 @@ ssize_t ucs2stringbuffer::write(const byte_t *string, size_t size) {
 
 inline
 ssize_t ucs2stringbuffer::writeUcs2(const ucs2_t *string) {
-	return bytebuffer::writeUcs2(string,ucs2charstring::length(string));
+	return bytebuffer::writeUcs2(string,ucs2charstring::getLength(string));
 }
 
 inline

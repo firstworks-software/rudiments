@@ -369,7 +369,7 @@ int32_t chat::substituteVariables(const char **ch,
 				nln; nln=nln->getNext()) {
 
 			const char	*variable=nln->getValue();
-			ssize_t		varlen=charstring::length(variable);
+			ssize_t		varlen=charstring::getLength(variable);
 			if (!charstring::compare(variable,str+2,varlen) &&
 							*(str+2+varlen)==')') {
 
@@ -380,7 +380,7 @@ int32_t chat::substituteVariables(const char **ch,
 				stdoutput.printf("%s",value);
 				#endif
 				if (result!=
-					(ssize_t)charstring::length(value)) {
+					(ssize_t)charstring::getLength(value)) {
 					#ifdef DEBUG_CHAT
 					stdoutput.printf("\n");
 					#endif
@@ -396,12 +396,12 @@ int32_t chat::substituteVariables(const char **ch,
 
 void chat::charUnescape(const char *str, char **newstr, bool second) {
 
-	if (!charstring::length(str)) {
+	if (!charstring::getLength(str)) {
 		*newstr=NULL;
 		return;
 	}
 
-	*newstr = new char[charstring::length(str)+1];
+	*newstr = new char[charstring::getLength(str)+1];
 
 	uint64_t i=0;
 	for (char ch; (ch=*str); str++) {

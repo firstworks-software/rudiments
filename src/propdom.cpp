@@ -313,7 +313,7 @@ ssize_t propdom::writeNode(domnode *dn, output *out,
 			const char	*e=NULL;
 			ssize_t		elen=0;
 			const char	*val=dn->getAttributeValue("v");
-			ssize_t		vlen=charstring::length(val);
+			ssize_t		vlen=charstring::getLength(val);
 			switch (*name) {
 				case 'e':
 					if (!incOrErr(&retval,
@@ -335,7 +335,7 @@ ssize_t propdom::writeNode(domnode *dn, output *out,
 					break;
 				case 'k':
 					e=dn->getAttributeValue("e");
-					elen=charstring::length(e);
+					elen=charstring::getLength(e);
 					if (!incOrErr(&retval,writeAndEscape(out,dn->getAttributeValue("k"))) ||
 						!incOrErr(&retval,out->write(e,elen),elen) ||
 						!incOrErr(&retval,writeAndEscape(out,val))) {
@@ -348,7 +348,7 @@ ssize_t propdom::writeNode(domnode *dn, output *out,
 		case TEXT_DOMNODETYPE:
 			{
 			const char	*val=dn->getValue();
-			ssize_t		vlen=charstring::length(val);
+			ssize_t		vlen=charstring::getLength(val);
 			if (!incOrErr(&retval,out->write(val,vlen),vlen)) {
 				return retval;
 			}

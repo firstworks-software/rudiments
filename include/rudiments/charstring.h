@@ -25,11 +25,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Note that this method expects to operate on strings encoded
 		 *  using a single-byte encoding, and will give unexpected
 		 *  results for multi-byte-encoded strings. */
-		static	size_t	length(const char *string);
+		static	size_t	getLength(const char *string);
 
 		/** Returns the number of bytes in "string", including the
 		 *  null terminator. */
-		static	size_t	size(const char *string);
+		static	size_t	getSize(const char *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const char *string);
@@ -527,13 +527,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters in "set". */
-		static size_t	lengthContainingSet(const char *haystack,
+		static size_t	getLengthContainingSet(const char *haystack,
 							const char *set);
 
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters not in "set". */
-		static size_t	lengthNotContainingSet(const char *haystack,
+		static size_t	getLengthNotContainingSet(const char *haystack,
 							const char *set);
 
 		/** Creates a duplicate of "str" and returns a pointer

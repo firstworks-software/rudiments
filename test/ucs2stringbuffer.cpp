@@ -113,7 +113,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 
-		test("length",ucs2charstring::length(str)==
+		test("length",ucs2charstring::getLength(str)==
 					strb->getStringLength());
 		test("contents",!ucs2charstring::compare(
 					str,strb->getString()));
@@ -153,7 +153,7 @@ int main(int argc, const char **argv) {
 		}
 
 		strb=new ucs2stringbuffer(data,
-					ucs2charstring::length(data));
+					ucs2charstring::getLength(data));
 		for (uint16_t j=0; j<=(i+1)*100; j++) {
 			strb->appendUcs2(numbersletters);
 			ucs2charstring::append(str,numbersletters);

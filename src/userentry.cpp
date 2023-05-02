@@ -318,7 +318,7 @@ const char *userentry::getSidString() {
 						(int64_t)pvt->_pwd->pw_uid);
 		}
 		pvt->_sid=pvt->_sidstr;
-		pvt->_sidsize=charstring::length(pvt->_sidstr);
+		pvt->_sidsize=charstring::getLength(pvt->_sidstr);
 	}
 	return pvt->_sidstr;
 #else
@@ -334,7 +334,7 @@ const void *userentry::getSid() {
 						(int64_t)pvt->_pwd->pw_uid);
 		}
 		pvt->_sid=pvt->_sidstr;
-		pvt->_sidsize=charstring::length(pvt->_sidstr);
+		pvt->_sidsize=charstring::getLength(pvt->_sidstr);
 	}
 	return pvt->_sid;
 #else
@@ -350,7 +350,7 @@ uint64_t userentry::getSidSize() {
 						(int64_t)pvt->_pwd->pw_uid);
 		}
 		pvt->_sid=pvt->_sidstr;
-		pvt->_sidsize=charstring::length(pvt->_sidstr);
+		pvt->_sidsize=charstring::getLength(pvt->_sidstr);
 	}
 	return pvt->_sidsize;
 #else

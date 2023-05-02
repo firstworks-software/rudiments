@@ -31,25 +31,25 @@ int main(int argc, const char **argv) {
 	test("getIncludeStart()",
 		!charstring::compare(sv.getIncludeStart(),rs));
 	test("getIncludeStartLength()",
-		sv.getIncludeStartLength()==charstring::length(rs));
+		sv.getIncludeStartLength()==charstring::getLength(rs));
 	const char	*re="]]]";
 	sv.setIncludeEnd(re);
 	test("getIncludeEnd()",
 		!charstring::compare(sv.getIncludeEnd(),re));
 	test("getIncludeEndLength()",
-		sv.getIncludeEndLength()==charstring::length(rs));
+		sv.getIncludeEndLength()==charstring::getLength(rs));
 	rs="[";
 	sv.setIncludeStart(rs);
 	test("getIncludeStart()",
 		!charstring::compare(sv.getIncludeStart(),rs));
 	test("getIncludeStartLength()",
-		sv.getIncludeStartLength()==charstring::length(rs));
+		sv.getIncludeStartLength()==charstring::getLength(rs));
 	re="]";
 	sv.setIncludeEnd(re);
 	test("getIncludeEnd()",
 		!charstring::compare(sv.getIncludeEnd(),re));
 	test("getIncludeEndLength()",
-		sv.getIncludeEndLength()==charstring::length(rs));
+		sv.getIncludeEndLength()==charstring::getLength(rs));
 	stdoutput.printf("\n\n");
 
 	
@@ -59,10 +59,10 @@ int main(int argc, const char **argv) {
 							svstring,
 							svstringsize));
 	test("getValueSize()",
-			sv.getValueSize()==charstring::length(svstring));
+			sv.getValueSize()==charstring::getLength(svstring));
 	test("getTextValue()",!charstring::compare(sv.getTextValue(),svstring));
 	test("getTextValueLength()",
-			sv.getTextValueLength()==charstring::length(svstring));
+			sv.getTextValueLength()==charstring::getLength(svstring));
 	stdoutput.printf("\n\n");
 
 	stdoutput.printf("verbatim with trailing text\n");
@@ -166,7 +166,7 @@ int main(int argc, const char **argv) {
 	char	*pwd=directory::getCurrentWorkingDirectory();
 	sv.setPath(pwd);
 	test("getPath()",!charstring::compare(sv.getPath(),pwd));
-	test("getPathLength()",sv.getPathLength()==charstring::length(pwd));
+	test("getPathLength()",sv.getPathLength()==charstring::getLength(pwd));
 	directory::changeDirectory("..");
 	sv.parse(svbfile);
 	test("bin: getValue()",!bytestring::compare(sv.getValue(),
@@ -188,14 +188,14 @@ int main(int argc, const char **argv) {
 	sv.parse(svstring);
 	uint64_t	valsize=sv.getValueSize();
 	byte_t		*val=sv.detachValue();
-	test("detachValue() (size)",valsize==charstring::length(svstring));
+	test("detachValue() (size)",valsize==charstring::getLength(svstring));
 	test("detachValue()",!bytestring::compare(val,svstring,valsize));
 	delete[] val;
 	sv.parse(svstring);
 	uint64_t	textvalsize=sv.getTextValueLength();
 	char		*textval=sv.detachTextValue();
 	test("detachTextValue() (size)",
-			textvalsize==charstring::length(svstring));
+			textvalsize==charstring::getLength(svstring));
 	test("detachTextValue()",
 			!bytestring::compare(textval,svstring,textvalsize));
 	delete[] textval;

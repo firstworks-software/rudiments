@@ -419,7 +419,7 @@ char *sys::getHostName() {
 }
 
 bool sys::setHostName(const char *hostname) {
-	return setHostName(hostname,charstring::length(hostname));
+	return setHostName(hostname,charstring::getLength(hostname));
 }
 
 bool sys::setHostName(const char *hostname, uint64_t hostnamelen) {

@@ -240,7 +240,7 @@ bool filesystem::open(int32_t fd) {
 			// location then we need to test the filename against
 			// each of the mappings.
 			if (!charstring::compare(filename,mapping,
-						charstring::length(mapping))) {
+						charstring::getLength(mapping))) {
 				break;
 			}
 
@@ -253,10 +253,10 @@ bool filesystem::open(int32_t fd) {
 		CloseHandle(fm);
 
 		// replace drive mapping with volume name in filename
-		size_t	mappinglength=charstring::length(mapping);
+		size_t	mappinglength=charstring::getLength(mapping);
 		char	*ptr=filename;
 		if (volume[0] && mappinglength>2) {
-			ptr=filename+charstring::length(mapping)-2;
+			ptr=filename+charstring::getLength(mapping)-2;
 			*ptr=volume[0];
 			*(ptr+1)=':';
 		}

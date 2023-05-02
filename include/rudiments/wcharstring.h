@@ -18,11 +18,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 	public:
 
 		/** Returns the number of characters in "string". */
-		static	size_t	length(const wchar_t *string);
+		static	size_t	getLength(const wchar_t *string);
 
 		/** Returns the number of bytes in "string", including the
 		 *  null terminator. */
-		static	size_t	size(const wchar_t *string);
+		static	size_t	getSize(const wchar_t *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const wchar_t *string);
@@ -488,14 +488,16 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters in "set". */
-		static size_t	lengthContainingSet(const wchar_t *haystack,
-							const wchar_t *set);
+		static size_t	getLengthContainingSet(
+						const wchar_t *haystack,
+						const wchar_t *set);
 
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters not in "set". */
-		static size_t	lengthNotContainingSet(const wchar_t *haystack,
-							const wchar_t *set);
+		static size_t	getLengthNotContainingSet(
+						const wchar_t *haystack,
+						const wchar_t *set);
 
 		/** Creates a duplicate of "str" and returns a pointer
 		 *  to it.  Note that this method allocates a buffer for

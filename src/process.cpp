@@ -82,7 +82,7 @@ bool process::createPidFile(const char *filename, mode_t permissions) {
 	char	*pid=charstring::parseNumber((uint64_t)process::getProcessId());
 	file	pidfile;
 	bool	retval=(pidfile.create(filename,permissions) &&
-			pidfile.write(pid)==(ssize_t)charstring::length(pid));
+			pidfile.write(pid)==(ssize_t)charstring::getLength(pid));
 	delete[] pid;
 	return retval;
 }
@@ -398,8 +398,8 @@ static char *quoteArg(const char *arg) {
 		return charstring::duplicate(arg);
 	}
 
-	size_t	quotedarglen=charstring::length(arg);
-	char	*quotedarg=new char[charstring::length(arg)+4];
+	size_t	quotedarglen=charstring::getLength(arg);
+	char	*quotedarg=new char[charstring::getLength(arg)+4];
 
 	charstring::copy(quotedarg,"\"");
 	charstring::append(quotedarg,arg);
@@ -435,7 +435,7 @@ pid_t process::spawn(const char *command,
 		char	*shortcommand=fullyQualifiedCommand(command);
 
 		// are we trying to run a batch file?
-		size_t	shortcommandlen=charstring::length(shortcommand);
+		size_t	shortcommandlen=charstring::getLength(shortcommand);
 		bool	batchfile=
 			(shortcommandlen>=4 &&
 				!charstring::compareIgnoringCase(
@@ -477,7 +477,7 @@ pid_t process::spawn(const char *command,
 					first=false;
 				}
 				char	*qarg=quoteArg(*arg);
-				size_t	size=charstring::length(qarg);
+				size_t	size=charstring::getLength(qarg);
 				if (spaceleft>size) {
 					cmdl.append(qarg);
 					delete[] qarg;
@@ -535,7 +535,7 @@ char *process::fullyQualifiedCommand(const char *command) {
 			// search each directory in the PATH
 			// (actually, try the current directory first, it's not
 			// in the PATH, but should be searched first)
-			size_t	cmdlen=charstring::length(command);
+			size_t	cmdlen=charstring::getLength(command);
 			for (uint64_t i=0; i<=dircount; i++) {
 
 				char	*dir=NULL;
@@ -547,7 +547,7 @@ char *process::fullyQualifiedCommand(const char *command) {
 				}
 
 				fqcommand=new char[
-						charstring::length(dir)+1+
+						charstring::getLength(dir)+1+
 						cmdlen+1];
 
 				charstring::copy(fqcommand,dir);
@@ -582,7 +582,7 @@ char *process::fullyQualifiedCommand(const char *command) {
 
 		// get the short form of the fully qualified command
 		// (this will work on older versions of windows)
-		size_t	shortcommandsize=charstring::length(fqcommand)+1;
+		size_t	shortcommandsize=charstring::getLength(fqcommand)+1;
 		char	*shortcommand=new char[shortcommandsize];
 		GetShortPathName(fqcommand,shortcommand,shortcommandsize);
 		delete[] fqcommand;

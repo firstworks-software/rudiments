@@ -68,8 +68,8 @@ const ucs2_t *ucs2charstring::findLast(const ucs2_t *haystack,
 		return NULL;
 	}
 
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
@@ -91,8 +91,8 @@ const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
 		return NULL;
 	}
 
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
@@ -224,7 +224,7 @@ bool ucs2charstring::strip(ucs2_t *str1, const ucs2_t *str2) {
 		return false;
 	}
 
-	int32_t	str2len=length(str2);
+	int32_t	str2len=getLength(str2);
 	int32_t	index=0;
 	int32_t	total=0;
 	bool	retval=false;
@@ -298,7 +298,7 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 		return NULL;
 	}
 	ucs2stringbuffer	newstring;
-	size_t		oldstrlen=length(oldstr);
+	size_t		oldstrlen=getLength(oldstr);
 	const ucs2_t	*ptr=str;
 	const ucs2_t	*start=ptr;
 	while (*ptr) {
@@ -332,7 +332,7 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 	size_t	*oldstrlen=new size_t[i];
 	i=0;
 	for (const ucs2_t * const *o=oldstrset; *o; o++) {
-		oldstrlen[i]=length(*o);
+		oldstrlen[i]=getLength(*o);
 		i++;
 	}
 
@@ -510,7 +510,7 @@ ucs2_t *ucs2charstring::convertAmount(int64_t amount) {
 
 ucs2_t *ucs2charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	ucs2_t	*amt=convertAmount(amount);
-	ssize_t	amtlen=length(amt+1);
+	ssize_t	amtlen=getLength(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	ucs2_t	*buffer=new ucs2_t[realspaces+1];
 	buffer[realspaces]=(ucs2_t)'\0';
@@ -527,7 +527,7 @@ ucs2_t *ucs2charstring::escape(const ucs2_t *input,
 					const ucs2_t *characters) {
 	ucs2_t		*output;
 	uint64_t	outputlength;
-	escape(input,length(input),&output,&outputlength,characters);
+	escape(input,getLength(input),&output,&outputlength,characters);
 	return output;
 }
 
@@ -574,7 +574,7 @@ void ucs2charstring::escape(const ucs2_t *input, uint64_t inputlength,
 ucs2_t *ucs2charstring::unescape(const ucs2_t *input) {
 	ucs2_t		*output;
 	uint64_t	outputsize;
-	unescape(input,length(input),&output,&outputsize);
+	unescape(input,getLength(input),&output,&outputsize);
 	return output;
 }
 
@@ -912,7 +912,7 @@ uint16_t ucs2charstring::integerLength(uint64_t number) {
 	return len;
 }
 
-size_t ucs2charstring::length(const ucs2_t *string) {
+size_t ucs2charstring::getLength(const ucs2_t *string) {
 	size_t	len=0;
 	if (string) {
 		for (const ucs2_t *s=string; *s; s++) {
@@ -922,8 +922,8 @@ size_t ucs2charstring::length(const ucs2_t *string) {
 	return len;
 }
 
-size_t ucs2charstring::size(const ucs2_t *string) {
-	return (string)?(length(string)+1)*sizeof(ucs2_t):0;
+size_t ucs2charstring::getSize(const ucs2_t *string) {
+	return (string)?(getLength(string)+1)*sizeof(ucs2_t):0;
 }
 
 bool ucs2charstring::isNullOrEmpty(const ucs2_t *string) {
@@ -1012,11 +1012,11 @@ void ucs2charstring::zero(ucs2_t *str, size_t len) {
 }
 
 ucs2_t *ucs2charstring::append(ucs2_t *dest, const ucs2_t *source) {
-	return append(dest,source,length(source)+1);
+	return append(dest,source,getLength(source)+1);
 }
 
 ucs2_t *ucs2charstring::append(ucs2_t *dest, const ucs2_t *source, size_t len) {
-	return copy(dest+length(dest),source,len);
+	return copy(dest+getLength(dest),source,len);
 }
 
 ucs2_t *ucs2charstring::append(ucs2_t *dest, int64_t number) {
@@ -1058,7 +1058,7 @@ ucs2_t *ucs2charstring::append(ucs2_t *dest, double number,
 }
 
 ucs2_t *ucs2charstring::copy(ucs2_t *dest, const ucs2_t *source) {
-	return copy(dest,source,length(source)+1);
+	return copy(dest,source,getLength(source)+1);
 }
 
 ucs2_t *ucs2charstring::copy(ucs2_t *dest, const ucs2_t *source,
@@ -1090,7 +1090,7 @@ ucs2_t *ucs2charstring::copy(ucs2_t *dest, size_t location,
 
 ucs2_t *ucs2charstring::safeCopy(ucs2_t *dest, size_t destlen,
 						const ucs2_t *source) {
-	return safeCopy(dest,destlen,source,length(source)+1);
+	return safeCopy(dest,destlen,source,getLength(source)+1);
 }
 
 ucs2_t *ucs2charstring::safeCopy(ucs2_t *dest, size_t destlen,
@@ -1462,7 +1462,7 @@ bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 					size_t patternlength,
 					ucs2_t singlewildcard,
 					ucs2_t multiwildcard) {
-	return compareWithWildcards(string,length(string),
+	return compareWithWildcards(string,getLength(string),
 					pattern,patternlength,
 					singlewildcard,multiwildcard);
 }
@@ -1473,7 +1473,7 @@ bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 					ucs2_t singlewildcard,
 					ucs2_t multiwildcard) {
 	return compareWithWildcards(string,stringlength,
-					pattern,length(pattern),
+					pattern,getLength(pattern),
 					singlewildcard,multiwildcard);
 }
 
@@ -1481,8 +1481,8 @@ bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 					const ucs2_t *pattern,
 					ucs2_t singlewildcard,
 					ucs2_t multiwildcard) {
-	return compareWithWildcards(string,length(string),
-					pattern,length(pattern),
+	return compareWithWildcards(string,getLength(string),
+					pattern,getLength(pattern),
 					singlewildcard,multiwildcard);
 }
 
@@ -1532,21 +1532,21 @@ bool ucs2charstring::containsIgnoringCase(const ucs2_t *haystack,
 
 bool ucs2charstring::startsWith(const ucs2_t *haystack,
 					const ucs2_t *needle) {
-	return !compare(haystack,needle,length(needle));
+	return !compare(haystack,needle,getLength(needle));
 }
 
 bool ucs2charstring::endsWith(const ucs2_t *haystack,
 					const ucs2_t *needle) {
-	size_t	needlelen=length(needle);
-	size_t	haystacklen=length(haystack);
+	size_t	needlelen=getLength(needle);
+	size_t	haystacklen=getLength(haystack);
 	return (haystacklen>=needlelen &&
 		!compare(haystack+haystacklen-needlelen,needle));
 }
 
 const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
 						const ucs2_t *needle) {
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	for (const ucs2_t *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
@@ -1559,8 +1559,8 @@ const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
 
 const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
 							const ucs2_t *needle) {
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	for (const ucs2_t *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
@@ -1573,7 +1573,7 @@ const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
 
 const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
 							ucs2_t needle) {
-	size_t	haystacklen=length(haystack);
+	size_t	haystacklen=getLength(haystack);
 	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
@@ -1586,7 +1586,7 @@ const ucs2_t *ucs2charstring::findFirst(const ucs2_t *haystack,
 
 const ucs2_t *ucs2charstring::findFirstIgnoringCase(const ucs2_t *haystack,
 							ucs2_t needle) {
-	size_t	haystacklen=length(haystack);
+	size_t	haystacklen=getLength(haystack);
 	needle=(ucs2_t)ucs2character::lower(needle);
 	for (const ucs2_t *ptr=haystack;
 			ptr<haystack+haystacklen;
@@ -1605,7 +1605,7 @@ const ucs2_t *ucs2charstring::findFirstOrEnd(const ucs2_t *haystack,
 	}
 	const ucs2_t	*retval=findFirst(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1618,7 +1618,7 @@ const ucs2_t *ucs2charstring::findFirstOrEndIgnoringCase(
 	}
 	const ucs2_t	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1630,7 +1630,7 @@ const ucs2_t *ucs2charstring::findFirstOrEnd(const ucs2_t *haystack,
 	}
 	const ucs2_t	*retval=findFirst(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1643,7 +1643,7 @@ const ucs2_t *ucs2charstring::findFirstOrEndIgnoringCase(
 	}
 	const ucs2_t	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1778,7 +1778,7 @@ ucs2_t *ucs2charstring::findLastOfSet(ucs2_t *haystack,
 	if (!haystack || !set) {
 		return NULL;
 	}
-	ucs2_t	*retval=haystack+ucs2charstring::length(haystack);
+	ucs2_t	*retval=haystack+ucs2charstring::getLength(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
@@ -1798,17 +1798,17 @@ ucs2_t *ucs2charstring::findLastOfSetOrEnd(ucs2_t *haystack,
 	if (!haystack || !set) {
 		return NULL;
 	}
-	ucs2_t	*retval=haystack+length(haystack);
+	ucs2_t	*retval=haystack+getLength(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
 			return retval;
 		}
 	} while (retval>haystack);
-	return haystack+length(haystack);
+	return haystack+getLength(haystack);
 }
 
-size_t ucs2charstring::lengthContainingSet(const ucs2_t *haystack,
+size_t ucs2charstring::getLengthContainingSet(const ucs2_t *haystack,
 							const ucs2_t *set) {
 	if (!haystack || !set) {
 		return 0;
@@ -1820,7 +1820,7 @@ size_t ucs2charstring::lengthContainingSet(const ucs2_t *haystack,
 	return index;
 }
 
-size_t ucs2charstring::lengthNotContainingSet(const ucs2_t *haystack,
+size_t ucs2charstring::getLengthNotContainingSet(const ucs2_t *haystack,
 							const ucs2_t *set) {
 	if (!haystack || !set) {
 		return 0;
@@ -1854,7 +1854,7 @@ ucs2_t *ucs2charstring::between(const ucs2_t *str,
 
 	// bump past the start
 	if (s!=str) {
-		s+=length(start);
+		s+=getLength(start);
 	}
 
 	// find the end (or use end of "str" if "end" is empty/NULL)
@@ -1878,7 +1878,7 @@ ucs2_t *ucs2charstring::after(const ucs2_t *str,
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str) {
-	return duplicate(str,charstring::length(str),sys::getIsBigEndian());
+	return duplicate(str,charstring::getLength(str),sys::getIsBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
@@ -1886,7 +1886,7 @@ ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, bool bigendian) {
-	return duplicate(str,charstring::length(str),bigendian);
+	return duplicate(str,charstring::getLength(str),bigendian);
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, size_t len, bool bigendian) {
@@ -1903,7 +1903,7 @@ ucs2_t *ucs2charstring::duplicate(const char *str, size_t len, bool bigendian) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const ucs2_t *str) {
-	return duplicate(str,length(str));
+	return duplicate(str,getLength(str));
 }
 
 ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
@@ -1917,7 +1917,7 @@ ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string) {
-	return duplicate(string,wcharstring::length(string),
+	return duplicate(string,wcharstring::getLength(string),
 				(ucs2_t)'?',sys::getIsBigEndian());
 }
 
@@ -1926,7 +1926,7 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, bool bigendian) {
-	return duplicate(string,wcharstring::length(string),
+	return duplicate(string,wcharstring::getLength(string),
 				(ucs2_t)'?',sys::getIsBigEndian());
 }
 
@@ -1937,7 +1937,7 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
 					ucs2_t replacement) {
-	return duplicate(string,wcharstring::length(string),
+	return duplicate(string,wcharstring::getLength(string),
 				replacement,sys::getIsBigEndian());
 }
 
@@ -2078,7 +2078,7 @@ long double ucs2charstring::toFloatC(const ucs2_t *string) {
 	 * representation to one appropriate for the current locale. */
 
 #ifdef RUDIMENTS_HAVE_LOCALE_H
-	size_t		len=length(string);
+	size_t		len=getLength(string);
 	ucs2_t	stringinlocale[256];
 	const ucs2_t	*decimalpointlocation;
 	struct	lconv	*currentlconv=localeconv();
@@ -2130,8 +2130,8 @@ void ucs2charstring::split(const ucs2_t *string,
 				bool collapse,
 				ucs2_t ***list,
 				uint64_t *listlength) {
-	split(string,length(string),
-			delimiter,length(delimiter),
+	split(string,getLength(string),
+			delimiter,getLength(delimiter),
 			collapse,list,listlength);
 }
 
@@ -2142,7 +2142,7 @@ void ucs2charstring::split(const ucs2_t *string,
 				ucs2_t ***list,
 				uint64_t *listlength) {
 	split(string,stringlength,
-			delimiter,length(delimiter),
+			delimiter,getLength(delimiter),
 			collapse,list,listlength);
 }
 
@@ -2152,7 +2152,7 @@ void ucs2charstring::split(const ucs2_t *string,
 				bool collapse,
 				ucs2_t ***list,
 				uint64_t *listlength) {
-	split(string,length(string),
+	split(string,getLength(string),
 			delimiter,delimiterlength,
 			collapse,list,listlength);
 }
@@ -2270,15 +2270,15 @@ ucs2_t *ucs2charstring::subString(const ucs2_t *str,
 }
 
 ucs2_t *ucs2charstring::subString(const ucs2_t *str, size_t start) {
-	return subString(str,start,length(str)-1);
+	return subString(str,start,getLength(str)-1);
 }
 
 ucs2_t *ucs2charstring::insertString(const ucs2_t *dest,
 					const ucs2_t *src,
 					uint64_t index) {
 
-	uint64_t	srcsize=length(src);
-	uint64_t	size=length(dest)+srcsize+1;
+	uint64_t	srcsize=getLength(src);
+	uint64_t	size=getLength(dest)+srcsize+1;
 	ucs2_t		*retval=new ucs2_t[size];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
@@ -2300,7 +2300,7 @@ ucs2_t *ucs2charstring::pad(const ucs2_t *str, ucs2_t padchar,
 		return NULL;
 	}
 
-	uint64_t	strlen=((str==NULL)?0:length(str));
+	uint64_t	strlen=((str==NULL)?0:getLength(str));
 	ucs2_t	*newstring=NULL;
 
 	newstring=new ucs2_t[totallength+1];

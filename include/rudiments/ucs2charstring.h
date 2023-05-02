@@ -26,11 +26,11 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 	public:
 
 		/** Returns the number of characters in "string". */
-		static	size_t	length(const ucs2_t *string);
+		static	size_t	getLength(const ucs2_t *string);
 
 		/** Returns the number of bytes in "string", including the
 		 *  null terminator. */
-		static	size_t	size(const ucs2_t *string);
+		static	size_t	getSize(const ucs2_t *string);
 
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const ucs2_t *string);
@@ -535,14 +535,16 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters in "set". */
-		static size_t	lengthContainingSet(const ucs2_t *haystack,
-							const ucs2_t *set);
+		static size_t	getLengthContainingSet(
+						const ucs2_t *haystack,
+						const ucs2_t *set);
 
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters not in "set". */
-		static size_t	lengthNotContainingSet(const ucs2_t *haystack,
-							const ucs2_t *set);
+		static size_t	getLengthNotContainingSet(
+						const ucs2_t *haystack,
+						const ucs2_t *set);
 
 		/** Creates a duplicate of "str" and returns a pointer
 		 *  to it.

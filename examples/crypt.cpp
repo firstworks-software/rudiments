@@ -27,7 +27,7 @@ int main(int argc, const char **argv) {
 			const byte_t	*data=(const byte_t *)*str;
 			const byte_t	*iv=(const byte_t *)*salt;
 
-			c.append(data,charstring::length(*str));
+			c.append(data,charstring::getLength(*str));
 			c.setIv(iv,c.getIvSize());
 
 			const char	*encrypted=

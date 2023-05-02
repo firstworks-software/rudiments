@@ -98,7 +98,7 @@ bool directory::open(const char *path) {
 		// what was passed in.
 		if (path!=pvt->_filespec) {
 			delete[] pvt->_filespec;
-			pvt->_filespec=new char[charstring::length(path)+3];
+			pvt->_filespec=new char[charstring::getLength(path)+3];
 			charstring::copy(pvt->_filespec,path);
 			charstring::append(pvt->_filespec,"\\*");
 		}
@@ -313,7 +313,7 @@ bool directory::createTemporaryDirectory(char *templatedirname, mode_t perms) {
 	#else
 		// sanity check on templatedirname
 		char	*lastsix=templatedirname+
-				charstring::length(templatedirname)-6;
+				charstring::getLength(templatedirname)-6;
 		if (charstring::compare(lastsix,"XXXXXX")) {
 			error::setErrorNumber(EINVAL);
 			return false;

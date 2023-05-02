@@ -24,7 +24,7 @@ int main(int argc, const char **argv) {
 
 
 	// get length
-	stdoutput.printf("length(buffer)=%d\n",charstring::length(buffer));
+	stdoutput.printf("length(buffer)=%d\n",charstring::getLength(buffer));
 	stdoutput.write('\n');
 
 
@@ -54,7 +54,7 @@ int main(int argc, const char **argv) {
 
 
 	// get length
-	stdoutput.printf("length(buffer)=%d\n",charstring::length(buffer));
+	stdoutput.printf("length(buffer)=%d\n",charstring::getLength(buffer));
 	stdoutput.write('\n');
 
 
@@ -77,7 +77,7 @@ int main(int argc, const char **argv) {
 
 
 	// get length
-	stdoutput.printf("length(buffer)=%d\n",charstring::length(buffer));
+	stdoutput.printf("length(buffer)=%d\n",charstring::getLength(buffer));
 	stdoutput.write('\n');
 
 
@@ -93,7 +93,7 @@ int main(int argc, const char **argv) {
 
 
 	// get length
-	stdoutput.printf("length(buffer)=%d\n",charstring::length(buffer));
+	stdoutput.printf("length(buffer)=%d\n",charstring::getLength(buffer));
 	stdoutput.write('\n');
 
 

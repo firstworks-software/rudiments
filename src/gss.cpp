@@ -507,7 +507,7 @@ bool gssmechanism::open(const char *str) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		gss_buffer_desc	mechbuffer;
 		mechbuffer.value=(void *)str;
-		mechbuffer.length=charstring::length(str);
+		mechbuffer.length=charstring::getLength(str);
 
 		OM_uint32		major;
 		OM_uint32		minor;
@@ -552,7 +552,7 @@ bool gssmechanism::open(const void *oid) {
 		// (you'd think there'd be a clean way to just copy
 		// an oid, but there doesn't appear to be)
 		mechbuffer.value=(void *)pvt->_str;
-		mechbuffer.length=charstring::length(pvt->_str);
+		mechbuffer.length=charstring::getLength(pvt->_str);
 
 		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
 		return (major==GSS_S_COMPLETE);
@@ -795,7 +795,7 @@ gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 bool gsscredentials::acquireForService(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_ACCEPT;
-		return acquire(name,charstring::length(name),
+		return acquire(name,charstring::getLength(name),
 						GSS_C_NT_HOSTBASED_SERVICE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_INBOUND;
@@ -809,7 +809,7 @@ bool gsscredentials::acquireForService(const char *name) {
 bool gsscredentials::acquireForUser(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
-		return acquire(name,charstring::length(name),
+		return acquire(name,charstring::getLength(name),
 						GSS_C_NT_USER_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
@@ -1592,7 +1592,7 @@ uint32_t gsscontext::getDesiredFlags() {
 
 void gsscontext::setService(const char *service) {
 	pvt->_service=service;
-	pvt->_servicelength=charstring::length(service);
+	pvt->_servicelength=charstring::getLength(service);
 }
 
 const char *gsscontext::getService() {

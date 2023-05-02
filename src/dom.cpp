@@ -418,13 +418,13 @@ ssize_t dom::safeWrite(output *out, const char *str) {
 		if (entity || num) {
 			incOrErr(&retval,out->write(start,ch-start),ch-start);
 			if (entity) {
-				ssize_t	len=charstring::length(entity);
+				ssize_t	len=charstring::getLength(entity);
 				incOrErr(&retval,out->write(entity,len),len);
 				entity=NULL;
 			} else {
 				incOrErr(&retval,out->write("&#",2),2);
 				char	*numstr=charstring::parseNumber(num);
-				ssize_t	len=charstring::length(numstr);
+				ssize_t	len=charstring::getLength(numstr);
 				incOrErr(&retval,out->write(numstr,len),len);
 				delete[] numstr;
 				incOrErr(&retval,out->write(';'),1);

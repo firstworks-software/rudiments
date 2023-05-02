@@ -127,7 +127,7 @@ void output::safePrint(const byte_t *string, int32_t length) {
 }
 
 void output::safePrint(const byte_t *string) {
-	safePrint(string,charstring::length((const char *)string));
+	safePrint(string,charstring::getLength((const char *)string));
 }
 
 void output::printBits(byte_t value) {

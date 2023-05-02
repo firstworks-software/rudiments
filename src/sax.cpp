@@ -179,7 +179,7 @@ bool sax::parseString(const char *string) {
 	pvt->_string=string;
 	pvt->_ptr=string;
 	pvt->_startptr=string;
-	pvt->_endptr=pvt->_string+charstring::length(string);
+	pvt->_endptr=pvt->_string+charstring::getLength(string);
 	pvt->_mmapped=false;
 
 	return parse();

@@ -56,15 +56,15 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("original text:   \"%s\"\n",paddedtext);
 
 	// left-justified...
-	charstring::leftJustify(paddedtext,charstring::length(paddedtext));
+	charstring::leftJustify(paddedtext,charstring::getLength(paddedtext));
 	stdoutput.printf("left-justified:  \"%s\"\n",paddedtext);
 
 	// right-justified...
-	charstring::rightJustify(paddedtext,charstring::length(paddedtext));
+	charstring::rightJustify(paddedtext,charstring::getLength(paddedtext));
 	stdoutput.printf("right-justified: \"%s\"\n",paddedtext);
 
 	// centered...
-	charstring::center(paddedtext,charstring::length(paddedtext));
+	charstring::center(paddedtext,charstring::getLength(paddedtext));
 	stdoutput.printf("centered:        \"%s\"\n",paddedtext);
 	stdoutput.write('\n');
 

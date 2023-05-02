@@ -57,7 +57,7 @@ void stdoutdestination::write(const char *string) {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=stdoutput.write(string,charstring::length(string));
+		result=stdoutput.write(string,charstring::getLength(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 }
@@ -66,7 +66,7 @@ void stdoutdestination::write(const wchar_t *string) {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=stdoutput.write(string,wcharstring::length(string));
+		result=stdoutput.write(string,wcharstring::getLength(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 }
@@ -75,7 +75,7 @@ void stderrdestination::write(const char *string) {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=stderror.write(string,charstring::length(string));
+		result=stderror.write(string,charstring::getLength(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 }
@@ -84,7 +84,7 @@ void stderrdestination::write(const wchar_t *string) {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=stderror.write(string,wcharstring::length(string));
+		result=stderror.write(string,wcharstring::getLength(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 }
@@ -213,7 +213,7 @@ void logger::start(uint8_t level, const char *header,
 		return;
 	}
 	stringbuffer	str;
-	if (charstring::length(header)) {
+	if (charstring::getLength(header)) {
 		str.append(header)->append(" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -229,7 +229,7 @@ void logger::start(uint8_t level, const wchar_t *header,
 		return;
 	}
 	wstringbuffer	str;
-	if (wcharstring::length(header)) {
+	if (wcharstring::getLength(header)) {
 		str.append(header)->append(L" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -245,7 +245,7 @@ void logger::write(uint8_t level, const char *header,
 		return;
 	}
 	stringbuffer	str;
-	if (charstring::length(header)) {
+	if (charstring::getLength(header)) {
 		str.append(header)->append(" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -267,7 +267,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 		return;
 	}
 	wstringbuffer	str;
-	if (wcharstring::length(header)) {
+	if (wcharstring::getLength(header)) {
 		str.append(header)->append(L" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -290,7 +290,7 @@ void logger::write(uint8_t level, const char *header,
 		return;
 	}
 	stringbuffer	str;
-	if (charstring::length(header)) {
+	if (charstring::getLength(header)) {
 		str.append(header)->append(" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -308,7 +308,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 		return;
 	}
 	wstringbuffer	str;
-	if (wcharstring::length(header)) {
+	if (wcharstring::getLength(header)) {
 		str.append(header)->append(L" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -324,7 +324,7 @@ void logger::end(uint8_t level, const char *header, uint32_t indent) {
 		return;
 	}
 	stringbuffer	str;
-	if (charstring::length(header)) {
+	if (charstring::getLength(header)) {
 		str.append(header)->append(" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {
@@ -339,7 +339,7 @@ void logger::end(uint8_t level, const wchar_t *header, uint32_t indent) {
 		return;
 	}
 	wstringbuffer	str;
-	if (wcharstring::length(header)) {
+	if (wcharstring::getLength(header)) {
 		str.append(header)->append(L" : ");
 	}
 	for (uint32_t i=0; i<indent; i++) {

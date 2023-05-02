@@ -1618,7 +1618,7 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 	#else
 		// sanity check on templatefilename
 		char	*lastsix=templatefilename+
-				charstring::length(templatefilename)-6;
+				charstring::getLength(templatefilename)-6;
 		if (charstring::compare(lastsix,"XXXXXX")) {
 			error::setErrorNumber(EINVAL);
 			return -1;
@@ -1731,7 +1731,7 @@ char *file::getBaseName(const char *filename) {
 char *file::getBaseName(const char *filename, const char *ext) {
 	char	*retval=getBaseName(filename);
 	char	*ptr=charstring::findLast(retval,ext);
-	if (!(*(ptr+charstring::length(ext)))) {
+	if (!(*(ptr+charstring::getLength(ext)))) {
 		(*ptr)='\0';
 	}
 	return retval;
@@ -1777,12 +1777,12 @@ char *file::getEightDotThree(const char *filename) {
 	charstring::stripSet(suffix," .\"/\\[]:;=,");
 
 	// truncate the base at 8 characters if necessary
-	if (charstring::length(base)>8) {
+	if (charstring::getLength(base)>8) {
 		*(base+8)='\0';
 	}
 
 	// truncate the suffix at 3 characters if necessary
-	if (charstring::length(suffix)>3) {
+	if (charstring::getLength(suffix)>3) {
 		*(suffix+3)='\0';
 	}
 
@@ -1799,7 +1799,7 @@ char *file::getEightDotThree(const char *filename) {
 
 		// try to come up with a unique name
 		if (tryunique) {
-			size_t	baselen=charstring::length(base);
+			size_t	baselen=charstring::getLength(base);
 			if (baselen>6) {
 				baselen=6;
 			}

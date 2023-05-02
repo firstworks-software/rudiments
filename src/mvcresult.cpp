@@ -135,9 +135,9 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 
 	ssize_t			retval=0;
 
-	size_t	mlen=charstring::length(pvt->_message);
+	size_t	mlen=charstring::getLength(pvt->_message);
 	char	*code=charstring::parseNumber(pvt->_code);
-	size_t	clen=charstring::length(code);
+	size_t	clen=charstring::getLength(code);
 
 	// begin object
 	incOrErr(&retval,out->write('{'),1) &&
@@ -174,7 +174,7 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 				pvt->_data.getKeys()->getFirst();
 				key; key=key->getNext()) {
 
-			ssize_t	klen=charstring::length(key->getValue());
+			ssize_t	klen=charstring::getLength(key->getValue());
 			
 			if (first) {
 				first=false;

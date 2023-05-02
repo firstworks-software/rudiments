@@ -732,7 +732,7 @@ ssize_t csvdom::writeValue(output *out, domnode *value) {
 		}
 		incOrErr(&retval,out->write(getQuote()),1);
 	} else {
-		size_t	len=charstring::length(v);
+		size_t	len=charstring::getLength(v);
 		incOrErr(&retval,out->write(v,len),len);
 	}
 	return retval;

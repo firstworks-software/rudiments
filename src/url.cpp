@@ -326,7 +326,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 		userpwd=sv.detachTextValue();
 
 		// build a clean url, without the user/password in it
-		cleanurl=new char[charstring::length(name)+1];
+		cleanurl=new char[charstring::getLength(name)+1];
 		charstring::copy(cleanurl,name,protodelim+3-name);
 		charstring::append(cleanurl,at+1);
 

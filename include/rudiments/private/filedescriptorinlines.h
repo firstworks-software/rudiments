@@ -43,25 +43,26 @@ ssize_t filedescriptor::write(bool value) {
 
 inline
 ssize_t filedescriptor::write(const byte_t *string) {
-	return highLevelWrite(string,charstring::length((const char *)string));
+	return highLevelWrite(string,
+			charstring::getLength((const char *)string));
 }
 
 inline
 ssize_t filedescriptor::write(const char *string) {
 	return highLevelWrite((const byte_t *)string,
-					charstring::length(string));
+				charstring::getLength(string));
 }
 
 inline
 ssize_t filedescriptor::write(const wchar_t *string) {
 	return highLevelWrite((const byte_t *)string,
-				wcharstring::length(string)*sizeof(wchar_t));
+			wcharstring::getLength(string)*sizeof(wchar_t));
 }
 
 inline
 ssize_t filedescriptor::writeUcs2(const ucs2_t *string) {
 	return highLevelWrite((const byte_t *)string,
-			ucs2charstring::length(string)*sizeof(ucs2_t));
+			ucs2charstring::getLength(string)*sizeof(ucs2_t));
 }
 
 inline
@@ -156,27 +157,27 @@ ssize_t filedescriptor::writeUcs2(const ucs2_t *string, size_t length,
 inline
 ssize_t filedescriptor::write(const byte_t *string, int32_t sec, int32_t usec) {
 	return highLevelWrite(string,
-			charstring::length((const char *)string),sec,usec);
+			charstring::getLength((const char *)string),sec,usec);
 }
 
 inline
 ssize_t filedescriptor::write(const char *string, int32_t sec, int32_t usec) {
 	return highLevelWrite((const byte_t *)string,
-			charstring::length(string),sec,usec);
+			charstring::getLength(string),sec,usec);
 }
 
 inline
 ssize_t filedescriptor::write(const wchar_t *string,
 					int32_t sec, int32_t usec) {
 	return highLevelWrite((const byte_t *)string,
-			wcharstring::length(string)*sizeof(wchar_t),sec,usec);
+		wcharstring::getLength(string)*sizeof(wchar_t),sec,usec);
 }
 
 inline
 ssize_t filedescriptor::writeUcs2(const ucs2_t *string,
 					int32_t sec, int32_t usec) {
 	return highLevelWrite((const byte_t *)string,
-		ucs2charstring::length(string)*sizeof(ucs2_t),sec,usec);
+		ucs2charstring::getLength(string)*sizeof(ucs2_t),sec,usec);
 }
 
 inline

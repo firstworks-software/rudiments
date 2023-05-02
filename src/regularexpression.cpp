@@ -170,7 +170,7 @@ bool regularexpression::match(const char *str) {
 		return pvt->_null;
 	}
 	#ifdef RUDIMENTS_HAS_PCRE
-		return match(str,charstring::length(str));
+		return match(str,charstring::getLength(str));
 	#else
 		pvt->_str=str;
 		for (int32_t i=0; i<pvt->_matchcount; i++) {

@@ -98,7 +98,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 
-		test("length",charstring::length(str)==strb->getStringLength());
+		test("length",charstring::getLength(str)==strb->getStringLength());
 		test("contents",!charstring::compare(str,strb->getString()));
 	}
 	stdoutput.printf("\n");
@@ -106,7 +106,7 @@ int main(int argc, const char **argv) {
 
 	// setPosition and write...
 	stdoutput.printf("write...\n");
-	size_t	strlen=charstring::length(str);
+	size_t	strlen=charstring::getLength(str);
 	for (uint16_t i=0; i<iterations; i++) {
 		for (uint32_t j=0; j<strlen-5-1; j=j+30+i) {
 			strb->setPositionRelativeToBeginning(j);
@@ -132,7 +132,7 @@ int main(int argc, const char **argv) {
 			charstring::append(str,"0123456789abcdef");
 		}
 
-		strb=new stringbuffer(data,charstring::length(data));
+		strb=new stringbuffer(data,charstring::getLength(data));
 		for (uint16_t j=0; j<=(i+1)*100; j++) {
 			strb->append("0123456789abcdef");
 			charstring::append(str,"0123456789abcdef");

@@ -553,8 +553,8 @@ bool codetree::parseChild(domnode *grammarnode,
 			debugPrintIndent(3);
 			debugPrintf(3,"resetting to \"");
         		debugSafePrintLength(3,startcodeposition,
-				(charstring::length(startcodeposition)>20)?
-					20:charstring::length(
+				(charstring::getLength(startcodeposition)>20)?
+					20:charstring::getLength(
 						startcodeposition));
 			debugPrintf(3,"\"\n");
 		}
@@ -770,7 +770,7 @@ bool codetree::parseTerminal(domnode *grammarnode,
 
 	// get the attributes of this terminal
 	const char	*value=grammarnode->getAttributeValue(VALUE);
-	size_t		valuelength=charstring::length(value);
+	size_t		valuelength=charstring::getLength(value);
 	const char	*casesensitive=grammarnode->getAttributeValue(CASE);
 
 	// if it matches, append the terminal to the
@@ -1008,7 +1008,7 @@ bool codetree::parseBreak(domnode *grammarnode,
 
 	// get the attributes of this terminal
 	const char	*value=grammarnode->getAttributeValue(VALUE);
-	size_t		valuelength=charstring::length(value);
+	size_t		valuelength=charstring::getLength(value);
 	const char	*casesensitive=grammarnode->getAttributeValue(CASE);
 	const char	*recurse=grammarnode->getAttributeValue(RECURSIVE);
 
@@ -1109,8 +1109,8 @@ bool codetree::parseNonTerminal(domnode *grammarnode,
 	debugPrintIndent(2);
 	debugPrintf(2,"nonterminal (%c) \"%s\" at \"",symboltype,name);
         debugSafePrintLength(2,*codeposition,
-			(charstring::length(*codeposition)>20)?
-				20:charstring::length(*codeposition));
+			(charstring::getLength(*codeposition)>20)?
+				20:charstring::getLength(*codeposition));
 	debugPrintf(2,"\"... {\n");
 
 	// keep track of the current position in the code, if we don't find
@@ -1150,8 +1150,8 @@ bool codetree::parseNonTerminal(domnode *grammarnode,
 	debugPrintIndent(2);
 	debugPrintf(2,"} nonterminal \"%s\" not found at \"",name);
         debugSafePrintLength(2,startcodeposition,
-			(charstring::length(startcodeposition)>20)?
-				20:charstring::length(startcodeposition));
+			(charstring::getLength(startcodeposition)>20)?
+				20:charstring::getLength(startcodeposition));
 	debugPrintf(2,"\"\n");
 
 	// apparently we didn't find one of these, delete the
@@ -1267,7 +1267,7 @@ bool codetree::write(domnode *in,
 	if (!pvt->_indentstring) {
 		pvt->_indentstring="\t";
 	}
-	pvt->_indentlength=charstring::length(pvt->_indentstring);
+	pvt->_indentlength=charstring::getLength(pvt->_indentstring);
 
 	// write the nodes
 	return writeNode(in,out);

@@ -65,8 +65,8 @@ const char *charstring::findLast(const char *haystack, const char *needle) {
 		return NULL;
 	}
 
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
@@ -88,8 +88,8 @@ const char *charstring::findLastIgnoringCase(const char *haystack,
 		return NULL;
 	}
 
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
@@ -212,7 +212,7 @@ bool charstring::strip(char *str1, const char *str2) {
 		return false;
 	}
 
-	int32_t	str2len=length(str2);
+	int32_t	str2len=getLength(str2);
 	int32_t	index=0;
 	int32_t	total=0;
 	bool	retval=false;
@@ -284,7 +284,7 @@ char *charstring::replace(const char *str, const char *oldstr,
 		return NULL;
 	}
 	stringbuffer	newstring;
-	size_t		oldstrlen=length(oldstr);
+	size_t		oldstrlen=getLength(oldstr);
 	const char	*ptr=str;
 	const char	*start=ptr;
 	while (*ptr) {
@@ -317,7 +317,7 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 	size_t	*oldstrlen=new size_t[i];
 	i=0;
 	for (const char * const *o=oldstrset; *o; o++) {
-		oldstrlen[i]=length(*o);
+		oldstrlen[i]=getLength(*o);
 		i++;
 	}
 
@@ -541,7 +541,7 @@ char *charstring::convertAmount(int64_t amount) {
 
 char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	char	*amt=convertAmount(amount);
-	ssize_t	amtlen=length(amt+1);
+	ssize_t	amtlen=getLength(amt+1);
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	char	*buffer=new char[realspaces+1];
 	buffer[realspaces]='\0';
@@ -560,7 +560,7 @@ char *charstring::httpEscape(const char *input) {
 		return NULL;
 	}
 
-	size_t		outputlen=length(input)*3+1;
+	size_t		outputlen=getLength(input)*3+1;
 	char		*output=new char[outputlen];
 	char		*outptr=output;
 	const byte_t	*ptr=(byte_t *)input;
@@ -605,7 +605,7 @@ char *charstring::httpUnescape(const char *input) {
 		return NULL;
 	}
 
-	char		*output=new char[length(input)+1];
+	char		*output=new char[getLength(input)+1];
 	char		*outptr=output;
 	const char	*ptr=input;
 	
@@ -651,7 +651,7 @@ char *charstring::httpUnescape(const char *input) {
 char *charstring::escape(const char *input, const char *characters) {
 	char		*output;
 	uint64_t	outputlength;
-	escape(input,length(input),&output,&outputlength,characters);
+	escape(input,getLength(input),&output,&outputlength,characters);
 	return output;
 }
 
@@ -698,7 +698,7 @@ void charstring::escape(const char *input, uint64_t inputlength,
 char *charstring::unescape(const char *input) {
 	char		*output;
 	uint64_t	outputsize;
-	unescape(input,length(input),&output,&outputsize);
+	unescape(input,getLength(input),&output,&outputsize);
 	return output;
 }
 
@@ -1026,11 +1026,11 @@ uint16_t charstring::integerLength(uint64_t number) {
 	return len;
 }
 
-size_t charstring::length(const char *string) {
+size_t charstring::getLength(const char *string) {
 	return (string)?strlen(string):0;
 }
 
-size_t charstring::size(const char *string) {
+size_t charstring::getSize(const char *string) {
 	return (string)?strlen(string)+1:0;
 }
 
@@ -1085,11 +1085,11 @@ void charstring::zero(char *str, size_t len) {
 }
 
 char *charstring::append(char *dest, const char *source) {
-	return append(dest,source,length(source)+1);
+	return append(dest,source,getLength(source)+1);
 }
 
 char *charstring::append(char *dest, const char *source, size_t len) {
-	return copy(dest+length(dest),source,len);
+	return copy(dest+getLength(dest),source,len);
 }
 
 char *charstring::append(char *dest, int64_t number) {
@@ -1129,7 +1129,7 @@ char *charstring::append(char *dest, double number, uint16_t precision,
 }
 
 char *charstring::copy(char *dest, const char *source) {
-	return copy(dest,source,length(source)+1);
+	return copy(dest,source,getLength(source)+1);
 }
 
 char *charstring::copy(char *dest, const char *source, size_t len) {
@@ -1149,7 +1149,7 @@ char *charstring::copy(char *dest, size_t location,
 }
 
 char *charstring::safeCopy(char *dest, size_t destlen, const char *source) {
-	return safeCopy(dest,destlen,source,length(source)+1);
+	return safeCopy(dest,destlen,source,getLength(source)+1);
 }
 
 char *charstring::safeCopy(char *dest, size_t destlen,
@@ -1497,7 +1497,7 @@ bool charstring::compareWithWildcards(const char *string,
 					size_t patternlength,
 					char singlewildcard,
 					char multiwildcard) {
-	return compareWithWildcards(string,length(string),
+	return compareWithWildcards(string,getLength(string),
 					pattern,patternlength,
 					singlewildcard,multiwildcard);
 }
@@ -1508,7 +1508,7 @@ bool charstring::compareWithWildcards(const char *string,
 					char singlewildcard,
 					char multiwildcard) {
 	return compareWithWildcards(string,stringlength,
-					pattern,length(pattern),
+					pattern,getLength(pattern),
 					singlewildcard,multiwildcard);
 }
 
@@ -1516,8 +1516,8 @@ bool charstring::compareWithWildcards(const char *string,
 					const char *pattern,
 					char singlewildcard,
 					char multiwildcard) {
-	return compareWithWildcards(string,length(string),
-					pattern,length(pattern),
+	return compareWithWildcards(string,getLength(string),
+					pattern,getLength(pattern),
 					singlewildcard,multiwildcard);
 }
 
@@ -1563,12 +1563,12 @@ bool charstring::containsIgnoringCase(const char *haystack, char needle) {
 }
 
 bool charstring::startsWith(const char *haystack, const char *needle) {
-	return !compare(haystack,needle,length(needle));
+	return !compare(haystack,needle,getLength(needle));
 }
 
 bool charstring::endsWith(const char *haystack, const char *needle) {
-	size_t	needlelen=length(needle);
-	size_t	haystacklen=length(haystack);
+	size_t	needlelen=getLength(needle);
+	size_t	haystacklen=getLength(haystack);
 	return (haystacklen>=needlelen &&
 		!compare(haystack+haystacklen-needlelen,needle));
 }
@@ -1579,8 +1579,8 @@ const char *charstring::findFirst(const char *haystack, const char *needle) {
 
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							const char *needle) {
-	size_t	haystacklen=length(haystack);
-	size_t	needlelen=length(needle);
+	size_t	haystacklen=getLength(haystack);
+	size_t	needlelen=getLength(needle);
 	for (const char *ptr=haystack;
 			ptr<=haystack+haystacklen-needlelen;
 			ptr++) {
@@ -1597,7 +1597,7 @@ const char *charstring::findFirst(const char *haystack, char needle) {
 
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							char needle) {
-	size_t	haystacklen=length(haystack);
+	size_t	haystacklen=getLength(haystack);
 	needle=character::lower(needle);
 	for (const char *ptr=haystack;
 			ptr<haystack+haystacklen;
@@ -1618,7 +1618,7 @@ const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	}
 	const char	*retval=findFirst(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 	#endif
@@ -1631,7 +1631,7 @@ const char *charstring::findFirstOrEndIgnoringCase(const char *haystack,
 	}
 	const char	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1643,7 +1643,7 @@ const char *charstring::findFirstOrEnd(const char *haystack,
 	}
 	const char	*retval=findFirst(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1655,7 +1655,7 @@ const char *charstring::findFirstOrEndIgnoringCase(const char *haystack,
 	}
 	const char	*retval=findFirstIgnoringCase(haystack,needle);
 	if (!retval) {
-		retval=haystack+length(haystack);
+		retval=haystack+getLength(haystack);
 	}
 	return retval;
 }
@@ -1761,7 +1761,7 @@ char *charstring::findLastOfSet(char *haystack, const char *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char	*retval=haystack+charstring::length(haystack);
+	char	*retval=haystack+charstring::getLength(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
@@ -1780,17 +1780,18 @@ char *charstring::findLastOfSetOrEnd(char *haystack, const char *set) {
 	if (!haystack || !set) {
 		return NULL;
 	}
-	char	*retval=haystack+length(haystack);
+	char	*retval=haystack+getLength(haystack);
 	do {
 		retval--;
 		if (contains(set,*retval)) {
 			return retval;
 		}
 	} while (retval>haystack);
-	return haystack+length(haystack);
+	return haystack+getLength(haystack);
 }
 
-size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
+size_t charstring::getLengthContainingSet(const char *haystack,
+						const char *set) {
 	#ifdef RUDIMENTS_HAVE_STRSPN
 	return (haystack && set)?strspn(haystack,set):0;
 	#else
@@ -1805,7 +1806,7 @@ size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
 	#endif
 }
 
-size_t charstring::lengthNotContainingSet(const char *haystack,
+size_t charstring::getLengthNotContainingSet(const char *haystack,
 						const char *set) {
 	#ifdef RUDIMENTS_HAVE_STRCSPN
 	return (haystack && set)?strcspn(haystack,set):0;
@@ -1840,7 +1841,7 @@ char *charstring::between(const char *str, const char *start, const char *end) {
 
 	// bump past the start
 	if (s!=str) {
-		s+=length(start);
+		s+=getLength(start);
 	}
 
 	// find the end (or use end of "str" if "end" is empty/NULL)
@@ -1863,7 +1864,7 @@ char *charstring::after(const char *str, const char *delimiter) {
 }
 
 char *charstring::duplicate(const char *str) {
-	return duplicate(str,length(str));
+	return duplicate(str,getLength(str));
 }
 
 char *charstring::duplicate(const char *str, size_t len) {
@@ -1877,7 +1878,7 @@ char *charstring::duplicate(const char *str, size_t len) {
 }
 
 char *charstring::duplicate(const wchar_t *string) {
-	return duplicate(string,wcharstring::length(string),'?');
+	return duplicate(string,wcharstring::getLength(string),'?');
 }
 
 char *charstring::duplicate(const wchar_t *string, size_t len) {
@@ -1885,7 +1886,7 @@ char *charstring::duplicate(const wchar_t *string, size_t len) {
 }
 
 char *charstring::duplicate(const wchar_t *string, char replacement) {
-	return duplicate(string,wcharstring::length(string),replacement);
+	return duplicate(string,wcharstring::getLength(string),replacement);
 }
 
 char *charstring::duplicate(const wchar_t *string, size_t len,
@@ -1903,7 +1904,7 @@ char *charstring::duplicate(const wchar_t *string, size_t len,
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string) {
-	return duplicateUcs2(string,ucs2charstring::length(string),
+	return duplicateUcs2(string,ucs2charstring::getLength(string),
 						'?',sys::getIsBigEndian());
 }
 
@@ -1912,7 +1913,7 @@ char *charstring::duplicateUcs2(const ucs2_t *string, size_t len) {
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string, bool bigendian) {
-	return duplicateUcs2(string,ucs2charstring::length(string),
+	return duplicateUcs2(string,ucs2charstring::getLength(string),
 							'?',bigendian);
 }
 
@@ -1922,7 +1923,7 @@ char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
 }
 
 char *charstring::duplicateUcs2(const ucs2_t *string, char replacement) {
-	return duplicateUcs2(string,ucs2charstring::length(string),
+	return duplicateUcs2(string,ucs2charstring::getLength(string),
 					replacement,sys::getIsBigEndian());
 }
 
@@ -1933,7 +1934,7 @@ char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
 
 char *charstring::duplicateUcs2(const ucs2_t *string, char replacement,
 							bool bigendian) {
-	return duplicateUcs2(string,ucs2charstring::length(string),
+	return duplicateUcs2(string,ucs2charstring::getLength(string),
 						replacement,bigendian);
 }
 
@@ -2061,7 +2062,7 @@ long double charstring::toFloatC(const char *string) {
 	 * representation to one appropriate for the current locale. */
 
 #ifdef RUDIMENTS_HAVE_LOCALE_H
-	size_t		len=length(string);
+	size_t		len=getLength(string);
 	char		stringinlocale[256];
 	const char	*decimalpointlocation;
 	struct	lconv	*currentlconv=localeconv();
@@ -2095,8 +2096,8 @@ long double charstring::toFloat(const char *string, const char **endptr) {
 void charstring::split(const char *string, const char *delimiter,
 				bool collapse,
 				char ***list, uint64_t *listlength) {
-	split(string,length(string),
-			delimiter,length(delimiter),
+	split(string,getLength(string),
+			delimiter,getLength(delimiter),
 			collapse,list,listlength);
 }
 
@@ -2104,7 +2105,7 @@ void charstring::split(const char *string, size_t stringlength,
 				const char *delimiter, bool collapse,
 				char ***list, uint64_t *listlength) {
 	split(string,stringlength,
-			delimiter,length(delimiter),
+			delimiter,getLength(delimiter),
 			collapse,list,listlength);
 }
 
@@ -2112,7 +2113,7 @@ void charstring::split(const char *string,
 				const char *delimiter, size_t delimiterlength,
 				bool collapse,
 				char ***list, uint64_t *listlength) {
-	split(string,length(string),
+	split(string,getLength(string),
 			delimiter,delimiterlength,
 			collapse,list,listlength);
 }
@@ -2225,11 +2226,11 @@ char *charstring::subString(const char *str, size_t start, size_t end) {
 }
 
 char *charstring::subString(const char *str, size_t start) {
-	return subString(str,start,length(str)-1);
+	return subString(str,start,getLength(str)-1);
 }
 
 char *charstring::base64Encode(const byte_t *input) {
-	return base64Encode(input,length((const char *)input));
+	return base64Encode(input,getLength((const char *)input));
 }
 
 char *charstring::base64Encode(const byte_t *input, uint64_t inputsize) {
@@ -2385,7 +2386,7 @@ void charstring::base64Encode(const byte_t *input, uint64_t inputsize,
 }
 
 byte_t *charstring::base64Decode(const char *input) {
-	return base64Decode(input,length(input));
+	return base64Decode(input,getLength(input));
 }
 
 byte_t *charstring::base64Decode(const char *input, uint64_t inputlen) {
@@ -2456,7 +2457,7 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 }
 
 char *charstring::quotedPrintableEncode(const byte_t *input) {
-	return quotedPrintableEncode(input,length((const char *)input));
+	return quotedPrintableEncode(input,getLength((const char *)input));
 }
 
 char *charstring::quotedPrintableEncode(const byte_t *input,
@@ -2513,7 +2514,7 @@ void charstring::quotedPrintableEncode(const byte_t *input,
 }
 
 byte_t *charstring::quotedPrintableDecode(const char *input) {
-	return quotedPrintableDecode(input,length(input));
+	return quotedPrintableDecode(input,getLength(input));
 }
 
 byte_t *charstring::quotedPrintableDecode(const char *input,
@@ -2648,7 +2649,7 @@ void charstring::quotedPrintableDecode(const char *input,
 }
 
 char *charstring::hexEncode(const byte_t *input) {
-	return hexEncode(input,length((const char *)input));
+	return hexEncode(input,getLength((const char *)input));
 }
 
 char *charstring::hexEncode(const byte_t *input, uint64_t inputsize) {
@@ -2686,7 +2687,7 @@ void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
 }
 
 byte_t *charstring::hexDecode(const char *input) {
-	return hexDecode(input,length(input));
+	return hexDecode(input,getLength(input));
 }
 
 byte_t *charstring::hexDecode(const char *input, uint64_t inputlen) {
@@ -2756,8 +2757,8 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 char *charstring::insertString(const char *dest,
 				const char *src, uint64_t index) {
 
-	uint64_t	srcsize=length(src);
-	uint64_t	size=length(dest)+srcsize+1;
+	uint64_t	srcsize=getLength(src);
+	uint64_t	size=getLength(dest)+srcsize+1;
 	char		*retval=new char[size];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
@@ -2791,7 +2792,7 @@ char *charstring::pad(const char *str, char padchar,
 		return NULL;
 	}
 
-	uint64_t	strlen=((str==NULL)?0:length(str));
+	uint64_t	strlen=((str==NULL)?0:getLength(str));
 	char		*newstring=NULL;
 
 	newstring=new char[totallength+1];

@@ -620,7 +620,7 @@ ssize_t	apachehttpserverapi::write(char ch) {
 ssize_t	apachehttpserverapi::write(const wchar_t *string) {
 	// FIXME: This just converts to char * and writes.
 	// Is there an ar_rputwc or something like that?
-	return write(string,wcharstring::length(string));
+	return write(string,wcharstring::getLength(string));
 }
 
 ssize_t	apachehttpserverapi::write(const wchar_t *string, size_t size) {
@@ -643,7 +643,7 @@ ssize_t	apachehttpserverapi::write(wchar_t ch) {
 ssize_t	apachehttpserverapi::writeUcs2(const ucs2_t *string) {
 	// FIXME: This just converts to char * and writes.
 	// Is there an ar_rputwc or something like that?
-	return writeUcs2(string,ucs2charstring::length(string));
+	return writeUcs2(string,ucs2charstring::getLength(string));
 }
 
 ssize_t	apachehttpserverapi::writeUcs2(const ucs2_t *string, size_t size) {

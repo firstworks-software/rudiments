@@ -51,7 +51,7 @@ void sensitivevalue::construct() {
 }
 
 void sensitivevalue::setIncludeStart(const char *delimiter) {
-	setIncludeStart(delimiter,charstring::length(delimiter));
+	setIncludeStart(delimiter,charstring::getLength(delimiter));
 }
 
 void sensitivevalue::setIncludeStart(const char *delimiter, uint64_t len) {
@@ -60,7 +60,7 @@ void sensitivevalue::setIncludeStart(const char *delimiter, uint64_t len) {
 }
 
 void sensitivevalue::setIncludeEnd(const char *delimiter) {
-	setIncludeEnd(delimiter,charstring::length(delimiter));
+	setIncludeEnd(delimiter,charstring::getLength(delimiter));
 }
 
 void sensitivevalue::setIncludeEnd(const char *delimiter, uint64_t len) {
@@ -81,7 +81,7 @@ void sensitivevalue::setChompTextFile(bool chomptextfile) {
 }
 
 void sensitivevalue::setPath(const char *path) {
-	setPath(path,charstring::length(path));
+	setPath(path,charstring::getLength(path));
 }
 
 void sensitivevalue::setPath(const char *path, uint64_t len) {
@@ -90,7 +90,7 @@ void sensitivevalue::setPath(const char *path, uint64_t len) {
 }
 
 void sensitivevalue::setTextExtension(const char *ext) {
-	setTextExtension(ext,charstring::length(ext));
+	setTextExtension(ext,charstring::getLength(ext));
 }
 
 void sensitivevalue::setTextExtension(const char *ext, uint64_t len) {
@@ -99,7 +99,7 @@ void sensitivevalue::setTextExtension(const char *ext, uint64_t len) {
 }
 
 void sensitivevalue::setBinaryExtension(const char *ext) {
-	setBinaryExtension(ext,charstring::length(ext));
+	setBinaryExtension(ext,charstring::getLength(ext));
 }
 
 void sensitivevalue::setBinaryExtension(const char *ext, uint64_t len) {
@@ -108,7 +108,7 @@ void sensitivevalue::setBinaryExtension(const char *ext, uint64_t len) {
 }
 
 void sensitivevalue::setHexExtension(const char *ext) {
-	setHexExtension(ext,charstring::length(ext));
+	setHexExtension(ext,charstring::getLength(ext));
 }
 
 void sensitivevalue::setHexExtension(const char *ext, uint64_t len) {
@@ -177,7 +177,7 @@ uint64_t sensitivevalue::getHexExtensionLength() {
 }
 
 void sensitivevalue::parse(const char *in) {
-	parse(in,charstring::length(in));
+	parse(in,charstring::getLength(in));
 }
 
 void sensitivevalue::parse(const char *in, uint64_t inlen) {
@@ -385,7 +385,7 @@ char *sensitivevalue::detachTextValue() {
 }
 
 uint64_t sensitivevalue::getTextValueLength() {
-	return charstring::length(getTextValue());
+	return charstring::getLength(getTextValue());
 }
 
 bool sensitivevalue::clear() {

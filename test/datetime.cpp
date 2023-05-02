@@ -62,11 +62,11 @@ int main(int argc, const char **argv) {
 	// the 5EDT part during these comparisons
 	test("date string",
 		!charstring::compare(dt.getString(),nondstdatestring,
-					charstring::length(nondstdatestring)));
+					charstring::getLength(nondstdatestring)));
 	test("date string (with usec)",
 		!charstring::compare(dt.getString(true),
 			nondstdatestringwithzerousec,
-			charstring::length(nondstdatestringwithzerousec)));
+			charstring::getLength(nondstdatestringwithzerousec)));
 
 	stdoutput.printf("\n");
 

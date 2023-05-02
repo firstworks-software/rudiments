@@ -84,17 +84,17 @@ int main(int argc, const char **argv) {
 
 	// write some contents to the file
 	stdoutput.printf("creating file...\n");
-	if (f.write(head)!=(ssize_t)charstring::length(head)) {
+	if (f.write(head)!=(ssize_t)charstring::getLength(head)) {
 		stdoutput.printf("write header failed\n");
 		process::exit(1);
 	}
 	for (uint32_t i=0; i<1024*256; i++) {
-		if (f.write(body)!=(ssize_t)charstring::length(body)) {
+		if (f.write(body)!=(ssize_t)charstring::getLength(body)) {
 			stdoutput.printf("write body failed\n");
 			process::exit(1);
 		}
 	}
-	if (f.write(footer)!=(ssize_t)charstring::length(footer)) {
+	if (f.write(footer)!=(ssize_t)charstring::getLength(footer)) {
 		stdoutput.printf("write footer failed\n");
 		process::exit(1);
 	}

@@ -59,7 +59,7 @@ const char *stringbuffer::getString() {
 
 inline
 size_t stringbuffer::getStringLength() {
-	return charstring::length(getString());
+	return charstring::getLength(getString());
 }
 
 inline
@@ -91,7 +91,7 @@ bool stringbuffer::clear(char *initialcontents, size_t initialsize) {
 inline
 stringbuffer *stringbuffer::append(const byte_t *string) {
 	return (stringbuffer *)bytebuffer::append(string,
-				charstring::length((const char *)string));
+				charstring::getLength((const char *)string));
 }
 
 inline
@@ -102,7 +102,7 @@ stringbuffer *stringbuffer::append(const byte_t *string, size_t size) {
 inline
 stringbuffer *stringbuffer::append(const char *string) {
 	return (stringbuffer *)bytebuffer::
-				append(string,charstring::length(string));
+				append(string,charstring::getLength(string));
 }
 
 inline
@@ -225,7 +225,7 @@ stringbuffer *stringbuffer::append(double number, uint16_t precision,
 inline
 ssize_t stringbuffer::write(const byte_t *string) {
 	return bytebuffer::write(string,
-				charstring::length((const char *)string));
+				charstring::getLength((const char *)string));
 }
 
 inline
@@ -235,7 +235,7 @@ ssize_t stringbuffer::write(const byte_t *string, size_t size) {
 
 inline
 ssize_t stringbuffer::write(const char *string) {
-	return bytebuffer::write(string,charstring::length(string));
+	return bytebuffer::write(string,charstring::getLength(string));
 }
 
 inline

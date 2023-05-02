@@ -83,32 +83,32 @@ templateengine::~templateengine() {
 
 void templateengine::setVariableStart(const char *delimiter) {
 	pvt->_varstart=delimiter;
-	pvt->_varstartlen=charstring::length(delimiter);
+	pvt->_varstartlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setVariableEnd(const char *delimiter) {
 	pvt->_varend=delimiter;
-	pvt->_varendlen=charstring::length(delimiter);
+	pvt->_varendlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setQuotedVariableStart(const char *delimiter) {
 	pvt->_qvarstart=delimiter;
-	pvt->_qvarstartlen=charstring::length(delimiter);
+	pvt->_qvarstartlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setQuotedVariableEnd(const char *delimiter) {
 	pvt->_qvarend=delimiter;
-	pvt->_qvarendlen=charstring::length(delimiter);
+	pvt->_qvarendlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setDoubleQuotedVariableStart(const char *delimiter) {
 	pvt->_dqvarstart=delimiter;
-	pvt->_dqvarstartlen=charstring::length(delimiter);
+	pvt->_dqvarstartlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setDoubleQuotedVariableEnd(const char *delimiter) {
 	pvt->_dqvarend=delimiter;
-	pvt->_dqvarendlen=charstring::length(delimiter);
+	pvt->_dqvarendlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setEscapeCharacter(char esc) {
@@ -119,32 +119,32 @@ void templateengine::setEscapeCharacter(char esc) {
 
 void templateengine::setBlockStartStart(const char *delimiter) {
 	pvt->_blockstartstart=delimiter;
-	pvt->_blockstartstartlen=charstring::length(delimiter);
+	pvt->_blockstartstartlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setBlockStartEnd(const char *delimiter) {
 	pvt->_blockstartend=delimiter;
-	pvt->_blockstartendlen=charstring::length(delimiter);
+	pvt->_blockstartendlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setBlockEndStart(const char *delimiter) {
 	pvt->_blockendstart=delimiter;
-	pvt->_blockendstartlen=charstring::length(delimiter);
+	pvt->_blockendstartlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setBlockEndEnd(const char *delimiter) {
 	pvt->_blockendend=delimiter;
-	pvt->_blockendendlen=charstring::length(delimiter);
+	pvt->_blockendendlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setIncludeStart(const char *delimiter) {
 	pvt->_incstart=delimiter;
-	pvt->_incstartlen=charstring::length(delimiter);
+	pvt->_incstartlen=charstring::getLength(delimiter);
 }
 
 void templateengine::setIncludeEnd(const char *delimiter) {
 	pvt->_incend=delimiter;
-	pvt->_incendlen=charstring::length(delimiter);
+	pvt->_incendlen=charstring::getLength(delimiter);
 }
 
 const char *templateengine::getVariableStart() {
@@ -215,7 +215,7 @@ bool templateengine::parse(
 		stringbuffer	file;
 		if (!parse(true,&file,
 				fileparsers[index].file,
-				charstring::length(fileparsers[index].file),
+				charstring::getLength(fileparsers[index].file),
 				NULL,vars)) {
 			if (!pvt->_err.getSize()) {
 				pvt->_err.printf(

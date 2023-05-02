@@ -118,7 +118,7 @@ void cgihttpserverapi::initEnvironmentVariables() {
 
 			// find the last dot in the scriptname
 			const char	*ptr=scriptname+
-					charstring::length(scriptname)-1;
+					charstring::getLength(scriptname)-1;
 			while (*ptr!='.' && ptr>scriptname) {
 				ptr--;
 			}
@@ -248,15 +248,15 @@ httpserverapi *cgihttpserverapi::status(const char *string) {
 
 httpserverapi *cgihttpserverapi::header(const char *variable,
 						const char *value) {
-	stdoutput.write(variable,charstring::length(variable));
+	stdoutput.write(variable,charstring::getLength(variable));
 	stdoutput.write(": ",2);
-	stdoutput.write(value,charstring::length(value));
+	stdoutput.write(value,charstring::getLength(value));
 	stdoutput.write("\r\n",2);
 	return this;
 }
 
 httpserverapi *cgihttpserverapi::header(const char *string) {
-	stdoutput.write(string,charstring::length(string));
+	stdoutput.write(string,charstring::getLength(string));
 	return this;
 }
 

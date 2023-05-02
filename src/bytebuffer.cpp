@@ -138,7 +138,7 @@ ssize_t bytebuffer::write(const char *string, size_t length) {
 }
 
 ssize_t bytebuffer::write(const char *string) {
-	return write((const byte_t *)string,charstring::length(string));
+	return write((const byte_t *)string,charstring::getLength(string));
 }
 
 ssize_t bytebuffer::write(const wchar_t *string, size_t length) {
@@ -147,7 +147,7 @@ ssize_t bytebuffer::write(const wchar_t *string, size_t length) {
 
 ssize_t bytebuffer::write(const wchar_t *string) {
 	return write((const byte_t *)string,
-				wcharstring::length(string)*sizeof(wchar_t));
+				wcharstring::getLength(string)*sizeof(wchar_t));
 }
 
 ssize_t bytebuffer::writeUcs2(const ucs2_t *string, size_t length) {
@@ -156,7 +156,7 @@ ssize_t bytebuffer::writeUcs2(const ucs2_t *string, size_t length) {
 
 ssize_t bytebuffer::writeUcs2(const ucs2_t *string) {
 	return write((const byte_t *)string,
-			ucs2charstring::length(string)*sizeof(ucs2_t));
+			ucs2charstring::getLength(string)*sizeof(ucs2_t));
 }
 
 ssize_t bytebuffer::write(char character) {
@@ -376,7 +376,7 @@ bytebuffer *bytebuffer::append(const char *data, size_t length) {
 }
 
 bytebuffer *bytebuffer::append(const char *string) {
-	return append((const byte_t *)string,charstring::length(string));
+	return append((const byte_t *)string,charstring::getLength(string));
 }
 
 bytebuffer *bytebuffer::append(const wchar_t *string, size_t length) {
@@ -385,7 +385,7 @@ bytebuffer *bytebuffer::append(const wchar_t *string, size_t length) {
 
 bytebuffer *bytebuffer::append(const wchar_t *string) {
 	return append((const byte_t *)string,
-				wcharstring::length(string)*sizeof(wchar_t));
+				wcharstring::getLength(string)*sizeof(wchar_t));
 }
 
 bytebuffer *bytebuffer::appendUcs2(const ucs2_t *string, size_t length) {
@@ -394,7 +394,7 @@ bytebuffer *bytebuffer::appendUcs2(const ucs2_t *string, size_t length) {
 
 bytebuffer *bytebuffer::appendUcs2(const ucs2_t *string) {
 	return append((const byte_t *)string,
-			ucs2charstring::length(string)*sizeof(ucs2_t));
+			ucs2charstring::getLength(string)*sizeof(ucs2_t));
 }
 
 bytebuffer *bytebuffer::append(char character) {

@@ -149,7 +149,7 @@ httprequest::httprequest(httpserverapi *sapi) : object() {
 	pvt->_sapi=sapi;
 
 	// tempdir length
-	pvt->_tmpdirlen=charstring::length(TMPDIR);
+	pvt->_tmpdirlen=charstring::getLength(TMPDIR);
 
 	// initialize some variables
 	pvt->_boundary=NULL;
@@ -369,7 +369,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 				charstring::toUnsignedInteger(contentlengthstr);
 	if (method==get_request || method==head_request) {
 		if (!charstring::isNullOrEmpty(querystring)) {
-			length=charstring::length(querystring);
+			length=charstring::getLength(querystring);
 		} else {
 			length=contentlength;
 		}
@@ -377,7 +377,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 		if (contentlength) {
 			length=contentlength;
 		} else if (!charstring::isNullOrEmpty(querystring)) {
-			length=charstring::length(querystring);
+			length=charstring::getLength(querystring);
 		} else {
 			length=0;
 		}
@@ -466,7 +466,7 @@ void httprequest::parseMultipart() {
 	pvt->_boundary=charstring::findFirst(
 				getEnvironmentVariable("CONTENT_TYPE"),
 				"boundary=")+9;
-	size_t	boundarylen=charstring::length(pvt->_boundary);
+	size_t	boundarylen=charstring::getLength(pvt->_boundary);
 
 	// create a buffer and copy the boundary into the buffer,
 	// preceeded by \r\n--
@@ -610,10 +610,10 @@ void httprequest::getTempFile(const char *filename, file **tempfile,
 	slash[0]=sys::getDirectorySeparator();
 	slash[1]='\0';
 
-	if (charstring::length(filename)) {
+	if (charstring::getLength(filename)) {
 		// generate a unique temporary filename using mkstemp
 		size_t	tempfilenamelen=pvt->_tmpdirlen+1+
-					charstring::length(filename)+8;
+					charstring::getLength(filename)+8;
 		*tempfilename=new char[tempfilenamelen];
 		charstring::copy(*tempfilename,TMPDIR);
 		charstring::append(*tempfilename,slash);
@@ -1218,10 +1218,10 @@ void httprequest::dumpEnvironment() {
 	for (uint64_t index=0;
 		index<pvt->_sapi->getEnvironmentVariableCount(); index++) {
 		pvt->_sapi->write(envvars[index],
-					charstring::length(envvars[index]));
+					charstring::getLength(envvars[index]));
 		pvt->_sapi->write("=",1);
 		pvt->_sapi->write(envvals[index],
-					charstring::length(envvals[index]));
+					charstring::getLength(envvals[index]));
 		pvt->_sapi->write("\n",1);
 	}
 }

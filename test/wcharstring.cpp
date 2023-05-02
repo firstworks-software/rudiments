@@ -94,21 +94,21 @@ int main(int argc, const char **argv) {
 	test("findFirstOrEnd",wcharstring::findFirstOrEnd(s,L"llo"));
 	test("findFirstOrEnd",
 		wcharstring::findFirstOrEnd(s,L"blah")==
-						s+wcharstring::length(s));
+						s+wcharstring::getLength(s));
 	test("findFirstOrEndIgnoringCase",
 		wcharstring::findFirstOrEndIgnoringCase(s,L"LLO"));
 	test("findFirstOrEndIgnoringCase",
 		wcharstring::findFirstOrEndIgnoringCase(s,L"BLAH")==
-						s+wcharstring::length(s));
+						s+wcharstring::getLength(s));
 	test("findFirst",wcharstring::findFirst(s,L'l'));
 	test("findFirstIgnoringCase",
 		wcharstring::findFirstIgnoringCase(s,L'L'));
 	test("findFirstOrEnd",
-		wcharstring::findFirstOrEnd(s,L'z')==s+wcharstring::length(s));
+		wcharstring::findFirstOrEnd(s,L'z')==s+wcharstring::getLength(s));
 	test("findFirstOrEnd",wcharstring::findFirstOrEnd(s,L'l'));
 	test("findFirstOrEndIgnoringCase",
 		wcharstring::findFirstOrEndIgnoringCase(s,L'Z')==
-						s+wcharstring::length(s));
+						s+wcharstring::getLength(s));
 	test("findFirstOrEndIgnoringCase",
 			wcharstring::findFirstOrEndIgnoringCase(s,L'l'));
 	stdoutput.printf("\n");
@@ -305,10 +305,10 @@ int main(int argc, const char **argv) {
 	const wchar_t	*alphabet=
 		L"aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";
 	test("lengthContainingSet",
-		wcharstring::lengthContainingSet(
+		wcharstring::getLengthContainingSet(
 				alphabet,L"gfedcba")==14);
 	test("lengthNotContainingSet",
-		wcharstring::lengthNotContainingSet(
+		wcharstring::getLengthNotContainingSet(
 				alphabet,L"hijklmnopqrstuvwxyz")==14);
 	test("findFirstOfSet",wcharstring::findFirstOfSet(alphabet,L"klm")==
 								(alphabet+20));
@@ -317,13 +317,13 @@ int main(int argc, const char **argv) {
 								(alphabet+20));
 	test("findFirstOfSetOrEnd (end)",
 			wcharstring::findFirstOfSetOrEnd(alphabet,L"123")==
-				(alphabet+wcharstring::length(alphabet)));
+				(alphabet+wcharstring::getLength(alphabet)));
 	test("findLastOfSetOrEnd",
 			wcharstring::findLastOfSetOrEnd(alphabet,L"abc")==
 								(alphabet+5));
 	test("findLastOfSetOrEnd (end)",
 			wcharstring::findLastOfSetOrEnd(alphabet,L"123")==
-				(alphabet+wcharstring::length(alphabet)));
+				(alphabet+wcharstring::getLength(alphabet)));
 	stdoutput.printf("\n");
 
 

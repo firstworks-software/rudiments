@@ -113,22 +113,22 @@ int main(int argc, const char **argv) {
 	ucs2literal(BLAH,"BLAH");
 	test("findFirstOrEnd",
 		ucs2charstring::findFirstOrEnd(s,blah)==
-						s+ucs2charstring::length(s));
+						s+ucs2charstring::getLength(s));
 	test("findFirstOrEndIgnoringCase",
 		ucs2charstring::findFirstOrEndIgnoringCase(s,LLO));
 	test("findFirstOrEndIgnoringCase",
 		ucs2charstring::findFirstOrEndIgnoringCase(s,BLAH)==
-						s+ucs2charstring::length(s));
+						s+ucs2charstring::getLength(s));
 	test("findFirst",ucs2charstring::findFirst(s,(ucs2_t)'l'));
 	test("findFirstIgnoringCase",
 		ucs2charstring::findFirstIgnoringCase(s,(ucs2_t)'L'));
 	test("findFirstOrEnd",
 		ucs2charstring::findFirstOrEnd(s,(ucs2_t)'z')==
-				s+ucs2charstring::length(s));
+				s+ucs2charstring::getLength(s));
 	test("findFirstOrEnd",ucs2charstring::findFirstOrEnd(s,(ucs2_t)'l'));
 	test("findFirstOrEndIgnoringCase",
 		ucs2charstring::findFirstOrEndIgnoringCase(s,(ucs2_t)'Z')==
-						s+ucs2charstring::length(s));
+						s+ucs2charstring::getLength(s));
 	test("findFirstOrEndIgnoringCase",
 		ucs2charstring::findFirstOrEndIgnoringCase(s,(ucs2_t)'l'));
 	stdoutput.printf("\n");
@@ -361,11 +361,11 @@ int main(int argc, const char **argv) {
 		"aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz");
 	ucs2literal(gfedcba,"gfedcba");
 	test("lengthContainingSet",
-		ucs2charstring::lengthContainingSet(
+		ucs2charstring::getLengthContainingSet(
 				alphabet,gfedcba)==14);
 	ucs2literal(hijklmnopqrstuvwxyz,"hijklmnopqrstuvwxyz");
 	test("lengthNotContainingSet",
-		ucs2charstring::lengthNotContainingSet(
+		ucs2charstring::getLengthNotContainingSet(
 				alphabet,hijklmnopqrstuvwxyz)==14);
 	ucs2literal(klm,"klm");
 	test("findFirstOfSet",ucs2charstring::findFirstOfSet(alphabet,klm)==
@@ -376,14 +376,14 @@ int main(int argc, const char **argv) {
 	ucs2literal(onetwothree,"123");
 	test("findFirstOfSetOrEnd (end)",
 		ucs2charstring::findFirstOfSetOrEnd(alphabet,onetwothree)==
-				(alphabet+ucs2charstring::length(alphabet)));
+				(alphabet+ucs2charstring::getLength(alphabet)));
 	ucs2literal(abc,"abc");
 	test("findLastOfSetOrEnd",
 			ucs2charstring::findLastOfSetOrEnd(alphabet,abc)==
 								(alphabet+5));
 	test("findLastOfSetOrEnd (end)",
 		ucs2charstring::findLastOfSetOrEnd(alphabet,onetwothree)==
-				(alphabet+ucs2charstring::length(alphabet)));
+				(alphabet+ucs2charstring::getLength(alphabet)));
 	stdoutput.printf("\n");
 
 
