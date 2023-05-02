@@ -134,7 +134,7 @@ int main(int argc, const char **argv) {
 	} else {
 
 		// get the parent pid from the command line
-		pid_t	pid=charstring::toInteger(argv[1]);
+		pid_t	pid=charstring::convertToInteger(argv[1]);
 
 		// send it a SIGTERM
 		#ifdef SLOWSYSTEM

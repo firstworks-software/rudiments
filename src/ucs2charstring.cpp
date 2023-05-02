@@ -864,7 +864,7 @@ void ucs2charstring::bothTrim(ucs2_t *string, ucs2_t character) {
 	rightTrim(string,character);
 }
 
-uint16_t ucs2charstring::integerLength(int16_t number) {
+uint16_t ucs2charstring::getIntegerLength(int16_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		len++;
@@ -872,7 +872,7 @@ uint16_t ucs2charstring::integerLength(int16_t number) {
 	return len;
 }
 
-uint16_t ucs2charstring::integerLength(int32_t number) {
+uint16_t ucs2charstring::getIntegerLength(int32_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		len++;
@@ -880,7 +880,7 @@ uint16_t ucs2charstring::integerLength(int32_t number) {
 	return len;
 }
 
-uint16_t ucs2charstring::integerLength(int64_t number) {
+uint16_t ucs2charstring::getIntegerLength(int64_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		len++;
@@ -888,7 +888,7 @@ uint16_t ucs2charstring::integerLength(int64_t number) {
 	return len;
 }
 
-uint16_t ucs2charstring::integerLength(uint16_t number) {
+uint16_t ucs2charstring::getIntegerLength(uint16_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
 		len++;
@@ -896,7 +896,7 @@ uint16_t ucs2charstring::integerLength(uint16_t number) {
 	return len;
 }
 
-uint16_t ucs2charstring::integerLength(uint32_t number) {
+uint16_t ucs2charstring::getIntegerLength(uint32_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
 		len++;
@@ -904,7 +904,7 @@ uint16_t ucs2charstring::integerLength(uint32_t number) {
 	return len;
 }
 
-uint16_t ucs2charstring::integerLength(uint64_t number) {
+uint16_t ucs2charstring::getIntegerLength(uint64_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
 		len++;
@@ -1832,12 +1832,12 @@ size_t ucs2charstring::getLengthNotContainingSet(const ucs2_t *haystack,
 	return index;
 }
 
-ucs2_t *ucs2charstring::before(const ucs2_t *str,
+ucs2_t *ucs2charstring::isBefore(const ucs2_t *str,
 					const ucs2_t *delimiter) {
-	return between(str,NULL,delimiter);
+	return isBetween(str,NULL,delimiter);
 }
 
-ucs2_t *ucs2charstring::between(const ucs2_t *str,
+ucs2_t *ucs2charstring::isBetween(const ucs2_t *str,
 					const ucs2_t *start,
 					const ucs2_t *end) {
 
@@ -1872,9 +1872,9 @@ ucs2_t *ucs2charstring::between(const ucs2_t *str,
 	return ucs2charstring::duplicate(s,e-s);
 }
 
-ucs2_t *ucs2charstring::after(const ucs2_t *str,
+ucs2_t *ucs2charstring::isAfter(const ucs2_t *str,
 					const ucs2_t *delimiter) {
-	return between(str,delimiter,NULL);
+	return isBetween(str,delimiter,NULL);
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str) {
@@ -2006,23 +2006,23 @@ void ucs2charstring::bothTrim(ucs2_t *string) {
 	rightTrim(string);
 }
 
-int64_t ucs2charstring::toInteger(const ucs2_t *string) {
+int64_t ucs2charstring::convertToInteger(const ucs2_t *string) {
 	return toInteger(string,NULL,10);
 }
 
-int64_t ucs2charstring::toInteger(const ucs2_t *string,
+int64_t ucs2charstring::convertToInteger(const ucs2_t *string,
 					const ucs2_t **endptr) {
 	return toInteger(string,endptr,10);
 }
 
-int64_t ucs2charstring::toInteger(const ucs2_t *string, int32_t base) {
+int64_t ucs2charstring::convertToInteger(const ucs2_t *string, int32_t base) {
 	return toInteger(string,NULL,base);
 }
 
-int64_t ucs2charstring::toInteger(const ucs2_t *string,
+int64_t ucs2charstring::convertToInteger(const ucs2_t *string,
 				const ucs2_t **endptr, int32_t base) {
 	char	*str=charstring::duplicateUcs2(string);
-	int64_t	retval=charstring::toInteger(str,NULL,base);
+	int64_t	retval=charstring::convertToInteger(str,NULL,base);
 	delete[] str;
 	if (endptr) {
 		while (ucs2character::isDigit(*string)) {
@@ -2033,25 +2033,25 @@ int64_t ucs2charstring::toInteger(const ucs2_t *string,
 	return retval;
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string) {
+uint64_t ucs2charstring::convertToUnsignedInteger(const ucs2_t *string) {
 	return toUnsignedInteger(string,NULL,10);
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
+uint64_t ucs2charstring::convertToUnsignedInteger(const ucs2_t *string,
 					const ucs2_t **endptr) {
 	return toUnsignedInteger(string,endptr,10);
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
+uint64_t ucs2charstring::convertToUnsignedInteger(const ucs2_t *string,
 							int32_t base) {
 	return toUnsignedInteger(string,NULL,base);
 }
 
-uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
+uint64_t ucs2charstring::convertToUnsignedInteger(const ucs2_t *string,
 						const ucs2_t **endptr,
 						int32_t base) {
 	char	*str=charstring::duplicateUcs2(string);
-	int64_t	retval=charstring::toUnsignedInteger(str,NULL,base);
+	int64_t	retval=charstring::convertToUnsignedInteger(str,NULL,base);
 	delete[] str;
 	if (endptr) {
 		while (ucs2character::isDigit(*string)) {
@@ -2062,11 +2062,11 @@ uint64_t ucs2charstring::toUnsignedInteger(const ucs2_t *string,
 	return retval;
 }
 
-long double ucs2charstring::toFloat(const ucs2_t *string) {
+long double ucs2charstring::convertToFloat(const ucs2_t *string) {
 	return toFloat(string,NULL);
 }
 
-long double ucs2charstring::toFloatC(const ucs2_t *string) {
+long double ucs2charstring::convertToFloatC(const ucs2_t *string) {
 
 	/* This method is needed when the locale of the client is different
 	 * from the C/POSIX locale, but we still need to convert a string
@@ -2101,10 +2101,10 @@ long double ucs2charstring::toFloatC(const ucs2_t *string) {
 	return toFloat(string,NULL);
 }
 
-long double ucs2charstring::toFloat(const ucs2_t *string,
+long double ucs2charstring::convertToFloat(const ucs2_t *string,
 					const ucs2_t **endptr) {
 	char		*str=charstring::duplicateUcs2(string);
-	long double	retval=charstring::toFloat(str,NULL);
+	long double	retval=charstring::convertToFloat(str,NULL);
 	delete[] str;
 	if (endptr) {
 		bool	found=false;
@@ -2256,7 +2256,7 @@ void ucs2charstring::split(const ucs2_t *string,
 	}
 }
 
-ucs2_t *ucs2charstring::subString(const ucs2_t *str,
+ucs2_t *ucs2charstring::getSubString(const ucs2_t *str,
 					size_t start,
 					size_t end) {
 
@@ -2269,7 +2269,7 @@ ucs2_t *ucs2charstring::subString(const ucs2_t *str,
 	return duplicate(str+start,end-start+1);
 }
 
-ucs2_t *ucs2charstring::subString(const ucs2_t *str, size_t start) {
+ucs2_t *ucs2charstring::getSubString(const ucs2_t *str, size_t start) {
 	return subString(str,start,getLength(str)-1);
 }
 
@@ -2327,27 +2327,27 @@ ucs2_t *ucs2charstring::pad(const ucs2_t *str, ucs2_t padchar,
 	return newstring;
 }
 
-ucs2_t *ucs2charstring::humanReadable(int64_t number) {
+ucs2_t *ucs2charstring::getHumanReadable(int64_t number) {
 	return humanReadable(number,false);
 }
 
-ucs2_t *ucs2charstring::humanReadable(int64_t number, bool onethousand) {
+ucs2_t *ucs2charstring::getHumanReadable(int64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-ucs2_t *ucs2charstring::humanReadable(uint64_t number) {
+ucs2_t *ucs2charstring::getHumanReadable(uint64_t number) {
 	return humanReadable(number,false);
 }
 
-ucs2_t *ucs2charstring::humanReadable(uint64_t number, bool onethousand) {
+ucs2_t *ucs2charstring::getHumanReadable(uint64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-ucs2_t *ucs2charstring::humanReadable(long double number) {
+ucs2_t *ucs2charstring::getHumanReadable(long double number) {
 	return humanReadable(number,false);
 }
 
-ucs2_t *ucs2charstring::humanReadable(long double number, bool onethousand) {
+ucs2_t *ucs2charstring::getHumanReadable(long double number, bool onethousand) {
 
 	long double	k=(onethousand)?1000.0:1024.0;
 	char		suffixes[]={

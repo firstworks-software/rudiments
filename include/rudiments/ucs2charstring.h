@@ -513,14 +513,14 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static ucs2_t	*before(const ucs2_t *str,
+		static ucs2_t	*isBefore(const ucs2_t *str,
 						const ucs2_t *delimiter);
 
 		/** Returns the string between "start" and "end".
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static ucs2_t	*between(const ucs2_t *str,
+		static ucs2_t	*isBetween(const ucs2_t *str,
 						const ucs2_t *start,
 						const ucs2_t *end);
 
@@ -529,7 +529,7 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static ucs2_t	*after(const ucs2_t *str,
+		static ucs2_t	*isAfter(const ucs2_t *str,
 						const ucs2_t *delimiter);
 
 		/** Returns the number of characters, starting at the
@@ -813,27 +813,27 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(int16_t number);
+		static	uint16_t	getIntegerLength(int16_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(int32_t number);
+		static	uint16_t	getIntegerLength(int32_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(int64_t number);
+		static	uint16_t	getIntegerLength(int64_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(uint16_t number);
+		static	uint16_t	getIntegerLength(uint16_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(uint32_t number);
+		static	uint16_t	getIntegerLength(uint32_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(uint64_t number);
+		static	uint16_t	getIntegerLength(uint64_t number);
 
 		/** Returns true if the string "val" is an integer and
 		 *  false if it is not an integer. */
@@ -973,38 +973,39 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 						uint16_t scale);
 
 		/** Converts "string" to a 64-bit integer. */
-		static	int64_t	toInteger(const ucs2_t *string);
+		static	int64_t	convertToInteger(const ucs2_t *string);
 
 		/** Converts "string" to a 64-bit integer.  If non-NULL,
 		 *  endptr will be set to the first character in the
 		 *  string after the number. */
-		static	int64_t	toInteger(const ucs2_t *string,
+		static	int64_t	convertToInteger(const ucs2_t *string,
 						const ucs2_t **endptr);
 
 		/** Converts "string" to a 64-bit integer of base "base". */
-		static	int64_t	toInteger(const ucs2_t *string, int32_t base);
+		static	int64_t	convertToInteger(const ucs2_t *string,
+						int32_t base);
 
 		/** Converts "string" to a 64-bit integer of base "base".
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
-		static	int64_t	toInteger(const ucs2_t *string,
+		static	int64_t	convertToInteger(const ucs2_t *string,
 						const ucs2_t **endptr,
 						int32_t base);
 
 		/** Converts "string" to a 64-bit unsigned integer. */
-		static	uint64_t	toUnsignedInteger(
+		static	uint64_t	convertToUnsignedInteger(
 						const ucs2_t *string);
 
 		/** Converts "string" to a 64-bit unsigned integer.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
-		static	uint64_t	toUnsignedInteger(
+		static	uint64_t	convertToUnsignedInteger(
 						const ucs2_t *string,
 						const ucs2_t **endptr);
 
 		/** Converts "string" to a 64-bit unsigned integer of
 		 *  base "base". */
-		static	uint64_t	toUnsignedInteger(
+		static	uint64_t	convertToUnsignedInteger(
 						const ucs2_t *string,
 						int32_t base);
 
@@ -1012,14 +1013,14 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  base "base".
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
-		static	uint64_t	toUnsignedInteger(
+		static	uint64_t	convertToUnsignedInteger(
 						const ucs2_t *string,
 						const ucs2_t **endptr,
 						int32_t base);
 
 
 		/** Converts "string" to a floating point number. */
-		static	long double	toFloat(const ucs2_t *string);
+		static	long double	convertToFloat(const ucs2_t *string);
 
 		/** Converts "string" to a floating point number.
 		 *
@@ -1029,13 +1030,13 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *
 		 *  (Currently only supported on linux/unix platforms that
 		 *  provide the locale.h header.  On other platforms, it just
-		 *  falls through to toFloat().) */
-		static	long double	toFloatC(const ucs2_t *string);
+		 *  falls through to convertToFloat().) */
+		static	long double	convertToFloatC(const ucs2_t *string);
 
 		/** Converts "string" to a floating point number.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
-		static	long double	toFloat(const ucs2_t *string,
+		static	long double	convertToFloat(const ucs2_t *string,
 							const ucs2_t **endptr);
 
 		/** Converts "amount" which is assumed to be a dollar amount
@@ -1173,13 +1174,13 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",
 		 *  inclusive. */
-		static ucs2_t	*subString(const ucs2_t *str,
+		static ucs2_t	*getSubString(const ucs2_t *str,
 						size_t start, size_t end);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string index "start" and the end
 		 *  of the string, inclusive. */
-		static ucs2_t	*subString(const ucs2_t *str, size_t start);
+		static ucs2_t	*getSubString(const ucs2_t *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
                  *  "index". */
@@ -1192,7 +1193,7 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.
 		 *
 		 *  Where 1K = 1024. */
-		static ucs2_t	*humanReadable(int64_t number);
+		static ucs2_t	*getHumanReadable(int64_t number);
 
 		/** Returns a human-readable version of the number.
 		 *  
@@ -1200,13 +1201,13 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *
 		 *  If "onethousand" = true then 1K = 1000, otherwise
 		 *  1K = 1024. */
-		static ucs2_t	*humanReadable(int64_t number,
+		static ucs2_t	*getHumanReadable(int64_t number,
 							bool onethousand);
 
 		/** Returns a human-readable version of the number.
 		 *  
 		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc. */
-		static ucs2_t	*humanReadable(uint64_t number);
+		static ucs2_t	*getHumanReadable(uint64_t number);
 
 		/** Returns a human-readable version of the number.
 		 *  
@@ -1214,13 +1215,13 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *
 		 *  If "onethousand" = true then 1K = 1000, otherwise
 		 *  1K = 1024. */
-		static ucs2_t	*humanReadable(uint64_t number,
+		static ucs2_t	*getHumanReadable(uint64_t number,
 							bool onethousand);
 
 		/** Returns a human-readable version of the number.
 		 *  
 		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc. */
-		static ucs2_t	*humanReadable(long double number);
+		static ucs2_t	*getHumanReadable(long double number);
 
 		/** Returns a human-readable version of the number.
 		 *  
@@ -1228,7 +1229,7 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *
 		 *  If "onethousand" = true then 1K = 1000, otherwise
 		 *  1K = 1024. */
-		static ucs2_t	*humanReadable(long double number,
+		static ucs2_t	*getHumanReadable(long double number,
 							bool onethousand);
 
 		/** Appends "..." to "buffer" of character length "len" using

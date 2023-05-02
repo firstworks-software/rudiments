@@ -60,7 +60,7 @@ static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
 #elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
 static char	*shmName(key_t key) {
-	uint32_t	shmnamelen=11+charstring::integerLength(key)+1;
+	uint32_t	shmnamelen=11+charstring::getIntegerLength(key)+1;
 	char		*shmname=new char[shmnamelen];
 	charstring::copy(shmname,"rudiments::");
 	charstring::append(shmname,(int64_t)key);

@@ -3062,7 +3062,7 @@ bool filedescriptor::supportsPassReceiveFileDescriptor() {
         // FreeBSD, NetBSD, or OpenBSD
         char    *os=sys::getOperatingSystemName();
         char    *rel=sys::getOperatingSystemRelease();
-        double  ver=charstring::toFloat(rel);
+        double  ver=charstring::convertToFloat(rel);
 	delete[] rel;
 	bool	supported=!(
 			!charstring::compare(os,"CYGWIN",6) ||

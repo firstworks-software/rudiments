@@ -111,7 +111,7 @@ bool cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 		cronscheduleperiod	*p=new cronscheduleperiod;
 
 		// set start
-		int64_t	start=charstring::toInteger(timepartparts[0]);
+		int64_t	start=charstring::convertToInteger(timepartparts[0]);
 		if (start<min) {
 			return false;
 		}
@@ -119,7 +119,7 @@ bool cronschedule::splitTimePart(linkedlist< cronscheduleperiod * > *periods,
 
 		// set end
 		if (timepartpartscount>1) {
-			int64_t	end=charstring::toInteger(timepartparts[1]);
+			int64_t	end=charstring::convertToInteger(timepartparts[1]);
 			if (end>max) {
 				return false;
 			}
@@ -178,7 +178,7 @@ bool cronschedule::splitDayParts(const char *daypartlist) {
 		// create a new daypart, set the start/end
 		// hour/minute and add it to the list of periods
 		cronscheduledaypart	*dp=new cronscheduledaypart;
-		dp->starthour=charstring::toInteger(daypartparts[0]);
+		dp->starthour=charstring::convertToInteger(daypartparts[0]);
 		const char	*minute=
 				charstring::findFirst(daypartparts[0],":");
 		if (minute) {
@@ -186,17 +186,17 @@ bool cronschedule::splitDayParts(const char *daypartlist) {
 		} else {
 			minute="0";
 		}
-		dp->startminute=charstring::toInteger(minute);
+		dp->startminute=charstring::convertToInteger(minute);
 
 		if (daypartpartscount>1) {
-			dp->endhour=charstring::toInteger(daypartparts[1]);
+			dp->endhour=charstring::convertToInteger(daypartparts[1]);
 			minute=charstring::findFirst(daypartparts[1],":");
 			if (minute) {
 				minute++;
 			} else {
 				minute="0";
 			}
-			dp->endminute=charstring::toInteger(minute);
+			dp->endminute=charstring::convertToInteger(minute);
 		} else {
 			dp->endhour=dp->starthour;
 			dp->endminute=dp->startminute;

@@ -366,7 +366,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 	const char	*contentlengthstr=
 				getEnvironmentVariable("CONTENT_LENGTH");
 	size_t		contentlength=
-				charstring::toUnsignedInteger(contentlengthstr);
+				charstring::convertToUnsignedInteger(contentlengthstr);
 	if (method==get_request || method==head_request) {
 		if (!charstring::isNullOrEmpty(querystring)) {
 			length=charstring::getLength(querystring);
@@ -827,7 +827,7 @@ void httprequest::getParametersAsGetString(output *out,
 			out->write('=');
 
 			// make sure to escape the value part
-			char	*escapedvalue=charstring::httpEscape(value);
+			char	*escapedvalue=charstring::urlEncode(value);
 			out->write(escapedvalue);
 			delete[] escapedvalue;
 		}

@@ -15,11 +15,11 @@ int main(int argc, const char **argv) {
 	}
 
 	uint32_t	buffersize=
-				charstring::toUnsignedInteger(argv[1]);
+				charstring::convertToUnsignedInteger(argv[1]);
 	uint32_t	bytesperiteration=
-				charstring::toUnsignedInteger(argv[2]);
+				charstring::convertToUnsignedInteger(argv[2]);
 	uint32_t	iterations=
-				charstring::toUnsignedInteger(argv[3]);
+				charstring::convertToUnsignedInteger(argv[3]);
 
 	char	*bytes=new char[bytesperiteration];
 	if (!bytes) {

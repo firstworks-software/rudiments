@@ -482,19 +482,19 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 
 	if (cmdl.getWasFound("readbuffer")) {
-		readbuffer=charstring::toInteger(
+		readbuffer=charstring::convertToInteger(
 				cmdl.getValue("readbuffer"));
 	}
 	if (cmdl.getWasFound("writebuffer")) {
-		writebuffer=charstring::toInteger(
+		writebuffer=charstring::convertToInteger(
 				cmdl.getValue("writebuffer"));
 	}
 	if (cmdl.getWasFound("socketreadbuffer")) {
-		socketreadbuffer=charstring::toInteger(
+		socketreadbuffer=charstring::convertToInteger(
 				cmdl.getValue("socketreadbuffer"));
 	}
 	if (cmdl.getWasFound("socketwritebuffer")) {
-		socketwritebuffer=charstring::toInteger(
+		socketwritebuffer=charstring::convertToInteger(
 				cmdl.getValue("socketwritebuffer"));
 	}
 	if (cmdl.getWasFound("dontdisablenagle")) {

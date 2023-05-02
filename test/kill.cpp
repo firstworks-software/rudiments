@@ -28,7 +28,7 @@ int main(int argc, const char **argv) {
 		sig=SIGKILL;
 	}
 
-	pid_t	pid=charstring::toInteger(argv[2]);
+	pid_t	pid=charstring::convertToInteger(argv[2]);
 
 	if (!process::sendSignal(pid,sig)) {
 		stdoutput.printf("kill failed: %s\n",error::getErrorString());

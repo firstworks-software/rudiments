@@ -617,7 +617,7 @@ int32_t xmlsax::getGeneralEntity(char breakchar) {
 	} else {
 		// handle numeric general entities
 		if (pvt->_entitybuffer[1]=='#') {
-			int64_t	number=charstring::toInteger(
+			int64_t	number=charstring::convertToInteger(
 							pvt->_entitybuffer+2);
 			if (number>255) {
 				number=255;

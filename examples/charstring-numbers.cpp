@@ -16,9 +16,9 @@ int main(int argc, const char **argv) {
 
 
 	// conversion of strings to numbers...
-	int64_t		intnum=charstring::toInteger("12345");
-	uint64_t	uintnum=charstring::toUnsignedInteger("12345");
-	long double	floatnum=charstring::toFloat("12.345");
+	int64_t		intnum=charstring::convertToInteger("12345");
+	uint64_t	uintnum=charstring::convertToUnsignedInteger("12345");
+	long double	floatnum=charstring::convertToFloat("12.345");
 
 	stdoutput.printf("strings as numbers: %lld, %lld, %5.3Lf\n",
 						intnum,uintnum,floatnum);
@@ -49,7 +49,7 @@ int main(int argc, const char **argv) {
 	for (uint64_t *i=integers; *i; i++) {
 		stdoutput.printf("it would take %d bytes to store "
 					"%lld as a string\n",
-					charstring::integerLength(*i),*i);
+					charstring::getIntegerLength(*i),*i);
 	}
 	stdoutput.write('\n');
 

@@ -554,7 +554,7 @@ char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	return buffer;
 }
 
-char *charstring::httpEscape(const char *input) {
+char *charstring::urlEncode(const char *input) {
 
 	if (!input) {
 		return NULL;
@@ -599,7 +599,7 @@ char *charstring::httpEscape(const char *input) {
 	return output;
 }
 
-char *charstring::httpUnescape(const char *input) {
+char *charstring::urlDencode(const char *input) {
 
 	if (!input) {
 		return NULL;
@@ -978,7 +978,7 @@ void charstring::bothTrim(char *string, char character) {
 	rightTrim(string,character);
 }
 
-uint16_t charstring::integerLength(int16_t number) {
+uint16_t charstring::getIntegerLength(int16_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		len++;
@@ -986,7 +986,7 @@ uint16_t charstring::integerLength(int16_t number) {
 	return len;
 }
 
-uint16_t charstring::integerLength(int32_t number) {
+uint16_t charstring::getIntegerLength(int32_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		len++;
@@ -994,7 +994,7 @@ uint16_t charstring::integerLength(int32_t number) {
 	return len;
 }
 
-uint16_t charstring::integerLength(int64_t number) {
+uint16_t charstring::getIntegerLength(int64_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		len++;
@@ -1002,7 +1002,7 @@ uint16_t charstring::integerLength(int64_t number) {
 	return len;
 }
 
-uint16_t charstring::integerLength(uint16_t number) {
+uint16_t charstring::getIntegerLength(uint16_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
 		len++;
@@ -1010,7 +1010,7 @@ uint16_t charstring::integerLength(uint16_t number) {
 	return len;
 }
 
-uint16_t charstring::integerLength(uint32_t number) {
+uint16_t charstring::getIntegerLength(uint32_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
 		len++;
@@ -1018,7 +1018,7 @@ uint16_t charstring::integerLength(uint32_t number) {
 	return len;
 }
 
-uint16_t charstring::integerLength(uint64_t number) {
+uint16_t charstring::getIntegerLength(uint64_t number) {
 	uint16_t	len=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
 		len++;
@@ -1822,11 +1822,12 @@ size_t charstring::getLengthNotContainingSet(const char *haystack,
 	#endif
 }
 
-char *charstring::before(const char *str, const char *delimiter) {
-	return between(str,NULL,delimiter);
+char *charstring::isBefore(const char *str, const char *delimiter) {
+	return isBetween(str,NULL,delimiter);
 }
 
-char *charstring::between(const char *str, const char *start, const char *end) {
+char *charstring::isBetween(const char *str,
+				const char *start, const char *end) {
 
 	// find the start (or use beginning of "str" if "start" is empty/NULL)
 	const char	*s=NULL;
@@ -1859,8 +1860,8 @@ char *charstring::between(const char *str, const char *start, const char *end) {
 	return charstring::duplicate(s,e-s);
 }
 
-char *charstring::after(const char *str, const char *delimiter) {
-	return between(str,delimiter,NULL);
+char *charstring::isAfter(const char *str, const char *delimiter) {
+	return isBetween(str,delimiter,NULL);
 }
 
 char *charstring::duplicate(const char *str) {
@@ -2003,19 +2004,19 @@ void charstring::bothTrim(char *string) {
 	rightTrim(string);
 }
 
-int64_t charstring::toInteger(const char *string) {
+int64_t charstring::convertToInteger(const char *string) {
 	return toInteger(string,NULL,10);
 }
 
-int64_t charstring::toInteger(const char *string, const char **endptr) {
+int64_t charstring::convertToInteger(const char *string, const char **endptr) {
 	return toInteger(string,endptr,10);
 }
 
-int64_t charstring::toInteger(const char *string, int32_t base) {
+int64_t charstring::convertToInteger(const char *string, int32_t base) {
 	return toInteger(string,NULL,base);
 }
 
-int64_t charstring::toInteger(const char *string,
+int64_t charstring::convertToInteger(const char *string,
 				const char **endptr, int32_t base) {
 	#ifdef RUDIMENTS_HAVE_STRTOLL
 	return (string)?strtoll(string,(char **)endptr,base):0;
@@ -2024,20 +2025,20 @@ int64_t charstring::toInteger(const char *string,
 	#endif
 }
 
-uint64_t charstring::toUnsignedInteger(const char *string) {
+uint64_t charstring::convertToUnsignedInteger(const char *string) {
 	return toUnsignedInteger(string,NULL,10);
 }
 
-uint64_t charstring::toUnsignedInteger(const char *string,
+uint64_t charstring::convertToUnsignedInteger(const char *string,
 					const char **endptr) {
 	return toUnsignedInteger(string,endptr,10);
 }
 
-uint64_t charstring::toUnsignedInteger(const char *string, int32_t base) {
+uint64_t charstring::convertToUnsignedInteger(const char *string, int32_t base) {
 	return toUnsignedInteger(string,NULL,base);
 }
 
-uint64_t charstring::toUnsignedInteger(const char *string,
+uint64_t charstring::convertToUnsignedInteger(const char *string,
 					const char **endptr, int32_t base) {
 	#ifdef RUDIMENTS_HAVE_STRTOULL
 	return (string)?strtoull(string,(char **)endptr,base):0;
@@ -2046,11 +2047,11 @@ uint64_t charstring::toUnsignedInteger(const char *string,
 	#endif
 }
 
-long double charstring::toFloat(const char *string) {
+long double charstring::convertToFloat(const char *string) {
 	return toFloat(string,NULL);
 }
 
-long double charstring::toFloatC(const char *string) {
+long double charstring::convertToFloatC(const char *string) {
 
 	/* This method is needed when the locale of the client is different
 	 * from the C/POSIX locale, but we still need to convert a string
@@ -2085,7 +2086,7 @@ long double charstring::toFloatC(const char *string) {
 	return toFloat(string,NULL);
 }
 
-long double charstring::toFloat(const char *string, const char **endptr) {
+long double charstring::convertToFloat(const char *string, const char **endptr) {
 	#ifdef RUDIMENTS_HAVE_STRTOLD
 	return (string)?strtold(string,(char **)endptr):0.0;
 	#else
@@ -2214,7 +2215,7 @@ void charstring::split(const char *string, size_t stringlength,
 	}
 }
 
-char *charstring::subString(const char *str, size_t start, size_t end) {
+char *charstring::getSubString(const char *str, size_t start, size_t end) {
 
 	// handle end<start
 	if (end<start) {
@@ -2225,7 +2226,7 @@ char *charstring::subString(const char *str, size_t start, size_t end) {
 	return duplicate(str+start,end-start+1);
 }
 
-char *charstring::subString(const char *str, size_t start) {
+char *charstring::getSubString(const char *str, size_t start) {
 	return subString(str,start,getLength(str)-1);
 }
 
@@ -2819,27 +2820,27 @@ char *charstring::pad(const char *str, char padchar,
 	return newstring;
 }
 
-char *charstring::humanReadable(int64_t number) {
+char *charstring::getHumanReadable(int64_t number) {
 	return humanReadable(number,false);
 }
 
-char *charstring::humanReadable(int64_t number, bool onethousand) {
+char *charstring::getHumanReadable(int64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-char *charstring::humanReadable(uint64_t number) {
+char *charstring::getHumanReadable(uint64_t number) {
 	return humanReadable(number,false);
 }
 
-char *charstring::humanReadable(uint64_t number, bool onethousand) {
+char *charstring::getHumanReadable(uint64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-char *charstring::humanReadable(long double number) {
+char *charstring::getHumanReadable(long double number) {
 	return humanReadable(number,false);
 }
 
-char *charstring::humanReadable(long double number, bool onethousand) {
+char *charstring::getHumanReadable(long double number, bool onethousand) {
 
 	long double	k=(onethousand)?1000.0:1024.0;
 	char		suffixes[]={

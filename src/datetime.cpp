@@ -147,19 +147,19 @@ bool datetime::init(const char *tmstring) {
 
 	// parse out the date
 	const char	*ptr=tmstring;
-	pvt->_mon=charstring::toInteger(ptr)-1;
+	pvt->_mon=charstring::convertToInteger(ptr)-1;
 	ptr=charstring::findFirst(ptr,'/');
 	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_mday=charstring::toInteger(ptr);
+	pvt->_mday=charstring::convertToInteger(ptr);
 	ptr=charstring::findFirst(ptr,'/');
 	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_year=charstring::toInteger(ptr)-1900;
+	pvt->_year=charstring::convertToInteger(ptr)-1900;
 
 	// parse out the time
 	ptr=charstring::findFirst(ptr,' ');
@@ -167,25 +167,25 @@ bool datetime::init(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_hour=charstring::toInteger(ptr);
+	pvt->_hour=charstring::convertToInteger(ptr);
 	ptr=charstring::findFirst(ptr,':');
 	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_min=charstring::toInteger(ptr);
+	pvt->_min=charstring::convertToInteger(ptr);
 	ptr=charstring::findFirst(ptr,':');
 	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	pvt->_sec=charstring::toInteger(ptr);
+	pvt->_sec=charstring::convertToInteger(ptr);
 
 	// parse out microseconds, if provided
 	pvt->_usec=0;
 	const char *usecptr=charstring::findFirst(ptr,':');
 	if (usecptr) {
-		pvt->_usec=charstring::toInteger(usecptr+1);
+		pvt->_usec=charstring::convertToInteger(usecptr+1);
 	}
 
 	// initialize the daylight savings time flag
@@ -796,7 +796,7 @@ void datetime::setWeekOfYear(void *tms) {
 	#ifdef RUDIMENTS_HAS_STRFTIME
 	char	yweek[3];
 	strftime(yweek,sizeof(yweek),"%W",(struct tm *)tms);
-	pvt->_yweek=charstring::toInteger(yweek);
+	pvt->_yweek=charstring::convertToInteger(yweek);
 	#else
 		#error no strftime or anything like it
 	#endif
@@ -1263,7 +1263,7 @@ int16_t datetime::adjustHour(int16_t hour, const char *timestring) {
 
 int32_t datetime::fractionToMicroseconds(const char *fraction) {
 
-	int32_t	val=charstring::toInteger(fraction);
+	int32_t	val=charstring::convertToInteger(fraction);
 	if (!val) {
 		return 0;
 	}
@@ -1449,10 +1449,10 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 		}
 
 		// get the day
-		*day=charstring::toInteger(parts[dayindex]);
+		*day=charstring::convertToInteger(parts[dayindex]);
 
 		// part 3 is the year
-		*year=charstring::toInteger(parts[2]);
+		*year=charstring::convertToInteger(parts[2]);
 
 		// part 4 could be the time, we'll split it below...
 	}
@@ -1491,8 +1491,8 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				charstring::isNumber(timeparts[0]) &&
 				charstring::isNumber(timeparts[1])) {
 
-				*hour=charstring::toInteger(timeparts[0]);
-				*minute=charstring::toInteger(timeparts[1]);
+				*hour=charstring::convertToInteger(timeparts[0]);
+				*minute=charstring::convertToInteger(timeparts[1]);
 				*second=0;
 				*microsecond=0;
 
@@ -1507,13 +1507,13 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				if (timeparts[0][0]=='-') {
 					*isnegative=true;
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]+1);
 				} else {
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]);
 				}
-				*minute=charstring::toInteger(timeparts[1]);
+				*minute=charstring::convertToInteger(timeparts[1]);
 				*second=0;
 				*microsecond=0;
 				*hour=adjustHour(*hour,timeparts[1]);
@@ -1529,46 +1529,46 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				// colon-delimited dates) otherwise it's a time
 				if (supportcolondelimiteddate &&
 					charstring::getLength(timeparts[0])==4) {
-					*year=charstring::toInteger(
+					*year=charstring::convertToInteger(
 								timeparts[0]);
 					if (ddmm) {
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								timeparts[1]);
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								timeparts[2]);
 					} else {
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								timeparts[1]);
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								timeparts[2]);
 					}
 				} else if (supportcolondelimiteddate &&
 					charstring::getLength(timeparts[2])==4) {
 					if (ddmm) {
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								timeparts[0]);
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								timeparts[1]);
 					} else {
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								timeparts[0]);
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								timeparts[1]);
 					}
-					*year=charstring::toInteger(
+					*year=charstring::convertToInteger(
 								timeparts[2]);
 				} else {
 					if (timeparts[0][0]=='-') {
 						*isnegative=true;
-						*hour=charstring::toInteger(
+						*hour=charstring::convertToInteger(
 								timeparts[0]+1);
 					} else {
-						*hour=charstring::toInteger(
+						*hour=charstring::convertToInteger(
 								timeparts[0]);
 					}
-					*minute=charstring::toInteger(
+					*minute=charstring::convertToInteger(
 								timeparts[1]);
-					*second=charstring::toInteger(
+					*second=charstring::convertToInteger(
 								timeparts[2]);
 					*microsecond=0;
 				}
@@ -1586,14 +1586,14 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				if (timeparts[0][0]=='-') {
 					*isnegative=true;
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]+1);
 				} else {
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]);
 				}
-				*minute=charstring::toInteger(timeparts[1]);
-				*second=charstring::toInteger(timeparts[2]);
+				*minute=charstring::convertToInteger(timeparts[1]);
+				*second=charstring::convertToInteger(timeparts[2]);
 				const char	*dot=
 					charstring::findFirst(timeparts[2],'.');
 				*microsecond=fractionToMicroseconds(dot+1);
@@ -1611,14 +1611,14 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				if (timeparts[0][0]=='-') {
 					*isnegative=true;
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]+1);
 				} else {
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]);
 				}
-				*minute=charstring::toInteger(timeparts[1]);
-				*second=charstring::toInteger(timeparts[2]);
+				*minute=charstring::convertToInteger(timeparts[1]);
+				*second=charstring::convertToInteger(timeparts[2]);
 				*microsecond=0;
 				*hour=adjustHour(*hour,timeparts[2]);
 
@@ -1629,14 +1629,14 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				if (timeparts[0][0]=='-') {
 					*isnegative=true;
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]+1);
 				} else {
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]);
 				}
-				*minute=charstring::toInteger(timeparts[1]);
-				*second=charstring::toInteger(timeparts[2]);
+				*minute=charstring::convertToInteger(timeparts[1]);
+				*second=charstring::convertToInteger(timeparts[2]);
 				const char	*dot=
 					charstring::findFirst(timeparts[2],'.');
 				*microsecond=fractionToMicroseconds(dot+1);
@@ -1654,14 +1654,14 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				if (timeparts[0][0]=='-') {
 					*isnegative=true;
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]+1);
 				} else {
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]);
 				}
-				*minute=charstring::toInteger(timeparts[1]);
-				*second=charstring::toInteger(timeparts[2]);
+				*minute=charstring::convertToInteger(timeparts[1]);
+				*second=charstring::convertToInteger(timeparts[2]);
 				*microsecond=
 					fractionToMicroseconds(timeparts[3]);
 				*hour=adjustHour(*hour,timeparts[3]);
@@ -1674,14 +1674,14 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				if (timeparts[0][0]=='-') {
 					*isnegative=true;
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]+1);
 				} else {
-					*hour=charstring::toInteger(
+					*hour=charstring::convertToInteger(
 							timeparts[0]);
 				}
-				*minute=charstring::toInteger(timeparts[1]);
-				*second=charstring::toInteger(timeparts[2]);
+				*minute=charstring::convertToInteger(timeparts[1]);
+				*second=charstring::convertToInteger(timeparts[2]);
 				*microsecond=
 					fractionToMicroseconds(timeparts[3]);
 
@@ -1723,32 +1723,32 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 
 				// it could be yyyy/xx/xx or xx/xx/yyyy
 				if (charstring::getLength(dateparts[0])==4) {
-					*year=charstring::toInteger(
+					*year=charstring::convertToInteger(
 								dateparts[0]);
 					if (ddmm) {
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								dateparts[1]);
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								dateparts[2]);
 					} else {
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								dateparts[1]);
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								dateparts[2]);
 					}
 				} else {
 					if (ddmm) {
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								dateparts[0]);
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								dateparts[1]);
 					} else {
-						*month=charstring::toInteger(
+						*month=charstring::convertToInteger(
 								dateparts[0]);
-						*day=charstring::toInteger(
+						*day=charstring::convertToInteger(
 								dateparts[1]);
 					}
-					*year=charstring::toInteger(
+					*year=charstring::convertToInteger(
 								dateparts[2]);
 				}
 			} else {
@@ -1780,7 +1780,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				// some dates have a non-numeric month in part 2
 				if (!charstring::isNumber(dateparts[1])) {
 
-					*day=charstring::toInteger(
+					*day=charstring::convertToInteger(
 								dateparts[0]);
 					for (int j=0; shortmonths[j]; j++) {
 						if (!charstring::
@@ -1796,47 +1796,47 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 							*month=j+1;
 						}
 					}
-					*year=charstring::toInteger(
+					*year=charstring::convertToInteger(
 								dateparts[2]);
 				} else {
 
 					// it could be yyyy.xx.xx or xx.xx.yyyy
 					if (charstring::getLength(
 							dateparts[0])==4) {
-						*year=charstring::toInteger(
+						*year=charstring::convertToInteger(
 								dateparts[0]);
 						if (ddmm) {
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[2]);
 						} else {
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[2]);
 						}
 					} else {
 						if (ddmm) {
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[0]);
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 						} else {
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[0]);
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 						}
-						*year=charstring::toInteger(
+						*year=charstring::convertToInteger(
 								dateparts[2]);
 					}
 				}
@@ -1872,7 +1872,7 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 				// some dates have a non-numeric month in part 2
 				if (!charstring::isNumber(dateparts[1])) {
 
-					*day=charstring::toInteger(
+					*day=charstring::convertToInteger(
 								dateparts[0]);
 					for (int j=0; shortmonths[j]; j++) {
 						if (!charstring::
@@ -1888,47 +1888,47 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 							*month=j+1;
 						}
 					}
-					*year=charstring::toInteger(
+					*year=charstring::convertToInteger(
 								dateparts[2]);
 				} else {
 
 					// it could be yyyy-xx-xx or xx-xx-yyyy
 					if (charstring::getLength(
 							dateparts[0])==4) {
-						*year=charstring::toInteger(
+						*year=charstring::convertToInteger(
 								dateparts[0]);
 						if (yyyyddmm) {
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[2]);
 						} else {
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[2]);
 						}
 					} else {
 						if (ddmm) {
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[0]);
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 						} else {
 							*month=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[0]);
 							*day=
-							charstring::toInteger(
+							charstring::convertToInteger(
 								dateparts[1]);
 						}
-						*year=charstring::toInteger(
+						*year=charstring::convertToInteger(
 								dateparts[2]);
 					}
 				}

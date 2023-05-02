@@ -90,7 +90,7 @@ bool process::createPidFile(const char *filename, mode_t permissions) {
 int64_t process::checkForPidFile(const char *filename) {
 	char	*pidstring=file::getContents(filename);
 	int64_t	retval=(pidstring && pidstring[0])?
-				charstring::toInteger(pidstring):-1;
+				charstring::convertToInteger(pidstring):-1;
 	delete[] pidstring;
 	return retval;
 }

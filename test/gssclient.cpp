@@ -96,7 +96,7 @@ int main(int argc, const char **argv) {
 	}
 	uint16_t	port=9000;
 	if (cmdl.getWasFound("port")) {
-		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+		port=charstring::convertToUnsignedInteger(cmdl.getValue("port"));
 	}
 	const char	*service="gssserver";
 	if (cmdl.getWasFound("service")) {
@@ -112,21 +112,21 @@ int main(int argc, const char **argv) {
 	if (cmdl.getWasFound("flags")) {
 		flags=cmdl.getValue("flags");
 	}
-	int64_t	ccount=charstring::toInteger(cmdl.getValue("ccount"));
+	int64_t	ccount=charstring::convertToInteger(cmdl.getValue("ccount"));
 	if (ccount<0) {
 		usage();
 		return 1;
 	} else if (!ccount) {
 		ccount=1;
 	}
-	int64_t	mcount=charstring::toInteger(cmdl.getValue("mcount"));
+	int64_t	mcount=charstring::convertToInteger(cmdl.getValue("mcount"));
 	if (mcount<0) {
 		usage();
 		return 1;
 	} else if (!mcount) {
 		mcount=1;
 	}
-	int64_t	dcount=charstring::toInteger(cmdl.getValue("dcount"));
+	int64_t	dcount=charstring::convertToInteger(cmdl.getValue("dcount"));
 	if (dcount<0) {
 		usage();
 		return 1;

@@ -496,19 +496,19 @@ bool sys::getLoadAverages(double *oneminuteaverage,
 		if (loadavg.read(&buffer," ")==RESULT_ERROR) {
 			return false;
 		}
-		*oneminuteaverage=(double)charstring::toFloat(buffer);
+		*oneminuteaverage=(double)charstring::convertToFloat(buffer);
 		delete[] buffer;
 
 		if (loadavg.read(&buffer," ")==RESULT_ERROR) {
 			return false;
 		}
-		*fiveminuteaverage=(double)charstring::toFloat(buffer);
+		*fiveminuteaverage=(double)charstring::convertToFloat(buffer);
 		delete[] buffer;
 		
 		if (loadavg.read(&buffer," ")==RESULT_ERROR) {
 			return false;
 		}
-		*fifteenminuteaverage=(double)charstring::toFloat(buffer);
+		*fifteenminuteaverage=(double)charstring::convertToFloat(buffer);
 		delete[] buffer;
 
 		return true;

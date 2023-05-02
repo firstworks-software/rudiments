@@ -428,7 +428,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		stdoutput.printf("Connecting...\n\n");
 		#endif
 		pvt->_isc.setHost(host);
-		pvt->_isc.setPort(charstring::toUnsignedInteger(port));
+		pvt->_isc.setPort(charstring::convertToUnsignedInteger(port));
 		if (!pvt->_isc.connect()) {
 			pvt->_error.append("http - connect failed: ");
 			char	*err=error::getErrorString();
@@ -692,7 +692,7 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 		// look for individual headers...
 		if (!charstring::compare(header,
 					"Content-Length: ",16)) {
-			pvt->_contentlength=charstring::toInteger(header+16);
+			pvt->_contentlength=charstring::convertToInteger(header+16);
 			pvt->_chunked=false;
 			retval=true;
 		} else if (!charstring::compare(header,
@@ -1688,7 +1688,7 @@ bool url::getProtocolIsSupported(const char *protocol) {
 		curl_version_info_data	*d=curl_version_info(CURLVERSION_NOW);
 		retval=charstring::isInSetIgnoringCase(protocol,d->protocols);
 		#else
-		if (charstring::toInteger(LIBCURL_VERSION)<6) {
+		if (charstring::convertToInteger(LIBCURL_VERSION)<6) {
 			const char	*pr[]={
 				"ftp","gopher","dict",
 				"file","http","https",

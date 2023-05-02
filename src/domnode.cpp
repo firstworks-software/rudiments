@@ -1630,7 +1630,7 @@ domnode *domnode::getChildByPath(const char *path) {
 
 			// now skip until we get the specified index
 			uint64_t	index=
-				charstring::toUnsignedInteger(
+				charstring::convertToUnsignedInteger(
 						indexstring.getString());
 			for (uint64_t i=0; i<index; i++) {
 				node=node->getNextTagSibling(name.getString());

@@ -148,9 +148,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("duplicate/subString...\n");
 	wchar_t	*hellothere=wcharstring::duplicate(s);
 	test("duplicate",!wcharstring::compare(hellothere,L"hello"));
-	wchar_t	*ell=wcharstring::subString(hellothere,1,3);
+	wchar_t	*ell=wcharstring::getSubString(hellothere,1,3);
 	test("subString",!wcharstring::compare(ell,L"ell"));
-	wchar_t	*llo=wcharstring::subString(hellothere,2,4);
+	wchar_t	*llo=wcharstring::getSubString(hellothere,2,4);
 	test("subString",!wcharstring::compare(llo,L"llo"));
 	delete[] hellothere;
 	delete[] ell;
@@ -274,15 +274,15 @@ int main(int argc, const char **argv) {
 	wcharstring::split(L"1.2.3.4.5.6",L".",false,NULL,NULL);
 	stdoutput.printf("\n");
 
-	// before, between, after
-	stdoutput.printf("before/between/after...\n");
-	wchar_t	*bef=wcharstring::before(L"one two three four five",L" two");
-	test("before",!wcharstring::compare(bef,L"one"));
-	wchar_t	*btw=wcharstring::between(L"one two three four five",
+	// isBefore, isBetween, isAfter
+	stdoutput.printf("isBefore/isBetween/isAfter...\n");
+	wchar_t	*bef=wcharstring::isBefore(L"one two three four five",L" two");
+	test("isBefore",!wcharstring::compare(bef,L"one"));
+	wchar_t	*btw=wcharstring::isBetween(L"one two three four five",
 							L"two ",L" four");
-	test("between",!wcharstring::compare(btw,L"three"));
-	wchar_t	*aft=wcharstring::after(L"one two three four five",L"four ");
-	test("after",!wcharstring::compare(aft,L"five"));
+	test("isBetween",!wcharstring::compare(btw,L"three"));
+	wchar_t	*aft=wcharstring::isAfter(L"one two three four five",L"four ");
+	test("isAfter",!wcharstring::compare(aft,L"five"));
 	stdoutput.printf("\n");
 
 
@@ -412,33 +412,33 @@ int main(int argc, const char **argv) {
 	test("isInteger: -100.5",!wcharstring::isInteger(L"-100.5"));
 	test("isInteger: -100.5.10",!wcharstring::isInteger(L"-100.5.10"));
 	test("integerLength: 0",
-			wcharstring::integerLength((int64_t)0)==1);
+			wcharstring::getIntegerLength((int64_t)0)==1);
 	test("integerLength: 1",
-			wcharstring::integerLength((int64_t)1)==1);
+			wcharstring::getIntegerLength((int64_t)1)==1);
 	test("integerLength: 10",
-			wcharstring::integerLength((int64_t)10)==2);
+			wcharstring::getIntegerLength((int64_t)10)==2);
 	test("integerLength: 100",
-			wcharstring::integerLength((int64_t)100)==3);
+			wcharstring::getIntegerLength((int64_t)100)==3);
 	test("integerLength: 1000",
-			wcharstring::integerLength((int64_t)1000)==4);
+			wcharstring::getIntegerLength((int64_t)1000)==4);
 	test("integerLength: -1",
-			wcharstring::integerLength((int64_t)-1)==2);
+			wcharstring::getIntegerLength((int64_t)-1)==2);
 	test("integerLength: -10",
-			wcharstring::integerLength((int64_t)-10)==3);
+			wcharstring::getIntegerLength((int64_t)-10)==3);
 	test("integerLength: -100",
-			wcharstring::integerLength((int64_t)-100)==4);
+			wcharstring::getIntegerLength((int64_t)-100)==4);
 	test("integerLength: -1000",
-			wcharstring::integerLength((int64_t)-1000)==5);
+			wcharstring::getIntegerLength((int64_t)-1000)==5);
 	test("integerLength: 0",
-			wcharstring::integerLength((uint64_t)0)==1);
+			wcharstring::getIntegerLength((uint64_t)0)==1);
 	test("integerLength: 1",
-			wcharstring::integerLength((uint64_t)1)==1);
+			wcharstring::getIntegerLength((uint64_t)1)==1);
 	test("integerLength: 10",
-			wcharstring::integerLength((uint64_t)10)==2);
+			wcharstring::getIntegerLength((uint64_t)10)==2);
 	test("integerLength: 100",
-			wcharstring::integerLength((uint64_t)100)==3);
+			wcharstring::getIntegerLength((uint64_t)100)==3);
 	test("integerLength: 1000",
-			wcharstring::integerLength((uint64_t)1000)==4);
+			wcharstring::getIntegerLength((uint64_t)1000)==4);
 
 	uint64_t	testuint64=ULONG_MAX;
 	wchar_t		*teststr=wcharstring::parseNumber(testuint64);
@@ -892,77 +892,77 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("humanReadable...\n");
 	long double	val=2.1*1024.0*1024.0*1024.0*1024.0*
 				1024.0*1024.0*1024.0*1024.0;
-	wchar_t	*sval=wcharstring::humanReadable(val);
+	wchar_t	*sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1B",!wcharstring::compare(sval,L"2.1B"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1Y",!wcharstring::compare(sval,L"2.1Y"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1Z",!wcharstring::compare(sval,L"2.1Z"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1P",!wcharstring::compare(sval,L"2.1P"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1T",!wcharstring::compare(sval,L"2.1T"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1G",!wcharstring::compare(sval,L"2.1G"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1M",!wcharstring::compare(sval,L"2.1M"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1K",!wcharstring::compare(sval,L"2.1K"));
 	delete[] sval;
 	val/=1024.0;
-	sval=wcharstring::humanReadable(val);
+	sval=wcharstring::getHumanReadable(val);
 	test("humanReadable 2.1",!wcharstring::compare(sval,L"2.1"));
 	delete[] sval;
 
 	val=2.1*1000.0*1000.0*1000.0*1000.0*
 		1000.0*1000.0*1000.0*1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1B",!wcharstring::compare(sval,L"2.1B"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1Y",!wcharstring::compare(sval,L"2.1Y"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1Z",!wcharstring::compare(sval,L"2.1Z"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1P",!wcharstring::compare(sval,L"2.1P"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1T",!wcharstring::compare(sval,L"2.1T"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1G",!wcharstring::compare(sval,L"2.1G"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1M",!wcharstring::compare(sval,L"2.1M"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1K",!wcharstring::compare(sval,L"2.1K"));
 	delete[] sval;
 	val/=1000.0;
-	sval=wcharstring::humanReadable(val,true);
+	sval=wcharstring::getHumanReadable(val,true);
 	test("humanReadable 2.1",!wcharstring::compare(sval,L"2.1"));
 	delete[] sval;
 
@@ -970,31 +970,31 @@ int main(int argc, const char **argv) {
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024);
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3Z",!wcharstring::compare(sval,L"3Z"));
 	delete[] sval;
 	ival/=1024;
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3P",!wcharstring::compare(sval,L"3P"));
 	delete[] sval;
 	ival/=1024;
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3T",!wcharstring::compare(sval,L"3T"));
 	delete[] sval;
 	ival/=1024;
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3G",!wcharstring::compare(sval,L"3G"));
 	delete[] sval;
 	ival/=1024;
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3M",!wcharstring::compare(sval,L"3M"));
 	delete[] sval;
 	ival/=1024;
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3K",!wcharstring::compare(sval,L"3K"));
 	delete[] sval;
 	ival/=1024;
-	sval=wcharstring::humanReadable(ival);
+	sval=wcharstring::getHumanReadable(ival);
 	test("humanReadable 3",!wcharstring::compare(sval,L"3"));
 	delete[] sval;
 
@@ -1002,31 +1002,31 @@ int main(int argc, const char **argv) {
 			((int64_t)1000)*((int64_t)1000)*
 			((int64_t)1000)*((int64_t)1000)*
 			((int64_t)1000)*((int64_t)1000);
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3Z",!wcharstring::compare(sval,L"-3Z"));
 	delete[] sval;
 	sival/=1000;
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3P",!wcharstring::compare(sval,L"-3P"));
 	delete[] sval;
 	sival/=1000;
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3T",!wcharstring::compare(sval,L"-3T"));
 	delete[] sval;
 	sival/=1000;
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3G",!wcharstring::compare(sval,L"-3G"));
 	delete[] sval;
 	sival/=1000;
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3M",!wcharstring::compare(sval,L"-3M"));
 	delete[] sval;
 	sival/=1000;
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3K",!wcharstring::compare(sval,L"-3K"));
 	delete[] sval;
 	sival/=1000;
-	sval=wcharstring::humanReadable(sival,true);
+	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3",!wcharstring::compare(sval,L"-3"));
 	delete[] sval;
 	stdoutput.printf("\n");

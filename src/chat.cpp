@@ -114,7 +114,7 @@ int32_t chat::runScript(const char *script, char **abort,
 		char	*unescaped=NULL;
 		int32_t	result=RESULT_SUCCESS;
 		if (!charstring::compare(node->getName(),"timeout")) {
-			pvt->_timeout=charstring::toInteger(
+			pvt->_timeout=charstring::convertToInteger(
 				node->getAttributeValue("seconds"));
 		} else if (!charstring::compare(node->getName(),"abort")) {
 			charUnescape(node->getAttributeValue("string"),

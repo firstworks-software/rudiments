@@ -42,13 +42,13 @@ void client::setParameters(dictionary<const char *, const char *> *cd) {
 		const char	*tries=NULL;
 		cd->getValue("tries",&tries);
 
-		setTimeoutSeconds(charstring::toInteger(
+		setTimeoutSeconds(charstring::convertToInteger(
 					(timeoutsec)?timeoutsec:"0"));
-		setTimeoutMicroseconds(charstring::toInteger(
+		setTimeoutMicroseconds(charstring::convertToInteger(
 					(timeoutusec)?timeoutusec:"0"));
-		setRetryWait(charstring::toUnsignedInteger(
+		setRetryWait(charstring::convertToUnsignedInteger(
 					(retrywait)?retrywait:"0"));
-		setTries(charstring::toUnsignedInteger(
+		setTries(charstring::convertToUnsignedInteger(
 					(tries)?tries:"0"));
 	}
 }

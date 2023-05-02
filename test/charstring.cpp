@@ -144,9 +144,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("duplicate/subString...\n");
 	char	*hellothere=charstring::duplicate(s);
 	test("duplicate",!charstring::compare(hellothere,"hello"));
-	char	*ell=charstring::subString(hellothere,1,3);
+	char	*ell=charstring::getSubString(hellothere,1,3);
 	test("subString",!charstring::compare(ell,"ell"));
-	char	*llo=charstring::subString(hellothere,2,4);
+	char	*llo=charstring::getSubString(hellothere,2,4);
 	test("subString",!charstring::compare(llo,"llo"));
 	delete[] hellothere;
 	delete[] ell;
@@ -265,15 +265,15 @@ int main(int argc, const char **argv) {
 	charstring::split("1.2.3.4.5.6",".",false,NULL,NULL);
 	stdoutput.printf("\n");
 
-	// before, between, after
-	stdoutput.printf("before/between/after...\n");
-	char	*bef=charstring::before("one two three four five"," two");
-	test("before",!charstring::compare(bef,"one"));
-	char	*btw=charstring::between("one two three four five",
+	// isBefore, isBetween, isAfter
+	stdoutput.printf("isBefore/isBetween/isAfter...\n");
+	char	*bef=charstring::isBefore("one two three four five"," two");
+	test("isBefore",!charstring::compare(bef,"one"));
+	char	*btw=charstring::isBetween("one two three four five",
 							"two "," four");
-	test("between",!charstring::compare(btw,"three"));
-	char	*aft=charstring::after("one two three four five","four ");
-	test("after",!charstring::compare(aft,"five"));
+	test("isBetween",!charstring::compare(btw,"three"));
+	char	*aft=charstring::isAfter("one two three four five","four ");
+	test("isAfter",!charstring::compare(aft,"five"));
 	stdoutput.printf("\n");
 
 
@@ -462,13 +462,13 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
-	// http escape the buffer
-	stdoutput.printf("http-escape...\n");
+	// url encode the buffer
+	stdoutput.printf("url-encode...\n");
 	const char	*original="!@#$%^&*()hello-+£";
-	char    *escbuffer=charstring::httpEscape(original);
+	char    *escbuffer=charstring::urlEncode(original);
 	test("escaped",!charstring::compare(escbuffer,
 				"!%40%23$%25%5E%26*()hello-%2B%C2%A3"));
-	char	*unescbuffer=charstring::httpUnescape(escbuffer);
+	char	*unescbuffer=charstring::urlDencode(escbuffer);
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
 	delete[] unescbuffer;
@@ -626,33 +626,33 @@ int main(int argc, const char **argv) {
 	test("isInteger: -100.5",!charstring::isInteger("-100.5"));
 	test("isInteger: -100.5.10",!charstring::isInteger("-100.5.10"));
 	test("integerLength: 0",
-			charstring::integerLength((int64_t)0)==1);
+			charstring::getIntegerLength((int64_t)0)==1);
 	test("integerLength: 1",
-			charstring::integerLength((int64_t)1)==1);
+			charstring::getIntegerLength((int64_t)1)==1);
 	test("integerLength: 10",
-			charstring::integerLength((int64_t)10)==2);
+			charstring::getIntegerLength((int64_t)10)==2);
 	test("integerLength: 100",
-			charstring::integerLength((int64_t)100)==3);
+			charstring::getIntegerLength((int64_t)100)==3);
 	test("integerLength: 1000",
-			charstring::integerLength((int64_t)1000)==4);
+			charstring::getIntegerLength((int64_t)1000)==4);
 	test("integerLength: -1",
-			charstring::integerLength((int64_t)-1)==2);
+			charstring::getIntegerLength((int64_t)-1)==2);
 	test("integerLength: -10",
-			charstring::integerLength((int64_t)-10)==3);
+			charstring::getIntegerLength((int64_t)-10)==3);
 	test("integerLength: -100",
-			charstring::integerLength((int64_t)-100)==4);
+			charstring::getIntegerLength((int64_t)-100)==4);
 	test("integerLength: -1000",
-			charstring::integerLength((int64_t)-1000)==5);
+			charstring::getIntegerLength((int64_t)-1000)==5);
 	test("integerLength: 0",
-			charstring::integerLength((uint64_t)0)==1);
+			charstring::getIntegerLength((uint64_t)0)==1);
 	test("integerLength: 1",
-			charstring::integerLength((uint64_t)1)==1);
+			charstring::getIntegerLength((uint64_t)1)==1);
 	test("integerLength: 10",
-			charstring::integerLength((uint64_t)10)==2);
+			charstring::getIntegerLength((uint64_t)10)==2);
 	test("integerLength: 100",
-			charstring::integerLength((uint64_t)100)==3);
+			charstring::getIntegerLength((uint64_t)100)==3);
 	test("integerLength: 1000",
-			charstring::integerLength((uint64_t)1000)==4);
+			charstring::getIntegerLength((uint64_t)1000)==4);
 
 	uint64_t	testuint64=ULONG_MAX;
 	char		*teststr=charstring::parseNumber(testuint64);
@@ -1089,77 +1089,77 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("humanReadable...\n");
 	long double	val=2.1*1024.0*1024.0*1024.0*1024.0*
 				1024.0*1024.0*1024.0*1024.0;
-	char	*sval=charstring::humanReadable(val);
+	char	*sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1B",!charstring::compare(sval,"2.1B"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1Y",!charstring::compare(sval,"2.1Y"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1Z",!charstring::compare(sval,"2.1Z"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1P",!charstring::compare(sval,"2.1P"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1T",!charstring::compare(sval,"2.1T"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1G",!charstring::compare(sval,"2.1G"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1M",!charstring::compare(sval,"2.1M"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1K",!charstring::compare(sval,"2.1K"));
 	delete[] sval;
 	val/=1024.0;
-	sval=charstring::humanReadable(val);
+	sval=charstring::getHumanReadable(val);
 	test("humanReadable 2.1",!charstring::compare(sval,"2.1"));
 	delete[] sval;
 
 	val=2.1*1000.0*1000.0*1000.0*1000.0*
 		1000.0*1000.0*1000.0*1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1B",!charstring::compare(sval,"2.1B"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1Y",!charstring::compare(sval,"2.1Y"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1Z",!charstring::compare(sval,"2.1Z"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1P",!charstring::compare(sval,"2.1P"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1T",!charstring::compare(sval,"2.1T"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1G",!charstring::compare(sval,"2.1G"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1M",!charstring::compare(sval,"2.1M"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1K",!charstring::compare(sval,"2.1K"));
 	delete[] sval;
 	val/=1000.0;
-	sval=charstring::humanReadable(val,true);
+	sval=charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1",!charstring::compare(sval,"2.1"));
 	delete[] sval;
 
@@ -1167,62 +1167,62 @@ int main(int argc, const char **argv) {
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024);
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3Z",!charstring::compare(sval,"3Z"));
 	delete[] sval;
 	ival/=1024;
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3P",!charstring::compare(sval,"3P"));
 	delete[] sval;
 	ival/=1024;
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3T",!charstring::compare(sval,"3T"));
 	delete[] sval;
 	ival/=1024;
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3G",!charstring::compare(sval,"3G"));
 	delete[] sval;
 	ival/=1024;
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3M",!charstring::compare(sval,"3M"));
 	delete[] sval;
 	ival/=1024;
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3K",!charstring::compare(sval,"3K"));
 	delete[] sval;
 	ival/=1024;
-	sval=charstring::humanReadable(ival);
+	sval=charstring::getHumanReadable(ival);
 	test("humanReadable 3",!charstring::compare(sval,"3"));
 	delete[] sval;
 
 	int64_t	sival=((int64_t)-3)*
 			((int64_t)1000)*((int64_t)1000)*((int64_t)1000)*
 			((int64_t)1000)*((int64_t)1000)*((int64_t)1000);
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3Z",!charstring::compare(sval,"-3Z"));
 	delete[] sval;
 	sival/=1000;
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3P",!charstring::compare(sval,"-3P"));
 	delete[] sval;
 	sival/=1000;
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3T",!charstring::compare(sval,"-3T"));
 	delete[] sval;
 	sival/=1000;
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3G",!charstring::compare(sval,"-3G"));
 	delete[] sval;
 	sival/=1000;
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3M",!charstring::compare(sval,"-3M"));
 	delete[] sval;
 	sival/=1000;
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3K",!charstring::compare(sval,"-3K"));
 	delete[] sval;
 	sival/=1000;
-	sval=charstring::humanReadable(sival,true);
+	sval=charstring::getHumanReadable(sival,true);
 	test("humanReadable -3",!charstring::compare(sval,"-3"));
 	delete[] sval;
 	stdoutput.printf("\n");

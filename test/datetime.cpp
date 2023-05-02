@@ -446,7 +446,7 @@ int main(int argc, const char **argv) {
 	// switch time zones
 	char	*os=sys::getOperatingSystemName();
 	char	*rel=sys::getOperatingSystemRelease();
-	double	ver=charstring::toFloat(rel);
+	double	ver=charstring::convertToFloat(rel);
 	// not supported on linux libc or Mac OS X <= 10.1
 	bool	notsupported=
 			#if !defined(__GLIBC__)

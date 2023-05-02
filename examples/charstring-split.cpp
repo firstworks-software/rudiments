@@ -25,8 +25,8 @@ int main(int argc, const char **argv) {
 
 
 	// substring...
-	char	*substring1=charstring::subString(str,14);
-	char	*substring2=charstring::subString(str,14,28);
+	char	*substring1=charstring::getSubString(str,14);
+	char	*substring2=charstring::getSubString(str,14,28);
 
 	stdoutput.printf("string starting at index 14: %s\n",substring1);
 	stdoutput.printf("string from index 14 to 21 : %s\n",substring2);

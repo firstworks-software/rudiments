@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 
 	uint16_t	port=9000;
 	if (cmdl.getWasFound("port")) {
-		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+		port=charstring::convertToUnsignedInteger(cmdl.getValue("port"));
 	}
 	const char	*version=NULL;
 	if (cmdl.getWasFound("version")) {
@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
 	}
 	uint16_t	depth=9;
 	if (cmdl.getWasFound("depth")) {
-		depth=charstring::toUnsignedInteger(cmdl.getValue("depth"));
+		depth=charstring::convertToUnsignedInteger(cmdl.getValue("depth"));
 	}
 	const char	*ca=NULL;
 	if (cmdl.getWasFound("ca")) {

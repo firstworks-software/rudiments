@@ -505,14 +505,14 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static char	*before(const char *str,
+		static char	*isBefore(const char *str,
 						const char *delimiter);
 
 		/** Returns the string between "start" and "end".
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static char	*between(const char *str,
+		static char	*isBetween(const char *str,
 						const char *start,
 						const char *end);
 
@@ -521,7 +521,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program
 		 *  must deallocate this buffer. */
-		static char	*after(const char *str,
+		static char	*isAfter(const char *str,
 						const char *delimiter);
 
 		/** Returns the number of characters, starting at the
@@ -823,27 +823,27 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(int16_t number);
+		static	uint16_t	getIntegerLength(int16_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(int32_t number);
+		static	uint16_t	getIntegerLength(int32_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(int64_t number);
+		static	uint16_t	getIntegerLength(int64_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(uint16_t number);
+		static	uint16_t	getIntegerLength(uint16_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(uint32_t number);
+		static	uint16_t	getIntegerLength(uint32_t number);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
-		static	uint16_t	integerLength(uint64_t number);
+		static	uint16_t	getIntegerLength(uint64_t number);
 
 		/** Returns true if the string "val" is an integer and
 		 *  false if it is not an integer. */
@@ -983,48 +983,53 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint16_t scale);
 
 		/** Converts "string" to a 64-bit integer. */
-		static	int64_t	toInteger(const char *string);
+		static	int64_t	convertToInteger(const char *string);
 
 		/** Converts "string" to a 64-bit integer.  If non-NULL,
 		 *  endptr will be set to the first character in the
 		 *  string after the number. */
-		static	int64_t	toInteger(const char *string,
+		static	int64_t	convertToInteger(const char *string,
 						const char **endptr);
 
 		/** Converts "string" to a 64-bit integer of base "base". */
-		static	int64_t	toInteger(const char *string, int32_t base);
+		static	int64_t	convertToInteger(const char *string,
+							int32_t base);
 
 		/** Converts "string" to a 64-bit integer of base "base".
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
-		static	int64_t	toInteger(const char *string,
+		static	int64_t	convertToInteger(const char *string,
 					const char **endptr, int32_t base);
 
 		/** Converts "string" to a 64-bit unsigned integer. */
-		static	uint64_t	toUnsignedInteger(const char *string);
+		static	uint64_t	convertToUnsignedInteger(
+							const char *string);
 
 		/** Converts "string" to a 64-bit unsigned integer.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
-		static	uint64_t	toUnsignedInteger(const char *string,
+		static	uint64_t	convertToUnsignedInteger(
+							const char *string,
 							const char **endptr);
 
 		/** Converts "string" to a 64-bit unsigned integer of
 		 *  base "base". */
-		static	uint64_t	toUnsignedInteger(const char *string,
-								int32_t base);
+		static	uint64_t	convertToUnsignedInteger(
+							const char *string,
+							int32_t base);
 
 		/** Converts "string" to a 64-bit unsigned integer of
 		 *  base "base".
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
-		static	uint64_t	toUnsignedInteger(const char *string,
+		static	uint64_t	convertToUnsignedInteger(
+							const char *string,
 							const char **endptr,
 							int32_t base);
 
 
 		/** Converts "string" to a floating point number. */
-		static	long double	toFloat(const char *string);
+		static	long double	convertToFloat(const char *string);
 
 		/** Converts "string" to a floating point number.
 		 *
@@ -1034,17 +1039,17 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  (Currently only supported on linux/unix platforms that
 		 *  provide the locale.h header.  On other platforms, it just
-		 *  falls through to toFloat().)
+		 *  falls through to convertToFloat().)
 		 *
 		 *  Note that this method expects to operate on strings encoded
 		 *  using ASCII or extended ASCII, and may give unexpected
 		 *  results for differently-encoded strings. */
-		static	long double	toFloatC(const char *string);
+		static	long double	convertToFloatC(const char *string);
 
 		/** Converts "string" to a floating point number.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
-		static	long double	toFloat(const char *string,
+		static	long double	convertToFloat(const char *string,
 							const char **endptr);
 
 		/** Converts "amount" which is assumed to be a dollar amount
@@ -1076,16 +1081,6 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint16_t padding);
 
 
-		/** http escapes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*httpEscape(const char *input);
-
-		/** http unescapes "input" and returns it in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*httpUnescape(const char *input);
-
 		/** escapes all characters in "characters" found in
 		 *  "input" using \'s and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1115,6 +1110,16 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint64_t inputlen,
 						char **output,
 						uint64_t *outputlen);
+
+		/** URL-encodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program. */
+		static	char	*urlEncode(const char *input);
+
+		/** URL-decodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program. */
+		static	char	*urlDecode(const char *input);
 
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1335,13 +1340,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",
 		 *  inclusive. */
-		static char	*subString(const char *str,
+		static char	*getSubString(const char *str,
 						size_t start, size_t end);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string index "start" and the end
 		 *  of the string, inclusive. */
-		static char	*subString(const char *str, size_t start);
+		static char	*getSubString(const char *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
                  *  "index". */
@@ -1354,7 +1359,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.
 		 *
 		 *  Where 1K = 1024. */
-		static char	*humanReadable(int64_t number);
+		static char	*getHumanReadable(int64_t number);
 
 		/** Returns a human-readable version of the number.
 		 *  
@@ -1362,13 +1367,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  If "onethousand" = true then 1K = 1000, otherwise
 		 *  1K = 1024. */
-		static char	*humanReadable(int64_t number,
+		static char	*getHumanReadable(int64_t number,
 							bool onethousand);
 
 		/** Returns a human-readable version of the number.
 		 *  
 		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc. */
-		static char	*humanReadable(uint64_t number);
+		static char	*getHumanReadable(uint64_t number);
 
 		/** Returns a human-readable version of the number.
 		 *  
@@ -1376,13 +1381,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  If "onethousand" = true then 1K = 1000, otherwise
 		 *  1K = 1024. */
-		static char	*humanReadable(uint64_t number,
+		static char	*getHumanReadable(uint64_t number,
 							bool onethousand);
 
 		/** Returns a human-readable version of the number.
 		 *  
 		 *  Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc. */
-		static char	*humanReadable(long double number);
+		static char	*getHumanReadable(long double number);
 
 		/** Returns a human-readable version of the number.
 		 *  
@@ -1390,7 +1395,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  If "onethousand" = true then 1K = 1000, otherwise
 		 *  1K = 1024. */
-		static char	*humanReadable(long double number,
+		static char	*getHumanReadable(long double number,
 							bool onethousand);
 
 		/** Appends "..." to "buffer" of character length "len" using

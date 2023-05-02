@@ -76,7 +76,7 @@ void inetsocketclient::setParameters(
 		cd->getValue("port",&port);
 	
 		setHost((host)?host:"");
-		setPort(charstring::toInteger((port)?port:"0"));
+		setPort(charstring::convertToInteger((port)?port:"0"));
 		client::setParameters(cd);
 	}
 }

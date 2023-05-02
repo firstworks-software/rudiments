@@ -85,7 +85,7 @@ int main(int argc, const char **argv) {
 
 	uint16_t	port=9000;
 	if (cmdl.getWasFound("port")) {
-		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+		port=charstring::convertToUnsignedInteger(cmdl.getValue("port"));
 	}
 	const char	*keytab=cmdl.getValue("keytab");
 	if (charstring::isNullOrEmpty(keytab)) {

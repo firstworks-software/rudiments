@@ -831,7 +831,7 @@ void wcharstring::bothTrim(wchar_t *string, wchar_t character) {
 	rightTrim(string,character);
 }
 
-uint16_t wcharstring::integerLength(int16_t number) {
+uint16_t wcharstring::getIntegerLength(int16_t number) {
 	uint16_t	length=(number>0)?0:1;
 	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
@@ -839,7 +839,7 @@ uint16_t wcharstring::integerLength(int16_t number) {
 	return length;
 }
 
-uint16_t wcharstring::integerLength(int32_t number) {
+uint16_t wcharstring::getIntegerLength(int32_t number) {
 	uint16_t	length=(number>0)?0:1;
 	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
@@ -847,7 +847,7 @@ uint16_t wcharstring::integerLength(int32_t number) {
 	return length;
 }
 
-uint16_t wcharstring::integerLength(int64_t number) {
+uint16_t wcharstring::getIntegerLength(int64_t number) {
 	uint16_t	length=(number>0)?0:1;
 	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
@@ -855,7 +855,7 @@ uint16_t wcharstring::integerLength(int64_t number) {
 	return length;
 }
 
-uint16_t wcharstring::integerLength(uint16_t number) {
+uint16_t wcharstring::getIntegerLength(uint16_t number) {
 	uint16_t	length=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
 		length++;
@@ -863,7 +863,7 @@ uint16_t wcharstring::integerLength(uint16_t number) {
 	return length;
 }
 
-uint16_t wcharstring::integerLength(uint32_t number) {
+uint16_t wcharstring::getIntegerLength(uint32_t number) {
 	uint16_t	length=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
 		length++;
@@ -871,7 +871,7 @@ uint16_t wcharstring::integerLength(uint32_t number) {
 	return length;
 }
 
-uint16_t wcharstring::integerLength(uint64_t number) {
+uint16_t wcharstring::getIntegerLength(uint64_t number) {
 	uint16_t	length=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
 		length++;
@@ -1791,11 +1791,11 @@ size_t wcharstring::getLengthNotContainingSet(const wchar_t *haystack,
 	#endif
 }
 
-wchar_t *wcharstring::before(const wchar_t *str, const wchar_t *delimiter) {
-	return between(str,NULL,delimiter);
+wchar_t *wcharstring::isBefore(const wchar_t *str, const wchar_t *delimiter) {
+	return isBetween(str,NULL,delimiter);
 }
 
-wchar_t *wcharstring::between(const wchar_t *str, const wchar_t *start,
+wchar_t *wcharstring::isBetween(const wchar_t *str, const wchar_t *start,
 							const wchar_t *end) {
 
 	// find the start (or use beginning of "str" if "start" is empty/NULL)
@@ -1829,8 +1829,8 @@ wchar_t *wcharstring::between(const wchar_t *str, const wchar_t *start,
 	return duplicate(s,e-s);
 }
 
-wchar_t *wcharstring::after(const wchar_t *str, const wchar_t *delimiter) {
-	return between(str,delimiter,NULL);
+wchar_t *wcharstring::isAfter(const wchar_t *str, const wchar_t *delimiter) {
+	return isBetween(str,delimiter,NULL);
 }
 
 wchar_t *wcharstring::duplicate(const wchar_t *str) {
@@ -1961,19 +1961,19 @@ void wcharstring::bothTrim(wchar_t *string) {
 	rightTrim(string);
 }
 
-int64_t wcharstring::toInteger(const wchar_t *string) {
+int64_t wcharstring::convertToInteger(const wchar_t *string) {
 	return toInteger(string,NULL,10);
 }
 
-int64_t wcharstring::toInteger(const wchar_t *string, const wchar_t **endptr) {
+int64_t wcharstring::convertToInteger(const wchar_t *string, const wchar_t **endptr) {
 	return toInteger(string,endptr,10);
 }
 
-int64_t wcharstring::toInteger(const wchar_t *string, int32_t base) {
+int64_t wcharstring::convertToInteger(const wchar_t *string, int32_t base) {
 	return toInteger(string,NULL,base);
 }
 
-int64_t wcharstring::toInteger(const wchar_t *string,
+int64_t wcharstring::convertToInteger(const wchar_t *string,
 				const wchar_t **endptr, int32_t base) {
 	if (!string) {
 		return 0;
@@ -1984,7 +1984,7 @@ int64_t wcharstring::toInteger(const wchar_t *string,
 		return wcstol(string,(wchar_t **)endptr,base);
 	#else
 		char	*str=charstring::duplicate(string);
-		int64_t	retval=charstring::toInteger(str,NULL,base);
+		int64_t	retval=charstring::convertToInteger(str,NULL,base);
 		delete[] str;
 		if (endptr) {
 			while (wcharacter::isDigit(*string)) {
@@ -1996,20 +1996,20 @@ int64_t wcharstring::toInteger(const wchar_t *string,
 	#endif
 }
 
-uint64_t wcharstring::toUnsignedInteger(const wchar_t *string) {
+uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string) {
 	return toUnsignedInteger(string,NULL,10);
 }
 
-uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
+uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string,
 					const wchar_t **endptr) {
 	return toUnsignedInteger(string,endptr,10);
 }
 
-uint64_t wcharstring::toUnsignedInteger(const wchar_t *string, int32_t base) {
+uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string, int32_t base) {
 	return toUnsignedInteger(string,NULL,base);
 }
 
-uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
+uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string,
 					const wchar_t **endptr, int32_t base) {
 	if (!string) {
 		return 0;
@@ -2020,7 +2020,7 @@ uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
 		return wcstoul(string,(wchar_t **)endptr,base);
 	#else
 		char	*str=charstring::duplicate(string);
-		int64_t	retval=charstring::toUnsignedInteger(str,NULL,base);
+		int64_t	retval=charstring::convertToUnsignedInteger(str,NULL,base);
 		delete[] str;
 		if (endptr) {
 			while (wcharacter::isDigit(*string)) {
@@ -2032,11 +2032,11 @@ uint64_t wcharstring::toUnsignedInteger(const wchar_t *string,
 	#endif
 }
 
-long double wcharstring::toFloat(const wchar_t *string) {
+long double wcharstring::convertToFloat(const wchar_t *string) {
 	return toFloat(string,NULL);
 }
 
-long double wcharstring::toFloatC(const wchar_t *string) {
+long double wcharstring::convertToFloatC(const wchar_t *string) {
 
 	/* This method is needed when the locale of the client is different
 	 * from the C/POSIX locale, but we still need to convert a string
@@ -2071,7 +2071,7 @@ long double wcharstring::toFloatC(const wchar_t *string) {
 	return toFloat(string,NULL);
 }
 
-long double wcharstring::toFloat(const wchar_t *string,
+long double wcharstring::convertToFloat(const wchar_t *string,
 					const wchar_t **endptr) {
 	if (!string) {
 		return 0.0;
@@ -2082,7 +2082,7 @@ long double wcharstring::toFloat(const wchar_t *string,
 		return (long double)(wcstod(string,(wchar_t **)endptr));
 	#else
 		char		*str=charstring::duplicate(string);
-		long double	retval=charstring::toFloat(str,NULL);
+		long double	retval=charstring::convertToFloat(str,NULL);
 		delete[] str;
 		if (endptr) {
 			bool	found=false;
@@ -2230,7 +2230,7 @@ void wcharstring::split(const wchar_t *string,
 	}
 }
 
-wchar_t *wcharstring::subString(const wchar_t *str, size_t start, size_t end) {
+wchar_t *wcharstring::getSubString(const wchar_t *str, size_t start, size_t end) {
 
 	// handle end<start
 	if (end<start) {
@@ -2241,7 +2241,7 @@ wchar_t *wcharstring::subString(const wchar_t *str, size_t start, size_t end) {
 	return duplicate(str+start,end-start+1);
 }
 
-wchar_t *wcharstring::subString(const wchar_t *str, size_t start) {
+wchar_t *wcharstring::getSubString(const wchar_t *str, size_t start) {
 	return subString(str,start,getLength(str)-1);
 }
 
@@ -2298,27 +2298,27 @@ wchar_t *wcharstring::pad(const wchar_t *str, wchar_t padchar,
 	return newstring;
 }
 
-wchar_t *wcharstring::humanReadable(int64_t number) {
+wchar_t *wcharstring::getHumanReadable(int64_t number) {
 	return humanReadable(number,false);
 }
 
-wchar_t *wcharstring::humanReadable(int64_t number, bool onethousand) {
+wchar_t *wcharstring::getHumanReadable(int64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-wchar_t *wcharstring::humanReadable(uint64_t number) {
+wchar_t *wcharstring::getHumanReadable(uint64_t number) {
 	return humanReadable(number,false);
 }
 
-wchar_t *wcharstring::humanReadable(uint64_t number, bool onethousand) {
+wchar_t *wcharstring::getHumanReadable(uint64_t number, bool onethousand) {
 	return humanReadable((long double)number,onethousand);
 }
 
-wchar_t *wcharstring::humanReadable(long double number) {
+wchar_t *wcharstring::getHumanReadable(long double number) {
 	return humanReadable(number,false);
 }
 
-wchar_t *wcharstring::humanReadable(long double number, bool onethousand) {
+wchar_t *wcharstring::getHumanReadable(long double number, bool onethousand) {
 
 	long double	k=(onethousand)?1000.0:1024.0;
 	wchar_t		suffixes[]={

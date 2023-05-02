@@ -92,7 +92,7 @@ int main(int argc, const char **argv) {
 
 	// write to the file
 	if (write) {
-		char	*hr=charstring::humanReadable(filesize);
+		char	*hr=charstring::getHumanReadable(filesize);
 		stdoutput.printf("writing %s bytes...",hr);
 		if (showprogress) {
 			stdoutput.printf("\n");

@@ -276,7 +276,7 @@ bool thread::reliable() {
 		// unreliable with this combination.
 		char	*os=sys::getOperatingSystemName();
 		char	*rel=sys::getOperatingSystemRelease();
-		double	ver=charstring::toFloat(rel);
+		double	ver=charstring::convertToFloat(rel);
 		delete[] rel;
 		if (!charstring::compare(os,"Linux") && ver<=2.0) {
 			delete[] os;

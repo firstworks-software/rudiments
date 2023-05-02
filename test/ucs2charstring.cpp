@@ -173,10 +173,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("duplicate/subString...\n");
 	ucs2_t	*hellothere=ucs2charstring::duplicate(s);
 	test("duplicate",!ucs2charstring::compare(hellothere,hello));
-	ucs2_t	*elll=ucs2charstring::subString(hellothere,1,3);
+	ucs2_t	*elll=ucs2charstring::getSubString(hellothere,1,3);
 	ucs2literal(ellr,"ell");
 	test("subString",!ucs2charstring::compare(elll,ellr));
-	ucs2_t	*llol=ucs2charstring::subString(hellothere,2,4);
+	ucs2_t	*llol=ucs2charstring::getSubString(hellothere,2,4);
 	ucs2literal(llor,"llo");
 	test("subString",!ucs2charstring::compare(llol,llor));
 	delete[] hellothere;
@@ -322,22 +322,23 @@ int main(int argc, const char **argv) {
 	ucs2charstring::split(splitstring6,dot,false,NULL,NULL);
 	stdoutput.printf("\n");
 
-	// before, between, after
-	stdoutput.printf("before/between/after...\n");
+	// isBefore, isBetween, isAfter
+	stdoutput.printf("isBefore/isBetween/isAfter...\n");
 	ucs2literal(onetwothreefourfive,"one two three four five");
 	ucs2literal(sptwo," two");
-	ucs2_t	*bef=ucs2charstring::before(onetwothreefourfive,sptwo);
+	ucs2_t	*bef=ucs2charstring::isBefore(onetwothreefourfive,sptwo);
 	ucs2literal(one,"one");
-	test("before",!ucs2charstring::compare(bef,one));
+	test("isBefore",!ucs2charstring::compare(bef,one));
 	ucs2literal(twosp,"two ");
 	ucs2literal(spfour," four");
-	ucs2_t	*btw=ucs2charstring::between(onetwothreefourfive,twosp,spfour);
+	ucs2_t	*btw=ucs2charstring::isBetween(
+				onetwothreefourfive,twosp,spfour);
 	ucs2literal(three,"three");
-	test("between",!ucs2charstring::compare(btw,three));
+	test("isBetween",!ucs2charstring::compare(btw,three));
 	ucs2literal(foursp,"four ");
-	ucs2_t	*aft=ucs2charstring::after(onetwothreefourfive,foursp);
+	ucs2_t	*aft=ucs2charstring::isAfter(onetwothreefourfive,foursp);
 	ucs2literal(five,"five");
-	test("after",!ucs2charstring::compare(aft,five));
+	test("isAfter",!ucs2charstring::compare(aft,five));
 	stdoutput.printf("\n");
 
 
@@ -499,33 +500,33 @@ int main(int argc, const char **argv) {
 	test("isInteger: -100.5",!ucs2charstring::isInteger(num1005));
 	test("isInteger: -100.5.10",!ucs2charstring::isInteger(num100510));
 	test("integerLength: 0",
-			ucs2charstring::integerLength((int64_t)0)==1);
+			ucs2charstring::getIntegerLength((int64_t)0)==1);
 	test("integerLength: 1",
-			ucs2charstring::integerLength((int64_t)1)==1);
+			ucs2charstring::getIntegerLength((int64_t)1)==1);
 	test("integerLength: 10",
-			ucs2charstring::integerLength((int64_t)10)==2);
+			ucs2charstring::getIntegerLength((int64_t)10)==2);
 	test("integerLength: 100",
-			ucs2charstring::integerLength((int64_t)100)==3);
+			ucs2charstring::getIntegerLength((int64_t)100)==3);
 	test("integerLength: 1000",
-			ucs2charstring::integerLength((int64_t)1000)==4);
+			ucs2charstring::getIntegerLength((int64_t)1000)==4);
 	test("integerLength: -1",
-			ucs2charstring::integerLength((int64_t)-1)==2);
+			ucs2charstring::getIntegerLength((int64_t)-1)==2);
 	test("integerLength: -10",
-			ucs2charstring::integerLength((int64_t)-10)==3);
+			ucs2charstring::getIntegerLength((int64_t)-10)==3);
 	test("integerLength: -100",
-			ucs2charstring::integerLength((int64_t)-100)==4);
+			ucs2charstring::getIntegerLength((int64_t)-100)==4);
 	test("integerLength: -1000",
-			ucs2charstring::integerLength((int64_t)-1000)==5);
+			ucs2charstring::getIntegerLength((int64_t)-1000)==5);
 	test("integerLength: 0",
-			ucs2charstring::integerLength((uint64_t)0)==1);
+			ucs2charstring::getIntegerLength((uint64_t)0)==1);
 	test("integerLength: 1",
-			ucs2charstring::integerLength((uint64_t)1)==1);
+			ucs2charstring::getIntegerLength((uint64_t)1)==1);
 	test("integerLength: 10",
-			ucs2charstring::integerLength((uint64_t)10)==2);
+			ucs2charstring::getIntegerLength((uint64_t)10)==2);
 	test("integerLength: 100",
-			ucs2charstring::integerLength((uint64_t)100)==3);
+			ucs2charstring::getIntegerLength((uint64_t)100)==3);
 	test("integerLength: 1000",
-			ucs2charstring::integerLength((uint64_t)1000)==4);
+			ucs2charstring::getIntegerLength((uint64_t)1000)==4);
 
 	uint64_t	testuint64=ULONG_MAX;
 	ucs2_t		*teststr=ucs2charstring::parseNumber(testuint64);
@@ -1057,86 +1058,86 @@ unimplemented...
 	stdoutput.printf("humanReadable...\n");
 	long double	val=2.1*1024.0*1024.0*1024.0*1024.0*
 				1024.0*1024.0*1024.0*1024.0;
-	ucs2_t	*sval=ucs2charstring::humanReadable(val);
+	ucs2_t	*sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1B,"2.1B");
 	test("humanReadable 2.1B",!ucs2charstring::compare(sval,num2dot1B));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1Y,"2.1Y");
 	test("humanReadable 2.1Y",!ucs2charstring::compare(sval,num2dot1Y));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1Z,"2.1Z");
 	test("humanReadable 2.1Z",!ucs2charstring::compare(sval,num2dot1Z));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1P,"2.1P");
 	test("humanReadable 2.1P",!ucs2charstring::compare(sval,num2dot1P));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1T,"2.1T");
 	test("humanReadable 2.1T",!ucs2charstring::compare(sval,num2dot1T));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1G,"2.1G");
 	test("humanReadable 2.1G",!ucs2charstring::compare(sval,num2dot1G));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1M,"2.1M");
 	test("humanReadable 2.1M",!ucs2charstring::compare(sval,num2dot1M));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1K,"2.1K");
 	test("humanReadable 2.1K",!ucs2charstring::compare(sval,num2dot1K));
 	delete[] sval;
 	val/=1024.0;
-	sval=ucs2charstring::humanReadable(val);
+	sval=ucs2charstring::getHumanReadable(val);
 	ucs2literal(num2dot1,"2.1");
 	test("humanReadable 2.1",!ucs2charstring::compare(sval,num2dot1));
 	delete[] sval;
 
 	val=2.1*1000.0*1000.0*1000.0*1000.0*
 		1000.0*1000.0*1000.0*1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1B",!ucs2charstring::compare(sval,num2dot1B));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1Y",!ucs2charstring::compare(sval,num2dot1Y));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1Z",!ucs2charstring::compare(sval,num2dot1Z));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1P",!ucs2charstring::compare(sval,num2dot1P));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1T",!ucs2charstring::compare(sval,num2dot1T));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1G",!ucs2charstring::compare(sval,num2dot1G));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1M",!ucs2charstring::compare(sval,num2dot1M));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1K",!ucs2charstring::compare(sval,num2dot1K));
 	delete[] sval;
 	val/=1000.0;
-	sval=ucs2charstring::humanReadable(val,true);
+	sval=ucs2charstring::getHumanReadable(val,true);
 	test("humanReadable 2.1",!ucs2charstring::compare(sval,num2dot1));
 	delete[] sval;
 
@@ -1144,37 +1145,37 @@ unimplemented...
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024);
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	ucs2literal(num3Z,"3Z");
 	test("humanReadable 3Z",!ucs2charstring::compare(sval,num3Z));
 	delete[] sval;
 	ival/=1024;
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	ucs2literal(num3P,"3P");
 	test("humanReadable 3P",!ucs2charstring::compare(sval,num3P));
 	delete[] sval;
 	ival/=1024;
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	ucs2literal(num3T,"3T");
 	test("humanReadable 3T",!ucs2charstring::compare(sval,num3T));
 	delete[] sval;
 	ival/=1024;
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	ucs2literal(num3G,"3G");
 	test("humanReadable 3G",!ucs2charstring::compare(sval,num3G));
 	delete[] sval;
 	ival/=1024;
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	ucs2literal(num3M,"3M");
 	test("humanReadable 3M",!ucs2charstring::compare(sval,num3M));
 	delete[] sval;
 	ival/=1024;
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	ucs2literal(num3K,"3K");
 	test("humanReadable 3K",!ucs2charstring::compare(sval,num3K));
 	delete[] sval;
 	ival/=1024;
-	sval=ucs2charstring::humanReadable(ival);
+	sval=ucs2charstring::getHumanReadable(ival);
 	test("humanReadable 3",!ucs2charstring::compare(sval,num3));
 	delete[] sval;
 
@@ -1182,37 +1183,37 @@ unimplemented...
 			((int64_t)1000)*((int64_t)1000)*
 			((int64_t)1000)*((int64_t)1000)*
 			((int64_t)1000)*((int64_t)1000);
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3Z,"-3Z");
 	test("humanReadable -3Z",!ucs2charstring::compare(sval,neg3Z));
 	delete[] sval;
 	sival/=1000;
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3P,"-3P");
 	test("humanReadable -3P",!ucs2charstring::compare(sval,neg3P));
 	delete[] sval;
 	sival/=1000;
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3T,"-3T");
 	test("humanReadable -3T",!ucs2charstring::compare(sval,neg3T));
 	delete[] sval;
 	sival/=1000;
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3G,"-3G");
 	test("humanReadable -3G",!ucs2charstring::compare(sval,neg3G));
 	delete[] sval;
 	sival/=1000;
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3M,"-3M");
 	test("humanReadable -3M",!ucs2charstring::compare(sval,neg3M));
 	delete[] sval;
 	sival/=1000;
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3K,"-3K");
 	test("humanReadable -3K",!ucs2charstring::compare(sval,neg3K));
 	delete[] sval;
 	sival/=1000;
-	sval=ucs2charstring::humanReadable(sival,true);
+	sval=ucs2charstring::getHumanReadable(sival,true);
 	ucs2literal(neg3,"-3");
 	test("humanReadable -3",!ucs2charstring::compare(sval,neg3));
 	delete[] sval;

@@ -81,7 +81,7 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	buffersize=charstring::toUnsignedInteger(argv[1]);
+	buffersize=charstring::convertToUnsignedInteger(argv[1]);
 
 	mysvr=new myserver();
 

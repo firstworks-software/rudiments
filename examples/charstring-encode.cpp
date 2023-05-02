@@ -3,22 +3,6 @@
 
 int main(int argc, const char **argv) {
 
-	// http escape...
-	const char	httpstr[]="string with spaces and symbols: \\{}\"\'";
-
-	stdoutput.printf("original string:\n  %s\n",httpstr);
-
-	char	*escapedstr=charstring::httpEscape(httpstr);
-	stdoutput.printf("http escaped string:\n  %s\n",escapedstr);
-
-	char	*unescapedstr=charstring::httpUnescape(escapedstr);
-	stdoutput.printf("http unescaped string:\n  %s\n",unescapedstr);
-	stdoutput.write('\n');
-
-	delete[] escapedstr;
-	delete[] unescapedstr;
-
-
 
 	// backslash-escaping of quote, backslash and space characters...
 	const char	path[]="\"C:\\Program Files\\Firstworks\"";
@@ -34,6 +18,23 @@ int main(int argc, const char **argv) {
 
 	delete[] escapedpath;
 	delete[] unescapedpath;
+
+
+
+	// url encoding...
+	const char	urlstr[]="string with spaces and symbols: \\{}\"\'";
+
+	stdoutput.printf("original string:\n  %s\n",urlstr);
+
+	char	*encodedstr=charstring::urlEncode(urlstr);
+	stdoutput.printf("url encoded string:\n  %s\n",encodedstr);
+
+	char	*unencodedstr=charstring::urlUnescape(encodedstr);
+	stdoutput.printf("url unencoded string:\n  %s\n",unencodedstr);
+	stdoutput.write('\n');
+
+	delete[] encodedstr;
+	delete[] unencodedstr;
 
 
 

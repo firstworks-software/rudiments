@@ -98,7 +98,7 @@ const char *num[10]={
 
 char *toString(int32_t number) {
 	stringbuffer	numstr;
-	uint16_t	len=charstring::integerLength(number);
+	uint16_t	len=charstring::getIntegerLength(number);
 	for (uint16_t i=0; i<len; i++) {
 		if (i) {
 			numstr.append('-');
@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
 	uint32_t	seed=randomnumber::getSeed();
 	stdoutput.printf("(seed: %d)\n\n",seed);
 	if (argc==2) {
-		seed=charstring::toInteger(argv[1]);
+		seed=charstring::convertToInteger(argv[1]);
 	}
 	r.setSeed(seed);
 
@@ -228,7 +228,7 @@ int main(int argc, char **argv) {
 		generateRandom(&r,&decimalpartint);
 		double	number=(double)integerpartint;
 		double	decimalpart=(double)decimalpartint;
-		uint16_t	exp=charstring::integerLength(decimalpartint);
+		uint16_t	exp=charstring::getIntegerLength(decimalpartint);
 		for (uint16_t j=0; j<exp; j++) {
 			decimalpart=decimalpart/10;
 		}

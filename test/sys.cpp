@@ -103,7 +103,7 @@ int main(int argc, const char **argv) {
 			"			: %lld\n",
 			(LONG_LONG)sys::getPhysicalMemorySize());
 
-	char	*hr=charstring::humanReadable(sys::getPhysicalMemorySize());
+	char	*hr=charstring::getHumanReadable(sys::getPhysicalMemorySize());
 	stdoutput.printf("Physical Memory Size"
 			"			: %s\n",
 			hr);
@@ -113,7 +113,7 @@ int main(int argc, const char **argv) {
 			"		: %lld\n",
 			(LONG_LONG)sys::getAvailablePhysicalMemorySize());
 
-	hr=charstring::humanReadable(sys::getAvailablePhysicalMemorySize());
+	hr=charstring::getHumanReadable(sys::getAvailablePhysicalMemorySize());
 	stdoutput.printf("Available Physical Memory Size"
 			"		: %s\n",
 			hr);
@@ -123,7 +123,7 @@ int main(int argc, const char **argv) {
 			"		: %lld\n",
 			(LONG_LONG)sys::getUsedPhysicalMemorySize());
 
-	hr=charstring::humanReadable(sys::getUsedPhysicalMemorySize());
+	hr=charstring::getHumanReadable(sys::getUsedPhysicalMemorySize());
 	stdoutput.printf("Used Physical Memory Size"
 			"		: %s\n",
 			hr);

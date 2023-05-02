@@ -76,19 +76,19 @@ int main(int argc, const char **argv) {
 
 	// create and verify the header
 	char	*header=logger::getLogHeader("logtest");
-	test("header month",charstring::toInteger(header)==dt.getMonth());
-	test("header day",charstring::toInteger(header+3)==dt.getDayOfMonth());
-	test("header year",charstring::toInteger(header+6)==dt.getYear());
-	test("header hour",charstring::toInteger(header+11)==dt.getHour());
-	test("header minute",charstring::toInteger(header+14)==dt.getMinute());
+	test("header month",charstring::convertToInteger(header)==dt.getMonth());
+	test("header day",charstring::convertToInteger(header+3)==dt.getDayOfMonth());
+	test("header year",charstring::convertToInteger(header+6)==dt.getYear());
+	test("header hour",charstring::convertToInteger(header+11)==dt.getHour());
+	test("header minute",charstring::convertToInteger(header+14)==dt.getMinute());
 	test("header program",
 		// (date string may or may not include the timezone)
 		!charstring::compare(header+24,"logtest ",8) ||
 		!charstring::compare(header+21,"logtest ",8));
 	test("header pid",
 		// (date string may or may not include the timezone)
-		charstring::toInteger(header+33)==process::getProcessId() ||
-		charstring::toInteger(header+30)==process::getProcessId());
+		charstring::convertToInteger(header+33)==process::getProcessId() ||
+		charstring::convertToInteger(header+30)==process::getProcessId());
 
 
 	// write various log messages (even though no destinations exist)
