@@ -68,11 +68,11 @@ bool serialport::restartOutput() {
 	return tcFlow(TCOON);
 }
 
-bool serialport::transmitStop() {
+bool serialport::sendStop() {
 	return tcFlow(TCIOFF);
 }
 
-bool serialport::transmitStart() {
+bool serialport::sendStart() {
 	return tcFlow(TCION);
 }
 

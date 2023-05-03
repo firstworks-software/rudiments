@@ -292,7 +292,7 @@ bool signalset::removeAllSignals() {
 	#endif
 }
 
-int32_t signalset::signalIsInSet(int32_t signum) {
+int32_t signalset::getSignalIsInSet(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return sigismember(&pvt->_sigset,signum);
 	#else
@@ -409,7 +409,7 @@ bool signalmanager::waitForSignals(signalset *sset) {
 	#endif
 }
 
-bool signalmanager::examineBlockedSignals(signalset *sset) {
+bool signalmanager::getBlockedSignals(signalset *sset) {
 	#ifdef RUDIMENTS_HAVE_KILL
 		int32_t	result;
 		error::clearError();

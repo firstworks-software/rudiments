@@ -69,7 +69,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  process group leader and detaches from the controlling
 		 *  terminal.  Returns the session id on success or -1 if an
 		 *  error occurred. */
-		static	pid_t	newSession();
+		static	pid_t	createNewSession();
 
 		/** Returns the real user id of the current process. */
 		static	uid_t	getUserId();
@@ -215,11 +215,6 @@ class RUDIMENTS_DLLSPEC process {
 		  * the exit status to "status". */
 		static void	exitImmediately(int32_t status);
 
-		/** Registers "function" to be called when the process
-		 *  exits normally.  Returns true on success and false on
-		 *  failure. */
-		static bool	atExit(void (*function)(void));
-
 		/** Send signal "signum" to process "processid".
 		 *  Returns true on success and false on failure. */
 		static	bool	sendSignal(pid_t processid, int32_t signum);
@@ -270,6 +265,19 @@ class RUDIMENTS_DLLSPEC process {
 		 *  SIGSEGV, SIGBUS, SIGIOT, SIGEMT or SIGSYS. */
 		static void	setShutDownFlagOnCrash();
 
+		/** Allows you to register a function to run when the process
+		 *  exits normally.
+		 *
+		 *  May be called multiple times to register multiple functions
+		 *  to be run at exit.  The functions will be called in the
+		 *  reverse order of their registration.
+		 *
+		 *  Note that there is no way to deregister a function from
+		 *  running at exit once it has been registered.
+		 *
+		 *  Returns true on success and false on failure. */
+		static bool	registerExitHandler(void (*handler)(void));
+
 		/** Allows you to designate a function to run when the
 		 *  process receives a termination signal:
 		 *  * SIGINT - interrupt (ctrl-C)
@@ -278,23 +286,29 @@ class RUDIMENTS_DLLSPEC process {
 		 *  * SIGHUP - hangup (terminal disconnected)
 		 *  * SIGXCPU - cpu consumption soft limit exceeded
 		 *  * SIGXFZ - file size limit exceeded
-		 *  * SIGPWR - ACPI (or similar) power down */
-		static	void	handleShutDown(
-					void (*shutdownfunction)(int32_t));
+		 *  * SIGPWR - ACPI (or similar) power down
+		 *
+		 *  Each time setShutDownHandler() is called, the shut down
+		 *  handler replaces the previously designated handler. */
+		static	void	setShutDownHandler(
+					void (*shutdownhandler)(int32_t));
 
 		/** Allows you to designate a function to run if the
 		 *  process crashes with a program error signal -
 		 *  SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
-		 *  SIGEMT or SIGSYS. */
-		static	void	handleCrash(void (*crashfunction)(int32_t));
+		 *  SIGEMT or SIGSYS.
+		 *
+		 *  Each time setCrashHandler() is called, the crash handler
+		 *  replaces the previously designated handler. */
+		static	void	setCrashHandler(void (*crashhandler)(int32_t));
 
 		/** Sets a global shutdown flag indicating whether or not the
 		 *  process has been asked to shut down.
 		 *
 		 *  For example...
 		 *
-		 *  The "shutdownfunction" of handleShutDown() may simply call
-		 *  setShutDownFlag(true) and then return.
+		 *  The "shutdownhandler" of setShutDownHandler() may simply
+		 *  call setShutDownFlag(true) and then return.
 		 *
 		 *  The process may then call getShutDownFlag() at strategic
 		 *  points to see if a shutdown has been requested and shut
@@ -310,8 +324,8 @@ class RUDIMENTS_DLLSPEC process {
 		 *
 		 *  For example...
 		 *
-		 *  The "shutdownfunction" of handleShutDown() may simply call
-		 *  setShutDownFlag(true) and then return.
+		 *  The "shutdownhandler" of setShutDownHandler() may simply
+		 *  call setShutDownFlag(true) and then return.
 		 *
 		 *  The process may then call getShutDownFlag() at strategic
 		 *  points to see if a shutdown has been requested and shut
@@ -327,7 +341,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *
 		 *  For example...
 		 *
-		 *  The "shutdownfunction" of handleShutDown() may call
+		 *  The "shutdownhandler" of setShutDownHandler() may call
 		 *  setShutDownSignal(signum), passing it the value of its
 		 *  "signum" parameter.
 		 *
@@ -343,7 +357,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *
 		 *  For example...
 		 *
-		 *  The "shutdownfunction" of handleShutDown() may call
+		 *  The "shutdownhandler" of setShutDownHandler() may call
 		 *  setShutDownSignal(signum), passing it the value of its
 		 *  "signum" parameter.
 		 *
@@ -382,7 +396,7 @@ class RUDIMENTS_DLLSPEC process {
 
 		/** This method causes the process not to wait on child
 		 *  processes which have exited.  Ordinarily, you'd want to
-		 *  wait on child processes, but this interferes with the
+		 *  wait on child processes, but that interferes with the
 		 *  behavior of WEXITSTATUS() after a call to system() (and
 		 *  possibly other calls).  This method allows you to disable
 		 *  waiting on child processes. */
@@ -478,7 +492,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  to include in the backtrace.
 		 *
 		 *  (Not supported on all platforms.) */
-		static void	backtrace(output *out, uint32_t maxframes);
+		static void	writeBacktrace(output *out, uint32_t maxframes);
 
 		/** Writes the backtrace for the current thread to "buffer".
 		 *  
@@ -486,26 +500,29 @@ class RUDIMENTS_DLLSPEC process {
 		 *  backtrace.
 		 *  
 		 *  (Not supported on all platforms.) */
-		static void	backtrace(output *out);
+		static void	writeBacktrace(output *out);
 
 		/** Appends the backtrace for the current thread to "filename".
+		 *  
+		 *  If "filename" doesn't already exist then it will be created
+		 *  with rw------- permissions.
 		 *  
 		 *  A maximum of 128 stack frames will be included in the
 		 *  backtrace.
 		 *  
 		 *  (Not supported on all platforms.) */
-		static void	backtrace(const char *filename);
+		static void	writeBacktrace(const char *filename);
 
 		/** Appends the backtrace for the current thread to "filename".
 		 *  
 		 *  If "filename" doesn't already exist then it will be created
 		 *  with "perms" permissions.
 		 *
-		 *  "maxframes" indicates the maximum number of stack frames
-		 *  to include in the backtrace.
+		 *  A maximum of "maxframes" stack frames will be included in
+		 *  the backtrace.
 		 *
 		 *  (Not supported on all platforms.) */
-		static void	backtrace(const char *filename,
+		static void	writeBacktrace(const char *filename,
 						mode_t perms,
 						uint32_t maxframes);
 

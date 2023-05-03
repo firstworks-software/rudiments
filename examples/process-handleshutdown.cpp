@@ -11,7 +11,7 @@ void shutDown(int32_t signal) {
 int main(int argc, const char **argv) {
 
 	// configure the process to call shutDown on shut down
-	process::handleShutDown(shutDown);
+	process::setShutDownHandler(shutDown);
 
 	stdoutput.write("kill the process or press ctrl-C to exit\n");
 	stdoutput.write("(should not display \"Terminated\")\n");

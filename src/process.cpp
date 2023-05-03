@@ -181,7 +181,7 @@ pid_t process::getSessionId(pid_t pid) {
 	#endif
 }
 
-pid_t process::newSession() {
+pid_t process::createNewSession() {
 	#ifdef RUDIMENTS_HAVE_SETSID
 		return setsid();
 	#else
@@ -611,7 +611,7 @@ bool process::detach() {
 	}
 
 	// create a new session with no controlling terminal
-	newSession();
+	createNewSession();
 
 	// change directory to root to avoid keeping any directories in use
 	directory::changeDirectory("/");
@@ -633,9 +633,9 @@ void process::exitImmediately(int32_t status) {
 	_exit(status);
 }
 
-bool process::atExit(void (*function)(void)) {
+bool process::registerExitHandler(void (*handler)(void)) {
 	#ifdef RUDIMENTS_HAVE_ATEXIT
-		return !atexit(function);
+		return !atexit(handler);
 	#else
 		return false;
 	#endif
@@ -1055,8 +1055,8 @@ void process::setShutDownFlagHandler(int32_t signum) {
 		(signalhandler::supportsSignalHandlerParameter())?signum:-1;
 }
 
-void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
-	_shutdownfunc=shutdownfunction;
+void process::setShutDownHandler(void (*shutdownhandler)(int32_t)) {
+	_shutdownfunc=shutdownhandler;
 	_shutdownhandler.setHandler(shutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
@@ -1077,8 +1077,8 @@ void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
 	#endif
 }
 
-void process::handleCrash(void (*crashfunction)(int32_t)) {
-	_crashfunc=crashfunction;
+void process::setCrashHandler(void (*crashhandler)(int32_t)) {
+	_crashfunc=crashhandler;
 	_crashhandler.setHandler(crash);
 	_crashhandler.handleSignal(SIGABRT);
 	_crashhandler.handleSignal(SIGFPE);
@@ -1291,10 +1291,10 @@ bool process::getRetryFailedFork() {
 	return _retry;
 }
 
-void process::backtrace(output *out, uint32_t maxframes) {
+void process::writeBacktrace(output *out, uint32_t maxframes) {
 	#if defined(RUDIMENTS_HAVE_BACKTRACE)
 		byte_t	**btarray=new byte_t *[maxframes];
-		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
+		size_t	btsize=backtrace((void **)btarray,(int)maxframes);
 		char	**btstrings=backtrace_symbols((void **)btarray,btsize);
 		for (size_t i=0; i<btsize; i++) {
 			out->write(btstrings[i]);
@@ -1336,19 +1336,19 @@ void process::backtrace(output *out, uint32_t maxframes) {
 	#endif
 }
 
-void process::backtrace(output *out) {
-	backtrace(out,128);
+void process::writeBacktrace(output *out) {
+	writeBacktrace(out,128);
 }
 
-void process::backtrace(const char *filename) {
-	backtrace(filename,permissions::evalPermString("rw-------"),128);
+void process::writeBacktrace(const char *filename) {
+	writeBacktrace(filename,permissions::evalPermString("rw-------"),128);
 }
 
-void process::backtrace(const char *filename,
+void process::writeBacktrace(const char *filename,
 				mode_t perms,
 				uint32_t maxframes) {
 	file	f;
 	if (f.open(filename,O_WRONLY|O_APPEND|O_CREAT,perms)) {
-		backtrace(&f,maxframes);
+		writeBacktrace(&f,maxframes);
 	}
 }

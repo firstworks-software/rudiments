@@ -23,7 +23,7 @@ bool winsock::initWinsock() {
 					WSACleanup();
 					result=1;
 				} else {
-					process::atExit(
+					process::registerExitHandler(
 						winsock::shutDownWinsock);
 				}
 			}

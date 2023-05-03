@@ -63,11 +63,11 @@ class RUDIMENTS_DLLSPEC serialport : public filedescriptor {
 		/** Sends a STOP character out the serial port, hopefully
 		 *  causing the DTE cease transmitting data until a START
 		 *  character is sent. */
-		bool	transmitStop();
+		bool	sendStop();
 
 		/** Sends a START character out the serial port, hopefully
  		 *  causing the DTE to resume transmission. */
-		bool	transmitStart();
+		bool	sendStart();
 
 		/** If the DTE is communicating asynchronously, then a 
 		 *  continuous stream of 0-valued bytes are sent to the DTE.

@@ -266,9 +266,9 @@ bool thread::supported() {
 	#endif
 }
 
-bool thread::reliable() {
+bool thread::isReliable() {
 	#if __GLIBC__==2 && __GLIBC_MINOR__ == 0
-		// glibc 2.0.x on linux 2.0.x supports thread, but they are
+		// glibc 2.0.x on linux 2.0.x supports threads, but they are
 		// unreliable.  The rudiments tests tend to succeed, but, for
 		// exmaple, on redhat 5.2, the sqlr-listener crashes when a
 		// client exits.  I may have a bug somewhere, but for now we'll

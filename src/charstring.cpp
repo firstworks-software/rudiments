@@ -2970,7 +2970,7 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 					(uint64_t)process::getProcessId());
 			scratch=fopen(scratchfile,"w+");
 			if (scratch) {
-				process::atExit((void (*)(void))removeScratch);
+				process::registerExitHandler((void (*)(void))removeScratch);
 				rewind(scratch);
 			} else {
 				delete[] scratchfile;

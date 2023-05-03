@@ -84,7 +84,7 @@ void environment::init() {
 	// chaos.  Ideally this should be called when the dll is unloaded but
 	// that's tricky to do too.  For now it's just disabled.
 	#ifndef _WIN32
-		process::atExit((void (*)(void))environment::exit);
+		process::registerExitHandler((void (*)(void))environment::exit);
 	#endif
 }
 

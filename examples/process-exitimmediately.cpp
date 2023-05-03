@@ -9,7 +9,7 @@ void runAtExit() {
 int main(int argc, const char **argv) {
 
 	// configure runAtExit to run at exit
-	process::atExit(runAtExit);
+	process::registerExitHandler(runAtExit);
 
 	stdoutput.write("nothing should be printed below...\n");
 

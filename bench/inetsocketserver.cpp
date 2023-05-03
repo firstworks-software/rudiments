@@ -87,8 +87,8 @@ int main(int argc, const char **argv) {
 
 	// set up signal handlers for clean shutdown
 	process::waitForChildren();
-	process::handleShutDown(shutDown);
-	process::handleCrash(shutDown);
+	process::setShutDownHandler(shutDown);
+	process::setCrashHandler(shutDown);
 
 	mysvr->myListen();
 }

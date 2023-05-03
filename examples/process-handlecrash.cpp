@@ -10,7 +10,7 @@ void shutDown(int32_t signal) {
 int main(int argc, const char **argv) {
 
 	// configure the process to call shutDown on crash
-	process::handleCrash(shutDown);
+	process::setCrashHandler(shutDown);
 
 	stdoutput.write("handling crash, instead of \"Segmentation Fault\"\n");
 

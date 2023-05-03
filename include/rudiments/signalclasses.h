@@ -46,7 +46,7 @@ class RUDIMENTS_DLLSPEC signalset : public object {
 
 		/** Returns 1 if the signal "signum" is in the 
 		 *  set, 0 if it is not and -1 on error. */
-		int32_t	signalIsInSet(int32_t signum);
+		int32_t	getSignalIsInSet(int32_t signum);
 
 	#include <rudiments/private/signalset.h>
 };
@@ -72,16 +72,15 @@ class RUDIMENTS_DLLSPEC signalmanager {
 		 *  Returns true on success and false on failure. */
 		static	bool	ignoreSignals(signalset *sset);
 
-		/** Wait until a signal NOT in the signal set 
-		 *  "mask" is received.
+		/** Wait until a signal NOT in the signal set "mask" has been
+		 *  received.
 		 *  Returns true on success and false on failure. */
 		static	bool	waitForSignals(signalset *mask);
 
-		/** Sets "sset" to the set of signals that
-		 *  were raised, but blocked during a call to 
-		 *  waitForSignals().
+		/** Sets "sset" to the set of signals that were raised, but
+		 *  blocked during the most recent call to waitForSignals().
 		 *  Returns true on success and false on failure. */
-		static	bool	examineBlockedSignals(signalset *sset);
+		static	bool	getBlockedSignals(signalset *sset);
 };
 
 
