@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 	response	resp(&st);
 
 	// send an http header
-	resp.textPlain();
+	resp.sendTextPlainHeader();
 
 	// write hello world
 	resp.write("hello world!\n");

@@ -104,7 +104,7 @@ class RUDIMENTS_DLLSPEC memorymap : public object {
 
 		/** Returns true if the platform supports
 		 *  memory mapping and false otherwise. */
-		static bool	supported();
+		static bool	isSupported();
 
 	#include <rudiments/private/memorymap.h>
 };

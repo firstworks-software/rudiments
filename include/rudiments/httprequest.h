@@ -16,9 +16,9 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 
 
 
-		/** Dumps all environment variables, parameters,
+		/** Writes all environment variables, parameters,
 		 *  file parameters, and cookies to the browser. */
-		virtual void	dumpVariables();
+		virtual void	writeVariables();
 
 
 
@@ -43,7 +43,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 
 		/** Writes all environment variables to the browser.  Similar
 		 *  to running "env" on the command line. */
-		void	dumpEnvironment();
+		void	writeEnvironment();
 
 
 

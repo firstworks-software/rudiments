@@ -55,12 +55,12 @@ socketclient::~socketclient() {
 	delete pvt;
 }
 
-bool socketclient::getBlockingAndNonBlockingModesAreSupported() {
+bool socketclient::supportsBlockingAndNonBlockingModes() {
 	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
 		return filedescriptor::
-			getBlockingAndNonBlockingModesAreSupported();
+			supportsBlockingAndNonBlockingModes();
 	#endif
 }
 

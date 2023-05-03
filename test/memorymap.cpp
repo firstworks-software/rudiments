@@ -15,7 +15,7 @@ int main(int argc, const char **argv) {
 
 	header("memorymap");
 
-	if (!memorymap::supported()) {
+	if (!memorymap::isSupported()) {
 		stdoutput.printf("	not supported\n\n");
 		return 0;
 	}

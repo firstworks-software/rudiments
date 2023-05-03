@@ -53,9 +53,9 @@ urlhttprequest::~urlhttprequest() {
 	delete pvt;
 }
 
-void urlhttprequest::dumpVariables() {
+void urlhttprequest::writeVariables() {
 
-	httprequest::dumpVariables();
+	httprequest::writeVariables();
 
 	pvt->_sapi->write("Skin Variables:\n");
 
@@ -349,63 +349,63 @@ void urlhttprequest::initUrlVariables() {
 	delete[] pathinfolist;
 }
 
-const char *urlhttprequest::application() {
+const char *urlhttprequest::getApplication() {
 	return pvt->_applicationstr.getString();
 }
 
-const char *urlhttprequest::applicationPath() {
+const char *urlhttprequest::getApplicationPath() {
 	return pvt->_applicationpath.getString();
 }
 
-const char *urlhttprequest::applicationUrl() {
+const char *urlhttprequest::getApplicationUrl() {
 	return pvt->_applicationurl.getString();
 }
 
-const char *urlhttprequest::program() {
+const char *urlhttprequest::getProgram() {
 	return pvt->_programstr.getString();
 }
 
-const char *urlhttprequest::programPath() {
+const char *urlhttprequest::getProgramPath() {
 	return pvt->_programpath.getString();
 }
 
-const char *urlhttprequest::programUrl() {
+const char *urlhttprequest::getProgramUrl() {
 	return pvt->_programurl.getString();
 }
 
-const char *urlhttprequest::module() {
+const char *urlhttprequest::getModule() {
 	return pvt->_modulestr.getString();
 }
 
-const char *urlhttprequest::modulePath() {
+const char *urlhttprequest::getModulePath() {
 	return pvt->_modulepath.getString();
 }
 
-const char *urlhttprequest::moduleUrl() {
+const char *urlhttprequest::getModuleUrl() {
 	return pvt->_moduleurl.getString();
 }
 
-const char *urlhttprequest::skin() {
+const char *urlhttprequest::getSkin() {
 	return pvt->_skinstr.getString();
 }
 
-const char *urlhttprequest::skinPath() {
+const char *urlhttprequest::getSkinPath() {
 	return pvt->_skinpath.getString();
 }
 
-const char *urlhttprequest::skinUrl() {
+const char *urlhttprequest::getSkinUrl() {
 	return pvt->_skinurl.getString();
 }
 
-const char *urlhttprequest::page() {
+const char *urlhttprequest::getPage() {
 	return pvt->_pagestr.getString();
 }
 
-const char *urlhttprequest::pagePath() {
+const char *urlhttprequest::getPagePath() {
 	return pvt->_pagepath.getString();
 }
 
-const char *urlhttprequest::pageUrl() {
+const char *urlhttprequest::getPageUrl() {
 	return pvt->_pageurl.getString();
 }
 

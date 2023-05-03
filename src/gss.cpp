@@ -456,7 +456,7 @@ const char *gss::getSspiStatusString(uint32_t status) {
 	#endif
 }
 
-bool gss::supported() {
+bool gss::isSupported() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return true;
 	#elif defined(RUDIMENTS_HAS_SSPI)

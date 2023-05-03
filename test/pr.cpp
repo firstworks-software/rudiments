@@ -39,7 +39,7 @@ bool mod1mod2::stHtml(output *container,
 			const char *filename,
 			void *data) {
 
-	resp->textHtml();
+	resp->sendTextHtmlHeader();
 
 	dictionary<const char *,const char *>	vars;
 	vars.setValues(req->getAllVariables(),req->getAllValues());
@@ -61,7 +61,7 @@ bool mod1mod2::stHtml(output *container,
 		{NULL,NULL,NULL,NULL}
 	};
 
-	return te->parse(container,req->pagePath(),sh,&vars);
+	return te->parse(container,req->getPagePath(),sh,&vars);
 }
 
 bool mod1mod2::sthtmlparser::block(output *container,
@@ -136,7 +136,7 @@ bool httpModuleMain(httpserverapi *sapi) {
 	dictionary<const char *,const char *>	vars;
 	vars.setValues(req->getAllVariables(),req->getAllValues());
 
-	return te->parse(resp,req->pagePath(),ph,&vars);
+	return te->parse(resp,req->getPagePath(),ph,&vars);
 }
 
 static bool httpModuleExit(httpserverapi *sapi) {

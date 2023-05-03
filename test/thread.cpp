@@ -36,7 +36,7 @@ int main(int argc, const char **argv) {
 
 	header("threads");
 
-	if (!thread::supported()) {
+	if (!thread::isSupported()) {
 		stdoutput.printf("	not supported\n\n");
 		return 0;
 	}

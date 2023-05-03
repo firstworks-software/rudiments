@@ -91,7 +91,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if the system supports blocking/nonblocking
 		 *  modes and false otherwise. */
-		virtual bool	getBlockingAndNonBlockingModesAreSupported();
+		virtual bool	supportsBlockingAndNonBlockingModes();
 
 		/** If "usenonblockingmode" is true then the file descriptor
 		 *  put into in non-blocking mode.  If "usenonblockingmode" is
@@ -904,7 +904,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if the platform supports passing and receiving
 		 *  file descriptors or false otherwise. */
-		static bool	supportsPassReceiveFileDescriptor();
+		static bool	supportsPassAndReceiveFileDescriptor();
 
 
 		/** Sends socket "sock" to the file descriptor.  This
@@ -919,7 +919,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Returns true if the platform supports passing and receiving
 		 *  sockets or false otherwise. */
-		static bool	supportsPassReceiveSocket();
+		static bool	supportsPassAndReceiveSocket();
 
 
 		/** Translate integers from native byte order to network byte
@@ -1176,8 +1176,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  used to bypass the cache, when using large buffer sizes, or
 		 *  when randomly accessing small parts of large files.
 		 *
-		 *  NOTE: if memorymap::supported() returns false, then calling
-		 *  this method with "enabled" set to true has no effect.
+		 *  NOTE: if memorymap::isSupported() returns false, then
+		 *  calling this method with "enabled" set to true has no
+		 *  effect.
 		 *
 		 *  Defaults to false. */
 		void	setMmapBufferingEnabled(bool enabled);

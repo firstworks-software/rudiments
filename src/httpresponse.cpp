@@ -21,32 +21,32 @@ httpresponse::~httpresponse() {
 	delete pvt;
 }
 
-void httpresponse::cr() {
-	pvt->_sapi->header("\r\n");
+void httpresponse::sendCrLf() {
+	pvt->_sapi->sendHeader("\r\n");
 }
 
-void httpresponse::textHtml() {
-	contentType("text","html");
-	cr();
-	cr();
+void httpresponse::sendTextHtmlHeader() {
+	sendContentTypeHeader("text","html");
+	sendCrLf();
+	sendCrLf();
 }
 
-void httpresponse::textPlain() {
-	contentType("text","plain");
-	cr();
-	cr();
+void httpresponse::sendTextPlainHeader() {
+	sendContentTypeHeader("text","plain");
+	sendCrLf();
+	sendCrLf();
 }
 
-void httpresponse::contentType(const char *type, const char *subtype) {
-	contentType(type,subtype,NULL,NULL);
+void httpresponse::sendContentTypeHeader(const char *type, const char *subtype) {
+	sendContentTypeHeader(type,subtype,NULL,NULL);
 }
 
-void httpresponse::contentType(const char *type, const char *subtype,
+void httpresponse::sendContentTypeHeader(const char *type, const char *subtype,
 							const char *charset) {
-	contentType(type,subtype,charset,NULL);
+	sendContentTypeHeader(type,subtype,charset,NULL);
 }
 
-void httpresponse::contentType(const char *type, const char *subtype,
+void httpresponse::sendContentTypeHeader(const char *type, const char *subtype,
 						const char *charset,
 						const char *boundary) {
 	stringbuffer	contenttypestr;
@@ -57,7 +57,7 @@ void httpresponse::contentType(const char *type, const char *subtype,
 	if (!charstring::isNullOrEmpty(boundary)) {
 		contenttypestr.append(";boundary=")->append(boundary);
 	}
-	pvt->_sapi->header("Content-type",contenttypestr.getString());
+	pvt->_sapi->sendHeader("Content-type",contenttypestr.getString());
 }
 
 void httpresponse::setCookie(const char *name, const char *value,
@@ -77,40 +77,40 @@ void httpresponse::setCookie(const char *name, const char *value,
 	if (secure) {
 		cookiestr.append("; secure");
 	}
-	pvt->_sapi->header("Set-Cookie",cookiestr.getString());
+	pvt->_sapi->sendHeader("Set-Cookie",cookiestr.getString());
 }
 
-const char *httpresponse::boundaryString() {
+const char *httpresponse::getBoundaryString() {
 	return "ThisRandomString";
 }
 
-void httpresponse::multiPartBoundary(output *out) {
+void httpresponse::sendMultiPartBoundary(output *out) {
 	out->write('\n');
 	out->write("--");
-	out->write(boundaryString());
+	out->write(getBoundaryString());
 	out->write('\n');
 }
 
-void httpresponse::multiPartEnd(output *out) {
+void httpresponse::sendFinalMultiPartBoundary(output *out) {
 	out->write('\n');
 	out->write("--");
-	out->write(boundaryString());
+	out->write(getBoundaryString());
 	out->write("--");
 	out->write('\n');
 }
 
-httpresponse *httpresponse::status(const char *status) {
-	pvt->_sapi->status(status);
+httpresponse *httpresponse::sendStatusHeader(const char *status) {
+	pvt->_sapi->sendStatusHeader(status);
 	return this;
 }
 
-httpresponse *httpresponse::header(const char *header, const char *value) {
-	pvt->_sapi->header(header,value);
+httpresponse *httpresponse::sendHeader(const char *header, const char *value) {
+	pvt->_sapi->sendHeader(header,value);
 	return this;
 }
 
-httpresponse *httpresponse::header(const char *header) {
-	pvt->_sapi->header(header);
+httpresponse *httpresponse::sendHeader(const char *header) {
+	pvt->_sapi->sendHeader(header);
 	return this;
 }
 

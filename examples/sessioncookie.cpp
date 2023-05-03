@@ -12,10 +12,10 @@ static bool stencilMain(void *apistruct) {
 	stencil		st(apistruct);
 	response	resp(&st);
 
-	resp.contentType("text","html",NULL);
+	resp.sendContentTypeHeader("text","html",NULL);
 	resp.setCookie("password","abcd1234",NULL,NULL,NULL,false);
-	resp.cr();
-	resp.cr();
+	resp.sendCrLf()();
+	resp.sendCrLf()();
 
 	resp.write("Cookie set!\n");
 

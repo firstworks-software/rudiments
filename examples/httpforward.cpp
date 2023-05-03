@@ -12,9 +12,9 @@ static bool stencilMain(void *apistruct) {
 	stencil		st(apistruct);
 	response	resp(&st);
 
-	resp.header("Location","html://www.mysite.com/errors/error.html");
-	resp.cr();
-	resp.cr();
+	resp.sendHeader("Location","html://www.mysite.com/errors/error.html");
+	resp.sendCrLf()();
+	resp.sendCrLf()();
 
 	return true;
 }

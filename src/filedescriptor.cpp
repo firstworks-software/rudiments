@@ -729,7 +729,7 @@ size_t filedescriptor::getReadBufferSize() {
 }
 
 void filedescriptor::setMmapBufferingEnabled(bool enabled) {
-	pvt->_writebuffermmapenabled=(enabled && memorymap::supported());
+	pvt->_writebuffermmapenabled=(enabled && memorymap::isSupported());
 }
 
 bool filedescriptor::getMmapBufferingEnabled() {
@@ -809,7 +809,7 @@ socketlayer *filedescriptor::getSocketLayer() {
 	return pvt->_socklr;
 }
 
-bool filedescriptor::getBlockingAndNonBlockingModesAreSupported() {
+bool filedescriptor::supportsBlockingAndNonBlockingModes() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
 		return true;
@@ -3056,7 +3056,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 #endif
 }
 
-bool filedescriptor::supportsPassReceiveFileDescriptor() {
+bool filedescriptor::supportsPassAndReceiveFileDescriptor() {
 
         // not supported on Cygwin, Linux < 2.2, syllable, IRIX, mac os 10.0,
         // FreeBSD, NetBSD, or OpenBSD
@@ -3152,10 +3152,10 @@ bool filedescriptor::receiveSocket(int32_t *sock) {
 #endif
 }
 
-bool filedescriptor::supportsPassReceiveSocket() {
+bool filedescriptor::supportsPassAndReceiveSocket() {
 	// so far, any platform that supports passing file
 	// descriptors also supports passing sockets
-	return supportsPassReceiveFileDescriptor();
+	return supportsPassAndReceiveFileDescriptor();
 }
 
 bool filedescriptor::useNaglesAlgorithm() {

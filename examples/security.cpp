@@ -15,7 +15,7 @@ static bool stencilMain(void *apistruct) {
 	response	resp(&st);
 
 	// send an http header
-	resp.textPlain();
+	resp.sendTextPlainHeader();
 
 	// method allowed
 

@@ -35,7 +35,7 @@ class RUDIMENTS_DLLSPEC gss : public object {
 
 		/** Returns true if rudiments was built with GSS support and
 		 *  false otherwise. */
-		static	bool	supported();
+		static	bool	isSupported();
 
 	#include <rudiments/private/gss.h>
 };

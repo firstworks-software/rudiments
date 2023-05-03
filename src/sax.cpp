@@ -425,7 +425,7 @@ bool sax::mapFile() {
 	// map the block that contains the offset,
 	// which may not begin at the offset
 
-	if (!memorymap::supported()) {
+	if (!memorymap::isSupported()) {
 		return false;
 	}
 	if (pvt->_offset) {

@@ -73,7 +73,7 @@ class RUDIMENTS_DLLSPEC thread : virtual public object {
 		 *  was built with thread support and false otherwise.
 		 *
 		 *  See also: isReliable(). */
-		static bool	supported();
+		static bool	isSupported();
 
 		/** Returns true if the platform supports threads, and
 		 *  rudiments was built with thread support, and this

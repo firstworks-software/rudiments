@@ -15,7 +15,7 @@ return 0;
 
 	// bail if https isn't supported, as the http url below is
 	// now forwarded to an https url
-	if (!url::getProtocolIsSupported("https")) {
+	if (!url::supportsProtocol("https")) {
 		stdoutput.printf("	not supported\n\n");
 		return 0;
 	}

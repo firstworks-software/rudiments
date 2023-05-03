@@ -34,31 +34,31 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		/** Returns the id of this user.
 		 * 
 		 *  Note: On platforms (like Windows) where the
-		 *  platformSupportsFormalSid method returns true, users don't
-		 *  have simple numeric ids.  On those platforms, the value
-		 *  returned by this method is simply an index into an internal
-		 *  structure that methods of other rudiments classes know how
-		 *  to access and ultimately translate to a user.  It should
-		 *  not be passed in to functions or methods of other libraries
-		 *  that don't ultimately use rudiments methods. */
+		 *  supportsFormalSid method returns true, users don't hav
+		 *  simple numeric ids.  On those platforms, the value returned
+		 *  by this method is simply an index into an internal structure
+		 *  that methods of other rudiments classes know how to access
+		 *  and ultimately translate to a user.  It should not be passed
+		 *  in to functions or methods of other libraries that don't
+		 *  ultimately use rudiments methods. */
 		uid_t		getUserId();
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this user.
 		 *
 		 *  Note: On platforms (like non-Windows platforms) where the
-		 *  platformSupportsFormalSid method returns false, the value
-		 *  returned is just a string representation of the number
-		 *  returned by getUserId(). */
+		 *  supportsFormalSid method returns false, the value returned
+		 *  is just a string representation of the number returned by
+		 *  getUserId(). */
 		const char	*getSidString();
 
 		/** Returns a binary representation of the SID (security id) of
 		 *  this user.
 		 *
 		 *  Note: On platforms (like non-Windows platforms) where the
-		 *  platformSupportsFormalSid method returns false, the value
-		 *  returned is just a string representation of the number
-		 *  returned by getUserId(). */
+		 *  supportsFormalSid method returns false, the value returned
+		 *  is just a string representation of the number returned by
+		 *  getUserId(). */
 		const void	*getSid();
 
 		/** Returns the size of the binary representation of the SID
@@ -144,7 +144,7 @@ class RUDIMENTS_DLLSPEC userentry : public object {
 		 *
 		 *  Windows and windows-like platforms do.  Unix and unix-like
 		 *  platforms (including Mac OS X) do not. */
-		static bool	platformSupportsFormalSid();
+		static bool	supportsFormalSid();
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

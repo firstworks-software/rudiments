@@ -191,11 +191,11 @@ void httprequest::cleanUp(const char ***vars, const char ***vals,
 	delete[] (*vals);
 }
 
-void httprequest::dumpVariables() {
+void httprequest::writeVariables() {
 
 	pvt->_sapi->write("Environment Variables:\n");
 
-	dumpEnvironment();
+	writeEnvironment();
 
 	pvt->_sapi->write("\n");
 
@@ -1212,7 +1212,7 @@ bool httprequest::setEnvironmentVariable(const char *name,
 	return pvt->_sapi->setEnvironmentVariable(name,value);
 }
 
-void httprequest::dumpEnvironment() {
+void httprequest::writeEnvironment() {
 	const char * const	*envvars=getEnvironmentVariables();
 	const char * const	*envvals=getEnvironmentValues();
 	for (uint64_t index=0;

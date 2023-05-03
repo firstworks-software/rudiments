@@ -59,7 +59,7 @@ static WCHAR *asciiToUnicode(const CHAR *in) {
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
 
-bool tls::supported() {
+bool tls::isSupported() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		return true;
 	#elif defined(RUDIMENTS_HAS_SSPI)

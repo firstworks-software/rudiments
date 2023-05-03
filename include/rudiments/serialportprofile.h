@@ -117,23 +117,23 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		~serialportprofile();
 
 		/** Sets the control options to system defaults. */
-		void	defaultControlOptions();
+		void	setDefaultControlOptions();
 
 		/** Sets the local options to system defaults. */
-		void	defaultLocalOptions();
+		void	setDefaultLocalOptions();
 
 		/** Sets the input options to system defaults. */
-		void	defaultInputOptions();
+		void	setDefaultInputOptions();
 
 		/** Sets the output options to system defaults. */
-		void	defaultOutputOptions();
+		void	setDefaultOutputOptions();
 
 		/** Sets the control characters to system defaults. */
-		void	defaultControlCharacters();
+		void	setDefaultControlCharacters();
 
 		/** Sets all options and control
 		 *  characters to system defaults. */
-		void	defaultOptions();
+		void	setDefaultOptions();
 
 		/** Set control characters to the values pointed to by
 		 *  "c_cc".  Note that c_cc must be an array of length
@@ -149,68 +149,68 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		void	evalOptionsString(const char *string);
 
 		/** Set input mode to "inputmode". */
-		void		inputMode(inputmode_t inputmode);
+		void		setInputMode(inputmode_t inputmode);
 
 		/** Get the current input mode setting. */
-		inputmode_t	inputMode();
+		inputmode_t	getInputMode();
 
 		/** Set flow control to "flowcontrol". */
-		void		flowControl(flowcontrol_t flowcontrol);
+		void		setFlowControl(flowcontrol_t flowcontrol);
 
 		/** Get the current flow control setting. */
-		flowcontrol_t	flowControl();
+		flowcontrol_t	getFlowControl();
 
 		/** Sets the (input and output) baud rate.  Default is 0. */
-		void	baud(const char *baudrate);
+		void	setBaud(const char *baudrate);
 
 		/** Sets the (input and output) baud rate.  Default is 0. */
-		void	baud(baudrate_t baudrate);
+		void	setBaud(baudrate_t baudrate);
 
 		/** Sets the input baud rate.  Default is 0. */
-		bool	inputBaud(const char *baudrate);
+		bool	setInputBaud(const char *baudrate);
 
 		/** Sets the input baud rate.  Default is 0. */
-		bool	inputBaud(baudrate_t baudrate);
+		bool	setInputBaud(baudrate_t baudrate);
 
 		/** Sets the output baud rate.  Default is 0. */
-		bool	outputBaud(const char *baudrate);
+		bool	setOutputBaud(const char *baudrate);
 
 		/** Sets the output baud rate.  Default is 0. */
-		bool	outputBaud(baudrate_t baudrate);
+		bool	setOutputBaud(baudrate_t baudrate);
 
 		/** Set the character size.  Default is 5 bits.
 		 *  Corresponding termios flag: CSIZE. */
-		void	characterSize(charsize_t size);
+		void	setCharacterSize(charsize_t size);
 
 		/** Use two stop bits if "truefalse" is true
 		 *  or one stop bit if "truefalse" is false.
 		 *  Default is one stop bit.
 		 *  Corresponding termios flag: CSTOPB. */
-		void	twoStopBits(bool truefalse);
+		void	setTwoStopBits(bool truefalse);
 
 		/** Turns the receiver on or off.
 		 *  (Enables serial port to read incoming data or not.)
 		 *  Default is off.
 		 *  (You probably always want to set this on.)
 		 *  Corresponding termios flag: CREAD. */
-		void	receiverOn(bool truefalse);
+		void	setReceiverOn(bool truefalse);
 
 		/** Turns parity checking on or off.
 		 *  Default is off.
 		 *  Corresponding termios flag: CPARENB. */
-		void	parityCheck(bool truefalse);
+		void	setParityCheck(bool truefalse);
 
 		/** Use odd parity if "truefalse" is true
 		 *  or even parity if "truefalse" is false.
 		 *  Default is even parity.
 		 *  Corresponding termios flag: PARODD. */
-		void	oddParity(bool truefalse);
+		void	setOddParity(bool truefalse);
 
 		/** Lower modem control lines after
 		 *  last process closes the device (hang up).
 		 *  Default is not to hang up on close.
 		 *  Corresponding termios flag: HUPCL. */
-		void	hangupOnClose(bool truefalse);
+		void	setHangupOnClose(bool truefalse);
 
 		/** Ignore (possibly sporadic) job control and hangup
 		 *  signals that could terminate or otherwise control
@@ -220,65 +220,65 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		 *  with a device connected directly to the computer as
 		 *  opposed to over a modem.)
 		 *  Corresponding termios flag: CLOCAL. */
-		void	ignoreModemControlLines(bool truefalse);
+		void	setIgnoreModemControlLines(bool truefalse);
 
 		/** Block output from a nonconcurrent shell layer.
 		 *  Default is not to block.
 		 *  Corresponding termios flag: LOBLK. */
-		void	blockJobControlOutput(bool truefalse);
+		void	setBlockJobControlOutput(bool truefalse);
 
 		/** Use RTS/CTS flow control.
 		 *  Default is not to use RTS/CTS flow control.
 		 *  Corresponding termios flags:
 		 *  CRTSCTS/NEW_CRTSCTS/CRTS_IFLOW/CRTS_OFLOW. */
-		void	hardwareFlowControl(bool truefalse);
+		void	setHardwareFlowControl(bool truefalse);
 
 		/** Returns current (input and output) baud. */
-		baudrate_t	baud();
+		baudrate_t	getBaud();
 
 		/** Returns current input baud. */
-		baudrate_t	inputBaud();
+		baudrate_t	getInputBaud();
 
 		/** Returns current output baud. */
-		baudrate_t	outputBaud();
+		baudrate_t	getOutputBaud();
 
 		/** Returns current character size. */
-		charsize_t	characterSize();
+		charsize_t	getCharacterSize();
 
 		/** Returns true if two stop bits are being used. */
-		bool		twoStopBits();
+		bool		getTwoStopBits();
 
 		/** Returns true if the receiver is on. */
-		bool		receiverOn();
+		bool		getReceiverOn();
 
 		/** Returns true if parity check is enabled. */
-		bool		parityCheck();
+		bool		getParityCheck();
 
 		/** Returns true if odd parity is being used. */
-		bool		oddParity();
+		bool		getOddParity();
 
 		/** Returns true if the modem lines will be
 		 *  lowered when the last device closes the
 		 *  device. */
-		bool		hangupOnClose();
+		bool		getHangupOnClose();
 
 		/** Returns true if (possibly sporadic) job
 		 *  control and hangup signals are being ignored. */
-		bool		ignoreModemControlLines();
+		bool		getIgnoreModemControlLines();
 
 		/** Returns true if output from a nonconcurrent
 		 *  shell layer is being blocked. */
-		bool		blockJobControlOutput();
+		bool		getBlockJobControlOutput();
 
 		/** Returns true if RTS/CTS hardware flow
 		 *  control is being used. */
-		bool		hardwareFlowControl();
+		bool		getHardwareFlowControl();
 
 		/** Cause corresponding signals to be raised when any of
 		 *  the INTR, QUIT, SUSP or DSUSP characters are received
 		 *  default is not to raise signals
 		 *  Corresponding termios flag: ISIG. */
-		void	generateSignals(bool truefalse);
+		void	setGenerateSignals(bool truefalse);
 
 		/** Enable special characters EOF, EOL, EOL2, ERASE,
 		 *  KILL, LNEXT, REPRINT, STATUS and WERASE, buffer by
@@ -286,7 +286,7 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		 *  Default is not to enable the special characters and
 		 *  not buffer by lines.
 		 *  Corresponding termios flag: ICANON. */
-		void	canonicalInput(bool truefalse);
+		void	setCanonicalInput(bool truefalse);
 
 		/** If cannonicalInput() is also set true, converts
 		 *  characters from input to lower case unless they are
@@ -298,46 +298,46 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		 *  can display upper or lower case, but only transmit and
 		 *  receive upper case.)
 		 *  Corresponding termios flag: XCASE. */
-		void	escapedUpperCase(bool truefalse);
+		void	setEscapedUpperCase(bool truefalse);
 
 		/** If cannonicalInput() is also set true then echo input.
 		 *  Corresponding termios flag: ECHO. */
-		void	echoInput(bool truefalse);
+		void	setEchoInput(bool truefalse);
 
 		/** If cannonicalInput() is also set true, character
 		 *  set using eraseCharacter() erases the preceeding
 		 *  character and character set using
 		 *  wordEraseCharacter() erases the preceeding word.
 		 *  Corresponding termios flag: ECHOE. */
-		void	eraseCharactersOn(bool truefalse);
+		void	setEraseCharactersOn(bool truefalse);
 
 		/** If cannonicalInput() is also set true, character
 		 *  set using killCharacter() erases the current line.
 		 *  Corresponding termios flag: ECHOK. */
-		void	killCharacterOn(bool truefalse);
+		void	setKillCharacterOn(bool truefalse);
 
 		/** If cannonicalInput() is also set true, new line
 		 *  characters are echoed even if echoInput() is set false.
 		 *  Corresponding termios flag: ECHONL. */
-		void	echoNewLine(bool truefalse);
+		void	setEchoNewLine(bool truefalse);
 
 		/** If cannonicalInput() is also set true, enables
 		 *  characters set by secondEndOfLineCharacter(),
 		 *  reprintCharacter() and wordEraseCharacter().  Also
 		 *  enables lowerCase().
 		 *  Corresponding termios flag: IEXTEN. */
-		void	extendedFunctions(bool truefalse);
+		void	setExtendedFunctions(bool truefalse);
 
 		/** If echoInput() is also set true, control characters
 		 *  are echoed as ^X where X is the ascii code for the
 		 *  character plus 0x40.
 		 *  Corresponding termios flag: ECHOCTL. */
-		void	echoControlCharacters(bool truefalse);
+		void	setEchoControlCharacters(bool truefalse);
 
 		/** If cannonicalInput() and echoInput() are also set
 		 *  true, characters are printed as they are erased.
 		 *  Corresponding termios flag: ECHOPRT. */
-		void	echoErasedCharacter(bool truefalse);
+		void	setEchoErasedCharacter(bool truefalse);
 
 		/** If cannonicalInput() is also set, the character set
 		 *  using killCharacter() causes the line to be erased
@@ -345,128 +345,128 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		 *  (Useful when a terminal doesn't support the KILL
 		 *  character but does support the ERASE character.)
 		 *  Corresponding termios flag: ECHOKE. */
-		void	emulateKill(bool truefalse);
+		void	setEmulateKill(bool truefalse);
 
 		/** Disables flushing of the input/output queues when
 		 *  generating SIGINT, SIGQUIT or SIGSUSP signals.
 		 *  Corresponding termios flag: NOFLSH. */
-		void	noFlushAfterInterruptOrQuit(bool truefalse);
+		void	setNoFlushAfterInterruptOrQuit(bool truefalse);
 
 		/** All characters in the input queue are reprinted when
 		 *  the next character is read.
 		 *  Corresponding termios flag: PENDIN. */
-		void	retypePendingCharacters(bool truefalse);
+		void	setRetypePendingCharacters(bool truefalse);
 
 		/** Send the SIGTTOU signal to the process group of a
 		 *  background process which tries to write to its
 		 *  controlling terminal.
 		 *  Corresponding termios flag: TOSTOP. */
-		void	sendSignalForBackgroundOutput(bool truefalse);
+		void	setSendSignalForBackgroundOutput(bool truefalse);
 
 		/** Returns true if corresponding signals will be raised
 		 *  when any of the INTR, QUIT, SUSP or DSUSP characters
 		 *  are received default is not to raise signals. */
-		bool	generateSignals();
+		bool	getGenerateSignals();
 
 		/** Returns true if special characters EOF, EOL, EOL2,
 		 *  ERASE, KILL, LNEXT, REPRINT, STATUS and WERASE are
 		 *  enabled and buffering is being done by lines. */
-		bool	canonicalInput();
+		bool	getCanonicalInput();
 
 		/** Returns true if on input, characters are being
 		 *  converted from upper to lower case unless they are
 		 *  preceeded by a \ and on output lower case characters
 		 *  are being converted to upper case and upper case
 		 *  characters are being preceeded with a \. */
-		bool	escapedUpperCase();
+		bool	getEscapedUpperCase();
 
 		/** Returns true if input characters are being echoed. */
-		bool	echoInput();
+		bool	getEchoInput();
 
 		/** Returns true if the character set using
 		 *  eraseCharacter() erases the preceeding
 		 *  character and the character set using
 		 *  wordEraseCharacter() erases the preceeding word. */
-		bool	eraseCharactersOn();
+		bool	getEraseCharactersOn();
 
 		/** Returns true if the character set using
 		 *  killCharacter() erases the current line. */
-		bool	killCharacterOn();
+		bool	getKillCharacterOn();
 
 		/** Returns true if new line characters are being echoed
 		 *  even if echoInput() is set false. */
-		bool	echoNewLine();
+		bool	getEchoNewLine();
 
 		/** Returns true if characters set by
 		 *  secondEndOfLineCharacter(), reprintCharacter() and
 		 *  wordEraseCharacter() are enabled and lowerCase() is
 		 *  enabled. */
-		bool	extendedFunctions();
+		bool	getExtendedFunctions();
 
 		/** Returns true if control characters are being echoed
 		 *  as ^X where X is the ascii code for the character
 		 *  plus 0x40. */
-		bool	echoControlCharacters();
+		bool	getEchoControlCharacters();
 
 		/** Returns true if characters are being printed as they
 		 *  are erased. */
-		bool	echoErasedCharacter();
+		bool	getEchoErasedCharacter();
 
 		/** Returns true if the character set using
 		 *  killCharacter() causes the line to be erased
 		 *  by erasing each character on the line. */
-		bool	emulateKill();
+		bool	getEmulateKill();
 
 		/** Returns true if flushing of the input/output queues
 		 *  when generating SIGINT, SIGQUIT or SIGSUSP signals
 		 *  is enabled. */
-		bool	noFlushAfterInterruptOrQuit();
+		bool	getNoFlushAfterInterruptOrQuit();
 
 		/** Returns true if all characters in the input queue
 		 *  are reprinted when the next character is read. */
-		bool	retypePendingCharacters();
+		bool	getRetypePendingCharacters();
 
 		/** Returns true if the SIGTTOU signal is being sent
 		 *  to the process group of a background process which
 		 *  tries to write to its controlling terminal. */
-		bool	sendSignalForBackgroundOutput();
+		bool	getSendSignalForBackgroundOutput();
 
 		/** Enable parity checking on input
 		 *  Corresponding termios flag: INPCK. */
-		void	inputParityCheck(bool truefalse);
+		void	setInputParityCheck(bool truefalse);
 
 		/** Ignore parity errors (ie. if a character has a
 		 *  parity error, just return what we got, rather than
 		 *  marking or converting it).
 		 *  Corresponding termios flag: IGNPAR. */
-		void	ignoreParityErrors(bool truefalse);
+		void	setIgnoreParityErrors(bool truefalse);
 
 		/** Unless ignoreParityErrors() is set true, prefix a
 		 *  character with a parity error with \337 \0.  The
 		 *  default is to convert it to \0 unless
 		 *  ignoreParityErrors() is set true.
 		 *  Corresponding termios flag: PARMRK. */
-		void	markParityErrors(bool truefalse);
+		void	setMarkParityErrors(bool truefalse);
 
 		/** Set the 8th bit of each character (the parity bit) to 0.
 		 *  Corresponding termios flag: ISTRIP. */
-		void	stripParityBits(bool truefalse);
+		void	setStripParityBits(bool truefalse);
 
 		/** Enable XON/XOFF flow control on output.
 		 *  Corresponding termios flag: IXON. */
-		void	softwareFlowControlOnOutput(bool truefalse);
+		void	setSoftwareFlowControlOnOutput(bool truefalse);
 
 		/** Enable XON/XOFF flow control on input.
 		 *  Corresponding termios flag: IXOFF. */
-		void	softwareFlowControlOnInput(bool truefalse);
+		void	setSoftwareFlowControlOnInput(bool truefalse);
 
 		/** Enable any character to restart output.
 		 *  Corresponding termios flag: IXANY. */
-		void	anyCharacterStartsFlow(bool truefalse);
+		void	setAnyCharacterStartsFlow(bool truefalse);
 
 		/** Ignore BREAK character. 
 		 *  Corresponding termios flag: IGNBRK. */
-		void	ignoreBreak(bool truefalse);
+		void	setIgnoreBreak(bool truefalse);
 
 		/** If ignoreBreak() isn't set true and a BREAK character
 		 *  is received, flush input and output queues and send a
@@ -475,396 +475,397 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		 *  the default is to return a \0 character or \377 \0
 		 *  if markParityErrors() is set true.
 		 *  Corresponding termios flag: BRKINT. */
-		void	sendSignalOnBreak(bool truefalse);
+		void	setSendSignalOnBreak(bool truefalse);
 
 		/** Translate new line to carriage return on input
 		 *  termios flag: INLCR. */
-		void	mapNewLineToCarriageReturnOnInput(bool truefalse);
+		void	setMapNewLineToCarriageReturnOnInput(bool truefalse);
 
 		/** ??? 
 		 *  Corresponding termios flag: ONOEOT. */
-		void	discardEndOfTransmission(bool truefalse);
+		void	setDiscardEndOfTransmission(bool truefalse);
 
 		/** Ignore carriage return on input.
 		 *  Corresponding termios flag: IGNCR. */
-		void	ignoreCarriageReturn(bool truefalse);
+		void	setIgnoreCarriageReturn(bool truefalse);
 
 		/** Translate carriage return to new line on input.
 		 *  Corresponding termios flag: ICRNL. */
-		void	mapCarriageReturnToNewLineOnInput(bool truefalse);
+		void	setMapCarriageReturnToNewLineOnInput(bool truefalse);
 
 		/** Map uppercase characters to lowercase on input.
 		 *  Corresponding termios flag: IUCLC. */
-		void	lowerCase(bool truefalse);
+		void	setLowerCase(bool truefalse);
 
 		/** Ring bell when input queue is full.
 		 *  Corresponding termios flag: IMAXBEL. */
-		void	bellIfLineTooLong(bool truefalse);
+		void	setBellIfLineTooLong(bool truefalse);
 
 		/** Returns true if input parity checking is enabled. */
-		bool	inputParityCheck();
+		bool	getInputParityCheck();
 
 		/** Returns true if parity errors are being ignored. */
-		bool	ignoreParityErrors();
+		bool	getIgnoreParityErrors();
 
 		/** Returns true if characters with parity errors are
 		 *  prefixed with \377 \0. */
-		bool	markParityErrors();
+		bool	getMarkParityErrors();
 
 		/** Returns true if the 8th bit (the parity bit) of
 		 *  each character is being set to 0. */
-		bool	stripParityBits();
+		bool	getStripParityBits();
 
 		/** Returns true if XON/XOFF flow control is enabled on
 		 *  output. */
-		bool	softwareFlowControlOnOutput();
+		bool	getSoftwareFlowControlOnOutput();
 
 		/** Returns true if XON/XOFF flow control is enabled on
 		 *  input. */
-		bool	softwareFlowControlOnInput();
+		bool	getSoftwareFlowControlOnInput();
 
 		/** Returns true if any character will restart output. */
-		bool	anyCharacterStartsFlow();
+		bool	getAnyCharacterStartsFlow();
 
 		/** Returns true if the BREAK character is being ignored. */
-		bool	ignoreBreak();
+		bool	getIgnoreBreak();
 
 		/** Returns true if input and output queues are flushed
 		 *  and a SIGINT is sent to the process group if the
 		 *  serial port is the controlling terminal when a BREAK
 		 *  character is received. */
-		bool	sendSignalOnBreak();
+		bool	getSendSignalOnBreak();
 
 		/** Returns true if new lines are mapped to carriage
 		 *  returns on input. */
-		bool	mapNewLineToCarriageReturnOnInput();
+		bool	getMapNewLineToCarriageReturnOnInput();
 
 		/** ??? */
-		bool	discardEndOfTransmission();
+		bool	getDiscardEndOfTransmission();
 
 		/** Returns true if carriage returns are ignored on input. */
-		bool	ignoreCarriageReturn();
+		bool	getIgnoreCarriageReturn();
 
 		/** Returns true if carriage returns are mapped to new
 		 *  lines on input. */
-		bool	mapCarriageReturnToNewLineOnInput();
+		bool	getMapCarriageReturnToNewLineOnInput();
 
 		/** Returns true if uppercase characters are mapped to
 		 *  lowercase on input. */
-		bool	lowerCase();
+		bool	getLowerCase();
 
 		/** Returns true if the bell will be rung when the input
 		 *  queue is full. */
-		bool	bellIfLineTooLong();
+		bool	getBellIfLineTooLong();
 
 
 		/** Enables implementation-defined output processing.
 		 *  Corresponding termios flag: OPOST. */
-		void	postProcessOutput(bool truefalse);
+		void	setPostProcessOutput(bool truefalse);
 
 		/** Map lowercase characters to uppercase on output.
 		 *  Corresponding termios flag: OLCUC. */
-		void	outputUpperCase(bool truefalse);
+		void	setOutputUpperCase(bool truefalse);
 
 		/** Map new line to carriage return/new line on output.
 		 *  Corresponding termios flag: ONLCR. */
-		void	mapNewLineToCarriageReturnNewLineOnOutput(
+		void	setMapNewLineToCarriageReturnNewLineOnOutput(
 							bool truefalse);
 
 		/** Map carriage return to new line on output.
 		 *  Corresponding termios flag: OCRNL. */
-		void	mapCarriageReturnToNewLineOnOutput(bool truefalse);
+		void	setMapCarriageReturnToNewLineOnOutput(bool truefalse);
 
 		/** Don't output carriage return at column 0.
 		 *  Corresponding termios flag: ONOCR. */
-		void	dontOutputCarriageReturnAtColumnZero(bool truefalse);
+		void	setDontOutputCarriageReturnAtColumnZero(bool truefalse);
 
 		/** Map new line to carriage return on output.
 		 *  Corresponding termios flag: ONLRET. */
-		void	mapNewLineToCarriageReturnOnOutput(bool truefalse);
+		void	setMapNewLineToCarriageReturnOnOutput(bool truefalse);
 
 		/** Send fill characters for delay instead of using a
 		 *  timed delay.
 		 *  Corresponding termios flag: OFILL. */
-		void	useFillCharactersForDelay(bool truefalse);
+		void	setUseFillCharactersForDelay(bool truefalse);
 
 		/** Use the DEL character instead of NULL for the fill
 		 *  character.
 		 *  Corresponding termios flag: OFDEL. */
-		void	useDelForFill(bool truefalse);
+		void	setUseDelForFill(bool truefalse);
 
 		/** Map tabs to spaces. 
 		 *  Corresponding termios flag: XTAGS/OXTABS/TAB3. */
-		void	expandTabToSpaces(bool truefalse);
+		void	setExpandTabToSpaces(bool truefalse);
 
 		/** Send a delay after each new line character.
 		 *  Corresponding termios flag: NLDLY. */
-		void	delayAfterNewLine(newlinedelay_t nldelay);
+		void	setDelayAfterNewLine(newlinedelay_t nldelay);
 
 		/** Send a delay after each carriage return character.
 		 *  Corresponding termios flag: CRDLY. */
-		void	delayAfterCarriageReturn(carriagereturndelay_t crdelay);
+		void	setDelayAfterCarriageReturn(
+					carriagereturndelay_t crdelay);
 
 		/** Send a delay after each tab character
 		 *  Corresponding termios flag: TABDLY. */
-		void	delayAfterTab(tabdelay_t tabdelay);
+		void	setDelayAfterTab(tabdelay_t tabdelay);
 
 		/** Send a delay after each backspace character
 		 *  Corresponding termios flag: BSDLY. */
-		void	delayAfterBackSpace(backspacedelay_t bsdelay);
+		void	setDelayAfterBackSpace(backspacedelay_t bsdelay);
 
 		/** Send a delay after each vertical tab character.
 		 *  Corresponding termios flag: VTDLY. */
-		void	delayAfterVerticalTab(verticaltabdelay_t vtdelay);
+		void	setDelayAfterVerticalTab(verticaltabdelay_t vtdelay);
 
 		/** Send a delay after each form feed character
 		 *  Corresponding termios flag: FFDLY. */
-		void	delayAfterFormFeed(formfeeddelay_t ffdelay);
+		void	setDelayAfterFormFeed(formfeeddelay_t ffdelay);
 
 		/** Returns true if implementation-defined output
 		 *  processing is enabled. */
-		bool	postProcessOutput();
+		bool	getPostProcessOutput();
 
 		/** Returns true if lowercase characters are mapped to
 		 *  uppercase on output. */
-		bool	outputUpperCase();
+		bool	getOutputUpperCase();
 
 		/** Returns true if new lines are mapped to carriage
 		 *  return/new line on output. */
-		bool	mapNewLineToCarriageReturnNewLineOnOutput();
+		bool	getMapNewLineToCarriageReturnNewLineOnOutput();
 
 		/** Returns true if carriage returns are mapped to new
 		 *  lines on output. */
-		bool	mapCarriageReturnToNewLineOnOutput();
+		bool	getMapCarriageReturnToNewLineOnOutput();
 
 		/** Returns true if carriage returns aren't sent at
 		 *  column 0. */
-		bool	dontOutputCarriageReturnAtColumnZero();
+		bool	getDontOutputCarriageReturnAtColumnZero();
 
 		/** Returns true if new lines are mapped to carriage
 		 *  returns on output. */
-		bool	mapNewLineToCarriageReturnOnOutput();
+		bool	getMapNewLineToCarriageReturnOnOutput();
 
 		/** Returns true if fill characters are sent for delay
 		 *  instead of using a timed delay. */
-		bool	useFillCharactersForDelay();
+		bool	getUseFillCharactersForDelay();
 
 		/** Returns true if the DEL character is used instead of
 		 *  NULL for the fill character. */
-		bool	useDelForFill();
+		bool	getUseDelForFill();
 
 		/** Returns true if the tabs are mapped to spaces. */
-		bool	expandTabToSpaces();
+		bool	getExpandTabToSpaces();
 
 		/** Returns the delay that is sent after new line
 		 *  characters. */
-		newlinedelay_t		delayAfterNewLine();
+		newlinedelay_t		getDelayAfterNewLine();
 
 		/** Returns the delay that is sent after carriage return
 		 *  characters. */
-		carriagereturndelay_t	delayAfterCarriageReturn();
+		carriagereturndelay_t	getDelayAfterCarriageReturn();
 
 		/** Returns the delay that is sent after tab characters. */
-		tabdelay_t		delayAfterTab();
+		tabdelay_t		getDelayAfterTab();
 
 		/** Returns the delay that is sent after backspace
 		 *  characters. */
-		backspacedelay_t	delayAfterBackSpace();
+		backspacedelay_t	getDelayAfterBackSpace();
 
 		/** Returns the delay that is sent after vertical tab
 		 *  characters. */
-		verticaltabdelay_t	delayAfterVerticalTab();
+		verticaltabdelay_t	getDelayAfterVerticalTab();
 
 		/** Returns the delay that is sent after form feed
 		 *  characters. */
-		formfeeddelay_t		delayAfterFormFeed();
+		formfeeddelay_t		getDelayAfterFormFeed();
 
 		/** Sets the character that will cause a SIGINT to be
 		 *  sent to the process when generateSignals() is set
 		 *  true.
 		 *  Corresponding termios flag: VINTR. */
-		void	interruptCharacter(byte_t character);
+		void	setInterruptCharacter(byte_t character);
 
 		/** Sets the character that will cause a SIGQUIT to be
 		 *  sent to the process when generateSignals() is set
 		 *  true.
 		 *  Corresponding termios flag: VQUIT. */
-		void	quitCharacter(byte_t character);
+		void	setQuitCharacter(byte_t character);
 
 		/** Sets the character that will cause a character erase
 		 *  when canonicalInput() is set to true
 		 *  Corresponding termios flag: VERASE. */
-		void	eraseCharacter(byte_t character);
+		void	setEraseCharacter(byte_t character);
 
 		/** Sets the character that will cause a line erase
 		 *  when canonicalInput() is set to true
 		 *  Corresponding termios flag: VKILL. */
-		void	killCharacter(byte_t character);
+		void	setKillCharacter(byte_t character);
 
 		/** Sets the character that will cause the pending tty
 		 *  buffer to be sent to the program without waiting for
 		 *  end-of-line and read()'s to return 0 when
 		 *  canonicalInput() is set to true
 		 *  Corresponding termios flag: VEOF. */
-		void	endOfFileCharacter(byte_t character);
+		void	setEndOfFileCharacter(byte_t character);
 
 		/** Sets the end-of-line character, recognized when 
 		 *  canonicalInput() is set to true
 		 *  Corresponding termios flag: VEOL. */
-		void	endOfLineCharacter(byte_t character);
+		void	setEndOfLineCharacter(byte_t character);
 
 		/** Sets the "other" end-of-line character, recognized
 		 *  when canonicalInput() is set to true
 		 *  Corresponding termios flag: VEOL2. */
-		void	secondEndOfLineCharacter(byte_t character);
+		void	setSecondEndOfLineCharacter(byte_t character);
 
 		/** Sets the switch character.
 		 *  Corresponding termios flag: VSWTCH/VSWTC. */
-		void	switchCharacer(byte_t character);
+		void	setSwitchCharacer(byte_t character);
 
 		/** Sets the start character for XON/XOFF flow control
 		 *  Corresponding termios flag: VSTART. */
-		void	startCharacter(byte_t character);
+		void	setStartCharacter(byte_t character);
 
 		/** Sets the stop character for XON/XOFF flow control
 		 *  Corresponding termios flag: VSTOP. */
-		void	stopCharacter(byte_t character);
+		void	setStopCharacter(byte_t character);
 
 		/** Sets the character that will cause a SIGSUSP to be
 		 *  sent to the process when generateSignals() is set
 		 *  true.
 		 *  Corresponding termios flag: VSUSP. */
-		void	suspendCharacter(byte_t character);
+		void	setSuspendCharacter(byte_t character);
 
 		/** Sets the character that will cause a SIGTSTP to be
 		 *  sent to the process when generateSignals() and
 		 *  extendedFunctions() are set true.
 		 *  Corresponding termios flag: VDSUSP. */
-		void	delayedSuspendCharacter(byte_t character);
+		void	setDelayedSuspendCharacter(byte_t character);
 
 		/** Sets the character that "quotes" the next character,
 		 *  depriving it of special meaning, recognized when
 		 *  extendedFunctions() is set true.
 		 *  Corresponding termios flag: VLNEXT. */
-		void	literalNextCharcter(byte_t character);
+		void	setLiteralNextCharcter(byte_t character);
 
 		/** Sets the word erase character, recognized when
 		 *  canonicalInput() and extendedFunctions() are set true.
 		 *  Corresponding termios flag: VWERASE. */
-		void	wordEraseCharcter(byte_t character);
+		void	setWordEraseCharcter(byte_t character);
 
 		/** Sets the character that causes unread characters to
 		 *  be reprinted, recognized when canonicalInput() and
 		 *  extendedFunctions() are set true.
 		 *  Corresponding termios flag: VREPRINT. */
-		void	reprintCharacter(byte_t character);
+		void	setReprintCharacter(byte_t character);
 
 		/** Sets the character that toggles discarding pending
 		 *  output, recognized when extendedFunctions() is set
 		 *  true.
 		 *  Corresponding termios flag: VDISCARD. */
-		void	discardPendingOutputCharacter(byte_t character);
+		void	setDiscardPendingOutputCharacter(byte_t character);
 
 		/** Sets the status request character.
 		 *  Corresponding termios flag: VSTATUS. */
-		void	statusRequestCharacter(byte_t character);
+		void	setStatusRequestCharacter(byte_t character);
 
 		/** Sets the number of characters that must be read
 		 *  before a read() will begin waiting for readTimeout()
 		 *  deciseconds before falling through.
 		 *  Corresponding termios flag: VMIN. */
-		void	readThreshold(byte_t count);
+		void	setReadThreshold(byte_t count);
 
 		/** Sets the number of deciseconds that a read() will
 		 *  wait after reading readThreshold() characters before
 		 *  falling through.
 		 *  Corresponding termios flag: VTIME. */
-		void	readTimeout(byte_t deciseconds);
+		void	setReadTimeout(byte_t deciseconds);
 
 
 		/** Returns the character that will cause a SIGINT to be
 		 *  sent to the process when generateSignals() is set
 		 *  true. */
-		byte_t	interruptCharacter();
+		byte_t	getInterruptCharacter();
 
 		/** Returns the character that will cause a SIGQUIT to be
 		 *  sent to the process when generateSignals() is set
 		 *  true. */
-		byte_t	quitCharacter();
+		byte_t	getQuitCharacter();
 
 		/** Returns the character that will cause a character
 		 *  erase when canonicalInput() is set to true. */
-		byte_t	eraseCharacter();
+		byte_t	getEraseCharacter();
 
 		/** Returns the character that will cause a line erase
 		 *  when canonicalInput() is set to true. */
-		byte_t	killCharacter();
+		byte_t	getKillCharacter();
 
 		/** Returns the character that will cause the pending tty
 		 *  buffer to be sent to the program without waiting for
 		 *  end-of-line and read()'s to return 0 when
 		 *  canonicalInput() is set to true. */
-		byte_t	endOfFileCharacter();
+		byte_t	getEndOfFileCharacter();
 
 		/** Returns the end-of-line character, recognized when 
 		 *  canonicalInput() is set to true. */
-		byte_t	endOfLineCharacter();
+		byte_t	getEndOfLineCharacter();
 
 		/** Returns the "other" end-of-line character, recognized
 		 *  when canonicalInput() is set to true. */
-		byte_t	secondEndOfLineCharacter();
+		byte_t	getSecondEndOfLineCharacter();
 
 		/** Returns the switch character. */
-		byte_t	switchCharacer();
+		byte_t	getSwitchCharacer();
 
 		/** Returns the start character for XON/XOFF flow control. */
-		byte_t	startCharacter();
+		byte_t	getStartCharacter();
 
 		/** Returns the stop character for XON/XOFF flow control. */
-		byte_t	stopCharacter();
+		byte_t	getStopCharacter();
 
 		/** Returns the character that will cause a SIGSUSP to be
 		 *  sent to the process when generateSignals() is set
 		 *  true. */
-		byte_t	suspendCharacter();
+		byte_t	getSuspendCharacter();
 
 		/** Returns the character that will cause a SIGTSTP to be
 		 *  sent to the process when generateSignals() and
 		 *  extendedFunctions() are set true. */
-		byte_t	delayedSuspendCharacter();
+		byte_t	getDelayedSuspendCharacter();
 
 		/** Returns the character that "quotes" the next
 		 *  character, depriving it of special meaning,
 		 *  recognized when extendedFunctions() is set true. */
-		byte_t	literalNextCharcter();
+		byte_t	getLiteralNextCharcter();
 
 		/** Returns the word erase character, recognized when
 		 *  canonicalInput() and extendedFunctions() are set true. */
-		byte_t	wordEraseCharcter();
+		byte_t	getWordEraseCharcter();
 
 
 		/** Returns the character that causes unread characters
 		 *  to be reprinted, recognized when canonicalInput() and
 		 *  extendedFunctions() are set true. */
-		byte_t	reprintCharacter();
+		byte_t	getReprintCharacter();
 
 		/** Returns the character that toggles discarding pending
 		 *  output, recognized when extendedFunctions() is set
 		 *  true. */
-		byte_t	discardPendingOutputCharacter();
+		byte_t	getDiscardPendingOutputCharacter();
 
 		/** Returns the status request character. */
-		byte_t	statusRequestCharacter();
+		byte_t	getStatusRequestCharacter();
 
 		/** Returns the number of characters that must be read
 		 *  before a read() will begin waiting for readTimeout()
 		 *  deciseconds before falling through. */
-		byte_t	readThreshold();
+		byte_t	getReadThreshold();
 
 		/** Returns the number of deciseconds that a read() will
 		 *  wait after reading readThreshold() characters before
 		 *  falling through. */
-		byte_t	readTimeout();
+		byte_t	getReadTimeout();
 
 	#include <rudiments/private/serialportprofile.h>
 };

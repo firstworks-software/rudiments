@@ -19,7 +19,7 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 
 		/** Returns true if the system supports blocking/nonblocking
 		 *  modes and false otherwise. */
-		virtual bool	getBlockingAndNonBlockingModesAreSupported();
+		virtual bool	supportsBlockingAndNonBlockingModes();
 
 		/** If "usenonblockingmode" is true then the socket put into in
 		 *  non-blocking mode.  If "usenonblockingmode" is false then

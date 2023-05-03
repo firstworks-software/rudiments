@@ -14,7 +14,7 @@ static bool stencilMain(void *apistruct) {
 	request		req(&st);
 	response	resp(&st);
 
-	resp.textHtml();
+	resp.sendTextHtmlHeader();
 
 	resp.write("Skin Variables: <br><br>\n");
 

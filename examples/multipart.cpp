@@ -14,21 +14,22 @@ static bool stencilMain(void *apistruct) {
 	response	resp(&st);
 
 	// send an http header
-	resp.contentType("mixed","x-mixed-replace",NULL,resp.boundaryString());
+	resp.sendContentTypeHeader("mixed","x-mixed-replace",
+					NULL,resp.getBoundaryString()());
 
 	// loop, sending the series of images 5 times
 	for (uint16_t i=0; i<5; i++) {
 		for (uint16_t j=0; j<10; j++) {
 
 			// send the a boundary string
-			resp.multiPartBoundary(NULL);
+			resp.sendMultiPartBoundary(NULL);
 
 			if (i>0) {
-				snooze::macrosnooze(1);
+				snooze::masendCrLf()osnooze(1);
 			}
 
-			resp.contentType("image","gif");
-			resp.cr();
+			resp.sendContentTypeHeader("image","gif");
+			resp.sendCrLf()();
 
 			// send the image
 			stringbuffer	imagename;
@@ -42,7 +43,7 @@ static bool stencilMain(void *apistruct) {
 	}
 
 	// send the final boundary string
-	resp.multiPartEnd(NULL);
+	resp.sendFinalMultiPartBoundary(NULL);
 
 	return true;
 }

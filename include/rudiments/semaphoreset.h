@@ -239,7 +239,7 @@ class RUDIMENTS_DLLSPEC semaphoreset : public object {
 
 		/** Returns true if the platform supports semaphores and
 		 *  false otherwise. */
-		static bool	supported();
+		static bool	isSupported();
 
 	#include <rudiments/private/semaphoreset.h>
 };

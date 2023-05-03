@@ -22,7 +22,7 @@ int main(int argc, const char **argv) {
 
 		header("sharedmemory");
 
-		if (!sharedmemory::supported()) {
+		if (!sharedmemory::isSupported()) {
 			stdoutput.printf("	not supported\n\n");
 			return 0;
 		}

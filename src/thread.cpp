@@ -257,7 +257,7 @@ bool thread::getRetryFailedSpawn() {
 	return pvt->_retry;
 }
 
-bool thread::supported() {
+bool thread::isSupported() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T) || \
 		defined(RUDIMENTS_HAVE_CREATETHREAD)
 		return true;
@@ -284,5 +284,5 @@ bool thread::isReliable() {
 		}
 		delete[] os;
 	#endif
-	return supported();
+	return isSupported();
 }

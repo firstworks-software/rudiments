@@ -12,10 +12,10 @@ static bool stencilMain(void *apistruct) {
 	stencil		st(apistruct);
 	response	resp(&st);
 
-	resp.contentType("text","html");
-	resp.header("Pragma","no-cache");
-	resp.cr();
-	resp.cr();
+	resp.sendContentTypeHeader("text","html");
+	resp.sendHeader("Pragma","no-cache");
+	resp.sendCrLf()();
+	resp.sendCrLf()();
 
 	resp.write("This page won't be cached\n");
 

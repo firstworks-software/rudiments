@@ -200,7 +200,7 @@ bool memorymap::sync(off64_t offset, size_t size,
 	#endif
 }
 
-bool memorymap::supported() {
+bool memorymap::isSupported() {
 	#if defined(_SYLLABLE)
 		// Syllable has mmap, but it appears that it can only map
 		// from byte-0 of the file.  Attempts to map further into

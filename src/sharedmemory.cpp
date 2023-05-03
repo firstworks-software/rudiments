@@ -417,7 +417,7 @@ bool sharedmemory::setGroupName(const char *groupname) {
 	return (groupid!=(gid_t)-1 && setGroupId(groupid));
 }
 
-bool sharedmemory::supported() {
+bool sharedmemory::isSupported() {
 	#if defined(RUDIMENTS_HAVE_SHMGET)
 		error::clearError();
 		shmget(0,0,0);

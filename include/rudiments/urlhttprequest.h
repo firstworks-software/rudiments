@@ -42,10 +42,10 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 
 
 
-		/** Dumps all environment variable, parameters, file parameter,
+		/** Writes all environment variable, parameters, file parameter,
 		 *  cookies, skin variables, and url variables to the
 		 *  browser. */
-		void	dumpVariables();
+		void	writeVariables();
 
 
 
@@ -53,91 +53,91 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 		 *  environment variable.  SCRIPT_NAME is assumed to be
 		 *  constructed as follows:
 		 *      DOCUMENT_ROOT/"application"/"program".cgi */
-		const char	*application();
+		const char	*getApplication();
 
 		/** Returns the location in the filesystem corresponding to the
 		 *  "application" part of the SCRIPT_NAME environment variable.
 		 *  SCRIPT_NAME is assumed to be constructed as follows:
 		 *      DOCUMENT_ROOT/"application"/"program".cgi */
-		const char	*applicationPath();
+		const char	*getApplicationPath();
 
 		/** Returns a URL corresponding to the "application" part of
 		 *  the SCRIPT_NAME environment variable.  SCRIPT_NAME is
 		 *  assumed to be constructed as follows:
 		 *      DOCUMENT_ROOT/"application"/"program".cgi */
-		const char	*applicationUrl();
+		const char	*getApplicationUrl();
 
 		/** Returns the "program" part of the SCRIPT_NAME environment
 		 *  variable.  SCRIPT_NAME is assumed to be constructed as
 		 *  follows:
 		 *      DOCUMENT_ROOT/"application"/"program".cgi */
-		const char	*program();
+		const char	*getProgram();
 
 		/** Returns the location in the filesystem corresponding to the
 		 *  "program" part of the SCRIPT_NAME environment variable.
 		 *  SCRIPT_NAME is assumed to be constructed as follows:
 		 *      DOCUMENT_ROOT/"application"/"program".cgi */
-		const char	*programPath();
+		const char	*getProgramPath();
 
 		/** Returns a URL corresponding to the "program" part of the
 		 *  SCRIPT_NAME environment variable.  SCRIPT_NAME is assumed
 		 *  to be constructed as follows:
 		 *      DOCUMENT_ROOT/"application"/"program".cgi */
-		const char	*programUrl();
+		const char	*getProgramUrl();
 
 		/** Returns the "skin" part of the PATH_INFO environment
 		 *  variable.  PATH_INFO is assumed to be constructed as
 		 *  follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*skin();
+		const char	*getSkin();
 
 		/** Returns the location in the filesystem corresponding to the
 		 *  "skin" part of the PATH_INFO environment variable.
 		 *  PATH_INFO is assumed to be constructed as follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*skinPath();
+		const char	*getSkinPath();
 
 		/** Returns a URL corresponding to the "skin" part of the
 		 *  PATH_INFO environment variable.  PATH_INFO is  assumed to
 		 *  be constructed as follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*skinUrl();
+		const char	*getSkinUrl();
 
 		/** Returns the "module" part of the PATH_INFO environment
 		 *  variable.  PATH_INFO is assumed to be constructed as
 		 *  follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*module();
+		const char	*getModule();
 
 		/** Returns the location in the filesystem corresponding to the
 		 *  "module" part of the PATH_INFO environment variable.
 		 *  PATH_INFO is assumed to be constructed as follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*modulePath();
+		const char	*getModulePath();
 
 		/** Returns a URL corresponding to the "module" part of the
 		 *  PATH_INFO environment variable.  PATH_INFO is  assumed to
 		 *  be constructed as follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*moduleUrl();
+		const char	*getModuleUrl();
 
 		/** Returns the "page" part of the PATH_INFO environment
 		 *  variable.  PATH_INFO is assumed to be constructed as
 		 *  follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*page();
+		const char	*getPage();
 
 		/** Returns the location in the filesystem corresponding to the
 		 *  "page" part of the PATH_INFO environment variable.
 		 *  PATH_INFO is assumed to be constructed as follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*pagePath();
+		const char	*getPagePath();
 
 		/** Returns a URL corresponding to the "path" part of the
 		 *  PATH_INFO environment variable.  PATH_INFO is  assumed to
 		 *  be constructed as follows:
 		 *      /"skin"/"module"/"page".html */
-		const char	*pageUrl();
+		const char	*getPageUrl();
 
 		/** Returns the number of URL variables. */
 		uint64_t	getUrlVariableCount();

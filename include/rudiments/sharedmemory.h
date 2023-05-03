@@ -127,7 +127,7 @@ class RUDIMENTS_DLLSPEC sharedmemory : public object {
 
 		/** Returns true if the platform supports shared memory and
 		 *  false otherwise. */
-		static bool	supported();
+		static bool	isSupported();
 
 	#include <rudiments/private/sharedmemory.h>
 };

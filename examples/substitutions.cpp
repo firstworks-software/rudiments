@@ -18,7 +18,7 @@ bool loginhtml(request *req, response *resp,
 			void *data) {
 
 	// send an http header
-	resp->textHtml();
+	resp->sendTextHtmlHeader();
 
 	// parse page contents
 	return templateengine::parse(req,resp,NULL,
@@ -86,7 +86,7 @@ bool addressbookhtml(request *req, response *resp,
 	}
 
 	// send an http header
-	resp->textHtml();
+	resp->sendTextHtmlHeader();
 
 	// use built-in substitution variables (parameters, cookies, etc.)
 	variables vars[]={
@@ -127,7 +127,7 @@ static bool stencilMain(void *apistruct) {
 	// if an error occurred, display the error page
 	stringbuffer	filename;
 	filename.append(req.skinPath())->append("/addressbook/error.html");
-	resp.textHtml();
+	resp.sendTextHtmlHeader();
 	templateengine::parse(&req,&resp,NULL,
 				filename.getString(),NULL,NULL,NULL);
 	return true;

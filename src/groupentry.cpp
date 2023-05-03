@@ -260,7 +260,7 @@ uint64_t groupentry::getSidSize() {
 #endif
 }
 
-bool groupentry::platformSupportsFormalSid() {
+bool groupentry::supportsFormalSid() {
 	#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 		return false;
 	#else
@@ -526,7 +526,7 @@ const char *groupentry::getSidString() {
 	return NULL;
 }
 
-bool groupentry::platformSupportsFormalSid() {
+bool groupentry::supportsFormalSid() {
 	return false;
 }
 

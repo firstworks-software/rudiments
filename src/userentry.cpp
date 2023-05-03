@@ -397,7 +397,7 @@ const char *userentry::getShell() {
 #endif
 }
 
-bool userentry::platformSupportsFormalSid() {
+bool userentry::supportsFormalSid() {
 	#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 		return false;
 	#else

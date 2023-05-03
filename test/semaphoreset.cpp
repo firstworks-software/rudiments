@@ -48,7 +48,7 @@ int main(int argc, const char **argv) {
 
 		header("semaphoreset");
 
-		if (!semaphoreset::supported()) {
+		if (!semaphoreset::isSupported()) {
 			stdoutput.printf("	not supported\n\n");
 			return 0;
 		}

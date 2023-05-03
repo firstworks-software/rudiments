@@ -16,18 +16,19 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		/** Send HTTP header:
 		 *  Content-type: text/html
 		 *  followed by two carriage-returns. */
-		void	textHtml();
+		void	sendTextHtmlHeader();
 
 		/** Send HTTP header:
 		 *  Content-type: text/plain
 		 *  followed by two carriage-returns. */
-		void	textPlain();
+		void	sendTextPlainHeader();
 
 		/** Send HTTP header:
 		 *  Content-type: "type"/"subtype"
 		 *
 		 *  Does not send carriage-returns. */
-		void	contentType(const char *type, const char *subtype);
+		void	sendContentTypeHeader(const char *type,
+						const char *subtype);
 
 		/** Send HTTP header:
 		 *  Content-type: "type"/"subtype"; charset="charset"
@@ -36,8 +37,9 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		 *  omitted.
 		 *
 		 *  Does not send carriage-returns. */
-		void	contentType(const char *type, const char *subtype,
-							const char *charset);
+		void	sendContentTypeHeader(const char *type,
+						const char *subtype,
+						const char *charset);
 
 		/** Send HTTP header:
 		 *  Content-type: "type"/"subtype"; charset="charset";
@@ -47,12 +49,13 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		 *  then it will be omitted.
 		 *
 		 *  Does not send carriage-returns. */
-		void	contentType(const char *type, const char *subtype,
-							const char *charset,
-							const char *boundary);
+		void	sendContentTypeHeader(const char *type,
+						const char *subtype,
+						const char *charset,
+						const char *boundary);
 
-		/** Send carriage-return. */
-		void	cr();
+		/** Send carriage-return and line-feed (/r/n). */
+		void	sendCrLf();
 		
 		/** Send Set-Cookie header. */
 		void	setCookie(const char *name, const char *value,
@@ -61,22 +64,22 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 
 		/** Returns a boundary string that is useful in building
 		 *  multipart responses. */
-		const char	*boundaryString();
+		const char	*getBoundaryString();
 
-		/** Sends a starting boundary string. */
-		void	multiPartBoundary(output *out);
+		/** Sends a multipart boundary string. */
+		void	sendMultiPartBoundary(output *out);
 
-		/** Sends a ending boundary string. */
-		void	multiPartEnd(output *out);
+		/** Sends a final multipart boundary string. */
+		void	sendFinalMultiPartBoundary(output *out);
 
 		/** Sends an http status header. */
-		httpresponse	*status(const char *status);
+		httpresponse	*sendStatusHeader(const char *status);
 
 		/** Sends an http header. */
-		httpresponse	*header(const char *header);
+		httpresponse	*sendHeader(const char *header);
 
 		/** Sends an http header. */
-		httpresponse	*header(const char *header,
+		httpresponse	*sendHeader(const char *header,
 						const char *value);
 
 		ssize_t	write(const byte_t *string, size_t size);

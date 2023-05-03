@@ -920,7 +920,7 @@ void semaphoreset::dontRetryInterruptedOperations() {
 	pvt->_retryinterruptedoperations=false;
 }
 
-bool semaphoreset::supported() {
+bool semaphoreset::isSupported() {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		error::clearError();
 		semget(0,0,0);

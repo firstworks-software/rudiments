@@ -39,12 +39,12 @@ socketserver::~socketserver() {
 	delete pvt;
 }
 
-bool socketserver::getBlockingAndNonBlockingModesAreSupported() {
+bool socketserver::supportsBlockingAndNonBlockingModes() {
 	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
 		return filedescriptor::
-			getBlockingAndNonBlockingModesAreSupported();
+			supportsBlockingAndNonBlockingModes();
 	#endif
 }
 

@@ -31,22 +31,22 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		/** Returns the id of the group.
 		 *
 		 *  Note: On platforms (like Windows) where the
-		 *  platformSupportsFormalSid method returns true, groups don't
-		 *  have simple numeric ids.  On those platforms, the value
-		 *  returned by this method is simply an index into an internal
-		 *  structure that methods of other rudiments classes know how
-		 *  to access and ultimately translate to a group.  It should
-		 *  not be passed in to functions or methods of other libraries
-		 *  that don't ultimately use rudiments methods. */
+		 *  supportsFormalSid method returns true, groups don't have
+		 *  simple numeric ids.  On those platforms, the value returned
+		 *  by this method is simply an index into an internal structure
+		 *  that methods of other rudiments classes know how to access
+		 *  and ultimately translate to a group.  It should not be
+		 *  passed in to functions or methods of other libraries that
+		 *  don't ultimately use rudiments methods. */
 		gid_t		getGroupId();
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this group.
 		 *
 		 *  Note: On platforms (like non-Windows platforms) where the
-		 *  platformSupportsFormalSid method returns false, the value
-		 *  returned is just a string representation of the number
-		 *  returned by getGroupId(). */
+		 *  supportsFormalSid method returns false, the value returned
+		 *  is just a string representation of the number returned by
+		 *  getGroupId(). */
 		const char	*getSidString();
 		const void	*getSid();
 		uint64_t	getSidSize();
@@ -88,7 +88,7 @@ class RUDIMENTS_DLLSPEC groupentry : public object {
 		 *
 		 *  Windows and windows-like platforms do.  Unix and unix-like
 		 *  platforms (including Mac OS X) do not. */
-		static bool	platformSupportsFormalSid();
+		static bool	supportsFormalSid();
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
