@@ -508,14 +508,14 @@ int64_t charstring::convertAmount(const char *amount) {
 	}
 	const char	*dollarsstr=findFirst(amount,'$');
 	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
-	uint64_t	dollars=toUnsignedInteger(dollarsstr);
+	uint64_t	dollars=convertToUnsignedInteger(dollarsstr);
 	const char	*centsstr=findFirst(amount,'.');
-	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
+	uint64_t	cents=(centsstr)?convertToUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
 }
 
 char *charstring::convertAmount(int64_t amount) {
-	uint16_t	len=integerLength(amount)+4;
+	uint16_t	len=getIntegerLength(amount)+4;
 	if (len<6) {
 		len=6;
 	}
@@ -599,7 +599,7 @@ char *charstring::urlEncode(const char *input) {
 	return output;
 }
 
-char *charstring::urlDencode(const char *input) {
+char *charstring::urlDecode(const char *input) {
 
 	if (!input) {
 		return NULL;
@@ -630,7 +630,7 @@ char *charstring::urlDencode(const char *input) {
 					break;
 				}
 				hex[2]='\0';
-				char	ch=toInteger(hex,16);
+				char	ch=convertToInteger(hex,16);
 				(*outptr)=ch;
 			} else {
 				(*outptr)='%';
@@ -889,7 +889,7 @@ char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	if (number>=0) {
 		return parseNumber((uint64_t)number,zeropadding);
 	}
-	uint16_t	len=integerLength(number);
+	uint16_t	len=getIntegerLength(number);
 	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
 	char		*ptr=new char[strlen+1];
 	*ptr='-';
@@ -912,7 +912,7 @@ char *charstring::parseNumber(uint64_t number) {
 }
 
 char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
-	uint16_t	len=integerLength(number);
+	uint16_t	len=getIntegerLength(number);
 	uint16_t	strlen=((zeropadding>len)?zeropadding:len);
 	char		*ptr=new char[strlen+1];
 	ptr+=strlen;
@@ -1365,7 +1365,7 @@ int32_t charstring::compareVersions(const char *str1,
 
 		// get the next integers from the strings, subtract them, and
 		// add the result to the running difference
-		difference+=(toInteger(str1)-toInteger(str2));
+		difference+=(convertToInteger(str1)-convertToInteger(str2));
 
 		// if the difference is non-zero then return it
 		if (difference) {
@@ -2005,15 +2005,15 @@ void charstring::bothTrim(char *string) {
 }
 
 int64_t charstring::convertToInteger(const char *string) {
-	return toInteger(string,NULL,10);
+	return convertToInteger(string,NULL,10);
 }
 
 int64_t charstring::convertToInteger(const char *string, const char **endptr) {
-	return toInteger(string,endptr,10);
+	return convertToInteger(string,endptr,10);
 }
 
 int64_t charstring::convertToInteger(const char *string, int32_t base) {
-	return toInteger(string,NULL,base);
+	return convertToInteger(string,NULL,base);
 }
 
 int64_t charstring::convertToInteger(const char *string,
@@ -2026,16 +2026,16 @@ int64_t charstring::convertToInteger(const char *string,
 }
 
 uint64_t charstring::convertToUnsignedInteger(const char *string) {
-	return toUnsignedInteger(string,NULL,10);
+	return convertToUnsignedInteger(string,NULL,10);
 }
 
 uint64_t charstring::convertToUnsignedInteger(const char *string,
 					const char **endptr) {
-	return toUnsignedInteger(string,endptr,10);
+	return convertToUnsignedInteger(string,endptr,10);
 }
 
 uint64_t charstring::convertToUnsignedInteger(const char *string, int32_t base) {
-	return toUnsignedInteger(string,NULL,base);
+	return convertToUnsignedInteger(string,NULL,base);
 }
 
 uint64_t charstring::convertToUnsignedInteger(const char *string,
@@ -2048,7 +2048,7 @@ uint64_t charstring::convertToUnsignedInteger(const char *string,
 }
 
 long double charstring::convertToFloat(const char *string) {
-	return toFloat(string,NULL);
+	return convertToFloat(string,NULL);
 }
 
 long double charstring::convertToFloatC(const char *string) {
@@ -2080,10 +2080,10 @@ long double charstring::convertToFloatC(const char *string) {
 		stringinlocale[decimalpointlocation-string]=
 					currentlconv->decimal_point[0];
 
-		return toFloat(stringinlocale,NULL);
+		return convertToFloat(stringinlocale,NULL);
 	}
 #endif
-	return toFloat(string,NULL);
+	return convertToFloat(string,NULL);
 }
 
 long double charstring::convertToFloat(const char *string, const char **endptr) {
@@ -2227,7 +2227,7 @@ char *charstring::getSubString(const char *str, size_t start, size_t end) {
 }
 
 char *charstring::getSubString(const char *str, size_t start) {
-	return subString(str,start,getLength(str)-1);
+	return getSubString(str,start,getLength(str)-1);
 }
 
 char *charstring::base64Encode(const byte_t *input) {
@@ -2821,23 +2821,23 @@ char *charstring::pad(const char *str, char padchar,
 }
 
 char *charstring::getHumanReadable(int64_t number) {
-	return humanReadable(number,false);
+	return getHumanReadable(number,false);
 }
 
 char *charstring::getHumanReadable(int64_t number, bool onethousand) {
-	return humanReadable((long double)number,onethousand);
+	return getHumanReadable((long double)number,onethousand);
 }
 
 char *charstring::getHumanReadable(uint64_t number) {
-	return humanReadable(number,false);
+	return getHumanReadable(number,false);
 }
 
 char *charstring::getHumanReadable(uint64_t number, bool onethousand) {
-	return humanReadable((long double)number,onethousand);
+	return getHumanReadable((long double)number,onethousand);
 }
 
 char *charstring::getHumanReadable(long double number) {
-	return humanReadable(number,false);
+	return getHumanReadable(number,false);
 }
 
 char *charstring::getHumanReadable(long double number, bool onethousand) {

@@ -35,7 +35,7 @@ void myserver::myListen() {
 	// create a pid file which is used to make sure that only one instance
 	// is running and can also be used to kill the process
 	process::createPidFile("svr.pid",
-				permissions::ownerReadWrite());
+				permissions::getOwnerReadWrite());
 
 	// listen on inet socket port 8000
 	setPort(8000);

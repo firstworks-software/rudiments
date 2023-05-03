@@ -423,14 +423,14 @@ int64_t wcharstring::convertAmount(const wchar_t *amount) {
 	}
 	const wchar_t	*dollarsstr=findFirst(amount,L'$');
 	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
-	uint64_t	dollars=toUnsignedInteger(dollarsstr);
+	uint64_t	dollars=convertToUnsignedInteger(dollarsstr);
 	const wchar_t	*centsstr=findFirst(amount,L'.');
-	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
+	uint64_t	cents=(centsstr)?convertToUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
 }
 
 wchar_t *wcharstring::convertAmount(int64_t amount) {
-	uint16_t	length=integerLength(amount)+4;
+	uint16_t	length=getIntegerLength(amount)+4;
 	if (length<6) {
 		length=6;
 	}
@@ -718,7 +718,7 @@ wchar_t *wcharstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	if (number>=0) {
 		return parseNumber((uint64_t)number,zeropadding);
 	}
-	uint16_t	len=integerLength(number);
+	uint16_t	len=getIntegerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
 	wchar_t		*ptr=new wchar_t[strlength+1];
 	*ptr=L'-';
@@ -741,7 +741,7 @@ wchar_t *wcharstring::parseNumber(uint64_t number) {
 }
 
 wchar_t *wcharstring::parseNumber(uint64_t number, uint16_t zeropadding) {
-	uint16_t	len=integerLength(number);
+	uint16_t	len=getIntegerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len);
 	wchar_t		*ptr=new wchar_t[strlength+1];
 	ptr+=strlength;
@@ -1283,7 +1283,7 @@ int32_t wcharstring::compareVersions(const wchar_t *str1,
 
 		// get the next integers from the strings, subtract them, and
 		// add the result to the running difference
-		difference+=(toInteger(str1)-toInteger(str2));
+		difference+=(convertToInteger(str1)-convertToInteger(str2));
 
 		// if the difference is non-zero then return it
 		if (difference) {
@@ -1962,15 +1962,15 @@ void wcharstring::bothTrim(wchar_t *string) {
 }
 
 int64_t wcharstring::convertToInteger(const wchar_t *string) {
-	return toInteger(string,NULL,10);
+	return convertToInteger(string,NULL,10);
 }
 
 int64_t wcharstring::convertToInteger(const wchar_t *string, const wchar_t **endptr) {
-	return toInteger(string,endptr,10);
+	return convertToInteger(string,endptr,10);
 }
 
 int64_t wcharstring::convertToInteger(const wchar_t *string, int32_t base) {
-	return toInteger(string,NULL,base);
+	return convertToInteger(string,NULL,base);
 }
 
 int64_t wcharstring::convertToInteger(const wchar_t *string,
@@ -1997,16 +1997,16 @@ int64_t wcharstring::convertToInteger(const wchar_t *string,
 }
 
 uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string) {
-	return toUnsignedInteger(string,NULL,10);
+	return convertToUnsignedInteger(string,NULL,10);
 }
 
 uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string,
 					const wchar_t **endptr) {
-	return toUnsignedInteger(string,endptr,10);
+	return convertToUnsignedInteger(string,endptr,10);
 }
 
 uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string, int32_t base) {
-	return toUnsignedInteger(string,NULL,base);
+	return convertToUnsignedInteger(string,NULL,base);
 }
 
 uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string,
@@ -2033,7 +2033,7 @@ uint64_t wcharstring::convertToUnsignedInteger(const wchar_t *string,
 }
 
 long double wcharstring::convertToFloat(const wchar_t *string) {
-	return toFloat(string,NULL);
+	return convertToFloat(string,NULL);
 }
 
 long double wcharstring::convertToFloatC(const wchar_t *string) {
@@ -2065,10 +2065,10 @@ long double wcharstring::convertToFloatC(const wchar_t *string) {
 			stringinlocale[decimalpointlocation-string]=
 						currentlconv->decimal_point[0];
 
-			return toFloat(stringinlocale,NULL);
+			return convertToFloat(stringinlocale,NULL);
 		}
 	#endif
-	return toFloat(string,NULL);
+	return convertToFloat(string,NULL);
 }
 
 long double wcharstring::convertToFloat(const wchar_t *string,
@@ -2242,7 +2242,7 @@ wchar_t *wcharstring::getSubString(const wchar_t *str, size_t start, size_t end)
 }
 
 wchar_t *wcharstring::getSubString(const wchar_t *str, size_t start) {
-	return subString(str,start,getLength(str)-1);
+	return getSubString(str,start,getLength(str)-1);
 }
 
 wchar_t *wcharstring::insertString(const wchar_t *dest,
@@ -2299,23 +2299,23 @@ wchar_t *wcharstring::pad(const wchar_t *str, wchar_t padchar,
 }
 
 wchar_t *wcharstring::getHumanReadable(int64_t number) {
-	return humanReadable(number,false);
+	return getHumanReadable(number,false);
 }
 
 wchar_t *wcharstring::getHumanReadable(int64_t number, bool onethousand) {
-	return humanReadable((long double)number,onethousand);
+	return getHumanReadable((long double)number,onethousand);
 }
 
 wchar_t *wcharstring::getHumanReadable(uint64_t number) {
-	return humanReadable(number,false);
+	return getHumanReadable(number,false);
 }
 
 wchar_t *wcharstring::getHumanReadable(uint64_t number, bool onethousand) {
-	return humanReadable((long double)number,onethousand);
+	return getHumanReadable((long double)number,onethousand);
 }
 
 wchar_t *wcharstring::getHumanReadable(long double number) {
-	return humanReadable(number,false);
+	return getHumanReadable(number,false);
 }
 
 wchar_t *wcharstring::getHumanReadable(long double number, bool onethousand) {

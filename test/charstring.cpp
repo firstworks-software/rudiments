@@ -468,7 +468,7 @@ int main(int argc, const char **argv) {
 	char    *escbuffer=charstring::urlEncode(original);
 	test("escaped",!charstring::compare(escbuffer,
 				"!%40%23$%25%5E%26*()hello-%2B%C2%A3"));
-	char	*unescbuffer=charstring::urlDencode(escbuffer);
+	char	*unescbuffer=charstring::urlDecode(escbuffer);
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
 	delete[] unescbuffer;

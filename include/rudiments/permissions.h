@@ -76,139 +76,139 @@ class RUDIMENTS_DLLSPEC permissions {
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	everyoneReadWrite();
+		static	mode_t	getEveryoneReadWrite();
 
 		/** Returns rwxrwxrwx (777) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	everyoneReadWriteExecute();
+		static	mode_t	getEveryoneReadWriteExecute();
 
 		/** Returns r-------- (400) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	ownerRead();
+		static	mode_t	getOwnerRead();
 
 		/** Returns -w------- (200) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	ownerWrite();
+		static	mode_t	getOwnerWrite();
 
 		/** Returns --x------ (100) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	ownerExecute();
+		static	mode_t	getOwnerExecute();
 
 		/** Returns rw------- (600) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	ownerReadWrite();
+		static	mode_t	getOwnerReadWrite();
 
 		/** Returns r-x------ (500) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	ownerReadExecute();
+		static	mode_t	getOwnerReadExecute();
 
 		/** Returns rwx------ (700) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	ownerReadWriteExecute();
+		static	mode_t	getOwnerReadWriteExecute();
 
 		/** Returns ---r----- (040) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	groupRead();
+		static	mode_t	getGroupRead();
 
 		/** Returns ----w---- (020) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	groupWrite();
+		static	mode_t	getGroupWrite();
 
 		/** Returns -----x--- (010) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	groupExecute();
+		static	mode_t	getGroupExecute();
 
 		/** Returns ---rw---- (060) permissions.
 		 *
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	groupReadWrite();
+		static	mode_t	getGroupReadWrite();
 
 		/** Returns ---r-x--- (050) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	groupReadExecute();
+		static	mode_t	getGroupReadExecute();
 
 		/** Returns ---rwx--- (070) permissions.
 		 *
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	groupReadWriteExecute();
+		static	mode_t	getGroupReadWriteExecute();
 
 		/** Returns ------r-- (004) permissions.
 		 *
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	othersRead();
+		static	mode_t	getOthersRead();
 
 		/** Returns -------w- (002) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	othersWrite();
+		static	mode_t	getOthersWrite();
 
 		/** Returns --------x (001) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	othersExecute();
+		static	mode_t	getOthersExecute();
 
 		/** Returns ------rw- (006) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	othersReadWrite();
+		static	mode_t	getOthersReadWrite();
 
 		/** Returns ------r-x (005) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	othersReadExecute();
+		static	mode_t	getOthersReadExecute();
 
 		/** Returns ------rwx (007) permissions.
 		 *
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	othersReadWriteExecute();
+		static	mode_t	getOthersReadWriteExecute();
 
 		/** Returns --------t permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	saveInSwapSpace();
+		static	mode_t	getSaveInSwapSpace();
 
 		/** Returns --s------ (u+s) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	setUserId();
+		static	mode_t	getSetUserId();
 
 		/** Returns -----s--- (g+s) permissions.
 		 *
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
-		static	mode_t	setGroupId();
+		static	mode_t	getSetGroupId();
 
 	#include <rudiments/private/permissions.h>
 };

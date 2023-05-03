@@ -40,24 +40,24 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("perm octals...\n");
         test("create with perms",
 			fd.open(permsfile,O_RDWR|O_CREAT,
-                                	permissions::ownerReadWrite()|
-                                	permissions::groupRead()|
-                                	permissions::othersRead()));
+                                	permissions::getOwnerReadWrite()|
+                                	permissions::getGroupRead()|
+                                	permissions::getOthersRead()));
 	fd.getCurrentProperties();
         test("get perms",(fd.getPermissions()&0x0fff)==
-                                	(permissions::ownerReadWrite()|
-                                	permissions::groupRead()|
-                                	permissions::othersRead()));
+                                	(permissions::getOwnerReadWrite()|
+                                	permissions::getGroupRead()|
+                                	permissions::getOthersRead()));
         test("change perms",
         	permissions::setFilePermissions(fd.getFileDescriptor(),
-                                	permissions::ownerReadWrite()|
-                                	permissions::groupReadWrite()|
-                                	permissions::othersRead()));
+                                	permissions::getOwnerReadWrite()|
+                                	permissions::getGroupReadWrite()|
+                                	permissions::getOthersRead()));
 	fd.getCurrentProperties();
         test("get perms",(fd.getPermissions()&0x0fff)==
-                                	(permissions::ownerReadWrite()|
-                                	permissions::groupReadWrite()|
-                                	permissions::othersRead()));
+                                	(permissions::getOwnerReadWrite()|
+                                	permissions::getGroupReadWrite()|
+                                	permissions::getOthersRead()));
         fd.close();
         file::remove(permsfile);
 	stdoutput.printf("\n");

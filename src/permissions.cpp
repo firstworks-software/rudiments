@@ -205,97 +205,97 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 	#endif
 }
 
-mode_t permissions::everyoneReadWrite() {
+mode_t permissions::getEveryoneReadWrite() {
 	return S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH;
 }
 
-mode_t permissions::everyoneReadWriteExecute() {
+mode_t permissions::getEveryoneReadWriteExecute() {
 	return S_IRUSR|S_IWUSR|S_IXUSR
 			|S_IRGRP|S_IWGRP|S_IXGRP
 			|S_IROTH|S_IWOTH|S_IXOTH;
 }
 
-mode_t permissions::ownerRead() {
+mode_t permissions::getOwnerRead() {
 	return S_IRUSR;
 }
 
-mode_t permissions::ownerWrite() {
+mode_t permissions::getOwnerWrite() {
 	return S_IWUSR;
 }
 
-mode_t permissions::ownerExecute() {
+mode_t permissions::getOwnerExecute() {
 	return S_IXUSR;
 }
 
-mode_t permissions::ownerReadWrite() {
+mode_t permissions::getOwnerReadWrite() {
 	return S_IRUSR|S_IWUSR;
 }
 
-mode_t permissions::ownerReadExecute() {
+mode_t permissions::getOwnerReadExecute() {
 	return S_IRUSR|S_IXUSR;
 }
 
-mode_t permissions::ownerReadWriteExecute() {
+mode_t permissions::getOwnerReadWriteExecute() {
 	return S_IRUSR|S_IWUSR|S_IXUSR;
 }
 
-mode_t permissions::groupRead() {
+mode_t permissions::getGroupRead() {
 	return S_IRGRP;
 }
 
-mode_t permissions::groupWrite() {
+mode_t permissions::getGroupWrite() {
 	return S_IWGRP;
 }
 
-mode_t permissions::groupExecute() {
+mode_t permissions::getGroupExecute() {
 	return S_IXGRP;
 }
 
-mode_t permissions::groupReadWrite() {
+mode_t permissions::getGroupReadWrite() {
 	return S_IRGRP|S_IWGRP;
 }
 
-mode_t permissions::groupReadExecute() {
+mode_t permissions::getGroupReadExecute() {
 	return S_IRGRP|S_IXGRP;
 }
 
-mode_t permissions::groupReadWriteExecute() {
+mode_t permissions::getGroupReadWriteExecute() {
 	return S_IRGRP|S_IWGRP|S_IXGRP;
 }
 
-mode_t permissions::othersRead() {
+mode_t permissions::getOthersRead() {
 	return S_IROTH;
 }
 
-mode_t permissions::othersWrite() {
+mode_t permissions::getOthersWrite() {
 	return S_IWOTH;
 }
 
-mode_t permissions::othersExecute() {
+mode_t permissions::getOthersExecute() {
 	return S_IXOTH;
 }
 
-mode_t permissions::othersReadWrite() {
+mode_t permissions::getOthersReadWrite() {
 	return S_IROTH|S_IWOTH;
 }
 
-mode_t permissions::othersReadExecute() {
+mode_t permissions::getOthersReadExecute() {
 	return S_IROTH|S_IXOTH;
 }
 
-mode_t permissions::othersReadWriteExecute() {
+mode_t permissions::getOthersReadWriteExecute() {
 	return S_IROTH|S_IWOTH|S_IXOTH;
 }
 
-mode_t permissions::saveInSwapSpace() {
+mode_t permissions::getSaveInSwapSpace() {
 	return S_ISVTX;
 }
 
-mode_t permissions::setUserId() {
+mode_t permissions::getSetUserId() {
 	return S_ISUID;
 }
 
-mode_t permissions::setGroupId() {
+mode_t permissions::getSetGroupId() {
 	return S_ISGID;
 }
 
@@ -305,44 +305,44 @@ mode_t permissions::evalPermString(const char *permstring) {
 
 		// handle user permissions
 		if (permstring[0]=='r') {
-			retval=retval|ownerRead();
+			retval=retval|getOwnerRead();
 		}
 		if (permstring[1]=='w') {
-			retval=retval|ownerWrite();
+			retval=retval|getOwnerWrite();
 		}
 		if (permstring[2]=='x') {
-			retval=retval|ownerExecute();
+			retval=retval|getOwnerExecute();
 		} else if (permstring[2]=='X' || permstring[2]=='S') {
-			retval=retval|ownerExecute();
-			retval=retval|setUserId();
+			retval=retval|getOwnerExecute();
+			retval=retval|getSetUserId();
 		}
 
 		// handle group permissions
 		if (permstring[3]=='r') {
-			retval=retval|groupRead();
+			retval=retval|getGroupRead();
 		}
 		if (permstring[4]=='w') {
-			retval=retval|groupWrite();
+			retval=retval|getGroupWrite();
 		}
 		if (permstring[5]=='x') {
-			retval=retval|groupExecute();
+			retval=retval|getGroupExecute();
 		} else if (permstring[5]=='X' || permstring[5]=='S') {
-			retval=retval|groupExecute();
+			retval=retval|getGroupExecute();
 		}
 
 		// handle others permissions
 		if (permstring[6]=='r') {
-			retval=retval|othersRead();
+			retval=retval|getOthersRead();
 		}
 		if (permstring[7]=='w') {
-			retval=retval|othersWrite();
+			retval=retval|getOthersWrite();
 		}
 		if (permstring[8]=='x') {
-			retval=retval|othersExecute();
+			retval=retval|getOthersExecute();
 
 		// handle sticky bit
 		} else if (permstring[5]=='t') {
-			retval=retval|saveInSwapSpace();
+			retval=retval|getSaveInSwapSpace();
 		}
 	}
 	return retval;
@@ -544,18 +544,18 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 					// update perms
 					if (mask&_ALL) {
-						perms|=ownerRead();
-						perms|=ownerWrite();
-						perms|=ownerExecute();
+						perms|=getOwnerRead();
+						perms|=getOwnerWrite();
+						perms|=getOwnerExecute();
 					}
 					if (mask&_READ) {
-						perms|=ownerRead();
+						perms|=getOwnerRead();
 					}
 					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
-						perms|=ownerWrite();
+						perms|=getOwnerWrite();
 					}
 					if (mask&_EXEC) {
-						perms|=ownerExecute();
+						perms|=getOwnerExecute();
 					}
 
 				} else if (aace->Header.AceType==
@@ -563,18 +563,18 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 					// update perms
 					if (mask&_ALL) {
-						perms&=~ownerRead();
-						perms&=~ownerWrite();
-						perms&=~ownerExecute();
+						perms&=~getOwnerRead();
+						perms&=~getOwnerWrite();
+						perms&=~getOwnerExecute();
 					}
 					if (mask&_READ) {
-						perms&=~ownerRead();
+						perms&=~getOwnerRead();
 					}
 					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
-						perms&=~ownerWrite();
+						perms&=~getOwnerWrite();
 					}
 					if (mask&_EXEC) {
-						perms&=~ownerExecute();
+						perms&=~getOwnerExecute();
 					}
 				}
 
@@ -585,18 +585,18 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 					// update perms
 					if (mask&_ALL) {
-						perms|=groupRead();
-						perms|=groupWrite();
-						perms|=groupExecute();
+						perms|=getGroupRead();
+						perms|=getGroupWrite();
+						perms|=getGroupExecute();
 					}
 					if (mask&_READ) {
-						perms|=groupRead();
+						perms|=getGroupRead();
 					}
 					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
-						perms|=groupWrite();
+						perms|=getGroupWrite();
 					}
 					if (mask&_EXEC) {
-						perms|=groupExecute();
+						perms|=getGroupExecute();
 					}
 
 				} else if (aace->Header.AceType==
@@ -604,18 +604,18 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 					// update perms
 					if (mask&_ALL) {
-						perms&=~groupRead();
-						perms&=~groupWrite();
-						perms&=~groupExecute();
+						perms&=~getGroupRead();
+						perms&=~getGroupWrite();
+						perms&=~getGroupExecute();
 					}
 					if (mask&_READ) {
-						perms&=~groupRead();
+						perms&=~getGroupRead();
 					}
 					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
-						perms&=~groupWrite();
+						perms&=~getGroupWrite();
 					}
 					if (mask&_EXEC) {
-						perms&=~groupExecute();
+						perms&=~getGroupExecute();
 					}
 				}
 
@@ -626,18 +626,18 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 					// update perms
 					if (mask&_ALL) {
-						perms|=othersRead();
-						perms|=othersWrite();
-						perms|=othersExecute();
+						perms|=getOthersRead();
+						perms|=getOthersWrite();
+						perms|=getOthersExecute();
 					}
 					if (mask&_READ) {
-						perms|=othersRead();
+						perms|=getOthersRead();
 					}
 					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
-						perms|=othersWrite();
+						perms|=getOthersWrite();
 					}
 					if (mask&_EXEC) {
-						perms|=othersExecute();
+						perms|=getOthersExecute();
 					}
 
 				} else if (aace->Header.AceType==
@@ -645,18 +645,18 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 					// update perms
 					if (mask&_ALL) {
-						perms&=~othersRead();
-						perms&=~othersWrite();
-						perms&=~othersExecute();
+						perms&=~getOthersRead();
+						perms&=~getOthersWrite();
+						perms&=~getOthersExecute();
 					}
 					if (mask&_READ) {
-						perms&=~othersRead();
+						perms&=~getOthersRead();
 					}
 					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
-						perms&=~othersWrite();
+						perms&=~getOthersWrite();
 					}
 					if (mask&_EXEC) {
-						perms&=~othersExecute();
+						perms&=~getOthersExecute();
 					}
 				}
 			}
