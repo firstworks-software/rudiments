@@ -48,7 +48,7 @@ void myserver::myListen() {
 
 		// accept a client connection
 		filedescriptor	*clientsock=accept();
-		clientsock->allowShortReads();
+		clientsock->setAllowShortReads(true);
 		clientsock->setReadBufferSize(buffersize);
 
 		// read from the client
@@ -86,7 +86,7 @@ int main(int argc, const char **argv) {
 	mysvr=new myserver();
 
 	// set up signal handlers for clean shutdown
-	process::waitForChildren();
+	process::setWaitForChildren(true);
 	process::setShutDownHandler(shutDown);
 	process::setCrashHandler(shutDown);
 

@@ -594,8 +594,8 @@ fallback:
 		// convert
 		debugPrintf("direct conversion... ");
 		if (to) {
-			*to=(ucs2_t)filedescriptor::hostToNet(
-				filedescriptor::littleEndianToHost(
+			*to=(ucs2_t)filedescriptor::convertHostToNet(
+				filedescriptor::convertLittleEndianToHost(
 							(uint16_t)from));
 		}
 
@@ -621,8 +621,8 @@ fallback:
 		// convert
 		debugPrintf("direct conversion... ");
 		if (to) {
-			*to=(ucs2_t)filedescriptor::hostToLittleEndian(
-				filedescriptor::netToHost((uint16_t)from));
+			*to=(ucs2_t)filedescriptor::convertHostToLittleEndian(
+				filedescriptor::convertNetToHost((uint16_t)from));
 		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
@@ -727,12 +727,12 @@ fallback:
 ucs2_t iconvert::byteswap(const char *enc, ucs2_t value) {
 	if (sys::getIsBigEndian()) {
 		if (!charstring::compare(enc,"UCS-2LE")) {
-			return (ucs2_t)filedescriptor::littleEndianToHost(
+			return (ucs2_t)filedescriptor::convertLittleEndianToHost(
 							(uint16_t)value);
 		}
 	} else {
 		if (!charstring::compare(enc,"UCS-2BE")) {
-			return (ucs2_t)filedescriptor::netToHost(
+			return (ucs2_t)filedescriptor::convertNetToHost(
 							(uint16_t)value);
 		}
 	}

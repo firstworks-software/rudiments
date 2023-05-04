@@ -96,7 +96,7 @@ url::url() : file() {
 	pvt=new urlprivate;
 	setGetCurrentPropertiesOnOpen(false);
 
-	pvt->_isc.allowShortReads();
+	pvt->_isc.setAllowShortReads(true);
 	pvt->_isc.setWriteBufferSize(65536);
 
 	pvt->_request=NULL;

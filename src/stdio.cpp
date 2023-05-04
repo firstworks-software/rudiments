@@ -9,7 +9,7 @@ stdiofiledescriptor::stdiofiledescriptor(int32_t fd) : filedescriptor(fd) {
 
 	// This is really for stdinput, nobody reads from stdout/err,
 	// but it doesn't hurt them.
-	allowShortReads();
+	setAllowShortReads(true);
 }
 
 stdiofiledescriptor::~stdiofiledescriptor() {

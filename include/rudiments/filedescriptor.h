@@ -105,11 +105,11 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *
 		 *  Returns false if the system doesn't support
 		 *  blocking/nonblocking modes. */
-		virtual bool	setUseNonBlockingMode(bool usenonblockingmode);
+		virtual bool	setNonBlockingMode(bool usenonblockingmode);
 
 		/** Returns true if the file descriptor is in
 		 *  non-blocking mode and false otherwise. */
-		virtual bool	getIsUsingNonBlockingMode();
+		virtual bool	getNonBlockingMode();
 
 		/** Returns the position (relative to the beginning of the
 		 *  file descriptor) at which the next read or write will
@@ -763,133 +763,103 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec);
 
 
-		/** Causes reads to automatically retry if interrupted by a
-		 *  signal.  By default, if a read is occurring and a signal
-		 *  interrupts it, the read fails, the system error is set to
-		 *  EINTR and the read must be retried. */
-		void	retryInterruptedReads();
-
-		/** Causes reads not to automatically retry if interrupted by a
-		 *  signal.  This is the default behavior.  By default, if a
-		 *  read is occurring and a signal interrupts it, the read
-		 *  fails, the system error is set to EINTR and the read must
-		 *  be retried. */
-		void	dontRetryInterruptedReads();
+		/** If "retry" is true then a read will be automatically
+		 *  retried if it is interrupted by a signal.  If "retry" is
+		 *  false then, if a read is interrupted by a signal, it
+		 *  will fail and the system error will be set to EINTR.
+		 *
+		 *  Defaults to false. */
+		void	setRetryInterruptedReads(bool retry);
 
 		/** Returns true if interrupted reads will be retried and false
 		 *  otherwise. */
 		bool	getRetryInterruptedReads();
 
-		/** Causes writes to automatically retry if interrupted by a
-		 *  signal.  By default, if a write is occurring and a signal
-		 *  interrupts it, the write fails, the system error is set to
-		 *  EINTR and the write must be retried. */
-		void	retryInterruptedWrites();
-
-		/** Causes writes not to automatically retry if interrupted by a
-		 *  signal.  This is the default behavior.  By default, if a
-		 *  write is occurring and a signal interrupts it, the write
-		 *  fails, the system error is set to EINTR and the write must
-		 *  be retried. */
-		void	dontRetryInterruptedWrites();
+		/** If "retry" is true then a write will be automatically
+		 *  retried if it is interrupted by a signal.  If "retry" is
+		 *  false then, if a write is interrupted by a signal, it
+		 *  will fail and the system error will be set to EINTR.
+		 *
+		 *  Defaults to false. */
+		void	setRetryInterruptedWrites(bool retry);
 
 		/** Returns true if interrupted writes will be retried and false
 		 *  otherwise. */
 		bool	getRetryInterruptedWrites();
 
-		/** Causes wait operations to be automatically retried if
-		 *  interrupted by a signal.  This is the default behavior.
-		 *  Otherwise, if a wait is occurring and a signal interrupts
-		 *  it, the wait fails, the system error is set to EINTR and
-		 *  the wait must be retried. */
-		void	retryInterruptedWaits();
-
-		/** Causes wait operations not to be automatically retried if
-		 *  interrupted by a signal.  If this is set, a wait is
-		 *  occurring and a signal interrupts it, the wait fails, the
-		 *  system error is set to EINTR and the wait must be
-		 *  retried. */
-		void	dontRetryInterruptedWaits();
+		/** If "retry" is true then a wait operation will be
+		 *  automatically retried if it is interrupted by a signal.  If
+		 *  "retry" is false then, if a wait operation is interrupted by
+		 *  a signal, it will fail and the system error will
+		 *  be set to EINTR.
+		 *
+		 *  Defaults to true. */
+		void	setRetryInterruptedWaits(bool retry);
 
 		/** Returns true if interrupted waits will be retried and false
 		 *  otherwise. */
 		bool	getRetryInterruptedWaits();
 
-		/** Causes fcntl operations to be automatically retried if
-		 *  interrupted by a signal.  This is the default behavior.
-		 *  Otherwise, if a fcntl is occurring and a signal interrupts
-		 *  it, the fcntl fails, the system error is set to EINTR and
-		 *  the fcntl must be retried. */
-		void	retryInterruptedFcntl();
-
-		/** Causes fcntl operations not to be automatically retried if
-		 *  interrupted by a signal.  If this is set, a fcntl is
-		 *  occurring and a signal interrupts it, the fcntl fails, the
-		 *  system error is set to EINTR and the fcntl must be
-		 *  retried. */
-		void	dontRetryInterruptedFcntl();
+		/** If "retry" is true then a fcntl operation will be
+		 *  automatically retried if it is interrupted by a signal.  If
+		 *  "retry" is false then, if a fcntl operation is interrupted
+		 *  by a signal, it will fail and the system error will be set
+		 *  to EINTR.
+		 *
+		 *  Defaults to true. */
+		void	setRetryInterruptedFcntl(bool retry);
 
 		/** Returns true if interrupted calls to fcntl will be retried
 		 *  and false otherwise. */
 		bool	getRetryInterruptedFcntl();
 
-		/** Causes ioctl operations to be automatically retried if
-		 *  interrupted by a signal.  This is the default behavior.
-		 *  Otherwise, if a ioctl is occurring and a signal interrupts
-		 *  it, the ioctl fails, the system error is set to EINTR and
-		 *  the ioctl must be retried. */
-		void	retryInterruptedIoctl();
-
-		/** Causes ioctl operations not to be automatically retried if
-		 *  interrupted by a signal.  If this is set, a ioctl is
-		 *  occurring and a signal interrupts it, the ioctl fails, the
-		 *  system error is set to EINTR and the ioctl must be
-		 *  retried. */
-		void	dontRetryInterruptedIoctl();
+		/** If "retry" is true then an ioctl operation will be
+		 *  automatically retried if it is interrupted by a signal.  If
+		 *  "retry" is false then, if an ioctl operation is interrupted
+		 *  by a signal, it will fail and the system error will be set
+		 *  to EINTR.
+		 *
+		 *  Defaults to true. */
+		void	setRetryInterruptedIoctl(bool retry);
 
 		/** Returns true if interrupted calls to ioctl will be retried
 		 *  and false otherwise. */
 		bool	getRetryInterruptedIoctl();
 
 
-		/** By default, read() will attempt to read the specified number
-		 *  of bytes from the file descriptor, even if several passes
-		 *  are necessary.
+		/** If "allow" is set true then read() will only attempt a
+		 *  single pass and return the number of bytes that were read
+		 *  during that  pass whether the specified number of bytes
+		 *  were read or not.
+		 *  
+		 *  If "allow" is set false then read() will attempt to read
+		 *  the specified number of bytes from the file descriptor,
+		 *  even if several passes are necessary.
 		 *
-		 *  This method causes a read() to attempt only a single pass
-		 *  and return the number of bytes that were read during that
-		 *  pass whether the specified number of bytes were read or not.
-		 *
-		 *  Note that reads longer than SSIZE_MAX will only attempt to
-		 *  read SSIZE_MAX bytes. */
-		void	allowShortReads();
+		 *  Defaults to false. */
+		void	setAllowShortReads(bool allow);
 
-		/** By default, read() will attempt to read the specified number
-		 *  of bytes from the file descriptor, even if several passes
-		 *  are necessary.
-		 *
-		 *  This method causes that default behavior to be observed. */
-		void	dontAllowShortReads();
-
-		/** By default, write() will attempt to write the specified
-		 *  number of bytes from the file descriptor, in several passes
-		 *  if necessary.
-		 *
-		 *  This method causes a write() to attempt only a single pass
-		 *  and return the number of bytes that were written during
-		 *  that pass whether the specified number of bytes were
-		 *  written or not.
-		 *
-		 *  Note that writes longer than SSIZE_MAX will only attempt to
-		 *  write SSIZE_MAX bytes. */
-		void	allowShortWrites();
-
-		/** By default, write() will attempt to write the specified
+		/** Returns true if read()s will attempt to read the specified
 		 *  number of bytes from the file descriptor, even if several
-		 *  passes are necessary.
+		 *  passes are necessary, and false otherwise. */
+		bool	getAllowShortReads();
+
+		/** If "allow" is set true then write() will only attempt a
+		 *  single pass and return the number of bytes that were written
+		 *  during that pass whether the specified number of bytes
+		 *  were written or not.
+		 *  
+		 *  If "allow" is set false then write() will attempt to write
+		 *  the specified number of bytes to the file descriptor,
+		 *  even if several passes are necessary.
 		 *
-		 *  This method causes that default behavior to be observed. */
-		void	dontAllowShortWrites();
+		 *  Defaults to false. */
+		void	setAllowShortWrites(bool allow);
+
+		/** Returns true if read()s will attempt to read the specified
+		 *  number of bytes from the file descriptor, even if several
+		 *  passes are necessary, and false otherwise. */
+		bool	getAllowShortWrites();
 
 
 		/** Sends file descriptor "fd" to the file descriptor.  This
@@ -1230,51 +1200,57 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Converts an unsigned 16-bit integer from host byte order to
 		 *  network byte order (big-endian). */
-		static	uint16_t	hostToNet(uint16_t value);
+		static	uint16_t	convertHostToNet(uint16_t value);
 
 		/** Converts an unsigned 32-bit integer from host byte order to
 		 *  network byte order (big-endian). */
-		static	uint32_t	hostToNet(uint32_t value);
+		static	uint32_t	convertHostToNet(uint32_t value);
 
 		/** Converts an unsigned 64-bit integer from host byte order to
 		 *  network byte order (big-endian). */
-		static	uint64_t	hostToNet(uint64_t value);
+		static	uint64_t	convertHostToNet(uint64_t value);
 
 		/** Converts an unsigned 16-bit integer from network byte order
 		 * (bit-endian) to host byte order. */
-		static	uint16_t	netToHost(uint16_t value);
+		static	uint16_t	convertNetToHost(uint16_t value);
 
 		/** Converts an unsigned 32-bit integer from network byte order
 		 * (bit-endian) to host byte order. */
-		static	uint32_t	netToHost(uint32_t value);
+		static	uint32_t	convertNetToHost(uint32_t value);
 
 		/** Converts an unsigned 64-bit integer from network byte order
 		 * (bit-endian) to host byte order. */
-		static	uint64_t	netToHost(uint64_t value);
+		static	uint64_t	convertNetToHost(uint64_t value);
 
 		/** Converts an unsigned 16-bit integer from host byte order to
 		 *  little-endian byte order. */
-		static	uint16_t	hostToLittleEndian(uint16_t value);
+		static	uint16_t	convertHostToLittleEndian(
+							uint16_t value);
 
 		/** Converts an unsigned 32-bit integer from host byte order to
 		 *  little-endian byte order. */
-		static	uint32_t	hostToLittleEndian(uint32_t value);
+		static	uint32_t	convertHostToLittleEndian(
+							uint32_t value);
 
 		/** Converts an unsigned 64-bit integer from host byte order to
 		 *  little-endian byte order. */
-		static	uint64_t	hostToLittleEndian(uint64_t value);
+		static	uint64_t	convertHostToLittleEndian(
+							uint64_t value);
 
 		/** Converts an unsigned 16-bit integer from little-endian byte
 		 *  order to host byte order. */
-		static	uint16_t	littleEndianToHost(uint16_t value);
+		static	uint16_t	convertLittleEndianToHost(
+							uint16_t value);
 
 		/** Converts an unsigned 32-bit integer from little-endian byte
 		 *  order to host byte order. */
-		static	uint32_t	littleEndianToHost(uint32_t value);
+		static	uint32_t	convertLittleEndianToHost(
+							uint32_t value);
 
 		/** Converts an unsigned 64-bit integer from little-endian byte
 		 *  order to host byte order. */
-		static	uint64_t	littleEndianToHost(uint64_t value);
+		static	uint64_t	convertLittleEndianToHost(
+							uint64_t value);
 
 	#include <rudiments/private/filedescriptor.h>
 };

@@ -227,15 +227,18 @@ class RUDIMENTS_DLLSPEC semaphoreset : public object {
 		 *  are waiting for the semaphore to increment. */
 		int32_t	getWaitingForIncrement(int32_t index);
 
-		/** Causes operations to automatically be retired if
-		 *  interrupted by a signal.  This is the default
-		 *  behiavior. */
-		void	retryInterruptedOperations();
+		/** If "retry" is true then a semaphore operation will be
+		 *  automatically retried if it is interrupted by a signal.  If
+		 *  "retry" is false then, if a semaphoore operation is
+		 *  interrupted by a signal, it will fail and the system error
+		 *  will be set to EINTR.
+		 *
+		 *  Defaults to true. */
+		void	setRetryInterruptedOperations(bool retry);
 
-		/** Causes operations not to automatically be retired
-		 *  if interrupted by a signal.  The default is to retry
-		 *  automatically. */
-		void	dontRetryInterruptedOperations();
+		/** Returns true if interrupted semaphore operations will be
+		 *  retried automatically and false otherwise. */
+		bool	getRetryInterruptedOperations();
 
 		/** Returns true if the platform supports semaphores and
 		 *  false otherwise. */

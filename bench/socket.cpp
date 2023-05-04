@@ -110,7 +110,7 @@ void listen(bool nonblocking) {
 
 		// use non-blocking mode if necessary
 		if (nonblocking) {
-			clientsock->setUseNonBlockingMode(true);
+			clientsock->setNonBlockingMode(true);
 		}
 
 		// get loop count
@@ -280,7 +280,7 @@ void session(socketclient *clnt) {
 
 		// use non-blocking mode if necessary
 		if (nonblocking) {
-			clnt->setUseNonBlockingMode(true);
+			clnt->setNonBlockingMode(true);
 			clnt->setReadBufferSize(0);
 			clnt->setWriteBufferSize(0);
 		} else {
@@ -420,7 +420,7 @@ void session(socketclient *clnt) {
 
 		// restore blocking mode
 		if (nonblocking) {
-			clnt->setUseNonBlockingMode(false);
+			clnt->setNonBlockingMode(false);
 		}
 	}
 }

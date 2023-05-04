@@ -5,7 +5,7 @@
 int main(int argc, const char **argv) {
 
 	// configure the process to "wait on child processes"
-	process::waitForChildren();
+	process::setWaitForChildren(true);
 
 	// five times...
 	for (uint16_t i=0; i<5; i++) {

@@ -48,7 +48,7 @@ bool socketserver::supportsBlockingAndNonBlockingModes() {
 	#endif
 }
 
-bool socketserver::setUseNonBlockingMode(bool usenonblockingmode) {
+bool socketserver::setNonBlockingMode(bool usenonblockingmode) {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -68,7 +68,7 @@ bool socketserver::setUseNonBlockingMode(bool usenonblockingmode) {
 				|| error::getErrorNumber()==EOPNOTSUPP
 				#endif
 				)) {
-			retval=filedescriptor::setUseNonBlockingMode(
+			retval=filedescriptor::setNonBlockingMode(
 							usenonblockingmode);
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -78,12 +78,12 @@ bool socketserver::setUseNonBlockingMode(bool usenonblockingmode) {
 		#endif
 		return retval;
 	#else
-		return filedescriptor::setUseNonBlockingMode(
+		return filedescriptor::setNonBlockingMode(
 						usenonblockingmode);
 	#endif
 }
 
-bool socketserver::getIsUsingNonBlockingMode() {
+bool socketserver::getNonBlockingMode() {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -93,7 +93,7 @@ bool socketserver::getIsUsingNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		return pvt->_nonblockingmode;
 	#else
-		return filedescriptor::getIsUsingNonBlockingMode();
+		return filedescriptor::getNonBlockingMode();
 	#endif
 }
 

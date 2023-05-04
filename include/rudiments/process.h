@@ -389,18 +389,19 @@ class RUDIMENTS_DLLSPEC process {
 		 *  use this method to get the signalhandler. */
 		static	signalhandler	*getShutDownSignalHandler();
 
-		/** This method causes the process to wait on child processes
-		 *  which have exited, preventing so-called "zombie" processes
-		 *  from occurring. */
-		static	void	waitForChildren();
-
-		/** This method causes the process not to wait on child
-		 *  processes which have exited.  Ordinarily, you'd want to
-		 *  wait on child processes, but that interferes with the
-		 *  behavior of WEXITSTATUS() after a call to system() (and
-		 *  possibly other calls).  This method allows you to disable
-		 *  waiting on child processes. */
-		static	void	dontWaitForChildren();
+		/** If "wait" is true then this method causes the process will
+		 *  automatically wait on child processes which have exited,
+		 *  preventing so-called "zombie" processes from occurring.
+		 *
+		 *  If "wait" is false then this method causes the process not
+		 *  to wait on child processes which have exited.  Ordinarily,
+		 *  you'd want to wait on child processes, but that interferes
+		 *  with the behavior of WEXITSTATUS() after a call to system()
+		 *  (and possibly other calls).  This method allows you to
+		 *  disable waiting on child processes.
+		 *
+		 *  Defaults to false. */
+		static	void	setWaitForChildren(bool wait);
 
 		/** This methods causes the process to wait until child
 		 *  process "pid" exits.  Returns true on success and false
@@ -469,18 +470,13 @@ class RUDIMENTS_DLLSPEC process {
 		 *  process to exit or change state and false otherwise. */
 		static bool	supportsGetChildStateChange();
 
-		/** Causes fork() calls to be automatically retried if they
-		 *  fail because of insufficient system resources.  This
-		 *  is the default behavior.  Otherwise, if a fork() fails,
-		 *  the system error is set to EAGAIN and the fork() must
-		 *  be retried by the calling program. */
-		static void	retryFailedFork();
-
-		/** Causes fork() calls not to be automatically retried if
-		 *  they fail because of insufficient system resources.  If
-		 *  set, if a fork() fails, the system error is set to EAGAIN
-		 *  and the fork() must be retried by the calling program. */
-		static void	dontRetryFailedFork();
+		/** If "retry" is true then fork() calls will be automatically
+		 *  retried if they fail eg. because of insufficient system
+		 *  resources.  If "retry" is set false then, if a fork() fails,
+		 *  the system error is set to EAGAIN and fork() returns -1.
+		 *
+		 *  Defaults to true.*/
+		static void	setRetryFailedFork(bool retry);
 
 		/** Returns true if failed fork() calls will be retried and
 		 *  false otherwise. */

@@ -1250,21 +1250,21 @@ int main(int argc, const char **argv) {
 
 	// hosttonet/nettohost (why are these here?)
 	/*byte_t	v8=0xC0;
-	uint16_t	v16=filedescriptor::hostToNet(
+	uint16_t	v16=filedescriptor::convertHostToNet(
 						(uint16_t)0xC0C0);
-	uint32_t	v32=filedescriptor::hostToNet(
+	uint32_t	v32=filedescriptor::convertHostToNet(
 						(uint32_t)0xC0C0C0C0);
 	#ifdef RUDIMENTS_HAVE_LONG_LONG
-	uint64_t	v64=filedescriptor::hostToNet(
+	uint64_t	v64=filedescriptor::convertHostToNet(
 					(uint64_t)0xC0C0C0C0C0C0C0C0ULL);
 	#endif
 	char	sv8=-1*0x01;
-	int16_t	sv16=filedescriptor::hostToNet((uint16_t)
+	int16_t	sv16=filedescriptor::convertHostToNet((uint16_t)
 						(int16_t)(-1*0x0101));
-	int32_t	sv32=filedescriptor::hostToNet((uint32_t)
+	int32_t	sv32=filedescriptor::convertHostToNet((uint32_t)
 						(int32_t)(-1*0x01010101));
 	#ifdef RUDIMENTS_HAVE_LONG_LONG
-	int64_t	sv64=filedescriptor::hostToNet((uint64_t)
+	int64_t	sv64=filedescriptor::convertHostToNet((uint64_t)
 					(int64_t)(-1*0x0101010101010101LL));
 	#endif
 	byte_t	v8s[]={0xC0,0xC0,0xC0,0xC0};

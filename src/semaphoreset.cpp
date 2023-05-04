@@ -912,12 +912,12 @@ bool semaphoreset::supportsUndoSemaphoreOperations() {
 	#endif
 }
 
-void semaphoreset::retryInterruptedOperations() {
-	pvt->_retryinterruptedoperations=true;
+void semaphoreset::setRetryInterruptedOperations(bool retry) {
+	pvt->_retryinterruptedoperations=retry;
 }
 
-void semaphoreset::dontRetryInterruptedOperations() {
-	pvt->_retryinterruptedoperations=false;
+bool semaphoreset::getRetryInterruptedOperations() {
+	return pvt->_retryinterruptedoperations;
 }
 
 bool semaphoreset::isSupported() {

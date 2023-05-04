@@ -1122,19 +1122,17 @@ signalhandler *process::getShutDownSignalHandler() {
 	return &_shutdownhandler;
 }
 
-void process::waitForChildren() {
+void process::setWaitForChildren(bool wait) {
 	#ifdef SIGCHLD
+	if (wait) {
 		_deadchildhandler.setHandler(waitForChildrenToExit);
 		_deadchildhandler.addFlag(SA_NOCLDSTOP);
 		_deadchildhandler.handleSignal(SIGCHLD);
-	#endif
-}
-
-void process::dontWaitForChildren() {
-	#ifdef SIGCHLD
+	} else {
 		_deadchildhandler.setHandler((void (*)(int32_t))SIG_DFL);
 		_deadchildhandler.removeAllFlags();
 		_deadchildhandler.handleSignal(SIGCHLD);
+	}
 	#endif
 }
 
@@ -1279,12 +1277,8 @@ bool process::supportsGetChildStateChange() {
 	#endif
 }
 
-void process::retryFailedFork() {
-	_retry=true;
-}
-
-void process::dontRetryFailedFork() {
-	_retry=false;
+void process::setRetryFailedFork(bool retry) {
+	_retry=retry;
 }
 
 bool process::getRetryFailedFork() {

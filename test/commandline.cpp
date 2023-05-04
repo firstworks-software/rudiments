@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 	// re-call ourself with some arguments
 	if (argc==1) {
 
-		process::waitForChildren();
+		process::setWaitForChildren(true);
 
 		const char	*args[]={
 			"commandline",

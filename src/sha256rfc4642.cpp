@@ -92,22 +92,22 @@ static void Transform(uint32_t *s, const uint32_t *chunk)
 	uint32_t a = s[0], b = s[1], c = s[2], d = s[3], e = s[4], f = s[5], g = s[6], h = s[7];
 	uint32_t w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15;
 
-	Round(a, b, c, &d, e, f, g, &h, 0x428a2f98, w0 = filedescriptor::netToHost(chunk[0]));
-	Round(h, a, b, &c, d, e, f, &g, 0x71374491, w1 = filedescriptor::netToHost(chunk[1]));
-	Round(g, h, a, &b, c, d, e, &f, 0xb5c0fbcf, w2 = filedescriptor::netToHost(chunk[2]));
-	Round(f, g, h, &a, b, c, d, &e, 0xe9b5dba5, w3 = filedescriptor::netToHost(chunk[3]));
-	Round(e, f, g, &h, a, b, c, &d, 0x3956c25b, w4 = filedescriptor::netToHost(chunk[4]));
-	Round(d, e, f, &g, h, a, b, &c, 0x59f111f1, w5 = filedescriptor::netToHost(chunk[5]));
-	Round(c, d, e, &f, g, h, a, &b, 0x923f82a4, w6 = filedescriptor::netToHost(chunk[6]));
-	Round(b, c, d, &e, f, g, h, &a, 0xab1c5ed5, w7 = filedescriptor::netToHost(chunk[7]));
-	Round(a, b, c, &d, e, f, g, &h, 0xd807aa98, w8 = filedescriptor::netToHost(chunk[8]));
-	Round(h, a, b, &c, d, e, f, &g, 0x12835b01, w9 = filedescriptor::netToHost(chunk[9]));
-	Round(g, h, a, &b, c, d, e, &f, 0x243185be, w10 = filedescriptor::netToHost(chunk[10]));
-	Round(f, g, h, &a, b, c, d, &e, 0x550c7dc3, w11 = filedescriptor::netToHost(chunk[11]));
-	Round(e, f, g, &h, a, b, c, &d, 0x72be5d74, w12 = filedescriptor::netToHost(chunk[12]));
-	Round(d, e, f, &g, h, a, b, &c, 0x80deb1fe, w13 = filedescriptor::netToHost(chunk[13]));
-	Round(c, d, e, &f, g, h, a, &b, 0x9bdc06a7, w14 = filedescriptor::netToHost(chunk[14]));
-	Round(b, c, d, &e, f, g, h, &a, 0xc19bf174, w15 = filedescriptor::netToHost(chunk[15]));
+	Round(a, b, c, &d, e, f, g, &h, 0x428a2f98, w0 = filedescriptor::convertNetToHost(chunk[0]));
+	Round(h, a, b, &c, d, e, f, &g, 0x71374491, w1 = filedescriptor::convertNetToHost(chunk[1]));
+	Round(g, h, a, &b, c, d, e, &f, 0xb5c0fbcf, w2 = filedescriptor::convertNetToHost(chunk[2]));
+	Round(f, g, h, &a, b, c, d, &e, 0xe9b5dba5, w3 = filedescriptor::convertNetToHost(chunk[3]));
+	Round(e, f, g, &h, a, b, c, &d, 0x3956c25b, w4 = filedescriptor::convertNetToHost(chunk[4]));
+	Round(d, e, f, &g, h, a, b, &c, 0x59f111f1, w5 = filedescriptor::convertNetToHost(chunk[5]));
+	Round(c, d, e, &f, g, h, a, &b, 0x923f82a4, w6 = filedescriptor::convertNetToHost(chunk[6]));
+	Round(b, c, d, &e, f, g, h, &a, 0xab1c5ed5, w7 = filedescriptor::convertNetToHost(chunk[7]));
+	Round(a, b, c, &d, e, f, g, &h, 0xd807aa98, w8 = filedescriptor::convertNetToHost(chunk[8]));
+	Round(h, a, b, &c, d, e, f, &g, 0x12835b01, w9 = filedescriptor::convertNetToHost(chunk[9]));
+	Round(g, h, a, &b, c, d, e, &f, 0x243185be, w10 = filedescriptor::convertNetToHost(chunk[10]));
+	Round(f, g, h, &a, b, c, d, &e, 0x550c7dc3, w11 = filedescriptor::convertNetToHost(chunk[11]));
+	Round(e, f, g, &h, a, b, c, &d, 0x72be5d74, w12 = filedescriptor::convertNetToHost(chunk[12]));
+	Round(d, e, f, &g, h, a, b, &c, 0x80deb1fe, w13 = filedescriptor::convertNetToHost(chunk[13]));
+	Round(c, d, e, &f, g, h, a, &b, 0x9bdc06a7, w14 = filedescriptor::convertNetToHost(chunk[14]));
+	Round(b, c, d, &e, f, g, h, &a, 0xc19bf174, w15 = filedescriptor::convertNetToHost(chunk[15]));
 
 	Round(a, b, c, &d, e, f, g, &h, 0xe49b69c1, w0 += sigma1(w14) + w9 + sigma0(w1));
 	Round(h, a, b, &c, d, e, f, &g, 0xefbe4786, w1 += sigma1(w15) + w10 + sigma0(w2));
@@ -227,12 +227,12 @@ void sha256_done(struct sha256_ctx *ctx, struct sha256_t *res)
 	uint64_t sizedesc;
 	size_t i;
 
-	sizedesc = filedescriptor::hostToNet((uint64_t)ctx->bytes << 3);
+	sizedesc = filedescriptor::convertHostToNet((uint64_t)ctx->bytes << 3);
 	/* Add '1' bit to terminate, then all 0 bits, up to next block - 8. */
 	add(ctx, pad, 1 + ((128 - 8 - (ctx->bytes % 64) - 1) % 64));
 	/* Add number of bits of data (big endian) */
 	add(ctx, &sizedesc, 8);
 	for (i = 0; i < sizeof(ctx->s) / sizeof(ctx->s[0]); i++)
-		res->u.u32[i] = filedescriptor::hostToNet(ctx->s[i]);
+		res->u.u32[i] = filedescriptor::convertHostToNet(ctx->s[i]);
 	ctx->bytes = (size_t)-1;
 }

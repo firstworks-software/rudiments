@@ -401,19 +401,19 @@ ssize_t apachehttpserverapi::readUcs2(ucs2_t *character) {
 
 ssize_t apachehttpserverapi::read(int16_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(int16_t));
-	*number=filedescriptor::netToHost((uint16_t)*number);
+	*number=filedescriptor::convertNetToHost((uint16_t)*number);
 	return retval;
 }
 
 ssize_t apachehttpserverapi::read(int32_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(int32_t));
-	*number=filedescriptor::netToHost((uint32_t)*number);
+	*number=filedescriptor::convertNetToHost((uint32_t)*number);
 	return retval;
 }
 
 ssize_t apachehttpserverapi::read(int64_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(int64_t));
-	*number=filedescriptor::netToHost((uint64_t)*number);
+	*number=filedescriptor::convertNetToHost((uint64_t)*number);
 	return retval;
 }
 
@@ -423,19 +423,19 @@ ssize_t apachehttpserverapi::read(byte_t *character) {
 
 ssize_t apachehttpserverapi::read(uint16_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(uint16_t));
-	*number=filedescriptor::netToHost(*number);
+	*number=filedescriptor::convertNetToHost(*number);
 	return retval;
 }
 
 ssize_t apachehttpserverapi::read(uint32_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(uint32_t));
-	*number=filedescriptor::netToHost(*number);
+	*number=filedescriptor::convertNetToHost(*number);
 	return retval;
 }
 
 ssize_t apachehttpserverapi::read(uint64_t *number) {
 	ssize_t	retval=bufferedRead(number,sizeof(uint64_t));
-	*number=filedescriptor::netToHost(*number);
+	*number=filedescriptor::convertNetToHost(*number);
 	return retval;
 }
 

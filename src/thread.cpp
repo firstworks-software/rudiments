@@ -245,12 +245,8 @@ bool thread::raiseSignal(int32_t signum) {
 	#endif
 }
 
-void thread::retryFailedSpawn() {
-	pvt->_retry=true;
-}
-
-void thread::dontRetryFailedSpawn() {
-	pvt->_retry=false;
+void thread::setRetryFailedSpawn(bool retry) {
+	pvt->_retry=retry;
 }
 
 bool thread::getRetryFailedSpawn() {

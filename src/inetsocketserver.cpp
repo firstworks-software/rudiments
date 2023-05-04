@@ -70,7 +70,7 @@ bool inetsocketserver::open() {
 	// initialize a socket address structure
 	bytestring::zero(getSin(),sizeof(sockaddr_in));
 	getSin()->sin_family=AF_INET;
-	getSin()->sin_port=hostToNet(port);
+	getSin()->sin_port=convertHostToNet(port);
 
 	// if a specific address was passed in, bind to it only,
 	// otherwise bind to all addresses
@@ -92,7 +92,7 @@ bool inetsocketserver::open() {
 			#error no inet_aton or anything like it
 		#endif
 	} else {
-		getSin()->sin_addr.s_addr=hostToNet((uint32_t)INADDR_ANY);
+		getSin()->sin_addr.s_addr=convertHostToNet((uint32_t)INADDR_ANY);
 	}
 
 	// create the socket
@@ -113,7 +113,7 @@ bool inetsocketserver::open() {
 	// Put the socket in blocking mode.  Most platforms create sockets in
 	// blocking mode by default but OpenBSD doesn't appear to (at least in
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
-	if (!setUseNonBlockingMode(false) &&
+	if (!setNonBlockingMode(false) &&
 			error::getErrorNumber()
 			#ifdef ENOTSUP
 			&& error::getErrorNumber()!=ENOTSUP
@@ -199,7 +199,7 @@ filedescriptor *inetsocketserver::accept() {
 
 	// set the client socket to the same blocking/non-blocking
 	// mode as the server socket
-	if (!(returnsock->setUseNonBlockingMode(getIsUsingNonBlockingMode())) &&
+	if (!(returnsock->setNonBlockingMode(getNonBlockingMode())) &&
 				error::getErrorNumber()
 				#ifdef ENOTSUP
 				&& error::getErrorNumber()!=ENOTSUP

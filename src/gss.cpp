@@ -3545,7 +3545,7 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
-	*tokenflags=pvt->_fd->netToHost(*tokenflags);
+	*tokenflags=pvt->_fd->convertNetToHost(*tokenflags);
 
 	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.printf("%08x,",*tokenflags);
@@ -3560,7 +3560,7 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
-	size=pvt->_fd->netToHost(size);
+	size=pvt->_fd->convertNetToHost(size);
 
 	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.printf("%d,",size);
@@ -3633,7 +3633,7 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	// get record size
 	uint16_t	size=0;
 	bytestring::copy(&size,&(header[3]),sizeof(uint16_t));
-	size=pvt->_fd->netToHost(size);
+	size=pvt->_fd->convertNetToHost(size);
 	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.printf("%d,",size);
 	#endif
@@ -3727,7 +3727,7 @@ ssize_t gsscontext::sendKrbToken(uint32_t tokenflags,
 	#endif
 
 	// write token flags
-	uint32_t	temptokenflags=pvt->_fd->netToHost(tokenflags);
+	uint32_t	temptokenflags=pvt->_fd->convertNetToHost(tokenflags);
 	ssize_t		result=fullWrite(&temptokenflags,sizeof(tokenflags));
 	if (result!=sizeof(tokenflags)) {
 		#ifdef DEBUG_GSS_SEND
@@ -3737,7 +3737,7 @@ ssize_t gsscontext::sendKrbToken(uint32_t tokenflags,
 	}
 
 	// write token size
-	uint32_t	size=pvt->_fd->netToHost((uint32_t)tokensize);
+	uint32_t	size=pvt->_fd->convertNetToHost((uint32_t)tokensize);
 	result=fullWrite(&size,sizeof(size));
 	if (result!=sizeof(size)) {
 		#ifdef DEBUG_GSS_SEND

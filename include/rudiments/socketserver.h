@@ -21,8 +21,8 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		 *  modes and false otherwise. */
 		virtual bool	supportsBlockingAndNonBlockingModes();
 
-		/** If "usenonblockingmode" is true then the socket put into in
-		 *  non-blocking mode.  If "usenonblockingmode" is false then
+		/** If "nonblockingmode" is true then the socket put into in
+		 *  non-blocking mode.  If "nonblockingmode" is false then
 		 *  the socket is put into blocking mode.
 		 *
 		 *  The default for most sockets is to be in blocking mode,
@@ -33,11 +33,11 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		 *
 		 *  Returns false if the system doesn't support
 		 *  blocking/nonblocking modes. */
-		virtual bool	setUseNonBlockingMode(bool usenonblockingmode);
+		virtual bool	setNonBlockingMode(bool nonblockingmode);
 
 		/** Returns true if the socket is in non-blocking mode and
 		 *  false otherwise. */
-		virtual bool	getIsUsingNonBlockingMode();
+		virtual bool	getNonBlockingMode();
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */

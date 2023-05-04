@@ -140,7 +140,7 @@ int32_t inetsocketclient::connect() {
 		// set the address type and port to connect to
 		bytestring::zero(getSin(),sizeof(sockaddr_in));
 		getSin()->sin_family=he.getAddressType();
-		getSin()->sin_port=hostToNet(getPort());
+		getSin()->sin_port=convertHostToNet(getPort());
 	#endif
 
 	int32_t	retval=RESULT_ERROR;
@@ -221,7 +221,7 @@ int32_t inetsocketclient::connect() {
 				// default but OpenBSD doesn't appear to (at
 				// least in version 4.9) so we'll force it to
 				// blocking-mode to be consistent.
-				if (!setUseNonBlockingMode(false) &&
+				if (!setNonBlockingMode(false) &&
 					error::getErrorNumber()
 					#ifdef ENOTSUP
 					&& error::getErrorNumber()!=ENOTSUP
@@ -329,7 +329,7 @@ int32_t inetsocketclient::connect() {
 				// default but OpenBSD doesn't appear to (at
 				// least in version 4.9) so we'll force it to
 				// blocking-mode to be consistent.
-				if (!setUseNonBlockingMode(false) &&
+				if (!setNonBlockingMode(false) &&
 					error::getErrorNumber()
 					#ifdef ENOTSUP
 					&& error::getErrorNumber()!=ENOTSUP

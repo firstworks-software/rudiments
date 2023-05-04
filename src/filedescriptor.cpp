@@ -818,7 +818,7 @@ bool filedescriptor::supportsBlockingAndNonBlockingModes() {
 	#endif
 }
 
-bool filedescriptor::setUseNonBlockingMode(bool usenonblockingmode) {
+bool filedescriptor::setNonBlockingMode(bool usenonblockingmode) {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
 		if (usenonblockingmode) {
@@ -833,7 +833,7 @@ bool filedescriptor::setUseNonBlockingMode(bool usenonblockingmode) {
 	#endif
 }
 
-bool filedescriptor::getIsUsingNonBlockingMode() {
+bool filedescriptor::getNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && defined(F_GETFL)
 		return (fCntl(F_GETFL,0)&O_NONBLOCK);
 	#else
@@ -1293,49 +1293,49 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 ssize_t filedescriptor::write(uint16_t number) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet(number);
+		number=convertHostToNet(number);
 	}
 	return highLevelWrite((const byte_t *)&number,sizeof(uint16_t));
 }
 
 ssize_t filedescriptor::write(uint32_t number) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet(number);
+		number=convertHostToNet(number);
 	}
 	return highLevelWrite((const byte_t *)&number,sizeof(uint32_t));
 }
 
 ssize_t filedescriptor::write(uint64_t number) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet(number);
+		number=convertHostToNet(number);
 	}
 	return highLevelWrite((const byte_t *)&number,sizeof(uint64_t));
 }
 
 ssize_t filedescriptor::write(int16_t number) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet((uint16_t)number);
+		number=convertHostToNet((uint16_t)number);
 	}
 	return highLevelWrite((const byte_t *)&number,sizeof(int16_t));
 }
 
 ssize_t filedescriptor::write(int32_t number) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet((uint32_t)number);
+		number=convertHostToNet((uint32_t)number);
 	}
 	return highLevelWrite((const byte_t *)&number,sizeof(int32_t));
 }
 
 ssize_t filedescriptor::write(int64_t number) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet((uint64_t)number);
+		number=convertHostToNet((uint64_t)number);
 	}
 	return highLevelWrite((const byte_t *)&number,sizeof(int64_t));
 }
 
 ssize_t filedescriptor::write(uint16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet(number);
+		number=convertHostToNet(number);
 	}
 	return highLevelWrite((const byte_t *)&number,
 					sizeof(uint16_t),sec,usec);
@@ -1343,7 +1343,7 @@ ssize_t filedescriptor::write(uint16_t number, int32_t sec, int32_t usec) {
 
 ssize_t filedescriptor::write(uint32_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet(number);
+		number=convertHostToNet(number);
 	}
 	return highLevelWrite((const byte_t *)&number,
 					sizeof(uint32_t),sec,usec);
@@ -1351,7 +1351,7 @@ ssize_t filedescriptor::write(uint32_t number, int32_t sec, int32_t usec) {
 
 ssize_t filedescriptor::write(uint64_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet(number);
+		number=convertHostToNet(number);
 	}
 	return highLevelWrite((const byte_t *)&number,
 					sizeof(uint64_t),sec,usec);
@@ -1359,7 +1359,7 @@ ssize_t filedescriptor::write(uint64_t number, int32_t sec, int32_t usec) {
 
 ssize_t filedescriptor::write(int16_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet((uint16_t)number);
+		number=convertHostToNet((uint16_t)number);
 	}
 	return highLevelWrite((const byte_t *)&number,
 					sizeof(int16_t),sec,usec);
@@ -1367,7 +1367,7 @@ ssize_t filedescriptor::write(int16_t number, int32_t sec, int32_t usec) {
 
 ssize_t filedescriptor::write(int32_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet((uint32_t)number);
+		number=convertHostToNet((uint32_t)number);
 	}
 	return highLevelWrite((const byte_t *)&number,
 					sizeof(int32_t),sec,usec);
@@ -1375,7 +1375,7 @@ ssize_t filedescriptor::write(int32_t number, int32_t sec, int32_t usec) {
 
 ssize_t filedescriptor::write(int64_t number, int32_t sec, int32_t usec) {
 	if (pvt->_translatebyteorder) {
-		number=hostToNet((uint64_t)number);
+		number=convertHostToNet((uint64_t)number);
 	}
 	return highLevelWrite((const byte_t *)&number,
 					sizeof(int64_t),sec,usec);
@@ -1384,7 +1384,7 @@ ssize_t filedescriptor::write(int64_t number, int32_t sec, int32_t usec) {
 ssize_t filedescriptor::read(uint16_t *buffer) {
 	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(uint16_t));
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost(*buffer);
+		*buffer=convertNetToHost(*buffer);
 	}
 	return retval;
 }
@@ -1392,7 +1392,7 @@ ssize_t filedescriptor::read(uint16_t *buffer) {
 ssize_t filedescriptor::read(uint32_t *buffer) {
 	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(uint32_t));
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost(*buffer);
+		*buffer=convertNetToHost(*buffer);
 	}
 	return retval;
 }
@@ -1400,7 +1400,7 @@ ssize_t filedescriptor::read(uint32_t *buffer) {
 ssize_t filedescriptor::read(uint64_t *buffer) {
 	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(uint64_t));
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost(*buffer);
+		*buffer=convertNetToHost(*buffer);
 	}
 	return retval;
 }
@@ -1408,7 +1408,7 @@ ssize_t filedescriptor::read(uint64_t *buffer) {
 ssize_t filedescriptor::read(int16_t *buffer) {
 	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(int16_t));
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost((uint16_t)*buffer);
+		*buffer=convertNetToHost((uint16_t)*buffer);
 	}
 	return retval;
 }
@@ -1416,7 +1416,7 @@ ssize_t filedescriptor::read(int16_t *buffer) {
 ssize_t filedescriptor::read(int32_t *buffer) {
 	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(int32_t));
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost((uint32_t)*buffer);
+		*buffer=convertNetToHost((uint32_t)*buffer);
 	}
 	return retval;
 }
@@ -1424,7 +1424,7 @@ ssize_t filedescriptor::read(int32_t *buffer) {
 ssize_t filedescriptor::read(int64_t *buffer) {
 	ssize_t	retval=highLevelRead((byte_t *)buffer,sizeof(int64_t));
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost((uint64_t)*buffer);
+		*buffer=convertNetToHost((uint64_t)*buffer);
 	}
 	return retval;
 }
@@ -1434,7 +1434,7 @@ ssize_t filedescriptor::read(uint16_t *buffer,
 	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(uint16_t),sec,usec);
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost(*buffer);
+		*buffer=convertNetToHost(*buffer);
 	}
 	return retval;
 }
@@ -1444,7 +1444,7 @@ ssize_t filedescriptor::read(uint32_t *buffer,
 	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(uint32_t),sec,usec);
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost(*buffer);
+		*buffer=convertNetToHost(*buffer);
 	}
 	return retval;
 }
@@ -1454,7 +1454,7 @@ ssize_t filedescriptor::read(uint64_t *buffer,
 	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(uint64_t),sec,usec);
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost(*buffer);
+		*buffer=convertNetToHost(*buffer);
 	}
 	return retval;
 }
@@ -1464,7 +1464,7 @@ ssize_t filedescriptor::read(int16_t *buffer,
 	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(int16_t),sec,usec);
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost((uint16_t)*buffer);
+		*buffer=convertNetToHost((uint16_t)*buffer);
 	}
 	return retval;
 }
@@ -1474,7 +1474,7 @@ ssize_t filedescriptor::read(int32_t *buffer,
 	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(int32_t),sec,usec);
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost((uint32_t)*buffer);
+		*buffer=convertNetToHost((uint32_t)*buffer);
 	}
 	return retval;
 }
@@ -1484,7 +1484,7 @@ ssize_t filedescriptor::read(int64_t *buffer,
 	ssize_t	retval=highLevelRead((byte_t *)buffer,
 					sizeof(int64_t),sec,usec);
 	if (pvt->_translatebyteorder) {
-		*buffer=netToHost((uint64_t)*buffer);
+		*buffer=convertNetToHost((uint64_t)*buffer);
 	}
 	return retval;
 }
@@ -1564,80 +1564,60 @@ int32_t filedescriptor::lowLevelClose() {
 	#endif
 }
 
-void filedescriptor::retryInterruptedReads() {
-	pvt->_retryinterruptedreads=true;
-}
-
-void filedescriptor::dontRetryInterruptedReads() {
-	pvt->_retryinterruptedreads=false;
+void filedescriptor::setRetryInterruptedReads(bool retry) {
+	pvt->_retryinterruptedreads=retry;
 }
 
 bool filedescriptor::getRetryInterruptedReads() {
 	return pvt->_retryinterruptedreads;
 }
 
-void filedescriptor::retryInterruptedWrites() {
-	pvt->_retryinterruptedwrites=true;
-}
-
-void filedescriptor::dontRetryInterruptedWrites() {
-	pvt->_retryinterruptedwrites=false;
+void filedescriptor::setRetryInterruptedWrites(bool retry) {
+	pvt->_retryinterruptedwrites=retry;
 }
 
 bool filedescriptor::getRetryInterruptedWrites() {
 	return pvt->_retryinterruptedwrites;
 }
 
-void filedescriptor::retryInterruptedWaits() {
-	pvt->_retryinterruptedwaits=true;
-}
-
-void filedescriptor::dontRetryInterruptedWaits() {
-	pvt->_retryinterruptedwaits=false;
+void filedescriptor::setRetryInterruptedWaits(bool retry) {
+	pvt->_retryinterruptedwaits=retry;
 }
 
 bool filedescriptor::getRetryInterruptedWaits() {
 	return pvt->_retryinterruptedwaits;
 }
 
-void filedescriptor::retryInterruptedFcntl() {
-	pvt->_retryinterruptedfcntl=true;
-}
-
-void filedescriptor::dontRetryInterruptedFcntl() {
-	pvt->_retryinterruptedfcntl=true;
+void filedescriptor::setRetryInterruptedFcntl(bool retry) {
+	pvt->_retryinterruptedfcntl=retry;
 }
 
 bool filedescriptor::getRetryInterruptedFcntl() {
 	return pvt->_retryinterruptedfcntl;
 }
 
-void filedescriptor::retryInterruptedIoctl() {
-	pvt->_retryinterruptedioctl=true;
-}
-
-void filedescriptor::dontRetryInterruptedIoctl() {
-	pvt->_retryinterruptedioctl=true;
+void filedescriptor::setRetryInterruptedIoctl(bool retry) {
+	pvt->_retryinterruptedioctl=retry;
 }
 
 bool filedescriptor::getRetryInterruptedIoctl() {
 	return pvt->_retryinterruptedioctl;
 }
 
-void filedescriptor::allowShortReads() {
-	pvt->_allowshortreads=true;
+void filedescriptor::setAllowShortReads(bool allow) {
+	pvt->_allowshortreads=allow;
 }
 
-void filedescriptor::dontAllowShortReads() {
-	pvt->_allowshortreads=false;
+bool filedescriptor::getAllowShortReads() {
+	return pvt->_allowshortreads;
 }
 
-void filedescriptor::allowShortWrites() {
-	pvt->_allowshortwrites=true;
+void filedescriptor::setAllowShortWrites(bool allow) {
+	pvt->_allowshortwrites=allow;
 }
 
-void filedescriptor::dontAllowShortWrites() {
-	pvt->_allowshortwrites=false;
+bool filedescriptor::getAllowShortWrites() {
+	return pvt->_allowshortwrites;
 }
 
 ssize_t filedescriptor::highLevelRead(byte_t *buf, size_t count) {
@@ -1921,7 +1901,7 @@ ssize_t filedescriptor::unBufferedRead(byte_t *buf, size_t count,
 	size_t	sizetoread;
 	ssize_t	actualread;
 	size_t	sizemax=(pvt->_socklr)?pvt->_socklr->getSizeMax():SSIZE_MAX;
-	bool	isusingnonblockingmode=getIsUsingNonBlockingMode();
+	bool	isusingnonblockingmode=getNonBlockingMode();
 	while (totalread<count) {
 
 		// limit size of individual reads
@@ -2382,7 +2362,7 @@ ssize_t filedescriptor::unBufferedWrite(
 	size_t	sizetowrite;
 	ssize_t	actualwrite;
 	size_t	sizemax=(pvt->_socklr)?pvt->_socklr->getSizeMax():SSIZE_MAX;
-	bool	isusingnonblockingmode=getIsUsingNonBlockingMode();
+	bool	isusingnonblockingmode=getNonBlockingMode();
 	while (totalwrite<count) {
 
 		// limit size of individual writes
@@ -2561,15 +2541,15 @@ bool filedescriptor::createPipe(filedescriptor *readfd,
 	return !result;
 }
 
-uint16_t filedescriptor::hostToNet(uint16_t value) {
+uint16_t filedescriptor::convertHostToNet(uint16_t value) {
 	return htons(value);
 }
 
-uint32_t filedescriptor::hostToNet(uint32_t value) {
+uint32_t filedescriptor::convertHostToNet(uint32_t value) {
 	return htonl(value);
 }
 
-uint64_t filedescriptor::hostToNet(uint64_t value) {
+uint64_t filedescriptor::convertHostToNet(uint64_t value) {
 	#if defined(RUDIMENTS_HAVE_HTONLL)
 		return htonll(value);
 	#elif __BYTE_ORDER == __BIG_ENDIAN
@@ -2589,9 +2569,9 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 	#else
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
 			return
-			(((uint64_t)hostToNet(
+			(((uint64_t)convertHostToNet(
 				(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
-			((uint64_t)hostToNet(
+			((uint64_t)convertHostToNet(
 				(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 		#else
 			return htonl(value);
@@ -2599,15 +2579,15 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 	#endif
 }
 
-uint16_t filedescriptor::netToHost(uint16_t value) {
+uint16_t filedescriptor::convertNetToHost(uint16_t value) {
 	return ntohs(value);
 }
 
-uint32_t filedescriptor::netToHost(uint32_t value) {
+uint32_t filedescriptor::convertNetToHost(uint32_t value) {
 	return ntohl(value);
 }
 
-uint64_t filedescriptor::netToHost(uint64_t value) {
+uint64_t filedescriptor::convertNetToHost(uint64_t value) {
 	#if defined(RUDIMENTS_HAVE_NTOHLL)
 		return ntohll(value);
 	#elif __BYTE_ORDER == __BIG_ENDIAN
@@ -2627,9 +2607,9 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 	#else
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
 			return
-			(((uint64_t)netToHost(
+			(((uint64_t)convertNetToHost(
 				(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
-			((uint64_t)netToHost(
+			((uint64_t)convertNetToHost(
 				(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 		#else
 			return ntohl(value);
@@ -2637,7 +2617,7 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 	#endif
 }
 
-uint16_t filedescriptor::hostToLittleEndian(uint16_t value) {
+uint16_t filedescriptor::convertHostToLittleEndian(uint16_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
@@ -2645,7 +2625,7 @@ uint16_t filedescriptor::hostToLittleEndian(uint16_t value) {
 	#endif
 }
 
-uint32_t filedescriptor::hostToLittleEndian(uint32_t value) {
+uint32_t filedescriptor::convertHostToLittleEndian(uint32_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
@@ -2656,7 +2636,7 @@ uint32_t filedescriptor::hostToLittleEndian(uint32_t value) {
 	#endif
 }
 
-uint64_t filedescriptor::hostToLittleEndian(uint64_t value) {
+uint64_t filedescriptor::convertHostToLittleEndian(uint64_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
@@ -2675,12 +2655,12 @@ uint64_t filedescriptor::hostToLittleEndian(uint64_t value) {
 				((high&0xFF000000)>>24));
 			return (((uint64_t)high)|(((uint64_t)low)<<32));
 		#else
-			return hostToLittleEndian((uint32_t)value);
+			return convertHostToLittleEndian((uint32_t)value);
 		#endif
 	#endif
 }
 
-uint16_t filedescriptor::littleEndianToHost(uint16_t value) {
+uint16_t filedescriptor::convertLittleEndianToHost(uint16_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
@@ -2688,7 +2668,7 @@ uint16_t filedescriptor::littleEndianToHost(uint16_t value) {
 	#endif
 }
 
-uint32_t filedescriptor::littleEndianToHost(uint32_t value) {
+uint32_t filedescriptor::convertLittleEndianToHost(uint32_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
@@ -2699,7 +2679,7 @@ uint32_t filedescriptor::littleEndianToHost(uint32_t value) {
 	#endif
 }
 
-uint64_t filedescriptor::littleEndianToHost(uint64_t value) {
+uint64_t filedescriptor::convertLittleEndianToHost(uint64_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
@@ -2718,7 +2698,7 @@ uint64_t filedescriptor::littleEndianToHost(uint64_t value) {
 				((high&0xFF000000)>>24));
 			return (((uint64_t)high)|(((uint64_t)low)<<32));
 		#else
-			return littleEndianToHost((uint32_t)value);
+			return convertLittleEndianToHost((uint32_t)value);
 		#endif
 	#endif
 }

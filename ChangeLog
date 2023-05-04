@@ -140,7 +140,9 @@
 	added get/set and advise to many sys methods
 	renamed sys::lock/unlock to disablePaging/enablePaging
 	added get to some directory methods
-	renamed lots of methods to start with action verbs
+	renamed lots of methods to start with action verbs or at least "is"
+	renamed lots of do/dont*() methods to just set*() and added getters
+		for ones that were missing
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

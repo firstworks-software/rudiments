@@ -64,7 +64,7 @@ bool socketclient::supportsBlockingAndNonBlockingModes() {
 	#endif
 }
 
-bool socketclient::setUseNonBlockingMode(bool usenonblockingmode) {
+bool socketclient::setNonBlockingMode(bool usenonblockingmode) {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl(), which is what the filedescriptor class does, but this
 	// doesn't work for sockets on all platforms.  If FIONBIO is defined,
@@ -84,7 +84,7 @@ bool socketclient::setUseNonBlockingMode(bool usenonblockingmode) {
 				|| error::getErrorNumber()==EOPNOTSUPP
 				#endif
 				)) {
-			retval=filedescriptor::setUseNonBlockingMode(
+			retval=filedescriptor::setNonBlockingMode(
 							usenonblockingmode);
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -94,12 +94,12 @@ bool socketclient::setUseNonBlockingMode(bool usenonblockingmode) {
 		#endif
 		return retval;
 	#else
-		return filedescriptor::setUseNonBlockingMode(
+		return filedescriptor::setNonBlockingMode(
 						usenonblockingmode);
 	#endif
 }
 
-bool socketclient::getIsUsingNonBlockingMode() {
+bool socketclient::getNonBlockingMode() {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -109,7 +109,7 @@ bool socketclient::getIsUsingNonBlockingMode() {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		return pvt->_nonblockingmode;
 	#else
-		return filedescriptor::getIsUsingNonBlockingMode();
+		return filedescriptor::getNonBlockingMode();
 	#endif
 }
 
@@ -172,9 +172,9 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 	// complex stuff...
 
 	// put the socket in non-blocking mode, if necessary
-	wasusingnonblockingmode=getIsUsingNonBlockingMode();
+	wasusingnonblockingmode=getNonBlockingMode();
 	if (!wasusingnonblockingmode &&
-			!setUseNonBlockingMode(true) &&
+			!setNonBlockingMode(true) &&
 			error::getErrorNumber()
 			#ifdef ENOTSUP
 			&& error::getErrorNumber()!=ENOTSUP
@@ -275,12 +275,12 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 cleanup:
 
 	// save any error that might have occurred, as a successful call to
-	// setUseNonBlockingMode(false) will mask it
+	// setNonBlockingMode(false) will mask it
 	int32_t	err=error::getErrorNumber();
 
 	// restore blocking mode, if necessary
 	if (!wasusingnonblockingmode &&
-			!setUseNonBlockingMode(false) &&
+			!setNonBlockingMode(false) &&
 			error::getErrorNumber()
 			#ifdef ENOTSUP
 			&& error::getErrorNumber()!=ENOTSUP
@@ -313,7 +313,7 @@ cleanup:
 		// complex stuff...
 
 		// find out if the socket was in non-blocking mode already
-		bool	wasusingnonblockingmode=getIsUsingNonBlockingMode();
+		bool	wasusingnonblockingmode=getNonBlockingMode();
 
 		// declare some variables
 		WSAEVENT		ev;
@@ -389,7 +389,7 @@ wsacleanup:
 		// non-blocking mode.  If necessary, we need to set it back to
 		// blocking mode here.
 		if (!wasusingnonblockingmode &&
-				!setUseNonBlockingMode(false) &&
+				!setNonBlockingMode(false) &&
 				error::getErrorNumber()
 				#ifdef ENOTSUP
 				&& error::getErrorNumber()!=ENOTSUP

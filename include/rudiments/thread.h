@@ -52,18 +52,14 @@ class RUDIMENTS_DLLSPEC thread : virtual public object {
 		/** Sends signal "signum" to the thread. */
 		bool	raiseSignal(int32_t signum);
 
-		/** Causes spawn() calls to be automatically retried if they
-		 *  fail because of insufficient system resources.  This
-		 *  is the default behavior.  Otherwise, if a spawn() fails,
-		 *  the system error is set to EAGAIN and the spawn() must
-		 *  be retried by the calling program. */
-		void	retryFailedSpawn();
-
-		/** Causes spawn() calls not to be automatically retried if
- 		 *  they fail because of insufficient system resources.  If
- 		 *  set, if a spawn() fails, the system error is set to EAGAIN
- 		 *  and the spawn() must be retried by the calling program. */
-		void	dontRetryFailedSpawn();
+		/** If "retry" is true then spawn() calls will be automatically
+		 *  retried if they fail eg. because of insufficient system
+		 *  resources.  If "retry" is set false then, if a spawn()
+		 *  fails, the system error is set to EAGAIN and spawn()
+		 *  returns false.
+		 *
+		 *  Defaults to true. */
+		void	setRetryFailedSpawn(bool retry);
 
 		/** Returns true if failed spawn() calls will be retried and
 		 *  false otherwise. */

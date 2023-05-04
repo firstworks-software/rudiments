@@ -66,7 +66,7 @@ const char *serviceentry::getName() {
 }
 
 int32_t serviceentry::getPort() {
-	return (pvt->_se)?filedescriptor::netToHost(
+	return (pvt->_se)?filedescriptor::convertNetToHost(
 				static_cast<uint16_t>(pvt->_se->s_port)):-1;
 }
 
@@ -132,7 +132,7 @@ bool serviceentry::open(const char *servicename, int32_t port,
 							pvt->_buffer,size,
 							&pvt->_se))
 				:(getservbyport_r(
-					filedescriptor::hostToNet(
+					filedescriptor::convertHostToNet(
 							(uint16_t)port),
 							protocol,
 							&pvt->_sebuffer,
@@ -147,7 +147,7 @@ bool serviceentry::open(const char *servicename, int32_t port,
 							&pvt->_sebuffer,
 							pvt->_buffer,size))
 				:(pvt->_se=getservbyport_r(
-					filedescriptor::hostToNet(
+					filedescriptor::convertHostToNet(
 							(uint16_t)port),
 							protocol,
 							&pvt->_sebuffer,
@@ -167,7 +167,7 @@ bool serviceentry::open(const char *servicename, int32_t port,
 		return (!(_semutex && !_semutex->lock()) &&
 			((pvt->_se=((servicename)
 				?getservbyname(servicename,protocol)
-				:getservbyport(filedescriptor::hostToNet(
+				:getservbyport(filedescriptor::convertHostToNet(
 						(uint16_t)port),
 						protocol)))!=NULL) &&
 			!(_semutex && !_semutex->unlock()));
