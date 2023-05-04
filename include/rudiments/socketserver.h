@@ -44,22 +44,34 @@ class RUDIMENTS_DLLSPEC socketserver : public server {
 		virtual int32_t	ioCtl(int32_t command, void *arg);
 
 
-		/** Instructs the socket to stay open for
-		 *  "timeout" seconds even after close() is
-		 *  called to allow it to receive any data that
-		 *  may still be buffered.  The default is not
-		 *  to linger on close.
+		/** If "enable" is set true then the socket will stay open for
+		 *  "timeout" seconds even after close() is called to allow it
+		 *  to receive any data that may still be buffered.
+		 *
+		 *  If "enable" is set false then the socket will close
+		 *  normally, possibly discarding any buffered data.
+		 *
+		 *  The default is not to linger on close.
+		 *  The default timeout is 0.
+		 *
+		 *  Note that while the "enabled" option might seen redundant,
+		 *  as a timeout of 0 would seemingly have the same effect, in
+		 *  fact setLingerOnClose(true,0) and setLingerOnClose(false,0)
+		 *  exhibit different behaviors on different platforms.
+		 *  Similarly, negative timeouts exhibit different behaviors on
+		 *  different platforms.   For the sake of completeness, this
+		 *  method provides both flags and allows a negative timeout
+		 *  to be provided.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	lingerOnClose(int32_t timeout);
+		bool	setLingerOnClose(bool enable, int32_t timeout);
 
-		/** Instructs the socket to close immediately
-		 *  when close() is called, dumping any data
-		 *  that may still be buffered but that it
-		 *  may not have received.  This is the default.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	dontLingerOnClose();
+		/** Returns true if the socket is configured to linger on close
+ 		 *  and false otherwise. */
+		bool	getLingerOnClose();
+
+		/** Returns the current linger-on-close timeout. */
+		int32_t	getLingerOnCloseTimeout();
 
 		/** If "reuse" is true then sockets in the TIME_WAIT state are
 		 *  allowed to be reused.  If "reuse" is false, then sockets in

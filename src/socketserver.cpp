@@ -24,6 +24,7 @@ class socketserverprivate {
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		bool	_nonblockingmode;
 		#endif
+		struct	linger	_l;
 };
 
 socketserver::socketserver() : server() {
@@ -33,6 +34,8 @@ socketserver::socketserver() : server() {
 	#endif
 	type("socketserver");
 	winsock::initWinsock();
+	pvt->_l.l_onoff=0;
+	pvt->_l.l_linger=0;
 }
 
 socketserver::~socketserver() {
@@ -113,30 +116,33 @@ int32_t socketserver::ioCtl(int32_t cmd, void *arg) {
 	#endif
 }
 
-bool socketserver::lingerOnClose(int32_t timeout) {
-	return setLingerOnClose(timeout,1);
-}
-
-bool socketserver::dontLingerOnClose() {
-	return setLingerOnClose(0,0);
-}
-
-bool socketserver::setReuseAddresses(bool reuse) {
-	return setReuseAddresses((reuse)?1:0);
+bool socketserver::setLingerOnClose(bool enable, int32_t timeout) {
+	return setLingerOnClose(timeout,(enable)?1:0);
 }
 
 bool socketserver::setLingerOnClose(int32_t timeout, int32_t onoff) {
 	#ifdef SO_LINGER
-		struct	linger	ling;
-		ling.l_onoff=onoff;
-		ling.l_linger=timeout;
+		pvt->_l.l_onoff=onoff;
+		pvt->_l.l_linger=timeout;
 		return !setSockOpt(SOL_SOCKET,SO_LINGER,
-				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&ling,
-					sizeof(struct linger));
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&(pvt->_l),
+				sizeof(struct linger));
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
+}
+
+bool socketserver::getLingerOnClose() {
+	return pvt->_l.l_onoff;
+}
+
+int32_t socketserver::getLingerOnCloseTimeout() {
+	return pvt->_l.l_linger;
+}
+
+bool socketserver::setReuseAddresses(bool reuse) {
+	return setReuseAddresses((reuse)?1:0);
 }
 
 bool socketserver::setReuseAddresses(int32_t onoff) {
