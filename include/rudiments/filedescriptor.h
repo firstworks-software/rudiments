@@ -892,15 +892,20 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		static bool	supportsPassAndReceiveSocket();
 
 
-		/** Translate integers from native byte order to network byte
-		 *  order during writes and vice-versa during reads.  By
-		 *  default, no translation is done. */
-		void	translateByteOrder();
+		/** If "translate" is set true then integers will be translated
+		 *  from native byte order to network byte order during writes
+		 *  and vice-versa during reads.
+		 *  
+		 *  If "translate" is set false then no translation will be
+		 *  done.
+		 *
+		 *  Defaults to false. */
+		void	setTranslateByteOrder(bool translate);
 
-		/** Don't translate integers from native byte order to network
-		 *  byte order during writes and vice-versa during reads.  This
-		 *  is the default behavior. */
-		void	dontTranslateByteOrder();
+		/** Returns true if integers will be translated from native
+		 *  byte order to network byte order during writes and
+		 *  vice-versa during reads, and false otherwise. */
+		bool	getTranslateByteOrder();
 
 		/** Use the fcntl() system call to perform various low-level
 		 *  file descriptor operations. */
@@ -910,21 +915,24 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  file descriptor operations. */
 		virtual int32_t	ioCtl(int32_t command, void *arg);
 
-		/** Causes small write()'s to be collected up and sent together
-		 *  when either the kernel's write buffer is full or when a
-		 *  maximum of 0.2 seconds has gone by.
-		 *  (enable Nagle's algorithm)
+		/** If "enabled" is set true then small write()s will be
+		 *  collected up and sent together when either the kernel's
+		 *  write buffer is full or when a maximum of 0.2 seconds has
+		 *  gone by, per Nagle's algorithm.
 		 * 
-		 *  This is the default.
+		 *  If "enabled" is set false then writes will be sent
+		 *  immediately.
+		 *
+		 *  Defaults to true.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	useNaglesAlgorithm();
+		bool	setNaglesAlgorithmEnabled(bool enabled);
 
-		/** Causes all write()'s to be sent immediately.
-		 *  (disables Nagle's algorithm)
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	dontUseNaglesAlgorithm();
+		/** Returns true if small write()s will be collected up and
+		 *  sent together when either the kernel's write buffer is full
+		 *  or when a maximum of 0.2 seconds has gone by, per Nagle's
+		 *  algorithm, or false if writes will be sent immediately. */
+		bool	getNaglesAlgorithmEnabled();
 
 		/** Sets the size of the kernel's socket write buffer to "size"
 		 *  bytes.  This is only useful for socket file descriptors.
@@ -1170,27 +1178,16 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  0 otherwise. */
 		off64_t	getCurrentBlockOffset();
 
-		/** If the close-on-exec status is false (the default), then the
-		 *  file descriptor will remain open across an execve() call,
-		 *  otherwise it will be closed.
-		 * 
-		 *  This method sets the close-on-exec status to true. */
-		bool	closeOnExec();
+		/** If "close" is true then the file descriptor will remain
+		 *  open across a process::exec() call.  If "close" is false
+		 *  then the file descriptor will be closed during a
+		 *  process::exec() call.
+		 *
+		 *  Defaults to false. */
+		bool	setCloseOnExec(bool close);
 
-		/** If the close-on-exec status is false (the default), then the
-		 *  file descriptor will remain open across an execve() call,
-		 *  otherwise it will be closed.
-		 * 
-		 *  This method sets the close-on-exec status to false
-		 *  (the default). */
-		bool	dontCloseOnExec();
-
-		/** If the close-on-exec status is false (the default), then the
-		 *  file descriptor will remain open across an execve() call,
-		 *  otherwise it will be closed.
-		 * 
-		 *  This method returns true if the close-on-exec status is set
-		 *  to true and false otherwise. */
+		/** Returns true if the file descriptor will remain open across
+		 *  a process::exec() call and false otherwise. */
 		bool	getCloseOnExec();
 
 		/** Creates a pipe and sets "readfd" to the read side and

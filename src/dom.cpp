@@ -437,7 +437,7 @@ ssize_t dom::safeWrite(output *out, const char *str) {
 	return retval;
 }
 
-bool dom::getStringCacheIsEnabled() {
+bool dom::getStringCacheEnabled() {
 	return pvt->_stringcacheenabled;
 }
 

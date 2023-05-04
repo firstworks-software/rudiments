@@ -102,7 +102,7 @@ domnode::~domnode() {
 		delete current;
 		current=pvt->_lastattribute;
 	}
-	if (pvt->_dom->getStringCacheIsEnabled()) {
+	if (pvt->_dom->getStringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_namespace);
 		pvt->_dom->unCacheString(pvt->_name);
 		pvt->_dom->unCacheString(pvt->_value);
@@ -1045,7 +1045,7 @@ void domnode::setType(domnodetype type) {
 }
 
 void domnode::setNamespace(const char *ns) {
-	if (pvt->_dom->getStringCacheIsEnabled()) {
+	if (pvt->_dom->getStringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_namespace);
 		pvt->_namespace=pvt->_dom->cacheString(ns);
 	} else {
@@ -1055,7 +1055,7 @@ void domnode::setNamespace(const char *ns) {
 }
 
 void domnode::setName(const char *name) {
-	if (pvt->_dom->getStringCacheIsEnabled()) {
+	if (pvt->_dom->getStringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_name);
 		pvt->_name=pvt->_dom->cacheString(name);
 	} else {
@@ -1070,7 +1070,7 @@ void domnode::setName(const char *ns, const char *name) {
 }
 
 void domnode::setValue(const char *value) {
-	if (pvt->_dom->getStringCacheIsEnabled()) {
+	if (pvt->_dom->getStringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_value);
 		pvt->_value=pvt->_dom->cacheString(value);
 	} else {

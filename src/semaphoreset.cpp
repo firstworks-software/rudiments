@@ -56,7 +56,7 @@
 class semaphoresetprivate {
 	public:
 		int32_t	_semid;
-		bool	_created;
+		bool	_remove;
 		int32_t	_semcount;
 		bool	_retryinterruptedoperations;
 		char	*_username;
@@ -80,7 +80,7 @@ class semaphoresetprivate {
 semaphoreset::semaphoreset() : object() {
 	pvt=new semaphoresetprivate;
 	pvt->_semid=-1;
-	pvt->_created=false;
+	pvt->_remove=false;
 	pvt->_semcount=0;
 	pvt->_retryinterruptedoperations=true;
 	pvt->_username=NULL;
@@ -141,7 +141,7 @@ semaphoreset::~semaphoreset() {
 		if (pvt->_sems) {
 			for (int32_t i=0; i<pvt->_semcount; i++) {
 				sem_close(pvt->_sems[i]);
-				if (pvt->_created) {
+				if (pvt->_remove) {
 					sem_unlink(pvt->_semnames[i]);
 				}
 				delete[] pvt->_semnames[i];
@@ -171,7 +171,7 @@ semaphoreset::~semaphoreset() {
 	// For sem_init() implementations, this is handled by the sem_unlink()
 	// above, before destroying the semaphore name.  For other
 	// implementations, we can do it here.
-	if (pvt->_created) {
+	if (pvt->_remove) {
 		forceRemove();
 	}
 	#endif
@@ -182,9 +182,7 @@ semaphoreset::~semaphoreset() {
 bool semaphoreset::forceRemove() {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
-		//return !semControl(pvt,0,IPC_RMID,&semctlun);
-		bool	success=!semControl(pvt,0,IPC_RMID,&semctlun);
-		return success;
+		return !semControl(pvt,0,IPC_RMID,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_SEM_INIT)
 		bool	success=true;
 		if (pvt->_sems) {
@@ -205,8 +203,12 @@ bool semaphoreset::forceRemove() {
 	#endif
 }
 
-void semaphoreset::dontRemove() {
-	pvt->_created=false;
+void semaphoreset::setRemove(bool remove) {
+	pvt->_remove=remove;
+}
+
+bool semaphoreset::getRemove() {
+	return !pvt->_remove;
 }
 
 int32_t semaphoreset::getId() {
@@ -433,7 +435,7 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	if (semGet(key,semcount,IPC_CREAT|IPC_EXCL|permissions,values)!=-1) {
 
 		// mark for removal
-		pvt->_created=true;
+		pvt->_remove=true;
 
 		// create the signal/wait operations
 		createOperations();

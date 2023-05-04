@@ -36,7 +36,7 @@ class inetsocketserverprivate {
 
 inetsocketserver::inetsocketserver() : socketserver(), inetsocketutil() {
 	pvt=new inetsocketserverprivate;
-	translateByteOrder();
+	setTranslateByteOrder(true);
 	type("inetsocketserver");
 }
 

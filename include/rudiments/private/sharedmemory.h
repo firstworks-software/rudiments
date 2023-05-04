@@ -5,4 +5,6 @@
 		sharedmemory(sharedmemory &s) {};
 		sharedmemory	&operator=(sharedmemory &s) { return *this; };
 
+		bool	forceRemove();
+
 		sharedmemoryprivate	*pvt;

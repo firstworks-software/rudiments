@@ -48,8 +48,6 @@
 		ssize_t	unBufferedWrite(const byte_t *buf, size_t count,
 						int32_t sec, int32_t usec);
 
-		bool	setNoDelay(int32_t onoff);
-
 		int32_t	getSockOpt(int32_t level, int32_t optname,
 					void *optval, socklen_t *optlen);
 		int32_t	setSockOpt(int32_t level, int32_t optname,

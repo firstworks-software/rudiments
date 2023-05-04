@@ -39,7 +39,7 @@ inidom::inidom(bool stringcacheenabled) : inisax(), dom(stringcacheenabled) {
 }
 
 inidom::inidom(inidom &x) : inisax(), dom(x) {
-	construct(getStringCacheIsEnabled());
+	construct(getStringCacheEnabled());
 }
 
 inidom &inidom::operator=(inidom &x) {

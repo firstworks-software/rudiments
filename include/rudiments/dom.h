@@ -117,7 +117,7 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 
 		/** Returns true if the string cache is enabled and false
 		 *  if it is disabled. */
-		bool	getStringCacheIsEnabled();
+		bool	getStringCacheEnabled();
 
 	#include <rudiments/private/dom.h>
 };

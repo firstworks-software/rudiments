@@ -43,18 +43,31 @@ class RUDIMENTS_DLLSPEC sharedmemory : public object {
 		bool	createOrAttach(key_t key, size_t size,
 						mode_t permissions);
 
-		/** Instructs the destructor not to remove the shared
-		 *  memory segment if it was created during a call to
-		 *  create() or createOrAttach().  This is useful
-		 *  if an application creates a shared memory segment
-		 *  then forks and wants to delete the shared memory
-		 *  segment in the forked process but does not want
-		 *  the segment removed from the system. */
-		void	dontRemove();
+		/** By default, the destructor will remove a sharemd memory
+		 *  segment if it was created during a call to create() or
+		 *  createOrAttach().
+		 *
+		 *  This method allows you to manually override that behavior.
+		 *
+		 *  If "remove" is true then the destructor will remove the
+		 *  shared memory segment whehter it was created or not.  If
+		 *  "remove" is set false then the destructor will not remove
+		 *  the shared memory segment, even if it was created.
+		 *
+		 *  Manually setting "remove" false is useful, for example, if
+		 *  an application creates a shared memory segment then forks
+		 *  and wants to delete the shred memory segment in the forked
+		 *  process but does not want the shared memory segment removed
+		 *  from the system.
+		 *
+		 *  Manually setting "remove" true is useful, for example, if
+		 *  you want to create a utility for removing arbitray
+		 *  shared memory segments. */
+		void	setRemove(bool remove);
 
-		/** Instructs the destructor to remove the shared memory
-		 *  segment whether it was created or just attached to. */
-		bool	forceRemove();
+		/** Returns true if the shared memory segment will be removed
+ 		 *  by the destructor and false otherwise. */
+		bool	getRemove();
 
 		/** Returns the internal id for the 
 		 *  shared memory segment. */

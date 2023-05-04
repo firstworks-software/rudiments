@@ -22,7 +22,7 @@ csvdom::csvdom(bool stringcacheenabled) : csvsax(), dom(stringcacheenabled) {
 }
 
 csvdom::csvdom(csvdom &x) : csvsax(), dom(x) {
-	construct(getStringCacheIsEnabled());
+	construct(getStringCacheEnabled());
 }
 
 csvdom &csvdom::operator=(csvdom &x) {

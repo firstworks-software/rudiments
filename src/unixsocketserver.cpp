@@ -31,7 +31,7 @@ unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
 	pvt=new unixsocketserverprivate;
 	pvt->_mask=0;
 	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-		translateByteOrder();
+		setTranslateByteOrder(true);
 	#endif
 	type("unixsocketserver");
 }

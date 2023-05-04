@@ -285,6 +285,8 @@ class filedescriptorprivate {
 		byte_t		*_readbufferhead;
 		byte_t		*_readbuffertail;
 		byte_t		*_readbufferend;
+
+		int32_t		_nodelay;
 };
 
 filedescriptor::filedescriptor() : input(), output() {
@@ -331,6 +333,7 @@ void filedescriptor::construct() {
 	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
 	pvt->_readbufferend=NULL;
+	pvt->_nodelay=false;
 }
 
 filedescriptor::~filedescriptor() {
@@ -1534,6 +1537,9 @@ bool filedescriptor::close() {
 	// mark the write buffer not dirty
 	pvt->_writebufferdirty=false;
 
+	// reset the nodelay flag
+	pvt->_nodelay=false;
+
 	// close the actual file
 	if (pvt->_fd!=-1) {
 
@@ -2507,12 +2513,12 @@ int32_t filedescriptor::waitForNonBlockingWrite(
 	return pvt->_lstnr->listen(sec,usec);
 }
 
-void filedescriptor::translateByteOrder() {
-	pvt->_translatebyteorder=true;
+void filedescriptor::setTranslateByteOrder(bool translate) {
+	pvt->_translatebyteorder=translate;
 }
 
-void filedescriptor::dontTranslateByteOrder() {
-	pvt->_translatebyteorder=false;
+bool filedescriptor::getTranslateByteOrder() {
+	return pvt->_translatebyteorder;
 }
 
 bool filedescriptor::createPipe(filedescriptor *readfd,
@@ -3138,24 +3144,20 @@ bool filedescriptor::supportsPassAndReceiveSocket() {
 	return supportsPassAndReceiveFileDescriptor();
 }
 
-bool filedescriptor::useNaglesAlgorithm() {
-	return setNoDelay(0);
-}
-
-bool filedescriptor::dontUseNaglesAlgorithm() {
-	return setNoDelay(1);
-}
-
-bool filedescriptor::setNoDelay(int32_t onoff) {
+bool filedescriptor::setNaglesAlgorithmEnabled(bool enabled) {
+	pvt->_nodelay=(enabled)?0:1;
 #ifdef TCP_NODELAY
-	int32_t	value=onoff;
 	return !setSockOpt(IPPROTO_TCP,TCP_NODELAY,
-				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
-				(socklen_t)sizeof(int));
+			(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&(pvt->_nodelay),
+			(socklen_t)sizeof(int));
 #else
 	RUDIMENTS_SET_ENOSYS
 	return false;
 #endif
+}
+
+bool filedescriptor::getNaglesAlgorithmEnabled() {
+	return pvt->_nodelay;
 }
 
 bool filedescriptor::getSocketWriteBufferSize(int32_t *size) {
@@ -3306,26 +3308,17 @@ socketlayer *filedescriptor::socklr() {
 	return pvt->_socklr;
 }
 
-bool filedescriptor::closeOnExec() {
+bool filedescriptor::setCloseOnExec(bool close) {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
-		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
-	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
-		return SetHandleInformation(
-				(HANDLE)getHandleFromFileDescriptor(pvt->_fd),
-				HANDLE_FLAG_INHERIT,0)!=0;
-	#else
-		#error no FD_CLOEXEC or anything like it
-	#endif
-}
-
-bool filedescriptor::dontCloseOnExec() {
-	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
-		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
+		return !fCntl(F_SETFD,
+				(close)?
+				fCntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC:
+				fCntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		return SetHandleInformation(
 				(HANDLE)getHandleFromFileDescriptor(pvt->_fd),
 				HANDLE_FLAG_INHERIT,
-				HANDLE_FLAG_INHERIT)!=0;
+				(close)?0:HANDLE_FLAG_INHERIT)!=0;
 	#else
 		#error no FD_CLOEXEC or anything like it
 	#endif

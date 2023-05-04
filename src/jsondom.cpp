@@ -41,7 +41,7 @@ jsondom::jsondom(bool stringcacheenabled) : jsonsax(), dom(stringcacheenabled) {
 }
 
 jsondom::jsondom(jsondom &x) : jsonsax(), dom(x) {
-	construct(getStringCacheIsEnabled());
+	construct(getStringCacheEnabled());
 }
 
 jsondom &jsondom::operator=(jsondom &x) {

@@ -23,7 +23,7 @@ xmldom::xmldom(bool stringcacheenabled) : xmlsax(), dom(stringcacheenabled) {
 }
 
 xmldom::xmldom(xmldom &x) : xmlsax(), dom(x) {
-	construct(getStringCacheIsEnabled());
+	construct(getStringCacheEnabled());
 }
 
 xmldom &xmldom::operator=(xmldom &x) {

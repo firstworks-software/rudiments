@@ -89,7 +89,7 @@ void listen(bool nonblocking) {
 			stdoutput.printf("	inet socket\n");
 			clientsock=inetsock.accept();
 			if (disablenagle) {
-				clientsock->dontUseNaglesAlgorithm();
+				clientsock->setNaglesAlgorithmEnabled(false);
 			}
 		} else if (fd==&unixsock) {
 			stdoutput.printf("	unix socket\n");
@@ -442,7 +442,7 @@ void inetclient(const char *host) {
 
 	// set socket options
 	if (disablenagle) {
-		clnt.dontUseNaglesAlgorithm();
+		clnt.setNaglesAlgorithmEnabled(false);
 	}
 
 	// have a session with the server

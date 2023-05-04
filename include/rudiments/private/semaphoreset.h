@@ -16,4 +16,6 @@
 						int32_t nanoseconds);
 		bool	semOp(struct sembuf *sops);
 
+		bool	forceRemove();
+
 		semaphoresetprivate	*pvt;

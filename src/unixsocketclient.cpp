@@ -27,7 +27,7 @@ class unixsocketclientprivate {
 unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
 	pvt=new unixsocketclientprivate;
 	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-		translateByteOrder();
+		setTranslateByteOrder(true);
 	#endif
 	type("unixsocketclient");
 }

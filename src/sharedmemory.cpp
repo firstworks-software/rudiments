@@ -73,7 +73,7 @@ class sharedmemoryprivate {
 	friend class sharedmemory;
 	private:
 		int32_t	_shmid;
-		bool	_created;
+		bool	_remove;
 		void	*_shmptr;
 		char	*_username;
 		char	*_groupname;
@@ -85,7 +85,7 @@ class sharedmemoryprivate {
 sharedmemory::sharedmemory() : object() {
 	pvt=new sharedmemoryprivate;
 	pvt->_shmid=-1;
-	pvt->_created=false;
+	pvt->_remove=false;
 	pvt->_shmptr=NULL;
 	pvt->_username=NULL;
 	pvt->_groupname=NULL;
@@ -97,7 +97,7 @@ sharedmemory::sharedmemory() : object() {
 sharedmemory::~sharedmemory() {
 	delete[] pvt->_username;
 	delete[] pvt->_groupname;
-	if (pvt->_created) {
+	if (pvt->_remove) {
 		forceRemove();
 	}
 	delete pvt;
@@ -115,8 +115,12 @@ bool sharedmemory::forceRemove() {
 	#endif
 }
 
-void sharedmemory::dontRemove() {
-	pvt->_created=false;
+void sharedmemory::setRemove(bool remove) {
+	pvt->_remove=remove;
+}
+
+bool sharedmemory::getRemove() {
+	return pvt->_remove;
 }
 
 int32_t sharedmemory::getId() {
@@ -207,7 +211,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 		}
 
 		// mark for removal
-		pvt->_created=true;
+		pvt->_remove=true;
 
 		// attach to the segment
 		pvt->_shmptr=shmAttach(pvt->_shmid);
@@ -240,7 +244,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 		}
 
 		// mark for removal
-		pvt->_created=true;
+		pvt->_remove=true;
 
 		// create a view of the file mapping
 		pvt->_shmptr=MapViewOfFile(pvt->_map,
@@ -320,7 +324,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 				IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 			// mark for removal
-			pvt->_created=true;
+			pvt->_remove=true;
 
 			// attach to the segment, remove the
 			// segment and return 0 on failure
@@ -362,7 +366,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		if (pvt->_map) {
 
 			// mark for removal
-			pvt->_created=true;
+			pvt->_remove=true;
 
 		} else {
 
@@ -384,7 +388,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 			return false;
 		}
 
-		if (pvt->_created) {
+		if (pvt->_remove) {
 			// init the segment to zero's
 			bytestring::zero(pvt->_shmptr,size);
 			return true;

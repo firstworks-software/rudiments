@@ -41,7 +41,7 @@ inetsocketclient::inetsocketclient() : socketclient(), inetsocketutil() {
 	pvt->_randomize=true;
 	pvt->_seed=0;
 	pvt->_seeded=false;
-	translateByteOrder();
+	setTranslateByteOrder(true);
 	type("inetsocketclient");
 }
 
