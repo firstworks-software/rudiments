@@ -15,42 +15,74 @@ size_t sys::getMaxSizeT() {
 
 inline
 ssize_t sys::getMinSSizeT() {
-	int64_t	retval=-2;
-	uint8_t	exp=(sizeof(ssize_t)*8)-1;
-	for (uint8_t i=1; i<exp; i++) {
-		retval*=2;
-	}
-	return retval;
+	size_t	s=-1;
+	s=s/2*-1-1;
+	return (ssize_t)s;
 }
 
 inline
 ssize_t sys::getMaxSSizeT() {
-	int64_t	retval=2;
-	uint8_t	exp=(sizeof(ssize_t)*8)-1;
-	for (uint8_t i=1; i<exp; i++) {
-		retval*=2;
-	}
-	retval--;
-	return retval;
+	size_t	s=-1;
+	s/=2;
+	return (ssize_t)s;
 }
 
 inline
 off64_t sys::getMinOff64T() {
-	int64_t	retval=-2;
-	uint8_t	exp=(sizeof(off64_t)*8)-1;
-	for (uint8_t i=1; i<exp; i++) {
-		retval*=2;
+	switch (sizeof(off64_t)) {
+		case 1:
+			{
+			uint8_t		s=-1;
+			s=s/2*-1-1;
+			return (off64_t)s;
+			}
+		case 2:
+			{
+			uint16_t	s=-1;
+			s=s/2*-1-1;
+			return (off64_t)s;
+			}
+		case 4:
+			{
+			uint32_t	s=-1;
+			s=s/2*-1-1;
+			return (off64_t)s;
+			}
+		default:
+			{
+			uint64_t	s=-1;
+			s=s/2*-1-1;
+			return (off64_t)s;
+			}
 	}
-	return retval;
 }
 
 inline
 off64_t sys::getMaxOff64T() {
-	int64_t	retval=2;
-	uint8_t	exp=(sizeof(off64_t)*8)-1;
-	for (uint8_t i=1; i<exp; i++) {
-		retval*=2;
+	switch (sizeof(off64_t)) {
+		case 1:
+			{
+			uint8_t		s=-1;
+			s/=2;
+			return (off64_t)s;
+			}
+		case 2:
+			{
+			uint16_t	s=-1;
+			s/=2;
+			return (off64_t)s;
+			}
+		case 4:
+			{
+			uint32_t	s=-1;
+			s/=2;
+			return (off64_t)s;
+			}
+		default:
+			{
+			uint64_t	s=-1;
+			s/=2;
+			return (off64_t)s;
+			}
 	}
-	retval--;
-	return retval;
 }
