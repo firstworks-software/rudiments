@@ -45,7 +45,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		virtual byte_t	*getKey();
 
 		/** Returns the number of bytes in the key. */
-		virtual uint32_t	getKeySize()=0;
+		virtual size_t	getKeySize()=0;
 
 		/** Sets the initialization vector used for
 		 *  encryption/decryption to the first "ivsize" bytes of "iv".
@@ -68,7 +68,7 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		virtual byte_t	*getIv();
 
 		/** Returns the number of bytes in the initialization vector. */
-		virtual uint32_t	getIvSize()=0;
+		virtual size_t	getIvSize()=0;
 
 		/** Appends "size" bytes of "data" to the data to be
 		 *  encrypted/decrypted.

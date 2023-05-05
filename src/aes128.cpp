@@ -45,11 +45,11 @@ aes128::~aes128() {
 	freeContext();
 }
 
-uint32_t aes128::getKeySize() {
+size_t aes128::getKeySize() {
 	return 16;
 }
 
-uint32_t aes128::getIvSize() {
+size_t aes128::getIvSize() {
 	return AES_BLOCK_SIZE;
 }
 

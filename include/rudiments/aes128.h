@@ -16,10 +16,10 @@ class RUDIMENTS_DLLSPEC aes128 : public encryption {
 		~aes128();
 
 		/** Returns the number of bytes in the key. */
-		uint32_t	getKeySize();
+		size_t	getKeySize();
 
 		/** Returns the number of bytes in the initialization vector. */
-		uint32_t	getIvSize();
+		size_t	getIvSize();
 
 		/** Interprets the current data as unencrypted.  Encrypts the
 		 *  current data.  Returns the encrypted data on success or
