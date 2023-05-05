@@ -1714,7 +1714,7 @@ size_t tlscontext::getPendingSize() {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
-			return RESULT_ERROR;
+			return (size_t)RESULT_ERROR;
 		}
 		return SSL_pending(pvt->_ssl);
 	#elif defined(RUDIMENTS_HAS_SSPI)
