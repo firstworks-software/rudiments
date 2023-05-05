@@ -33,14 +33,14 @@ int main(int argc, const char **argv) {
 		file::remove("shmkey");
 		file	fd;
 		test("key file",fd.create("shmkey",
-				permissions::evalPermString("rw-------")));
+				permissions::parsePermString("rw-------")));
 		fd.close();
 
 		// create a 128 byte shared memory segment
         	sharedmemory    shm;
         	test("create shm",
 			shm.create(file::generateKey("shmkey",1),128,
-                                permissions::evalPermString("rw-------")));
+                                permissions::parsePermString("rw-------")));
 
 		// write a string into the shared memory
         	test("write",charstring::copy(

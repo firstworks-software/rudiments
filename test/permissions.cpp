@@ -24,13 +24,13 @@ int main(int argc, const char **argv) {
         file	fd;
 	test("create with perms",
 			fd.open(permsfile,O_RDWR|O_CREAT,
-                                permissions::evalPermString("rw-r--r--")));
+                                permissions::parsePermString("rw-r--r--")));
         test("change perms",
 		permissions::setFilePermissions(fd.getFileDescriptor(),
-                                permissions::evalPermString("rw-rw-r--")));
+                                permissions::parsePermString("rw-rw-r--")));
 	fd.getCurrentProperties();
 	test("get perms",!charstring::compare(
-				permissions::evalPermOctal(fd.getPermissions()),
+				permissions::parsePermOctal(fd.getPermissions()),
 				"rw-rw-r--"));
         fd.close();
         file::remove(permsfile);

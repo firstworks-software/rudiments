@@ -10,12 +10,12 @@
 int main(int argc, const char **argv) {
 
 	// create a file called "shm"
-	file::createFile("shm",permissions::evalPermString("rw-------"));
+	file::createFile("shm",permissions::parsePermString("rw-------"));
 
 	// create a 128 byte shared memory segment, keyed to the file "shm"
         sharedmemory    shm;
         if (!shm.create(file::generateKey("shm",1),128,
-                                permissions::evalPermString("rw-------"))) {
+                                permissions::parsePermString("rw-------"))) {
 		stdoutput.printf("error: %s\n",error::getErrorString());
 		process::exit(1);
 	}

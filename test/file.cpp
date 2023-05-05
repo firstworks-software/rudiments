@@ -48,19 +48,19 @@ int main(int argc, const char **argv) {
 		test("error",error::getErrorNumber()==EINVAL);
 		test("create",
 			fl.open(testfiletxt,O_RDWR|O_CREAT,
-				permissions::evalPermString("rw-rw----")));
+				permissions::parsePermString("rw-rw----")));
 		fl.close();
 		test("create when already exists",
 			fl.open(testfiletxt,O_RDWR|O_CREAT,
-				permissions::evalPermString("rw-rw----")));
+				permissions::parsePermString("rw-rw----")));
 		fl.close();
 		test("create with excl",
 			!fl.open(testfiletxt,O_RDWR|O_CREAT|O_EXCL,
-				permissions::evalPermString("rw-rw----")));
+				permissions::parsePermString("rw-rw----")));
 		file::remove(testfiletxt);
 		test("create",
 			fl.create(testfiletxt,
-				permissions::evalPermString("rw-rw----")));
+				permissions::parsePermString("rw-rw----")));
 		test("write",fl.write("hello")==5);
 		test("get properties",fl.getCurrentProperties());
 		test("close",fl.close());

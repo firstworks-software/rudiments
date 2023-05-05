@@ -147,7 +147,7 @@ int main() {
 		filename.clear();
 		filename.append(t->name)->append(".ini");
 		i.writeFile(filename.getString(),
-				permissions::evalPermString("rw-r--r--"));
+				permissions::parsePermString("rw-r--r--"));
 		char	*contents=file::getContents(filename.getString());
 		test("file contents",
 			!charstring::compare(

@@ -32,7 +32,7 @@ void handoff1() {
 	file	f;
 	test("handoff1 - create file",
 		f.create(handofffile,
-			permissions::evalPermString("rw-r--r--")));
+			permissions::parsePermString("rw-r--r--")));
 	test("handoff1 - write to file",f.write("bye",3)==3);
 
 	// open a unix socket

@@ -6,7 +6,7 @@ int main(int argc, const char **argv) {
 	// open/create a file
 	file	f;
 	f.open("testfile",O_WRONLY|O_CREAT,
-				permissions::evalPermString("rw-rw-rw-"));
+				permissions::parsePermString("rw-rw-rw-"));
 
 	// write some text to it
 	f.write("this is some text\n");

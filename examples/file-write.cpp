@@ -6,7 +6,7 @@ int main(int argc, const char **argv) {
 	// open/create the file
 	file	f;
 	f.open("testfile",O_WRONLY|O_CREAT,
-				permissions::evalPermString("rw-rw-rw-"));
+				permissions::parsePermString("rw-rw-rw-"));
 
 
 	// write a bool

@@ -299,7 +299,7 @@ mode_t permissions::getSetGroupId() {
 	return S_ISGID;
 }
 
-mode_t permissions::evalPermString(const char *permstring) {
+mode_t permissions::parsePermString(const char *permstring) {
 	mode_t	retval=0;
 	if (charstring::getLength(permstring)==9) {
 
@@ -348,7 +348,7 @@ mode_t permissions::evalPermString(const char *permstring) {
 	return retval;
 }
 
-char *permissions::evalPermOctal(mode_t permoctal) {
+char *permissions::parsePermOctal(mode_t permoctal) {
 	char	*permstring=new char[10];
 	permstring[9]='\0';
 
@@ -362,7 +362,7 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 }
 
 void *permissions::permStringToDacl(const char *permstring, bool directory) {
-	return permOctalToDacl(evalPermString(permstring),directory);
+	return permOctalToDacl(parsePermString(permstring),directory);
 }
 
 void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
@@ -479,7 +479,7 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 }
 
 char *permissions::daclToPermString(void *dacl) {
-	return evalPermOctal(daclToPermOctal(dacl));
+	return parsePermOctal(daclToPermOctal(dacl));
 }
 
 mode_t permissions::daclToPermOctal(void *dacl) {

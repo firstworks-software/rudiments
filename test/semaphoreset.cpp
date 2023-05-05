@@ -59,14 +59,14 @@ int main(int argc, const char **argv) {
 		file::remove("semkey");
 		file	fd;
 		test("key file",fd.create("semkey",
-				permissions::evalPermString("rw-------")));
+				permissions::parsePermString("rw-------")));
 		fd.close();
 
 		// create the semaphore
 		int32_t	vals[2]={0,1};
 		test("create sem",
 			sem.create(file::generateKey("semkey",1),
-				permissions::evalPermString("rw-------"),
+				permissions::parsePermString("rw-------"),
 				2,vals));
 
 
@@ -76,7 +76,7 @@ int main(int argc, const char **argv) {
 		file::remove("semout");
 		file	semout;
 		test("output file",semout.create("semout",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 		stdoutput.write("\n");
 
 		stdoutput.write("synchronization...\n");

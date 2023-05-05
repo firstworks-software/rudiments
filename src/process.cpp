@@ -1335,7 +1335,7 @@ void process::writeBacktrace(output *out) {
 }
 
 void process::writeBacktrace(const char *filename) {
-	writeBacktrace(filename,permissions::evalPermString("rw-------"),128);
+	writeBacktrace(filename,permissions::parsePermString("rw-------"),128);
 }
 
 void process::writeBacktrace(const char *filename,

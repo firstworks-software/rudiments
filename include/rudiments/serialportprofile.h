@@ -146,7 +146,7 @@ class RUDIMENTS_DLLSPEC serialportprofile : public object {
 		 *  of stop bits such as "8n1", "7e2", etc.
 		 *  This methods parses such a string and sets the
 		 *  profile to match those values. */
-		void	evalOptionsString(const char *string);
+		void	parseOptionsString(const char *string);
 
 		/** Set input mode to "inputmode". */
 		void		setInputMode(inputmode_t inputmode);

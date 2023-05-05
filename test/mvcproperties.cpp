@@ -40,7 +40,7 @@ int main() {
 	file	f;
 	test("create file",
 		f.create("test.prop",
-			permissions::evalPermString("rw-r--r--")) &&
+			permissions::parsePermString("rw-r--r--")) &&
 		f.write(data,sizeof(data))==sizeof(data) &&
 		f.close());
 

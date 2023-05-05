@@ -7,7 +7,7 @@ int main(int argc, const char **argv) {
 	// open the file
 	file	f;
 	f.open("testfile",O_RDWR|O_CREAT,
-				permissions::evalPermString("rw-rw-rw-"));
+				permissions::parsePermString("rw-rw-rw-"));
 
 	// write 4 fixed length records to the file,
 	// each consiting of two 10-character fields

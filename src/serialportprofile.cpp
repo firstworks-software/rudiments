@@ -1346,7 +1346,7 @@ serialportprofile::inputmode_t serialportprofile::getInputMode() {
 			cannonical:raw;
 }
 
-void serialportprofile::evalOptionsString(const char *string) {
+void serialportprofile::parseOptionsString(const char *string) {
 
 	char	bitsperchar=string[0];
 	char	parity=character::upper(string[1]);

@@ -15,7 +15,7 @@ int main(int argc, const char **argv) {
 
 		// permissions
 		mode_t	perms=f.getPermissions();
-		char	*permstring=permissions::evalPermOctal(perms);
+		char	*permstring=permissions::parsePermOctal(perms);
 		stdoutput.printf("Permissions:		%s\n",permstring);
 		delete[] permstring;
 

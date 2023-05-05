@@ -27,7 +27,7 @@ int main(int argc, const char **argv) {
 	#endif
 	filedestination		fd;
 	test("file",fd.open("test.log",
-			permissions::evalPermString("rw-------")));
+			permissions::parsePermString("rw-------")));
 	stdoutdestination	sod;
 	stderrdestination	sed;
 

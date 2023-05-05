@@ -92,7 +92,7 @@ char *prompt::read() {
 			if (historyfile.open(
 				pvt->_historyfilename,
 				O_WRONLY|O_CREAT|O_APPEND,
-				permissions::evalPermString("rw-rw-r--"))) {
+				permissions::parsePermString("rw-rw-r--"))) {
 				historyfile.close();
 				read_history(pvt->_historyfilename);
 			}

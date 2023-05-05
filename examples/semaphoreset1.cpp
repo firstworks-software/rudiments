@@ -7,7 +7,7 @@
 int main(int argc, const char **argv) {
 
 	// create a file named "sem"
-	file::createFile("sem",permissions::evalPermString("rw-------"));
+	file::createFile("sem",permissions::parsePermString("rw-------"));
 
 	// generate a unique semaphore id based on the file
 	key_t	semid=file::generateKey("sem",1);
@@ -16,7 +16,7 @@ int main(int argc, const char **argv) {
 	// Initialize them to 0 and 1 respectively.
 	int32_t	vals[2]={0,1};
 	semaphoreset	sem;
-	if (sem.create(semid,permissions::evalPermString("rw-------"),2,vals)) {
+	if (sem.create(semid,permissions::parsePermString("rw-------"),2,vals)) {
 
 		// loop 10 times, printing 2 and 4, using the
 		// semaphores to synchronize with another process

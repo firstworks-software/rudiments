@@ -8,7 +8,7 @@ int main(int argc, const char **argv) {
 
 	// Create a file, or open it for write if it already exists.
 	if (f.open("testfile1",O_WRONLY|O_CREAT,
-				permissions::evalPermString("rw-rw-rw-"))) {
+				permissions::parsePermString("rw-rw-rw-"))) {
 		stdoutput.write("created/opened testfile1\n");
 	} else {
 		stdoutput.write("failed to create/open testfile1\n");
@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	// Attempt to create a file, and fail if it already exists.
 	// (the previously open file will be closed automatically)
 	if (f.open("testfile1",O_WRONLY|O_CREAT|O_EXCL,
-				permissions::evalPermString("rw-rw-rw-"))) {
+				permissions::parsePermString("rw-rw-rw-"))) {
 		stdoutput.write("created/opened testfile1\n");
 	} else {
 		stdoutput.write("failed to create/open testfile1 "

@@ -57,7 +57,7 @@ int main(int argc, const char **argv) {
 
 
 	test("create pidfile",process::createPidFile("pidfile",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 	test("check pidfile",process::checkForPidFile("pidfile"));
 	file::remove("pidfile");
 	stdoutput.printf("\n");

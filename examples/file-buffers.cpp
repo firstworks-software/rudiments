@@ -12,7 +12,7 @@ int main(int argc, const char **argv) {
 
 	// open/create the file
 	f.open("testfile",O_WRONLY|O_CREAT|O_TRUNC,
-				permissions::evalPermString("rw-rw-rw-"));
+				permissions::parsePermString("rw-rw-rw-"));
 
 	// write 1mb of characters to the file, unbuffered
 	stdoutput.write("writing unbuffered...\n");

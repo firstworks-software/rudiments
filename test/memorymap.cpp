@@ -26,7 +26,7 @@ int main(int argc, const char **argv) {
 	file::remove("memorymap.txt");
 	file	fd;
 	test("create file",fd.create("memorymap.txt",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 	
 	char	*buffer=new char[allocgran];
 	for (uint16_t i=0; i<10; i++) {

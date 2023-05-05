@@ -65,7 +65,7 @@ int main(int argc, const char **argv) {
 		}
 	} else {
 		if (!f.create(filename.getString(),
-				permissions::evalPermString("rw-r--r--"))) {
+				permissions::parsePermString("rw-r--r--"))) {
 			stdoutput.printf("create failed\n");
 			process::exit(1);
 		}

@@ -35,15 +35,15 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("create...\n");
 	test("create testdir",
 			directory::create("testdir",
-				permissions::evalPermString("rwxr-xr-x")));
+				permissions::parsePermString("rwxr-xr-x")));
 	file	f;
 	test("create testdir/testfile1",
 			f.create("testdir/testfile1",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 	f.close();
 	test("create testdir/testfile2",
 			f.create("testdir/testfile2",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 	f.close();
 	stdoutput.printf("\n");
 

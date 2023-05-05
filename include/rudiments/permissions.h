@@ -66,11 +66,11 @@ class RUDIMENTS_DLLSPEC permissions {
 		 * 	rw-rw-rwt : read/write for everyone,
 		 * 			and save the file in
 		 * 			swap space */
-		static	mode_t	evalPermString(const char *permstring);
+		static	mode_t	parsePermString(const char *permstring);
 
-		/**  The inverse of evalPermString().  Evaluates "mode"
+		/**  The inverse of parsePermString().  Evaluates "mode"
 		 *   and returns a string representing the permissions. */
-		static	char	*evalPermOctal(mode_t mode);
+		static	char	*parsePermOctal(mode_t mode);
 
 		/** Returns rw-rw-rw- (666) permissions.
 		 * 

@@ -43,7 +43,7 @@ int main() {
 
 	stdoutput.printf("normal...\n");
 	c.parseString(normal);
-	c.writeFile("normal.csv",permissions::evalPermString("rw-r--r--"));
+	c.writeFile("normal.csv",permissions::parsePermString("rw-r--r--"));
 	char	*normalcsv=file::getContents("normal.csv");
 	test("file contents",!charstring::compare(normal,normalcsv));
 	delete[] normalcsv;
@@ -59,7 +59,7 @@ int main() {
 		} else {
 			file	f;
 			test("create file",f.create("test.csv",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 			test("write to file",
 				f.write(testcsv,charstring::getLength(testcsv))==
 					(ssize_t)charstring::getLength(testcsv));
@@ -701,7 +701,7 @@ int main() {
 		} else {
 			file	f;
 			test("create file",f.create("longdata.csv",
-				permissions::evalPermString("rw-r--r--")));
+				permissions::parsePermString("rw-r--r--")));
 			test("write to file",
 				f.write(longdata.getString(),
 					longdata.getStringLength())==

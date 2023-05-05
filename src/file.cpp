@@ -1655,7 +1655,7 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 		// create the file
 		file	f;
 		if (!f.create(templatefilename,
-				permissions::evalPermString("rw-r--r--"))) {
+				permissions::parsePermString("rw-r--r--"))) {
 			return -1;
 		}
 
