@@ -1164,7 +1164,7 @@ uint32_t gsscredentials::getActualLifetime() {
 	#endif
 }
 
-bool gsscredentials::getIsInActualMechanisms(gssmechanism *mech) {
+bool gsscredentials::isInActualMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -2860,11 +2860,11 @@ const char *gsscontext::getAcceptor() {
 	return pvt->_acceptor;
 }
 
-bool gsscontext::getIsInitiator() {
+bool gsscontext::isInitiator() {
 	return pvt->_isinitiator;
 }
 
-bool gsscontext::getIsOpen() {
+bool gsscontext::isOpen() {
 	return pvt->_isopen;
 }
 

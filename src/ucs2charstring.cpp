@@ -1878,11 +1878,11 @@ ucs2_t *ucs2charstring::isAfter(const ucs2_t *str,
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str) {
-	return duplicate(str,charstring::getLength(str),sys::getIsBigEndian());
+	return duplicate(str,charstring::getLength(str),sys::isBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, size_t len) {
-	return duplicate(str,len,sys::getIsBigEndian());
+	return duplicate(str,len,sys::isBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, bool bigendian) {
@@ -1918,16 +1918,16 @@ ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string) {
 	return duplicate(string,wcharstring::getLength(string),
-				(ucs2_t)'?',sys::getIsBigEndian());
+				(ucs2_t)'?',sys::isBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
-	return duplicate(string,len,(ucs2_t)'?',sys::getIsBigEndian());
+	return duplicate(string,len,(ucs2_t)'?',sys::isBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, bool bigendian) {
 	return duplicate(string,wcharstring::getLength(string),
-				(ucs2_t)'?',sys::getIsBigEndian());
+				(ucs2_t)'?',sys::isBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
@@ -1938,7 +1938,7 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
 					ucs2_t replacement) {
 	return duplicate(string,wcharstring::getLength(string),
-				replacement,sys::getIsBigEndian());
+				replacement,sys::isBigEndian());
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,

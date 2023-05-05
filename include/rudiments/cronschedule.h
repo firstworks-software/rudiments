@@ -117,11 +117,11 @@ class RUDIMENTS_DLLSPEC cronschedule : virtual public object {
 
 		/** Returns true if "dt" falls within the schedule previously
 		 *  configured by setSchedule() or false otherwise. */
-		bool	getIsInSchedule(datetime *dt);
+		bool	isInSchedule(datetime *dt);
 
 		/** Returns true if "dt" falls within the schedule previously
 		 *  configured by setSchedule() or false otherwise. */
-		bool	getIsInSchedule(const char *dt);
+		bool	isInSchedule(const char *dt);
 
 		/** Clears any schedule previously set by setSchedule() such
 		 *  that any call to inSchedule() will return false.

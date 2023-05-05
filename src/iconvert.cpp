@@ -725,7 +725,7 @@ fallback:
 }
 
 ucs2_t iconvert::byteswap(const char *enc, ucs2_t value) {
-	if (sys::getIsBigEndian()) {
+	if (sys::isBigEndian()) {
 		if (!charstring::compare(enc,"UCS-2LE")) {
 			return (ucs2_t)filedescriptor::convertLittleEndianToHost(
 							(uint16_t)value);

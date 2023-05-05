@@ -200,11 +200,11 @@ wchar_t wcharacter::duplicate(char c, wchar_t replacement) {
 }
 
 wchar_t wcharacter::duplicateUcs2(ucs2_t c) {
-	return duplicateUcs2(c,L'?',sys::getIsBigEndian());
+	return duplicateUcs2(c,L'?',sys::isBigEndian());
 }
 
 wchar_t wcharacter::duplicateUcs2(ucs2_t c, wchar_t replacement) {
-	return duplicateUcs2(c,replacement,sys::getIsBigEndian());
+	return duplicateUcs2(c,replacement,sys::isBigEndian());
 }
 
 wchar_t wcharacter::duplicateUcs2(ucs2_t c, bool bigendian) {

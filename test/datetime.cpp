@@ -47,7 +47,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==39);
 	test("week of year",dt.getWeekOfYear()==6);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",!dt.getIsDaylightSavingsTime());
+	test("daylight savings time",!dt.isDaylightSavingsTime());
 
 	// some platforms (haiku) convert EST to EST5EDT,
 	// so we have to allow that
@@ -88,7 +88,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",dt.getIsDaylightSavingsTime());
+	test("daylight savings time",dt.isDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);
@@ -117,7 +117,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",dt.getIsDaylightSavingsTime());
+	test("daylight savings time",dt.isDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);
@@ -147,7 +147,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("week of year",dt.getWeekOfYear()==14);
 	test("year",dt.getYear()==2016);
-	test("daylight savings time",dt.getIsDaylightSavingsTime());
+	test("daylight savings time",dt.isDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);

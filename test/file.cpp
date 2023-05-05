@@ -64,7 +64,7 @@ int main(int argc, const char **argv) {
 		test("write",fl.write("hello")==5);
 		test("get properties",fl.getCurrentProperties());
 		test("close",fl.close());
-		test("getExists",file::getExists(testfiletxt));
+		test("exists",file::exists(testfiletxt));
 		test("reopen",fl.open(testfiletxt,O_RDWR));
 
 		uid_t	uid=fl.getOwnerUserId();
@@ -99,13 +99,13 @@ int main(int argc, const char **argv) {
 			test("blocks",fl.getBlockCount()!=0);
 		}
 
-		test("is a socket",!fl.getIsSocket());
-		test("is a symlink",!fl.getIsSymbolicLink());
-		test("is a regular file",fl.getIsRegularFile());
-		test("is a block device",!fl.getIsBlockDevice());
-		test("is a directory",!fl.getIsDirectory());
-		test("is a character device",!fl.getIsCharacterDevice());
-		test("is a fifo",!fl.getIsFifo());
+		test("is a socket",!fl.isSocket());
+		test("is a symlink",!fl.isSymbolicLink());
+		test("is a regular file",fl.isRegularFile());
+		test("is a block device",!fl.isBlockDevice());
+		test("is a directory",!fl.isDirectory());
+		test("is a character device",!fl.isCharacterDevice());
+		test("is a fifo",!fl.isFifo());
 
 		datetime	dt;
 		dt.initFromSystemDateTime();

@@ -1866,11 +1866,11 @@ wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string) {
 	return duplicateUcs2(string,ucs2charstring::getLength(string),
-						'?',sys::getIsBigEndian());
+						'?',sys::isBigEndian());
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len) {
-	return duplicateUcs2(string,len,'?',sys::getIsBigEndian());
+	return duplicateUcs2(string,len,'?',sys::isBigEndian());
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, bool bigendian) {
@@ -1885,12 +1885,12 @@ wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, wchar_t replacement) {
 	return duplicateUcs2(string,ucs2charstring::getLength(string),
-					replacement,sys::getIsBigEndian());
+					replacement,sys::isBigEndian());
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
 							wchar_t replacement) {
-	return duplicateUcs2(string,len,replacement,sys::getIsBigEndian());
+	return duplicateUcs2(string,len,replacement,sys::isBigEndian());
 }
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string,

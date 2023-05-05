@@ -178,11 +178,11 @@ char character::duplicate(wchar_t c, char replacement) {
 }
 
 char character::duplicateUcs2(ucs2_t c) {
-	return duplicateUcs2(c,'?',sys::getIsBigEndian());
+	return duplicateUcs2(c,'?',sys::isBigEndian());
 }
 
 char character::duplicateUcs2(ucs2_t c, char replacement) {
-	return duplicateUcs2(c,replacement,sys::getIsBigEndian());
+	return duplicateUcs2(c,replacement,sys::isBigEndian());
 }
 
 char character::duplicateUcs2(ucs2_t c, bool bigendian) {

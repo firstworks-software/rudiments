@@ -275,7 +275,7 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 
 		/** Returns true if daylight savings time is currently
 		 *  in effect and false if it isn't */
-		bool	getIsDaylightSavingsTime();
+		bool	isDaylightSavingsTime();
 
 		/** Returns a 3 character string representing the time zone */
 		const char	*getTimeZoneString();

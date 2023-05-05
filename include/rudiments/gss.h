@@ -182,7 +182,7 @@ class RUDIMENTS_DLLSPEC gsscredentials : public object {
 		 *  security mechanisms that was actually used during the
 		 *  most recent call to one of the acquire methods and false
 		 *  otherwise. */
-		bool		getIsInActualMechanisms(gssmechanism *mech);
+		bool		isInActualMechanisms(gssmechanism *mech);
 
 		/** Returns the number of security mechanisms in the list of
 		 *  security mechanisms that were actually used during the
@@ -378,11 +378,11 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 
 		/** Returns true if the calling process was the initator of
 		 *  this context and false if it was not. */
-		bool	getIsInitiator();
+		bool	isInitiator();
 
 		/** Returns true if the context has been initiated or accepted
 		 *  and false otherwise. */
-		bool	getIsOpen();
+		bool	isOpen();
 
 
 		/** Wraps "input" data of "inputsize" bytes, allocates a buffer

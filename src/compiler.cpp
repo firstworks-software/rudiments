@@ -107,7 +107,7 @@ bool compiler::appendModule(const char *filename,
 			modulefilename.append(sys::getDirectorySeparator());
 			modulefilename.append(filename);
 
-			if (file::getExists(modulefilename.getString())) {
+			if (file::exists(modulefilename.getString())) {
 				break;
 			}
 

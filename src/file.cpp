@@ -771,23 +771,23 @@ bool file::unlockRemainderFromEnd(off64_t start) {
 	return unlock(SEEK_END,start,0);
 }
 
-bool file::getExists(const char *filename) {
-	return getIsAccessible(filename,F_OK);
+bool file::exists(const char *filename) {
+	return isAccessible(filename,F_OK);
 }
 
-bool file::getIsReadable(const char *filename) {
-	return getIsAccessible(filename,R_OK);
+bool file::isReadable(const char *filename) {
+	return isAccessible(filename,R_OK);
 }
 
-bool file::getIsWriteable(const char *filename) {
-	return getIsAccessible(filename,W_OK);
+bool file::isWriteable(const char *filename) {
+	return isAccessible(filename,W_OK);
 }
 
-bool file::getIsExecutable(const char *filename) {
-	return getIsAccessible(filename,X_OK);
+bool file::isExecutable(const char *filename) {
+	return isAccessible(filename,X_OK);
 }
 
-bool file::getIsAccessible(const char *filename, int32_t mode) {
+bool file::isAccessible(const char *filename, int32_t mode) {
 	int32_t	result;
 	error::clearError();
 	do {
@@ -912,7 +912,7 @@ blkcnt_t file::getBlockCount() {
 	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
 #endif
 
-int32_t file::getIsSocket() {
+int32_t file::isSocket() {
 	#if defined(_S_IFSOCK)
 		return ((pvt->_st.st_mode&_S_IFSOCK)==_S_IFSOCK);
 	#elif defined(S_IFSOCK)
@@ -926,7 +926,7 @@ int32_t file::getIsSocket() {
 	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
 #endif
 
-int32_t file::getIsSymbolicLink() {
+int32_t file::isSymbolicLink() {
 	#if defined(_S_IFLNK)
 		return ((pvt->_st.st_mode&_S_IFLNK)==_S_IFLNK);
 	#elif defined(S_IFLNK)
@@ -936,7 +936,7 @@ int32_t file::getIsSymbolicLink() {
 	#endif
 }
 
-int32_t file::getIsRegularFile() {
+int32_t file::isRegularFile() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_DISK);
 	#elif defined(_S_IFREG)
@@ -952,7 +952,7 @@ int32_t file::getIsRegularFile() {
 	#define S_ISBLK(m) (((m&0060000)==0060000)?1:0)
 #endif
 
-int32_t file::getIsBlockDevice() {
+int32_t file::isBlockDevice() {
 	#if defined(_S_IFBLK)
 		return ((pvt->_st.st_mode&_S_IFBLK)==_S_IFBLK);
 	#elif defined(S_IFBLK)
@@ -962,7 +962,7 @@ int32_t file::getIsBlockDevice() {
 	#endif
 }
 
-int32_t file::getIsDirectory() {
+int32_t file::isDirectory() {
 	#if defined(_S_IFDIR)
 		return ((pvt->_st.st_mode&_S_IFDIR)==_S_IFDIR);
 	#elif defined(S_IFDIR)
@@ -972,7 +972,7 @@ int32_t file::getIsDirectory() {
 	#endif
 }
 
-int32_t file::getIsCharacterDevice() {
+int32_t file::isCharacterDevice() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_CHAR);
 	#elif defined(_S_IFCHR)
@@ -984,7 +984,7 @@ int32_t file::getIsCharacterDevice() {
 	#endif
 }
 
-int32_t file::getIsFifo() {
+int32_t file::isFifo() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		return (pvt->_filetype==FILE_TYPE_PIPE);
 	#elif defined(_S_IFIFO)
@@ -1823,7 +1823,7 @@ char *file::getEightDotThree(const char *filename) {
 		// filename or if a file with the name we've come up with
 		// doesn't exist, then go ahead and use the name
 		if (!charstring::compare(fullname.getString(),filename) ||
-					!getExists(fullname.getString())) {
+					!exists(fullname.getString())) {
 			break;
 		}
 

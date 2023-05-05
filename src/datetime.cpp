@@ -348,7 +348,7 @@ int32_t datetime::getCentury() {
 	return (pvt->_year<100)?20:((pvt->_year/100)+20);
 }
 
-bool datetime::getIsDaylightSavingsTime() {
+bool datetime::isDaylightSavingsTime() {
 	return pvt->_isdst!=0;
 }
 

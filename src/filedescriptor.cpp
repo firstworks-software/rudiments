@@ -739,7 +739,7 @@ bool filedescriptor::getMmapBufferingEnabled() {
 	return pvt->_writebuffermmapenabled;
 }
 
-bool filedescriptor::getIsCurrentBlockMmapBuffered() {
+bool filedescriptor::isCurrentBlockMmapBuffered() {
 	return pvt->_writebuffermap;
 }
 

@@ -770,31 +770,31 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns 1 if the file is a socket,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsSocket();
+		virtual int32_t		isSocket();
 
 		/** Returns 1 if the file is a symbolic link,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsSymbolicLink();
+		virtual int32_t		isSymbolicLink();
 
 		/** Returns 1 if the file is a regular file,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsRegularFile();
+		virtual int32_t		isRegularFile();
 
 		/** Returns 1 if the file is a block device,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsBlockDevice();
+		virtual int32_t		isBlockDevice();
 
 		/** Returns 1 if the file is a directory,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsDirectory();
+		virtual int32_t		isDirectory();
 
 		/** Returns 1 if the file is a character device,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsCharacterDevice();
+		virtual int32_t		isCharacterDevice();
 
 		/** Returns 1 if the file is a fifo,
 		 *  0 if it's not or -1 on error. */
-		virtual int32_t		getIsFifo();
+		virtual int32_t		isFifo();
 
 		/** Returns the time of last access of the file. */
 		virtual time_t		getLastAccessTime();
@@ -970,19 +970,19 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 
 		/** Returns true if the file exists and false otherwise. */
-		static bool	getExists(const char *filename);
+		static bool	exists(const char *filename);
 
 		/** Returns true if "filename" is readable by the user
 		 *  or false otherwise. */
-		static bool	getIsReadable(const char *filename);
+		static bool	isReadable(const char *filename);
 
 		/** Returns true if "filename" is writeable by the user
 		 *  or false otherwise. */
-		static bool	getIsWriteable(const char *filename);
+		static bool	isWriteable(const char *filename);
 
 		/** Returns true if "filename" is executable by the user
 		 *  or false otherwise. */
-		static bool	getIsExecutable(const char *filename);
+		static bool	isExecutable(const char *filename);
 
 		/** Checks to see if "filename" exists, is readable,
 		 *  is writeable and/or is executable by the user, based
@@ -992,7 +992,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns true if the file meets the conditions set
 		 *  by the mode and false otherwise. */
-		static bool	getIsAccessible(const char *filename,
+		static bool	isAccessible(const char *filename,
 							int32_t mode);
 
 		/** Sets "ctime" to the last change time of "filename".

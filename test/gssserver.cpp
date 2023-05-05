@@ -222,9 +222,9 @@ int main(int argc, const char **argv) {
 					(ctx.getAcceptor())?
 						ctx.getAcceptor():"(none)");
 				stdoutput.printf("  is initiator: %s\n",
-					(ctx.getIsInitiator())?"yes":"no");
+					(ctx.isInitiator())?"yes":"no");
 				stdoutput.printf("  is open: %s\n",
-					(ctx.getIsOpen())?"yes":"no");
+					(ctx.isOpen())?"yes":"no");
 				stdoutput.write("}\n");
 			}
 

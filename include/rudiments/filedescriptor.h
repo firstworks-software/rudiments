@@ -1170,7 +1170,7 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** Returns true if this is a storage filedescriptor such as a
 		 *  file, raw block device, etc. and the current block is
 		 *  buffered using mmap, or false otherwise. */
-		bool	getIsCurrentBlockMmapBuffered();
+		bool	isCurrentBlockMmapBuffered();
 
 		/** If buffering is enabled, and this is a storage
 		 *  filedescriptor such as a file or raw block device. then

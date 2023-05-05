@@ -32,7 +32,7 @@ class RUDIMENTS_DLLSPEC sys {
 		/** Returns true if the byte order of the system is big
 		 *  endian and false if the byte order of the system is
 		 *  little endian. */
-		static	bool	getIsBigEndian();
+		static	bool	isBigEndian();
 
 		/** Returns the version of the rudiments library. */
 		static	const char	*getRudimentsVersion();

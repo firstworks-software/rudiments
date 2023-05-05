@@ -85,15 +85,15 @@ bool ucs2character::isBom(ucs2_t c) {
 }
 
 bool ucs2character::isBigEndianBom(ucs2_t c) {
-	return sys::getIsBigEndian() && c==0xFEFF;
+	return sys::isBigEndian() && c==0xFEFF;
 }
 
 ucs2_t ucs2character::duplicate(char c) {
-	return duplicate(c,(ucs2_t)'?',sys::getIsBigEndian());
+	return duplicate(c,(ucs2_t)'?',sys::isBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(char c, ucs2_t replacement) {
-	return duplicate(c,replacement,sys::getIsBigEndian());
+	return duplicate(c,replacement,sys::isBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(char c, bool bigendian) {
@@ -112,15 +112,15 @@ ucs2_t ucs2character::duplicate(char c, ucs2_t replacement, bool bigendian) {
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c) {
-	return duplicate(c,(ucs2_t)'?',sys::getIsBigEndian());
+	return duplicate(c,(ucs2_t)'?',sys::isBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
-	return duplicate(c,replacement,sys::getIsBigEndian());
+	return duplicate(c,replacement,sys::isBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, bool bigendian) {
-	return duplicate(c,(ucs2_t)'?',sys::getIsBigEndian());
+	return duplicate(c,(ucs2_t)'?',sys::isBigEndian());
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement, bool bigendian) {

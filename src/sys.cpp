@@ -318,7 +318,7 @@ char *sys::getOperatingSystemArchitecture() {
 	#endif
 }
 
-bool sys::getIsBigEndian() {
+bool sys::isBigEndian() {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return false;
 	#else
