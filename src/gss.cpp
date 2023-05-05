@@ -3796,7 +3796,7 @@ ssize_t gsscontext::fullRead(void *data, size_t size) {
 	// until we've read "size" bytes...
 
 	size_t	bytesread=0;
-	size_t bytestoread=size;
+	size_t	bytestoread=size;
 	// FIXME: bytestoread needs to be limited to SSIZE_MAX and we need to
 	// loop until size bytes have been read
 	while (bytestoread) {
