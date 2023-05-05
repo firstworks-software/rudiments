@@ -162,7 +162,7 @@ class linkedlist : public listcollection<valuetype> {
 		bool	remove(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the linkedlist. */
-		uint64_t	getLength();
+		uint64_t	getCount();
 
 		/** Returns the first node in the linkedlist. */
 		listnode<valuetype>	*getFirst();

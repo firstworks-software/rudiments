@@ -86,14 +86,15 @@ class dynamicarray : public arraycollection<valuetype> {
 		 *  dynamicarray. */
 		valuetype	&operator[](uint64_t index);
 
-		/*  Returns the length of the initial extent. */
-		uint64_t	getInitialLength();
+		/*  Returns the number of elements in the initial extent. */
+		uint64_t	getInitialCount();
 
-		/*  Returns the length of each incremental extent. */
-		uint64_t	getIncrementLength();
+		/*  Returns the number of elements in each incremental
+		 *  extent. */
+		uint64_t	getIncrementCount();
 
 		/** Returns the number of elements in the array. */
-		uint64_t	getLength();
+		uint64_t	getCount();
 
 		/** Clears the array.
 		 *

@@ -8,7 +8,7 @@ const char *scalarcollection<valuetype>::getType() {
 }
 template <class valuetype>
 inline
-uint64_t scalarcollection<valuetype>::getLength() {
+uint64_t scalarcollection<valuetype>::getCount() {
 	return 1;
 }
 

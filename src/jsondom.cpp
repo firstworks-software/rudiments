@@ -295,7 +295,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 
 	ssize_t	retval=0;
 
-	bool	inarray=(pvt->_inarray.getLength() &&
+	bool	inarray=(pvt->_inarray.getCount() &&
 				pvt->_inarray.getLast()->getValue());
 	if (dn->getType()!=ROOT_DOMNODETYPE &&
 			dn->getParent()->getType()!=ROOT_DOMNODETYPE &&

@@ -44,7 +44,7 @@ inline
 ssize_t arraycollection<valuetype>::writeJson(output *out, bool indent) {
 	ssize_t	retval=0;
 	incOrErr(&retval,out->write('['),1);
-	for (uint64_t i=0; i<getLength() && retval>-1; i++) {
+	for (uint64_t i=0; i<getCount() && retval>-1; i++) {
 		((i)?this->incOrErr(&retval,out->write(','),1):true) &&
 		((indent)?this->incOrErr(&retval,out->write("\n	",2),2):true) &&
 		incOrErr(&retval,this->writeJsonValue(out,(*this)[i]));

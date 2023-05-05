@@ -11,7 +11,7 @@ avltree<valuetype>::avltree() :
 	top(NULL),
 	first(NULL),
 	last(NULL),
-	length(0) {
+	count(0) {
 }
 
 template <class valuetype>
@@ -77,7 +77,7 @@ void avltree<valuetype>::clone(treecollection<valuetype> *tree) {
 	top=NULL;
 	first=NULL;
 	last=NULL;
-	length=tree->getLength();
+	count=tree->getCount();
 		
 	if (tree->getTop()) {
 
@@ -102,7 +102,7 @@ void avltree<valuetype>::clone(nodecollection<valuetype> *coll) {
 	top=NULL;
 	first=NULL;
 	last=NULL;
-	length=0;
+	count=0;
 
 	if (coll->getFirst()) {
 
@@ -204,8 +204,8 @@ void avltree<valuetype>::insert(treenode<valuetype> *node) {
 		last=node;
 	}
 
-	// increment length
-	length++;
+	// increment count
+	count++;
 }
 
 template <class valuetype>
@@ -277,8 +277,8 @@ treenode<valuetype> *avltree<valuetype>::detach(treenode<valuetype> *node) {
 	// detach the node
 	node->detach(&top);
 
-	// decrement length
-	length--;
+	// decrement count
+	count--;
 
 	return node;
 }
@@ -313,8 +313,8 @@ bool avltree<valuetype>::remove(treenode<valuetype> *node) {
 
 template <class valuetype>
 inline
-uint64_t avltree<valuetype>::getLength() {
-	return length;
+uint64_t avltree<valuetype>::getCount() {
+	return count;
 }
 
 template <class valuetype>
@@ -420,11 +420,11 @@ bool avltree<valuetype>::clear() {
 		node=p;
 	}
 	
-	// clear pointers and length
+	// clear pointers and count
 	top=NULL;
 	first=NULL;
 	last=NULL;
-	length=0;
+	count=0;
 
 	return true;
 }

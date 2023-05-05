@@ -47,7 +47,7 @@ void listen() {
 		filedescriptor	*fd=pool.getReadReadyList()->
 						getFirst()->getValue();
 		test("listener - ready list",
-				pool.getReadReadyList()->getLength()==1);
+				pool.getReadReadyList()->getCount()==1);
 
 		// figure out which socket the client connected to
 		filedescriptor	*clientsock=NULL;

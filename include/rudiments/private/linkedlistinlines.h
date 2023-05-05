@@ -10,7 +10,7 @@ linkedlist<valuetype>::linkedlist() :
 	listcollection<valuetype>(),
 	first(NULL),
 	last(NULL),
-	length(0) {
+	count(0) {
 #ifdef DARWIN_GCC_2952_HACKS
 	return;
 
@@ -81,7 +81,7 @@ inline
 void linkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 	first=NULL;
 	last=NULL;
-	length=0;
+	count=0;
 	for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
 		append(node_duplicate_value(&(node->getReference()),
@@ -115,7 +115,7 @@ void linkedlist<valuetype>::prepend(listnode<valuetype> *node) {
 		first=node;
 		last=first;
 	}
-	length++;
+	count++;
 }
 
 template <class valuetype>
@@ -137,7 +137,7 @@ void linkedlist<valuetype>::append(listnode<valuetype> *node) {
 		first=node;
 		last=first;
 	}
-	length++;
+	count++;
 }
 
 template <class valuetype>
@@ -160,7 +160,7 @@ void linkedlist<valuetype>::insertBefore(listnode<valuetype> *node,
 		newnode->setPrevious(node->getPrevious());
 		node->getPrevious()->setNext(newnode);
 		node->setPrevious(newnode);
-		length++;
+		count++;
 	}
 }
 
@@ -184,7 +184,7 @@ void linkedlist<valuetype>::insertAfter(listnode<valuetype> *node,
 		newnode->setPrevious(node);
 		node->getNext()->setPrevious(newnode);
 		node->setNext(newnode);
-		length++;
+		count++;
 	}
 }
 
@@ -238,7 +238,7 @@ void linkedlist<valuetype>::detach(listnode<valuetype> *node) {
 	}
 	node->setNext(NULL);
 	node->setPrevious(NULL);
-	length--;
+	count--;
 }
 
 template <class valuetype>
@@ -288,14 +288,14 @@ bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
 				this->getManageValues(),
 				this->getManageArrayValues());
 	delete node;
-	length--;
+	count--;
 	return true;
 }
 
 template <class valuetype>
 inline
-uint64_t linkedlist<valuetype>::getLength() {
-	return length;
+uint64_t linkedlist<valuetype>::getCount() {
+	return count;
 }
 
 template <class valuetype>
@@ -352,7 +352,7 @@ void linkedlist<valuetype>::sortInexpensively() {
 	// insertion sort with a few optimizations...
 
 	// if there are 0 or 1 items in the list then it's already sorted
-	if (length<2) {
+	if (count<2) {
 		return;
 	}
 
@@ -464,7 +464,7 @@ inline
 void linkedlist<valuetype>::sortQuickly() {
 
 	// if there are 0 or 1 items in the list then it's already sorted
-	if (length<2) {
+	if (count<2) {
 		return;
 	}
 
@@ -472,7 +472,7 @@ void linkedlist<valuetype>::sortQuickly() {
 	//	parentindex = floor((childindex-1)/2)
 	//	leftchildindex = parent*2+1
 	//	rightchildindex = parent*2+2
-	listnode<valuetype>	**heap=new listnode<valuetype> *[length];
+	listnode<valuetype>	**heap=new listnode<valuetype> *[count];
 	listnode<valuetype>	*temp=NULL;
 	uint64_t		heapend=0;
 	for (listnode<valuetype> *node=first; node; node=node->getNext()) {
@@ -615,7 +615,7 @@ bool linkedlist<valuetype>::clear() {
 	}
 	first=NULL;
 	last=NULL;
-	length=0;
+	count=0;
 	return true;
 }
 

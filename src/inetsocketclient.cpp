@@ -170,12 +170,12 @@ int32_t inetsocketclient::connect() {
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
-			while (addrlist.getLength()) {
+			while (addrlist.getCount()) {
 
 				// figure out which addrinfo to try
 				listnode< addrinfo * >
 					*addrlistnode=addrlist.getFirst();
-				if (pvt->_randomize && addrlist.getLength()>1) {
+				if (pvt->_randomize && addrlist.getCount()>1) {
 					if (!pvt->_seeded) {
 						pvt->_seed=
 							randomnumber::getSeed();
@@ -185,7 +185,7 @@ int32_t inetsocketclient::connect() {
 								pvt->_seed);
 					int32_t	skip=randomnumber::scale(
 							pvt->_seed,0,
-							addrlist.getLength()-1);
+							addrlist.getCount()-1);
 					for (int32_t i=0; i<skip; i++) {
 						addrlistnode=
 							addrlistnode->getNext();
@@ -277,12 +277,12 @@ int32_t inetsocketclient::connect() {
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
-			while (addrlist.getLength()) {
+			while (addrlist.getCount()) {
 
 				// figure out which addrinfo to try
 				listnode< const char * >
 					*addrlistnode=addrlist.getFirst();
-				if (pvt->_randomize && addrlist.getLength()>1) {
+				if (pvt->_randomize && addrlist.getCount()>1) {
 					if (!pvt->_seeded) {
 						pvt->_seed=
 							randomnumber::getSeed();
@@ -292,7 +292,7 @@ int32_t inetsocketclient::connect() {
 								pvt->_seed);
 					int32_t	skip=randomnumber::scale(
 							pvt->_seed,0,
-							addrlist.getLength()-1);
+							addrlist.getCount()-1);
 					for (int32_t i=0; i<skip; i++) {
 						addrlistnode=
 							addrlistnode->getNext();

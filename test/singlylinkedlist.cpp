@@ -18,16 +18,16 @@ int main(int argc, char **argv) {
 
 	// append
 	intl.append((int32_t)0);
-	test("append(0)/getLength()",intl.getLength()==1);
+	test("append(0)/getCount()",intl.getCount()==1);
 	test("append(0)/walk forwards",intl.getFirst()->getValue()==0);
 	test("append(0)/walk backwards",intl.getLast()->getValue()==0);
 	intl.append((int32_t)1);
-	test("append(1)/getLength()",intl.getLength()==2);
+	test("append(1)/getCount()",intl.getCount()==2);
 	test("append(1)/walk forwards",intl.getFirst()->getValue()==0);
 	test("append(1)/walk forwards",intl.getFirst()->
 						getNext()->getValue()==1);
 	intl.append((int32_t)3);
-	test("append(3)/getLength()",intl.getLength()==3);
+	test("append(3)/getCount()",intl.getCount()==3);
 	test("append(3)/walk forwards",intl.getFirst()->getValue()==0);
 	test("append(3)/walk forwards",intl.getFirst()->
 						getNext()->getValue()==1);
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
 	// insert
 	intl.insertAfter(intl.getFirst()->getNext(),2);
-	test("insertAfter(2,2)/getLength()",intl.getLength()==4);
+	test("insertAfter(2,2)/getCount()",intl.getCount()==4);
 	test("insertAfter(2,2)/walk forwards",intl.getFirst()->getValue()==0);
 	test("insertAfter(2,2)/walk forwards",intl.getFirst()->
 						getNext()->getValue()==1);
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 
 	// remove
 	intl.remove(3);
-	test("remove(3)/getLength()",intl.getLength()==3);
+	test("remove(3)/getCount()",intl.getCount()==3);
 	test("remove(3)/walk forwards",intl.getFirst()->getValue()==0);
 	test("remove(3)/walk forwards",intl.getFirst()->
 						getNext()->getValue()==1);
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
 	// clear
 	intl.clear();
-	test("clear()/getLength()",intl.getLength()==0);
+	test("clear()/getCount()",intl.getCount()==0);
 	test("clear()/getFirst()",!intl.getFirst());
 	test("clear()/getLast()",!intl.getLast());
 	stdoutput.printf("\n\n");
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 
 	// append
 	strl.append("zero");
-	test("append(zero)/getLength()",strl.getLength()==1);
+	test("append(zero)/getCount()",strl.getCount()==1);
 	test("append(zero)/walk forwards",!charstring::compare(
 						strl.getFirst()->getValue(),
 						"zero"));
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
 						strl.getLast()->getValue(),
 						"zero"));
 	strl.append("one");
-	test("append(one)/getLength()",strl.getLength()==2);
+	test("append(one)/getCount()",strl.getCount()==2);
 	test("append(one)/walk forwards",!charstring::compare(
 						strl.getFirst()->getValue(),
 						"zero"));
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
 						getNext()->getValue(),
 						"one"));
 	strl.append("three");
-	test("append(three)/getLength()",strl.getLength()==3);
+	test("append(three)/getCount()",strl.getCount()==3);
 	test("append(three)/walk forwards",!charstring::compare(
 						strl.getFirst()->getValue(),
 						"zero"));
@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 
 	// insert
 	strl.insertAfter(strl.getFirst()->getNext(),"two");
-	test("insertAfter(two,two)/getLength()",strl.getLength()==4);
+	test("insertAfter(two,two)/getCount()",strl.getCount()==4);
 	test("insertAfter(two,two)/walk forwards",!charstring::compare(
 							strl.getFirst()->
 							getValue(),
@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 
 	// remove
 	strl.remove("three");
-	test("remove(three)/getLength()",strl.getLength()==3);
+	test("remove(three)/getCount()",strl.getCount()==3);
 	test("remove(three)/walk forwards",!charstring::compare(
 						strl.getFirst()->getValue(),
 						"zero"));
@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
 
 	// clear
 	strl.clear();
-	test("clear()/getLength()",strl.getLength()==0);
+	test("clear()/getCount()",strl.getCount()==0);
 	test("clear()/getFirst()",!strl.getFirst());
 	test("clear()/getLast()",!strl.getLast());
 	stdoutput.printf("\n");
@@ -345,11 +345,11 @@ int main(int argc, char **argv) {
 	strb4->append("4");
 	strbl.append(strb4);
 	strbl.remove(strb3);
-	test("remove, getLength(): ",strbl.getLength()==3);
+	test("remove, getCount(): ",strbl.getCount()==3);
 	strbl.remove(strb4);
-	test("remove, getLength(): ",strbl.getLength()==2);
+	test("remove, getCount(): ",strbl.getCount()==2);
 	strbl.clear();
-	test("clear, getLength(): ",!strbl.getLength());
+	test("clear, getCount(): ",!strbl.getCount());
 	stdoutput.printf("\n");
 
 	// remove/clear and array delete
@@ -361,11 +361,11 @@ int main(int argc, char **argv) {
 	charl.append(charstring::duplicate("3"));
 	charl.append(charstring::duplicate("4"));
 	charl.remove((char *)"1");
-	test("remove, getLength(): ",charl.getLength()==3);
+	test("remove, getCount(): ",charl.getCount()==3);
 	charl.remove((char *)"2");
-	test("remove, getLength(): ",charl.getLength()==2);
+	test("remove, getCount(): ",charl.getCount()==2);
 	charl.clear();
-	test("clear, getLength(): ",!charl.getLength());
+	test("clear, getCount(): ",!charl.getCount());
 	stdoutput.printf("\n");
 
 	// copy and assignment
@@ -413,8 +413,8 @@ int main(int argc, char **argv) {
 
 			// verify length
 			test((!j)?"copy: length":"assignment: length",
-						cch2.getLength()==
-						cch1.getLength());
+						cch2.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;
@@ -458,8 +458,8 @@ int main(int argc, char **argv) {
 			// verify length
 			test((!j)?"copy (linkedlist): length":
 					"assignment (linkedlist): length",
-						cch3.getLength()==
-						cch1.getLength());
+						cch3.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;
@@ -507,8 +507,8 @@ int main(int argc, char **argv) {
 			// verify length
 			test((!j)?"copy (avltree): length":
 					"assignment (avltree): length",
-						cch4.getLength()==
-						cch1.getLength());
+						cch4.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;

@@ -155,7 +155,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		linkedlist<keytype>	*getKeys();
 
 		/** Returns the number of key-value pairs in the dictionary. */
-		uint64_t	getLength();
+		uint64_t	getCount();
 
 		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't

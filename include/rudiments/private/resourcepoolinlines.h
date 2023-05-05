@@ -156,7 +156,7 @@ valuetype *resourcepool<valuetype>::borrowResource() {
 
 	// if we have initial resources available to loan out,
 	// then loan one out
-	if (initiallist.getLength()) {
+	if (initiallist.getCount()) {
 
 		// the list contains resources available to be loaned out and
 		// the tree contains resources that have been loaned out,
@@ -178,7 +178,7 @@ valuetype *resourcepool<valuetype>::borrowResource() {
 
 	// if we don't have any on-demand resources available to loan out,
 	// then grow, if we can
-	if (!ondemandlist.getLength()) {
+	if (!ondemandlist.getCount()) {
 		for (uint64_t i=0; i<growby && total<max; i++) {
 			valuetype	*v=createResource();
 			ondemandlist.append(v);
@@ -188,7 +188,7 @@ valuetype *resourcepool<valuetype>::borrowResource() {
 
 	// if we have on-demand resources available to loan out,
 	// then loan one out
-	if (ondemandlist.getLength()) {
+	if (ondemandlist.getCount()) {
 
 		// the list contains resources available to be loaned out and
 		// the tree contains resources that have been loaned out,
@@ -274,12 +274,12 @@ void resourcepool<valuetype>::setMutex(threadmutex *mtx) {
 template <class valuetype>
 inline
 uint64_t resourcepool<valuetype>::getAvailableInitialResourceCount() {
-	return initiallist.getLength();
+	return initiallist.getCount();
 }
 
 
 template <class valuetype>
 inline
 uint64_t resourcepool<valuetype>::getAvailableOnDemandResourceCount() {
-	return ondemandlist.getLength();
+	return ondemandlist.getCount();
 }

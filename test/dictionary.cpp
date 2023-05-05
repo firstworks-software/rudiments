@@ -45,9 +45,9 @@ int main(int argc, const char **argv) {
 	test("getValue(): 5,NULL",!strstrdict.getValue("5"));
 
 	// keys
-	test("getLength",strstrdict.getLength()==4);
-	test("getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==4);
+	test("getCount",strstrdict.getCount()==4);
+	test("getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==4);
 	test("getValue(): 1,one",
 		!charstring::compare(strstrdict.getValue("1"),"one"));
 	test("getValue(): 2,two",
@@ -88,9 +88,9 @@ int main(int argc, const char **argv) {
 
 	// remove
 	strstrdict.remove("3");
-	test("remove 3: getLength",strstrdict.getLength()==3);
-	test("remove 3: getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==3);
+	test("remove 3: getCount",strstrdict.getCount()==3);
+	test("remove 3: getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==3);
 	test("remove 3: getValue(): 1,one",
 		!charstring::compare(strstrdict.getValue("1"),"one"));
 	test("remove 3: getValue(): 2,two",
@@ -101,9 +101,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(strstrdict.getValue("4"),"four"));
 
 	strstrdict.remove("2");
-	test("remove 2: getLength",strstrdict.getLength()==2);
-	test("remove 2: getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==2);
+	test("remove 2: getCount",strstrdict.getCount()==2);
+	test("remove 2: getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==2);
 	test("remove 2: getValue(): 1,one",
 		!charstring::compare(strstrdict.getValue("1"),"one"));
 	test("remove 2: getValue(): 2,NULL",
@@ -114,9 +114,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(strstrdict.getValue("4"),"four"));
 
 	strstrdict.remove("1");
-	test("remove 1: getLength",strstrdict.getLength()==1);
-	test("remove 1: getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==1);
+	test("remove 1: getCount",strstrdict.getCount()==1);
+	test("remove 1: getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==1);
 	test("remove 1: getValue(): 1,NULL",
 		!strstrdict.getValue("1"));
 	test("remove 1: getValue(): 2,NULL",
@@ -127,9 +127,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(strstrdict.getValue("4"),"four"));
 
 	strstrdict.remove("4");
-	test("remove 4: getLength",strstrdict.getLength()==0);
-	test("remove 4: getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==0);
+	test("remove 4: getCount",strstrdict.getCount()==0);
+	test("remove 4: getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==0);
 	test("remove 4: getValue(): 1,NULL",
 		!strstrdict.getValue("1"));
 	test("remove 4: getValue(): 2,NULL",
@@ -148,9 +148,9 @@ int main(int argc, const char **argv) {
 	strstrdict.setValue("3","three");
 	strstrdict.setValue("4","four");
 	strstrdict.clear();
-	test("clear: getLength",strstrdict.getLength()==0);
-	test("clear: getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==0);
+	test("clear: getCount",strstrdict.getCount()==0);
+	test("clear: getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==0);
 
 	// array
 	const char	*keys[]={
@@ -160,9 +160,9 @@ int main(int argc, const char **argv) {
 		"one","two","three","four",NULL
 	};
 	strstrdict.setValues(keys,values);
-	test("array (null): getLength",strstrdict.getLength()==4);
-	test("array (null): getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==4);
+	test("array (null): getCount",strstrdict.getCount()==4);
+	test("array (null): getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==4);
 	test("array (null): setValue()/getValue() 1",
 		!charstring::compare(strstrdict.getValue("1"),"one"));
 	test("array (null): setValue()/getValue() 2",
@@ -174,9 +174,9 @@ int main(int argc, const char **argv) {
 	test("array (null): getValue(): 5",!strstrdict.getValue("5"));
 	strstrdict.clear();
 	strstrdict.setValues(keys,values,4);
-	test("array (count): getLength",strstrdict.getLength()==4);
-	test("array (count): getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==4);
+	test("array (count): getCount",strstrdict.getCount()==4);
+	test("array (count): getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==4);
 	test("array (count): setValue()/getValue() 1",
 		!charstring::compare(strstrdict.getValue("1"),"one"));
 	test("array (count): setValue()/getValue() 2",
@@ -190,9 +190,9 @@ int main(int argc, const char **argv) {
 	// from another dictionary
 	dictionary< const char *, const char * >	strstrdict1;
 	strstrdict1.setValues(&strstrdict);
-	test("dict: getLength",strstrdict.getLength()==4);
-	test("dict: getKeys()->getLength",
-		strstrdict.getKeys()->getLength()==4);
+	test("dict: getCount",strstrdict.getCount()==4);
+	test("dict: getKeys()->getCount",
+		strstrdict.getKeys()->getCount()==4);
 	test("dict: setValue()/getValue() 1",
 		!charstring::compare(strstrdict.getValue("1"),"one"));
 	test("dict: setValue()/getValue() 2",
@@ -240,9 +240,9 @@ int main(int argc, const char **argv) {
 	test("getValue(): 5,NULL",!intstrdict.getValue(5));
 
 	// keys
-	test("getLength",intstrdict.getLength()==4);
-	test("getKeys()->getLength",
-		intstrdict.getKeys()->getLength()==4);
+	test("getCount",intstrdict.getCount()==4);
+	test("getKeys()->getCount",
+		intstrdict.getKeys()->getCount()==4);
 	test("getValue(): 1,one",
 		!charstring::compare(intstrdict.getValue(1),"one"));
 	test("getValue(): 2,two",
@@ -282,9 +282,9 @@ int main(int argc, const char **argv) {
 
 	// remove
 	intstrdict.remove(3);
-	test("remove 3: getLength",intstrdict.getLength()==3);
-	test("remove 3: getKeys()->getLength",
-		intstrdict.getKeys()->getLength()==3);
+	test("remove 3: getCount",intstrdict.getCount()==3);
+	test("remove 3: getKeys()->getCount",
+		intstrdict.getKeys()->getCount()==3);
 	test("remove 3: getValue(): 1,one",
 		!charstring::compare(intstrdict.getValue(1),"one"));
 	test("remove 3: getValue(): 2,two",
@@ -295,9 +295,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(intstrdict.getValue(4),"four"));
 
 	intstrdict.remove(2);
-	test("remove 2: getLength",intstrdict.getLength()==2);
-	test("remove 2: getKeys()->getLength",
-		intstrdict.getKeys()->getLength()==2);
+	test("remove 2: getCount",intstrdict.getCount()==2);
+	test("remove 2: getKeys()->getCount",
+		intstrdict.getKeys()->getCount()==2);
 	test("remove 2: getValue(): 1,one",
 		!charstring::compare(intstrdict.getValue(1),"one"));
 	test("remove 2: getValue(): 2,NULL",
@@ -308,9 +308,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(intstrdict.getValue(4),"four"));
 
 	intstrdict.remove(1);
-	test("remove 1: getLength",intstrdict.getLength()==1);
-	test("remove 1: getKeys()->getLength",
-		intstrdict.getKeys()->getLength()==1);
+	test("remove 1: getCount",intstrdict.getCount()==1);
+	test("remove 1: getKeys()->getCount",
+		intstrdict.getKeys()->getCount()==1);
 	test("remove 1: getValue(): 1,NULL",
 		!intstrdict.getValue(1));
 	test("remove 1: getValue(): 2,NULL",
@@ -321,9 +321,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(intstrdict.getValue(4),"four"));
 
 	intstrdict.remove(4);
-	test("remove 4: getLength",intstrdict.getLength()==0);
-	test("remove 4: getKeys()->getLength",
-		intstrdict.getKeys()->getLength()==0);
+	test("remove 4: getCount",intstrdict.getCount()==0);
+	test("remove 4: getKeys()->getCount",
+		intstrdict.getKeys()->getCount()==0);
 	test("remove 4: getValue(): 1,NULL",
 		!intstrdict.getValue(1));
 	test("remove 4: getValue(): 2,NULL",
@@ -342,9 +342,9 @@ int main(int argc, const char **argv) {
 	intstrdict.setValue(3,"three");
 	intstrdict.setValue(4,"four");
 	intstrdict.clear();
-	test("clear: getLength",intstrdict.getLength()==0);
-	test("clear: getKeys()->getLength",
-		intstrdict.getKeys()->getLength()==0);
+	test("clear: getCount",intstrdict.getCount()==0);
+	test("clear: getKeys()->getCount",
+		intstrdict.getKeys()->getCount()==0);
 	stdoutput.printf("\n");
 
 	// remove and delete
@@ -490,8 +490,8 @@ int main(int argc, const char **argv) {
 
 			// verify length
 			test((!j)?"copy: length":"assignment: length",
-						cch2.getLength()==
-						cch1.getLength());
+						cch2.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;

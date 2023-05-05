@@ -21,7 +21,7 @@ int main(int argc, const char **argv) {
 	strb.append("1 2 3 4 5 6 7 8 9 0");
 
 	// overwrite the first 5 numbers...
-	strb.setPosition(0);
+	strb.setPositionRelativeToBeginning(0);
 	strb.write("0 9 8 7 6");
 
 	stdoutput.write("after overwrite:\n");

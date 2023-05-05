@@ -30,7 +30,7 @@ class collection : virtual public object {
 		virtual const char	*getType()=0;
 
 		/** Returns the number of elementes in the collection. */
-		virtual uint64_t	getLength()=0;
+		virtual uint64_t	getCount()=0;
 
 		/** Returns the comparator used internally by the class.
 		 *  Returns whatever was previously set by setComparator() or

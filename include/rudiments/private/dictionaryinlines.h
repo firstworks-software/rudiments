@@ -189,7 +189,7 @@ template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::setTrackInsertionOrder(
 						bool trackinsertionorder) {
-	if (!tree.getLength()) {
+	if (!tree.getCount()) {
 		this->trackinsertionorder=trackinsertionorder;
 		return true;
 	}
@@ -375,8 +375,8 @@ linkedlist<keytype> *dictionary<keytype,valuetype>::getKeys() {
 
 template <class keytype, class valuetype>
 inline
-uint64_t dictionary<keytype,valuetype>::getLength() {
-	return tree.getLength();
+uint64_t dictionary<keytype,valuetype>::getCount() {
+	return tree.getCount();
 }
 
 template <class keytype, class valuetype>

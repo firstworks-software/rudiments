@@ -28,8 +28,8 @@ int main(int argc, const char **argv) {
 	// remove all of a particular value from the list
 	ll.removeAll(-2);
 
-	// length
-	stdoutput.printf("The list contains %lld nodes.\n\n",ll.getLength());
+	// count
+	stdoutput.printf("The list contains %lld nodes.\n\n",ll.getCount());
 
 	// print the list
 	stdoutput.write("Current contents:\n");
@@ -39,5 +39,5 @@ int main(int argc, const char **argv) {
 	// clear the list
 	ll.clear();
 	stdoutput.printf("The list contains %lld nodes after clearing it.\n",
-								ll.getLength());
+								ll.getCount());
 }

@@ -11,18 +11,18 @@ dynamicarray<valuetype>::dynamicarray() : arraycollection<valuetype>() {
 
 template< class valuetype >
 inline
-dynamicarray<valuetype>::dynamicarray(uint64_t initiallength,
-					uint64_t incrementlength) :
+dynamicarray<valuetype>::dynamicarray(uint64_t initialcount,
+					uint64_t incrementcount) :
 						arraycollection<valuetype>() {
-	construct((initiallength)?initiallength:128,
-				(incrementlength)?incrementlength:32);
+	construct((initialcount)?initialcount:128,
+				(incrementcount)?incrementcount:32);
 }
 
 template< class valuetype >
 inline
 dynamicarray<valuetype>::dynamicarray(dynamicarray<valuetype> &v) :
 						arraycollection<valuetype>(v) {
-	construct(v.initlen,v.inclen);
+	construct(v.initcount,v.inccount);
 	clone(v);
 }
 
@@ -39,9 +39,9 @@ inline
 dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 					dynamicarray<valuetype> &v) {
 	if (this!=&v) {
-		clear(v.initlen,v.inclen);
+		clear(v.initcount,v.inccount);
 		arraycollection<valuetype>::operator=(v);
-		construct(v.initlen,v.inclen);
+		construct(v.initcount,v.inccount);
 		clone(v);
 	}
 	return *this;
@@ -54,7 +54,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
-		construct(initlen,inclen);
+		construct(initcount,inccount);
 		clone(v);
 	}
 	return *this;
@@ -62,14 +62,14 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::construct(uint64_t initiallength,
-					uint64_t incrementlength) {
+void dynamicarray<valuetype>::construct(uint64_t initialcount,
+					uint64_t incrementcount) {
 	extents.setManageArrayValues(true);
-	totallen=0;
-	lastlen=0;
-	initlen=initiallength;
-	inclen=incrementlength;
-	extend(initiallength);
+	totalcount=0;
+	lastcount=0;
+	initcount=initialcount;
+	inccount=incrementcount;
+	extend(initialcount);
 	curext=extents.getFirst();
 	curind=0;
 }
@@ -78,17 +78,17 @@ template< class valuetype >
 inline
 void dynamicarray<valuetype>::clone(dynamicarray<valuetype> &v) {
 
-	// extend storage to fit (do this before setting length)
-	extend(v.lastlen);
+	// extend storage to fit (do this before setting count)
+	extend(v.lastcount);
 
-	// clone lengths and positions
-	totallen=v.totallen;
-	lastlen=v.lastlen;
-	initlen=v.initlen;
-	inclen=v.inclen;
+	// clone counts and positions
+	totalcount=v.totalcount;
+	lastcount=v.lastcount;
+	initcount=v.initcount;
+	inccount=v.inccount;
 
 	// clone the data
-	for (uint64_t i=0; i<v.getLength(); i++) {
+	for (uint64_t i=0; i<v.getCount(); i++) {
 		find(i)=node_duplicate_value(&(v.find(i)),
 					this->getManageValues(),
 					this->getManageArrayValues());
@@ -105,8 +105,8 @@ void dynamicarray<valuetype>::clone(dynamicarray<valuetype> &v) {
 template< class valuetype >
 inline
 void dynamicarray<valuetype>::clone(arraycollection<valuetype> &v) {
-	lastlen=v.getLength();
-	for (uint64_t i=0; i<lastlen; i++) {
+	lastcount=v.getCount();
+	for (uint64_t i=0; i<lastcount; i++) {
 		find(i)=node_duplicate_value(&(v[i]),
 					this->getManageValues(),
 					this->getManageArrayValues());
@@ -123,12 +123,12 @@ template< class valuetype >
 inline
 valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 	extend(index+1);
-	if (index>=lastlen) {
-		lastlen=index+1;
+	if (index>=lastcount) {
+		lastcount=index+1;
 	}
 	// I once had (semi-clever) bounds-checking code here like:
 	//
-	// if (index>=lastlen) {
+	// if (index>=lastcount) {
 	//	return *((valuetype *)NULL);
 	// }
 	//
@@ -150,31 +150,31 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getInitialLength() {
-	return initlen;
+uint64_t dynamicarray<valuetype>::getInitialCount() {
+	return initcount;
 }
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getIncrementLength() {
-	return inclen;
+uint64_t dynamicarray<valuetype>::getIncrementCount() {
+	return inccount;
 }
 
 template< class valuetype >
 inline
-uint64_t dynamicarray<valuetype>::getLength() {
-	return lastlen;
+uint64_t dynamicarray<valuetype>::getCount() {
+	return lastcount;
 }
 
 template< class valuetype >
 inline
-void dynamicarray<valuetype>::extend(uint64_t length) {
-	uint64_t	inc=(extents.getLength())?inclen:initlen;
-	while (totallen<length) {
+void dynamicarray<valuetype>::extend(uint64_t count) {
+	uint64_t	inc=(extents.getCount())?inccount:initcount;
+	while (totalcount<count) {
 		valuetype	*newext=new valuetype[inc];
 		extents.append(newext);
-		totallen+=inc;
-		inc=inclen;
+		totalcount+=inc;
+		inc=inccount;
 	}
 }
 
@@ -185,12 +185,12 @@ size_t dynamicarray<valuetype>::findExtentStartIndex(uint64_t index) {
 	// move to the extent that contains the specified index
 	// (also calculate the index of the first element of the extent)
 	size_t	eind;
-	if (index<initlen) {
+	if (index<initcount) {
 		curext=extents.getFirst();
 		curind=0;
 		eind=0;
 	} else {
-		uint64_t	targetind=(index-initlen+inclen)/inclen;
+		uint64_t	targetind=(index-initcount+inccount)/inccount;
 		while (curind>targetind) {
 			curext=curext->getPrevious();
 			curind--;
@@ -199,7 +199,7 @@ size_t dynamicarray<valuetype>::findExtentStartIndex(uint64_t index) {
 			curext=curext->getNext();
 			curind++;
 		}
-		eind=initlen+inclen*(curind-1);
+		eind=initcount+inccount*(curind-1);
 	}
 	return eind;
 }
@@ -221,7 +221,7 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 template< class valuetype >
 inline
 bool dynamicarray<valuetype>::clear() {
-	return clear(initlen,inclen);
+	return clear(initcount,inccount);
 }
 
 template< class valuetype >
@@ -231,30 +231,30 @@ void dynamicarray<valuetype>::deleteManagedValues() {
 	// delete managed values in all extents
 	if (this->getManageValues() || this->getManageArrayValues()) {
 		uint64_t	i=0;
-		uint64_t	length=initlen;
-		for (curext=extents.getFirst(); i<lastlen && curext;
+		uint64_t	count=initcount;
+		for (curext=extents.getFirst(); i<lastcount && curext;
 						curext=curext->getNext()) {
 			valuetype	*data=curext->getValue();
-			for (uint64_t j=0; i<lastlen && j<length; j++) {
+			for (uint64_t j=0; i<lastcount && j<count; j++) {
 				node_delete_value(&(data[j]),
 						this->getManageValues(),
 						this->getManageArrayValues());
 				node_zero_value(&(data[j]));
 				i++;
 			}
-			length=inclen;
+			count=inccount;
 		}
 	}
 }
 
 template< class valuetype >
 inline
-bool dynamicarray<valuetype>::clear(uint64_t initiallength,
-					uint64_t incrementlength) {
+bool dynamicarray<valuetype>::clear(uint64_t initialcount,
+					uint64_t incrementcount) {
 
 	deleteManagedValues();
 
-	if (initiallength==initlen) {
+	if (initialcount==initcount) {
 
 		// remove all but the first extent
 		curext=extents.getLast();
@@ -266,7 +266,7 @@ bool dynamicarray<valuetype>::clear(uint64_t initiallength,
 
 		// reinit first extent
 		valuetype	*ext=curext->getValue();
-		for (uint64_t i=0; i<initlen; i++) {
+		for (uint64_t i=0; i<initcount; i++) {
 			// gcc 2.91.66 on redhat 6.2 throws an internal
 			// compiler error unless we use a pointer to call
 			// the destructor.  No other compilers appear to have
@@ -282,24 +282,24 @@ bool dynamicarray<valuetype>::clear(uint64_t initiallength,
 
 	} else {
 
-		// reset the initial length
-		initlen=initiallength;
+		// reset the initial count
+		initcount=initialcount;
 
 		// remove all extents
 		extents.clear();
 
 		// reinit first extent
-		valuetype	*newext=new valuetype[initlen];
+		valuetype	*newext=new valuetype[initcount];
 		extents.append(newext);
 		curext=extents.getFirst();
 	}
 
-	// reset the incremental length
-	inclen=incrementlength;
+	// reset the incremental count
+	inccount=incrementcount;
 
-	// reset lengths
-	totallen=initlen;
-	lastlen=0;
+	// reset counts
+	totalcount=initcount;
+	lastcount=0;
 
 	// reset current extent index
 	curind=0;

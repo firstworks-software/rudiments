@@ -27,8 +27,8 @@ int main(int argc, const char **argv) {
 	sll.moveAfter(sll.find(8),sll.find(9));
 	sll.moveAfter(sll.find(9),sll.find(10));
 
-	// length
-	stdoutput.printf("The list contains %lld nodes.\n\n",sll.getLength());
+	// count
+	stdoutput.printf("The list contains %lld nodes.\n\n",sll.getCount());
 
 	// print the list
 	stdoutput.write("Current contents:\n");

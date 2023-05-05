@@ -1176,7 +1176,7 @@ void codetree::popBreakStack() {
 	listnode< linkedlist< break_t * > * >
 			*stacknode=pvt->_breakstack.getLast();
 	pvt->_breakstack.detach(stacknode);
-	pvt->_breakcount=pvt->_breakcount-stacknode->getValue()->getLength();
+	pvt->_breakcount=pvt->_breakcount-stacknode->getValue()->getCount();
 	for (listnode< break_t * > *listnode=
 			stacknode->getValue()->getFirst();
 			listnode; listnode=listnode->getNext()) {

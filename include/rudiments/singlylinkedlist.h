@@ -164,7 +164,7 @@ class singlylinkedlist : public listcollection<valuetype> {
 		bool	remove(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the singlylinkedlist. */
-		uint64_t	getLength();
+		uint64_t	getCount();
 
 		/** Returns the first node in the singlylinkedlist. */
 		listnode<valuetype>	*getFirst();

@@ -73,7 +73,7 @@ void walk(bool forwards, avltree<type> *t,
 		length++;
 	}
 
-	*lengtherror=(length!=t->getLength());
+	*lengtherror=(length!=t->getCount());
 }
 
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 	test("insert/balance",!balanceerror);
 	test("insert/length",!lengtherror);
 	test("insert/find",!finderror);
-	test("insert/ultimate length",intt.getLength()==nodecount);
+	test("insert/ultimate length",intt.getCount()==nodecount);
 	stdoutput.printf("\n");
 
 	// remove
@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
 	test("remove/balance",!balanceerror);
 	test("remove/length",!lengtherror);
 	test("remove/find",!finderror);
-	test("remove/ultimate length",intt.getLength()==0);
+	test("remove/ultimate length",intt.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -253,7 +253,7 @@ int main(int argc, char **argv) {
 	test("insert/balance",!balanceerror);
 	test("insert/length",!lengtherror);
 	test("insert/find",!finderror);
-	test("insert/ultimate length",dblt.getLength()==nodecount);
+	test("insert/ultimate length",dblt.getCount()==nodecount);
 	stdoutput.printf("\n");
 
 	// remove
@@ -300,7 +300,7 @@ int main(int argc, char **argv) {
 	test("remove/balance",!balanceerror);
 	test("remove/length",!lengtherror);
 	test("remove/find",!finderror);
-	test("remove/ultimate length",dblt.getLength()==0);
+	test("remove/ultimate length",dblt.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -334,7 +334,7 @@ int main(int argc, char **argv) {
 	test("insert/balance",!balanceerror);
 	test("insert/length",!lengtherror);
 	test("insert/find",!finderror);
-	test("insert/ultimate length",strt.getLength()==nodecount);
+	test("insert/ultimate length",strt.getCount()==nodecount);
 	stdoutput.printf("\n");
 
 	// remove
@@ -383,7 +383,7 @@ int main(int argc, char **argv) {
 	test("remove/balance",!balanceerror);
 	test("remove/length",!lengtherror);
 	test("remove/find",!finderror);
-	test("remove/ultimate length",strt.getLength()==0);
+	test("remove/ultimate length",strt.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -404,11 +404,11 @@ int main(int argc, char **argv) {
 	strb4->append("4");
 	strbt.insert(strb4);
 	strbt.remove(strb3);
-	test("remove, getLength(): ",strbt.getLength()==3);
+	test("remove, getCount(): ",strbt.getCount()==3);
 	strbt.remove(strb4);
-	test("remove, getLength(): ",strbt.getLength()==2);
+	test("remove, getCount(): ",strbt.getCount()==2);
 	strbt.clear();
-	test("clear, getLength(): ",!strbt.getLength());
+	test("clear, getCount(): ",!strbt.getCount());
 	stdoutput.printf("\n");
 
 	// remove/clear and array delete
@@ -420,11 +420,11 @@ int main(int argc, char **argv) {
 	chart.insert(charstring::duplicate("3"));
 	chart.insert(charstring::duplicate("4"));
 	chart.remove((char *)"1");
-	test("remove, getLength(): ",chart.getLength()==3);
+	test("remove, getCount(): ",chart.getCount()==3);
 	chart.remove((char *)"2");
-	test("remove, getLength(): ",chart.getLength()==2);
+	test("remove, getCount(): ",chart.getCount()==2);
 	chart.clear();
-	test("clear, getLength(): ",!chart.getLength());
+	test("clear, getCount(): ",!chart.getCount());
 	stdoutput.printf("\n");
 
 	// copy and assignment
@@ -473,8 +473,8 @@ int main(int argc, char **argv) {
 
 			// verify length
 			test((!j)?"copy: length":"assignment: length",
-						cch2.getLength()==
-						cch1.getLength());
+						cch2.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;
@@ -519,8 +519,8 @@ int main(int argc, char **argv) {
 			// verify length
 			test((!j)?"copy (linkedlist): length":
 					"assignment: length",
-						cch3.getLength()==
-						cch1.getLength());
+						cch3.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;
@@ -566,8 +566,8 @@ int main(int argc, char **argv) {
 			// verify length
 			test((!j)?"copy (linkedlist): length":
 					"assignment: length",
-						cch4.getLength()==
-						cch1.getLength());
+						cch4.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;

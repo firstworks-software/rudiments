@@ -43,12 +43,12 @@ int main(int argc, const char **argv) {
 	// Create a dynamicarray
 	dynamicarray<struct test>	da1;
 	stdoutput.printf("create <test>...\n");
-	test("create, getLength()",da1.getLength()==0);
-	test("create, getInitialLength()",da1.getInitialLength()==128);
-	test("create, getIncrementLength()",da1.getIncrementLength()==32);
+	test("create, getCount()",da1.getCount()==0);
+	test("create, getInitialCount()",da1.getInitialCount()==128);
+	test("create, getIncrementCount()",da1.getIncrementCount()==32);
 	da1.clear(25,10);
-	test("clear, getInitialLength()",da1.getInitialLength()==25);
-	test("clear, getIncrementLength()",da1.getIncrementLength()==10);
+	test("clear, getInitialCount()",da1.getInitialCount()==25);
+	test("clear, getIncrementCount()",da1.getIncrementCount()==10);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -61,7 +61,7 @@ int main(int argc, const char **argv) {
 		delete[] val;
 		da1[i].uintval=i;
 	}
-	test("get values, getLength()",(uint32_t)da1.getLength()==count);
+	test("get values, getCount()",(uint32_t)da1.getCount()==count);
 	bool	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("copy (using =)...\n");
 	dynamicarray<struct test>	da1copy1(25,10);
 	da1copy1=da1;
-	test("get values, getLength()",(uint32_t)da1copy1.getLength()==count);
+	test("get values, getCount()",(uint32_t)da1copy1.getCount()==count);
 	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -116,7 +116,7 @@ int main(int argc, const char **argv) {
 	// copy using constructor
 	stdoutput.printf("copy (using constructor)...\n");
 	dynamicarray<struct test>	da1copy2(da1);
-	test("get values, getLength()",(uint32_t)da1copy2.getLength()==count);
+	test("get values, getCount()",(uint32_t)da1copy2.getCount()==count);
 	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -143,7 +143,7 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	da1.clear();
-	test("clear, getLength()",da1.getLength()==0);
+	test("clear, getCount()",da1.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -151,7 +151,7 @@ int main(int argc, const char **argv) {
 	// create
 	dynamicarray<testclass>	da2(25,10);
 	stdoutput.printf("create <testclass>...\n");
-	test("create, getLength()",da2.getLength()==0);
+	test("create, getCount()",da2.getCount()==0);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -162,7 +162,7 @@ int main(int argc, const char **argv) {
 		success=(da2[i].getValue()==1);
 	}
 	test("get values, default",success);
-	test("get values, getLength()",(uint32_t)da2.getLength()==count);
+	test("get values, getCount()",(uint32_t)da2.getCount()==count);
 	for (i=0; success && i<count; i++) {
 		da2[i].setValue(2);
 	}
@@ -179,7 +179,7 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	da2.clear();
-	test("clear, getLength()",da2.getLength()==0);
+	test("clear, getCount()",da2.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -187,7 +187,7 @@ int main(int argc, const char **argv) {
 	// create
 	dynamicarray<testclass *>	da3(25,10);
 	stdoutput.printf("create <testclass *>...\n");
-	test("create, getLength()",da3.getLength()==0);
+	test("create, getCount()",da3.getCount()==0);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -220,7 +220,7 @@ int main(int argc, const char **argv) {
 		delete da3[i];
 	}
 	da3.clear();
-	test("clear, getLength()",da3.getLength()==0);
+	test("clear, getCount()",da3.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -228,7 +228,7 @@ int main(int argc, const char **argv) {
 	// create
 	dynamicarray< dynamicarray< uint32_t > >	da4(25,10);
 	stdoutput.printf("create nested...\n");
-	test("create, getLength()",da4.getLength()==0);
+	test("create, getCount()",da4.getCount()==0);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -257,7 +257,7 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	da4.clear();
-	test("clear, getLength()",da4.getLength()==0);
+	test("clear, getCount()",da4.getCount()==0);
 	stdoutput.printf("\n");
 
 
@@ -309,8 +309,8 @@ int main(int argc, const char **argv) {
 
 			// verify length
 			test((!j)?"copy: length":"assignment: length",
-						cch2.getLength()==
-						cch1.getLength());
+						cch2.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;
@@ -350,8 +350,8 @@ int main(int argc, const char **argv) {
 			// verify length
 			test((!j)?"copy (staticarray): length":
 						"assignment: length",
-						cch3.getLength()==
-						cch1.getLength());
+						cch3.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;

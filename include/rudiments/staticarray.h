@@ -38,23 +38,23 @@
  *  collection::setManageValues(true) or collection::setManageArrayValue(true)
  *  are called, then all elements of the staticarray must be set to something.
  *
- *  For example, if the staticarray has length 10 then elements 0-9 must be set
+ *  For example, if the staticarray has count 10 then elements 0-9 must be set
  *  to some value.  They may be set to 0 or NULL, but they must be set.
  *
  *  Otherwise attempts to delete the uninitialized elements during calls to
  *  clear() or the destructor will likely cause the program to crash.
  */
-template <class valuetype, uint64_t length>
+template <class valuetype, uint64_t count>
 class staticarray : public arraycollection<valuetype> {
 	public:
 		/** Creates an empty instance of the staticarray class with
-		 *  "length" elements.  "length" is given in the template
+		 *  "count" elements.  "count" is given in the template
 		 *  definition. */
 		staticarray();
 
 		/** Creates an instance of the staticarray class
 		 *  that is a copy of "v". */
-		staticarray(staticarray<valuetype,length> &v);
+		staticarray(staticarray<valuetype,count> &v);
 
 		/** Creates an instance of the staticarray class
 		 *  that is a copy of "v". */
@@ -62,12 +62,12 @@ class staticarray : public arraycollection<valuetype> {
 
 		/** Makes this instance of the staticarray class
 		 *  identical to "v". */
-		staticarray<valuetype,length>	&operator=(
-				staticarray<valuetype,length> &v);
+		staticarray<valuetype,count>	&operator=(
+				staticarray<valuetype,count> &v);
 
 		/** Makes this instance of the staticarray class
 		 *  identical to "v". */
-		staticarray<valuetype,length>	&operator=(
+		staticarray<valuetype,count>	&operator=(
 				arraycollection<valuetype> &v);
 
 		/** Deletes this instance of the staticarray class. */
@@ -78,7 +78,7 @@ class staticarray : public arraycollection<valuetype> {
 		valuetype	&operator[](uint64_t index);
 
 		/** Returns the number of elements in the array. */
-		uint64_t	getLength();
+		uint64_t	getCount();
 
 		/** Clears the array.  Always returns true. */
 		bool	clear();

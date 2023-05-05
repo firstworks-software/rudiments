@@ -154,7 +154,7 @@ class avltree : public treecollection<valuetype> {
 		bool	remove(treenode<valuetype> *node);
 
 		/** Returns the number of nodes in the avltree. */
-		uint64_t	getLength();
+		uint64_t	getCount();
 
 		/** Returns the top-most node in the avltree. */
 		treenode<valuetype>	*getTop();

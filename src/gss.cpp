@@ -754,7 +754,7 @@ bool gsscredentials::inDesiredMechanisms(gssmechanism *mech) {
 	#endif
 
 	// just return false for degenerate lists
-	if (!pvt->_dmlist.getLength()) {
+	if (!pvt->_dmlist.getCount()) {
 		return false;
 	}
 
@@ -776,7 +776,7 @@ void gsscredentials::clearDesiredMechanisms() {
 }
 
 uint64_t gsscredentials::getDesiredMechanismCount() {
-	return pvt->_dmlist.getLength();
+	return pvt->_dmlist.getCount();
 }
 
 gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
@@ -1182,7 +1182,7 @@ bool gsscredentials::isInActualMechanisms(gssmechanism *mech) {
 	#endif
 
 	// just return false for degenerate lists
-	if (!pvt->_amlist.getLength()) {
+	if (!pvt->_amlist.getCount()) {
 		return false;
 	}
 
@@ -1200,7 +1200,7 @@ bool gsscredentials::isInActualMechanisms(gssmechanism *mech) {
 }
 
 uint64_t gsscredentials::getActualMechanismCount() {
-	return pvt->_amlist.getLength();
+	return pvt->_amlist.getCount();
 }
 
 gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {

@@ -28,10 +28,9 @@ int main(int argc, const char **argv) {
 			const byte_t	*iv=(const byte_t *)*salt;
 
 			c.append(data,charstring::getLength(*str));
-			c.setIv(iv,c.getIvSize());
+			c.setSalt(iv,c.getSaltSize());
 
-			const char	*encrypted=
-					(const char *)c.getEncryptedData();
+			const char	*encrypted=(const char *)c.getHash();
 
 			stdoutput.printf("  %s: %s\n",*str,encrypted);
 

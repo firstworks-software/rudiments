@@ -24,7 +24,7 @@ int main(int argc, const char **argv) {
 	bb.append(data,sizeof(data));
 
 	// overwrite the first 5 numbers...
-	bb.setPosition(0);
+	bb.setPositionRelativeToBeginning(0);
 	const byte_t	newdata[]={8,7,6,5};
 	bb.write(newdata,sizeof(newdata));
 

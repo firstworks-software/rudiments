@@ -160,7 +160,7 @@ byte_t *memorypool::allocate(size_t length) {
 	#ifdef DEBUG_ALLOCATE
 	if (node) {
 		stdoutput.printf("	node : %d (of %d)\n",
-					counter,pvt->_bufferlist.getLength());
+					counter,pvt->_bufferlist.getCount());
 	}
 	#endif
 
@@ -291,7 +291,7 @@ bool memorypool::clear(bool resetinitialsize,
 
 	// if the pool was unused during this iteration...
 	// (a surprisingly common case)
-	if (pvt->_bufferlist.getLength()==1 &&
+	if (pvt->_bufferlist.getCount()==1 &&
 			!pvt->_first->getValue()->_position) {
 
 		#ifdef DEBUG_DEALLOCATE
@@ -308,7 +308,7 @@ bool memorypool::clear(bool resetinitialsize,
 
 	#ifdef DEBUG_DEALLOCATE
 	stdoutput.printf("	clearing %d nodes\n",
-					pvt->_bufferlist.getLength());
+					pvt->_bufferlist.getCount());
 	#endif
 
 	// delete all buffers except for the first one
@@ -416,7 +416,7 @@ bool memorypool::clear(bool resetinitialsize,
 	pvt->_first=pvt->_bufferlist.getFirst();
 
 	#ifdef DEBUG_DEALLOCATE
-	stdoutput.printf("	node count: %d\n",pvt->_bufferlist.getLength());
+	stdoutput.printf("	node count: %d\n",pvt->_bufferlist.getCount());
 	stdoutput.printf("}\n");
 	#endif
 

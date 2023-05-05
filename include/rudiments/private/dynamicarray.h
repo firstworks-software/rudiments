@@ -2,11 +2,11 @@
 // See the COPYING file for more information.
 
 	private:
-		void		construct(uint64_t initiallength,
+		void		construct(uint64_t initialcount,
 						uint64_t increment);
 		void		clone(dynamicarray<valuetype> &v);
 		void		clone(arraycollection<valuetype> &v);
-		void		extend(uint64_t length);
+		void		extend(uint64_t count);
 		size_t		findExtentStartIndex(uint64_t index);
 		valuetype	&find(uint64_t index);
 		void		deleteManagedValues();
@@ -15,7 +15,7 @@
 		listnode<valuetype *>	*curext;
 		uint64_t		curind;
 
-		uint64_t	initlen;
-		uint64_t	inclen;
-		uint64_t	totallen;
-		uint64_t	lastlen;
+		uint64_t	initcount;
+		uint64_t	inccount;
+		uint64_t	totalcount;
+		uint64_t	lastcount;

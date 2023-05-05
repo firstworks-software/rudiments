@@ -23,4 +23,4 @@
 		treenode<valuetype>	*top;
 		treenode<valuetype>	*first;
 		treenode<valuetype>	*last;
-		uint64_t		length;
+		uint64_t		count;

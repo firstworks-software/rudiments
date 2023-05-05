@@ -98,7 +98,7 @@ bool compiler::appendModule(const char *filename,
 
 	// find the module
 	stringbuffer	modulefilename;
-	if (pvt->_modulepaths.getLength()) {
+	if (pvt->_modulepaths.getCount()) {
 		for (listnode< char * >
 				*mpnode=pvt->_modulepaths.getFirst();
 				mpnode; mpnode=mpnode->getNext()) {

@@ -263,7 +263,7 @@ void httprequest::buildList(const char ***vars, const char ***vals,
 	delete[] (*vars);
 	delete[] (*vals);
 
-	uint64_t	length=nvp->getLength();
+	uint64_t	length=nvp->getCount();
 
 	(*vars)=new const char *[length+1];
 	(*vals)=new const char *[length+1];
@@ -878,7 +878,7 @@ void httprequest::getParametersAsHiddenVariables(output *out,
 }
 
 uint64_t httprequest::getParameterCount() {
-	return pvt->_parameters.getLength();
+	return pvt->_parameters.getCount();
 }
 
 const char * const *httprequest::getParameterVariables() {
@@ -919,7 +919,7 @@ const char *httprequest::getFileParameterMimeType(const char *name) {
 }
 
 uint64_t httprequest::getFileCount() {
-	return pvt->_fileparameters.getLength();
+	return pvt->_fileparameters.getCount();
 }
 
 const char * const *httprequest::getFileNames() {
@@ -933,7 +933,7 @@ void httprequest::buildFileNamesList() {
 
 		delete[] pvt->_filenames;
 
-		uint64_t	length=pvt->_fileparameters.getLength();
+		uint64_t	length=pvt->_fileparameters.getCount();
 
 		pvt->_filenames=new const char *[length+1];
 
@@ -1044,7 +1044,7 @@ const char *httprequest::getCookie(const char *name) {
 }
 
 uint64_t httprequest::getCookieCount() {
-	return pvt->_cookies.getLength();
+	return pvt->_cookies.getCount();
 }
 
 const char * const *httprequest::getCookieVariables() {

@@ -57,7 +57,7 @@ dom::~dom() {
 	delete pvt;
 }
 
-uint64_t dom::getLength() {
+uint64_t dom::getCount() {
 	return 0;
 }
 

@@ -4,34 +4,34 @@
 #include <rudiments/private/new.h>
 #include <rudiments/private/nodeinlines.h>
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-staticarray<valuetype,length>::staticarray() : arraycollection<valuetype>() {
-	data=new valuetype[length];
+staticarray<valuetype,count>::staticarray() : arraycollection<valuetype>() {
+	data=new valuetype[count];
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-staticarray<valuetype,length>::staticarray(
-				staticarray<valuetype,length> &v) :
+staticarray<valuetype,count>::staticarray(
+				staticarray<valuetype,count> &v) :
 						arraycollection<valuetype>(v) {
-	data=new valuetype[length];
+	data=new valuetype[count];
 	clone(v);
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-staticarray<valuetype,length>::staticarray(
+staticarray<valuetype,count>::staticarray(
 				arraycollection<valuetype> &v) :
 						arraycollection<valuetype>(v) {
-	data=new valuetype[length];
+	data=new valuetype[count];
 	clone(v);
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
-				staticarray<valuetype,length> &v) {
+staticarray<valuetype,count> &staticarray<valuetype,count>::operator=(
+				staticarray<valuetype,count> &v) {
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
@@ -40,9 +40,9 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 	return *this;
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
+staticarray<valuetype,count> &staticarray<valuetype,count>::operator=(
 					arraycollection<valuetype> &v) {
 	if (this!=&v) {
 		clear();
@@ -52,29 +52,29 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 	return *this;
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-void staticarray<valuetype,length>::clone(arraycollection<valuetype> &v) {
-	for (uint64_t i=0; i<length && i<v.getLength(); i++) {
+void staticarray<valuetype,count>::clone(arraycollection<valuetype> &v) {
+	for (uint64_t i=0; i<count && i<v.getCount(); i++) {
 		data[i]=node_duplicate_value(&(v[i]),
 					this->getManageValues(),
 					this->getManageArrayValues());
 	}
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-staticarray<valuetype,length>::~staticarray() {
+staticarray<valuetype,count>::~staticarray() {
 	deleteManagedValues();
 	delete[] data;
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-valuetype &staticarray<valuetype,length>::operator[](uint64_t index) {
+valuetype &staticarray<valuetype,count>::operator[](uint64_t index) {
 	// I once had (semi-clever) bounds-checking code here like:
 	//
-	// if (index>=length) {
+	// if (index>=count) {
 	//	return *((valuetype *)NULL);
 	// }
 	//
@@ -94,28 +94,28 @@ valuetype &staticarray<valuetype,length>::operator[](uint64_t index) {
 	return data[index];
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-uint64_t staticarray<valuetype,length>::getLength() {
-	return length;
+uint64_t staticarray<valuetype,count>::getCount() {
+	return count;
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-bool staticarray<valuetype,length>::clear() {
+bool staticarray<valuetype,count>::clear() {
 	deleteManagedValues();
-	for (uint64_t i=0; i<length; i++) {
+	for (uint64_t i=0; i<count; i++) {
 		((valuetype *)&data[i])->~valuetype();
 		new(&data[i]) valuetype;
 	}
 	return true;
 }
 
-template< class valuetype, uint64_t length >
+template< class valuetype, uint64_t count >
 inline
-void staticarray<valuetype,length>::deleteManagedValues() {
+void staticarray<valuetype,count>::deleteManagedValues() {
 	if (this->getManageValues() || this->getManageArrayValues()) {
-		for (uint64_t i=0; i<length; i++) {
+		for (uint64_t i=0; i<count; i++) {
 			node_delete_value(&(data[i]),
 						this->getManageValues(),
 						this->getManageArrayValues());

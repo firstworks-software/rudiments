@@ -39,7 +39,7 @@ const char *tablecollection<valuetype>::getType() {
 
 template <class valuetype>
 inline
-uint64_t tablecollection<valuetype>::getLength() {
+uint64_t tablecollection<valuetype>::getCount() {
 	return getRowCount()*getColumnCount();
 }
 

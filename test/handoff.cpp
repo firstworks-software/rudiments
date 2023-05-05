@@ -55,7 +55,7 @@ void handoff1() {
 			pool.listen(-1,-1)==RESULT_SUCCESS);
 	filedescriptor	*fd=pool.getReadReadyList()->getFirst()->getValue();
 	test("handoff1 - ready list",
-			pool.getReadReadyList()->getLength()==1);
+			pool.getReadReadyList()->getCount()==1);
 	test("handoff1 - is handoff2",fd==&handoffsock);
 	unixsocketclient	*handoffclientsock=
 				(unixsocketclient *)handoffsock.accept();
@@ -65,7 +65,7 @@ void handoff1() {
 			pool.listen(-1,-1)==RESULT_SUCCESS);
 	fd=pool.getReadReadyList()->getFirst()->getValue();
 	test("handoff1 - ready list",
-			pool.getReadReadyList()->getLength()==1);
+			pool.getReadReadyList()->getCount()==1);
 	test("handoff1 - is handoffclient",fd==&serversock);
 	inetsocketclient	*clientsock=
 				(inetsocketclient *)serversock.accept();

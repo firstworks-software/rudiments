@@ -29,7 +29,7 @@ int main(int argc, const char **argv) {
 	char	*encodedstr=charstring::urlEncode(urlstr);
 	stdoutput.printf("url encoded string:\n  %s\n",encodedstr);
 
-	char	*unencodedstr=charstring::urlUnescape(encodedstr);
+	char	*unencodedstr=charstring::urlDecode(encodedstr);
 	stdoutput.printf("url unencoded string:\n  %s\n",unencodedstr);
 	stdoutput.write('\n');
 

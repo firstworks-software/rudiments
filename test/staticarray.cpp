@@ -43,7 +43,7 @@ int main(int argc, const char **argv) {
 	// Create a staticarray
 	staticarray<struct test,COUNT>	sa1;
 	stdoutput.printf("create <test>...\n");
-	test("create, getLength()",sa1.getLength()==COUNT);
+	test("create, getCount()",sa1.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -56,7 +56,7 @@ int main(int argc, const char **argv) {
 		delete[] val;
 		sa1[i].uintval=i;
 	}
-	test("get values, getLength()",(uint32_t)sa1.getLength()==count);
+	test("get values, getCount()",(uint32_t)sa1.getCount()==count);
 	bool	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -84,7 +84,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("copy (using =)...\n");
 	staticarray<struct test,COUNT>	sa1copy1;
 	sa1copy1=sa1;
-	test("get values, getLength()",(uint32_t)sa1copy1.getLength()==count);
+	test("get values, getCount()",(uint32_t)sa1copy1.getCount()==count);
 	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -111,7 +111,7 @@ int main(int argc, const char **argv) {
 	// copy using constructor
 	stdoutput.printf("copy (using constructor)...\n");
 	staticarray<struct test,COUNT>	sa1copy2(sa1);
-	test("get values, getLength()",(uint32_t)sa1copy2.getLength()==count);
+	test("get values, getCount()",(uint32_t)sa1copy2.getCount()==count);
 	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -138,7 +138,7 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	sa1.clear();
-	test("clear, getLength()",sa1.getLength()==COUNT);
+	test("clear, getCount()",sa1.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 
@@ -146,7 +146,7 @@ int main(int argc, const char **argv) {
 	// create
 	staticarray<testclass,COUNT>	sa2;
 	stdoutput.printf("create <testclass>...\n");
-	test("create, getLength()",sa2.getLength()==COUNT);
+	test("create, getCount()",sa2.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -157,7 +157,7 @@ int main(int argc, const char **argv) {
 		success=(sa2[i].getValue()==1);
 	}
 	test("get values, default",success);
-	test("get values, getLength()",(uint32_t)sa2.getLength()==count);
+	test("get values, getCount()",(uint32_t)sa2.getCount()==count);
 	for (i=0; success && i<count; i++) {
 		sa2[i].setValue(2);
 	}
@@ -174,7 +174,7 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	sa2.clear();
-	test("clear, getLength()",sa2.getLength()==COUNT);
+	test("clear, getCount()",sa2.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 
@@ -182,7 +182,7 @@ int main(int argc, const char **argv) {
 	// create
 	staticarray<testclass *,COUNT>	sa3;
 	stdoutput.printf("create <testclass *>...\n");
-	test("create, getLength()",sa3.getLength()==COUNT);
+	test("create, getCount()",sa3.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -215,7 +215,7 @@ int main(int argc, const char **argv) {
 		delete sa3[i];
 	}
 	sa3.clear();
-	test("clear, getLength()",sa3.getLength()==COUNT);
+	test("clear, getCount()",sa3.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 
@@ -223,7 +223,7 @@ int main(int argc, const char **argv) {
 	// create
 	staticarray< staticarray< uint32_t, COUNT > ,COUNT>	sa4;
 	stdoutput.printf("create nested...\n");
-	test("create, getLength()",sa4.getLength()==COUNT);
+	test("create, getCount()",sa4.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -252,7 +252,7 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	sa4.clear();
-	test("clear, getLength()",sa4.getLength()==COUNT);
+	test("clear, getCount()",sa4.getCount()==COUNT);
 	stdoutput.printf("\n");
 
 
@@ -304,8 +304,8 @@ int main(int argc, const char **argv) {
 
 			// verify length
 			test((!j)?"copy: length":"assignment: length",
-						cch2.getLength()==
-						cch1.getLength());
+						cch2.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;
@@ -344,8 +344,8 @@ int main(int argc, const char **argv) {
 
 			// verify length
 			test((!j)?"copy: length":"assignment: length",
-						cch3.getLength()==
-						cch1.getLength());
+						cch3.getCount()==
+						cch1.getCount());
 
 			// verify values
 			bool	success=true;

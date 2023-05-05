@@ -12,4 +12,4 @@
 
 		listnode<valuetype>	*first;
 		listnode<valuetype>	*last;
-		uint64_t		length;
+		uint64_t		count;

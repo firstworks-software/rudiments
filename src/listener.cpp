@@ -291,7 +291,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 			defined(RUDIMENTS_HAVE_POLL) || \
 			defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)) && \
 			!defined(RUDIMENTS_HAVE_PORT_CREATE)
-		uint64_t	fdcount=pvt->_fdlist.getLength();
+		uint64_t	fdcount=pvt->_fdlist.getCount();
 	#endif
 	error::clearError();
 	for (;;) {
@@ -582,7 +582,7 @@ bool listener::rebuildMonitorList() {
 	#endif
 
 	// reinit list resources
-	uint64_t	fdcount=pvt->_fdlist.getLength();
+	uint64_t	fdcount=pvt->_fdlist.getCount();
 	#if defined(RUDIMENTS_HAVE_KQUEUE)
 		pvt->_kq=kqueue();
 		if (pvt->_kq==-1) {

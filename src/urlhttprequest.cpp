@@ -187,7 +187,7 @@ const char *urlhttprequest::getSkinVariable(const char *name) {
 }
 
 uint64_t urlhttprequest::getSkinVariableCount() {
-	return pvt->_skinvars.getLength();
+	return pvt->_skinvars.getCount();
 }
 
 const char * const *urlhttprequest::getSkinVariables() {

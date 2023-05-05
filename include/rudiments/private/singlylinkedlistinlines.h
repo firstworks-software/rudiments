@@ -10,7 +10,7 @@ singlylinkedlist<valuetype>::singlylinkedlist() :
 	listcollection<valuetype>(),
 	first(NULL),
 	last(NULL),
-	length(0) {
+	count(0) {
 }
 
 template <class valuetype>
@@ -59,7 +59,7 @@ void singlylinkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 
 	first=NULL;
 	last=NULL;
-	length=0;
+	count=0;
 
 	for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
@@ -93,7 +93,7 @@ void singlylinkedlist<valuetype>::prepend(listnode<valuetype> *node) {
 		first=node;
 		last=first;
 	}
-	length++;
+	count++;
 }
 
 template <class valuetype>
@@ -114,7 +114,7 @@ void singlylinkedlist<valuetype>::append(listnode<valuetype> *node) {
 		first=node;
 		last=first;
 	}
-	length++;
+	count++;
 }
 
 template <class valuetype>
@@ -137,7 +137,7 @@ void singlylinkedlist<valuetype>::insertAfter(
 	} else {
 		newnode->setNext(node->getNext());
 		node->setNext(newnode);
-		length++;
+		count++;
 	}
 }
 
@@ -199,7 +199,7 @@ void singlylinkedlist<valuetype>::detach(listnode<valuetype> *node) {
 		previous->setNext(node->getNext());
 	}
 	node->setNext(NULL);
-	length--;
+	count--;
 }
 
 template <class valuetype>
@@ -234,7 +234,7 @@ bool singlylinkedlist<valuetype>::remove(valuetype value) {
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
-		length--;
+		count--;
 		return true;
 	}
 	return false;
@@ -257,7 +257,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 						this->getManageValues(),
 						this->getManageArrayValues());
 			delete current;
-			length--;
+			count--;
 			return true;
 		} else {
 			first=first->getNext();
@@ -265,7 +265,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 						this->getManageValues(),
 						this->getManageArrayValues());
 			delete current;
-			length--;
+			count--;
 			current=first;
 		}
 	}
@@ -284,7 +284,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 						this->getManageValues(),
 						this->getManageArrayValues());
 			delete current;
-			length--;
+			count--;
 			current=temp;
 		} else {
 			prev=current;
@@ -328,7 +328,7 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 					this->getManageValues(),
 					this->getManageArrayValues());
 		delete current;
-		length--;
+		count--;
 		return true;
 	}
 	return false;
@@ -336,8 +336,8 @@ bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
 
 template <class valuetype>
 inline
-uint64_t singlylinkedlist<valuetype>::getLength() {
-	return length;
+uint64_t singlylinkedlist<valuetype>::getCount() {
+	return count;
 }
 
 template <class valuetype>
@@ -387,7 +387,7 @@ void singlylinkedlist<valuetype>::sortInexpensively() {
 	// insertion sort with a few optimization...
 
 	// if there are 0 or 1 items in the list then it's already sorted
-	if (length<2) {
+	if (count<2) {
 		return;
 	}
 
@@ -469,7 +469,7 @@ inline
 void singlylinkedlist<valuetype>::sortQuickly() {
 
 	// if there are 0 or 1 items in the list then it's already sorted
-	if (length<2) {
+	if (count<2) {
 		return;
 	}
 
@@ -477,7 +477,7 @@ void singlylinkedlist<valuetype>::sortQuickly() {
 	//	parentindex = floor((childindex-1)/2)
 	//	leftchildindex = parent*2+1
 	//	rightchildindex = parent*2+2
-	listnode<valuetype>	**heap=new listnode<valuetype> *[length];
+	listnode<valuetype>	**heap=new listnode<valuetype> *[count];
 	listnode<valuetype>	*temp=NULL;
 	uint64_t		heapend=0;
 	for (listnode<valuetype> *node=first;
@@ -618,7 +618,7 @@ bool singlylinkedlist<valuetype>::clear() {
 	}
 	first=NULL;
 	last=NULL;
-	length=0;
+	count=0;
 	return true;
 }
 
