@@ -52,6 +52,9 @@ class tablecollection : public collection {
 		/** Returns "table". */
 		virtual const char	*getType();
 
+		/** Returns the number of elements in the table. */
+		virtual uint64_t	getLength();
+
 		/** In a read-write implementation, sets the name of column
 		 *  "col" to "name".
 		 *

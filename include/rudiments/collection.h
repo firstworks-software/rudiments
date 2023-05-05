@@ -29,6 +29,9 @@ class collection : virtual public object {
 		 *  collection, eg. list, dictionary, tree, etc. */
 		virtual const char	*getType()=0;
 
+		/** Returns the number of elementes in the collection. */
+		virtual uint64_t	getLength()=0;
+
 		/** Returns the comparator used internally by the class.
 		 *  Returns whatever was previously set by setComparator() or
 		 *  an instance of the comparator class by default. */

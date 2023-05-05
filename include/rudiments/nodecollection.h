@@ -32,9 +32,6 @@ class nodecollection : public collection {
 	public:
 		/** Returns the first node in the nodecollection. */
 		virtual nodecollectionnode<valuetype>	*getFirst()=0;
-
-		/** Returns the number of nodes in the nodecollection. */
-		virtual	uint64_t	getLength()=0;
 };
 
 #endif

@@ -1,6 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		uint64_t	getLength();
+
 		bool	clear();
 
 		virtual ssize_t	writeJson();

@@ -57,6 +57,10 @@ dom::~dom() {
 	delete pvt;
 }
 
+uint64_t dom::getLength() {
+	return 0;
+}
+
 bool dom::clear() {
 	// FIXME: this is only here to satisfy the pure virtual method defined
 	// in the collection base class.  Arguably it ought to actually do

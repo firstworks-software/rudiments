@@ -152,9 +152,6 @@ class listcollection : public nodecollection<valuetype> {
 		 *  Returns true on success and false on failure. */
 		virtual bool	remove(listnode<valuetype> *node)=0;
 
-		/** Returns the number of nodes in the listcollection. */
-		virtual	uint64_t	getLength()=0;
-
 		/** Returns the first node in the listcollection. */
 		virtual	listnode<valuetype>	*getFirst()=0;
 

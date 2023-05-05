@@ -90,9 +90,6 @@ class dictionarycollection : public collection {
 		/** Returns a list of the keys in the dictionary. */
 		virtual	linkedlist<keytype>	*getKeys()=0;
 
-		/** Returns the number of key/value pairs in the dictionary. */
-		virtual	uint64_t	getLength()=0;
-
 		/** Removes the key-value pair associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */

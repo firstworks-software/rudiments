@@ -119,9 +119,6 @@ class treecollection : public nodecollection<valuetype> {
 		 *  Returns true on success and false on failure. */
 		virtual bool	remove(treenode<valuetype> *node)=0;
 
-		/** Returns the number of nodes in the tree. */
-		virtual uint64_t	getLength()=0;
-
 		/** Returns the top-most node in the treecollection. */
 		virtual treenode<valuetype>	*getTop()=0;
 

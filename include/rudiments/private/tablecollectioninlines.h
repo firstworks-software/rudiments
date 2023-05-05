@@ -39,6 +39,12 @@ const char *tablecollection<valuetype>::getType() {
 
 template <class valuetype>
 inline
+uint64_t tablecollection<valuetype>::getLength() {
+	return getRowCount()*getColumnCount();
+}
+
+template <class valuetype>
+inline
 void tablecollection<valuetype>::setCopyColumnNames(bool copy) {
 	copycolumnnames=copy;
 }

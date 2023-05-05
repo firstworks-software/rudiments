@@ -6,6 +6,11 @@ inline
 const char *scalarcollection<valuetype>::getType() {
 	return "scalar";
 }
+template <class valuetype>
+inline
+uint64_t scalarcollection<valuetype>::getLength() {
+	return 1;
+}
 
 template <class valuetype>
 inline

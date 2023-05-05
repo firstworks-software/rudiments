@@ -15,6 +15,9 @@ class scalarcollection : public collection {
 		/** Returns "scalar". */
 		virtual const char	*getType();
 
+		/** Returns 1. */
+		virtual uint64_t	getLength();
+
 		/** Sets the value stored in this instance to "v". */
 		virtual	void		setValue(valuetype v)=0;
 

@@ -19,9 +19,6 @@ class arraycollection : public collection {
 		 *  array. */
 		virtual	valuetype	&operator[](uint64_t index)=0;
 
-		/** Returns the number of elements in the array. */
-		virtual	uint64_t	getLength()=0;
-
 		/** Writes a representation of the arraycollection to standard
 		 *  output. */
 		virtual	ssize_t	write();
