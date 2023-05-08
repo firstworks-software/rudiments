@@ -7,7 +7,7 @@
 #include <rudiments/private/objectincludes.h>
 
 /** The object class is the parent class for all rudiments classes. */
-class object {
+class RUDIMENTS_DLLSPEC object {
 	public:
 
 		/** Deletes this instance of the object class. */

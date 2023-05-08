@@ -678,8 +678,8 @@ int main(int argc, const char **argv) {
 	test("true",ucs2charstring::isYes(truestr));
 	ucs2literal(True,"True");
 	test("True",ucs2charstring::isYes(True));
-	ucs2literal(TRUE,"TRUE");
-	test("TRUE",ucs2charstring::isYes(TRUE));
+	ucs2literal(TRUESTR,"TRUE");
+	test("TRUE",ucs2charstring::isYes(TRUESTR));
 	ucs2literal(truest,"truest");
 	test("truest",!ucs2charstring::isYes(truest));
 	ucs2literal(T,"T");
@@ -710,8 +710,8 @@ int main(int argc, const char **argv) {
 	test("false",ucs2charstring::isNo(falsestr));
 	ucs2literal(False,"False");
 	test("False",ucs2charstring::isNo(False));
-	ucs2literal(FALSE,"FALSE");
-	test("FALSE",ucs2charstring::isNo(FALSE));
+	ucs2literal(FALSESTR,"FALSE");
+	test("FALSE",ucs2charstring::isNo(FALSESTR));
 	ucs2literal(falsest,"falsest");
 	test("falsest",!ucs2charstring::isNo(falsest));
 	ucs2literal(F,"F");

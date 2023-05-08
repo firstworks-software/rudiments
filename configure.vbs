@@ -122,6 +122,7 @@ srcs="winsock.cpp "+_
 
 lobjs="winsock.obj "+_
 	"object.obj "+_
+	"hash.obj "+_
 	"sha1.obj "+_
 	"sha256.obj "+_
 	"md5.obj "+_
