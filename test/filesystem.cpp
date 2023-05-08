@@ -69,8 +69,6 @@ int main(int argc, const char **argv) {
 
 	header("filesystem");
 
-	size_t	allocgran=sys::getAllocationGranularity();
-
 	filesystem	fs;
 	for (uint16_t i=0; i<2; i++) {
 
