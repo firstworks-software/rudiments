@@ -4,10 +4,10 @@
 		void	*getContext();
 		void	setTokenFormat(gsstokenformat_t tokenformat);
 
-	private:
 		gsscontext(gsscontext &g) {};
 		gsscontext	&operator=(gsscontext &g) { return *this; };
 
+	private:
 		bool	getMaxMessageSize(const char *mechname);
 		bool	inquire();
 		bool	initiate(const char *name,

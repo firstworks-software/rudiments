@@ -3,10 +3,10 @@
 
 		static const char	*getSspiStatusString(uint32_t status);
 
-	private:
 		gss(gss &g) {};
 		gss	&operator=(gss &g) { return *this; };
 
+	private:
 		bool	clear();
 
 		gssprivate	*pvt;

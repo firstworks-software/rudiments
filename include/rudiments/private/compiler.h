@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		compiler(compiler &c) {};
 		compiler	&operator=(compiler &c) { return *this; };
 
+	private:
 		bool	appendModule(
 				const char *filename,
 				const char *classname,

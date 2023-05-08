@@ -4,8 +4,8 @@
 		bool	reset();
 		bool	parse();
 
-	private:
 		csvsax(csvsax &x) {};
 		csvsax	&operator=(csvsax &x) { return *this; };
 
+	private:
 		csvsaxprivate	*pvt;

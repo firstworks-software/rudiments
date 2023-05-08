@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		encryption(encryption &e) {};
+		encryption	&operator=(encryption &e) { return *this; };
+
 	protected:
 		void		setRandomBuffer(byte_t *buffer,
 							size_t buffersize);
@@ -13,9 +16,6 @@
 		bool		getEncrypted();
 
 	private:
-		encryption(encryption &e) {};
-		encryption	&operator=(encryption &e) { return *this; };
-
 		void	construct();
 		void	initKey();
 		void	initIv();

@@ -1,7 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	friend class domnode;
+		propdom(propdom &x);
+		propdom	&operator=(propdom &x);
+
 	protected:
 		void	construct(bool stringcacheenabled);
 		bool	reset();
@@ -13,9 +15,7 @@
 		ssize_t	writeAndEscape(output *out,
 					const char *value);
 
-		propdom(propdom &x);
-		propdom	&operator=(propdom &x);
-
+	friend class domnode;
 	private:
 		bool	parse(input *in, domnode *parent,
 					uint64_t position);

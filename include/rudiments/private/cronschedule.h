@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		cronschedule(cronschedule &c) {};
 		cronschedule	&operator=(cronschedule &c) { return *this; };
 
+	private:
 		bool	splitTimePart(
 				linkedlist< cronscheduleperiod * > *periods,
 				const char *timepartlist,

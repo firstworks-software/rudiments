@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		chat(chat &c) {};
 		chat	&operator=(chat &c) { return *this; };
 
+	private:
 		void	appendAbortString(const char *string);
 		void	clearAbortStrings();
 		int32_t	send(const char *string,

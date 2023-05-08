@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
+		url(url &u) {};
+		url	&operator=(url &u) { return *this; };
+
 		bool	getCurrentProperties();
 
 		char	*getContents();
@@ -26,9 +29,6 @@
 
 		ssize_t	lowLevelRead(void *buffer, size_t size);
 	private:
-		url(url &u) {};
-		url	&operator=(url &u) { return *this; };
-
 		void	init();
 
 		bool	httpOpen(const char *urlname, char *userpwd);

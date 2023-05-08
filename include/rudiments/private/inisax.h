@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		inisax(inisax &x) {};
 		inisax	&operator=(inisax &x) { return *this; };
 
+	private:
 		bool	parse();
 
 		bool	parseWhitespace(char current, char *next);

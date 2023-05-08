@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		domnode(domnode &x);
+		domnode	&operator=(domnode &x);
+
 	protected:
 		virtual	bool		insertNode(domnode *node,
 							uint64_t position,
@@ -25,8 +28,6 @@
 	friend class codetreegrammar;
 	friend class domevents;
 	private:
-		domnode(domnode &x);
-		domnode	&operator=(domnode &x);
 
 		void	construct(dom *dom);
 		domnode	*getNode(domnode *first,

@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		websocket(websocket &w) {};
 		websocket	&operator=(websocket &w) { return *this; };
 
+	private:
 		bool	acceptInternal();
 		ssize_t	readInternal(void *buf, size_t size);
 		ssize_t	write(const void *buf, size_t size, byte_t opcode);

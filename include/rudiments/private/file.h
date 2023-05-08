@@ -1,14 +1,14 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
+		file(file &f) {};
+		file	&operator=(file &f) { return *this; };
+
 	protected:
 		virtual	bool	lowLevelOpen(const char *name, int32_t flags,
 						mode_t perms, bool useperms);
 
 	private:
-		file(file &f) {};
-		file	&operator=(file &f) { return *this; };
-
 		static	bool	stat(const char *filename, void *st);
 
 		ssize_t	getContents(byte_t **buffer,

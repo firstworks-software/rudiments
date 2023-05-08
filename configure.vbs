@@ -493,7 +493,8 @@ privateheaders5="dictionary.h "+_
 	"wstringbufferincludes.h "+_
 	"wstringbufferinlines.h "+_
 	"sys.h "+_
-	"sysincludes.h"
+	"sysincludes.h "+_
+	"sysinlines.h"
 privateheaders6="dynamicarray.h "+_
 	"dynamicarrayincludes.h "+_
 	"dynamicarrayinlines.h "+_

@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		jsonsax(jsonsax &x) {};
 		jsonsax	&operator=(jsonsax &x) { return *this; };
 
+	private:
 		bool	parse();
 		bool	parseObject(char current, char *next);
 		bool	parseMember(char current, char *next);

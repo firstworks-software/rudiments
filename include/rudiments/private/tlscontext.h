@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		tlscontext(tlscontext &t) {};
 		tlscontext	&operator=(tlscontext &t) { return *this; };
 	
+	private:
 		void	initContext();
 		void	initSubContext();
 		void	freeContext();

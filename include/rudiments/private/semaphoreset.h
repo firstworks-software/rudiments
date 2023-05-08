@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		semaphoreset(semaphoreset &s) {};
 		semaphoreset	&operator=(semaphoreset &s) { return *this; };
 
+	private:
 		void	createOperations();
 
 		int32_t	semGet(key_t key, int32_t nsems,

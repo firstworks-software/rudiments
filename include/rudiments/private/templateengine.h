@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-	private:
 		templateengine(templateengine &t) {};
 		templateengine	&operator=(templateengine &t) { return *this; };
 
+	private:
 		bool	parse(bool justvariables,
 					output *out,
 					const char *block,

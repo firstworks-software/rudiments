@@ -56,12 +56,12 @@
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 		ssize_t	printfUcs2Delegate(const ucs2_t *format, va_list *argp);
 
-	private:
 		apachehttpserverapi(apachehttpserverapi &a) {};
 		apachehttpserverapi	&operator=(apachehttpserverapi &a) {
 			return *this;
 		};
 
+	private:
 		ssize_t	bufferedRead(void *buf, size_t count);
 		ssize_t	bufferedRead(char *ch);
 

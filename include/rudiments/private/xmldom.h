@@ -1,13 +1,13 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		xmldom(xmldom &x);
+		xmldom	&operator=(xmldom &x);
+
 	friend class domnode;
 	protected:
 		void	construct(bool stringcacheenabled);
 		bool	reset();
-
-		xmldom(xmldom &x);
-		xmldom	&operator=(xmldom &x);
 
 	private:
 		bool	parse(input *in, domnode *parent,

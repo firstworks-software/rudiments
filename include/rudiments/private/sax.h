@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		sax(sax &s) {}
+		sax	&operator=(sax &s) { return *this; };
+
 	protected:
 		bool	reset();
 		void	close();
@@ -12,9 +15,6 @@
 		void	parseFailed(const char *thing, const char *why);
 
 	private:
-		sax(sax &s) {}
-		sax	&operator=(sax &s) { return *this; };
-
 		bool	parseLocalFile(const char *filename);
 		bool	parseRemoteFile(const char *filename);
 

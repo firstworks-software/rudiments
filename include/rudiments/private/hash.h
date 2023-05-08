@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		hash(hash &h) {};
+		hash	&operator=(hash &h) { return *this; };
+
 	protected:
 		bytebuffer	*getIn();
 		bytebuffer	*getOut();
@@ -9,9 +12,6 @@
 		bool		getDirty();
 
 	private:
-		hash(hash &h) {};
-		hash	&operator=(hash &h) { return *this; };
-
 		void	construct();
 		void	initSalt();
 

@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		dom(dom &x);
+		dom	&operator=(dom &x);
+
 		uint64_t	getCount();
 
 		bool	clear();
@@ -26,9 +29,6 @@
 					uint16_t indent);
 		virtual	ssize_t	safeWrite(output *out,
 					const char *str);
-
-		dom(dom &x);
-		dom	&operator=(dom &x);
 
 	private:
 		domprivate	*pvt;

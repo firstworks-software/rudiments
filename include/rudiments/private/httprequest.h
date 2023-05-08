@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
+		httprequest(httprequest &h) {};
+		httprequest	&operator=(httprequest &h) { return *this; };
+
 	protected:
 		void	buildList(const char ***vars, const char ***vals,
 					dictionary<char *, char *> *nvp);
@@ -25,9 +28,6 @@
 		const char	***allVals();
 
 	private:
-		httprequest(httprequest &h) {};
-		httprequest	&operator=(httprequest &h) { return *this; };
-
 		void	initCookies();
 		void	initParameters();
 		void	initFileNames();

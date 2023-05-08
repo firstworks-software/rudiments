@@ -1,7 +1,8 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	friend class domnode;
+		jsondom(jsondom &x);
+		jsondom	&operator=(jsondom &x);
 
 		virtual ssize_t	writeJson();
 		virtual ssize_t	writeJson(bool indent);
@@ -17,9 +18,7 @@
 					bool indent,
 					uint16_t *indentlevel);
 
-		jsondom(jsondom &x);
-		jsondom	&operator=(jsondom &x);
-
+	friend class domnode;
 	private:
 		bool	parse(input *in, domnode *parent,
 					uint64_t position);

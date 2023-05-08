@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		aes128(aes128 &a) {};
 		aes128	&operator=(aes128 &a) { return *this; };
 
+	private:
 		const byte_t	*getData(bool encrypt);
 
 		void	newContext();

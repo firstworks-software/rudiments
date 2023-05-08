@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information
 
-	protected:
 		resourcepool(resourcepool &r) {};
 		resourcepool	&operator=(resourcepool &r) { return *this; };
 
+	protected:
 		virtual valuetype	*createResource();
 
 		void	clearDelegate();

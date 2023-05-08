@@ -1795,7 +1795,7 @@
 #define socklen_t int
 
 /* Define to `int' if <sys/types.h> does not define. */
-#define ssize_t int
+#define ssize_t int64_t
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #define uid_t int

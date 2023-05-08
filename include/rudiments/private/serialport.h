@@ -1,10 +1,10 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
-	private:
 		serialport(serialport &s) {};
 		serialport	&operator=(serialport &s) { return *this; };
 
+	private:
 		bool	tcSetAttr(int32_t optional_actions,
 					termios *termios_p);
 		bool	tcFlush(int32_t queue_selector);

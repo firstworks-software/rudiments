@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2018 David Muse
 // See the COPYING file for more information.
 
+		inidom(inidom &x);
+		inidom	&operator=(inidom &x);
+
 	friend class domnode;
 	protected:
 		void	construct(bool stringcacheenabled);
@@ -10,9 +13,6 @@
 					output *out,
 					bool indent,
 					uint16_t *indentlevel);
-
-		inidom(inidom &x);
-		inidom	&operator=(inidom &x);
 
 	private:
 		bool	parse(input *in, domnode *parent,

@@ -56,10 +56,10 @@
 		ssize_t	printfDelegate(const wchar_t *format, va_list *argp);
 		ssize_t	printfUcs2Delegate(const ucs2_t *format, va_list *argp);
 
-	private:
 		cgihttpserverapi(cgihttpserverapi &c) {};
 		cgihttpserverapi	&operator=(cgihttpserverapi &c) {
 			return *this;
 		}
 
+	private:
 		cgihttpserverapiprivate	*pvt;
