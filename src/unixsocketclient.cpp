@@ -65,10 +65,10 @@ int32_t unixsocketclient::connect() {
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 	pvt->_isc.setHost("127.0.0.1");
-	pvt->_isc.setPort(filenameToPort(getFileName()));
+	pvt->_isc.setPort(convertFileNameToPort(getFileName()));
 	pvt->_isc.setSocketLayer(getSocketLayer());
 	pvt->_isc.setTimeoutSeconds(getTimeoutSeconds());
-	pvt->_isc.setTimeoutMicroeconds(getTimeoutMicroeconds());
+	pvt->_isc.setTimeoutMicroseconds(getTimeoutMicroseconds());
 	pvt->_isc.setRetryWait(getRetryWait());
 	pvt->_isc.setTries(getTries());
 	int32_t	result=pvt->_isc.connect();

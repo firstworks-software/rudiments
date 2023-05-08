@@ -76,7 +76,7 @@ bool socketserver::setNonBlockingMode(bool usenonblockingmode) {
 		}
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
-			pvt->_nonblockingmode=usenonblockingmode
+			pvt->_nonblockingmode=usenonblockingmode;
 		}
 		#endif
 		return retval;

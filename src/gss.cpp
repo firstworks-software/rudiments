@@ -1052,7 +1052,7 @@ bool gsscredentials::acquire(const char *name,
 
 		// save the actual mechanism
 		gssmechanism	*mech=new gssmechanism;
-		mech->init(mechname);
+		mech->open(mechname);
 		pvt->_amlist.append(mech);
 	#else
 		retval=false;
@@ -2384,7 +2384,7 @@ bool gsscontext::inquire() {
 		}
 
 		// set actual mechanism
-		pvt->_actualmechanism.init(mech);
+		pvt->_actualmechanism.open(mech);
 
 		// are we using kerberos or schannel?
 		if (!charstring::compareIgnoringCase(mech,"Kerberos")) {

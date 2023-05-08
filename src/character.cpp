@@ -4,9 +4,7 @@
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
-#ifndef _WIN32
-	#include <rudiments/iconvert.h>
-#endif
+#include <rudiments/iconvert.h>
 
 #ifdef RUDIMENTS_HAVE_CTYPE_H
 	#include <ctype.h>

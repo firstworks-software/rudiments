@@ -88,7 +88,9 @@ bool unixsocketserver::open() {
 	}
 
 #if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
-	if (pvt->_iss.open("127.0.0.1",filenameToPort(filename))) {
+	pvt->_iss.setHost("127.0.0.1");
+	pvt->_iss.setPort(convertFileNameToPort(filename));
+	if (pvt->_iss.open()) {
 		fd(pvt->_iss.getFileDescriptor());
 		return true;
 	}

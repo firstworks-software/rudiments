@@ -187,7 +187,7 @@ void tlscontext::initContext() {
 
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 
-		pvt->_gmech.init(UNISP_NAME_A);
+		pvt->_gmech.open(UNISP_NAME_A);
 
 		pvt->_gcred.clearDesiredMechanisms();
 		pvt->_gcred.addDesiredMechanism(&pvt->_gmech);
