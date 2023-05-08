@@ -6,6 +6,8 @@
 #include <rudiments/charstring.h>
 #include <rudiments/userentry.h>
 #include <rudiments/stdio.h>
+#include <rudiments/sys.h>
+#include <rudiments/permissions.h>
 #include "test.cpp"
 
 const char	*filename=
@@ -67,6 +69,8 @@ int main(int argc, const char **argv) {
 
 	header("filesystem");
 
+	size_t	allocgran=sys::getAllocationGranularity();
+
 	filesystem	fs;
 	for (uint16_t i=0; i<2; i++) {
 
@@ -76,8 +80,6 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("negative file descriptor...\n");
 			fs.open(-1);
 		}
-
-		//print(&fs);
 
 		test("type",!fs.getType());
 		test("block size",!fs.getBlockSize());
@@ -195,7 +197,6 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("closed:\n");
 		fs.close();
-		//print(&fs);
 
 		test("type",!fs.getType());
 		test("block size",!fs.getBlockSize());

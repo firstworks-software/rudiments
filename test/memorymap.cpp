@@ -20,13 +20,20 @@ int main(int argc, const char **argv) {
 		return 0;
 	}
 
+	const char	*filename=
+	#ifdef _WIN32
+		"C:\\memorymap.txt";
+	#else
+		"memorymap.txt";
+	#endif
+
 	size_t	allocgran=sys::getAllocationGranularity();
 
 	// create a file to test with
-	file::remove("memorymap.txt");
+	file::remove(filename);
 	file	fd;
-	test("create file",fd.create("memorymap.txt",
-				permissions::parsePermString("rw-r--r--")));
+	test("create file",
+		fd.create(filename,permissions::parsePermString("rw-r--r--")));
 	
 	char	*buffer=new char[allocgran];
 	for (uint16_t i=0; i<10; i++) {
@@ -71,7 +78,7 @@ int main(int argc, const char **argv) {
 	fd.close();
 
 	// clean up
-	file::remove("memorymap.txt");
+	file::remove(filename);
 
 	return 0;
 }

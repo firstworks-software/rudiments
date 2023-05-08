@@ -208,14 +208,20 @@ bool filesystem::open(int32_t fd) {
 		char	mapping[MAX_PATH+1];
 
 		// for each volume...
-		for (char driveletter='c'; driveletter<='z'; driveletter++) {
+		bool	found=false;
+		for (char driveletter='C'; driveletter<='Z'; driveletter++) {
 
+			// this is disabled (for now) because it tends to skip
+			// volumes that do, in fact, exist, like the C drive,
+			// at least on windows 7
+			#if 0
 			// ignore volumes that don't exist
 			DWORD	exists=volumes&0x0001;
 			volumes=volumes>>1;
 			if (!exists) {
 				continue;
 			}
+			#endif
 
 			// create the volume name, eg: C:
 			volume[0]=driveletter;
@@ -234,13 +240,37 @@ bool filesystem::open(int32_t fd) {
 				return false;
 			}
 
+			// mapping may be a ;-delimited set of paths, only
+			// look at the first one
+			// FIXME: really, we should look at all of the paths
+			char	*sc=charstring::findFirst(mapping,';');
+			if (sc) {
+				*sc='\0';
+			}
+
 			// if the drive mapping for this volume matches
 			// then we're done
 			// FIXME: If the volume is mapped to more than 1
 			// location then we need to test the filename against
 			// each of the mappings.
 			if (!charstring::compare(filename,mapping,
-						charstring::getLength(mapping))) {
+					charstring::getLength(mapping))) {
+				break;
+			}
+
+			// On Windows 7+, GetMappedFileName() may return
+			// \Device\Mup\... for files on mounted shares.  On
+			// Windows XP-, it returns \Device\LanmanRedirector\...
+			// However, on both, QueryDosDevice returns
+			// \Device\LanmanRedirector\... so we have to
+			// consider Mup and LanmanRedirectory to be equivalent.
+			if (!charstring::compare(filename,
+					"\\Device\\Mup\\",12) &&
+				!charstring::compare(mapping,
+					"\\Device\\LanmanRedirector\\",25) &&
+				!charstring::compare(
+					filename+12,mapping+25,
+					charstring::getLength(mapping+25))) {
 				break;
 			}
 
