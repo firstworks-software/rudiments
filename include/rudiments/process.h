@@ -429,7 +429,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  "zombie" processes from occurring.  However, this method
 		 *  only waits when called.  To configure a process to
 		 *  automatically wait on and respond when any child process
-		 *  exits, use waitForChildren().
+		 *  exits, use setWaitForChildren(true).
 		 *
 		 *  If "wait" is set true then the method waits until a child
 		 *  state-change occurs.  Otherwise the method returns

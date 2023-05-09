@@ -16,38 +16,38 @@ int main(int argc, const char **argv) {
 	// process the command line
 	commandline	cmdl(argc,argv);
 
-	if (cmdl.getWasFound("help") || !cmdl.getWasFound("cert")) {
+	if (cmdl.isFound("help") || !cmdl.isFound("cert")) {
 		stdoutput.printf("tlsserver [-port port] [-version version] -cert cert [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
 		return 0;
 	}
 
 	uint16_t	port=9000;
-	if (cmdl.getWasFound("port")) {
+	if (cmdl.isFound("port")) {
 		port=charstring::convertToUnsignedInteger(cmdl.getValue("port"));
 	}
 	const char	*version=NULL;
-	if (cmdl.getWasFound("version")) {
+	if (cmdl.isFound("version")) {
 		version=cmdl.getValue("version");
 	}
 	const char	*cert=cmdl.getValue("cert");
 	const char	*ciphers=NULL;
-	if (cmdl.getWasFound("ciphers")) {
+	if (cmdl.isFound("ciphers")) {
 		ciphers=cmdl.getValue("ciphers");
 	}
 	bool	validate=false;
-	if (cmdl.getWasFound("validate")) {
+	if (cmdl.isFound("validate")) {
 		validate=!charstring::compare(cmdl.getValue("validate"),"yes");
 	}
 	uint16_t	depth=9;
-	if (cmdl.getWasFound("depth")) {
+	if (cmdl.isFound("depth")) {
 		depth=charstring::convertToUnsignedInteger(cmdl.getValue("depth"));
 	}
 	const char	*ca=NULL;
-	if (cmdl.getWasFound("ca")) {
+	if (cmdl.isFound("ca")) {
 		ca=cmdl.getValue("ca");
 	}
 	const char	*commonname="client.localdomain";
-	if (cmdl.getWasFound("commonname")) {
+	if (cmdl.isFound("commonname")) {
 		commonname=cmdl.getValue("commonname");
 	}
 

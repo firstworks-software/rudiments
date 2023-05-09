@@ -481,26 +481,26 @@ int main(int argc, const char **argv) {
 
 	commandline	cmdl(argc,argv);
 
-	if (cmdl.getWasFound("readbuffer")) {
+	if (cmdl.isFound("readbuffer")) {
 		readbuffer=charstring::convertToInteger(
 				cmdl.getValue("readbuffer"));
 	}
-	if (cmdl.getWasFound("writebuffer")) {
+	if (cmdl.isFound("writebuffer")) {
 		writebuffer=charstring::convertToInteger(
 				cmdl.getValue("writebuffer"));
 	}
-	if (cmdl.getWasFound("socketreadbuffer")) {
+	if (cmdl.isFound("socketreadbuffer")) {
 		socketreadbuffer=charstring::convertToInteger(
 				cmdl.getValue("socketreadbuffer"));
 	}
-	if (cmdl.getWasFound("socketwritebuffer")) {
+	if (cmdl.isFound("socketwritebuffer")) {
 		socketwritebuffer=charstring::convertToInteger(
 				cmdl.getValue("socketwritebuffer"));
 	}
-	if (cmdl.getWasFound("dontdisablenagle")) {
+	if (cmdl.isFound("dontdisablenagle")) {
 		disablenagle=false;
 	}
-	bool	nonblockingserver=cmdl.getWasFound("nonblockingserver");
+	bool	nonblockingserver=cmdl.isFound("nonblockingserver");
 
 	stdoutput.printf("parameters {\n");
 	stdoutput.printf("	readbuffer: 		%d\n",
@@ -516,11 +516,11 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("}\n");
 	
 
-	if (cmdl.getWasFound("listener")) {
+	if (cmdl.isFound("listener")) {
 		listen(nonblockingserver);
-	} else if (cmdl.getWasFound("inet")) {
+	} else if (cmdl.isFound("inet")) {
 		inetclient(cmdl.getValue("host"));
-	} else if (cmdl.getWasFound("unix")) {
+	} else if (cmdl.isFound("unix")) {
 		unixclient();
 	} else {
 		stdoutput.printf("usage:	socketbench"

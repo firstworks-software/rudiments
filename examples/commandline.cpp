@@ -8,7 +8,7 @@ int main(int argc, const char **argv) {
 
 	// determine the greeting
 	const char	*greeting="hi";
-	if (cmdl.getWasFound("hello")) {
+	if (cmdl.isFound("hello")) {
 		greeting="hello";
 	}
 

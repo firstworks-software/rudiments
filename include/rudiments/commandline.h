@@ -75,7 +75,7 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *  on the command line and false if it was not found.
 		 *
 		 *  This is useful for processing command line switches. */
-		bool	getWasFound(const char *arg);
+		bool	isFound(const char *arg);
 
 		/** Returns true if the argument or an abbreviated version of
 		 *  it was found on the command line and false if neither were
@@ -86,7 +86,7 @@ class RUDIMENTS_DLLSPEC commandline : public object {
 		 *  "--r" was found on the command line.
 		 *
 		 *  This is useful for processing command line switches. */
-		bool	getWasFound(const char *arg, const char *abbr);
+		bool	isFound(const char *arg, const char *abbr);
 
 		/** Parses the command line into the supplied dictionary.
 		 *

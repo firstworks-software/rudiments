@@ -18,12 +18,12 @@ int main(int argc, const char **argv) {
 
 	// process command line
 	commandline	cmdl(argc,argv);
-	bool	write=cmdl.getWasFound("write");
-	bool	read=cmdl.getWasFound("read");
-	bool	unbuffered=cmdl.getWasFound("unbuffered");
-	bool	tradbuffered=cmdl.getWasFound("tradbuffered");
-	bool	mmapbuffered=cmdl.getWasFound("mmapbuffered");
-	bool	showprogress=cmdl.getWasFound("showprogress");
+	bool	write=cmdl.isFound("write");
+	bool	read=cmdl.isFound("read");
+	bool	unbuffered=cmdl.isFound("unbuffered");
+	bool	tradbuffered=cmdl.isFound("tradbuffered");
+	bool	mmapbuffered=cmdl.isFound("mmapbuffered");
+	bool	showprogress=cmdl.isFound("showprogress");
 	if ((!write && !read) ||
 		(read && !unbuffered && !tradbuffered && !mmapbuffered)) {
 		stderror.printf("usage: ./file [-write] [-read]\n"

@@ -78,13 +78,13 @@ int main(int argc, const char **argv) {
 	// process the command line
 	commandline	cmdl(argc,argv);
 
-	if (cmdl.getWasFound("help")) {
+	if (cmdl.isFound("help")) {
 		stdoutput.printf("gssserver [-port port] [-keytab keytab] [-service service] [-verbose]\n");
 		return 0;
 	}
 
 	uint16_t	port=9000;
-	if (cmdl.getWasFound("port")) {
+	if (cmdl.isFound("port")) {
 		port=charstring::convertToUnsignedInteger(cmdl.getValue("port"));
 	}
 	const char	*keytab=cmdl.getValue("keytab");
@@ -99,10 +99,10 @@ int main(int argc, const char **argv) {
 		#endif
 	}
 	const char	*service="gssserver";
-	if (cmdl.getWasFound("service")) {
+	if (cmdl.isFound("service")) {
 		service=cmdl.getValue("service");
 	}
-	bool		verbose=cmdl.getWasFound("verbose");
+	bool		verbose=cmdl.isFound("verbose");
 
 	// print available mechs
 	if (verbose) {

@@ -45,18 +45,18 @@ int main(int argc, const char **argv) {
 
 	// found
 	stdoutput.printf("found...\n");
-	test("getWasFound(), -one",cmdline.getWasFound("one"));
-	test("getWasFound(), -two",cmdline.getWasFound("two"));
-	test("getWasFound(), --three",cmdline.getWasFound("three"));
-	test("getWasFound(), --four",cmdline.getWasFound("four"));
-	test("getWasFound(), --five",cmdline.getWasFound("five"));
-	test("getWasFound(), -f",cmdline.getWasFound("f"));
-	test("getWasFound(), --five/-f",cmdline.getWasFound("five","f"));
-	test("getWasFound(), --six",cmdline.getWasFound("six"));
-	test("getWasFound(), -s",cmdline.getWasFound("s"));
-	test("getWasFound(), --six/-s",cmdline.getWasFound("six","s"));
-	test("getWasFound(), --SIX/-s",cmdline.getWasFound("SIX","s"));
-	test("getWasFound(), --six/-S",cmdline.getWasFound("six","S"));
+	test("isFound(), -one",cmdline.isFound("one"));
+	test("isFound(), -two",cmdline.isFound("two"));
+	test("isFound(), --three",cmdline.isFound("three"));
+	test("isFound(), --four",cmdline.isFound("four"));
+	test("isFound(), --five",cmdline.isFound("five"));
+	test("isFound(), -f",cmdline.isFound("f"));
+	test("isFound(), --five/-f",cmdline.isFound("five","f"));
+	test("isFound(), --six",cmdline.isFound("six"));
+	test("isFound(), -s",cmdline.isFound("s"));
+	test("isFound(), --six/-s",cmdline.isFound("six","s"));
+	test("isFound(), --SIX/-s",cmdline.isFound("SIX","s"));
+	test("isFound(), --six/-S",cmdline.isFound("six","S"));
 	stdoutput.printf("\n");
 
 	// getValue
