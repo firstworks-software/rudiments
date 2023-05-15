@@ -10,28 +10,33 @@
 
 class RUDIMENTS_DLLSPEC httpresponse : public output {
 	public:
+		/** Creates an instance of the httpresponse class. */
 		httpresponse(httpserverapi *sapi);
+
+		/** Deletes this instance of the httpresponse class. */
 		virtual	~httpresponse();
 
-		/** Send HTTP header:
+		/** Sends HTTP header:
 		 *  Content-type: text/html
-		 *  followed by two carriage-returns. */
+		 *  followed by two carriage-returns to the browser. */
 		void	sendTextHtmlHeader();
 
-		/** Send HTTP header:
+		/** Sends HTTP header:
 		 *  Content-type: text/plain
-		 *  followed by two carriage-returns. */
+		 *  followed by two carriage-returns to the browser. */
 		void	sendTextPlainHeader();
 
-		/** Send HTTP header:
+		/** Sends HTTP header:
 		 *  Content-type: "type"/"subtype"
+		 *  to the browser.
 		 *
 		 *  Does not send carriage-returns. */
 		void	sendContentTypeHeader(const char *type,
 						const char *subtype);
 
-		/** Send HTTP header:
+		/** Sends HTTP header:
 		 *  Content-type: "type"/"subtype"; charset="charset"
+		 *  to the browser.
 		 *
 		 *  If charset is NULL or an empty string then it will be
 		 *  omitted.
@@ -41,9 +46,10 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 						const char *subtype,
 						const char *charset);
 
-		/** Send HTTP header:
+		/** Sends HTTP header:
 		 *  Content-type: "type"/"subtype"; charset="charset";
 		 *  boundary="boundary"
+		 *  to the browser.
 		 *
 		 *  If either of charset or boundary are NULL or empty strings
 		 *  then it will be omitted.
@@ -54,10 +60,11 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 						const char *charset,
 						const char *boundary);
 
-		/** Send carriage-return and line-feed (/r/n). */
+		/** Sends carriage-return and line-feed (/r/n) to the
+		 *  browser. */
 		void	sendCrLf();
 		
-		/** Send Set-Cookie header. */
+		/** Sends Set-Cookie header to the browser. */
 		void	setCookie(const char *name, const char *value,
 					const char *domain, const char *path,
 					const char *expires, bool secure);
@@ -82,24 +89,105 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		httpresponse	*sendHeader(const char *header,
 						const char *value);
 
+		/** Writes "size" bytes of "string" to the browser.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
 		ssize_t	write(const byte_t *string, size_t size);
+
+		/** Writes NULL-terminated "string" to the browser.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
 		ssize_t	write(const char *string);
+
+		/** Writes "length" characters of "string" to the browser.
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred.  Note that it is
+ 		 *  possible to write beyond the string's NULL terminator using
+ 		 *  this method.  */
 		ssize_t	write(const char *string, size_t length);
+
+		/** Writes "character" to the browser.  Returns the number of
+ 		 *  bytes that were successfully written or RESULT_ERROR if an
+ 		 *  error occurred. */
 		ssize_t	write(char character);
+
+		/** Writes NULL-terminated "string" to the browser.  Returns
+		 *  the number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	write(const wchar_t *string);
+
+		/** Writes "length" characters of "string" to the browser.
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
 		ssize_t	write(const wchar_t *string, size_t length);
+
+		/** Writes "character" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(wchar_t character);
+
+		/** Writes NULL-terminated "string" to the browser.  Returns
+		 *  the number of bytes that were successfully written or
+		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	writeUcs2(const ucs2_t *string);
+
+		/** Writes "length" characters of "string" to the browser.
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
 		ssize_t	writeUcs2(const ucs2_t *string, size_t length);
+
+		/** Writes "character" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	writeUcs2(ucs2_t character);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(int16_t number);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(int32_t number);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(int64_t number);
+
+		/** Writes "character" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(byte_t character);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(uint16_t number);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(uint32_t number);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *   bytes that were successfully written or RESULT_ERROR if an
+		 *   error occurred. */
 		ssize_t	write(uint64_t number);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(float number);
+
+		/** Writes "number" to the browser.  Returns the number of
+		 *  bytes that were successfully written or RESULT_ERROR if an
+		 *  error occurred. */
 		ssize_t	write(double number);
 
 		/** Writes "filebuffer" to the browser.*/
