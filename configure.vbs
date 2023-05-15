@@ -118,7 +118,8 @@ srcs="winsock.cpp "+_
 	"mvcresult.cpp "+_
 	"mvcproperties.cpp "+_
 	"httpbasicsecurity.cpp "+_
-	"cronschedule.cpp"
+	"cronschedule.cpp "+_
+	"locale.cpp "
 
 lobjs="winsock.obj "+_
 	"object.obj "+_
@@ -217,7 +218,8 @@ lobjs="winsock.obj "+_
 	"mvcresult.obj "+_
 	"mvcproperties.obj "+_
 	"httpbasicsecurity.obj "+_
-	"cronschedule.obj"
+	"cronschedule.obj "+_
+	"locale.obj "
 
 headers0="object.h "+_
 	"collection.h "+_
@@ -337,7 +339,8 @@ headers3="dynamicarray.h "+_
 	"httpserverapimain.h "+_
 	"mvc.h "+_
 	"cronschedule.h "+_
-	"resourcepool.h "
+	"resourcepool.h "+_
+	"locale.h "
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -603,7 +606,9 @@ privateheaders7="staticarray.h "+_
 	"cronschedule.h "+_
 	"resourcepool.h "+_
 	"resourcepoolincludes.h "+_
-	"resourcepoolinlines.h "
+	"resourcepoolinlines.h "+_
+	"localeincludes.h "+_
+	"locale.h "
 
 ' version
 RUDIMENTS_VERSION="2.0.0"

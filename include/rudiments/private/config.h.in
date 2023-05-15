@@ -1179,6 +1179,9 @@
 /* Some systems have setitimer */
 #undef RUDIMENTS_HAVE_SETITIMER
 
+/* Some systems have setlocale */
+#undef RUDIMENTS_HAVE_SETLOCALE
+
 /* Some systems have setpgid */
 #undef RUDIMENTS_HAVE_SETPGID
 

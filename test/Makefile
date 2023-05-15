@@ -83,7 +83,8 @@ PROGS3= handoff \
 	sensitivevalue \
 	resourcepool \
 	domevents \
-	collectionprint \
+	locale \
+	collectionprint
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -335,6 +336,9 @@ resourcepool: resourcepool.cpp resourcepool.$(OBJ)
 
 domevents: domevents.cpp domevents.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) domevents.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+locale: locale.cpp locale.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) locale.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 collectionprint: collectionprint.cpp collectionprint.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) collectionprint.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

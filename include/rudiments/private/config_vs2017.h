@@ -793,7 +793,7 @@
 #define RUDIMENTS_HAVE_LOADLIBRARYEX 1
 
 /* Some systems have locale.h */
-/* #undef RUDIMENTS_HAVE_LOCALE_H */
+#define RUDIMENTS_HAVE_LOCALE_H 1
 
 /* Some systems have localtime_r */
 /* #undef RUDIMENTS_HAVE_LOCALTIME_R */
@@ -1166,6 +1166,9 @@
 
 /* Some systems have setitimer */
 /* #undef RUDIMENTS_HAVE_SETITIMER */
+
+/* Some systems have setlocale */
+#define RUDIMENTS_HAVE_SETLOCALE 1
 
 /* Some systems have setpgid */
 /* #undef RUDIMENTS_HAVE_SETPGID */

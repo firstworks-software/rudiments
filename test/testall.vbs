@@ -27,6 +27,7 @@ tests=Array(_
 	"jsondom",_
 	"linkedlist",_
 	"listener",_
+	"locale",_
 	"logger",_
 	"md5sum",_
 	"memorymap",_

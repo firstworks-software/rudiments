@@ -184,6 +184,10 @@ AC_ARG_ENABLE(environment,
 	[  --disable-environment   Don't build environment class],
 	INCLUDE_ENVIRONMENT="0",
 	INCLUDE_ENVIRONMENT="1")
+AC_ARG_ENABLE(locale,
+	[  --disable-locale        Don't build locale class],
+	INCLUDE_LOCALE="0",
+	INCLUDE_LOCALE="1")
 AC_ARG_ENABLE(error,
 	[  --disable-error         Don't build error],
 	INCLUDE_ERROR="0",
@@ -1769,6 +1773,17 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 clearenv();,AC_DEFINE(RUDIMENTS_HAVE_CLEARENV,1,Some systems have clearenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+echo "******************************"
+
+
+dnl Checks for locale functions.
+echo
+echo "***** Locale *****************"
+AC_MSG_CHECKING(for setlocale)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+setlocale(0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETLOCALE,1,Some systems have setlocale) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -5110,6 +5125,14 @@ then
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 listener.h listenerincludes.h"
 	SRCS="$SRCS listener.cpp"
 	LOBJS="$LOBJS listener.lo"
+fi
+
+if ( test "$INCLUDE_LOCALE" = "1" )
+then
+	HEADERS1="$HEADERS1 locale.h"
+	PRIVATEHEADERS2="$PRIVATEHEADERS2 localeincludes.h locale.h"
+	SRCS="$SRCS locale.cpp"
+	LOBJS="$LOBJS locale.lo"
 fi
 
 if ( test "$INCLUDE_LOGGER" = "1" )

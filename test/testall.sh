@@ -28,6 +28,7 @@ for program in \
 	jsondom \
 	linkedlist \
 	listener \
+	locale \
 	logger \
 	md5sum \
 	memorymap \
