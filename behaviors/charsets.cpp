@@ -1,11 +1,8 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/locale.h>
 #include <rudiments/stdio.h>
-
-#include <locale.h>
-#include <iconv.h>
-#include <stdio.h>
 
 #include "../test/test.cpp"
 
@@ -67,7 +64,7 @@ int main(int argc, char **argv) {
 
 		// set locale
 		if (!charstring::isNullOrEmpty(*locale)) {
-			setlocale(LC_CTYPE,*locale);
+			locale::setValue("LC_CTYPE",*locale);
 			header(*locale);
 		} else {
 			header("initial locale");
@@ -76,7 +73,7 @@ int main(int argc, char **argv) {
 		// display locale
 		stdoutput.printf("  requested locale: %s\n",*locale);
 		stdoutput.printf("  actual locale:    %s\n",
-						setlocale(LC_CTYPE,NULL));
+					locale::getValue("LC_CTYPE"));
 		stdoutput.printf("\n");
 
 
