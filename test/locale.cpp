@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
+#include <rudiments/sys.h>
 #include "test.cpp"
 
 static const char *categories[]={
@@ -36,6 +37,11 @@ int main(int argc, const char **argv) {
 		return 0;
 	}
 
+	// NetBSD has some strangeness
+	char	*osname=sys::getOperatingSystemName();
+	bool	isnetbsd=!charstring::compare(osname,"NetBSD");
+	delete[] osname;
+
 	stringbuffer	title;
 
 	// default locale
@@ -56,6 +62,17 @@ int main(int argc, const char **argv) {
 	test(title.getString(),locale::setValue("LC_ALL",l));
 	title.clear();
 	for (const char * const *cat=categories; *cat; cat++) {
+
+		// on NetBSD, LC_ALL isn't just a single value, but rather
+		// a /-delimited list of the values for the other categories,
+		// eg. C/en_US.UTF-8/en_US.UTF-8/...
+		// also, LC_COLLATE is always set to C
+		// so, skip both of those on NetBSD
+		if (isnetbsd && (!charstring::compare(*cat,"LC_ALL") ||
+				!charstring::compare(*cat,"LC_COLLATE"))) {
+			continue;
+		}
+
 		if (!charstring::isInSet(*cat,locale::getCategories())) {
 			continue;
 		}
