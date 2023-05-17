@@ -195,6 +195,14 @@ bool iconvert::convert() {
 
 			pvt->_i=iconv_open(pvt->_toencoding,pvt->_fromencoding);
 
+			// If iconv_open() returns -1 then it ought to set
+			// errno.  When Solaris 8 sparc (but not x86, oddly)
+			// doesn't support a conversion, it returns -1 but
+			// doesn't set the errno.  Catch that and fake EINVAL.
+			if (pvt->_i==(iconv_t)-1 && !error::getErrorNumber()) {
+				error::setErrorNumber(EINVAL);
+			}
+
 			// if the requested conversion isn't supported, then we
 			// should fall back to other methods
 			//
@@ -207,9 +215,12 @@ bool iconvert::convert() {
 			// UCS-2
 			if (error::getErrorNumber()==EINVAL) {
 
-				debugPrintf("iconv_open() failed with error %d "
+				debugPrintf("iconv_open(\"%s\",\"%s\") "
+						"failed with error %d "
 						"- attempting other "
 						"methods...\n",
+						pvt->_toencoding,
+						pvt->_fromencoding,
 						error::getErrorNumber());
 				
 
@@ -230,9 +241,12 @@ bool iconvert::convert() {
 			// if iconv_open() failed for some reason other than
 			// not supporting the conversion, then bail
 			if (pvt->_i==(iconv_t)-1) {
-				debugPrintf("iconv_open() failed with error %d "
+				debugPrintf("iconv_open(\"%s\",\"%s\") "
+						"failed with error %d "
 						"- not attempting other "
 						"methods.\n",
+						pvt->_toencoding,
+						pvt->_fromencoding,
 						error::getErrorNumber());
 				pvt->_i=0;
 				return false;
