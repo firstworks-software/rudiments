@@ -25,8 +25,6 @@ static const char *categories[]={
 	NULL
 };
 
-const char	*l="en_US.UTF-8";
-
 int main(int argc, const char **argv) {
 
 	header("locale");
@@ -56,7 +54,15 @@ int main(int argc, const char **argv) {
 		title.clear();
 	}
 
-	// set LC_ALL to another locale
+	// set LC_ALL to another locale...
+
+	// try en_US.UTF-8, but if that fails (eg. on Solaris 10),
+	// fall back to POSIX
+	const char	*l="en_US.UTF-8";
+	if (!locale::setValue("LC_ALL",l)) {
+		l="POSIX";
+	}
+
 	stdoutput.printf("set LC_ALL to %s locale:\n",l);
 	title.append("set LC_ALL=")->append(l);
 	test(title.getString(),locale::setValue("LC_ALL",l));

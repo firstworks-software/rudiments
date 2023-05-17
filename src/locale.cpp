@@ -3,6 +3,7 @@
 
 #include <rudiments/locale.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_LOCALE_H

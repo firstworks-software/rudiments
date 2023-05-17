@@ -7,7 +7,8 @@ LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(LIBEDITLIBS) $(SSLLIBS) $(GSS
 
 PROGS = charsets \
 	vswprintf \
-	pack
+	pack \
+	printfnull
 
 .SUFFIXES: .lo .obj .cpp
 
@@ -31,3 +32,6 @@ vswprintf: vswprintf.cpp vswprintf.$(OBJ)
 
 pack: pack.cpp pack.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pack.$(OBJ) $(ALLSTATIC) $(LDFLAGS)
+
+printfnull: printfnull.cpp printfnull.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) printfnull.$(OBJ) $(ALLSTATIC) $(LDFLAGS)
