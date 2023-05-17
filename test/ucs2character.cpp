@@ -343,7 +343,7 @@ int main(int argc, const char **argv) {
 			(ucs2_t)ucs2character::lower(c)==tolowercase[c]);
 		test("\tconvertToAscii",
 			(ucs2_t)ucs2character::convertToAscii(c)==toascii[c]);
-		test("\tduplicate",
+		test("\tduplicate (char)",
 			ucs2character::duplicate((char)c)==(ucs2_t)c);
 	}
 
