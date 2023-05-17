@@ -51,18 +51,33 @@ void print(filesystem *fs) {
 				fs->getSyncWrites());
 	stdoutput.printf("	async writes:			%lld\n",
 				fs->getAsyncWrites());
-	stdoutput.printf("	fs type name:			%s\n",
-				fs->getTypeName());
-	stdoutput.printf("	mount point:			%s\n",
-				fs->getMountPoint());
+	// Some older versions of solaris don't know some of these attributes
+	// and also crash if you attempt to printf a NULL, so deal with that
+	// gracefully.
+	const char	*tn=fs->getTypeName();
+	if (!tn) {
+		tn="(null)";
+	}
+	stdoutput.printf("	fs type name:			%s\n",tn);
+	const char	*mp=fs->getMountPoint();
+	if (!mp) {
+		mp="(null)";
+	}
+	stdoutput.printf("	mount point:			%s\n",mp);
 	stdoutput.printf("	sync reads:			%lld\n",
 				fs->getSyncReads());
 	stdoutput.printf("	async reads:			%lld\n",
 				fs->getAsyncReads());
-	stdoutput.printf("	device name:			%s\n",
-				fs->getDeviceName());
-	stdoutput.printf("	fs specific string:		%s\n\n",
-				fs->getFilesystemSpecificString());
+	const char	*dn=fs->getDeviceName();
+	if (!dn) {
+		dn="(null)";
+	}
+	stdoutput.printf("	device name:			%s\n",dn);
+	const char	*fss=fs->getFilesystemSpecificString();
+	if (!fss) {
+		fss="(null)";
+	}
+	stdoutput.printf("	fs specific string:		%s\n\n",fss);
 }
 
 int main(int argc, const char **argv) {
