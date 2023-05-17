@@ -512,6 +512,7 @@ FW_CHECK_HAIKU
 FW_CHECK_SYLLABLE
 FW_CHECK_SCO
 FW_CHECK_IRIX
+FW_CHECK_ILLUMOS
 if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
 then
 	dnl you can add FSU Pthreads to OSR5 but they cause odd problems

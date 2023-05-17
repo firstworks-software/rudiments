@@ -1747,6 +1747,9 @@
 /* Haiku OS */
 /* #undef _HAIKU */
 
+/* IllumOS */
+/* #undef _ILLUMOS */
+
 /* Irix OS */
 /* #undef _IRIX */
 
