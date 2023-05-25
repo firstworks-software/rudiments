@@ -10,159 +10,348 @@
 	#include <locale.h>
 #endif
 
-const char *locale::getValue(const char *category) {
-	return setLocale(category,NULL);
+bool locale::setAll(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ALL)
+	return setlocale(LC_ALL,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
 }
 
-bool locale::setValue(const char *category, const char *value) {
-	return setLocale(category,value);
+const char *locale::getAll() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ALL)
+	return setlocale(LC_ALL,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
 }
 
-const char *locale::setLocale(const char *category, const char *value) {
-	#ifdef RUDIMENTS_HAVE_SETLOCALE
-		int	cat;
-		bool	found=false;
-		#ifdef LC_ALL
-			if (!charstring::compare(category,"LC_ALL")) {
-				cat=LC_ALL;
-				found=true;
-			}
-		#endif
-		#ifdef LC_COLLATE
-			if (!charstring::compare(category,"LC_COLLATE")) {
-				cat=LC_COLLATE;
-				found=true;
-			}
-		#endif
-		#ifdef LC_CTYPE
-			if (!charstring::compare(category,"LC_CTYPE")) {
-				cat=LC_CTYPE;
-				found=true;
-			}
-		#endif
-		#ifdef LC_MESSAGES
-			if (!charstring::compare(category,"LC_MESSAGES")) {
-				cat=LC_MESSAGES;
-				found=true;
-			}
-		#endif
-		#ifdef LC_MONETARY
-			if (!charstring::compare(category,"LC_MONETARY")) {
-				cat=LC_MONETARY;
-				found=true;
-			}
-		#endif
-		#ifdef LC_NUMERIC
-			if (!charstring::compare(category,"LC_NUMERIC")) {
-				cat=LC_NUMERIC;
-				found=true;
-			}
-		#endif
-		#ifdef LC_TIME
-			if (!charstring::compare(category,"LC_TIME")) {
-				cat=LC_TIME;
-				found=true;
-			}
-		#endif
-		#ifdef LC_ADDRESS
-			if (!charstring::compare(category,"LC_ADDRESS")) {
-				cat=LC_ADDRESS;
-				found=true;
-			}
-		#endif
-		#ifdef LC_IDENTIFICATION
-			if (!charstring::compare(category,
-						"LC_IDENTIFICATION")) {
-				cat=LC_IDENTIFICATION;
-				found=true;
-			}
-		#endif
-		#ifdef LC_MEASUREMENT
-			if (!charstring::compare(category,"LC_MEASUREMENT")) {
-				cat=LC_MEASUREMENT;
-				found=true;
-			}
-		#endif
-		#ifdef LC_NAME
-			if (!charstring::compare(category,"LC_NAME")) {
-				cat=LC_NAME;
-				found=true;
-			}
-		#endif
-		#ifdef LC_PAPER
-			if (!charstring::compare(category,"LC_PAPER")) {
-				cat=LC_PAPER;
-				found=true;
-			}
-		#endif
-		#ifdef LC_TELEPHONE
-			if (!charstring::compare(category,"LC_TELEPHONE")) {
-				cat=LC_TELEPHONE;
-				found=true;
-			}
-		#endif
-		if (!found) {
-			error::setErrorNumber(ENOTSUP);
-			return NULL;
-		}
-		return setlocale(cat,value);
-	#else
-		error::setErrorNumber(ENOTSUP);
-		return NULL;
-	#endif
+bool locale::isAllSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ALL)
+	return true;
+#else
+	return false;
+#endif
 }
 
-static const char *categories[]={
-	#ifdef LC_ALL
-		"LC_ALL",
-	#endif
-	#ifdef LC_COLLATE
-		"LC_COLLATE",
-	#endif
-	#ifdef LC_CTYPE
-		"LC_CTYPE",
-	#endif
-	#ifdef LC_MESSAGES
-		"LC_MESSAGES",
-	#endif
-	#ifdef LC_MONETARY
-		"LC_MONETARY",
-	#endif
-	#ifdef LC_NUMERIC
-		"LC_NUMERIC",
-	#endif
-	#ifdef LC_TIME
-		"LC_TIME",
-	#endif
-	#ifdef LC_ADDRESS
-		"LC_ADDRESS",
-	#endif
-	#ifdef LC_IDENTIFICATION
-		"LC_IDENTIFICATION",
-	#endif
-	#ifdef LC_MEASUREMENT
-		"LC_MEASUREMENT",
-	#endif
-	#ifdef LC_NAME
-		"LC_NAME",
-	#endif
-	#ifdef LC_PAPER
-		"LC_PAPER",
-	#endif
-	#ifdef LC_TELEPHONE
-		"LC_TELEPHONE",
-	#endif
-	NULL
-};
+bool locale::setCollate(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_COLLATE)
+	return setlocale(LC_COLLATE,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
 
-const char * const *locale::getCategories() {
-	return categories;
+const char *locale::getCollate() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_COLLATE)
+	return setlocale(LC_COLLATE,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isCollateSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_COLLATE)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setCType(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_CTYPE)
+	return setlocale(LC_CTYPE,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getCType() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_CTYPE)
+	return setlocale(LC_CTYPE,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isCTypeSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_CTYPE)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setMessages(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MESSAGES)
+	return setlocale(LC_MESSAGES,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getMessages() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MESSAGES)
+	return setlocale(LC_MESSAGES,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isMessagesSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MESSAGES)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setMonetary(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MONETARY)
+	return setlocale(LC_MONETARY,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getMonetary() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MONETARY)
+	return setlocale(LC_MONETARY,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isMonetarySupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MONETARY)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setNumeric(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NUMERIC)
+	return setlocale(LC_NUMERIC,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getNumeric() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NUMERIC)
+	return setlocale(LC_NUMERIC,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isNumericSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NUMERIC)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setTime(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TIME)
+	return setlocale(LC_TIME,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getTime() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TIME)
+	return setlocale(LC_TIME,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isTimeSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TIME)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setAddress(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ADDRESS)
+	return setlocale(LC_ADDRESS,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getAddress() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ADDRESS)
+	return setlocale(LC_ADDRESS,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isAddressSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ADDRESS)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setIdentification(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_IDENTIFICATION)
+	return setlocale(LC_IDENTIFICATION,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getIdentification() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_IDENTIFICATION)
+	return setlocale(LC_IDENTIFICATION,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isIdentificationSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_IDENTIFICATION)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setMeasurement(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MEASUREMENT)
+	return setlocale(LC_MEASUREMENT,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getMeasurement() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MEASUREMENT)
+	return setlocale(LC_MEASUREMENT,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isMeasurementSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MEASUREMENT)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setName(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NAME)
+	return setlocale(LC_NAME,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getName() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NAME)
+	return setlocale(LC_NAME,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isNameSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NAME)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setPaper(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_PAPER)
+	return setlocale(LC_PAPER,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getPaper() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_PAPER)
+	return setlocale(LC_PAPER,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isPaperSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_PAPER)
+	return true;
+#else
+	return false;
+#endif
+}
+
+bool locale::setTelephone(const char *value) {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TELEPHONE)
+	return setlocale(LC_TELEPHONE,value);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+const char *locale::getTelephone() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TELEPHONE)
+	return setlocale(LC_TELEPHONE,NULL);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+bool locale::isTelephoneSupported() {
+#if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TELEPHONE)
+	return true;
+#else
+	return false;
+#endif
 }
 
 bool locale::isSupported() {
-	#ifdef RUDIMENTS_HAVE_SETLOCALE
-		return true;
-	#else
-		return false;
-	#endif
+#ifdef RUDIMENTS_HAVE_SETLOCALE
+	return true;
+#else
+	return false;
+#endif
 }
