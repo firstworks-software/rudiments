@@ -607,7 +607,8 @@ privateheaders7="staticarray.h "+_
 	"resourcepool.h "+_
 	"resourcepoolincludes.h "+_
 	"resourcepoolinlines.h "+_
-	"localeincludes.h "
+	"localeincludes.h "+_
+	"locale.h "
 
 ' version
 RUDIMENTS_VERSION="2.0.0"

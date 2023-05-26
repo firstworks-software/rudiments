@@ -798,6 +798,9 @@
 /* Some systems have LoadLibraryEx */
 #undef RUDIMENTS_HAVE_LOADLIBRARYEX
 
+/* Some systems have localeconv */
+#undef RUDIMENTS_HAVE_LOCALECONV
+
 /* Some systems have locale.h */
 #undef RUDIMENTS_HAVE_LOCALE_H
 

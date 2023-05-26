@@ -376,5 +376,98 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	stdoutput.printf("strings and settings for the C locale:\n");
+	char	*c=NULL;
+	uint8_t	n=0;
+	bool	b=false;
+	monetary_sign_position_t	m;
+	c=locale::getNumericDecimalPoint();
+	test("numeric decimal point",!charstring::compare(c,"."));
+	c=locale::getNumericSeparator();
+	test("numeric separator",!charstring::compare(c,""));
+	n=locale::getNumericGrouping(0);
+	test("numeric grouping(0)",n==0);
+	c=locale::getInternationalCurrencySymbol();
+	test("int currency symbol",!charstring::compare(c,""));
+	c=locale::getInternationalCurrencySeparator();
+	test("int currency separator",!charstring::compare(c,""));
+	c=locale::getLocalCurrencySymbol();
+	test("local currency symbol",!charstring::compare(c,""));
+	c=locale::getMonetaryDecimalPoint();
+	test("monetary decimal point",!charstring::compare(c,""));
+	c=locale::getMonetarySeparator();
+	test("monetary separator",!charstring::compare(c,""));
+	n=locale::getMonetaryGrouping(0);
+	test("monetary grouping(0)",n==0);
+	c=locale::getMonetaryPositiveSign();
+	test("monetary positive sign",!charstring::compare(c,""));
+	c=locale::getMonetaryNegativeSign();
+	test("monetary negative sign",!charstring::compare(c,""));
+	n=locale::getInternationalMonetaryFractionalDigits();
+	test("int monetary fractional digits",n==127);
+	n=locale::getLocalMonetaryFractionalDigits();
+	test("local monetary fractional digits",n==127);
+	b=locale::getCurrencySymbolPreceedsPositiveValue();
+	test("currency symbol preceeds positive value",!b);
+	b=locale::getSpaceSeparatesCurrencySymbolAndPositiveValue();
+	test("space separates currency symbol and positive value",!b);
+	m=locale::getMonetarySignPositionForPositiveValues();
+	test("monetary sign position for positive values",
+			m==MONETARY_SIGN_POSITION_ERROR);
+	b=locale::getCurrencySymbolPreceedsNegativeValue();
+	test("currency symbol preceeds negative value",!b);
+	b=locale::getSpaceSeparatesCurrencySymbolAndNegativeValue();
+	test("space separates currency symbol and negative value",!b);
+	m=locale::getMonetarySignPositionForNegativeValues();
+	test("monetary sign position for negative values",
+			m==MONETARY_SIGN_POSITION_ERROR);
+	stdoutput.printf("\n");
+
+	if (locale::setAll("en_US.UTF-8")) {
+		stdoutput.printf("strings and settings for "
+					"the en_US-UTF-8 locale:\n");
+		c=locale::getNumericDecimalPoint();
+		test("numeric decimal point",!charstring::compare(c,"."));
+		c=locale::getNumericSeparator();
+		test("numeric separator",!charstring::compare(c,","));
+		n=locale::getNumericGrouping(0);
+		test("numeric grouping(0)",n==3);
+		c=locale::getInternationalCurrencySymbol();
+		test("int currency symbol",!charstring::compare(c,"USD"));
+		c=locale::getInternationalCurrencySeparator();
+		test("int currency separator",!charstring::compare(c," "));
+		c=locale::getLocalCurrencySymbol();
+		test("local currency symbol",!charstring::compare(c,"$"));
+		c=locale::getMonetaryDecimalPoint();
+		test("monetary decimal point",!charstring::compare(c,"."));
+		c=locale::getMonetarySeparator();
+		test("monetary separator",!charstring::compare(c,","));
+		n=locale::getMonetaryGrouping(0);
+		test("monetary grouping(0)",n==3);
+		c=locale::getMonetaryPositiveSign();
+		test("monetary positive sign",!charstring::compare(c,""));
+		c=locale::getMonetaryNegativeSign();
+		test("monetary negative sign",!charstring::compare(c,"-"));
+		n=locale::getInternationalMonetaryFractionalDigits();
+		test("int monetary fractional digits",n==2);
+		n=locale::getLocalMonetaryFractionalDigits();
+		test("local monetary fractional digits",n==2);
+		b=locale::getCurrencySymbolPreceedsPositiveValue();
+		test("currency symbol preceeds positive value",b);
+		b=locale::getSpaceSeparatesCurrencySymbolAndPositiveValue();
+		test("space separates currency symbol and positive value",!b);
+		m=locale::getMonetarySignPositionForPositiveValues();
+		test("monetary sign position for positive values",
+				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+		b=locale::getCurrencySymbolPreceedsNegativeValue();
+		test("currency symbol preceeds negative value",b);
+		b=locale::getSpaceSeparatesCurrencySymbolAndNegativeValue();
+		test("space separates currency symbol and negative value",!b);
+		m=locale::getMonetarySignPositionForNegativeValues();
+		test("monetary sign position for negative values",
+				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+		stdoutput.printf("\n");
+	}
+
 	return 0;
 }

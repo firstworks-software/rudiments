@@ -1785,6 +1785,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
 	#include <locale.h>
 #endif],
 setlocale(0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETLOCALE,1,Some systems have setlocale) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for localeconv)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+localeconv();,AC_DEFINE(RUDIMENTS_HAVE_LOCALECONV,1,Some systems have localeconv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -5131,7 +5137,7 @@ fi
 if ( test "$INCLUDE_LOCALE" = "1" )
 then
 	HEADERS1="$HEADERS1 locale.h"
-	PRIVATEHEADERS2="$PRIVATEHEADERS2 localeincludes.h"
+	PRIVATEHEADERS2="$PRIVATEHEADERS2 localeincludes.h locale.h"
 	SRCS="$SRCS locale.cpp"
 	LOBJS="$LOBJS locale.lo"
 fi

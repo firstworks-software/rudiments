@@ -793,6 +793,9 @@
 /* Some systems have LoadLibraryEx */
 #define RUDIMENTS_HAVE_LOADLIBRARYEX 1
 
+/* Some systems have localeconv */
+#define RUDIMENTS_HAVE_LOCALECONV 1
+
 /* Some systems have locale.h */
 #define RUDIMENTS_HAVE_LOCALE_H 1
 

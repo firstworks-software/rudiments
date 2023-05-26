@@ -8,6 +8,16 @@
 
 /** The locale class provides static methods for accessing and manipulating
  *  locale categories. */
+
+enum monetary_sign_position_t {
+	MONETARY_SIGN_POSITION_PARENTHESES=0,
+	MONETARY_SIGN_POSITION_BEFORE_STRING,
+	MONETARY_SIGN_POSITION_AFTER_STRING,
+	MONETARY_SIGN_POSITION_BEFORE_SYMBOL,
+	MONETARY_SIGN_POSITION_AFTER_SYMBOL,
+	MONETARY_SIGN_POSITION_ERROR
+};
+
 class RUDIMENTS_DLLSPEC locale {
 	public:
 		/** Sets the value of the LC_ALL locale category
@@ -231,9 +241,239 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  false otherwise. */
 		static bool	isTelephoneSupported();
 
+		/** Returns the decimal point string, for non-monetary
+		 *  values, for the current locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getNumericDecimalPoint();
+
+		/** Returns the separator string for groups of digits before the
+		 *  decimal point, for non-monetary values, for the current
+		 *  locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getNumericSeparator();
+
+		/** Returns the number of digits in a group, where index 0
+		 *  is the rightmost group, and subsequent indices refer to
+		 *  groups of digits to the left of the rightmost group,
+		 *  for non-monetary values, for the current locale.
+		 *
+		 *  For example...
+		 *
+		 *  If a number is grouped like:
+		 *  100,000,000,000
+		 *  Then:
+		 *  * getNumericGrouping(0) would return 3
+		 *  * getNumericGrouping(1) would return 3
+		 *  * getNumericGrouping(2) would return 3
+		 *  * getNumericGrouping(>2) would return 3
+		 *
+		 *  If a number is grouped like:
+		 *  100,000,00,00
+		 *  Then:
+		 *  * getNumericGrouping(0) would return 2
+		 *  * getNumericGrouping(1) would return 2
+		 *  * getNumericGrouping(2) would return 3
+		 *  * getNumericGrouping(>2) would return 3
+		 *
+		 *  If a number is grouped like:
+		 *  100,000,00,0
+		 *  Then:
+		 *  * getNumericGrouping(0) would return 1
+		 *  * getNumericGrouping(1) would return 2
+		 *  * getNumericGrouping(2) would return 3
+		 *  * getNumericGrouping(>2) would return 3
+		 *
+		 *  Returns 0 if no grouping is performed at that index or
+		 *  on error.  */
+		static uint8_t	getNumericGrouping(uint8_t index);
+
+		/** Returns the ISO 4217:1995 international currency symbol
+		 *  string, for the current locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getInternationalCurrencySymbol();
+
+		/** Returns the ISO 4217:1995 international currency separator
+		 *  string, for the current locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getInternationalCurrencySeparator();
+
+		/** Returns the local currency symbol string, for the current
+		 *  locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getLocalCurrencySymbol();
+
+		/** Returns the decimal point string, for monetary values, for
+		 *  the current locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getMonetaryDecimalPoint();
+
+		/** Returns the separator string for groups of digits before
+ 		 *  the decimal point, for monetary values, for the current
+		 *  locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getMonetarySeparator();
+
+		/** Returns the number of digits in a group, where index 0
+		 *  is the rightmost group, and subsequent indices refer to
+		 *  groups of digits to the left of the rightmost group,
+		 *  for monetary values, for the current locale.
+		 *
+		 *  For example...
+		 *
+		 *  If an amount is grouped like:
+		 *  $100,000,000,000
+		 *  Then:
+		 *  * getMonetaryGrouping(0) would return 3
+		 *  * getMonetaryGrouping(1) would return 3
+		 *  * getMonetaryGrouping(2) would return 3
+		 *  * getMonetaryGrouping(>2) would return 3
+		 *
+		 *  If an amount is grouped like:
+		 *  $100,000,00,00
+		 *  Then:
+		 *  * getMonetaryGrouping(0) would return 2
+		 *  * getMonetaryGrouping(1) would return 2
+		 *  * getMonetaryGrouping(2) would return 3
+		 *  * getMonetaryGrouping(>2) would return 3
+		 *
+		 *  If an amount is grouped like:
+		 *  $100,000,00,0
+		 *  Then:
+		 *  * getMonetaryGrouping(0) would return 1
+		 *  * getMonetaryGrouping(1) would return 2
+		 *  * getMonetaryGrouping(2) would return 3
+		 *  * getMonetaryGrouping(>2) would return 3
+		 *
+		 *  Returns 0 if no grouping is performed at that index or
+		 *  on error.  */
+		static uint8_t	getMonetaryGrouping(uint8_t index);
+
+		/** Returns the positive sign string, for monetary values,
+		 *  for the current locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getMonetaryPositiveSign();
+
+		/** Returns the negative sign string, for monetary values,
+		 *  for the current locale.
+		 *
+		 *  Returns NULL on error. */
+		static char	*getMonetaryNegativeSign();
+
+		/** Returns the number of digits after the decimal point
+		 *  for an internationally formatted monetary value, for the
+		 *  current locale.
+		 *
+		 *  Returns 0 on error. */
+		static uint8_t	getInternationalMonetaryFractionalDigits();
+
+		/** Returns the number of digits after the decimal point
+		 *  for an locally formatted monetary value, for the current
+		 *  locale.
+		 *
+		 *  Returns 0 on error. */
+		static uint8_t	getLocalMonetaryFractionalDigits();
+
+		/** Returns true if the currency symbol preceeds a positive
+		 *  monetary value, for the current locale, and false otherwise.
+		 *
+		 *  Eg.
+		 *  * true for $100
+		 *  * false for 100$
+		 *
+		 *  Returns false on error. */
+		static bool	getCurrencySymbolPreceedsPositiveValue();
+
+		/** Returns true if a space separates the currency symbol and a
+		 *  positive monetary value, for the current locale, and false
+		 *  otherwise.
+		 *
+		 *  Eg.
+		 *  * true for $ 100
+		 *  * false for $100
+		 *
+		 *  Returns false on error. */
+		static bool
+		getSpaceSeparatesCurrencySymbolAndPositiveValue();
+
+		/** Returns the position of the sign, for positive monetary
+		 *  values, for the current locale, as follows:
+		 *
+		 *  MONETARY_SIGN_POSITION_PARENTHESES if parentheses surround
+		 *  the entire string.  Eg. ($100)
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_STRING if the sign comes
+		 *  before the entire string.  Eg. +$100
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_STRING if the sign comes
+		 *  after the entire string. Eg. $100+
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_SYMBOL if the sign comes
+		 *  immediately before the currency symbol.  Eg. 100+$
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
+		 *  immediately after the currency symbol.  Eg. 100$+
+		 *
+		 *  MONETARY_SIGN_POSITION_ERROR on error. */
+		static monetary_sign_position_t
+			getMonetarySignPositionForPositiveValues();
+
+		/** Returns true if the currency symbol preceeds a netative
+		 *  monetary value, for the current locale, and false otherwise.
+		 *
+		 *  Eg.
+		 *  * true for -$100
+		 *  * false for 100$-
+		 *
+		 *  Returns false on error. */
+		static bool	getCurrencySymbolPreceedsNegativeValue();
+
+		/** Returns true if a space separates the currency symbol and a
+		 *  negative monetary value, for the current locale, and false
+		 *  otherwise.
+		 *
+		 *  Eg.
+		 *  * true for -$ 100
+		 *  * false for -$100
+		 *
+		 *  Returns false on error. */
+		static bool
+		getSpaceSeparatesCurrencySymbolAndNegativeValue();
+
+		/** Returns the position of the sign, for negative monetary
+		 *  values, for the current locale, as follows:
+		 *
+		 *  MONETARY_SIGN_POSITION_PARENTHESES if parentheses surround
+		 *  the entire string.  Eg. (-$100)
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_STRING if the sign comes
+		 *  before the entire string.  Eg. -$100
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_STRING if the sign comes
+		 *  after the entire string. Eg. $100-
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_SYMBOL if the sign comes
+		 *  immediately before the currency symbol.  Eg. 100-$
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
+		 *  immediately after the currency symbol.  Eg. 100$-
+		 *
+		 *  MONETARY_SIGN_POSITION_ERROR on error. */
+		static monetary_sign_position_t
+			getMonetarySignPositionForNegativeValues();
+
 		/** Returns true if the platform supports locales and
 		 *  false otherwise. */
 		static bool	isSupported();
+
+	#include <rudiments/private/locale.h>
 };
 
 #endif

@@ -10,6 +10,11 @@
 	#include <locale.h>
 #endif
 
+// for CHAR_MAX
+#ifdef RUDIMENTS_HAVE_LIMITS_H
+	#include <limits.h>
+#endif
+
 bool locale::setAll(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ALL)
 	return setlocale(LC_ALL,value);
@@ -345,6 +350,378 @@ bool locale::isTelephoneSupported() {
 	return true;
 #else
 	return false;
+#endif
+}
+
+char *locale::getNumericDecimalPoint() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	return charstring::duplicate(l->decimal_point);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+char *locale::getNumericSeparator() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	return charstring::duplicate(l->thousands_sep);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+uint8_t locale::getNumericGrouping(uint8_t index) {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return 0;
+	}
+	return getGrouping(l->grouping,index);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return 0;
+#endif
+}
+
+uint8_t locale::getGrouping(const char *g, uint8_t index) {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+
+	// bail and set error if the grouping array is NULL
+	if (!g) {
+		error::setErrorNumber(ENOTSUP);
+		return 0;
+	}
+
+	// In the grouping array, each element is the number of digits to group,
+	// where the 0th element is the rightmost number of digits to group,
+	// the 1st is the next rightmost, the 2nd is the next rightmost, etc.
+	//
+	// A value of 0 means repeat the previous grouping forever.
+	// A value of CHAR_MAX means no more grouping is performed.
+	//
+	// Eg.
+	//
+	// for a number grouped like: 100,000,00,0
+	// the values would be 1,2,3,0
+	//
+	// for a number grouped like: 10000000,000,00,0
+	// the values would be 1,2,3,CHAR_MAX
+	//
+	uint8_t	retval=0;
+	for (;;) {
+		// I hope we don't get into trouble on some random ARM platform
+		// with this...
+		if (*g==CHAR_MAX) {
+			return 0;
+		}
+		retval=*g;
+		if (!index || !*g) {
+			return retval;
+		}
+		g++;
+		index--;
+	}
+#else
+	return 0;
+#endif
+}
+
+char *locale::getInternationalCurrencySymbol() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	// the first 3 characters are the symbol, but do some sanity checking
+	const char	*s=l->int_curr_symbol;
+	if (!s) {
+		error::setErrorNumber(ENOTSUP);
+		return NULL;
+	}
+	size_t	len=charstring::getLength(s);
+	// in some locales (eg. C) this is empty, which is ok
+	if (!len) {
+		return charstring::duplicate("");
+	}
+	if (len<4) {
+		error::setErrorNumber(ENOTSUP);
+		return NULL;
+	}
+	return charstring::duplicate(s,3);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+char *locale::getInternationalCurrencySeparator() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	// the 4th character is the separator, but do some sanity checking
+	const char	*s=l->int_curr_symbol;
+	if (!s) {
+		error::setErrorNumber(ENOTSUP);
+		return NULL;
+	}
+	size_t	len=charstring::getLength(s);
+	// in some locales (eg. C) this is empty, which is ok
+	if (!len) {
+		return charstring::duplicate("");
+	}
+	if (len<4) {
+		error::setErrorNumber(ENOTSUP);
+		return NULL;
+	}
+	return charstring::duplicate(s+3,1);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+char *locale::getLocalCurrencySymbol() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	return charstring::duplicate(l->currency_symbol);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+char *locale::getMonetaryDecimalPoint() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return 0;
+	}
+	return charstring::duplicate(l->mon_decimal_point);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+char *locale::getMonetarySeparator() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return 0;
+	}
+	return charstring::duplicate(l->mon_thousands_sep);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+uint8_t locale::getMonetaryGrouping(uint8_t index) {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return 0;
+	}
+	return getGrouping(l->mon_grouping,index);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return 0;
+#endif
+}
+
+char *locale::getMonetaryPositiveSign() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	return charstring::duplicate(l->positive_sign);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+char *locale::getMonetaryNegativeSign() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return NULL;
+	}
+	return charstring::duplicate(l->negative_sign);
+#else
+	error::setErrorNumber(ENOTSUP);
+	return NULL;
+#endif
+}
+
+uint8_t locale::getInternationalMonetaryFractionalDigits() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return 0;
+	}
+	return l->int_frac_digits;
+#else
+	error::setErrorNumber(ENOTSUP);
+	return 0;
+#endif
+}
+
+uint8_t locale::getLocalMonetaryFractionalDigits() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return 0;
+	}
+	return l->frac_digits;
+#else
+	error::setErrorNumber(ENOTSUP);
+	return 0;
+#endif
+}
+
+bool locale::getCurrencySymbolPreceedsPositiveValue() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return false;
+	}
+	// on Linux, this is CHAR_MAX if not supported in the current locale
+	if (l->p_cs_precedes==CHAR_MAX) {
+		error::setErrorNumber(ENOTSUP);
+		return false;
+	}
+	return l->p_cs_precedes;
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+bool locale::getSpaceSeparatesCurrencySymbolAndPositiveValue() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return false;
+	}
+	// on Linux, this is CHAR_MAX if not supported in the current locale
+	if (l->p_sep_by_space==CHAR_MAX) {
+		error::setErrorNumber(ENOTSUP);
+		return false;
+	}
+	return l->p_sep_by_space;
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+monetary_sign_position_t locale::getMonetarySignPositionForPositiveValues() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return MONETARY_SIGN_POSITION_ERROR;
+	}
+	switch (l->p_sign_posn) {
+		case 0:
+        		return MONETARY_SIGN_POSITION_PARENTHESES;
+		case 1:
+        		return MONETARY_SIGN_POSITION_BEFORE_STRING;
+		case 2:
+        		return MONETARY_SIGN_POSITION_AFTER_STRING;
+		case 3:
+        		return MONETARY_SIGN_POSITION_BEFORE_SYMBOL;
+		case 4:
+        		return MONETARY_SIGN_POSITION_AFTER_SYMBOL;
+		default:
+			// on Linux, this is CHAR_MAX if it's not supported in
+			// the current locale
+			error::setErrorNumber(ENOTSUP);
+			return MONETARY_SIGN_POSITION_ERROR;
+	}
+#else
+	error::setErrorNumber(ENOTSUP);
+	return MONETARY_SIGN_POSITION_ERROR;
+#endif
+}
+
+bool locale::getCurrencySymbolPreceedsNegativeValue() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return false;
+	}
+	// on Linux, this is CHAR_MAX if not supported in the current locale
+	if (l->n_cs_precedes==CHAR_MAX) {
+		error::setErrorNumber(ENOTSUP);
+		return false;
+	}
+	return l->n_cs_precedes;
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+bool locale::getSpaceSeparatesCurrencySymbolAndNegativeValue() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return false;
+	}
+	// on Linux, this is CHAR_MAX if not supported in the current locale
+	if (l->n_sep_by_space==CHAR_MAX) {
+		error::setErrorNumber(ENOTSUP);
+		return false;
+	}
+	return l->n_sep_by_space;
+#else
+	error::setErrorNumber(ENOTSUP);
+	return false;
+#endif
+}
+
+monetary_sign_position_t locale::getMonetarySignPositionForNegativeValues() {
+#if defined(RUDIMENTS_HAVE_LOCALECONV)
+	lconv	*l=localeconv();
+	if (!l) {
+		return MONETARY_SIGN_POSITION_ERROR;
+	}
+	switch (l->n_sign_posn) {
+		case 0:
+        		return MONETARY_SIGN_POSITION_PARENTHESES;
+		case 1:
+        		return MONETARY_SIGN_POSITION_BEFORE_STRING;
+		case 2:
+        		return MONETARY_SIGN_POSITION_AFTER_STRING;
+		case 3:
+        		return MONETARY_SIGN_POSITION_BEFORE_SYMBOL;
+		case 4:
+        		return MONETARY_SIGN_POSITION_AFTER_SYMBOL;
+		default:
+			// on Linux, this is CHAR_MAX if it's not supported in
+			// the current locale
+			error::setErrorNumber(ENOTSUP);
+			return MONETARY_SIGN_POSITION_ERROR;
+	}
+#else
+	error::setErrorNumber(ENOTSUP);
+	return MONETARY_SIGN_POSITION_ERROR;
 #endif
 }
 
