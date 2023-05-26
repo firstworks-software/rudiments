@@ -244,15 +244,15 @@ class RUDIMENTS_DLLSPEC locale {
 		/** Returns the decimal point string, for non-monetary
 		 *  values, for the current locale.
 		 *
-		 *  Returns NULL on error. */
+		 *  Returns NULL and sets errno on error. */
 		static char	*getNumericDecimalPoint();
 
 		/** Returns the separator string for groups of digits before the
 		 *  decimal point, for non-monetary values, for the current
 		 *  locale.
 		 *
-		 *  Returns NULL on error. */
-		static char	*getNumericSeparator();
+		 *  Returns NULL and sets errno on error. */
+		static char	*getNumericDigitGroupSeparator();
 
 		/** Returns the number of digits in a group, where index 0
 		 *  is the rightmost group, and subsequent indices refer to
@@ -264,61 +264,43 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  If a number is grouped like:
 		 *  100,000,000,000
 		 *  Then:
-		 *  * getNumericGrouping(0) would return 3
-		 *  * getNumericGrouping(1) would return 3
-		 *  * getNumericGrouping(2) would return 3
-		 *  * getNumericGrouping(>2) would return 3
+		 *  * getNumericDigitGroupCount(0) would return 3
+		 *  * getNumericDigitGroupCount(1) would return 3
+		 *  * getNumericDigitGroupCount(2) would return 3
+		 *  * getNumericDigitGroupCount(>2) would return 3
 		 *
 		 *  If a number is grouped like:
 		 *  100,000,00,00
 		 *  Then:
-		 *  * getNumericGrouping(0) would return 2
-		 *  * getNumericGrouping(1) would return 2
-		 *  * getNumericGrouping(2) would return 3
-		 *  * getNumericGrouping(>2) would return 3
+		 *  * getNumericDigitGroupCount(0) would return 2
+		 *  * getNumericDigitGroupCount(1) would return 2
+		 *  * getNumericDigitGroupCount(2) would return 3
+		 *  * getNumericDigitGroupCount(>2) would return 3
 		 *
 		 *  If a number is grouped like:
 		 *  100,000,00,0
 		 *  Then:
-		 *  * getNumericGrouping(0) would return 1
-		 *  * getNumericGrouping(1) would return 2
-		 *  * getNumericGrouping(2) would return 3
-		 *  * getNumericGrouping(>2) would return 3
+		 *  * getNumericDigitGroupCount(0) would return 1
+		 *  * getNumericDigitGroupCount(1) would return 2
+		 *  * getNumericDigitGroupCount(2) would return 3
+		 *  * getNumericDigitGroupCount(>2) would return 3
 		 *
-		 *  Returns 0 if no grouping is performed at that index or
-		 *  on error.  */
-		static uint8_t	getNumericGrouping(uint8_t index);
-
-		/** Returns the ISO 4217:1995 international currency symbol
-		 *  string, for the current locale.
-		 *
-		 *  Returns NULL on error. */
-		static char	*getInternationalCurrencySymbol();
-
-		/** Returns the ISO 4217:1995 international currency separator
-		 *  string, for the current locale.
-		 *
-		 *  Returns NULL on error. */
-		static char	*getInternationalCurrencySeparator();
-
-		/** Returns the local currency symbol string, for the current
-		 *  locale.
-		 *
-		 *  Returns NULL on error. */
-		static char	*getLocalCurrencySymbol();
+		 *  Returns 0 if no grouping is performed at that index.
+		 *  Returns 0 and sets errno on error.  */
+		static uint8_t	getNumericDigitGroupCount(uint8_t index);
 
 		/** Returns the decimal point string, for monetary values, for
 		 *  the current locale.
 		 *
-		 *  Returns NULL on error. */
+		 *  Returns NULL and sets errno on error. */
 		static char	*getMonetaryDecimalPoint();
 
 		/** Returns the separator string for groups of digits before
  		 *  the decimal point, for monetary values, for the current
 		 *  locale.
 		 *
-		 *  Returns NULL on error. */
-		static char	*getMonetarySeparator();
+		 *  Returns NULL and sets errno on error. */
+		static char	*getMonetaryDigitGroupSeparator();
 
 		/** Returns the number of digits in a group, where index 0
 		 *  is the rightmost group, and subsequent indices refer to
@@ -330,56 +312,56 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  If an amount is grouped like:
 		 *  $100,000,000,000
 		 *  Then:
-		 *  * getMonetaryGrouping(0) would return 3
-		 *  * getMonetaryGrouping(1) would return 3
-		 *  * getMonetaryGrouping(2) would return 3
-		 *  * getMonetaryGrouping(>2) would return 3
+		 *  * getMonetaryDigitGroupCount(0) would return 3
+		 *  * getMonetaryDigitGroupCount(1) would return 3
+		 *  * getMonetaryDigitGroupCount(2) would return 3
+		 *  * getMonetaryDigitGroupCount(>2) would return 3
 		 *
 		 *  If an amount is grouped like:
 		 *  $100,000,00,00
 		 *  Then:
-		 *  * getMonetaryGrouping(0) would return 2
-		 *  * getMonetaryGrouping(1) would return 2
-		 *  * getMonetaryGrouping(2) would return 3
-		 *  * getMonetaryGrouping(>2) would return 3
+		 *  * getMonetaryDigitGroupCount(0) would return 2
+		 *  * getMonetaryDigitGroupCount(1) would return 2
+		 *  * getMonetaryDigitGroupCount(2) would return 3
+		 *  * getMonetaryDigitGroupCount(>2) would return 3
 		 *
 		 *  If an amount is grouped like:
 		 *  $100,000,00,0
 		 *  Then:
-		 *  * getMonetaryGrouping(0) would return 1
-		 *  * getMonetaryGrouping(1) would return 2
-		 *  * getMonetaryGrouping(2) would return 3
-		 *  * getMonetaryGrouping(>2) would return 3
+		 *  * getMonetaryDigitGroupCount(0) would return 1
+		 *  * getMonetaryDigitGroupCount(1) would return 2
+		 *  * getMonetaryDigitGroupCount(2) would return 3
+		 *  * getMonetaryDigitGroupCount(>2) would return 3
 		 *
-		 *  Returns 0 if no grouping is performed at that index or
-		 *  on error.  */
-		static uint8_t	getMonetaryGrouping(uint8_t index);
+		 *  Returns 0 if no grouping is performed at that index.
+		 *  Returns 0 and sets errno on error.  */
+		static uint8_t	getMonetaryDigitGroupCount(uint8_t index);
 
 		/** Returns the positive sign string, for monetary values,
-		 *  for the current locale.
+		 *  for the current locale.  Eg. "+" but usually ""
+		 *  (empty string).
 		 *
-		 *  Returns NULL on error. */
+		 *  Returns NULL and sets errno on error. */
 		static char	*getMonetaryPositiveSign();
 
 		/** Returns the negative sign string, for monetary values,
-		 *  for the current locale.
+		 *  for the current locale.  Eg. "-"
 		 *
-		 *  Returns NULL on error. */
+		 *  Returns NULL and sets errno on error. */
 		static char	*getMonetaryNegativeSign();
 
-		/** Returns the number of digits after the decimal point
-		 *  for an internationally formatted monetary value, for the
-		 *  current locale.
+		/** Returns the local currency symbol string, for the current
+		 *  locale.  Eg. "$"
 		 *
-		 *  Returns 0 on error. */
-		static uint8_t	getInternationalMonetaryFractionalDigits();
+		 *  Returns NULL and sets errno on error. */
+		static char	*getLocalCurrencySymbol();
 
 		/** Returns the number of digits after the decimal point
 		 *  for an locally formatted monetary value, for the current
 		 *  locale.
 		 *
-		 *  Returns 0 on error. */
-		static uint8_t	getLocalMonetaryFractionalDigits();
+		 *  Returns 0 and sets errno on error. */
+		static uint8_t	getLocalMonetaryDecimalDigits();
 
 		/** Returns true if the currency symbol preceeds a positive
 		 *  monetary value, for the current locale, and false otherwise.
@@ -388,23 +370,25 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for $100
 		 *  * false for 100$
 		 *
-		 *  Returns false on error. */
-		static bool	getCurrencySymbolPreceedsPositiveValue();
+		 *  Returns false and sets errno on error. */
+		static bool
+		getLocalCurrencySymbolPreceedsPositiveValue();
 
 		/** Returns true if a space separates the currency symbol and a
-		 *  positive monetary value, for the current locale, and false
-		 *  otherwise.
+		 *  locally formatted positive monetary value, for the current
+		 *  locale, and false otherwise.
 		 *
 		 *  Eg.
 		 *  * true for $ 100
 		 *  * false for $100
 		 *
-		 *  Returns false on error. */
+		 *  Returns false and sets errno on error. */
 		static bool
-		getSpaceSeparatesCurrencySymbolAndPositiveValue();
+		getLocalSpaceSeparatesCurrencySymbolAndPositiveValue();
 
-		/** Returns the position of the sign, for positive monetary
-		 *  values, for the current locale, as follows:
+		/** Returns the position of the sign, for locally formatted
+		 *  positive monetary values, for the current locale, as
+		 *  follows:
 		 *
 		 *  MONETARY_SIGN_POSITION_PARENTHESES if parentheses surround
 		 *  the entire string.  Eg. ($100)
@@ -421,34 +405,37 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
 		 *  immediately after the currency symbol.  Eg. 100$+
 		 *
-		 *  MONETARY_SIGN_POSITION_ERROR on error. */
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
 		static monetary_sign_position_t
-			getMonetarySignPositionForPositiveValues();
+		getLocalMonetaryPositiveSignPosition();
 
-		/** Returns true if the currency symbol preceeds a netative
-		 *  monetary value, for the current locale, and false otherwise.
+		/** Returns true if the currency symbol preceeds a locally
+		 *  formatted negative monetary value, for the current locale,
+		 *  and false otherwise.
 		 *
 		 *  Eg.
 		 *  * true for -$100
 		 *  * false for 100$-
 		 *
-		 *  Returns false on error. */
-		static bool	getCurrencySymbolPreceedsNegativeValue();
+		 *  Returns false and sets errno on error. */
+		static bool
+		getLocalCurrencySymbolPreceedsNegativeValue();
 
 		/** Returns true if a space separates the currency symbol and a
-		 *  negative monetary value, for the current locale, and false
-		 *  otherwise.
+		 *  locally formatted negative monetary value, for the current
+		 *  locale, and false otherwise.
 		 *
 		 *  Eg.
 		 *  * true for -$ 100
 		 *  * false for -$100
 		 *
-		 *  Returns false on error. */
+		 *  Returns false and sets errno on error. */
 		static bool
-		getSpaceSeparatesCurrencySymbolAndNegativeValue();
+		getLocalSpaceSeparatesCurrencySymbolAndNegativeValue();
 
-		/** Returns the position of the sign, for negative monetary
-		 *  values, for the current locale, as follows:
+		/** Returns the position of the sign, for locally formatted
+		 *  negative monetary values, for the current locale, as
+		 *  follows:
 		 *
 		 *  MONETARY_SIGN_POSITION_PARENTHESES if parentheses surround
 		 *  the entire string.  Eg. (-$100)
@@ -465,9 +452,122 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
 		 *  immediately after the currency symbol.  Eg. 100$-
 		 *
-		 *  MONETARY_SIGN_POSITION_ERROR on error. */
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
 		static monetary_sign_position_t
-			getMonetarySignPositionForNegativeValues();
+		getLocalMonetaryNegativeSignPosition();
+
+		/** Returns the ISO 4217:1995 international currency symbol
+		 *  string, for the current locale.  Eg. "USD"
+		 *
+		 *  Returns NULL and sets errno on error. */
+		static char	*getInternationalCurrencySymbol();
+
+		/** Returns the separator character that goes between the
+		 *  ISO 4217:1995 international currency symbol and the
+		 *  monetary amount, for the current locale.  Eg. " " (a space)
+		 *
+		 *  Returns NULL and sets errno on error. */
+		static char	*getInternationalCurrencySymbolSeparator();
+
+		/** Returns the number of digits after the decimal point
+		 *  for an internationally formatted monetary value, for the
+		 *  current locale.
+		 *
+		 *  Returns 0 and sets errno on error. */
+		static uint8_t	getInternationalMonetaryDecimalDigits();
+
+		/** Returns true if the currency symbol preceeds a positive
+		 *  monetary value, for the current locale, and false otherwise.
+		 *
+		 *  Eg.
+		 *  * true for $100
+		 *  * false for 100$
+		 *
+		 *  Returns false and sets errno on error. */
+		static bool
+		getInternationalCurrencySymbolPreceedsPositiveValue();
+
+		/** Returns true if a space separates the currency symbol and a
+		 *  internationally formatted positive monetary value, for the
+		 *  current locale, and false otherwise.
+		 *
+		 *  Eg.
+		 *  * true for $ 100
+		 *  * false for $100
+		 *
+		 *  Returns false and sets errno on error. */
+		static bool
+		getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
+
+		/** Returns the position of the sign, for internationally
+		 *  formatted positive monetary values, for the current locale,
+		 *  as follows:
+		 *
+		 *  MONETARY_SIGN_POSITION_PARENTHESES if parentheses surround
+		 *  the entire string.  Eg. ($100)
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_STRING if the sign comes
+		 *  before the entire string.  Eg. +$100
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_STRING if the sign comes
+		 *  after the entire string. Eg. $100+
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_SYMBOL if the sign comes
+		 *  immediately before the currency symbol.  Eg. 100+$
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
+		 *  immediately after the currency symbol.  Eg. 100$+
+		 *
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
+		static monetary_sign_position_t
+		getInternationalMonetaryPositiveSignPosition();
+
+		/** Returns true if the currency symbol preceeds a
+		 *  internationally formatted negative monetary value, for the
+		 *  current locale, and false otherwise.
+		 *
+		 *  Eg.
+		 *  * true for -$100
+		 *  * false for 100$-
+		 *
+		 *  Returns false and sets errno on error. */
+		static bool
+		getInternationalCurrencySymbolPreceedsNegativeValue();
+
+		/** Returns true if a space separates the currency symbol and a
+		 *  internationally formatted negative monetary value, for the
+		 *  current locale, and false otherwise.
+		 *
+		 *  Eg.
+		 *  * true for -$ 100
+		 *  * false for -$100
+		 *
+		 *  Returns false and sets errno on error. */
+		static bool
+		getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
+
+		/** Returns the position of the sign, for internationally
+		 *  formatted negative monetary values, for the current locale,
+		 *  as follows:
+		 *
+		 *  MONETARY_SIGN_POSITION_PARENTHESES if parentheses surround
+		 *  the entire string.  Eg. (-$100)
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_STRING if the sign comes
+		 *  before the entire string.  Eg. -$100
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_STRING if the sign comes
+		 *  after the entire string. Eg. $100-
+		 *
+		 *  MONETARY_SIGN_POSITION_BEFORE_SYMBOL if the sign comes
+		 *  immediately before the currency symbol.  Eg. 100-$
+		 *
+		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
+		 *  immediately after the currency symbol.  Eg. 100$-
+		 *
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
+		static monetary_sign_position_t
+		getInternationalMonetaryNegativeSignPosition();
 
 		/** Returns true if the platform supports locales and
 		 *  false otherwise. */

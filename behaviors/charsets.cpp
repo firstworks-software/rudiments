@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 
 		// set locale
 		if (!charstring::isNullOrEmpty(*locale)) {
-			locale::setValue("LC_CTYPE",*locale);
+			locale::setCType(*locale);
 			header(*locale);
 		} else {
 			header("initial locale");
@@ -72,8 +72,7 @@ int main(int argc, char **argv) {
 
 		// display locale
 		stdoutput.printf("  requested locale: %s\n",*locale);
-		stdoutput.printf("  actual locale:    %s\n",
-					locale::getValue("LC_CTYPE"));
+		stdoutput.printf("  actual locale:    %s\n",locale::getCType());
 		stdoutput.printf("\n");
 
 

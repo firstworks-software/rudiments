@@ -1791,6 +1791,42 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
 	#include <locale.h>
 #endif],
 localeconv();,AC_DEFINE(RUDIMENTS_HAVE_LOCALECONV,1,Some systems have localeconv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lconv.int_p_cs_precedes)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+lconv l; char a=l.int_p_cs_precedes;,AC_DEFINE(RUDIMENTS_HAVE_LCONV_INT_P_CS_PRECEDES,1,Some systems have lconv.int_p_cs_precedes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lconv.int_n_cs_precedes)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+lconv l; char a=l.int_n_cs_precedes;,AC_DEFINE(RUDIMENTS_HAVE_LCONV_INT_N_CS_PRECEDES,1,Some systems have lconv.int_n_cs_precedes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lconv.int_p_sep_by_space)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+lconv l; char a=l.int_p_sep_by_space;,AC_DEFINE(RUDIMENTS_HAVE_LCONV_INT_P_SEP_BY_SPACE,1,Some systems have lconv.int_p_sep_by_space) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lconv.int_n_sep_by_space)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+lconv l; char a=l.int_n_sep_by_space;,AC_DEFINE(RUDIMENTS_HAVE_LCONV_INT_N_SEP_BY_SPACE,1,Some systems have lconv.int_n_sep_by_space) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lconv.int_p_sign_posn)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+lconv l; char a=l.int_p_sign_posn;,AC_DEFINE(RUDIMENTS_HAVE_LCONV_INT_P_SIGN_POSN,1,Some systems have lconv.int_p_sign_posn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lconv.int_n_sign_posn)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif],
+lconv l; char a=l.int_n_sign_posn;,AC_DEFINE(RUDIMENTS_HAVE_LCONV_INT_N_SIGN_POSN,1,Some systems have lconv.int_n_sign_posn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
 

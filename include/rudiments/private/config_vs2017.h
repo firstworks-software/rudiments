@@ -759,6 +759,24 @@
 /* Some systems have void * kqueue user data */
 /* #undef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA */
 
+/* Some systems have lconv.int_n_cs_precedes */
+#define RUDIMENTS_HAVE_LCONV_INT_N_CS_PRECEDES 1
+
+/* Some systems have lconv.int_n_sep_by_space */
+#define RUDIMENTS_HAVE_LCONV_INT_N_SEP_BY_SPACE 1
+
+/* Some systems have lconv.int_n_sign_posn */
+#define RUDIMENTS_HAVE_LCONV_INT_N_SIGN_POSN 1
+
+/* Some systems have lconv.int_p_cs_precedes */
+#define RUDIMENTS_HAVE_LCONV_INT_P_CS_PRECEDES 1
+
+/* Some systems have lconv.int_p_sep_by_space */
+#define RUDIMENTS_HAVE_LCONV_INT_P_SEP_BY_SPACE 1
+
+/* Some systems have lconv.int_p_sign_posn */
+#define RUDIMENTS_HAVE_LCONV_INT_P_SIGN_POSN 1
+
 /* Do we have libedit */
 /* #undef RUDIMENTS_HAVE_LIBEDIT */
 
