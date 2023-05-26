@@ -490,6 +490,9 @@ int main(int argc, const char **argv) {
 		n=locale::getInternationalMonetaryDecimalDigits();
 		test("int monetary decimal digits",n==2);
 		b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
+
+		// inconsistent across platforms
+		#if 0
 		test("int currency symbol preceeds positive value",b);
 		b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 		test("int space separates currency symbol and positive value",
@@ -505,6 +508,7 @@ int main(int argc, const char **argv) {
 		m=locale::getInternationalMonetaryNegativeSignPosition();
 		test("int monetary sign position for negative values",
 				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+		#endif
 		stdoutput.printf("\n");
 	}
 
