@@ -21,6 +21,7 @@ int main(int argc, const char **argv) {
 	// NetBSD has some strangeness
 	char	*osname=sys::getOperatingSystemName();
 	bool	isnetbsd=!charstring::compare(osname,"NetBSD");
+	bool	isopenbsd=!charstring::compare(osname,"OpenBSD");
 	delete[] osname;
 
 	// default locale
@@ -452,7 +453,9 @@ int main(int argc, const char **argv) {
 			m==MONETARY_SIGN_POSITION_ERROR);
 	stdoutput.printf("\n");
 
-	if (locale::setAll("en_US.UTF-8")) {
+	// openbsd's en_US.UTF-8 is very inconsistent, compared to other
+	// platforms, so just bail on this entirely for openbsd
+	if (locale::setAll("en_US.UTF-8") && !isopenbsd) {
 		stdoutput.printf("strings and settings for "
 					"the en_US-UTF-8 locale:\n");
 		c=locale::getNumericDecimalPoint();
