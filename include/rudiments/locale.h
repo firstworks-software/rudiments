@@ -244,14 +244,26 @@ class RUDIMENTS_DLLSPEC locale {
 		/** Returns the decimal point string, for non-monetary
 		 *  values, for the current locale.
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getNumericDecimalPoint();
 
 		/** Returns the separator string for groups of digits before the
 		 *  decimal point, for non-monetary values, for the current
 		 *  locale.
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getNumericDigitGroupSeparator();
 
 		/** Returns the number of digits in a group, where index 0
@@ -286,20 +298,36 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * getNumericDigitGroupCount(>2) would return 3
 		 *
 		 *  Returns 0 if no grouping is performed at that index.
-		 *  Returns 0 and sets errno on error.  */
+		 *  Returns 0 and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static uint8_t	getNumericDigitGroupCount(uint8_t index);
 
 		/** Returns the decimal point string, for monetary values, for
 		 *  the current locale.
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getMonetaryDecimalPoint();
 
 		/** Returns the separator string for groups of digits before
  		 *  the decimal point, for monetary values, for the current
 		 *  locale.
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getMonetaryDigitGroupSeparator();
 
 		/** Returns the number of digits in a group, where index 0
@@ -334,33 +362,59 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * getMonetaryDigitGroupCount(>2) would return 3
 		 *
 		 *  Returns 0 if no grouping is performed at that index.
-		 *  Returns 0 and sets errno on error.  */
+		 *  Returns 0 and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static uint8_t	getMonetaryDigitGroupCount(uint8_t index);
 
 		/** Returns the positive sign string, for monetary values,
 		 *  for the current locale.  Eg. "+" but usually ""
 		 *  (empty string).
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getMonetaryPositiveSign();
 
 		/** Returns the negative sign string, for monetary values,
 		 *  for the current locale.  Eg. "-"
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getMonetaryNegativeSign();
 
 		/** Returns the local currency symbol string, for the current
 		 *  locale.  Eg. "$"
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getLocalCurrencySymbol();
 
 		/** Returns the number of digits after the decimal point
 		 *  for an locally formatted monetary value, for the current
 		 *  locale.
 		 *
-		 *  Returns 0 and sets errno on error. */
+		 *  Returns 0 and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static uint8_t	getLocalMonetaryDecimalDigits();
 
 		/** Returns true if the currency symbol preceeds a positive
@@ -370,7 +424,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for $100
 		 *  * false for 100$
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getLocalCurrencySymbolPreceedsPositiveValue();
 
@@ -382,7 +440,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for $ 100
 		 *  * false for $100
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getLocalSpaceSeparatesCurrencySymbolAndPositiveValue();
 
@@ -405,7 +467,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
 		 *  immediately after the currency symbol.  Eg. 100$+
 		 *
-		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static monetary_sign_position_t
 		getLocalMonetaryPositiveSignPosition();
 
@@ -417,7 +483,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for -$100
 		 *  * false for 100$-
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getLocalCurrencySymbolPreceedsNegativeValue();
 
@@ -429,7 +499,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for -$ 100
 		 *  * false for -$100
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getLocalSpaceSeparatesCurrencySymbolAndNegativeValue();
 
@@ -452,28 +526,48 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
 		 *  immediately after the currency symbol.  Eg. 100$-
 		 *
-		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static monetary_sign_position_t
 		getLocalMonetaryNegativeSignPosition();
 
 		/** Returns the ISO 4217:1995 international currency symbol
 		 *  string, for the current locale.  Eg. "USD"
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getInternationalCurrencySymbol();
 
 		/** Returns the separator character that goes between the
 		 *  ISO 4217:1995 international currency symbol and the
 		 *  monetary amount, for the current locale.  Eg. " " (a space)
 		 *
-		 *  Returns NULL and sets errno on error. */
+		 *  Returns NULL and sets errno on error.
+		 *
+		 *  NOTE: This method allocates a buffer internally and returns
+		 *  it.  The calling program must deallocate this buffer.  The
+		 *  get*() methods of this class are not thread-safe, and must
+		 *  be protected by a mutex if multiple threads could call any
+		 *  of them simultaneously. */
 		static char	*getInternationalCurrencySymbolSeparator();
 
 		/** Returns the number of digits after the decimal point
 		 *  for an internationally formatted monetary value, for the
 		 *  current locale.
 		 *
-		 *  Returns 0 and sets errno on error. */
+		 *  Returns 0 and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static uint8_t	getInternationalMonetaryDecimalDigits();
 
 		/** Returns true if the currency symbol preceeds a positive
@@ -483,7 +577,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for $100
 		 *  * false for 100$
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getInternationalCurrencySymbolPreceedsPositiveValue();
 
@@ -495,7 +593,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for $ 100
 		 *  * false for $100
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 
@@ -518,7 +620,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
 		 *  immediately after the currency symbol.  Eg. 100$+
 		 *
-		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static monetary_sign_position_t
 		getInternationalMonetaryPositiveSignPosition();
 
@@ -530,7 +636,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for -$100
 		 *  * false for 100$-
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getInternationalCurrencySymbolPreceedsNegativeValue();
 
@@ -542,7 +652,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  * true for -$ 100
 		 *  * false for -$100
 		 *
-		 *  Returns false and sets errno on error. */
+		 *  Returns false and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static bool
 		getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
 
@@ -565,7 +679,11 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  MONETARY_SIGN_POSITION_AFTER_SYMBOL if the sign comes
 		 *  immediately after the currency symbol.  Eg. 100$-
 		 *
-		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error. */
+		 *  MONETARY_SIGN_POSITION_ERROR and sets errno on error.
+		 *
+		 *  NOTE: The get*() methods of this class are not thread-safe,
+		 *  and must be protected by a mutex if multiple threads could
+		 *  call any of them simultaneously. */
 		static monetary_sign_position_t
 		getInternationalMonetaryNegativeSignPosition();
 
