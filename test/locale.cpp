@@ -22,6 +22,7 @@ int main(int argc, const char **argv) {
 	char	*osname=sys::getOperatingSystemName();
 	bool	isnetbsd=!charstring::compare(osname,"NetBSD");
 	bool	isopenbsd=!charstring::compare(osname,"OpenBSD");
+	bool	issolaris=!charstring::compare(osname,"SunOS");
 	delete[] osname;
 
 	// default locale
@@ -461,13 +462,12 @@ int main(int argc, const char **argv) {
 		c=locale::getNumericDecimalPoint();
 		test("numeric decimal point",!charstring::compare(c,"."));
 		delete[] c;
-		// inconsistent across platforms
-		#if 0
-		c=locale::getNumericDigitGroupSeparator();
-		test("numeric digit group separator",
-					!charstring::compare(c,","));
-		delete[] c;
-		#endif
+		if (!issolaris) {
+			c=locale::getNumericDigitGroupSeparator();
+			test("numeric digit group separator",
+						!charstring::compare(c,","));
+			delete[] c;
+		}
 		n=locale::getNumericDigitGroupCount(0);
 		test("numeric digit group count(0)",n==3);
 		c=locale::getMonetaryDecimalPoint();
@@ -517,7 +517,7 @@ int main(int argc, const char **argv) {
 		b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 
 		// inconsistent across platforms
-		#if 0
+		//#if 0
 		test("int currency symbol preceeds positive value",b);
 		b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 		test("int space separates currency symbol and positive value",
@@ -533,7 +533,7 @@ int main(int argc, const char **argv) {
 		m=locale::getInternationalMonetaryNegativeSignPosition();
 		test("int monetary sign position for negative values",
 				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
-		#endif
+		//#endif
 		stdoutput.printf("\n");
 	}
 
