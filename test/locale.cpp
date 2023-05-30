@@ -383,23 +383,30 @@ int main(int argc, const char **argv) {
 	monetary_sign_position_t	m;
 	c=locale::getNumericDecimalPoint();
 	test("numeric decimal point",!charstring::compare(c,"."));
+	delete[] c;
 	c=locale::getNumericDigitGroupSeparator();
 	test("numeric digit group separator",!charstring::compare(c,""));
+	delete[] c;
 	n=locale::getNumericDigitGroupCount(0);
 	test("numeric digit group count(0)",n==0);
 	c=locale::getMonetaryDecimalPoint();
 	test("monetary decimal point",!charstring::compare(c,""));
+	delete[] c;
 	c=locale::getMonetaryDigitGroupSeparator();
 	test("monetary digit group separator",!charstring::compare(c,""));
+	delete[] c;
 	n=locale::getMonetaryDigitGroupCount(0);
 	test("monetary digit group count(0)",n==0);
 	c=locale::getMonetaryPositiveSign();
 	test("monetary positive sign",!charstring::compare(c,""));
+	delete[] c;
 	c=locale::getMonetaryNegativeSign();
 	test("monetary negative sign",!charstring::compare(c,""));
+	delete[] c;
 
 	c=locale::getLocalCurrencySymbol();
 	test("local currency symbol",!charstring::compare(c,""));
+	delete[] c;
 	n=locale::getLocalMonetaryDecimalDigits();
 	test("local monetary decimal digits",n==127);
 	b=locale::getLocalCurrencySymbolPreceedsPositiveValue();
@@ -418,12 +425,15 @@ int main(int argc, const char **argv) {
 			m==MONETARY_SIGN_POSITION_ERROR);
 	c=locale::getInternationalCurrencySymbol();
 	test("int currency symbol",!charstring::compare(c,""));
+	delete[] c;
 	c=locale::getInternationalCurrencySymbolSeparator();
 	test("int currency separator",!charstring::compare(c,""));
+	delete[] c;
 	n=locale::getInternationalMonetaryDecimalDigits();
 	test("int monetary decimal digits",n==127);
 	c=locale::getInternationalCurrencySymbol();
 	test("int currency symbol",!charstring::compare(c,""));
+	delete[] c;
 	n=locale::getInternationalMonetaryDecimalDigits();
 	test("int monetary decimal digits",n==127);
 	b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
@@ -447,27 +457,34 @@ int main(int argc, const char **argv) {
 					"the en_US-UTF-8 locale:\n");
 		c=locale::getNumericDecimalPoint();
 		test("numeric decimal point",!charstring::compare(c,"."));
+		delete[] c;
 		// inconsistent across platforms
 		#if 0
 		c=locale::getNumericDigitGroupSeparator();
 		test("numeric digit group separator",
 					!charstring::compare(c,","));
+		delete[] c;
 		#endif
 		n=locale::getNumericDigitGroupCount(0);
 		test("numeric digit group count(0)",n==3);
 		c=locale::getMonetaryDecimalPoint();
 		test("monetary decimal point",!charstring::compare(c,"."));
+		delete[] c;
 		c=locale::getMonetaryDigitGroupSeparator();
 		test("monetary digit group separator",
 					!charstring::compare(c,","));
+		delete[] c;
 		n=locale::getMonetaryDigitGroupCount(0);
 		test("monetary digit group count(0)",n==3);
 		c=locale::getMonetaryPositiveSign();
 		test("monetary positive sign",!charstring::compare(c,""));
+		delete[] c;
 		c=locale::getMonetaryNegativeSign();
 		test("monetary negative sign",!charstring::compare(c,"-"));
+		delete[] c;
 		c=locale::getLocalCurrencySymbol();
 		test("local currency symbol",!charstring::compare(c,"$"));
+		delete[] c;
 		n=locale::getLocalMonetaryDecimalDigits();
 		test("local monetary decimal digits",n==2);
 		b=locale::getLocalCurrencySymbolPreceedsPositiveValue();
@@ -488,8 +505,10 @@ int main(int argc, const char **argv) {
 				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
 		c=locale::getInternationalCurrencySymbol();
 		test("int currency symbol",!charstring::compare(c,"USD"));
+		delete[] c;
 		c=locale::getInternationalCurrencySymbolSeparator();
 		test("int currency separator",!charstring::compare(c," "));
+		delete[] c;
 		n=locale::getInternationalMonetaryDecimalDigits();
 		test("int monetary decimal digits",n==2);
 		b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
