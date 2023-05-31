@@ -20,6 +20,7 @@ int main(int argc, const char **argv) {
 
 	// NetBSD has some strangeness
 	char	*osname=sys::getOperatingSystemName();
+	bool	isfreebsd=!charstring::compare(osname,"FreeBSD");
 	bool	isnetbsd=!charstring::compare(osname,"NetBSD");
 	bool	isopenbsd=!charstring::compare(osname,"OpenBSD");
 	bool	issolaris=!charstring::compare(osname,"SunOS");
@@ -523,7 +524,7 @@ int main(int argc, const char **argv) {
 		if (!issolaris) {
 			b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 			test("int currency symbol preceeds positive value",b);
-			if (!isdarwin) {
+			if (!isnetbsd && !isdarwin) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 				test("int space separates currency symbol and positive value",b);
 			}
@@ -532,7 +533,7 @@ int main(int argc, const char **argv) {
 					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
 			b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
 			test("int currency symbol preceeds negative value",b);
-			if (!isdarwin) {
+			if (!isnetbsd && !isdarwin) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
 				test("int space separates currency symbol and negative value",b);
 			}
