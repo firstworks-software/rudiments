@@ -138,3 +138,7 @@ ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement, bool bigendian) {
 uint8_t ucs2character::getNullSize() {
 	return sizeof(ucs2_t);
 }
+
+uint8_t ucs2character::getBomSize() {
+	return sizeof(ucs2_t);
+}

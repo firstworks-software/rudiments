@@ -171,6 +171,9 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		/** Returns the number of bytes needed to NULL-terminate a
 		 *  string of UCS-2-encoded characters. */
 		static uint8_t	getNullSize();
+
+		/** Returns the number of bytes in the UCS-2 byte-order mark. */
+		static uint8_t	getBomSize();
 };
 
 #endif

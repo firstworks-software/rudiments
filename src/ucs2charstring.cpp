@@ -2373,6 +2373,18 @@ ucs2_t *ucs2charstring::getHumanReadable(long double number, bool onethousand) {
 	return converted;
 }
 
+bool ucs2charstring::isByteOrderMark(const ucs2_t *str) {
+	const byte_t	*s=(const byte_t *)str;
+	return s && *s && *(s+1) &&
+		((*s==0xFE && *(s+1)==0xFF) ||
+		(*s==0xFF && *(s+1)==0xFE));
+}
+
+bool ucs2charstring::isBigEndian(const ucs2_t *str) {
+	const byte_t	*s=(const byte_t *)str;
+	return s && *s && *(s+1) && *s==0xFE && *(s+1)==0xFF;
+}
+
 ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
 					const ucs2_t *format, ...) {
 	va_list	args;

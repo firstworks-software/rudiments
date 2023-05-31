@@ -1232,6 +1232,14 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		static ucs2_t	*getHumanReadable(long double number,
 							bool onethousand);
 
+		/** Returns true if the current character in "str" is the byte
+		 *  order mark and false otherwise. */
+		static bool	isByteOrderMark(const ucs2_t *str);
+
+		/** Returns true if the current character in "str" is a
+		 *  bigendian byte-order mark and false otherwise. */
+		static bool	isBigEndian(const ucs2_t *str);
+
 		/** Appends "..." to "buffer" of character length "len" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
