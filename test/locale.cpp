@@ -514,26 +514,26 @@ int main(int argc, const char **argv) {
 		delete[] c;
 		n=locale::getInternationalMonetaryDecimalDigits();
 		test("int monetary decimal digits",n==2);
-		b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 
 		// inconsistent across platforms
-		//#if 0
-		test("int currency symbol preceeds positive value",b);
-		b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
-		test("int space separates currency symbol and positive value",
+		if (!issolaris) {
+			b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
+			test("int currency symbol preceeds positive value",b);
+			b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
+			test("int space separates currency symbol and positive value",
 				b);
-		m=locale::getInternationalMonetaryPositiveSignPosition();
-		test("int monetary sign position for positive values",
-				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
-		b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
-		test("int currency symbol preceeds negative value",b);
-		b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
-		test("int space separates currency symbol and negative value",
+			m=locale::getInternationalMonetaryPositiveSignPosition();
+			test("int monetary sign position for positive values",
+					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+			b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
+			test("int currency symbol preceeds negative value",b);
+			b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
+			test("int space separates currency symbol and negative value",
 				b);
-		m=locale::getInternationalMonetaryNegativeSignPosition();
-		test("int monetary sign position for negative values",
-				m==MONETARY_SIGN_POSITION_BEFORE_STRING);
-		//#endif
+			m=locale::getInternationalMonetaryNegativeSignPosition();
+			test("int monetary sign position for negative values",
+					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+		}
 		stdoutput.printf("\n");
 	}
 
