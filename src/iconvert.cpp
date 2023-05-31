@@ -323,6 +323,8 @@ fallback:
 	if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"")) {
 
+		// FIXME: loop
+
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
 			pvt->_tobufferremaining<getMaxMultiByteSize()) {
@@ -371,8 +373,18 @@ fallback:
 			return false;
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"") &&
 			!charstring::compare(toenc,"WCHAR_T")) {
+
+		// FIXME: loop
 
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(char) ||
@@ -434,8 +446,18 @@ fallback:
 			return false;
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"UCS-2",5) &&
 				!charstring::compare(toenc,"")) {
+
+		// FIXME: loop
 
 		// FIXME: verify that the character set of the current
 		// locale is ASCII or some kind of extended ASCII
@@ -460,8 +482,18 @@ fallback:
 			return false;
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"") &&
 				!charstring::compare(toenc,"UCS-2",5)) {
+
+		// FIXME: loop
 
 		// FIXME: verify that the character set of the current
 		// locale is ASCII or some kind of extended ASCII
@@ -486,8 +518,18 @@ fallback:
 			return false;
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"UCS-2",5) &&
 				!charstring::compare(toenc,"WCHAR_T")) {
+
+		// FIXME: loop
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
@@ -522,8 +564,18 @@ fallback:
 			return false;
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"UCS-2",5)) {
+
+		// FIXME: loop
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
@@ -559,10 +611,20 @@ fallback:
 			return false;
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if ((!charstring::compare(fromenc,"UCS-2LE") &&
 				!charstring::compare(toenc,"UCS-2LE")) ||
 			(!charstring::compare(fromenc,"UCS-2BE") &&
 				!charstring::compare(toenc,"UCS-2BE"))) {
+
+		// FIXME: loop
 		
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
@@ -586,8 +648,18 @@ fallback:
 						tosize);
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
 				!charstring::compare(toenc,"UCS-2BE")) {
+
+		// FIXME: loop
 
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
@@ -613,8 +685,18 @@ fallback:
 							(uint16_t)from));
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"UCS-2BE") &&
 				!charstring::compare(toenc,"UCS-2LE")) {
+
+		// FIXME: loop
 
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
@@ -635,12 +717,24 @@ fallback:
 		// convert
 		debugPrintf("direct conversion... ");
 		if (to) {
-			*to=(ucs2_t)filedescriptor::convertHostToLittleEndian(
-				filedescriptor::convertNetToHost((uint16_t)from));
+			*to=(ucs2_t)filedescriptor::
+					convertHostToLittleEndian(
+				filedescriptor::
+					convertNetToHost((uint16_t)from));
+		}
+
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
 		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"WCHAR_T")) {
+
+		// FIXME: loop
 
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
@@ -664,8 +758,18 @@ fallback:
 						tosize);
 		}
 
+		// bump buffer pointers and remaining counts
+		pvt->_frombufferptr+=fromsize;
+		pvt->_frombufferremaining-=fromsize;
+		if (pvt->_tobufferptr) {
+			pvt->_tobufferptr+=tosize;
+			pvt->_tobufferremaining-=tosize;
+		}
+
 	} else if (!charstring::compare(fromenc,"") &&
 				!charstring::compare(toenc,"")) {
+
+		// FIXME: loop
 
 		// sanity check on buffers
 		if (pvt->_frombufferremaining<sizeof(char) ||
@@ -717,21 +821,19 @@ fallback:
 			bytestring::copy(to,from,fromsize);
 		}
 
-	} else {
-
-		debugPrintf("unsupported conversion\n");
-		error::setErrorNumber(ENOSYS);
-		return false;
-	}
-
-	// bump buffer pointers and remaining counts
-	if ((ssize_t)fromsize>-1) {
+		// bump buffer pointers and remaining counts
 		pvt->_frombufferptr+=fromsize;
 		pvt->_frombufferremaining-=fromsize;
 		if (pvt->_tobufferptr) {
 			pvt->_tobufferptr+=tosize;
 			pvt->_tobufferremaining-=tosize;
 		}
+
+	} else {
+
+		debugPrintf("unsupported conversion\n");
+		error::setErrorNumber(ENOSYS);
+		return false;
 	}
 
 	debugPrintf("success\n");
@@ -741,7 +843,8 @@ fallback:
 ucs2_t iconvert::byteswap(const char *enc, ucs2_t value) {
 	if (sys::isBigEndian()) {
 		if (!charstring::compare(enc,"UCS-2LE")) {
-			return (ucs2_t)filedescriptor::convertLittleEndianToHost(
+			return (ucs2_t)filedescriptor::
+					convertLittleEndianToHost(
 							(uint16_t)value);
 		}
 	} else {
