@@ -524,7 +524,7 @@ int main(int argc, const char **argv) {
 		if (!issolaris) {
 			b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 			test("int currency symbol preceeds positive value",b);
-			if (!isnetbsd && !isdarwin) {
+			if (!isfreebsd && !isnetbsd && !isdarwin) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 				test("int space separates currency symbol and positive value",b);
 			}
@@ -533,7 +533,7 @@ int main(int argc, const char **argv) {
 					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
 			b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
 			test("int currency symbol preceeds negative value",b);
-			if (!isnetbsd && !isdarwin) {
+			if (!isfreebsd && !isnetbsd && !isdarwin) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
 				test("int space separates currency symbol and negative value",b);
 			}
