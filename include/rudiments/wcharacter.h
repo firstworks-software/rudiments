@@ -126,6 +126,10 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		static wchar_t	duplicateUcs2(ucs2_t c,
 						wchar_t replacement,
 						bool bigendian);
+
+		/** Returns the number of bytes needed to NULL-terminate a
+		 *  string of wide characters. */
+		static uint8_t	getNullSize();
 };
 
 #endif

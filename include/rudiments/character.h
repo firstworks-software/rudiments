@@ -143,6 +143,10 @@ class RUDIMENTS_DLLSPEC character {
 		static char	duplicateUcs2(ucs2_t c,
 						char replacement,
 						bool bigendian);
+
+		/** Returns the number of bytes needed to NULL-terminate a
+		 *  string of ASCII-encoded characters. */
+		static uint8_t	getNullSize();
 };
 
 #endif

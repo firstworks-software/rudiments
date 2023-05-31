@@ -223,3 +223,7 @@ wchar_t wcharacter::duplicateUcs2(ucs2_t c, wchar_t replacement,
 	i.setToBufferSize(sizeof(wchar_t));
 	return (i.convert())?wc:replacement;
 }
+
+uint8_t wcharacter::getNullSize() {
+	return sizeof(wchar_t);
+}

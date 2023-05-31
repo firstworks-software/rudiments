@@ -134,3 +134,7 @@ ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement, bool bigendian) {
 	i.setToBufferSize(sizeof(uc));
 	return (i.convert())?uc:replacement;
 }
+
+uint8_t ucs2character::getNullSize() {
+	return sizeof(ucs2_t);
+}

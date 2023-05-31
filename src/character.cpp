@@ -213,3 +213,7 @@ char character::duplicateUcs2(ucs2_t c, char replacement, bool bigendian) {
 	delete[] mb;
 	return retval;
 }
+
+uint8_t character::getNullSize() {
+	return sizeof(char);
+}

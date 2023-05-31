@@ -167,6 +167,10 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		static ucs2_t	duplicate(wchar_t c,
 						ucs2_t replacement,
 						bool bigendian);
+
+		/** Returns the number of bytes needed to NULL-terminate a
+		 *  string of UCS-2-encoded characters. */
+		static uint8_t	getNullSize();
 };
 
 #endif
