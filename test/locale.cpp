@@ -23,6 +23,7 @@ int main(int argc, const char **argv) {
 	bool	isnetbsd=!charstring::compare(osname,"NetBSD");
 	bool	isopenbsd=!charstring::compare(osname,"OpenBSD");
 	bool	issolaris=!charstring::compare(osname,"SunOS");
+	bool	isdarwin=!charstring::compare(osname,"Darwin");
 	delete[] osname;
 
 	// default locale
@@ -462,12 +463,15 @@ int main(int argc, const char **argv) {
 		c=locale::getNumericDecimalPoint();
 		test("numeric decimal point",!charstring::compare(c,"."));
 		delete[] c;
+
+		// inconsistent across platforms
 		if (!issolaris) {
 			c=locale::getNumericDigitGroupSeparator();
 			test("numeric digit group separator",
 						!charstring::compare(c,","));
 			delete[] c;
 		}
+
 		n=locale::getNumericDigitGroupCount(0);
 		test("numeric digit group count(0)",n==3);
 		c=locale::getMonetaryDecimalPoint();
@@ -519,17 +523,19 @@ int main(int argc, const char **argv) {
 		if (!issolaris) {
 			b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 			test("int currency symbol preceeds positive value",b);
-			b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
-			test("int space separates currency symbol and positive value",
-				b);
+			if (!isdarwin) {
+				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
+				test("int space separates currency symbol and positive value",b);
+			}
 			m=locale::getInternationalMonetaryPositiveSignPosition();
 			test("int monetary sign position for positive values",
 					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
 			b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
 			test("int currency symbol preceeds negative value",b);
-			b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
-			test("int space separates currency symbol and negative value",
-				b);
+			if (!isdarwin) {
+				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
+				test("int space separates currency symbol and negative value",b);
+			}
 			m=locale::getInternationalMonetaryNegativeSignPosition();
 			test("int monetary sign position for negative values",
 					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
