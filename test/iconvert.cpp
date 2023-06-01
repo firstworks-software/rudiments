@@ -5,6 +5,7 @@
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/wcharstring.h>
 #include <rudiments/charstring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 
 #include "test.cpp"
@@ -15,6 +16,9 @@ int main(int argc, char **argv) {
 	const char	*hellochar="Hello!";
 	const wchar_t	*hellowchar=L"Hello!";
 	ucs2literal(helloucs2char,"Hello!");
+
+	// big or little endian
+	const char	*ucs2=(sys::isBigEndian())?"UCS-2BE":"UCS-2LE";
 
 	// some stuff to reuse
 	iconvert	i;
@@ -42,7 +46,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("ucs2 to char:\n");
 	s=ucs2charstring::getSize(helloucs2char);
 	c=new char[s];
-	i.setFromEncoding("UCS-2");
+	i.setFromEncoding(ucs2);
 	i.setFromBuffer((const byte_t *)helloucs2char);
 	i.setFromBufferSize(s);
 	i.setToBuffer((byte_t *)c);
@@ -72,7 +76,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("ucs2 to char:\n");
 	s=ucs2charstring::getSize(helloucs2char);
 	wc=new wchar_t[s];
-	i.setFromEncoding("UCS-2");
+	i.setFromEncoding(ucs2);
 	i.setFromBuffer((const byte_t *)helloucs2char);
 	i.setFromBufferSize(s);
 	i.setToEncoding("WCHAR_T");
@@ -91,7 +95,7 @@ int main(int argc, char **argv) {
 	i.setFromEncoding("");
 	i.setFromBuffer((const byte_t *)hellochar);
 	i.setFromBufferSize(s);
-	i.setToEncoding("UCS-2");
+	i.setToEncoding(ucs2);
 	i.setToBuffer((byte_t *)uc);
 	i.setToBufferSize(s*sizeof(ucs2_t));
 	test("convert",i.convert());
@@ -106,7 +110,7 @@ int main(int argc, char **argv) {
 	i.setFromEncoding("WCHAR_T");
 	i.setFromBuffer((const byte_t *)hellowchar);
 	i.setFromBufferSize(s);
-	i.setToEncoding("UCS-2");
+	i.setToEncoding(ucs2);
 	i.setToBuffer((byte_t *)uc);
 	i.setToBufferSize(s*sizeof(ucs2_t));
 	test("convert",i.convert());
