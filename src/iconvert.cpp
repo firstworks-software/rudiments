@@ -4,7 +4,7 @@
 #include <rudiments/iconvert.h>
 #include <rudiments/error.h>
 #include <rudiments/sys.h>
-#define DEBUG_MESSAGES
+//#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
 #ifdef RUDIMENTS_HAVE_ICONV_H
