@@ -188,7 +188,7 @@ char character::duplicateUcs2(ucs2_t c, bool bigendian) {
 }
 
 char character::duplicateUcs2(ucs2_t c, char replacement, bool bigendian) {
-	char		*mb= new char[iconvert::getMaxMultiByteSize()];
+	char		*mb=new char[iconvert::getMaxMultiByteSize()];
 	iconvert	i;
 	i.setFromEncoding((bigendian)?"UCS-2BE":"UCS-2LE");
 	i.setFromBuffer((byte_t *)&c);

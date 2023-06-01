@@ -1890,7 +1890,6 @@ ucs2_t *ucs2charstring::duplicate(const char *str, bool bigendian) {
 }
 
 ucs2_t *ucs2charstring::duplicate(const char *str, size_t len, bool bigendian) {
-	// FIXME: use iconvert directly
 	if (!str) {
 		return NULL;
 	}
@@ -1944,7 +1943,6 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 							ucs2_t replacement,
 							bool bigendian) {
-	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}

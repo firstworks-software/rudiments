@@ -24,6 +24,7 @@ for program in \
 	groupentry \
 	handoff \
 	hostentry \
+	iconvert \
 	inidom \
 	jsondom \
 	linkedlist \

@@ -1852,7 +1852,6 @@ wchar_t	*wcharstring::duplicate(const char *string) {
 }
 
 wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
-	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}
@@ -1901,7 +1900,6 @@ wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string,
 
 wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
 					wchar_t replacement, bool bigendian) {
-	// FIXME: use iconvert directly
 	if (!string) {
 		return NULL;
 	}

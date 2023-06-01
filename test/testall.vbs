@@ -23,6 +23,7 @@ tests=Array(_
 	"groupentry",_
 	"handoff",_
 	"hostentry",_
+	"iconvert",_
 	"inidom",_
 	"jsondom",_
 	"linkedlist",_
