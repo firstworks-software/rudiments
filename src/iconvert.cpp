@@ -323,300 +323,312 @@ fallback:
 	if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-			pvt->_tobufferremaining<getMaxMultiByteSize()) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
-
-		// set up "from"
-		fromsize=sizeof(wchar_t);
-		wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
-
-		// set up "to"
-		char	*to=(char *)pvt->_tobufferptr;
-		bytestring::zero(to,getMaxMultiByteSize());
-
-		// convert...
-		#if defined(RUDIMENTS_HAVE_WCRTOMB)
-			debugPrintf("wcrtomb()... ");
-			mbstate_t	st;
-			bytestring::zero(&st,sizeof(st));
-			tosize=wcrtomb(to,from,&st);
-		#elif defined(RUDIMENTS_HAVE_WCTOMB)
-			debugPrintf("wctomb()... ");
-			tosize=wctomb(to,from);
-		#else
-			debugPrintf("direct conversion... ");
-			// FIXME: Arguably we should verify that the
-			// character set of the current locale is ASCII
-			// or some kind of extended ASCII.  This is
-			// likely the case on platforms that don't
-			// provide wctomb/wcrtomb, but not guaranteed.
-			if (from<128) {
-				tosize=sizeof(char);
-				if (to) {
-					*to=(char)from;
-				}
-			} else {
-				tosize=(size_t)-1;
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<getMaxMultiByteSize()) {
+				debugPrintf("buffer check failed\n");
 				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		#endif
 
-		if (tosize==(size_t)-1) {
-			debugPrintf("failed\n");
-			return false;
-		}
+			// set up "from"
+			fromsize=sizeof(wchar_t);
+			wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// set up "to"
+			char	*to=(char *)pvt->_tobufferptr;
+			bytestring::zero(to,getMaxMultiByteSize());
+
+			// convert...
+			#if defined(RUDIMENTS_HAVE_WCRTOMB)
+				debugPrintf("wcrtomb()... ");
+				mbstate_t	st;
+				bytestring::zero(&st,sizeof(st));
+				tosize=wcrtomb(to,from,&st);
+			#elif defined(RUDIMENTS_HAVE_WCTOMB)
+				debugPrintf("wctomb()... ");
+				tosize=wctomb(to,from);
+			#else
+				debugPrintf("direct conversion... ");
+				// FIXME: Arguably we should verify that the
+				// character set of the current locale is ASCII
+				// or some kind of extended ASCII.  This is
+				// likely the case on platforms that don't
+				// provide wctomb/wcrtomb, but not guaranteed.
+				if (from<128) {
+					tosize=sizeof(char);
+					if (to) {
+						*to=(char)from;
+					}
+				} else {
+					tosize=(size_t)-1;
+					error::setErrorNumber(EILSEQ);
+				}
+			#endif
+
+			if (tosize==(size_t)-1) {
+				debugPrintf("failed\n");
+				return false;
+			}
+			debugPrintf("success\n");
+
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"") &&
 			!charstring::compare(toenc,"WCHAR_T")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(char) ||
-			pvt->_tobufferremaining<sizeof(wchar_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
-
-		// set up "from"
-		const char	*from=(const char *)pvt->_frombufferptr;
-
-		// set up "to"
-		tosize=sizeof(wchar_t);
-		wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
-		bytestring::zero(to,sizeof(wchar_t));
-
-		// convert...
-		#if defined(RUDIMENTS_HAVE_WCRTOMB)
-			debugPrintf("mbrtowc()... ");
-			mbstate_t	st;
-			bytestring::zero(&st,sizeof(st));
-			fromsize=mbrtowc(to,from,
-					pvt->_frombufferremaining,
-					&st);
-		#elif defined(RUDIMENTS_HAVE_WCTOMB)
-			debugPrintf("mbtowc()... ");
-			// mbtowc() doesn't like being passed '\0' on
-			// some platforms (redhat 4.2 with libc5)
-			if (from) {
-				fromsize=mbtowc(to,from,
-					pvt->_frombufferremaining);
-			} else {
-				fromsize=sizeof(char);
-				if (to) {
-					*to=(wchar_t)0;
-				}
-			}
-		#else
-			debugPrintf("direct conversion... ");
-			// FIXME: Arguably we should verify that the
-			// character set of the current locale is ASCII
-			// or some kind of extended ASCII.  This is
-			// likely the case on platforms that don't
-			if ((unsigned char)*from<128) {
-				fromsize=sizeof(char);
-				if (to) {
-					*to=(wchar_t)*from;
-				}
-			} else {
-				fromsize=(size_t)-1;
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(char) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				debugPrintf("buffer check failed\n");
 				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		#endif
 
-		// bail on error
-		if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
-			debugPrintf("failed\n");
-			return false;
-		}
+			// set up "from"
+			const char	*from=(const char *)pvt->_frombufferptr;
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// set up "to"
+			tosize=sizeof(wchar_t);
+			wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
+			bytestring::zero(to,sizeof(wchar_t));
+
+			// convert...
+			#if defined(RUDIMENTS_HAVE_WCRTOMB)
+				debugPrintf("mbrtowc()... ");
+				mbstate_t	st;
+				bytestring::zero(&st,sizeof(st));
+				fromsize=mbrtowc(to,from,
+						pvt->_frombufferremaining,
+						&st);
+			#elif defined(RUDIMENTS_HAVE_WCTOMB)
+				debugPrintf("mbtowc()... ");
+				// mbtowc() doesn't like being passed '\0' on
+				// some platforms (redhat 4.2 with libc5)
+				if (from) {
+					fromsize=mbtowc(to,from,
+						pvt->_frombufferremaining);
+				} else {
+					fromsize=sizeof(char);
+					if (to) {
+						*to=(wchar_t)0;
+					}
+				}
+			#else
+				debugPrintf("direct conversion... ");
+				// FIXME: Arguably we should verify that the
+				// character set of the current locale is ASCII
+				// or some kind of extended ASCII.  This is
+				// likely the case on platforms that don't
+				if ((unsigned char)*from<128) {
+					fromsize=sizeof(char);
+					if (to) {
+						*to=(wchar_t)*from;
+					}
+				} else {
+					fromsize=(size_t)-1;
+					error::setErrorNumber(EILSEQ);
+				}
+			#endif
+
+			// bail on error
+			if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
+				debugPrintf("failed\n");
+				return false;
+			}
+			debugPrintf("success\n");
+
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"UCS-2",5) &&
 				!charstring::compare(toenc,"")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// FIXME: verify that the character set of the current
-		// locale is ASCII or some kind of extended ASCII
+			// FIXME: verify that the character set of the current
+			// locale is ASCII or some kind of extended ASCII
 
-		// set up "from"
-		fromsize=sizeof(ucs2_t);
-		ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
 
-		// set up "to"
-		tosize=sizeof(char);
-		char	*to=(char *)pvt->_tobufferptr;
+			// set up "to"
+			tosize=sizeof(char);
+			char	*to=(char *)pvt->_tobufferptr;
 
-		// convert
-		debugPrintf("direct conversion... ");
-		if (from<128) {
-			if (to) {
-				*to=(char)byteswap(fromenc,from);
+			// convert
+			debugPrintf("direct conversion... ");
+			if (from<128) {
+				debugPrintf("success\n");
+				if (to) {
+					*to=(char)byteswap(fromenc,from);
+				}
+			} else {
+				debugPrintf("failed - invalid sequence\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		} else {
-			debugPrintf("failed - invalid sequence\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"") &&
 				!charstring::compare(toenc,"UCS-2",5)) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// FIXME: verify that the character set of the current
-		// locale is ASCII or some kind of extended ASCII
+			// FIXME: verify that the character set of the current
+			// locale is ASCII or some kind of extended ASCII
 
-		// set up "from"
-		fromsize=sizeof(char);
-		char	from=*((const char *)pvt->_frombufferptr);
+			// set up "from"
+			fromsize=sizeof(char);
+			char	from=*((const char *)pvt->_frombufferptr);
 
-		// set up "to"
-		tosize=sizeof(ucs2_t);
-		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
-		// convert
-		debugPrintf("direct conversion... ");
-		if ((unsigned char)from<128) {
-			if (to) {
-				*to=byteswap(toenc,(ucs2_t)from);
+			// convert
+			debugPrintf("direct conversion... ");
+			if ((unsigned char)from<128) {
+				debugPrintf("success\n");
+				if (to) {
+					*to=byteswap(toenc,(ucs2_t)from);
+				}
+			} else {
+				debugPrintf("failed - invalid sequence\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		} else {
-			debugPrintf("failed - invalid sequence\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"UCS-2",5) &&
 				!charstring::compare(toenc,"WCHAR_T")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 		
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
-			pvt->_tobufferremaining<sizeof(wchar_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
-
-		// set up "from"
-		fromsize=sizeof(ucs2_t);
-		ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
-
-		// set up "to"
-		tosize=sizeof(wchar_t);
-		wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
-
-		// FIXME: use mbrtoc16/mbtoc16 if available
-
-		// convert
-		// FIXME: this implementation is incorrect for
-		// chars >= 128 and for platforms where the wchar_t
-		// format is not the same as UCS-2 (Solaris 9-)
-		debugPrintf("direct conversion... ");
-		if (from<128) {
-			if (to) {
-				*to=(wchar_t)byteswap(fromenc,from);
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		} else {
-			debugPrintf("failed - invalid sequence\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+
+			// set up "to"
+			tosize=sizeof(wchar_t);
+			wchar_t	*to=(wchar_t *)pvt->_tobufferptr;
+
+			// FIXME: use mbrtoc16/mbtoc16 if available
+
+			// convert
+			// FIXME: this implementation is incorrect for
+			// chars >= 128 and for platforms where the wchar_t
+			// format is not the same as UCS-2 (Solaris 9-)
+			debugPrintf("direct conversion... ");
+			if (from<128) {
+				debugPrintf("success\n");
+				if (to) {
+					*to=(wchar_t)byteswap(fromenc,from);
+				}
+			} else {
+				debugPrintf("failed - invalid sequence\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"UCS-2",5)) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 		
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-			pvt->_tobufferremaining<sizeof(ucs2_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
-
-		// set up "from"
-		fromsize=sizeof(wchar_t);
-		wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
-
-		// set up "to"
-		tosize=sizeof(ucs2_t);
-		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
-		bytestring::zero(to,tosize);
-
-		// FIXME: use c16rtomb/c16tomb if available
-
-		// convert
-		// FIXME: this implementation is incorrect for
-		// chars >= 128 and for platforms where the wchar_t
-		// format is not the same as UCS-2 (Solaris 9-)
-		debugPrintf("direct conversion... ");
-		if (from<128) {
-			if (to) {
-				*to=byteswap(toenc,(ucs2_t)from);
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		} else {
-			debugPrintf("failed - invalid sequence\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// set up "from"
+			fromsize=sizeof(wchar_t);
+			wchar_t	from=*((const wchar_t *)pvt->_frombufferptr);
+
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			bytestring::zero(to,tosize);
+
+			// FIXME: use c16rtomb/c16tomb if available
+
+			// convert
+			// FIXME: this implementation is incorrect for
+			// chars >= 128 and for platforms where the wchar_t
+			// format is not the same as UCS-2 (Solaris 9-)
+			debugPrintf("direct conversion... ");
+			if (from<128) {
+				debugPrintf("success\n");
+				if (to) {
+					*to=byteswap(toenc,(ucs2_t)from);
+				}
+			} else {
+				debugPrintf("failed - invalid sequence\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
+
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if ((!charstring::compare(fromenc,"UCS-2LE") &&
@@ -624,209 +636,215 @@ fallback:
 			(!charstring::compare(fromenc,"UCS-2BE") &&
 				!charstring::compare(toenc,"UCS-2BE"))) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 		
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
-			pvt->_tobufferremaining<sizeof(ucs2_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(ucs2_t) ||
+				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
 
-		// set up "from"
-		fromsize=sizeof(ucs2_t);
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
 
-		// set up "to"
-		tosize=sizeof(ucs2_t);
+			// set up "to"
+			tosize=sizeof(ucs2_t);
 
-		// copy
-		debugPrintf("direct conversion... ");
-		if (pvt->_tobufferptr) {
-			bytestring::copy(pvt->_tobufferptr,
-						pvt->_frombufferptr,
-						tosize);
-		}
+			// copy
+			debugPrintf("direct conversion... success\n");
+			if (pvt->_tobufferptr) {
+				bytestring::copy(pvt->_tobufferptr,
+							pvt->_frombufferptr,
+							tosize);
+			}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"UCS-2LE") &&
 				!charstring::compare(toenc,"UCS-2BE")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-			pvt->_tobufferremaining<sizeof(ucs2_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
 
-		// set up "from"
-		fromsize=sizeof(ucs2_t);
-		ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
 
-		// set up "to"
-		tosize=sizeof(ucs2_t);
-		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
-		// convert
-		debugPrintf("direct conversion... ");
-		if (to) {
-			*to=(ucs2_t)filedescriptor::convertHostToNet(
+			// convert
+			debugPrintf("direct conversion... success\n");
+			if (to) {
+				*to=(ucs2_t)filedescriptor::convertHostToNet(
 				filedescriptor::convertLittleEndianToHost(
-							(uint16_t)from));
-		}
+								(uint16_t)from));
+			}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"UCS-2BE") &&
 				!charstring::compare(toenc,"UCS-2LE")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-			pvt->_tobufferremaining<sizeof(ucs2_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<sizeof(ucs2_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
 
-		// set up "from"
-		fromsize=sizeof(ucs2_t);
-		ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			// set up "from"
+			fromsize=sizeof(ucs2_t);
+			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
 
-		// set up "to"
-		tosize=sizeof(ucs2_t);
-		ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
+			// set up "to"
+			tosize=sizeof(ucs2_t);
+			ucs2_t	*to=(ucs2_t *)pvt->_tobufferptr;
 
-		// convert
-		debugPrintf("direct conversion... ");
-		if (to) {
-			*to=(ucs2_t)filedescriptor::
+			// convert
+			debugPrintf("direct conversion... success\n");
+			if (to) {
+				*to=(ucs2_t)filedescriptor::
 					convertHostToLittleEndian(
-				filedescriptor::
+					filedescriptor::
 					convertNetToHost((uint16_t)from));
-		}
+			}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"WCHAR_T") &&
 				!charstring::compare(toenc,"WCHAR_T")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(wchar_t) ||
-			pvt->_tobufferremaining<sizeof(wchar_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(wchar_t) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
+			}
 
-		// set up "from"
-		fromsize=sizeof(wchar_t);
+			// set up "from"
+			fromsize=sizeof(wchar_t);
 
-		// set up "to"
-		tosize=sizeof(wchar_t);
+			// set up "to"
+			tosize=sizeof(wchar_t);
 
-		// copy
-		debugPrintf("direct conversion... ");
-		if (pvt->_tobufferptr) {
-			bytestring::copy(pvt->_tobufferptr,
-						pvt->_frombufferptr,
-						tosize);
-		}
+			// copy
+			debugPrintf("direct conversion... success\n");
+			if (pvt->_tobufferptr) {
+				bytestring::copy(pvt->_tobufferptr,
+							pvt->_frombufferptr,
+							tosize);
+			}
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else if (!charstring::compare(fromenc,"") &&
 				!charstring::compare(toenc,"")) {
 
-		// FIXME: loop
+		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-		// sanity check on buffers
-		if (pvt->_frombufferremaining<sizeof(char) ||
-			pvt->_tobufferremaining<sizeof(wchar_t)) {
-			debugPrintf("buffer check failed\n");
-			error::setErrorNumber(EILSEQ);
-			return false;
-		}
-
-		// set up "from"
-		const char	*from=(const char *)pvt->_frombufferptr;
-
-		// set up "to"
-		char		*to=(char *)pvt->_tobufferptr;
-
-		// get the number of bytes to copy
-		#if defined(RUDIMENTS_HAVE_WCRTOMB)
-			debugPrintf("mbrtowc()... ");
-			mbstate_t	st;
-			bytestring::zero(&st,sizeof(st));
-			fromsize=mbrtowc(NULL,from,
-					pvt->_frombufferremaining,
-					&st);
-		#elif defined(RUDIMENTS_HAVE_WCTOMB)
-			debugPrintf("mbtowc()... ");
-			// mbtowc() doesn't like being passed '\0' on
-			// some platforms (redhat 4.2 with libc5)
-			if (from) {
-				fromsize=mbtowc(NULL,from,
-					pvt->_frombufferremaining);
-			} else {
-				fromsize=sizeof(char);
+			// sanity check on buffers
+			if (pvt->_frombufferremaining<sizeof(char) ||
+				pvt->_tobufferremaining<sizeof(wchar_t)) {
+				debugPrintf("buffer check failed\n");
+				error::setErrorNumber(EILSEQ);
+				return false;
 			}
-		#else
-			debugPrintf("direct conversion... ");
-			// FIXME: verify that the character set of the
-			// current locale is single-byte
-			fromsize=sizeof(char);
-		#endif
 
-		// bail on error
-		if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
-			debugPrintf("failed\n");
-			return false;
-		}
+			// set up "from"
+			const char	*from=(const char *)pvt->_frombufferptr;
 
-		// copy the bytes
-		if (to) {
-			bytestring::copy(to,from,fromsize);
-		}
+			// set up "to"
+			char		*to=(char *)pvt->_tobufferptr;
 
-		// bump buffer pointers and remaining counts
-		pvt->_frombufferptr+=fromsize;
-		pvt->_frombufferremaining-=fromsize;
-		if (pvt->_tobufferptr) {
-			pvt->_tobufferptr+=tosize;
-			pvt->_tobufferremaining-=tosize;
+			// get the number of bytes to copy
+			#if defined(RUDIMENTS_HAVE_WCRTOMB)
+				debugPrintf("mbrtowc()... ");
+				mbstate_t	st;
+				bytestring::zero(&st,sizeof(st));
+				fromsize=mbrtowc(NULL,from,
+						pvt->_frombufferremaining,
+						&st);
+			#elif defined(RUDIMENTS_HAVE_WCTOMB)
+				debugPrintf("mbtowc()... ");
+				// mbtowc() doesn't like being passed '\0' on
+				// some platforms (redhat 4.2 with libc5)
+				if (from) {
+					fromsize=mbtowc(NULL,from,
+						pvt->_frombufferremaining);
+				} else {
+					fromsize=sizeof(char);
+				}
+			#else
+				debugPrintf("direct conversion... ");
+				// FIXME: verify that the character set of the
+				// current locale is single-byte
+				fromsize=sizeof(char);
+			#endif
+
+			// bail on error
+			if (fromsize==(size_t)-1 || fromsize==(size_t)-2) {
+				debugPrintf("failed\n");
+				return false;
+			}
+			debugPrintf("success\n");
+
+			// copy the bytes
+			if (to) {
+				bytestring::copy(to,from,fromsize);
+			}
+
+			// bump buffer pointers and remaining counts
+			pvt->_frombufferptr+=fromsize;
+			pvt->_frombufferremaining-=fromsize;
+			if (pvt->_tobufferptr) {
+				pvt->_tobufferptr+=tosize;
+				pvt->_tobufferremaining-=tosize;
+			}
 		}
 
 	} else {
@@ -836,7 +854,6 @@ fallback:
 		return false;
 	}
 
-	debugPrintf("success\n");
 	return true;
 }
 
