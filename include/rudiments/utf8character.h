@@ -10,6 +10,7 @@
  *  manipulating UTF-8 encoded characters. */
 class RUDIMENTS_DLLSPEC utf8character {
 	public:
+
 		/** Returns the number of bytes needed to NULL-terminate a
 		 *  string of UTF-8-encoded characters. */
 		static uint8_t	getNullSize();
