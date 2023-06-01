@@ -36,9 +36,13 @@ srcs="winsock.cpp "+_
 	"character.cpp "+_
 	"wcharacter.cpp "+_
 	"ucs2character.cpp "+_
+	"utf8character.cpp "+_
+	"utf16character.cpp "+_
 	"charstring.cpp "+_
 	"wcharstring.cpp "+_
 	"ucs2charstring.cpp "+_
+	"utf8charstring.cpp "+_
+	"utf16charstring.cpp "+_
 	"iconvert.cpp "+_
 	"chat.cpp "+_
 	"client.cpp "+_
@@ -136,9 +140,13 @@ lobjs="winsock.obj "+_
 	"character.obj "+_
 	"wcharacter.obj "+_
 	"ucs2character.obj "+_
+	"utf8character.obj "+_
+	"utf16character.obj "+_
 	"charstring.obj "+_
 	"wcharstring.obj "+_
 	"ucs2charstring.obj "+_
+	"utf8charstring.obj "+_
+	"utf16charstring.obj "+_
 	"iconvert.obj "+_
 	"chat.obj "+_
 	"client.obj "+_
@@ -241,9 +249,13 @@ headers1="table.h "+_
 	"character.h "+_
 	"wcharacter.h "+_
 	"ucs2character.h "+_
+	"utf8character.h "+_
+	"utf16character.h "+_
 	"charstring.h "+_
 	"wcharstring.h "+_
 	"ucs2charstring.h "+_
+	"utf8charstring.h "+_
+	"utf16charstring.h "+_
 	"iconvert.h "+_
 	"chat.h "+_
 	"client.h "+_
@@ -363,12 +375,18 @@ privateheaders1="inttypes.h "+_
 	"characterincludes.h "+_
 	"wcharacterincludes.h "+_
 	"ucs2characterincludes.h "+_
+	"utf8characterincludes.h "+_
+	"utf16characterincludes.h "+_
 	"charstring.h "+_
 	"charstringincludes.h "+_
 	"wcharstring.h "+_
 	"wcharstringincludes.h "+_
 	"ucs2charstring.h "+_
 	"ucs2charstringincludes.h "+_
+	"utf8charstring.h "+_
+	"utf8charstringincludes.h "+_
+	"utf16charstring.h "+_
+	"utf16charstringincludes.h "+_
 	"iconvert.h "+_
 	"iconvertincludes.h "+_
 	"chat.h "+_

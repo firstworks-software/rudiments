@@ -923,7 +923,10 @@ size_t ucs2charstring::getLength(const ucs2_t *string) {
 }
 
 size_t ucs2charstring::getSize(const ucs2_t *string) {
-	return (string)?(getLength(string)+1)*sizeof(ucs2_t):0;
+	return (string)?
+		((getLength(string)*sizeof(ucs2_t))+
+			ucs2character::getNullSize()):
+		0;
 }
 
 bool ucs2charstring::isNullOrEmpty(const ucs2_t *string) {

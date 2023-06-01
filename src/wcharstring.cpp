@@ -886,7 +886,6 @@ size_t wcharstring::getLength(const wchar_t *string) {
 	#ifdef RUDIMENTS_HAVE_WCSLEN
 		return wcslen(string);
 	#else
-		// FIXME: only works with UCS-2/UCS-4
 		size_t	len=0;
 		for (const wchar_t *c=string; *c; c++) {
 			len++;
@@ -896,8 +895,10 @@ size_t wcharstring::getLength(const wchar_t *string) {
 }
 
 size_t wcharstring::getSize(const wchar_t *string) {
-	// FIXME: only works with UCS-2/UCS-4
-	return (string)?((getLength(string)+1)*sizeof(wchar_t)):0;
+	return (string)?
+		(getLength(string)*sizeof(wchar_t))+
+			wcharacter::getNullSize():
+		0;
 }
 
 bool wcharstring::isNullOrEmpty(const wchar_t *string) {

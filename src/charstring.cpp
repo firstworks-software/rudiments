@@ -1031,7 +1031,7 @@ size_t charstring::getLength(const char *string) {
 }
 
 size_t charstring::getSize(const char *string) {
-	return (string)?strlen(string)+1:0;
+	return (string)?strlen(string)+character::getNullSize():0;
 }
 
 bool charstring::isNullOrEmpty(const char *string) {

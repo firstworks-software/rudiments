@@ -841,9 +841,13 @@ enable_threads
 enable_character
 enable_wcharacter
 enable_ucs2character
+enable_utf8character
+enable_utf16character
 enable_charstring
 enable_wcharstring
 enable_ucs2charstring
+enable_utf8charstring
+enable_utf16charstring
 enable_iconvert
 enable_chat
 enable_client
@@ -1580,9 +1584,13 @@ Optional Features:
   --disable-character     Don't build character class
   --disable-wcharacter    Don't build wcharacter class
   --disable-ucs2character Don't build ucs2character class
+  --disable-utf8character Don't build utf8character class
+  --disable-utf16character Don't build utf16character class
   --disable-charstring    Don't build charstring class
   --disable-wcharstring   Don't build wcharstring class
   --disable-ucs2charstring Don't build ucs2charstring class
+  --disable-utf8charstring Don't build utf8charstring class
+  --disable-utf16charstring Don't build utf16charstring class
   --disable-iconvert       Don't build iconvert class
   --disable-chat           Build chat class
   --disable-client        Don't build client class
@@ -2811,6 +2819,20 @@ else
   INCLUDE_UCS2CHARACTER="1"
 fi
 
+# Check whether --enable-utf8character was given.
+if test "${enable_utf8character+set}" = set; then :
+  enableval=$enable_utf8character; INCLUDE_UTF8CHARACTER="0"
+else
+  INCLUDE_UTF8CHARACTER="1"
+fi
+
+# Check whether --enable-utf16character was given.
+if test "${enable_utf16character+set}" = set; then :
+  enableval=$enable_utf16character; INCLUDE_UTF16CHARACTER="0"
+else
+  INCLUDE_UTF16CHARACTER="1"
+fi
+
 # Check whether --enable-charstring was given.
 if test "${enable_charstring+set}" = set; then :
   enableval=$enable_charstring; INCLUDE_CHARSTRING="0"
@@ -2830,6 +2852,20 @@ if test "${enable_ucs2charstring+set}" = set; then :
   enableval=$enable_ucs2charstring; INCLUDE_UCS2CHARSTRING="0"
 else
   INCLUDE_UCS2CHARSTRING="1"
+fi
+
+# Check whether --enable-utf8charstring was given.
+if test "${enable_utf8charstring+set}" = set; then :
+  enableval=$enable_utf8charstring; INCLUDE_UTF8CHARSTRING="0"
+else
+  INCLUDE_UTF8CHARSTRING="1"
+fi
+
+# Check whether --enable-utf16charstring was given.
+if test "${enable_utf16charstring+set}" = set; then :
+  enableval=$enable_utf16charstring; INCLUDE_UTF16CHARSTRING="0"
+else
+  INCLUDE_UTF16CHARSTRING="1"
 fi
 
 # Check whether --enable-iconvert was given.
@@ -40111,6 +40147,22 @@ then
 	LOBJS="$LOBJS ucs2character.lo"
 fi
 
+if ( test "$INCLUDE_UTF8CHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 utf8character.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf8characterincludes.h"
+	SRCS="$SRCS utf8character.cpp"
+	LOBJS="$LOBJS utf8character.lo"
+fi
+
+if ( test "$INCLUDE_UTF16CHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 utf16character.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf16characterincludes.h"
+	SRCS="$SRCS utf16character.cpp"
+	LOBJS="$LOBJS utf16character.lo"
+fi
+
 if ( test "$INCLUDE_CHARSTRING" = "1" )
 then
 	HEADERS1="$HEADERS1 charstring.h"
@@ -40133,6 +40185,22 @@ then
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 ucs2charstring.h ucs2charstringincludes.h"
 	SRCS="$SRCS ucs2charstring.cpp"
 	LOBJS="$LOBJS ucs2charstring.lo"
+fi
+
+if ( test "$INCLUDE_UTF8CHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 utf8charstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf8charstring.h utf8charstringincludes.h"
+	SRCS="$SRCS utf8charstring.cpp"
+	LOBJS="$LOBJS utf8charstring.lo"
+fi
+
+if ( test "$INCLUDE_UTF16CHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 utf16charstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf16charstring.h utf16charstringincludes.h"
+	SRCS="$SRCS utf16charstring.cpp"
+	LOBJS="$LOBJS utf16charstring.lo"
 fi
 
 if ( test "$INCLUDE_ICONVERT" = "1" )

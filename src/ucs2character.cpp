@@ -80,14 +80,6 @@ bool ucs2character::isInSet(ucs2_t c, const ucs2_t *set) {
 	return false;
 }
 
-bool ucs2character::isBom(ucs2_t c) {
-	return c==0xFEFF || c==0xFFFE;
-}
-
-bool ucs2character::isBigEndianBom(ucs2_t c) {
-	return sys::isBigEndian() && c==0xFEFF;
-}
-
 ucs2_t ucs2character::duplicate(char c) {
 	return duplicate(c,(ucs2_t)'?',sys::isBigEndian());
 }

@@ -132,6 +132,14 @@ AC_ARG_ENABLE(ucs2character,
 	[  --disable-ucs2character Don't build ucs2character class],
 	INCLUDE_UCS2CHARACTER="0",
 	INCLUDE_UCS2CHARACTER="1")
+AC_ARG_ENABLE(utf8character,
+	[  --disable-utf8character Don't build utf8character class],
+	INCLUDE_UTF8CHARACTER="0",
+	INCLUDE_UTF8CHARACTER="1")
+AC_ARG_ENABLE(utf16character,
+	[  --disable-utf16character Don't build utf16character class],
+	INCLUDE_UTF16CHARACTER="0",
+	INCLUDE_UTF16CHARACTER="1")
 AC_ARG_ENABLE(charstring,
 	[  --disable-charstring    Don't build charstring class],
 	INCLUDE_CHARSTRING="0",
@@ -144,6 +152,14 @@ AC_ARG_ENABLE(ucs2charstring,
 	[  --disable-ucs2charstring Don't build ucs2charstring class],
 	INCLUDE_UCS2CHARSTRING="0",
 	INCLUDE_UCS2CHARSTRING="1")
+AC_ARG_ENABLE(utf8charstring,
+	[  --disable-utf8charstring Don't build utf8charstring class],
+	INCLUDE_UTF8CHARSTRING="0",
+	INCLUDE_UTF8CHARSTRING="1")
+AC_ARG_ENABLE(utf16charstring,
+	[  --disable-utf16charstring Don't build utf16charstring class],
+	INCLUDE_UTF16CHARSTRING="0",
+	INCLUDE_UTF16CHARSTRING="1")
 AC_ARG_ENABLE(iconvert,
 	[  --disable-iconvert       Don't build iconvert class],
 	INCLUDE_ICONVERT="0",
@@ -4962,6 +4978,22 @@ then
 	LOBJS="$LOBJS ucs2character.lo"
 fi
 
+if ( test "$INCLUDE_UTF8CHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 utf8character.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf8characterincludes.h"
+	SRCS="$SRCS utf8character.cpp"
+	LOBJS="$LOBJS utf8character.lo"
+fi
+
+if ( test "$INCLUDE_UTF16CHARACTER" = "1" )
+then
+	HEADERS1="$HEADERS1 utf16character.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf16characterincludes.h"
+	SRCS="$SRCS utf16character.cpp"
+	LOBJS="$LOBJS utf16character.lo"
+fi
+
 if ( test "$INCLUDE_CHARSTRING" = "1" )
 then
 	HEADERS1="$HEADERS1 charstring.h"
@@ -4984,6 +5016,22 @@ then
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 ucs2charstring.h ucs2charstringincludes.h"
 	SRCS="$SRCS ucs2charstring.cpp"
 	LOBJS="$LOBJS ucs2charstring.lo"
+fi
+
+if ( test "$INCLUDE_UTF8CHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 utf8charstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf8charstring.h utf8charstringincludes.h"
+	SRCS="$SRCS utf8charstring.cpp"
+	LOBJS="$LOBJS utf8charstring.lo"
+fi
+
+if ( test "$INCLUDE_UTF16CHARSTRING" = "1" )
+then
+	HEADERS1="$HEADERS1 utf16charstring.h"
+	PRIVATEHEADERS1="$PRIVATEHEADERS1 utf16charstring.h utf16charstringincludes.h"
+	SRCS="$SRCS utf16charstring.cpp"
+	LOBJS="$LOBJS utf16charstring.lo"
 fi
 
 if ( test "$INCLUDE_ICONVERT" = "1" )
