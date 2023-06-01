@@ -44,7 +44,7 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 		 *  or = operator. */
 		const char	*getToEncoding();
 
-		/** Sets the "from buffer" - the buffer that a character will
+		/** Sets the "from buffer" - the buffer that characters will
 		 *  be read from during the call to convert().  Specifically,
 		 *  "buffer" should be a pointer to the first byte that will
 		 *  be read when convert() is called. */
@@ -63,7 +63,7 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 		 *  by a previous call to setFromBufferSize(). */
 		size_t	getFromBufferSize();
 
-		/** Sets the "to buffer" - the buffer that a character will be
+		/** Sets the "to buffer" - the buffer that characters will be
 		 *  written to during a call to convert(). */
 		void	setToBuffer(byte_t *buffer);
 
@@ -79,21 +79,21 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 		 *  by a previous call to setToBufferSize(). */
 		size_t	getToBufferSize();
 
-		/** Processes one character from the "from buffer", converting
-		 *  it from the "from encoding" to the "to encoding" and
-		 *  writing the converted character to the "to buffer".
+		/** Processes characters from the "from buffer", converting
+		 *  them from the "from encoding" to the "to encoding" and
+		 *  writing the converted characters to the "to buffer".
 		 *
 		 *  Sets the "from buffer position" to a pointer to the first
-		 *  byte of the "from buffer" after the character that was
+		 *  byte of the "from buffer" after the last character that was
 		 *  processed.  Sets the "from buffer remaining" to the number
 		 *  of bytes in the "from buffer" that were not processed.
 		 *
 		 *  Sets the "to buffer position" to a pointer to the first
-		 *  byte in the "to buffer" after the character that was
+		 *  byte in the "to buffer" after the last character that was
 		 *  written.  Sets the "to buffer remaining" to the number of
 		 *  bytes in the "to buffer" that were not written to.
 		 *
-		 *  Returns true on successful conversion of one character.
+		 *  Returns true on successful conversion.
 		 *
 		 *  Returns false if one of the following errors occur.
 		 *
@@ -101,7 +101,7 @@ class RUDIMENTS_DLLSPEC iconvert : public object {
 		 *  isn't supported then the error number will be set to ENOSYS.
 		 *
 		 *  If the "to buffer size" isn't sufficient to store the
-		 *  converted character (eg. because we're converting to a
+		 *  converted characters (eg. because we're converting to a
 		 *  multi-byte encoding and there aren't enough bytes to store
 		 *  the multi-byte character) then the error number will be set
 		 *  to E2BIG.
