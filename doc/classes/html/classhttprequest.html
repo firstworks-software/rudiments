@@ -61,8 +61,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a250bcdf40f490a812627b88e81f0168d"><td class="memItemLeft" align="right" valign="top"><a id="a250bcdf40f490a812627b88e81f0168d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>httprequest</b> (<a class="el" href="classhttpserverapi.html">httpserverapi</a> *sapi)</td></tr>
 <tr class="separator:a250bcdf40f490a812627b88e81f0168d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e11d2a63420e2e8025f2aac20b7f073"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a0e11d2a63420e2e8025f2aac20b7f073">dumpVariables</a> ()</td></tr>
-<tr class="separator:a0e11d2a63420e2e8025f2aac20b7f073"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79a7ef03ee3b429cbd68c99ba92ed0e9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a79a7ef03ee3b429cbd68c99ba92ed0e9">writeVariables</a> ()</td></tr>
+<tr class="separator:a79a7ef03ee3b429cbd68c99ba92ed0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb554a46a4880935036332b62b0a5ddc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#afb554a46a4880935036332b62b0a5ddc">getEnvironmentVariable</a> (const char *name)</td></tr>
 <tr class="separator:afb554a46a4880935036332b62b0a5ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab00c25ae12e6063f7a5c5388842fe75"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#aab00c25ae12e6063f7a5c5388842fe75">getEnvironmentVariableCount</a> ()</td></tr>
@@ -73,8 +73,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9d8fcc9d051787d1980aabb2ed1b00e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf747bf8b58ab12e3f93d8b54a5bd63d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#adf747bf8b58ab12e3f93d8b54a5bd63d">setEnvironmentVariable</a> (const char *name, const char *value)</td></tr>
 <tr class="separator:adf747bf8b58ab12e3f93d8b54a5bd63d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5269f14a00bb5cf326ba81e8406fe9d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a5269f14a00bb5cf326ba81e8406fe9d5">dumpEnvironment</a> ()</td></tr>
-<tr class="separator:a5269f14a00bb5cf326ba81e8406fe9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a449a648885267f4565ff63f6c8068ee9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a449a648885267f4565ff63f6c8068ee9">writeEnvironment</a> ()</td></tr>
+<tr class="separator:a449a648885267f4565ff63f6c8068ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf5188af867099878073cfdcd2c720e6"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#acf5188af867099878073cfdcd2c720e6">getParameter</a> (const char *name)</td></tr>
 <tr class="separator:acf5188af867099878073cfdcd2c720e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90f4e34d77c28158a4269198e87197cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a90f4e34d77c28158a4269198e87197cf">getParametersAsGetString</a> (<a class="el" href="classoutput.html">output</a> *container, const char *const *exceptions)</td></tr>
@@ -151,16 +151,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aca70561b50a2817729c13b1bbcf936b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95e522779685997561a80a8e95ccbfaa"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a95e522779685997561a80a8e95ccbfaa">read</a> (double *number)</td></tr>
 <tr class="separator:a95e522779685997561a80a8e95ccbfaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a745f6721a764bee9d9fb8362fcaba909"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a745f6721a764bee9d9fb8362fcaba909">methodAllowed</a> (const char *deniedmethods, const char *allowedmethods)</td></tr>
-<tr class="separator:a745f6721a764bee9d9fb8362fcaba909"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac549fcac3883c47d45a4613eb8290dc8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#ac549fcac3883c47d45a4613eb8290dc8">contentTypeAllowed</a> (const char *deniedcontenttypes, const char *allowedcontenttypes)</td></tr>
-<tr class="separator:ac549fcac3883c47d45a4613eb8290dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4575ce23fa0bcca0c265e7af665e6879"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a4575ce23fa0bcca0c265e7af665e6879">ipAllowed</a> (const char *deniedips, const char *allowedips)</td></tr>
-<tr class="separator:a4575ce23fa0bcca0c265e7af665e6879"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f7bc599d25666c6ac1964af3cec10dd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a4f7bc599d25666c6ac1964af3cec10dd">refererAllowed</a> (const char *deniedreferers, const char *allowedreferers)</td></tr>
-<tr class="separator:a4f7bc599d25666c6ac1964af3cec10dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7ae16bc1c05c90972524f0918f93a21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#aa7ae16bc1c05c90972524f0918f93a21">requiredParameters</a> (<a class="el" href="structhttprequest_1_1parameterrequirement.html">parameterrequirement</a> **pr)</td></tr>
-<tr class="separator:aa7ae16bc1c05c90972524f0918f93a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a508cad2c82bd626fcfb3e4f060ae59f6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a508cad2c82bd626fcfb3e4f060ae59f6">getMethodIsAllowed</a> (const char *deniedmethods, const char *allowedmethods)</td></tr>
+<tr class="separator:a508cad2c82bd626fcfb3e4f060ae59f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4afc95fe758b66dc2f1289f138218970"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a4afc95fe758b66dc2f1289f138218970">getContentTypeIsAllowed</a> (const char *deniedcontenttypes, const char *allowedcontenttypes)</td></tr>
+<tr class="separator:a4afc95fe758b66dc2f1289f138218970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8667bfc229adb58d9a01e65f0755367a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a8667bfc229adb58d9a01e65f0755367a">getIpIsAllowed</a> (const char *deniedips, const char *allowedips)</td></tr>
+<tr class="separator:a8667bfc229adb58d9a01e65f0755367a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c3867547726ee92b8b73bf51fdf71e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#ad0c3867547726ee92b8b73bf51fdf71e">getRefererIsAllowed</a> (const char *deniedreferers, const char *allowedreferers)</td></tr>
+<tr class="separator:ad0c3867547726ee92b8b73bf51fdf71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19be069a045fbb6c82defa4223eb8e71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttprequest.html#a19be069a045fbb6c82defa4223eb8e71">getRequiredParametersWereProvided</a> (<a class="el" href="structhttprequest_1_1parameterrequirement.html">parameterrequirement</a> **pr)</td></tr>
+<tr class="separator:a19be069a045fbb6c82defa4223eb8e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classinput"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classinput')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classinput.html">input</a></td></tr>
 <tr class="memitem:adac0ea346c43d7762baef3e3f387eebd inherit pub_methods_classinput"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinput.html#adac0ea346c43d7762baef3e3f387eebd">input</a> ()</td></tr>
 <tr class="separator:adac0ea346c43d7762baef3e3f387eebd inherit pub_methods_classinput"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,90 +223,6 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The httprequest class provides methods for accessing components of the http request. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac549fcac3883c47d45a4613eb8290dc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac549fcac3883c47d45a4613eb8290dc8">&#9670;&nbsp;</a></span>contentTypeAllowed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::contentTypeAllowed </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>deniedcontenttypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>allowedcontenttypes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Matches the CONTENT_TYPE environment variable against "deniedcontenttypes" and "allowedcontenttypes" (in that order) using regular expression syntax. Returns true if the content type of the data posted by the client is allowed and false otherwise.</p>
-<p>This method may be overriden to provide customized content-type-based security. </p>
-
-</div>
-</div>
-<a id="a5269f14a00bb5cf326ba81e8406fe9d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5269f14a00bb5cf326ba81e8406fe9d5">&#9670;&nbsp;</a></span>dumpEnvironment()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void httprequest::dumpEnvironment </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Writes all environment variables to the browser. Similar to running "env" on the command line. </p>
-
-</div>
-</div>
-<a id="a0e11d2a63420e2e8025f2aac20b7f073"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e11d2a63420e2e8025f2aac20b7f073">&#9670;&nbsp;</a></span>dumpVariables()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void httprequest::dumpVariables </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Dumps all environment variables, parameters, file parameters, and cookies to the browser. </p>
-
-<p>Reimplemented in <a class="el" href="classurlhttprequest.html#adf5615d6e128970c9668c121dfd82985">urlhttprequest</a>.</p>
-
-</div>
-</div>
 <a id="a368a9e355e0e850f75085ccefd63149d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a368a9e355e0e850f75085ccefd63149d">&#9670;&nbsp;</a></span>getAllValues()</h2>
 
@@ -358,6 +274,44 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns a null terminated list of all variables. The order of the list is the order the variables were received in. </p>
+
+</div>
+</div>
+<a id="a4afc95fe758b66dc2f1289f138218970"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4afc95fe758b66dc2f1289f138218970">&#9670;&nbsp;</a></span>getContentTypeIsAllowed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::getContentTypeIsAllowed </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>deniedcontenttypes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>allowedcontenttypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Matches the CONTENT_TYPE environment variable against "deniedcontenttypes" and "allowedcontenttypes" (in that order) using regular expression syntax. Returns true if the content type of the data posted by the client is allowed and false otherwise.</p>
+<p>This method may be overriden to provide customized content-type-based security. </p>
 
 </div>
 </div>
@@ -600,6 +554,82 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a8667bfc229adb58d9a01e65f0755367a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8667bfc229adb58d9a01e65f0755367a">&#9670;&nbsp;</a></span>getIpIsAllowed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::getIpIsAllowed </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>deniedips</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>allowedips</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Matches the REMOTE_ADDR environment variable against "deniedips" and "allowedips" (in that order) using regular expression syntax. Returns true if the client's IP address is allowed and false otherwise.</p>
+<p>This method may be overriden to provide customized ip-based security. </p>
+
+</div>
+</div>
+<a id="a508cad2c82bd626fcfb3e4f060ae59f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a508cad2c82bd626fcfb3e4f060ae59f6">&#9670;&nbsp;</a></span>getMethodIsAllowed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::getMethodIsAllowed </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>deniedmethods</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>allowedmethods</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Matches the REQUEST_METHOD environment variable against "deniedmethods" and "allowedmethods" (in that order) using regular expression syntax. Returns true if the request method used by the client is allowed and false otherwise.</p>
+<p>This method may be overriden to provide customized request-method-based security. </p>
+
+</div>
+</div>
 <a id="acf5188af867099878073cfdcd2c720e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf5188af867099878073cfdcd2c720e6">&#9670;&nbsp;</a></span>getParameter()</h2>
 
@@ -731,8 +761,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4575ce23fa0bcca0c265e7af665e6879"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4575ce23fa0bcca0c265e7af665e6879">&#9670;&nbsp;</a></span>ipAllowed()</h2>
+<a id="ad0c3867547726ee92b8b73bf51fdf71e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c3867547726ee92b8b73bf51fdf71e">&#9670;&nbsp;</a></span>getRefererIsAllowed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -741,16 +771,16 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::ipAllowed </td>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::getRefererIsAllowed </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>deniedips</em>, </td>
+          <td class="paramname"><em>deniedreferers</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>allowedips</em>&#160;</td>
+          <td class="paramname"><em>allowedreferers</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -764,46 +794,30 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Matches the REMOTE_ADDR environment variable against "deniedips" and "allowedips" (in that order) using regular expression syntax. Returns true if the client's IP address is allowed and false otherwise.</p>
-<p>This method may be overriden to provide customized ip-based security. </p>
+<p>Matches the HTTP_REFERER environment variable against "deniedreferers" and "allowedreferers" (in that order) using regular expression syntax. Returns true if the referrer is permitted and false otherwise.</p>
+<p>This method may be overriden to provide customized referrer-based security. </p>
 
 </div>
 </div>
-<a id="a745f6721a764bee9d9fb8362fcaba909"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a745f6721a764bee9d9fb8362fcaba909">&#9670;&nbsp;</a></span>methodAllowed()</h2>
+<a id="a19be069a045fbb6c82defa4223eb8e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19be069a045fbb6c82defa4223eb8e71">&#9670;&nbsp;</a></span>getRequiredParametersWereProvided()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::methodAllowed </td>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> httprequest::getRequiredParametersWereProvided </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>deniedmethods</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="structhttprequest_1_1parameterrequirement.html">parameterrequirement</a> **&#160;</td>
+          <td class="paramname"><em>pr</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>allowedmethods</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p>Matches the REQUEST_METHOD environment variable against "deniedmethods" and "allowedmethods" (in that order) using regular expression syntax. Returns true if the request method used by the client is allowed and false otherwise.</p>
-<p>This method may be overriden to provide customized request-method-based security. </p>
+<p>Reads through the NULL terminated list of parameter requirements. Returns true if the parameters meet the requirements and false if they did not.</p>
+<p>Each parameterrequirement contains a parameter variable name and a boolean value indicating whether that variable can be empty or not.</p>
+<p>For example. The following call requires that "first", "last", "address", "city", "state" and "phone" be present but allows "address", "city" and "state" to be blank.</p>
+<p>parameterrequirement *pr[]={{"first",false}, {"last",false}, {"address",true}, {"city",true}, {"state",true}, {"phone",false}, NULL}; success=requiredParameters(pr); </p>
 
 </div>
 </div>
@@ -1327,44 +1341,6 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4f7bc599d25666c6ac1964af3cec10dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f7bc599d25666c6ac1964af3cec10dd">&#9670;&nbsp;</a></span>refererAllowed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> httprequest::refererAllowed </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>deniedreferers</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>allowedreferers</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Matches the HTTP_REFERER environment variable against "deniedreferers" and "allowedreferers" (in that order) using regular expression syntax. Returns true if the referrer is permitted and false otherwise.</p>
-<p>This method may be overriden to provide customized referrer-based security. </p>
-
-</div>
-</div>
 <a id="aef934a0839a6bcecff8fad7132f59982"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aef934a0839a6bcecff8fad7132f59982">&#9670;&nbsp;</a></span>removeTempFiles()</h2>
 
@@ -1380,28 +1356,6 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Removes all temporary files that were created when parsing the request. </p>
-
-</div>
-</div>
-<a id="aa7ae16bc1c05c90972524f0918f93a21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7ae16bc1c05c90972524f0918f93a21">&#9670;&nbsp;</a></span>requiredParameters()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> httprequest::requiredParameters </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structhttprequest_1_1parameterrequirement.html">parameterrequirement</a> **&#160;</td>
-          <td class="paramname"><em>pr</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Reads through the NULL terminated list of parameter requirements. Returns true if the parameters meet the requirements and false if they did not.</p>
-<p>Each parameterrequirement contains a parameter variable name and a boolean value indicating whether that variable can be empty or not.</p>
-<p>For example. The following call requires that "first", "last", "address", "city", "state" and "phone" be present but allows "address", "city" and "state" to be blank.</p>
-<p>parameterrequirement *pr[]={{"first",false}, {"last",false}, {"address",true}, {"city",true}, {"state",true}, {"phone",false}, NULL}; success=requiredParameters(pr); </p>
 
 </div>
 </div>
@@ -1533,10 +1487,56 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a449a648885267f4565ff63f6c8068ee9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a449a648885267f4565ff63f6c8068ee9">&#9670;&nbsp;</a></span>writeEnvironment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void httprequest::writeEnvironment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Writes all environment variables to the browser. Similar to running "env" on the command line. </p>
+
+</div>
+</div>
+<a id="a79a7ef03ee3b429cbd68c99ba92ed0e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79a7ef03ee3b429cbd68c99ba92ed0e9">&#9670;&nbsp;</a></span>writeVariables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void httprequest::writeVariables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Writes all environment variables, parameters, file parameters, and cookies to the browser. </p>
+
+<p>Reimplemented in <a class="el" href="classurlhttprequest.html#a86de6b00461202193aade936f78bb20c">urlhttprequest</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

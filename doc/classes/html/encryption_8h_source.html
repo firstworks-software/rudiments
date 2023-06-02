@@ -76,7 +76,7 @@ $(function() {
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classencryption.html#ad053016da776f99e3cb0ce89647f6529">   45</a></span>&#160;                <span class="keyword">virtual</span> byte_t  *<a class="code" href="classencryption.html#ad053016da776f99e3cb0ce89647f6529">getKey</a>();</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classencryption.html#a1a98e575b9f998806b996295bcd67177">   48</a></span>&#160;                <span class="keyword">virtual</span> uint32_t        <a class="code" href="classencryption.html#a1a98e575b9f998806b996295bcd67177">getKeySize</a>()=0;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classencryption.html#a091043a4894069d442ecd7866b7ed236">   48</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">size_t</span>  <a class="code" href="classencryption.html#a091043a4894069d442ecd7866b7ed236">getKeySize</a>()=0;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classencryption.html#acaf48f3c2cc4d9db90e8fb21e4c02030">   58</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classencryption.html#acaf48f3c2cc4d9db90e8fb21e4c02030">setIv</a>(<span class="keyword">const</span> byte_t *iv, <span class="keywordtype">size_t</span> ivsize);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
@@ -84,7 +84,7 @@ $(function() {
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classencryption.html#a2a87c44ff02889ab9facac7c4e5e12f1">   68</a></span>&#160;                <span class="keyword">virtual</span> byte_t  *<a class="code" href="classencryption.html#a2a87c44ff02889ab9facac7c4e5e12f1">getIv</a>();</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classencryption.html#a8bf8c98815ed4cc675bf4841b05828c0">   71</a></span>&#160;                <span class="keyword">virtual</span> uint32_t        <a class="code" href="classencryption.html#a8bf8c98815ed4cc675bf4841b05828c0">getIvSize</a>()=0;</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classencryption.html#a92b4d11afce79adfac5a9f6f8143c147">   71</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">size_t</span>  <a class="code" href="classencryption.html#a92b4d11afce79adfac5a9f6f8143c147">getIvSize</a>()=0;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
 <div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classencryption.html#a36beb1d585e456c0701acfc65787cf8c">   77</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code" href="classencryption.html#a36beb1d585e456c0701acfc65787cf8c">append</a>(<span class="keyword">const</span> byte_t *data, uint32_t size);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
@@ -107,15 +107,15 @@ $(function() {
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassencryption_html"><div class="ttname"><a href="classencryption.html">encryption</a></div><div class="ttdef"><b>Definition:</b> encryption.h:21</div></div>
+<div class="ttc" id="aclassencryption_html_a091043a4894069d442ecd7866b7ed236"><div class="ttname"><a href="classencryption.html#a091043a4894069d442ecd7866b7ed236">encryption::getKeySize</a></div><div class="ttdeci">virtual size_t getKeySize()=0</div></div>
 <div class="ttc" id="aclassencryption_html_a10239feae8218835099bc8eb7c8cdffb"><div class="ttname"><a href="classencryption.html#a10239feae8218835099bc8eb7c8cdffb">encryption::~encryption</a></div><div class="ttdeci">virtual ~encryption()</div></div>
-<div class="ttc" id="aclassencryption_html_a1a98e575b9f998806b996295bcd67177"><div class="ttname"><a href="classencryption.html#a1a98e575b9f998806b996295bcd67177">encryption::getKeySize</a></div><div class="ttdeci">virtual uint32_t getKeySize()=0</div></div>
 <div class="ttc" id="aclassencryption_html_a1d1ecd3892050b9afd13bd87391071a3"><div class="ttname"><a href="classencryption.html#a1d1ecd3892050b9afd13bd87391071a3">encryption::clear</a></div><div class="ttdeci">virtual bool clear()</div></div>
 <div class="ttc" id="aclassencryption_html_a26927c8a1ae38988c76297313f9c383d"><div class="ttname"><a href="classencryption.html#a26927c8a1ae38988c76297313f9c383d">encryption::setKey</a></div><div class="ttdeci">virtual bool setKey(const byte_t *key, size_t keysize)</div></div>
 <div class="ttc" id="aclassencryption_html_a2a87c44ff02889ab9facac7c4e5e12f1"><div class="ttname"><a href="classencryption.html#a2a87c44ff02889ab9facac7c4e5e12f1">encryption::getIv</a></div><div class="ttdeci">virtual byte_t * getIv()</div></div>
 <div class="ttc" id="aclassencryption_html_a36beb1d585e456c0701acfc65787cf8c"><div class="ttname"><a href="classencryption.html#a36beb1d585e456c0701acfc65787cf8c">encryption::append</a></div><div class="ttdeci">virtual bool append(const byte_t *data, uint32_t size)</div></div>
 <div class="ttc" id="aclassencryption_html_a5a0d469e4290c24eee11c9905dc13805"><div class="ttname"><a href="classencryption.html#a5a0d469e4290c24eee11c9905dc13805">encryption::getDecryptedData</a></div><div class="ttdeci">virtual const byte_t * getDecryptedData()=0</div></div>
 <div class="ttc" id="aclassencryption_html_a8bb8b61aa9d13a65fdb835183482dbe4"><div class="ttname"><a href="classencryption.html#a8bb8b61aa9d13a65fdb835183482dbe4">encryption::getEncryptedData</a></div><div class="ttdeci">virtual const byte_t * getEncryptedData()=0</div></div>
-<div class="ttc" id="aclassencryption_html_a8bf8c98815ed4cc675bf4841b05828c0"><div class="ttname"><a href="classencryption.html#a8bf8c98815ed4cc675bf4841b05828c0">encryption::getIvSize</a></div><div class="ttdeci">virtual uint32_t getIvSize()=0</div></div>
+<div class="ttc" id="aclassencryption_html_a92b4d11afce79adfac5a9f6f8143c147"><div class="ttname"><a href="classencryption.html#a92b4d11afce79adfac5a9f6f8143c147">encryption::getIvSize</a></div><div class="ttdeci">virtual size_t getIvSize()=0</div></div>
 <div class="ttc" id="aclassencryption_html_a92fc19b2862c9acaa61cb7f95f47dc02"><div class="ttname"><a href="classencryption.html#a92fc19b2862c9acaa61cb7f95f47dc02">encryption::reset</a></div><div class="ttdeci">virtual bool reset()</div></div>
 <div class="ttc" id="aclassencryption_html_aa9db1e7b3d17e4902a7be63cf39e5595"><div class="ttname"><a href="classencryption.html#aa9db1e7b3d17e4902a7be63cf39e5595">encryption::getError</a></div><div class="ttdeci">virtual encryptionerror_t getError()</div></div>
 <div class="ttc" id="aclassencryption_html_aa9f7eaefdcc153523ad4d8c7ba01b111"><div class="ttname"><a href="classencryption.html#aa9f7eaefdcc153523ad4d8c7ba01b111">encryption::setRandomIv</a></div><div class="ttdeci">virtual void setRandomIv()</div></div>
@@ -129,7 +129,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

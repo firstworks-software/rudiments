@@ -163,8 +163,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a4258fae84ceb61d7253679643ca5ddcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0349e6f3fac49149b928f8922ef9a876"><td class="memItemLeft" align="right" valign="top">static const int32_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#a0349e6f3fac49149b928f8922ef9a876">getTimeZoneOffsets</a> ()</td></tr>
 <tr class="separator:a0349e6f3fac49149b928f8922ef9a876"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23acccb520303d75d808367688cfa486"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#a23acccb520303d75d808367688cfa486">validDateTime</a> (const char *string)</td></tr>
-<tr class="separator:a23acccb520303d75d808367688cfa486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7079b0c8bfc93eac76a5801f9753711"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#ac7079b0c8bfc93eac76a5801f9753711">isValidDateTime</a> (const char *string)</td></tr>
+<tr class="separator:ac7079b0c8bfc93eac76a5801f9753711"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f6773cfee8dc5f9ef8147269ba0d76"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#ad3f6773cfee8dc5f9ef8147269ba0d76">getString</a> (time_t seconds)</td></tr>
 <tr class="separator:ad3f6773cfee8dc5f9ef8147269ba0d76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeaf50d97acd5b8c3f836063682425d1a"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdatetime.html#aeaf50d97acd5b8c3f836063682425d1a">getString</a> (time_t seconds, time_t microseconds)</td></tr>
@@ -1220,6 +1220,34 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ac7079b0c8bfc93eac76a5801f9753711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7079b0c8bfc93eac76a5801f9753711">&#9670;&nbsp;</a></span>isValidDateTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> datetime::isValidDateTime </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if string represents a valid date/time and false otherwise.</p>
+<p>For this methods to return true, "string" must be formatted like: "00/00/0000 00:00:00" optionally followed by a space and a timezone. </p>
+
+</div>
+</div>
 <a id="a6efe1f02b5981786324953037dbd3b0b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6efe1f02b5981786324953037dbd3b0b">&#9670;&nbsp;</a></span>operator=()</h2>
 
@@ -1601,38 +1629,10 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a23acccb520303d75d808367688cfa486"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23acccb520303d75d808367688cfa486">&#9670;&nbsp;</a></span>validDateTime()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> datetime::validDateTime </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns true if string represents a valid date/time and false otherwise.</p>
-<p>For this methods to return true, "string" must be formatted like: "00/00/0000 00:00:00" optionally followed by a space and a timezone. </p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

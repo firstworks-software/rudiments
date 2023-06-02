@@ -62,36 +62,33 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classarraycollection.html#a0fbe9b3259b40598e8b5f5cd16f9be11">   20</a></span>&#160;                <span class="keyword">virtual</span> valuetype       &amp;<a class="code" href="classarraycollection.html#a0fbe9b3259b40598e8b5f5cd16f9be11">operator[]</a>(uint64_t index)=0;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classarraycollection.html#ab8303b41dccaea83c88c4fa38b1046bf">   23</a></span>&#160;                <span class="keyword">virtual</span> uint64_t        <a class="code" href="classarraycollection.html#ab8303b41dccaea83c88c4fa38b1046bf">getLength</a>()=0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#a255c9eb6094adbb23379536dd2e9c505">write</a>();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#a255c9eb6094adbb23379536dd2e9c505">write</a>();</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#a255c9eb6094adbb23379536dd2e9c505">write</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#a255c9eb6094adbb23379536dd2e9c505">write</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>(<span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/arraycollectioninlines.h&gt;</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>(<span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/arraycollectioninlines.h&gt;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassarraycollection_html"><div class="ttname"><a href="classarraycollection.html">arraycollection</a></div><div class="ttdef"><b>Definition:</b> arraycollection.h:13</div></div>
 <div class="ttc" id="aclassarraycollection_html_a0fbe9b3259b40598e8b5f5cd16f9be11"><div class="ttname"><a href="classarraycollection.html#a0fbe9b3259b40598e8b5f5cd16f9be11">arraycollection::operator[]</a></div><div class="ttdeci">virtual valuetype &amp; operator[](uint64_t index)=0</div></div>
 <div class="ttc" id="aclassarraycollection_html_a255c9eb6094adbb23379536dd2e9c505"><div class="ttname"><a href="classarraycollection.html#a255c9eb6094adbb23379536dd2e9c505">arraycollection::write</a></div><div class="ttdeci">virtual ssize_t write()</div><div class="ttdef"><b>Definition:</b> arraycollectioninlines.h:14</div></div>
 <div class="ttc" id="aclassarraycollection_html_aac40e2f0275e5a303277d8eb29b3bf5f"><div class="ttname"><a href="classarraycollection.html#aac40e2f0275e5a303277d8eb29b3bf5f">arraycollection::getType</a></div><div class="ttdeci">virtual const char * getType()</div><div class="ttdef"><b>Definition:</b> arraycollectioninlines.h:8</div></div>
-<div class="ttc" id="aclassarraycollection_html_ab8303b41dccaea83c88c4fa38b1046bf"><div class="ttname"><a href="classarraycollection.html#ab8303b41dccaea83c88c4fa38b1046bf">arraycollection::getLength</a></div><div class="ttdeci">virtual uint64_t getLength()=0</div></div>
 <div class="ttc" id="aclassarraycollection_html_ac26113c0487577cf8d571c9e926332c4"><div class="ttname"><a href="classarraycollection.html#ac26113c0487577cf8d571c9e926332c4">arraycollection::writeJson</a></div><div class="ttdeci">virtual ssize_t writeJson()</div><div class="ttdef"><b>Definition:</b> arraycollectioninlines.h:26</div></div>
 <div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition:</b> collection.h:11</div></div>
 <div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

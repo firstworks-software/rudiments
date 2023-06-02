@@ -69,10 +69,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7ee1ad4541bdf438513a2ac9a83a97ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1344e9d5204f984faaa3567e62981464"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a1344e9d5204f984faaa3567e62981464">raiseSignal</a> (int32_t signum)</td></tr>
 <tr class="separator:a1344e9d5204f984faaa3567e62981464"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cf5a05c3390c914cc2eff38d7fec8d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a3cf5a05c3390c914cc2eff38d7fec8d5">retryFailedSpawn</a> ()</td></tr>
-<tr class="separator:a3cf5a05c3390c914cc2eff38d7fec8d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a070cad57c6f4a1d0f2eb514efc6000f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a070cad57c6f4a1d0f2eb514efc6000f4">dontRetryFailedSpawn</a> ()</td></tr>
-<tr class="separator:a070cad57c6f4a1d0f2eb514efc6000f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac49e51c92b5fa656f1c327de90ed9047"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#ac49e51c92b5fa656f1c327de90ed9047">setRetryFailedSpawn</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:ac49e51c92b5fa656f1c327de90ed9047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac58a79791c641de8389837a0cdb166b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#ac58a79791c641de8389837a0cdb166b6">getRetryFailedSpawn</a> ()</td></tr>
 <tr class="separator:ac58a79791c641de8389837a0cdb166b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classobject.html">object</a></td></tr>
@@ -81,10 +79,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a448e33d24dc2b0292b6f9e1ff5a63378"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a448e33d24dc2b0292b6f9e1ff5a63378">supported</a> ()</td></tr>
-<tr class="separator:a448e33d24dc2b0292b6f9e1ff5a63378"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83cbb514790de0fe079739119c39f090"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a83cbb514790de0fe079739119c39f090">reliable</a> ()</td></tr>
-<tr class="separator:a83cbb514790de0fe079739119c39f090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5f237c1d6fee19aeeb12d245045c36"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#aef5f237c1d6fee19aeeb12d245045c36">isSupported</a> ()</td></tr>
+<tr class="separator:aef5f237c1d6fee19aeeb12d245045c36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45c19a55dec55d010832753b2d3fddc2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a45c19a55dec55d010832753b2d3fddc2">isReliable</a> ()</td></tr>
+<tr class="separator:a45c19a55dec55d010832753b2d3fddc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The thread class provides a simple thread implementation. </p>
@@ -152,24 +150,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a070cad57c6f4a1d0f2eb514efc6000f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a070cad57c6f4a1d0f2eb514efc6000f4">&#9670;&nbsp;</a></span>dontRetryFailedSpawn()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void thread::dontRetryFailedSpawn </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> calls not to be automatically retried if they fail because of insufficient system resources. If set, if a <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> fails, the system error is set to EAGAIN and the <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> must be retried by the calling program. </p>
-
-</div>
-</div>
 <a id="af605ce8a6d487c45553d0a0e817132cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af605ce8a6d487c45553d0a0e817132cf">&#9670;&nbsp;</a></span>exit()</h2>
 
@@ -227,6 +207,60 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a45c19a55dec55d010832753b2d3fddc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45c19a55dec55d010832753b2d3fddc2">&#9670;&nbsp;</a></span>isReliable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> thread::isReliable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the platform supports threads, and rudiments was built with thread support, and this platform's thread implementation is bellieved to be reliable.</p>
+<p>Returns false if the platform doesn't support threads, rudiments was not built with thread support, or this platform's thread implementation is bellieved to be unreliable. </p>
+
+</div>
+</div>
+<a id="aef5f237c1d6fee19aeeb12d245045c36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef5f237c1d6fee19aeeb12d245045c36">&#9670;&nbsp;</a></span>isSupported()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> thread::isSupported </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the platform supports threads and rudiments was built with thread support and false otherwise.</p>
+<p>See also: <a class="el" href="classthread.html#a45c19a55dec55d010832753b2d3fddc2">isReliable()</a>. </p>
+
+</div>
+</div>
 <a id="a1344e9d5204f984faaa3567e62981464"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1344e9d5204f984faaa3567e62981464">&#9670;&nbsp;</a></span>raiseSignal()</h2>
 
@@ -246,47 +280,23 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a83cbb514790de0fe079739119c39f090"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83cbb514790de0fe079739119c39f090">&#9670;&nbsp;</a></span>reliable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> thread::reliable </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns false if the platform supports threads, but they are believed to be unreliable, and true otherwise. </p>
-
-</div>
-</div>
-<a id="a3cf5a05c3390c914cc2eff38d7fec8d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cf5a05c3390c914cc2eff38d7fec8d5">&#9670;&nbsp;</a></span>retryFailedSpawn()</h2>
+<a id="ac49e51c92b5fa656f1c327de90ed9047"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac49e51c92b5fa656f1c327de90ed9047">&#9670;&nbsp;</a></span>setRetryFailedSpawn()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void thread::retryFailedSpawn </td>
+          <td class="memname">void thread::setRetryFailedSpawn </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Causes <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> calls to be automatically retried if they fail because of insufficient system resources. This is the default behavior. Otherwise, if a <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> fails, the system error is set to EAGAIN and the <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> must be retried by the calling program. </p>
+<p>If "retry" is true then <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> calls will be automatically retried if they fail eg. because of insufficient system resources. If "retry" is set false then, if a <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> fails, the system error is set to EAGAIN and <a class="el" href="classthread.html#ad837e6405fd01ba98d2d40a9896219d7">spawn()</a> returns false.</p>
+<p>Defaults to true. </p>
 
 </div>
 </div>
@@ -344,33 +354,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a448e33d24dc2b0292b6f9e1ff5a63378"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a448e33d24dc2b0292b6f9e1ff5a63378">&#9670;&nbsp;</a></span>supported()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> thread::supported </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns true if the platform supports threads and rudiments was built with thread support and false otherwise.</p>
-<p>See also: <a class="el" href="classthread.html#a83cbb514790de0fe079739119c39f090">reliable()</a>. </p>
-
-</div>
-</div>
 <a id="a8867991f5953e4ee11f8f6b2efebd2b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8867991f5953e4ee11f8f6b2efebd2b0">&#9670;&nbsp;</a></span>wait()</h2>
 
@@ -393,7 +376,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

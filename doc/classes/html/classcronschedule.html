@@ -58,10 +58,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a11ab891674b42b2f6c0bea90f79732b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e97e8d7ff3f083127566f75c6b69cdb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcronschedule.html#a3e97e8d7ff3f083127566f75c6b69cdb">setSchedule</a> (const char *years, const char *months, const char *daysofmonth, const char *daysofweek, const char *dayparts)</td></tr>
 <tr class="separator:a3e97e8d7ff3f083127566f75c6b69cdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c1a9bb196f4785d6c4bb88341fe9b41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcronschedule.html#a9c1a9bb196f4785d6c4bb88341fe9b41">inSchedule</a> (<a class="el" href="classdatetime.html">datetime</a> *dt)</td></tr>
-<tr class="separator:a9c1a9bb196f4785d6c4bb88341fe9b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d30acfc6695ce34c8334ab613ccf87f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcronschedule.html#a5d30acfc6695ce34c8334ab613ccf87f">inSchedule</a> (const char *dt)</td></tr>
-<tr class="separator:a5d30acfc6695ce34c8334ab613ccf87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfdcbdecfc959faa78a2034ffa0bc1f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcronschedule.html#acfdcbdecfc959faa78a2034ffa0bc1f9">isInSchedule</a> (<a class="el" href="classdatetime.html">datetime</a> *dt)</td></tr>
+<tr class="separator:acfdcbdecfc959faa78a2034ffa0bc1f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9259d94e136df687f88d2220b1e933"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcronschedule.html#a6d9259d94e136df687f88d2220b1e933">isInSchedule</a> (const char *dt)</td></tr>
+<tr class="separator:a6d9259d94e136df687f88d2220b1e933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd2dce0c9062198f4f59cf6f63313dc9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcronschedule.html#acd2dce0c9062198f4f59cf6f63313dc9">clear</a> ()</td></tr>
 <tr class="separator:acd2dce0c9062198f4f59cf6f63313dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classobject.html">object</a></td></tr>
@@ -123,19 +123,19 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Clears any schedule previously set by <a class="el" href="classcronschedule.html#a11ab891674b42b2f6c0bea90f79732b2">setSchedule()</a> such that any call to <a class="el" href="classcronschedule.html#a9c1a9bb196f4785d6c4bb88341fe9b41">inSchedule()</a> will return false.</p>
+<p>Clears any schedule previously set by <a class="el" href="classcronschedule.html#a11ab891674b42b2f6c0bea90f79732b2">setSchedule()</a> such that any call to inSchedule() will return false.</p>
 <p>Always returns true. </p>
 
 </div>
 </div>
-<a id="a5d30acfc6695ce34c8334ab613ccf87f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d30acfc6695ce34c8334ab613ccf87f">&#9670;&nbsp;</a></span>inSchedule() <span class="overload">[1/2]</span></h2>
+<a id="a6d9259d94e136df687f88d2220b1e933"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9259d94e136df687f88d2220b1e933">&#9670;&nbsp;</a></span>isInSchedule() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> cronschedule::inSchedule </td>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> cronschedule::isInSchedule </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>dt</em></td><td>)</td>
@@ -147,14 +147,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c1a9bb196f4785d6c4bb88341fe9b41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c1a9bb196f4785d6c4bb88341fe9b41">&#9670;&nbsp;</a></span>inSchedule() <span class="overload">[2/2]</span></h2>
+<a id="acfdcbdecfc959faa78a2034ffa0bc1f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfdcbdecfc959faa78a2034ffa0bc1f9">&#9670;&nbsp;</a></span>isInSchedule() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> cronschedule::inSchedule </td>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> cronschedule::isInSchedule </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classdatetime.html">datetime</a> *&#160;</td>
           <td class="paramname"><em>dt</em></td><td>)</td>
@@ -317,7 +317,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

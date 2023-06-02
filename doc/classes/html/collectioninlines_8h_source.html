@@ -113,12 +113,12 @@ $(function() {
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classcollection.html#a9f895bd43f599eac4a40640f70641eff">   68</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classcollection.html#a9f895bd43f599eac4a40640f70641eff">collection::getIsReadOnly</a>() {</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classcollection.html#a5059d78cd77197727c3c674151eea083">   68</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classcollection.html#a5059d78cd77197727c3c674151eea083">collection::isReadOnly</a>() {</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classcollection.html#a09c13e45c3bcebd5c8cd2fc05ea0336e">   73</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classcollection.html#a09c13e45c3bcebd5c8cd2fc05ea0336e">collection::getIsBlockBased</a>() {</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classcollection.html#ae09521a76312d4436b7146cc28de746c">   73</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classcollection.html#ae09521a76312d4436b7146cc28de746c">collection::isBlockBased</a>() {</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
@@ -128,7 +128,7 @@ $(function() {
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classcollection.html#ad8d8b633d98d56ecb9fd294f6df714e5">   83</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classcollection.html#ad8d8b633d98d56ecb9fd294f6df714e5">collection::getIsSequentialAccess</a>() {</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classcollection.html#adc375a16f090504975252ef27a83f923">   83</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classcollection.html#adc375a16f090504975252ef27a83f923">collection::isSequentialAccess</a>() {</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
@@ -493,15 +493,14 @@ $(function() {
 <div class="ttc" id="aclasscharacter_html_ac8d2f1e83a804d0f1e5fce9f89a457c8"><div class="ttname"><a href="classcharacter.html#ac8d2f1e83a804d0f1e5fce9f89a457c8">character::isDigit</a></div><div class="ttdeci">static bool isDigit(int32_t c)</div></div>
 <div class="ttc" id="aclasscharstring_html_a0695b4a7fc9f284211a6f3c2ca65d31b"><div class="ttname"><a href="classcharstring.html#a0695b4a7fc9f284211a6f3c2ca65d31b">charstring::isNumber</a></div><div class="ttdeci">static bool isNumber(const char *val)</div></div>
 <div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition:</b> collection.h:11</div></div>
-<div class="ttc" id="aclasscollection_html_a09c13e45c3bcebd5c8cd2fc05ea0336e"><div class="ttname"><a href="classcollection.html#a09c13e45c3bcebd5c8cd2fc05ea0336e">collection::getIsBlockBased</a></div><div class="ttdeci">virtual bool getIsBlockBased()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:73</div></div>
 <div class="ttc" id="aclasscollection_html_a0fb9ab070a9c23dab93a761c63ed6e73"><div class="ttname"><a href="classcollection.html#a0fb9ab070a9c23dab93a761c63ed6e73">collection::~collection</a></div><div class="ttdeci">virtual ~collection()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:44</div></div>
 <div class="ttc" id="aclasscollection_html_a14bcb0d4300b2cdc5a7945cfaf092c7e"><div class="ttname"><a href="classcollection.html#a14bcb0d4300b2cdc5a7945cfaf092c7e">collection::setComparator</a></div><div class="ttdeci">void setComparator(comparator *newcomp)</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:53</div></div>
 <div class="ttc" id="aclasscollection_html_a1b14432316e5ef1730376513db34b52e"><div class="ttname"><a href="classcollection.html#a1b14432316e5ef1730376513db34b52e">collection::getManageArrayValues</a></div><div class="ttdeci">virtual bool getManageArrayValues()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:99</div></div>
 <div class="ttc" id="aclasscollection_html_a356698fc38710fa46238c52e24367d9d"><div class="ttname"><a href="classcollection.html#a356698fc38710fa46238c52e24367d9d">collection::operator=</a></div><div class="ttdeci">collection &amp; operator=(collection &amp;c)</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:30</div></div>
 <div class="ttc" id="aclasscollection_html_a48c0a45ddea1840e7d95e653279764ac"><div class="ttname"><a href="classcollection.html#a48c0a45ddea1840e7d95e653279764ac">collection::getManageArrayKeys</a></div><div class="ttdeci">virtual bool getManageArrayKeys()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:121</div></div>
+<div class="ttc" id="aclasscollection_html_a5059d78cd77197727c3c674151eea083"><div class="ttname"><a href="classcollection.html#a5059d78cd77197727c3c674151eea083">collection::isReadOnly</a></div><div class="ttdeci">virtual bool isReadOnly()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:68</div></div>
 <div class="ttc" id="aclasscollection_html_a644686d8b4f4bf58fdb0a763566ace01"><div class="ttname"><a href="classcollection.html#a644686d8b4f4bf58fdb0a763566ace01">collection::setManageArrayValues</a></div><div class="ttdeci">virtual void setManageArrayValues(bool manage)</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:93</div></div>
 <div class="ttc" id="aclasscollection_html_a95fe22a12fb3fb96c39be949041e7410"><div class="ttname"><a href="classcollection.html#a95fe22a12fb3fb96c39be949041e7410">collection::setManageValues</a></div><div class="ttdeci">virtual void setManageValues(bool manage)</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:62</div></div>
-<div class="ttc" id="aclasscollection_html_a9f895bd43f599eac4a40640f70641eff"><div class="ttname"><a href="classcollection.html#a9f895bd43f599eac4a40640f70641eff">collection::getIsReadOnly</a></div><div class="ttdeci">virtual bool getIsReadOnly()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:68</div></div>
 <div class="ttc" id="aclasscollection_html_aa8d030acf87703cdef3b22b3d73a1006"><div class="ttname"><a href="classcollection.html#aa8d030acf87703cdef3b22b3d73a1006">collection::setManageKeys</a></div><div class="ttdeci">virtual void setManageKeys(bool manage)</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:104</div></div>
 <div class="ttc" id="aclasscollection_html_ab0cc7bdab47b53bfdf8703394293b930"><div class="ttname"><a href="classcollection.html#ab0cc7bdab47b53bfdf8703394293b930">collection::setManageArrayKeys</a></div><div class="ttdeci">virtual void setManageArrayKeys(bool manage)</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:115</div></div>
 <div class="ttc" id="aclasscollection_html_ab23659d6097251b480c5c22802bc6126"><div class="ttname"><a href="classcollection.html#ab23659d6097251b480c5c22802bc6126">collection::getManageValues</a></div><div class="ttdeci">virtual bool getManageValues()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:88</div></div>
@@ -509,7 +508,8 @@ $(function() {
 <div class="ttc" id="aclasscollection_html_aca52ffc2466bd9aa8d957f35c0e98c62"><div class="ttname"><a href="classcollection.html#aca52ffc2466bd9aa8d957f35c0e98c62">collection::getBlockSize</a></div><div class="ttdeci">virtual uint64_t getBlockSize()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:78</div></div>
 <div class="ttc" id="aclasscollection_html_ad0d6cf31943c319e8530d197ce07729c"><div class="ttname"><a href="classcollection.html#ad0d6cf31943c319e8530d197ce07729c">collection::collection</a></div><div class="ttdeci">collection()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:9</div></div>
 <div class="ttc" id="aclasscollection_html_ad1a61bfff46d1aeaf445f673a4423839"><div class="ttname"><a href="classcollection.html#ad1a61bfff46d1aeaf445f673a4423839">collection::getComparator</a></div><div class="ttdeci">comparator * getComparator()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:48</div></div>
-<div class="ttc" id="aclasscollection_html_ad8d8b633d98d56ecb9fd294f6df714e5"><div class="ttname"><a href="classcollection.html#ad8d8b633d98d56ecb9fd294f6df714e5">collection::getIsSequentialAccess</a></div><div class="ttdeci">virtual bool getIsSequentialAccess()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:83</div></div>
+<div class="ttc" id="aclasscollection_html_adc375a16f090504975252ef27a83f923"><div class="ttname"><a href="classcollection.html#adc375a16f090504975252ef27a83f923">collection::isSequentialAccess</a></div><div class="ttdeci">virtual bool isSequentialAccess()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:83</div></div>
+<div class="ttc" id="aclasscollection_html_ae09521a76312d4436b7146cc28de746c"><div class="ttname"><a href="classcollection.html#ae09521a76312d4436b7146cc28de746c">collection::isBlockBased</a></div><div class="ttdeci">virtual bool isBlockBased()</div><div class="ttdef"><b>Definition:</b> collectioninlines.h:73</div></div>
 <div class="ttc" id="aclasscomparator_html"><div class="ttname"><a href="classcomparator.html">comparator</a></div><div class="ttdef"><b>Definition:</b> comparator.h:11</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 <div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition:</b> output.h:11</div></div>
@@ -519,7 +519,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -111,7 +111,7 @@ $(function() {
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classucs2stringbuffer.html#adbc8c6fb2ccd43d4bd61c2be03c978cb">   65</a></span>&#160;<span class="keywordtype">size_t</span> <a class="code" href="classucs2stringbuffer.html#adbc8c6fb2ccd43d4bd61c2be03c978cb">ucs2stringbuffer::getStringLength</a>() {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">ucs2charstring::length</a>(<a class="code" href="classucs2stringbuffer.html#ac026ecaa138be6a924edcac994a4ccd1">getString</a>());</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">ucs2charstring::getLength</a>(<a class="code" href="classucs2stringbuffer.html#ac026ecaa138be6a924edcac994a4ccd1">getString</a>());</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">inline</span></div>
@@ -143,7 +143,7 @@ $(function() {
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classucs2stringbuffer.html#a03b1d52e683c110bdb3e67edd657d86e">   96</a></span>&#160;<a class="code" href="classucs2stringbuffer.html">ucs2stringbuffer</a> *<a class="code" href="classucs2stringbuffer.html#a03b1d52e683c110bdb3e67edd657d86e">ucs2stringbuffer::append</a>(<span class="keyword">const</span> byte_t *<span class="keywordtype">string</span>) {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">return</span> (<a class="code" href="classucs2stringbuffer.html">ucs2stringbuffer</a> *)<a class="code" href="classbytebuffer.html#a4777b9452bd0069de89daff433e6e929">bytebuffer::append</a>(<span class="keywordtype">string</span>,</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                        <a class="code" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">ucs2charstring::length</a>((<span class="keyword">const</span> ucs2_t *)<span class="keywordtype">string</span>));</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                        <a class="code" href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">ucs2charstring::getLength</a>((<span class="keyword">const</span> ucs2_t *)<span class="keywordtype">string</span>));</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;}</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">inline</span></div>
@@ -153,7 +153,7 @@ $(function() {
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classucs2stringbuffer.html#ad3a0757e979ca08b018a47cbddaef603">  107</a></span>&#160;<a class="code" href="classucs2stringbuffer.html">ucs2stringbuffer</a> *<a class="code" href="classucs2stringbuffer.html#ad3a0757e979ca08b018a47cbddaef603">ucs2stringbuffer::appendUcs2</a>(<span class="keyword">const</span> ucs2_t *<span class="keywordtype">string</span>) {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classucs2stringbuffer.html#ad3a0757e979ca08b018a47cbddaef603">appendUcs2</a>(<span class="keywordtype">string</span>,<a class="code" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">ucs2charstring::length</a>(<span class="keywordtype">string</span>));</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classucs2stringbuffer.html#ad3a0757e979ca08b018a47cbddaef603">appendUcs2</a>(<span class="keywordtype">string</span>,<a class="code" href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">ucs2charstring::getLength</a>(<span class="keywordtype">string</span>));</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;}</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keyword">inline</span></div>
@@ -283,7 +283,7 @@ $(function() {
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="classucs2stringbuffer.html#a12a062c00f32ff5e71a7aeb3c00d3bab">  236</a></span>&#160;ssize_t <a class="code" href="classucs2stringbuffer.html#a12a062c00f32ff5e71a7aeb3c00d3bab">ucs2stringbuffer::write</a>(<span class="keyword">const</span> byte_t *<span class="keywordtype">string</span>) {</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classbytebuffer.html#a5beae1bb0b9267b029825cf6d0146c21">bytebuffer::write</a>(<span class="keywordtype">string</span>,</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                        <a class="code" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">ucs2charstring::length</a>((<span class="keyword">const</span> ucs2_t *)<span class="keywordtype">string</span>));</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                        <a class="code" href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">ucs2charstring::getLength</a>((<span class="keyword">const</span> ucs2_t *)<span class="keywordtype">string</span>));</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;}</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="keyword">inline</span></div>
@@ -293,7 +293,7 @@ $(function() {
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="classucs2stringbuffer.html#a593f7e475a46dfccba15800bd73902d0">  247</a></span>&#160;ssize_t <a class="code" href="classucs2stringbuffer.html#a593f7e475a46dfccba15800bd73902d0">ucs2stringbuffer::writeUcs2</a>(<span class="keyword">const</span> ucs2_t *<span class="keywordtype">string</span>) {</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classbytebuffer.html#a3c002f6c4b8556a39e04fce7b67b1ecb">bytebuffer::writeUcs2</a>(<span class="keywordtype">string</span>,<a class="code" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">ucs2charstring::length</a>(<span class="keywordtype">string</span>));</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classbytebuffer.html#a3c002f6c4b8556a39e04fce7b67b1ecb">bytebuffer::writeUcs2</a>(<span class="keywordtype">string</span>,<a class="code" href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">ucs2charstring::getLength</a>(<span class="keywordtype">string</span>));</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;}</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="keyword">inline</span></div>
@@ -398,8 +398,8 @@ $(function() {
 <div class="ttc" id="aclassbytebuffer_html_afba6482c0ba249a04b8b08a8a61c7a78"><div class="ttname"><a href="classbytebuffer.html#afba6482c0ba249a04b8b08a8a61c7a78">bytebuffer::operator=</a></div><div class="ttdeci">bytebuffer &amp; operator=(bytebuffer &amp;v)</div></div>
 <div class="ttc" id="aclasscharacter_html"><div class="ttname"><a href="classcharacter.html">character</a></div><div class="ttdef"><b>Definition:</b> character.h:11</div></div>
 <div class="ttc" id="aclassoutput_html_a7de42cb03622a9c4dbb64cd93074507e"><div class="ttname"><a href="classoutput.html#a7de42cb03622a9c4dbb64cd93074507e">output::printf</a></div><div class="ttdeci">virtual ssize_t printf(const char *format,...)</div><div class="ttdef"><b>Definition:</b> outputinlines.h:25</div></div>
+<div class="ttc" id="aclassucs2charstring_html_a7ea1e06487dfde06518f4d98ab86a820"><div class="ttname"><a href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">ucs2charstring::getLength</a></div><div class="ttdeci">static size_t getLength(const ucs2_t *string)</div></div>
 <div class="ttc" id="aclassucs2charstring_html_aa9a3def10f65c8633da80f9cf4da37be"><div class="ttname"><a href="classucs2charstring.html#aa9a3def10f65c8633da80f9cf4da37be">ucs2charstring::parseNumber</a></div><div class="ttdeci">static ucs2_t * parseNumber(int16_t number)</div></div>
-<div class="ttc" id="aclassucs2charstring_html_aecb083fa6c22eba0b44121d5ab665f80"><div class="ttname"><a href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">ucs2charstring::length</a></div><div class="ttdeci">static size_t length(const ucs2_t *string)</div></div>
 <div class="ttc" id="aclassucs2stringbuffer_html"><div class="ttname"><a href="classucs2stringbuffer.html">ucs2stringbuffer</a></div><div class="ttdef"><b>Definition:</b> ucs2stringbuffer.h:13</div></div>
 <div class="ttc" id="aclassucs2stringbuffer_html_a01060940ba2c6d54ef176cd3bf31a632"><div class="ttname"><a href="classucs2stringbuffer.html#a01060940ba2c6d54ef176cd3bf31a632">ucs2stringbuffer::setPositionRelativeToBeginning</a></div><div class="ttdeci">off64_t setPositionRelativeToBeginning(off64_t pos)</div><div class="ttdef"><b>Definition:</b> ucs2stringbufferinlines.h:38</div></div>
 <div class="ttc" id="aclassucs2stringbuffer_html_a03b1d52e683c110bdb3e67edd657d86e"><div class="ttname"><a href="classucs2stringbuffer.html#a03b1d52e683c110bdb3e67edd657d86e">ucs2stringbuffer::append</a></div><div class="ttdeci">ucs2stringbuffer * append(const byte_t *string)</div><div class="ttdef"><b>Definition:</b> ucs2stringbufferinlines.h:96</div></div>
@@ -420,7 +420,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

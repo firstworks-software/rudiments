@@ -96,43 +96,41 @@ $(function() {
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                ssize_t unBufferedWrite(<span class="keyword">const</span> byte_t *buf, <span class="keywordtype">size_t</span> count,</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                                int32_t sec, int32_t usec);</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordtype">bool</span>    setNoDelay(int32_t onoff);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                int32_t getSockOpt(int32_t level, int32_t optname,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                        <span class="keywordtype">void</span> *optval, socklen_t *optlen);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                int32_t setSockOpt(int32_t level, int32_t optname,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">void</span> *optval, socklen_t optlen);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keyword">virtual</span> ssize_t lowLevelRead(<span class="keywordtype">void</span> *buf,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                int32_t getSockOpt(int32_t level, int32_t optname,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                                        <span class="keywordtype">void</span> *optval, socklen_t *optlen);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                int32_t setSockOpt(int32_t level, int32_t optname,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">void</span> *optval, socklen_t optlen);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <span class="keyword">virtual</span> ssize_t lowLevelRead(<span class="keywordtype">void</span> *buf,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                                <span class="keywordtype">size_t</span> count);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keyword">virtual</span> ssize_t lowLevelWrite(<span class="keyword">const</span> <span class="keywordtype">void</span> *buf,</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                                <span class="keywordtype">size_t</span> count);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keyword">virtual</span> ssize_t lowLevelWrite(<span class="keyword">const</span> <span class="keywordtype">void</span> *buf,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                                                <span class="keywordtype">size_t</span> count);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keyword">virtual</span> int32_t lowLevelClose();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *type();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                <span class="keywordtype">void</span>            type(<span class="keyword">const</span> <span class="keywordtype">char</span> *tp);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                int32_t fd();</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keywordtype">void</span>    fd(int32_t filedes);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keyword">virtual</span> int32_t lowLevelClose();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *type();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                <span class="keywordtype">void</span>            type(<span class="keyword">const</span> <span class="keywordtype">char</span> *tp);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                int32_t fd();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordtype">void</span>    fd(int32_t filedes);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <a class="code" href="classsocketlayer.html">socketlayer</a>     *socklr();</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                <a class="code" href="classsocketlayer.html">socketlayer</a>     *socklr();</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>(<a class="code" href="classfiledescriptor.html">filedescriptor</a> &amp;f) {};</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>  &amp;operator=(<a class="code" href="classfiledescriptor.html">filedescriptor</a> &amp;f) { <span class="keywordflow">return</span> *<span class="keyword">this</span>; };</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>(<a class="code" href="classfiledescriptor.html">filedescriptor</a> &amp;f) {};</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>  &amp;operator=(<a class="code" href="classfiledescriptor.html">filedescriptor</a> &amp;f) { <span class="keywordflow">return</span> *<span class="keyword">this</span>; };</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                filedescriptorprivate   *pvt;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                filedescriptorprivate   *pvt;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>(int32_t fd);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                <span class="keyword">static</span> <span class="keywordtype">void</span>     *getHandleFromFileDescriptor(int32_t fd);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="keywordtype">size_t</span>  getBytesBuffered();</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                ssize_t printfDelegate(<span class="keyword">const</span> <span class="keywordtype">char</span> *format, va_list *argp);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                ssize_t printfDelegate(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *format, va_list *argp);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                ssize_t printfUcs2Delegate(<span class="keyword">const</span> ucs2_t *format, va_list *argp);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                <a class="code" href="classfiledescriptor.html">filedescriptor</a>(int32_t fd);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keyword">static</span> <span class="keywordtype">void</span>     *getHandleFromFileDescriptor(int32_t fd);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                <span class="keywordtype">size_t</span>  getBytesBuffered();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                ssize_t printfDelegate(<span class="keyword">const</span> <span class="keywordtype">char</span> *format, va_list *argp);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                ssize_t printfDelegate(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *format, va_list *argp);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                ssize_t printfUcs2Delegate(<span class="keyword">const</span> ucs2_t *format, va_list *argp);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 <div class="ttc" id="aclassgsscontext_html"><div class="ttname"><a href="classgsscontext.html">gsscontext</a></div><div class="ttdef"><b>Definition:</b> gss.h:242</div></div>
 <div class="ttc" id="aclasssecuritycontext_html"><div class="ttname"><a href="classsecuritycontext.html">securitycontext</a></div><div class="ttdef"><b>Definition:</b> securitycontext.h:11</div></div>
@@ -141,7 +139,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -61,10 +61,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2ebf59446fb422651e69ee0c70a5e7ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9012e9a4561b960df5f29ce5684725a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#a9012e9a4561b960df5f29ce5684725a9">createOrAttach</a> (key_t key, size_t size, mode_t <a class="el" href="classpermissions.html">permissions</a>)</td></tr>
 <tr class="separator:a9012e9a4561b960df5f29ce5684725a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24aa8777638d60adc038a84cd4babf51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#a24aa8777638d60adc038a84cd4babf51">dontRemove</a> ()</td></tr>
-<tr class="separator:a24aa8777638d60adc038a84cd4babf51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4614ceab622e487303715fb1a61c3ecc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#a4614ceab622e487303715fb1a61c3ecc">forceRemove</a> ()</td></tr>
-<tr class="separator:a4614ceab622e487303715fb1a61c3ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa94078d04eefa4aeeeee08f71b8976b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#aa94078d04eefa4aeeeee08f71b8976b4">setRemove</a> (<a class="el" href="classbool.html">bool</a> remove)</td></tr>
+<tr class="separator:aa94078d04eefa4aeeeee08f71b8976b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfb41f999cb2b87f8f9483b9ed4b08bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#adfb41f999cb2b87f8f9483b9ed4b08bf">getRemove</a> ()</td></tr>
+<tr class="separator:adfb41f999cb2b87f8f9483b9ed4b08bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a746d7ddea239409e61a73c533317c40f"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#a746d7ddea239409e61a73c533317c40f">getId</a> ()</td></tr>
 <tr class="separator:a746d7ddea239409e61a73c533317c40f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5684e50a3985b02316712aaffbd2ebf"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#ac5684e50a3985b02316712aaffbd2ebf">getPointer</a> ()</td></tr>
@@ -95,8 +95,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a52db2c008fe41c39c8cb541378fd27cb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#a52db2c008fe41c39c8cb541378fd27cb">supported</a> ()</td></tr>
-<tr class="separator:a52db2c008fe41c39c8cb541378fd27cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d99b260d0ce0ba520d6e8350e8d9d59"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#a4d99b260d0ce0ba520d6e8350e8d9d59">isSupported</a> ()</td></tr>
+<tr class="separator:a4d99b260d0ce0ba520d6e8350e8d9d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Shared memory segments allow multiple processes to access a common address space.</p>
@@ -240,42 +240,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a24aa8777638d60adc038a84cd4babf51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24aa8777638d60adc038a84cd4babf51">&#9670;&nbsp;</a></span>dontRemove()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void sharedmemory::dontRemove </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Instructs the destructor not to remove the shared memory segment if it was created during a call to <a class="el" href="classsharedmemory.html#a15b64693fa2af5c46cd4924119b133ae">create()</a> or <a class="el" href="classsharedmemory.html#a9012e9a4561b960df5f29ce5684725a9">createOrAttach()</a>. This is useful if an application creates a shared memory segment then forks and wants to delete the shared memory segment in the forked process but does not want the segment removed from the system. </p>
-
-</div>
-</div>
-<a id="a4614ceab622e487303715fb1a61c3ecc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4614ceab622e487303715fb1a61c3ecc">&#9670;&nbsp;</a></span>forceRemove()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> sharedmemory::forceRemove </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Instructs the destructor to remove the shared memory segment whether it was created or just attached to. </p>
-
-</div>
-</div>
 <a id="af3383e37d3cf3f4acb4e3a99cfb4f0b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af3383e37d3cf3f4acb4e3a99cfb4f0b1">&#9670;&nbsp;</a></span>getGroupId()</h2>
 
@@ -367,6 +331,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="adfb41f999cb2b87f8f9483b9ed4b08bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfb41f999cb2b87f8f9483b9ed4b08bf">&#9670;&nbsp;</a></span>getRemove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> sharedmemory::getRemove </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if the shared memory segment will be removed by the destructor and false otherwise. </p>
+
+</div>
+</div>
 <a id="a452c4e90adc2cad54451ca70d4ea4388"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a452c4e90adc2cad54451ca70d4ea4388">&#9670;&nbsp;</a></span>getUserId()</h2>
 
@@ -401,6 +383,32 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the name of the user that owns this shared memory segment</p>
 <p>Note that <a class="el" href="classsharedmemory.html#af39af79728bcbfb98d2d339f68f3257e">getUserName()</a> uses the userentry class. If you are using this method in a multithreaded application, you may need to supply the userentry class a mutex. See userentry.h for more detail. </p>
+
+</div>
+</div>
+<a id="a4d99b260d0ce0ba520d6e8350e8d9d59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d99b260d0ce0ba520d6e8350e8d9d59">&#9670;&nbsp;</a></span>isSupported()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> sharedmemory::isSupported </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the platform supports shared memory and false otherwise. </p>
 
 </div>
 </div>
@@ -462,6 +470,29 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa94078d04eefa4aeeeee08f71b8976b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa94078d04eefa4aeeeee08f71b8976b4">&#9670;&nbsp;</a></span>setRemove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sharedmemory::setRemove </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>remove</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>By default, the destructor will remove a sharemd memory segment if it was created during a call to <a class="el" href="classsharedmemory.html#a15b64693fa2af5c46cd4924119b133ae">create()</a> or <a class="el" href="classsharedmemory.html#a9012e9a4561b960df5f29ce5684725a9">createOrAttach()</a>.</p>
+<p>This method allows you to manually override that behavior.</p>
+<p>If "remove" is true then the destructor will remove the shared memory segment whehter it was created or not. If "remove" is set false then the destructor will not remove the shared memory segment, even if it was created.</p>
+<p>Manually setting "remove" false is useful, for example, if an application creates a shared memory segment then forks and wants to delete the shred memory segment in the forked process but does not want the shared memory segment removed from the system.</p>
+<p>Manually setting "remove" true is useful, for example, if you want to create a utility for removing arbitray shared memory segments. </p>
+
+</div>
+</div>
 <a id="a684bb6e898d9d7efa8f2372b1cf19bf4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a684bb6e898d9d7efa8f2372b1cf19bf4">&#9670;&nbsp;</a></span>setUserId()</h2>
 
@@ -501,36 +532,10 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a52db2c008fe41c39c8cb541378fd27cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52db2c008fe41c39c8cb541378fd27cb">&#9670;&nbsp;</a></span>supported()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> sharedmemory::supported </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns true if the platform supports shared memory and false otherwise. </p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

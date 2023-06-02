@@ -54,8 +54,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a0d4fa946c86cda5812b4298302febf9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9585496d369032f16c4097f9b399e373"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenvironment.html#a9585496d369032f16c4097f9b399e373">remove</a> (const char *variable)</td></tr>
 <tr class="separator:a9585496d369032f16c4097f9b399e373"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70167639bd65becd4b323f17b0a30982"><td class="memItemLeft" align="right" valign="top">static const char *const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenvironment.html#a70167639bd65becd4b323f17b0a30982">variables</a> ()</td></tr>
-<tr class="separator:a70167639bd65becd4b323f17b0a30982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52a000df3280a99b0c5d0be1e9359042"><td class="memItemLeft" align="right" valign="top">static const char *const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenvironment.html#a52a000df3280a99b0c5d0be1e9359042">getVariables</a> ()</td></tr>
+<tr class="separator:a52a000df3280a99b0c5d0be1e9359042"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dc5d1cec58e5bf2ca301f7021ffb08c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenvironment.html#a6dc5d1cec58e5bf2ca301f7021ffb08c">clear</a> ()</td></tr>
 <tr class="separator:a6dc5d1cec58e5bf2ca301f7021ffb08c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8448e411a5f361d4d6a585cbc9bcce0c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenvironment.html#a8448e411a5f361d4d6a585cbc9bcce0c">setMutex</a> (<a class="el" href="classthreadmutex.html">threadmutex</a> *mtx)</td></tr>
@@ -86,7 +86,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Clears the environment of all name-value pairs. After calling this, <a class="el" href="classenvironment.html#a70167639bd65becd4b323f17b0a30982">variables()</a> will return NULL. </p>
+<p>Clears the environment of all name-value pairs. After calling this, variables() will return NULL. </p>
 
 </div>
 </div>
@@ -114,6 +114,32 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the value of "variable". </p>
+
+</div>
+</div>
+<a id="a52a000df3280a99b0c5d0be1e9359042"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52a000df3280a99b0c5d0be1e9359042">&#9670;&nbsp;</a></span>getVariables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const char* const* environment::getVariables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a NULL terminated list of all environment variables. Each entry in the list is of the form NAME=VALUE. </p>
 
 </div>
 </div>
@@ -208,36 +234,10 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a70167639bd65becd4b323f17b0a30982"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70167639bd65becd4b323f17b0a30982">&#9670;&nbsp;</a></span>variables()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const char* const* environment::variables </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns a NULL terminated list of all environment variables. Each entry in the list is of the form NAME=VALUE. </p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

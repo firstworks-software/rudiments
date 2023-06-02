@@ -185,13 +185,13 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Processes one character from the "from buffer", converting it from the "from encoding" to the "to encoding" and writing the converted character to the "to buffer".</p>
-<p>Sets the "from buffer position" to a pointer to the first byte of the "from buffer" after the character that was processed. Sets the "from buffer remaining" to the number of bytes in the "from buffer" that were not processed.</p>
-<p>Sets the "to buffer position" to a pointer to the first byte in the "to buffer" after the character that was written. Sets the "to buffer remaining" to the number of bytes in the "to buffer" that were not written to.</p>
-<p>Returns true on successful conversion of one character.</p>
+<p>Processes characters from the "from buffer", converting them from the "from encoding" to the "to encoding" and writing the converted characters to the "to buffer".</p>
+<p>Sets the "from buffer position" to a pointer to the first byte of the "from buffer" after the last character that was processed. Sets the "from buffer remaining" to the number of bytes in the "from buffer" that were not processed.</p>
+<p>Sets the "to buffer position" to a pointer to the first byte in the "to buffer" after the last character that was written. Sets the "to buffer remaining" to the number of bytes in the "to buffer" that were not written to.</p>
+<p>Returns true on successful conversion.</p>
 <p>Returns false if one of the following errors occur.</p>
 <p>If conversion from the "from encoding" to the "to encoding" isn't supported then the error number will be set to ENOSYS.</p>
-<p>If the "to buffer size" isn't sufficient to store the converted character (eg. because we're converting to a multi-byte encoding and there aren't enough bytes to store the multi-byte character) then the error number will be set to E2BIG.</p>
+<p>If the "to buffer size" isn't sufficient to store the converted characters (eg. because we're converting to a multi-byte encoding and there aren't enough bytes to store the multi-byte character) then the error number will be set to E2BIG.</p>
 <p>If an invalid multibyte sequence was encountered in the "from buffer" then the error number will be set to EILSEQ.</p>
 <p>If an incomplete multibyte sequence was encountered in the "from buffer" then the error number will be set to EINVAL.</p>
 <p>In each of these error cases, the "from buffer position" will be set to the "from buffer" and the "from buffer
@@ -468,7 +468,7 @@ buffer remaining" will be set to the "to buffer size". </p>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the "from buffer" - the buffer that a character will be read from during the call to <a class="el" href="classiconvert.html#a9510a92e28b792aa4426df5f86941684">convert()</a>. Specifically, "buffer" should be a pointer to the first byte that will be read when <a class="el" href="classiconvert.html#a9510a92e28b792aa4426df5f86941684">convert()</a> is called. </p>
+<p>Sets the "from buffer" - the buffer that characters will be read from during the call to <a class="el" href="classiconvert.html#a9510a92e28b792aa4426df5f86941684">convert()</a>. Specifically, "buffer" should be a pointer to the first byte that will be read when <a class="el" href="classiconvert.html#a9510a92e28b792aa4426df5f86941684">convert()</a> is called. </p>
 
 </div>
 </div>
@@ -525,7 +525,7 @@ buffer remaining" will be set to the "to buffer size". </p>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the "to buffer" - the buffer that a character will be written to during a call to <a class="el" href="classiconvert.html#a9510a92e28b792aa4426df5f86941684">convert()</a>. </p>
+<p>Sets the "to buffer" - the buffer that characters will be written to during a call to <a class="el" href="classiconvert.html#a9510a92e28b792aa4426df5f86941684">convert()</a>. </p>
 
 </div>
 </div>
@@ -570,7 +570,7 @@ buffer remaining" will be set to the "to buffer size". </p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -80,14 +80,14 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a539b24796fee0b69804b874ce4e3e7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a467ecf7fee9ba7c9f1888a6789f2c324"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a467ecf7fee9ba7c9f1888a6789f2c324">isAscii</a> (int32_t c)</td></tr>
 <tr class="separator:a467ecf7fee9ba7c9f1888a6789f2c324"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe067139abd5df6a78d598735e349fcb"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#abe067139abd5df6a78d598735e349fcb">toUpperCase</a> (int32_t c)</td></tr>
-<tr class="separator:abe067139abd5df6a78d598735e349fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a49f415b57b40cdaddb76458392532c"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a5a49f415b57b40cdaddb76458392532c">toLowerCase</a> (int32_t c)</td></tr>
-<tr class="separator:a5a49f415b57b40cdaddb76458392532c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a374913feb44ab89688f9a5717c61a62a"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a374913feb44ab89688f9a5717c61a62a">toAscii</a> (int32_t c)</td></tr>
-<tr class="separator:a374913feb44ab89688f9a5717c61a62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85ef5e5488549ce9f944606805183a17"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a85ef5e5488549ce9f944606805183a17">inSet</a> (char c, const char *set)</td></tr>
-<tr class="separator:a85ef5e5488549ce9f944606805183a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a893ee1580a0e779f0e57af6dca42dae5"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a893ee1580a0e779f0e57af6dca42dae5">upper</a> (int32_t c)</td></tr>
+<tr class="separator:a893ee1580a0e779f0e57af6dca42dae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e71e97f47c43a8180e6c5bad80aa1d1"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a1e71e97f47c43a8180e6c5bad80aa1d1">lower</a> (int32_t c)</td></tr>
+<tr class="separator:a1e71e97f47c43a8180e6c5bad80aa1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0102efa2c89b66d7457d1fe965e45e16"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a0102efa2c89b66d7457d1fe965e45e16">convertToAscii</a> (int32_t c)</td></tr>
+<tr class="separator:a0102efa2c89b66d7457d1fe965e45e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94b7aa72a0e6b78173f2b02f105f3919"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a94b7aa72a0e6b78173f2b02f105f3919">isInSet</a> (char c, const char *set)</td></tr>
+<tr class="separator:a94b7aa72a0e6b78173f2b02f105f3919"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa182f46a1f1ababdfb5c081eb76f18c5"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#aa182f46a1f1ababdfb5c081eb76f18c5">duplicate</a> (wchar_t c)</td></tr>
 <tr class="separator:aa182f46a1f1ababdfb5c081eb76f18c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5e44a0ad2fbf7cf3b83ed7ba6457f05"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#ab5e44a0ad2fbf7cf3b83ed7ba6457f05">duplicate</a> (wchar_t c, char replacement)</td></tr>
@@ -100,10 +100,39 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a518e0550b2f2da15fd05a68e94dde50e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c459831178a38defa3a2c3ad72976d9"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#a6c459831178a38defa3a2c3ad72976d9">duplicateUcs2</a> (ucs2_t c, char replacement, <a class="el" href="classbool.html">bool</a> bigendian)</td></tr>
 <tr class="separator:a6c459831178a38defa3a2c3ad72976d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb8762ec1d383b5f4fe3e0b189dba36e"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharacter.html#acb8762ec1d383b5f4fe3e0b189dba36e">getNullSize</a> ()</td></tr>
+<tr class="separator:acb8762ec1d383b5f4fe3e0b189dba36e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The character class provides static methods for evaluating and manipulating ASCII characters. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0102efa2c89b66d7457d1fe965e45e16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0102efa2c89b66d7457d1fe965e45e16">&#9670;&nbsp;</a></span>convertToAscii()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int32_t character::convertToAscii </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "c" to a 7-bit value by clearing the higher order bits. </p>
+
+</div>
+</div>
 <a id="aa182f46a1f1ababdfb5c081eb76f18c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa182f46a1f1ababdfb5c081eb76f18c5">&#9670;&nbsp;</a></span>duplicate() <span class="overload">[1/2]</span></h2>
 
@@ -322,8 +351,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a85ef5e5488549ce9f944606805183a17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85ef5e5488549ce9f944606805183a17">&#9670;&nbsp;</a></span>inSet()</h2>
+<a id="acb8762ec1d383b5f4fe3e0b189dba36e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb8762ec1d383b5f4fe3e0b189dba36e">&#9670;&nbsp;</a></span>getNullSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -332,21 +361,10 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> character::inSet </td>
+          <td class="memname">static uint8_t character::getNullSize </td>
           <td>(</td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>set</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -355,7 +373,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if "c" is in the set of characters in "set" and false otherwise. </p>
+<p>Returns the number of bytes needed to NULL-terminate a string of ASCII-encoded characters. </p>
 
 </div>
 </div>
@@ -575,6 +593,43 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a94b7aa72a0e6b78173f2b02f105f3919"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94b7aa72a0e6b78173f2b02f105f3919">&#9670;&nbsp;</a></span>isInSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> character::isInSet </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>set</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if "c" is in the set of characters in "set" and false otherwise. </p>
+
+</div>
+</div>
 <a id="a89ef7c27749cff7cbd3bc93390bddf91"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89ef7c27749cff7cbd3bc93390bddf91">&#9670;&nbsp;</a></span>isLowerCase()</h2>
 
@@ -791,8 +846,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a374913feb44ab89688f9a5717c61a62a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a374913feb44ab89688f9a5717c61a62a">&#9670;&nbsp;</a></span>toAscii()</h2>
+<a id="a1e71e97f47c43a8180e6c5bad80aa1d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e71e97f47c43a8180e6c5bad80aa1d1">&#9670;&nbsp;</a></span>lower()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -801,34 +856,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int32_t character::toAscii </td>
-          <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "c" to a 7-bit value by clearing the higher order bits. </p>
-
-</div>
-</div>
-<a id="a5a49f415b57b40cdaddb76458392532c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a49f415b57b40cdaddb76458392532c">&#9670;&nbsp;</a></span>toLowerCase()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int32_t character::toLowerCase </td>
+          <td class="memname">static int32_t character::lower </td>
           <td>(</td>
           <td class="paramtype">int32_t&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
@@ -845,8 +873,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abe067139abd5df6a78d598735e349fcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe067139abd5df6a78d598735e349fcb">&#9670;&nbsp;</a></span>toUpperCase()</h2>
+<a id="a893ee1580a0e779f0e57af6dca42dae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a893ee1580a0e779f0e57af6dca42dae5">&#9670;&nbsp;</a></span>upper()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -855,7 +883,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int32_t character::toUpperCase </td>
+          <td class="memname">static int32_t character::upper </td>
           <td>(</td>
           <td class="paramtype">int32_t&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
@@ -875,7 +903,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

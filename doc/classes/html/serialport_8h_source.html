@@ -81,9 +81,9 @@ $(function() {
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
 <div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classserialport.html#afbaade2bb375fcdd1989004271d0305b">   61</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classserialport.html#afbaade2bb375fcdd1989004271d0305b">restartOutput</a>();</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classserialport.html#a1d95b561df631dffcfa8d53636f73cab">   66</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classserialport.html#a1d95b561df631dffcfa8d53636f73cab">transmitStop</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classserialport.html#abacef387be12ed65218cc5a6c7b72aeb">   66</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classserialport.html#abacef387be12ed65218cc5a6c7b72aeb">sendStop</a>();</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classserialport.html#a07745294e705b2cdd84f3ce73b45ee0b">   70</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classserialport.html#a07745294e705b2cdd84f3ce73b45ee0b">transmitStart</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classserialport.html#abeacc9ef581039be2c921c023d9fa5cf">   70</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classserialport.html#abeacc9ef581039be2c921c023d9fa5cf">sendStart</a>();</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classserialport.html#ade3266dc3a74aa3aafea5cc9737e51a3">   81</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classserialport.html#ade3266dc3a74aa3aafea5cc9737e51a3">sendBreak</a>(int32_t duration);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
@@ -93,9 +93,7 @@ $(function() {
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 <div class="ttc" id="aclassserialport_html"><div class="ttname"><a href="classserialport.html">serialport</a></div><div class="ttdef"><b>Definition:</b> serialport.h:14</div></div>
-<div class="ttc" id="aclassserialport_html_a07745294e705b2cdd84f3ce73b45ee0b"><div class="ttname"><a href="classserialport.html#a07745294e705b2cdd84f3ce73b45ee0b">serialport::transmitStart</a></div><div class="ttdeci">bool transmitStart()</div></div>
 <div class="ttc" id="aclassserialport_html_a0e0bc03dcb0459934df56d13c1c767b0"><div class="ttname"><a href="classserialport.html#a0e0bc03dcb0459934df56d13c1c767b0">serialport::suspendOutput</a></div><div class="ttdeci">bool suspendOutput()</div></div>
-<div class="ttc" id="aclassserialport_html_a1d95b561df631dffcfa8d53636f73cab"><div class="ttname"><a href="classserialport.html#a1d95b561df631dffcfa8d53636f73cab">serialport::transmitStop</a></div><div class="ttdeci">bool transmitStop()</div></div>
 <div class="ttc" id="aclassserialport_html_a2611a898236ec64daee0e1fdf7a48b2d"><div class="ttname"><a href="classserialport.html#a2611a898236ec64daee0e1fdf7a48b2d">serialport::flushInput</a></div><div class="ttdeci">bool flushInput()</div></div>
 <div class="ttc" id="aclassserialport_html_a494e3da7d00cc71a2a7730587ef81efd"><div class="ttname"><a href="classserialport.html#a494e3da7d00cc71a2a7730587ef81efd">serialport::getProfile</a></div><div class="ttdeci">bool getProfile(serialportprofile *profile)</div></div>
 <div class="ttc" id="aclassserialport_html_a4c7af797fa20c5b6cd803132bb94efda"><div class="ttname"><a href="classserialport.html#a4c7af797fa20c5b6cd803132bb94efda">serialport::serialport</a></div><div class="ttdeci">serialport()</div></div>
@@ -103,6 +101,8 @@ $(function() {
 <div class="ttc" id="aclassserialport_html_a8bb3399bccd9506ef7719fa6479f0228"><div class="ttname"><a href="classserialport.html#a8bb3399bccd9506ef7719fa6479f0228">serialport::setProfileOnDrain</a></div><div class="ttdeci">bool setProfileOnDrain(serialportprofile *profile)</div></div>
 <div class="ttc" id="aclassserialport_html_ab070c7c721c47fd0afd4a4cd940e2579"><div class="ttname"><a href="classserialport.html#ab070c7c721c47fd0afd4a4cd940e2579">serialport::flushOutput</a></div><div class="ttdeci">bool flushOutput()</div></div>
 <div class="ttc" id="aclassserialport_html_ab3d301d6d9d1222633ad5b84124a2618"><div class="ttname"><a href="classserialport.html#ab3d301d6d9d1222633ad5b84124a2618">serialport::~serialport</a></div><div class="ttdeci">virtual ~serialport()</div></div>
+<div class="ttc" id="aclassserialport_html_abacef387be12ed65218cc5a6c7b72aeb"><div class="ttname"><a href="classserialport.html#abacef387be12ed65218cc5a6c7b72aeb">serialport::sendStop</a></div><div class="ttdeci">bool sendStop()</div></div>
+<div class="ttc" id="aclassserialport_html_abeacc9ef581039be2c921c023d9fa5cf"><div class="ttname"><a href="classserialport.html#abeacc9ef581039be2c921c023d9fa5cf">serialport::sendStart</a></div><div class="ttdeci">bool sendStart()</div></div>
 <div class="ttc" id="aclassserialport_html_ac1f7d0ee7ff1580d7badbf639a34d118"><div class="ttname"><a href="classserialport.html#ac1f7d0ee7ff1580d7badbf639a34d118">serialport::setProfileOnFlush</a></div><div class="ttdeci">bool setProfileOnFlush(serialportprofile *profile)</div></div>
 <div class="ttc" id="aclassserialport_html_ac8c61430104a4c261c7f66f99924aa05"><div class="ttname"><a href="classserialport.html#ac8c61430104a4c261c7f66f99924aa05">serialport::flush</a></div><div class="ttdeci">bool flush()</div></div>
 <div class="ttc" id="aclassserialport_html_ade3266dc3a74aa3aafea5cc9737e51a3"><div class="ttname"><a href="classserialport.html#ade3266dc3a74aa3aafea5cc9737e51a3">serialport::sendBreak</a></div><div class="ttdeci">bool sendBreak(int32_t duration)</div></div>
@@ -112,7 +112,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

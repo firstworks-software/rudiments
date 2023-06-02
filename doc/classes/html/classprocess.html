@@ -70,8 +70,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a122bfeb9ef597c253ea6f99b6582b665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37af1fa3a07219a9af850013c9516cef"><td class="memItemLeft" align="right" valign="top">static pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a37af1fa3a07219a9af850013c9516cef">getSessionId</a> (pid_t pid)</td></tr>
 <tr class="separator:a37af1fa3a07219a9af850013c9516cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e3a65f5705d5a2a84977a9243655bcf"><td class="memItemLeft" align="right" valign="top">static pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a0e3a65f5705d5a2a84977a9243655bcf">newSession</a> ()</td></tr>
-<tr class="separator:a0e3a65f5705d5a2a84977a9243655bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a098bffb6d975a224e4952b3bc5073704"><td class="memItemLeft" align="right" valign="top">static pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a098bffb6d975a224e4952b3bc5073704">createNewSession</a> ()</td></tr>
+<tr class="separator:a098bffb6d975a224e4952b3bc5073704"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c5e449d9318e11549c87a2440abed1"><td class="memItemLeft" align="right" valign="top">static uid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a89c5e449d9318e11549c87a2440abed1">getUserId</a> ()</td></tr>
 <tr class="separator:a89c5e449d9318e11549c87a2440abed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa22539187b19369065253b18324b4a5e"><td class="memItemLeft" align="right" valign="top">static uid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#aa22539187b19369065253b18324b4a5e">getEffectiveUserId</a> ()</td></tr>
@@ -116,8 +116,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a6f4a254246fe4724cf05bc6128c87428"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f9487a848d43a378398b1647b68f075"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a0f9487a848d43a378398b1647b68f075">exitImmediately</a> (int32_t status)</td></tr>
 <tr class="separator:a0f9487a848d43a378398b1647b68f075"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3700a0c1259bc318496b06e2d54bb24c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a3700a0c1259bc318496b06e2d54bb24c">atExit</a> (void(*function)(void))</td></tr>
-<tr class="separator:a3700a0c1259bc318496b06e2d54bb24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aade65047296939d2e290cbee90598acd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#aade65047296939d2e290cbee90598acd">sendSignal</a> (pid_t processid, int32_t signum)</td></tr>
 <tr class="separator:aade65047296939d2e290cbee90598acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3297d98e06dd8fdaafc42809d75a198"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab3297d98e06dd8fdaafc42809d75a198">raiseSignal</a> (int32_t signum)</td></tr>
@@ -134,10 +132,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a996b56768f884c92292d41c5efce9280"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e8fd1b11e48a61d4c05e915bb2010f5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a7e8fd1b11e48a61d4c05e915bb2010f5">setShutDownFlagOnCrash</a> ()</td></tr>
 <tr class="separator:a7e8fd1b11e48a61d4c05e915bb2010f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68d1a9213c066d4f3aee8a34d4742c62"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a68d1a9213c066d4f3aee8a34d4742c62">handleShutDown</a> (void(*shutdownfunction)(int32_t))</td></tr>
-<tr class="separator:a68d1a9213c066d4f3aee8a34d4742c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdbc7cb97afbe59afbcdc7db55fcafb4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#abdbc7cb97afbe59afbcdc7db55fcafb4">handleCrash</a> (void(*crashfunction)(int32_t))</td></tr>
-<tr class="separator:abdbc7cb97afbe59afbcdc7db55fcafb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a043818567ba787d98fc57f793a83fab3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a043818567ba787d98fc57f793a83fab3">registerExitHandler</a> (void(*handler)(void))</td></tr>
+<tr class="separator:a043818567ba787d98fc57f793a83fab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54e3746f089b10bf53407424971af6e3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a54e3746f089b10bf53407424971af6e3">setShutDownHandler</a> (void(*shutdownhandler)(int32_t))</td></tr>
+<tr class="separator:a54e3746f089b10bf53407424971af6e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd3227cb7bc93b20bbb4d2fbaa57404f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#afd3227cb7bc93b20bbb4d2fbaa57404f">setCrashHandler</a> (void(*crashhandler)(int32_t))</td></tr>
+<tr class="separator:afd3227cb7bc93b20bbb4d2fbaa57404f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad38af68b37afb458b1d8ecf73eb823fd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ad38af68b37afb458b1d8ecf73eb823fd">setShutDownFlag</a> (<a class="el" href="classbool.html">bool</a> shutdownflag)</td></tr>
 <tr class="separator:ad38af68b37afb458b1d8ecf73eb823fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac522d7738d4034b5cde66b7f966a5542"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ac522d7738d4034b5cde66b7f966a5542">getShutDownFlag</a> ()</td></tr>
@@ -150,10 +150,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a8b7e07caf070073d69abaa9144b50cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa07afe4d4c4cdfee2dc6dc46e5f07fc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classsignalhandler.html">signalhandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#afa07afe4d4c4cdfee2dc6dc46e5f07fc">getShutDownSignalHandler</a> ()</td></tr>
 <tr class="separator:afa07afe4d4c4cdfee2dc6dc46e5f07fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a150e5786f0688e9e6dc6e3ea7ff089c8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a150e5786f0688e9e6dc6e3ea7ff089c8">waitForChildren</a> ()</td></tr>
-<tr class="separator:a150e5786f0688e9e6dc6e3ea7ff089c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab13eab1e72392bfd94de67220204cf61"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab13eab1e72392bfd94de67220204cf61">dontWaitForChildren</a> ()</td></tr>
-<tr class="separator:ab13eab1e72392bfd94de67220204cf61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59075cbaeaaf514fd7cfe5821402c18c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a59075cbaeaaf514fd7cfe5821402c18c">setWaitForChildren</a> (<a class="el" href="classbool.html">bool</a> <a class="el" href="classprocess.html#a625f7bc5eb99e504545780b9a82140f9">wait</a>)</td></tr>
+<tr class="separator:a59075cbaeaaf514fd7cfe5821402c18c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a625f7bc5eb99e504545780b9a82140f9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a625f7bc5eb99e504545780b9a82140f9">wait</a> (pid_t pid)</td></tr>
 <tr class="separator:a625f7bc5eb99e504545780b9a82140f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab82840ada045c8edbf06d62ac5ba48fb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab82840ada045c8edbf06d62ac5ba48fb">wait</a> (pid_t pid, int32_t *exitstatus)</td></tr>
@@ -162,194 +160,22 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a54ab1dc6e7c34efa727d312c99d474f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf488d004356ddf0c5fe7716d3d497c7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#abf488d004356ddf0c5fe7716d3d497c7">supportsGetChildStateChange</a> ()</td></tr>
 <tr class="separator:abf488d004356ddf0c5fe7716d3d497c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17c552ca93fa923a9377a102402d1e0b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a17c552ca93fa923a9377a102402d1e0b">retryFailedFork</a> ()</td></tr>
-<tr class="separator:a17c552ca93fa923a9377a102402d1e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90a11c63fcd5235d5f85d3eecb12ddfd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a90a11c63fcd5235d5f85d3eecb12ddfd">dontRetryFailedFork</a> ()</td></tr>
-<tr class="separator:a90a11c63fcd5235d5f85d3eecb12ddfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b536bd5f0f2fd46e63d83a0fa07c67"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a46b536bd5f0f2fd46e63d83a0fa07c67">setRetryFailedFork</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:a46b536bd5f0f2fd46e63d83a0fa07c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab005f4dce5bb63023677c08ca543c80a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab005f4dce5bb63023677c08ca543c80a">getRetryFailedFork</a> ()</td></tr>
 <tr class="separator:ab005f4dce5bb63023677c08ca543c80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03f3c2f43ef3c67c7edcbe05124e7a3c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a03f3c2f43ef3c67c7edcbe05124e7a3c">backtrace</a> (<a class="el" href="classoutput.html">output</a> *out, uint32_t maxframes)</td></tr>
-<tr class="separator:a03f3c2f43ef3c67c7edcbe05124e7a3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4f6ac1a0c9edcceeaabb01c61aeb908"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ae4f6ac1a0c9edcceeaabb01c61aeb908">backtrace</a> (<a class="el" href="classoutput.html">output</a> *out)</td></tr>
-<tr class="separator:ae4f6ac1a0c9edcceeaabb01c61aeb908"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5d88b2c3c0af1800d1869e579ff9e88"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#aa5d88b2c3c0af1800d1869e579ff9e88">backtrace</a> (const char *filename)</td></tr>
-<tr class="separator:aa5d88b2c3c0af1800d1869e579ff9e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad15b8f24259825cdeaef1f7b6815ace7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ad15b8f24259825cdeaef1f7b6815ace7">backtrace</a> (const char *filename, mode_t perms, uint32_t maxframes)</td></tr>
-<tr class="separator:ad15b8f24259825cdeaef1f7b6815ace7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a820eef60b61a6bb17bdae23879bf8277"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a820eef60b61a6bb17bdae23879bf8277">writeBacktrace</a> (<a class="el" href="classoutput.html">output</a> *out, uint32_t maxframes)</td></tr>
+<tr class="separator:a820eef60b61a6bb17bdae23879bf8277"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a171eabb8691d7985dd3fef0f6c65b54c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a171eabb8691d7985dd3fef0f6c65b54c">writeBacktrace</a> (<a class="el" href="classoutput.html">output</a> *out)</td></tr>
+<tr class="separator:a171eabb8691d7985dd3fef0f6c65b54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bb7a10187183325609df286f1f4f81e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a6bb7a10187183325609df286f1f4f81e">writeBacktrace</a> (const char *filename)</td></tr>
+<tr class="separator:a6bb7a10187183325609df286f1f4f81e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a024ecfc89bfaf79b6509f2158c1f9d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a5a024ecfc89bfaf79b6509f2158c1f9d">writeBacktrace</a> (const char *filename, mode_t perms, uint32_t maxframes)</td></tr>
+<tr class="separator:a5a024ecfc89bfaf79b6509f2158c1f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The process class provides static methods for accessing information about and controlling processes, including methods for forking, spawning and executing child processes. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3700a0c1259bc318496b06e2d54bb24c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3700a0c1259bc318496b06e2d54bb24c">&#9670;&nbsp;</a></span>atExit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> process::atExit </td>
-          <td>(</td>
-          <td class="paramtype">void(*)(void)&#160;</td>
-          <td class="paramname"><em>function</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Registers "function" to be called when the process exits normally. Returns true on success and false on failure. </p>
-
-</div>
-</div>
-<a id="aa5d88b2c3c0af1800d1869e579ff9e88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5d88b2c3c0af1800d1869e579ff9e88">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::backtrace </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Appends the backtrace for the current thread to "filename".</p>
-<p>A maximum of 128 stack frames will be included in the backtrace.</p>
-<p>(Not supported on all platforms.) </p>
-
-</div>
-</div>
-<a id="ad15b8f24259825cdeaef1f7b6815ace7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad15b8f24259825cdeaef1f7b6815ace7">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::backtrace </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">mode_t&#160;</td>
-          <td class="paramname"><em>perms</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>maxframes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Appends the backtrace for the current thread to "filename".</p>
-<p>If "filename" doesn't already exist then it will be created with "perms" permissions.</p>
-<p>"maxframes" indicates the maximum number of stack frames to include in the backtrace.</p>
-<p>(Not supported on all platforms.) </p>
-
-</div>
-</div>
-<a id="ae4f6ac1a0c9edcceeaabb01c61aeb908"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4f6ac1a0c9edcceeaabb01c61aeb908">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::backtrace </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classoutput.html">output</a> *&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Writes the backtrace for the current thread to "buffer".</p>
-<p>A maximum of 128 stack frames will be included in the backtrace.</p>
-<p>(Not supported on all platforms.) </p>
-
-</div>
-</div>
-<a id="a03f3c2f43ef3c67c7edcbe05124e7a3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03f3c2f43ef3c67c7edcbe05124e7a3c">&#9670;&nbsp;</a></span>backtrace() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::backtrace </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classoutput.html">output</a> *&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>maxframes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Writes the backtrace for the current thread to "buffer".</p>
-<p>"maxframes" indicates the maximum number of stack frames to include in the backtrace.</p>
-<p>(Not supported on all platforms.) </p>
-
-</div>
-</div>
 <a id="aae5b20b0b50ac8b7058037ec97ba2ec0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aae5b20b0b50ac8b7058037ec97ba2ec0">&#9670;&nbsp;</a></span>checkForPidFile()</h2>
 
@@ -374,6 +200,32 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Checks for filename "filename" and reads the process id out of it, if it exists. Returns the process id on success or -1 on failure. </p>
+
+</div>
+</div>
+<a id="a098bffb6d975a224e4952b3bc5073704"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a098bffb6d975a224e4952b3bc5073704">&#9670;&nbsp;</a></span>createNewSession()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static pid_t process::createNewSession </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a new session, sets the calling process to be the process group leader and detaches from the controlling terminal. Returns the session id on success or -1 if an error occurred. </p>
 
 </div>
 </div>
@@ -438,58 +290,6 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Detaches the current process from the controlling tty, creates a new session, changes directory to / and sets the file creation mask to 0. Use this method to "fork your
 process into the background." Returns true on success and false on failure. </p>
-
-</div>
-</div>
-<a id="a90a11c63fcd5235d5f85d3eecb12ddfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90a11c63fcd5235d5f85d3eecb12ddfd">&#9670;&nbsp;</a></span>dontRetryFailedFork()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::dontRetryFailedFork </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Causes <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> calls not to be automatically retried if they fail because of insufficient system resources. If set, if a <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> fails, the system error is set to EAGAIN and the <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> must be retried by the calling program. </p>
-
-</div>
-</div>
-<a id="ab13eab1e72392bfd94de67220204cf61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab13eab1e72392bfd94de67220204cf61">&#9670;&nbsp;</a></span>dontWaitForChildren()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::dontWaitForChildren </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>This method causes the process not to wait on child processes which have exited. Ordinarily, you'd want to wait on child processes, but this interferes with the behavior of WEXITSTATUS() after a call to system() (and possibly other calls). This method allows you to disable waiting on child processes. </p>
 
 </div>
 </div>
@@ -768,7 +568,7 @@ process into the background." Returns true on success and false on failure. </p>
 <p>This method causes the process to get information about a change in process state for the specified child process id "pid" (ie. whether it was stopped, continued or killed).</p>
 <p>Returns the process id of the child that changed state, -1 if an error occurred, and 0 if "wait" is set false and no child has changed state.</p>
 <p>Setting "pid" to -1 causes the method to get information on any child of the current process.</p>
-<p>Waiting on child processes to exit prevents so-called "zombie" processes from occurring. However, this method only waits when called. To configure a process to automatically wait on and respond when any child process exits, use <a class="el" href="classprocess.html#a150e5786f0688e9e6dc6e3ea7ff089c8">waitForChildren()</a>.</p>
+<p>Waiting on child processes to exit prevents so-called "zombie" processes from occurring. However, this method only waits when called. To configure a process to automatically wait on and respond when any child process exits, use setWaitForChildren(true).</p>
 <p>If "wait" is set true then the method waits until a child state-change occurs. Otherwise the method returns immediately.</p>
 <p>If "ignorestop" is set true then the method ignores when a child process has been stopped.</p>
 <p>If "ignorecontinue" is set true then the method ignores when a child process has been continued.</p>
@@ -1091,7 +891,7 @@ process into the background." Returns true on success and false on failure. </p>
 </div><div class="memdoc">
 <p>Returns the value of a global shutdown flag indicating whether or not the process has been asked to shut down.</p>
 <p>For example...</p>
-<p>The "shutdownfunction" of <a class="el" href="classprocess.html#a68d1a9213c066d4f3aee8a34d4742c62">handleShutDown()</a> may simply call setShutDownFlag(true) and then return.</p>
+<p>The "shutdownhandler" of <a class="el" href="classprocess.html#a54e3746f089b10bf53407424971af6e3">setShutDownHandler()</a> may simply call setShutDownFlag(true) and then return.</p>
 <p>The process may then call <a class="el" href="classprocess.html#ac522d7738d4034b5cde66b7f966a5542">getShutDownFlag()</a> at strategic points to see if a shutdown has been requested and shut down gracefully if it has.</p>
 <p>All rudiments methods that retry interrupted system calls (see retryInterrupted*() methods of various classes) exit if this flag is set upon return from the system call. </p>
 
@@ -1121,7 +921,7 @@ process into the background." Returns true on success and false on failure. </p>
 </div><div class="memdoc">
 <p>Returns the value of a global variable indicating which signal was received that initiated the process shut down.</p>
 <p>For example...</p>
-<p>The "shutdownfunction" of <a class="el" href="classprocess.html#a68d1a9213c066d4f3aee8a34d4742c62">handleShutDown()</a> may call setShutDownSignal(signum), passing it the value of its "signum" parameter.</p>
+<p>The "shutdownhandler" of <a class="el" href="classprocess.html#a54e3746f089b10bf53407424971af6e3">setShutDownHandler()</a> may call setShutDownSignal(signum), passing it the value of its "signum" parameter.</p>
 <p>Once the process determines that a shutdown has been initiated (perhaps by checking <a class="el" href="classprocess.html#ac522d7738d4034b5cde66b7f966a5542">getShutDownFlag()</a>, it may then call <a class="el" href="classprocess.html#a038c7867886b5fff10844d2eaa317804">getShutDownSignal()</a> to query which signal was received that initiated the shutdown and respond differently to different signals. </p>
 
 </div>
@@ -1178,94 +978,6 @@ process into the background." Returns true on success and false on failure. </p>
 
 </div>
 </div>
-<a id="abdbc7cb97afbe59afbcdc7db55fcafb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdbc7cb97afbe59afbcdc7db55fcafb4">&#9670;&nbsp;</a></span>handleCrash()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::handleCrash </td>
-          <td>(</td>
-          <td class="paramtype">void(*)(int32_t)&#160;</td>
-          <td class="paramname"><em>crashfunction</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Allows you to designate a function to run if the process crashes with a program error signal - SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT, SIGEMT or SIGSYS. </p>
-
-</div>
-</div>
-<a id="a68d1a9213c066d4f3aee8a34d4742c62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68d1a9213c066d4f3aee8a34d4742c62">&#9670;&nbsp;</a></span>handleShutDown()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void process::handleShutDown </td>
-          <td>(</td>
-          <td class="paramtype">void(*)(int32_t)&#160;</td>
-          <td class="paramname"><em>shutdownfunction</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Allows you to designate a function to run when the process receives a termination signal:</p><ul>
-<li>SIGINT - interrupt (ctrl-C)</li>
-<li>SIGTERM - terminate (kill)</li>
-<li>SIGQUIT - quit (ctrl-)</li>
-<li>SIGHUP - hangup (terminal disconnected)</li>
-<li>SIGXCPU - cpu consumption soft limit exceeded</li>
-<li>SIGXFZ - file size limit exceeded</li>
-<li>SIGPWR - ACPI (or similar) power down </li>
-</ul>
-
-</div>
-</div>
-<a id="a0e3a65f5705d5a2a84977a9243655bcf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e3a65f5705d5a2a84977a9243655bcf">&#9670;&nbsp;</a></span>newSession()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static pid_t process::newSession </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Creates a new session, sets the calling process to be the process group leader and detaches from the controlling terminal. Returns the session id on success or -1 if an error occurred. </p>
-
-</div>
-</div>
 <a id="ab3297d98e06dd8fdaafc42809d75a198"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab3297d98e06dd8fdaafc42809d75a198">&#9670;&nbsp;</a></span>raiseSignal()</h2>
 
@@ -1293,8 +1005,8 @@ process into the background." Returns true on success and false on failure. </p>
 
 </div>
 </div>
-<a id="a17c552ca93fa923a9377a102402d1e0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17c552ca93fa923a9377a102402d1e0b">&#9670;&nbsp;</a></span>retryFailedFork()</h2>
+<a id="a043818567ba787d98fc57f793a83fab3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a043818567ba787d98fc57f793a83fab3">&#9670;&nbsp;</a></span>registerExitHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1303,9 +1015,10 @@ process into the background." Returns true on success and false on failure. </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void process::retryFailedFork </td>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> process::registerExitHandler </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">void(*)(void)&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1315,7 +1028,10 @@ process into the background." Returns true on success and false on failure. </p>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Causes <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> calls to be automatically retried if they fail because of insufficient system resources. This is the default behavior. Otherwise, if a <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> fails, the system error is set to EAGAIN and the <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> must be retried by the calling program. </p>
+<p>Allows you to register a function to run when the process exits normally.</p>
+<p>May be called multiple times to register multiple functions to be run at exit. The functions will be called in the reverse order of their registration.</p>
+<p>Note that there is no way to deregister a function from running at exit once it has been registered.</p>
+<p>Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -1353,6 +1069,34 @@ process into the background." Returns true on success and false on failure. </p>
 </table>
 </div><div class="memdoc">
 <p>Send signal "signum" to process "processid". Returns true on success and false on failure. </p>
+
+</div>
+</div>
+<a id="afd3227cb7bc93b20bbb4d2fbaa57404f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd3227cb7bc93b20bbb4d2fbaa57404f">&#9670;&nbsp;</a></span>setCrashHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::setCrashHandler </td>
+          <td>(</td>
+          <td class="paramtype">void(*)(int32_t)&#160;</td>
+          <td class="paramname"><em>crashhandler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allows you to designate a function to run if the process crashes with a program error signal - SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT, SIGEMT or SIGSYS.</p>
+<p>Each time <a class="el" href="classprocess.html#afd3227cb7bc93b20bbb4d2fbaa57404f">setCrashHandler()</a> is called, the crash handler replaces the previously designated handler. </p>
 
 </div>
 </div>
@@ -1717,6 +1461,34 @@ process into the background." Returns true on success and false on failure. </p>
 
 </div>
 </div>
+<a id="a46b536bd5f0f2fd46e63d83a0fa07c67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46b536bd5f0f2fd46e63d83a0fa07c67">&#9670;&nbsp;</a></span>setRetryFailedFork()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::setRetryFailedFork </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>If "retry" is true then <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> calls will be automatically retried if they fail eg. because of insufficient system resources. If "retry" is set false then, if a <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> fails, the system error is set to EAGAIN and <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> returns -1.</p>
+<p>Defaults to true. </p>
+
+</div>
+</div>
 <a id="ad38af68b37afb458b1d8ecf73eb823fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad38af68b37afb458b1d8ecf73eb823fd">&#9670;&nbsp;</a></span>setShutDownFlag()</h2>
 
@@ -1742,7 +1514,7 @@ process into the background." Returns true on success and false on failure. </p>
 </div><div class="memdoc">
 <p>Sets a global shutdown flag indicating whether or not the process has been asked to shut down.</p>
 <p>For example...</p>
-<p>The "shutdownfunction" of <a class="el" href="classprocess.html#a68d1a9213c066d4f3aee8a34d4742c62">handleShutDown()</a> may simply call setShutDownFlag(true) and then return.</p>
+<p>The "shutdownhandler" of <a class="el" href="classprocess.html#a54e3746f089b10bf53407424971af6e3">setShutDownHandler()</a> may simply call setShutDownFlag(true) and then return.</p>
 <p>The process may then call <a class="el" href="classprocess.html#ac522d7738d4034b5cde66b7f966a5542">getShutDownFlag()</a> at strategic points to see if a shutdown has been requested and shut down gracefully if it has.</p>
 <p>All rudiments methods that retry interrupted system calls (see retryInterrupted*() methods of various classes) exit if this flag is set upon return from the system call. </p>
 
@@ -1834,6 +1606,42 @@ process into the background." Returns true on success and false on failure. </p>
 
 </div>
 </div>
+<a id="a54e3746f089b10bf53407424971af6e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54e3746f089b10bf53407424971af6e3">&#9670;&nbsp;</a></span>setShutDownHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::setShutDownHandler </td>
+          <td>(</td>
+          <td class="paramtype">void(*)(int32_t)&#160;</td>
+          <td class="paramname"><em>shutdownhandler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allows you to designate a function to run when the process receives a termination signal:</p><ul>
+<li>SIGINT - interrupt (ctrl-C)</li>
+<li>SIGTERM - terminate (kill)</li>
+<li>SIGQUIT - quit (ctrl-)</li>
+<li>SIGHUP - hangup (terminal disconnected)</li>
+<li>SIGXCPU - cpu consumption soft limit exceeded</li>
+<li>SIGXFZ - file size limit exceeded</li>
+<li>SIGPWR - ACPI (or similar) power down</li>
+</ul>
+<p>Each time <a class="el" href="classprocess.html#a54e3746f089b10bf53407424971af6e3">setShutDownHandler()</a> is called, the shut down handler replaces the previously designated handler. </p>
+
+</div>
+</div>
 <a id="a2cd153041c31295b5fb65585e550b4eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2cd153041c31295b5fb65585e550b4eb">&#9670;&nbsp;</a></span>setShutDownSignal()</h2>
 
@@ -1859,7 +1667,7 @@ process into the background." Returns true on success and false on failure. </p>
 </div><div class="memdoc">
 <p>Sets a global variable indicating which signal was received that initiated the process shut down.</p>
 <p>For example...</p>
-<p>The "shutdownfunction" of <a class="el" href="classprocess.html#a68d1a9213c066d4f3aee8a34d4742c62">handleShutDown()</a> may call setShutDownSignal(signum), passing it the value of its "signum" parameter.</p>
+<p>The "shutdownhandler" of <a class="el" href="classprocess.html#a54e3746f089b10bf53407424971af6e3">setShutDownHandler()</a> may call setShutDownSignal(signum), passing it the value of its "signum" parameter.</p>
 <p>Once the process determines that a shutdown has been initiated (perhaps by checking <a class="el" href="classprocess.html#ac522d7738d4034b5cde66b7f966a5542">getShutDownFlag()</a>, it may then call <a class="el" href="classprocess.html#a038c7867886b5fff10844d2eaa317804">getShutDownSignal()</a> to query which signal was received that initiated the shutdown and respond differently to different signals. </p>
 
 </div>
@@ -1917,6 +1725,35 @@ process into the background." Returns true on success and false on failure. </p>
 </div><div class="memdoc">
 <p>Sets the effective user id of the current process to uid. If the effective user id is root, the real and saved user ids are also set.</p>
 <p>Returns true on success and false on failure. </p>
+
+</div>
+</div>
+<a id="a59075cbaeaaf514fd7cfe5821402c18c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59075cbaeaaf514fd7cfe5821402c18c">&#9670;&nbsp;</a></span>setWaitForChildren()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::setWaitForChildren </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>wait</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>If "wait" is true then this method causes the process will automatically wait on child processes which have exited, preventing so-called "zombie" processes from occurring.</p>
+<p>If "wait" is false then this method causes the process not to wait on child processes which have exited. Ordinarily, you'd want to wait on child processes, but that interferes with the behavior of WEXITSTATUS() after a call to system() (and possibly other calls). This method allows you to disable waiting on child processes.</p>
+<p>Defaults to false. </p>
 
 </div>
 </div>
@@ -2079,8 +1916,8 @@ process into the background." Returns true on success and false on failure. </p>
 
 </div>
 </div>
-<a id="a150e5786f0688e9e6dc6e3ea7ff089c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a150e5786f0688e9e6dc6e3ea7ff089c8">&#9670;&nbsp;</a></span>waitForChildren()</h2>
+<a id="a6bb7a10187183325609df286f1f4f81e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bb7a10187183325609df286f1f4f81e">&#9670;&nbsp;</a></span>writeBacktrace() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2089,9 +1926,10 @@ process into the background." Returns true on success and false on failure. </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void process::waitForChildren </td>
+          <td class="memname">static void process::writeBacktrace </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -2101,14 +1939,131 @@ process into the background." Returns true on success and false on failure. </p>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>This method causes the process to wait on child processes which have exited, preventing so-called "zombie" processes from occurring. </p>
+<p>Appends the backtrace for the current thread to "filename".</p>
+<p>If "filename" doesn't already exist then it will be created with rw----&mdash; permissions.</p>
+<p>A maximum of 128 stack frames will be included in the backtrace.</p>
+<p>(Not supported on all platforms.) </p>
+
+</div>
+</div>
+<a id="a5a024ecfc89bfaf79b6509f2158c1f9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a024ecfc89bfaf79b6509f2158c1f9d">&#9670;&nbsp;</a></span>writeBacktrace() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::writeBacktrace </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mode_t&#160;</td>
+          <td class="paramname"><em>perms</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>maxframes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Appends the backtrace for the current thread to "filename".</p>
+<p>If "filename" doesn't already exist then it will be created with "perms" permissions.</p>
+<p>A maximum of "maxframes" stack frames will be included in the backtrace.</p>
+<p>(Not supported on all platforms.) </p>
+
+</div>
+</div>
+<a id="a171eabb8691d7985dd3fef0f6c65b54c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a171eabb8691d7985dd3fef0f6c65b54c">&#9670;&nbsp;</a></span>writeBacktrace() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::writeBacktrace </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classoutput.html">output</a> *&#160;</td>
+          <td class="paramname"><em>out</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Writes the backtrace for the current thread to "buffer".</p>
+<p>A maximum of 128 stack frames will be included in the backtrace.</p>
+<p>(Not supported on all platforms.) </p>
+
+</div>
+</div>
+<a id="a820eef60b61a6bb17bdae23879bf8277"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a820eef60b61a6bb17bdae23879bf8277">&#9670;&nbsp;</a></span>writeBacktrace() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::writeBacktrace </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classoutput.html">output</a> *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>maxframes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Writes the backtrace for the current thread to "buffer".</p>
+<p>"maxframes" indicates the maximum number of stack frames to include in the backtrace.</p>
+<p>(Not supported on all platforms.) </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

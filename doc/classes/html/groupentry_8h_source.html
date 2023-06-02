@@ -65,7 +65,7 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classgroupentry.html#afc4e1914698df540d4b5268f89a89549">   26</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classgroupentry.html#afc4e1914698df540d4b5268f89a89549">open</a>(gid_t groupid);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classgroupentry.html#a1679618addbbcd16348f23cf8c4e597e">   29</a></span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>              *<a class="code" href="classgroupentry.html#a1679618addbbcd16348f23cf8c4e597e">getName</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classgroupentry.html#a1679618addbbcd16348f23cf8c4e597e">   29</a></span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classgroupentry.html#a1679618addbbcd16348f23cf8c4e597e">getName</a>();</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classgroupentry.html#a641aa0abdd79c60b20b7272146aa9d78">   41</a></span>&#160;                gid_t           <a class="code" href="classgroupentry.html#a641aa0abdd79c60b20b7272146aa9d78">getGroupId</a>();</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
@@ -81,7 +81,7 @@ $(function() {
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classgroupentry.html#a2918e090aa7de639c1400a76d8d8140c">   84</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     *<a class="code" href="classgroupentry.html#a2918e090aa7de639c1400a76d8d8140c">getSidString</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *groupname);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classgroupentry.html#ac92a490ce031caf8fd6c3b0643db5e05">   91</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">bool</span>     <a class="code" href="classgroupentry.html#ac92a490ce031caf8fd6c3b0643db5e05">platformSupportsFormalSid</a>();</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classgroupentry.html#a71b1abeb0fec709e7012c9021a6c08f8">   91</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">bool</span>     <a class="code" href="classgroupentry.html#a71b1abeb0fec709e7012c9021a6c08f8">supportsFormalSid</a>();</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
 <div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classgroupentry.html#a2ed832fa70ecab63e62b6a47c0791c69">   95</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">bool</span>    <a class="code" href="classgroupentry.html#a2ed832fa70ecab63e62b6a47c0791c69">getNeedsMutex</a>();</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
@@ -98,12 +98,12 @@ $(function() {
 <div class="ttc" id="aclassgroupentry_html_a2ed832fa70ecab63e62b6a47c0791c69"><div class="ttname"><a href="classgroupentry.html#a2ed832fa70ecab63e62b6a47c0791c69">groupentry::getNeedsMutex</a></div><div class="ttdeci">static bool getNeedsMutex()</div></div>
 <div class="ttc" id="aclassgroupentry_html_a3b83e0c9a6bf91d086b0784db0345efc"><div class="ttname"><a href="classgroupentry.html#a3b83e0c9a6bf91d086b0784db0345efc">groupentry::open</a></div><div class="ttdeci">bool open(const char *groupname)</div></div>
 <div class="ttc" id="aclassgroupentry_html_a641aa0abdd79c60b20b7272146aa9d78"><div class="ttname"><a href="classgroupentry.html#a641aa0abdd79c60b20b7272146aa9d78">groupentry::getGroupId</a></div><div class="ttdeci">gid_t getGroupId()</div></div>
+<div class="ttc" id="aclassgroupentry_html_a71b1abeb0fec709e7012c9021a6c08f8"><div class="ttname"><a href="classgroupentry.html#a71b1abeb0fec709e7012c9021a6c08f8">groupentry::supportsFormalSid</a></div><div class="ttdeci">static bool supportsFormalSid()</div></div>
 <div class="ttc" id="aclassgroupentry_html_a775b5119bcc96f5b092cab4693f3d2ae"><div class="ttname"><a href="classgroupentry.html#a775b5119bcc96f5b092cab4693f3d2ae">groupentry::setMutex</a></div><div class="ttdeci">static void setMutex(threadmutex *mtx)</div></div>
 <div class="ttc" id="aclassgroupentry_html_a900299ff7d295a4d11d6255163e737d0"><div class="ttname"><a href="classgroupentry.html#a900299ff7d295a4d11d6255163e737d0">groupentry::getName</a></div><div class="ttdeci">static char * getName(gid_t groupid)</div></div>
 <div class="ttc" id="aclassgroupentry_html_a9a8fd8adc622c7fa0202edf0536cb485"><div class="ttname"><a href="classgroupentry.html#a9a8fd8adc622c7fa0202edf0536cb485">groupentry::~groupentry</a></div><div class="ttdeci">~groupentry()</div></div>
 <div class="ttc" id="aclassgroupentry_html_abba63a050a5c2233cdd1d610f617396d"><div class="ttname"><a href="classgroupentry.html#abba63a050a5c2233cdd1d610f617396d">groupentry::groupentry</a></div><div class="ttdeci">groupentry()</div></div>
 <div class="ttc" id="aclassgroupentry_html_abec7eb183cf8a8a42a5394d5375218e4"><div class="ttname"><a href="classgroupentry.html#abec7eb183cf8a8a42a5394d5375218e4">groupentry::getMembers</a></div><div class="ttdeci">const char *const  * getMembers()</div></div>
-<div class="ttc" id="aclassgroupentry_html_ac92a490ce031caf8fd6c3b0643db5e05"><div class="ttname"><a href="classgroupentry.html#ac92a490ce031caf8fd6c3b0643db5e05">groupentry::platformSupportsFormalSid</a></div><div class="ttdeci">static bool platformSupportsFormalSid()</div></div>
 <div class="ttc" id="aclassgroupentry_html_ae7230cb4f5919f856819c14cf7e04f79"><div class="ttname"><a href="classgroupentry.html#ae7230cb4f5919f856819c14cf7e04f79">groupentry::getGroupId</a></div><div class="ttdeci">static gid_t getGroupId(const char *groupname)</div></div>
 <div class="ttc" id="aclassgroupentry_html_afc4e1914698df540d4b5268f89a89549"><div class="ttname"><a href="classgroupentry.html#afc4e1914698df540d4b5268f89a89549">groupentry::open</a></div><div class="ttdeci">bool open(gid_t groupid)</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
@@ -111,7 +111,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -65,10 +65,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa8849740afe623fbb56644e0cd15ea36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12cab64f62c305edad6059010b8c31a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a12cab64f62c305edad6059010b8c31a1">createOrAttach</a> (key_t key, mode_t <a class="el" href="classpermissions.html">permissions</a>, int32_t semcount, const int32_t *values)</td></tr>
 <tr class="separator:a12cab64f62c305edad6059010b8c31a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a301e37b063c6c2a7fdeda321c16d08d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a301e37b063c6c2a7fdeda321c16d08d6">dontRemove</a> ()</td></tr>
-<tr class="separator:a301e37b063c6c2a7fdeda321c16d08d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43619f570d840022bd086d8e9b42ec61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a43619f570d840022bd086d8e9b42ec61">forceRemove</a> ()</td></tr>
-<tr class="separator:a43619f570d840022bd086d8e9b42ec61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72d4bd3b37d44084dfc3bb8cab941042"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a72d4bd3b37d44084dfc3bb8cab941042">setRemove</a> (<a class="el" href="classbool.html">bool</a> remove)</td></tr>
+<tr class="separator:a72d4bd3b37d44084dfc3bb8cab941042"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0087245c4a5ff6bb8080fb0d76c970ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a0087245c4a5ff6bb8080fb0d76c970ee">getRemove</a> ()</td></tr>
+<tr class="separator:a0087245c4a5ff6bb8080fb0d76c970ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5659c9d992420e1448279910cb8ad65a"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a5659c9d992420e1448279910cb8ad65a">getId</a> ()</td></tr>
 <tr class="separator:a5659c9d992420e1448279910cb8ad65a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a900741be2c25df7a50bfee9267b67a8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait</a> (int32_t index)</td></tr>
@@ -111,18 +111,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaf91cdd7584340923f51e09c71016799"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa927dbb91461efa68831b4e73fc747d5"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#aa927dbb91461efa68831b4e73fc747d5">getWaitingForIncrement</a> (int32_t index)</td></tr>
 <tr class="separator:aa927dbb91461efa68831b4e73fc747d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a529a17f290efcd57d629086ffc9c4db7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a529a17f290efcd57d629086ffc9c4db7">retryInterruptedOperations</a> ()</td></tr>
-<tr class="separator:a529a17f290efcd57d629086ffc9c4db7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa285359617329d495f24cc03291a1cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#aa285359617329d495f24cc03291a1cd8">dontRetryInterruptedOperations</a> ()</td></tr>
-<tr class="separator:aa285359617329d495f24cc03291a1cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc5d46875c78e3c924d1f91d09681362"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#adc5d46875c78e3c924d1f91d09681362">setRetryInterruptedOperations</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:adc5d46875c78e3c924d1f91d09681362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f483483ee3ebba5b0815098b4e33ddc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a6f483483ee3ebba5b0815098b4e33ddc">getRetryInterruptedOperations</a> ()</td></tr>
+<tr class="separator:a6f483483ee3ebba5b0815098b4e33ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classobject.html">object</a></td></tr>
 <tr class="memitem:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classobject.html#a6233244b77a2794b456e5eee6964806d">~object</a> ()</td></tr>
 <tr class="separator:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a6801cb73bff477e7ad3d47fb2a189809"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a6801cb73bff477e7ad3d47fb2a189809">supported</a> ()</td></tr>
-<tr class="separator:a6801cb73bff477e7ad3d47fb2a189809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cdf9bd76b16b58e0e1cc2fa28fbf4bd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a4cdf9bd76b16b58e0e1cc2fa28fbf4bd">isSupported</a> ()</td></tr>
+<tr class="separator:a4cdf9bd76b16b58e0e1cc2fa28fbf4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Semaphores allow processes to synchronize their activities.</p>
@@ -286,60 +286,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a301e37b063c6c2a7fdeda321c16d08d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a301e37b063c6c2a7fdeda321c16d08d6">&#9670;&nbsp;</a></span>dontRemove()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void semaphoreset::dontRemove </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Instructs the destructor not to remove the semaphore set if it was created during a call to <a class="el" href="classsemaphoreset.html#a2053d324d1e12251cd1b5d498df83be3">create()</a> or <a class="el" href="classsemaphoreset.html#a12cab64f62c305edad6059010b8c31a1">createOrAttach()</a>. This is useful if an application creates a semaphore set then forks and wants to delete the semaphore set in the forked process but does not want the semaphore removed from the system. </p>
-
-</div>
-</div>
-<a id="aa285359617329d495f24cc03291a1cd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa285359617329d495f24cc03291a1cd8">&#9670;&nbsp;</a></span>dontRetryInterruptedOperations()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void semaphoreset::dontRetryInterruptedOperations </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes operations not to automatically be retired if interrupted by a signal. The default is to retry automatically. </p>
-
-</div>
-</div>
-<a id="a43619f570d840022bd086d8e9b42ec61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43619f570d840022bd086d8e9b42ec61">&#9670;&nbsp;</a></span>forceRemove()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> semaphoreset::forceRemove </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Instructs the destructor to remove the semaphore set, whether it was created or attached to. </p>
-
-</div>
-</div>
 <a id="a5146404ff705fc972f59e892a258b27b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5146404ff705fc972f59e892a258b27b">&#9670;&nbsp;</a></span>getGroupId()</h2>
 
@@ -411,6 +357,42 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns the access permissions for this semaphore set. </p>
+
+</div>
+</div>
+<a id="a0087245c4a5ff6bb8080fb0d76c970ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0087245c4a5ff6bb8080fb0d76c970ee">&#9670;&nbsp;</a></span>getRemove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> semaphoreset::getRemove </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if the semaphore will be removed by the destructor and false otherwise. </p>
+
+</div>
+</div>
+<a id="a6f483483ee3ebba5b0815098b4e33ddc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f483483ee3ebba5b0815098b4e33ddc">&#9670;&nbsp;</a></span>getRetryInterruptedOperations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> semaphoreset::getRetryInterruptedOperations </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if interrupted semaphore operations will be retried automatically and false otherwise. </p>
 
 </div>
 </div>
@@ -509,21 +491,29 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a529a17f290efcd57d629086ffc9c4db7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a529a17f290efcd57d629086ffc9c4db7">&#9670;&nbsp;</a></span>retryInterruptedOperations()</h2>
+<a id="a4cdf9bd76b16b58e0e1cc2fa28fbf4bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cdf9bd76b16b58e0e1cc2fa28fbf4bd">&#9670;&nbsp;</a></span>isSupported()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void semaphoreset::retryInterruptedOperations </td>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> semaphoreset::isSupported </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Causes operations to automatically be retired if interrupted by a signal. This is the default behiavior. </p>
+<p>Returns true if the platform supports semaphores and false otherwise. </p>
 
 </div>
 </div>
@@ -582,6 +572,49 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Sets the access permissions for this semaphore set to "permissions". </p>
+
+</div>
+</div>
+<a id="a72d4bd3b37d44084dfc3bb8cab941042"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72d4bd3b37d44084dfc3bb8cab941042">&#9670;&nbsp;</a></span>setRemove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void semaphoreset::setRemove </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>remove</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>By default, the destructor will remove a semaphore set if it was created during a call to <a class="el" href="classsemaphoreset.html#a2053d324d1e12251cd1b5d498df83be3">create()</a> or <a class="el" href="classsemaphoreset.html#a12cab64f62c305edad6059010b8c31a1">createOrAttach()</a>.</p>
+<p>This method allows you to manually override that behavior.</p>
+<p>If "remove" is true then the destructor will remove the semaphore set whehter it was created or not. If "remove" is set false then the destructor will not remove the semaphore set, even if it was created.</p>
+<p>Manually setting "remove" false is useful, for example, if an application creates a semaphore set then forks and wants to delete the semaphore set in the forked process but does not want the semaphore removed from the system.</p>
+<p>Manually setting "remove" true is useful, for example, if you want to create a utility for removing arbitray sempahores. </p>
+
+</div>
+</div>
+<a id="adc5d46875c78e3c924d1f91d09681362"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc5d46875c78e3c924d1f91d09681362">&#9670;&nbsp;</a></span>setRetryInterruptedOperations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void semaphoreset::setRetryInterruptedOperations </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "retry" is true then a semaphore operation will be automatically retried if it is interrupted by a signal. If "retry" is false then, if a semaphoore operation is interrupted by a signal, it will fail and the system error will be set to EINTR.</p>
+<p>Defaults to true. </p>
 
 </div>
 </div>
@@ -688,32 +721,6 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Signal on the "index"'th semaphore in the set and undo the signal when the program exits. </p>
-
-</div>
-</div>
-<a id="a6801cb73bff477e7ad3d47fb2a189809"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6801cb73bff477e7ad3d47fb2a189809">&#9670;&nbsp;</a></span>supported()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> semaphoreset::supported </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns true if the platform supports semaphores and false otherwise. </p>
 
 </div>
 </div>
@@ -865,7 +872,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

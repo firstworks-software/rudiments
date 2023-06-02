@@ -95,10 +95,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a801647b23d5537c41afcc2ee4cf80c22"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a801647b23d5537c41afcc2ee4cf80c22">logHeader</a> (const char *name)</td></tr>
-<tr class="separator:a801647b23d5537c41afcc2ee4cf80c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60689ab711aae21ed337e7f34e85a95b"><td class="memItemLeft" align="right" valign="top">static wchar_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a60689ab711aae21ed337e7f34e85a95b">logHeader</a> (const wchar_t *name)</td></tr>
-<tr class="separator:a60689ab711aae21ed337e7f34e85a95b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610e5439a1706fd2323bb0598ff3ccca"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a610e5439a1706fd2323bb0598ff3ccca">getLogHeader</a> (const char *name)</td></tr>
+<tr class="separator:a610e5439a1706fd2323bb0598ff3ccca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8450c15cb8d184c6672f591ba98001a5"><td class="memItemLeft" align="right" valign="top">static wchar_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a8450c15cb8d184c6672f591ba98001a5">getLogHeader</a> (const wchar_t *name)</td></tr>
+<tr class="separator:a8450c15cb8d184c6672f591ba98001a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The logger class and associated logdestination classes provide methods for logging data from an application. The following destinations are supported: file, syslog, stdout and stderr</p>
@@ -248,6 +248,66 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a610e5439a1706fd2323bb0598ff3ccca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a610e5439a1706fd2323bb0598ff3ccca">&#9670;&nbsp;</a></span>getLogHeader() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* logger::getLogHeader </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a string containing the current date, followed by "name", followed by the process id in brackets. For example:</p>
+<p>01/05/2002 12:54:23 myprogram [2421]</p>
+<p>Note that this method allocates a string internally and returns it. This string must be deleted by the calling program.</p>
+<p>Note that this method uses getSystemDateAndTime() from the datetime class. If you are using <a class="el" href="classlogger.html#a610e5439a1706fd2323bb0598ff3ccca">getLogHeader()</a> in a multi-threaded application, you must supply a mutex to the datetime class using it's setMutex() method. </p>
+
+</div>
+</div>
+<a id="a8450c15cb8d184c6672f591ba98001a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8450c15cb8d184c6672f591ba98001a5">&#9670;&nbsp;</a></span>getLogHeader() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static wchar_t* logger::getLogHeader </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a string containing the current date, followed by "name", followed by the process id in brackets. For example:</p>
+<p>01/05/2002 12:54:23 myprogram [2421]</p>
+<p>Note that this method allocates a string internally and returns it. This string must be deleted by the calling program.</p>
+<p>Note that this method uses getSystemDateAndTime() from the datetime class. If you are using <a class="el" href="classlogger.html#a610e5439a1706fd2323bb0598ff3ccca">getLogHeader()</a> in a multi-threaded application, you must supply a mutex to the datetime class using it's setMutex() method. </p>
+
+</div>
+</div>
 <a id="a9aaaaab333172496225cc5bb22017fb5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9aaaaab333172496225cc5bb22017fb5">&#9670;&nbsp;</a></span>getLogLevel()</h2>
 
@@ -281,66 +341,6 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns the wide character currently used when indenting. </p>
-
-</div>
-</div>
-<a id="a801647b23d5537c41afcc2ee4cf80c22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a801647b23d5537c41afcc2ee4cf80c22">&#9670;&nbsp;</a></span>logHeader() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* logger::logHeader </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns a string containing the current date, followed by "name", followed by the process id in brackets. For example:</p>
-<p>01/05/2002 12:54:23 myprogram [2421]</p>
-<p>Note that this method allocates a string internally and returns it. This string must be deleted by the calling program.</p>
-<p>Note that this method uses getSystemDateAndTime() from the datetime class. If you are using <a class="el" href="classlogger.html#a801647b23d5537c41afcc2ee4cf80c22">logHeader()</a> in a multi-threaded application, you must supply a mutex to the datetime class using it's setTimeMutex() method. </p>
-
-</div>
-</div>
-<a id="a60689ab711aae21ed337e7f34e85a95b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60689ab711aae21ed337e7f34e85a95b">&#9670;&nbsp;</a></span>logHeader() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static wchar_t* logger::logHeader </td>
-          <td>(</td>
-          <td class="paramtype">const wchar_t *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns a string containing the current date, followed by "name", followed by the process id in brackets. For example:</p>
-<p>01/05/2002 12:54:23 myprogram [2421]</p>
-<p>Note that this method allocates a string internally and returns it. This string must be deleted by the calling program.</p>
-<p>Note that this method uses getSystemDateAndTime() from the datetime class. If you are using <a class="el" href="classlogger.html#a801647b23d5537c41afcc2ee4cf80c22">logHeader()</a> in a multi-threaded application, you must supply a mutex to the datetime class using it's setTimeMutex() method. </p>
 
 </div>
 </div>
@@ -711,7 +711,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

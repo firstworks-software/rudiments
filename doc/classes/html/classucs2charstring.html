@@ -48,10 +48,10 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aecb083fa6c22eba0b44121d5ab665f80"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">length</a> (const ucs2_t *string)</td></tr>
-<tr class="separator:aecb083fa6c22eba0b44121d5ab665f80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f1f352d2cb92d90495f0d1d05543fb1"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a3f1f352d2cb92d90495f0d1d05543fb1">size</a> (const ucs2_t *string)</td></tr>
-<tr class="separator:a3f1f352d2cb92d90495f0d1d05543fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ea1e06487dfde06518f4d98ab86a820"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7ea1e06487dfde06518f4d98ab86a820">getLength</a> (const ucs2_t *string)</td></tr>
+<tr class="separator:a7ea1e06487dfde06518f4d98ab86a820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d56408730a8f3419f5f75335121c7ac"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a6d56408730a8f3419f5f75335121c7ac">getSize</a> (const ucs2_t *string)</td></tr>
+<tr class="separator:a6d56408730a8f3419f5f75335121c7ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c2e84e92bec5b8837fe29ecbc9b6116"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a8c2e84e92bec5b8837fe29ecbc9b6116">isNullOrEmpty</a> (const ucs2_t *string)</td></tr>
 <tr class="separator:a8c2e84e92bec5b8837fe29ecbc9b6116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f22edc5e8789ba81b3140278323c318"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a2f22edc5e8789ba81b3140278323c318">isYes</a> (const ucs2_t *string)</td></tr>
@@ -88,7 +88,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a1d0cb19b35149b25d65c066990f4671a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44923393d2fd0ab64cea193f074543a3"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a44923393d2fd0ab64cea193f074543a3">compare</a> (const ucs2_t *str1, const ucs2_t *str2)</td></tr>
 <tr class="separator:a44923393d2fd0ab64cea193f074543a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f22d9749750e4eda7b52e0004038184"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7f22d9749750e4eda7b52e0004038184">compare</a> (const ucs2_t *str1, const ucs2_t *str2, size_t <a class="el" href="classucs2charstring.html#aecb083fa6c22eba0b44121d5ab665f80">length</a>)</td></tr>
+<tr class="memitem:a7f22d9749750e4eda7b52e0004038184"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7f22d9749750e4eda7b52e0004038184">compare</a> (const ucs2_t *str1, const ucs2_t *str2, size_t length)</td></tr>
 <tr class="separator:a7f22d9749750e4eda7b52e0004038184"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa65a2b7448aeadbdba25216155dbc79f"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#aa65a2b7448aeadbdba25216155dbc79f">compareIgnoringCase</a> (const ucs2_t *str1, const ucs2_t *str2)</td></tr>
 <tr class="separator:aa65a2b7448aeadbdba25216155dbc79f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -110,10 +110,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:af55b40186ae6a85acb9787bca2fc145f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a102d2129cfa57067e56154ede49da011"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a102d2129cfa57067e56154ede49da011">compareWithWildcards</a> (const ucs2_t *string, const ucs2_t *pattern, ucs2_t singlewildcard, ucs2_t multiwildcard)</td></tr>
 <tr class="separator:a102d2129cfa57067e56154ede49da011"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ca9e54b29c1b195168bc9fa8f0a4aab"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a5ca9e54b29c1b195168bc9fa8f0a4aab">inSet</a> (const ucs2_t *str, const ucs2_t *const *set)</td></tr>
-<tr class="separator:a5ca9e54b29c1b195168bc9fa8f0a4aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafe82910f1f02d823f73854d780dd49d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#aafe82910f1f02d823f73854d780dd49d">inSetIgnoringCase</a> (const ucs2_t *str, const ucs2_t *const *set)</td></tr>
-<tr class="separator:aafe82910f1f02d823f73854d780dd49d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac47d79123255ab0503eb7c12526bf824"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ac47d79123255ab0503eb7c12526bf824">isInSet</a> (const ucs2_t *str, const ucs2_t *const *set)</td></tr>
+<tr class="separator:ac47d79123255ab0503eb7c12526bf824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dffd1a32cdf54243e07f26101e6380a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a1dffd1a32cdf54243e07f26101e6380a">isInSetIgnoringCase</a> (const ucs2_t *str, const ucs2_t *const *set)</td></tr>
+<tr class="separator:a1dffd1a32cdf54243e07f26101e6380a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26220029af9e7a32725b1976b5070517"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a26220029af9e7a32725b1976b5070517">contains</a> (const ucs2_t *haystack, const ucs2_t *needle)</td></tr>
 <tr class="separator:a26220029af9e7a32725b1976b5070517"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b0f6be93f80431950625bd6226ad3cd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a5b0f6be93f80431950625bd6226ad3cd">containsIgnoringCase</a> (const ucs2_t *haystack, const ucs2_t *needle)</td></tr>
@@ -186,16 +186,16 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a68b6d11ad31f7c840248aa045de592d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf2d3f35472f9d768a5973eff5aef18c"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#adf2d3f35472f9d768a5973eff5aef18c">findLastOfSetOrEnd</a> (ucs2_t *haystack, const ucs2_t *set)</td></tr>
 <tr class="separator:adf2d3f35472f9d768a5973eff5aef18c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64ec730f1656ac19c73ef5fc27f544bd"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a64ec730f1656ac19c73ef5fc27f544bd">before</a> (const ucs2_t *str, const ucs2_t *delimiter)</td></tr>
-<tr class="separator:a64ec730f1656ac19c73ef5fc27f544bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add085592cf015009fe9e8ba8db21fecc"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#add085592cf015009fe9e8ba8db21fecc">between</a> (const ucs2_t *str, const ucs2_t *start, const ucs2_t *end)</td></tr>
-<tr class="separator:add085592cf015009fe9e8ba8db21fecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cdfa84ab7a1eb52dfcf473fc63994c8"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a3cdfa84ab7a1eb52dfcf473fc63994c8">after</a> (const ucs2_t *str, const ucs2_t *delimiter)</td></tr>
-<tr class="separator:a3cdfa84ab7a1eb52dfcf473fc63994c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a140f2f2079aa0320cc410b259e279fe0"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a140f2f2079aa0320cc410b259e279fe0">lengthContainingSet</a> (const ucs2_t *haystack, const ucs2_t *set)</td></tr>
-<tr class="separator:a140f2f2079aa0320cc410b259e279fe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b5a35ec0982e4febb4a6d911da93963"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a4b5a35ec0982e4febb4a6d911da93963">lengthNotContainingSet</a> (const ucs2_t *haystack, const ucs2_t *set)</td></tr>
-<tr class="separator:a4b5a35ec0982e4febb4a6d911da93963"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac21cb45df02013b71729feececd36db4"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ac21cb45df02013b71729feececd36db4">isBefore</a> (const ucs2_t *str, const ucs2_t *delimiter)</td></tr>
+<tr class="separator:ac21cb45df02013b71729feececd36db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6cca77d30650f44d863eabd92c035b3"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ac6cca77d30650f44d863eabd92c035b3">isBetween</a> (const ucs2_t *str, const ucs2_t *start, const ucs2_t *end)</td></tr>
+<tr class="separator:ac6cca77d30650f44d863eabd92c035b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06362e6f6ef0eb1a0c7585e6a0808ea3"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a06362e6f6ef0eb1a0c7585e6a0808ea3">isAfter</a> (const ucs2_t *str, const ucs2_t *delimiter)</td></tr>
+<tr class="separator:a06362e6f6ef0eb1a0c7585e6a0808ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d1c67334ad45da45e85f03d1ad23590"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a9d1c67334ad45da45e85f03d1ad23590">getLengthContainingSet</a> (const ucs2_t *haystack, const ucs2_t *set)</td></tr>
+<tr class="separator:a9d1c67334ad45da45e85f03d1ad23590"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc3317da546bc1431475ab5e7a24a7e"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#abbc3317da546bc1431475ab5e7a24a7e">getLengthNotContainingSet</a> (const ucs2_t *haystack, const ucs2_t *set)</td></tr>
+<tr class="separator:abbc3317da546bc1431475ab5e7a24a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90177d1a589a342063f0f4af5a6ef641"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a90177d1a589a342063f0f4af5a6ef641">duplicate</a> (const char *str)</td></tr>
 <tr class="separator:a90177d1a589a342063f0f4af5a6ef641"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae65c6701b62fd572b14bbd5f20af109b"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ae65c6701b62fd572b14bbd5f20af109b">duplicate</a> (const char *str, size_t len)</td></tr>
@@ -258,18 +258,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:abafd6be2376b95af9f77a2a48f1ff94a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e0a875f230948de661b93eb864ad423"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a6e0a875f230948de661b93eb864ad423">replace</a> (const ucs2_t *str, const ucs2_t *const *oldstrset, size_t *oldstrlen, const ucs2_t *const *newstrset)</td></tr>
 <tr class="separator:a6e0a875f230948de661b93eb864ad423"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26ec3d3a43ecc8ba78b88f2b2b7eabef"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a26ec3d3a43ecc8ba78b88f2b2b7eabef">integerLength</a> (int16_t number)</td></tr>
-<tr class="separator:a26ec3d3a43ecc8ba78b88f2b2b7eabef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbd6118017d97b35f0028fbd29be88b7"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#adbd6118017d97b35f0028fbd29be88b7">integerLength</a> (int32_t number)</td></tr>
-<tr class="separator:adbd6118017d97b35f0028fbd29be88b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bcb2a834f2062b07ac16095c7492798"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a9bcb2a834f2062b07ac16095c7492798">integerLength</a> (int64_t number)</td></tr>
-<tr class="separator:a9bcb2a834f2062b07ac16095c7492798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ab589ddce4b1592f908ad2af9fb98b1"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a8ab589ddce4b1592f908ad2af9fb98b1">integerLength</a> (uint16_t number)</td></tr>
-<tr class="separator:a8ab589ddce4b1592f908ad2af9fb98b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e9b4ddca4ea73891fa5b5cc4eab27ff"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a2e9b4ddca4ea73891fa5b5cc4eab27ff">integerLength</a> (uint32_t number)</td></tr>
-<tr class="separator:a2e9b4ddca4ea73891fa5b5cc4eab27ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1dd4f7db5db1f312bbf5ca36b2572b8"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ad1dd4f7db5db1f312bbf5ca36b2572b8">integerLength</a> (uint64_t number)</td></tr>
-<tr class="separator:ad1dd4f7db5db1f312bbf5ca36b2572b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7154d4d179ddaf82c1607e56d73272"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#abc7154d4d179ddaf82c1607e56d73272">getIntegerLength</a> (int16_t number)</td></tr>
+<tr class="separator:abc7154d4d179ddaf82c1607e56d73272"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25b84adf9ce90f38f8d83497133a5570"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a25b84adf9ce90f38f8d83497133a5570">getIntegerLength</a> (int32_t number)</td></tr>
+<tr class="separator:a25b84adf9ce90f38f8d83497133a5570"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df71c5e6426a0594c2b3d7376810ea2"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a5df71c5e6426a0594c2b3d7376810ea2">getIntegerLength</a> (int64_t number)</td></tr>
+<tr class="separator:a5df71c5e6426a0594c2b3d7376810ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e84bb9a3881afd3e87f67e898dde228"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a6e84bb9a3881afd3e87f67e898dde228">getIntegerLength</a> (uint16_t number)</td></tr>
+<tr class="separator:a6e84bb9a3881afd3e87f67e898dde228"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e3525b813bb11163f09122cf3f811d0"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a9e3525b813bb11163f09122cf3f811d0">getIntegerLength</a> (uint32_t number)</td></tr>
+<tr class="separator:a9e3525b813bb11163f09122cf3f811d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a854dd197cc934c8f29273c70721514d3"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a854dd197cc934c8f29273c70721514d3">getIntegerLength</a> (uint64_t number)</td></tr>
+<tr class="separator:a854dd197cc934c8f29273c70721514d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad0552b4efd349848523c1e69d1a163"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a1ad0552b4efd349848523c1e69d1a163">isInteger</a> (const ucs2_t *val)</td></tr>
 <tr class="separator:a1ad0552b4efd349848523c1e69d1a163"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f621040c5c0244b416ad56aa5f7fc2c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a9f621040c5c0244b416ad56aa5f7fc2c">isInteger</a> (const ucs2_t *val, int32_t len)</td></tr>
@@ -320,28 +320,28 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a67872381b6e8138050c5a9aef5a54395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c4947ec6cdcba296c06c72c539c159c"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a3c4947ec6cdcba296c06c72c539c159c">parseNumber</a> (long double number, uint16_t precision, uint16_t scale)</td></tr>
 <tr class="separator:a3c4947ec6cdcba296c06c72c539c159c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16927e45fe2b1a1e5d6ee2b9082119aa"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a16927e45fe2b1a1e5d6ee2b9082119aa">toInteger</a> (const ucs2_t *string)</td></tr>
-<tr class="separator:a16927e45fe2b1a1e5d6ee2b9082119aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a476e51b11d88f7ed0465c55b377ce5d4"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a476e51b11d88f7ed0465c55b377ce5d4">toInteger</a> (const ucs2_t *string, const ucs2_t **endptr)</td></tr>
-<tr class="separator:a476e51b11d88f7ed0465c55b377ce5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2560a19d2a9c0274fa96ca18ba764d1"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ab2560a19d2a9c0274fa96ca18ba764d1">toInteger</a> (const ucs2_t *string, int32_t base)</td></tr>
-<tr class="separator:ab2560a19d2a9c0274fa96ca18ba764d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c5117e47987f78702f4669a1df9b5d9"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7c5117e47987f78702f4669a1df9b5d9">toInteger</a> (const ucs2_t *string, const ucs2_t **endptr, int32_t base)</td></tr>
-<tr class="separator:a7c5117e47987f78702f4669a1df9b5d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ed38d6d46e802a2cbf045bb823050de"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a0ed38d6d46e802a2cbf045bb823050de">toUnsignedInteger</a> (const ucs2_t *string)</td></tr>
-<tr class="separator:a0ed38d6d46e802a2cbf045bb823050de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68f57c7feb2de52602747b612e5d3fcb"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a68f57c7feb2de52602747b612e5d3fcb">toUnsignedInteger</a> (const ucs2_t *string, const ucs2_t **endptr)</td></tr>
-<tr class="separator:a68f57c7feb2de52602747b612e5d3fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3765718b90976681ce2dbcaabdf5348d"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a3765718b90976681ce2dbcaabdf5348d">toUnsignedInteger</a> (const ucs2_t *string, int32_t base)</td></tr>
-<tr class="separator:a3765718b90976681ce2dbcaabdf5348d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a734eee15374fb4ac1e4f7902f200d225"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a734eee15374fb4ac1e4f7902f200d225">toUnsignedInteger</a> (const ucs2_t *string, const ucs2_t **endptr, int32_t base)</td></tr>
-<tr class="separator:a734eee15374fb4ac1e4f7902f200d225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab703cd0873e660c5b01850f915cc4a58"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ab703cd0873e660c5b01850f915cc4a58">toFloat</a> (const ucs2_t *string)</td></tr>
-<tr class="separator:ab703cd0873e660c5b01850f915cc4a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a767f72738706a221b87ef5375455bf29"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a767f72738706a221b87ef5375455bf29">toFloatC</a> (const ucs2_t *string)</td></tr>
-<tr class="separator:a767f72738706a221b87ef5375455bf29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad05ca58b026e41a3c12d621052c0420d"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ad05ca58b026e41a3c12d621052c0420d">toFloat</a> (const ucs2_t *string, const ucs2_t **endptr)</td></tr>
-<tr class="separator:ad05ca58b026e41a3c12d621052c0420d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52fab6445f9f056bd8a6d91b5501d501"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a52fab6445f9f056bd8a6d91b5501d501">convertToInteger</a> (const ucs2_t *string)</td></tr>
+<tr class="separator:a52fab6445f9f056bd8a6d91b5501d501"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf0afc20b0170b2825bc5fea146b4bc7"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#adf0afc20b0170b2825bc5fea146b4bc7">convertToInteger</a> (const ucs2_t *string, const ucs2_t **endptr)</td></tr>
+<tr class="separator:adf0afc20b0170b2825bc5fea146b4bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0ba89192535dc164cafe97d0c1102eb"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ad0ba89192535dc164cafe97d0c1102eb">convertToInteger</a> (const ucs2_t *string, int32_t base)</td></tr>
+<tr class="separator:ad0ba89192535dc164cafe97d0c1102eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae421cfa88c12af9781fd2cc405fa53e8"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ae421cfa88c12af9781fd2cc405fa53e8">convertToInteger</a> (const ucs2_t *string, const ucs2_t **endptr, int32_t base)</td></tr>
+<tr class="separator:ae421cfa88c12af9781fd2cc405fa53e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a327576dc38ab8b491877cddd09ab3d77"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a327576dc38ab8b491877cddd09ab3d77">convertToUnsignedInteger</a> (const ucs2_t *string)</td></tr>
+<tr class="separator:a327576dc38ab8b491877cddd09ab3d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2984bdf19ca431efb12722eaa45aefa6"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a2984bdf19ca431efb12722eaa45aefa6">convertToUnsignedInteger</a> (const ucs2_t *string, const ucs2_t **endptr)</td></tr>
+<tr class="separator:a2984bdf19ca431efb12722eaa45aefa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e96f6195b06b7b710f251f1ab4b81fd"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a5e96f6195b06b7b710f251f1ab4b81fd">convertToUnsignedInteger</a> (const ucs2_t *string, int32_t base)</td></tr>
+<tr class="separator:a5e96f6195b06b7b710f251f1ab4b81fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1427834b43e78b1703ca42695f47f614"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a1427834b43e78b1703ca42695f47f614">convertToUnsignedInteger</a> (const ucs2_t *string, const ucs2_t **endptr, int32_t base)</td></tr>
+<tr class="separator:a1427834b43e78b1703ca42695f47f614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c0f5e9d75a5e7d95756b0faa65e72f"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a33c0f5e9d75a5e7d95756b0faa65e72f">convertToFloat</a> (const ucs2_t *string)</td></tr>
+<tr class="separator:a33c0f5e9d75a5e7d95756b0faa65e72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d41822f3baa341e8d736bc9e5f632e8"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a0d41822f3baa341e8d736bc9e5f632e8">convertToFloatC</a> (const ucs2_t *string)</td></tr>
+<tr class="separator:a0d41822f3baa341e8d736bc9e5f632e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86cc4ff1a13fe24cfbb92b76ce970b1d"><td class="memItemLeft" align="right" valign="top">static long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a86cc4ff1a13fe24cfbb92b76ce970b1d">convertToFloat</a> (const ucs2_t *string, const ucs2_t **endptr)</td></tr>
+<tr class="separator:a86cc4ff1a13fe24cfbb92b76ce970b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9674cdde06cbe0bf61bf58eb39587cdd"><td class="memItemLeft" align="right" valign="top">static int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a9674cdde06cbe0bf61bf58eb39587cdd">convertAmount</a> (const ucs2_t *amount)</td></tr>
 <tr class="separator:a9674cdde06cbe0bf61bf58eb39587cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18f38b85dace8fe877c71b4b065086aa"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a18f38b85dace8fe877c71b4b065086aa">convertAmount</a> (int64_t amount)</td></tr>
@@ -372,24 +372,28 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a3d5529d70fa33549a8d227fe2df58fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae403addfb084edd8c7896cd987fad67e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ae403addfb084edd8c7896cd987fad67e">split</a> (const ucs2_t *string, const ucs2_t *delimiter, <a class="el" href="classbool.html">bool</a> collapse, ucs2_t ***list, uint64_t *listlength)</td></tr>
 <tr class="separator:ae403addfb084edd8c7896cd987fad67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0f8f42f853ac034360fe5d75d09b6e9"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ab0f8f42f853ac034360fe5d75d09b6e9">subString</a> (const ucs2_t *str, size_t start, size_t end)</td></tr>
-<tr class="separator:ab0f8f42f853ac034360fe5d75d09b6e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4099bc1faba4008387552f355fd3098f"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a4099bc1faba4008387552f355fd3098f">subString</a> (const ucs2_t *str, size_t start)</td></tr>
-<tr class="separator:a4099bc1faba4008387552f355fd3098f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e876d90c11fef9e95c58525535f6471"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a5e876d90c11fef9e95c58525535f6471">getSubString</a> (const ucs2_t *str, size_t start, size_t end)</td></tr>
+<tr class="separator:a5e876d90c11fef9e95c58525535f6471"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40103c4f141938cc25fc713e9d559c99"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a40103c4f141938cc25fc713e9d559c99">getSubString</a> (const ucs2_t *str, size_t start)</td></tr>
+<tr class="separator:a40103c4f141938cc25fc713e9d559c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a345b694ccbfa1f153ad34ac966e32eae"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a345b694ccbfa1f153ad34ac966e32eae">insertString</a> (const ucs2_t *dest, const ucs2_t *src, uint64_t index)</td></tr>
 <tr class="separator:a345b694ccbfa1f153ad34ac966e32eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5063c2420c9962dc0a85d8c029e68e45"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a5063c2420c9962dc0a85d8c029e68e45">humanReadable</a> (int64_t number)</td></tr>
-<tr class="separator:a5063c2420c9962dc0a85d8c029e68e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a54552c281ee47e4346ed90098b2da1"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a2a54552c281ee47e4346ed90098b2da1">humanReadable</a> (int64_t number, <a class="el" href="classbool.html">bool</a> onethousand)</td></tr>
-<tr class="separator:a2a54552c281ee47e4346ed90098b2da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af862bbfbf691daa0eec4cafb6741eed9"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#af862bbfbf691daa0eec4cafb6741eed9">humanReadable</a> (uint64_t number)</td></tr>
-<tr class="separator:af862bbfbf691daa0eec4cafb6741eed9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc8df80ae12840fe2794ba9f6e2ed57c"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#afc8df80ae12840fe2794ba9f6e2ed57c">humanReadable</a> (uint64_t number, <a class="el" href="classbool.html">bool</a> onethousand)</td></tr>
-<tr class="separator:afc8df80ae12840fe2794ba9f6e2ed57c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7507be7ee1e35f3cc5f0256671f5590f"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7507be7ee1e35f3cc5f0256671f5590f">humanReadable</a> (long double number)</td></tr>
-<tr class="separator:a7507be7ee1e35f3cc5f0256671f5590f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e975c89a3d14d696d45ecb8656def18"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7e975c89a3d14d696d45ecb8656def18">humanReadable</a> (long double number, <a class="el" href="classbool.html">bool</a> onethousand)</td></tr>
-<tr class="separator:a7e975c89a3d14d696d45ecb8656def18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c6297ddb64290e43ceaf17ba2c99d3e"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a7c6297ddb64290e43ceaf17ba2c99d3e">getHumanReadable</a> (int64_t number)</td></tr>
+<tr class="separator:a7c6297ddb64290e43ceaf17ba2c99d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ff817394454d25ed4a6937841a898d1"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a3ff817394454d25ed4a6937841a898d1">getHumanReadable</a> (int64_t number, <a class="el" href="classbool.html">bool</a> onethousand)</td></tr>
+<tr class="separator:a3ff817394454d25ed4a6937841a898d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07f3286036829e0b5cf45f260e41fb9"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ad07f3286036829e0b5cf45f260e41fb9">getHumanReadable</a> (uint64_t number)</td></tr>
+<tr class="separator:ad07f3286036829e0b5cf45f260e41fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacd2078db790bae2d5ff5ea83b176c86"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#aacd2078db790bae2d5ff5ea83b176c86">getHumanReadable</a> (uint64_t number, <a class="el" href="classbool.html">bool</a> onethousand)</td></tr>
+<tr class="separator:aacd2078db790bae2d5ff5ea83b176c86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab26cd542546b9e1e5cc011bcb47a6dbf"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ab26cd542546b9e1e5cc011bcb47a6dbf">getHumanReadable</a> (long double number)</td></tr>
+<tr class="separator:ab26cd542546b9e1e5cc011bcb47a6dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa60201d5ece179d421b76779498b16df"><td class="memItemLeft" align="right" valign="top">static ucs2_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#aa60201d5ece179d421b76779498b16df">getHumanReadable</a> (long double number, <a class="el" href="classbool.html">bool</a> onethousand)</td></tr>
+<tr class="separator:aa60201d5ece179d421b76779498b16df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89f600dcdfeeb5aef1d82cd21a39c9c7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a89f600dcdfeeb5aef1d82cd21a39c9c7">isByteOrderMark</a> (const ucs2_t *str)</td></tr>
+<tr class="separator:a89f600dcdfeeb5aef1d82cd21a39c9c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f80e417c77f8561ddcd36417506a81"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#ad7f80e417c77f8561ddcd36417506a81">isBigEndian</a> (const ucs2_t *str)</td></tr>
+<tr class="separator:ad7f80e417c77f8561ddcd36417506a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1eed6c9fe3fca9f98dd493292ce0375a"><td class="memItemLeft" align="right" valign="top">static ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a1eed6c9fe3fca9f98dd493292ce0375a">printf</a> (ucs2_t *buffer, size_t len, const ucs2_t *format,...)</td></tr>
 <tr class="separator:a1eed6c9fe3fca9f98dd493292ce0375a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56eac876106c9694445e94a1c04c5eee"><td class="memItemLeft" align="right" valign="top">static ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classucs2charstring.html#a56eac876106c9694445e94a1c04c5eee">printf</a> (ucs2_t *buffer, size_t len, const ucs2_t *format, va_list *argp)</td></tr>
@@ -404,43 +408,6 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classucs2charstring.html">ucs2charstring</a> class provides static methods for manipulating UCS-2 encoded character strings. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3cdfa84ab7a1eb52dfcf473fc63994c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cdfa84ab7a1eb52dfcf473fc63994c8">&#9670;&nbsp;</a></span>after()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::after </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>delimiter</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the string from the "delimiter" until the end of the string. Note that this method allocates a buffer for the return value internally and returns it. The calling program must deallocate this buffer. </p>
-
-</div>
-</div>
 <a id="ac11e4466629c4bef415aa636afb7207c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac11e4466629c4bef415aa636afb7207c">&#9670;&nbsp;</a></span>append() <span class="overload">[1/7]</span></h2>
 
@@ -721,86 +688,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Converts "number" to a string and appends it to "dest". Assumes that there is enough room remaining in "dest" to accommodate the new string. Returns a pointer to "dest". </p>
-
-</div>
-</div>
-<a id="a64ec730f1656ac19c73ef5fc27f544bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64ec730f1656ac19c73ef5fc27f544bd">&#9670;&nbsp;</a></span>before()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::before </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>delimiter</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the string from the beginning of "str" until Note that this method allocates a buffer for the return value internally and returns it. The calling program must deallocate this buffer. </p>
-
-</div>
-</div>
-<a id="add085592cf015009fe9e8ba8db21fecc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add085592cf015009fe9e8ba8db21fecc">&#9670;&nbsp;</a></span>between()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::between </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>start</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>end</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the string between "start" and "end". Note that this method allocates a buffer for the return value internally and returns it. The calling program must deallocate this buffer. </p>
 
 </div>
 </div>
@@ -1721,6 +1608,387 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Converts "amount" which is assumed to be a number of pennies into a dollar amount string where there are "padding" places between the dollar sign and decimal point. These will be space padded if the amount is small enough not to fill them. </p>
+
+</div>
+</div>
+<a id="a33c0f5e9d75a5e7d95756b0faa65e72f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33c0f5e9d75a5e7d95756b0faa65e72f">&#9670;&nbsp;</a></span>convertToFloat() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static long double ucs2charstring::convertToFloat </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a floating point number. </p>
+
+</div>
+</div>
+<a id="a86cc4ff1a13fe24cfbb92b76ce970b1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86cc4ff1a13fe24cfbb92b76ce970b1d">&#9670;&nbsp;</a></span>convertToFloat() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static long double ucs2charstring::convertToFloat </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t **&#160;</td>
+          <td class="paramname"><em>endptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a floating point number. If non-NULL, endptr will be set to the first character in the string after the number. </p>
+
+</div>
+</div>
+<a id="a0d41822f3baa341e8d736bc9e5f632e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d41822f3baa341e8d736bc9e5f632e8">&#9670;&nbsp;</a></span>convertToFloatC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static long double ucs2charstring::convertToFloatC </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a floating point number.</p>
+<p>If "string" uses a "." as a decimal point (per the "C" locale) then the "." is first converted to the appropriate decimal-delimiter for the current locale.</p>
+<p>(Currently only supported on linux/unix platforms that provide the locale.h header. On other platforms, it just falls through to <a class="el" href="classucs2charstring.html#a33c0f5e9d75a5e7d95756b0faa65e72f">convertToFloat()</a>.) </p>
+
+</div>
+</div>
+<a id="a52fab6445f9f056bd8a6d91b5501d501"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52fab6445f9f056bd8a6d91b5501d501">&#9670;&nbsp;</a></span>convertToInteger() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t ucs2charstring::convertToInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit integer. </p>
+
+</div>
+</div>
+<a id="adf0afc20b0170b2825bc5fea146b4bc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf0afc20b0170b2825bc5fea146b4bc7">&#9670;&nbsp;</a></span>convertToInteger() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t ucs2charstring::convertToInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t **&#160;</td>
+          <td class="paramname"><em>endptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit integer. If non-NULL, endptr will be set to the first character in the string after the number. </p>
+
+</div>
+</div>
+<a id="ae421cfa88c12af9781fd2cc405fa53e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae421cfa88c12af9781fd2cc405fa53e8">&#9670;&nbsp;</a></span>convertToInteger() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t ucs2charstring::convertToInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t **&#160;</td>
+          <td class="paramname"><em>endptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>base</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit integer of base "base". If non-NULL, endptr will be set to the first character in the string after the number. </p>
+
+</div>
+</div>
+<a id="ad0ba89192535dc164cafe97d0c1102eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0ba89192535dc164cafe97d0c1102eb">&#9670;&nbsp;</a></span>convertToInteger() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t ucs2charstring::convertToInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>base</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit integer of base "base". </p>
+
+</div>
+</div>
+<a id="a327576dc38ab8b491877cddd09ab3d77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a327576dc38ab8b491877cddd09ab3d77">&#9670;&nbsp;</a></span>convertToUnsignedInteger() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t ucs2charstring::convertToUnsignedInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit unsigned integer. </p>
+
+</div>
+</div>
+<a id="a2984bdf19ca431efb12722eaa45aefa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2984bdf19ca431efb12722eaa45aefa6">&#9670;&nbsp;</a></span>convertToUnsignedInteger() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t ucs2charstring::convertToUnsignedInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t **&#160;</td>
+          <td class="paramname"><em>endptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit unsigned integer. If non-NULL, endptr will be set to the first character in the string after the number. </p>
+
+</div>
+</div>
+<a id="a1427834b43e78b1703ca42695f47f614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1427834b43e78b1703ca42695f47f614">&#9670;&nbsp;</a></span>convertToUnsignedInteger() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t ucs2charstring::convertToUnsignedInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t **&#160;</td>
+          <td class="paramname"><em>endptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>base</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit unsigned integer of base "base". If non-NULL, endptr will be set to the first character in the string after the number. </p>
+
+</div>
+</div>
+<a id="a5e96f6195b06b7b710f251f1ab4b81fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e96f6195b06b7b710f251f1ab4b81fd">&#9670;&nbsp;</a></span>convertToUnsignedInteger() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t ucs2charstring::convertToUnsignedInteger </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>base</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts "string" to a 64-bit unsigned integer of base "base". </p>
 
 </div>
 </div>
@@ -3685,8 +3953,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5063c2420c9962dc0a85d8c029e68e45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5063c2420c9962dc0a85d8c029e68e45">&#9670;&nbsp;</a></span>humanReadable() <span class="overload">[1/6]</span></h2>
+<a id="a7c6297ddb64290e43ceaf17ba2c99d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c6297ddb64290e43ceaf17ba2c99d3e">&#9670;&nbsp;</a></span>getHumanReadable() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3695,7 +3963,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::humanReadable </td>
+          <td class="memname">static ucs2_t* ucs2charstring::getHumanReadable </td>
           <td>(</td>
           <td class="paramtype">int64_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
@@ -3714,8 +3982,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2a54552c281ee47e4346ed90098b2da1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a54552c281ee47e4346ed90098b2da1">&#9670;&nbsp;</a></span>humanReadable() <span class="overload">[2/6]</span></h2>
+<a id="a3ff817394454d25ed4a6937841a898d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ff817394454d25ed4a6937841a898d1">&#9670;&nbsp;</a></span>getHumanReadable() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3724,7 +3992,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::humanReadable </td>
+          <td class="memname">static ucs2_t* ucs2charstring::getHumanReadable </td>
           <td>(</td>
           <td class="paramtype">int64_t&#160;</td>
           <td class="paramname"><em>number</em>, </td>
@@ -3753,8 +4021,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7507be7ee1e35f3cc5f0256671f5590f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7507be7ee1e35f3cc5f0256671f5590f">&#9670;&nbsp;</a></span>humanReadable() <span class="overload">[3/6]</span></h2>
+<a id="ab26cd542546b9e1e5cc011bcb47a6dbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab26cd542546b9e1e5cc011bcb47a6dbf">&#9670;&nbsp;</a></span>getHumanReadable() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3763,7 +4031,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::humanReadable </td>
+          <td class="memname">static ucs2_t* ucs2charstring::getHumanReadable </td>
           <td>(</td>
           <td class="paramtype">long double&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
@@ -3781,8 +4049,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7e975c89a3d14d696d45ecb8656def18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e975c89a3d14d696d45ecb8656def18">&#9670;&nbsp;</a></span>humanReadable() <span class="overload">[4/6]</span></h2>
+<a id="aa60201d5ece179d421b76779498b16df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa60201d5ece179d421b76779498b16df">&#9670;&nbsp;</a></span>getHumanReadable() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3791,7 +4059,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::humanReadable </td>
+          <td class="memname">static ucs2_t* ucs2charstring::getHumanReadable </td>
           <td>(</td>
           <td class="paramtype">long double&#160;</td>
           <td class="paramname"><em>number</em>, </td>
@@ -3820,8 +4088,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af862bbfbf691daa0eec4cafb6741eed9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af862bbfbf691daa0eec4cafb6741eed9">&#9670;&nbsp;</a></span>humanReadable() <span class="overload">[5/6]</span></h2>
+<a id="ad07f3286036829e0b5cf45f260e41fb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad07f3286036829e0b5cf45f260e41fb9">&#9670;&nbsp;</a></span>getHumanReadable() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3830,7 +4098,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::humanReadable </td>
+          <td class="memname">static ucs2_t* ucs2charstring::getHumanReadable </td>
           <td>(</td>
           <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
@@ -3848,8 +4116,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afc8df80ae12840fe2794ba9f6e2ed57c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc8df80ae12840fe2794ba9f6e2ed57c">&#9670;&nbsp;</a></span>humanReadable() <span class="overload">[6/6]</span></h2>
+<a id="aacd2078db790bae2d5ff5ea83b176c86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacd2078db790bae2d5ff5ea83b176c86">&#9670;&nbsp;</a></span>getHumanReadable() <span class="overload">[6/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3858,7 +4126,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::humanReadable </td>
+          <td class="memname">static ucs2_t* ucs2charstring::getHumanReadable </td>
           <td>(</td>
           <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>number</em>, </td>
@@ -3884,6 +4152,376 @@ Static Public Member Functions</h2></td></tr>
 <p>Returns a human-readable version of the number.</p>
 <p>Eg. 128, 1.2K, 2.4M, 3.5G, 4.6T, etc.</p>
 <p>If "onethousand" = true then 1K = 1000, otherwise 1K = 1024. </p>
+
+</div>
+</div>
+<a id="abc7154d4d179ddaf82c1607e56d73272"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc7154d4d179ddaf82c1607e56d73272">&#9670;&nbsp;</a></span>getIntegerLength() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t ucs2charstring::getIntegerLength </td>
+          <td>(</td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters needed to represent "number" as a string. </p>
+
+</div>
+</div>
+<a id="a25b84adf9ce90f38f8d83497133a5570"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25b84adf9ce90f38f8d83497133a5570">&#9670;&nbsp;</a></span>getIntegerLength() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t ucs2charstring::getIntegerLength </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters needed to represent "number" as a string. </p>
+
+</div>
+</div>
+<a id="a5df71c5e6426a0594c2b3d7376810ea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5df71c5e6426a0594c2b3d7376810ea2">&#9670;&nbsp;</a></span>getIntegerLength() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t ucs2charstring::getIntegerLength </td>
+          <td>(</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters needed to represent "number" as a string. </p>
+
+</div>
+</div>
+<a id="a6e84bb9a3881afd3e87f67e898dde228"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e84bb9a3881afd3e87f67e898dde228">&#9670;&nbsp;</a></span>getIntegerLength() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t ucs2charstring::getIntegerLength </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters needed to represent "number" as a string. </p>
+
+</div>
+</div>
+<a id="a9e3525b813bb11163f09122cf3f811d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e3525b813bb11163f09122cf3f811d0">&#9670;&nbsp;</a></span>getIntegerLength() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t ucs2charstring::getIntegerLength </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters needed to represent "number" as a string. </p>
+
+</div>
+</div>
+<a id="a854dd197cc934c8f29273c70721514d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a854dd197cc934c8f29273c70721514d3">&#9670;&nbsp;</a></span>getIntegerLength() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t ucs2charstring::getIntegerLength </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters needed to represent "number" as a string. </p>
+
+</div>
+</div>
+<a id="a7ea1e06487dfde06518f4d98ab86a820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ea1e06487dfde06518f4d98ab86a820">&#9670;&nbsp;</a></span>getLength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t ucs2charstring::getLength </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters in "string". </p>
+
+</div>
+</div>
+<a id="a9d1c67334ad45da45e85f03d1ad23590"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d1c67334ad45da45e85f03d1ad23590">&#9670;&nbsp;</a></span>getLengthContainingSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t ucs2charstring::getLengthContainingSet </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>haystack</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>set</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters, starting at the beginning of "haystack" which consists entirely of characters in "set". </p>
+
+</div>
+</div>
+<a id="abbc3317da546bc1431475ab5e7a24a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbc3317da546bc1431475ab5e7a24a7e">&#9670;&nbsp;</a></span>getLengthNotContainingSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t ucs2charstring::getLengthNotContainingSet </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>haystack</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>set</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of characters, starting at the beginning of "haystack" which consists entirely of characters not in "set". </p>
+
+</div>
+</div>
+<a id="a6d56408730a8f3419f5f75335121c7ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d56408730a8f3419f5f75335121c7ac">&#9670;&nbsp;</a></span>getSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t ucs2charstring::getSize </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of bytes in "string", including the null terminator. </p>
+
+</div>
+</div>
+<a id="a40103c4f141938cc25fc713e9d559c99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40103c4f141938cc25fc713e9d559c99">&#9670;&nbsp;</a></span>getSubString() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ucs2_t* ucs2charstring::getSubString </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>start</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a copy of the segment of "str" between string index "start" and the end of the string, inclusive. </p>
+
+</div>
+</div>
+<a id="a5e876d90c11fef9e95c58525535f6471"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e876d90c11fef9e95c58525535f6471">&#9670;&nbsp;</a></span>getSubString() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ucs2_t* ucs2charstring::getSubString </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a copy of the segment of "str" between string indices "start" and "end", inclusive. </p>
 
 </div>
 </div>
@@ -3930,8 +4568,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5ca9e54b29c1b195168bc9fa8f0a4aab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ca9e54b29c1b195168bc9fa8f0a4aab">&#9670;&nbsp;</a></span>inSet()</h2>
+<a id="a06362e6f6ef0eb1a0c7585e6a0808ea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06362e6f6ef0eb1a0c7585e6a0808ea3">&#9670;&nbsp;</a></span>isAfter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3940,7 +4578,178 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> ucs2charstring::inSet </td>
+          <td class="memname">static ucs2_t* ucs2charstring::isAfter </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>delimiter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the string from the "delimiter" until the end of the string. Note that this method allocates a buffer for the return value internally and returns it. The calling program must deallocate this buffer. </p>
+
+</div>
+</div>
+<a id="ac21cb45df02013b71729feececd36db4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac21cb45df02013b71729feececd36db4">&#9670;&nbsp;</a></span>isBefore()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ucs2_t* ucs2charstring::isBefore </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>delimiter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the string from the beginning of "str" until Note that this method allocates a buffer for the return value internally and returns it. The calling program must deallocate this buffer. </p>
+
+</div>
+</div>
+<a id="ac6cca77d30650f44d863eabd92c035b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6cca77d30650f44d863eabd92c035b3">&#9670;&nbsp;</a></span>isBetween()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ucs2_t* ucs2charstring::isBetween </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the string between "start" and "end". Note that this method allocates a buffer for the return value internally and returns it. The calling program must deallocate this buffer. </p>
+
+</div>
+</div>
+<a id="ad7f80e417c77f8561ddcd36417506a81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7f80e417c77f8561ddcd36417506a81">&#9670;&nbsp;</a></span>isBigEndian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> ucs2charstring::isBigEndian </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the current character in "str" is a bigendian byte-order mark and false otherwise. </p>
+
+</div>
+</div>
+<a id="a89f600dcdfeeb5aef1d82cd21a39c9c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89f600dcdfeeb5aef1d82cd21a39c9c7">&#9670;&nbsp;</a></span>isByteOrderMark()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> ucs2charstring::isByteOrderMark </td>
+          <td>(</td>
+          <td class="paramtype">const ucs2_t *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the current character in "str" is the byte order mark and false otherwise. </p>
+
+</div>
+</div>
+<a id="ac47d79123255ab0503eb7c12526bf824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac47d79123255ab0503eb7c12526bf824">&#9670;&nbsp;</a></span>isInSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> ucs2charstring::isInSet </td>
           <td>(</td>
           <td class="paramtype">const ucs2_t *&#160;</td>
           <td class="paramname"><em>str</em>, </td>
@@ -3967,8 +4776,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aafe82910f1f02d823f73854d780dd49d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafe82910f1f02d823f73854d780dd49d">&#9670;&nbsp;</a></span>inSetIgnoringCase()</h2>
+<a id="a1dffd1a32cdf54243e07f26101e6380a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dffd1a32cdf54243e07f26101e6380a">&#9670;&nbsp;</a></span>isInSetIgnoringCase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3977,7 +4786,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> ucs2charstring::inSetIgnoringCase </td>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> ucs2charstring::isInSetIgnoringCase </td>
           <td>(</td>
           <td class="paramtype">const ucs2_t *&#160;</td>
           <td class="paramname"><em>str</em>, </td>
@@ -4001,168 +4810,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns true if "str" is found among the values in the NULL-terminated array "set", ignoring case. Also returns true if "str" is NULL and set is NULL or contains only a NULL-terminator. Otherwise returns false. </p>
-
-</div>
-</div>
-<a id="a26ec3d3a43ecc8ba78b88f2b2b7eabef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26ec3d3a43ecc8ba78b88f2b2b7eabef">&#9670;&nbsp;</a></span>integerLength() <span class="overload">[1/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t ucs2charstring::integerLength </td>
-          <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters needed to represent "number" as a string. </p>
-
-</div>
-</div>
-<a id="adbd6118017d97b35f0028fbd29be88b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adbd6118017d97b35f0028fbd29be88b7">&#9670;&nbsp;</a></span>integerLength() <span class="overload">[2/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t ucs2charstring::integerLength </td>
-          <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters needed to represent "number" as a string. </p>
-
-</div>
-</div>
-<a id="a9bcb2a834f2062b07ac16095c7492798"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bcb2a834f2062b07ac16095c7492798">&#9670;&nbsp;</a></span>integerLength() <span class="overload">[3/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t ucs2charstring::integerLength </td>
-          <td>(</td>
-          <td class="paramtype">int64_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters needed to represent "number" as a string. </p>
-
-</div>
-</div>
-<a id="a8ab589ddce4b1592f908ad2af9fb98b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ab589ddce4b1592f908ad2af9fb98b1">&#9670;&nbsp;</a></span>integerLength() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t ucs2charstring::integerLength </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters needed to represent "number" as a string. </p>
-
-</div>
-</div>
-<a id="a2e9b4ddca4ea73891fa5b5cc4eab27ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e9b4ddca4ea73891fa5b5cc4eab27ff">&#9670;&nbsp;</a></span>integerLength() <span class="overload">[5/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t ucs2charstring::integerLength </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters needed to represent "number" as a string. </p>
-
-</div>
-</div>
-<a id="ad1dd4f7db5db1f312bbf5ca36b2572b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1dd4f7db5db1f312bbf5ca36b2572b8">&#9670;&nbsp;</a></span>integerLength() <span class="overload">[6/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t ucs2charstring::integerLength </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters needed to represent "number" as a string. </p>
 
 </div>
 </div>
@@ -4477,107 +5124,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Trims all "character"'s off of the left hand side of "str". </p>
-
-</div>
-</div>
-<a id="aecb083fa6c22eba0b44121d5ab665f80"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aecb083fa6c22eba0b44121d5ab665f80">&#9670;&nbsp;</a></span>length()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static size_t ucs2charstring::length </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters in "string". </p>
-
-</div>
-</div>
-<a id="a140f2f2079aa0320cc410b259e279fe0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a140f2f2079aa0320cc410b259e279fe0">&#9670;&nbsp;</a></span>lengthContainingSet()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static size_t ucs2charstring::lengthContainingSet </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>haystack</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>set</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters, starting at the beginning of "haystack" which consists entirely of characters in "set". </p>
-
-</div>
-</div>
-<a id="a4b5a35ec0982e4febb4a6d911da93963"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b5a35ec0982e4febb4a6d911da93963">&#9670;&nbsp;</a></span>lengthNotContainingSet()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static size_t ucs2charstring::lengthNotContainingSet </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>haystack</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>set</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of characters, starting at the beginning of "haystack" which consists entirely of characters not in "set". </p>
 
 </div>
 </div>
@@ -5978,33 +6524,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3f1f352d2cb92d90495f0d1d05543fb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f1f352d2cb92d90495f0d1d05543fb1">&#9670;&nbsp;</a></span>size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static size_t ucs2charstring::size </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of bytes in "string", including the null terminator. </p>
-
-</div>
-</div>
 <a id="ae403addfb084edd8c7896cd987fad67e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae403addfb084edd8c7896cd987fad67e">&#9670;&nbsp;</a></span>split() <span class="overload">[1/4]</span></h2>
 
@@ -6397,86 +6916,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4099bc1faba4008387552f355fd3098f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4099bc1faba4008387552f355fd3098f">&#9670;&nbsp;</a></span>subString() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::subString </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>start</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns a copy of the segment of "str" between string index "start" and the end of the string, inclusive. </p>
-
-</div>
-</div>
-<a id="ab0f8f42f853ac034360fe5d75d09b6e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0f8f42f853ac034360fe5d75d09b6e9">&#9670;&nbsp;</a></span>subString() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static ucs2_t* ucs2charstring::subString </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>start</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>end</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns a copy of the segment of "str" between string indices "start" and "end", inclusive. </p>
-
-</div>
-</div>
 <a id="ad4d3d32dfff0665a59f4511f71d094b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad4d3d32dfff0665a59f4511f71d094b0">&#9670;&nbsp;</a></span>supportsPrintf()</h2>
 
@@ -6500,387 +6939,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns true if the platform supports <a class="el" href="classucs2charstring.html#a1eed6c9fe3fca9f98dd493292ce0375a">printf()</a>ing UCS-2 characters and false otherwise. </p>
-
-</div>
-</div>
-<a id="ab703cd0873e660c5b01850f915cc4a58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab703cd0873e660c5b01850f915cc4a58">&#9670;&nbsp;</a></span>toFloat() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static long double ucs2charstring::toFloat </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a floating point number. </p>
-
-</div>
-</div>
-<a id="ad05ca58b026e41a3c12d621052c0420d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad05ca58b026e41a3c12d621052c0420d">&#9670;&nbsp;</a></span>toFloat() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static long double ucs2charstring::toFloat </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t **&#160;</td>
-          <td class="paramname"><em>endptr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a floating point number. If non-NULL, endptr will be set to the first character in the string after the number. </p>
-
-</div>
-</div>
-<a id="a767f72738706a221b87ef5375455bf29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a767f72738706a221b87ef5375455bf29">&#9670;&nbsp;</a></span>toFloatC()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static long double ucs2charstring::toFloatC </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a floating point number.</p>
-<p>If "string" uses a "." as a decimal point (per the "C" locale) then the "." is first converted to the appropriate decimal-delimiter for the current locale.</p>
-<p>(Currently only supported on linux/unix platforms that provide the locale.h header. On other platforms, it just falls through to <a class="el" href="classucs2charstring.html#ab703cd0873e660c5b01850f915cc4a58">toFloat()</a>.) </p>
-
-</div>
-</div>
-<a id="a16927e45fe2b1a1e5d6ee2b9082119aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16927e45fe2b1a1e5d6ee2b9082119aa">&#9670;&nbsp;</a></span>toInteger() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int64_t ucs2charstring::toInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit integer. </p>
-
-</div>
-</div>
-<a id="a476e51b11d88f7ed0465c55b377ce5d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a476e51b11d88f7ed0465c55b377ce5d4">&#9670;&nbsp;</a></span>toInteger() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int64_t ucs2charstring::toInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t **&#160;</td>
-          <td class="paramname"><em>endptr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit integer. If non-NULL, endptr will be set to the first character in the string after the number. </p>
-
-</div>
-</div>
-<a id="a7c5117e47987f78702f4669a1df9b5d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c5117e47987f78702f4669a1df9b5d9">&#9670;&nbsp;</a></span>toInteger() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int64_t ucs2charstring::toInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t **&#160;</td>
-          <td class="paramname"><em>endptr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>base</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit integer of base "base". If non-NULL, endptr will be set to the first character in the string after the number. </p>
-
-</div>
-</div>
-<a id="ab2560a19d2a9c0274fa96ca18ba764d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2560a19d2a9c0274fa96ca18ba764d1">&#9670;&nbsp;</a></span>toInteger() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int64_t ucs2charstring::toInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>base</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit integer of base "base". </p>
-
-</div>
-</div>
-<a id="a0ed38d6d46e802a2cbf045bb823050de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ed38d6d46e802a2cbf045bb823050de">&#9670;&nbsp;</a></span>toUnsignedInteger() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t ucs2charstring::toUnsignedInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit unsigned integer. </p>
-
-</div>
-</div>
-<a id="a68f57c7feb2de52602747b612e5d3fcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68f57c7feb2de52602747b612e5d3fcb">&#9670;&nbsp;</a></span>toUnsignedInteger() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t ucs2charstring::toUnsignedInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t **&#160;</td>
-          <td class="paramname"><em>endptr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit unsigned integer. If non-NULL, endptr will be set to the first character in the string after the number. </p>
-
-</div>
-</div>
-<a id="a734eee15374fb4ac1e4f7902f200d225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a734eee15374fb4ac1e4f7902f200d225">&#9670;&nbsp;</a></span>toUnsignedInteger() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t ucs2charstring::toUnsignedInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ucs2_t **&#160;</td>
-          <td class="paramname"><em>endptr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>base</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit unsigned integer of base "base". If non-NULL, endptr will be set to the first character in the string after the number. </p>
-
-</div>
-</div>
-<a id="a3765718b90976681ce2dbcaabdf5348d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3765718b90976681ce2dbcaabdf5348d">&#9670;&nbsp;</a></span>toUnsignedInteger() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t ucs2charstring::toUnsignedInteger </td>
-          <td>(</td>
-          <td class="paramtype">const ucs2_t *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>base</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts "string" to a 64-bit unsigned integer of base "base". </p>
 
 </div>
 </div>
@@ -7028,7 +7086,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -49,33 +49,33 @@ $(function() {
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// See the COPYING file for more information</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;        <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <span class="keywordtype">void</span>    buildList(<span class="keyword">const</span> <span class="keywordtype">char</span> ***vars, <span class="keyword">const</span> <span class="keywordtype">char</span> ***vals,</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;                                        <a class="code" href="classdictionary.html">dictionary&lt;char *, char *&gt;</a> *nvp);</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;                <span class="keywordtype">void</span>    cleanUp(<span class="keyword">const</span> <span class="keywordtype">char</span> ***vars, <span class="keyword">const</span> <span class="keywordtype">char</span> ***vals,</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                                        <a class="code" href="classdictionary.html">dictionary&lt;char *, char *&gt;</a> *nvp);</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;                <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                        get_request,</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                        head_request,</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                        post_request</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                } httprequestmethod;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    parseQueryString(httprequestmethod method);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    buildAllVariables();</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keywordtype">bool</span>            dirtyAllVars();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                <span class="keywordtype">void</span>            dirtyAllVars(<span class="keywordtype">bool</span> dirtyallvars);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                uint64_t        allVariableCount();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keywordtype">void</span>            allVariableCount(uint64_t allvariablecount);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      ***allVars();</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      ***allVals();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <a class="code" href="classhttprequest.html">httprequest</a>(<a class="code" href="classhttprequest.html">httprequest</a> &amp;h) {};</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                <a class="code" href="classhttprequest.html">httprequest</a>     &amp;operator=(<a class="code" href="classhttprequest.html">httprequest</a> &amp;h) { <span class="keywordflow">return</span> *<span class="keyword">this</span>; };</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;                <a class="code" href="classhttprequest.html">httprequest</a>(<a class="code" href="classhttprequest.html">httprequest</a> &amp;h) {};</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <a class="code" href="classhttprequest.html">httprequest</a>     &amp;operator=(<a class="code" href="classhttprequest.html">httprequest</a> &amp;h) { <span class="keywordflow">return</span> *<span class="keyword">this</span>; };</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                <span class="keywordtype">void</span>    buildList(<span class="keyword">const</span> <span class="keywordtype">char</span> ***vars, <span class="keyword">const</span> <span class="keywordtype">char</span> ***vals,</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                                        <a class="code" href="classdictionary.html">dictionary&lt;char *, char *&gt;</a> *nvp);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;                <span class="keywordtype">void</span>    cleanUp(<span class="keyword">const</span> <span class="keywordtype">char</span> ***vars, <span class="keyword">const</span> <span class="keywordtype">char</span> ***vals,</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                                        <a class="code" href="classdictionary.html">dictionary&lt;char *, char *&gt;</a> *nvp);</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                        get_request,</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                        head_request,</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                        post_request</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                } httprequestmethod;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    parseQueryString(httprequestmethod method);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    buildAllVariables();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keywordtype">bool</span>            dirtyAllVars();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keywordtype">void</span>            dirtyAllVars(<span class="keywordtype">bool</span> dirtyallvars);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                uint64_t        allVariableCount();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keywordtype">void</span>            allVariableCount(uint64_t allvariablecount);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      ***allVars();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      ***allVals();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keywordtype">void</span>    initCookies();</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                <span class="keywordtype">void</span>    initParameters();</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="keywordtype">void</span>    initFileNames();</div>
@@ -101,7 +101,7 @@ $(function() {
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <span class="keywordtype">void</span>    buildCookieList();</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keywordtype">void</span>    buildFileNameList();</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <span class="keywordtype">bool</span>    allowedThing(<span class="keyword">const</span> <span class="keywordtype">char</span> *thing,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <span class="keywordtype">bool</span>    getThingIsAllowed(<span class="keyword">const</span> <span class="keywordtype">char</span> *thing,</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                        <span class="keywordtype">bool</span> allowemptything,</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *deniedthings,</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *allowedthings);</div>
@@ -114,7 +114,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

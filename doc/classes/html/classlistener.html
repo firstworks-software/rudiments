@@ -72,10 +72,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a79df162446e3cecab0679d9313813e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23a8ffc73c9006212fe944c88ab42db3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsinglylinkedlist.html">singlylinkedlist</a>&lt; <a class="el" href="classfiledescriptor.html">filedescriptor</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#a23a8ffc73c9006212fe944c88ab42db3">getWriteReadyList</a> ()</td></tr>
 <tr class="separator:a23a8ffc73c9006212fe944c88ab42db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf7614995872457989ecf4854a788ae7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#adf7614995872457989ecf4854a788ae7">retryInterruptedWaits</a> ()</td></tr>
-<tr class="separator:adf7614995872457989ecf4854a788ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab739d3d989916044c115c6d3d6d6907b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#ab739d3d989916044c115c6d3d6d6907b">dontRetryInterruptedWaits</a> ()</td></tr>
-<tr class="separator:ab739d3d989916044c115c6d3d6d6907b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0661af828babd4ce246c9559843cd5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#ac0661af828babd4ce246c9559843cd5a">retryInterruptedWaits</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:ac0661af828babd4ce246c9559843cd5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classobject.html">object</a></td></tr>
 <tr class="memitem:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classobject.html#a6233244b77a2794b456e5eee6964806d">~object</a> ()</td></tr>
 <tr class="separator:a6233244b77a2794b456e5eee6964806d inherit pub_methods_classobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,24 +180,6 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen()</a> is called, it will only listen for write operations on this file descriptor. </p>
-
-</div>
-</div>
-<a id="ab739d3d989916044c115c6d3d6d6907b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab739d3d989916044c115c6d3d6d6907b">&#9670;&nbsp;</a></span>dontRetryInterruptedWaits()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void listener::dontRetryInterruptedWaits </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes waits not to automatically retry if interrupted by a signal. The default is to retry automatically. </p>
 
 </div>
 </div>
@@ -328,8 +308,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adf7614995872457989ecf4854a788ae7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf7614995872457989ecf4854a788ae7">&#9670;&nbsp;</a></span>retryInterruptedWaits()</h2>
+<a id="ac0661af828babd4ce246c9559843cd5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0661af828babd4ce246c9559843cd5a">&#9670;&nbsp;</a></span>retryInterruptedWaits()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -337,19 +317,21 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void listener::retryInterruptedWaits </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Causes waits to automatically retry if interrupted by a signal. This is the default. </p>
+<p>If "retry" is true then waits are automatically retried if interrupted by a signal. If "retry" is false then waits are not automatically retried if interrupted by a signel.</p>
+<p>Defaults to true. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

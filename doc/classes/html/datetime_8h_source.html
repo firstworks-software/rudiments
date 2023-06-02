@@ -171,7 +171,7 @@ $(function() {
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
 <div class="line"><a name="l00345"></a><span class="lineno"><a class="line" href="classdatetime.html#a0349e6f3fac49149b928f8922ef9a876">  345</a></span>&#160;                <span class="keyword">static</span> <span class="keyword">const</span> int32_t            *<a class="code" href="classdatetime.html#a0349e6f3fac49149b928f8922ef9a876">getTimeZoneOffsets</a>();</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno"><a class="line" href="classdatetime.html#a23acccb520303d75d808367688cfa486">  353</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">bool</span>     <a class="code" href="classdatetime.html#a23acccb520303d75d808367688cfa486">validDateTime</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00353"></a><span class="lineno"><a class="line" href="classdatetime.html#ac7079b0c8bfc93eac76a5801f9753711">  353</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">bool</span>     <a class="code" href="classdatetime.html#ac7079b0c8bfc93eac76a5801f9753711">isValidDateTime</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
 <div class="line"><a name="l00361"></a><span class="lineno"><a class="line" href="classdatetime.html#ad3f6773cfee8dc5f9ef8147269ba0d76">  361</a></span>&#160;                <span class="keyword">static</span> <span class="keywordtype">char</span>     *<a class="code" href="classdatetime.html#ad3f6773cfee8dc5f9ef8147269ba0d76">getString</a>(time_t seconds);</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
@@ -209,7 +209,6 @@ $(function() {
 <div class="ttc" id="aclassdatetime_html_a0349e6f3fac49149b928f8922ef9a876"><div class="ttname"><a href="classdatetime.html#a0349e6f3fac49149b928f8922ef9a876">datetime::getTimeZoneOffsets</a></div><div class="ttdeci">static const int32_t * getTimeZoneOffsets()</div></div>
 <div class="ttc" id="aclassdatetime_html_a03a8cb328fe85e7204eb6df98e1cd4cf"><div class="ttname"><a href="classdatetime.html#a03a8cb328fe85e7204eb6df98e1cd4cf">datetime::getYear</a></div><div class="ttdeci">int32_t getYear()</div></div>
 <div class="ttc" id="aclassdatetime_html_a1d45203b7ffb154c25579d4a8985bdae"><div class="ttname"><a href="classdatetime.html#a1d45203b7ffb154c25579d4a8985bdae">datetime::addDays</a></div><div class="ttdeci">bool addDays(int32_t days)</div></div>
-<div class="ttc" id="aclassdatetime_html_a23acccb520303d75d808367688cfa486"><div class="ttname"><a href="classdatetime.html#a23acccb520303d75d808367688cfa486">datetime::validDateTime</a></div><div class="ttdeci">static bool validDateTime(const char *string)</div></div>
 <div class="ttc" id="aclassdatetime_html_a241bfabad0f77244fd36b634603dc166"><div class="ttname"><a href="classdatetime.html#a241bfabad0f77244fd36b634603dc166">datetime::formatAs</a></div><div class="ttdeci">static char * formatAs(const char *format, int16_t year, int16_t month, int16_t day, int16_t hour, int16_t minute, int16_t second, int32_t microsecond, bool isnegative)</div></div>
 <div class="ttc" id="aclassdatetime_html_a244b65304aeb5dfdd50c0a493c61f6ac"><div class="ttname"><a href="classdatetime.html#a244b65304aeb5dfdd50c0a493c61f6ac">datetime::getWeekOfYear</a></div><div class="ttdeci">int32_t getWeekOfYear()</div></div>
 <div class="ttc" id="aclassdatetime_html_a26e43af25dc713aa4ae61eb41c6254e1"><div class="ttname"><a href="classdatetime.html#a26e43af25dc713aa4ae61eb41c6254e1">datetime::addMonths</a></div><div class="ttdeci">bool addMonths(int32_t months)</div></div>
@@ -251,6 +250,7 @@ $(function() {
 <div class="ttc" id="aclassdatetime_html_abc2add770c847d221e28855eb989b55d"><div class="ttname"><a href="classdatetime.html#abc2add770c847d221e28855eb989b55d">datetime::setTimeZone</a></div><div class="ttdeci">bool setTimeZone(const char *newtz, bool ignoredst)</div></div>
 <div class="ttc" id="aclassdatetime_html_ac32cbf7b12038e9ac6ee449179ffa188"><div class="ttname"><a href="classdatetime.html#ac32cbf7b12038e9ac6ee449179ffa188">datetime::setDayOfMonth</a></div><div class="ttdeci">bool setDayOfMonth(int32_t day)</div></div>
 <div class="ttc" id="aclassdatetime_html_ac418a3506c3bdf8cce222a650000db5c"><div class="ttname"><a href="classdatetime.html#ac418a3506c3bdf8cce222a650000db5c">datetime::getDayOfMonth</a></div><div class="ttdeci">int32_t getDayOfMonth()</div></div>
+<div class="ttc" id="aclassdatetime_html_ac7079b0c8bfc93eac76a5801f9753711"><div class="ttname"><a href="classdatetime.html#ac7079b0c8bfc93eac76a5801f9753711">datetime::isValidDateTime</a></div><div class="ttdeci">static bool isValidDateTime(const char *string)</div></div>
 <div class="ttc" id="aclassdatetime_html_ace8222b51809d4762434b8c9c3fb1374"><div class="ttname"><a href="classdatetime.html#ace8222b51809d4762434b8c9c3fb1374">datetime::setMicrosecond</a></div><div class="ttdeci">bool setMicrosecond(int32_t microsecond)</div></div>
 <div class="ttc" id="aclassdatetime_html_ad3b0013902f780f039fcd60622e70efa"><div class="ttname"><a href="classdatetime.html#ad3b0013902f780f039fcd60622e70efa">datetime::isDaylightSavingsTime</a></div><div class="ttdeci">bool isDaylightSavingsTime()</div></div>
 <div class="ttc" id="aclassdatetime_html_ad3f6773cfee8dc5f9ef8147269ba0d76"><div class="ttname"><a href="classdatetime.html#ad3f6773cfee8dc5f9ef8147269ba0d76">datetime::getString</a></div><div class="ttdeci">static char * getString(time_t seconds)</div></div>
@@ -271,7 +271,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -54,27 +54,37 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/modemutilincludes.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classmodemutil.html">    9</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classmodemutil.html">modemutil</a> {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                <a class="code" href="classmodemutil.html">modemutil</a>();</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                <span class="keyword">virtual</span> ~<a class="code" href="classmodemutil.html">modemutil</a>();</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classmodemutil.html">   11</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classmodemutil.html">modemutil</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                <span class="keywordtype">void</span>    setDevice(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classdevice.html">device</a>);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <span class="keywordtype">void</span>    setBaud(<span class="keyword">const</span> <span class="keywordtype">char</span> *baud);</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classmodemutil.html#afa4558040cce0b0bc8b21360479b176d">   15</a></span>&#160;                <a class="code" href="classmodemutil.html#afa4558040cce0b0bc8b21360479b176d">modemutil</a>();</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getDevice();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getBaud();</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classmodemutil.html#a65d4c96cf216280c75f46365d424b3dc">   18</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classmodemutil.html#a65d4c96cf216280c75f46365d424b3dc">~modemutil</a>();</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/modemutil.h&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;};</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classmodemutil.html#a01dbd62fd1be6a9d5a464883cc4e58aa">   22</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classmodemutil.html#a01dbd62fd1be6a9d5a464883cc4e58aa">setDevice</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classdevice.html">device</a>);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classmodemutil.html#a9c2ffc5575631c8a736a55d22ca7e942">   28</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classmodemutil.html#a9c2ffc5575631c8a736a55d22ca7e942">setBaud</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *baud);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classmodemutil.html#aea3ed3fc8ebdd41309c05571c993ffae">   32</a></span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classmodemutil.html#aea3ed3fc8ebdd41309c05571c993ffae">getDevice</a>();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classmodemutil.html#a4dbdb15f58558c32a69a1584c7a5488a">   36</a></span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classmodemutil.html#a4dbdb15f58558c32a69a1584c7a5488a">getBaud</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/modemutil.h&gt;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;};</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassdevice_html"><div class="ttname"><a href="classdevice.html">device</a></div><div class="ttdef"><b>Definition:</b> device.h:16</div></div>
-<div class="ttc" id="aclassmodemutil_html"><div class="ttname"><a href="classmodemutil.html">modemutil</a></div><div class="ttdef"><b>Definition:</b> modemutil.h:9</div></div>
+<div class="ttc" id="aclassmodemutil_html"><div class="ttname"><a href="classmodemutil.html">modemutil</a></div><div class="ttdef"><b>Definition:</b> modemutil.h:11</div></div>
+<div class="ttc" id="aclassmodemutil_html_a01dbd62fd1be6a9d5a464883cc4e58aa"><div class="ttname"><a href="classmodemutil.html#a01dbd62fd1be6a9d5a464883cc4e58aa">modemutil::setDevice</a></div><div class="ttdeci">void setDevice(const char *device)</div></div>
+<div class="ttc" id="aclassmodemutil_html_a4dbdb15f58558c32a69a1584c7a5488a"><div class="ttname"><a href="classmodemutil.html#a4dbdb15f58558c32a69a1584c7a5488a">modemutil::getBaud</a></div><div class="ttdeci">const char * getBaud()</div></div>
+<div class="ttc" id="aclassmodemutil_html_a65d4c96cf216280c75f46365d424b3dc"><div class="ttname"><a href="classmodemutil.html#a65d4c96cf216280c75f46365d424b3dc">modemutil::~modemutil</a></div><div class="ttdeci">virtual ~modemutil()</div></div>
+<div class="ttc" id="aclassmodemutil_html_a9c2ffc5575631c8a736a55d22ca7e942"><div class="ttname"><a href="classmodemutil.html#a9c2ffc5575631c8a736a55d22ca7e942">modemutil::setBaud</a></div><div class="ttdeci">void setBaud(const char *baud)</div></div>
+<div class="ttc" id="aclassmodemutil_html_aea3ed3fc8ebdd41309c05571c993ffae"><div class="ttname"><a href="classmodemutil.html#aea3ed3fc8ebdd41309c05571c993ffae">modemutil::getDevice</a></div><div class="ttdeci">const char * getDevice()</div></div>
+<div class="ttc" id="aclassmodemutil_html_afa4558040cce0b0bc8b21360479b176d"><div class="ttname"><a href="classmodemutil.html#afa4558040cce0b0bc8b21360479b176d">modemutil::modemutil</a></div><div class="ttdeci">modemutil()</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

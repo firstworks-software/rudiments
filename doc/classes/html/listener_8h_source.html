@@ -81,14 +81,12 @@ $(function() {
 <div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classlistener.html#a23a8ffc73c9006212fe944c88ab42db3">   77</a></span>&#160;                <a class="code" href="classsinglylinkedlist.html">singlylinkedlist&lt;filedescriptor *&gt;</a>      *<a class="code" href="classlistener.html#a23a8ffc73c9006212fe944c88ab42db3">getWriteReadyList</a>();</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classlistener.html#adf7614995872457989ecf4854a788ae7">   82</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classlistener.html#adf7614995872457989ecf4854a788ae7">retryInterruptedWaits</a>();</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classlistener.html#ab739d3d989916044c115c6d3d6d6907b">   87</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classlistener.html#ab739d3d989916044c115c6d3d6d6907b">dontRetryInterruptedWaits</a>();</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/listener.h&gt;</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;};</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classlistener.html#ac0661af828babd4ce246c9559843cd5a">   85</a></span>&#160;                <span class="keywordtype">void</span>    <a class="code" href="classlistener.html#ac0661af828babd4ce246c9559843cd5a">retryInterruptedWaits</a>(<span class="keywordtype">bool</span> retry);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/listener.h&gt;</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;};</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:13</div></div>
 <div class="ttc" id="aclasslistener_html"><div class="ttname"><a href="classlistener.html">listener</a></div><div class="ttdef"><b>Definition:</b> listener.h:11</div></div>
 <div class="ttc" id="aclasslistener_html_a03e88066b6015f4ee3f23cba4a90d501"><div class="ttname"><a href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listener::listen</a></div><div class="ttdeci">int32_t listen(int32_t sec, int32_t usec)</div></div>
@@ -101,15 +99,14 @@ $(function() {
 <div class="ttc" id="aclasslistener_html_aa5168e36669b69005d03f63963a6cb73"><div class="ttname"><a href="classlistener.html#aa5168e36669b69005d03f63963a6cb73">listener::addWriteFileDescriptor</a></div><div class="ttdeci">void addWriteFileDescriptor(filedescriptor *fd)</div></div>
 <div class="ttc" id="aclasslistener_html_aa65296f47f48392ff8ac41a81c694881"><div class="ttname"><a href="classlistener.html#aa65296f47f48392ff8ac41a81c694881">listener::~listener</a></div><div class="ttdeci">virtual ~listener()</div></div>
 <div class="ttc" id="aclasslistener_html_aa7cb68b6f581ecb410b861f9eb5afe60"><div class="ttname"><a href="classlistener.html#aa7cb68b6f581ecb410b861f9eb5afe60">listener::removeAllFileDescriptors</a></div><div class="ttdeci">void removeAllFileDescriptors()</div></div>
-<div class="ttc" id="aclasslistener_html_ab739d3d989916044c115c6d3d6d6907b"><div class="ttname"><a href="classlistener.html#ab739d3d989916044c115c6d3d6d6907b">listener::dontRetryInterruptedWaits</a></div><div class="ttdeci">void dontRetryInterruptedWaits()</div></div>
+<div class="ttc" id="aclasslistener_html_ac0661af828babd4ce246c9559843cd5a"><div class="ttname"><a href="classlistener.html#ac0661af828babd4ce246c9559843cd5a">listener::retryInterruptedWaits</a></div><div class="ttdeci">void retryInterruptedWaits(bool retry)</div></div>
 <div class="ttc" id="aclasslistener_html_adcb04b045c915b88ec6b741602a88f3d"><div class="ttname"><a href="classlistener.html#adcb04b045c915b88ec6b741602a88f3d">listener::listener</a></div><div class="ttdeci">listener()</div></div>
-<div class="ttc" id="aclasslistener_html_adf7614995872457989ecf4854a788ae7"><div class="ttname"><a href="classlistener.html#adf7614995872457989ecf4854a788ae7">listener::retryInterruptedWaits</a></div><div class="ttdeci">void retryInterruptedWaits()</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 <div class="ttc" id="aclasssinglylinkedlist_html"><div class="ttname"><a href="classsinglylinkedlist.html">singlylinkedlist</a></div><div class="ttdef"><b>Definition:</b> singlylinkedlist.h:54</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

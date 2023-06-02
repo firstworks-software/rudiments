@@ -87,29 +87,26 @@ $(function() {
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 <div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classdictionarycollection.html#ab6b73e94891b86fd36012116a11984cb">   91</a></span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classlinkedlist.html">linkedlist&lt;keytype&gt;</a>     *<a class="code" href="classdictionarycollection.html#ab6b73e94891b86fd36012116a11984cb">getKeys</a>()=0;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classdictionarycollection.html#a037d6283dcaf39072533d4fb87a32c73">   94</a></span>&#160;                <span class="keyword">virtual</span> uint64_t        <a class="code" href="classdictionarycollection.html#a037d6283dcaf39072533d4fb87a32c73">getLength</a>()=0;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classdictionarycollection.html#a90cc40c50c809b6fe9f6dfdde41d5d31">   99</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>            <a class="code" href="classdictionarycollection.html#a90cc40c50c809b6fe9f6dfdde41d5d31">remove</a>(keytype key)=0;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#ad90d71036e92c8add2b45ba383a43cd0">write</a>();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#ad90d71036e92c8add2b45ba383a43cd0">write</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>();</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>(<span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;};</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/dictionarycollectioninlines.h&gt;</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classdictionarycollection.html#a90cc40c50c809b6fe9f6dfdde41d5d31">   96</a></span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>            <a class="code" href="classdictionarycollection.html#a90cc40c50c809b6fe9f6dfdde41d5d31">remove</a>(keytype key)=0;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#ad90d71036e92c8add2b45ba383a43cd0">write</a>();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#ad90d71036e92c8add2b45ba383a43cd0">write</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>();</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>(<span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                <span class="keyword">virtual</span> ssize_t <a class="code" href="classdictionarycollection.html#aa054c63f88263636de5a2358ee1050d2">writeJson</a>(<a class="code" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;};</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#include &lt;rudiments/private/dictionarycollectioninlines.h&gt;</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition:</b> collection.h:11</div></div>
 <div class="ttc" id="aclassdictionarycollection_html"><div class="ttname"><a href="classdictionarycollection.html">dictionarycollection</a></div><div class="ttdef"><b>Definition:</b> dictionarycollection.h:13</div></div>
-<div class="ttc" id="aclassdictionarycollection_html_a037d6283dcaf39072533d4fb87a32c73"><div class="ttname"><a href="classdictionarycollection.html#a037d6283dcaf39072533d4fb87a32c73">dictionarycollection::getLength</a></div><div class="ttdeci">virtual uint64_t getLength()=0</div></div>
 <div class="ttc" id="aclassdictionarycollection_html_a45064465c8faaa8ac45ce67efbf2a487"><div class="ttname"><a href="classdictionarycollection.html#a45064465c8faaa8ac45ce67efbf2a487">dictionarycollection::setValues</a></div><div class="ttdeci">virtual void setValues(keytype *key, valuetype *value, uint64_t count)=0</div></div>
 <div class="ttc" id="aclassdictionarycollection_html_a61c3a070716af68e8796a290e274fc42"><div class="ttname"><a href="classdictionarycollection.html#a61c3a070716af68e8796a290e274fc42">dictionarycollection::getTrackInsertionOrder</a></div><div class="ttdeci">virtual bool getTrackInsertionOrder()=0</div></div>
 <div class="ttc" id="aclassdictionarycollection_html_a6c608468b28236ebd110d70d6f8cd434"><div class="ttname"><a href="classdictionarycollection.html#a6c608468b28236ebd110d70d6f8cd434">dictionarycollection::getValue</a></div><div class="ttdeci">virtual valuetype getValue(keytype key)=0</div></div>
@@ -130,7 +127,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

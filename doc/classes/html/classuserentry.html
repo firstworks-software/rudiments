@@ -107,8 +107,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a12e574042eac455a2e7a64ff68b307f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0a94c3c28837a7491f9e5c0fcb5319e"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classuserentry.html#aa0a94c3c28837a7491f9e5c0fcb5319e">getSidString</a> (const char *username)</td></tr>
 <tr class="separator:aa0a94c3c28837a7491f9e5c0fcb5319e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1f22a65d9badedbf73948341218ff6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classuserentry.html#ae1f22a65d9badedbf73948341218ff6d">platformSupportsFormalSid</a> ()</td></tr>
-<tr class="separator:ae1f22a65d9badedbf73948341218ff6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f89b8f62aca9824deaf61ca827d1fd0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classuserentry.html#a4f89b8f62aca9824deaf61ca827d1fd0">supportsFormalSid</a> ()</td></tr>
+<tr class="separator:a4f89b8f62aca9824deaf61ca827d1fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d9403370ac012d4c971f7f7d6e82b24"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classuserentry.html#a5d9403370ac012d4c971f7f7d6e82b24">getNeedsMutex</a> ()</td></tr>
 <tr class="separator:a5d9403370ac012d4c971f7f7d6e82b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac987a51fcc84246cd3dc0358c2703d60"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classuserentry.html#ac987a51fcc84246cd3dc0358c2703d60">setMutex</a> (<a class="el" href="classthreadmutex.html">threadmutex</a> *mtx)</td></tr>
@@ -476,7 +476,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns a binary representation of the SID (security id) of this user.</p>
-<p>Note: On platforms (like non-Windows platforms) where the platformSupportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classuserentry.html#a85571ebd2c87d74683fd40c9e82a7b13">getUserId()</a>. </p>
+<p>Note: On platforms (like non-Windows platforms) where the supportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classuserentry.html#a85571ebd2c87d74683fd40c9e82a7b13">getUserId()</a>. </p>
 
 </div>
 </div>
@@ -513,7 +513,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns a string representation of the SID (security id) of this user.</p>
-<p>Note: On platforms (like non-Windows platforms) where the platformSupportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classuserentry.html#a85571ebd2c87d74683fd40c9e82a7b13">getUserId()</a>. </p>
+<p>Note: On platforms (like non-Windows platforms) where the supportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classuserentry.html#a85571ebd2c87d74683fd40c9e82a7b13">getUserId()</a>. </p>
 
 </div>
 </div>
@@ -562,7 +562,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns the id of this user.</p>
-<p>Note: On platforms (like Windows) where the platformSupportsFormalSid method returns true, users don't have simple numeric ids. On those platforms, the value returned by this method is simply an index into an internal structure that methods of other rudiments classes know how to access and ultimately translate to a user. It should not be passed in to functions or methods of other libraries that don't ultimately use rudiments methods. </p>
+<p>Note: On platforms (like Windows) where the supportsFormalSid method returns true, users don't hav simple numeric ids. On those platforms, the value returned by this method is simply an index into an internal structure that methods of other rudiments classes know how to access and ultimately translate to a user. It should not be passed in to functions or methods of other libraries that don't ultimately use rudiments methods. </p>
 
 </div>
 </div>
@@ -632,33 +632,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae1f22a65d9badedbf73948341218ff6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1f22a65d9badedbf73948341218ff6d">&#9670;&nbsp;</a></span>platformSupportsFormalSid()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> userentry::platformSupportsFormalSid </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns true if the platform supports a formal user SID (security id) and false if not.</p>
-<p>Windows and windows-like platforms do. Unix and unix-like platforms (including Mac OS X) do not. </p>
-
-</div>
-</div>
 <a id="ac987a51fcc84246cd3dc0358c2703d60"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac987a51fcc84246cd3dc0358c2703d60">&#9670;&nbsp;</a></span>setMutex()</h2>
 
@@ -686,10 +659,37 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a4f89b8f62aca9824deaf61ca827d1fd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f89b8f62aca9824deaf61ca827d1fd0">&#9670;&nbsp;</a></span>supportsFormalSid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> userentry::supportsFormalSid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the platform supports a formal user SID (security id) and false if not.</p>
+<p>Windows and windows-like platforms do. Unix and unix-like platforms (including Mac OS X) do not. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -59,7 +59,7 @@ $(function() {
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        top(NULL),</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        first(NULL),</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        last(NULL),</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        length(0) {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        count(0) {</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;}</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
@@ -125,7 +125,7 @@ $(function() {
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        top=NULL;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        first=NULL;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        last=NULL;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        length=tree-&gt;getLength();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        count=tree-&gt;getCount();</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">if</span> (tree-&gt;getTop()) {</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
@@ -150,7 +150,7 @@ $(function() {
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        top=NULL;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        first=NULL;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        last=NULL;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        length=0;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        count=0;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">if</span> (coll-&gt;<a class="code" href="classnodecollection.html#a49c963152fd96052812c1b44778c7f89">getFirst</a>()) {</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
@@ -252,8 +252,8 @@ $(function() {
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                last=node;</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        }</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="comment">// increment length</span></div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        length++;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="comment">// increment count</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        count++;</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
@@ -325,8 +325,8 @@ $(function() {
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="comment">// detach the node</span></div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        node-&gt;detach(&amp;top);</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="comment">// decrement length</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        length--;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="comment">// decrement count</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        count--;</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordflow">return</span> node;</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;}</div>
@@ -361,8 +361,8 @@ $(function() {
 <div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="classavltree.html#abc02f0fdfc9fe360bfa2e24587286298">  316</a></span>&#160;uint64_t <a class="code" href="classavltree.html#abc02f0fdfc9fe360bfa2e24587286298">avltree&lt;valuetype&gt;::getLength</a>() {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">return</span> length;</div>
+<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="classavltree.html#acdacf151c5874a4d4159e374678fcc69">  316</a></span>&#160;uint64_t <a class="code" href="classavltree.html#acdacf151c5874a4d4159e374678fcc69">avltree&lt;valuetype&gt;::getCount</a>() {</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">return</span> count;</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;}</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
@@ -468,11 +468,11 @@ $(function() {
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;                node=p;</div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        }</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        </div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="comment">// clear pointers and length</span></div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="comment">// clear pointers and count</span></div>
 <div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        top=NULL;</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        first=NULL;</div>
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        last=NULL;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        length=0;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        count=0;</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;}</div>
@@ -1264,7 +1264,7 @@ $(function() {
 <div class="ttc" id="aclassavltree_html_a9fd6be56ad9467befbf7bb29221d5283"><div class="ttname"><a href="classavltree.html#a9fd6be56ad9467befbf7bb29221d5283">avltree::~avltree</a></div><div class="ttdeci">~avltree()</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:165</div></div>
 <div class="ttc" id="aclassavltree_html_aa1904238fdb925b9667595fc7d11a674"><div class="ttname"><a href="classavltree.html#aa1904238fdb925b9667595fc7d11a674">avltree::clear</a></div><div class="ttdeci">bool clear()</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:385</div></div>
 <div class="ttc" id="aclassavltree_html_ab745174911327a26e7df141ed11ea43c"><div class="ttname"><a href="classavltree.html#ab745174911327a26e7df141ed11ea43c">avltree::avltree</a></div><div class="ttdeci">avltree()</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:9</div></div>
-<div class="ttc" id="aclassavltree_html_abc02f0fdfc9fe360bfa2e24587286298"><div class="ttname"><a href="classavltree.html#abc02f0fdfc9fe360bfa2e24587286298">avltree::getLength</a></div><div class="ttdeci">uint64_t getLength()</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:316</div></div>
+<div class="ttc" id="aclassavltree_html_acdacf151c5874a4d4159e374678fcc69"><div class="ttname"><a href="classavltree.html#acdacf151c5874a4d4159e374678fcc69">avltree::getCount</a></div><div class="ttdeci">uint64_t getCount()</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:316</div></div>
 <div class="ttc" id="aclassavltree_html_ae43c0dde1e18b6c236ceb1dda7158911"><div class="ttname"><a href="classavltree.html#ae43c0dde1e18b6c236ceb1dda7158911">avltree::getNext</a></div><div class="ttdeci">treenode&lt; valuetype &gt; * getNext(treenode&lt; valuetype &gt; *node)</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:347</div></div>
 <div class="ttc" id="aclassavltreenode_html"><div class="ttname"><a href="classavltreenode.html">avltreenode</a></div><div class="ttdef"><b>Definition:</b> avltree.h:11</div></div>
 <div class="ttc" id="aclassavltreenode_html_a06277a2575ec0eaf64194debb7bb29c8"><div class="ttname"><a href="classavltreenode.html#a06277a2575ec0eaf64194debb7bb29c8">avltreenode::~avltreenode</a></div><div class="ttdeci">~avltreenode()</div><div class="ttdef"><b>Definition:</b> avltreeinlines.h:563</div></div>
@@ -1300,7 +1300,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -65,7 +65,7 @@ $(function() {
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classsys.html#a534e8a662981ff7ba5fd01048a328c30">   30</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">char</span>    *<a class="code" href="classsys.html#a534e8a662981ff7ba5fd01048a328c30">getOperatingSystemArchitecture</a>();</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classsys.html#aed4c2f57a07ac2a16c44086c7967f5b6">   35</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">bool</span>    <a class="code" href="classsys.html#aed4c2f57a07ac2a16c44086c7967f5b6">getIsBigEndian</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classsys.html#a158bc430ff66ea83609fb17a00be1528">   35</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">bool</span>    <a class="code" href="classsys.html#a158bc430ff66ea83609fb17a00be1528">isBigEndian</a>();</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classsys.html#a89edbb4f0c2fe0d99359d8227a75d9ee">   38</a></span>&#160;                <span class="keyword">static</span>  <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code" href="classsys.html#a89edbb4f0c2fe0d99359d8227a75d9ee">getRudimentsVersion</a>();</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
@@ -227,6 +227,7 @@ $(function() {
 <div class="ttc" id="aclasssys_html_a05151103d8656c3aa026e59a8121b7ac"><div class="ttname"><a href="classsys.html#a05151103d8656c3aa026e59a8121b7ac">sys::halt</a></div><div class="ttdeci">static bool halt()</div></div>
 <div class="ttc" id="aclasssys_html_a0a51c4d2f32ad7be424732fd8fdb56b1"><div class="ttname"><a href="classsys.html#a0a51c4d2f32ad7be424732fd8fdb56b1">sys::getMaxSemaphoreValue</a></div><div class="ttdeci">static int64_t getMaxSemaphoreValue()</div></div>
 <div class="ttc" id="aclasssys_html_a140e307456fa33fcedf07a01ea1efa43"><div class="ttname"><a href="classsys.html#a140e307456fa33fcedf07a01ea1efa43">sys::getAvailablePhysicalPageCount</a></div><div class="ttdeci">static int64_t getAvailablePhysicalPageCount()</div></div>
+<div class="ttc" id="aclasssys_html_a158bc430ff66ea83609fb17a00be1528"><div class="ttname"><a href="classsys.html#a158bc430ff66ea83609fb17a00be1528">sys::isBigEndian</a></div><div class="ttdeci">static bool isBigEndian()</div></div>
 <div class="ttc" id="aclasssys_html_a17e55f3c436abe040c1b3e16fbf7eb29"><div class="ttname"><a href="classsys.html#a17e55f3c436abe040c1b3e16fbf7eb29">sys::getHostName</a></div><div class="ttdeci">static char * getHostName()</div></div>
 <div class="ttc" id="aclasssys_html_a1a78c1f80ecfec520d7bb5dfae80a034"><div class="ttname"><a href="classsys.html#a1a78c1f80ecfec520d7bb5dfae80a034">sys::getPageSize</a></div><div class="ttdeci">static int32_t getPageSize()</div></div>
 <div class="ttc" id="aclasssys_html_a1d393e628893296aeb1c6c38c61dc6b3"><div class="ttname"><a href="classsys.html#a1d393e628893296aeb1c6c38c61dc6b3">sys::getMaxProcessesPerUser</a></div><div class="ttdeci">static int64_t getMaxProcessesPerUser()</div></div>
@@ -290,13 +291,12 @@ $(function() {
 <div class="ttc" id="aclasssys_html_ae3c5729164f95e152514e14fa47a447c"><div class="ttname"><a href="classsys.html#ae3c5729164f95e152514e14fa47a447c">sys::getClockTicksPerSecond</a></div><div class="ttdeci">static int64_t getClockTicksPerSecond()</div></div>
 <div class="ttc" id="aclasssys_html_ae8aeb8bdcac919bb278919125c24e8d9"><div class="ttname"><a href="classsys.html#ae8aeb8bdcac919bb278919125c24e8d9">sys::shutDown</a></div><div class="ttdeci">static bool shutDown()</div></div>
 <div class="ttc" id="aclasssys_html_aec85d9d6bb8f09d69a2ad5cdaaef3e78"><div class="ttname"><a href="classsys.html#aec85d9d6bb8f09d69a2ad5cdaaef3e78">sys::getMaxTerminalDeviceNameLength</a></div><div class="ttdeci">static int64_t getMaxTerminalDeviceNameLength()</div></div>
-<div class="ttc" id="aclasssys_html_aed4c2f57a07ac2a16c44086c7967f5b6"><div class="ttname"><a href="classsys.html#aed4c2f57a07ac2a16c44086c7967f5b6">sys::getIsBigEndian</a></div><div class="ttdeci">static bool getIsBigEndian()</div></div>
 <div class="ttc" id="aclasssys_html_aeed83ef80022a7df3b59c343f68f94a8"><div class="ttname"><a href="classsys.html#aeed83ef80022a7df3b59c343f68f94a8">sys::getMaxHostNameLength</a></div><div class="ttdeci">static int64_t getMaxHostNameLength()</div></div>
 <div class="ttc" id="aclasssys_html_af0850603305524fe2e033e2b02cd60cb"><div class="ttname"><a href="classsys.html#af0850603305524fe2e033e2b02cd60cb">sys::adviseWontNeed</a></div><div class="ttdeci">static bool adviseWontNeed(byte_t *ptr, size_t size)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

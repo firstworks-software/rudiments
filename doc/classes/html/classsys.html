@@ -56,8 +56,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a5bdabeae32ae6831d46094db116733be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a534e8a662981ff7ba5fd01048a328c30"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a534e8a662981ff7ba5fd01048a328c30">getOperatingSystemArchitecture</a> ()</td></tr>
 <tr class="separator:a534e8a662981ff7ba5fd01048a328c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed4c2f57a07ac2a16c44086c7967f5b6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#aed4c2f57a07ac2a16c44086c7967f5b6">getIsBigEndian</a> ()</td></tr>
-<tr class="separator:aed4c2f57a07ac2a16c44086c7967f5b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a158bc430ff66ea83609fb17a00be1528"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a158bc430ff66ea83609fb17a00be1528">isBigEndian</a> ()</td></tr>
+<tr class="separator:a158bc430ff66ea83609fb17a00be1528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89edbb4f0c2fe0d99359d8227a75d9ee"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a89edbb4f0c2fe0d99359d8227a75d9ee">getRudimentsVersion</a> ()</td></tr>
 <tr class="separator:a89edbb4f0c2fe0d99359d8227a75d9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17e55f3c436abe040c1b3e16fbf7eb29"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsys.html#a17e55f3c436abe040c1b3e16fbf7eb29">getHostName</a> ()</td></tr>
@@ -768,32 +768,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the host name of the machine that the program is running on, as understood by the kernel. This may or may not necessarily be the name the machine is known by on the network. </p>
-
-</div>
-</div>
-<a id="aed4c2f57a07ac2a16c44086c7967f5b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed4c2f57a07ac2a16c44086c7967f5b6">&#9670;&nbsp;</a></span>getIsBigEndian()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> sys::getIsBigEndian </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns true if the byte order of the system is big endian and false if the byte order of the system is little endian. </p>
 
 </div>
 </div>
@@ -2131,6 +2105,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a158bc430ff66ea83609fb17a00be1528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a158bc430ff66ea83609fb17a00be1528">&#9670;&nbsp;</a></span>isBigEndian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> sys::isBigEndian </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the byte order of the system is big endian and false if the byte order of the system is little endian. </p>
+
+</div>
+</div>
 <a id="ad8f4307b0bdab63bab2766567e8be9be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8f4307b0bdab63bab2766567e8be9be">&#9670;&nbsp;</a></span>reboot()</h2>
 
@@ -2349,7 +2349,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -204,7 +204,7 @@ $(function() {
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="comment">// if we have initial resources available to loan out,</span></div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="comment">// then loan one out</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">if</span> (initiallist.getLength()) {</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">if</span> (initiallist.getCount()) {</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="comment">// the list contains resources available to be loaned out and</span></div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                <span class="comment">// the tree contains resources that have been loaned out,</span></div>
@@ -226,7 +226,7 @@ $(function() {
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="comment">// if we don&#39;t have any on-demand resources available to loan out,</span></div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="comment">// then grow, if we can</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">if</span> (!ondemandlist.getLength()) {</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">if</span> (!ondemandlist.getCount()) {</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                <span class="keywordflow">for</span> (uint64_t i=0; i&lt;growby &amp;&amp; total&lt;max; i++) {</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                        valuetype       *v=createResource();</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                        ondemandlist.append(v);</div>
@@ -236,7 +236,7 @@ $(function() {
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="comment">// if we have on-demand resources available to loan out,</span></div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="comment">// then loan one out</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordflow">if</span> (ondemandlist.getLength()) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordflow">if</span> (ondemandlist.getCount()) {</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                <span class="comment">// the list contains resources available to be loaned out and</span></div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                <span class="comment">// the tree contains resources that have been loaned out,</span></div>
@@ -322,14 +322,14 @@ $(function() {
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="classresourcepool.html#afbd82f767f92b8adcdf8ce4fd83da368">  276</a></span>&#160;uint64_t <a class="code" href="classresourcepool.html#afbd82f767f92b8adcdf8ce4fd83da368">resourcepool&lt;valuetype&gt;::getAvailableInitialResourceCount</a>() {</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">return</span> initiallist.getLength();</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">return</span> initiallist.getCount();</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;}</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="keyword">inline</span></div>
 <div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="classresourcepool.html#aa1ac72b4a76c970d9e15da449d6ef3a3">  283</a></span>&#160;uint64_t <a class="code" href="classresourcepool.html#aa1ac72b4a76c970d9e15da449d6ef3a3">resourcepool&lt;valuetype&gt;::getAvailableOnDemandResourceCount</a>() {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">return</span> ondemandlist.getLength();</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">return</span> ondemandlist.getCount();</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}</div>
 <div class="ttc" id="aclasslistnode_html"><div class="ttname"><a href="classlistnode.html">listnode</a></div><div class="ttdef"><b>Definition:</b> listcollection.h:12</div></div>
 <div class="ttc" id="aclasslistnode_html_ad90ae46b77baa1628493ed2da9660f71"><div class="ttname"><a href="classlistnode.html#ad90ae46b77baa1628493ed2da9660f71">listnode::getValue</a></div><div class="ttdeci">virtual valuetype getValue()=0</div></div>
@@ -358,7 +358,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -62,16 +62,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad7c448d397b5ac682a030b1bf41545c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad053016da776f99e3cb0ce89647f6529"><td class="memItemLeft" align="right" valign="top">virtual byte_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#ad053016da776f99e3cb0ce89647f6529">getKey</a> ()</td></tr>
 <tr class="separator:ad053016da776f99e3cb0ce89647f6529"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a98e575b9f998806b996295bcd67177"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a1a98e575b9f998806b996295bcd67177">getKeySize</a> ()=0</td></tr>
-<tr class="separator:a1a98e575b9f998806b996295bcd67177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a091043a4894069d442ecd7866b7ed236"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a091043a4894069d442ecd7866b7ed236">getKeySize</a> ()=0</td></tr>
+<tr class="separator:a091043a4894069d442ecd7866b7ed236"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaf48f3c2cc4d9db90e8fb21e4c02030"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#acaf48f3c2cc4d9db90e8fb21e4c02030">setIv</a> (const byte_t *iv, size_t ivsize)</td></tr>
 <tr class="separator:acaf48f3c2cc4d9db90e8fb21e4c02030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9f7eaefdcc153523ad4d8c7ba01b111"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#aa9f7eaefdcc153523ad4d8c7ba01b111">setRandomIv</a> ()</td></tr>
 <tr class="separator:aa9f7eaefdcc153523ad4d8c7ba01b111"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a87c44ff02889ab9facac7c4e5e12f1"><td class="memItemLeft" align="right" valign="top">virtual byte_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a2a87c44ff02889ab9facac7c4e5e12f1">getIv</a> ()</td></tr>
 <tr class="separator:a2a87c44ff02889ab9facac7c4e5e12f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bf8c98815ed4cc675bf4841b05828c0"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a8bf8c98815ed4cc675bf4841b05828c0">getIvSize</a> ()=0</td></tr>
-<tr class="separator:a8bf8c98815ed4cc675bf4841b05828c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92b4d11afce79adfac5a9f6f8143c147"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a92b4d11afce79adfac5a9f6f8143c147">getIvSize</a> ()=0</td></tr>
+<tr class="separator:a92b4d11afce79adfac5a9f6f8143c147"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36beb1d585e456c0701acfc65787cf8c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a36beb1d585e456c0701acfc65787cf8c">append</a> (const byte_t *data, uint32_t size)</td></tr>
 <tr class="separator:a36beb1d585e456c0701acfc65787cf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bb8b61aa9d13a65fdb835183482dbe4"><td class="memItemLeft" align="right" valign="top">virtual const byte_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classencryption.html#a8bb8b61aa9d13a65fdb835183482dbe4">getEncryptedData</a> ()=0</td></tr>
@@ -370,8 +370,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8bf8c98815ed4cc675bf4841b05828c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bf8c98815ed4cc675bf4841b05828c0">&#9670;&nbsp;</a></span>getIvSize()</h2>
+<a id="a92b4d11afce79adfac5a9f6f8143c147"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92b4d11afce79adfac5a9f6f8143c147">&#9670;&nbsp;</a></span>getIvSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -380,7 +380,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual uint32_t encryption::getIvSize </td>
+          <td class="memname">virtual size_t encryption::getIvSize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -394,7 +394,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the number of bytes in the initialization vector. </p>
 
-<p>Implemented in <a class="el" href="classaes128.html#a536972105bfc68410e9633c440d56835">aes128</a>.</p>
+<p>Implemented in <a class="el" href="classaes128.html#acf5e4d2457f8b9ec067285048b521790">aes128</a>.</p>
 
 </div>
 </div>
@@ -424,8 +424,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1a98e575b9f998806b996295bcd67177"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a98e575b9f998806b996295bcd67177">&#9670;&nbsp;</a></span>getKeySize()</h2>
+<a id="a091043a4894069d442ecd7866b7ed236"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a091043a4894069d442ecd7866b7ed236">&#9670;&nbsp;</a></span>getKeySize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,7 +434,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual uint32_t encryption::getKeySize </td>
+          <td class="memname">virtual size_t encryption::getKeySize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -448,7 +448,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the number of bytes in the key. </p>
 
-<p>Implemented in <a class="el" href="classaes128.html#a2d17d150f176ce0b5c815d1ef4d081ef">aes128</a>.</p>
+<p>Implemented in <a class="el" href="classaes128.html#a57a0d882df6cb19e171d0f8cebe6443c">aes128</a>.</p>
 
 </div>
 </div>
@@ -514,7 +514,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Sets the initialization vector used for encryption/decryption to the first "ivsize" bytes of "iv".</p>
 <p>Returns true on success and false if an error occurred.</p>
-<p>The most common error is that "ivsize" is not the correct number of bytes. The method <a class="el" href="classencryption.html#a1a98e575b9f998806b996295bcd67177">getKeySize()</a> returns the correct number of bytes for the key. </p>
+<p>The most common error is that "ivsize" is not the correct number of bytes. The method <a class="el" href="classencryption.html#a091043a4894069d442ecd7866b7ed236">getKeySize()</a> returns the correct number of bytes for the key. </p>
 
 </div>
 </div>
@@ -553,7 +553,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Sets the key used for encryption/decryption to the first "keysize" bytes of "key".</p>
 <p>Returns true on success and false if an error occurred.</p>
-<p>The most common error is that "keysize" is not the correct number of bytes. The method <a class="el" href="classencryption.html#a1a98e575b9f998806b996295bcd67177">getKeySize()</a> returns the correct number of bytes for the key. </p>
+<p>The most common error is that "keysize" is not the correct number of bytes. The method <a class="el" href="classencryption.html#a091043a4894069d442ecd7866b7ed236">getKeySize()</a> returns the correct number of bytes for the key. </p>
 
 </div>
 </div>
@@ -612,7 +612,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -54,8 +54,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a8e496ae468e63650f9f7102b38b32084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15014f517f91ca77e1126621b3844247"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsignalmanager.html#a15014f517f91ca77e1126621b3844247">waitForSignals</a> (<a class="el" href="classsignalset.html">signalset</a> *mask)</td></tr>
 <tr class="separator:a15014f517f91ca77e1126621b3844247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3652b35722334c8671d7c129b2d470ad"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsignalmanager.html#a3652b35722334c8671d7c129b2d470ad">examineBlockedSignals</a> (<a class="el" href="classsignalset.html">signalset</a> *sset)</td></tr>
-<tr class="separator:a3652b35722334c8671d7c129b2d470ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6cf4418354ef1680450f4f6ed657e4c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsignalmanager.html#ac6cf4418354ef1680450f4f6ed657e4c">getBlockedSignals</a> (<a class="el" href="classsignalset.html">signalset</a> *sset)</td></tr>
+<tr class="separator:ac6cf4418354ef1680450f4f6ed657e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The signalmanager class provides methods for sending, blocking and waiting for signals. </p>
@@ -88,8 +88,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3652b35722334c8671d7c129b2d470ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3652b35722334c8671d7c129b2d470ad">&#9670;&nbsp;</a></span>examineBlockedSignals()</h2>
+<a id="ac6cf4418354ef1680450f4f6ed657e4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6cf4418354ef1680450f4f6ed657e4c">&#9670;&nbsp;</a></span>getBlockedSignals()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -98,7 +98,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> signalmanager::examineBlockedSignals </td>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> signalmanager::getBlockedSignals </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classsignalset.html">signalset</a> *&#160;</td>
           <td class="paramname"><em>sset</em></td><td>)</td>
@@ -111,7 +111,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets "sset" to the set of signals that were raised, but blocked during a call to <a class="el" href="classsignalmanager.html#a15014f517f91ca77e1126621b3844247">waitForSignals()</a>. Returns true on success and false on failure. </p>
+<p>Sets "sset" to the set of signals that were raised, but blocked during the most recent call to <a class="el" href="classsignalmanager.html#a15014f517f91ca77e1126621b3844247">waitForSignals()</a>. Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -165,14 +165,14 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Wait until a signal NOT in the signal set "mask" is received. Returns true on success and false on failure. </p>
+<p>Wait until a signal NOT in the signal set "mask" has been received. Returns true on success and false on failure. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:04 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

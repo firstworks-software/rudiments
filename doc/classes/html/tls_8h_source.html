@@ -57,7 +57,7 @@ $(function() {
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classtls.html">   12</a></span>&#160;<span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code" href="classtls.html">tls</a> {</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classtls.html#a4b66c1debf3d43913c12946c522057da">   16</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">bool</span>    <a class="code" href="classtls.html#a4b66c1debf3d43913c12946c522057da">supported</a>();</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classtls.html#a43732e981177265b4bacca329458c78e">   16</a></span>&#160;                <span class="keyword">static</span>  <span class="keywordtype">bool</span>    <a class="code" href="classtls.html#a43732e981177265b4bacca329458c78e">isSupported</a>();</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/tls.h&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
@@ -117,7 +117,7 @@ $(function() {
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
 <div class="line"><a name="l00332"></a><span class="lineno"><a class="line" href="classtlscontext.html#a52558ec1a215e455a5175981a7d7a219">  332</a></span>&#160;                ssize_t <a class="code" href="classtlscontext.html#a52558ec1a215e455a5175981a7d7a219">write</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *buf, <span class="keywordtype">size_t</span> size);</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="classtlscontext.html#a5dee7d5f923b39a59defd76bdd37fed6">  336</a></span>&#160;                <span class="keywordtype">size_t</span> <a class="code" href="classtlscontext.html#a5dee7d5f923b39a59defd76bdd37fed6">pending</a>();</div>
+<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="classtlscontext.html#afa867b99ec5a55f4f7fdd4fef7220b39">  336</a></span>&#160;                <span class="keywordtype">size_t</span> <a class="code" href="classtlscontext.html#afa867b99ec5a55f4f7fdd4fef7220b39">getPendingSize</a>();</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
 <div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="classtlscontext.html#a57170a5bc65c7131193a9a76856164ab">  340</a></span>&#160;                <span class="keywordtype">bool</span>    <a class="code" href="classtlscontext.html#a57170a5bc65c7131193a9a76856164ab">close</a>();</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
@@ -175,7 +175,7 @@ $(function() {
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition:</b> object.h:10</div></div>
 <div class="ttc" id="aclasssecuritycontext_html"><div class="ttname"><a href="classsecuritycontext.html">securitycontext</a></div><div class="ttdef"><b>Definition:</b> securitycontext.h:11</div></div>
 <div class="ttc" id="aclasstls_html"><div class="ttname"><a href="classtls.html">tls</a></div><div class="ttdef"><b>Definition:</b> tls.h:12</div></div>
-<div class="ttc" id="aclasstls_html_a4b66c1debf3d43913c12946c522057da"><div class="ttname"><a href="classtls.html#a4b66c1debf3d43913c12946c522057da">tls::supported</a></div><div class="ttdeci">static bool supported()</div></div>
+<div class="ttc" id="aclasstls_html_a43732e981177265b4bacca329458c78e"><div class="ttname"><a href="classtls.html#a43732e981177265b4bacca329458c78e">tls::isSupported</a></div><div class="ttdeci">static bool isSupported()</div></div>
 <div class="ttc" id="aclasstlscertificate_html"><div class="ttname"><a href="classtlscertificate.html">tlscertificate</a></div><div class="ttdef"><b>Definition:</b> tls.h:361</div></div>
 <div class="ttc" id="aclasstlscertificate_html_a1510bc4699cf7f5ef8a4c0690b7fada5"><div class="ttname"><a href="classtlscertificate.html#a1510bc4699cf7f5ef8a4c0690b7fada5">tlscertificate::getSubjectAlternateNames</a></div><div class="ttdeci">linkedlist&lt; char * &gt; * getSubjectAlternateNames()</div></div>
 <div class="ttc" id="aclasstlscertificate_html_a17c7d30d8b2bc967ee8fd35a093b04d5"><div class="ttname"><a href="classtlscertificate.html#a17c7d30d8b2bc967ee8fd35a093b04d5">tlscertificate::getValidFrom</a></div><div class="ttdeci">datetime * getValidFrom()</div></div>
@@ -208,7 +208,6 @@ $(function() {
 <div class="ttc" id="aclasstlscontext_html_a51c39b5df1d6c9e19d55a17ea308044e"><div class="ttname"><a href="classtlscontext.html#a51c39b5df1d6c9e19d55a17ea308044e">tlscontext::setValidationDepth</a></div><div class="ttdeci">void setValidationDepth(uint16_t depth)</div></div>
 <div class="ttc" id="aclasstlscontext_html_a52558ec1a215e455a5175981a7d7a219"><div class="ttname"><a href="classtlscontext.html#a52558ec1a215e455a5175981a7d7a219">tlscontext::write</a></div><div class="ttdeci">ssize_t write(const void *buf, size_t size)</div></div>
 <div class="ttc" id="aclasstlscontext_html_a57170a5bc65c7131193a9a76856164ab"><div class="ttname"><a href="classtlscontext.html#a57170a5bc65c7131193a9a76856164ab">tlscontext::close</a></div><div class="ttdeci">bool close()</div></div>
-<div class="ttc" id="aclasstlscontext_html_a5dee7d5f923b39a59defd76bdd37fed6"><div class="ttname"><a href="classtlscontext.html#a5dee7d5f923b39a59defd76bdd37fed6">tlscontext::pending</a></div><div class="ttdeci">size_t pending()</div></div>
 <div class="ttc" id="aclasstlscontext_html_a6195bc26845204fa5a2ea30e97f38913"><div class="ttname"><a href="classtlscontext.html#a6195bc26845204fa5a2ea30e97f38913">tlscontext::setCertificateChainFile</a></div><div class="ttdeci">void setCertificateChainFile(const char *filename)</div></div>
 <div class="ttc" id="aclasstlscontext_html_a7893c1740acfac805de4abbf4318c2e4"><div class="ttname"><a href="classtlscontext.html#a7893c1740acfac805de4abbf4318c2e4">tlscontext::read</a></div><div class="ttdeci">ssize_t read(void *buf, size_t size)</div></div>
 <div class="ttc" id="aclasstlscontext_html_aadc09ae9962b063c4b052932d65d72a6"><div class="ttname"><a href="classtlscontext.html#aadc09ae9962b063c4b052932d65d72a6">tlscontext::getPrivateKeyFile</a></div><div class="ttdeci">const char * getPrivateKeyFile()</div></div>
@@ -222,11 +221,12 @@ $(function() {
 <div class="ttc" id="aclasstlscontext_html_ae4b5a4856a7fd854d2284958bc389b96"><div class="ttname"><a href="classtlscontext.html#ae4b5a4856a7fd854d2284958bc389b96">tlscontext::getValidationDepth</a></div><div class="ttdeci">uint16_t getValidationDepth()</div></div>
 <div class="ttc" id="aclasstlscontext_html_af01ed813bb31e2a7145cc0f47cab4fd3"><div class="ttname"><a href="classtlscontext.html#af01ed813bb31e2a7145cc0f47cab4fd3">tlscontext::setPrivateKeyFile</a></div><div class="ttdeci">void setPrivateKeyFile(const char *filename)</div></div>
 <div class="ttc" id="aclasstlscontext_html_af1efb2f0c995c9e509fa68098b1aeb5a"><div class="ttname"><a href="classtlscontext.html#af1efb2f0c995c9e509fa68098b1aeb5a">tlscontext::~tlscontext</a></div><div class="ttdeci">virtual ~tlscontext()</div></div>
+<div class="ttc" id="aclasstlscontext_html_afa867b99ec5a55f4f7fdd4fef7220b39"><div class="ttname"><a href="classtlscontext.html#afa867b99ec5a55f4f7fdd4fef7220b39">tlscontext::getPendingSize</a></div><div class="ttdeci">size_t getPendingSize()</div></div>
 <div class="ttc" id="aclasstlscontext_html_afd1555876488f36d8ded65c1ee26d7d9"><div class="ttname"><a href="classtlscontext.html#afd1555876488f36d8ded65c1ee26d7d9">tlscontext::setCiphers</a></div><div class="ttdeci">void setCiphers(const char *ciphers)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

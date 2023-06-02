@@ -50,11 +50,11 @@ $(function() {
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <span class="keywordtype">void</span>            construct(uint64_t initiallength,</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;                <span class="keywordtype">void</span>            construct(uint64_t initialcount,</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;                                                uint64_t increment);</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;                <span class="keywordtype">void</span>            clone(<a class="code" href="classdynamicarray.html">dynamicarray&lt;valuetype&gt;</a> &amp;v);</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                <span class="keywordtype">void</span>            clone(<a class="code" href="classarraycollection.html">arraycollection&lt;valuetype&gt;</a> &amp;v);</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                <span class="keywordtype">void</span>            extend(uint64_t length);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                <span class="keywordtype">void</span>            extend(uint64_t count);</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;                <span class="keywordtype">size_t</span>          findExtentStartIndex(uint64_t index);</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                valuetype       &amp;find(uint64_t index);</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                <span class="keywordtype">void</span>            deleteManagedValues();</div>
@@ -63,10 +63,10 @@ $(function() {
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <a class="code" href="classlistnode.html">listnode&lt;valuetype *&gt;</a>   *curext;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                uint64_t                curind;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                uint64_t        initlen;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                uint64_t        inclen;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                uint64_t        totallen;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                uint64_t        lastlen;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                uint64_t        initcount;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                uint64_t        inccount;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                uint64_t        totalcount;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                uint64_t        lastcount;</div>
 <div class="ttc" id="aclassarraycollection_html"><div class="ttname"><a href="classarraycollection.html">arraycollection</a></div><div class="ttdef"><b>Definition:</b> arraycollection.h:13</div></div>
 <div class="ttc" id="aclassdynamicarray_html"><div class="ttname"><a href="classdynamicarray.html">dynamicarray</a></div><div class="ttdef"><b>Definition:</b> dynamicarray.h:52</div></div>
 <div class="ttc" id="aclasslinkedlist_html"><div class="ttname"><a href="classlinkedlist.html">linkedlist</a></div><div class="ttdef"><b>Definition:</b> linkedlist.h:47</div></div>
@@ -74,7 +74,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

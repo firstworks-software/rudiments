@@ -76,8 +76,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aeb70ad038e1ca69fe867b939287c8da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6b73e94891b86fd36012116a11984cb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classlinkedlist.html">linkedlist</a>&lt; keytype &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionarycollection.html#ab6b73e94891b86fd36012116a11984cb">getKeys</a> ()=0</td></tr>
 <tr class="separator:ab6b73e94891b86fd36012116a11984cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a037d6283dcaf39072533d4fb87a32c73"><td class="memItemLeft" align="right" valign="top">virtual uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionarycollection.html#a037d6283dcaf39072533d4fb87a32c73">getLength</a> ()=0</td></tr>
-<tr class="separator:a037d6283dcaf39072533d4fb87a32c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90cc40c50c809b6fe9f6dfdde41d5d31"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionarycollection.html#a90cc40c50c809b6fe9f6dfdde41d5d31">remove</a> (keytype key)=0</td></tr>
 <tr class="separator:a90cc40c50c809b6fe9f6dfdde41d5d31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad90d71036e92c8add2b45ba383a43cd0"><td class="memItemLeft" align="right" valign="top">virtual ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionarycollection.html#ad90d71036e92c8add2b45ba383a43cd0">write</a> ()</td></tr>
@@ -101,18 +99,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a356698fc38710fa46238c52e24367d9d inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fb9ab070a9c23dab93a761c63ed6e73 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a0fb9ab070a9c23dab93a761c63ed6e73">~collection</a> ()</td></tr>
 <tr class="separator:a0fb9ab070a9c23dab93a761c63ed6e73 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a407da4cd9b238689e725ec87469c9820 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a407da4cd9b238689e725ec87469c9820">getCount</a> ()=0</td></tr>
+<tr class="separator:a407da4cd9b238689e725ec87469c9820 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1a61bfff46d1aeaf445f673a4423839 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcomparator.html">comparator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#ad1a61bfff46d1aeaf445f673a4423839">getComparator</a> ()</td></tr>
 <tr class="separator:ad1a61bfff46d1aeaf445f673a4423839 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14bcb0d4300b2cdc5a7945cfaf092c7e inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a14bcb0d4300b2cdc5a7945cfaf092c7e">setComparator</a> (<a class="el" href="classcomparator.html">comparator</a> *newcomp)</td></tr>
 <tr class="separator:a14bcb0d4300b2cdc5a7945cfaf092c7e inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f895bd43f599eac4a40640f70641eff inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a9f895bd43f599eac4a40640f70641eff">getIsReadOnly</a> ()</td></tr>
-<tr class="separator:a9f895bd43f599eac4a40640f70641eff inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09c13e45c3bcebd5c8cd2fc05ea0336e inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a09c13e45c3bcebd5c8cd2fc05ea0336e">getIsBlockBased</a> ()</td></tr>
-<tr class="separator:a09c13e45c3bcebd5c8cd2fc05ea0336e inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5059d78cd77197727c3c674151eea083 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a5059d78cd77197727c3c674151eea083">isReadOnly</a> ()</td></tr>
+<tr class="separator:a5059d78cd77197727c3c674151eea083 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae09521a76312d4436b7146cc28de746c inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#ae09521a76312d4436b7146cc28de746c">isBlockBased</a> ()</td></tr>
+<tr class="separator:ae09521a76312d4436b7146cc28de746c inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca52ffc2466bd9aa8d957f35c0e98c62 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#aca52ffc2466bd9aa8d957f35c0e98c62">getBlockSize</a> ()</td></tr>
 <tr class="separator:aca52ffc2466bd9aa8d957f35c0e98c62 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8d8b633d98d56ecb9fd294f6df714e5 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#ad8d8b633d98d56ecb9fd294f6df714e5">getIsSequentialAccess</a> ()</td></tr>
-<tr class="separator:ad8d8b633d98d56ecb9fd294f6df714e5 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc375a16f090504975252ef27a83f923 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#adc375a16f090504975252ef27a83f923">isSequentialAccess</a> ()</td></tr>
+<tr class="separator:adc375a16f090504975252ef27a83f923 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95fe22a12fb3fb96c39be949041e7410 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#a95fe22a12fb3fb96c39be949041e7410">setManageValues</a> (<a class="el" href="classbool.html">bool</a> manage)</td></tr>
 <tr class="separator:a95fe22a12fb3fb96c39be949041e7410 inherit pub_methods_classcollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab23659d6097251b480c5c22802bc6126 inherit pub_methods_classcollection"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcollection.html#ab23659d6097251b480c5c22802bc6126">getManageValues</a> ()</td></tr>
@@ -240,36 +240,6 @@ template&lt;class keytype , class valuetype &gt; </div>
 <p>Returns a list of the keys in the dictionary. </p>
 
 <p>Implemented in <a class="el" href="classdictionary.html#a63dcb0a304be26b33e52eca1bd7f15c7">dictionary&lt; keytype, valuetype &gt;</a>.</p>
-
-</div>
-</div>
-<a id="a037d6283dcaf39072533d4fb87a32c73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a037d6283dcaf39072533d4fb87a32c73">&#9670;&nbsp;</a></span>getLength()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class keytype , class valuetype &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual uint64_t <a class="el" href="classdictionarycollection.html">dictionarycollection</a>&lt; keytype, valuetype &gt;::getLength </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the number of key/value pairs in the dictionary. </p>
-
-<p>Implemented in <a class="el" href="classdictionary.html#a821b3bf236d1006e0f00a1f281680d0c">dictionary&lt; keytype, valuetype &gt;</a>.</p>
 
 </div>
 </div>
@@ -845,7 +815,7 @@ template&lt;class keytype , class valuetype &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:15 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

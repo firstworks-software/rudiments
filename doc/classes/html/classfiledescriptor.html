@@ -75,14 +75,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a886db6103e51b87b877593d066c0ca22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0799678fb81a39efec06e51c10f1325"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsocketlayer.html">socketlayer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad0799678fb81a39efec06e51c10f1325">getSocketLayer</a> ()</td></tr>
 <tr class="separator:ad0799678fb81a39efec06e51c10f1325"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba9a7fa52d49184adda885bf76e1197b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">supportsBlockingNonBlockingModes</a> ()</td></tr>
-<tr class="separator:aba9a7fa52d49184adda885bf76e1197b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af24b2ab45dafb96beb507b4e7d984831"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#af24b2ab45dafb96beb507b4e7d984831">useNonBlockingMode</a> ()</td></tr>
-<tr class="separator:af24b2ab45dafb96beb507b4e7d984831"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9ae2997a92b2ba36f8f5700dc9b5e9f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ae9ae2997a92b2ba36f8f5700dc9b5e9f">useBlockingMode</a> ()</td></tr>
-<tr class="separator:ae9ae2997a92b2ba36f8f5700dc9b5e9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30cd8c8d066e8983af884aeafadb150b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a30cd8c8d066e8983af884aeafadb150b">isUsingNonBlockingMode</a> ()</td></tr>
-<tr class="separator:a30cd8c8d066e8983af884aeafadb150b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a471a3422ae31e8282b5d1e6e488add5f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a471a3422ae31e8282b5d1e6e488add5f">supportsBlockingAndNonBlockingModes</a> ()</td></tr>
+<tr class="separator:a471a3422ae31e8282b5d1e6e488add5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0edee541e496345df3c40251baba90ab"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a0edee541e496345df3c40251baba90ab">setNonBlockingMode</a> (<a class="el" href="classbool.html">bool</a> usenonblockingmode)</td></tr>
+<tr class="separator:a0edee541e496345df3c40251baba90ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5afa621f441da9789e00551f49b5f43"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac5afa621f441da9789e00551f49b5f43">getNonBlockingMode</a> ()</td></tr>
+<tr class="separator:ac5afa621f441da9789e00551f49b5f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a324b121fbe0bd26fa5d6823edc3ccab2"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a324b121fbe0bd26fa5d6823edc3ccab2">getPosition</a> ()</td></tr>
 <tr class="separator:a324b121fbe0bd26fa5d6823edc3ccab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99e466741fe2e54e106ebfdc0d64970d"><td class="memItemLeft" align="right" valign="top">virtual off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a99e466741fe2e54e106ebfdc0d64970d">setPositionRelativeToBeginning</a> (off64_t offset)</td></tr>
@@ -265,44 +263,34 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a31b1772d651f75f01beeee67a733a3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66e89d1defd4452796446763978c2cc6"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a66e89d1defd4452796446763978c2cc6">waitForNonBlockingWrite</a> (int32_t sec, int32_t usec)</td></tr>
 <tr class="separator:a66e89d1defd4452796446763978c2cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a873da850bf73716babe080f7fa723784"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a873da850bf73716babe080f7fa723784">retryInterruptedReads</a> ()</td></tr>
-<tr class="separator:a873da850bf73716babe080f7fa723784"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f7311c4fa746bcf1f75f076264c308b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7f7311c4fa746bcf1f75f076264c308b">dontRetryInterruptedReads</a> ()</td></tr>
-<tr class="separator:a7f7311c4fa746bcf1f75f076264c308b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4529990cf8f4b6eeca8743b6638ed7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ae4529990cf8f4b6eeca8743b6638ed7b">setRetryInterruptedReads</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:ae4529990cf8f4b6eeca8743b6638ed7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6bf09e0a9122f2066bb68cdb8251e90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac6bf09e0a9122f2066bb68cdb8251e90">getRetryInterruptedReads</a> ()</td></tr>
 <tr class="separator:ac6bf09e0a9122f2066bb68cdb8251e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac372c3c60abd093ea7a0b70c74e30f9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac372c3c60abd093ea7a0b70c74e30f9b">retryInterruptedWrites</a> ()</td></tr>
-<tr class="separator:ac372c3c60abd093ea7a0b70c74e30f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac70cc7d8e024f7bb6bf8fc926067d9ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac70cc7d8e024f7bb6bf8fc926067d9ba">dontRetryInterruptedWrites</a> ()</td></tr>
-<tr class="separator:ac70cc7d8e024f7bb6bf8fc926067d9ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a829dd471c24d0763fbde01627da8ef81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a829dd471c24d0763fbde01627da8ef81">setRetryInterruptedWrites</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:a829dd471c24d0763fbde01627da8ef81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a489ed7729bfe7109f020fbf07afc2ecb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a489ed7729bfe7109f020fbf07afc2ecb">getRetryInterruptedWrites</a> ()</td></tr>
 <tr class="separator:a489ed7729bfe7109f020fbf07afc2ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6f560f93d4b1ee57a7332b19588d3af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ae6f560f93d4b1ee57a7332b19588d3af">retryInterruptedWaits</a> ()</td></tr>
-<tr class="separator:ae6f560f93d4b1ee57a7332b19588d3af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a879e0146d88f66e6188442e8b4b1cb8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a879e0146d88f66e6188442e8b4b1cb8b">dontRetryInterruptedWaits</a> ()</td></tr>
-<tr class="separator:a879e0146d88f66e6188442e8b4b1cb8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7433ed652d0d88d788e2ed01bef36e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac7433ed652d0d88d788e2ed01bef36e8">setRetryInterruptedWaits</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:ac7433ed652d0d88d788e2ed01bef36e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5beaed3dac2c74d42b5010684dd7096"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ae5beaed3dac2c74d42b5010684dd7096">getRetryInterruptedWaits</a> ()</td></tr>
 <tr class="separator:ae5beaed3dac2c74d42b5010684dd7096"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aced1588c0b772a96548b8b1a737199c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aced1588c0b772a96548b8b1a737199c2">retryInterruptedFcntl</a> ()</td></tr>
-<tr class="separator:aced1588c0b772a96548b8b1a737199c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32dd611bf1ab97bfff2c14535a403f74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a32dd611bf1ab97bfff2c14535a403f74">dontRetryInterruptedFcntl</a> ()</td></tr>
-<tr class="separator:a32dd611bf1ab97bfff2c14535a403f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74e8469247e6988e44471ae573391f39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a74e8469247e6988e44471ae573391f39">setRetryInterruptedFcntl</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:a74e8469247e6988e44471ae573391f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84ae20ad9ff18e318e43e676eede5ae3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a84ae20ad9ff18e318e43e676eede5ae3">getRetryInterruptedFcntl</a> ()</td></tr>
 <tr class="separator:a84ae20ad9ff18e318e43e676eede5ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08e322411718595166970dc371981457"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a08e322411718595166970dc371981457">retryInterruptedIoctl</a> ()</td></tr>
-<tr class="separator:a08e322411718595166970dc371981457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50e1255f92ef1f93396a2badabe8998b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a50e1255f92ef1f93396a2badabe8998b">dontRetryInterruptedIoctl</a> ()</td></tr>
-<tr class="separator:a50e1255f92ef1f93396a2badabe8998b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a135bfba9e3bf5b08e6c9077aaf288a9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a135bfba9e3bf5b08e6c9077aaf288a9a">setRetryInterruptedIoctl</a> (<a class="el" href="classbool.html">bool</a> retry)</td></tr>
+<tr class="separator:a135bfba9e3bf5b08e6c9077aaf288a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ad019f80273910b37f8e054108efb0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a6ad019f80273910b37f8e054108efb0e">getRetryInterruptedIoctl</a> ()</td></tr>
 <tr class="separator:a6ad019f80273910b37f8e054108efb0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8385bed0f0586feb7129ffa3ce5e5c55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a8385bed0f0586feb7129ffa3ce5e5c55">allowShortReads</a> ()</td></tr>
-<tr class="separator:a8385bed0f0586feb7129ffa3ce5e5c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a450567c8744e8162832cfc325051ee6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a450567c8744e8162832cfc325051ee6e">dontAllowShortReads</a> ()</td></tr>
-<tr class="separator:a450567c8744e8162832cfc325051ee6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe7c22612b0dd31718fac688d896b084"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#abe7c22612b0dd31718fac688d896b084">allowShortWrites</a> ()</td></tr>
-<tr class="separator:abe7c22612b0dd31718fac688d896b084"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5585ce27c88d29da92e37aa23f027e1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5585ce27c88d29da92e37aa23f027e1b">dontAllowShortWrites</a> ()</td></tr>
-<tr class="separator:a5585ce27c88d29da92e37aa23f027e1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f2c31b9e9ec6b1e98725a2f249887e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7f2c31b9e9ec6b1e98725a2f249887e8">setAllowShortReads</a> (<a class="el" href="classbool.html">bool</a> allow)</td></tr>
+<tr class="separator:a7f2c31b9e9ec6b1e98725a2f249887e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05c567b59fb1b98bd6f0d1d6c4d5236c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a05c567b59fb1b98bd6f0d1d6c4d5236c">getAllowShortReads</a> ()</td></tr>
+<tr class="separator:a05c567b59fb1b98bd6f0d1d6c4d5236c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc842cade350981515f90be4c480670a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#acc842cade350981515f90be4c480670a">setAllowShortWrites</a> (<a class="el" href="classbool.html">bool</a> allow)</td></tr>
+<tr class="separator:acc842cade350981515f90be4c480670a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bffd45365348c3154c809150888d86e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a3bffd45365348c3154c809150888d86e">getAllowShortWrites</a> ()</td></tr>
+<tr class="separator:a3bffd45365348c3154c809150888d86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20fe84f596f3f7858b58342c53745f62"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a20fe84f596f3f7858b58342c53745f62">passFileDescriptor</a> (int32_t fd)</td></tr>
 <tr class="separator:a20fe84f596f3f7858b58342c53745f62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa2631e6bcb28f671c9476f879c2d26c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#afa2631e6bcb28f671c9476f879c2d26c">receiveFileDescriptor</a> (int32_t *fd)</td></tr>
@@ -311,18 +299,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab78ff24aa4496d326d079add756f6a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0606bdff7f7e6902b03f58b27f5f8bf5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a0606bdff7f7e6902b03f58b27f5f8bf5">receiveSocket</a> (int32_t *sock)</td></tr>
 <tr class="separator:a0606bdff7f7e6902b03f58b27f5f8bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50c42991f500b7fc1ef01fcdf0f240fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a50c42991f500b7fc1ef01fcdf0f240fd">translateByteOrder</a> ()</td></tr>
-<tr class="separator:a50c42991f500b7fc1ef01fcdf0f240fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a2ea19fa8e4d360f969f0446a556f2a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5a2ea19fa8e4d360f969f0446a556f2a">dontTranslateByteOrder</a> ()</td></tr>
-<tr class="separator:a5a2ea19fa8e4d360f969f0446a556f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a663c1578cf0004768e38d686589ddbd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a663c1578cf0004768e38d686589ddbd4">setTranslateByteOrder</a> (<a class="el" href="classbool.html">bool</a> translate)</td></tr>
+<tr class="separator:a663c1578cf0004768e38d686589ddbd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a775bf52530bd0f6e29c9aef2006cf9fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a775bf52530bd0f6e29c9aef2006cf9fc">getTranslateByteOrder</a> ()</td></tr>
+<tr class="separator:a775bf52530bd0f6e29c9aef2006cf9fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a282f5d255799bac82e179a1e4ddaa898"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a282f5d255799bac82e179a1e4ddaa898">fCntl</a> (int32_t command, long arg)</td></tr>
 <tr class="separator:a282f5d255799bac82e179a1e4ddaa898"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa426e6aae1c85ae3852ac4397a49391f"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aa426e6aae1c85ae3852ac4397a49391f">ioCtl</a> (int32_t command, void *arg)</td></tr>
 <tr class="separator:aa426e6aae1c85ae3852ac4397a49391f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68d4f98f00a3794e44bafb8c94f7b906"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a68d4f98f00a3794e44bafb8c94f7b906">useNaglesAlgorithm</a> ()</td></tr>
-<tr class="separator:a68d4f98f00a3794e44bafb8c94f7b906"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40cd844190971abebd6af838f1b2becb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a40cd844190971abebd6af838f1b2becb">dontUseNaglesAlgorithm</a> ()</td></tr>
-<tr class="separator:a40cd844190971abebd6af838f1b2becb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa55d865c9f3b89513d5ff6d66b68f4f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aa55d865c9f3b89513d5ff6d66b68f4f4">setNaglesAlgorithmEnabled</a> (<a class="el" href="classbool.html">bool</a> enabled)</td></tr>
+<tr class="separator:aa55d865c9f3b89513d5ff6d66b68f4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a6a33807cde34be06fb63d02f247a3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a1a6a33807cde34be06fb63d02f247a3d">getNaglesAlgorithmEnabled</a> ()</td></tr>
+<tr class="separator:a1a6a33807cde34be06fb63d02f247a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c69c33a212a8e8ecfcba6a0327ee07b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a6c69c33a212a8e8ecfcba6a0327ee07b">setSocketWriteBufferSize</a> (int32_t size)</td></tr>
 <tr class="separator:a6c69c33a212a8e8ecfcba6a0327ee07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af77cac3657cb1a8baa4e7e1e0457bba3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#af77cac3657cb1a8baa4e7e1e0457bba3">getSocketWriteBufferSize</a> (int32_t *size)</td></tr>
@@ -353,14 +341,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab7d949b18912ec1334f1a864bafdff4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2406bf97d25097091fd02a5e21e032b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab2406bf97d25097091fd02a5e21e032b">getMmapBufferingEnabled</a> ()</td></tr>
 <tr class="separator:ab2406bf97d25097091fd02a5e21e032b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9fafff36cbd2aa7fe4155d873840b5af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a9fafff36cbd2aa7fe4155d873840b5af">getIsCurrentBlockMmapBuffered</a> ()</td></tr>
-<tr class="separator:a9fafff36cbd2aa7fe4155d873840b5af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01ab1a893cd5c5d2c8a1979925cd4d1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a01ab1a893cd5c5d2c8a1979925cd4d1d">isCurrentBlockMmapBuffered</a> ()</td></tr>
+<tr class="separator:a01ab1a893cd5c5d2c8a1979925cd4d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d31223a36c5edbaa2041e93ffd760ed"><td class="memItemLeft" align="right" valign="top">off64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7d31223a36c5edbaa2041e93ffd760ed">getCurrentBlockOffset</a> ()</td></tr>
 <tr class="separator:a7d31223a36c5edbaa2041e93ffd760ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8620a165895ff4e8a433e4539c10955"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aa8620a165895ff4e8a433e4539c10955">closeOnExec</a> ()</td></tr>
-<tr class="separator:aa8620a165895ff4e8a433e4539c10955"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72033e31c0cbe18602b9a21e9493b590"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a72033e31c0cbe18602b9a21e9493b590">dontCloseOnExec</a> ()</td></tr>
-<tr class="separator:a72033e31c0cbe18602b9a21e9493b590"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab46421baf74068312b9077a6e4e5cf0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab46421baf74068312b9077a6e4e5cf0d">setCloseOnExec</a> (<a class="el" href="classbool.html">bool</a> <a class="el" href="classfiledescriptor.html#a67442522f75c98d34ce5778ab5eeb754">close</a>)</td></tr>
+<tr class="separator:ab46421baf74068312b9077a6e4e5cf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d3f857b7f6ee423a39640c5dc2ebfee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a2d3f857b7f6ee423a39640c5dc2ebfee">getCloseOnExec</a> ()</td></tr>
 <tr class="separator:a2d3f857b7f6ee423a39640c5dc2ebfee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classinput"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classinput')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classinput.html">input</a></td></tr>
@@ -435,36 +421,36 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a76e92d10a4c94cece97e48b11bf6c40a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a76e92d10a4c94cece97e48b11bf6c40a">supportsPassReceiveFileDescriptor</a> ()</td></tr>
-<tr class="separator:a76e92d10a4c94cece97e48b11bf6c40a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa93cf632eb8776a3e589d4ecba08005"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aaa93cf632eb8776a3e589d4ecba08005">supportsPassReceiveSocket</a> ()</td></tr>
-<tr class="separator:aaa93cf632eb8776a3e589d4ecba08005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd7d90c69651c40aefacc0df7b144ab7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#afd7d90c69651c40aefacc0df7b144ab7">supportsPassAndReceiveFileDescriptor</a> ()</td></tr>
+<tr class="separator:afd7d90c69651c40aefacc0df7b144ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14bd7018728e932589d256b6ad0d1210"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a14bd7018728e932589d256b6ad0d1210">supportsPassAndReceiveSocket</a> ()</td></tr>
+<tr class="separator:a14bd7018728e932589d256b6ad0d1210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9652e51c9538ba18002497f4d987f779"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a9652e51c9538ba18002497f4d987f779">createPipe</a> (<a class="el" href="classfiledescriptor.html">filedescriptor</a> *readfd, <a class="el" href="classfiledescriptor.html">filedescriptor</a> *writefd)</td></tr>
 <tr class="separator:a9652e51c9538ba18002497f4d987f779"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a015c15b53476f7741d4693481a0b2a96"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a015c15b53476f7741d4693481a0b2a96">hostToNet</a> (uint16_t value)</td></tr>
-<tr class="separator:a015c15b53476f7741d4693481a0b2a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0dd118e7f10d87de4300ac399bd1272"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab0dd118e7f10d87de4300ac399bd1272">hostToNet</a> (uint32_t value)</td></tr>
-<tr class="separator:ab0dd118e7f10d87de4300ac399bd1272"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a231c459ea091720cb70b7b1b071fc132"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a231c459ea091720cb70b7b1b071fc132">hostToNet</a> (uint64_t value)</td></tr>
-<tr class="separator:a231c459ea091720cb70b7b1b071fc132"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a687405f4614390bb3bf6ad91ea0a709a"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a687405f4614390bb3bf6ad91ea0a709a">netToHost</a> (uint16_t value)</td></tr>
-<tr class="separator:a687405f4614390bb3bf6ad91ea0a709a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04f43ceb482795d7a26631ba836fe9d3"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a04f43ceb482795d7a26631ba836fe9d3">netToHost</a> (uint32_t value)</td></tr>
-<tr class="separator:a04f43ceb482795d7a26631ba836fe9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf96fd9d695c8bc46a8d6a73d620c7b8"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#abf96fd9d695c8bc46a8d6a73d620c7b8">netToHost</a> (uint64_t value)</td></tr>
-<tr class="separator:abf96fd9d695c8bc46a8d6a73d620c7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10b5bba9cfcbdb5323b00d7b2a2461ca"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a10b5bba9cfcbdb5323b00d7b2a2461ca">hostToLittleEndian</a> (uint16_t value)</td></tr>
-<tr class="separator:a10b5bba9cfcbdb5323b00d7b2a2461ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4133339567513861cac8f70058ca4892"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a4133339567513861cac8f70058ca4892">hostToLittleEndian</a> (uint32_t value)</td></tr>
-<tr class="separator:a4133339567513861cac8f70058ca4892"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5da8c89f873d4f4e1babd06e1af9f939"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5da8c89f873d4f4e1babd06e1af9f939">hostToLittleEndian</a> (uint64_t value)</td></tr>
-<tr class="separator:a5da8c89f873d4f4e1babd06e1af9f939"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1419a73970c6711bff174f472cf1710e"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a1419a73970c6711bff174f472cf1710e">littleEndianToHost</a> (uint16_t value)</td></tr>
-<tr class="separator:a1419a73970c6711bff174f472cf1710e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16936cd058672d1f526cfec2b89f91bf"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a16936cd058672d1f526cfec2b89f91bf">littleEndianToHost</a> (uint32_t value)</td></tr>
-<tr class="separator:a16936cd058672d1f526cfec2b89f91bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f3d59984792b1dc17966494249424b0"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a4f3d59984792b1dc17966494249424b0">littleEndianToHost</a> (uint64_t value)</td></tr>
-<tr class="separator:a4f3d59984792b1dc17966494249424b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2551bd0c0408094c01ecd96e01a4e699"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a2551bd0c0408094c01ecd96e01a4e699">convertHostToNet</a> (uint16_t value)</td></tr>
+<tr class="separator:a2551bd0c0408094c01ecd96e01a4e699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fdf1429df1ca8e5942a872ef4684049"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a8fdf1429df1ca8e5942a872ef4684049">convertHostToNet</a> (uint32_t value)</td></tr>
+<tr class="separator:a8fdf1429df1ca8e5942a872ef4684049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6995dd655bae1a8f2daa35881a1e7563"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a6995dd655bae1a8f2daa35881a1e7563">convertHostToNet</a> (uint64_t value)</td></tr>
+<tr class="separator:a6995dd655bae1a8f2daa35881a1e7563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a319bb71e8c9fe2e9d7d7839b82be0dd2"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a319bb71e8c9fe2e9d7d7839b82be0dd2">convertNetToHost</a> (uint16_t value)</td></tr>
+<tr class="separator:a319bb71e8c9fe2e9d7d7839b82be0dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc3a190b747ab51d0870e6cd9c312091"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#acc3a190b747ab51d0870e6cd9c312091">convertNetToHost</a> (uint32_t value)</td></tr>
+<tr class="separator:acc3a190b747ab51d0870e6cd9c312091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6f23892a21cec93a942a79d69602ec2"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#af6f23892a21cec93a942a79d69602ec2">convertNetToHost</a> (uint64_t value)</td></tr>
+<tr class="separator:af6f23892a21cec93a942a79d69602ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81b348d99838f32f1be3e3c679b69000"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a81b348d99838f32f1be3e3c679b69000">convertHostToLittleEndian</a> (uint16_t value)</td></tr>
+<tr class="separator:a81b348d99838f32f1be3e3c679b69000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d815b1d34f8ef56ae8c7241e0aad79"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad8d815b1d34f8ef56ae8c7241e0aad79">convertHostToLittleEndian</a> (uint32_t value)</td></tr>
+<tr class="separator:ad8d815b1d34f8ef56ae8c7241e0aad79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a933d5bb5e052f247e619a5ee0c65d5b1"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a933d5bb5e052f247e619a5ee0c65d5b1">convertHostToLittleEndian</a> (uint64_t value)</td></tr>
+<tr class="separator:a933d5bb5e052f247e619a5ee0c65d5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab71921b81614b7683e5f722af0282ae3"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab71921b81614b7683e5f722af0282ae3">convertLittleEndianToHost</a> (uint16_t value)</td></tr>
+<tr class="separator:ab71921b81614b7683e5f722af0282ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5cf41a44e920b6de326a2b578510516"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aa5cf41a44e920b6de326a2b578510516">convertLittleEndianToHost</a> (uint32_t value)</td></tr>
+<tr class="separator:aa5cf41a44e920b6de326a2b578510516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a142f1efe53879fd4a9c52f1b9a51be2d"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a142f1efe53879fd4a9c52f1b9a51be2d">convertLittleEndianToHost</a> (uint64_t value)</td></tr>
+<tr class="separator:a142f1efe53879fd4a9c52f1b9a51be2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The filedescriptor class extends the input and output classes, providing a base class for child classes that utilize file descriptors. </p>
@@ -514,46 +500,6 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8385bed0f0586feb7129ffa3ce5e5c55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8385bed0f0586feb7129ffa3ce5e5c55">&#9670;&nbsp;</a></span>allowShortReads()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::allowShortReads </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>By default, <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a> will attempt to read the specified number of bytes from the file descriptor, even if several passes are necessary.</p>
-<p>This method causes a <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a> to attempt only a single pass and return the number of bytes that were read during that pass whether the specified number of bytes were read or not.</p>
-<p>Note that reads longer than SSIZE_MAX will only attempt to read SSIZE_MAX bytes. </p>
-
-</div>
-</div>
-<a id="abe7c22612b0dd31718fac688d896b084"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe7c22612b0dd31718fac688d896b084">&#9670;&nbsp;</a></span>allowShortWrites()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::allowShortWrites </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>By default, <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a> will attempt to write the specified number of bytes from the file descriptor, in several passes if necessary.</p>
-<p>This method causes a <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a> to attempt only a single pass and return the number of bytes that were written during that pass whether the specified number of bytes were written or not.</p>
-<p>Note that writes longer than SSIZE_MAX will only attempt to write SSIZE_MAX bytes. </p>
-
-</div>
-</div>
 <a id="a67442522f75c98d34ce5778ab5eeb754"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67442522f75c98d34ce5778ab5eeb754">&#9670;&nbsp;</a></span>close()</h2>
 
@@ -582,22 +528,327 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa8620a165895ff4e8a433e4539c10955"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8620a165895ff4e8a433e4539c10955">&#9670;&nbsp;</a></span>closeOnExec()</h2>
+<a id="a81b348d99838f32f1be3e3c679b69000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81b348d99838f32f1be3e3c679b69000">&#9670;&nbsp;</a></span>convertHostToLittleEndian() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::closeOnExec </td>
+          <td class="memname">static uint16_t filedescriptor::convertHostToLittleEndian </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>If the close-on-exec status is false (the default), then the file descriptor will remain open across an execve() call, otherwise it will be closed.</p>
-<p>This method sets the close-on-exec status to true. </p>
+<p>Converts an unsigned 16-bit integer from host byte order to little-endian byte order. </p>
+
+</div>
+</div>
+<a id="ad8d815b1d34f8ef56ae8c7241e0aad79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d815b1d34f8ef56ae8c7241e0aad79">&#9670;&nbsp;</a></span>convertHostToLittleEndian() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t filedescriptor::convertHostToLittleEndian </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 32-bit integer from host byte order to little-endian byte order. </p>
+
+</div>
+</div>
+<a id="a933d5bb5e052f247e619a5ee0c65d5b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a933d5bb5e052f247e619a5ee0c65d5b1">&#9670;&nbsp;</a></span>convertHostToLittleEndian() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t filedescriptor::convertHostToLittleEndian </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 64-bit integer from host byte order to little-endian byte order. </p>
+
+</div>
+</div>
+<a id="a2551bd0c0408094c01ecd96e01a4e699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2551bd0c0408094c01ecd96e01a4e699">&#9670;&nbsp;</a></span>convertHostToNet() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t filedescriptor::convertHostToNet </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 16-bit integer from host byte order to network byte order (big-endian). </p>
+
+</div>
+</div>
+<a id="a8fdf1429df1ca8e5942a872ef4684049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fdf1429df1ca8e5942a872ef4684049">&#9670;&nbsp;</a></span>convertHostToNet() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t filedescriptor::convertHostToNet </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 32-bit integer from host byte order to network byte order (big-endian). </p>
+
+</div>
+</div>
+<a id="a6995dd655bae1a8f2daa35881a1e7563"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6995dd655bae1a8f2daa35881a1e7563">&#9670;&nbsp;</a></span>convertHostToNet() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t filedescriptor::convertHostToNet </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 64-bit integer from host byte order to network byte order (big-endian). </p>
+
+</div>
+</div>
+<a id="ab71921b81614b7683e5f722af0282ae3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab71921b81614b7683e5f722af0282ae3">&#9670;&nbsp;</a></span>convertLittleEndianToHost() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t filedescriptor::convertLittleEndianToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 16-bit integer from little-endian byte order to host byte order. </p>
+
+</div>
+</div>
+<a id="aa5cf41a44e920b6de326a2b578510516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5cf41a44e920b6de326a2b578510516">&#9670;&nbsp;</a></span>convertLittleEndianToHost() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t filedescriptor::convertLittleEndianToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 32-bit integer from little-endian byte order to host byte order. </p>
+
+</div>
+</div>
+<a id="a142f1efe53879fd4a9c52f1b9a51be2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a142f1efe53879fd4a9c52f1b9a51be2d">&#9670;&nbsp;</a></span>convertLittleEndianToHost() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t filedescriptor::convertLittleEndianToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 64-bit integer from little-endian byte order to host byte order. </p>
+
+</div>
+</div>
+<a id="a319bb71e8c9fe2e9d7d7839b82be0dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a319bb71e8c9fe2e9d7d7839b82be0dd2">&#9670;&nbsp;</a></span>convertNetToHost() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t filedescriptor::convertNetToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 16-bit integer from network byte order (bit-endian) to host byte order. </p>
+
+</div>
+</div>
+<a id="acc3a190b747ab51d0870e6cd9c312091"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc3a190b747ab51d0870e6cd9c312091">&#9670;&nbsp;</a></span>convertNetToHost() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t filedescriptor::convertNetToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 32-bit integer from network byte order (bit-endian) to host byte order. </p>
+
+</div>
+</div>
+<a id="af6f23892a21cec93a942a79d69602ec2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6f23892a21cec93a942a79d69602ec2">&#9670;&nbsp;</a></span>convertNetToHost() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t filedescriptor::convertNetToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts an unsigned 64-bit integer from network byte order (bit-endian) to host byte order. </p>
 
 </div>
 </div>
@@ -653,190 +904,6 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Disables IPv4 on this file descriptor, only IPv6 will be used. This is only useful for TCP Socket file descriptors. Returns true on success and false on failure. </p>
-
-</div>
-</div>
-<a id="a450567c8744e8162832cfc325051ee6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a450567c8744e8162832cfc325051ee6e">&#9670;&nbsp;</a></span>dontAllowShortReads()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontAllowShortReads </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>By default, <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a> will attempt to read the specified number of bytes from the file descriptor, even if several passes are necessary.</p>
-<p>This method causes that default behavior to be observed. </p>
-
-</div>
-</div>
-<a id="a5585ce27c88d29da92e37aa23f027e1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5585ce27c88d29da92e37aa23f027e1b">&#9670;&nbsp;</a></span>dontAllowShortWrites()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontAllowShortWrites </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>By default, <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a> will attempt to write the specified number of bytes from the file descriptor, even if several passes are necessary.</p>
-<p>This method causes that default behavior to be observed. </p>
-
-</div>
-</div>
-<a id="a72033e31c0cbe18602b9a21e9493b590"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72033e31c0cbe18602b9a21e9493b590">&#9670;&nbsp;</a></span>dontCloseOnExec()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::dontCloseOnExec </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>If the close-on-exec status is false (the default), then the file descriptor will remain open across an execve() call, otherwise it will be closed.</p>
-<p>This method sets the close-on-exec status to false (the default). </p>
-
-</div>
-</div>
-<a id="a32dd611bf1ab97bfff2c14535a403f74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32dd611bf1ab97bfff2c14535a403f74">&#9670;&nbsp;</a></span>dontRetryInterruptedFcntl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontRetryInterruptedFcntl </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes fcntl operations not to be automatically retried if interrupted by a signal. If this is set, a fcntl is occurring and a signal interrupts it, the fcntl fails, the system error is set to EINTR and the fcntl must be retried. </p>
-
-</div>
-</div>
-<a id="a50e1255f92ef1f93396a2badabe8998b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50e1255f92ef1f93396a2badabe8998b">&#9670;&nbsp;</a></span>dontRetryInterruptedIoctl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontRetryInterruptedIoctl </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes ioctl operations not to be automatically retried if interrupted by a signal. If this is set, a ioctl is occurring and a signal interrupts it, the ioctl fails, the system error is set to EINTR and the ioctl must be retried. </p>
-
-</div>
-</div>
-<a id="a7f7311c4fa746bcf1f75f076264c308b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f7311c4fa746bcf1f75f076264c308b">&#9670;&nbsp;</a></span>dontRetryInterruptedReads()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontRetryInterruptedReads </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes reads not to automatically retry if interrupted by a signal. This is the default behavior. By default, if a read is occurring and a signal interrupts it, the read fails, the system error is set to EINTR and the read must be retried. </p>
-
-</div>
-</div>
-<a id="a879e0146d88f66e6188442e8b4b1cb8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a879e0146d88f66e6188442e8b4b1cb8b">&#9670;&nbsp;</a></span>dontRetryInterruptedWaits()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontRetryInterruptedWaits </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes wait operations not to be automatically retried if interrupted by a signal. If this is set, a wait is occurring and a signal interrupts it, the wait fails, the system error is set to EINTR and the wait must be retried. </p>
-
-</div>
-</div>
-<a id="ac70cc7d8e024f7bb6bf8fc926067d9ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac70cc7d8e024f7bb6bf8fc926067d9ba">&#9670;&nbsp;</a></span>dontRetryInterruptedWrites()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontRetryInterruptedWrites </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes writes not to automatically retry if interrupted by a signal. This is the default behavior. By default, if a write is occurring and a signal interrupts it, the write fails, the system error is set to EINTR and the write must be retried. </p>
-
-</div>
-</div>
-<a id="a5a2ea19fa8e4d360f969f0446a556f2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a2ea19fa8e4d360f969f0446a556f2a">&#9670;&nbsp;</a></span>dontTranslateByteOrder()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::dontTranslateByteOrder </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Don't translate integers from native byte order to network byte order during writes and vice-versa during reads. This is the default behavior. </p>
-
-</div>
-</div>
-<a id="a40cd844190971abebd6af838f1b2becb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40cd844190971abebd6af838f1b2becb">&#9670;&nbsp;</a></span>dontUseNaglesAlgorithm()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::dontUseNaglesAlgorithm </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes all <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a>'s to be sent immediately. (disables Nagle's algorithm)</p>
-<p>Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -965,6 +1032,42 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a05c567b59fb1b98bd6f0d1d6c4d5236c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05c567b59fb1b98bd6f0d1d6c4d5236c">&#9670;&nbsp;</a></span>getAllowShortReads()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::getAllowShortReads </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a>s will attempt to read the specified number of bytes from the file descriptor, even if several passes are necessary, and false otherwise. </p>
+
+</div>
+</div>
+<a id="a3bffd45365348c3154c809150888d86e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bffd45365348c3154c809150888d86e">&#9670;&nbsp;</a></span>getAllowShortWrites()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::getAllowShortWrites </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a>s will attempt to read the specified number of bytes from the file descriptor, even if several passes are necessary, and false otherwise. </p>
+
+</div>
+</div>
 <a id="a2d3f857b7f6ee423a39640c5dc2ebfee"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d3f857b7f6ee423a39640c5dc2ebfee">&#9670;&nbsp;</a></span>getCloseOnExec()</h2>
 
@@ -979,8 +1082,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>If the close-on-exec status is false (the default), then the file descriptor will remain open across an execve() call, otherwise it will be closed.</p>
-<p>This method returns true if the close-on-exec status is set to true and false otherwise. </p>
+<p>Returns true if the file descriptor will remain open across a <a class="el" href="classprocess.html#a0b0dd7d2f99c578466071328a1c115cb">process::exec()</a> call and false otherwise. </p>
 
 </div>
 </div>
@@ -1020,24 +1122,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9fafff36cbd2aa7fe4155d873840b5af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9fafff36cbd2aa7fe4155d873840b5af">&#9670;&nbsp;</a></span>getIsCurrentBlockMmapBuffered()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::getIsCurrentBlockMmapBuffered </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns true if this is a storage filedescriptor such as a file, raw block device, etc. and the current block is buffered using mmap, or false otherwise. </p>
-
-</div>
-</div>
 <a id="a74697302e8712d0db26a6db9c61baa15"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a74697302e8712d0db26a6db9c61baa15">&#9670;&nbsp;</a></span>getIsStream()</h2>
 
@@ -1071,6 +1155,52 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns true if mmap will be used when buffering a storage filedescriptor such as a file or raw block device, or false otherwise. See <a class="el" href="classfiledescriptor.html#a41ad7f795974c9f6accf48285bd009be">setWriteBufferSize()</a>/ <a class="el" href="classfiledescriptor.html#a9a011c9ffa424370e04aa3ee6a87c08d">setReadBufferSize()</a>. </p>
+
+</div>
+</div>
+<a id="a1a6a33807cde34be06fb63d02f247a3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a6a33807cde34be06fb63d02f247a3d">&#9670;&nbsp;</a></span>getNaglesAlgorithmEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::getNaglesAlgorithmEnabled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if small <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a>s will be collected up and sent together when either the kernel's write buffer is full or when a maximum of 0.2 seconds has gone by, per Nagle's algorithm, or false if writes will be sent immediately. </p>
+
+</div>
+</div>
+<a id="ac5afa621f441da9789e00551f49b5f43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5afa621f441da9789e00551f49b5f43">&#9670;&nbsp;</a></span>getNonBlockingMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::getNonBlockingMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the file descriptor is in non-blocking mode and false otherwise. </p>
+
+<p>Reimplemented in <a class="el" href="classsocketserver.html#a97eb4c58dbf91678ba9b310cc2e6d9d7">socketserver</a>, and <a class="el" href="classsocketclient.html#a9a572d3fdeb650c874f2b00dd4d01346">socketclient</a>.</p>
 
 </div>
 </div>
@@ -1285,6 +1415,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a775bf52530bd0f6e29c9aef2006cf9fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a775bf52530bd0f6e29c9aef2006cf9fc">&#9670;&nbsp;</a></span>getTranslateByteOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::getTranslateByteOrder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if integers will be translated from native byte order to network byte order during writes and vice-versa during reads, and false otherwise. </p>
+
+</div>
+</div>
 <a id="a25f23e9c0ef9ec0a635a76f625b5ae0d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a25f23e9c0ef9ec0a635a76f625b5ae0d">&#9670;&nbsp;</a></span>getType()</h2>
 
@@ -1318,168 +1466,6 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns the current size of the write buffer. </p>
-
-</div>
-</div>
-<a id="a10b5bba9cfcbdb5323b00d7b2a2461ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10b5bba9cfcbdb5323b00d7b2a2461ca">&#9670;&nbsp;</a></span>hostToLittleEndian() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t filedescriptor::hostToLittleEndian </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 16-bit integer from host byte order to little-endian byte order. </p>
-
-</div>
-</div>
-<a id="a4133339567513861cac8f70058ca4892"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4133339567513861cac8f70058ca4892">&#9670;&nbsp;</a></span>hostToLittleEndian() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint32_t filedescriptor::hostToLittleEndian </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 32-bit integer from host byte order to little-endian byte order. </p>
-
-</div>
-</div>
-<a id="a5da8c89f873d4f4e1babd06e1af9f939"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5da8c89f873d4f4e1babd06e1af9f939">&#9670;&nbsp;</a></span>hostToLittleEndian() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t filedescriptor::hostToLittleEndian </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 64-bit integer from host byte order to little-endian byte order. </p>
-
-</div>
-</div>
-<a id="a015c15b53476f7741d4693481a0b2a96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a015c15b53476f7741d4693481a0b2a96">&#9670;&nbsp;</a></span>hostToNet() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t filedescriptor::hostToNet </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 16-bit integer from host byte order to network byte order (big-endian). </p>
-
-</div>
-</div>
-<a id="ab0dd118e7f10d87de4300ac399bd1272"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0dd118e7f10d87de4300ac399bd1272">&#9670;&nbsp;</a></span>hostToNet() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint32_t filedescriptor::hostToNet </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 32-bit integer from host byte order to network byte order (big-endian). </p>
-
-</div>
-</div>
-<a id="a231c459ea091720cb70b7b1b071fc132"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a231c459ea091720cb70b7b1b071fc132">&#9670;&nbsp;</a></span>hostToNet() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t filedescriptor::hostToNet </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 64-bit integer from host byte order to network byte order (big-endian). </p>
 
 </div>
 </div>
@@ -1522,193 +1508,21 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a30cd8c8d066e8983af884aeafadb150b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30cd8c8d066e8983af884aeafadb150b">&#9670;&nbsp;</a></span>isUsingNonBlockingMode()</h2>
+<a id="a01ab1a893cd5c5d2c8a1979925cd4d1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01ab1a893cd5c5d2c8a1979925cd4d1d">&#9670;&nbsp;</a></span>isCurrentBlockMmapBuffered()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::isUsingNonBlockingMode </td>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::isCurrentBlockMmapBuffered </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p>Returns true if the file descriptor is in non-blocking mode and false otherwise. </p>
-
-<p>Reimplemented in <a class="el" href="classsocketserver.html#a2233fd8d1309dcdbda58c34261b14f30">socketserver</a>, and <a class="el" href="classsocketclient.html#a15e17009be152f495b884966ad7e3b31">socketclient</a>.</p>
-
-</div>
-</div>
-<a id="a1419a73970c6711bff174f472cf1710e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1419a73970c6711bff174f472cf1710e">&#9670;&nbsp;</a></span>littleEndianToHost() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t filedescriptor::littleEndianToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 16-bit integer from little-endian byte order to host byte order. </p>
-
-</div>
-</div>
-<a id="a16936cd058672d1f526cfec2b89f91bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16936cd058672d1f526cfec2b89f91bf">&#9670;&nbsp;</a></span>littleEndianToHost() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint32_t filedescriptor::littleEndianToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 32-bit integer from little-endian byte order to host byte order. </p>
-
-</div>
-</div>
-<a id="a4f3d59984792b1dc17966494249424b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f3d59984792b1dc17966494249424b0">&#9670;&nbsp;</a></span>littleEndianToHost() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t filedescriptor::littleEndianToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 64-bit integer from little-endian byte order to host byte order. </p>
-
-</div>
-</div>
-<a id="a687405f4614390bb3bf6ad91ea0a709a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a687405f4614390bb3bf6ad91ea0a709a">&#9670;&nbsp;</a></span>netToHost() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint16_t filedescriptor::netToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 16-bit integer from network byte order (bit-endian) to host byte order. </p>
-
-</div>
-</div>
-<a id="a04f43ceb482795d7a26631ba836fe9d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04f43ceb482795d7a26631ba836fe9d3">&#9670;&nbsp;</a></span>netToHost() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint32_t filedescriptor::netToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 32-bit integer from network byte order (bit-endian) to host byte order. </p>
-
-</div>
-</div>
-<a id="abf96fd9d695c8bc46a8d6a73d620c7b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf96fd9d695c8bc46a8d6a73d620c7b8">&#9670;&nbsp;</a></span>netToHost() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t filedescriptor::netToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Converts an unsigned 64-bit integer from network byte order (bit-endian) to host byte order. </p>
+<p>Returns true if this is a storage filedescriptor such as a file, raw block device, etc. and the current block is buffered using mmap, or false otherwise. </p>
 
 </div>
 </div>
@@ -3483,93 +3297,65 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aced1588c0b772a96548b8b1a737199c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aced1588c0b772a96548b8b1a737199c2">&#9670;&nbsp;</a></span>retryInterruptedFcntl()</h2>
+<a id="a7f2c31b9e9ec6b1e98725a2f249887e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f2c31b9e9ec6b1e98725a2f249887e8">&#9670;&nbsp;</a></span>setAllowShortReads()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void filedescriptor::retryInterruptedFcntl </td>
+          <td class="memname">void filedescriptor::setAllowShortReads </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>allow</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Causes fcntl operations to be automatically retried if interrupted by a signal. This is the default behavior. Otherwise, if a fcntl is occurring and a signal interrupts it, the fcntl fails, the system error is set to EINTR and the fcntl must be retried. </p>
+<p>If "allow" is set true then <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a> will only attempt a single pass and return the number of bytes that were read during that pass whether the specified number of bytes were read or not.</p>
+<p>If "allow" is set false then <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a> will attempt to read the specified number of bytes from the file descriptor, even if several passes are necessary.</p>
+<p>Defaults to false. </p>
 
 </div>
 </div>
-<a id="a08e322411718595166970dc371981457"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08e322411718595166970dc371981457">&#9670;&nbsp;</a></span>retryInterruptedIoctl()</h2>
+<a id="acc842cade350981515f90be4c480670a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc842cade350981515f90be4c480670a">&#9670;&nbsp;</a></span>setAllowShortWrites()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void filedescriptor::retryInterruptedIoctl </td>
+          <td class="memname">void filedescriptor::setAllowShortWrites </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>allow</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Causes ioctl operations to be automatically retried if interrupted by a signal. This is the default behavior. Otherwise, if a ioctl is occurring and a signal interrupts it, the ioctl fails, the system error is set to EINTR and the ioctl must be retried. </p>
+<p>If "allow" is set true then <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a> will only attempt a single pass and return the number of bytes that were written during that pass whether the specified number of bytes were written or not.</p>
+<p>If "allow" is set false then <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a> will attempt to write the specified number of bytes to the file descriptor, even if several passes are necessary.</p>
+<p>Defaults to false. </p>
 
 </div>
 </div>
-<a id="a873da850bf73716babe080f7fa723784"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a873da850bf73716babe080f7fa723784">&#9670;&nbsp;</a></span>retryInterruptedReads()</h2>
+<a id="ab46421baf74068312b9077a6e4e5cf0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab46421baf74068312b9077a6e4e5cf0d">&#9670;&nbsp;</a></span>setCloseOnExec()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void filedescriptor::retryInterruptedReads </td>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::setCloseOnExec </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>close</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Causes reads to automatically retry if interrupted by a signal. By default, if a read is occurring and a signal interrupts it, the read fails, the system error is set to EINTR and the read must be retried. </p>
-
-</div>
-</div>
-<a id="ae6f560f93d4b1ee57a7332b19588d3af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6f560f93d4b1ee57a7332b19588d3af">&#9670;&nbsp;</a></span>retryInterruptedWaits()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::retryInterruptedWaits </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes wait operations to be automatically retried if interrupted by a signal. This is the default behavior. Otherwise, if a wait is occurring and a signal interrupts it, the wait fails, the system error is set to EINTR and the wait must be retried. </p>
-
-</div>
-</div>
-<a id="ac372c3c60abd093ea7a0b70c74e30f9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac372c3c60abd093ea7a0b70c74e30f9b">&#9670;&nbsp;</a></span>retryInterruptedWrites()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::retryInterruptedWrites </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes writes to automatically retry if interrupted by a signal. By default, if a write is occurring and a signal interrupts it, the write fails, the system error is set to EINTR and the write must be retried. </p>
+<p>If "close" is true then the file descriptor will remain open across a <a class="el" href="classprocess.html#a0b0dd7d2f99c578466071328a1c115cb">process::exec()</a> call. If "close" is false then the file descriptor will be closed during a <a class="el" href="classprocess.html#a0b0dd7d2f99c578466071328a1c115cb">process::exec()</a> call.</p>
+<p>Defaults to false. </p>
 
 </div>
 </div>
@@ -3632,8 +3418,62 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>If "enabled" is set true then mmap will be used when buffering a storage filedescriptor such as a file or raw block device. If set false, then traditional buffering will be used. See <a class="el" href="classfiledescriptor.html#a41ad7f795974c9f6accf48285bd009be">setWriteBufferSize()</a>/setReadBufferSize().</p>
 <p>Note that on platforms with modern file caching, traditional buffering tends to outperform mmap buffering except in very specific situations such as when O_DIRECT is used to bypass the cache, when using large buffer sizes, or when randomly accessing small parts of large files.</p>
-<p>NOTE: if <a class="el" href="classmemorymap.html#a50f4ce3ac57e06a6fc6efe96bc8511fb">memorymap::supported()</a> returns false, then calling this method with "enabled" set to true has no effect.</p>
+<p>NOTE: if <a class="el" href="classmemorymap.html#acc61cd3e87f62468237873aa246a85ce">memorymap::isSupported()</a> returns false, then calling this method with "enabled" set to true has no effect.</p>
 <p>Defaults to false. </p>
+
+</div>
+</div>
+<a id="aa55d865c9f3b89513d5ff6d66b68f4f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa55d865c9f3b89513d5ff6d66b68f4f4">&#9670;&nbsp;</a></span>setNaglesAlgorithmEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::setNaglesAlgorithmEnabled </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "enabled" is set true then small <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a>s will be collected up and sent together when either the kernel's write buffer is full or when a maximum of 0.2 seconds has gone by, per Nagle's algorithm.</p>
+<p>If "enabled" is set false then writes will be sent immediately.</p>
+<p>Defaults to true.</p>
+<p>Returns true on success and false on failure. </p>
+
+</div>
+</div>
+<a id="a0edee541e496345df3c40251baba90ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0edee541e496345df3c40251baba90ab">&#9670;&nbsp;</a></span>setNonBlockingMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::setNonBlockingMode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>usenonblockingmode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>If "usenonblockingmode" is true then the file descriptor put into in non-blocking mode. If "usenonblockingmode" is false then the file descriptor is put into blocking mode.</p>
+<p>The default for most file descriptors is to be in blocking mode, however this is not guaranteed. It is good practice to specifically set the mode.</p>
+<p>Returns true on success and false on failure.</p>
+<p>Returns false if the system doesn't support blocking/nonblocking modes. </p>
+
+<p>Reimplemented in <a class="el" href="classsocketserver.html#a2e3ff13a2a789f31bdefd4fe682a9948">socketserver</a>, and <a class="el" href="classsocketclient.html#a9163b49c0896e71b3ce492dbbce512ed">socketclient</a>.</p>
 
 </div>
 </div>
@@ -3760,6 +3600,106 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a74e8469247e6988e44471ae573391f39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74e8469247e6988e44471ae573391f39">&#9670;&nbsp;</a></span>setRetryInterruptedFcntl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void filedescriptor::setRetryInterruptedFcntl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "retry" is true then a fcntl operation will be automatically retried if it is interrupted by a signal. If "retry" is false then, if a fcntl operation is interrupted by a signal, it will fail and the system error will be set to EINTR.</p>
+<p>Defaults to true. </p>
+
+</div>
+</div>
+<a id="a135bfba9e3bf5b08e6c9077aaf288a9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a135bfba9e3bf5b08e6c9077aaf288a9a">&#9670;&nbsp;</a></span>setRetryInterruptedIoctl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void filedescriptor::setRetryInterruptedIoctl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "retry" is true then an ioctl operation will be automatically retried if it is interrupted by a signal. If "retry" is false then, if an ioctl operation is interrupted by a signal, it will fail and the system error will be set to EINTR.</p>
+<p>Defaults to true. </p>
+
+</div>
+</div>
+<a id="ae4529990cf8f4b6eeca8743b6638ed7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4529990cf8f4b6eeca8743b6638ed7b">&#9670;&nbsp;</a></span>setRetryInterruptedReads()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void filedescriptor::setRetryInterruptedReads </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "retry" is true then a read will be automatically retried if it is interrupted by a signal. If "retry" is false then, if a read is interrupted by a signal, it will fail and the system error will be set to EINTR.</p>
+<p>Defaults to false. </p>
+
+</div>
+</div>
+<a id="ac7433ed652d0d88d788e2ed01bef36e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7433ed652d0d88d788e2ed01bef36e8">&#9670;&nbsp;</a></span>setRetryInterruptedWaits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void filedescriptor::setRetryInterruptedWaits </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "retry" is true then a wait operation will be automatically retried if it is interrupted by a signal. If "retry" is false then, if a wait operation is interrupted by a signal, it will fail and the system error will be set to EINTR.</p>
+<p>Defaults to true. </p>
+
+</div>
+</div>
+<a id="a829dd471c24d0763fbde01627da8ef81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a829dd471c24d0763fbde01627da8ef81">&#9670;&nbsp;</a></span>setRetryInterruptedWrites()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void filedescriptor::setRetryInterruptedWrites </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>retry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "retry" is true then a write will be automatically retried if it is interrupted by a signal. If "retry" is false then, if a write is interrupted by a signal, it will fail and the system error will be set to EINTR.</p>
+<p>Defaults to false. </p>
+
+</div>
+</div>
 <a id="a886db6103e51b87b877593d066c0ca22"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a886db6103e51b87b877593d066c0ca22">&#9670;&nbsp;</a></span>setSocketLayer()</h2>
 
@@ -3817,6 +3757,27 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a663c1578cf0004768e38d686589ddbd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a663c1578cf0004768e38d686589ddbd4">&#9670;&nbsp;</a></span>setTranslateByteOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void filedescriptor::setTranslateByteOrder </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbool.html">bool</a>&#160;</td>
+          <td class="paramname"><em>translate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If "translate" is set true then integers will be translated from native byte order to network byte order during writes and vice-versa during reads.</p>
+<p>If "translate" is set false then no translation will be done.</p>
+<p>Defaults to false. </p>
+
+</div>
+</div>
 <a id="a41ad7f795974c9f6accf48285bd009be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a41ad7f795974c9f6accf48285bd009be">&#9670;&nbsp;</a></span>setWriteBufferSize()</h2>
 
@@ -3852,8 +3813,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aba9a7fa52d49184adda885bf76e1197b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba9a7fa52d49184adda885bf76e1197b">&#9670;&nbsp;</a></span>supportsBlockingNonBlockingModes()</h2>
+<a id="a471a3422ae31e8282b5d1e6e488add5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a471a3422ae31e8282b5d1e6e488add5f">&#9670;&nbsp;</a></span>supportsBlockingAndNonBlockingModes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3862,7 +3823,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::supportsBlockingNonBlockingModes </td>
+          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::supportsBlockingAndNonBlockingModes </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -3874,14 +3835,14 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns true if the client socket supports blocking/nonblocking modes and false otherwise. </p>
+<p>Returns true if the system supports blocking/nonblocking modes and false otherwise. </p>
 
-<p>Reimplemented in <a class="el" href="classsocketserver.html#af62d33f4bfb8e80c01a795d6b2aa931c">socketserver</a>, and <a class="el" href="classsocketclient.html#a837eef34e0bf89326ac4bc1c037d8fd6">socketclient</a>.</p>
+<p>Reimplemented in <a class="el" href="classsocketserver.html#ab0c2079ac240c2adef03d30d28d2e2e7">socketserver</a>, and <a class="el" href="classsocketclient.html#a0cd16e90609d58f128c4d56c5749dfdf">socketclient</a>.</p>
 
 </div>
 </div>
-<a id="a76e92d10a4c94cece97e48b11bf6c40a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76e92d10a4c94cece97e48b11bf6c40a">&#9670;&nbsp;</a></span>supportsPassReceiveFileDescriptor()</h2>
+<a id="afd7d90c69651c40aefacc0df7b144ab7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd7d90c69651c40aefacc0df7b144ab7">&#9670;&nbsp;</a></span>supportsPassAndReceiveFileDescriptor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3890,7 +3851,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> filedescriptor::supportsPassReceiveFileDescriptor </td>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> filedescriptor::supportsPassAndReceiveFileDescriptor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -3906,8 +3867,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aaa93cf632eb8776a3e589d4ecba08005"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa93cf632eb8776a3e589d4ecba08005">&#9670;&nbsp;</a></span>supportsPassReceiveSocket()</h2>
+<a id="a14bd7018728e932589d256b6ad0d1210"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14bd7018728e932589d256b6ad0d1210">&#9670;&nbsp;</a></span>supportsPassAndReceiveSocket()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3916,7 +3877,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classbool.html">bool</a> filedescriptor::supportsPassReceiveSocket </td>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> filedescriptor::supportsPassAndReceiveSocket </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -3929,100 +3890,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns true if the platform supports passing and receiving sockets or false otherwise. </p>
-
-</div>
-</div>
-<a id="a50c42991f500b7fc1ef01fcdf0f240fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50c42991f500b7fc1ef01fcdf0f240fd">&#9670;&nbsp;</a></span>translateByteOrder()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::translateByteOrder </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Translate integers from native byte order to network byte order during writes and vice-versa during reads. By default, no translation is done. </p>
-
-</div>
-</div>
-<a id="ae9ae2997a92b2ba36f8f5700dc9b5e9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9ae2997a92b2ba36f8f5700dc9b5e9f">&#9670;&nbsp;</a></span>useBlockingMode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::useBlockingMode </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Puts the file descriptor in blocking mode. Returns true on success and false on failure. </p>
-
-<p>Reimplemented in <a class="el" href="classsocketserver.html#ab3dc23a6c6b9472e020d51f223b83361">socketserver</a>, and <a class="el" href="classsocketclient.html#a3b2378890ad555d75fdea9b7a1965642">socketclient</a>.</p>
-
-</div>
-</div>
-<a id="a68d4f98f00a3794e44bafb8c94f7b906"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68d4f98f00a3794e44bafb8c94f7b906">&#9670;&nbsp;</a></span>useNaglesAlgorithm()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::useNaglesAlgorithm </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes small <a class="el" href="classfiledescriptor.html#a0f26a106cae6c5cd65b0e1138f89b2e9">write()</a>'s to be collected up and sent together when either the kernel's write buffer is full or when a maximum of 0.2 seconds has gone by. (enable Nagle's algorithm)</p>
-<p>This is the default.</p>
-<p>Returns true on success and false on failure. </p>
-
-</div>
-</div>
-<a id="af24b2ab45dafb96beb507b4e7d984831"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af24b2ab45dafb96beb507b4e7d984831">&#9670;&nbsp;</a></span>useNonBlockingMode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="classbool.html">bool</a> filedescriptor::useNonBlockingMode </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Puts the file descriptor in non-blocking mode. Returns true on success and false on failure. </p>
-
-<p>Reimplemented in <a class="el" href="classsocketserver.html#a0787781d97a6a47017744c7b5bddc2b2">socketserver</a>, and <a class="el" href="classsocketclient.html#ab1c7af55fb789044426d1f673ca5a58e">socketclient</a>.</p>
 
 </div>
 </div>
@@ -5800,7 +5667,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 21 2023 23:49:16 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Thu Jun 1 2023 23:28:03 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
