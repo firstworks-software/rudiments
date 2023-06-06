@@ -1,60 +1,67 @@
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/thread.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/snooze.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#0000ff">// struct for passing arguments into the thread</font><br>
-<font color="#2e8b57"><b>struct</b></font>&nbsp;args {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*th;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>int32_t</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; id;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>uint16_t</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max;<br>
-};<br>
-<br>
-<font color="#0000ff">// function that will be spawned as a thread</font><br>
-<font color="#2e8b57"><b>void</b></font>&nbsp;count(<font color="#2e8b57"><b>void</b></font>&nbsp;*args) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>struct</b></font>&nbsp;args&nbsp;&nbsp;&nbsp;&nbsp; *a=(<font color="#2e8b57"><b>struct</b></font>&nbsp;args *)args;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a-&gt;th-&gt;detach();<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>uint16_t</b></font>&nbsp;c=<font color="#ff00ff">0</font>; c&lt;a-&gt;max; c++) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,a-&gt;id,c);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-}<br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// do we even support threads?</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(!thread::supportsThreads()) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;thread are not supported</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">1</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create the threads</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;t1;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;t2;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// define arguments to pass to each thread</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>struct</b></font>&nbsp;args&nbsp;&nbsp;&nbsp;&nbsp; a1;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a1.th=&amp;t1;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a1.id=<font color="#ff00ff">1</font>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a1.max=<font color="#ff00ff">100</font>;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>struct</b></font>&nbsp;args&nbsp;&nbsp;&nbsp;&nbsp; a2;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.th=&amp;t2;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.id=<font color="#ff00ff">2</font>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.max=<font color="#ff00ff">200</font>;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// spawn the threads</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.spawn((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count,(<font color="#2e8b57"><b>void</b></font>&nbsp;*)&amp;a1,<font color="#ff00ff">true</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.spawn((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count,(<font color="#2e8b57"><b>void</b></font>&nbsp;*)&amp;a2,<font color="#ff00ff">true</font>);<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/thread.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Comment">// struct for passing arguments into the thread</span>
+<span class="Type">struct</span> args {
+	thread		*th;
+	<span class="Type">int32_t</span>		id;
+	<span class="Type">uint16_t</span>	max;
+};
+
+<span class="Comment">// function that will be spawned as a thread</span>
+<span class="Type">void</span> count(<span class="Type">void</span> *args) {
+
+	<span class="Type">struct</span> args	*a=(<span class="Type">struct</span> args *)args;
+
+	a-&gt;th-&gt;detach();
+
+	<span class="Statement">for</span> (<span class="Type">uint16_t</span> c=<span class="Constant">0</span>; c&lt;a-&gt;max; c++) {
+		stdoutput.printf(<span class="Constant">&quot;  </span><span class="Special">%d</span><span class="Constant">: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,a-&gt;id,c);
+	}
+}
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// do we even support threads?</span>
+	<span class="Statement">if</span> (!thread::isSupported()) {
+		stdoutput.printf(<span class="Constant">&quot;thread are not supported</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+		process::exit(<span class="Constant">1</span>);
+	}
+
+	<span class="Comment">// create the threads</span>
+	thread	t1;
+	thread	t2;
+
+	<span class="Comment">// define arguments to pass to each thread</span>
+	<span class="Type">struct</span> args	a1;
+	a1.th=&amp;t1;
+	a1.id=<span class="Constant">1</span>;
+	a1.max=<span class="Constant">100</span>;
+
+	<span class="Type">struct</span> args	a2;
+	a2.th=&amp;t2;
+	a2.id=<span class="Constant">2</span>;
+	a2.max=<span class="Constant">200</span>;
+
+	<span class="Comment">// spawn the threads</span>
+	t1.spawn((<span class="Type">void</span> *(*)(<span class="Type">void</span> *))count,(<span class="Type">void</span> *)&amp;a1,<span class="Constant">true</span>);
+	t2.spawn((<span class="Type">void</span> *(*)(<span class="Type">void</span> *))count,(<span class="Type">void</span> *)&amp;a2,<span class="Constant">true</span>);
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->

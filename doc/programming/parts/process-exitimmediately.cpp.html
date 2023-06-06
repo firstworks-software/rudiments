@@ -1,27 +1,33 @@
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#0000ff">// define a function to run at exit</font><br>
-<font color="#2e8b57"><b>void</b></font>&nbsp;runAtExit() {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;running at exit!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
-}<br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// configure runAtExit to run at exit</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::atExit(runAtExit);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;nothing should be printed below...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// exit immediately, bypassing functions configured to run at exit</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exitImmediately(<font color="#ff00ff">0</font>);<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Comment">// define a function to run at exit</span>
+<span class="Type">void</span> runAtExit() {
+	stdoutput.write(<span class="Constant">&quot;running at exit!</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+}
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// configure runAtExit to run at exit</span>
+	process::registerExitHandler(runAtExit);
+
+	stdoutput.write(<span class="Constant">&quot;nothing should be printed below...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+	<span class="Comment">// exit immediately, bypassing functions configured to run at exit</span>
+	process::exitImmediately(<span class="Constant">0</span>);
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->

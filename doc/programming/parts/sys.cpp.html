@@ -1,190 +1,196 @@
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/sys.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/charstring.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*osname=sys::getOperatingSystemName();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;OS Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,osname);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>[] osname;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*release=sys::getOperatingSystemRelease();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;OS Release&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,release);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>[] release;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*version=sys::getOperatingSystemVersion();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;OS Version&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,version);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>[] version;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*arch=sys::getOperatingSystemArchitecture();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;OS Arch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,arch);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>[] arch;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*hostname=sys::getHostName();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Host Name&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hostname);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>[] hostname;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;onemin;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;fivemin;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;fifteenmin;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getLoadAverages(&amp;onemin,&amp;fivemin,&amp;fifteenmin);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Load Averages :&nbsp;</font><font color="#6a5acd">%0.2f</font><font color="#ff00ff">&nbsp;&nbsp;</font><font color="#6a5acd">%0.2f</font><font color="#ff00ff">&nbsp;&nbsp;</font><font color="#6a5acd">%0.2f</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onemin,fivemin,fifteenmin);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Cmd Line Arg Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxCommandLineArgumentLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Processes Per User&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxProcessesPerUser());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Host Name Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxHostNameLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Login Name Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxLoginNameLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Clock Ticks Per Second&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getClockTicksPerSecond());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Open Files Per Process&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxOpenFilesPerProcess());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Page Size&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getPageSize());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Allocation Granularity&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getAllocationGranularity());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Open Streams Per Process&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxOpenStreamsPerProcess());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Symlink Loops&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxSymlinkLoops());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Terminal Device Name Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxTerminalDeviceNameLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Timezone Name Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxTimezoneNameLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Line Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxLineLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Physical Page Count&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getPhysicalPageCount());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Available Physical Page Count&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getAvailablePhysicalPageCount());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Processor Count&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getProcessorCount());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Processor Count&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxProcessorCount());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Processors Online&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getProcessorsOnline());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Supplemental Groups Per User&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxSupplementalGroupsPerUser());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Delay Timer Expirations&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxDelayTimerExpirations());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Realtime Signals&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxRealtimeSignals());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Sempahores Per Process&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxSemaphoresPerProcess());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Semaphore Value&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxSemaphoreValue());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Signal Queue Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxSignalQueueLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Timers Per Process&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxTimersPerProcess());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Suggested Group Entry Buffer Size&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getSuggestedGroupEntryBufferSize());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Suggested Passwd Entry Buffer Size&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getSuggestedPasswordEntryBufferSize());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Min Thread Stack Size&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMinThreadStackSize());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Threads Per Process&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxThreadsPerProcess());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Thread Destructor Iterations&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getThreadDestructorIterations());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Thread Keys&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxThreadKeys());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max At-Exit Functions&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxAtExitFunctions());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;CPUSet Size&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getCpuSetSize());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Password Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxPasswordLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Log Name Length&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxLogNameLength());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Process ID&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxProcessId());<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Directory Separator&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%c</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getDirectorySeparator());<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sys.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">char</span>	*osname=sys::getOperatingSystemName();
+	stdoutput.printf(<span class="Constant">&quot;OS Name		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,osname);
+	<span class="Statement">delete</span>[] osname;
+
+	<span class="Type">char</span>	*release=sys::getOperatingSystemRelease();
+	stdoutput.printf(<span class="Constant">&quot;OS Release	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,release);
+	<span class="Statement">delete</span>[] release;
+
+	<span class="Type">char</span>	*version=sys::getOperatingSystemVersion();
+	stdoutput.printf(<span class="Constant">&quot;OS Version	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,version);
+	<span class="Statement">delete</span>[] version;
+
+	<span class="Type">char</span>	*arch=sys::getOperatingSystemArchitecture();
+	stdoutput.printf(<span class="Constant">&quot;OS Arch		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,arch);
+	<span class="Statement">delete</span>[] arch;
+
+	<span class="Type">char</span>	*hostname=sys::getHostName();
+	stdoutput.printf(<span class="Constant">&quot;Host Name	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,hostname);
+	<span class="Statement">delete</span>[] hostname;
+
+	<span class="Type">double</span>	onemin;
+	<span class="Type">double</span>	fivemin;
+	<span class="Type">double</span>	fifteenmin;
+	sys::getLoadAverages(&amp;onemin,&amp;fivemin,&amp;fifteenmin);
+	stdoutput.printf(<span class="Constant">&quot;Load Averages	: </span><span class="Special">%0.2f</span><span class="Constant">  </span><span class="Special">%0.2f</span><span class="Constant">  </span><span class="Special">%0.2f</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					onemin,fivemin,fifteenmin);
+
+	stdoutput.printf(<span class="Constant">&quot;Max Cmd Line Arg Length&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxCommandLineArgumentLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Processes Per User&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxProcessesPerUser());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Host Name Length&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxHostNameLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Login Name Length&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxLoginNameLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Clock Ticks Per Second&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getClockTicksPerSecond());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Open Files Per Process&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxOpenFilesPerProcess());
+
+	stdoutput.printf(<span class="Constant">&quot;Page Size&quot;</span>
+			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getPageSize());
+
+	stdoutput.printf(<span class="Constant">&quot;Allocation Granularity&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getAllocationGranularity());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Open Streams Per Process&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxOpenStreamsPerProcess());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Symlink Loops&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxSymlinkLoops());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Terminal Device Name Length&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxTerminalDeviceNameLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Timezone Name Length&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxTimezoneNameLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Line Length&quot;</span>
+			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxLineLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Physical Page Count&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getPhysicalPageCount());
+
+	stdoutput.printf(<span class="Constant">&quot;Available Physical Page Count&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getAvailablePhysicalPageCount());
+
+	stdoutput.printf(<span class="Constant">&quot;Processor Count&quot;</span>
+			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getProcessorCount());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Processor Count&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxProcessorCount());
+
+	stdoutput.printf(<span class="Constant">&quot;Processors Online&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getProcessorsOnline());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Supplemental Groups Per User&quot;</span>
+			<span class="Constant">&quot;	: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxSupplementalGroupsPerUser());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Delay Timer Expirations&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxDelayTimerExpirations());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Realtime Signals&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxRealtimeSignals());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Sempahores Per Process&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxSemaphoresPerProcess());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Semaphore Value&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxSemaphoreValue());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Signal Queue Length&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxSignalQueueLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Timers Per Process&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxTimersPerProcess());
+
+	stdoutput.printf(<span class="Constant">&quot;Suggested Group Entry Buffer Size&quot;</span>
+			<span class="Constant">&quot;	: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getSuggestedGroupEntryBufferSize());
+
+	stdoutput.printf(<span class="Constant">&quot;Suggested Passwd Entry Buffer Size&quot;</span>
+			<span class="Constant">&quot;	: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getSuggestedPasswordEntryBufferSize());
+
+	stdoutput.printf(<span class="Constant">&quot;Min Thread Stack Size&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMinThreadStackSize());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Threads Per Process&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxThreadsPerProcess());
+
+	stdoutput.printf(<span class="Constant">&quot;Thread Destructor Iterations&quot;</span>
+			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getThreadDestructorIterations());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Thread Keys&quot;</span>
+			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxThreadKeys());
+
+	stdoutput.printf(<span class="Constant">&quot;Max At-Exit Functions&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxAtExitFunctions());
+
+	stdoutput.printf(<span class="Constant">&quot;CPUSet Size&quot;</span>
+			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getCpuSetSize());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Password Length&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxPasswordLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Log Name Length&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxLogNameLength());
+
+	stdoutput.printf(<span class="Constant">&quot;Max Process ID&quot;</span>
+			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getMaxProcessId());
+
+	stdoutput.printf(<span class="Constant">&quot;Directory Separator&quot;</span>
+			<span class="Constant">&quot;			: </span><span class="Special">%c</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			sys::getDirectorySeparator());
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->

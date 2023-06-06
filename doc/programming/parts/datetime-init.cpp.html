@@ -1,32 +1,38 @@
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from system date/time</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getSystemDateAndTime();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;system date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from a formatted string</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.initialize(<font color="#ff00ff">&quot;01/02/2000 03:04:05 EDT&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;formatted string:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from the number of seconds since 1970</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.initialize(<font color="#ff00ff">40000000</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;seconds since 1970:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from the number of seconds and microseconds since 1970</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.initialize(<font color="#ff00ff">40000000</font>,<font color="#ff00ff">100</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;sec/usec since 1970:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	datetime	dt;
+
+	<span class="Comment">// initialize from system date/time</span>
+	dt.initFromSystemDateTime();
+	stdoutput.printf(<span class="Constant">&quot;system date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// initialize from a formatted string</span>
+	dt.init(<span class="Constant">&quot;01/02/2000 03:04:05 EDT&quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;formatted string: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// initialize from the number of seconds since </span><span class="Constant">1970</span>
+	dt.init(<span class="Constant">40000000</span>);
+	stdoutput.printf(<span class="Constant">&quot;seconds since 1970: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// initialize from the number of seconds and microseconds since </span><span class="Constant">1970</span>
+	dt.init(<span class="Constant">40000000</span>,<span class="Constant">100</span>);
+	stdoutput.printf(<span class="Constant">&quot;sec/usec since 1970: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->

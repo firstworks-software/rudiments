@@ -1,61 +1,68 @@
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/dictionary.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a dictionary of name-value pairs</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dictionary&lt;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*,<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&gt;&nbsp;&nbsp; nvp;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// set some name-value pairs</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;color&quot;</font>,<font color="#ff00ff">&quot;blue&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;number&quot;</font>,<font color="#ff00ff">&quot;one&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;automobile&quot;</font>,<font color="#ff00ff">&quot;car&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;dwelling&quot;</font>,<font color="#ff00ff">&quot;house&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;parent&quot;</font>,<font color="#ff00ff">&quot;dad&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the dictionary</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;Current contents:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.print();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// replace some values</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;number&quot;</font>,<font color="#ff00ff">&quot;two&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;dwelling&quot;</font>,<font color="#ff00ff">&quot;apartment&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;parent&quot;</font>,<font color="#ff00ff">&quot;mom&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove a value</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.remove(<font color="#ff00ff">&quot;color&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the dictionary</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;Current contents:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.print();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clear the dictionary</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.clear();<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// set some new values</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;road&quot;</font>,<font color="#ff00ff">&quot;highway&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;furniture&quot;</font>,<font color="#ff00ff">&quot;chair&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nvp.setValue(<font color="#ff00ff">&quot;tree&quot;</font>,<font color="#ff00ff">&quot;elm&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print out the dictionary a different way</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;Current contents:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkedlist&lt;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*keys=nvp.getKeys();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(linkedlistnode&lt;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&gt; *kn=keys-&gt;getFirst();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kn; kn=kn-&gt;getNext()) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#ff00ff">=</font><font color="#6a5acd">%s</font><font color="#ff00ff">&nbsp;&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kn-&gt;getValue(),nvp.getValue(kn-&gt;getValue()));<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>&nbsp;keys;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/dictionary.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// create a dictionary of name-value pairs</span>
+	dictionary&lt;<span class="Type">const</span> <span class="Type">char</span> *,<span class="Type">const</span> <span class="Type">char</span> *&gt;	nvp;
+
+	<span class="Comment">// set some name-value pairs</span>
+	nvp.setValue(<span class="Constant">&quot;color&quot;</span>,<span class="Constant">&quot;blue&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;number&quot;</span>,<span class="Constant">&quot;one&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;automobile&quot;</span>,<span class="Constant">&quot;car&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;dwelling&quot;</span>,<span class="Constant">&quot;house&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;parent&quot;</span>,<span class="Constant">&quot;dad&quot;</span>);
+
+	<span class="Comment">// print the dictionary</span>
+	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	nvp.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Comment">// replace some values</span>
+	nvp.setValue(<span class="Constant">&quot;number&quot;</span>,<span class="Constant">&quot;two&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;dwelling&quot;</span>,<span class="Constant">&quot;apartment&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;parent&quot;</span>,<span class="Constant">&quot;mom&quot;</span>);
+
+	<span class="Comment">// remove a value</span>
+	nvp.remove(<span class="Constant">&quot;color&quot;</span>);
+
+	<span class="Comment">// print the dictionary</span>
+	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	nvp.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Comment">// clear the dictionary</span>
+	nvp.clear();
+
+	<span class="Comment">// set some new values</span>
+	nvp.setValue(<span class="Constant">&quot;road&quot;</span>,<span class="Constant">&quot;highway&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;furniture&quot;</span>,<span class="Constant">&quot;chair&quot;</span>);
+	nvp.setValue(<span class="Constant">&quot;tree&quot;</span>,<span class="Constant">&quot;elm&quot;</span>);
+
+	<span class="Comment">// print out the dictionary a different way</span>
+	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	linkedlist&lt;<span class="Type">const</span> <span class="Type">char</span> *&gt;	*keys=nvp.getKeys();
+	<span class="Statement">for</span> (listnode&lt;<span class="Type">const</span> <span class="Type">char</span> *&gt; *kn=keys-&gt;getFirst();
+						kn; kn=kn-&gt;getNext()) {
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">=</span><span class="Special">%s</span><span class="Constant"> &quot;</span>,
+			kn-&gt;getValue(),nvp.getValue(kn-&gt;getValue()));
+	}
+	<span class="Statement">delete</span> keys;
+	stdoutput.write(<span class="Special">'\n'</span>);
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->

@@ -1,42 +1,48 @@
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from system date/time</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getSystemDateAndTime();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;current date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// add three years, months, days,</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// hours, minutes, seconds, and microseconds</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addYears(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMonths(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addDays(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addHours(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMinutes(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addSeconds(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMicroseconds(<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;new date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// subtract three years, months, days,</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// hours, minutes, seconds, and microseconds</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addYears(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMonths(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addDays(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addHours(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMinutes(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addSeconds(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMicroseconds(-<font color="#ff00ff">3</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;original date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	datetime	dt;
+
+	<span class="Comment">// initialize from system date/time</span>
+	dt.initFromSystemDateTime();
+	stdoutput.printf(<span class="Constant">&quot;current date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// add three years, months, days,</span>
+	<span class="Comment">// hours, minutes, seconds, and microseconds</span>
+	dt.addYears(<span class="Constant">3</span>);
+	dt.addMonths(<span class="Constant">3</span>);
+	dt.addDays(<span class="Constant">3</span>);
+	dt.addHours(<span class="Constant">3</span>);
+	dt.addMinutes(<span class="Constant">3</span>);
+	dt.addSeconds(<span class="Constant">3</span>);
+	dt.addMicroseconds(<span class="Constant">3</span>);
+	stdoutput.printf(<span class="Constant">&quot;new date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// subtract three years, months, days,</span>
+	<span class="Comment">// hours, minutes, seconds, and microseconds</span>
+	dt.addYears(-<span class="Constant">3</span>);
+	dt.addMonths(-<span class="Constant">3</span>);
+	dt.addDays(-<span class="Constant">3</span>);
+	dt.addHours(-<span class="Constant">3</span>);
+	dt.addMinutes(-<span class="Constant">3</span>);
+	dt.addSeconds(-<span class="Constant">3</span>);
+	dt.addMicroseconds(-<span class="Constant">3</span>);
+	stdoutput.printf(<span class="Constant">&quot;original date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->

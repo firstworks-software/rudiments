@@ -529,11 +529,12 @@ uint8_t locale::getLocalMonetaryDecimalDigits() {
 	if (!l) {
 		return 0;
 	}
-	// If frac_digits is -1 (indicating that this value is undefined for
-	// the current locale) then casting it to a uint8_t can result in
-	// either 127 or 255, depending on the platform.  For consistency,
-	// we'll make it 255.
-	return (l->frac_digits==-1)?255:l->frac_digits;
+	// If frac_digits is CHAR_MAX (indicating that this value is undefined
+	// for the current locale) then it could be 127 or 255, depending on
+	// whether char is explicitly signed or not on the current platform.
+	// Eg. on ARM and MIPS, char is not explicitly signed.  For consistency,
+	// we'll always return 255.
+	return (l->frac_digits==127)?255:l->frac_digits;
 #else
 	error::setErrorNumber(ENOTSUP);
 	return 0;
@@ -747,10 +748,12 @@ uint8_t locale::getInternationalMonetaryDecimalDigits() {
 	if (!l) {
 		return 0;
 	}
-	// If int_frac_digits is -1 (indicating that this value is undefined for
-	// the current locale) then casting it to a uint8_t can result in
-	// either 127 or 255, depending on the platform.  For consistency,
-	return (l->int_frac_digits==-1)?255:l->int_frac_digits;
+	// If int_frac_digits is CHAR_MAX (indicating that this value is
+	// undefined for the current locale) then it could be 127 or 255,
+	// depending on whether char is explicitly signed or not on the current
+	// platform.  Eg. on ARM and MIPS, char is not explicitly signed.  For
+	// consistency, we'll always return 255.
+	return (l->int_frac_digits==127)?255:l->int_frac_digits;
 #else
 	error::setErrorNumber(ENOTSUP);
 	return 0;

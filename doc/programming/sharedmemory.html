@@ -12,80 +12,94 @@
 <p>This program creates a shared memory segment, copies some data into it, then goes to sleep, giving another program time to access the segment.</p>
 
 <blockquote class="code">
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/sharedmemory.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/charstring.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/error.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/snooze.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a file called &quot;shm&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file::createFile(<font color="#ff00ff">&quot;shm&quot;</font>,permissions::evalPermString(<font color="#ff00ff">&quot;rw-------&quot;</font>));<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a 128 byte shared memory segment, keyed to the file &quot;shm&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sharedmemory&nbsp;&nbsp;&nbsp;&nbsp;shm;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(!shm.create(file::generateKey(<font color="#ff00ff">&quot;shm&quot;</font>,<font color="#ff00ff">1</font>),<font color="#ff00ff">128</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permissions::evalPermString(<font color="#ff00ff">&quot;rw-------&quot;</font>))) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;error:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,error::getErrorString());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">1</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// write a string into the shared memory</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*shmptr=(<font color="#2e8b57"><b>char</b></font>&nbsp;*)shm.getPointer();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstring::copy(shmptr,<font color="#ff00ff">&quot;This string is in shared memory.&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// sleep for 10 seconds, giving another process some time to access</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// the shared memory...</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;snooze::macrosnooze(<font color="#ff00ff">10</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove the file &quot;shm&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file::remove(<font color="#ff00ff">&quot;shm&quot;</font>);<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sharedmemory.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// create a file called </span><span class="Constant">&quot;shm&quot;</span>
+	file::createFile(<span class="Constant">&quot;shm&quot;</span>,permissions::parsePermString(<span class="Constant">&quot;rw-------&quot;</span>));
+
+	<span class="Comment">// create a </span><span class="Constant">128</span><span class="Comment"> byte shared memory segment, keyed to the file </span><span class="Constant">&quot;shm&quot;</span>
+        sharedmemory    shm;
+        <span class="Statement">if</span> (!shm.create(file::generateKey(<span class="Constant">&quot;shm&quot;</span>,<span class="Constant">1</span>),<span class="Constant">128</span>,
+                                permissions::parsePermString(<span class="Constant">&quot;rw-------&quot;</span>))) {
+		stdoutput.printf(<span class="Constant">&quot;error: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,error::getErrorString());
+		process::exit(<span class="Constant">1</span>);
+	}
+
+	<span class="Comment">// write a string into the shared memory</span>
+        <span class="Type">char</span>    *shmptr=(<span class="Type">char</span> *)shm.getPointer();
+        charstring::copy(shmptr,<span class="Constant">&quot;This string is in shared memory.&quot;</span>);
+
+	<span class="Comment">// sleep for </span><span class="Constant">10</span><span class="Comment"> seconds, giving another process some time to access</span>
+	<span class="Comment">// the shared memory...</span>
+        snooze::macrosnooze(<span class="Constant">10</span>);
+
+	<span class="Comment">// remove the file </span><span class="Constant">&quot;shm&quot;</span>
+	file::remove(<span class="Constant">&quot;shm&quot;</span>);
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
 <p>This program reads the data from shared memory.</p>
 
 <blockquote class="code">
-
-<script type='text/javascript'>
+<style>
 <!--
-
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
 -->
-</script>
-<font face="monospace">
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/sharedmemory.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/error.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
-<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
-<br>
-<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// attach to the shared memory segment keyed to the file &quot;shm&quot;</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sharedmemory&nbsp;&nbsp;&nbsp;&nbsp;shm;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(!shm.attach(file::generateKey(<font color="#ff00ff">&quot;shm&quot;</font>,<font color="#ff00ff">1</font>),<font color="#ff00ff">128</font>)) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;error:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,error::getErrorString());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">1</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the data contained in the shared memory segment</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,(<font color="#2e8b57"><b>char</b></font>&nbsp;*)shm.getPointer());<br>
-}<br>
-</font>
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sharedmemory.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// attach to the shared memory segment keyed to the file </span><span class="Constant">&quot;shm&quot;</span>
+        sharedmemory    shm;
+        <span class="Statement">if</span> (!shm.attach(file::generateKey(<span class="Constant">&quot;shm&quot;</span>,<span class="Constant">1</span>),<span class="Constant">128</span>)) {
+		stdoutput.printf(<span class="Constant">&quot;error: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,error::getErrorString());
+		process::exit(<span class="Constant">1</span>);
+	}
+
+	<span class="Comment">// display the data contained in the shared memory segment</span>
+        stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,(<span class="Type">char</span> *)shm.getPointer());
+}
+</pre>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
