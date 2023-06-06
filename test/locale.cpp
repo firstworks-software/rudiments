@@ -412,7 +412,6 @@ int main(int argc, const char **argv) {
 	test("local currency symbol",!charstring::compare(c,""));
 	delete[] c;
 	n=locale::getLocalMonetaryDecimalDigits();
-stdoutput.printf("n=%d\n",n);
 	test("local monetary decimal digits",n==255);
 	b=locale::getLocalCurrencySymbolPreceedsPositiveValue();
 	test("local currency symbol preceeds positive value",!b);
