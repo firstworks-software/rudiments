@@ -410,6 +410,9 @@ class RUDIMENTS_DLLSPEC locale {
 		 *  for an locally formatted monetary value, for the current
 		 *  locale.
 		 *
+		 *  Returns 255 if the number of digits is undefined for the
+		 *  current locale.
+		 *
 		 *  Returns 0 and sets errno on error.
 		 *
 		 *  NOTE: The get*() methods of this class are not thread-safe,
@@ -561,6 +564,9 @@ class RUDIMENTS_DLLSPEC locale {
 
 		/** Returns the number of digits after the decimal point
 		 *  for an internationally formatted monetary value, for the
+		 *  current locale.
+		 *
+		 *  Returns 255 if the number of digits is undefined for the
 		 *  current locale.
 		 *
 		 *  Returns 0 and sets errno on error.

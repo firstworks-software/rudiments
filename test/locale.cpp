@@ -412,7 +412,7 @@ int main(int argc, const char **argv) {
 	test("local currency symbol",!charstring::compare(c,""));
 	delete[] c;
 	n=locale::getLocalMonetaryDecimalDigits();
-	test("local monetary decimal digits",n==127 || n==255);
+	test("local monetary decimal digits",n==255);
 	b=locale::getLocalCurrencySymbolPreceedsPositiveValue();
 	test("local currency symbol preceeds positive value",!b);
 	b=locale::getLocalSpaceSeparatesCurrencySymbolAndPositiveValue();
@@ -434,12 +434,10 @@ int main(int argc, const char **argv) {
 	test("int currency separator",!charstring::compare(c,""));
 	delete[] c;
 	n=locale::getInternationalMonetaryDecimalDigits();
-	test("int monetary decimal digits",n==127 || n==255);
+	test("int monetary decimal digits",n==255);
 	c=locale::getInternationalCurrencySymbol();
 	test("int currency symbol",!charstring::compare(c,""));
 	delete[] c;
-	n=locale::getInternationalMonetaryDecimalDigits();
-	test("int monetary decimal digits",n==127 || n==255);
 	b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 	test("int currency symbol preceeds positive value",!b);
 	b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
