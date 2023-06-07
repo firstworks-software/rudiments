@@ -936,6 +936,10 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 			pvt->_writebufferwriteavail=0;
 			pvt->_writebufferreadavail=0;
 
+			// also set the tail to the end of the buffer so it
+			// won't immediately think that we're at the EOF
+			pvt->_writebuffertail=pvt->_writebufferend;
+
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("outside current block");
 			#endif
