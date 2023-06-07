@@ -1120,7 +1120,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		if (filesize/pvt->_writeblocksize==
 				pvt->_writeblockoffset/pvt->_writeblocksize) {
 			debugPrintf(",is last block");
-			if (filesize-pvt->_writeblockoffset==
+			if (((size_t)filesize-pvt->_writeblockoffset)==
 						pvt->_writeblocksize) {
 				debugPrintf(",is full block,"
 						"can mmap");
@@ -1265,7 +1265,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	#if defined(DEBUG_BUFFERING)
 	if (!result) {
 		debugPrintf("...EOF\n");
-	} else if (result!=pvt->_writeblocksize) {
+	} else if (result!=(ssize_t)pvt->_writeblocksize) {
 		debugPrintf("...short read\n");
 	} else {
 		debugPrintf("...success\n");
@@ -1827,6 +1827,15 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 
 		if (!pvt->_writebufferreadavail) {
 
+			// bail on EOF
+			if (pvt->_writebuffertail<pvt->_writebufferend) {
+				#if defined(DEBUG_READ) && \
+						defined(DEBUG_BUFFERING)
+				debugPrintf("...EOF,0 bytes available!)\n");
+				#endif
+				return bytesread;
+			}
+
 			// realign/fill the write buffer
 			result=realignWriteBuffer(sec,usec);
 			if (result) {
@@ -1840,8 +1849,10 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 			}
 
 			// bail on EOF
+			// (this can occur if the file size is an exact
+			// multiple of the block size)
 			if (!pvt->_writebufferreadavail) {
-				#if defined(DEBUG_WRITE) && \
+				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
 				debugPrintf("...0 bytes available!)\n");
 				#endif
@@ -1874,7 +1885,7 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 
 		// return if we've copied out enough to satisfy the request
 		if (!count) {
-			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			debugPrintf(")\n");
 			#endif
 			return bytesread;
@@ -2330,7 +2341,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf("...,%d bytes,%s)\n",(int)result,
-			(result==writebuffersize)?"true":"false");
+			(result==(ssize_t)writebuffersize)?"true":"false");
 	#endif
 
 	// If the write succeeded, then reset the buffer tail and mark the
