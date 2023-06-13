@@ -1822,39 +1822,6 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 	for (;;) {
 
 		if (!pvt->_writebufferreadavail) {
-// If we're here then we're positioned past whatever was available in the
-// buffer.
-//
-// Either:
-// * EOF is in the currently buffered block, and we're at or past EOF, but still
-//   in this block.
-// * We're positioned outside of the current block and just need to buffer
-//   that block.
-//
-// We need to be able to detect both of those.
-//
-// Note that it's possible for the file size to be an exact multiple of the
-// blocksize, and we might not be at EOF until we attempt to realign the buffer,
-// at which point then we will be.
-stdoutput.printf(
-	"offset=%08x\n"
-	"writebuffer=%08x\n"
-	"writeblockoffset=%08x\n"
-	"writebufferhead=%08x\n"
-	"writebuffertail=%08x\n"
-	"writebufferend=%08x\n"
-	"positioninbuffer=%08x\n"
-	"writebufferreadavail=%d\n"
-	"writebufferwriteavail=%d\n",
-	pvt->_offset,
-	pvt->_writebuffer,
-	pvt->_writeblockoffset,
-	pvt->_writebufferhead,
-	pvt->_writebuffertail,
-	pvt->_writebufferend,
-	pvt->_offset-pvt->_writeblockoffset+pvt->_writebuffer,
-	pvt->_writebufferreadavail,
-	pvt->_writebufferwriteavail);
 
 			// realign/fill the write buffer
 			result=realignWriteBuffer(sec,usec);
@@ -1867,25 +1834,6 @@ stdoutput.printf(
 				#endif
 				return result;
 			}
-stdoutput.printf(
-	"offset=%08x\n"
-	"writebuffer=%08x\n"
-	"writeblockoffset=%08x\n"
-	"writebufferhead=%08x\n"
-	"writebuffertail=%08x\n"
-	"writebufferend=%08x\n"
-	"positioninbuffer=%08x\n"
-	"writebufferreadavail=%d\n"
-	"writebufferwriteavail=%d\n",
-	pvt->_offset,
-	pvt->_writebuffer,
-	pvt->_writeblockoffset,
-	pvt->_writebufferhead,
-	pvt->_writebuffertail,
-	pvt->_writebufferend,
-	pvt->_offset-pvt->_writeblockoffset+pvt->_writebuffer,
-	pvt->_writebufferreadavail,
-	pvt->_writebufferwriteavail);
 
 			// bail on EOF
 			// (this can occur if the file size is an exact
