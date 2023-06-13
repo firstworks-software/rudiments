@@ -220,6 +220,7 @@ int main(int argc, const char **argv) {
 		if (blocksize==-1) {
 			blocksize=1024;
 		}
+blocksize=131072;
 		fl.setWriteBufferSize(blocksize);
 		test("getWriteBufferSize",
 			fl.getWriteBufferSize()==(size_t)blocksize);

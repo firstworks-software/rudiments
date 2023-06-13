@@ -929,16 +929,12 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 
 		} else {
 
-			// Otherwise we'll just set the read/write avail to 0
+			// Otherwise we'll fudge the read/write avail to 0
 			// so that realignWriteBuffer() will get called during
 			// the next read/write and figure everything out at that
 			// time.
 			pvt->_writebufferwriteavail=0;
 			pvt->_writebufferreadavail=0;
-
-			// also set the tail to the end of the buffer so it
-			// won't immediately think that we're at the EOF
-			pvt->_writebuffertail=pvt->_writebufferend;
 
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("outside current block");
@@ -1268,11 +1264,11 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	#if defined(DEBUG_BUFFERING)
 	if (!result) {
-		debugPrintf("...EOF\n");
+		debugPrintf("...EOF");
 	} else if (result!=(ssize_t)pvt->_writeblocksize) {
-		debugPrintf("...short read\n");
+		debugPrintf("...short read");
 	} else {
-		debugPrintf("...success\n");
+		debugPrintf("...success");
 	}
 	#endif
 
@@ -1282,14 +1278,10 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	pvt->_writebuffertail=pvt->_writebuffer+result;
 
 	// update the number of bytes available in the buffer
-	//
-	// Note that these could be different for read/write.  The number of
-	// bytes available to read is how ever many we were able to copy in
-	// to the buffer.  The number of bytes available to write is the full
-	// size of the buffer.  These might be different if this is the last
-	// block of the file and it's a partial block.
-	pvt->_writebufferreadavail=result;
-	pvt->_writebufferwriteavail=pvt->_writeblocksize;
+	// Note that these could be different for read/write, if this is the
+	// last block of the file and it's a partial block.
+	pvt->_writebufferreadavail=pvt->_writebuffertail-pvt->_writebufferhead;
+	pvt->_writebufferwriteavail=pvt->_writebufferend-pvt->_writebufferhead;
 
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf(",read %d bytes)\n",(int)result);
@@ -1830,15 +1822,39 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 	for (;;) {
 
 		if (!pvt->_writebufferreadavail) {
-
-			// bail on EOF
-			if (pvt->_writebuffertail<pvt->_writebufferend) {
-				#if defined(DEBUG_READ) && \
-						defined(DEBUG_BUFFERING)
-				debugPrintf("...EOF,0 bytes available!)\n");
-				#endif
-				return bytesread;
-			}
+// If we're here then we're positioned past whatever was available in the
+// buffer.
+//
+// Either:
+// * EOF is in the currently buffered block, and we're at or past EOF, but still
+//   in this block.
+// * We're positioned outside of the current block and just need to buffer
+//   that block.
+//
+// We need to be able to detect both of those.
+//
+// Note that it's possible for the file size to be an exact multiple of the
+// blocksize, and we might not be at EOF until we attempt to realign the buffer,
+// at which point then we will be.
+stdoutput.printf(
+	"offset=%08x\n"
+	"writebuffer=%08x\n"
+	"writeblockoffset=%08x\n"
+	"writebufferhead=%08x\n"
+	"writebuffertail=%08x\n"
+	"writebufferend=%08x\n"
+	"positioninbuffer=%08x\n"
+	"writebufferreadavail=%d\n"
+	"writebufferwriteavail=%d\n",
+	pvt->_offset,
+	pvt->_writebuffer,
+	pvt->_writeblockoffset,
+	pvt->_writebufferhead,
+	pvt->_writebuffertail,
+	pvt->_writebufferend,
+	pvt->_offset-pvt->_writeblockoffset+pvt->_writebuffer,
+	pvt->_writebufferreadavail,
+	pvt->_writebufferwriteavail);
 
 			// realign/fill the write buffer
 			result=realignWriteBuffer(sec,usec);
@@ -1851,6 +1867,25 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 				#endif
 				return result;
 			}
+stdoutput.printf(
+	"offset=%08x\n"
+	"writebuffer=%08x\n"
+	"writeblockoffset=%08x\n"
+	"writebufferhead=%08x\n"
+	"writebuffertail=%08x\n"
+	"writebufferend=%08x\n"
+	"positioninbuffer=%08x\n"
+	"writebufferreadavail=%d\n"
+	"writebufferwriteavail=%d\n",
+	pvt->_offset,
+	pvt->_writebuffer,
+	pvt->_writeblockoffset,
+	pvt->_writebufferhead,
+	pvt->_writebuffertail,
+	pvt->_writebufferend,
+	pvt->_offset-pvt->_writeblockoffset+pvt->_writebuffer,
+	pvt->_writebufferreadavail,
+	pvt->_writebufferwriteavail);
 
 			// bail on EOF
 			// (this can occur if the file size is an exact
@@ -1869,7 +1904,7 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 					pvt->_writebufferreadavail:count;
 
 		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		debugPrintf("...%d bytes available,copying out %d bytes\n",
+		debugPrintf("...%d bytes available,copying out %d bytes",
 					(int)pvt->_writebufferreadavail,
 					(int)bytestocopy);
 		#endif
@@ -2286,8 +2321,17 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	// return the number of bytes flushed, one of the various error
 	// conditions, or EOF rather than just true/false
 
+	#if defined(DEBUG_BUFFERING)
+	debugPrintf("%d: flushWriteBuffer(%d",
+					(int)process::getProcessId(),
+					(int)pvt->_fd);
+	#endif
+
 	// degenerate case, bail immediately
 	if (!pvt->_writebuffer) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf(",no write buffer,nothing to flush)\n");
+		#endif
 		return true;
 	}
 
@@ -2296,7 +2340,10 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	// actually written to it), or we're using a memorymap, then just reset
 	// the buffer tail and mark the buffer clean
 	if ((!pvt->_isstream && !pvt->_writebufferdirty) ||
-					pvt->_writebuffermap ) {
+					pvt->_writebuffermap) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf(",write buffer clean,nothing to flush)\n");
+		#endif
 		pvt->_writebuffertail=pvt->_writebuffer;
 		pvt->_writebufferreadavail=0;
 		pvt->_writebufferdirty=false;
@@ -2306,9 +2353,7 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	// calculate how much to write
 	size_t	writebuffersize=pvt->_writebuffertail-pvt->_writebuffer;
 	#if defined(DEBUG_BUFFERING)
-	debugPrintf("%d: flushWriteBuffer(%d,attempting %d bytes",
-					(int)process::getProcessId(),
-					(int)pvt->_fd,(int)writebuffersize);
+	debugPrintf(",attempting %d bytes",(int)writebuffersize);
 	#endif
 
 	// set the position in the file to write to
