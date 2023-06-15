@@ -10208,13 +10208,22 @@ else
 	then
 		echo "cross compiling"
 	else
-		AC_PATH_PROG(APR_1_MT_CONFIG,apr-1-mt-config,"",/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin)
+		dnl NOTE that we prefer /usr/bin and /usr/sbin to /bin and
+		dnl /sbin for these.  On fedora37+ (and maybe other platforms)
+		dnl these scripts are found in /usr/bin and in /bin but if you
+		dnl run /bin/apr-1-config it thinks you're cross compiling
+		dnl because you called it by "absolute path, but not installed
+		dnl path".  It then prepends the APR_TARGET_DIR (which it
+		dnl appears to miscalculate) to the includedir.  So, we'll
+		dnl prefer /usr/bin and /usr/sbin to /bin and /sbin for these
+		dnl scripts.  This doesn't appear to break older platforms.
+		AC_PATH_PROG(APR_1_MT_CONFIG,apr-1-mt-config,"",/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin)
 		if ( test -z "$APR_1_MT_CONFIG" )
 		then
-			AC_PATH_PROG(APR_1_CONFIG,apr-1-config,"",/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
+			AC_PATH_PROG(APR_1_CONFIG,apr-1-config,"",/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
 			if ( test -z "$APR_1_CONFIG" )
 			then
-				AC_PATH_PROG(APR_CONFIG,apr-config,"",/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
+				AC_PATH_PROG(APR_CONFIG,apr-config,"",/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
 			fi
 		fi
 		if ( test -n "$APR_1_CONFIG" )
@@ -11997,13 +12006,22 @@ else
 	then
 		echo "cross compiling"
 	else
-		AC_PATH_PROG(APR_1_MT_CONFIG,apr-1-mt-config,"",/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin)
+		dnl NOTE that we prefer /usr/bin and /usr/sbin to /bin and
+		dnl /sbin for these.  On fedora37+ (and maybe other platforms)
+		dnl these scripts are found in /usr/bin and in /bin but if you
+		dnl run /bin/apr-1-config it thinks you're cross compiling
+		dnl because you called it by "absolute path, but not installed
+		dnl path".  It then prepends the APR_TARGET_DIR (which it
+		dnl appears to miscalculate) to the includedir.  So, we'll
+		dnl prefer /usr/bin and /usr/sbin to /bin and /sbin for these
+		dnl scripts.  This doesn't appear to break older platforms.
+		AC_PATH_PROG(APR_1_MT_CONFIG,apr-1-mt-config,"",/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin)
 		if ( test -z "$APR_1_MT_CONFIG" )
 		then
-			AC_PATH_PROG(APR_1_CONFIG,apr-1-config,"",/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
+			AC_PATH_PROG(APR_1_CONFIG,apr-1-config,"",/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
 			if ( test -z "$APR_1_CONFIG" )
 			then
-				AC_PATH_PROG(APR_CONFIG,apr-config,"",/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
+				AC_PATH_PROG(APR_CONFIG,apr-config,"",/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/apache/bin:/usr/local/apache/sbin:/usr/pkg/bin:/usr/pkg/sbin:/boot/common/bin:/resources/index/bin)
 			fi
 		fi
 		if ( test -n "$APR_1_CONFIG" )
