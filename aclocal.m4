@@ -9792,8 +9792,11 @@ AC_DEFUN([FW_CHECK_WNOOVERLOADEDVIRTUAL],
 WNOOVERLOADEDVIRTUAL=""
 AC_MSG_CHECKING(for -Wno-overloaded-virtual option)
 
-# clang's -Wall includes -Woverloaded-virtual, which we don't want
-if ( test -n "`$CC --version 2> /dev/null | grep clang`" )
+dnl clang's and gcc 13+'s -Wall includes -Woverloaded-virtual, which we don't
+dnl want. It looks like all versions of clang and gcc are tolerant to passing
+dnl in this parameter, whether they really support it or not, so we'll just
+dnl always use it for clang and gcc
+if ( test -n "`$CC --version 2> /dev/null | grep clang`" -o -n "`$CC --version 2> /dev/null | grep gcc`" )
 then
 	WNOOVERLOADEDVIRTUAL="-Wno-overloaded-virtual"
 	AC_MSG_RESULT(yes)
@@ -11590,8 +11593,11 @@ AC_DEFUN([FW_CHECK_WNOOVERLOADEDVIRTUAL],
 WNOOVERLOADEDVIRTUAL=""
 AC_MSG_CHECKING(for -Wno-overloaded-virtual option)
 
-# clang's -Wall includes -Woverloaded-virtual, which we don't want
-if ( test -n "`$CC --version 2> /dev/null | grep clang`" )
+dnl clang's and gcc 13+'s -Wall includes -Woverloaded-virtual, which we don't
+dnl want. It looks like all versions of clang and gcc are tolerant to passing
+dnl in this parameter, whether they really support it or not, so we'll just
+dnl always use it for clang and gcc
+if ( test -n "`$CC --version 2> /dev/null | grep clang`" -o -n "`$CC --version 2> /dev/null | grep gcc`" )
 then
 	WNOOVERLOADEDVIRTUAL="-Wno-overloaded-virtual"
 	AC_MSG_RESULT(yes)

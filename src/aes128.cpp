@@ -64,7 +64,7 @@ const byte_t *aes128::getDecryptedData() {
 const byte_t *aes128::getData(bool encrypt) {
 
 	// reset the error
-	setError(ENCRYPTION_ERROR_SUCCESS);
+	encryption::setError(ENCRYPTION_ERROR_SUCCESS);
 
 	// set the dirty flag true if we're doing a different operation
 	// (encryption vs. decryption) than we're currently configured to do
@@ -298,7 +298,8 @@ const byte_t *aes128::getData(bool encrypt) {
 			getOut()->setPositionRelativeToEnd(-1);
 			getOut()->read(&padbytes,sizeof(padbytes));
 			if (padbytes>AES_BLOCK_SIZE) {
-				setError(ENCRYPTION_ERROR_INVALID_PADDING);
+				encryption::setError(
+					ENCRYPTION_ERROR_INVALID_PADDING);
 				getOut()->clear();
 				return NULL;
 			}
@@ -320,7 +321,7 @@ void aes128::setError(int32_t err) {
 		// (currently just clears the queue)
 		while (ERR_get_error()) {}
 	#else
-		encryption::setError((encryptionerror_t)err);
+		encryption::setError(ENCRYPTION_ERROR_NULL);
 	#endif
 }
 

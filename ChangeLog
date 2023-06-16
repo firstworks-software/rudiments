@@ -145,6 +145,7 @@
 		for ones that were missing
 	added locale class
 	configure prefers /usr/bin and /usr/sbin for apr-*-config scripts now
+	-Wno-overloaded-virtual is now set when clang or gcc is used
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

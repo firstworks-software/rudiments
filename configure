@@ -17111,8 +17111,7 @@ WNOOVERLOADEDVIRTUAL=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -Wno-overloaded-virtual option" >&5
 $as_echo_n "checking for -Wno-overloaded-virtual option... " >&6; }
 
-# clang's -Wall includes -Woverloaded-virtual, which we don't want
-if ( test -n "`$CC --version 2> /dev/null | grep clang`" )
+if ( test -n "`$CC --version 2> /dev/null | grep clang`" -o -n "`$CC --version 2> /dev/null | grep gcc`" )
 then
 	WNOOVERLOADEDVIRTUAL="-Wno-overloaded-virtual"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5

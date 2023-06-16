@@ -21,7 +21,6 @@ class sha1private {
 			SHA1Context	_context;
 			uint8_t		_hash[SHA1HashSize];
 		#endif
-		hasherror_t	_err;
 };
 
 sha1::sha1() : hash() {
@@ -34,7 +33,7 @@ sha1::~sha1() {
 }
 
 bool sha1::append(const byte_t *data, uint32_t size) {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
 			if (!SHA1_Update(&pvt->_context,data,size)) {
@@ -53,7 +52,7 @@ bool sha1::append(const byte_t *data, uint32_t size) {
 }
 
 const byte_t *sha1::getHash() {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
 			if (!SHA1_Final(pvt->_hash,&pvt->_context)) {
@@ -83,7 +82,7 @@ uint64_t sha1::getHashSize() {
 }
 
 bool sha1::clear() {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT)
@@ -102,26 +101,22 @@ bool sha1::clear() {
 	#endif
 }
 
-hasherror_t sha1::getError() {
-	return pvt->_err;
-}
-
 void sha1::setError(int32_t err) {
 	#if defined(RUDIMENTS_HAS_SSL)
 		// FIXME: implement this...
-		pvt->_err=HASH_ERROR_NULL;
+		hash::setError(HASH_ERROR_NULL);
 		// clear the queue
 		while (ERR_get_error()) {}
 	#else
 		switch (err) {
 			case shaNull:
-				pvt->_err=HASH_ERROR_NULL;
+				hash::setError(HASH_ERROR_NULL);
 			case shaInputTooLong:
-				pvt->_err=HASH_ERROR_INPUT_TOO_LONG;
+				hash::setError(HASH_ERROR_INPUT_TOO_LONG);
 			case shaStateError:
-				pvt->_err=HASH_ERROR_STATE_ERROR;
+				hash::setError(HASH_ERROR_STATE_ERROR);
 			default:
-				pvt->_err=HASH_ERROR_SUCCESS;
+				hash::setError(HASH_ERROR_SUCCESS);
 		}
 	#endif
 }

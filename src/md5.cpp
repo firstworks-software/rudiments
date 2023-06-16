@@ -23,7 +23,6 @@ class md5private {
 			MD5		_md5;
 		#endif
 		byte_t		_hash[16];
-		hasherror_t	_err;
 };
 
 md5::md5() : hash() {
@@ -36,7 +35,7 @@ md5::~md5() {
 }
 
 bool md5::append(const byte_t *data, uint32_t size) {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
 			if (!MD5_Update(&pvt->_context,data,size)) {
@@ -54,7 +53,7 @@ bool md5::append(const byte_t *data, uint32_t size) {
 }
 
 const byte_t *md5::getHash() {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
 			if (!MD5_Final(pvt->_hash,&pvt->_context)) {
@@ -75,7 +74,7 @@ uint64_t md5::getHashSize() {
 }
 
 bool md5::clear() {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 	#if defined(RUDIMENTS_HAS_SSL)
 		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
@@ -92,17 +91,13 @@ bool md5::clear() {
 	return true;
 }
 
-hasherror_t md5::getError() {
-	return pvt->_err;
-}
-
 void md5::setError(int32_t err) {
 	#if defined(RUDIMENTS_HAS_SSL)
 		// FIXME: implement this...
-		pvt->_err=HASH_ERROR_NULL;
+		hash::setError(HASH_ERROR_NULL);
 		// clear the queue
 		while (ERR_get_error()) {}
 	#else
-		// FIXME: implement this...
+		hash::setError(HASH_ERROR_NULL);
 	#endif
 }

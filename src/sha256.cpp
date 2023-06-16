@@ -23,7 +23,6 @@ class sha256private {
 			sha256_ctx	_context;
 			sha256_t	_hash;
 		#endif
-		hasherror_t	_err;
 };
 
 sha256::sha256() : hash() {
@@ -36,7 +35,7 @@ sha256::~sha256() {
 }
 
 bool sha256::append(const byte_t *data, uint32_t size) {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
 			if (!SHA256_Update(&pvt->_context,data,size)) {
@@ -54,7 +53,7 @@ bool sha256::append(const byte_t *data, uint32_t size) {
 }
 
 const byte_t *sha256::getHash() {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
 			if (!SHA256_Final(pvt->_hash,&pvt->_context)) {
@@ -80,7 +79,7 @@ uint64_t sha256::getHashSize() {
 }
 
 bool sha256::clear() {
-	pvt->_err=HASH_ERROR_SUCCESS;
+	hash::setError(HASH_ERROR_SUCCESS);
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		bytestring::zero(pvt->_hash,sizeof(pvt->_hash));
 		#if defined(RUDIMENTS_HAS_SHA256_INIT_RETURNING_INT)
@@ -99,17 +98,13 @@ bool sha256::clear() {
 	#endif
 }
 
-hasherror_t sha256::getError() {
-	return pvt->_err;
-}
-
 void sha256::setError(int32_t err) {
 	#if defined(RUDIMENTS_HAS_SSL) && defined(RUDIMENTS_HAS_SHA256_CTX)
 		// FIXME: implement this...
-		pvt->_err=HASH_ERROR_NULL;
+		hash::setError(HASH_ERROR_NULL);
 		// clear the queue
 		while (ERR_get_error()) {}
 	#else
-		pvt->_err=HASH_ERROR_NULL;
+		hash::setError(HASH_ERROR_NULL);
 	#endif
 }

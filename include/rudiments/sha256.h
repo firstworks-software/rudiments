@@ -33,9 +33,6 @@ class RUDIMENTS_DLLSPEC sha256 : public hash {
  		 *  false if an error occurred. */
 		bool	clear();
 
-		/** Returns the most recent error. */
-		hasherror_t	getError();
-
 	#include <rudiments/private/sha256.h>
 };
 
