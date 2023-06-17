@@ -19,7 +19,9 @@ bool locale::setAll(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ALL)
 	return setlocale(LC_ALL,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -28,7 +30,9 @@ const char *locale::getAll() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ALL)
 	return setlocale(LC_ALL,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -45,7 +49,9 @@ bool locale::setCollate(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_COLLATE)
 	return setlocale(LC_COLLATE,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -54,7 +60,9 @@ const char *locale::getCollate() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_COLLATE)
 	return setlocale(LC_COLLATE,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -71,7 +79,9 @@ bool locale::setCType(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_CTYPE)
 	return setlocale(LC_CTYPE,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -80,7 +90,9 @@ const char *locale::getCType() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_CTYPE)
 	return setlocale(LC_CTYPE,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -97,7 +109,9 @@ bool locale::setMessages(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MESSAGES)
 	return setlocale(LC_MESSAGES,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -106,7 +120,9 @@ const char *locale::getMessages() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MESSAGES)
 	return setlocale(LC_MESSAGES,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -123,7 +139,9 @@ bool locale::setMonetary(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MONETARY)
 	return setlocale(LC_MONETARY,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -132,7 +150,9 @@ const char *locale::getMonetary() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MONETARY)
 	return setlocale(LC_MONETARY,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -149,7 +169,9 @@ bool locale::setNumeric(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NUMERIC)
 	return setlocale(LC_NUMERIC,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -158,7 +180,9 @@ const char *locale::getNumeric() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NUMERIC)
 	return setlocale(LC_NUMERIC,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -175,7 +199,9 @@ bool locale::setTime(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TIME)
 	return setlocale(LC_TIME,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -184,7 +210,9 @@ const char *locale::getTime() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TIME)
 	return setlocale(LC_TIME,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -201,7 +229,9 @@ bool locale::setAddress(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ADDRESS)
 	return setlocale(LC_ADDRESS,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -210,7 +240,9 @@ const char *locale::getAddress() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_ADDRESS)
 	return setlocale(LC_ADDRESS,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -227,7 +259,9 @@ bool locale::setIdentification(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_IDENTIFICATION)
 	return setlocale(LC_IDENTIFICATION,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -236,7 +270,9 @@ const char *locale::getIdentification() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_IDENTIFICATION)
 	return setlocale(LC_IDENTIFICATION,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -253,7 +289,9 @@ bool locale::setMeasurement(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MEASUREMENT)
 	return setlocale(LC_MEASUREMENT,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -262,7 +300,9 @@ const char *locale::getMeasurement() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_MEASUREMENT)
 	return setlocale(LC_MEASUREMENT,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -279,7 +319,9 @@ bool locale::setName(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NAME)
 	return setlocale(LC_NAME,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -288,7 +330,9 @@ const char *locale::getName() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_NAME)
 	return setlocale(LC_NAME,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -305,7 +349,9 @@ bool locale::setPaper(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_PAPER)
 	return setlocale(LC_PAPER,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -314,7 +360,9 @@ const char *locale::getPaper() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_PAPER)
 	return setlocale(LC_PAPER,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -331,7 +379,9 @@ bool locale::setTelephone(const char *value) {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TELEPHONE)
 	return setlocale(LC_TELEPHONE,value);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -340,7 +390,9 @@ const char *locale::getTelephone() {
 #if defined(RUDIMENTS_HAVE_SETLOCALE) && defined(LC_TELEPHONE)
 	return setlocale(LC_TELEPHONE,NULL);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -362,7 +414,9 @@ char *locale::getNumericDecimalPoint() {
 	}
 	return charstring::duplicate(l->decimal_point);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -376,7 +430,9 @@ char *locale::getNumericDigitGroupSeparator() {
 	}
 	return charstring::duplicate(l->thousands_sep);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -390,7 +446,9 @@ uint8_t locale::getNumericDigitGroupCount(uint8_t index) {
 	}
 	return getDigitGroupCount(l->grouping,index);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return 0;
 #endif
 }
@@ -400,7 +458,9 @@ uint8_t locale::getDigitGroupCount(const char *g, uint8_t index) {
 
 	// bail and set error if the grouping array is NULL
 	if (!g) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return 0;
 	}
 
@@ -447,7 +507,9 @@ char *locale::getMonetaryDecimalPoint() {
 	}
 	return charstring::duplicate(l->mon_decimal_point);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -461,7 +523,9 @@ char *locale::getMonetaryDigitGroupSeparator() {
 	}
 	return charstring::duplicate(l->mon_thousands_sep);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -475,7 +539,9 @@ uint8_t locale::getMonetaryDigitGroupCount(uint8_t index) {
 	}
 	return getDigitGroupCount(l->mon_grouping,index);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return 0;
 #endif
 }
@@ -489,7 +555,9 @@ char *locale::getMonetaryPositiveSign() {
 	}
 	return charstring::duplicate(l->positive_sign);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -503,7 +571,9 @@ char *locale::getMonetaryNegativeSign() {
 	}
 	return charstring::duplicate(l->negative_sign);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -517,7 +587,9 @@ char *locale::getLocalCurrencySymbol() {
 	}
 	return charstring::duplicate(l->currency_symbol);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -536,7 +608,9 @@ uint8_t locale::getLocalMonetaryDecimalDigits() {
 	// we'll always return 255.
 	return (l->frac_digits==127)?255:l->frac_digits;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return 0;
 #endif
 }
@@ -550,12 +624,16 @@ bool locale::getLocalCurrencySymbolPreceedsPositiveValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->p_cs_precedes==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->p_cs_precedes;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -569,12 +647,16 @@ bool locale::getLocalSpaceSeparatesCurrencySymbolAndPositiveValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->p_sep_by_space==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->p_sep_by_space;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -600,14 +682,18 @@ monetary_sign_position_t locale::getLocalMonetaryPositiveSignPosition() {
 		case CHAR_MAX:
 			// on Linux, this is CHAR_MAX if it's not supported in
 			// the current locale
-			error::setErrorNumber(ENOTSUP);
+			#ifdef ENOTSUP
+				error::setErrorNumber(ENOTSUP);
+			#endif
 			return MONETARY_SIGN_POSITION_ERROR;
 		default:
 			error::setErrorNumber(ERANGE);
 			return MONETARY_SIGN_POSITION_ERROR;
 	}
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return MONETARY_SIGN_POSITION_ERROR;
 #endif
 }
@@ -621,12 +707,16 @@ bool locale::getLocalCurrencySymbolPreceedsNegativeValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->n_cs_precedes==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->n_cs_precedes;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -640,12 +730,16 @@ bool locale::getLocalSpaceSeparatesCurrencySymbolAndNegativeValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->n_sep_by_space==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->n_sep_by_space;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -671,14 +765,18 @@ monetary_sign_position_t locale::getLocalMonetaryNegativeSignPosition() {
 		case CHAR_MAX:
 			// on Linux, this is CHAR_MAX if it's not supported in
 			// the current locale
-			error::setErrorNumber(ENOTSUP);
+			#ifdef ENOTSUP
+				error::setErrorNumber(ENOTSUP);
+			#endif
 			return MONETARY_SIGN_POSITION_ERROR;
 		default:
 			error::setErrorNumber(ERANGE);
 			return MONETARY_SIGN_POSITION_ERROR;
 	}
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return MONETARY_SIGN_POSITION_ERROR;
 #endif
 }
@@ -693,7 +791,9 @@ char *locale::getInternationalCurrencySymbol() {
 	// the first 3 characters are the symbol, but do some sanity checking
 	const char	*s=l->int_curr_symbol;
 	if (!s) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return NULL;
 	}
 	size_t	len=charstring::getLength(s);
@@ -702,12 +802,16 @@ char *locale::getInternationalCurrencySymbol() {
 		return charstring::duplicate("");
 	}
 	if (len<4) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return NULL;
 	}
 	return charstring::duplicate(s,3);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -722,7 +826,9 @@ char *locale::getInternationalCurrencySymbolSeparator() {
 	// the 4th character is the separator, but do some sanity checking
 	const char	*s=l->int_curr_symbol;
 	if (!s) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return NULL;
 	}
 	size_t	len=charstring::getLength(s);
@@ -731,12 +837,16 @@ char *locale::getInternationalCurrencySymbolSeparator() {
 		return charstring::duplicate("");
 	}
 	if (len<4) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return NULL;
 	}
 	return charstring::duplicate(s+3,1);
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return NULL;
 #endif
 }
@@ -755,7 +865,9 @@ uint8_t locale::getInternationalMonetaryDecimalDigits() {
 	// consistency, we'll always return 255.
 	return (l->int_frac_digits==127)?255:l->int_frac_digits;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return 0;
 #endif
 }
@@ -770,12 +882,16 @@ bool locale::getInternationalCurrencySymbolPreceedsPositiveValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->int_p_cs_precedes==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->int_p_cs_precedes;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -790,12 +906,16 @@ bool locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->int_p_sep_by_space==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->int_p_sep_by_space;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -823,14 +943,18 @@ locale::getInternationalMonetaryPositiveSignPosition() {
 		case CHAR_MAX:
 			// on Linux, this is CHAR_MAX if it's not supported in
 			// the current locale
-			error::setErrorNumber(ENOTSUP);
+			#ifdef ENOTSUP
+				error::setErrorNumber(ENOTSUP);
+			#endif
 			return MONETARY_SIGN_POSITION_ERROR;
 		default:
 			error::setErrorNumber(ERANGE);
 			return MONETARY_SIGN_POSITION_ERROR;
 	}
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return MONETARY_SIGN_POSITION_ERROR;
 #endif
 }
@@ -845,12 +969,16 @@ bool locale::getInternationalCurrencySymbolPreceedsNegativeValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->int_n_cs_precedes==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->int_n_cs_precedes;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -865,12 +993,16 @@ bool locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue() {
 	}
 	// on Linux, this is CHAR_MAX if not supported in the current locale
 	if (l->int_n_sep_by_space==CHAR_MAX) {
-		error::setErrorNumber(ENOTSUP);
+		#ifdef ENOTSUP
+			error::setErrorNumber(ENOTSUP);
+		#endif
 		return false;
 	}
 	return l->int_n_sep_by_space;
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return false;
 #endif
 }
@@ -898,14 +1030,18 @@ locale::getInternationalMonetaryNegativeSignPosition() {
 		case CHAR_MAX:
 			// on Linux, this is CHAR_MAX if it's not supported in
 			// the current locale
-			error::setErrorNumber(ENOTSUP);
+			#ifdef ENOTSUP
+				error::setErrorNumber(ENOTSUP);
+			#endif
 			return MONETARY_SIGN_POSITION_ERROR;
 		default:
 			error::setErrorNumber(ERANGE);
 			return MONETARY_SIGN_POSITION_ERROR;
 	}
 #else
-	error::setErrorNumber(ENOTSUP);
+	#ifdef ENOTSUP
+		error::setErrorNumber(ENOTSUP);
+	#endif
 	return MONETARY_SIGN_POSITION_ERROR;
 #endif
 }

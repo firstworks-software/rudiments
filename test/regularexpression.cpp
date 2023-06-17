@@ -63,7 +63,7 @@ int main(int argc, const char **argv) {
 
         str="Hello Dave";
         test(str,re.match(str));
-	//printMatches(&re);
+printMatches(&re);
 	test("match count",re.getSubstringCount()==1);
 	test("match start",re.getSubstringStart(0)==(str+6));
 	test("match end",re.getSubstringEnd(0)==(str+10));
