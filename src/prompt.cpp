@@ -120,7 +120,7 @@ char *prompt::read() {
 
 		stdoutput.write(pvt->_prompt);
 
-		size_t	retvalsize=sys::getMaxLineLength();
+		int64_t	retvalsize=sys::getMaxLineLength();
 		char	*retval=new char[retvalsize];
 		ssize_t	bytes=stdinput.read(retval,retvalsize-1);
 		if (bytes>0) {

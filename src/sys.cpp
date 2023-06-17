@@ -99,12 +99,6 @@
 	#include <sys/mman.h>
 #endif
 
-// if SSIZE_MAX is undefined, choose a good safe value
-// that should even work on 16-bit systems
-#ifndef SSIZE_MAX
-        #define SSIZE_MAX 16383
-#endif
-
 #ifdef RUDIMENTS_HAVE_MPROTECT_CADDR_T
 	#define MPROTECT_ADDRCAST caddr_t
 #else
@@ -932,7 +926,7 @@ int64_t sys::getMaxLineLength() {
 	#if defined(_SC_LINE_MAX)
 		return sysConf(_SC_LINE_MAX);
 	#else
-		return SSIZE_MAX;
+		return 2048;
 	#endif
 }
 
