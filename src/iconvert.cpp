@@ -4,6 +4,7 @@
 #include <rudiments/iconvert.h>
 #include <rudiments/error.h>
 #include <rudiments/sys.h>
+#include <rudiments/locale.h>
 //#define DEBUG_MESSAGES
 #include <rudiments/debugprint.h>
 
@@ -306,15 +307,52 @@ fallback:
 	const char	*fromenc=pvt->_fromencoding;
 	const char	*toenc=pvt->_toencoding;
 	#ifdef _WIN32
-		// on windows, wchar_t's are encoded as UCS-2LE,
-		// so we can support UCS-2LE by piggybacking
-		if (!charstring::compare(fromenc,"UCS-2LE")) {
+		// On windows, wchar_t's are encoded as UCS-2, so we can
+		// support UCS-2 by piggybacking.  Make sure to discriminate
+		// between BE and LE though.
+		const char	*ucsnot=(sys::isBigEndian())?
+						"UCS-2LE":"UCS-2BE";
+		if (!charstring::compare(fromenc,"UCS-2",5) &&
+				!charstring::compare(fromenc,ucsnot,7)) {
 			fromenc="WCHAR_T";
 		}
-		if (!charstring::compare(toenc,"UCS-2LE")) {
+		if (!charstring::compare(toenc,"UCS-2",5) &&
+				!charstring::compare(toenc,ucsnot,7)) {
 			toenc="WCHAR_T";
 		}
 	#endif
+
+	// If we're attempting to convert to/from UTF-8, C, or POSIX and
+	// the character type of the current locale is some kind of UTF-8, C,
+	// or POSIX then set the encoding to "".
+	// Also, if we're attempting to convert to/from the exact character
+	// type of the current locale, then set the encoding to "".
+	//
+	// FIXME: We're assuming that if a platform doesn't support iconv()
+	// then it probably also doesn't properly support UTF-8 and a string
+	// of what is ostensibly UTF-8 is really just a string of ASCII.
+	// While this makes some of my code work, it's not a proper assumption
+	// eg. for Windows.
+	const char	*lc=locale::getCType();
+	// fudge some utf-8 and asciish encodings...
+	if (((!charstring::compare(fromenc,"UTF-8",5) ||
+		!charstring::compare(fromenc,"C") ||
+		!charstring::compare(fromenc,"POSIX")) &&
+		(charstring::containsIgnoringCase(lc,"UTF-8") ||
+		!charstring::compareIgnoringCase(lc,"C") ||
+		!charstring::compareIgnoringCase(lc,"POSIX"))) ||
+		!charstring::compare(fromenc,lc)) {
+		fromenc="";
+	}
+	if (((!charstring::compare(toenc,"UTF-8",5) ||
+		!charstring::compare(toenc,"C") ||
+		!charstring::compare(toenc,"POSIX")) &&
+		(charstring::containsIgnoringCase(lc,"UTF-8") ||
+		!charstring::compareIgnoringCase(lc,"C") ||
+		!charstring::compareIgnoringCase(lc,"POSIX"))) ||
+		!charstring::compare(toenc,lc)) {
+		toenc="";
+	}
 
 	// initialize sizes and return value
 	size_t	fromsize=0;
