@@ -322,35 +322,24 @@ fallback:
 		}
 	#endif
 
-	// If we're attempting to convert to/from UTF-8, C, or POSIX and
-	// the character type of the current locale is some kind of UTF-8, C,
-	// or POSIX then set the encoding to "".
-	// Also, if we're attempting to convert to/from the exact character
+	// If we're attempting to convert to/from the exact character
 	// type of the current locale, then set the encoding to "".
-	//
-	// FIXME: We're assuming that if a platform doesn't support iconv()
-	// then it probably also doesn't properly support UTF-8 and a string
-	// of what is ostensibly UTF-8 is really just a string of ASCII.
-	// While this makes some of my code work, it's not a proper assumption
-	// eg. for Windows.
+	// Also, if we're attempting to convert to/from C or POSIX and the
+	// character type of the current locale is C or POSIX then set the
+	// encoding to "".
 	const char	*lc=locale::getCType();
-	// fudge some utf-8 and asciish encodings...
-	if (((!charstring::compare(fromenc,"UTF-8",5) ||
-		!charstring::compare(fromenc,"C") ||
+	if (!charstring::compare(fromenc,lc) ||
+		((!charstring::compare(fromenc,"C") ||
 		!charstring::compare(fromenc,"POSIX")) &&
-		(charstring::containsIgnoringCase(lc,"UTF-8") ||
-		!charstring::compareIgnoringCase(lc,"C") ||
-		!charstring::compareIgnoringCase(lc,"POSIX"))) ||
-		!charstring::compare(fromenc,lc)) {
+		(!charstring::compareIgnoringCase(lc,"C") ||
+		!charstring::compareIgnoringCase(lc,"POSIX")))) {
 		fromenc="";
 	}
-	if (((!charstring::compare(toenc,"UTF-8",5) ||
-		!charstring::compare(toenc,"C") ||
+	if (!charstring::compare(toenc,lc) ||
+		((!charstring::compare(toenc,"C") ||
 		!charstring::compare(toenc,"POSIX")) &&
-		(charstring::containsIgnoringCase(lc,"UTF-8") ||
-		!charstring::compareIgnoringCase(lc,"C") ||
-		!charstring::compareIgnoringCase(lc,"POSIX"))) ||
-		!charstring::compare(toenc,lc)) {
+		(!charstring::compareIgnoringCase(lc,"C") ||
+		!charstring::compareIgnoringCase(lc,"POSIX")))) {
 		toenc="";
 	}
 
