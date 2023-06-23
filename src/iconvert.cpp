@@ -301,7 +301,8 @@ fallback:
 	}
 
 	// without iconv() and friends, we can still convert to and from
-	// the current locale, wchar_t, and ucs-2be/le...
+	// the current locale (assuming the current locale is C, POSIX, or
+	// UTF-8), wchar_t, and ucs-2be/le...
 
 	// determine from and to encodings
 	const char	*fromenc=pvt->_fromencoding;
@@ -324,22 +325,26 @@ fallback:
 
 	// If we're attempting to convert to/from the exact character
 	// type of the current locale, then set the encoding to "".
-	// Also, if we're attempting to convert to/from C or POSIX and the
-	// character type of the current locale is C or POSIX then set the
-	// encoding to "".
+	// Also, if we're attempting to convert to/from C, POSIX, or UTF-8 and
+	// the character type of the current locale is C, POSIX, or UTF-8 then
+	// set the encoding to "".
 	const char	*lc=locale::getCType();
 	if (!charstring::compare(fromenc,lc) ||
 		((!charstring::compare(fromenc,"C") ||
-		!charstring::compare(fromenc,"POSIX")) &&
+		!charstring::compare(fromenc,"POSIX") ||
+		charstring::containsIgnoringCase(fromenc,"UTF-8")) &&
 		(!charstring::compareIgnoringCase(lc,"C") ||
-		!charstring::compareIgnoringCase(lc,"POSIX")))) {
+		!charstring::compareIgnoringCase(lc,"POSIX") ||
+		charstring::containsIgnoringCase(lc,"UTF-8")))) {
 		fromenc="";
 	}
 	if (!charstring::compare(toenc,lc) ||
 		((!charstring::compare(toenc,"C") ||
-		!charstring::compare(toenc,"POSIX")) &&
+		!charstring::compare(toenc,"POSIX") ||
+		charstring::containsIgnoringCase(toenc,"UTF-8")) &&
 		(!charstring::compareIgnoringCase(lc,"C") ||
-		!charstring::compareIgnoringCase(lc,"POSIX")))) {
+		!charstring::compareIgnoringCase(lc,"POSIX") ||
+		charstring::containsIgnoringCase(lc,"UTF-8")))) {
 		toenc="";
 	}
 
@@ -458,6 +463,7 @@ fallback:
 				// character set of the current locale is ASCII
 				// or some kind of extended ASCII.  This is
 				// likely the case on platforms that don't
+				// provide wctomb/wcrtomb, but not guaranteed.
 				if ((unsigned char)*from<128) {
 					fromsize=sizeof(char);
 					if (to) {
@@ -490,8 +496,8 @@ fallback:
 
 		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-			// FIXME: verify that the character set of the current
-			// locale is ASCII or some kind of extended ASCII
+			// FIXME: the code below only works for C/POSIX,
+			// not UTF-8
 
 			// set up "from"
 			fromsize=sizeof(ucs2_t);
@@ -528,8 +534,8 @@ fallback:
 
 		while (pvt->_frombufferremaining && pvt->_tobufferremaining) {
 
-			// FIXME: verify that the character set of the current
-			// locale is ASCII or some kind of extended ASCII
+			// FIXME: the code below only works for C/POSIX,
+			// not UTF-8
 
 			// set up "from"
 			fromsize=sizeof(char);
@@ -585,9 +591,9 @@ fallback:
 			// FIXME: use mbrtoc16/mbtoc16 if available
 
 			// convert
-			// FIXME: this implementation is incorrect for
-			// chars >= 128 and for platforms where the wchar_t
-			// format is not the same as UCS-2 (Solaris 9-)
+			// FIXME: this doesn't support chars >= 128 and doesn't
+			// work on platforms where the wchar_t format is not
+			// the same as UCS-2 (Solaris 9-)
 			debugPrintf("direct conversion... ");
 			if (from<128) {
 				debugPrintf("success\n");
@@ -634,9 +640,9 @@ fallback:
 			// FIXME: use c16rtomb/c16tomb if available
 
 			// convert
-			// FIXME: this implementation is incorrect for
-			// chars >= 128 and for platforms where the wchar_t
-			// format is not the same as UCS-2 (Solaris 9-)
+			// FIXME: this doesn't support chars >= 128 and doesn't
+			// work on platforms where the wchar_t format is not
+			// the same as UCS-2 (Solaris 9-)
 			debugPrintf("direct conversion... ");
 			if (from<128) {
 				debugPrintf("success\n");
