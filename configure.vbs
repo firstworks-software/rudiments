@@ -619,6 +619,7 @@ privateheaders7="staticarray.h "+_
 	"mvcservice.h "+_
 	"mvcdao.h "+_
 	"mvcview.h "+_
+	"mvccrudinlines.h "+_
 	"httpbasicsecurity.h "+_
 	"cronscheduleincludes.h "+_
 	"cronschedule.h "+_

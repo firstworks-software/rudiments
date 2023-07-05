@@ -426,13 +426,16 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *
 		 *  "columns" should contain the set of columns that
 		 *  corresponding elements of "values" will be inserted into.
+		 *
 		 *  "types" should contain the corresponding type for each
 		 *  value:
-		 *  * "s" for string
 		 *  * "n" for numeric
 		 *  * "t" for true
 		 *  * "f" for false
 		 *  * "u" for null
+		 *  * "s" (or any other value) for string
+		 *  Otherwise "types" may be null, and the data type will be 
+		 *  erived as "s", "n", or "u" from the value.
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
@@ -443,7 +446,22 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 
 		/** Executes a create (insert) operation.
 		 *
-		 * "kvp" should contain the column/value pairs to be inserted.
+		 *  "columns" should contain the set of columns that
+		 *  corresponding elements of "values" will be inserted into.
+		 *  The data type of each value will be derived as "s", "n", or
+		 *  "u" from the value.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doCreate(const char * const *columns,
+						const char * const *values);
+
+		/** Executes a create (insert) operation.
+		 *
+		 *  Keys of "kvp" and values of "kvp" should be set to the
+		 *  column/value pairs to be inserted.  The data type of each
+		 *  value will be derived as "s", "n", or "u" from the value.
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
@@ -508,11 +526,13 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  "columns" and "values" should be set to the column/value
 		 *  pairs to be updated.  "types" should be set to the
 		 *  corresponding type for each value:
-		 *  * "s" for string
 		 *  * "n" for numeric
 		 *  * "t" for true
 		 *  * "f" for false
 		 *  * "u" for null
+		 *  * "s" (or any other value) for string
+		 *  Otherwise "types" may be null, and the data type will be
+		 *  derived as "s", "n", or "u" from the value.
 		 *
 		 *  "criteria" should be a JSON string representing the
 		 *  criteria that will be used to determine what to update,
@@ -528,8 +548,26 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 
 		/** Executes an update operation.
 		 *
+		 *  "columns" and "values" should be set to the column/value
+		 *  pairs to be updated.  The data type of each value will be
+		 *  derived as "s", "n", or "u" from the value.
+		 *
+		 *  "criteria" should be a JSON string representing the
+		 *  criteria that will be used to determine what to update,
+		 *  conforming to the format described in the class description.
+		 *
+		 *  Returns true on success and false on error.  On error, the
+		 *  code and message can be retrieved using getErrorCode() and
+		 *  getErrorMessage(). */
+		virtual bool	doUpdate(const char * const * columns,
+						const char * const *values,
+						const char *criteria);
+
+		/** Executes an update operation.
+		 *
 		 *  Keys of "kvp" and values of "kvp" should be set to the
-		 *  column/value pairs to be updated.
+		 *  column/value pairs to be updated.  The data type of each
+		 *  value will be derived as "s", "n", or "u" from the value.
 		 *
 		 *  "criteria" should be a JSON string representing the
 		 *  criteria that will be used to determine what to update,
@@ -652,6 +690,13 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  most recently called. */
 		virtual tablecollection<const char *>
 					*getResultSetTable()=0;
+
+	protected:
+		/** Returns "u" if "value" is NULL, "n" if value is a numeric
+		 *  string, and "s" otherwise. */
+		virtual	const char	*deriveDataType(const char *value);
 };
+
+#include <rudiments/private/mvccrudinlines.h>
 
 #endif
