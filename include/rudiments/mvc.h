@@ -426,12 +426,20 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *
 		 *  "columns" should contain the set of columns that
 		 *  corresponding elements of "values" will be inserted into.
+		 *  "types" should contain the corresponding type for each
+		 *  value:
+		 *  * "s" for string
+		 *  * "n" for numeric
+		 *  * "t" for true
+		 *  * "f" for false
+		 *  * "u" for null
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
 		 *  getErrorMessage(). */
 		virtual bool	doCreate(const char * const *columns,
-						const char * const *values)=0;
+						const char * const *values,
+						const char * const *types)=0;
 
 		/** Executes a create (insert) operation.
 		 *
@@ -498,7 +506,13 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		/** Executes an update operation.
 		 *
 		 *  "columns" and "values" should be set to the column/value
-		 *  pairs to be updated.
+		 *  pairs to be updated.  "types" should be set to the
+		 *  corresponding type for each value:
+		 *  * "s" for string
+		 *  * "n" for numeric
+		 *  * "t" for true
+		 *  * "f" for false
+		 *  * "u" for null
 		 *
 		 *  "criteria" should be a JSON string representing the
 		 *  criteria that will be used to determine what to update,
@@ -509,6 +523,7 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  getErrorMessage(). */
 		virtual bool	doUpdate(const char * const * columns,
 						const char * const *values,
+						const char * const *types,
 						const char *criteria)=0;
 
 		/** Executes an update operation.
