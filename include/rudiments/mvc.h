@@ -427,7 +427,7 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  "columns" should contain the set of columns that
 		 *  corresponding elements of "values" will be inserted into.
 		 *
-		 *  "types" should contain the corresponding type for each
+		 *  "types" should contain the corresponding data type for each
 		 *  value:
 		 *  * "n" for numeric
 		 *  * "t" for true
@@ -435,7 +435,7 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *  * "u" for null
 		 *  * "s" (or any other value) for string
 		 *  Otherwise "types" may be null, and the data type will be 
-		 *  erived as "s", "n", or "u" from the value.
+		 *  derived as "s", "n", or "u" from the value.
 		 *
 		 *  Returns true on success and false on error.  On error, the
 		 *  code and message can be retrieved using getErrorCode() and
@@ -525,7 +525,7 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		 *
 		 *  "columns" and "values" should be set to the column/value
 		 *  pairs to be updated.  "types" should be set to the
-		 *  corresponding type for each value:
+		 *  corresponding data type for each value:
 		 *  * "n" for numeric
 		 *  * "t" for true
 		 *  * "f" for false
