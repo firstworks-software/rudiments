@@ -2028,11 +2028,12 @@ uint64_t charstring::convertToUnsignedInteger(const char *string) {
 }
 
 uint64_t charstring::convertToUnsignedInteger(const char *string,
-					const char **endptr) {
+						const char **endptr) {
 	return convertToUnsignedInteger(string,endptr,10);
 }
 
-uint64_t charstring::convertToUnsignedInteger(const char *string, int32_t base) {
+uint64_t charstring::convertToUnsignedInteger(const char *string,
+							int32_t base) {
 	return convertToUnsignedInteger(string,NULL,base);
 }
 
@@ -2084,11 +2085,42 @@ long double charstring::convertToFloatC(const char *string) {
 	return convertToFloat(string,NULL);
 }
 
-long double charstring::convertToFloat(const char *string, const char **endptr) {
-	#ifdef RUDIMENTS_HAVE_STRTOLD
-	return (string)?strtold(string,(char **)endptr):0.0;
+long double charstring::convertToFloat(const char *string,
+					const char **endptr) {
+	#ifdef _HPUX
+		// g++ can't seem to compile code that uses strtold() on HPUX.
+		// sscanf() code compiles and works correctly though, except
+		// that %Lf doesn't work as it should.  Instead, you have to
+		// use %lf.  At least on HP-UX 11.11.
+		if (endptr) {
+			*endptr=NULL;
+		}
+		if (isNullOrEmpty(string)) {
+			return 0.0;
+		}
+		long double	retval;
+		int		endoflongdouble;
+		int		result=sscanf(string,
+						"%lf%n",
+						&retval,
+						&endoflongdouble);
+		if (result==EOF) {
+			return 0.0;
+		}
+		if (result==2) {
+			*endptr=string+endoflongdouble;
+		}
+		return retval;
 	#else
-	return (string)?(long double)(strtod(string,(char **)endptr)):0.0;
+		#ifdef RUDIMENTS_HAVE_STRTOLD
+			return (string)?
+				strtold(string,(char **)endptr):
+				0.0;
+		#else
+			return (string)?
+				(long double)(strtod(string,(char **)endptr)):
+				0.0;
+		#endif
 	#endif
 }
 

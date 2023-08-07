@@ -27,9 +27,15 @@
 	#include <ctype.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#ifdef RUDIMENTS_HAVE_VARCHAR_H
+		#include <varchar.h>
+	#endif
 	#include <wctype.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARCHAR_H
+		#include <varchar.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H

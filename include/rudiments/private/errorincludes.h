@@ -2,8 +2,8 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/dll.h>
-#include <errno.h>
 #include <rudiments/private/inttypes.h>
+#include <errno.h>
 
 #ifdef RUDIMENTS_ENOSYS_NOTIFY
 

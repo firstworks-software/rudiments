@@ -529,6 +529,7 @@ FW_CHECK_SYLLABLE
 FW_CHECK_SCO
 FW_CHECK_IRIX
 FW_CHECK_ILLUMOS
+FW_CHECK_HPUX
 if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
 then
 	dnl you can add FSU Pthreads to OSR5 but they cause odd problems
@@ -775,12 +776,20 @@ AC_MSG_CHECKING(for stdint.h)
 AC_TRY_COMPILE([#include <stdint.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_STDINT_H, 1, Some systems have stdint.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for varargs.h)
+AC_TRY_COMPILE([#include <varargs.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_VARARGS_H, 1, Some systems have varargs.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sys/bitypes.h)
 AC_TRY_COMPILE([#include <sys/bitypes.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_BITYPES_H, 1, Some systems have sys/bitypes.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for inttypes.h)
-AC_TRY_COMPILE([#include <inttypes.h>],
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_VARARGS_H
+	#include <varargs.h>
+#endif
+#include <inttypes.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_INTTYPES_H, 1, Some systems have inttypes.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for uchar.h)
@@ -982,11 +991,19 @@ AC_TRY_COMPILE([#include <locale.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_LOCALE_H, 1, Some systems have locale.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for wctype.h)
-AC_TRY_COMPILE([#include <wctype.h>],
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_VARARGS_H
+	#include <varargs.h>
+#endif
+#include <wctype.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WCTYPE_H, 1, Some systems have wctype.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for wchar.h)
-AC_TRY_COMPILE([#include <wchar.h>],
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_VARARGS_H
+	#include <varargs.h>
+#endif
+#include <wchar.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WCHAR_H, 1, Some systems have wchar.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for wcstr.h)
@@ -1095,13 +1112,265 @@ echo "***** Structures *************"
 AC_C_INLINE
 AC_C_CONST
 
-AC_TYPE_UID_T
-AC_TYPE_MODE_T
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
-AC_CHECK_TYPE([off64_t],[],[AC_DEFINE(off64_t,off_t,Some systems dont have off64_t)])
-AC_CHECK_TYPE([nlink_t],[],[AC_DEFINE(nlink_t,short,Some systems dont have nlink_t)])
+AC_CHECK_TYPE([uid_t],[],[AC_DEFINE(uid_t,int,Some systems dont have uid_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
+AC_CHECK_TYPE([mode_t],[],[AC_DEFINE(mode_t,int,Some systems dont have mode_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
+AC_CHECK_TYPE([pid_t],[],[AC_DEFINE(pid_t,int,Some systems dont have pid_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
+AC_CHECK_TYPE([size_t],[],[AC_DEFINE(size_t,int,Some systems dont have size_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
+AC_CHECK_TYPE([ssize_t],[],[AC_DEFINE(ssize_t,int,Some systems dont have ssize_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
+AC_CHECK_TYPE([off64_t],[],[AC_DEFINE(off64_t,off_t,Some systems dont have off64_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
+AC_CHECK_TYPE([nlink_t],[],[AC_DEFINE(nlink_t,short,Some systems dont have nlink_t)],[
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif])
 AC_CHECK_TYPE([key_t],[],[AC_DEFINE(key_t,int,Some systems dont have key_t)],[
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1277,32 +1546,44 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 [struct sockaddr_un a;],AC_DEFINE(RUDIMENTS_HAVE_SOCKADDR_UN,1,Some systems have sockaddr_un) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for int8_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [int8_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT8_T,1,Some systems have int8_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for uint8_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [uint8_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT8_T,1,Some systems have uint8_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 RUDIMENTS_HAVE_CHAR8_T="no"
 AC_MSG_CHECKING(for char8_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -1317,32 +1598,44 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 [char8_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR8_T,1,Some systems have char8_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR8_T="yes", AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for int16_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [int16_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT16_T,1,Some systems have int16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for uint16_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [uint16_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT16_T,1,Some systems have uint16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 RUDIMENTS_HAVE_CHAR16_T="no"
 AC_MSG_CHECKING(for char16_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -1357,32 +1650,44 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 [char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR16_T="yes", AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for int32_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [int32_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT32_T,1,Some systems have int32_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for uint32_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [uint32_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT32_T,1,Some systems have uint32_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 RUDIMENTS_HAVE_CHAR32_T="no"
 AC_MSG_CHECKING(for char32_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -1397,21 +1702,29 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 [char32_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR32_T,1,Some systems have char32_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR32_T="yes", AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for int64_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [int64_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT64_T,1,Some systems have int64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for uint64_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1429,11 +1742,15 @@ fi
 
 RUDIMENTS_HAVE_BYTE_T="no"
 AC_MSG_CHECKING(for byte_t type)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -2584,6 +2901,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2602,6 +2922,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2620,6 +2943,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2638,6 +2964,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2656,6 +2985,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2674,6 +3006,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2702,6 +3037,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2730,6 +3068,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2763,6 +3104,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2781,6 +3125,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2814,6 +3161,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2832,6 +3182,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2865,6 +3218,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2883,6 +3239,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2916,6 +3275,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2949,6 +3311,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -2982,6 +3347,9 @@ AC_TRY_LINK([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -3015,6 +3383,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 wchar_t *a=NULL; wcschrnul(a,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSCHRNUL,1,Some systems have wcschrnul) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -3030,6 +3401,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 iswascii(0);,AC_DEFINE(RUDIMENTS_HAVE_ISWASCII,1,Some systems have iswascii) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -3045,6 +3419,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 iswblank(0);,AC_DEFINE(RUDIMENTS_HAVE_ISWBLANK,1,Some systems have iswblank) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -3052,6 +3429,9 @@ iswblank(0);,AC_DEFINE(RUDIMENTS_HAVE_ISWBLANK,1,Some systems have iswblank) AC_
 AC_MSG_CHECKING(for broken towctrans)
 AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wctype.h>
 #endif],
 [
@@ -3074,6 +3454,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 swprintf(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SWPRINTF,1,Some systems have swprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -3092,6 +3475,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 vswprintf(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_VSWPRINTF,1,Some systems have vswprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -3110,6 +3496,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 vfwprintf(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_VFWPRINTF,1,Some systems have vfwprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -3128,6 +3517,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 wcsstr(0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCSSTR,1,Some systems have wcsstr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -4044,25 +4436,33 @@ echo
 echo "***** Byte Swap Functions ****"
 
 AC_MSG_CHECKING(for htonll)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_NETINET_IN_H
 	#include <netinet/in.h>
 #endif
 #ifdef RUDIMENTS_HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 htonll(0);,AC_DEFINE(RUDIMENTS_HAVE_HTONLL,1,Some systems have htonll) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for ntohll)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_NETINET_IN_H
 	#include <netinet/in.h>
 #endif
 #ifdef RUDIMENTS_HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif],
 ntohll(0);,AC_DEFINE(RUDIMENTS_HAVE_NTOHLL,1,Some systems have ntohll) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -4842,7 +5242,7 @@ then
 	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ICONV_H
 	#include <iconv.h>
 #endif],
-[iconv(0,(char **)0,0,0,0);],[$LIBICONVINCLUDES],[$LIBICONVLIBS],[],[AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF,1,Some systems have iconv with non-const inbuf)],[AC_MSG_RESULT(no)])
+[iconv(0,(char **)0,0,0,0);],[$CPPFLAGS $LIBICONVINCLUDES],[$LIBICONVLIBS],[],[AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF,1,Some systems have iconv with non-const inbuf)],[AC_MSG_RESULT(no)])
 	FW_RESTORE_WERROR
 fi
 
@@ -4857,6 +5257,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 mbrtowc(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBRTOWC,1,Some systems have mbrtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -4872,6 +5275,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 mbtowc(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MBTOWC,1,Some systems have mbtowc) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -4887,6 +5293,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 wcrtomb(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCRTOMB,1,Some systems have wcrtomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -4902,6 +5311,9 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif],
 wctomb(0,0);,AC_DEFINE(RUDIMENTS_HAVE_WCTOMB,1,Some systems have wctomb) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))

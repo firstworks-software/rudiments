@@ -58,6 +58,9 @@
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARCHAR_H
+		#include <varchar.h>
+	#endif
 	#include <wchar.h>
 #endif
 

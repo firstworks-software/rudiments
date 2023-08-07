@@ -701,6 +701,8 @@ PIPE
 JNISUFFIX
 MODULESUFFIX
 SOSUFFIX
+HPUX
+ILLUMOS
 IRIX
 CRTLIB
 SCO_UW
@@ -16746,10 +16748,12 @@ esac
 
 
 
+ILLUMOS=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for illumos" >&5
 $as_echo_n "checking for illumos... " >&6; }
-if ( test -n "`uname -v 2> /dev/null | grep -v illumos`" )
+if ( test -n "`uname -v 2> /dev/null | grep -i illumos`" )
 then
+	ILLUMOS="yes"
 
 $as_echo "#define _ILLUMOS 1" >>confdefs.h
 
@@ -16759,6 +16763,55 @@ else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
+
+
+
+HPUX=""
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for hp-ux" >&5
+$as_echo_n "checking for hp-ux... " >&6; }
+case $host_os in
+	*hpux* )
+		HPUX="yes"
+		CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
+		ENABLE_WERROR=""
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for -Wa,-w36" >&5
+$as_echo_n "checking for -Wa,-w36... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+CPPFLAGS="-Wa,-w36"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdio.h>
+int
+main ()
+{
+printf("hello");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  CXXFLAGS="$CXXFLAGS -Wa,-w36"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+
+
+$as_echo "#define _HPUX 1" >>confdefs.h
+
+		;;
+	* )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		;;
+esac
+
 
 if ( test -n "$SCO_OSR5" -o -n "$SCO_OSR6" )
 then
@@ -18349,6 +18402,30 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for varargs.h" >&5
+$as_echo_n "checking for varargs.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <varargs.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_VARARGS_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/bitypes.h" >&5
 $as_echo_n "checking for sys/bitypes.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -18377,6 +18454,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for inttypes.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+#ifdef RUDIMENTS_HAVE_VARARGS_H
+	#include <varargs.h>
+#endif
 #include <inttypes.h>
 int
 main ()
@@ -19416,6 +19497,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for wctype.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+#ifdef RUDIMENTS_HAVE_VARARGS_H
+	#include <varargs.h>
+#endif
 #include <wctype.h>
 int
 main ()
@@ -19440,6 +19525,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for wchar.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+#ifdef RUDIMENTS_HAVE_VARARGS_H
+	#include <varargs.h>
+#endif
 #include <wchar.h>
 int
 main ()
@@ -22909,82 +22998,274 @@ $as_echo "#define const /**/" >>confdefs.h
 fi
 
 
+ac_fn_cxx_check_type "$LINENO" "uid_t" "ac_cv_type_uid_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
+if test "x$ac_cv_type_uid_t" = xyes; then :
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for uid_t in sys/types.h" >&5
-$as_echo_n "checking for uid_t in sys/types.h... " >&6; }
-if ${ac_cv_type_uid_t+:} false; then :
-  $as_echo_n "(cached) " >&6
 else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <sys/types.h>
-
-_ACEOF
-if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
-  $EGREP "uid_t" >/dev/null 2>&1; then :
-  ac_cv_type_uid_t=yes
-else
-  ac_cv_type_uid_t=no
-fi
-rm -f conftest*
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_type_uid_t" >&5
-$as_echo "$ac_cv_type_uid_t" >&6; }
-if test $ac_cv_type_uid_t = no; then
 
 $as_echo "#define uid_t int" >>confdefs.h
 
-
-$as_echo "#define gid_t int" >>confdefs.h
-
 fi
 
-ac_fn_cxx_check_type "$LINENO" "mode_t" "ac_cv_type_mode_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "mode_t" "ac_cv_type_mode_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
 if test "x$ac_cv_type_mode_t" = xyes; then :
 
 else
 
-cat >>confdefs.h <<_ACEOF
-#define mode_t int
-_ACEOF
+$as_echo "#define mode_t int" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "pid_t" "ac_cv_type_pid_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "pid_t" "ac_cv_type_pid_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
 if test "x$ac_cv_type_pid_t" = xyes; then :
 
 else
 
-cat >>confdefs.h <<_ACEOF
-#define pid_t int
-_ACEOF
+$as_echo "#define pid_t int" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "size_t" "ac_cv_type_size_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "size_t" "ac_cv_type_size_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
 if test "x$ac_cv_type_size_t" = xyes; then :
 
 else
 
-cat >>confdefs.h <<_ACEOF
-#define size_t unsigned int
-_ACEOF
+$as_echo "#define size_t int" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "ssize_t" "ac_cv_type_ssize_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "ssize_t" "ac_cv_type_ssize_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
 if test "x$ac_cv_type_ssize_t" = xyes; then :
 
 else
 
-cat >>confdefs.h <<_ACEOF
-#define ssize_t int
-_ACEOF
+$as_echo "#define ssize_t int" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "off64_t" "ac_cv_type_off64_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "off64_t" "ac_cv_type_off64_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
 if test "x$ac_cv_type_off64_t" = xyes; then :
 
 else
@@ -22993,7 +23274,44 @@ $as_echo "#define off64_t off_t" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "nlink_t" "ac_cv_type_nlink_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "nlink_t" "ac_cv_type_nlink_t" "
+#include <stdio.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef STDC_HEADERS
+	#include <stdlib.h>
+	#include <stddef.h>
+#else
+	#ifdef HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+#endif
+#ifdef HAVE_STRING_H
+	#if !defined STDC_HEADERS && defined HAVE_MEMORY_H
+		#include <memory.h>
+	#endif
+	#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
+	#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+	#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+"
 if test "x$ac_cv_type_nlink_t" = xyes; then :
 
 else
@@ -23022,6 +23340,7 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for socklen_t" >&5
 $as_echo_n "checking for socklen_t... " >&6; }
+
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/socket.h>
@@ -24068,11 +24387,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for int8_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24098,11 +24421,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for uint8_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24129,11 +24456,15 @@ RUDIMENTS_HAVE_CHAR8_T="no"
 $as_echo_n "checking for char8_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -24168,11 +24499,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for int16_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24198,11 +24533,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for uint16_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24229,11 +24568,15 @@ RUDIMENTS_HAVE_CHAR16_T="no"
 $as_echo_n "checking for char16_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -24268,11 +24611,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for int32_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24298,11 +24645,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for uint32_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24329,11 +24680,15 @@ RUDIMENTS_HAVE_CHAR32_T="no"
 $as_echo_n "checking for char32_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -24368,11 +24723,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for int64_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24398,11 +24757,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for uint64_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -24459,11 +24822,15 @@ RUDIMENTS_HAVE_BYTE_T="no"
 $as_echo_n "checking for byte_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
@@ -30412,6 +30779,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30451,6 +30821,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30490,6 +30863,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30529,6 +30905,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30568,6 +30947,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30607,6 +30989,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30676,6 +31061,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30744,6 +31132,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30817,6 +31208,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30855,6 +31249,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30928,6 +31325,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -30966,6 +31366,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -31039,6 +31442,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -31077,6 +31483,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -31150,6 +31559,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -31225,6 +31637,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -31299,6 +31714,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H
@@ -31373,6 +31791,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -31408,6 +31829,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -31443,6 +31867,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -31470,6 +31897,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wctype.h>
 #endif
 int
@@ -31511,6 +31941,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -31549,6 +31982,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -31587,6 +32023,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -31625,6 +32064,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdio.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -35328,6 +35770,7 @@ echo "***** Byte Swap Functions ****"
 $as_echo_n "checking for htonll... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
@@ -35335,6 +35778,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <netinet/in.h>
 #endif
 #ifdef RUDIMENTS_HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -35361,6 +35807,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for ntohll... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
@@ -35368,6 +35815,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <netinet/in.h>
 #endif
 #ifdef RUDIMENTS_HAVE_INTTYPES_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 int
@@ -39249,7 +39699,7 @@ $as_echo_n "checking for iconv with non-const inbuf... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$LIBICONVINCLUDES"
+CPPFLAGS="$CPPFLAGS $LIBICONVINCLUDES"
 LIBS="$LIBICONVLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -39305,6 +39755,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -39340,6 +39793,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -39375,6 +39831,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int
@@ -39410,6 +39869,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
+	#ifdef RUDIMENTS_HAVE_VARARGS_H
+		#include <varargs.h>
+	#endif
 	#include <wchar.h>
 #endif
 int

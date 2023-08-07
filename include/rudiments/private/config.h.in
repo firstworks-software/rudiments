@@ -1560,6 +1560,9 @@
 /* Some systems have utime.h */
 #undef RUDIMENTS_HAVE_UTIME_H
 
+/* Some systems have varargs.h */
+#undef RUDIMENTS_HAVE_VARARGS_H
+
 /* Some systems have vasprintf */
 #undef RUDIMENTS_HAVE_VASPRINTF
 
@@ -1779,6 +1782,9 @@
 /* Haiku OS */
 #undef _HAIKU
 
+/* HP-UX OS */
+#undef _HPUX
+
 /* IllumOS */
 #undef _ILLUMOS
 
@@ -1803,9 +1809,6 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define to `int' if <sys/types.h> doesn't define. */
-#undef gid_t
-
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
@@ -1815,7 +1818,7 @@
 /* Some systems dont have key_t */
 #undef key_t
 
-/* Define to `int' if <sys/types.h> does not define. */
+/* Some systems dont have mode_t */
 #undef mode_t
 
 /* Some systems dont have nlink_t */
@@ -1824,17 +1827,17 @@
 /* Some systems dont have off64_t */
 #undef off64_t
 
-/* Define to `int' if <sys/types.h> does not define. */
+/* Some systems dont have pid_t */
 #undef pid_t
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Some systems dont have size_t */
 #undef size_t
 
 /* Some systems dont define socklen_t */
 #undef socklen_t
 
-/* Define to `int' if <sys/types.h> does not define. */
+/* Some systems dont have ssize_t */
 #undef ssize_t
 
-/* Define to `int' if <sys/types.h> doesn't define. */
+/* Some systems dont have uid_t */
 #undef uid_t

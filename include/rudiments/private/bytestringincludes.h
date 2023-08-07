@@ -10,5 +10,8 @@
 #include <sys/types.h>
 
 #ifdef RUDIMENTS_HAVE_WCTYPE_H
+	#ifdef RUDIMENTS_HAVE_VARCHAR_H
+		#include <varchar.h>
+	#endif
 	#include <wctype.h>
 #endif

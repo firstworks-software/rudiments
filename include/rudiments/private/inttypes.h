@@ -6,6 +6,16 @@
 
 #include <rudiments/private/config.h>
 
+// HP-UX has a function named memorymap() that prints out the contents of the
+// memory allocator for 32-bit HP-UX systems.  It's depreceated in 11.11 and
+// obsolete in 11.21+.  However, its existence confuses code that uses the
+// memorymap class.  It's defined in malloc.h, and one of the includes below
+// ends up pulling it in.  Since this header gets included by any code that
+// uses rudiments, we'll use the trick below to effectively rename memorymap()
+// to _memorymap(), then undef it after the includes.  Hopefully no code
+// that uses rudiments actually tries to call memorymap().
+#define memorymap _memorymap
+
 // define NULL...
 
 // NULL is typically defined in stddef.h
@@ -34,12 +44,18 @@
 	#endif
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#if defined(RUDIMENTS_HAVE_VARARGS_H)
+		#include <varargs.h>
+	#endif
 	#include <inttypes.h>
 #endif
 
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
 	#include <uchar.h>
 #endif
+
+// see HP-UX note above for why we're doing this
+#undef memorymap
 
 // define bool and true/false
 #ifndef RUDIMENTS_HAVE_BOOL

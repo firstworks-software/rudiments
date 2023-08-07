@@ -1767,6 +1767,9 @@
 /* Haiku OS */
 /* #undef _HAIKU */
 
+/* HP-UX OS */
+/* #undef _HPUX */
+
 /* IllumOS */
 /* #undef _ILLUMOS */
 
