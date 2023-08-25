@@ -955,13 +955,25 @@ char *charstring::parseNumber(double number,
 
 char *charstring::parseNumber(long double number) {
 	char	*str=new char[22];
-	printf(str,22,"%Lf",number);
+	printf(str,22,
+		#ifdef _HPUX
+		"%lf",
+		#else
+		"%Lf",
+		#endif
+		number);
 	return str;
 }
 
 char *charstring::parseNumber(long double number, uint16_t scale) {
 	char	*str=new char[22];
-	printf(str,22,"%.*Lf",scale,number);
+	printf(str,22,
+		#ifdef _HPUX
+		"%.*lf",
+		#else
+		"%.*Lf",
+		#endif
+		scale,number);
 	return str;
 }
 
@@ -969,7 +981,13 @@ char *charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
 	size_t	strlen=precision+3;
 	char	*str=new char[strlen];
-	printf(str,strlen,"%*.*Lf",precision,scale,number);
+	printf(str,strlen,
+		#ifdef _HPUX
+		"%*.*lf",
+		#else
+		"%*.*Lf",
+		#endif
+		precision,scale,number);
 	return str;
 }
 
@@ -2888,7 +2906,13 @@ char *charstring::getHumanReadable(long double number, bool onethousand) {
 	} while (i>0);
 	
 	char	*buf=NULL;
-	printf(&buf,"%0.1Lf%c",number/size,suffixes[i]);
+	printf(&buf,
+		#ifdef _HPUX
+		"%0.1lf%c",
+		#else
+		"%0.1Lf%c",
+		#endif
+		number/size,suffixes[i]);
 	char	*subbed=replace(buf,".0","");
 	delete[] buf;
 	return subbed;

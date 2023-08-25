@@ -219,7 +219,7 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 // on some platforms, we should use the stdin/out/err stream directly rather
 // than fdopen()ing a new stream for it
 #if defined(__SGICXX) || defined(__FreeBSD__) || \
-		defined(_SCO_UW) || defined(_ILLUMOS)
+		defined(_SCO_UW) || defined(_ILLUMOS) || defined(_HPUX)
 	#define USESTDSTREAMS 1
 #endif
 
