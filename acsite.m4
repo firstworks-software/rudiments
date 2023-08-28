@@ -1535,6 +1535,32 @@ $CRYPT_H],[crypt(NULL,NULL);],[$CPPFLAGS],[$i],[],[HAVE_CRYPT="yes"; CRYPTLIB="$
 		AC_MSG_RESULT(no)
 	fi
 
+	dnl on some platforms (HP-UX 11.11) crypt() is in libc, but isn't
+	dnl declared in crypt.h
+	AC_MSG_CHECKING(for undeclared crypt)
+	HAVE_CRYPT=""
+	for i in "" "-lcrypt"
+	do
+		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+			#include <stdlib.h>
+#endif
+$CRYPT_H
+extern "C" {
+	char *crypt(const char *key, const char *salt);
+}
+],[crypt(NULL,NULL);],[$CPPFLAGS],[$i],[],[HAVE_CRYPT="yes"; CRYPTLIB="$i"; AC_DEFINE(RUDIMENTS_HAVE_UNDECLARED_CRYPT,1,Some systems have crypt)],[])
+		if ( test -n "$HAVE_CRYPT" )
+		then
+			break
+		fi
+	done
+	if ( test -n "$HAVE_CRYPT" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
 	AC_MSG_CHECKING(for crypt_r)
 	HAVE_CRYPT_R=""
 	for i in "" "-lcrypt"

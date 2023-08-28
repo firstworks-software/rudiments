@@ -1501,6 +1501,9 @@
 /* Some systems have uname */
 /* #undef RUDIMENTS_HAVE_UNAME */
 
+/* Some systems have crypt */
+/* #undef RUDIMENTS_HAVE_UNDECLARED_CRYPT */
+
 /* Some systems have fsync but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_FSYNC */
 

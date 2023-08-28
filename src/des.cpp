@@ -19,6 +19,13 @@
 	#include <stdlib.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_UNDECLARED_CRYPT
+	#define RUDIMENTS_HAVE_CRYPT 1
+	extern "C" {
+		char *crypt(const char *key, const char *salt);
+	}
+#endif
+
 class desprivate {
 	friend class des;
 	private:
