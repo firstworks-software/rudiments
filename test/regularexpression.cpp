@@ -133,7 +133,8 @@ printMatches(&re);
 	// solaris, darwin, and irix regex can't handle this, apparently
 	if (charstring::compare(osname,"SunOS") &&
 		charstring::compare(osname,"Darwin") &&
-		charstring::compare(osname,"IRIX")) {
+		charstring::compare(osname,"IRIX") &&
+		charstring::compare(osname,"HP-UX")) {
 
         	stdoutput.printf("wildcard word match\n");
 		test("setPattern",re.setPattern("(\\w+) (\\w+)"));
