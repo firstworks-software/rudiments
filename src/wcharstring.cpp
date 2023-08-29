@@ -788,7 +788,13 @@ wchar_t *wcharstring::parseNumber(double number,
 wchar_t *wcharstring::parseNumber(long double number) {
 	wchar_t	*str=new wchar_t[22];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,22,L"%Lf",number);
+		swprintf(str,22,
+			#ifdef _HPUX
+			L"%lf",
+			#else
+			L"%Lf",
+			#endif
+			number);
 	#else
 		char	*temp=charstring::parseNumber(number);
 		wchar_t	*wtemp=duplicate(temp);
@@ -802,7 +808,13 @@ wchar_t *wcharstring::parseNumber(long double number) {
 wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
 	wchar_t	*str=new wchar_t[22];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,22,L"%.*Lf",scale,number);
+		swprintf(str,22,
+			#ifdef _HPUX
+			L"%.*lf",
+			#else
+			L"%.*Lf",
+			#endif
+			scale,number);
 	#else
 		char	*temp=charstring::parseNumber(number,scale);
 		wchar_t	*wtemp=duplicate(temp);
@@ -818,7 +830,13 @@ wchar_t *wcharstring::parseNumber(long double number,
 	size_t	strlength=precision+3;
 	wchar_t	*str=new wchar_t[strlength];
 	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,strlength,L"%*.*Lf",precision,scale,number);
+		swprintf(str,strlength,
+			#ifdef _HPUX
+			L"%*.*lf",
+			#else
+			L"%*.*Lf",
+			#endif
+			precision,scale,number);
 	#else
 		char	*temp=charstring::parseNumber(number,precision,scale);
 		wchar_t	*wtemp=duplicate(temp);
@@ -2339,7 +2357,18 @@ wchar_t *wcharstring::getHumanReadable(long double number, bool onethousand) {
 	
 	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 		wchar_t	*buf=NULL;
-		printf(&buf,L"%0.1Lf%c",number/size,suffixes[i]);
+		// Some platforms (hp-ux 11.11) don't like to vswprintf
+		// '\0' to a %c.
+		#ifdef _HPUX
+			if (i) {
+				printf(&buf,L"%0.1lf%c",
+					number/size,suffixes[i]);
+			} else {
+				printf(&buf,L"%0.1lf",number/size);
+			}
+		#else
+			printf(&buf,L"%0.1Lf%c",number/size,suffixes[i]);
+		#endif
 	#else
 		char	*tmp=NULL;
 		charstring::printf(&tmp,"%0.1Lf%c",number/size,
