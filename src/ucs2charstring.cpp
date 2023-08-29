@@ -835,7 +835,13 @@ ucs2_t *ucs2charstring::parseNumber(double number,
 
 ucs2_t *ucs2charstring::parseNumber(long double number) {
 	char		*str=new char[22];
-	charstring::printf(str,22,"%Lf",number);
+	charstring::printf(str,22,
+			#ifdef _HPUX
+			"%lf",
+			#else
+			"%Lf",
+			#endif
+			number);
 	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
@@ -843,7 +849,13 @@ ucs2_t *ucs2charstring::parseNumber(long double number) {
 
 ucs2_t *ucs2charstring::parseNumber(long double number, uint16_t scale) {
 	char		*str=new char[22];
-	charstring::printf(str,22,"%.*Lf",scale,number);
+	charstring::printf(str,22,
+			#ifdef _HPUX
+			"%.*lf",
+			#else
+			"%.*Lf",
+			#endif
+			scale,number);
 	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
@@ -853,7 +865,13 @@ ucs2_t *ucs2charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
 	size_t		strlen=precision+3;
 	char		*str=new char[strlen];
-	charstring::printf(str,strlen,"%*.*Lf",precision,scale,number);
+	charstring::printf(str,strlen,
+			#ifdef _HPUX
+			"%*.*lf",
+			#else
+			"%*.*Lf",
+			#endif
+			precision,scale,number);
 	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
@@ -2366,7 +2384,13 @@ ucs2_t *ucs2charstring::getHumanReadable(long double number, bool onethousand) {
 	} while (i>0);
 	
 	char	*buf=NULL;
-	charstring::printf(&buf,"%0.1Lf%c",number/size,suffixes[i]);
+	charstring::printf(&buf,
+			#ifdef _HPUX
+			"%0.1lf%c",
+			#else
+			"%0.1Lf%c",
+			#endif
+			number/size,suffixes[i]);
 	char	*subbed=charstring::replace(buf,".0","");
 	delete[] buf;
 	ucs2_t	*converted=duplicate(subbed);
