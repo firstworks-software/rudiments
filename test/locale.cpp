@@ -25,13 +25,17 @@ int main(int argc, const char **argv) {
 	bool	isopenbsd=!charstring::compare(osname,"OpenBSD");
 	bool	issolaris=!charstring::compare(osname,"SunOS");
 	bool	isdarwin=!charstring::compare(osname,"Darwin");
+	bool	ishpux=!charstring::compare(osname,"HP-UX");
 	delete[] osname;
 
 	// default locale
 	stdoutput.printf("default locale (C):\n");
-	if (locale::isAllSupported()) {
-		test("getAll",
-			!charstring::compare(locale::getAll(),"C"));
+
+	// on HP-UX, LC_ALL isn't just a single value, but rather
+	// a delimited list of the values for the other categories,
+	// so skip testing that on HPUX
+	if (!ishpux && locale::isAllSupported()) {
+		test("getAll",!charstring::compare(locale::getAll(),"C"));
 	}
 	if (locale::isCollateSupported()) {
 		test("getCollate",
@@ -95,10 +99,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("set LC_ALL to %s:\n",l);
 	test("setAll",locale::setAll(l));
 
-	// on NetBSD, LC_ALL isn't just a single value, but rather
-	// a /-delimited list of the values for the other categories,
-	// so skip testing that on NetBSD
-	if (!isnetbsd && locale::isAllSupported()) {
+	// on NetBSD and HPUX, LC_ALL isn't just a single value, but rather
+	// a delimited list of the values for the other categories,
+	// so skip testing that on NetBSD and HPUX
+	if (!isnetbsd && !hpux && locale::isAllSupported()) {
 		test("getAll",
 			!charstring::compare(locale::getAll(),l));
 	}
