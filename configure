@@ -23744,6 +23744,8 @@ $as_echo "#define RUDIMENTS_HAVE_SOME_KIND_OF_STATFS 1" >>confdefs.h
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+if ( test "$STATFS_STYLE" = "unknown" )
+then
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/vfs.h>
@@ -23775,6 +23777,7 @@ $as_echo "#define RUDIMENTS_HAVE_SOME_KIND_OF_STATFS 1" >>confdefs.h
  STATFS_STYLE="linux libc4 style"
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
 
 if ( test "$STATFS_STYLE" = "unknown" )
 then

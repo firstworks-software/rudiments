@@ -505,7 +505,7 @@ int64_t filesystem::getType() {
 				fstypename,"ncp")) {
 		return 0x564c;
 	} else if (!charstring::compareIgnoringCase(
-				fstypename,"nfs")) {
+				fstypename,"nfs",3)) {
 		return 0x6969;
 	} else if (!charstring::compareIgnoringCase(
 				fstypename,"ntfs")) {
@@ -563,6 +563,9 @@ int64_t filesystem::getType() {
 	} else if (!charstring::compareIgnoringCase(
 				fstypename,"zfs")) {
 		return 0x00BAB10C;
+	} else if (!charstring::compareIgnoringCase(
+				fstypename,"vxfs")) {
+		return 0xA501FCF5;
 	}
 	return 0;
 }
