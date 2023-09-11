@@ -102,7 +102,7 @@ int main(int argc, const char **argv) {
 	// on NetBSD and HPUX, LC_ALL isn't just a single value, but rather
 	// a delimited list of the values for the other categories,
 	// so skip testing that on NetBSD and HPUX
-	if (!isnetbsd && !hpux && locale::isAllSupported()) {
+	if (!isnetbsd && !ishpux && locale::isAllSupported()) {
 		test("getAll",
 			!charstring::compare(locale::getAll(),l));
 	}
