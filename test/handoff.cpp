@@ -144,7 +144,7 @@ int main(int argc, const char **argv) {
 		header("handoff");
 
 		if (!filedescriptor::supportsPassAndReceiveFileDescriptor() ||
-				!filedescriptor::supportsPassAndReceiveSocket()) {
+			!filedescriptor::supportsPassAndReceiveSocket()) {
 			stdoutput.printf("	not supported\n\n");
 			return 0;
 		}
