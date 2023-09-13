@@ -63,7 +63,6 @@ LTFINISH = echo
 
 # uninstall/clean commands
 LTUNINSTALL =
-LTCLEAN =
 RM = cscript /nologo @top_builddir@\rm.vbs
 RMTREE = cscript /nologo @top_builddir@\rmtree.vbs
 

@@ -37,8 +37,8 @@ PROGS = dictionary \
 all: $(PROGS)
 
 clean:
-	$(LTCLEAN) $(RM) $(PROGS)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
+	$(RM) $(PROGS) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
+	$(RMTREE) .libs
 
 dictionary: dictionary.cpp dictionary.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dictionary.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

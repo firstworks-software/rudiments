@@ -149,10 +149,11 @@ PROGS = $(PROGS0) $(PROGS1) $(PROGS2)
 all: $(PROGS)
 
 clean:
-	$(LTCLEAN) $(RM) $(PROGS0)
-	$(LTCLEAN) $(RM) $(PROGS1)
-	$(LTCLEAN) $(RM) $(PROGS2)
-	$(LTCLEAN) $(RM) *.lo *.o *.obj shm sem testfile testfile1 testfile2 *.ii
+	$(RM) $(PROGS0)
+	$(RM) $(PROGS1)
+	$(RM) $(PROGS2)
+	$(RM) *.lo *.o *.obj shm sem testfile testfile1 testfile2 *.ii
+	$(RMTREE) .libs
 
 character-isxxx$(EXE): character-isxxx.cpp character-isxxx.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)

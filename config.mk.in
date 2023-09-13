@@ -67,7 +67,6 @@ LTFINISH = $(LIBTOOL) --mode=finish
 
 # uninstall/clean commands
 LTUNINSTALL = $(LIBTOOL) --mode=uninstall
-LTCLEAN = $(LIBTOOL) --mode=clean
 RM = rm -f
 RMTREE = rm -rf
 

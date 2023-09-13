@@ -8,8 +8,7 @@ clean:
 	cd certificates $(AND) $(RM) *.crt *.pfx
 	cd database $(AND) $(RM) index* serial*
 	cd database $(AND) cd newcerts $(AND) $(RM) *.pem
-	cd certificatechains $(AND) $(RM) *.pem
-	cd certificatechains $(AND) $(RM) *.pfx
+	cd certificatechains $(AND) $(RM) *.pem *.pfx
 
 database/index.txt:
 	touch database/index.txt

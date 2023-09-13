@@ -21,8 +21,8 @@ PROGS = charsets \
 all: $(PROGS)
 
 clean:
-	$(LTCLEAN) $(RM) $(PROGS)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
+	$(RM) $(PROGS) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
+	$(RMTREE) .libs
 
 charsets: charsets.cpp charsets.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) charsets.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

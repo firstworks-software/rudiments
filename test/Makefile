@@ -105,11 +105,12 @@ tests: all
 	$(SCRIPTINT) $(THISDIR)testall$(SCRIPTEXT)
 	
 clean:
-	$(LTCLEAN) $(RM) $(PROGS0)
-	$(LTCLEAN) $(RM) $(PROGS1)
-	$(LTCLEAN) $(RM) $(PROGS2)
-	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi semout semkey
+	$(RM) $(PROGS0)
+	$(RM) $(PROGS1)
+	$(RM) $(PROGS2)
+	$(RM) $(PROGS3)
+	$(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi semout semkey
+	$(RMTREE) .libs
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
