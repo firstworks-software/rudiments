@@ -810,6 +810,45 @@ class RUDIMENTS_DLLSPEC charstring {
 						size_t *oldstrlen,
 						const char * const *newstrset);
 
+		/** Replaces all instances of "oldchar" in "str" with
+		 *  "newchar", ignoring case */
+		static	void	replaceIgnoringCase(char *str,
+					char oldchar, char newchar);
+
+		/** Replaces all instances of any of the characters in the set
+		 *  "oldchar" in "str" with "newchar", ignoring case */
+		static	void	replaceIgnoringCase(char *str,
+					const char *oldchars, char newchar);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of "oldstr" have been replaced with
+		 *  "newstr", ignoring case */
+		static	char	*replaceIgnoringCase(const char *str,
+							const char *oldstr,
+							const char *newstr);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset", ignoring case */
+		static	char	*replaceIgnoringCase(const char *str,
+						const char * const *oldstrset,
+						const char * const *newstrset);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", the number of characters of which are
+		 *  given by the array "oldstrlen", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset", ignoring set */
+		static	char	*replaceIgnoringCase(const char *str,
+						const char * const *oldstrset,
+						size_t *oldstrlen,
+						const char * const *newstrset);
+
 		/** Returns a new string which is a copy of "str" in which
 		 *  parts that match "from" have been replaced with "to".
 		 *

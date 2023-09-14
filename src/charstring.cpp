@@ -364,6 +364,118 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 	return newstring.detachString();
 }
 
+void charstring::replaceIgnoringCase(char *str, char oldchar, char newchar) {
+	if (str) {
+		for (char *ptr=str; *ptr; ptr++) {
+			if (character::lower(*ptr)==character::lower(oldchar)) {
+				*ptr=newchar;
+			}
+		}
+	}
+}
+
+void charstring::replaceIgnoringCase(char *str,
+					const char *oldchars,
+					char newchar) {
+	if (str) {
+		for (char *ptr=str; *ptr; ptr++) {
+			if (character::isInSetIgnoringCase(*ptr,oldchars)) {
+				*ptr=newchar;
+			}
+		}
+	}
+}
+
+char *charstring::replaceIgnoringCase(const char *str,
+						const char *oldstr,
+						const char *newstr) {
+	if (!str) {
+		return NULL;
+	}
+	stringbuffer	newstring;
+	size_t		oldstrlen=getLength(oldstr);
+	const char	*ptr=str;
+	const char	*start=ptr;
+	while (*ptr) {
+		if (!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
+			newstring.append(start,ptr-start);
+			newstring.append(newstr);
+			ptr+=oldstrlen;
+			start=ptr;
+		} else {
+			ptr++;
+		}
+	}
+	newstring.append(start,ptr-start);
+	return newstring.detachString();
+}
+
+char *charstring::replaceIgnoringCase(const char *str,
+					const char * const *oldstrset,
+					const char * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
+
+	// count members of oldstrset
+	uint64_t	i=0;
+	for (const char * const *o=oldstrset; *o; o++) {
+		i++;
+	}
+
+	// create oldstrlen
+	size_t	*oldstrlen=new size_t[i];
+	i=0;
+	for (const char * const *o=oldstrset; *o; o++) {
+		oldstrlen[i]=getLength(*o);
+		i++;
+	}
+
+	// replace
+	char	*result=replaceIgnoringCase(str,oldstrset,oldstrlen,newstrset);
+
+	// clean up
+	delete[] oldstrlen;
+
+	return result;
+}
+
+char *charstring::replaceIgnoringCase(const char *str,
+					const char * const *oldstrset,
+					size_t *oldstrlen,
+					const char * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
+
+	// search and replace
+	stringbuffer	newstring;
+	const char	*ptr=str;
+	const char	*start=ptr;
+	while (*ptr) {
+		bool	found=false;
+		uint64_t i=0;
+		for (const char * const *oldptr=oldstrset; *oldptr; oldptr++) {
+			if (!compareIgnoringCase(ptr,oldstrset[i],
+							oldstrlen[i])) {
+				newstring.append(start,ptr-start);
+				newstring.append(newstrset[i]);
+				ptr+=oldstrlen[i];
+				start=ptr;
+				found=true;
+				break;
+			}
+			i++;
+		}
+		if (!found) {
+			ptr++;
+		}
+	}
+	newstring.append(start,ptr-start);
+
+	return newstring.detachString();
+}
+
 char *charstring::replace(const char *str,
 				regularexpression *from,
 				const char *to,

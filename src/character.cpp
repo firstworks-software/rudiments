@@ -149,6 +149,15 @@ bool character::isInSet(char c, const char *set) {
 	return false;
 }
 
+bool character::isInSetIgnoringCase(char c, const char *set) {
+	for (const char *s=set; *s; s++) {
+		if (lower(*s)==lower(c)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 char character::duplicate(wchar_t c) {
 	return duplicate(c,'?');
 }
