@@ -725,6 +725,37 @@ class RUDIMENTS_DLLSPEC wcharstring {
 					size_t *oldstrlen,
 					const wchar_t * const *newstrset);
 
+		/** Replaces all instances of "oldchar" in "str" with
+		 *  "newchar", ignoring case */
+		static	void	replaceIgnoringCase(wchar_t *str,
+					wchar_t oldchar,
+					wchar_t newchar);
+
+		/** Replaces all instances of any of the characters in the set
+		 *  "oldchar" in "str" with "newchar", ignoring case */
+		static	void	replaceIgnoringCase(wchar_t *str,
+					const wchar_t *oldchars,
+					wchar_t newchar);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of "oldstr" have been replaced with
+		 *  "newstr", ignoring case */
+		static	wchar_t	*replaceIgnoringCase(const wchar_t *str,
+						const wchar_t *oldstr,
+						const wchar_t *newstr);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", the number of characters of which are
+		 *  given by the array "oldstrlen", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset", ignoring case */
+		static	wchar_t	*replaceIgnoringCase(const wchar_t *str,
+					const wchar_t * const *oldstrset,
+					size_t *oldstrlen,
+					const wchar_t * const *newstrset);
+
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
 		static	uint16_t	getIntegerLength(int16_t number);

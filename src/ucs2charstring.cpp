@@ -381,6 +381,122 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 	return newstring.detachString();
 }
 
+void ucs2charstring::replaceIgnoringCase(ucs2_t *str,
+					ucs2_t oldchar,
+					ucs2_t newchar) {
+	if (str) {
+		for (ucs2_t *ptr=str; *ptr; ptr++) {
+			if (ucs2character::lower(*ptr)==
+				ucs2character::lower(oldchar)) {
+				*ptr=newchar;
+			}
+		}
+	}
+}
+
+void ucs2charstring::replaceIgnoringCase(ucs2_t *str,
+					const ucs2_t *oldchars,
+					ucs2_t newchar) {
+	if (str) {
+		for (ucs2_t *ptr=str; *ptr; ptr++) {
+			if (ucs2character::isInSetIgnoringCase(*ptr,oldchars)) {
+				*ptr=newchar;
+			}
+		}
+	}
+}
+
+ucs2_t *ucs2charstring::replaceIgnoringCase(const ucs2_t *str,
+						const ucs2_t *oldstr,
+						const ucs2_t *newstr) {
+	if (!str) {
+		return NULL;
+	}
+	ucs2stringbuffer	newstring;
+	size_t		oldstrlen=getLength(oldstr);
+	const ucs2_t	*ptr=str;
+	const ucs2_t	*start=ptr;
+	while (*ptr) {
+		if (!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
+			newstring.appendUcs2(start,ptr-start);
+			newstring.appendUcs2(newstr);
+			ptr+=oldstrlen;
+			start=ptr;
+		} else {
+			ptr++;
+		}
+	}
+	newstring.appendUcs2(start,ptr-start);
+	return newstring.detachString();
+}
+
+ucs2_t *ucs2charstring::replaceIgnoringCase(const ucs2_t *str,
+					const ucs2_t * const *oldstrset,
+					const ucs2_t * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
+
+	// count members of oldstrset
+	uint64_t	i=0;
+	for (const ucs2_t * const *o=oldstrset; *o; o++) {
+		i++;
+	}
+
+	// create oldstrlen
+	size_t	*oldstrlen=new size_t[i];
+	i=0;
+	for (const ucs2_t * const *o=oldstrset; *o; o++) {
+		oldstrlen[i]=getLength(*o);
+		i++;
+	}
+
+	// replace
+	ucs2_t	*result=replaceIgnoringCase(str,oldstrset,oldstrlen,newstrset);
+
+	// clean up
+	delete[] oldstrlen;
+
+	return result;
+}
+
+ucs2_t *ucs2charstring::replaceIgnoringCase(const ucs2_t *str,
+					const ucs2_t * const *oldstrset,
+					size_t *oldstrlen,
+					const ucs2_t * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
+
+	// search and replace
+	ucs2stringbuffer	newstring;
+	const ucs2_t	*ptr=str;
+	const ucs2_t	*start=ptr;
+	while (*ptr) {
+		bool	found=false;
+		uint64_t i=0;
+		for (const ucs2_t * const *oldptr=oldstrset;
+							*oldptr; oldptr++) {
+			if (!compareIgnoringCase(ptr,oldstrset[i],
+							oldstrlen[i])) {
+				newstring.appendUcs2(start,ptr-start);
+				newstring.appendUcs2(newstrset[i]);
+				ptr+=oldstrlen[i];
+				start=ptr;
+				found=true;
+				break;
+			}
+			i++;
+		}
+		if (!found) {
+			ptr++;
+		}
+	}
+	newstring.appendUcs2(start,ptr-start);
+
+	return newstring.detachString();
+}
+
 bool ucs2charstring::isInteger(const ucs2_t *str) {
 
 	if (isNullOrEmpty(str)) {

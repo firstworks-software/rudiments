@@ -73,6 +73,11 @@ class RUDIMENTS_DLLSPEC ucs2character {
 		 *  characters in "set" and false otherwise. */
 		static bool	isInSet(ucs2_t c, const ucs2_t *set);
 
+		/** Returns true if "c" is in the set of characters in "set"
+		 *  (ignoring case) and false otherwise. */
+		static bool	isInSetIgnoringCase(ucs2_t c,
+							const ucs2_t *set);
+
 		/** Returns the UCS-2 character representation of character "c"
 		 *  per the character set of the current locale.
 		 *

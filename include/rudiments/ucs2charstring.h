@@ -811,6 +811,47 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 					size_t *oldstrlen,
 					const ucs2_t * const *newstrset);
 
+		/** Replaces all instances of "oldchar" in "str" with
+		 *  "newchar", ignoring case */
+		static	void	replaceIgnoringCase(ucs2_t *str,
+					ucs2_t oldchar,
+					ucs2_t newchar);
+
+		/** Replaces all instances of any of the characters in the set
+		 *  "oldchar" in "str" with "newchar", ignoring case */
+		static	void	replaceIgnoringCase(ucs2_t *str,
+					const ucs2_t *oldchars,
+					ucs2_t newchar);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of "oldstr" have been replaced with
+		 *  "newstr", ignoring case */
+		static	ucs2_t	*replaceIgnoringCase(const ucs2_t *str,
+						const ucs2_t *oldstr,
+						const ucs2_t *newstr);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset", ignoring case */
+		static	ucs2_t	*replaceIgnoringCase(const ucs2_t *str,
+					const ucs2_t * const *oldstrset,
+					const ucs2_t * const *newstrset);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", the number of characters of which are
+		 *  given by the array "oldstrlen", have been replaced with the
+		 *  commensurate string found in the NULL-terminated array
+		 *  "newstrset", which must have the same number of members as
+		 *  "oldstrset" */
+		static	ucs2_t	*replaceIgnoringCase(const ucs2_t *str,
+					const ucs2_t * const *oldstrset,
+					size_t *oldstrlen,
+					const ucs2_t * const *newstrset);
+
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
 		static	uint16_t	getIntegerLength(int16_t number);

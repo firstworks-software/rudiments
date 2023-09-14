@@ -338,6 +338,93 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 	return newstring.detachString();
 }
 
+void wcharstring::replaceIgnoringCase(wchar_t *str,
+					wchar_t oldchar,
+					wchar_t newchar) {
+	if (str) {
+		for (wchar_t *ptr=str; *ptr; ptr++) {
+			if (wcharacter::lower(*ptr)==
+				wcharacter::lower(oldchar)) {
+				*ptr=newchar;
+			}
+		}
+	}
+}
+
+void wcharstring::replaceIgnoringCase(wchar_t *str,
+					const wchar_t *oldchars,
+					wchar_t newchar) {
+	if (str) {
+		for (wchar_t *ptr=str; *ptr; ptr++) {
+			if (wcharacter::isInSetIgnoringCase(*ptr,oldchars)) {
+				*ptr=newchar;
+			}
+		}
+	}
+}
+
+wchar_t *wcharstring::replaceIgnoringCase(const wchar_t *str,
+						const wchar_t *oldstr,
+						const wchar_t *newstr) {
+	if (!str) {
+		return NULL;
+	}
+	wstringbuffer	newstring;
+	size_t		oldstrlen=getLength(oldstr);
+	const wchar_t	*ptr=str;
+	const wchar_t	*start=ptr;
+	while (*ptr) {
+		if (!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
+			newstring.append(start,ptr-start);
+			newstring.append(newstr);
+			ptr+=oldstrlen;
+			start=ptr;
+		} else {
+			ptr++;
+		}
+	}
+	newstring.append(start,ptr-start);
+	return newstring.detachString();
+}
+
+wchar_t *wcharstring::replaceIgnoringCase(const wchar_t *str,
+					const wchar_t * const *oldstrset,
+					size_t *oldstrlen,
+					const wchar_t * const *newstrset) {
+	if (!str) {
+		return NULL;
+	}
+
+	// search and replace
+	wstringbuffer	newstring;
+	const wchar_t	*ptr=str;
+	const wchar_t	*start=ptr;
+	while (*ptr) {
+		bool	found=false;
+		uint64_t i=0;
+		for (const wchar_t * const *oldptr=oldstrset;
+						*oldptr; oldptr++) {
+			if (!compareIgnoringCase(ptr,
+						oldstrset[i],
+						oldstrlen[i])) {
+				newstring.append(start,ptr-start);
+				newstring.append(newstrset[i]);
+				ptr+=oldstrlen[i];
+				start=ptr;
+				found=true;
+				break;
+			}
+			i++;
+		}
+		if (!found) {
+			ptr++;
+		}
+	}
+	newstring.append(start,ptr-start);
+
+	return newstring.detachString();
+}
+
 bool wcharstring::isInteger(const wchar_t *str) {
 
 	if (isNullOrEmpty(str)) {

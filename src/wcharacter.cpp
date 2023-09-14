@@ -190,6 +190,15 @@ bool wcharacter::isInSet(wchar_t c, const wchar_t *set) {
 	return false;
 }
 
+bool wcharacter::isInSetIgnoringCase(wchar_t c, const wchar_t *set) {
+	for (const wchar_t *s=set; *s; s++) {
+		if (lower(*s)==lower(c)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 wchar_t wcharacter::duplicate(char c) {
 	return duplicate(c,L'?');
 }

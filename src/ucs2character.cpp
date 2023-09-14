@@ -80,6 +80,15 @@ bool ucs2character::isInSet(ucs2_t c, const ucs2_t *set) {
 	return false;
 }
 
+bool ucs2character::isInSetIgnoringCase(ucs2_t c, const ucs2_t *set) {
+	for (const ucs2_t *s=set; *s; s++) {
+		if (lower(*s)==lower(c)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 ucs2_t ucs2character::duplicate(char c) {
 	return duplicate(c,(ucs2_t)'?',sys::isBigEndian());
 }

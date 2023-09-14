@@ -73,6 +73,11 @@ class RUDIMENTS_DLLSPEC wcharacter {
 		 *  characters in "set" and false otherwise. */
 		static bool	isInSet(wchar_t c, const wchar_t *set);
 
+		/** Returns true if "c" is in the set of characters in "set"
+ 		 *  (ignoring case) and false otherwise. */
+		static bool	isInSetIgnoringCase(wchar_t c,
+							const wchar_t *set);
+
 		/** Returns the wide character representation of character "c"
 		 *  as interpreted by the character set of the current
 		 *  locale. */
