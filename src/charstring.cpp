@@ -1921,61 +1921,97 @@ char *charstring::findLastOfSetOrEnd(char *haystack, const char *set) {
 }
 
 const char *charstring::findEndOfQuotedString(const char *string,
-						uint64_t stringlen,
 						bool backslash,
-						bool doublequote) {
-	return findEndOfQuotedString((char *)string,stringlen,
-						backslash,doublequote);
+						bool doubling) {
+	return findEndOfQuotedString((char *)string,
+					charstring::getLength(string),
+					backslash,doubling);
 }
 
 char *charstring::findEndOfQuotedString(char *string,
-					uint64_t stringlen,
-					bool backslash,
-					bool doublequote) {
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString(string,
+					charstring::getLength(string),
+					backslash,doubling);
+}
+
+const char *charstring::findEndOfQuotedString(const char *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((char *)string,stringlen,
+						backslash,doubling);
+}
+
+char *charstring::findEndOfQuotedString(char *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doubling) {
 
 	// handle degenerate cases
-	if (!string || !stringlen) {
+	if (!string) {
 		return NULL;
 	}
-
-	// bail if the first character isn't a quote
-	if (*string!='\'' && *string!='"' && *string!='`' && *string!='[') {
-		return NULL;
+	if (!stringlen) {
+		return string;
 	}
 
 	// auto-detect the quoting style
 	char	quote=*string;
 
 	// for bracket-quoting, the closing bracket is different
-	// and we need to disable doublequote escaping
+	// and we need to disable backslash-escaping and doubling
 	if (quote=='[') {
 		quote=']';
-		doublequote=false;
+		backslash=false;
+		doubling=false;
 	}
 
 	// find end of string
 	return findEndOfQuotedString(string,stringlen,
-					quote,backslash,doublequote);
+					quote,backslash,doubling);
+}
+
+const char *charstring::findEndOfQuotedString(const char *string,
+						char quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((char *)string,
+					charstring::getLength(string),
+					quote,backslash,doubling);
+}
+
+char *charstring::findEndOfQuotedString(char *string,
+						char quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString(string,
+					charstring::getLength(string),
+					quote,backslash,doubling);
 }
 
 const char *charstring::findEndOfQuotedString(const char *string,
 						uint64_t stringlen,
 						char quote,
 						bool backslash,
-						bool doublequote) {
+						bool doubling) {
 	return findEndOfQuotedString((char *)string,stringlen,quote,
-						backslash,doublequote);
+						backslash,doubling);
 }
 
 char *charstring::findEndOfQuotedString(char *string,
-					uint64_t stringlen,
-					char quote,
-					bool backslash,
-					bool doublequote) {
+						uint64_t stringlen,
+						char quote,
+						bool backslash,
+						bool doubling) {
 
 	// handle degenerate cases
-	if (!string || !stringlen) {
+	if (!string) {
 		return NULL;
+	}
+	if (!stringlen) {
+		return string;
 	}
 
 	// find the end
@@ -1992,7 +2028,7 @@ char *charstring::findEndOfQuotedString(char *string,
 
 			if (ch+1==end) {
 				// apparently the string ended in a backslash
-				return NULL;
+				return end;
 			} else {
 				// skip the escaped sequence
 				ch+=2;
@@ -2003,20 +2039,20 @@ char *charstring::findEndOfQuotedString(char *string,
 			// we found a quote...
 
 			// if the next char was a quote...
-			if (doublequote && *(ch+1)==quote) {
+			if (doubling && *(ch+1)==quote) {
 				
 				// skip the escaped sequence
 				ch+=2;
 			} else {
 
 				// this is the terminating quote
-				return ch;
+				return ch+1;
 			}
 
 		} else if (ch==end) {
 
 			// we ran off the end of the string...
-			return NULL;
+			return end;
 
 		} else {
 

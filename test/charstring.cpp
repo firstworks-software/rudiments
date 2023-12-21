@@ -1250,33 +1250,55 @@ int main(int argc, const char **argv) {
 
 	// escaping
 	stdoutput.printf("quoted strings...\n");
-	const char * const qstr[]={
-		"'test'",
-		"'''test'''",
-		"'\\'test\\''",
-		"'\\'''test''\\''",
-		"'\\\\''test''\\\\'",
+	const char * const goodstr[]={
+		// properly terminated
+		"'test'test",
+		"'''test'''test",
+		"'\\'test\\''test",
+		"'\\'''test''\\''test",
+		"'\\\\''test''\\\\'test",
+		"\"test\"test",
+		"\"\"\"test\"\"\"test",
+		"\"\\\"test\\\"\"test",
+		"\"\\\"\"\"test\"\"\\\"\"test",
+		"\"\\\\\"\"test\"\"\\\\\"test",
+		"`test`test",
+		"```test```test",
+		"`\\`test\\``test",
+		"`\\```test``\\``test",
+		"`\\\\``test``\\\\`test",
+		"[test]test",
 		NULL
 	};
-	for (const char * const *s=qstr; *s; s++) {
+	for (const char * const *s=goodstr; *s; s++) {
 		test(*s,charstring::findEndOfQuotedString(*s,
 					charstring::getLength(*s),true,true)==
-					*s+charstring::getLength(*s)-1);
+					*s+charstring::getLength(*s)-4);
 	}
-
-	stdoutput.printf("quoted strings (unterminated)...\n");
-	const char * const badqstr[]={
-		"'test",
-		"'''test''",
-		"'\\'test\\'",
-		"'\\'''test''\\'",
-		"'\\\\''test''\\",
+	const char * const badstr[]={
+		// unterminated
+		"'testtest",
+		"'''test''test",
+		"'\\'test\\'test",
+		"'\\'''test''\\'test",
+		"'\\\\''test''\\test",
+		"\"testtest",
+		"\"\"\"test\"\"test",
+		"\"\\\"test\\\"test",
+		"\"\\\"\"\"test\"\"\\\"test",
+		"\"\\\\\"\"test\"\"\\test",
+		"`testtest",
+		"```test``test",
+		"`\\`test\\`test",
+		"`\\```test``\\`test",
+		"`\\\\``test``\\test",
+		"[testtest",
 		NULL
 	};
-	for (const char * const *s=badqstr; *s; s++) {
+	for (const char * const *s=badstr; *s; s++) {
 		test(*s,charstring::findEndOfQuotedString(*s,
 					charstring::getLength(*s),true,true)==
-					NULL);
+					*s+charstring::getLength(*s));
 	}
 	stdoutput.printf("\n");
 
