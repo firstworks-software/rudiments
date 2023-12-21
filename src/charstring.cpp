@@ -1920,6 +1920,112 @@ char *charstring::findLastOfSetOrEnd(char *haystack, const char *set) {
 	return haystack+getLength(haystack);
 }
 
+const char *charstring::findEndOfQuotedString(const char *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doublequote) {
+	return findEndOfQuotedString((char *)string,stringlen,
+						backslash,doublequote);
+}
+
+char *charstring::findEndOfQuotedString(char *string,
+					uint64_t stringlen,
+					bool backslash,
+					bool doublequote) {
+
+	// handle degenerate cases
+	if (!string || !stringlen) {
+		return NULL;
+	}
+
+	// bail if the first character isn't a quote
+	if (*string!='\'' && *string!='"' && *string!='`' && *string!='[') {
+		return NULL;
+	}
+
+	// auto-detect the quoting style
+	char	quote=*string;
+
+	// for bracket-quoting, the closing bracket is different
+	// and we need to disable doublequote escaping
+	if (quote=='[') {
+		quote=']';
+		doublequote=false;
+	}
+
+	// find end of string
+	return findEndOfQuotedString(string,stringlen,
+					quote,backslash,doublequote);
+}
+
+const char *charstring::findEndOfQuotedString(const char *string,
+						uint64_t stringlen,
+						char quote,
+						bool backslash,
+						bool doublequote) {
+	return findEndOfQuotedString((char *)string,stringlen,quote,
+						backslash,doublequote);
+}
+
+char *charstring::findEndOfQuotedString(char *string,
+					uint64_t stringlen,
+					char quote,
+					bool backslash,
+					bool doublequote) {
+
+	// handle degenerate cases
+	if (!string || !stringlen) {
+		return NULL;
+	}
+
+	// find the end
+	char	*end=string+stringlen;
+
+	// run through the string
+	char	*ch=string+1;
+	for (;;) {
+
+		if (backslash && *ch=='\\') {
+
+			// we support backslash-escaping and
+			// found a backslash...
+
+			if (ch+1==end) {
+				// apparently the string ended in a backslash
+				return NULL;
+			} else {
+				// skip the escaped sequence
+				ch+=2;
+			}
+
+		} else if (*ch==quote) {
+	
+			// we found a quote...
+
+			// if the next char was a quote...
+			if (doublequote && *(ch+1)==quote) {
+				
+				// skip the escaped sequence
+				ch+=2;
+			} else {
+
+				// this is the terminating quote
+				return ch;
+			}
+
+		} else if (ch==end) {
+
+			// we ran off the end of the string...
+			return NULL;
+
+		} else {
+
+			// move on
+			ch++;
+		}
+	}
+}
+
 size_t charstring::getLengthContainingSet(const char *haystack,
 						const char *set) {
 	#ifdef RUDIMENTS_HAVE_STRSPN

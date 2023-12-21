@@ -501,6 +501,100 @@ class RUDIMENTS_DLLSPEC charstring {
 							char *haystack,
 							const char *set);
 
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the closing quote.
+		 *
+		 *  "quote" specifies the character to interpret as a quote,
+		 *  eg. a single-quote, double-quote, back-quote, etc. but may
+		 *  be any character.  Note that the first character of
+		 *  "string" is not validated to be "quote".
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  Returns NULL if "string" is NULL, "stringlen" is 0, or if
+		 *  no closing quote is found. */
+		static char	*findEndOfQuotedString(char *string,
+							uint64_t stringlen,
+							char quote,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the closing quote.
+		 *
+		 *  "quote" specifies the character to interpret as a quote,
+		 *  eg. a single-quote, double-quote, back-quote, etc. but may
+		 *  be any character.  Note that the first character of
+		 *  "string" is not validated to be "quote".
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  Returns NULL if "string" is NULL, "stringlen" is 0, or if
+		 *  no closing quote is found. */
+		static const char	*findEndOfQuotedString(
+							const char *string,
+							uint64_t stringlen,
+							char quote,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the closing quote.
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  The character to interpret as a quote is determined by
+		 *  the first character in the string.  Supported
+		 *  quote-characters are single-quotes, double-quotes,
+		 *  back-quotes, and square brackets.  Note, that in the case
+		 *  of square brackets, doubling is disabled, independent of
+		 *  the value of the parameter "doubling".
+		 *
+		 *  Returns NULL if "string" is NULL, "stringlen" is 0, the
+		 *  first character of "string" isn't a known quote, or if
+		 *  no closing quote is found. */
+		static char	*findEndOfQuotedString(char *string,
+							uint64_t stringlen,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the closing quote.
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  The character to interpret as a quote is determined by
+		 *  the first character in the string.  Supported
+		 *  quote-characters are single-quotes, double-quotes,
+		 *  back-quotes, and square brackets.  Note, that in the case
+		 *  of square brackets, doubling is disabled, independent of
+		 *  the value of the parameter "doubling".
+		 *
+		 *  Returns NULL if "string" is NULL, "stringlen" is 0, the
+		 *  first character of "string" isn't a known quote, or if no
+		 *  closing quote is found. */
+		static const char	*findEndOfQuotedString(
+							const char *string,
+							uint64_t stringlen,
+							bool backslash,
+							bool doubling);
+
 		/** Returns the string from the beginning of "str" until
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program

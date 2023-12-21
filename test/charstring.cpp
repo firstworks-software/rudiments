@@ -1248,8 +1248,42 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// escaping
+	stdoutput.printf("quoted strings...\n");
+	const char * const qstr[]={
+		"'test'",
+		"'''test'''",
+		"'\\'test\\''",
+		"'\\'''test''\\''",
+		"'\\\\''test''\\\\'",
+		NULL
+	};
+	for (const char * const *s=qstr; *s; s++) {
+		test(*s,charstring::findEndOfQuotedString(*s,
+					charstring::getLength(*s),true,true)==
+					*s+charstring::getLength(*s)-1);
+	}
+
+	stdoutput.printf("quoted strings (unterminated)...\n");
+	const char * const badqstr[]={
+		"'test",
+		"'''test''",
+		"'\\'test\\'",
+		"'\\'''test''\\'",
+		"'\\\\''test''\\",
+		NULL
+	};
+	for (const char * const *s=badqstr; *s; s++) {
+		test(*s,charstring::findEndOfQuotedString(*s,
+					charstring::getLength(*s),true,true)==
+					NULL);
+	}
+	stdoutput.printf("\n");
+
+
+#if 0
 	// hosttonet/nettohost (why are these here?)
-	/*byte_t	v8=0xC0;
+	byte_t	v8=0xC0;
 	uint16_t	v16=filedescriptor::convertHostToNet(
 						(uint16_t)0xC0C0);
 	uint32_t	v32=filedescriptor::convertHostToNet(
@@ -1289,7 +1323,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 	#endif
 	stdoutput.printBits(v8s,sizeof(v8s));
-	stdoutput.printf("\n");*/
+	stdoutput.printf("\n");
+#endif
 
 	return 0;
 }
