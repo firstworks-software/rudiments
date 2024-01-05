@@ -1868,6 +1868,148 @@ wchar_t *wcharstring::findLastOfSetOrEnd(wchar_t *haystack,
 	return haystack+getLength(haystack);
 }
 
+const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((wchar_t *)string,
+					wcharstring::getLength(string),
+					backslash,doubling);
+}
+
+wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString(string,
+					wcharstring::getLength(string),
+					backslash,doubling);
+}
+
+const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((wchar_t *)string,stringlen,
+						backslash,doubling);
+}
+
+wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doubling) {
+
+	// handle degenerate cases
+	if (!string) {
+		return NULL;
+	}
+	if (!stringlen) {
+		return string;
+	}
+
+	// auto-detect the quoting style
+	wchar_t	quote=*string;
+
+	// for bracket-quoting, the closing bracket is different
+	// and we need to disable backslash-escaping and doubling
+	if (quote==L'[') {
+		quote=L']';
+		backslash=false;
+		doubling=false;
+	}
+
+	// find end of string
+	return findEndOfQuotedString(string,stringlen,
+					quote,backslash,doubling);
+}
+
+const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
+						wchar_t quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((wchar_t *)string,
+					wcharstring::getLength(string),
+					quote,backslash,doubling);
+}
+
+wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
+						wchar_t quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString(string,
+					wcharstring::getLength(string),
+					quote,backslash,doubling);
+}
+
+const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
+						uint64_t stringlen,
+						wchar_t quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((wchar_t *)string,stringlen,quote,
+						backslash,doubling);
+}
+
+wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
+						uint64_t stringlen,
+						wchar_t quote,
+						bool backslash,
+						bool doubling) {
+
+	// handle degenerate cases
+	if (!string) {
+		return NULL;
+	}
+	if (!stringlen) {
+		return string;
+	}
+
+	// find the end
+	wchar_t	*end=string+stringlen;
+
+	// run through the string
+	wchar_t	*ch=string+1;
+	for (;;) {
+
+		if (backslash && *ch==L'\\') {
+
+			// we support backslash-escaping and
+			// found a backslash...
+
+			if (ch+1==end) {
+				// apparently the string ended in a backslash
+				return end;
+			} else {
+				// skip the escaped sequence
+				ch+=2;
+			}
+
+		} else if (*ch==quote) {
+	
+			// we found a quote...
+
+			// if the next char was a quote...
+			if (doubling && *(ch+1)==quote) {
+				
+				// skip the escaped sequence
+				ch+=2;
+			} else {
+
+				// this is the terminating quote
+				return ch+1;
+			}
+
+		} else if (ch==end) {
+
+			// we ran off the end of the string...
+			return end;
+
+		} else {
+
+			// move on
+			ch++;
+		}
+	}
+}
+
 size_t wcharstring::getLengthContainingSet(const wchar_t *haystack,
 						const wchar_t *set) {
 	if (!haystack || !set) {

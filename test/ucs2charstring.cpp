@@ -1240,5 +1240,64 @@ unimplemented...
 	stdoutput.printf("\n");
 
 
+	// escaping
+	stdoutput.printf("quoted strings...\n");
+	const char * const goodstr[]={
+		// properly terminated
+		"'test'test",
+		"'''test'''test",
+		"'\\'test\\''test",
+		"'\\'''test''\\''test",
+		"'\\\\''test''\\\\'test",
+		"\"test\"test",
+		"\"\"\"test\"\"\"test",
+		"\"\\\"test\\\"\"test",
+		"\"\\\"\"\"test\"\"\\\"\"test",
+		"\"\\\\\"\"test\"\"\\\\\"test",
+		"`test`test",
+		"```test```test",
+		"`\\`test\\``test",
+		"`\\```test``\\``test",
+		"`\\\\``test``\\\\`test",
+		"[test]test",
+		NULL
+	};
+	for (const char * const *s=goodstr; *s; s++) {
+		ucs2_t	*u2s=ucs2charstring::duplicate(*s);
+		test(*s,ucs2charstring::findEndOfQuotedString(u2s,
+				ucs2charstring::getLength(u2s),true,true)==
+				u2s+ucs2charstring::getLength(u2s)-4);
+		delete[] u2s;
+	}
+	const char * const badstr[]={
+		// unterminated
+		"'testtest",
+		"'''test''test",
+		"'\\'test\\'test",
+		"'\\'''test''\\'test",
+		"'\\\\''test''\\test",
+		"\"testtest",
+		"\"\"\"test\"\"test",
+		"\"\\\"test\\\"test",
+		"\"\\\"\"\"test\"\"\\\"test",
+		"\"\\\\\"\"test\"\"\\test",
+		"`testtest",
+		"```test``test",
+		"`\\`test\\`test",
+		"`\\```test``\\`test",
+		"`\\\\``test``\\test",
+		"[testtest",
+		NULL
+	};
+	for (const char * const *s=badstr; *s; s++) {
+		ucs2_t	*u2s=ucs2charstring::duplicate(*s);
+		test(*s,ucs2charstring::findEndOfQuotedString(u2s,
+				ucs2charstring::getLength(u2s),true,true)==
+				u2s+ucs2charstring::getLength(u2s));
+		delete[] u2s;
+	}
+	stdoutput.printf("\n");
+
+
 	return 0;
 }

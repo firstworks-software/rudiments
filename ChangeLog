@@ -149,7 +149,7 @@
 	sys::getMaxLineLength() returns 2048 instead of SSIZE_MAX if
 		_SC_LINE_MAX is not supported now
 	added various case-insensitive replace() methods
-	added charstring::findEndOfQuotedString() methods
+	added *charstring::findEndOfQuotedString() methods
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

@@ -462,6 +462,202 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							wchar_t *haystack,
 							const wchar_t *set);
 
+		/** Where "string" is presumed to contain a quoted string
+		 *  (eg. "'hello'"), the first character of which is an opening
+		 *  quote, this method returns a pointer to the position in the
+		 *  string, immediately following the closing quote.
+		 *
+		 *  "quote" specifies the character to interpret as a quote,
+		 *  eg. a single-quote, double-quote, back-quote, etc. but may
+		 *  be any character.  Note that the first character of
+		 *  "string" is not validated to be "quote".
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static wchar_t	*findEndOfQuotedString(wchar_t *string,
+							wchar_t quote,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string" is presumed to contain a quoted string
+		 *  (eg. "'hello'"), the first character of which is an opening
+		 *  quote, this method returns a pointer to the position in the
+		 *  string, immediately following the closing quote.
+		 *
+		 *  "quote" specifies the character to interpret as a quote,
+		 *  eg. a single-quote, double-quote, back-quote, etc. but may
+		 *  be any character.  Note that the first character of
+		 *  "string" is not validated to be "quote".
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static const wchar_t	*findEndOfQuotedString(
+							const wchar_t *string,
+							wchar_t quote,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the position in the string,
+		 *  immediately following the closing quote.
+		 *
+		 *  "quote" specifies the character to interpret as a quote,
+		 *  eg. a single-quote, double-quote, back-quote, etc. but may
+		 *  be any character.  Note that the first character of
+		 *  "string" is not validated to be "quote".
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static wchar_t	*findEndOfQuotedString(wchar_t *string,
+							uint64_t stringlen,
+							wchar_t quote,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the position in the string,
+		 *  immediately following the closing quote.
+		 *
+		 *  "quote" specifies the character to interpret as a quote,
+		 *  eg. a single-quote, double-quote, back-quote, etc. but may
+		 *  be any character.  Note that the first character of
+		 *  "string" is not validated to be "quote".
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static const wchar_t	*findEndOfQuotedString(
+							const wchar_t *string,
+							uint64_t stringlen,
+							wchar_t quote,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string" is presumed to contain a quoted string
+		 *  (eg. "'hello'"), the first character of which is an opening
+		 *  quote, this method returns a pointer to the position in the
+		 *  string, immediately following the closing quote.
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  The character to interpret as a quote is determined by
+		 *  the first character in the string.
+		 *
+		 *  Note, that in the case of the first character being an open
+		 *  square bracket, the closing quote is set to a closing square
+		 *  bracket, and doubling is disabled, independent of the value
+		 *  of the parameter "doubling".
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static wchar_t	*findEndOfQuotedString(wchar_t *string,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string" is presumed to contain a quoted string
+		 *  (eg. "'hello'"), the first character of which is an opening
+		 *  quote, this method returns a pointer to the position in the
+		 *  string, immediately following the closing quote.
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  The character to interpret as a quote is determined by
+		 *  the first character in the string.
+		 *
+		 *  Note, that in the case of the first character being an open
+		 *  square bracket, the closing quote is set to a closing square
+		 *  bracket, and doubling is disabled, independent of the value
+		 *  of the parameter "doubling".
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static const wchar_t	*findEndOfQuotedString(
+							const wchar_t *string,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the position in the string,
+		 *  immediately following the closing quote.
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  The character to interpret as a quote is determined by
+		 *  the first character in the string.
+		 *
+		 *  Note, that in the case of the first character being an open
+		 *  square bracket, the closing quote is set to a closing square
+		 *  bracket, and doubling is disabled, independent of the value
+		 *  of the parameter "doubling".
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static wchar_t	*findEndOfQuotedString(wchar_t *string,
+							uint64_t stringlen,
+							bool backslash,
+							bool doubling);
+
+		/** Where "string", of length "stringlen", is presumed to
+		 *  contain a quoted string (eg. "'hello'"), the first
+		 *  character of which is an opening quote, this method
+		 *  returns a pointer to the position in the string,
+		 *  immediately following the closing quote.
+		 *
+		 *  If "backslash" is true then backslash-escaping is
+		 *  considered.  If "doubling" is true then doubling to
+		 *  represent a literal quote is considered.
+		 *
+		 *  The character to interpret as a quote is determined by
+		 *  the first character in the string.
+		 *
+		 *  Note, that in the case of the first character being an open
+		 *  square bracket, the closing quote is set to a closing square
+		 *  bracket, and doubling is disabled, independent of the value
+		 *  of the parameter "doubling".
+		 *
+		 *  Returns NULL if "string" is NULL.  Returns a pointer to
+		 *  "string" if "stringlen" is 0.  If no closing quote is found
+		 *  then it returns a pointer to the end of the string. */
+		static const wchar_t	*findEndOfQuotedString(
+							const wchar_t *string,
+							uint64_t stringlen,
+							bool backslash,
+							bool doubling);
+
 		/** Returns the string from the beginning of "str" until
 		 *  Note that this method allocates a buffer for the return
 		 *  value internally and returns it.  The calling program

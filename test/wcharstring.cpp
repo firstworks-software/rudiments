@@ -1052,5 +1052,60 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// escaping
+	stdoutput.printf("quoted strings...\n");
+	const wchar_t * const goodstr[]={
+		// properly terminated
+		L"'test'test",
+		L"'''test'''test",
+		L"'\\'test\\''test",
+		L"'\\'''test''\\''test",
+		L"'\\\\''test''\\\\'test",
+		L"\"test\"test",
+		L"\"\"\"test\"\"\"test",
+		L"\"\\\"test\\\"\"test",
+		L"\"\\\"\"\"test\"\"\\\"\"test",
+		L"\"\\\\\"\"test\"\"\\\\\"test",
+		L"`test`test",
+		L"```test```test",
+		L"`\\`test\\``test",
+		L"`\\```test``\\``test",
+		L"`\\\\``test``\\\\`test",
+		L"[test]test",
+		NULL
+	};
+	for (const wchar_t * const *s=goodstr; *s; s++) {
+		test(*s,wcharstring::findEndOfQuotedString(*s,
+					wcharstring::getLength(*s),true,true)==
+					*s+wcharstring::getLength(*s)-4);
+	}
+	const wchar_t * const badstr[]={
+		// unterminated
+		L"'testtest",
+		L"'''test''test",
+		L"'\\'test\\'test",
+		L"'\\'''test''\\'test",
+		L"'\\\\''test''\\test",
+		L"\"testtest",
+		L"\"\"\"test\"\"test",
+		L"\"\\\"test\\\"test",
+		L"\"\\\"\"\"test\"\"\\\"test",
+		L"\"\\\\\"\"test\"\"\\test",
+		L"`testtest",
+		L"```test``test",
+		L"`\\`test\\`test",
+		L"`\\```test``\\`test",
+		L"`\\\\``test``\\test",
+		L"[testtest",
+		NULL
+	};
+	for (const wchar_t * const *s=badstr; *s; s++) {
+		test(*s,wcharstring::findEndOfQuotedString(*s,
+					wcharstring::getLength(*s),true,true)==
+					*s+wcharstring::getLength(*s));
+	}
+	stdoutput.printf("\n");
+
+
 	return 0;
 }

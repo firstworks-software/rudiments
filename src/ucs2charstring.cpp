@@ -1945,6 +1945,148 @@ ucs2_t *ucs2charstring::findLastOfSetOrEnd(ucs2_t *haystack,
 	return haystack+getLength(haystack);
 }
 
+const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((ucs2_t *)string,
+					ucs2charstring::getLength(string),
+					backslash,doubling);
+}
+
+ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString(string,
+					ucs2charstring::getLength(string),
+					backslash,doubling);
+}
+
+const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((ucs2_t *)string,stringlen,
+						backslash,doubling);
+}
+
+ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
+						uint64_t stringlen,
+						bool backslash,
+						bool doubling) {
+
+	// handle degenerate cases
+	if (!string) {
+		return NULL;
+	}
+	if (!stringlen) {
+		return string;
+	}
+
+	// auto-detect the quoting style
+	ucs2_t	quote=*string;
+
+	// for bracket-quoting, the closing bracket is different
+	// and we need to disable backslash-escaping and doubling
+	if (quote==(ucs2_t)'[') {
+		quote=(ucs2_t)']';
+		backslash=false;
+		doubling=false;
+	}
+
+	// find end of string
+	return findEndOfQuotedString(string,stringlen,
+					quote,backslash,doubling);
+}
+
+const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
+						ucs2_t quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((ucs2_t *)string,
+					ucs2charstring::getLength(string),
+					quote,backslash,doubling);
+}
+
+ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
+						ucs2_t quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString(string,
+					ucs2charstring::getLength(string),
+					quote,backslash,doubling);
+}
+
+const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
+						uint64_t stringlen,
+						ucs2_t quote,
+						bool backslash,
+						bool doubling) {
+	return findEndOfQuotedString((ucs2_t *)string,stringlen,quote,
+						backslash,doubling);
+}
+
+ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
+						uint64_t stringlen,
+						ucs2_t quote,
+						bool backslash,
+						bool doubling) {
+
+	// handle degenerate cases
+	if (!string) {
+		return NULL;
+	}
+	if (!stringlen) {
+		return string;
+	}
+
+	// find the end
+	ucs2_t	*end=string+stringlen;
+
+	// run through the string
+	ucs2_t	*ch=string+1;
+	for (;;) {
+
+		if (backslash && *ch==(ucs2_t)'\\') {
+
+			// we support backslash-escaping and
+			// found a backslash...
+
+			if (ch+1==end) {
+				// apparently the string ended in a backslash
+				return end;
+			} else {
+				// skip the escaped sequence
+				ch+=2;
+			}
+
+		} else if (*ch==quote) {
+	
+			// we found a quote...
+
+			// if the next char was a quote...
+			if (doubling && *(ch+1)==quote) {
+				
+				// skip the escaped sequence
+				ch+=2;
+			} else {
+
+				// this is the terminating quote
+				return ch+1;
+			}
+
+		} else if (ch==end) {
+
+			// we ran off the end of the string...
+			return end;
+
+		} else {
+
+			// move on
+			ch++;
+		}
+	}
+}
+
 size_t ucs2charstring::getLengthContainingSet(const ucs2_t *haystack,
 							const ucs2_t *set) {
 	if (!haystack || !set) {
