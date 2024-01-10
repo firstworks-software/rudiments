@@ -28,9 +28,9 @@
 		bool	insertColumnAt(uint64_t position,
 					const char *name, bool quoted);
 
-		bool	insertRowAt(uint64_t position);
+		bool	insertRecordAt(uint64_t position);
 
-		bool	trimField(uint64_t row, uint64_t column,
+		bool	trimField(uint64_t record, uint64_t column,
 						bool left, bool right);
 
 		void	trimFields(bool left, bool right);

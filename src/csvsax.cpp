@@ -12,11 +12,11 @@ enum csvstate {
 	COLUMN_END,
 	HEADER_END,
 	BODY_START,
-	ROW_START,
+	RECORD_START,
 	FIELD_START,
 	FIELD,
 	FIELD_END,
-	ROW_END,
+	RECORD_END,
 	BODY_END
 };
 
@@ -84,9 +84,9 @@ bool csvsax::bodyStart() {
 	return true;
 }
 
-bool csvsax::rowStart() {
+bool csvsax::recordStart() {
 	// by default, just return success
-	debugPrintf("    rowStart {\n");
+	debugPrintf("    recordStart {\n");
 	return true;
 }
 
@@ -97,7 +97,7 @@ bool csvsax::field(const char *value, bool quoted) {
 	return true;
 }
 
-bool csvsax::rowEnd() {
+bool csvsax::recordEnd() {
 	// by default, just return success
 	debugPrintf("    }\n");
 	return true;
@@ -200,13 +200,13 @@ bool csvsax::parse() {
 		if (pvt->_state==HEADER_END) {
 			pvt->_state=BODY_START;
 			bodyStart();
-			pvt->_state=ROW_START;
+			pvt->_state=RECORD_START;
 		}
-		if (pvt->_state==ROW_START) {
+		if (pvt->_state==RECORD_START) {
 			if (ch=='\r' || ch=='\n') {
 				continue;
 			}
-			rowStart();
+			recordStart();
 			pvt->_state=FIELD_START;
 		}
 		if (pvt->_state==FIELD_START) {
@@ -241,9 +241,9 @@ bool csvsax::parse() {
 					field(current.getString(),quoted);
 					current.clear();
 					ignore=false;
-					pvt->_state=ROW_END;
-					rowEnd();
-					pvt->_state=ROW_START;
+					pvt->_state=RECORD_END;
+					recordEnd();
+					pvt->_state=RECORD_START;
 					continue;
 				}
 			}

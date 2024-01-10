@@ -117,7 +117,7 @@ int main() {
 			!charstring::compare(c.getColumnName(3),"c4"));
 		test("column name 4",
 			!charstring::compare(c.getColumnName(4),"c5"));
-		test("row count",c.getRowCount()==5);
+		test("record count",c.getRecordCount()==5);
 		test("field 0,0",
 			!charstring::compare(
 				c.getField(0,(uint64_t)0),"val11"));
@@ -372,14 +372,14 @@ int main() {
 			!charstring::compare(
 				c.getColumnName((uint64_t)4),"c1"));
 
-		stdoutput.printf("row manipulation - %s...\n",
+		stdoutput.printf("record manipulation - %s...\n",
 						(!i)?"string":"file");
-		test("insert before 0",c.insertRowBefore((uint64_t)0));
-		test("insert before 2",c.insertRowBefore(2));
-		test("insert before 4",c.insertRowBefore(4));
-		test("insert before 6",c.insertRowBefore(6));
-		test("insert before 8",c.insertRowBefore(8));
-		test("row count",c.getRowCount()==10);
+		test("insert before 0",c.insertRecordBefore((uint64_t)0));
+		test("insert before 2",c.insertRecordBefore(2));
+		test("insert before 4",c.insertRecordBefore(4));
+		test("insert before 6",c.insertRecordBefore(6));
+		test("insert before 8",c.insertRecordBefore(8));
+		test("record count",c.getRecordCount()==10);
 		test("field 0,0",
 			!charstring::compare(c.getField(0,(uint64_t)0),""));
 		test("field 0,1",!charstring::compare(c.getField(0,1),""));
@@ -400,41 +400,41 @@ int main() {
 		test("field 2,2",!charstring::compare(c.getField(2,2),""));
 		test("field 2,3",!charstring::compare(c.getField(2,3),""));
 		test("field 2,4",!charstring::compare(c.getField(2,4),""));
-		test("delete row 0",c.deleteRow(0));
-		test("row count",c.getRowCount()==9);
+		test("delete record 0",c.deleteRecord(0));
+		test("record count",c.getRecordCount()==9);
 		test("field 0,0",!charstring::compare(
 					c.getField(0,(uint64_t)0),"val15"));
-		test("delete row 1",c.deleteRow(1));
-		test("row count",c.getRowCount()==8);
+		test("delete record 1",c.deleteRecord(1));
+		test("record count",c.getRecordCount()==8);
 		test("field 1,0",!charstring::compare(
 					c.getField(1,(uint64_t)0),"val25"));
-		test("delete row 6",c.deleteRow(6));
-		test("row count",c.getRowCount()==7);
+		test("delete record 6",c.deleteRecord(6));
+		test("record count",c.getRecordCount()==7);
 		test("field 6,0",!charstring::compare(
 					c.getField(6,(uint64_t)0),"val55"));
-		test("empty row 0",!c.getRowIsEmpty((uint64_t)0));
-		test("empty row 1",!c.getRowIsEmpty((uint64_t)1));
-		test("empty row 2",c.getRowIsEmpty((uint64_t)2));
-		test("empty row 3",!c.getRowIsEmpty((uint64_t)3));
-		test("empty row 4",c.getRowIsEmpty((uint64_t)4));
-		test("empty row 5",!c.getRowIsEmpty((uint64_t)5));
-		test("empty row 6",!c.getRowIsEmpty((uint64_t)6));
-		test("delete empty rows",c.deleteEmptyRows());
-		test("empty row 0",!c.getRowIsEmpty((uint64_t)0));
-		test("empty row 1",!c.getRowIsEmpty((uint64_t)1));
-		test("empty row 2",!c.getRowIsEmpty((uint64_t)2));
-		test("empty row 3",!c.getRowIsEmpty((uint64_t)3));
-		test("empty row 4",!c.getRowIsEmpty((uint64_t)4));
-		test("move 4 -> 0",c.moveRow(4,0));
+		test("empty record 0",!c.getRecordIsEmpty((uint64_t)0));
+		test("empty record 1",!c.getRecordIsEmpty((uint64_t)1));
+		test("empty record 2",c.getRecordIsEmpty((uint64_t)2));
+		test("empty record 3",!c.getRecordIsEmpty((uint64_t)3));
+		test("empty record 4",c.getRecordIsEmpty((uint64_t)4));
+		test("empty record 5",!c.getRecordIsEmpty((uint64_t)5));
+		test("empty record 6",!c.getRecordIsEmpty((uint64_t)6));
+		test("delete empty records",c.deleteEmptyRecords());
+		test("empty record 0",!c.getRecordIsEmpty((uint64_t)0));
+		test("empty record 1",!c.getRecordIsEmpty((uint64_t)1));
+		test("empty record 2",!c.getRecordIsEmpty((uint64_t)2));
+		test("empty record 3",!c.getRecordIsEmpty((uint64_t)3));
+		test("empty record 4",!c.getRecordIsEmpty((uint64_t)4));
+		test("move 4 -> 0",c.moveRecord(4,0));
 		test("field 0,0",!charstring::compare(
 					c.getField(0,(uint64_t)0),"val55"));
-		test("move 4 -> 1",c.moveRow(4,1));
+		test("move 4 -> 1",c.moveRecord(4,1));
 		test("field 1,0",!charstring::compare(
 					c.getField(1,(uint64_t)0),"val45"));
-		test("move 4 -> 2",c.moveRow(4,2));
+		test("move 4 -> 2",c.moveRecord(4,2));
 		test("field 2,0",!charstring::compare(
 					c.getField(2,(uint64_t)0),"val35"));
-		test("move 4 -> 3",c.moveRow(4,3));
+		test("move 4 -> 3",c.moveRecord(4,3));
 		test("field 3,0",!charstring::compare(
 					c.getField(3,(uint64_t)0),"val25"));
 	}

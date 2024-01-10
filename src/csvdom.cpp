@@ -366,7 +366,7 @@ bool csvdom::moveColumn(uint64_t oldposition, uint64_t newposition) {
 		return false;
 	}
 
-	// run through the rows
+	// run through the records
 	for (domnode *r=getRootNode()->getFirstTagChild("r");
 			!r->isNullNode(); r=r->getNextTagSibling("r")) {
 
@@ -395,7 +395,7 @@ bool csvdom::deleteColumn(uint64_t position) {
 		return false;
 	}
 
-	// run through the rows
+	// run through the records
 	for (domnode *r=getRootNode()->getFirstTagChild("r");
 			!r->isNullNode(); r=r->getNextTagSibling("r")) {
 
@@ -444,16 +444,16 @@ bool csvdom::deleteEmptyColumns() {
 	return true;
 }
 
-uint64_t csvdom::getRowCount() {
+uint64_t csvdom::getRecordCount() {
 	return getRootNode()->getChildCount()-1;
 }
 
-domnode *csvdom::getRow(uint64_t position) {
+domnode *csvdom::getRecord(uint64_t position) {
 	return getRootNode()->getChild(position+1);
 }
 
-const char *csvdom::getField(uint64_t row, uint64_t column) {
-	domnode	*r=getRootNode()->getChild(row+1);
+const char *csvdom::getField(uint64_t record, uint64_t column) {
+	domnode	*r=getRootNode()->getChild(record+1);
 	if (r->isNullNode()) {
 		return NULL;
 	}
@@ -461,17 +461,17 @@ const char *csvdom::getField(uint64_t row, uint64_t column) {
 	return (f->isNullNode())?NULL:f->getAttributeValue("v");
 }
 
-const char *csvdom::getField(uint64_t row, const char *column) {
+const char *csvdom::getField(uint64_t record, const char *column) {
 	uint64_t	pos;
 	if (!getColumnPosition(column,&pos)) {
 		return NULL;
 	}
-	return getField(row,pos);
+	return getField(record,pos);
 }
 
-bool csvdom::setField(uint64_t row, uint64_t column,
+bool csvdom::setField(uint64_t record, uint64_t column,
 					const char *value, bool quoted) {
-	domnode	*r=getRootNode()->getChild(row+1);
+	domnode	*r=getRootNode()->getChild(record+1);
 	if (r->isNullNode()) {
 		return false;
 	}
@@ -479,57 +479,58 @@ bool csvdom::setField(uint64_t row, uint64_t column,
 	return true;
 }
 
-bool csvdom::setField(uint64_t row, const char *column,
+bool csvdom::setField(uint64_t record, const char *column,
 					const char *value, bool quoted) {
 	uint64_t	pos;
 	if (!getColumnPosition(column,&pos)) {
 		return false;
 	}
-	return setField(row,pos,value,quoted);
+	return setField(record,pos,value,quoted);
 }
 
-bool csvdom::trimField(uint64_t row, uint64_t column, bool left, bool right) {
-	domnode	*f=getRootNode()->getChild(row+1)->getChild(column);
+bool csvdom::trimField(uint64_t record, uint64_t column,
+					bool left, bool right) {
+	domnode	*f=getRootNode()->getChild(record+1)->getChild(column);
 	if (f->isNullNode()) {
 		return false;
 	}
 	return trimNode(f,left,right);
 }
 
-bool csvdom::leftTrimField(uint64_t row, uint64_t column) {
-	return trimField(row,column,true,false);
+bool csvdom::leftTrimField(uint64_t record, uint64_t column) {
+	return trimField(record,column,true,false);
 }
 
-bool csvdom::leftTrimField(uint64_t row, const char *column) {
+bool csvdom::leftTrimField(uint64_t record, const char *column) {
 	uint64_t	pos;
 	if (!getColumnPosition(column,&pos)) {
 		return false;
 	}
-	return trimField(row,pos,true,false);
+	return trimField(record,pos,true,false);
 }
 
-bool csvdom::rightTrimField(uint64_t row, uint64_t column) {
-	return trimField(row,column,false,true);
+bool csvdom::rightTrimField(uint64_t record, uint64_t column) {
+	return trimField(record,column,false,true);
 }
 
-bool csvdom::rightTrimField(uint64_t row, const char *column) {
+bool csvdom::rightTrimField(uint64_t record, const char *column) {
 	uint64_t	pos;
 	if (!getColumnPosition(column,&pos)) {
 		return false;
 	}
-	return trimField(row,pos,false,true);
+	return trimField(record,pos,false,true);
 }
 
-bool csvdom::bothTrimField(uint64_t row, uint64_t column) {
-	return trimField(row,column,true,true);
+bool csvdom::bothTrimField(uint64_t record, uint64_t column) {
+	return trimField(record,column,true,true);
 }
 
-bool csvdom::bothTrimField(uint64_t row, const char *column) {
+bool csvdom::bothTrimField(uint64_t record, const char *column) {
 	uint64_t	pos;
 	if (!getColumnPosition(column,&pos)) {
 		return false;
 	}
-	return trimField(row,pos,true,true);
+	return trimField(record,pos,true,true);
 }
 
 void csvdom::trimFields(bool left, bool right) {
@@ -554,27 +555,27 @@ void csvdom::bothTrimFields() {
 	trimFields(true,true);
 }
 
-bool csvdom::insertRowAt(uint64_t position) {
-	domnode	*rownode=new domnode(this,TAG_DOMNODETYPE,NULL,"r",NULL);
+bool csvdom::insertRecordAt(uint64_t position) {
+	domnode	*recordnode=new domnode(this,TAG_DOMNODETYPE,NULL,"r",NULL);
 	uint64_t	count=getColumnCount();
 	for (uint64_t i=0; i<count; i++) {
 		domnode	*fieldnode=new domnode(
 					this,TAG_DOMNODETYPE,NULL,"f",NULL);
 		setValue(fieldnode,"",false);
-		rownode->appendChild(fieldnode);
+		recordnode->appendChild(fieldnode);
 	}
-	return getRootNode()->insertChild(rownode,position+1);
+	return getRootNode()->insertChild(recordnode,position+1);
 }
 
-bool csvdom::insertRowBefore(uint64_t position) {
-	return insertRowAt(position);
+bool csvdom::insertRecordBefore(uint64_t position) {
+	return insertRecordAt(position);
 }
 
-bool csvdom::insertRowAfter(uint64_t position) {
-	return insertRowAt(position+1);
+bool csvdom::insertRecordAfter(uint64_t position) {
+	return insertRecordAt(position+1);
 }
 
-bool csvdom::moveRow(uint64_t oldposition, uint64_t newposition) {
+bool csvdom::moveRecord(uint64_t oldposition, uint64_t newposition) {
 	domnode	*r=getRootNode()->getChild(oldposition+1);
 	if (r->isNullNode()) {
 		return false;
@@ -582,11 +583,11 @@ bool csvdom::moveRow(uint64_t oldposition, uint64_t newposition) {
 	return getRootNode()->moveChild(r,getRootNode(),newposition+1);
 }
 
-bool csvdom::deleteRow(uint64_t position) {
+bool csvdom::deleteRecord(uint64_t position) {
 	return getRootNode()->deleteChild(position+1);
 }
 
-bool csvdom::getRowIsEmpty(uint64_t position) {
+bool csvdom::getRecordIsEmpty(uint64_t position) {
 	domnode	*r=getRootNode()->getChild(position+1);
 	if (r->isNullNode()) {
 		return false;
@@ -600,12 +601,12 @@ bool csvdom::getRowIsEmpty(uint64_t position) {
 	return true;
 }
 
-bool csvdom::deleteEmptyRows() {
+bool csvdom::deleteEmptyRecords() {
 	uint64_t	i=0;
-	uint64_t	count=getRowCount();
+	uint64_t	count=getRecordCount();
 	while (i<count) {
-		if (getRowIsEmpty(i)) {
-			if (!deleteRow(i)) {
+		if (getRecordIsEmpty(i)) {
+			if (!deleteRecord(i)) {
 				return false;
 			}
 			count--;
@@ -687,15 +688,15 @@ ssize_t csvdom::writeNode(domnode *dn, output *out,
 	if (!incOrErr(&retval,out->write('\n'),1)) {
 		return retval;
 	}
-	for (domnode *row=dn->getFirstTagChild("r");
-			!row->isNullNode();
-			row=row->getNextTagSibling("r")) {
-		bool	firstrow=true;
-		for (domnode *field=row->getFirstTagChild("f");
+	for (domnode *record=dn->getFirstTagChild("r");
+			!record->isNullNode();
+			record=record->getNextTagSibling("r")) {
+		bool	firstrecord=true;
+		for (domnode *field=record->getFirstTagChild("f");
 				!field->isNullNode();
 				field=field->getNextTagSibling("f")) {
-			if (firstrow) {
-				firstrow=false;
+			if (firstrecord) {
+				firstrecord=false;
 			} else {
 				if (!incOrErr(&retval,
 					out->write(getDelimiter()),1)) {
@@ -764,10 +765,10 @@ bool csvdom::bodyStart() {
 	return true;
 }
 
-bool csvdom::rowStart() {
-	domnode	*rownode=new domnode(this,TAG_DOMNODETYPE,NULL,"r",NULL);
-	pvt->_currentparent->appendChild(rownode);
-	pvt->_currentparent=rownode;
+bool csvdom::recordStart() {
+	domnode	*recordnode=new domnode(this,TAG_DOMNODETYPE,NULL,"r",NULL);
+	pvt->_currentparent->appendChild(recordnode);
+	pvt->_currentparent=recordnode;
 	return true;
 }
 
@@ -778,7 +779,7 @@ bool csvdom::field(const char *value, bool quoted) {
 	return true;
 }
 
-bool csvdom::rowEnd() {
+bool csvdom::recordEnd() {
 	pvt->_currentparent=pvt->_currentparent->getParent();
 	return true;
 }

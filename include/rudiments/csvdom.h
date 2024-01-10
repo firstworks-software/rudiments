@@ -10,10 +10,10 @@
  *
  *  It parses a file or string of CSV-formatted data and produces a dom tree
  *  representing the data.  It creates an "h" element for the header, "c"
- *  element for each column, "r" element for each row, and "f" element for each
- *  field.  To each "c" and "f" element, it adds a "v" attribute, containing
- *  the value, and a "q" element which can contain "y" or "n" indicating whether
- *  or not the value is quoted.
+ *  element for each column, "r" element for each record, and "f" element for
+ *  each field.  To each "c" and "f" element, it adds a "v" attribute,
+ *  containing the value, and a "q" element which can contain "y" or "n"
+ *  indicating whether or not the value is quoted.
  *
  *  For example, the following CSV:
  *
@@ -265,57 +265,57 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		 *  Returns true on success and false on failure. */
 		bool	deleteEmptyColumns();
 
-		/** Returns the number of rows in the CSV. */
-		uint64_t	getRowCount();
+		/** Returns the number of records in the CSV. */
+		uint64_t	getRecordCount();
 
-		/** Returns row at "position". */
-		domnode		*getRow(uint64_t position);
+		/** Returns record at "position". */
+		domnode		*getRecord(uint64_t position);
 
-		/** Returns the value at "row","column" or NULL if no such
-		 *  row/column exists. */
-		const char	*getField(uint64_t row, uint64_t column);
+		/** Returns the value at "record","column" or NULL if no such
+		 *  record/column exists. */
+		const char	*getField(uint64_t record, uint64_t column);
 
-		/** Returns the value at "row","column" or NULL if no such
-		 *  row/column exists. */
-		const char	*getField(uint64_t row, const char *column);
+		/** Returns the value at "record","column" or NULL if no such
+		 *  record/column exists. */
+		const char	*getField(uint64_t record, const char *column);
 
-		/** Sets the value at "row","column" to "value" and marks
+		/** Sets the value at "record","column" to "value" and marks
 		 *  it "quoted".  Returns true on success and false if no such
-		 *  row/column exists. */
-		bool	setField(uint64_t row, uint64_t column,
+		 *  record/column exists. */
+		bool	setField(uint64_t record, uint64_t column,
 					const char *value, bool quoted);
 
-		/** Sets the value at "row","column" to "value" and marks
+		/** Sets the value at "record","column" to "value" and marks
 		 *  it "quoted".  Returns true on success and false if no such
-		 *  row/column exists. */
-		bool	setField(uint64_t row, const char *column,
+		 *  record/column exists. */
+		bool	setField(uint64_t record, const char *column,
 					const char *value, bool quoted);
 
-		/** Right-trims the value at "row","column".  Returns true on
-		 *  success and false if no such row/column exists. */
-		bool	rightTrimField(uint64_t row, uint64_t column);
+		/** Right-trims the value at "record","column".  Returns true on
+		 *  success and false if no such record/column exists. */
+		bool	rightTrimField(uint64_t record, uint64_t column);
 
-		/** Right-trims the value at "row","column".  Returns true on
-		 *  success and false if no such row/column exists. */
-		bool	rightTrimField(uint64_t row, const char *column);
+		/** Right-trims the value at "record","column".  Returns true on
+		 *  success and false if no such record/column exists. */
+		bool	rightTrimField(uint64_t record, const char *column);
 
-		/** Left-trims the value at "row","column".  Returns true on
-		 *  success and false if no such row/column exists. */
-		bool	leftTrimField(uint64_t row, uint64_t column);
+		/** Left-trims the value at "record","column".  Returns true on
+		 *  success and false if no such record/column exists. */
+		bool	leftTrimField(uint64_t record, uint64_t column);
 
-		/** Left-trims the value at "row","column".  Returns true on
-		 *  success and false if no such row/column exists. */
-		bool	leftTrimField(uint64_t row, const char *column);
+		/** Left-trims the value at "record","column".  Returns true on
+		 *  success and false if no such record/column exists. */
+		bool	leftTrimField(uint64_t record, const char *column);
 
-		/** Right-trims and left-trims the value at "row","column".
-		 *  Returns true on success and false if no such row/column
+		/** Right-trims and left-trims the value at "record","column".
+		 *  Returns true on success and false if no such record/column
 		 *  exists. */
-		bool	bothTrimField(uint64_t row, uint64_t column);
+		bool	bothTrimField(uint64_t record, uint64_t column);
 
-		/** Right-trims and left-trims the value at "row","column".
-		 *  Returns true on success and false if no such row/column
+		/** Right-trims and left-trims the value at "record","column".
+		 *  Returns true on success and false if no such record/column
 		 *  exists. */
-		bool	bothTrimField(uint64_t row, const char *column);
+		bool	bothTrimField(uint64_t record, const char *column);
 
 		/** Right-trims all values. */
 		void	rightTrimFields();
@@ -326,47 +326,47 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Right-trims and left-trims all values. */
 		void	bothTrimFields();
 
-		/** Inserts a row before "position".  Returns true on success
+		/** Inserts a record before "position".  Returns true on success
 		 *  and false if "position" doesn't exist. */
-		bool	insertRowBefore(uint64_t position);
+		bool	insertRecordBefore(uint64_t position);
 
-		/** Inserts a row after "position".  Returns true on success
+		/** Inserts a record after "position".  Returns true on success
 		 *  and false if "position" doesn't exist. */
-		bool	insertRowAfter(uint64_t position);
+		bool	insertRecordAfter(uint64_t position);
 
-		/** Moves row at "oldposition" to "newposition".  Returns
+		/** Moves record at "oldposition" to "newposition".  Returns
 		 *  true on success and false if "oldposition" doesn't exist
 		 *  or if "newposition" is greater than one more than the last
 		 *  position. */
-		bool	moveRow(uint64_t oldposition, uint64_t newposition);
+		bool	moveRecord(uint64_t oldposition, uint64_t newposition);
 
-		/** Deletes the row at "position".  Returns true on success
+		/** Deletes the record at "position".  Returns true on success
 		 *  and false if "position" doesn't exist. */
-		bool	deleteRow(uint64_t position);
+		bool	deleteRecord(uint64_t position);
 
-		/** Returns true if the row at "position" is composed
+		/** Returns true if the record at "position" is composed
 		 *  entirely of empty fields. */
-		bool	getRowIsEmpty(uint64_t position);
+		bool	getRecordIsEmpty(uint64_t position);
 
-		/** Deletes rows composed entirely of empty fields.
+		/** Deletes records composed entirely of empty fields.
 		 *  Returns true on success and false on failure. */
-		bool	deleteEmptyRows();
+		bool	deleteEmptyRecords();
 
-		/** For each row, at the field in column "position", if the
-		 *  value for the field in that row is empty, then replace
+		/** For each record, at the field in column "position", if the
+		 *  value for the field in that record is empty, then replace
 		 *  it with the value of the field at the same position from
-		 *  the previous row. */
+		 *  the previous record. */
 		void	carryValueDown(uint64_t position);
 
-		/** For each row, at the field in column "name", if the
-		 *  value for the field in that row is empty, then replace
+		/** For each record, at the field in column "name", if the
+		 *  value for the field in that record is empty, then replace
 		 *  it with the value of the field at the same position from
-		 *  the previous row. */
+		 *  the previous record. */
 		void	carryValueDown(const char *name);
 
-		/** For each row, for all fields, if the value for the field in
-		 *  that row is empty, then replace it with the value of the
-		 *  field at the same position from the previous row. */
+		/** For each record, for all fields, if the value for the field
+ 		 *  in that record is empty, then replace it with the value of
+ 		 *  the field at the same position from the previous record. */
 		void	carryAllValuesDown();
 
 	protected:
@@ -383,14 +383,14 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Gets called when the start of the body is encountered. */
 		virtual	bool	bodyStart();
 
-		/** Gets called when the start of a row is encountered. */
-		virtual	bool	rowStart();
+		/** Gets called when the start of a record is encountered. */
+		virtual	bool	recordStart();
 
 		/** Gets called when a field is parsed. */
 		virtual	bool	field(const char *value, bool quoted);
 
-		/** Gets called when the end of a row is encountered. */
-		virtual	bool	rowEnd();
+		/** Gets called when the end of a record is encountered. */
+		virtual	bool	recordEnd();
 
 		/** Gets called when the end of the body is encountered. */
 		virtual	bool	bodyEnd();

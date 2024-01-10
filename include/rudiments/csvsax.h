@@ -47,14 +47,14 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 		/** Gets called when the start of the body is encountered. */
 		virtual	bool	bodyStart();
 
-		/** Gets called when the start of a row is encountered. */
-		virtual	bool	rowStart();
+		/** Gets called when the start of a record is encountered. */
+		virtual	bool	recordStart();
 
 		/** Gets called when a field is parsed. */
 		virtual	bool	field(const char *value, bool quoted);
 
-		/** Gets called when the end of a row is encountered. */
-		virtual	bool	rowEnd();
+		/** Gets called when the end of a record is encountered. */
+		virtual	bool	recordEnd();
 
 		/** Gets called when the end of the body is encountered. */
 		virtual	bool	bodyEnd();
