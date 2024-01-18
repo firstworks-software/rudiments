@@ -100,21 +100,13 @@ ssize_t dom::writeFile(const char *filename, mode_t perms) {
 
 ssize_t dom::writeFile(const char *filename, mode_t perms, bool indent) {
 
-	// get the optimum block size for I/O on this filesystem
-	filesystem	fs;
-	off64_t	optblocksize;
-	if (fs.open(filename)) {
-		optblocksize=fs.getOptimumTransferBlockSize();
-	} else {
-		optblocksize=sys::getPageSize();
-	}
-
 	// open the file
 	file	fl;
 	if (!fl.open(filename,O_RDWR|O_CREAT|O_TRUNC,perms)) {
 		return RESULT_ERROR;
 	}
-	fl.setWriteBufferSize(optblocksize);
+	fl.setWriteBufferSize(
+		filesystem::getOptimumTransferBlockSize(filename));
 
 	// write the file, saving any error that may occur
 	ssize_t	retval=write(&fl,indent);

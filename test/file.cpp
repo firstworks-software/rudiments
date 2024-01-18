@@ -216,10 +216,8 @@ int main(int argc, const char **argv) {
 		test("getSize after truncate",!fl.getSize());
 		filesystem	fs;
 		fs.open(testfiletxt);
-		ssize_t	blocksize=fs.getOptimumTransferBlockSize();
-		if (blocksize==-1) {
-			blocksize=1024;
-		}
+		ssize_t	blocksize=
+			filesystem::getOptimumTransferBlockSize(testfiletxt);
 		fl.setWriteBufferSize(blocksize);
 		test("getWriteBufferSize",
 			fl.getWriteBufferSize()==(size_t)blocksize);

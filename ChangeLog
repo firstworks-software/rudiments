@@ -151,6 +151,7 @@
 	added various case-insensitive replace() methods
 	added *charstring::findEndOfQuotedString() methods
 	renamed row to record in csvsax and csvdom classes
+	added static filesystem::getOptimumTransferBlockSize()
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

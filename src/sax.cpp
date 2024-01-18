@@ -111,13 +111,9 @@ bool sax::parseLocalFile(const char *filename) {
 		// Set the read buffer size...
 
 		// Get the optimum transfer size for the filesystem
-		// the file is found on, if possible.
-		filesystem	fs;
-		if (fs.open(filename)) {
-			pvt->_optblocksize=fs.getOptimumTransferBlockSize();
-		} else {
-			pvt->_optblocksize=sys::getPageSize();
-		}
+		// the file is found on.
+		pvt->_optblocksize=
+			filesystem::getOptimumTransferBlockSize(filename);
 
 		// If we're memory mapping, since we'll use this for the
 		// offsets as well, then we must use an even multiple of

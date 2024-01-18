@@ -22,7 +22,7 @@ class RUDIMENTS_DLLSPEC filesystem : virtual public object {
 		virtual		~filesystem();
 
 		/** Opens the filesystem containing file or directory "path".
-		 *  If "path" is NULL or an empty string then it the instance
+		 *  If "path" is NULL or an empty string then the instance
 		 *  is initialized using the current working directoy.
 		 *
 		 *  Returns true on success and false on failure. */
@@ -50,6 +50,12 @@ class RUDIMENTS_DLLSPEC filesystem : virtual public object {
 
 		/** Returns the optimum transfer block size. */
 		int64_t		getOptimumTransferBlockSize();
+
+		/** Returns the optimum transfer block size for the filesystem
+		 *  containing file or directory "path".  If "path" is NULL or
+		 *  an empty string then the current working directory is used.
+		 *  Returns sys::getPageSize() if "path" cannot be opened. */
+		static int64_t	getOptimumTransferBlockSize(const char *path);
 
 		/** Returns the total number of blocks allocated for the
 		 *  filesystem. */

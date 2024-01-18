@@ -72,13 +72,8 @@ int main(int argc, const char **argv) {
 	}
 
 	// use optimium block size for buffers
-	filesystem	fs;
-	fs.open(filename.getString());
-	int64_t	blocksize=fs.getOptimumTransferBlockSize()*3;
-	if (blocksize<=0) {
-		stdoutput.printf("get optimum block size failed\n");
-		process::exit(1);
-	}
+	int64_t	blocksize=filesystem::getOptimumTransferBlockSize(
+						filename.getString())*3;
 	stdoutput.printf("blocksize: %lld\n",blocksize);
 	fs.close();
 	f.setWriteBufferSize(blocksize);

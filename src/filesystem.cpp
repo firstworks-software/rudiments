@@ -7,6 +7,7 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
+#include <rudiments/sys.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <rudiments/filedescriptor.h>
 #endif
@@ -604,6 +605,14 @@ int64_t filesystem::getOptimumTransferBlockSize() {
 #else
 	return 0;
 #endif
+}
+
+int64_t filesystem::getOptimumTransferBlockSize(const char *path) {
+	filesystem	fs;
+	if (fs.open(path)) {
+		return fs.getOptimumTransferBlockSize();
+	}
+	return sys::getPageSize();
 }
 
 int64_t filesystem::getTotalBlocks() {
