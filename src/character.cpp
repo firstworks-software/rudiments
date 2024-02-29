@@ -141,6 +141,9 @@ int32_t character::convertToAscii(int32_t c) {
 }
 
 bool character::isInSet(char c, const char *set) {
+	if (!set || !set[0]) {
+		return false;
+	}
 	for (const char *s=set; *s; s++) {
 		if (*s==c) {
 			return true;
@@ -150,6 +153,9 @@ bool character::isInSet(char c, const char *set) {
 }
 
 bool character::isInSetIgnoringCase(char c, const char *set) {
+	if (!set || !set[0]) {
+		return false;
+	}
 	for (const char *s=set; *s; s++) {
 		if (lower(*s)==lower(c)) {
 			return true;

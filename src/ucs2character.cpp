@@ -72,6 +72,9 @@ int32_t ucs2character::convertToAscii(int32_t c) {
 }
 
 bool ucs2character::isInSet(ucs2_t c, const ucs2_t *set) {
+	if (!set || !set[0]) {
+		return false;
+	}
 	for (const ucs2_t *s=set; *s; s++) {
 		if (*s==c) {
 			return true;
@@ -81,6 +84,9 @@ bool ucs2character::isInSet(ucs2_t c, const ucs2_t *set) {
 }
 
 bool ucs2character::isInSetIgnoringCase(ucs2_t c, const ucs2_t *set) {
+	if (!set || !set[0]) {
+		return false;
+	}
 	for (const ucs2_t *s=set; *s; s++) {
 		if (lower(*s)==lower(c)) {
 			return true;

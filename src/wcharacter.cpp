@@ -182,6 +182,9 @@ int32_t wcharacter::convertToAscii(int32_t c) {
 }
 
 bool wcharacter::isInSet(wchar_t c, const wchar_t *set) {
+	if (!set || !set[0]) {
+		return false;
+	}
 	for (const wchar_t *s=set; *s; s++) {
 		if (*s==c) {
 			return true;
@@ -191,6 +194,9 @@ bool wcharacter::isInSet(wchar_t c, const wchar_t *set) {
 }
 
 bool wcharacter::isInSetIgnoringCase(wchar_t c, const wchar_t *set) {
+	if (!set || !set[0]) {
+		return false;
+	}
 	for (const wchar_t *s=set; *s; s++) {
 		if (lower(*s)==lower(c)) {
 			return true;

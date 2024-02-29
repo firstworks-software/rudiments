@@ -20,25 +20,67 @@ class RUDIMENTS_DLLSPEC xmlsax : public sax {
 
 	protected:
 
-		/** Gets called when a start tag is parsed. */
+		/** Gets called when a start tag is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	tagStart(const char *ns, const char *name);
 
-		/** Gets called when an attribute name is parsed. */
+		/** Gets called when an attribute name is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	attributeName(const char *name);
 
-		/** Gets called when an attribute value is parsed. */
+		/** Gets called when an attribute value is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	attributeValue(const char *value);
 
-		/** Gets called when a block of text is parsed. */
+		/** Gets called when a block of text is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	text(const char *string);
 
-		/** Gets called when an end tag is parsed. */
+		/** Gets called when an end tag is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	tagEnd(const char *ns, const char *name);
 
-		/** Gets called when a comment is parsed. */
+		/** Gets called when a comment is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	comment(const char *string);
 
-		/** Gets called when cdata is parsed. */
+		/** Gets called when cdata is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	cdata(const char *string);
 
 	#include <rudiments/private/xmlsax.h>

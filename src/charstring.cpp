@@ -1653,7 +1653,7 @@ bool charstring::compareWithWildcards(const char *string,
 
 bool charstring::isInSet(const char *str, const char * const *set) {
 	if (!set || !set[0]) {
-		return !str;
+		return false;
 	}
 	for (const char * const *s=set; *s; s++) {
 		if (!compare(str,*s)) {
@@ -1665,7 +1665,7 @@ bool charstring::isInSet(const char *str, const char * const *set) {
 
 bool charstring::isInSetIgnoringCase(const char *str, const char * const *set) {
 	if (!set || !set[0]) {
-		return !str;
+		return false;
 	}
 	for (const char * const *s=set; *s; s++) {
 		if (!compareIgnoringCase(str,*s)) {

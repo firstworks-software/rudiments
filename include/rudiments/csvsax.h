@@ -35,28 +35,76 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 
 	protected:
 
-		/** Gets called when the start of the header is encountered. */
+		/** Gets called when the start of the header is encountered.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	headerStart();
 
-		/** Gets called when a column name is parsed. */
+		/** Gets called when a column name is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	column(const char *name, bool quoted);
 
-		/** Gets called when the end of the header is encountered. */
+		/** Gets called when the end of the header is encountered.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	headerEnd();
 
-		/** Gets called when the start of the body is encountered. */
+		/** Gets called when the start of the body is encountered.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	bodyStart();
 
-		/** Gets called when the start of a record is encountered. */
+		/** Gets called when the start of a record is encountered.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	recordStart();
 
-		/** Gets called when a field is parsed. */
+		/** Gets called when a field is parsed.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	field(const char *value, bool quoted);
 
-		/** Gets called when the end of a record is encountered. */
+		/** Gets called when the end of a record is encountered.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	recordEnd();
 
-		/** Gets called when the end of the body is encountered. */
+		/** Gets called when the end of the body is encountered.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation just returns true by a child class may
+		 *  override this method to do something else. */
 		virtual	bool	bodyEnd();
 
 	#include <rudiments/private/csvsax.h>

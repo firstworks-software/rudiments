@@ -1625,7 +1625,7 @@ bool ucs2charstring::compareWithWildcards(const ucs2_t *string,
 
 bool ucs2charstring::isInSet(const ucs2_t *str, const ucs2_t * const *set) {
 	if (!set || !set[0]) {
-		return !str;
+		return false;
 	}
 	for (const ucs2_t * const *s=set; *s; s++) {
 		if (!compare(str,*s)) {
@@ -1638,7 +1638,7 @@ bool ucs2charstring::isInSet(const ucs2_t *str, const ucs2_t * const *set) {
 bool ucs2charstring::isInSetIgnoringCase(const ucs2_t *str,
 					const ucs2_t * const *set) {
 	if (!set || !set[0]) {
-		return !str;
+		return false;
 	}
 	for (const ucs2_t * const *s=set; *s; s++) {
 		if (!compareIgnoringCase(str,*s)) {

@@ -1550,7 +1550,7 @@ bool wcharstring::compareWithWildcards(const wchar_t *string,
 
 bool wcharstring::isInSet(const wchar_t *str, const wchar_t * const *set) {
 	if (!set || !set[0]) {
-		return !str;
+		return false;
 	}
 	for (const wchar_t * const *s=set; *s; s++) {
 		if (!compare(str,*s)) {
@@ -1563,7 +1563,7 @@ bool wcharstring::isInSet(const wchar_t *str, const wchar_t * const *set) {
 bool wcharstring::isInSetIgnoringCase(const wchar_t *str,
 					const wchar_t * const *set) {
 	if (!set || !set[0]) {
-		return !str;
+		return false;
 	}
 	for (const wchar_t * const *s=set; *s; s++) {
 		if (!compareIgnoringCase(str,*s)) {

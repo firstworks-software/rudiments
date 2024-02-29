@@ -152,6 +152,7 @@
 	added *charstring::findEndOfQuotedString() methods
 	renamed row to record in csvsax and csvdom classes
 	added static filesystem::getOptimumTransferBlockSize()
+	isInSet*() return false now if the set is NULL or empty
 
 1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
 	memorymap::getLength() -> getSize()

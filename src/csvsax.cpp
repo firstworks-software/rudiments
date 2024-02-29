@@ -134,14 +134,19 @@ bool csvsax::parse() {
 			} else if (ch=='\0') {
 				// if the file was empty then create an empty
 				// header and empty body
-				headerStart();
+				if (!headerStart()) {
+					return false;
+				}
 				pvt->_state=HEADER_END;
-				headerEnd();
+				if (!headerEnd()) {
+					return false;
+				}
 				pvt->_state=BODY_START;
-				bodyStart();
+				if (!bodyStart()) {
+					return false;
+				}
 				pvt->_state=BODY_END;
-				bodyEnd();
-				return true;
+				return bodyEnd();
 			}
 		}
 
@@ -152,7 +157,9 @@ bool csvsax::parse() {
 
 		// handle various states
 		if (pvt->_state==HEADER_START) {
-			headerStart();
+			if (!headerStart()) {
+				return false;
+			}
 			pvt->_state=COLUMN_START;
 		}
 		if (pvt->_state==COLUMN_START) {
@@ -177,18 +184,26 @@ bool csvsax::parse() {
 			} else {
 				if (ch==pvt->_delimiter) {
 					pvt->_state=COLUMN_END;
-					column(current.getString(),quoted);
+					if (!column(current.getString(),
+								quoted)) {
+						return false;
+					}
 					current.clear();
 					ignore=false;
 					pvt->_state=COLUMN_START;
 					continue;
 				} else if (ch=='\r' || ch=='\n') {
 					pvt->_state=COLUMN_END;
-					column(current.getString(),quoted);
+					if (!column(current.getString(),
+								quoted)) {
+						return false;
+					}
 					current.clear();
 					ignore=false;
 					pvt->_state=HEADER_END;
-					headerEnd();
+					if (!headerEnd()) {
+						return false;
+					}
 					continue;
 				}
 			}
@@ -199,14 +214,18 @@ bool csvsax::parse() {
 		}
 		if (pvt->_state==HEADER_END) {
 			pvt->_state=BODY_START;
-			bodyStart();
+			if (!bodyStart()) {
+				return false;
+			}
 			pvt->_state=RECORD_START;
 		}
 		if (pvt->_state==RECORD_START) {
 			if (ch=='\r' || ch=='\n') {
 				continue;
 			}
-			recordStart();
+			if (!recordStart()) {
+				return false;
+			}
 			pvt->_state=FIELD_START;
 		}
 		if (pvt->_state==FIELD_START) {
@@ -231,18 +250,26 @@ bool csvsax::parse() {
 			} else {
 				if (ch==pvt->_delimiter) {
 					pvt->_state=FIELD_END;
-					field(current.getString(),quoted);
+					if (!field(current.getString(),
+								quoted)) {
+						return false;
+					}
 					current.clear();
 					ignore=false;
 					pvt->_state=FIELD_START;
 					continue;
 				} else if (ch=='\r' || ch=='\n') {
 					pvt->_state=FIELD_END;
-					field(current.getString(),quoted);
+					if (!field(current.getString(),
+								quoted)) {
+						return false;
+					}
 					current.clear();
 					ignore=false;
 					pvt->_state=RECORD_END;
-					recordEnd();
+					if (!recordEnd()) {
+						return false;
+					}
 					pvt->_state=RECORD_START;
 					continue;
 				}
@@ -256,6 +283,5 @@ bool csvsax::parse() {
 
 	// document parsed successfully
 	pvt->_state=BODY_END;
-	bodyEnd();
-	return true;
+	return bodyEnd();
 }
