@@ -111,6 +111,8 @@ bool csvsax::bodyEnd() {
 
 bool csvsax::parse() {
 
+	pvt->_state=HEADER_START;
+
 	stringbuffer	current;
 	bool		quoted=false;
 	bool		inquotes=false;
