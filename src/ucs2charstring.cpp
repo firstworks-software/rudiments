@@ -1962,7 +1962,7 @@ ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
 }
 
 const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						bool backslash,
 						bool doubling) {
 	return findEndOfQuotedString((ucs2_t *)string,stringlen,
@@ -1970,7 +1970,7 @@ const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
 }
 
 ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						bool backslash,
 						bool doubling) {
 
@@ -2017,7 +2017,7 @@ ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
 }
 
 const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						ucs2_t quote,
 						bool backslash,
 						bool doubling) {
@@ -2026,7 +2026,7 @@ const ucs2_t *ucs2charstring::findEndOfQuotedString(const ucs2_t *string,
 }
 
 ucs2_t *ucs2charstring::findEndOfQuotedString(ucs2_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						ucs2_t quote,
 						bool backslash,
 						bool doubling) {

@@ -565,7 +565,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "string" if "stringlen" is 0.  If no closing quote is found
 		 *  then it returns a pointer to the end of the string. */
 		static char	*findEndOfQuotedString(char *string,
-							uint64_t stringlen,
+							size_t stringlen,
 							char quote,
 							bool backslash,
 							bool doubling);
@@ -590,7 +590,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  then it returns a pointer to the end of the string. */
 		static const char	*findEndOfQuotedString(
 							const char *string,
-							uint64_t stringlen,
+							size_t stringlen,
 							char quote,
 							bool backslash,
 							bool doubling);
@@ -666,7 +666,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "string" if "stringlen" is 0.  If no closing quote is found
 		 *  then it returns a pointer to the end of the string. */
 		static char	*findEndOfQuotedString(char *string,
-							uint64_t stringlen,
+							size_t stringlen,
 							bool backslash,
 							bool doubling);
 
@@ -693,7 +693,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  then it returns a pointer to the end of the string. */
 		static const char	*findEndOfQuotedString(
 							const char *string,
-							uint64_t stringlen,
+							size_t stringlen,
 							bool backslash,
 							bool doubling);
 

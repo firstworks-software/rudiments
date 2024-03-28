@@ -1885,7 +1885,7 @@ wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
 }
 
 const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						bool backslash,
 						bool doubling) {
 	return findEndOfQuotedString((wchar_t *)string,stringlen,
@@ -1893,7 +1893,7 @@ const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
 }
 
 wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						bool backslash,
 						bool doubling) {
 
@@ -1940,7 +1940,7 @@ wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
 }
 
 const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						wchar_t quote,
 						bool backslash,
 						bool doubling) {
@@ -1949,7 +1949,7 @@ const wchar_t *wcharstring::findEndOfQuotedString(const wchar_t *string,
 }
 
 wchar_t *wcharstring::findEndOfQuotedString(wchar_t *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						wchar_t quote,
 						bool backslash,
 						bool doubling) {

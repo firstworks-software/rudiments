@@ -1937,7 +1937,7 @@ char *charstring::findEndOfQuotedString(char *string,
 }
 
 const char *charstring::findEndOfQuotedString(const char *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						bool backslash,
 						bool doubling) {
 	return findEndOfQuotedString((char *)string,stringlen,
@@ -1945,7 +1945,7 @@ const char *charstring::findEndOfQuotedString(const char *string,
 }
 
 char *charstring::findEndOfQuotedString(char *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						bool backslash,
 						bool doubling) {
 
@@ -1992,7 +1992,7 @@ char *charstring::findEndOfQuotedString(char *string,
 }
 
 const char *charstring::findEndOfQuotedString(const char *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						char quote,
 						bool backslash,
 						bool doubling) {
@@ -2001,7 +2001,7 @@ const char *charstring::findEndOfQuotedString(const char *string,
 }
 
 char *charstring::findEndOfQuotedString(char *string,
-						uint64_t stringlen,
+						size_t stringlen,
 						char quote,
 						bool backslash,
 						bool doubling) {
