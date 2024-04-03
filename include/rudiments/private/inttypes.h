@@ -44,7 +44,8 @@
 	#endif
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
-	#if defined(RUDIMENTS_HAVE_VARARGS_H)
+	#if defined(RUDIMENTS_HAVE_VARARGS_H) && \
+		!defined(RUDIMENTS_HAVE_STDARG_H)
 		#include <varargs.h>
 	#endif
 	#include <inttypes.h>
