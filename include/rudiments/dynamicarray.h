@@ -82,6 +82,22 @@ class dynamicarray : public arraycollection<valuetype> {
 		 *  its values. */
 		~dynamicarray();
 
+		/** Sets all bytes of the first "count" elements of the
+		 *  dynamicarray to 0. */
+		void	zero(uint64_t count);
+
+		/** Sets all bytes of "count" elements of the dynamicarray,
+		 *  starting at "start", to 0. */
+		void	zero(uint64_t start, uint64_t count);
+
+		/** Sets all bytes of the first "count" elements of the
+ 		 *  dynamicarray to "value". */
+		void	set(byte_t value, uint64_t count);
+
+		/** Sets all bytes of "count" elements of the dynamicarray,
+		 *  starting at "start", to "value". */
+		void	set(byte_t value, uint64_t start, uint64_t count);
+
 		/** Provides read/write access to the "index"th element of the
 		 *  dynamicarray. */
 		valuetype	&operator[](uint64_t index);

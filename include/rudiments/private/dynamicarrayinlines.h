@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/new.h>
+#include <rudiments/bytestring.h>
 
 template< class valuetype >
 inline
@@ -117,6 +118,34 @@ template< class valuetype >
 inline
 dynamicarray<valuetype>::~dynamicarray() {
 	deleteManagedValues();
+}
+
+template< class valuetype >
+inline
+void dynamicarray<valuetype>::zero(uint64_t count) {
+	set(0,0,count);
+}
+
+template< class valuetype >
+inline
+void dynamicarray<valuetype>::zero(uint64_t start, uint64_t count) {
+	set(0,start,count);
+}
+
+template< class valuetype >
+inline
+void dynamicarray<valuetype>::set(byte_t value, uint64_t count) {
+	set(value,0,count);
+}
+
+template< class valuetype >
+inline
+void dynamicarray<valuetype>::set(byte_t value,
+				uint64_t start, uint64_t count) {
+	uint64_t end=start+count;
+	for (uint64_t i=start; i<end; i++) {
+		bytestring::set(&((*this)[i]),value,sizeof(valuetype));
+	}
 }
 
 template< class valuetype >

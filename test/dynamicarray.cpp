@@ -14,7 +14,7 @@ struct test {
 
 class testclass {
 	public:
-			testclass();
+		testclass();
 		uint32_t	getValue();
 		void		setValue(uint32_t value);
 	private:
@@ -259,6 +259,20 @@ int main(int argc, const char **argv) {
 	da4.clear();
 	test("clear, getCount()",da4.getCount()==0);
 	stdoutput.printf("\n");
+
+
+
+	// create, zero, and clear (successful if it doesn't crash)
+	stdoutput.printf("create, zero and clear...\n");
+	for (uint16_t i=0; i<1024; i++) {
+		dynamicarray<struct test *>	da5;
+		da5.setManageValues(true);
+		da5.zero(i);
+		da5.clear();
+	}
+	test("create, zero, clear",true);
+	stdoutput.printf("\n");
+	
 
 
 	// copy and assignment

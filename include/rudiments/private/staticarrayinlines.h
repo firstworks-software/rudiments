@@ -3,6 +3,7 @@
 
 #include <rudiments/private/new.h>
 #include <rudiments/private/nodeinlines.h>
+#include <rudiments/bytestring.h>
 
 template< class valuetype, uint64_t count >
 inline
@@ -67,6 +68,43 @@ inline
 staticarray<valuetype,count>::~staticarray() {
 	deleteManagedValues();
 	delete[] data;
+}
+
+template< class valuetype, uint64_t count >
+inline
+void staticarray<valuetype,count>::zero() {
+	set(0,0,count);
+}
+
+template< class valuetype, uint64_t count >
+inline
+void staticarray<valuetype,count>::zero(uint64_t zerocount) {
+	set(0,0,zerocount);
+}
+
+template< class valuetype, uint64_t count >
+inline
+void staticarray<valuetype,count>::zero(uint64_t start, uint64_t zerocount) {
+	set(0,start,zerocount);
+}
+
+template< class valuetype, uint64_t count >
+inline
+void staticarray<valuetype,count>::set(byte_t value) {
+	set(value,0,count);
+}
+
+template< class valuetype, uint64_t count >
+inline
+void staticarray<valuetype,count>::set(byte_t value, uint64_t setcount) {
+	set(value,0,setcount);
+}
+
+template< class valuetype, uint64_t count >
+inline
+void staticarray<valuetype,count>::set(byte_t value,
+				uint64_t start, uint64_t setcount) {
+	bytestring::set(data,value+start,sizeof(valuetype)*setcount);
 }
 
 template< class valuetype, uint64_t count >

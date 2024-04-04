@@ -256,6 +256,18 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+
+	// create, zero, and clear (successful if it doesn't crash)
+	stdoutput.printf("create, zero and clear...\n");
+	staticarray<struct test *, 1024>	sa5;
+	sa5.setManageValues(true);
+	sa5.zero();
+	sa5.clear();
+	test("create, zero, clear",true);
+	stdoutput.printf("\n");
+
+
+
 	// copy and assignment
 	for (uint16_t i=0; i<2; i++) {
 
