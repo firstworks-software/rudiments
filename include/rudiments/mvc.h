@@ -395,8 +395,7 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
  *
  *  Various methods such as doRead(), doUpdate(), and doDelete() take a
  *  "criteria" argument.  This should be a JSON string in jsonlogic format
- *  (http://jsonlogic.com), and will be used to construct the where clause for
- *  these operations:
+ *  (http://jsonlogic.com), and will be used to constrain the results.
  *
  *    { "and" : [
  *      { "=" : [
@@ -410,8 +409,8 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
  *    ] }
  *
  *  The doRead() method also takes a "sort" argument.  This should be a JSON
- *  string conforming to the following format, and will be used to construct
- *  the order-by clause for these operations:
+ *  string conforming to the following format, and will be used to order
+ *  the results.
  *
  *    {
  *      "col1" : "asc",
@@ -484,8 +483,9 @@ class RUDIMENTS_DLLSPEC mvccrud : virtual public object {
 		/** Executes a read operation.
 		 *
 		 *  "criteria" should be a JSON string representing the
-		 *  criteria that will be used to build the where clause,
-		 *  conforming to the format described in the class description.
+		 *  criteria that will be used to constrain the results,
+		 *  conforming to the format described in the class
+		 *  description.
 		 *
 		 *  "sort" should be a JSON object representing the criteria
 		 *  that will be used to order the results, conforming to the
