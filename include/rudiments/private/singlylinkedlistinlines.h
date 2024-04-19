@@ -61,11 +61,12 @@ void singlylinkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 	last=NULL;
 	count=0;
 
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
 		append(node_duplicate_value(&(node->getReference()),
-						this->getManageValues(),
-						this->getManageArrayValues()));
+					managevalues,managearrayvalues));
 	}
 }
 
@@ -248,22 +249,22 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 	}
 	bool	retval=false;
 	listnode<valuetype> *current=first;
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	while (!this->getComparator()->compare(current->getValue(),value)) {
 		retval=true;
 		if (first==last) {
 			first=NULL;
 			last=NULL;
 			node_delete_value(&(current->getReference()),
-						this->getManageValues(),
-						this->getManageArrayValues());
+						managevalues,managearrayvalues);
 			delete current;
 			count--;
 			return true;
 		} else {
 			first=first->getNext();
 			node_delete_value(&(current->getReference()),
-						this->getManageValues(),
-						this->getManageArrayValues());
+						managevalues,managearrayvalues);
 			delete current;
 			count--;
 			current=first;
@@ -281,8 +282,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 				last=prev;
 			}
 			node_delete_value(&(current->getReference()),
-						this->getManageValues(),
-						this->getManageArrayValues());
+						managevalues,managearrayvalues);
 			delete current;
 			count--;
 			current=temp;
@@ -608,11 +608,12 @@ inline
 bool singlylinkedlist<valuetype>::clear() {
 	listnode<valuetype>	*next;
 	listnode<valuetype>	*current=first;
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	while (current) {
 		next=current->getNext();
 		node_delete_value(&(current->getReference()),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 		delete current;
 		current=next;
 	}

@@ -133,16 +133,18 @@ void dictionary<keytype,valuetype>::clone(dictionary<keytype,valuetype> *a) {
 	//
 	// So, we'll manually build both by running through a.tree and
 	// adding its key/value pairs to ourself.
+	bool	managekeys=this->getManageKeys();
+	bool	managearraykeys=this->getManageArrayKeys();
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (treenode<dictionarypair<keytype,valuetype> *>
 			*node=a->tree.getFirst(); node; node=node->getNext()) {
 		setValue(node_duplicate_value(
 				&(node->getValue()->getKeyRef()),
-				this->getManageKeys(),
-				this->getManageArrayKeys()),
+				managekeys,managearraykeys),
 			node_duplicate_value(
 				&(node->getValue()->getValueRef()),
-				this->getManageValues(),
-				this->getManageArrayValues()));
+				managevalues,managearrayvalues));
 	}
 
 	// if a's keylist was already built then go ahead and build ours too
@@ -161,16 +163,18 @@ void dictionary<keytype,valuetype>::clone(
 	// comp should already exist at this point
 	tree.setComparator(comp);
 
+	bool	managekeys=this->getManageKeys();
+	bool	managearraykeys=this->getManageArrayKeys();
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (listnode<keytype> *node=a->getKeys()->getFirst();
 					node; node=node->getNext()) {
 		keytype		key=node->getValue();
 		valuetype	value=a->getValue(key);
 		setValue(node_duplicate_value(&key,
-				this->getManageKeys(),
-				this->getManageArrayKeys()),
+				managekeys,managearraykeys),
 			node_duplicate_value(&value,
-				this->getManageValues(),
-				this->getManageArrayValues()));
+				managevalues,managearrayvalues));
 	}
 
 	// a's keylist may have been built as a result of the getKeys() call
@@ -402,14 +406,16 @@ bool dictionary<keytype,valuetype>::remove(keytype key) {
 template <class keytype, class valuetype>
 inline
 bool dictionary<keytype,valuetype>::clear() {
+	bool	managekeys=this->getManageKeys();
+	bool	managearraykeys=this->getManageArrayKeys();
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (treenode<dictionarypair<keytype,valuetype> *> *node=
 				tree.getFirst(); node; node=node->getNext()) {
 		node_delete_value(&(node->getValue()->getKeyRef()),
-					this->getManageKeys(),
-					this->getManageArrayKeys());
+					managekeys,managearraykeys);
 		node_delete_value(&(node->getValue()->getValueRef()),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 		delete node->getValue();
 	}
 	tree.clear();

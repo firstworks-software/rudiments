@@ -56,10 +56,11 @@ staticarray<valuetype,count> &staticarray<valuetype,count>::operator=(
 template< class valuetype, uint64_t count >
 inline
 void staticarray<valuetype,count>::clone(arraycollection<valuetype> &v) {
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (uint64_t i=0; i<count && i<v.getCount(); i++) {
 		data[i]=node_duplicate_value(&(v[i]),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 	}
 }
 
@@ -152,11 +153,12 @@ bool staticarray<valuetype,count>::clear() {
 template< class valuetype, uint64_t count >
 inline
 void staticarray<valuetype,count>::deleteManagedValues() {
-	if (this->getManageValues() || this->getManageArrayValues()) {
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
+	if (managevalues || managearrayvalues) {
 		for (uint64_t i=0; i<count; i++) {
 			node_delete_value(&(data[i]),
-						this->getManageValues(),
-						this->getManageArrayValues());
+					managevalues,managearrayvalues);
 			node_zero_value(&(data[i]));
 		}
 	}

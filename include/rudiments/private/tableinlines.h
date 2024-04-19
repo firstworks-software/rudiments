@@ -59,15 +59,16 @@ void table<valuetype>::clone(tablecollection<valuetype> *t) {
 	for (uint64_t col=0; col<t->getColumnCount(); col++) {
 		setColumnName(col,t->getColumnName(col));
 	}
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (uint64_t row=0;
 		!(t->getAllRowsAvailable() && row==t->getRowCount());
 		row++) {
 		for (uint64_t col=0; col<t->getColumnCount(); col++) {
 			setValue(row,col,
 				node_duplicate_value(
-						&(t->getReference(row,col)),
-						this->getManageValues(),
-						this->getManageArrayValues()));
+					&(t->getReference(row,col)),
+					managevalues,managearrayvalues));
 		}
 	}
 }

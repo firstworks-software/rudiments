@@ -107,11 +107,13 @@ void avltree<valuetype>::clone(nodecollection<valuetype> *coll) {
 	if (coll->getFirst()) {
 
 		// clone the collection...
+		bool	managevalues=this->getManageValues();
+		bool	managearrayvalues=this->getManageArrayValues();
 		for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
-			insert(node_duplicate_value(&(node->getReference()),
-						this->getManageValues(),
-						this->getManageArrayValues()));
+			insert(node_duplicate_value(
+					&(node->getReference()),
+					managevalues,managearrayvalues));
 		}
 	
 		// update first
@@ -384,6 +386,9 @@ template <class valuetype>
 inline
 bool avltree<valuetype>::clear() {
 
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
+
 	// start at the top
 	treenode<valuetype>	*node=top;
 	while (node) {
@@ -410,8 +415,7 @@ bool avltree<valuetype>::clear() {
 
 		// delete the value in the node
 		node_delete_value(&(node->getReference()),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 
 		// delete the node itself
 		delete node;

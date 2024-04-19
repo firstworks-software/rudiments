@@ -89,10 +89,11 @@ void dynamicarray<valuetype>::clone(dynamicarray<valuetype> &v) {
 	inccount=v.inccount;
 
 	// clone the data
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (uint64_t i=0; i<v.getCount(); i++) {
 		find(i)=node_duplicate_value(&(v.find(i)),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 	}
 
 	// clone positions
@@ -107,10 +108,11 @@ template< class valuetype >
 inline
 void dynamicarray<valuetype>::clone(arraycollection<valuetype> &v) {
 	lastcount=v.getCount();
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (uint64_t i=0; i<lastcount; i++) {
 		find(i)=node_duplicate_value(&(v[i]),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 	}
 }
 
@@ -257,8 +259,11 @@ template< class valuetype >
 inline
 void dynamicarray<valuetype>::deleteManagedValues() {
 
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
+
 	// delete managed values in all extents
-	if (this->getManageValues() || this->getManageArrayValues()) {
+	if (managevalues || managearrayvalues) {
 		uint64_t	i=0;
 		uint64_t	count=initcount;
 		for (curext=extents.getFirst(); i<lastcount && curext;
@@ -266,8 +271,7 @@ void dynamicarray<valuetype>::deleteManagedValues() {
 			valuetype	*data=curext->getValue();
 			for (uint64_t j=0; i<lastcount && j<count; j++) {
 				node_delete_value(&(data[j]),
-						this->getManageValues(),
-						this->getManageArrayValues());
+						managevalues,managearrayvalues);
 				node_zero_value(&(data[j]));
 				i++;
 			}

@@ -82,11 +82,12 @@ void linkedlist<valuetype>::clone(nodecollection<valuetype> *coll) {
 	first=NULL;
 	last=NULL;
 	count=0;
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	for (nodecollectionnode<valuetype> *node=coll->getFirst();
 						node; node=node->getNext()) {
 		append(node_duplicate_value(&(node->getReference()),
-						this->getManageValues(),
-						this->getManageArrayValues()));
+					managevalues,managearrayvalues));
 	}
 }
 
@@ -605,11 +606,12 @@ inline
 bool linkedlist<valuetype>::clear() {
 	listnode<valuetype>	*next;
 	listnode<valuetype>	*current=first;
+	bool	managevalues=this->getManageValues();
+	bool	managearrayvalues=this->getManageArrayValues();
 	while (current) {
 		next=current->getNext();
 		node_delete_value(&(current->getReference()),
-					this->getManageValues(),
-					this->getManageArrayValues());
+					managevalues,managearrayvalues);
 		delete current;
 		current=next;
 	}
