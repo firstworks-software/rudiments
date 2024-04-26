@@ -97,10 +97,13 @@ void urlhttprequest::initSkinVariables() {
 	// build the path from the application to the page
 	stringbuffer	path;
 	path.append(pvt->_skinstr.getString());
-	if (pvt->_modulestr.getStringLength()) {
-		path.append(slash)->append(pvt->_modulestr.getString());
+	if (pvt->_modulestr.getSize()) {
+		path.append(slash);
+		path.append(pvt->_modulestr.getString(),
+				pvt->_modulestr.getSize());
 	}
-	path.append(slash)->append(pvt->_pagestr.getString());
+	path.append(slash);
+	path.append(pvt->_pagestr.getString(),pvt->_pagestr.getSize());
 
 	// iterate over the path, at each slash, try to parse an 
 	// skin file at that level
@@ -111,9 +114,10 @@ void urlhttprequest::initSkinVariables() {
 		if (*ptr1==slash || !*ptr1) {
 			skinvarfilename.clear();
 			skinvarfilename.append(docroot)->append(slash);
-			if (pvt->_applicationstr.getStringLength()) {
+			if (pvt->_applicationstr.getSize()) {
 				skinvarfilename.append(
-					pvt->_applicationstr.getString());
+					pvt->_applicationstr.getString(),
+					pvt->_applicationstr.getSize());
 				skinvarfilename.append(slash);
 			}
 			const char	*ptr2=path.getString();
@@ -254,8 +258,10 @@ void urlhttprequest::initUrlVariables() {
 					pvt->_applicationurl.getString();
 
 	// build the program name
-	pvt->_programpath.append(pvt->_applicationpath.getString());
-	pvt->_programurl.append(pvt->_applicationurl.getString());
+	pvt->_programpath.append(pvt->_applicationpath.getString(),
+					pvt->_applicationpath.getSize());
+	pvt->_programurl.append(pvt->_applicationurl.getString(),
+					pvt->_applicationurl.getSize());
 	if (scriptnamelistlength) {
 		pvt->_programstr.append(
 				scriptnamelist[scriptnamelistlength-1]);
@@ -282,8 +288,10 @@ void urlhttprequest::initUrlVariables() {
 	charstring::split(pathinfo,"/",true,&pathinfolist,&pathinfolistlength);
 
 	// skin is the first thing in the list (unless the page was)
-	pvt->_skinpath.append(pvt->_applicationpath.getString());
-	pvt->_skinurl.append(pvt->_applicationurl.getString());
+	pvt->_skinpath.append(pvt->_applicationpath.getString(),
+					pvt->_applicationpath.getSize());
+	pvt->_skinurl.append(pvt->_applicationurl.getString(),
+					pvt->_applicationurl.getSize());
 	if (pathinfolistlength>1) {
 		pvt->_skinstr.append(pathinfolist[0]);
 		pvt->_skinpath.append(slash);
@@ -300,8 +308,10 @@ void urlhttprequest::initUrlVariables() {
 	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_skinurl.getString();
 
 	// module is everything between the skin and page
-	pvt->_modulepath.append(pvt->_skinpath.getString());
-	pvt->_moduleurl.append(pvt->_skinurl.getString());
+	pvt->_modulepath.append(pvt->_skinpath.getString(),
+					pvt->_skinpath.getSize());
+	pvt->_moduleurl.append(pvt->_skinurl.getString(),
+					pvt->_skinurl.getSize());
 	if (pathinfolistlength>2) {
 		for (uint64_t index=1;
 				index<pathinfolistlength-1;
@@ -325,8 +335,10 @@ void urlhttprequest::initUrlVariables() {
 	pvt->_urlvals[pvt->_urlvariablecount++]=pvt->_moduleurl.getString();
 
 	// page is the last thing in the list
-	pvt->_pagepath.append(pvt->_modulepath.getString());
-	pvt->_pageurl.append(pvt->_moduleurl.getString());
+	pvt->_pagepath.append(pvt->_modulepath.getString(),
+					pvt->_modulepath.getSize());
+	pvt->_pageurl.append(pvt->_moduleurl.getString(),
+					pvt->_moduleurl.getSize());
 	if (pathinfolistlength) {
 		pvt->_pagestr.append(pathinfolist[pathinfolistlength-1]);
 		pvt->_pagepath.append(slash);

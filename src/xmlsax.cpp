@@ -157,7 +157,7 @@ bool xmlsax::parseTag(char current, char *next) {
 	} else {
 
 		// call the callback for tag start
-		if (!tagStart((pvt->_tagns.getStringLength())?
+		if (!tagStart((pvt->_tagns.getSize())?
 					pvt->_tagns.getString():NULL,
 				pvt->_tagname.getString())) {
 			return false;
@@ -207,7 +207,7 @@ bool xmlsax::parseTag(char current, char *next) {
 	// if the tag was an empty or standalone tag,
 	// call the callback for tag end
 	if (endtag || standalone) {
-		if (!tagEnd((pvt->_tagns.getStringLength())?
+		if (!tagEnd((pvt->_tagns.getSize())?
 					pvt->_tagns.getString():NULL,
 				pvt->_tagname.getString())) {
 			return false;
@@ -282,7 +282,7 @@ bool xmlsax::parseTagName(char current, stringbuffer *ns,
 		}
 
 		// look for comments
-		if (name->getStringLength()==3 &&
+		if (name->getSize()==3 &&
 			!charstring::compare(name->getString(),"!--")) {
 			// return the character after the !--
 			return (*next=getCharacter())!='\0';
@@ -649,7 +649,7 @@ bool xmlsax::parseText(char current, char *next) {
 			// if we find an opening < then it should be a tag,
 			// call the text callback (if we actually read any text)
 			// and return the <
-			if (pvt->_textdata.getStringLength()) {
+			if (pvt->_textdata.getSize()) {
 				text(pvt->_textdata.getString());
 			}
 			*next=ch;

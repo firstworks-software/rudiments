@@ -1860,7 +1860,7 @@ void tlscontext::setError(int32_t ret) {
 		}
 
 		// if that failed then try to get the error from SSL...
-		if (!pvt->_errorstr.getStringLength() && pvt->_ssl) {
+		if (!pvt->_errorstr.getSize() && pvt->_ssl) {
 			const char	*str="";
 			switch (SSL_get_error(pvt->_ssl,ret)) {
 				case SSL_ERROR_NONE:

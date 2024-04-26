@@ -114,7 +114,7 @@ bool compiler::appendModule(const char *filename,
 			modulefilename.clear();
 		}
 	}
-	if (!modulefilename.getStringLength()) {
+	if (!modulefilename.getSize()) {
 		modulefilename.append(filename);
 	}
 

@@ -2812,7 +2812,7 @@ void charstring::quotedPrintableEncode(const byte_t *input,
 		}
 	}
 
-	*outputlen=out.getStringLength();
+	*outputlen=out.getSize();
 	*output=out.detachString();
 }
 

@@ -589,9 +589,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 	}
 	stdoutput.write("\r\n");
 	#endif
-	ssize_t	requestlength=pvt->_request->getStringLength();
+	ssize_t	requestsize=pvt->_request->getSize();
 	if (pvt->_isc.write(pvt->_request->getString(),
-					requestlength)!=requestlength ||
+					requestsize)!=requestsize ||
 		((pvt->_usehttppost)?
 			(pvt->_isc.write(pvt->_httppostdata,
 					pvt->_httppostdatasize)!=
