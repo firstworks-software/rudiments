@@ -31,3 +31,9 @@ Architecture: any
 Depends: ${misc:Depends}
 Description: Documentation for rudiments
  Documentation for rudiments.
+
+Package: rudiments-dbg
+Section: libs
+Architecture: any
+Depends: rudiments (= ${Source-Version})
+Description: Debug symbols for the Rudiments library
