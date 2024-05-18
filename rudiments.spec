@@ -38,7 +38,9 @@ BuildArch: noarch
 %description doc
 Documentation for rudiments.
 
+
 %debug_package
+
 
 %prep
 %autosetup -p1
