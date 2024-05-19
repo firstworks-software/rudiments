@@ -39,9 +39,6 @@ BuildArch: noarch
 Documentation for rudiments.
 
 
-# debug package
-
-
 %prep
 %autosetup -p1
 
@@ -92,7 +89,6 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 - Updated to version 2.0.0.
 - Updated library versions to 8.
 - Added datadir/rudiments to devel files.
-- Added debug package.
 
 * Thu Mar 04 2021 David Muse <david.muse@firstworks.com> - 1.4.0-1
 - Updated to version 1.4.0.
