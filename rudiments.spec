@@ -39,7 +39,7 @@ BuildArch: noarch
 Documentation for rudiments.
 
 
-%debug_package
+#debug_package
 
 
 %prep
