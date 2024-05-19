@@ -9,8 +9,8 @@
 
 		void	clearDelegate();
 
-		uint64_t	min;
-		uint64_t	max;
+		uint64_t	minval;
+		uint64_t	maxval;
 		uint64_t	growby;
 		uint64_t	total;
 		bool		initialized;

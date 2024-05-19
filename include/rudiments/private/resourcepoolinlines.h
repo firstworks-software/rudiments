@@ -6,7 +6,7 @@
 
 template <class valuetype>
 inline
-resourcepool<valuetype>::resourcepool() : min(0), max(10),
+resourcepool<valuetype>::resourcepool() : minval(0), maxval(10),
 						growby(1), total(0),
 						initialized(false),
 						mtx(NULL) {
@@ -21,28 +21,28 @@ resourcepool<valuetype>::~resourcepool() {
 template <class valuetype>
 inline
 void resourcepool<valuetype>::setMin(uint64_t min) {
-	this->min=min;
-	if (max<min) {
-		max=min;
+	minval=min;
+	if (maxval<min) {
+		maxval=min;
 	}
 }
 
 template <class valuetype>
 inline
 uint64_t resourcepool<valuetype>::getMin() {
-	return min;
+	return minval;
 }
 
 template <class valuetype>
 inline
 void resourcepool<valuetype>::setMax(uint64_t max) {
-	this->max=max;
+	maxval=max;
 }
 
 template <class valuetype>
 inline
 uint64_t resourcepool<valuetype>::getMax() {
-	return max;
+	return maxval;
 }
 
 template <class valuetype>
@@ -66,7 +66,7 @@ bool resourcepool<valuetype>::create() {
 		return false;
 	}
 
-	for (uint64_t i=0; i<min; i++) {
+	for (uint64_t i=0; i<minval; i++) {
 		valuetype	*v=createResource();
 		if (!v) {
 			clearDelegate();
@@ -80,7 +80,7 @@ bool resourcepool<valuetype>::create() {
 		}
 		initiallist.append(v);
 	}
-	total=min;
+	total=minval;
 	initialized=true;
 
 	// unlock mutex
@@ -119,8 +119,8 @@ bool resourcepool<valuetype>::reset() {
 	}
 
 	clearDelegate();
-	min=0;
-	max=10;
+	minval=0;
+	maxval=10;
 	growby=1;
 
 	// unlock mutex
@@ -179,7 +179,7 @@ valuetype *resourcepool<valuetype>::borrowResource() {
 	// if we don't have any on-demand resources available to loan out,
 	// then grow, if we can
 	if (!ondemandlist.getCount()) {
-		for (uint64_t i=0; i<growby && total<max; i++) {
+		for (uint64_t i=0; i<growby && total<maxval; i++) {
 			valuetype	*v=createResource();
 			ondemandlist.append(v);
 			total++;
