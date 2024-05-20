@@ -37,7 +37,7 @@ PROGS = dictionary \
 all: $(PROGS)
 
 clean:
-	$(RM) $(PROGS) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
+	$(RM) $(PROGS) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
 	$(RMTREE) .libs
 
 dictionary: dictionary.cpp dictionary.$(OBJ) 
