@@ -35,5 +35,5 @@ Description: Documentation for rudiments
 Package: rudiments-dbg
 Section: libs
 Architecture: any
-Depends: rudiments (= ${Source-Version})
+Depends: rudiments (= ${source:Version})
 Description: Debug symbols for the Rudiments library
