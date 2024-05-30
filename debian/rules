@@ -20,11 +20,6 @@ else
 	DISTBUILDDEPENDS = -Vdist:BuildDepends="libssl1.0-dev"
 endif
 
-override_dh_auto_configure:
-	./autogen.sh
-	dh_auto_configure
-
-
 clean:
 	dh_testdir
 	dh_auto_configure
@@ -33,3 +28,7 @@ clean:
 
 %:
 	dh $@  --with autotools_dev
+
+override_dh_auto_configure:
+	./autogen.sh
+	dh_auto_configure
