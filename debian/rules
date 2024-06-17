@@ -29,10 +29,6 @@ clean:
 %:
 	dh $@  --with autotools_dev
 
-#override_dh_auto_configure:
-	#./autogen.sh
-	#dh_auto_configure
-
 override_dh_autoreconf:
 	./autogen.sh
 
