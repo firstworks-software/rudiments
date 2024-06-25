@@ -1,4 +1,7 @@
+echo "libtoolize..."
 libtoolize --copy --force
+
+echo "aclocal.m4..."
 cat /usr/share/aclocal/libtool.m4 > aclocal.m4
 cat /usr/share/aclocal/ltoptions.m4 >> aclocal.m4
 cat /usr/share/aclocal/ltsugar.m4 >> aclocal.m4
@@ -28,6 +31,9 @@ do
 	cat $foundfile >> aclocal.m4
 done
 
+echo "autoconf..."
 autoconf
+echo "autoheader..."
 autoheader
+
 sed -i -e "s/beos\*/beos\* | haiku\*/g" configure
