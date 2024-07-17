@@ -867,10 +867,24 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  process to another over a unix socket, for example. */
 		virtual bool	passFileDescriptor(int32_t fd);
 
+		/** Sends file descriptor "fd" to the file descriptor.  This
+		 *  is useful for passing an open file descriptor from one
+		 *  process to another over a unix socket, for example,
+		 *  with a timeout of "sec" seconds and "usec" microseconds. */
+		virtual bool	passFileDescriptor(int32_t fd,
+						int32_t sec, int32_t usec);
+
 		/** Receives a file descriptor into buffer "fd".  This
 		 *  is useful for receiving an open file descriptor passed
 		 *  from another process over a unix socket, for example. */
 		virtual bool	receiveFileDescriptor(int32_t *fd);
+
+		/** Receives a file descriptor into buffer "fd".  This
+		 *  is useful for receiving an open file descriptor passed
+		 *  from another process over a unix socket, for example,
+		 *  with a timeout of "sec" seconds and "usec" microseconds. */
+		virtual bool	receiveFileDescriptor(int32_t *fd,
+						int32_t sec, int32_t usec);
 
 		/** Returns true if the platform supports passing and receiving
 		 *  file descriptors or false otherwise. */
@@ -882,10 +896,24 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  process to another over a unix socket, for example. */
 		virtual bool	passSocket(int32_t sock);
 
+		/** Sends socket "sock" to the file descriptor.  This
+		 *  is useful for passing an open socket from one
+		 *  process to another over a unix socket, for example,
+		 *  with a timeout of "sec" seconds and "usec" microseconds. */
+		virtual bool	passSocket(int32_t sock,
+						int32_t sec, int32_t usec);
+
 		/** Receives a socket into buffer "sock".  This is useful for
 		 *  receiving an open file descriptor passed from another
 		 *  process over a unix socket, for example. */
 		virtual bool	receiveSocket(int32_t *sock);
+
+		/** Receives a socket into buffer "sock".  This is useful for
+		 *  receiving an open file descriptor passed from another
+		 *  process over a unix socket, for example, with a timeout of
+		 *  "sec" seconds and "usec" microseconds. */
+		virtual bool	receiveSocket(int32_t *sock,
+						int32_t sec, int32_t usec);
 
 		/** Returns true if the platform supports passing and receiving
 		 *  sockets or false otherwise. */

@@ -2752,6 +2752,10 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) {
 }
 
 bool filedescriptor::passFileDescriptor(int32_t fd) {
+	return passFileDescriptor(fd,-1,-1);
+}
+
+bool filedescriptor::passFileDescriptor(int32_t fd, int32_t sec, int32_t usec) {
 
 #if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
 		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
@@ -2885,6 +2889,11 @@ bool filedescriptor::passFileDescriptor(int32_t fd) {
 }
 
 bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
+	return receiveFileDescriptor(fd,-1,-1);
+}
+
+bool filedescriptor::receiveFileDescriptor(int32_t *fd,
+					int32_t sec, int32_t usec) {
 
 #if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
 		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
@@ -2932,11 +2941,10 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 	int32_t	result;
 	error::clearError();
 	do {
-		// wait 120 seconds for data to come in
-		// FIXME: this should be configurable
+		// wait for data to come in
 		bool	oldwaits=pvt->_retryinterruptedwaits;
 		pvt->_retryinterruptedwaits=pvt->_retryinterruptedreads;
-		result=waitForNonBlockingRead(120,0);
+		result=waitForNonBlockingRead(sec,usec);
 		pvt->_retryinterruptedwaits=oldwaits;
 		if (result==RESULT_TIMEOUT) {
 			#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
@@ -3078,6 +3086,10 @@ bool filedescriptor::supportsPassAndReceiveFileDescriptor() {
 }
 
 bool filedescriptor::passSocket(int32_t sock) {
+	return passSocket(sock,-1,-1);
+}
+
+bool filedescriptor::passSocket(int32_t sock, int32_t sec, int32_t usec) {
 
 #if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
 
@@ -3115,6 +3127,10 @@ bool filedescriptor::passSocket(int32_t sock) {
 }
 
 bool filedescriptor::receiveSocket(int32_t *sock) {
+	return receiveSocket(sock,-1,-1);
+}
+
+bool filedescriptor::receiveSocket(int32_t *sock, int32_t sec, int32_t usec) {
 
 #if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
 
