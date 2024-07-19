@@ -20,6 +20,7 @@ int main(int argc, const char **argv) {
 	// there's a distro with a pre 2.0 kernel that doesn't use libc
 	bool	notsupported=(!charstring::compare(os,"Linux",5) && ver<2.0);
 	bool	iswindows=!charstring::compare(os,"Windows");
+	bool	isopenbsd=!charstring::compare(os,"OpenBSD");
 	delete[] os;
 	delete[] rel;
 
@@ -33,7 +34,13 @@ int main(int argc, const char **argv) {
 		f=charstring::duplicate(
 				"C:\\Windows\\System32\\msvcrt.dll");
 	} else {
-		// decide on a file to use
+		// decide on a file to use...
+		// On most platforms, we'll look for the first libc to open.
+		// On OpenBSD, there can be multiple libcs, and we need to
+		// open the highest versioned one.
+		linkedlist<char	*>	libs;
+		libs.setManageArrayValues(true);
+		libs.getComparator()->setNatural(true);
 		const char	*dirs[]={
 			"/lib64","/usr/lib64","/lib","/usr/lib",
 			// FIXME: other architectures
@@ -64,15 +71,24 @@ int main(int argc, const char **argv) {
 							file,"libc.so.",8) ||
 						!charstring::compare(
 							file,"libc.dylib",10)) {
-						f=file;
-						break;
+						if (!isopenbsd) {
+							f=file;
+						} else {
+							libs.append(file);
+						}
+					} else {
+						delete[] file;
 					}
-					delete[] file;
 				}
 			}
-			if (f) {
+			if (libs.getCount()) {
 				break;
 			}
+		}
+		if (isopenbsd && libs.getCount()) {
+			libs.sortInexpensively();
+			f=libs.getLast()->getValue();
+			libs.getLast()->setValue(NULL);
 		}
 	}
 	test("file exists",f);
