@@ -81,7 +81,7 @@ int main(int argc, const char **argv) {
 					}
 				}
 			}
-			if (libs.getCount()) {
+			if (f) {
 				break;
 			}
 		}
