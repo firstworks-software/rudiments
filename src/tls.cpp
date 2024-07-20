@@ -2196,21 +2196,48 @@ void tlscertificate::setCertificate(void *cert) {
 		pvt->_pklen=EVP_PKEY_size(pubkey);
 		const void	*pk=NULL;
 		#ifdef RUDIMENTS_HAS_EVP_PKEY_BASE_ID
-			switch (EVP_PKEY_base_id(pubkey)) {
+			int	id=EVP_PKEY_base_id(pubkey);
+			switch (id) {
 				case EVP_PKEY_RSA:
 				case EVP_PKEY_RSA2:
+				#ifdef EVP_PKEY_RSA_PSS
 				case EVP_PKEY_RSA_PSS:
+				#endif
+					#if defined(\
+						RUDIMENTS_HAS_EVP_PKEY_GET0_RSA)
 					pk=EVP_PKEY_get0_RSA(pubkey);
+					#elif defined(\
+						RUDIMENTS_HAS_EVP_PKEY_GET1_RSA)
+					pk=EVP_PKEY_get1_RSA(pubkey);
+					#else
+					pk=EVP_PKEY_get0(pubkey);
+					#endif
 					break;
 				case EVP_PKEY_DSA:
 				case EVP_PKEY_DSA1:
 				case EVP_PKEY_DSA2:
 				case EVP_PKEY_DSA3:
 				case EVP_PKEY_DSA4:
+					#if defined(\
+						RUDIMENTS_HAS_EVP_PKEY_GET0_DSA)
 					pk=EVP_PKEY_get0_DSA(pubkey);
+					#elif defined(\
+						RUDIMENTS_HAS_EVP_PKEY_GET1_DSA)
+					pk=EVP_PKEY_get1_DSA(pubkey);
+					#else
+					pk=EVP_PKEY_get0(pubkey);
+					#endif
 					break;
 				case EVP_PKEY_EC:
+					#if defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET0_EC_KEY)
 					pk=EVP_PKEY_get0_EC_KEY(pubkey);
+					#elif defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET1_EC_KEY)
+					pk=EVP_PKEY_get1_EC_KEY(pubkey);
+					#else
+					pk=EVP_PKEY_get0(pubkey);
+					#endif
 					break;
 				default:
 					pk=EVP_PKEY_get0(pubkey);
@@ -2223,6 +2250,44 @@ void tlscertificate::setCertificate(void *cert) {
 		#endif
 		pvt->_pk=(byte_t *)bytestring::duplicate(pk,pvt->_pklen);
 		pvt->_pkbits=EVP_PKEY_bits(pubkey);
+		#ifdef RUDIMENTS_HAS_EVP_PKEY_BASE_ID
+			switch (id) {
+				#if defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET1_RSA) && \
+					!defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET0_RSA)
+				case EVP_PKEY_RSA:
+				case EVP_PKEY_RSA2:
+				#ifdef EVP_PKEY_RSA_PSS
+				case EVP_PKEY_RSA_PSS:
+				#endif
+					RSA_free((RSA *)pk);
+					break;
+				#endif
+				#if defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET1_DSA) && \
+					!defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET0_DSA)
+				case EVP_PKEY_DSA:
+				case EVP_PKEY_DSA1:
+				case EVP_PKEY_DSA2:
+				case EVP_PKEY_DSA3:
+				case EVP_PKEY_DSA4:
+					DSA_free((DSA *)pk);
+					break;
+				#endif
+				#if defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET1_EC_KEY) && \
+					!defined(\
+					RUDIMENTS_HAS_EVP_PKEY_GET0_EC_KEY)
+				case EVP_PKEY_EC:
+					EC_KEY_free((EC_KEY *)pk);
+					break;
+				#endif
+				default:
+					break;
+			}
+		#endif
 		EVP_PKEY_free(pubkey);
 
 		// FIXME: issuer unique id
