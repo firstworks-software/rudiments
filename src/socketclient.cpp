@@ -403,7 +403,7 @@ wsacleanup:
 	}
 	#endif
 
-	// securitycontext-connect if necessary
+	// socketlayer-connect if necessary
 	if (retval==RESULT_SUCCESS && socklr()) {
 		socklr()->setFileDescriptor(this);
 		if (!socklr()->connect()) {

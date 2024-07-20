@@ -1630,7 +1630,11 @@ bool tlscontext::loadPeerCert() {
 			return true;
 		}
 		pvt->_peercert=SSL_get_peer_certificate(pvt->_ssl);
-		return (pvt->_peercert!=NULL);
+		if (pvt->_peercert) {
+			return true;
+		}
+		setError(-1);
+		return false;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		if (pvt->_peercert) {
 			return true;
@@ -1862,7 +1866,8 @@ void tlscontext::setError(int32_t ret) {
 		// if that failed then try to get the error from SSL...
 		if (!pvt->_errorstr.getSize() && pvt->_ssl) {
 			const char	*str="";
-			switch (SSL_get_error(pvt->_ssl,ret)) {
+			int		err=SSL_get_error(pvt->_ssl,ret);
+			switch (err) {
 				case SSL_ERROR_NONE:
 					str="SSL_ERROR_NONE";
 					break;
@@ -1900,7 +1905,7 @@ void tlscontext::setError(int32_t ret) {
 				default:
 					str="";
 			}
-			pvt->_error=ret;
+			pvt->_error=err;
 			pvt->_errorstr.append(str);
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
@@ -1908,7 +1913,15 @@ void tlscontext::setError(int32_t ret) {
 			return;
 		}
 		setError(pvt->_gctx.getMajorStatus(),pvt->_gctx.getStatus());
-	#else
+	#endif
+	#ifdef DEBUG_TLS
+		stdoutput.printf("  error {\n");
+		stdoutput.printf("    error: %d\n",pvt->_error);
+		stdoutput.printf("    error string: %s\n",
+					pvt->_errorstr.getString());
+		stdoutput.printf("    system error: %d\n",
+					error::getErrorNumber());
+		stdoutput.printf("  }\n");
 	#endif
 }
 
@@ -2181,13 +2194,34 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// get the public key
 		pvt->_pklen=EVP_PKEY_size(pubkey);
-		pvt->_pk=(byte_t *)bytestring::duplicate(
-					#ifdef RUDIMENTS_HAS_EVP_PKEY_GET0
-						EVP_PKEY_get0(pubkey)
-					#else
-						pubkey->pkey.ptr
-					#endif
-					,pvt->_pklen);
+		const void	*pk=NULL;
+		#ifdef RUDIMENTS_HAS_EVP_PKEY_BASE_ID
+			switch (EVP_PKEY_base_id(pubkey)) {
+				case EVP_PKEY_RSA:
+				case EVP_PKEY_RSA2:
+				case EVP_PKEY_RSA_PSS:
+					pk=EVP_PKEY_get0_RSA(pubkey);
+					break;
+				case EVP_PKEY_DSA:
+				case EVP_PKEY_DSA1:
+				case EVP_PKEY_DSA2:
+				case EVP_PKEY_DSA3:
+				case EVP_PKEY_DSA4:
+					pk=EVP_PKEY_get0_DSA(pubkey);
+					break;
+				case EVP_PKEY_EC:
+					pk=EVP_PKEY_get0_EC_KEY(pubkey);
+					break;
+				default:
+					pk=EVP_PKEY_get0(pubkey);
+					break;
+			}
+		#elif RUDIMENTS_HAS_EVP_PKEY_GET0
+			pk=EVP_PKEY_get0(pubkey);
+		#else
+			pk=pubkey->pkey.ptr;
+		#endif
+		pvt->_pk=(byte_t *)bytestring::duplicate(pk,pvt->_pklen);
 		pvt->_pkbits=EVP_PKEY_bits(pubkey);
 		EVP_PKEY_free(pubkey);
 
@@ -2398,9 +2432,13 @@ void tlscertificate::setCertificate(void *cert) {
 						pvt->_validto.getString());
 		stdoutput.printf("    subject: %s\n",pvt->_subject);
 		stdoutput.printf("    public key algorithm: %s\n",pvt->_pkalg);
-		stdoutput.printf("    public key: ");
-		stdoutput.safePrint(pvt->_pk,(pvt->_pklen<5)?pvt->_pklen:5);
-		stdoutput.printf("...\n");
+		stdoutput.printf("    public key:\n");
+		if (pvt->_pk) {
+			stdoutput.safePrint(pvt->_pk,pvt->_pklen);
+		} else {
+			stdoutput.printf("(null)");
+		}
+		stdoutput.printf("\n");
 		stdoutput.printf("    public key length: %lld\n",pvt->_pklen);
 		stdoutput.printf("    public key bits: %lld\n",pvt->_pkbits);
 		stdoutput.printf("    common name: %s\n",pvt->_commonname);
