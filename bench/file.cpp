@@ -75,7 +75,6 @@ int main(int argc, const char **argv) {
 	int64_t	blocksize=filesystem::getOptimumTransferBlockSize(
 						filename.getString())*3;
 	stdoutput.printf("blocksize: %lld\n",blocksize);
-	fs.close();
 	f.setWriteBufferSize(blocksize);
 
 	// declare start/end for timings
