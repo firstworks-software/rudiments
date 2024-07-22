@@ -337,7 +337,7 @@ void filedescriptor::construct() {
 	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
 	pvt->_readbufferend=NULL;
-	pvt->_nodelay=false;
+	pvt->_nodelay=0;
 }
 
 filedescriptor::~filedescriptor() {
@@ -1538,7 +1538,7 @@ bool filedescriptor::close() {
 	pvt->_writebufferdirty=false;
 
 	// reset the nodelay flag
-	pvt->_nodelay=false;
+	pvt->_nodelay=0;
 
 	// close the actual file
 	if (pvt->_fd!=-1) {
