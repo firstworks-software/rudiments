@@ -85,7 +85,9 @@ PROGS3= handoff \
 	domevents \
 	locale \
 	iconvert \
-	collectionprint
+	collectionprint \
+	client \
+	server
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -347,6 +349,12 @@ iconvert: iconvert.cpp iconvert.$(OBJ)
 
 collectionprint: collectionprint.cpp collectionprint.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) collectionprint.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+server: server.cpp server.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) server.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+client: client.cpp client.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) client.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
