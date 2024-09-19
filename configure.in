@@ -5344,7 +5344,7 @@ echo "******************************"
 
 
 FW_SET_VERSION([RUDIMENTS_VERSION],[2.0.0])
-FW_SET_VERSION([SONAME_VERSION_INFO],[8:0:0])
+FW_SET_VERSION([SONAME_VERSION_INFO],[10:0:0])
 
 
 AC_PREFIX_DEFAULT(/usr/local/firstworks)

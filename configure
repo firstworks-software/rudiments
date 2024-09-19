@@ -40861,12 +40861,12 @@ $as_echo "#define RUDIMENTS_VERSION \"2.0.0\"" >>confdefs.h
 
 
 
-	eval "SONAME_VERSION_INFO=\"8:0:0\""
+	eval "SONAME_VERSION_INFO=\"10:0:0\""
 
 	if ( test "SONAME_VERSION_INFO" != "SONAME_VERSION_INFO" )
 	then
 
-$as_echo "#define SONAME_VERSION_INFO \"8:0:0\"" >>confdefs.h
+$as_echo "#define SONAME_VERSION_INFO \"10:0:0\"" >>confdefs.h
 
 	fi
 

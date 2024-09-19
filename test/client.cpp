@@ -88,8 +88,8 @@ int main(int argc, const char **argv) {
 	}
 
 	// set options
-	fd->setSocketWriteBufferSize(65536);
-	fd->setSocketReadBufferSize(65536);
+	//fd->setSocketWriteBufferSize(65536);
+	//fd->setSocketReadBufferSize(65536);
 	fd->setWriteBufferSize(65536);
 	fd->setReadBufferSize(65536);
 	fd->setNaglesAlgorithmEnabled(false);
