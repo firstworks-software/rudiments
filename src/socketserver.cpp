@@ -124,9 +124,9 @@ bool socketserver::setLingerOnClose(int32_t timeout, int32_t onoff) {
 	#ifdef SO_LINGER
 		pvt->_l.l_onoff=onoff;
 		pvt->_l.l_linger=timeout;
-		return !setSockOpt(SOL_SOCKET,SO_LINGER,
+		return setSockOpt(SOL_SOCKET,SO_LINGER,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&(pvt->_l),
-				sizeof(struct linger));
+				sizeof(struct linger))!=-1;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;
@@ -147,9 +147,9 @@ bool socketserver::setReuseAddresses(bool reuse) {
 
 bool socketserver::setReuseAddresses(int32_t onoff) {
 	int32_t	value=onoff;
-	return !setSockOpt(SOL_SOCKET,SO_REUSEADDR,
+	return setSockOpt(SOL_SOCKET,SO_REUSEADDR,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
-					(socklen_t)sizeof(int));
+					(socklen_t)sizeof(int))!=-1;
 }
 
 bool socketserver::listen(int32_t backlog) {

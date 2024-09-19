@@ -4,6 +4,7 @@
 #include <rudiments/commandline.h>
 #include <rudiments/datetime.h>
 #include <rudiments/inetsocketclient.h>
+#include <rudiments/unixsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytebuffer.h>
 #include <rudiments/error.h>
@@ -11,7 +12,7 @@
 
 static void usage() {
 	stdoutput.printf("client "
-			"[-host host] [-port port] [-quiet] "
+			"[-host host] [-port port] [-socket socket] [-quiet] "
 			"[-ccount count] [-mcount count] [-dcount count]\n");
 }
 
@@ -29,7 +30,12 @@ int main(int argc, const char **argv) {
 	}
 	uint16_t	port=9000;
 	if (cmdl.isFound("port")) {
-		port=charstring::convertToUnsignedInteger(cmdl.getValue("port"));
+		port=charstring::convertToUnsignedInteger(
+						cmdl.getValue("port"));
+	}
+	const char	*sock=NULL;
+	if (cmdl.isFound("socket")) {
+		sock=cmdl.getValue("socket");
 	}
 	const char	*msg="hello";
 	if (cmdl.isFound("message")) {
@@ -67,20 +73,39 @@ int main(int argc, const char **argv) {
 
 {
 	// create an inet socket client
-	inetsocketclient	fd;
-	fd.setHost(host);
-	fd.setPort(port);
-	fd.setWriteBufferSize(65536);
-	fd.setReadBufferSize(65536);
+	inetsocketclient	ifd;
+	ifd.setHost(host);
+	ifd.setPort(port);
+
+	// create a unix socket client
+	unixsocketclient	ufd;
+	ufd.setFileName(sock);
+
+	// decide which to use
+	client	*fd=&ifd;
+	if (sock) {
+		fd=&ufd;
+	}
+
+	// set options
+	fd->setSocketWriteBufferSize(65536);
+	fd->setSocketReadBufferSize(65536);
+	fd->setWriteBufferSize(65536);
+	fd->setReadBufferSize(65536);
+	fd->setNaglesAlgorithmEnabled(false);
+
+	// get start time
+	datetime	start;
+	start.initFromSystemDateTime();
 
 	// loop, having sessions with the server
 	for (int64_t i=0; i<ccount; i++) {
 
 		// connect 
-		if (fd.connect()!=RESULT_SUCCESS) {
+		if (fd->connect()!=RESULT_SUCCESS) {
 			if (error::getErrorNumber()) {
 				stdoutput.printf("connect failed (1): %s\n",
-							error::getErrorString());
+						error::getErrorString());
 			} else {
 				stdoutput.printf("connect failed (2): "
 							"unknown error\n");
@@ -88,18 +113,16 @@ int main(int argc, const char **argv) {
 			continue;
 		}
 
-		stdoutput.printf("serverSession {\n");
-
-		// get start time
-		datetime	start;
-		start.initFromSystemDateTime();
+		if (!quiet) {
+			stdoutput.printf("serverSession {\n");
+		}
 
 		// write the message to the server,
 		// the specified number of times
 		for (int64_t j=0; j<mcount; j++) {
 
 			// write size
-			ssize_t	sizewritten=fd.write((uint64_t)
+			ssize_t	sizewritten=fd->write((uint64_t)
 						msgbuf.getSize());
 			if (sizewritten<=0) {
 				if (sizewritten==0) {
@@ -127,7 +150,7 @@ int main(int argc, const char **argv) {
 			}
 
 			// write message
-			sizewritten=fd.write(msgbuf.getBuffer(),
+			sizewritten=fd->write(msgbuf.getBuffer(),
 						msgbuf.getSize());
 			if (sizewritten<=0) {
 				if (sizewritten==0) {
@@ -155,7 +178,7 @@ int main(int argc, const char **argv) {
 			}
 
 			// flush write buffer
-			if (!fd.flushWriteBuffer(-1,-1)) {
+			if (!fd->flushWriteBuffer(-1,-1)) {
 				stdoutput.printf("flushWriteBuffer() failed\n");
 				break;
 			}
@@ -175,7 +198,7 @@ int main(int argc, const char **argv) {
 
 			// read size
 			uint64_t	msgsize;
-			ssize_t	sizeread=fd.read(&msgsize);
+			ssize_t	sizeread=fd->read(&msgsize);
 			if (sizeread<=0) {
 				if (sizeread==0) {
 					stdoutput.printf(
@@ -203,7 +226,7 @@ int main(int argc, const char **argv) {
 
 			// read message
 			byte_t	*msg=new byte_t[msgsize];
-			sizeread=fd.read(msg,msgsize);
+			sizeread=fd->read(msg,msgsize);
 			if (sizeread<=0) {
 				if (sizeread==0) {
 					stdoutput.printf(
@@ -240,30 +263,32 @@ int main(int argc, const char **argv) {
 			delete[] msg;
 		}
 
-		// get end time
-		datetime	end;
-		end.initFromSystemDateTime();
-
-		// calculate total time
-		uint32_t	sec=end.getEpoch()-start.getEpoch();
-		int32_t		usec=end.getMicrosecond()-
-					start.getMicrosecond();
-		if (usec<0) {
-			sec--;
-			usec=usec+1000000;
+		if (!quiet) {
+			stdoutput.printf("}\n");
 		}
 
-		float	totalsec=(float)sec+((float)usec/1000000.0);
-		float	mbps=(((float)msgbuf.getSize()*(float)mcount)/
-						1024.0/1024.0*8.0)/totalsec;
-		stdoutput.printf("  sec:  %18.2f\n",totalsec);
-		stdoutput.printf("  mbps: %18.2f\n",mbps);
-
-		stdoutput.printf("}\n");
-
 		// close the connection to the server
-		fd.close();
+		fd->close();
 	}
+
+	// get end time
+	datetime	end;
+	end.initFromSystemDateTime();
+
+	// calculate total time
+	uint32_t	sec=end.getEpoch()-start.getEpoch();
+	int32_t		usec=end.getMicrosecond()-
+					start.getMicrosecond();
+	if (usec<0) {
+		sec--;
+		usec=usec+1000000;
+	}
+
+	float	totalsec=(float)sec+((float)usec/1000000.0);
+	float	mbps=(((float)ccount*(float)mcount*(float)msgbuf.getSize())/
+						1024.0/1024.0*8.0)/totalsec;
+	stdoutput.printf("sec:  %18.2f\n",totalsec);
+	stdoutput.printf("mbps: %18.2f\n",mbps);
 }
 
 	return 0;

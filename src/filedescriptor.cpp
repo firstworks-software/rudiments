@@ -3176,9 +3176,9 @@ bool filedescriptor::supportsPassAndReceiveSocket() {
 bool filedescriptor::setNaglesAlgorithmEnabled(bool enabled) {
 	pvt->_nodelay=(enabled)?0:1;
 #ifdef TCP_NODELAY
-	return !setSockOpt(IPPROTO_TCP,TCP_NODELAY,
+	return setSockOpt(IPPROTO_TCP,TCP_NODELAY,
 			(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&(pvt->_nodelay),
-			(socklen_t)sizeof(int));
+			(socklen_t)sizeof(int))!=-1;
 #else
 	RUDIMENTS_SET_ENOSYS
 	return false;
@@ -3197,9 +3197,9 @@ bool filedescriptor::getSocketWriteBufferSize(int32_t *size) {
 }
 
 bool filedescriptor::setSocketWriteBufferSize(int32_t size) {
-	return !setSockOpt(SOL_SOCKET,SO_SNDBUF,
+	return setSockOpt(SOL_SOCKET,SO_SNDBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
-				(socklen_t)sizeof(int));
+				(socklen_t)sizeof(int))!=-1;
 }
 
 bool filedescriptor::getSocketReadBufferSize(int32_t *size) {
