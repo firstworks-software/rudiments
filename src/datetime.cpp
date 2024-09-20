@@ -70,7 +70,7 @@ class datetimeprivate {
 				!defined(RUDIMENTS_HAS__TZNAME) && \
 				!defined(RUDIMENTS_HAS_TZNAME) && \
 				defined(RUDIMENTS_HAS_STRFTIME)
-			char	tzname[32];
+			char	_tzname[32];
 		#endif
 };
 
@@ -130,7 +130,15 @@ void datetime::construct() {
 	pvt->_timestring=NULL;
 	pvt->_sqlstring=NULL;
 	pvt->_epoch=0;
-	normalize();
+	#if defined(RUDIMENTS_HAS__GET_TZNAME)
+	bytestring::zero(pvt->_timezonename,sizeof(pvt->_timezonename));
+	#endif
+	#if !defined(RUDIMENTS_HAS__GET_TZNAME) && \
+			!defined(RUDIMENTS_HAS__TZNAME) && \
+			!defined(RUDIMENTS_HAS_TZNAME) && \
+			defined(RUDIMENTS_HAS_STRFTIME)
+	bytestring::zero(pvt->_tzname,sizeof(pvt->_tzname));
+	#endif
 }
 
 bool datetime::clear() {
