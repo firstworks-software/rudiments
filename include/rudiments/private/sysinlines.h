@@ -23,13 +23,9 @@ ssize_t sys::getMinSSizeT() {
 
 inline
 ssize_t sys::getMaxSSizeT() {
-#if 1
 	size_t	s=(size_t)-1;
 	s/=2;
 	return (ssize_t)s;
-#else
-	return SSIZE_MAX;
-#endif
 }
 
 inline
