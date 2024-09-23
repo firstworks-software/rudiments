@@ -72,6 +72,8 @@ class datetimeprivate {
 				defined(RUDIMENTS_HAS_STRFTIME)
 			char	_tzname[32];
 		#endif
+
+		bool	_dirty;
 };
 
 static threadmutex	*_datetimemutex=NULL;
@@ -139,6 +141,7 @@ void datetime::construct() {
 			defined(RUDIMENTS_HAS_STRFTIME)
 	bytestring::zero(pvt->_tzname,sizeof(pvt->_tzname));
 	#endif
+	pvt->_dirty=true;
 }
 
 bool datetime::clear() {
@@ -211,9 +214,7 @@ bool datetime::init(const char *tmstring) {
 	} else {
 		pvt->_zone=NULL;
 	}
-
-	// normalize
-	return normalize();
+	return true;
 }
 
 bool datetime::init(time_t seconds) {
@@ -297,149 +298,217 @@ bool datetime::init(const void *tmstruct) {
 		pvt->_gmtoff=-tms->tm_tzadj;
 	#endif
 
-	return normalize();
+	return true;
 }
 
 int32_t datetime::getHour() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_hour;
 }
 
 int32_t datetime::getMinute() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_min;
 }
 
 int32_t datetime::getSecond() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_sec;
 }
 
 int32_t datetime::getMicrosecond() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_usec;
 }
 
 int32_t datetime::getMonth() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_mon+1;
 }
 
 const char *datetime::getMonthName() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return _monthname[pvt->_mon];
 }
 
 const char *datetime::getMonthAbbreviation() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return _monthabbr[pvt->_mon];
 }
 
 int32_t datetime::getDayOfMonth() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_mday;
 }
 
 int32_t datetime::getDayOfWeek() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_wday+1;
 }
 
 int32_t datetime::getDayOfYear() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_yday+1;
 }
 
 int32_t datetime::getWeekOfYear() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_yweek;
 }
 
 int32_t datetime::getYear() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_year+1900;
 }
 
 int32_t datetime::getShortYear() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_year%100;
 }
 
 int32_t datetime::getCentury() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return (pvt->_year<100)?20:((pvt->_year/100)+20);
 }
 
 bool datetime::isDaylightSavingsTime() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_isdst!=0;
 }
 
 const char *datetime::getTimeZoneString() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_zone;
 }
 
 int32_t datetime::getTimeZoneOffset() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_gmtoff;
 }
 
 time_t datetime::getEpoch() {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	return pvt->_epoch;
 }
 
 bool datetime::setMicrosecond(int32_t microsecond) {
 	pvt->_usec=microsecond;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::setSecond(int32_t second) {
 	pvt->_sec=second;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::setMinute(int32_t minute) {
 	pvt->_min=minute;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::setHour(int32_t hour) {
 	pvt->_hour=hour;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::setDayOfMonth(int32_t day) {
 	pvt->_mday=day;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::setMonth(int32_t month) {
 	pvt->_mon=month-1;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::setYear(int32_t year) {
 	pvt->_year=year-1900;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addMicroseconds(int32_t microseconds) {
 	pvt->_usec=pvt->_usec+microseconds;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addSeconds(int32_t seconds) {
 	pvt->_sec=pvt->_sec+seconds;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addMinutes(int32_t minutes) {
 	pvt->_min=pvt->_min+minutes;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addHours(int32_t hours) {
 	pvt->_hour=pvt->_hour+hours;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addDays(int32_t days) {
 	pvt->_mday=pvt->_mday+days;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addMonths(int32_t months) {
 	pvt->_mon=pvt->_mon+months;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 bool datetime::addYears(int32_t years) {
 	pvt->_year=pvt->_year+years;
-	return normalize();
+	pvt->_dirty=true;
+	return true;
 }
 
 void datetime::setMutex(threadmutex *mtx) {
@@ -451,6 +520,9 @@ const char *datetime::getString() {
 }
 
 const char *datetime::getString(bool microseconds) {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	delete[] pvt->_timestring;
 	stringbuffer	timestr;
 	timestr.append(getMonth(),2)->append('/');
@@ -473,6 +545,9 @@ const char *datetime::getSqlString() {
 }
 
 const char *datetime::getSqlString(bool microseconds) {
+	if (pvt->_dirty) {
+		normalize();
+	}
 	delete[] pvt->_sqlstring;
 	stringbuffer	timestr;
 	timestr.append(getYear())->append('-');
@@ -652,6 +727,13 @@ bool datetime::setTimeZone(const char *newtz, bool ignoredst) {
 		return false;
 	}
 
+	// If we're dirty and the epoch is 0 then we need to call normalize()
+	// to make sure the epoch gets set.  Bail if that fails.
+	if (pvt->_dirty && !pvt->_epoch && !normalize()) {
+		releaseLock();
+		return false;
+	}
+
 	// Change the time zone, get the broken down time relative to the
 	// current epoch, in the new time zone.
 	char	*oldzone=NULL;
@@ -707,10 +789,10 @@ bool datetime::setTZ(const char *zone, char **oldzone, bool ignoredst) {
 
 	// get the current value of TZ
 	const char	*tz=environment::getValue("TZ");
-	if (!charstring::isNullOrEmpty(tz)) {
-		*oldzone=charstring::duplicate(tz);
-	} else {
+	if (charstring::isNullOrEmpty(tz)) {
 		*oldzone=NULL;
+	} else {
+		*oldzone=charstring::duplicate(tz);
 	}
 
 	// If realzone is non-null/non-empty then set TZ to it.  If realzone is
@@ -730,15 +812,16 @@ bool datetime::setTZ(const char *zone, char **oldzone, bool ignoredst) {
 	// former.
 	//
 	// This method is called when normalizing the time, or when we
-	// specifically want to change the time zone.  Also, often,
+	// specifically want to change the time zone.
+	//
+	// FIXME: not any more...  Also, often,
 	// setTZ(pvt->_zone) gets called by construct() when pvt->_zone was
 	// just initialized to NULL.
 	//
-	// In all of these cases, if we're asked to set TZ to a null/empty
-	// value, then ignoring it and not setting TZ at all is really what we
-	// want to do - not set it to something with undefined results, and
-	// preserve the existing TZ on platforms that depend on it
-	// (eg. UnixWare).
+	// In these cases, if we're asked to set TZ to a null/empty value, then
+	// ignoring it and not setting TZ at all is really what we want to do -
+	// not set it to something with undefined results, and preserve the
+	// existing TZ on platforms that depend on it (eg. UnixWare).
 	if (!charstring::isNullOrEmpty(realzone)) {
 		return environment::setValue("TZ",realzone);
 	}
@@ -746,13 +829,18 @@ bool datetime::setTZ(const char *zone, char **oldzone, bool ignoredst) {
 }
 
 bool datetime::restoreTZ(char *oldzone) {
-	if (!charstring::isNullOrEmpty(oldzone)) {
-		bool	retval=environment::setValue("TZ",oldzone);
+
+	// if oldzone is null or empty then remove the TZ environment variable
+	if (charstring::isNullOrEmpty(oldzone)) {
+		environment::remove("TZ");
 		delete[] oldzone;
-		return retval;
+		return true;
 	}
-	environment::remove("TZ");
-	return true;
+
+	// otherwise, set it to whatever oldzone was set to
+	bool	retval=environment::setValue("TZ",oldzone);
+	delete[] oldzone;
+	return retval;
 }
 
 bool datetime::getBrokenDownTimeFromEpoch() {
@@ -797,6 +885,8 @@ bool datetime::getBrokenDownTimeFromEpoch() {
 
 	setWeekOfYear((void *)tms);
 
+	pvt->_dirty=false;
+
 	return (pvt->_epoch!=-1);
 }
 
@@ -816,7 +906,7 @@ bool datetime::normalize() {
 		return false;
 	}
 
-	// If a time zone is set then use it
+	// set the TZ environment variable, as mktime() below depends on it
 	char	*oldzone=NULL;
 	if (!setTZ(pvt->_zone,&oldzone,false)) {
 		releaseLock();
@@ -841,8 +931,6 @@ bool datetime::normalize() {
 	tms.tm_mday=pvt->_mday;
 	tms.tm_mon=pvt->_mon;
 	tms.tm_year=pvt->_year;
-	tms.tm_wday=0;
-	tms.tm_yday=0;
 	tms.tm_isdst=pvt->_isdst;
 
 	// call mktime() to get the epoch, set wday, yday and isdst
@@ -859,10 +947,13 @@ bool datetime::normalize() {
 	pvt->_wday=tms.tm_wday;
 	pvt->_yday=tms.tm_yday;
 	pvt->_isdst=tms.tm_isdst;
+
+	// set pvt->_zone and pvt->_gmtoff
 	processTZ((void *)&tms);
 
 	bool	retval=(pvt->_epoch!=-1);
 
+	// restore the TZ variable to whatever it was, originally
 	if (!charstring::isNullOrEmpty(pvt->_zone)) {
 		restoreTZ(oldzone);
 	}
@@ -870,6 +961,8 @@ bool datetime::normalize() {
 	releaseLock();
 
 	setWeekOfYear((void *)&tms);
+
+	pvt->_dirty=false;
 
 	return retval;
 }
@@ -1176,6 +1269,12 @@ const int32_t *datetime::getTimeZoneOffsets() {
 // comment and knows the answer, please let me know.
 const char *datetime::lookupCombinedTimeZone(const char *zn) {
 
+	// if the zone name is null or empty then don't bother with the more
+	// expsensive stuff below
+	if (charstring::isNullOrEmpty(zn)) {
+		return zn;
+	}
+
 	// if the zone name is longer than 4 chars, then it's a combined zone
 	if (charstring::getLength(zn)>4) {
 		return zn;
@@ -1194,6 +1293,12 @@ const char *datetime::lookupCombinedTimeZone(const char *zn) {
 }
 
 bool datetime::daylightZone(const char *zn) {
+
+	// if the zone name is null or empty then don't bother with the more
+	// expsensive stuff below
+	if (charstring::isNullOrEmpty(zn)) {
+		return zn;
+	}
 
 	// run through the list of timezones that observe daylight
 	// savings time, if "zn" is in that list, return true,
