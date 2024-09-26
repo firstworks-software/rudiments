@@ -291,6 +291,8 @@ class filedescriptorprivate {
 		byte_t		*_readbufferend;
 
 		int32_t		_nodelay;
+
+		size_t		_maxssizet;
 };
 
 filedescriptor::filedescriptor() : input(), output() {
@@ -338,6 +340,7 @@ void filedescriptor::construct() {
 	pvt->_readbuffertail=NULL;
 	pvt->_readbufferend=NULL;
 	pvt->_nodelay=0;
+	pvt->_maxssizet=(size_t)sys::getMaxSSizeT();
 }
 
 filedescriptor::~filedescriptor() {
@@ -1633,10 +1636,10 @@ ssize_t filedescriptor::highLevelRead(byte_t *buf, size_t count) {
 		return 0;
 	}
 
-	// limit count to sys::getMaxSSizeT() or the return
+	// limit count to max ssize_t or the return
 	// value won't make sense for very large reads
-	if (count>(size_t)sys::getMaxSSizeT()) {
-		count=sys::getMaxSSizeT();
+	if (count>pvt->_maxssizet) {
+		count=pvt->_maxssizet;
 	}
 
 	// do the actual read
@@ -1651,10 +1654,10 @@ ssize_t filedescriptor::highLevelRead(byte_t *buf, size_t count,
 		return 0;
 	}
 
-	// limit count to sys::getMaxSSizeT() or the return
+	// limit count to max ssize_t or the return
 	// value won't make sense for very large reads
-	if (count>(size_t)sys::getMaxSSizeT()) {
-		count=sys::getMaxSSizeT();
+	if (count>pvt->_maxssizet) {
+		count=pvt->_maxssizet;
 	}
 
 	// do the actual read
@@ -1695,7 +1698,9 @@ ssize_t filedescriptor::streamBufferedRead(byte_t *buf, size_t count,
 			#endif
 
 			// copy out those bytes
-			bytestring::copy(buf,pvt->_readbufferhead,bytestocopy);
+			// (use memcpy to improve performance by
+			// avoiding bytestring::copy()'s NULL checks)
+			memcpy(buf,pvt->_readbufferhead,bytestocopy);
 
 			// advance various pointers
 			buf+=bytestocopy;
@@ -2039,10 +2044,10 @@ ssize_t filedescriptor::highLevelWrite(
 		return 0;
 	}
 
-	// limit count to sys::getMaxSSizeT() or the return
+	// limit count to max ssize_t or the return
 	// value won't make sense for very large reads
-	if (count>(size_t)sys::getMaxSSizeT()) {
-		count=sys::getMaxSSizeT();
+	if (count>pvt->_maxssizet) {
+		count=pvt->_maxssizet;
 	}
 
 	// do the actual write
@@ -2058,10 +2063,10 @@ ssize_t filedescriptor::highLevelWrite(
 		return 0;
 	}
 
-	// limit count to sys::getMaxSSizeT() or the return
+	// limit count to max ssize_t or the return
 	// value won't make sense for very large reads
-	if (count>(size_t)sys::getMaxSSizeT()) {
-		count=sys::getMaxSSizeT();
+	if (count>pvt->_maxssizet) {
+		count=pvt->_maxssizet;
 	}
 
 	// do the actual write
@@ -2112,8 +2117,9 @@ ssize_t filedescriptor::streamBufferedWrite(
 			#endif
 
 			// copy the data into the buffer
-			bytestring::copy(pvt->_writebuffertail,
-						buf,bytesunwritten);
+			// (use memcpy to improve performance by
+			// avoiding bytestring::copy()'s NULL checks)
+			memcpy(pvt->_writebuffertail,buf,bytesunwritten);
 			pvt->_writebuffertail+=bytesunwritten;
 			byteswritten+=bytesunwritten;
 
@@ -2130,8 +2136,9 @@ ssize_t filedescriptor::streamBufferedWrite(
 			#endif
 
 			// copy what we can of the data into the buffer
-			bytestring::copy(pvt->_writebuffertail,
-						buf,writebufferspace);
+			// (use memcpy to improve performance by
+			// avoiding bytestring::copy()'s NULL checks)
+			memcpy(pvt->_writebuffertail,buf,writebufferspace);
 
 			// attempt to write the contents of the buffer
 			// (temporarily allowing short writes)
@@ -2797,8 +2804,9 @@ bool filedescriptor::passFileDescriptor(int32_t fd, int32_t sec, int32_t usec) {
 		cmptr->cmsg_type=SCM_RIGHTS;
 		cmptr->cmsg_len=CMSG_LEN(sizeof(int32_t));
 
-		bytestring::copy((int32_t *)CMSG_DATA(cmptr),
-						&fd,sizeof(int32_t));
+		// (use memcpy to improve performance by
+		// avoiding bytestring::copy()'s NULL checks)
+		memcpy((int32_t *)CMSG_DATA(cmptr),&fd,sizeof(int32_t));
 	#else
 		// old-style: the descriptor is passed in the accrights...
 		messageheader.msg_accrights=(caddr_t)&fd;
@@ -2980,8 +2988,9 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd,
 				cmptr->cmsg_level==SOL_SOCKET &&
 				cmptr->cmsg_type==SCM_RIGHTS) {
 
-			bytestring::copy(fd,(int32_t *)CMSG_DATA(cmptr),
-							sizeof(int32_t));
+			// (use memcpy to improve performance by
+			// avoiding bytestring::copy()'s NULL checks)
+			memcpy(fd,(int32_t *)CMSG_DATA(cmptr),sizeof(int32_t));
 
 			delete[] control;
 			return true;
