@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the url class =
 
 The [../classes/html/classurl.html url class] provides read access to urls.
@@ -33,3 +37,5 @@ Coming soon...
 @../../examples/url.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

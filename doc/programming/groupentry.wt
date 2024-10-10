@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the groupentry class =
 
 The [../classes/html/classgroupentry.html groupentry class] provides methods for retrieving information about groups.
@@ -7,3 +11,5 @@ The [../classes/html/classgroupentry.html groupentry class] provides methods for
 @../../examples/groupentry.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

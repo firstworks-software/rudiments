@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the userentry class =
 
 The [../classes/html/classuserentry.html userentry class] provides methods for retrieving information about users.
@@ -7,3 +11,5 @@ The [../classes/html/classuserentry.html userentry class] provides methods for r
 @../../examples/userentry.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

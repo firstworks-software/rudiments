@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the file class =
 
 * [#intro Introduction]
@@ -318,3 +322,5 @@ The example below illustrates buffered I/O.
 @../../examples/file-convenience.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

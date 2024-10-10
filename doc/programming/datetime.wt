@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the datetime class =
 
 * [#intro Introduction]
@@ -61,3 +65,5 @@ The datetime class also provides methods for getting information about timezones
 @../../examples/datetime-tz.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

@@ -1,9 +1,7 @@
-<html>
-<head>
-	<title>Using the semaphoreset class</title>
-	<link rel="stylesheet" href="../css/styles.css">
-</head>
-<body>
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
 <h1>Using the semaphoreset class</h1>
 
 <p>Semaphores allow seperate processes or threads to synchronize activities.  The <a href="../classes/html/classsemaphoreset.html">semaphoreset class</a> provides methods for creating and accessing semaphores.</p>
@@ -133,6 +131,7 @@ key        semid      owner      perms      nsems
 </blockquote>
 <p>The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -s 188678177</i></p>
 
-None of this is an issue on Windows systems.
-</body>
-</html>
+<p>None of this is an issue on Windows systems.</p>
+
+<!--#include virtual="footer.html"-->
+

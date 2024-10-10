@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the serviceentry class =
 
 * [=#intro Introduction]
@@ -35,3 +39,5 @@ In this example, information for "service number 25", "tcp" protocol is retrieve
 @../../examples/serviceentry-number.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

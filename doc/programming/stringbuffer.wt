@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the stringbuffer class =
 
 The [../classes/html/classstringbuffer.html stringbuffer class] can be used to store strings of arbitrary length.
@@ -17,3 +21,5 @@ When data is detached, it is no longer associated with the buffer and must be fr
 @../../examples/stringbuffer.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

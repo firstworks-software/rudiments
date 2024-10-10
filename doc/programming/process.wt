@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the process class =
 
 * [=#intro Introduction]
@@ -211,3 +215,5 @@ Note that running "in the background" may have different meanings and consequenc
 On all platforms, once a process has called detach(), if it was run from a terminal, the terminal that it was run from will display a new prompt, and new commands may be run.
 
 On unix-like platforms, once a process has called detach(), it is safe to close the tty that the process was run from.  On Windows platforms though, closing the console that the process was run from will kill the process unless Windows-specific functions are called to dissociate it from the console, create a new console, and associate it with that console.
+
+{{{#!include footer.html}}}

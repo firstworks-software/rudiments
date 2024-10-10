@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the compiler class =
 
 ...
@@ -7,3 +11,5 @@
 @../../examples/compiler cpp.html@
 }}}
 }}}
+
+{{{#!include footer.html}}}

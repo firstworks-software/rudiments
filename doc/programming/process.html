@@ -1,9 +1,7 @@
-<html>
-<head>
-	<title>Using the process class</title>
-	<link rel="stylesheet" href="../css/styles.css">
-</head>
-<body>
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
 <h1>Using the process class</h1>
 
 <ul>
@@ -528,6 +526,7 @@ http://www.gnu.org/software/src-highlite -->
 
 <p>On all platforms, once a process has called detach(), if it was run from a terminal, the terminal that it was run from will display a new prompt, and new commands may be run.</p>
 
-On unix-like platforms, once a process has called detach(), it is safe to close the tty that the process was run from.  On Windows platforms though, closing the console that the process was run from will kill the process unless Windows-specific functions are called to dissociate it from the console, create a new console, and associate it with that console.
-</body>
-</html>
+<p>On unix-like platforms, once a process has called detach(), it is safe to close the tty that the process was run from.  On Windows platforms though, closing the console that the process was run from will kill the process unless Windows-specific functions are called to dissociate it from the console, create a new console, and associate it with that console.</p>
+
+<!--#include virtual="footer.html"-->
+

@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the crypt class =
 
 The [../classes/html/classcrypt.html crypt class] provides a static encryption method that is commonly used for password encryption.
@@ -7,3 +11,5 @@ The [../classes/html/classcrypt.html crypt class] provides a static encryption m
 @../../examples/crypt.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the character class =
 
 * [#intro Introduction]
@@ -9,13 +13,13 @@
 [=#intro]
 == Introduction ==
 
-The [../classes/html/classcharacter.h character class] provides static methods for evaluating and manipulating characters.
+The [../classes/html/classcharacter.html character class] provides static methods for evaluating and manipulating characters.
 
 
 [=#isxxx]
 == Analyzing Characters ==
 
-Methods are provided for determining if a character is alphabetic, alphanumeric, lower case, upper case, etc.
+Methods are provided for determining if a character is alphabetic, alphaumeric, lower case, upper case, etc.
 
 {{{#!blockquote
 {{{#!code
@@ -46,3 +50,5 @@ An inSet() method is also provided which returns true if the specified character
 @../../examples/character-inset.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

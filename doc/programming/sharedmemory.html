@@ -1,9 +1,7 @@
-<html>
-<head>
-	<title>Using the sharedmemory class</title>
-	<link rel="stylesheet" href="../css/styles.css">
-</head>
-<body>
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
 <h1>Using the sharedmemory class</h1>
 
 <p>Shared memory allows seperate processes to access a common block of memory.  The <a href="../classes/html/classsharedmemory.html">sharedmemory class</a> provides methods for creating and accessing shared memory.</p>
@@ -98,6 +96,7 @@ key        shmid      owner      perms      bytes      nattch     status
 </blockquote>
 <p>The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -m 190021641</i></p>
 
-None of this is an issue on Windows systems.
-</body>
-</html>
+<p>None of this is an issue on Windows systems.</p>
+
+<!--#include virtual="footer.html"-->
+

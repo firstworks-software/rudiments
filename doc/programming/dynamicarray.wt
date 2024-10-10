@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the dynamicarray class =
 
 ...
@@ -7,3 +11,5 @@
 @../../examples/dynamicarray.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

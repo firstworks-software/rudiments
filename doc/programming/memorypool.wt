@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the memorypool class =
 
 The [../classes/html/classmemorypool.html memorypool class] provides methods for creating and using a memory pool.
@@ -13,3 +17,5 @@ Coming soon...
 @../../examples/memorypool.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

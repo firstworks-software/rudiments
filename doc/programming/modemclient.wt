@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Programming with Rudiments using the modemclient class =
 
 Here's the code for a client that can talk to the [modemserver.html modem server].  This client sends a string to the server, reads what the server sends back and prints it out.
@@ -11,3 +15,5 @@ Coming soon...
 @../../examples/modemclient.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the parameterstring class =
 
 Sometimes a function needs to take an arbitrary set of parameters.  For
@@ -42,3 +46,5 @@ Coming soon...
 @../../examples/parameterstring.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

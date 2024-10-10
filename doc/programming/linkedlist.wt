@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the linkedlist class =
 
 * [#intro Introduction]
@@ -80,3 +84,5 @@ Note also that the linkedlist class does not manage the data stored in it.  If y
 @../../examples/linkedlist-types.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

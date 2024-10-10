@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Programming with Rudiments using the inetsocketclient class =
 
 Here's the code for a client that can communicate with the [inetsocketserver.html inetsocketserver program].  This client sends a string to the server, reads what the server sends back and prints it out.
@@ -13,3 +17,5 @@ Coming soon...
 }}}
 
 Inet sockets allow clients and servers to communicate across a network.  Unix sockets can be used to allow clients and servers on the same machine to communicate.  Though clients and servers on the same machine could communicate over an inet socket using localhost, unix sockets are much faster and use fewer system resources.  See the [unixsocketserver.html unixsocketserver] and [unixsocketclient.html unixsocketclient] examples.
+
+{{{#!include footer.html}}}

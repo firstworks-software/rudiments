@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the sharedmemory class =
 
 Shared memory allows seperate processes to access a common block of memory.  The [../classes/html/classsharedmemory.html sharedmemory class] provides methods for creating and accessing shared memory.
@@ -35,3 +39,5 @@ key        shmid      owner      perms      bytes      nattch     status
 The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -m 190021641</i>
 
 None of this is an issue on Windows systems.
+
+{{{#!include footer.html}}}

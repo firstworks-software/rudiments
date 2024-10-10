@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the commandline class =
 
 The [../classes/html/classcommandline.html commandline class] provides methods for parsing command line arguments.
@@ -31,3 +35,5 @@ If -hello is specified then the user is greeted with "hello", rather than "hi". 
 @../../examples/commandline.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

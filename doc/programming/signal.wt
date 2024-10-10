@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the signal classes =
 
 Signals allow one processes to interrupt the execution of another process.
@@ -29,3 +33,5 @@ Windows systems don't have signals or the <i>kill</i> program.  Signals are more
 @../../examples/kill.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

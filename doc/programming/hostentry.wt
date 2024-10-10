@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the hostentry class =
 
 * [#intro Introduction]
@@ -33,3 +37,5 @@ In this example, host information is retrieved by address.  In particular, an IP
 @../../examples/hostentry-address.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

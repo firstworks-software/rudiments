@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the charstring class =
 
 * [#intro Introduction]
@@ -102,3 +106,5 @@ The charstring class also provides methods for escaping, encoding and obfuscatin
 @../../examples/charstring-encode.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

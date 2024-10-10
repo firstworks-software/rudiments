@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the device class =
 
 [[Image(../images/traffic_cone.png)]]
@@ -9,3 +13,5 @@ Coming soon...
 @../../examples/device.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}

@@ -1,3 +1,7 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
 = Using the singlylinkedlist class =
 
 * [#intro Introduction]
@@ -90,3 +94,5 @@ Note also that the singlylinkedlist class does not manage the data stored in it.
 @../../examples/singlylinkedlist-types.cpp@
 }}}
 }}}
+
+{{{#!include footer.html}}}
