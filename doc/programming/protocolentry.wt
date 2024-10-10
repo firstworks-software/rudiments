@@ -1,0 +1,39 @@
+= Using the protocolentry class =
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#name">Lookup By Name</a></li>
+<li><a href="#number">Lookup By Number</a></li>
+</ul>
+
+
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+The <a href="../classes/html/classprotocolentry.html">protocolentry class</a> provides methods for retrieving network protocol definitions.  These are usually defined in a file like /etc/protocols on unix-like systems or C:\Windows\System32\drivers\etc\protocol on Windows, or are served from another source via the name-service switch.
+
+Protocols can be looked up by name or number.
+
+
+<a name="name"></a>
+<h3>Lookup By Name</h3>
+
+This example retrieves network protocol information for the "tcp" protocol.
+
+{{{#!blockquote
+{{{#!code
+@protocolentry-name.cpp.html@
+}}}
+}}}
+
+
+<a name="number"></a>
+<h3>Lookup By Number</h3>
+
+This example retrieves network protocol information for "protocol number 6".
+
+{{{#!blockquote
+{{{#!code
+@protocolentry-number.cpp.html@
+}}}
+}}}

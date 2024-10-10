@@ -41,12 +41,6 @@ td a {
 	font-size: 13px;
 }
 
-body iframe {
-	border: 0px;
-	width: 100%;
-	overflow: hidden;
-}
-
 #firstworks {
 	float: right;
 	margin-top: 5px;
@@ -179,6 +173,13 @@ body iframe {
 	vertical-align: middle;
 }
 
+.heading {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 14pt;
+}
+
 .heading1 {
 	color: black;
 	font-family: arial;
@@ -205,13 +206,6 @@ body iframe {
 	font-family: arial;
 	font-weight: bold;
 	font-size: 10pt;
-}
-
-.heading {
-	color: black;
-	font-family: arial;
-	font-weight: bold;
-	font-size: 14pt;
 }
 
 .subject {

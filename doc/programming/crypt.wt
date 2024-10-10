@@ -1,0 +1,9 @@
+= Using the crypt class =
+
+The <a href="../classes/html/classcrypt.html">crypt class</a> provides a static encryption method that is commonly used for password encryption.
+
+{{{#!blockquote
+{{{#!code
+@crypt.cpp.html@
+}}}
+}}}

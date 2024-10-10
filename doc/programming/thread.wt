@@ -1,0 +1,43 @@
+= Using the thread class =
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#ordinary">Ordinary Threads</a></li>
+<li><a href="#detach">Detached Threads</a></li>
+</ul>
+
+
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+The <a href="../classes/html/classthread.html">thread class</a> provides a simple thread implementation.
+
+In this implementation, each instance of the thread class corresponds to a separate thread.  When the spawn() method is called, a new thread is created, and the function is run in the new thread.  An argument may be passed to the function via the spawn() method.  This argument is usually used to pass a pointer to a class or struct, providing parameters for the thread function.
+
+In these examples, two threads are spawned.  Each runs a separate instance of a "count" function which counts from 0 to some number and prints out the numbers.  Each thread is passed in a structure containing a pointer to the thread class, a thread id and a maximum number to count to.  The threads are not synchronized in any way, so the numbers will be printed out in seemingly random blocks.
+
+Note that rudiments supports platforms that don't support threads, and it is possible to explicitly compile rudiments without thread support.  The supportsThreads() method returns true or false, indicating whether thread support is enabled or not.
+
+
+<a name="ordinary"></a>
+<h3>Ordinary Threads</h3>
+
+Ordinarily, a thread runs until its function returns, or calls the exit() method.  Another thread (usually the main thread of the parent process) must call the wait() method to completely dispose of the thread (analagous to "waiting on a child process") and get its exit status. 
+
+{{{#!blockquote
+{{{#!code
+@thread-join.cpp.html@
+}}}
+}}}
+
+
+<a name="detach"></a>
+<h3>Detached Threads</h3>
+
+Alternatively, a thread may dissociate itself from the parent by calling the detach() method.  In this case, the thread is completely disposed of when its function returns.  The parent process will only exit when all threads have exited.  Note that if a thread calls detach(), there is no way for it to return an exit status.
+
+{{{#!blockquote
+{{{#!code
+@thread-detach.cpp.html@
+}}}
+}}}

@@ -1,0 +1,16 @@
+= Using the chat class =
+
+The chat class provides a framework for communications across file descriptors with a peer.
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@chat.cpp.html@
+}}}
+}}}
+
+
+

@@ -1,0 +1,44 @@
+<a name="semaphoreset"></a>
+= Using the semaphoreset class =
+
+Semaphores allow seperate processes or threads to synchronize activities.  The <a href="../classes/html/classsemaphoreset.html">semaphoreset class</a> provides methods for creating and accessing semaphores.
+
+This program creates a set of semaphores and prints out 1 and 3, using the semaphores to synchronize with a second program.
+
+{{{#!blockquote
+{{{#!code
+@semaphoreset1.cpp.html@
+}}}
+}}}
+
+This program attaches to the semaphore set created by the first program and prints out 2 and 4, using the semaphores to synchronize with a first program.
+
+{{{#!blockquote
+{{{#!code
+@semaphoreset2.cpp.html@
+}}}
+}}}
+
+These programs must both be run to the background.
+
+No matter what order the programs are started in, they will always print out:
+
+12341234etc.
+
+Note that on unix-like systems, the first program should not be killed.  Semaphore sets are persistent in the kernel and remain unless specifically removed.  The semaphoreset class will remove the semaphore set that it created when the instance of the class is destroyed, but if the first process is killed then the semaphore set will persist and subsequent attempts to run the program will fail with a cryptic error like "File exists" or similar.
+
+If this happens, most unix-like systems provide utilites for examining and cleaning up semaphore sets.
+
+Running <i>ipcs -s</i> allows you to examine semaphore sets.  It ought to return something like:
+
+{{{#!blockquote
+{{{#!code
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems
+0x010114f4 188678177  dmuse      600        2
+}}}
+}}}
+
+The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -s 188678177</i>
+
+None of this is an issue on Windows systems.

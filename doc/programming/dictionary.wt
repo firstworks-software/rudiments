@@ -1,0 +1,23 @@
+= Using the dictionary class =
+
+The <a href="../classes/html/classdictionary.html">dictionary class</a> allows you to store arbitrary numbers of key/value-pair data.
+
+Each dictionary is composed of a set of dictionarynodes.  Each dictionarynode contains the key and value.
+
+{{{#!blockquote
+{{{#!code
+@dictionary-const.cpp.html@
+}}}
+}}}
+
+Since the dictionary class is template-based, it can store any type of data.
+
+Note that the print() method works for primitive types and strings, but for more compex types, it only prints out the address of the object.
+
+Note also that the dictionary class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted when a node is removes or when the list is cleared.  The recommended method for removing a node is to detach the node, delete its dynamically allocated members and then delete the node.
+
+{{{#!blockquote
+{{{#!code
+@dictionary-nonconst.cpp.html@
+}}}
+}}}

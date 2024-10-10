@@ -1,0 +1,37 @@
+= Using the url class =
+
+The <a href="../classes/html/classurl.html">url class</a> provides read access to urls.
+
+Its parent class: file provides provides open(), read(), and close() methods.
+
+http urls, with Basic Authentication, are supported on all platforms.
+
+urls for other protocols, including ftp, https, scp, sftp, and others, are supported if rudiments was compiled with support for libcurl.
+
+Examples of supported urls include:
+
+<ul>
+<li>http://somedomain.com/path/to/file.html</li>
+<li>http://user:password@somedomain.com/path/to/file.html</li>
+<li>http://[/path/to/userpwdfile]@somedomain.com/path/to/file.html</li>
+</ul>
+
+The url class supports storing the user:password portion of a url in a user-password file.  These files may be referenced in the url by enclosing the full pathname of the file in square brackets.  The file should consist of a single line containing the user and password, separated by a colon.
+
+For example:
+
+{{{#!blockquote
+{{{#!code
+myusername:mypassword
+}}}
+}}}
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@url.cpp.html@
+}}}
+}}}

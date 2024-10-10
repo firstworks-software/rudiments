@@ -1,0 +1,22 @@
+= Using the bytebuffer class =
+
+The bytebuffer class can be used to store binary data of arbitrary length.
+
+Internally, the class stores this data in a series of extents which are coalesced when getBuffer() or detachBuffer() are called.  The size of the initial and incremental extents may be defined in the constructor.
+
+When cleared, all extents except for the initial extent are freed.
+
+It is generally more efficient to reuse the same bytebuffer over and over than to allocate a new one for each operation.
+
+The bytebuffer class provides methods for appending data, writing to arbitrary locations, clearing and truncating the buffer, getting the data stored in the buffer, getting the number of bytes stored in the buffer, and detaching the data from the buffer.
+
+When data is detached, it is no longer associated with the buffer and must be freed by the calling program.
+
+{{{#!blockquote
+{{{#!code
+@bytebuffer.cpp.html@
+}}}
+}}}
+
+
+

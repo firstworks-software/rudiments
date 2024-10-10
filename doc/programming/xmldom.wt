@@ -1,0 +1,61 @@
+= Using the xmldom and domnode classes =
+
+The xmldom and domnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.
+
+The following XML file contains an address book.
+
+{{{#!blockquote
+{{{#!code
+<?xml version="1.0"?>
+<!DOCTYPE instances SYSTEM "adbook.dtd">
+<addressbook>
+        <person firstname="David" middlename="Lee" lastname="Muse">
+                <phones>
+                        <phone location="home" number="1-222-333-4444"/>
+                        <phone location="work" number="1-333-444-5555"/>
+                        <phone location="mobile" number="1-444-555-6666"/>
+                </phones>
+                <addresses>
+                        <address location="home" address="1234 homestreet dr." city="mycity" state="GA" zip="12345"/>
+                        <address location="work" address="2345 workstreet dr." city="mycity" state="GA" zip="23456"/>
+                </addresses>
+                <emails>
+                        <email location="home" address="dmuse@firstworks.com"/>
+                        <email location="work" address="dmuse@workemail.com"/>
+                </emails>
+        </person>
+</addressbook>
+}}}
+}}}
+
+The following program parses the addressbook and prints it to the screen.
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@xmldom.cpp.html@
+}}}
+}}}
+
+Here is the output of the program above.
+
+{{{#!blockquote
+{{{#!code
+David Lee Muse
+Phones:
+        home: 1-222-333-4444
+        work: 1-333-444-5555
+        mobile: 1-444-555-6666
+
+Addresses:
+        home: 1234 homestreet dr. mycity, GA 12345
+        work: 2345 workstreet dr. mycity, GA 23456
+
+Emails:
+        home: dmuse@firstworks.com
+        work: dmuse@workemail.com
+}}}
+}}}

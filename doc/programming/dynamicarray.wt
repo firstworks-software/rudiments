@@ -1,0 +1,9 @@
+= Using the dynamicarray class =
+
+...
+
+{{{#!blockquote
+{{{#!code
+@dynamicarray.cpp.html@
+}}}
+}}}

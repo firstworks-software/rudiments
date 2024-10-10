@@ -1,0 +1,35 @@
+= Using the commandline class =
+
+The <a href="../classes/html/classcommandline.html">commandline class</a> provides methods for parsing command line arguments.
+
+Most programs take command line options in the option/value pair format:
+
+{{{#!blockquote
+program -option value -option value ...
+}}}
+
+or
+
+{{{#!blockquote
+program --option=value --option=value ...
+}}}
+
+The commandline class makes it easy to deal with command line options of
+either of these formats.
+
+The found() method returns true if the option is found and false otherwise.  The getValue() method returns the value of the option or an empty string if the option wasn't specified.
+
+The following program greets the user and takes two arguments:
+
+<ul>
+<li>-hello</li>
+<li>-name <i>name</i></li>
+</ul>
+
+If -hello is specified then the user is greeted with "hello", rather than "hi".  If -name is specified then the user is greeted by name.
+
+{{{#!blockquote
+{{{#!code
+@commandline.cpp.html@
+}}}
+}}}

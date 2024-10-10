@@ -1,0 +1,13 @@
+= Using the filesystem class =
+
+The filesystem class provides methods for collecting statistics about a filesystem.  The "standard" posix function for getting filesystem statistics is either statfs or statvfs.  Few operating systems implement statvfs though and the structure returned by statfs varies greatly between operating systems.  The filesystem class attempts to remedy this situation.  However, no operating system supports every method in this class.
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@filesystem.cpp.html@
+}}}
+}}}

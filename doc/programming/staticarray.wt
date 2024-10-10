@@ -1,0 +1,9 @@
+= Using the staticarray class =
+
+...
+
+{{{#!blockquote
+{{{#!code
+@staticarray.cpp.html@
+}}}
+}}}

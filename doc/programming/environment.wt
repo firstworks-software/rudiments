@@ -1,0 +1,10 @@
+<a name="environment"></a>
+= Using the environment class =
+
+The <a href="">environment class</a> provides methods for accessing and manipulating environment variables.
+
+{{{#!blockquote
+{{{#!code
+@environment.cpp.html@
+}}}
+}}}

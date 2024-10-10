@@ -1,0 +1,11 @@
+= Using the memorymap class =
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@memorymap.cpp.html@
+}}}
+}}}

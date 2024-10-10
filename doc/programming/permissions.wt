@@ -1,0 +1,12 @@
+<a name="permissions">
+= Using the permissions class =
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@permissions.cpp.html@
+}}}
+}}}

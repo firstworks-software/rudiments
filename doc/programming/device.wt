@@ -1,0 +1,11 @@
+= Using the device class =
+
+[[Image(../images/traffic_cone.png)]]
+
+Coming soon...
+
+{{{#!blockquote
+{{{#!code
+@device.cpp.html@
+}}}
+}}}

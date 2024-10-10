@@ -1,0 +1,65 @@
+= Using the sys class =
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#info">Getting System Information</a></li>
+<li><a href="#reboot">Reboot</a></li>
+<li><a href="#shutdown">Shutdown</a></li>
+<li><a href="#halt">Halt</a></li>
+</ul>
+
+
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+The <a href="../classes/html/classsys.html">sys class</a> provides methods for getting information about the operating system and controlling the state of the operating system.
+
+
+<a name="info"></a>
+<h3>Getting System Information</h3>
+
+In this example, various bits of system information are printed out.
+
+{{{#!blockquote
+{{{#!code
+@sys.cpp.html@
+}}}
+}}}
+
+Note that not all systems support every piece of information.  If a piece of information is unsupported, then a -1 is returned.
+
+
+<a name="reboot"></a>
+<h3>Reboot</h3>
+
+This example reboots the system, when run as root or Administrator.
+
+{{{#!blockquote
+{{{#!code
+@reboot.cpp.html@
+}}}
+}}}
+
+
+<a name="shutdown"></a>
+<h3>Shutdown</h3>
+
+This example performs a graceful system shutdown, when run as root or Administrator.
+
+{{{#!blockquote
+{{{#!code
+@shutdown.cpp.html@
+}}}
+}}}
+
+
+<a name="halt"></a>
+<h3>Halt</h3>
+
+This example performs a less-graceful system halt, when run as root or Administrator.
+
+{{{#!blockquote
+{{{#!code
+@halt.cpp.html@
+}}}
+}}}
