@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the randomnumber class =
 
 * [#intro Introduction]
@@ -45,5 +47,7 @@ If you need to generate lots of numbers though, you should create an instance, s
 @../../examples/randomnumber-multiple.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

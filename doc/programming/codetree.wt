@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the codetree class =
 
 [[Image(../images/traffic_cone.png)]]
@@ -13,5 +15,7 @@ Coming soon...
 @../../examples/codetree.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

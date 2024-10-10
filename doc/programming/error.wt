@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the error class =
 
 The [../classes/html/classerror.html error class] provides static methods for getting and setting posix and native system errors.
@@ -23,5 +25,7 @@ In this example, the posix system error is manipulated directly.
 @../../examples/error.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

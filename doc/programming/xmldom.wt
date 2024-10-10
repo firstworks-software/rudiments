@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the xmldom and domnode classes =
 
 The xmldom and domnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.
@@ -63,5 +65,7 @@ Emails:
         work: dmuse@workemail.com
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

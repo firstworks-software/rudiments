@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Programming with Rudiments using the inetsocketserver class =
 
 Daemons are commonly used to serve data to clients over a network.  This can be done using the inetsocketserver class.  The example below listens on an inet socket for a client connection, receives a string from the client and writes the same string back to the client.
@@ -17,5 +19,7 @@ Coming soon...
 }}}
 
 See the [inetsocketclient.html inetsocketclient] example for a client that can communicate with this server.
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

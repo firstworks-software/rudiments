@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the standard I/O classes =
 
 The filedescriptor class provides methods for generic input and output to file descriptors.  Rudiments pre-defines three instances: stdinput, stdoutput and stderror, which provide access to standard input, standard output and standard error.
@@ -13,5 +15,7 @@ As these classes are ultimately instances of the filedescriptor class, many I/O 
 @../../examples/stdio.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

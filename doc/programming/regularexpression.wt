@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the regularexpression class =
 
 * [#intro Introduction]
@@ -54,5 +56,7 @@ Some patterns return multiple unique matches.  The methods getSubstringCount(), 
 }}}
 
 Note that only unique matches are returned.  If the exact same pattern of characters is found at multiple locations in the same string, only the first instance of that pattern is returned.
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

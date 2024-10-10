@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the avltree class =
 
 [[Image(../images/traffic_cone.png)]]
@@ -14,5 +16,6 @@ Coming soon...
 }}}
 }}}
 
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

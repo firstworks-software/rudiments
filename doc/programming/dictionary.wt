@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the dictionary class =
 
 The [../classes/html/classdictionary.html dictionary class] allows you to store arbitrary numbers of key/value-pair data.
@@ -25,5 +27,7 @@ Note also that the dictionary class does not manage the data stored in it.  If y
 @../../examples/dictionary-nonconst.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

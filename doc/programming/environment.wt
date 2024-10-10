@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the environment class =
 
 The [ environment class] provides methods for accessing and manipulating environment variables.
@@ -11,5 +13,7 @@ The [ environment class] provides methods for accessing and manipulating environ
 @../../examples/environment.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

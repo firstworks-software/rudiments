@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the bytestring class =
 
 * [#intro Introduction]
@@ -54,5 +56,7 @@ The findFirst() and findLast() methods return the first/last instance of a chara
 @../../examples/bytestring-find.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

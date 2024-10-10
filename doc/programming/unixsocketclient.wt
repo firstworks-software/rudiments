@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Programming with Rudiments using the unixsocketclient class =
 
 Here's the code for a client that can communicate with the [unixsocketserver.html unixsocketserver program].  This client sends a string to the server, reads what the server sends back and prints it out.
@@ -17,5 +19,7 @@ Coming soon...
 }}}
 
 Unix sockets allow clients and servers on the same machine to communicate.  See the [inetsocketserver.html inetsocketserver] and [inetsocketclient.html inetsocketclient] examples for clients and servers that can communcate across a network.
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

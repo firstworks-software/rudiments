@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the protocolentry class =
 
 * [#intro Introduction]
@@ -39,5 +41,7 @@ This example retrieves network protocol information for "protocol number 6".
 @../../examples/protocolentry-number.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

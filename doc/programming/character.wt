@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the character class =
 
 * [#intro Introduction]
@@ -50,5 +52,7 @@ An inSet() method is also provided which returns true if the specified character
 @../../examples/character-inset.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

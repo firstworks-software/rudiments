@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the xmlsax class =
 
 The xmlsax class provides a callback-based framework for parsing XML documents.  The xmlsax class provides methods for parsing strings of XML or XML files.  When it encounters a tag, attribute or other XML component, it calls one of it's callback methods.  These methods may be overridden by a child class to perform specific tasks.  The xmlsax class is especially useful if you can't afford to load the entire document into memory and use the xmldom class, or if you just need to extract specific data from an XML file.
@@ -15,5 +17,7 @@ Coming soon...
 @../../examples/xmlsax.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

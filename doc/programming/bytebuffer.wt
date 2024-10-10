@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the bytebuffer class =
 
 The bytebuffer class can be used to store binary data of arbitrary length.
@@ -22,5 +24,6 @@ When data is detached, it is no longer associated with the buffer and must be fr
 }}}
 }}}
 
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

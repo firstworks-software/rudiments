@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the semaphoreset class =
 
 Semaphores allow seperate processes or threads to synchronize activities.  The [../classes/html/classsemaphoreset.html semaphoreset class] provides methods for creating and accessing semaphores.
@@ -45,5 +47,7 @@ key        semid      owner      perms      nsems
 The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -s 188678177</i>
 
 None of this is an issue on Windows systems.
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

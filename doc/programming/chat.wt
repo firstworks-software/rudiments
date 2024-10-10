@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the chat class =
 
 The chat class provides a framework for communications across file descriptors with a peer.
@@ -16,5 +18,6 @@ Coming soon...
 }}}
 }}}
 
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the sys class =
 
 * [=#intro Introduction]
@@ -65,5 +67,7 @@ This example performs a less-graceful system halt, when run as root or Administr
 @../../examples/halt.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

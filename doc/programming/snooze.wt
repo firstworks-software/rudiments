@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the snooze class =
 
 The [../classes/html/classsnooze.html snooze class] provides static methods for suspending process execution.
@@ -15,5 +17,7 @@ Processes may be suspended for times specified in second, microsecond or nanosec
 }}}
 
 It is safe to pass NULL in for the secondsremaining, microsecondsremaining, and nanosecondsremaining parameters.  This is useful if you want the snooze to be interruptable, but you don't care about the amount of time remaining after it was interrupted.
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

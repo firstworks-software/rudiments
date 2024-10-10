@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the thread class =
 
 * [#intro Introduction]
@@ -43,5 +45,7 @@ Alternatively, a thread may dissociate itself from the parent by calling the det
 @../../examples/thread-detach.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}

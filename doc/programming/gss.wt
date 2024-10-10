@@ -2,6 +2,8 @@
 
 {{{#!include projectheader.html}}}
 
+{{{#!include contentstart.html}}}
+
 = Using the gss classes =
 
 [[Image(../images/traffic_cone.png)]]
@@ -13,5 +15,7 @@ Coming soon...
 @../../examples/gss.cpp@
 }}}
 }}}
+
+{{{#!include contentend.html}}}
 
 {{{#!include footer.html}}}
