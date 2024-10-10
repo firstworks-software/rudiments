@@ -322,14 +322,14 @@ http://www.gnu.org/software/src-highlite -->
 </blockquote>
 <p>There are 3 other methods worth mentioning as well:</p>
 
-<p><dl>
-<dt>getCurrentProperties()</dt>
-<dd>By default, the file class fetches file properties when open() or create() are called.  If a property is changed, then the old value will still be reflected when the method to get it is called, unless this method is called first.</dd>
-<dt>dontGetCurrentPropertiesOnOpen()</dt>
-<dd>By default, the file class fetches file properties when open() or create() are called.  If this method is called, then file properties will not be fetched unless getCurrentProperties() is called manually.</dd>
-<dt>getCurrentPropertiesOnOpen()</dt>
-<dd>Returns the class to its default behavior of fetching file properties when open() or create() are called.</dd>
-</dl></p>
+<dl>
+  <dt>getCurrentProperties()</dt>
+  <dd>By default, the file class fetches file properties when open() or create() are called.  If a property is changed, then the old value will still be reflected when the method to get it is called, unless this method is called first.</dd>
+  <dt>dontGetCurrentPropertiesOnOpen()</dt>
+  <dd>By default, the file class fetches file properties when open() or create() are called.  If this method is called, then file properties will not be fetched unless getCurrentProperties() is called manually.</dd>
+  <dt>getCurrentPropertiesOnOpen()</dt>
+  <dd>Returns the class to its default behavior of fetching file properties when open() or create() are called.</dd>
+</dl>
 
 <a name="read"/><h2>Read Access</h2>
 
@@ -695,14 +695,14 @@ http://www.gnu.org/software/src-highlite -->
 
 <p>The filesystem class makes buffered I/O simple.  There are only three methods involved:</p>
 
-<p><dl>
-<dt>setReadBufferSize()</dt>
-<dd>Sets the size of the buffer used when reading.</dd>
-<dt>setWriteBufferSize()</dt>
-<dd>Sets the size of the buffer used when writing.</dd>
-<dt>flushWriteBuffer()</dt>
-<dd>Makes sure that any data that is buffered but hasn't been written to storage, actually gets written to storage.</dd>
-</dl></p>
+<dl>
+  <dt>setReadBufferSize()</dt>
+  <dd>Sets the size of the buffer used when reading.</dd>
+  <dt>setWriteBufferSize()</dt>
+  <dd>Sets the size of the buffer used when writing.</dd>
+  <dt>flushWriteBuffer()</dt>
+  <dd>Makes sure that any data that is buffered but hasn't been written to storage, actually gets written to storage.</dd>
+</dl>
 
 <p>Reading is completely transparent.  The read buffer is filled during the first read, and filled again when all bytes have been read from it.</p>
 
