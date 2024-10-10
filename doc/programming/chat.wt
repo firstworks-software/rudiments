@@ -8,7 +8,7 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@chat.cpp.html@
+@../../examples/chat.cpp@
 }}}
 }}}
 

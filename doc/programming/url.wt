@@ -1,6 +1,6 @@
 = Using the url class =
 
-The <a href="../classes/html/classurl.html">url class</a> provides read access to urls.
+The [../classes/html/classurl.html url class] provides read access to urls.
 
 Its parent class: file provides provides open(), read(), and close() methods.
 
@@ -10,11 +10,9 @@ urls for other protocols, including ftp, https, scp, sftp, and others, are suppo
 
 Examples of supported urls include:
 
-<ul>
-<li>http://somedomain.com/path/to/file.html</li>
-<li>http://user:password@somedomain.com/path/to/file.html</li>
-<li>http://[/path/to/userpwdfile]@somedomain.com/path/to/file.html</li>
-</ul>
+* http://somedomain.com/path/to/file.html
+* http://user:password@somedomain.com/path/to/file.html
+* http://[/path/to/userpwdfile]@somedomain.com/path/to/file.html
 
 The url class supports storing the user:password portion of a url in a user-password file.  These files may be referenced in the url by enclosing the full pathname of the file in square brackets.  The file should consist of a single line containing the user and password, separated by a colon.
 
@@ -32,6 +30,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@url.cpp.html@
+@../../examples/url.cpp@
 }}}
 }}}

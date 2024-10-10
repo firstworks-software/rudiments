@@ -1,65 +1,63 @@
 = Using the sys class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#info">Getting System Information</a></li>
-<li><a href="#reboot">Reboot</a></li>
-<li><a href="#shutdown">Shutdown</a></li>
-<li><a href="#halt">Halt</a></li>
-</ul>
+* [=#intro Introduction]
+* [=#info Getting System Information]
+* [=#reboot Reboot]
+* [=#shutdown Shutdown]
+* [=#halt Halt]
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[=#intro]
+== Introduction ==
 
-The <a href="../classes/html/classsys.html">sys class</a> provides methods for getting information about the operating system and controlling the state of the operating system.
+The [../classes/html/classsys.html sys class] provides methods for getting information about the operating system and controlling the state of the operating system.
 
 
-<a name="info"></a>
-<h3>Getting System Information</h3>
+[=#info]
+== Getting System Information ==
 
 In this example, various bits of system information are printed out.
 
 {{{#!blockquote
 {{{#!code
-@sys.cpp.html@
+@../../examples/sys.cpp@
 }}}
 }}}
 
 Note that not all systems support every piece of information.  If a piece of information is unsupported, then a -1 is returned.
 
 
-<a name="reboot"></a>
-<h3>Reboot</h3>
+[=#reboot]
+== Reboot ==
 
 This example reboots the system, when run as root or Administrator.
 
 {{{#!blockquote
 {{{#!code
-@reboot.cpp.html@
+@../../examples/reboot.cpp@
 }}}
 }}}
 
 
-<a name="shutdown"></a>
-<h3>Shutdown</h3>
+[=#shutdown]
+== Shutdown ==
 
 This example performs a graceful system shutdown, when run as root or Administrator.
 
 {{{#!blockquote
 {{{#!code
-@shutdown.cpp.html@
+@../../examples/shutdown.cpp@
 }}}
 }}}
 
 
-<a name="halt"></a>
-<h3>Halt</h3>
+[=#halt]
+== Halt ==
 
 This example performs a less-graceful system halt, when run as root or Administrator.
 
 {{{#!blockquote
 {{{#!code
-@halt.cpp.html@
+@../../examples/halt.cpp@
 }}}
 }}}

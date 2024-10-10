@@ -1,112 +1,82 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the protocolentry class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the protocolentry class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<a name="protocolentry"></a>
-<span class="heading">Using the protocolentry class</span><br><br>
+<h1>Using the protocolentry class</h1>
 
 <ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#name">Lookup By Name</a></li>
-<li><a href="#number">Lookup By Number</a></li>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#name">Lookup By Name</a></li>
+  <li><a href="#number">Lookup By Number</a></li>
 </ul>
 
-<br>
-<a name="intro"></a>
-<h3>Introduction</h3>
+<br/><a name="intro"/><h2>Introduction</h2>
 
 <p>The <a href="../classes/html/classprotocolentry.html">protocolentry class</a> provides methods for retrieving network protocol definitions.  These are usually defined in a file like /etc/protocols on unix-like systems or C:\Windows\System32\drivers\etc\protocol on Windows, or are served from another source via the name-service switch.</p>
 
 <p>Protocols can be looked up by name or number.</p>
 
-<br>
-<a name="name"></a>
-<h3>Lookup By Name</h3>
+<a name="name"/><h2>Lookup By Name</h2>
 
 <p>This example retrieves network protocol information for the "tcp" protocol.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/protocolentry.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/protocolentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// get the protocol entry for the </span><span class="Constant">&quot;tcp&quot;</span><span class="Comment"> protocol</span>
-	protocolentry	pe;
-	pe.open(<span class="Constant">&quot;tcp&quot;</span>);
+	<i><font color="#9A1900">// get the protocol entry for the "tcp" protocol</font></i>
+	<font color="#008080">protocolentry</font>	pe<font color="#990000">;</font>
+	pe<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"tcp"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print out details</span>
-	stdoutput.printf(<span class="Constant">&quot;	Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pe.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Alias list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (<span class="Type">uint32_t</span> i=<span class="Constant">0</span>; pe.getAliasList() &amp;&amp; pe.getAliasList()[i]; i++) {
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pe.getAliasList()[i]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;	Number:		</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pe.getNumber());
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pe<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Alias list:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint32_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> pe<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> pe<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pe<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Number:		%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pe<font color="#990000">.</font><b><font color="#000000">getNumber</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="number"></a>
-<h3>Lookup By Number</h3>
+<br/><a name="number"/><h2>Lookup By Number</h2>
 
 <p>This example retrieves network protocol information for "protocol number 6".</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/protocolentry.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/protocolentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// get the protocol entry for </span><span class="Constant">&quot;protocol number 6&quot;</span>
-	protocolentry	pe;
-	pe.open(<span class="Constant">6</span>);
+	<i><font color="#9A1900">// get the protocol entry for "protocol number 6"</font></i>
+	<font color="#008080">protocolentry</font>	pe<font color="#990000">;</font>
+	pe<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#993399">6</font><font color="#990000">);</font>
 
-	<span class="Comment">// print out details</span>
-	stdoutput.printf(<span class="Constant">&quot;	Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pe.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Alias list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (<span class="Type">uint32_t</span> i=<span class="Constant">0</span>; pe.getAliasList() &amp;&amp; pe.getAliasList()[i]; i++) {
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pe.getAliasList()[i]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;	Number:		</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pe.getNumber());
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pe<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Alias list:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint32_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> pe<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> pe<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pe<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Number:		%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pe<font color="#990000">.</font><b><font color="#000000">getNumber</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

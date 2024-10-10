@@ -1,11 +1,10 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the error class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the error class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the error class</span><br><br>
+<h1>Using the error class</h1>
 
 <p>The <a href="../classes/html/classerror.html">error class</a> provides static methods for getting and setting posix and native system errors.</p>
 
@@ -21,42 +20,32 @@
 
 <p>In this example, the posix system error is manipulated directly.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	error::setErrorNumber(<span class="Constant">EINTR</span>);
+	error<font color="#990000">::</font><b><font color="#000000">setErrorNumber</font></b><font color="#990000">(</font>EINTR<font color="#990000">);</font>
 
-	stdoutput.printf(<span class="Constant">&quot;error number: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,error::getErrorNumber());
-	<span class="Type">char</span>	*err=error::getErrorString();
-	stdoutput.printf(<span class="Constant">&quot;error string: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,err);
-	<span class="Statement">delete</span>[] err;
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error number: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>error<font color="#990000">::</font><b><font color="#000000">getErrorNumber</font></b><font color="#990000">());</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error string: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
 
-	error::clearError();
+	error<font color="#990000">::</font><b><font color="#000000">clearError</font></b><font color="#990000">();</font>
 
-	stdoutput.printf(<span class="Constant">&quot;error number (after clear): </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,error::getErrorNumber());
-	err=error::getErrorString();
-	stdoutput.printf(<span class="Constant">&quot;error string (after clear) : </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,err);
-	<span class="Statement">delete</span>[] err;
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error number (after clear): %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>error<font color="#990000">::</font><b><font color="#000000">getErrorNumber</font></b><font color="#990000">());</font>
+	err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error string (after clear) : %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

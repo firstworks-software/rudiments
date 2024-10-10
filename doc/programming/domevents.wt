@@ -6,6 +6,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@domevents.cpp.html@
+@../../examples/domevents.cpp@
 }}}
 }}}

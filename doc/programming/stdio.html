@@ -1,59 +1,47 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the standard I/O classes</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the standard I/O classes</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the standard I/O classes</span><br><br>
+<h1>Using the standard I/O classes</h1>
 
 <p>The filedescriptor class provides methods for generic input and output to file descriptors.  Rudiments pre-defines three instances: stdinput, stdoutput and stderror, which provide access to standard input, standard output and standard error.</p>
 
 <p>As these classes are ultimately instances of the filedescriptor class, many I/O methods are available, but the most commonly used are read(), write() and printf().  The printf() method features all of the formatting capabilities of the standard C printf() function.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// standard output...</span>
-	stdoutput.write(<span class="Constant">&quot;This line is written to standard output.</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;Fully functional printf is also available: &quot;</span>);
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">, </span><span class="Special">%c</span><span class="Constant">, </span><span class="Special">%05d</span><span class="Special">\n</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;hello&quot;</span>,<span class="Constant">'c'</span>,<span class="Constant">25</span>);
-	stdoutput.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// standard output...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"This line is written to standard output.</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Fully functional printf is also available: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s, %c, %05d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font> <font color="#FF0000">"hello"</font><font color="#990000">,</font><font color="#FF0000">'c'</font><font color="#990000">,</font><font color="#993399">25</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// standard error...</span>
-	stderror.write(<span class="Constant">&quot;This line is written to standard error.</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stderror.write(<span class="Constant">&quot;Fully functional printf is also available: &quot;</span>);
-	stderror.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">, </span><span class="Special">%c</span><span class="Constant">, </span><span class="Special">%05d</span><span class="Special">\n</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;hello&quot;</span>,<span class="Constant">'c'</span>,<span class="Constant">25</span>);
-	stderror.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// standard error...</font></i>
+	stderror<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"This line is written to standard error.</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stderror<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Fully functional printf is also available: "</font><font color="#990000">);</font>
+	stderror<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s, %c, %05d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font> <font color="#FF0000">"hello"</font><font color="#990000">,</font><font color="#FF0000">'c'</font><font color="#990000">,</font><font color="#993399">25</font><font color="#990000">);</font>
+	stderror<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// standard input...</span>
-	stdoutput.write(<span class="Constant">&quot;Type something and hit return...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Type">char</span>	input[<span class="Constant">1024</span>];
-	<span class="Type">ssize_t</span>	count=stdinput.read(input,<span class="Statement">sizeof</span>(input));
-	input[count]=<span class="Special">'\0'</span>;
-	stdoutput.printf(<span class="Constant">&quot;You typed: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,input);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// standard input...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Type something and hit return...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#009900">char</font>	input<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+	<font color="#008080">ssize_t</font>	count<font color="#990000">=</font>stdinput<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>input<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>input<font color="#990000">));</font>
+	input<font color="#990000">[</font>count<font color="#990000">]=</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">;</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"You typed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>input<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

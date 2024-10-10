@@ -8,8 +8,8 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@modemserver.cpp.html@
+@../../examples/modemserver.cpp@
 }}}
 }}}
 
-See the <a href="modemclient.html">modemclient</a> example for a client that can communicate with this server.
+See the [modemclient.html modemclient] example for a client that can communicate with this server.

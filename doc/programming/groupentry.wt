@@ -1,9 +1,9 @@
 = Using the groupentry class =
 
-The <a href="../classes/html/classgroupentry.html">groupentry class</a> provides methods for retrieving information about groups.
+The [../classes/html/classgroupentry.html groupentry class] provides methods for retrieving information about groups.
 
 {{{#!blockquote
 {{{#!code
-@groupentry.cpp.html@
+@../../examples/groupentry.cpp@
 }}}
 }}}

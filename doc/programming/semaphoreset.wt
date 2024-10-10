@@ -1,13 +1,12 @@
-<a name="semaphoreset"></a>
 = Using the semaphoreset class =
 
-Semaphores allow seperate processes or threads to synchronize activities.  The <a href="../classes/html/classsemaphoreset.html">semaphoreset class</a> provides methods for creating and accessing semaphores.
+Semaphores allow seperate processes or threads to synchronize activities.  The [../classes/html/classsemaphoreset.html semaphoreset class] provides methods for creating and accessing semaphores.
 
 This program creates a set of semaphores and prints out 1 and 3, using the semaphores to synchronize with a second program.
 
 {{{#!blockquote
 {{{#!code
-@semaphoreset1.cpp.html@
+@../../examples/semaphoreset1.cpp@
 }}}
 }}}
 
@@ -15,7 +14,7 @@ This program attaches to the semaphore set created by the first program and prin
 
 {{{#!blockquote
 {{{#!code
-@semaphoreset2.cpp.html@
+@../../examples/semaphoreset2.cpp@
 }}}
 }}}
 

@@ -1,6 +1,6 @@
 = Using the threadmutex class =
 
-The <a href="../classes/html/classthreadmutex.html">threadmutex class</a> provides mutual exclusion locks between separate threads of a single process.
+The [../classes/html/classthreadmutex.html threadmutex class] provides mutual exclusion locks between separate threads of a single process.
 
 Intances of threadmutex can be used to protect critical sections of code or synchronize threads.
 
@@ -8,6 +8,6 @@ In this example, five threads are spawned.  Each counts from 0 to 4, ten times. 
 
 {{{#!blockquote
 {{{#!code
-@threadmutex.cpp.html@
+@../../examples/threadmutex.cpp@
 }}}
 }}}

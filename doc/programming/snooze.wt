@@ -1,12 +1,12 @@
 = Using the snooze class =
 
-The <a href="../classes/html/classsnooze.html">snooze class</a> provides static methods for suspending process execution.
+The [../classes/html/classsnooze.html snooze class] provides static methods for suspending process execution.
 
 Processes may be suspended for times specified in second, microsecond or nanosecond granularity.  Methods for snoozing come in two varieties: snoozes which return when interruped, and snoozes which automatically resume when interrupted.  The methods which return when interrupted also return the time that remained at the point that they were interrupted.
 
 {{{#!blockquote
 {{{#!code
-@snooze.cpp.html@
+@../../examples/snooze.cpp@
 }}}
 }}}
 

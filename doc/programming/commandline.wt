@@ -1,6 +1,6 @@
 = Using the commandline class =
 
-The <a href="../classes/html/classcommandline.html">commandline class</a> provides methods for parsing command line arguments.
+The [../classes/html/classcommandline.html commandline class] provides methods for parsing command line arguments.
 
 Most programs take command line options in the option/value pair format:
 
@@ -21,15 +21,13 @@ The found() method returns true if the option is found and false otherwise.  The
 
 The following program greets the user and takes two arguments:
 
-<ul>
-<li>-hello</li>
-<li>-name <i>name</i></li>
-</ul>
+* -hello
+* -name <i>name</i>
 
 If -hello is specified then the user is greeted with "hello", rather than "hi".  If -name is specified then the user is greeted by name.
 
 {{{#!blockquote
 {{{#!code
-@commandline.cpp.html@
+@../../examples/commandline.cpp@
 }}}
 }}}

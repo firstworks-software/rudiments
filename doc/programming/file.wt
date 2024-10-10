@@ -1,66 +1,64 @@
 = Using the file class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#create">Creating a File</a></li>
-<li><a href="#remove">Removing a File</a></li>
-<li><a href="#open">Opening and Closing Files</a></li>
-<li><a href="#props">File Properties</a></li>
-<li><a href="#read">Read Access</a></li>
-<li><a href="#write">Write Access</a></li>
-<li><a href="#random">Random Access</a></li>
-<li><a href="#lock">File Locks</a></li>
-<li><a href="#truncate">Truncating a File</a></li>
-<li><a href="#buffers">Buffered File Access</a></li>
-<li><a href="#optimizations">Optimizing File Access</a></li>
-<li><a href="#temp">Temporary Files</a></li>
-<li><a href="#links">Links</a></li>
-<li><a href="#fifos">Fifos</a></li>
-<li><a href="#pipes">Named Pipes</a></li>
-<li><a href="#convenience">Convenience Methods</a></li>
-</ul>
+* [#intro Introduction]
+* [#create Creating a File]
+* [#remove Removing a File]
+* [#open Opening and Closing Files]
+* [#props File Properties]
+* [#read Read Access]
+* [#write Write Access]
+* [#random Random Access]
+* [#lock File Locks]
+* [#truncate Truncating a File]
+* [#buffers Buffered File Access]
+* [#optimizations Optimizing File Access]
+* [#temp Temporary Files]
+* [#links Links]
+* [#fifos Fifos]
+* [#pipes Named Pipes]
+* [#convenience Convenience Methods]
 
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[=#intro]
+== Introduction ==
 
-The <a href="../classes/html/classfile.html">file class</a> provides methods for creating and accessing files.
+The [../classes/html/classfile.html file class] provides methods for creating and accessing files.
 
 The filedescriptor class provides methods for generic input and output to file descriptors.  The file class inherits from filedescriptor and adds methods that are specific to files.  However, when using the file class, you will likely make heavy use of filedescriptor methods such as read() and write().
 
 
 
-<a name="create"></a>
-<h3>Creating a File</h3>
+[=#create]
+== Creating a File ==
 
 The following example demonstrates the different ways to create a file.
 
-Note that when creating a file, the file permissions must be supplied.  Rudiments supports unix-style file permissions, even on Windows.  See the <a href="permissions.html">permissions class</a> for more information.
+Note that when creating a file, the file permissions must be supplied.  Rudiments supports unix-style file permissions, even on Windows.  See the [permissions.html permissions class] for more information.
 
 {{{#!blockquote
 {{{#!code
-@file-create.cpp.html@
+@../../examples/file-create.cpp@
 }}}
 }}}
 
 
 
-<a name="remove"></a>
-<h3>Removing a File</h3>
+[=#remove]
+== Removing a File ==
 
 The file class provides a static method for removing a file.
 
 {{{#!blockquote
 {{{#!code
-@file-remove.cpp.html@
+@../../examples/file-remove.cpp@
 }}}
 }}}
 
 
 
-<a name="open"></a>
-<h3>Opening a File</h3>
+[=#open]
+== Opening a File ==
 
 To open a file, call one of the open() methods.
 
@@ -68,15 +66,15 @@ The open() methods take the filename to open and a set of flags.
 
 Flags may include one or more of the following flags, or'ed together.
 
-<ul>
-<li>O_RDONLY - Open the file in read-only mode.</li>
-<li>O_WRONLY - Open the file in write-only mode.</li>
-<li>O_RDWR - Open the file in write-only mode.</li>
-<li>O_APPEND - Set the position to the end of the file.</li>
-<li>O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.</li>
-<li>O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.</li>
-<li>O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the file already exists.  Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.</li>
-</ul>
+
+* O_RDONLY - Open the file in read-only mode.
+* O_WRONLY - Open the file in write-only mode.
+* O_RDWR - Open the file in write-only mode.
+* O_APPEND - Set the position to the end of the file.
+* O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
+* O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.
+* O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the file already exists.  Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.
+
 
 Many platforms support additional, platform-specific flags.
 
@@ -88,14 +86,14 @@ The following example demonstrates various ways to open and close a file.
 
 {{{#!blockquote
 {{{#!code
-@file-open.cpp.html@
+@../../examples/file-open.cpp@
 }}}
 }}}
 
 
 
-<a name="props"></a>
-<h3>File Properties</h3>
+[=#props]
+== File Properties ==
 
 The file class provides methods for getting various file properties including permissions, ownership, size, type, and access and modification times.
 
@@ -105,7 +103,7 @@ Note that this program depends on the existence of testfile1, so you'll have to 
 
 {{{#!blockquote
 {{{#!code
-@file-getprops.cpp.html@
+@../../examples/file-getprops.cpp@
 }}}
 }}}
 
@@ -122,8 +120,8 @@ There are 3 other methods worth mentioning as well:
 
 
 
-<a name="read"></a>
-<h3>Read Access</h3>
+[=#read]
+== Read Access ==
 
 The filedescriptor class (which the file class inherits from) provides read() methods to read data from files and file descriptors.
 
@@ -131,7 +129,7 @@ Methods are provided for reading all primitive types directly.  This example ope
 
 {{{#!blockquote
 {{{#!code
-@file-read.cpp.html@
+@../../examples/file-read.cpp@
 }}}
 }}}
 
@@ -139,7 +137,7 @@ Methods are also provided for reading arbitrary data into buffers.  This example
 
 {{{#!blockquote
 {{{#!code
-@cat.cpp.html@
+@../../examples/cat.cpp@
 }}}
 }}}
 
@@ -147,14 +145,14 @@ A read() method is also provided that reads until it encounters a specified term
 
 {{{#!blockquote
 {{{#!code
-@file-readline.cpp.html@
+@../../examples/file-readline.cpp@
 }}}
 }}}
 
 
 
-<a name="write"></a>
-<h3>Write Access</h3>
+[=#write]
+== Write Access ==
 
 The filedescriptor class (which the file class inherits from) provides write() methods to write data to files and file descriptors.
 
@@ -162,14 +160,14 @@ Methods are provided for writing primitive types as well as blocks of character 
 
 {{{#!blockquote
 {{{#!code
-@file-write.cpp.html@
+@../../examples/file-write.cpp@
 }}}
 }}}
 
 
 
-<a name="random"></a>
-<h3>Random Access</h3>
+[=#random]
+== Random Access ==
 
 It is possible to open a file for both reading and writing, write to it, jump around, overwrite parts, jump around some more, and read from it.
 
@@ -177,47 +175,47 @@ This example illustrates random file access.
 
 {{{#!blockquote
 {{{#!code
-@file-random.cpp.html@
+@../../examples/file-random.cpp@
 }}}
 }}}
 
 
 
-<a name="lock"></a>
-<h3>File Locks</h3>
+[=#lock]
+== File Locks ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-lock.cpp.html@
+@../../examples/file-lock.cpp@
 }}}
 }}}
 
 
 
-<a name="truncate"></a>
-<h3>Truncating a File</h3>
+[=#truncate]
+== Truncating a File ==
 
 If you want to erase the current contents of a file, there are two options.  The first is to open the file using the O_TRUNC flag.  But, if you want to truncate the file after you've already opened it, you can use the truncate() method.
 
 {{{#!blockquote
 {{{#!code
-@file-truncate.cpp.html@
+@../../examples/file-truncate.cpp@
 }}}
 }}}
 
 
 
-<a name="buffers"></a>
-<h3>Buffered File Access</h3>
+[=#buffers]
+== Buffered File Access ==
 
 If your program does a lot of reads and writes, then you probably want to buffer them.  There are two main reasons for this:
 
-<ul>
-<li>Accessing storage is much slower than accessing memory.</li>
-<li>System calls are generally slower than library calls.</li>
-</ul>
+
+* Accessing storage is much slower than accessing memory.
+* System calls are generally slower than library calls.
+
 
 Both file systems and physical storage are typically organized in blocks.  Each block is some number of bytes.  A read or write of the entire block costs the same as reading or writing a single byte.  If you use buffers that are the same size as the file system's block size, then reading or writing the entire buffer takes only marginally more time than reading or writing a single byte.
 
@@ -244,85 +242,85 @@ The example below illustrates buffered I/O.
 
 {{{#!blockquote
 {{{#!code
-@file-buffers.cpp.html@
+@../../examples/file-buffers.cpp@
 }}}
 }}}
 
 
 
-<a name="optimizations"></a>
-<h3>Optimizing File Access</h3>
+[=#optimizations]
+== Optimizing File Access ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-optimizations.cpp.html@
+@../../examples/file-optimizations.cpp@
 }}}
 }}}
 
 
 
-<a name="temp"></a>
-<h3>Temporary Files</h3>
+[=#temp]
+== Temporary Files ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-temp.cpp.html@
+@../../examples/file-temp.cpp@
 }}}
 }}}
 
 
 
 
-<a name="links"></a>
-<h3>Links</h3>
+[=#links]
+== Links ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-links.cpp.html@
+@../../examples/file-links.cpp@
 }}}
 }}}
 
 
 
-<a name="fifos"></a>
-<h3>Fifos</h3>
+[=#fifos]
+== Fifos ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-fifos.cpp.html@
+@../../examples/file-fifos.cpp@
 }}}
 }}}
 
 
 
-<a name="pipes"></a>
-<h3>Named Pipes</h3>
+[=#pipes]
+== Named Pipes ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-pipes.cpp.html@
+@../../examples/file-pipes.cpp@
 }}}
 }}}
 
 
 
-<a name="convenience"></a>
-<h3>Convenience Methods</h3>
+[=#convenience]
+== Convenience Methods ==
 
 ...
 
 {{{#!blockquote
 {{{#!code
-@file-convenience.cpp.html@
+@../../examples/file-convenience.cpp@
 }}}
 }}}

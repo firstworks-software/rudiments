@@ -6,6 +6,6 @@ As these classes are ultimately instances of the filedescriptor class, many I/O 
 
 {{{#!blockquote
 {{{#!code
-@stdio.cpp.html@
+@../../examples/stdio.cpp@
 }}}
 }}}

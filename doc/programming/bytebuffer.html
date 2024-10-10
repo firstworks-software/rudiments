@@ -1,11 +1,10 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the bytebuffer class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the bytebuffer class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the bytebuffer class</span><br><br>
+<h1>Using the bytebuffer class</h1>
 
 <p>The bytebuffer class can be used to store binary data of arbitrary length.</p>
 
@@ -19,90 +18,79 @@
 
 <p>When data is detached, it is no longer associated with the buffer and must be freed by the calling program.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/bytebuffer.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytebuffer.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	bytebuffer	bb;
+	<font color="#008080">bytebuffer</font>	bb<font color="#990000">;</font>
 
-	<span class="Comment">// append strings, numbers, and characters...</span>
-	bb.append(<span class="Constant">&quot;hello, &quot;</span>)-&gt;append(<span class="Constant">&quot;goodbye, &quot;</span>);
-	bb.append((<span class="Type">uint64_t</span>)<span class="Constant">1</span>)-&gt;append(<span class="Constant">&quot;, &quot;</span>);
-	bb.append((<span class="Type">double</span>)<span class="Constant">1.234</span>)-&gt;append(<span class="Constant">'.'</span>);
+	<i><font color="#9A1900">// append strings, numbers, and characters...</font></i>
+	bb<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">"hello, "</font><font color="#990000">)-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">"goodbye, "</font><font color="#990000">);</font>
+	bb<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">((</font>uint64_t<font color="#990000">)</font><font color="#993399">1</font><font color="#990000">)-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">", "</font><font color="#990000">);</font>
+	bb<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">((</font><font color="#009900">double</font><font color="#990000">)</font><font color="#993399">1.234</font><font color="#990000">)-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">'.'</font><font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;after initial append:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;  contents: &quot;</span>);
-	stdoutput.safePrint(bb.getBuffer(),bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
-	stdoutput.printf(<span class="Constant">&quot;      size: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after initial append:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  contents: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>bb<font color="#990000">.</font><b><font color="#000000">getBuffer</font></b><font color="#990000">(),</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"      size: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// clear the buffer and append more data to it</span>
-	<span class="Type">const</span> byte_t	data[]={<span class="Constant">1</span>,<span class="Constant">2</span>,<span class="Constant">3</span>,<span class="Constant">4</span>,<span class="Constant">5</span>,<span class="Constant">6</span>,<span class="Constant">7</span>,<span class="Constant">8</span>};
-	bb.clear();
-	bb.append(data,<span class="Statement">sizeof</span>(data));
+	<i><font color="#9A1900">// clear the buffer and append more data to it</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	data<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">5</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">,</font><font color="#993399">7</font><font color="#990000">,</font><font color="#993399">8</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	bb<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	bb<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>data<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
 
-	<span class="Comment">// overwrite the first </span><span class="Constant">5</span><span class="Comment"> numbers...</span>
-	bb.setPositionRelativeToBeginning(<span class="Constant">0</span>);
-	<span class="Type">const</span> byte_t	newdata[]={<span class="Constant">8</span>,<span class="Constant">7</span>,<span class="Constant">6</span>,<span class="Constant">5</span>};
-	bb.write(newdata,<span class="Statement">sizeof</span>(newdata));
+	<i><font color="#9A1900">// overwrite the first 5 numbers...</font></i>
+	bb<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	newdata<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">8</font><font color="#990000">,</font><font color="#993399">7</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">,</font><font color="#993399">5</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	bb<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>newdata<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>newdata<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;after overwrite:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;  contents: &quot;</span>);
-	stdoutput.safePrint(bb.getBuffer(),bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
-	stdoutput.printf(<span class="Constant">&quot;      size: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
-
-
-	<span class="Comment">// truncate the string after the first </span><span class="Constant">2</span><span class="Comment"> numbers</span>
-	bb.truncate(<span class="Constant">3</span>);
-
-	stdoutput.write(<span class="Constant">&quot;after truncate:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;  contents: &quot;</span>);
-	stdoutput.safePrint(bb.getBuffer(),bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
-	stdoutput.printf(<span class="Constant">&quot;      size: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after overwrite:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  contents: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>bb<font color="#990000">.</font><b><font color="#000000">getBuffer</font></b><font color="#990000">(),</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"      size: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// detach the string</span>
-	<span class="Type">size_t</span>	ddatasize=bb.getSize();
-	byte_t	*ddata=bb.detachBuffer();
+	<i><font color="#9A1900">// truncate the string after the first 2 numbers</font></i>
+	bb<font color="#990000">.</font><b><font color="#000000">truncate</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;after detach:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;       contents: &quot;</span>);
-	stdoutput.safePrint(bb.getBuffer(),bb.getSize());
-	stdoutput.write(<span class="Special">'\n'</span>);
-	stdoutput.printf(<span class="Constant">&quot;           size: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,bb.getSize());
-	stdoutput.write(<span class="Constant">&quot;  detached data: &quot;</span>);
-	stdoutput.safePrint(ddata,ddatasize);
-	stdoutput.write(<span class="Special">'\n'</span>);
-	stdoutput.printf(<span class="Constant">&quot;           size: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,ddatasize);
-	stdoutput.write(<span class="Special">'\n'</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after truncate:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  contents: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>bb<font color="#990000">.</font><b><font color="#000000">getBuffer</font></b><font color="#990000">(),</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"      size: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	<span class="Statement">delete</span>[] ddata;
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+
+	<i><font color="#9A1900">// detach the string</font></i>
+	<font color="#008080">size_t</font>	ddatasize<font color="#990000">=</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">();</font>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>ddata<font color="#990000">=</font>bb<font color="#990000">.</font><b><font color="#000000">detachBuffer</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after detach:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"       contents: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>bb<font color="#990000">.</font><b><font color="#000000">getBuffer</font></b><font color="#990000">(),</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"           size: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>bb<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  detached data: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>ddata<font color="#990000">,</font>ddatasize<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"           size: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ddatasize<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> ddata<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-</body>
+<br/></body>
 </html>

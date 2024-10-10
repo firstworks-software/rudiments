@@ -1,243 +1,205 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the bytestring class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the bytestring class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the bytestring class</span><br><br>
+<h1>Using the bytestring class</h1>
 
 <ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#manip">Manipulating Byte Strings</a></li>
-<li><a href="#comp">Comparing Byte Strings</a></li>
-<li><a href="#find">Finding Data in Byte Strings</a></li>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#manip">Manipulating Byte Strings</a></li>
+  <li><a href="#comp">Comparing Byte Strings</a></li>
+  <li><a href="#find">Finding Data in Byte Strings</a></li>
 </ul>
 
-<br>
-<a name="intro"></a>
-<h3>Introduction</h3>
+<br/><p><a href="#=intro"/>
+== Introduction ==</p>
 
 <p>The bytestring class provides methods for manipulating byte strings.</p>
 
 <p>In addition to some unique methods, analogs for the standard C "memory" functions are provided.  However, unlike the standard C functions, the bytestring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.</p>
 
-<br>
-<a name="manip"></a>
-<h3>Manipulating Byte Strings</h3>
+<p><a href="#=manip"/>
+== Manipulating Byte Strings ==</p>
 
 <p>The bytestring class provides methods for zeroing, initializing, duplicating, and copying byte strings.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/bytestring.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	byte_t	buffer[<span class="Constant">9</span>];
+	<font color="#008080">byte_t</font>	buffer<font color="#990000">[</font><font color="#993399">9</font><font color="#990000">];</font>
 
 
-	<span class="Comment">// zero the buffer</span>
-	bytestring::zero(buffer,<span class="Statement">sizeof</span>(buffer));
+	<i><font color="#9A1900">// zero the buffer</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;all zeros:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
-
-
-	<span class="Comment">// set the buffer to all ones</span>
-	bytestring::set(buffer,<span class="Constant">1</span>,<span class="Statement">sizeof</span>(buffer));
-
-	stdoutput.write(<span class="Constant">&quot;all ones:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all zeros:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// copy some data into the buffer</span>
-	byte_t	data[]={<span class="Constant">0</span>,<span class="Constant">1</span>,<span class="Constant">2</span>,<span class="Constant">3</span>,<span class="Constant">4</span>,<span class="Constant">5</span>,<span class="Constant">6</span>,<span class="Constant">7</span>,<span class="Constant">8</span>};
-	bytestring::copy(buffer,data,<span class="Statement">sizeof</span>(data));
+	<i><font color="#9A1900">// set the buffer to all ones</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;after copying 0-8:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
-
-
-	<span class="Comment">// copy some overlapping data from one part of the buffer to another</span>
-	bytestring::copyWithOverlap(buffer,buffer+<span class="Constant">3</span>,<span class="Statement">sizeof</span>(buffer)-<span class="Constant">3</span>);
-
-	stdoutput.write(<span class="Constant">&quot;after copying with overlap:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all ones:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// copy a string into the buffer</span>
-	byte_t	str[]=<span class="Constant">&quot;hello&quot;</span>;
-	bytestring::copyUntil(buffer,str,<span class="Special">'\0'</span>,<span class="Statement">sizeof</span>(str));
+	<i><font color="#9A1900">// copy some data into the buffer</font></i>
+	<font color="#008080">byte_t</font>	data<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">5</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">,</font><font color="#993399">7</font><font color="#990000">,</font><font color="#993399">8</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>data<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;after copying </span><span class="Special">\&quot;</span><span class="Constant">hello</span><span class="Special">\&quot;</span><span class="Constant">:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying 0-8:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// copy some data into the buffer, swapping bytes as they are copied</span>
-	bytestring::copySwapBytes(buffer,data,<span class="Statement">sizeof</span>(data));
+	<i><font color="#9A1900">// copy some overlapping data from one part of the buffer to another</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copyWithOverlap</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>buffer<font color="#990000">+</font><font color="#993399">3</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-</font><font color="#993399">3</font><font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;after copying 0-8, swapping bytes:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying with overlap:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy a string into the buffer</font></i>
+	<font color="#008080">byte_t</font>	str<font color="#990000">[]=</font><font color="#FF0000">"hello"</font><font color="#990000">;</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copyUntil</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>str<font color="#990000">,</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>str<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying </font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\"</font><font color="#FF0000">:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy some data into the buffer, swapping bytes as they are copied</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copySwapBytes</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>data<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying 0-8, swapping bytes:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="comp"></a>
-<h3>Comparing Byte Strings</h3>
+<br/><p><a href="#=comp"/>
+== Comparing Byte Strings ==</p>
 
 <p>The bytestring class also provides a compare() method for comparing two byte strings.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/bytestring.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	byte_t	buffer1[<span class="Constant">8</span>];
-	byte_t	buffer2[<span class="Constant">8</span>];
+	<font color="#008080">byte_t</font>	buffer1<font color="#990000">[</font><font color="#993399">8</font><font color="#990000">];</font>
+	<font color="#008080">byte_t</font>	buffer2<font color="#990000">[</font><font color="#993399">8</font><font color="#990000">];</font>
 
 
-	<span class="Comment">// zero the buffers</span>
-	bytestring::zero(buffer1,<span class="Statement">sizeof</span>(buffer1));
-	bytestring::zero(buffer2,<span class="Statement">sizeof</span>(buffer2));
+	<i><font color="#9A1900">// zero the buffers</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">));</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer2<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;both zeroed:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.printf(<span class="Constant">&quot;  does buffer1=buffer2?  </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,
-		(!bytestring::compare(buffer1,buffer2,<span class="Statement">sizeof</span>(buffer1)))?
-								<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"both zeroed:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does buffer1=buffer2?  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+		<font color="#990000">(!</font>bytestring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">)))?</font>
+								<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
 
-	<span class="Comment">// set buffer2 to all ones</span>
-	bytestring::set(buffer2,<span class="Constant">1</span>,<span class="Statement">sizeof</span>(buffer2));
+	<i><font color="#9A1900">// set buffer2 to all ones</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>buffer2<font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer2<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;buffer2 is all ones:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.printf(<span class="Constant">&quot;  does buffer1=buffer2?  </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,
-		(!bytestring::compare(buffer1,buffer2,<span class="Statement">sizeof</span>(buffer1)))?
-								<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"buffer2 is all ones:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does buffer1=buffer2?  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+		<font color="#990000">(!</font>bytestring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">)))?</font>
+								<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
 
-	<span class="Comment">// set the first half of buffer2 to zeros</span>
-	<span class="Comment">// and only compare the first half</span>
-	bytestring::set(buffer2,<span class="Constant">0</span>,<span class="Statement">sizeof</span>(buffer2)/<span class="Constant">2</span>);
+	<i><font color="#9A1900">// set the first half of buffer2 to zeros</font></i>
+	<i><font color="#9A1900">// and only compare the first half</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>buffer2<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer2<font color="#990000">)/</font><font color="#993399">2</font><font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;first half of buffer2 is all zeros:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.printf(<span class="Constant">&quot;  does 1/2 buffer1 = 1/2 buffer2?  </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,
-		(!bytestring::compare(buffer1,buffer2,<span class="Statement">sizeof</span>(buffer1)/<span class="Constant">2</span>))?
-								<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"first half of buffer2 is all zeros:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does 1/2 buffer1 = 1/2 buffer2?  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+		<font color="#990000">(!</font>bytestring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">)/</font><font color="#993399">2</font><font color="#990000">))?</font>
+								<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="find"></a>
-<h3>Finding Data in Byte Strings</h3>
+<br/><p><a href="#=find"/>
+== Finding Data in Byte Strings ==</p>
 
 <p>The charstring class also provides methods for finding characters or other character strings within character strings.</p>
 
 <p>The findFirst() and findLast() methods return the first/last instance of a character or byte string within a byte string, or NULL if no match is found.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/bytestring.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// initialize buffer</span>
-	byte_t	buffer[]={<span class="Constant">0</span>,<span class="Constant">2</span>,<span class="Constant">0</span>,<span class="Constant">2</span>,<span class="Constant">0</span>,<span class="Constant">2</span>,<span class="Constant">0</span>};
+	<i><font color="#9A1900">// initialize buffer</font></i>
+	<font color="#008080">byte_t</font>	buffer<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#FF0000">}</font><font color="#990000">;</font>
 
-	stdoutput.write(<span class="Constant">&quot;buffer : &quot;</span>);
-	stdoutput.safePrint(buffer,<span class="Statement">sizeof</span>(buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"buffer : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// find first and last </span><span class="Constant">0</span>
-	byte_t	*firstzero=(byte_t *)
-			bytestring::findFirst(buffer,<span class="Constant">0</span>,<span class="Statement">sizeof</span>(buffer));
-	byte_t	*lastzero=(byte_t *)
-			bytestring::findLast(buffer,<span class="Constant">0</span>,<span class="Statement">sizeof</span>(buffer));
+	<i><font color="#9A1900">// find first and last 0</font></i>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>firstzero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findFirst</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>lastzero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findLast</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;first 0 : &quot;</span>);
-	stdoutput.safePrint(firstzero,<span class="Statement">sizeof</span>(buffer)-(firstzero-buffer));
-	stdoutput.write(<span class="Special">'\n'</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"first 0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>firstzero<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>firstzero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot; last 0 : &quot;</span>);
-	stdoutput.safePrint(lastzero,<span class="Statement">sizeof</span>(buffer)-(lastzero-buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">" last 0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>lastzero<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>lastzero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// find first and last </span><span class="Constant">0</span><span class="Comment">,</span><span class="Constant">2</span><span class="Comment">,</span><span class="Constant">0</span><span class="Comment"> patterns</span>
-	byte_t	pattern[]={<span class="Constant">0</span>,<span class="Constant">2</span>,<span class="Constant">0</span>};
+	<i><font color="#9A1900">// find first and last 0,2,0 patterns</font></i>
+	<font color="#008080">byte_t</font>	pattern<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#FF0000">}</font><font color="#990000">;</font>
 
-	byte_t	*firstzerotwozero=(byte_t *)
-			bytestring::findFirst(buffer,<span class="Statement">sizeof</span>(buffer),
-						pattern,<span class="Statement">sizeof</span>(pattern));
-	byte_t	*lastzerotwozero=(byte_t *)
-			bytestring::findLast(buffer,<span class="Statement">sizeof</span>(buffer),
-						pattern,<span class="Statement">sizeof</span>(pattern));
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>firstzerotwozero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findFirst</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">),</font>
+						pattern<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>pattern<font color="#990000">));</font>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>lastzerotwozero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findLast</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">),</font>
+						pattern<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>pattern<font color="#990000">));</font>
 
-	stdoutput.write(<span class="Constant">&quot;first 0,2,0 : &quot;</span>);
-	stdoutput.safePrint(firstzerotwozero,
-				<span class="Statement">sizeof</span>(buffer)-(firstzerotwozero-buffer));
-	stdoutput.write(<span class="Special">'\n'</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"first 0,2,0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>firstzerotwozero<font color="#990000">,</font>
+				<b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>firstzerotwozero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot; last 0,2,0 : &quot;</span>);
-	stdoutput.safePrint(lastzerotwozero,
-				<span class="Statement">sizeof</span>(buffer)-(lastzerotwozero-buffer));
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">" last 0,2,0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>lastzerotwozero<font color="#990000">,</font>
+				<b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>lastzerotwozero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

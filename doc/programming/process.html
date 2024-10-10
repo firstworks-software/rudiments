@@ -1,588 +1,441 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the process class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the process class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the process class</span><br><br>
+<h1>Using the process class</h1>
 
 <ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#info">Process Information</a></li>
-<li><a href="#exit">Exiting</a></li>
-<li><a href="#abnormalshutdown">Abnormal Shutdown</a></li>
-<li><a href="#uidgid">Setting User and Group</a></li>
-<li><a href="#spawn">Running Other Processes</a></li>
-<li><a href="#zombie">Managing Zombie Processes</a></li>
-<li><a href="#detach">Detaching</a></li>
+  <li><a href="=#intro">Introduction</a></li>
+  <li><a href="=#info">Process Information</a></li>
+  <li><a href="=#exit">Exiting</a></li>
+  <li><a href="=#abnormalshutdown">Abnormal Shutdown</a></li>
+  <li><a href="=#uidgid">Setting User and Group</a></li>
+  <li><a href="=#spawn">Running Other Processes</a></li>
+  <li><a href="=#zombie">Managing Zombie Processes</a></li>
+  <li><a href="=#detach">Detaching</a></li>
 </ul>
 
-<br>
-<a name="intro"></a>
-<h3>Introduction</h3>
+<br/><a name="intro"/><h2>Introduction</h2>
 
 <p>The <a href="../classes/html/classprocess.html">process class</a> provides static methods for accessing information about and controlling processes, including methods for forking, spawning and executing child processes.</p>
 
-<br>
-<a name="info"></a>
-<h3>Process Information</h3>
+<a name="info"/><h2>Process Information</h2>
 
 <p>The following program prints various ID's associated with the process.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Process ID		: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					process::getProcessId());
-	stdoutput.printf(<span class="Constant">&quot;Parent Process ID	: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					process::getParentProcessId());
-	stdoutput.printf(<span class="Constant">&quot;Process Group ID	: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					process::getProcessGroupId());
-	stdoutput.printf(<span class="Constant">&quot;Session ID		: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					process::getSessionId());
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Process ID		: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					process<font color="#990000">::</font><b><font color="#000000">getProcessId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Parent Process ID	: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					process<font color="#990000">::</font><b><font color="#000000">getParentProcessId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Process Group ID	: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					process<font color="#990000">::</font><b><font color="#000000">getProcessGroupId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Session ID		: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					process<font color="#990000">::</font><b><font color="#000000">getSessionId</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="exit"></a>
-<h3>Exiting</h3>
+<br/><a name="exit"/><h2>Exiting</h2>
 
 <p>The process class also provides methods for managing how a program exits.</p>
 
 <p>The exit() method allows you to set an exit status.  Traditionally, an exit status of 0 indicates that the program exited normally and 1 (or any other number) indicates that an error occurred.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	stdoutput.write(<span class="Constant">&quot;exiting with status 0 (success)</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"exiting with status 0 (success)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	process::exit(<span class="Constant">0</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>The atExit() method allows you to register functions that will be called when the program exits.  Multiple functions may be registered.  Functions are called in the reverse of the order of their registration.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Comment">// define a function to run at exit</span>
-<span class="Type">void</span> runAtExit() {
-	stdoutput.write(<span class="Constant">&quot;running at exit!</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
+<i><font color="#9A1900">// define a function to run at exit</font></i>
+<font color="#009900">void</font> <b><font color="#000000">runAtExit</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"running at exit!</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure runAtExit to run at exit</span>
-	process::registerExitHandler(runAtExit);
+	<i><font color="#9A1900">// configure runAtExit to run at exit</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">registerExitHandler</font></b><font color="#990000">(</font>runAtExit<font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\&quot;</span><span class="Constant">running at exit!</span><span class="Special">\&quot;</span><span class="Constant"> ought to be printed below...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\"</font><font color="#FF0000">running at exit!</font><font color="#CC33CC">\"</font><font color="#FF0000"> ought to be printed below...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// exit normally</span>
-	process::exit(<span class="Constant">0</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// exit normally</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>The exitImmediately() allows the program to terminate immediately, bypassing any functions registered to run at exit.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Comment">// define a function to run at exit</span>
-<span class="Type">void</span> runAtExit() {
-	stdoutput.write(<span class="Constant">&quot;running at exit!</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
+<i><font color="#9A1900">// define a function to run at exit</font></i>
+<font color="#009900">void</font> <b><font color="#000000">runAtExit</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"running at exit!</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure runAtExit to run at exit</span>
-	process::registerExitHandler(runAtExit);
+	<i><font color="#9A1900">// configure runAtExit to run at exit</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">registerExitHandler</font></b><font color="#990000">(</font>runAtExit<font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;nothing should be printed below...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"nothing should be printed below...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// exit immediately, bypassing functions configured to run at exit</span>
-	process::exitImmediately(<span class="Constant">0</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// exit immediately, bypassing functions configured to run at exit</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">exitImmediately</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="abnormalshutdown"></a>
-<h3>Abnormal Shutdown</h3>
+<br/><a name="abnormalshutdown"/><h2>Abnormal Shutdown</h2>
 
 <p>The process class also provides methods for managing various abnormal shutdown conditions such as a crash or termination by another process.</p>
 
 <p>Ordinarily, if a program encounters a floating point exception, illegal instruction, segmentation fault, bus error, or a few other unusual conditions, it will "crash", display a short message indicating why, and possibly offer to debug the program.  The exitOnCrash() method causes the program to exit more gracefully when one of these conditions occurs by "waiting on child processes" (see <a href="#zombie">Managing Zombie Processes</a> below), calling functions registered with atExit(), and setting the exit status to 1, indicating that an error occurred.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure the process to exit gracefully on crash</span>
-	process::exitOnCrash();
+	<i><font color="#9A1900">// configure the process to exit gracefully on crash</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">exitOnCrash</font></b><font color="#990000">();</font>
 
-	stdoutput.write(<span class="Constant">&quot;exiting instead of </span><span class="Special">\&quot;</span><span class="Constant">Segmentation Fault</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"exiting instead of </font><font color="#CC33CC">\"</font><font color="#FF0000">Segmentation Fault</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// this will crash...</span>
-	<span class="Type">void</span>	(*f)(<span class="Type">void</span>)=<span class="Constant">0</span>;
-	f();
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// this will crash...</font></i>
+	<font color="#009900">void</font>	<font color="#990000">(*</font>f<font color="#990000">)(</font><font color="#009900">void</font><font color="#990000">)=</font><font color="#993399">0</font><font color="#990000">;</font>
+	<b><font color="#000000">f</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>However, if you want to do something different when the program crashes, then you can use the handleCrash() method to specify a function to run when the program crashes.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Comment">// define a function to run when a crash occurs</span>
-<span class="Type">void</span> shutDown(<span class="Type">int32_t</span> signal) {
-	stdoutput.write(<span class="Constant">&quot;shutting down gracefully...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	process::exit(<span class="Constant">1</span>);
-}
+<i><font color="#9A1900">// define a function to run when a crash occurs</font></i>
+<font color="#009900">void</font> <b><font color="#000000">shutDown</font></b><font color="#990000">(</font><font color="#008080">int32_t</font> signal<font color="#990000">)</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"shutting down gracefully...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure the process to call shutDown on crash</span>
-	process::setCrashHandler(shutDown);
+	<i><font color="#9A1900">// configure the process to call shutDown on crash</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">setCrashHandler</font></b><font color="#990000">(</font>shutDown<font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;handling crash, instead of </span><span class="Special">\&quot;</span><span class="Constant">Segmentation Fault</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"handling crash, instead of </font><font color="#CC33CC">\"</font><font color="#FF0000">Segmentation Fault</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// this will crash...</span>
-	<span class="Type">void</span>	(*f)(<span class="Type">void</span>)=<span class="Constant">0</span>;
-	f();
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// this will crash...</font></i>
+	<font color="#009900">void</font>	<font color="#990000">(*</font>f<font color="#990000">)(</font><font color="#009900">void</font><font color="#990000">)=</font><font color="#993399">0</font><font color="#990000">;</font>
+	<b><font color="#000000">f</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>Ordinarily, if a program is shut down, either aborted using ctrl-C or killed, it will exit immediately.  The exitOnShutdown() method causes the program exit more gracefully when it is shut down by "waiting on child processes" (see <a href="#zombie">Managing Zombie Processes</a> below), calling functions registered with atExit(), and setting the exit status to 0, indicating that no error occurred.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/snooze.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure the process to exit gracefully on shut down</span>
-	process::exitOnShutDown();
+	<i><font color="#9A1900">// configure the process to exit gracefully on shut down</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">exitOnShutDown</font></b><font color="#990000">();</font>
 
-	stdoutput.write(<span class="Constant">&quot;kill the process or press ctrl-C to exit</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;(should not display </span><span class="Special">\&quot;</span><span class="Constant">Terminated</span><span class="Special">\&quot;</span><span class="Constant">)</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"kill the process or press ctrl-C to exit</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"(should not display </font><font color="#CC33CC">\"</font><font color="#FF0000">Terminated</font><font color="#CC33CC">\"</font><font color="#FF0000">)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// loop forever, waiting for ctrl-C or to be killed</span>
-	<span class="Statement">for</span> (;;) {
-		snooze::macrosnooze(<span class="Constant">1</span>);
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// loop forever, waiting for ctrl-C or to be killed</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(;;)</font> <font color="#FF0000">{</font> 
+		snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>However, if you want to do something different when the program is shut down, then you can use the handleShutDown() method to specify a function to run when the program is shut down.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/snooze.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Comment">// define a function to run when shut down occurs</span>
-<span class="Type">void</span> shutDown(<span class="Type">int32_t</span> signal) {
-	stdoutput.write(<span class="Constant">&quot;shutting down gracefully...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	process::exit(<span class="Constant">1</span>);
-}
+<i><font color="#9A1900">// define a function to run when shut down occurs</font></i>
+<font color="#009900">void</font> <b><font color="#000000">shutDown</font></b><font color="#990000">(</font><font color="#008080">int32_t</font> signal<font color="#990000">)</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"shutting down gracefully...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure the process to call shutDown on shut down</span>
-	process::setShutDownHandler(shutDown);
+	<i><font color="#9A1900">// configure the process to call shutDown on shut down</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">setShutDownHandler</font></b><font color="#990000">(</font>shutDown<font color="#990000">);</font>
 
-	stdoutput.write(<span class="Constant">&quot;kill the process or press ctrl-C to exit</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;(should not display </span><span class="Special">\&quot;</span><span class="Constant">Terminated</span><span class="Special">\&quot;</span><span class="Constant">)</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"kill the process or press ctrl-C to exit</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"(should not display </font><font color="#CC33CC">\"</font><font color="#FF0000">Terminated</font><font color="#CC33CC">\"</font><font color="#FF0000">)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// loop forever, waiting for ctrl-C or to be killed</span>
-	<span class="Statement">for</span> (;;) {
-		snooze::macrosnooze(<span class="Constant">1</span>);
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// loop forever, waiting for ctrl-C or to be killed</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(;;)</font> <font color="#FF0000">{</font> 
+		snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="uidgid"></a>
-<h3>Setting User and Group</h3>
+<br/><a name="uidgid"/><h2>Setting User and Group</h2>
 
 <p>The process class also provides methods for changing who the current process is running as.  Both the "real" and "effective" user and group can be set.</p>
 
 <p>The "real" user corresponds to who the user logged in as.  The "real" group corresponds to that user's default group.  The "real" user and group can only be changed if the user is logged in as root (or the equivalent on non-unix-like platforms).</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// display the user and group</span>
-	stdoutput.printf(<span class="Constant">&quot;running as user id </span><span class="Special">%d</span><span class="Constant">, group id </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						process::getUserId(),
-						process::getGroupId());
+	<i><font color="#9A1900">// display the user and group</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"running as user id %d, group id %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						process<font color="#990000">::</font><b><font color="#000000">getUserId</font></b><font color="#990000">(),</font>
+						process<font color="#990000">::</font><b><font color="#000000">getGroupId</font></b><font color="#990000">());</font>
 
-	<span class="Comment">// set the user and group to </span><span class="Constant">&quot;nobody&quot;</span>
-	process::setUser(<span class="Constant">&quot;nobody&quot;</span>);
-	process::setGroup(<span class="Constant">&quot;nobody&quot;</span>);
+	<i><font color="#9A1900">// set the user and group to "nobody"</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">setUser</font></b><font color="#990000">(</font><font color="#FF0000">"nobody"</font><font color="#990000">);</font>
+	process<font color="#990000">::</font><b><font color="#000000">setGroup</font></b><font color="#990000">(</font><font color="#FF0000">"nobody"</font><font color="#990000">);</font>
 
-	<span class="Comment">// display the user and group again</span>
-	stdoutput.printf(<span class="Constant">&quot;now running as user id </span><span class="Special">%d</span><span class="Constant">, group id </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						process::getUserId(),
-						process::getGroupId());
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// display the user and group again</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"now running as user id %d, group id %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						process<font color="#990000">::</font><b><font color="#000000">getUserId</font></b><font color="#990000">(),</font>
+						process<font color="#990000">::</font><b><font color="#000000">getGroupId</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>The "effective" user can be only be changed if the program is running as root.  This could be either because the user logged in as root, or because the program's permissions are configured so that it always runs as root.  The "effective" group can be changed to any group that the user is a member of.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// display the effective user and group id</span>
-	stdoutput.printf(<span class="Constant">&quot;running as effetive user id </span><span class="Special">%d</span><span class="Constant">, group id </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					process::getEffectiveUserId(),
-					process::getEffectiveGroupId());
+	<i><font color="#9A1900">// display the effective user and group id</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"running as effetive user id %d, group id %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					process<font color="#990000">::</font><b><font color="#000000">getEffectiveUserId</font></b><font color="#990000">(),</font>
+					process<font color="#990000">::</font><b><font color="#000000">getEffectiveGroupId</font></b><font color="#990000">());</font>
 
-	<span class="Comment">// set the effective user and group to </span><span class="Constant">&quot;nobody&quot;</span>
-	process::setEffectiveUser(<span class="Constant">&quot;nobody&quot;</span>);
-	process::setEffectiveGroup(<span class="Constant">&quot;nobody&quot;</span>);
+	<i><font color="#9A1900">// set the effective user and group to "nobody"</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">setEffectiveUser</font></b><font color="#990000">(</font><font color="#FF0000">"nobody"</font><font color="#990000">);</font>
+	process<font color="#990000">::</font><b><font color="#000000">setEffectiveGroup</font></b><font color="#990000">(</font><font color="#FF0000">"nobody"</font><font color="#990000">);</font>
 
-	<span class="Comment">// display the effective user and group id again</span>
-	stdoutput.printf(<span class="Constant">&quot;now running as effetive user id </span><span class="Special">%d</span><span class="Constant">, group id </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					process::getEffectiveUserId(),
-					process::getEffectiveGroupId());
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// display the effective user and group id again</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"now running as effetive user id %d, group id %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					process<font color="#990000">::</font><b><font color="#000000">getEffectiveUserId</font></b><font color="#990000">(),</font>
+					process<font color="#990000">::</font><b><font color="#000000">getEffectiveGroupId</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>Note that some platforms don't have the notion of an effective user and group.  On those platforms, the methods for setting and getting the effective user and group fail.</p>
 
-<br>
-<a name="spawn"></a>
-<h3>Running Other Processes</h3>
+<a name="spawn"/><h2>Running Other Processes</h2>
 
 <p>The process class also provides methods for running other processes.</p>
 
 <p>The spawn() method allows you to spawn a child process.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	stdoutput.write(<span class="Constant">&quot;running </span><span class="Special">\&quot;</span><span class="Constant">ls -l /</span><span class="Special">\&quot;</span><span class="Constant">...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"running </font><font color="#CC33CC">\"</font><font color="#FF0000">ls -l /</font><font color="#CC33CC">\"</font><font color="#FF0000">...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// spawn the comand:  ls -l /</span>
-	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> arguments[]={<span class="Constant">&quot;ls&quot;</span>,<span class="Constant">&quot;-l&quot;</span>,<span class="Constant">&quot;/&quot;</span>,<span class="Constant">NULL</span>};
-	process::spawn(<span class="Constant">&quot;ls&quot;</span>,arguments,<span class="Constant">false</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// spawn the comand:  ls -l /</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> arguments<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#FF0000">"ls"</font><font color="#990000">,</font><font color="#FF0000">"-l"</font><font color="#990000">,</font><font color="#FF0000">"/"</font><font color="#990000">,</font>NULL<font color="#FF0000">}</font><font color="#990000">;</font>
+	process<font color="#990000">::</font><b><font color="#000000">spawn</font></b><font color="#990000">(</font><font color="#FF0000">"ls"</font><font color="#990000">,</font>arguments<font color="#990000">,</font><b><font color="#0000FF">false</font></b><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>There are several things to note when using spawn():</p>
 
 <ul>
-<li>The spawn() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
-<li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
-<li>The parent process doesn't wait for the child process to finish executing, but rather continues executing itself, right away.</li>
+  <li>The spawn() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
+  <li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
+  <li>The parent process doesn't wait for the child process to finish executing, but rather continues executing itself, right away.</li>
 </ul>
 
-<p>The fork() method allows you to fork the current process.  I.e. to create a child process that is an copy of the current process' address space, open file descriptors, and other things.</p>
+<br/><p>The fork() method allows you to fork the current process.  I.e. to create a child process that is an copy of the current process' address space, open file descriptors, and other things.</p>
 
 <p>Note though, that fork() only works on unix-like systems and does not work on Windows and other non-unix-like systems.  The supportsFork() method returns true or false, indicating whether fork is supported or not.</p>
 
 <p>In the parent process, fork() returns the process-id of the child process.  In the child process, fork() returns 0.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// see if fork() is supported and exit if it's not...</span>
-	<span class="Statement">if</span> (!process::supportsFork()) {
-		stdoutput.write(<span class="Constant">&quot;sorry, fork() not supported</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-		process::exit(<span class="Constant">1</span>);
-	}
+	<i><font color="#9A1900">// see if fork() is supported and exit if it's not...</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>process<font color="#990000">::</font><b><font color="#000000">supportsFork</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"sorry, fork() not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Comment">// fork the process</span>
-	pid_t	pid=process::fork();
+	<i><font color="#9A1900">// fork the process</font></i>
+	<font color="#008080">pid_t</font>	pid<font color="#990000">=</font>process<font color="#990000">::</font><b><font color="#000000">fork</font></b><font color="#990000">();</font>
 
-	<span class="Statement">if</span> (pid) {
-		<span class="Comment">// the parent process will run this code...</span>
-		stdoutput.write(<span class="Constant">&quot;I am the parent.  &quot;</span>);
-		stdoutput.printf(<span class="Constant">&quot;The child's process id is </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pid);
-	} <span class="Statement">else</span> {
-		<span class="Comment">// the child process will run this code...</span>
-		stdoutput.write(<span class="Constant">&quot;I am the child.  &quot;</span>);
-		stdoutput.printf(<span class="Constant">&quot;My process id is </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						process::getProcessId());
-	}
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>pid<font color="#990000">)</font> <font color="#FF0000">{</font>
+		<i><font color="#9A1900">// the parent process will run this code...</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"I am the parent.  "</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"The child's process id is %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pid<font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		<i><font color="#9A1900">// the child process will run this code...</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"I am the child.  "</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"My process id is %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						process<font color="#990000">::</font><b><font color="#000000">getProcessId</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Comment">// both processes will run this code to exit</span>
-	process::exit(<span class="Constant">0</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// both processes will run this code to exit</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>The exec() method allows you to replace the currently running process with a new process.  This is useful if you want to fork a child process which needs to do a few things and then just run another process.</p>
 
 <p>There are several things to note when using exec():</p>
 
 <ul>
-<li>The exec() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
-<li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
-<li>The process calling exec() won't execute any code past its call to exec().  As such, it doesn't need to call exit().</p>
-<li>Due to differences in implementations for different paltforms, it should not be assumed that the exec'ed process will have the same process ID as the process that called the exec() method.</p>
+  <li>The exec() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
+  <li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
+  <li>The process calling exec() won't execute any code past its call to exec().  As such, it doesn't need to call exit().</li>
+  <li>Due to differences in implementations for different paltforms, it should not be assumed that the exec'ed process will have the same process ID as the process that called the exec() method.</li>
 </ul>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<br/><blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// see if fork() is supported and exit if it's not...</span>
-	<span class="Statement">if</span> (!process::supportsFork()) {
-		stdoutput.write(<span class="Constant">&quot;sorry, fork() not supported</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-		process::exit(<span class="Constant">1</span>);
-	}
+	<i><font color="#9A1900">// see if fork() is supported and exit if it's not...</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>process<font color="#990000">::</font><b><font color="#000000">supportsFork</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"sorry, fork() not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Comment">// fork the process</span>
-	pid_t	pid=process::fork();
+	<i><font color="#9A1900">// fork the process</font></i>
+	<font color="#008080">pid_t</font>	pid<font color="#990000">=</font>process<font color="#990000">::</font><b><font color="#000000">fork</font></b><font color="#990000">();</font>
 
-	<span class="Statement">if</span> (pid) {
-		<span class="Comment">// the parent process will run this code...</span>
-		stdoutput.write(<span class="Constant">&quot;I am the parent.  &quot;</span>);
-		stdoutput.printf(<span class="Constant">&quot;The child's process id is </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pid);
-		process::exit(<span class="Constant">0</span>);
-	} <span class="Statement">else</span> {
-		<span class="Comment">// the child process will run this code...</span>
-		stdoutput.write(<span class="Constant">&quot;I am the child.  &quot;</span>);
-		stdoutput.printf(<span class="Constant">&quot;My process id is </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						process::getProcessId());
-		stdoutput.write(<span class="Constant">&quot;and I'm running </span><span class="Special">\&quot;</span><span class="Constant">ls -l /</span><span class="Special">\&quot;</span><span class="Constant">...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>pid<font color="#990000">)</font> <font color="#FF0000">{</font>
+		<i><font color="#9A1900">// the parent process will run this code...</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"I am the parent.  "</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"The child's process id is %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pid<font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		<i><font color="#9A1900">// the child process will run this code...</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"I am the child.  "</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"My process id is %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						process<font color="#990000">::</font><b><font color="#000000">getProcessId</font></b><font color="#990000">());</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"and I'm running </font><font color="#CC33CC">\"</font><font color="#FF0000">ls -l /</font><font color="#CC33CC">\"</font><font color="#FF0000">...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-		<span class="Comment">// execute the command:  ls -l /</span>
-		<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> arguments[]={<span class="Constant">&quot;ls&quot;</span>,<span class="Constant">&quot;-l&quot;</span>,<span class="Constant">&quot;/&quot;</span>,<span class="Constant">NULL</span>};
-		process::exec(<span class="Constant">&quot;ls&quot;</span>,arguments);
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+		<i><font color="#9A1900">// execute the command:  ls -l /</font></i>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> arguments<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#FF0000">"ls"</font><font color="#990000">,</font><font color="#FF0000">"-l"</font><font color="#990000">,</font><font color="#FF0000">"/"</font><font color="#990000">,</font>NULL<font color="#FF0000">}</font><font color="#990000">;</font>
+		process<font color="#990000">::</font><b><font color="#000000">exec</font></b><font color="#990000">(</font><font color="#FF0000">"ls"</font><font color="#990000">,</font>arguments<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>It's also worth noting that this same thing could be accomplished by calling spawn(), followed by exit(), instead of exec().  However, on unix-like systems, simply calling exec() is lighter weight.</p>
 
-<br>
-<a name="zombie"></a>
-<h3>Managing Zombie Processes</h3>
+<a name="zombie"/><h2>Managing Zombie Processes</h2>
 
 <p>The process class also provides methods for managing zombie processes.</p>
 
@@ -592,114 +445,89 @@ body { font-family: monospace; color: #000000; background-color: #ffffff; }
 
 <p>The waitForChildren() method causes the program to automatically "wait on child processes".  The dontWaitForChildren() method disables this behavior.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/snooze.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// configure the process to </span><span class="Constant">&quot;wait on child processes&quot;</span>
-	process::setWaitForChildren(<span class="Constant">true</span>);
+	<i><font color="#9A1900">// configure the process to "wait on child processes"</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">setWaitForChildren</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
 
-	<span class="Comment">// five times...</span>
-	<span class="Statement">for</span> (<span class="Type">uint16_t</span> i=<span class="Constant">0</span>; i&lt;<span class="Constant">5</span>; i++) {
+	<i><font color="#9A1900">// five times...</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">5</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
 
-		<span class="Comment">// fork the process</span>
-		pid_t	pid=process::fork();
+		<i><font color="#9A1900">// fork the process</font></i>
+		<font color="#008080">pid_t</font>	pid<font color="#990000">=</font>process<font color="#990000">::</font><b><font color="#000000">fork</font></b><font color="#990000">();</font>
 
-		<span class="Statement">if</span> (pid) {
-			<span class="Comment">// the parent process will run this code...</span>
-			stdoutput.printf(<span class="Constant">&quot;forked a child with pid: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pid);
-		} <span class="Statement">else</span> {
-			<span class="Comment">// the child process will run this code...</span>
-			stdoutput.write(<span class="Constant">&quot;I'm the child, and I'm exiting...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-			process::exit(<span class="Constant">0</span>);
-		}
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>pid<font color="#990000">)</font> <font color="#FF0000">{</font>
+			<i><font color="#9A1900">// the parent process will run this code...</font></i>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"forked a child with pid: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pid<font color="#990000">);</font>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+			<i><font color="#9A1900">// the child process will run this code...</font></i>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"I'm the child, and I'm exiting...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font>
 
-		<span class="Comment">// wait a second</span>
-		snooze::macrosnooze(<span class="Constant">1</span>);
-	}
+		<i><font color="#9A1900">// wait a second</font></i>
+		snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	stdoutput.write(<span class="Special">'\n'</span>);
-	stdoutput.write(<span class="Constant">&quot;check process list, there should be no zombies</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	stdoutput.write(<span class="Constant">&quot;kill the process or press ctrl-C to exit</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"check process list, there should be no zombies</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"kill the process or press ctrl-C to exit</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 
-	<span class="Comment">// loop forever, waiting for ctrl-C or to be killed</span>
-	<span class="Statement">for</span> (;;) {
-		snooze::macrosnooze(<span class="Constant">1</span>);
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// loop forever, waiting for ctrl-C or to be killed</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(;;)</font> <font color="#FF0000">{</font>
+		snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>As an alternative to calling waitForChildren(), the process can register a signal handler for the SIGCHLD signal and call getChildStateChange() to "wait on child processes".  See <a href="signal.html">Using the signal classes</a> for more information on how to do this.  The supportsGetChildStateChange method returns true or false, indicating whether this method is supported or not.</p>
 
-<br>
-<a name="detaching"></a>
-<h3>Detaching</h3>
+<a name="detaching"/><h2>Detaching</h2>
 
 <p>The process class also provides a method for detaching from the controlling terminal.</p>
 
 <p>This is useful for programs which need to continue running "in the background".  Note that once a program detaches, it cannot be shut down using ctrl-C.  It must be killed.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/snooze.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// detach from the controlling terminal</span>
-	process::detach();
+	<i><font color="#9A1900">// detach from the controlling terminal</font></i>
+	process<font color="#990000">::</font><b><font color="#000000">detach</font></b><font color="#990000">();</font>
 
-	<span class="Comment">// print </span><span class="Constant">&quot;I'm running in the background 5 times&quot;</span><span class="Comment">,</span>
-	<span class="Comment">// snoozing </span><span class="Constant">1</span><span class="Comment"> second between each line...</span>
-	<span class="Statement">for</span> (<span class="Type">uint16_t</span> i=<span class="Constant">0</span>; i&lt;<span class="Constant">5</span>; i++) {
-		stdoutput.write(<span class="Constant">&quot;I'm running in the background...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-		snooze::macrosnooze(<span class="Constant">1</span>);
-	}
+	<i><font color="#9A1900">// print "I'm running in the background 5 times",</font></i>
+	<i><font color="#9A1900">// snoozing 1 second between each line...</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">5</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"I'm running in the background...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	process::exit(<span class="Constant">0</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>Note that running "in the background" may have different meanings and consequences on different platforms.</p>
 
 <p>On all platforms, once a process has called detach(), if it was run from a terminal, the terminal that it was run from will display a new prompt, and new commands may be run.</p>
 
-<p>On unix-like platforms, once a process has called detach(), it is safe to close the tty that the process was run from.  On Windows platforms though, closing the console that the process was run from will kill the process unless Windows-specific functions are called to dissociate it from the console, create a new console, and associate it with that console.</p>
-
+On unix-like platforms, once a process has called detach(), it is safe to close the tty that the process was run from.  On Windows platforms though, closing the console that the process was run from will kill the process unless Windows-specific functions are called to dissociate it from the console, create a new console, and associate it with that console.
 </body>
 </html>

@@ -6,7 +6,7 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@codetree.cpp.html@
+@../../examples/codetree.cpp@
 }}}
 }}}
 

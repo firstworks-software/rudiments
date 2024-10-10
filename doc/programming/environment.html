@@ -1,69 +1,56 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the environment class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the environment class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+<h1>Using the environment class</h1>
 
-<a name="environment"></a>
-<span class="heading">Using the environment class</span><br><br>
+<p>The  <a href="environment">class</a> provides methods for accessing and manipulating environment variables.</p>
 
-<p>The <a href="">environment class</a> provides methods for accessing and manipulating environment variables.</p>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/environment.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/environment.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
-
-	<span class="Comment">// Print the PATH environment variable.</span>
-	stdoutput.printf(<span class="Constant">&quot;PATH=</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,environment::getValue(<span class="Constant">&quot;PATH&quot;</span>));
+	<i><font color="#9A1900">// Print the PATH environment variable.</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"PATH=%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>environment<font color="#990000">::</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"PATH"</font><font color="#990000">));</font>
 
 
-	<span class="Comment">// Set TEST=testvalue and print the TEST.</span>
-	environment::setValue(<span class="Constant">&quot;TEST&quot;</span>,<span class="Constant">&quot;testvalue&quot;</span>);
-	stdoutput.printf(<span class="Constant">&quot;TEST=</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,environment::getValue(<span class="Constant">&quot;TEST&quot;</span>));
+	<i><font color="#9A1900">// Set TEST=testvalue and print the TEST.</font></i>
+	environment<font color="#990000">::</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">,</font><font color="#FF0000">"testvalue"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"TEST=%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>environment<font color="#990000">::</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">));</font>
 
 
-	<span class="Comment">// Remove TEST and print it.</span>
-	environment::remove(<span class="Constant">&quot;TEST&quot;</span>);
-	stdoutput.printf(<span class="Constant">&quot;TEST=</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,environment::getValue(<span class="Constant">&quot;TEST&quot;</span>));
+	<i><font color="#9A1900">// Remove TEST and print it.</font></i>
+	environment<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"TEST=%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>environment<font color="#990000">::</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">));</font>
 
 
-	<span class="Comment">// Print all environment variable/value pairs.</span>
-	stdoutput.write(<span class="Constant">&quot;All Variables:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *v=environment::getVariables(); v &amp;&amp; *v; v++) {
-		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*v);
-	}
-	stdoutput.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// Print all environment variable/value pairs.</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"All Variables:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>v<font color="#990000">=</font>environment<font color="#990000">::</font><b><font color="#000000">getVariables</font></b><font color="#990000">();</font> v <font color="#990000">&amp;&amp;</font> <font color="#990000">*</font>v<font color="#990000">;</font> v<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>v<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
 
-	<span class="Comment">// Clear the environment and atttempt to print all</span>
-	<span class="Comment">// environment variable/value pairs.  Should print nothing.</span>
-	environment::clear();
-	stdoutput.write(<span class="Constant">&quot;All Variables (should be empty now):</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *v=environment::getVariables(); v &amp;&amp; *v; v++) {
-		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*v);
-	}
-	stdoutput.write(<span class="Special">'\n'</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// Clear the environment and atttempt to print all</font></i>
+	<i><font color="#9A1900">// environment variable/value pairs.  Should print nothing.</font></i>
+	environment<font color="#990000">::</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"All Variables (should be empty now):</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>v<font color="#990000">=</font>environment<font color="#990000">::</font><b><font color="#000000">getVariables</font></b><font color="#990000">();</font> v <font color="#990000">&amp;&amp;</font> <font color="#990000">*</font>v<font color="#990000">;</font> v<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>v<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-</html>
 </body>
+</html>

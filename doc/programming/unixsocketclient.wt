@@ -1,6 +1,6 @@
 = Programming with Rudiments using the unixsocketclient class =
 
-Here's the code for a client that can communicate with the <a href="unixsocketserver.html">unixsocketserver program</a>.  This client sends a string to the server, reads what the server sends back and prints it out.
+Here's the code for a client that can communicate with the [unixsocketserver.html unixsocketserver program].  This client sends a string to the server, reads what the server sends back and prints it out.
 
 [[Image(../images/traffic_cone.png)]]
 
@@ -8,8 +8,8 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@unixsocketclient.cpp.html@
+@../../examples/unixsocketclient.cpp@
 }}}
 }}}
 
-Unix sockets allow clients and servers on the same machine to communicate.  See the <a href="inetsocketserver.html">inetsocketserver</a> and <a href="inetsocketclient.html">inetsocketclient</a> examples for clients and servers that can communcate across a network.
+Unix sockets allow clients and servers on the same machine to communicate.  See the [inetsocketserver.html inetsocketserver] and [inetsocketclient.html inetsocketclient] examples for clients and servers that can communcate across a network.

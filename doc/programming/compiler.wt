@@ -4,6 +4,6 @@
 
 {{{#!blockquote
 {{{#!code
-@compiler cpp.html@
+@../../examples/compiler cpp.html@
 }}}
 }}}

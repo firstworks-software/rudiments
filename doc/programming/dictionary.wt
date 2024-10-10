@@ -1,12 +1,12 @@
 = Using the dictionary class =
 
-The <a href="../classes/html/classdictionary.html">dictionary class</a> allows you to store arbitrary numbers of key/value-pair data.
+The [../classes/html/classdictionary.html dictionary class] allows you to store arbitrary numbers of key/value-pair data.
 
 Each dictionary is composed of a set of dictionarynodes.  Each dictionarynode contains the key and value.
 
 {{{#!blockquote
 {{{#!code
-@dictionary-const.cpp.html@
+@../../examples/dictionary-const.cpp@
 }}}
 }}}
 
@@ -18,6 +18,6 @@ Note also that the dictionary class does not manage the data stored in it.  If y
 
 {{{#!blockquote
 {{{#!code
-@dictionary-nonconst.cpp.html@
+@../../examples/dictionary-nonconst.cpp@
 }}}
 }}}

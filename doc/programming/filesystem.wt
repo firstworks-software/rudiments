@@ -8,6 +8,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@filesystem.cpp.html@
+@../../examples/filesystem.cpp@
 }}}
 }}}

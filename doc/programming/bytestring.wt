@@ -1,47 +1,45 @@
 = Using the bytestring class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#manip">Manipulating Byte Strings</a></li>
-<li><a href="#comp">Comparing Byte Strings</a></li>
-<li><a href="#find">Finding Data in Byte Strings</a></li>
-</ul>
+* [#intro Introduction]
+* [#manip Manipulating Byte Strings]
+* [#comp Comparing Byte Strings]
+* [#find Finding Data in Byte Strings]
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[#=intro]
+== Introduction ==
 
 The bytestring class provides methods for manipulating byte strings.
 
 In addition to some unique methods, analogs for the standard C "memory" functions are provided.  However, unlike the standard C functions, the bytestring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.
 
 
-<a name="manip"></a>
-<h3>Manipulating Byte Strings</h3>
+[#=manip]
+== Manipulating Byte Strings ==
 
 The bytestring class provides methods for zeroing, initializing, duplicating, and copying byte strings.
 
 {{{#!blockquote
 {{{#!code
-@bytestring-copy.cpp.html@
+@../../examples/bytestring-copy.cpp@
 }}}
 }}}
 
 
-<a name="comp"></a>
-<h3>Comparing Byte Strings</h3>
+[#=comp]
+== Comparing Byte Strings ==
 
 The bytestring class also provides a compare() method for comparing two byte strings.
 
 {{{#!blockquote
 {{{#!code
-@bytestring-compare.cpp.html@
+@../../examples/bytestring-compare.cpp@
 }}}
 }}}
 
 
-<a name="find"></a>
-<h3>Finding Data in Byte Strings</h3>
+[#=find]
+== Finding Data in Byte Strings ==
 
 The charstring class also provides methods for finding characters or other character strings within character strings.
 
@@ -49,6 +47,6 @@ The findFirst() and findLast() methods return the first/last instance of a chara
 
 {{{#!blockquote
 {{{#!code
-@bytestring-find.cpp.html@
+@../../examples/bytestring-find.cpp@
 }}}
 }}}

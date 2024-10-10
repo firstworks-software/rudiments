@@ -1,22 +1,23 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the commandline class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the commandline class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the commandline class</span><br><br>
+<h1>Using the commandline class</h1>
 
 <p>The <a href="../classes/html/classcommandline.html">commandline class</a> provides methods for parsing command line arguments.</p>
 
 <p>Most programs take command line options in the option/value pair format:</p>
 
-<blockquote>program -option value -option value ...</blockquote>
-
+<blockquote>
+program -option value -option value ...
+</blockquote>
 <p>or</p>
 
-<blockquote>program --option=value --option=value ...</blockquote>
-
+<blockquote>
+program --option=value --option=value ...
+</blockquote>
 <p>The commandline class makes it easy to deal with command line options of
 either of these formats.</p>
 
@@ -25,50 +26,39 @@ either of these formats.</p>
 <p>The following program greets the user and takes two arguments:</p>
 
 <ul>
-<li>-hello</li>
-<li>-name <i>name</i></li>
+  <li>-hello</li>
+  <li>-name <i>name</i></li>
 </ul>
 
 <p>If -hello is specified then the user is greeted with "hello", rather than "hi".  If -name is specified then the user is greeted by name.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/commandline.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/commandline.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// initialize an instance of the commandline class</span>
-	commandline	cmdl(argc,argv);
+	<i><font color="#9A1900">// initialize an instance of the commandline class</font></i>
+	<font color="#008080">commandline</font>	<b><font color="#000000">cmdl</font></b><font color="#990000">(</font>argc<font color="#990000">,</font>argv<font color="#990000">);</font>
 
-	<span class="Comment">// determine the greeting</span>
-	<span class="Type">const</span> <span class="Type">char</span>	*greeting=<span class="Constant">&quot;hi&quot;</span>;
-	<span class="Statement">if</span> (cmdl.isFound(<span class="Constant">&quot;hello&quot;</span>)) {
-		greeting=<span class="Constant">&quot;hello&quot;</span>;
-	}
+	<i><font color="#9A1900">// determine the greeting</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>greeting<font color="#990000">=</font><font color="#FF0000">"hi"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>cmdl<font color="#990000">.</font><b><font color="#000000">isFound</font></b><font color="#990000">(</font><font color="#FF0000">"hello"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		greeting<font color="#990000">=</font><font color="#FF0000">"hello"</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Comment">// get the name</span>
-	<span class="Type">const</span> <span class="Type">char</span>	*name=cmdl.getValue(<span class="Constant">&quot;name&quot;</span>);
+	<i><font color="#9A1900">// get the name</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>name<font color="#990000">=</font>cmdl<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"name"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print the greeting</span>
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant"> </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,greeting,name);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print the greeting</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>greeting<font color="#990000">,</font>name<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

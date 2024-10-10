@@ -1,9 +1,9 @@
 = Using the userentry class =
 
-The <a href="../classes/html/classuserentry.html">userentry class</a> provides methods for retrieving information about users.
+The [../classes/html/classuserentry.html userentry class] provides methods for retrieving information about users.
 
 {{{#!blockquote
 {{{#!code
-@userentry.cpp.html@
+@../../examples/userentry.cpp@
 }}}
 }}}

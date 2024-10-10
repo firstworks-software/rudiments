@@ -1,51 +1,49 @@
 = Using the charstring class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#manip">Manipulating Character Strings</a></li>
-<li><a href="#comp">Comparing Character Strings</a></li>
-<li><a href="#find">Finding Data in Character Strings</a></li>
-<li><a href="#trans">Transforming Character Strings</a></li>
-<li><a href="#parsing">Parsing Character Strings</a></li>
-<li><a href="#conversion">Converting Numbers and Amounts</a></li>
-<li><a href="#encoding">Encoding Character Strings</a></li>
-</ul>
+* [#intro Introduction]
+* [#manip Manipulating Character Strings]
+* [#comp Comparing Character Strings]
+* [#find Finding Data in Character Strings]
+* [#trans Transforming Character Strings]
+* [#parsing Parsing Character Strings]
+* [#conversion Converting Numbers and Amounts]
+* [#encoding Encoding Character Strings]
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[=#intro]
+== Introduction ==
 
-The <a href="../classes/html/classcharstring.html">charstring class</a> provides static methods for manipulating C-style character strings.
+The [../classes/html/classcharstring.html charstring class] provides static methods for manipulating C-style character strings.
 
 In addition to some unique methods, analogs for the standard C string functions are provided.  However, unlike the standard C string functions, the charstring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.
 
 
-<a name="manip"></a>
-<h3>Manipulating Character Strings</h3>
+[=#manip]
+== Manipulating Character Strings ==
 
 The charstring class provides methods for zeroing, duplicating, appending, copying data to, printing formatted data to, and determining the lengths of character strings.
 
 {{{#!blockquote
 {{{#!code
-@charstring-copy.cpp.html@
+@../../examples/charstring-copy.cpp@
 }}}
 }}}
 
 
-<a name="comp"></a>
-<h3>Comparing Character Strings</h3>
+[=#comp]
+== Comparing Character Strings ==
 
 The charstring class also provides methods for performing various character string comparisons.
 
 {{{#!blockquote
 {{{#!code
-@charstring-compare.cpp.html@
+@../../examples/charstring-compare.cpp@
 }}}
 }}}
 
 
-<a name="find"></a>
-<h3>Finding Data in Character Strings</h3>
+[=#find]
+== Finding Data in Character Strings ==
 
 The charstring class also provides methods for finding characters or other character strings within character strings.
 
@@ -53,54 +51,54 @@ The findFirst()/findFirstOfSet() and findLast() methods return the first/last in
 
 {{{#!blockquote
 {{{#!code
-@charstring-find.cpp.html@
+@../../examples/charstring-find.cpp@
 }}}
 }}}
 
 
-<a href="trans"></a>
-<h3>Transforming Character Strings</h3>
+[=#trans]
+== Transforming Character Strings ==
 
 The charstring class also provides methods for transforming character strings.
 
 {{{#!blockquote
 {{{#!code
-@charstring-transform.cpp.html@
+@../../examples/charstring-transform.cpp@
 }}}
 }}}
 
 
-<a name="parsing"></a>
-<h3>Parsing Character Strings</h3>
+[=#parsing]
+== Parsing Character Strings ==
 
 The charstring class also provides methods for splitting character strings, finding substrings and inserting text into a character string.
 
 {{{#!blockquote
 {{{#!code
-@charstring-split.cpp.html@
+@../../examples/charstring-split.cpp@
 }}}
 }}}
 
 
-<a name="conversion"></a>
-<h3>Converting Numbers and Amounts</h3>
+[=#conversion]
+== Converting Numbers and Amounts ==
 
 The charstring class also provides methods for converting numbers and dollar amounts to and from character strings.
 
 {{{#!blockquote
 {{{#!code
-@charstring-numbers.cpp.html@
+@../../examples/charstring-numbers.cpp@
 }}}
 }}}
 
 
-<a name="encoding"></a>
-<h3>Encoding Character Strings</h3>
+[=#encoding]
+== Encoding Character Strings ==
 
 The charstring class also provides methods for escaping, encoding and obfuscating character strings.
 
 {{{#!blockquote
 {{{#!code
-@charstring-encode.cpp.html@
+@../../examples/charstring-encode.cpp@
 }}}
 }}}

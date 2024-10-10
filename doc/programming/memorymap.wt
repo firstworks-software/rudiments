@@ -6,6 +6,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@memorymap.cpp.html@
+@../../examples/memorymap.cpp@
 }}}
 }}}

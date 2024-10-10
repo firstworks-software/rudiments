@@ -4,6 +4,6 @@
 
 {{{#!blockquote
 {{{#!code
-@dynamicarray.cpp.html@
+@../../examples/dynamicarray.cpp@
 }}}
 }}}

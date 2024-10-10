@@ -1,90 +1,77 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the snooze class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the snooze class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the snooze class</span><br><br>
+<h1>Using the snooze class</h1>
 
 <p>The <a href="../classes/html/classsnooze.html">snooze class</a> provides static methods for suspending process execution.</p>
 
 <p>Processes may be suspended for times specified in second, microsecond or nanosecond granularity.  Methods for snoozing come in two varieties: snoozes which return when interruped, and snoozes which automatically resume when interrupted.  The methods which return when interrupted also return the time that remained at the point that they were interrupted.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/snooze.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// declare some variables that we'll use later</span>
-	<span class="Type">uint32_t</span>	remainingseconds;
-	<span class="Type">uint32_t</span>	remainingmicroseconds;
-	<span class="Type">uint32_t</span>	remainingnanoseconds;
+	<i><font color="#9A1900">// declare some variables that we'll use later</font></i>
+	<font color="#008080">uint32_t</font>	remainingseconds<font color="#990000">;</font>
+	<font color="#008080">uint32_t</font>	remainingmicroseconds<font color="#990000">;</font>
+	<font color="#008080">uint32_t</font>	remainingnanoseconds<font color="#990000">;</font>
 
 
-	<span class="Comment">// snooze for </span><span class="Constant">2</span><span class="Comment"> seconds, auto-recovering from interruptions</span>
-	stdoutput.write(<span class="Constant">&quot;snoozing for 2 seconds...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	snooze::macrosnooze(<span class="Constant">2</span>);
+	<i><font color="#9A1900">// snooze for 2 seconds, auto-recovering from interruptions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"snoozing for 2 seconds...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
 
-	<span class="Comment">// snooze for </span><span class="Constant">2</span><span class="Comment"> seconds, allowing interruptions</span>
-	stdoutput.write(<span class="Constant">&quot;snoozing for 2 seconds (interruptable)...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">if</span> (!snooze::macrosnooze(<span class="Constant">2</span>,&amp;remainingseconds)) {
-		stdoutput.printf(<span class="Constant">&quot;interrupted... </span><span class="Special">%d</span><span class="Constant"> seconds remained</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-							remainingseconds);
-	}
-
-
-	<span class="Comment">// snooze for </span><span class="Constant">200</span><span class="Comment"> microseconds, auto-recovering from interruptions</span>
-	stdoutput.write(<span class="Constant">&quot;snoozing for 200 microseconds...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	snooze::microsnooze(<span class="Constant">0</span>,<span class="Constant">200</span>);
-
-	<span class="Comment">// snooze for </span><span class="Constant">200</span><span class="Comment"> microseconds, allowing interruptions</span>
-	stdoutput.write(<span class="Constant">&quot;snoozing for 200 microseconds (interruptable)...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">if</span> (!snooze::microsnooze(<span class="Constant">0</span>,<span class="Constant">200</span>,
-				&amp;remainingseconds,
-				&amp;remainingmicroseconds)) {
-		stdoutput.printf(<span class="Constant">&quot;interrupted... </span><span class="Special">%d</span><span class="Constant"> seconds and &quot;</span>
-					<span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> microseconds remained</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-							remainingseconds,
-							remainingmicroseconds);
-	}
+	<i><font color="#9A1900">// snooze for 2 seconds, allowing interruptions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"snoozing for 2 seconds (interruptable)...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>snooze<font color="#990000">::</font><b><font color="#000000">macrosnooze</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">,&amp;</font>remainingseconds<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"interrupted... %d seconds remained</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							remainingseconds<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
 
-	<span class="Comment">// snooze for </span><span class="Constant">200</span><span class="Comment"> nanoseconds, auto-recovering from interruptions</span>
-	stdoutput.write(<span class="Constant">&quot;snoozing for 200 nanoseconds...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	snooze::nanosnooze(<span class="Constant">0</span>,<span class="Constant">200</span>);
+	<i><font color="#9A1900">// snooze for 200 microseconds, auto-recovering from interruptions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"snoozing for 200 microseconds...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	snooze<font color="#990000">::</font><b><font color="#000000">microsnooze</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">200</font><font color="#990000">);</font>
 
-	<span class="Comment">// snooze for </span><span class="Constant">200</span><span class="Comment"> nanoseconds, allowing interruptions</span>
-	stdoutput.write(<span class="Constant">&quot;snoozing for 200 nanoseconds (interruptable)...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">if</span> (!snooze::nanosnooze(<span class="Constant">0</span>,<span class="Constant">200</span>,
-				&amp;remainingseconds,
-				&amp;remainingnanoseconds)) {
-		stdoutput.printf(<span class="Constant">&quot;interrupted... </span><span class="Special">%d</span><span class="Constant"> seconds and &quot;</span>
-					<span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> nanoseconds remained</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-							remainingseconds,
-							remainingnanoseconds);
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// snooze for 200 microseconds, allowing interruptions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"snoozing for 200 microseconds (interruptable)...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>snooze<font color="#990000">::</font><b><font color="#000000">microsnooze</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">200</font><font color="#990000">,</font>
+				<font color="#990000">&amp;</font>remainingseconds<font color="#990000">,</font>
+				<font color="#990000">&amp;</font>remainingmicroseconds<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"interrupted... %d seconds and "</font>
+					<font color="#FF0000">"%d microseconds remained</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							remainingseconds<font color="#990000">,</font>
+							remainingmicroseconds<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// snooze for 200 nanoseconds, auto-recovering from interruptions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"snoozing for 200 nanoseconds...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	snooze<font color="#990000">::</font><b><font color="#000000">nanosnooze</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">200</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// snooze for 200 nanoseconds, allowing interruptions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"snoozing for 200 nanoseconds (interruptable)...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>snooze<font color="#990000">::</font><b><font color="#000000">nanosnooze</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">200</font><font color="#990000">,</font>
+				<font color="#990000">&amp;</font>remainingseconds<font color="#990000">,</font>
+				<font color="#990000">&amp;</font>remainingnanoseconds<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"interrupted... %d seconds and "</font>
+					<font color="#FF0000">"%d nanoseconds remained</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							remainingseconds<font color="#990000">,</font>
+							remainingnanoseconds<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<p>It is safe to pass NULL in for the secondsremaining, microsecondsremaining, and nanosecondsremaining parameters.  This is useful if you want the snooze to be interruptable, but you don't care about the amount of time remaining after it was interrupted.</p>
-
+It is safe to pass NULL in for the secondsremaining, microsecondsremaining, and nanosecondsremaining parameters.  This is useful if you want the snooze to be interruptable, but you don't care about the amount of time remaining after it was interrupted.
 </body>
 </html>

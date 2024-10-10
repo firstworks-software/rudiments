@@ -8,8 +8,8 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@unixsocketserver.cpp.html@
+@../../examples/unixsocketserver.cpp@
 }}}
 }}}
 
-See the <a href="unixsocketclient.html">unixsocketclient</a> example for a client that can communicate with this server.
+See the [unixsocketclient.html unixsocketclient] example for a client that can communicate with this server.

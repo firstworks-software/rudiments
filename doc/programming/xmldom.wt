@@ -7,9 +7,9 @@ The following XML file contains an address book.
 {{{#!blockquote
 {{{#!code
 <?xml version="1.0"?>
-<!DOCTYPE instances SYSTEM "adbook.dtd">
+<!DOCTYPE instances SYSTEM "adbook.dtd 
 <addressbook>
-        <person firstname="David" middlename="Lee" lastname="Muse">
+        <person firstname="David" middlename="Lee" lastname="Muse 
                 <phones>
                         <phone location="home" number="1-222-333-4444"/>
                         <phone location="work" number="1-333-444-5555"/>
@@ -36,7 +36,7 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@xmldom.cpp.html@
+@../../examples/xmldom.cpp@
 }}}
 }}}
 

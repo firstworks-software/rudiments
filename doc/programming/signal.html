@@ -1,17 +1,16 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the signal class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the signal classes</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the signal classes</span><br><br>
+<h1>Using the signal classes</h1>
 
 <p>Signals allow one processes to interrupt the execution of another process.</p>
 
 <p>Signal handlers allow processes to intercept and react to the signals sent to them.</p>
 
-<p>Rudiments provides 3 classes for working with signals: <a href="../classes/html/classsignalset.html">signalset</a>, <a href="../classes/html/classsignalmanager.html">signalmanager</a> and <a href="../classes/html/classsignalhandler.html">signalhandler</a>.
+<p>Rudiments provides 3 classes for working with signals: <a href="../classes/html/classsignalset.html">signalset</a>, <a href="../classes/html/classsignalmanager.html">signalmanager</a> and <a href="../classes/html/classsignalhandler.html">signalhandler</a>.</p>
 
 <p>A signal set is just a collection of signals.  The <a href="../classes/html/classsignalset.html">signalset class</a> allows a programmer to build up a collection of signals.</p>
 
@@ -21,130 +20,109 @@
 
 <p>This program illustrates the use of all three classes.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.Comment { color: #0000ff; }
-.Constant { color: #ff00ff; }
-.PreProc { color: #6a0dad; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Special { color: #6a5acd; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="Comment">// Copyright (c) </span><span class="Constant">1999</span><span class="Comment">-</span><span class="Constant">2018</span><span class="Comment"> David Muse</span>
-<span class="Comment">// See the file COPYING for more information</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><i><font color="#9A1900">// Copyright (c) 1999-2018 David Muse</font></i>
+<i><font color="#9A1900">// See the file COPYING for more information</font></i>
 
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/signalclasses.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/signalclasses.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">bool</span>	gotsigterm=<span class="Constant">false</span>;
+<font color="#009900">bool</font>	gotsigterm<font color="#990000">=</font><b><font color="#0000FF">false</font></b><font color="#990000">;</font>
 
-<span class="Type">void</span> handleSigterm(<span class="Type">int32_t</span> sig) {
-	stdoutput.printf(<span class="Constant">&quot;Got a SIGTERM!</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	gotsigterm=<span class="Constant">true</span>;
-}
+<font color="#009900">void</font> <b><font color="#000000">handleSigterm</font></b><font color="#990000">(</font><font color="#008080">int32_t</font> sig<font color="#990000">)</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Got a SIGTERM!</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	gotsigterm<font color="#990000">=</font><b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+<font color="#FF0000">}</font>
 
-<span class="PreProc">#ifdef SIGALRM</span>
-<span class="Type">void</span> handleAlarm(<span class="Type">int32_t</span> sig) {
-	stdoutput.printf(<span class="Constant">&quot;alarm!</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
-<span class="PreProc">#endif</span>
+<b><font color="#000080">#ifdef</font></b> SIGALRM
+<font color="#009900">void</font> <b><font color="#000000">handleAlarm</font></b><font color="#990000">(</font><font color="#008080">int32_t</font> sig<font color="#990000">)</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"alarm!</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+<b><font color="#000080">#endif</font></b>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// ignore all signals except SIGTERM and SIGALRM</span>
-	signalset	ignoreset;
-	ignoreset.addAllSignals();
-	ignoreset.removeSignal(<span class="Constant">SIGTERM</span>);
-	<span class="PreProc">#ifdef SIGALRM</span>
-	ignoreset.removeSignal(<span class="Constant">SIGALRM</span>);
-	<span class="PreProc">#endif</span>
-	signalmanager::ignoreSignals(&amp;ignoreset);
+	<i><font color="#9A1900">// ignore all signals except SIGTERM and SIGALRM</font></i>
+	<font color="#008080">signalset</font>	ignoreset<font color="#990000">;</font>
+	ignoreset<font color="#990000">.</font><b><font color="#000000">addAllSignals</font></b><font color="#990000">();</font>
+	ignoreset<font color="#990000">.</font><b><font color="#000000">removeSignal</font></b><font color="#990000">(</font>SIGTERM<font color="#990000">);</font>
+<b><font color="#000080">	#ifdef</font></b> SIGALRM
+	ignoreset<font color="#990000">.</font><b><font color="#000000">removeSignal</font></b><font color="#990000">(</font>SIGALRM<font color="#990000">);</font>
+<b><font color="#000080">	#endif</font></b>
+	signalmanager<font color="#990000">::</font><b><font color="#000000">ignoreSignals</font></b><font color="#990000">(&amp;</font>ignoreset<font color="#990000">);</font>
 
-	<span class="Comment">// run handleSigterm() when a SIGTERM is received</span>
-	signalhandler	termhandler;
-	termhandler.setHandler(handleSigterm);
-	termhandler.handleSignal(<span class="Constant">SIGTERM</span>);
+	<i><font color="#9A1900">// run handleSigterm() when a SIGTERM is received</font></i>
+	<font color="#008080">signalhandler</font>	termhandler<font color="#990000">;</font>
+	termhandler<font color="#990000">.</font><b><font color="#000000">setHandler</font></b><font color="#990000">(</font>handleSigterm<font color="#990000">);</font>
+	termhandler<font color="#990000">.</font><b><font color="#000000">handleSignal</font></b><font color="#990000">(</font>SIGTERM<font color="#990000">);</font>
 
-	<span class="Comment">// run handleAlarm() when a SIGALRM is received</span>
-	<span class="PreProc">#ifdef SIGALRM</span>
-	signalhandler	alarmhandler;
-	alarmhandler.setHandler(handleAlarm);
-	alarmhandler.handleSignal(<span class="Constant">SIGALRM</span>);
-	<span class="PreProc">#endif</span>
+	<i><font color="#9A1900">// run handleAlarm() when a SIGALRM is received</font></i>
+<b><font color="#000080">	#ifdef</font></b> SIGALRM
+	<font color="#008080">signalhandler</font>	alarmhandler<font color="#990000">;</font>
+	alarmhandler<font color="#990000">.</font><b><font color="#000000">setHandler</font></b><font color="#990000">(</font>handleAlarm<font color="#990000">);</font>
+	alarmhandler<font color="#990000">.</font><b><font color="#000000">handleSignal</font></b><font color="#990000">(</font>SIGALRM<font color="#990000">);</font>
+<b><font color="#000080">	#endif</font></b>
 
-	<span class="Comment">// Loop forever, waiting to receive a signal that we are not ignoring.</span>
-	signalmanager::alarm(<span class="Constant">2</span>);
-	<span class="Statement">while</span> (!gotsigterm) {
-		signalmanager::waitForSignals(&amp;ignoreset);
-		signalmanager::alarm(<span class="Constant">2</span>);
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// Loop forever, waiting to receive a signal that we are not ignoring.</font></i>
+	signalmanager<font color="#990000">::</font><b><font color="#000000">alarm</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
+	<b><font color="#0000FF">while</font></b> <font color="#990000">(!</font>gotsigterm<font color="#990000">)</font> <font color="#FF0000">{</font>
+		signalmanager<font color="#990000">::</font><b><font color="#000000">waitForSignals</font></b><font color="#990000">(&amp;</font>ignoreset<font color="#990000">);</font>
+		signalmanager<font color="#990000">::</font><b><font color="#000000">alarm</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>It should print out "alarm!" every 2 seconds and, if killed, should print out "Got a SIGTERM!" before exiting.  If killed with a signal other than SIGTERM (the default), then it will ignore the signal.</p>
 
 <p>Windows systems don't have signals or the <i>kill</i> program.  Signals are more-or-less simulated on Windows platforms though, and the following program provides an approximation of the <i>kill</i> program as found on unix-like systems, that should work on Windows.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Statement">if</span> (argc&lt;<span class="Constant">3</span>) {
-		stdoutput.printf(<span class="Constant">&quot;usage: kill signal processid</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-		process::exit(<span class="Constant">1</span>);
-	}
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>argc<font color="#990000">&lt;</font><font color="#993399">3</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"usage: kill signal processid</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Type">int32_t</span>	sig=<span class="Constant">SIGTERM</span>;
-	<span class="Statement">if</span> (!charstring::compare(argv[<span class="Constant">1</span>],<span class="Constant">&quot;SIGINT&quot;</span>)) {
-		sig=<span class="Constant">SIGINT</span>;
-	} <span class="Statement">else</span> <span class="Statement">if</span> (!charstring::compare(argv[<span class="Constant">1</span>],<span class="Constant">&quot;SIGABRT&quot;</span>)) {
-		sig=<span class="Constant">SIGABRT</span>;
-	} <span class="Statement">else</span> <span class="Statement">if</span> (!charstring::compare(argv[<span class="Constant">1</span>],<span class="Constant">&quot;SIGFPE&quot;</span>)) {
-		sig=<span class="Constant">SIGFPE</span>;
-	} <span class="Statement">else</span> <span class="Statement">if</span> (!charstring::compare(argv[<span class="Constant">1</span>],<span class="Constant">&quot;SIGILL&quot;</span>)) {
-		sig=<span class="Constant">SIGILL</span>;
-	} <span class="Statement">else</span> <span class="Statement">if</span> (!charstring::compare(argv[<span class="Constant">1</span>],<span class="Constant">&quot;SIGSEGV&quot;</span>)) {
-		sig=<span class="Constant">SIGSEGV</span>;
-	} <span class="Statement">else</span> <span class="Statement">if</span> (!charstring::compare(argv[<span class="Constant">1</span>],<span class="Constant">&quot;SIGKILL&quot;</span>)) {
-		sig=<span class="Constant">SIGKILL</span>;
-	}
+	<font color="#008080">int32_t</font>	sig<font color="#990000">=</font>SIGTERM<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGINT"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGINT<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGABRT"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGABRT<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGFPE"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGFPE<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGILL"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGILL<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGSEGV"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGSEGV<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGKILL"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGKILL<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
 
-	pid_t	pid=charstring::convertToInteger(argv[<span class="Constant">2</span>]);
+	<font color="#008080">pid_t</font>	pid<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">convertToInteger</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">]);</font>
 
-	<span class="Statement">if</span> (!process::sendSignal(pid,sig)) {
-		stdoutput.printf(<span class="Constant">&quot;kill failed: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,error::getErrorString());
-		process::exit(<span class="Constant">1</span>);
-	}
-	process::exit(<span class="Constant">0</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>process<font color="#990000">::</font><b><font color="#000000">sendSignal</font></b><font color="#990000">(</font>pid<font color="#990000">,</font>sig<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"kill failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">());</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

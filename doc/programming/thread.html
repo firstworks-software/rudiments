@@ -1,21 +1,18 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the thread class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the thread class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the thread class</span><br><br>
+<h1>Using the thread class</h1>
 
 <ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#ordinary">Ordinary Threads</a></li>
-<li><a href="#detach">Detached Threads</a></li>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#ordinary">Ordinary Threads</a></li>
+  <li><a href="#detach">Detached Threads</a></li>
 </ul>
 
-<br>
-<a name="intro"></a>
-<h3>Introduction</h3>
+<br/><a name="intro"/><h2>Introduction</h2>
 
 <p>The <a href="../classes/html/classthread.html">thread class</a> provides a simple thread implementation.</p>
 
@@ -25,166 +22,140 @@
 
 <p>Note that rudiments supports platforms that don't support threads, and it is possible to explicitly compile rudiments without thread support.  The supportsThreads() method returns true or false, indicating whether thread support is enabled or not.</p>
 
-<br>
-<a name="ordinary"></a>
-<h3>Ordinary Threads</h3>
+<a name="ordinary"/><h2>Ordinary Threads</h2>
 
-<p>Ordinarily, a thread runs until its function returns, or calls the exit() method.  Another thread (usually the main thread of the parent process) must call the wait() method to completely dispose of the thread (analagous to "waiting on a child process") and get its exit status.</p> 
+<p>Ordinarily, a thread runs until its function returns, or calls the exit() method.  Another thread (usually the main thread of the parent process) must call the wait() method to completely dispose of the thread (analagous to "waiting on a child process") and get its exit status. </p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/thread.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/thread.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Comment">// struct for passing arguments into the thread</span>
-<span class="Type">struct</span> args {
-	thread		*th;
-	<span class="Type">int32_t</span>		id;
-	<span class="Type">uint16_t</span>	max;
-};
+<i><font color="#9A1900">// struct for passing arguments into the thread</font></i>
+<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font> <font color="#FF0000">{</font>
+	<font color="#008080">thread</font>		<font color="#990000">*</font>th<font color="#990000">;</font>
+	<font color="#008080">int32_t</font>		id<font color="#990000">;</font>
+	<font color="#008080">uint16_t</font>	max<font color="#990000">;</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
 
-<span class="Comment">// function that will be spawned as a thread</span>
-<span class="Type">void</span> count(<span class="Type">void</span> *args) {
+<i><font color="#9A1900">// function that will be spawned as a thread</font></i>
+<font color="#009900">void</font> <b><font color="#000000">count</font></b><font color="#990000">(</font><font color="#009900">void</font> <font color="#990000">*</font>args<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Type">struct</span> args	*a=(<span class="Type">struct</span> args *)args;
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	<font color="#990000">*</font>a<font color="#990000">=(</font><b><font color="#0000FF">struct</font></b> <font color="#008080">args</font> <font color="#990000">*)</font>args<font color="#990000">;</font>
 
-	<span class="Statement">for</span> (<span class="Type">uint16_t</span> c=<span class="Constant">0</span>; c&lt;a-&gt;max; c++) {
-		stdoutput.printf(<span class="Constant">&quot;  </span><span class="Special">%d</span><span class="Constant">: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,a-&gt;id,c);
-	}
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> c<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> c<font color="#990000">&lt;</font>a<font color="#990000">-&gt;</font>max<font color="#990000">;</font> c<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %d: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>a<font color="#990000">-&gt;</font>id<font color="#990000">,</font>c<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	a-&gt;th-&gt;exit(&amp;(a-&gt;id));
-}
+	a<font color="#990000">-&gt;</font>th<font color="#990000">-&gt;</font><b><font color="#000000">exit</font></b><font color="#990000">(&amp;(</font>a<font color="#990000">-&gt;</font>id<font color="#990000">));</font>
+<font color="#FF0000">}</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// do we even support threads?</span>
-	<span class="Statement">if</span> (!thread::isSupported()) {
-		stdoutput.printf(<span class="Constant">&quot;thread are not supported</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-		process::exit(<span class="Constant">1</span>);
-	}
+	<i><font color="#9A1900">// do we even support threads?</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>thread<font color="#990000">::</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"thread are not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Comment">// create the threads</span>
-	thread	t1;
-	thread	t2;
+	<i><font color="#9A1900">// create the threads</font></i>
+	<font color="#008080">thread</font>	t1<font color="#990000">;</font>
+	<font color="#008080">thread</font>	t2<font color="#990000">;</font>
 
-	<span class="Comment">// define arguments to pass to each thread</span>
-	<span class="Type">struct</span> args	a1;
-	a1.th=&amp;t1;
-	a1.id=<span class="Constant">1</span>;
-	a1.max=<span class="Constant">100</span>;
+	<i><font color="#9A1900">// define arguments to pass to each thread</font></i>
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	a1<font color="#990000">;</font>
+	a1<font color="#990000">.</font>th<font color="#990000">=&amp;</font>t1<font color="#990000">;</font>
+	a1<font color="#990000">.</font>id<font color="#990000">=</font><font color="#993399">1</font><font color="#990000">;</font>
+	a1<font color="#990000">.</font>max<font color="#990000">=</font><font color="#993399">100</font><font color="#990000">;</font>
 
-	<span class="Type">struct</span> args	a2;
-	a2.th=&amp;t2;
-	a2.id=<span class="Constant">2</span>;
-	a2.max=<span class="Constant">200</span>;
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	a2<font color="#990000">;</font>
+	a2<font color="#990000">.</font>th<font color="#990000">=&amp;</font>t2<font color="#990000">;</font>
+	a2<font color="#990000">.</font>id<font color="#990000">=</font><font color="#993399">2</font><font color="#990000">;</font>
+	a2<font color="#990000">.</font>max<font color="#990000">=</font><font color="#993399">200</font><font color="#990000">;</font>
 
-	<span class="Comment">// spawn the threads</span>
-	t1.spawn((<span class="Type">void</span> *(*)(<span class="Type">void</span> *))count,(<span class="Type">void</span> *)&amp;a1,<span class="Constant">false</span>);
-	t2.spawn((<span class="Type">void</span> *(*)(<span class="Type">void</span> *))count,(<span class="Type">void</span> *)&amp;a2,<span class="Constant">false</span>);
+	<i><font color="#9A1900">// spawn the threads</font></i>
+	t1<font color="#990000">.</font><b><font color="#000000">spawn</font></b><font color="#990000">((</font><font color="#009900">void</font> <font color="#990000">*(*)(</font><font color="#009900">void</font> <font color="#990000">*))</font>count<font color="#990000">,(</font><font color="#009900">void</font> <font color="#990000">*)&amp;</font>a1<font color="#990000">,</font><b><font color="#0000FF">false</font></b><font color="#990000">);</font>
+	t2<font color="#990000">.</font><b><font color="#000000">spawn</font></b><font color="#990000">((</font><font color="#009900">void</font> <font color="#990000">*(*)(</font><font color="#009900">void</font> <font color="#990000">*))</font>count<font color="#990000">,(</font><font color="#009900">void</font> <font color="#990000">*)&amp;</font>a2<font color="#990000">,</font><b><font color="#0000FF">false</font></b><font color="#990000">);</font>
 
-	<span class="Comment">// wait for the threads to exit</span>
-	<span class="Type">int32_t</span>	t1status=-<span class="Constant">1</span>;
-	<span class="Type">int32_t</span>	t2status=-<span class="Constant">1</span>;
-	t1.wait(&amp;t1status);
-	t2.wait(&amp;t2status);
+	<i><font color="#9A1900">// wait for the threads to exit</font></i>
+	<font color="#008080">int32_t</font>	t1status<font color="#990000">=-</font><font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#008080">int32_t</font>	t2status<font color="#990000">=-</font><font color="#993399">1</font><font color="#990000">;</font>
+	t1<font color="#990000">.</font><b><font color="#000000">wait</font></b><font color="#990000">(&amp;</font>t1status<font color="#990000">);</font>
+	t2<font color="#990000">.</font><b><font color="#000000">wait</font></b><font color="#990000">(&amp;</font>t2status<font color="#990000">);</font>
 
-	<span class="Comment">// print out the thread's exit status</span>
-	stdoutput.printf(<span class="Constant">&quot;t1 status: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,t1status);
-	stdoutput.printf(<span class="Constant">&quot;t2 status: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,t2status);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out the thread's exit status</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"t1 status: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>t1status<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"t2 status: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>t2status<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="detach"></a>
-<h3>Detached Threads</h3>
+<br/><a name="detach"/><h2>Detached Threads</h2>
 
 <p>Alternatively, a thread may dissociate itself from the parent by calling the detach() method.  In this case, the thread is completely disposed of when its function returns.  The parent process will only exit when all threads have exited.  Note that if a thread calls detach(), there is no way for it to return an exit status.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/thread.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/process.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/snooze.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/thread.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/snooze.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Comment">// struct for passing arguments into the thread</span>
-<span class="Type">struct</span> args {
-	thread		*th;
-	<span class="Type">int32_t</span>		id;
-	<span class="Type">uint16_t</span>	max;
-};
+<i><font color="#9A1900">// struct for passing arguments into the thread</font></i>
+<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font> <font color="#FF0000">{</font>
+	<font color="#008080">thread</font>		<font color="#990000">*</font>th<font color="#990000">;</font>
+	<font color="#008080">int32_t</font>		id<font color="#990000">;</font>
+	<font color="#008080">uint16_t</font>	max<font color="#990000">;</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
 
-<span class="Comment">// function that will be spawned as a thread</span>
-<span class="Type">void</span> count(<span class="Type">void</span> *args) {
+<i><font color="#9A1900">// function that will be spawned as a thread</font></i>
+<font color="#009900">void</font> <b><font color="#000000">count</font></b><font color="#990000">(</font><font color="#009900">void</font> <font color="#990000">*</font>args<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Type">struct</span> args	*a=(<span class="Type">struct</span> args *)args;
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	<font color="#990000">*</font>a<font color="#990000">=(</font><b><font color="#0000FF">struct</font></b> <font color="#008080">args</font> <font color="#990000">*)</font>args<font color="#990000">;</font>
 
-	a-&gt;th-&gt;detach();
+	a<font color="#990000">-&gt;</font>th<font color="#990000">-&gt;</font><b><font color="#000000">detach</font></b><font color="#990000">();</font>
 
-	<span class="Statement">for</span> (<span class="Type">uint16_t</span> c=<span class="Constant">0</span>; c&lt;a-&gt;max; c++) {
-		stdoutput.printf(<span class="Constant">&quot;  </span><span class="Special">%d</span><span class="Constant">: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,a-&gt;id,c);
-	}
-}
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> c<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> c<font color="#990000">&lt;</font>a<font color="#990000">-&gt;</font>max<font color="#990000">;</font> c<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %d: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>a<font color="#990000">-&gt;</font>id<font color="#990000">,</font>c<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// do we even support threads?</span>
-	<span class="Statement">if</span> (!thread::isSupported()) {
-		stdoutput.printf(<span class="Constant">&quot;thread are not supported</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-		process::exit(<span class="Constant">1</span>);
-	}
+	<i><font color="#9A1900">// do we even support threads?</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>thread<font color="#990000">::</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"thread are not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 
-	<span class="Comment">// create the threads</span>
-	thread	t1;
-	thread	t2;
+	<i><font color="#9A1900">// create the threads</font></i>
+	<font color="#008080">thread</font>	t1<font color="#990000">;</font>
+	<font color="#008080">thread</font>	t2<font color="#990000">;</font>
 
-	<span class="Comment">// define arguments to pass to each thread</span>
-	<span class="Type">struct</span> args	a1;
-	a1.th=&amp;t1;
-	a1.id=<span class="Constant">1</span>;
-	a1.max=<span class="Constant">100</span>;
+	<i><font color="#9A1900">// define arguments to pass to each thread</font></i>
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	a1<font color="#990000">;</font>
+	a1<font color="#990000">.</font>th<font color="#990000">=&amp;</font>t1<font color="#990000">;</font>
+	a1<font color="#990000">.</font>id<font color="#990000">=</font><font color="#993399">1</font><font color="#990000">;</font>
+	a1<font color="#990000">.</font>max<font color="#990000">=</font><font color="#993399">100</font><font color="#990000">;</font>
 
-	<span class="Type">struct</span> args	a2;
-	a2.th=&amp;t2;
-	a2.id=<span class="Constant">2</span>;
-	a2.max=<span class="Constant">200</span>;
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	a2<font color="#990000">;</font>
+	a2<font color="#990000">.</font>th<font color="#990000">=&amp;</font>t2<font color="#990000">;</font>
+	a2<font color="#990000">.</font>id<font color="#990000">=</font><font color="#993399">2</font><font color="#990000">;</font>
+	a2<font color="#990000">.</font>max<font color="#990000">=</font><font color="#993399">200</font><font color="#990000">;</font>
 
-	<span class="Comment">// spawn the threads</span>
-	t1.spawn((<span class="Type">void</span> *(*)(<span class="Type">void</span> *))count,(<span class="Type">void</span> *)&amp;a1,<span class="Constant">true</span>);
-	t2.spawn((<span class="Type">void</span> *(*)(<span class="Type">void</span> *))count,(<span class="Type">void</span> *)&amp;a2,<span class="Constant">true</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// spawn the threads</font></i>
+	t1<font color="#990000">.</font><b><font color="#000000">spawn</font></b><font color="#990000">((</font><font color="#009900">void</font> <font color="#990000">*(*)(</font><font color="#009900">void</font> <font color="#990000">*))</font>count<font color="#990000">,(</font><font color="#009900">void</font> <font color="#990000">*)&amp;</font>a1<font color="#990000">,</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	t2<font color="#990000">.</font><b><font color="#000000">spawn</font></b><font color="#990000">((</font><font color="#009900">void</font> <font color="#990000">*(*)(</font><font color="#009900">void</font> <font color="#990000">*))</font>count<font color="#990000">,(</font><font color="#009900">void</font> <font color="#990000">*)&amp;</font>a2<font color="#990000">,</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

@@ -1,12 +1,12 @@
 = Using the sharedmemory class =
 
-Shared memory allows seperate processes to access a common block of memory.  The <a href="../classes/html/classsharedmemory.html">sharedmemory class</a> provides methods for creating and accessing shared memory.
+Shared memory allows seperate processes to access a common block of memory.  The [../classes/html/classsharedmemory.html sharedmemory class] provides methods for creating and accessing shared memory.
 
 This program creates a shared memory segment, copies some data into it, then goes to sleep, giving another program time to access the segment.
 
 {{{#!blockquote
 {{{#!code
-@sharedmemory1.cpp.html@
+@../../examples/sharedmemory1.cpp@
 }}}
 }}}
 
@@ -14,7 +14,7 @@ This program reads the data from shared memory.
 
 {{{#!blockquote
 {{{#!code
-@sharedmemory2.cpp.html@
+@../../examples/sharedmemory2.cpp@
 }}}
 }}}
 

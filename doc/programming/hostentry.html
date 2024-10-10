@@ -1,129 +1,99 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the hostentry class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the hostentry class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<a name="hostentry"></a>
-<span class="heading">Using the hostentry class</span><br><br>
+<h1>Using the hostentry class</h1>
 
 <ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#hostname">Lookup By Hostname</a></li>
-<li><a href="#address">Lookup By Address</a></li>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#hostname">Lookup By Hostname</a></li>
+  <li><a href="#address">Lookup By Address</a></li>
 </ul>
 
-<br>
-<a name="intro"></a>
-<h3>Introduction</h3>
+<br/><a name="intro"/><h2>Introduction</h2>
 
 <p>The <a href="../classes/html/classhostentry.html">hostentry class</a> provides methods for retrieveing information about hosts by hostname or address.</p>
 
-<br>
-<a name="hostname"></a>
-<h3>Lookup By Hostname</h3>
+<a name="hostname"/><h2>Lookup By Hostname</h2>
 
 <p>In this example, host information is retrieved by hostname.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/hostentry.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/hostentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Type">uint32_t</span>	i;
+	<font color="#008080">uint32_t</font>	i<font color="#990000">;</font>
 
-	<span class="Comment">// get the host entry for hostname </span><span class="Constant">&quot;localhost&quot;</span>
-	hostentry	he;
-	he.open(<span class="Constant">&quot;localhost&quot;</span>);
+	<i><font color="#9A1900">// get the host entry for hostname "localhost"</font></i>
+	<font color="#008080">hostentry</font>	he<font color="#990000">;</font>
+	he<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"localhost"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print out details</span>
-	stdoutput.printf(<span class="Constant">&quot;	Name: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Alias list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (i=<span class="Constant">0</span>; he.getAliasList() &amp;&amp; he.getAliasList()[i]; i++) {
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getAliasList()[i]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;	Address type: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getAddressType());
-	stdoutput.printf(<span class="Constant">&quot;	Address length: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getAddressLength());
-	stdoutput.printf(<span class="Constant">&quot;	Address list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (i=<span class="Constant">0</span>; he.getAddressList() &amp;&amp; he.getAddressList()[i]; i++) {
-		<span class="Type">const</span> <span class="Type">char</span>	*addr=he.getAddressList()[i];
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%d</span><span class="Constant">.</span><span class="Special">%d</span><span class="Constant">.</span><span class="Special">%d</span><span class="Constant">.</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					addr[<span class="Constant">0</span>],addr[<span class="Constant">1</span>],addr[<span class="Constant">2</span>],addr[<span class="Constant">3</span>]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Alias list:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> he<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> he<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Address type: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getAddressType</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Address length: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getAddressLength</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Address list:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> he<font color="#990000">.</font><b><font color="#000000">getAddressList</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> he<font color="#990000">.</font><b><font color="#000000">getAddressList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>addr<font color="#990000">=</font>he<font color="#990000">.</font><b><font color="#000000">getAddressList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%d.%d.%d.%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					addr<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">],</font>addr<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font>addr<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">],</font>addr<font color="#990000">[</font><font color="#993399">3</font><font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="address"></a>
-<h3>Lookup By Address</h3>
+<br/><a name="address"/><h2>Lookup By Address</h2>
 
 <p>In this example, host information is retrieved by address.  In particular, an IPv4 address.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/hostentry.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/hostentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Type">uint32_t</span>	i;
+	<font color="#008080">uint32_t</font>	i<font color="#990000">;</font>
 
-	<span class="Comment">// get the host entry for IP address </span><span class="Constant">&quot;127.0.0.1&quot;</span>
-	hostentry	he;
-	<span class="Type">char</span>	address[]={<span class="Constant">127</span>,<span class="Constant">0</span>,<span class="Constant">0</span>,<span class="Constant">1</span>};
-	he.open(address,<span class="Constant">4</span>,AF_INET);
+	<i><font color="#9A1900">// get the host entry for IP address "127.0.0.1"</font></i>
+	<font color="#008080">hostentry</font>	he<font color="#990000">;</font>
+	<font color="#009900">char</font>	address<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">127</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">1</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	he<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>address<font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font>AF_INET<font color="#990000">);</font>
 
-	<span class="Comment">// print out details</span>
-	stdoutput.printf(<span class="Constant">&quot;	Name: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Alias list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (i=<span class="Constant">0</span>; he.getAliasList() &amp;&amp; he.getAliasList()[i]; i++) {
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getAliasList()[i]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;	Address type: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getAddressType());
-	stdoutput.printf(<span class="Constant">&quot;	Address length: </span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,he.getAddressLength());
-	stdoutput.printf(<span class="Constant">&quot;	Address list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (i=<span class="Constant">0</span>; he.getAddressList() &amp;&amp; he.getAddressList()[i]; i++) {
-		<span class="Type">const</span> <span class="Type">char</span>	*addr=he.getAddressList()[i];
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%d</span><span class="Constant">.</span><span class="Special">%d</span><span class="Constant">.</span><span class="Special">%d</span><span class="Constant">.</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					addr[<span class="Constant">0</span>],addr[<span class="Constant">1</span>],addr[<span class="Constant">2</span>],addr[<span class="Constant">3</span>]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Alias list:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> he<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> he<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getAliasList</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Address type: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getAddressType</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Address length: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>he<font color="#990000">.</font><b><font color="#000000">getAddressLength</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Address list:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> he<font color="#990000">.</font><b><font color="#000000">getAddressList</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> he<font color="#990000">.</font><b><font color="#000000">getAddressList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>addr<font color="#990000">=</font>he<font color="#990000">.</font><b><font color="#000000">getAddressList</font></b><font color="#990000">()[</font>i<font color="#990000">];</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%d.%d.%d.%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					addr<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">],</font>addr<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font>addr<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">],</font>addr<font color="#990000">[</font><font color="#993399">3</font><font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

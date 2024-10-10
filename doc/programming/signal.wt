@@ -4,19 +4,19 @@ Signals allow one processes to interrupt the execution of another process.
 
 Signal handlers allow processes to intercept and react to the signals sent to them.
 
-Rudiments provides 3 classes for working with signals: <a href="../classes/html/classsignalset.html">signalset</a>, <a href="../classes/html/classsignalmanager.html">signalmanager</a> and <a href="../classes/html/classsignalhandler.html">signalhandler</a>.
+Rudiments provides 3 classes for working with signals: [../classes/html/classsignalset.html signalset], [../classes/html/classsignalmanager.html signalmanager] and [../classes/html/classsignalhandler.html signalhandler].
 
-A signal set is just a collection of signals.  The <a href="../classes/html/classsignalset.html">signalset class</a> allows a programmer to build up a collection of signals.
+A signal set is just a collection of signals.  The [../classes/html/classsignalset.html signalset class] allows a programmer to build up a collection of signals.
 
-The <a href="../classes/html/classsignalmanager.html">signalmanager class</a> provides methods for sending signals, ignoring signals, waiting for signals and examining blocked signals.
+The [../classes/html/classsignalmanager.html signalmanager class] provides methods for sending signals, ignoring signals, waiting for signals and examining blocked signals.
 
-The <a href="../classes/html/classsignalhandler.html">signalhandler class</a> provides methods for catching and handling signals.
+The [../classes/html/classsignalhandler.html signalhandler class] provides methods for catching and handling signals.
 
 This program illustrates the use of all three classes.
 
 {{{#!blockquote
 {{{#!code
-@signal.cpp.html@
+@../../examples/signal.cpp@
 }}}
 }}}
 
@@ -26,6 +26,6 @@ Windows systems don't have signals or the <i>kill</i> program.  Signals are more
 
 {{{#!blockquote
 {{{#!code
-@kill.cpp.html@
+@../../examples/kill.cpp@
 }}}
 }}}

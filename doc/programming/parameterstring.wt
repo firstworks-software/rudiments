@@ -39,6 +39,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@parameterstring.cpp.html@
+@../../examples/parameterstring.cpp@
 }}}
 }}}

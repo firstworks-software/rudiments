@@ -1,53 +1,48 @@
 = Using the character class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#isxxx">Analyzing Characters</a></li>
-<li><a href="#toxxx">Transforming Characters</a></li>
-<li><a href="#inset">Member of a Set</a></li>
-</ul>
+* [#intro Introduction]
+* [#isxxx Analyzing Characters]
+* [#toxxx Transforming Characters]
+* [#inset Member of a Set]
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[=#intro]
+== Introduction ==
 
-The <a href="../classes/html/classcharacter.h">character class</a> provides static methods for evaluating and manipulating characters.
+The [../classes/html/classcharacter.h character class] provides static methods for evaluating and manipulating characters.
 
 
-<a name="isxxx"></a>
-<h3>Analyzing Characters</h3>
+[=#isxxx]
+== Analyzing Characters ==
 
 Methods are provided for determining if a character is alphabetic, alphanumeric, lower case, upper case, etc.
 
 {{{#!blockquote
 {{{#!code
-@character-isxxx.cpp.html@
+@../../examples/character-isxxx.cpp@
 }}}
 }}}
 
 
-<a name="toxxx"></a>
-<h3>Transforming Characters</h3>
+[=#toxxx]
+== Transforming Characters ==
 
 Methods are also provided for transforming the character to upper or lower case, and to 7-bit ascii, by stripping off the high order bit.
 
 {{{#!blockquote
 {{{#!code
-@character-toxxx.cpp.html@
+@../../examples/character-toxxx.cpp@
 }}}
 }}}
 
 
-<a name="inset"></a>
-<h3>Member of a Set</h3>
+[=#inset]
+== Member of a Set ==
 
 An inSet() method is also provided which returns true if the specified character is a member of the specified set of characters and false otherwise.
 
 {{{#!blockquote
 {{{#!code
-@character-inset.cpp.html@
+@../../examples/character-inset.cpp@
 }}}
 }}}
-
-
-

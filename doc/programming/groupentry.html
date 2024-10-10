@@ -1,57 +1,45 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the groupentry class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the groupentry class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the groupentry class</span><br><br>
+<h1>Using the groupentry class</h1>
 
 <p>The <a href="../classes/html/classgroupentry.html">groupentry class</a> provides methods for retrieving information about groups.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/groupentry.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/groupentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="PreProc">#ifdef _WIN32</span>
-<span class="Type">const</span> <span class="Type">char</span>	*groupname=<span class="Constant">&quot;None&quot;</span>;
-<span class="PreProc">#else</span>
-<span class="Type">const</span> <span class="Type">char</span>	*groupname=<span class="Constant">&quot;bin&quot;</span>;
-<span class="PreProc">#endif</span>
+<b><font color="#000080">#ifdef</font></b> _WIN32
+<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>groupname<font color="#990000">=</font><font color="#FF0000">"None"</font><font color="#990000">;</font>
+<b><font color="#000080">#else</font></b>
+<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>groupname<font color="#990000">=</font><font color="#FF0000">"bin"</font><font color="#990000">;</font>
+<b><font color="#000080">#endif</font></b>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// get the group entry</span>
-	groupentry	grent;
-	grent.open(groupname);
+	<i><font color="#9A1900">// get the group entry</font></i>
+	<font color="#008080">groupentry</font>	grent<font color="#990000">;</font>
+	grent<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>groupname<font color="#990000">);</font>
 
-	<span class="Comment">// print out details</span>
-	stdoutput.printf(<span class="Constant">&quot;	Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,grent.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Group Id:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,grent.getGroupId());
-	stdoutput.printf(<span class="Constant">&quot;	Members:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	<span class="Statement">for</span> (<span class="Type">uint32_t</span> i=<span class="Constant">0</span>; grent.getMembers() &amp;&amp; grent.getMembers()[i]; i++) {
-		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,grent.getMembers()[i]);
-	}
-	stdoutput.printf(<span class="Constant">&quot;	SID:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,grent.getSidString());
-	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Group Id:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getGroupId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Members:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint32_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> grent<font color="#990000">.</font><b><font color="#000000">getMembers</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> grent<font color="#990000">.</font><b><font color="#000000">getMembers</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getMembers</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	SID:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getSidString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

@@ -6,6 +6,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@hash.cpp.html@
+@../../examples/hash.cpp@
 }}}
 }}}

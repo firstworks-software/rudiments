@@ -1,71 +1,60 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the crypt class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the crypt class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the crypt class</span><br><br>
+<h1>Using the crypt class</h1>
 
 <p>The <a href="../classes/html/classcrypt.html">crypt class</a> provides a static encryption method that is commonly used for password encryption.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/des.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/des.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> salts[]={
-		<span class="Constant">&quot;FW&quot;</span>,
-		<span class="Constant">&quot;fw&quot;</span>,
-		<span class="Constant">NULL</span>
-	};
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> salts<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		<font color="#FF0000">"FW"</font><font color="#990000">,</font>
+		<font color="#FF0000">"fw"</font><font color="#990000">,</font>
+		NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
 
-	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> strings[]={
-		<span class="Constant">&quot;rudiments&quot;</span>,
-		<span class="Constant">&quot;RUDIMENTS&quot;</span>,
-		<span class="Constant">&quot;firstworks&quot;</span>,
-		<span class="Constant">&quot;FIRSTWORKS&quot;</span>,
-		<span class="Constant">NULL</span>
-	};
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> strings<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		<font color="#FF0000">"rudiments"</font><font color="#990000">,</font>
+		<font color="#FF0000">"RUDIMENTS"</font><font color="#990000">,</font>
+		<font color="#FF0000">"firstworks"</font><font color="#990000">,</font>
+		<font color="#FF0000">"FIRSTWORKS"</font><font color="#990000">,</font>
+		NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
 
-	des	c;
-	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *salt=salts; *salt; salt++) {
+	<font color="#008080">des</font>	c<font color="#990000">;</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>salt<font color="#990000">=</font>salts<font color="#990000">;</font> <font color="#990000">*</font>salt<font color="#990000">;</font> salt<font color="#990000">++)</font> <font color="#FF0000">{</font>
 
-		stdoutput.printf(<span class="Constant">&quot;salt=</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*salt);
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"salt=%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>salt<font color="#990000">);</font>
 
-		<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *str=strings; *str; str++) {
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>str<font color="#990000">=</font>strings<font color="#990000">;</font> <font color="#990000">*</font>str<font color="#990000">;</font> str<font color="#990000">++)</font> <font color="#FF0000">{</font>
 
-			<span class="Type">const</span> byte_t	*data=(<span class="Type">const</span> byte_t *)*str;
-			<span class="Type">const</span> byte_t	*iv=(<span class="Type">const</span> byte_t *)*salt;
+			<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	<font color="#990000">*</font>data<font color="#990000">=(</font><b><font color="#0000FF">const</font></b> byte_t <font color="#990000">*)*</font>str<font color="#990000">;</font>
+			<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	<font color="#990000">*</font>iv<font color="#990000">=(</font><b><font color="#0000FF">const</font></b> byte_t <font color="#990000">*)*</font>salt<font color="#990000">;</font>
 
-			c.append(data,charstring::getLength(*str));
-			c.setSalt(iv,c.getSaltSize());
+			c<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>data<font color="#990000">,</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(*</font>str<font color="#990000">));</font>
+			c<font color="#990000">.</font><b><font color="#000000">setSalt</font></b><font color="#990000">(</font>iv<font color="#990000">,</font>c<font color="#990000">.</font><b><font color="#000000">getSaltSize</font></b><font color="#990000">());</font>
 
-			<span class="Type">const</span> <span class="Type">char</span>	*encrypted=(<span class="Type">const</span> <span class="Type">char</span> *)c.getHash();
+			<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>encrypted<font color="#990000">=(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*)</font>c<font color="#990000">.</font><b><font color="#000000">getHash</font></b><font color="#990000">();</font>
 
-			stdoutput.printf(<span class="Constant">&quot;  </span><span class="Special">%s</span><span class="Constant">: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*str,encrypted);
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %s: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>str<font color="#990000">,</font>encrypted<font color="#990000">);</font>
 
-			c.clear();
-		}
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+			c<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+		<font color="#FF0000">}</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

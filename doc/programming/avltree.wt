@@ -6,7 +6,7 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@avltree.cpp.html@
+@../../examples/avltree.cpp@
 }}}
 }}}
 

@@ -1,6 +1,6 @@
 = Using the error class =
 
-The <a href="../classes/html/classerror.html">error class</a> provides static methods for getting and setting posix and native system errors.
+The [../classes/html/classerror.html error class] provides static methods for getting and setting posix and native system errors.
 
 On more-or-less posix-compliant systems, most system calls and C-library functions set the "posix system error" when they fail.  Since rudiments uses these functions, when many rudiments methods fail, the posix system error is also set.
 
@@ -16,6 +16,6 @@ In this example, the posix system error is manipulated directly.
 
 {{{#!blockquote
 {{{#!code
-@error.cpp.html@
+@../../examples/error.cpp@
 }}}
 }}}

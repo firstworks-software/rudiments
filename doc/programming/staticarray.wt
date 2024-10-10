@@ -4,6 +4,6 @@
 
 {{{#!blockquote
 {{{#!code
-@staticarray.cpp.html@
+@../../examples/staticarray.cpp@
 }}}
 }}}

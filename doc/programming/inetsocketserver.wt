@@ -8,8 +8,8 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@inetsocketserver.cpp.html@
+@../../examples/inetsocketserver.cpp@
 }}}
 }}}
 
-See the <a href="inetsocketclient.html">inetsocketclient</a> example for a client that can communicate with this server.
+See the [inetsocketclient.html inetsocketclient] example for a client that can communicate with this server.

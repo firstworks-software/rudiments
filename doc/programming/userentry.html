@@ -1,76 +1,65 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the userentry class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the userentry class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the userentry class</span><br><br>
+<h1>Using the userentry class</h1>
 
 <p>The <a href="../classes/html/classuserentry.html">userentry class</a> provides methods for retrieving information about users.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/userentry.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/userentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// get the user entry for </span><span class="Constant">&quot;dmuse&quot;</span>
-	userentry	uent;
-	uent.open(<span class="Constant">&quot;dmuse&quot;</span>);
+	<i><font color="#9A1900">// get the user entry for "dmuse"</font></i>
+	<font color="#008080">userentry</font>	uent<font color="#990000">;</font>
+	uent<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"dmuse"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print out details</span>
-	stdoutput.printf(<span class="Constant">&quot;	Name:			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Password:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getPassword());
-	stdoutput.printf(<span class="Constant">&quot;	User Id:		</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getUserId());
-	stdoutput.printf(<span class="Constant">&quot;	Primary Group Id:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getPrimaryGroupId());
-	stdoutput.printf(<span class="Constant">&quot;	Real Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getRealName());
-	stdoutput.printf(<span class="Constant">&quot;	Home Directory:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getHomeDirectory());
-	stdoutput.printf(<span class="Constant">&quot;	Shell:			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getShell());
-	stdoutput.printf(<span class="Constant">&quot;	Name: 			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getName());
-	stdoutput.printf(<span class="Constant">&quot;	Encrypted Password:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getEncryptedPassword());
-	stdoutput.printf(<span class="Constant">&quot;	Last Change:		</span><span class="Special">%ld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getLastChangeDate());
-	stdoutput.printf(<span class="Constant">&quot;	Days Before Change Allowed:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					uent.getDaysBeforeChangeAllowed());
-	stdoutput.printf(<span class="Constant">&quot;	Days Before Change Required:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					uent.getDaysBeforeChangeRequired());
-	stdoutput.printf(<span class="Constant">&quot;	Days Before Expiration Warning:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					uent.getDaysBeforeExpirationWarning());
-	stdoutput.printf(<span class="Constant">&quot;	Days Of Inactivity Allowed:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					uent.getDaysOfInactivityAllowed());
-	stdoutput.printf(<span class="Constant">&quot;	Expiration Date:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getExpirationDate());
-	stdoutput.printf(<span class="Constant">&quot;	Flag:			</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getFlag());
-	stdoutput.printf(<span class="Constant">&quot;	SID:			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-						uent.getSidString());
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name:			%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Password:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getPassword</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	User Id:		%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getUserId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Primary Group Id:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getPrimaryGroupId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Real Name:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getRealName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Home Directory:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getHomeDirectory</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Shell:			%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getShell</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name: 			%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Encrypted Password:	%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getEncryptedPassword</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Last Change:		%ld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getLastChangeDate</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Days Before Change Allowed:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					uent<font color="#990000">.</font><b><font color="#000000">getDaysBeforeChangeAllowed</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Days Before Change Required:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					uent<font color="#990000">.</font><b><font color="#000000">getDaysBeforeChangeRequired</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Days Before Expiration Warning:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					uent<font color="#990000">.</font><b><font color="#000000">getDaysBeforeExpirationWarning</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Days Of Inactivity Allowed:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					uent<font color="#990000">.</font><b><font color="#000000">getDaysOfInactivityAllowed</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Expiration Date:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getExpirationDate</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Flag:			%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getFlag</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	SID:			%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						uent<font color="#990000">.</font><b><font color="#000000">getSidString</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

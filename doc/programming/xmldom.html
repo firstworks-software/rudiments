@@ -1,82 +1,79 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the xmldom and domnode classes</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the xmldom and domnode classes</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the xmldom and domnode classes</span><br><br>
+<h1>Using the xmldom and domnode classes</h1>
 
 <p>The xmldom and domnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
 
 <p>The following XML file contains an address book.</p>
 
-<PRE>
-<font color="#0000f8">&lt;?</font><font color="#288850"><b>xml</b></font><font color="#288850"><b> </b></font><font color="#288850"><b>version</b></font>=<font color="#f800f8">&quot;1.0&quot;</font><font color="#0000f8">?&gt;</font>
-<font color="#008888">&lt;!</font><font color="#a02828"><b>DOCTYPE</b></font> instances <font color="#a02828"><b>SYSTEM</b></font> <font color="#f800f8">&quot;adbook.dtd&quot;</font><font color="#008888">&gt;</font>
-<font color="#008888">&lt;</font><font color="#008888">addressbook</font><font color="#008888">&gt;</font>
-        <font color="#008888">&lt;</font><font color="#008888">person</font><font color="#008888"> </font><font color="#288850"><b>firstname</b></font>=<font color="#f800f8">&quot;David&quot;</font><font color="#008888"> </font><font color="#288850"><b>middlename</b></font>=<font color="#f800f8">&quot;Lee&quot;</font><font color="#008888"> </font><font color="#288850"><b>lastname</b></font>=<font color="#f800f8">&quot;Muse&quot;</font><font color="#008888">&gt;</font>
-                <font color="#008888">&lt;</font><font color="#008888">phones</font><font color="#008888">&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-222-333-4444&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-333-444-5555&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;mobile&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-444-555-6666&quot;</font><font color="#008888">/&gt;</font>
-                <font color="#008888">&lt;/phones&gt;</font>
-                <font color="#008888">&lt;</font><font color="#008888">addresses</font><font color="#008888">&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;1234 homestreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;12345&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;2345 workstreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;23456&quot;</font><font color="#008888">/&gt;</font>
-                <font color="#008888">&lt;/addresses&gt;</font>
-                <font color="#008888">&lt;</font><font color="#008888">emails</font><font color="#008888">&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@firstworks.com&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@workemail.com&quot;</font><font color="#008888">/&gt;</font>
-                <font color="#008888">&lt;/emails&gt;</font>
-        <font color="#008888">&lt;/person&gt;</font>
-<font color="#008888">&lt;/addressbook&gt;</font>
-</PRE>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">&lt;?xml</font></b> <font color="#009900">version</font><font color="#990000">=</font><font color="#FF0000">"1.0"</font><b><font color="#000080">?&gt;</font></b>
+<b><font color="#000080">&lt;!DOCTYPE</font></b> <font color="#009900">instances</font> <font color="#009900">SYSTEM</font> <font color="#FF0000">"adbook.dtd </font>
+<font color="#FF0000">&lt;addressbook&gt;</font>
+<font color="#FF0000">        &lt;person firstname="</font><font color="#009900">David</font><font color="#FF0000">" middlename="</font><font color="#009900">Lee</font><font color="#FF0000">" lastname="</font><font color="#009900">Muse</font> 
+                &lt;<font color="#009900">phones</font><b><font color="#000080">&gt;</font></b>
+                        <b><font color="#0000FF">&lt;phone</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"home"</font> <font color="#009900">number</font><font color="#990000">=</font><font color="#FF0000">"1-222-333-4444"</font><b><font color="#0000FF">/&gt;</font></b>
+                        <b><font color="#0000FF">&lt;phone</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"work"</font> <font color="#009900">number</font><font color="#990000">=</font><font color="#FF0000">"1-333-444-5555"</font><b><font color="#0000FF">/&gt;</font></b>
+                        <b><font color="#0000FF">&lt;phone</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"mobile"</font> <font color="#009900">number</font><font color="#990000">=</font><font color="#FF0000">"1-444-555-6666"</font><b><font color="#0000FF">/&gt;</font></b>
+                <b><font color="#0000FF">&lt;/phones&gt;</font></b>
+                <b><font color="#0000FF">&lt;addresses&gt;</font></b>
+                        <b><font color="#0000FF">&lt;address</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"home"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"1234 homestreet dr."</font> <font color="#009900">city</font><font color="#990000">=</font><font color="#FF0000">"mycity"</font> <font color="#009900">state</font><font color="#990000">=</font><font color="#FF0000">"GA"</font> <font color="#009900">zip</font><font color="#990000">=</font><font color="#FF0000">"12345"</font><b><font color="#0000FF">/&gt;</font></b>
+                        <b><font color="#0000FF">&lt;address</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"work"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"2345 workstreet dr."</font> <font color="#009900">city</font><font color="#990000">=</font><font color="#FF0000">"mycity"</font> <font color="#009900">state</font><font color="#990000">=</font><font color="#FF0000">"GA"</font> <font color="#009900">zip</font><font color="#990000">=</font><font color="#FF0000">"23456"</font><b><font color="#0000FF">/&gt;</font></b>
+                <b><font color="#0000FF">&lt;/addresses&gt;</font></b>
+                <b><font color="#0000FF">&lt;emails&gt;</font></b>
+                        <b><font color="#0000FF">&lt;email</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"home"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"dmuse@firstworks.com"</font><b><font color="#0000FF">/&gt;</font></b>
+                        <b><font color="#0000FF">&lt;email</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"work"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"dmuse@workemail.com"</font><b><font color="#0000FF">/&gt;</font></b>
+                <b><font color="#0000FF">&lt;/emails&gt;</font></b>
+        <b><font color="#0000FF">&lt;/person&gt;</font></b>
+<b><font color="#0000FF">&lt;/addressbook&gt;</font></b></tt></pre>
 
+</blockquote>
 <p>The following program parses the addressbook and prints it to the screen.</p>
 
-<img src="../images/traffic_cone.png"/>
+<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
 
 <p>Coming soon...</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
-	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
-</blockquote>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<i><font color="#9A1900">// FIXME: example...</font></i>
+<font color="#FF0000">}</font>
+</tt></pre>
 
+</blockquote>
 <p>Here is the output of the program above.</p>
 
 <blockquote>
-<PRE>
-David Lee Muse
-Phones:
-        home: 1-222-333-4444
-        work: 1-333-444-5555
-        mobile: 1-444-555-6666
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>David Lee Muse
+<b><font color="#008080">Phones:</font></b>
+        home<font color="#990000">:</font> <font color="#993399">1</font><font color="#990000">-</font><font color="#993399">222</font><font color="#990000">-</font><font color="#993399">333</font><font color="#990000">-</font><font color="#993399">4444</font>
+        work<font color="#990000">:</font> <font color="#993399">1</font><font color="#990000">-</font><font color="#993399">333</font><font color="#990000">-</font><font color="#993399">444</font><font color="#990000">-</font><font color="#993399">5555</font>
+        mobile<font color="#990000">:</font> <font color="#993399">1</font><font color="#990000">-</font><font color="#993399">444</font><font color="#990000">-</font><font color="#993399">555</font><font color="#990000">-</font><font color="#993399">6666</font>
 
-Addresses:
-        home: 1234 homestreet dr. mycity, GA 12345
-        work: 2345 workstreet dr. mycity, GA 23456
+<b><font color="#008080">Addresses:</font></b>
+        home<font color="#990000">:</font> <font color="#993399">1234</font> <font color="#008080">homestreet</font> dr<font color="#990000">.</font> mycity<font color="#990000">,</font> GA <font color="#993399">12345</font>
+        work<font color="#990000">:</font> <font color="#993399">2345</font> <font color="#008080">workstreet</font> dr<font color="#990000">.</font> mycity<font color="#990000">,</font> GA <font color="#993399">23456</font>
 
-Emails:
-        home: dmuse@firstworks.com
-        work: dmuse@workemail.com
-</PRE>
+<b><font color="#008080">Emails:</font></b>
+        home<font color="#990000">:</font> dmuse@firstworks<font color="#990000">.</font>com
+        work<font color="#990000">:</font> dmuse@workemail<font color="#990000">.</font>com</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

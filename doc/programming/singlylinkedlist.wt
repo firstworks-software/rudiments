@@ -1,29 +1,27 @@
 = Using the singlylinkedlist class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#values">Manipulating Values</a></li>
-<li><a href="#nodes">Manipulating Nodes</a></li>
-<li><a href="#sort">Sorting</a></li>
-<li><a href="#iterate">Iterating Manually</a></li>
-<li><a href="#types">Data Types</a></li>
-</ul>
+* [#intro Introduction]
+* [#values Manipulating Values]
+* [#nodes Manipulating Nodes]
+* [#sort Sorting]
+* [#iterate Iterating Manually]
+* [#types Data Types]
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[=#intro]
+== Introduction ==
 
-The <a href="../classes/html/classsinglylinkedlist.html">singlylinkedlist class</a> allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.
+The [../classes/html/classsinglylinkedlist.html singlylinkedlist class] allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.
 
 Each singlylinkedlist is composed of a series of singlylinkedlistnodes.  Each singlylinkedlistnode contains a value.
 
-This class is similar to the <a href="../classes/html/classlinkedlist.html">linkedlist class</a> but uses less memory and many of its operations are faster.
+This class is similar to the [../classes/html/classlinkedlist.html linkedlist class] but uses less memory and many of its operations are faster.
 
 However, the move, detach and remove operations are much slower.  If your application must run these operations regularly, you should consider using the linkedlist class instead.
 
 
-<a name="values"></a>
-<h3>Manipulating Values</h3>
+[=#values]
+== Manipulating Values ==
 
 The singlylinkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.
 
@@ -31,13 +29,13 @@ Note that unlike the linkedlist class, there is no method for inserting a value 
 
 {{{#!blockquote
 {{{#!code
-@singlylinkedlist-values.cpp.html@
+@../../examples/singlylinkedlist-values.cpp@
 }}}
 }}}
 
 
-<a name="nodes"></a>
-<h3>Manipulating Nodes</h3>
+[=#nodes]
+== Manipulating Nodes ==
 
 The singlylinkedlist class also provides methods for manipulating list nodes directly.
 
@@ -45,13 +43,13 @@ Note that unlike the linkedlist class, there are no methods for inserting or mov
 
 {{{#!blockquote
 {{{#!code
-@singlylinkedlist-nodes.cpp.html@
+@../../examples/singlylinkedlist-nodes.cpp@
 }}}
 }}}
 
 
-<a name="sort"></a>
-<h3>Sorting</h3>
+[=#sort]
+== Sorting ==
 
 The singlylinkedlist class also provides methods for sorting the list.
 
@@ -59,13 +57,13 @@ Methods for both insertion and heap sort are provided.  Insertion sort is slow, 
 
 {{{#!blockquote
 {{{#!code
-@singlylinkedlist-sort.cpp.html@
+@../../examples/singlylinkedlist-sort.cpp@
 }}}
 }}}
 
 
-<a name="iterate"></a>
-<h3>Iterating Manually</h3>
+[=#iterate]
+== Iterating Manually ==
 
 The singlylinkedlist class also provides methods for manually iterating through the list.
 
@@ -73,13 +71,13 @@ Note, that unlike the linkedlistnode class, the singlylinkedlistnode class does 
 
 {{{#!blockquote
 {{{#!code
-@singlylinkedlist-iterate.cpp.html@
+@../../examples/singlylinkedlist-iterate.cpp@
 }}}
 }}}
 
 
-<a name="types"></a>
-<h3>Data Types</h3>
+[=#types]
+== Data Types ==
 
 Since the singlylinkedlist class is template-based, it can store any type of data.
 
@@ -89,6 +87,6 @@ Note also that the singlylinkedlist class does not manage the data stored in it.
 
 {{{#!blockquote
 {{{#!code
-@singlylinkedlist-types.cpp.html@
+@../../examples/singlylinkedlist-types.cpp@
 }}}
 }}}

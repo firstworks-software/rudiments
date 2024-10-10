@@ -1,37 +1,35 @@
 = Using the hostentry class =
 
-<ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#hostname">Lookup By Hostname</a></li>
-<li><a href="#address">Lookup By Address</a></li>
-</ul>
+* [#intro Introduction]
+* [#hostname Lookup By Hostname]
+* [#address Lookup By Address]
 
 
-<a name="intro"></a>
-<h3>Introduction</h3>
+[=#intro]
+== Introduction ==
 
-The <a href="../classes/html/classhostentry.html">hostentry class</a> provides methods for retrieveing information about hosts by hostname or address.
+The [../classes/html/classhostentry.html hostentry class] provides methods for retrieveing information about hosts by hostname or address.
 
 
-<a name="hostname"></a>
-<h3>Lookup By Hostname</h3>
+[=#hostname]
+== Lookup By Hostname ==
 
 In this example, host information is retrieved by hostname.
 
 {{{#!blockquote
 {{{#!code
-@hostentry-hostname.cpp.html@
+@../../examples/hostentry-hostname.cpp@
 }}}
 }}}
 
 
-<a name="address"></a>
-<h3>Lookup By Address</h3>
+[=#address]
+== Lookup By Address ==
 
 In this example, host information is retrieved by address.  In particular, an IPv4 address.
 
 {{{#!blockquote
 {{{#!code
-@hostentry-address.cpp.html@
+@../../examples/hostentry-address.cpp@
 }}}
 }}}

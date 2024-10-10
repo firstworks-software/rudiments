@@ -1,4 +1,4 @@
-<a name="permissions">
+<a name="permissions 
 = Using the permissions class =
 
 [[Image(../images/traffic_cone.png)]]
@@ -7,6 +7,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@permissions.cpp.html@
+@../../examples/permissions.cpp@
 }}}
 }}}

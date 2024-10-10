@@ -1,148 +1,126 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the dictionary class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the dictionary class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the dictionary class</span><br><br>
+<h1>Using the dictionary class</h1>
 
 <p>The <a href="../classes/html/classdictionary.html">dictionary class</a> allows you to store arbitrary numbers of key/value-pair data.</p>
 
 <p>Each dictionary is composed of a set of dictionarynodes.  Each dictionarynode contains the key and value.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/dictionary.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dictionary.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// create a dictionary of name-value pairs</span>
-	dictionary&lt;<span class="Type">const</span> <span class="Type">char</span> *,<span class="Type">const</span> <span class="Type">char</span> *&gt;	nvp;
+	<i><font color="#9A1900">// create a dictionary of name-value pairs</font></i>
+	<font color="#008080">dictionary&lt;const char *,const char *&gt;</font>	nvp<font color="#990000">;</font>
 
-	<span class="Comment">// set some name-value pairs</span>
-	nvp.setValue(<span class="Constant">&quot;color&quot;</span>,<span class="Constant">&quot;blue&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;number&quot;</span>,<span class="Constant">&quot;one&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;automobile&quot;</span>,<span class="Constant">&quot;car&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;dwelling&quot;</span>,<span class="Constant">&quot;house&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;parent&quot;</span>,<span class="Constant">&quot;dad&quot;</span>);
+	<i><font color="#9A1900">// set some name-value pairs</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"color"</font><font color="#990000">,</font><font color="#FF0000">"blue"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"number"</font><font color="#990000">,</font><font color="#FF0000">"one"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"automobile"</font><font color="#990000">,</font><font color="#FF0000">"car"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"dwelling"</font><font color="#990000">,</font><font color="#FF0000">"house"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"parent"</font><font color="#990000">,</font><font color="#FF0000">"dad"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print the dictionary</span>
-	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	nvp.write();
-	stdoutput.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	<span class="Comment">// replace some values</span>
-	nvp.setValue(<span class="Constant">&quot;number&quot;</span>,<span class="Constant">&quot;two&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;dwelling&quot;</span>,<span class="Constant">&quot;apartment&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;parent&quot;</span>,<span class="Constant">&quot;mom&quot;</span>);
+	<i><font color="#9A1900">// replace some values</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"number"</font><font color="#990000">,</font><font color="#FF0000">"two"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"dwelling"</font><font color="#990000">,</font><font color="#FF0000">"apartment"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"parent"</font><font color="#990000">,</font><font color="#FF0000">"mom"</font><font color="#990000">);</font>
 
-	<span class="Comment">// remove a value</span>
-	nvp.remove(<span class="Constant">&quot;color&quot;</span>);
+	<i><font color="#9A1900">// remove a value</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"color"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print the dictionary</span>
-	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	nvp.write();
-	stdoutput.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	<span class="Comment">// clear the dictionary</span>
-	nvp.clear();
+	<i><font color="#9A1900">// clear the dictionary</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
 
-	<span class="Comment">// set some new values</span>
-	nvp.setValue(<span class="Constant">&quot;road&quot;</span>,<span class="Constant">&quot;highway&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;furniture&quot;</span>,<span class="Constant">&quot;chair&quot;</span>);
-	nvp.setValue(<span class="Constant">&quot;tree&quot;</span>,<span class="Constant">&quot;elm&quot;</span>);
+	<i><font color="#9A1900">// set some new values</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"road"</font><font color="#990000">,</font><font color="#FF0000">"highway"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"furniture"</font><font color="#990000">,</font><font color="#FF0000">"chair"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"tree"</font><font color="#990000">,</font><font color="#FF0000">"elm"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print out the dictionary a different way</span>
-	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	linkedlist&lt;<span class="Type">const</span> <span class="Type">char</span> *&gt;	*keys=nvp.getKeys();
-	<span class="Statement">for</span> (listnode&lt;<span class="Type">const</span> <span class="Type">char</span> *&gt; *kn=keys-&gt;getFirst();
-						kn; kn=kn-&gt;getNext()) {
-		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">=</span><span class="Special">%s</span><span class="Constant"> &quot;</span>,
-			kn-&gt;getValue(),nvp.getValue(kn-&gt;getValue()));
-	}
-	<span class="Statement">delete</span> keys;
-	stdoutput.write(<span class="Special">'\n'</span>);
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// print out the dictionary a different way</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#008080">linkedlist&lt;const char *&gt;</font>	<font color="#990000">*</font>keys<font color="#990000">=</font>nvp<font color="#990000">.</font><b><font color="#000000">getKeys</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">listnode&lt;const char *&gt;</font> <font color="#990000">*</font>kn<font color="#990000">=</font>keys<font color="#990000">-&gt;</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font>
+						kn<font color="#990000">;</font> kn<font color="#990000">=</font>kn<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s=%s "</font><font color="#990000">,</font>
+			kn<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">(),</font>nvp<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font>kn<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">()));</font>
+	<font color="#FF0000">}</font>
+	<b><font color="#0000FF">delete</font></b> keys<font color="#990000">;</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>Since the dictionary class is template-based, it can store any type of data.</p>
 
 <p>Note that the print() method works for primitive types and strings, but for more compex types, it only prints out the address of the object.</p>
 
 <p>Note also that the dictionary class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted when a node is removes or when the list is cleared.  The recommended method for removing a node is to detach the node, delete its dynamically allocated members and then delete the node.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Comment { color: #0000ff; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/dictionary.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dictionary.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Comment">// create a dictionary of name-value pairs</span>
-	dictionary&lt;<span class="Type">char</span> *,<span class="Type">char</span> *&gt;	nvp;
-	nvp.setManageArrayKeys(<span class="Constant">true</span>);
-	nvp.setManageArrayValues(<span class="Constant">true</span>);
+	<i><font color="#9A1900">// create a dictionary of name-value pairs</font></i>
+	<font color="#008080">dictionary&lt;char *,char *&gt;</font>	nvp<font color="#990000">;</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setManageArrayKeys</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setManageArrayValues</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
 
-	<span class="Comment">// set some name-value pairs</span>
-	nvp.setValue(charstring::duplicate(<span class="Constant">&quot;color&quot;</span>),
-			charstring::duplicate(<span class="Constant">&quot;blue&quot;</span>));
-	nvp.setValue(charstring::duplicate(<span class="Constant">&quot;number&quot;</span>),
-			charstring::duplicate(<span class="Constant">&quot;one&quot;</span>));
-	nvp.setValue(charstring::duplicate(<span class="Constant">&quot;automobile&quot;</span>),
-			charstring::duplicate(<span class="Constant">&quot;car&quot;</span>));
-	nvp.setValue(charstring::duplicate(<span class="Constant">&quot;dwelling&quot;</span>),
-			charstring::duplicate(<span class="Constant">&quot;house&quot;</span>));
-	nvp.setValue(charstring::duplicate(<span class="Constant">&quot;parent&quot;</span>),
-			charstring::duplicate(<span class="Constant">&quot;dad&quot;</span>));
+	<i><font color="#9A1900">// set some name-value pairs</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"color"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"blue"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"number"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"one"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"automobile"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"car"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"dwelling"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"house"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"parent"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"dad"</font><font color="#990000">));</font>
 
-	<span class="Comment">// print the dictionary</span>
-	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	nvp.write();
-	stdoutput.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	<span class="Comment">// remove a value</span>
-	nvp.remove((<span class="Type">char</span> *)<span class="Constant">&quot;color&quot;</span>);
+	<i><font color="#9A1900">// remove a value</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">remove</font></b><font color="#990000">((</font><font color="#009900">char</font> <font color="#990000">*)</font><font color="#FF0000">"color"</font><font color="#990000">);</font>
 
-	<span class="Comment">// print the dictionary</span>
-	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
-	nvp.write();
-	stdoutput.write(<span class="Special">'\n'</span>);
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 
-	<span class="Comment">// clear the dictionary</span>
-	nvp.clear();
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	<i><font color="#9A1900">// clear the dictionary</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>

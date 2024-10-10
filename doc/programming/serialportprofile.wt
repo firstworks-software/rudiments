@@ -6,6 +6,6 @@ Coming soon...
 
 {{{#!blockquote
 {{{#!code
-@serialportprofile.cpp.html@
+@../../examples/serialportprofile.cpp@
 }}}
 }}}

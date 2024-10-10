@@ -14,7 +14,7 @@ When data is detached, it is no longer associated with the buffer and must be fr
 
 {{{#!blockquote
 {{{#!code
-@bytebuffer.cpp.html@
+@../../examples/bytebuffer.cpp@
 }}}
 }}}
 

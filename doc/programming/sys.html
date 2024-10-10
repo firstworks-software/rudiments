@@ -1,337 +1,286 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the sys class</title>
-<link href="../css/style.css" rel="stylesheet">
+	<title>Using the sys class</title>
+	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
-<span class="heading">Using the sys class</span><br><br>
+<h1>Using the sys class</h1>
 
 <ul>
-<li><a href="#intro">Introduction</a></li>
-<li><a href="#info">Getting System Information</a></li>
-<li><a href="#reboot">Reboot</a></li>
-<li><a href="#shutdown">Shutdown</a></li>
-<li><a href="#halt">Halt</a></li>
+  <li><a href="=#intro">Introduction</a></li>
+  <li><a href="=#info">Getting System Information</a></li>
+  <li><a href="=#reboot">Reboot</a></li>
+  <li><a href="=#shutdown">Shutdown</a></li>
+  <li><a href="=#halt">Halt</a></li>
 </ul>
 
-<br>
-<a name="intro"></a>
-<h3>Introduction</h3>
+<br/><a name="intro"/><h2>Introduction</h2>
 
 <p>The <a href="../classes/html/classsys.html">sys class</a> provides methods for getting information about the operating system and controlling the state of the operating system.</p>
 
-<br>
-<a name="info"></a>
-<h3>Getting System Information</h3>
+<a name="info"/><h2>Getting System Information</h2>
 
 <p>In this example, various bits of system information are printed out.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sys.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
 
-	<span class="Type">char</span>	*osname=sys::getOperatingSystemName();
-	stdoutput.printf(<span class="Constant">&quot;OS Name		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,osname);
-	<span class="Statement">delete</span>[] osname;
+	<font color="#009900">char</font>	<font color="#990000">*</font>osname<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemName</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Name		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>osname<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> osname<font color="#990000">;</font>
 
-	<span class="Type">char</span>	*release=sys::getOperatingSystemRelease();
-	stdoutput.printf(<span class="Constant">&quot;OS Release	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,release);
-	<span class="Statement">delete</span>[] release;
+	<font color="#009900">char</font>	<font color="#990000">*</font>release<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemRelease</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Release	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>release<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> release<font color="#990000">;</font>
 
-	<span class="Type">char</span>	*version=sys::getOperatingSystemVersion();
-	stdoutput.printf(<span class="Constant">&quot;OS Version	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,version);
-	<span class="Statement">delete</span>[] version;
+	<font color="#009900">char</font>	<font color="#990000">*</font>version<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemVersion</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Version	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>version<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> version<font color="#990000">;</font>
 
-	<span class="Type">char</span>	*arch=sys::getOperatingSystemArchitecture();
-	stdoutput.printf(<span class="Constant">&quot;OS Arch		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,arch);
-	<span class="Statement">delete</span>[] arch;
+	<font color="#009900">char</font>	<font color="#990000">*</font>arch<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemArchitecture</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Arch		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>arch<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> arch<font color="#990000">;</font>
 
-	<span class="Type">char</span>	*hostname=sys::getHostName();
-	stdoutput.printf(<span class="Constant">&quot;Host Name	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,hostname);
-	<span class="Statement">delete</span>[] hostname;
+	<font color="#009900">char</font>	<font color="#990000">*</font>hostname<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getHostName</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Host Name	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hostname<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> hostname<font color="#990000">;</font>
 
-	<span class="Type">double</span>	onemin;
-	<span class="Type">double</span>	fivemin;
-	<span class="Type">double</span>	fifteenmin;
-	sys::getLoadAverages(&amp;onemin,&amp;fivemin,&amp;fifteenmin);
-	stdoutput.printf(<span class="Constant">&quot;Load Averages	: </span><span class="Special">%0.2f</span><span class="Constant">  </span><span class="Special">%0.2f</span><span class="Constant">  </span><span class="Special">%0.2f</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-					onemin,fivemin,fifteenmin);
+	<font color="#009900">double</font>	onemin<font color="#990000">;</font>
+	<font color="#009900">double</font>	fivemin<font color="#990000">;</font>
+	<font color="#009900">double</font>	fifteenmin<font color="#990000">;</font>
+	sys<font color="#990000">::</font><b><font color="#000000">getLoadAverages</font></b><font color="#990000">(&amp;</font>onemin<font color="#990000">,&amp;</font>fivemin<font color="#990000">,&amp;</font>fifteenmin<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Load Averages	: %0.2f  %0.2f  %0.2f</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					onemin<font color="#990000">,</font>fivemin<font color="#990000">,</font>fifteenmin<font color="#990000">);</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Cmd Line Arg Length&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxCommandLineArgumentLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Cmd Line Arg Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxCommandLineArgumentLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Processes Per User&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxProcessesPerUser());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Processes Per User"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxProcessesPerUser</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Host Name Length&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxHostNameLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Host Name Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxHostNameLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Login Name Length&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxLoginNameLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Login Name Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxLoginNameLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Clock Ticks Per Second&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getClockTicksPerSecond());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Clock Ticks Per Second"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getClockTicksPerSecond</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Open Files Per Process&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxOpenFilesPerProcess());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Open Files Per Process"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxOpenFilesPerProcess</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Page Size&quot;</span>
-			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getPageSize());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Page Size"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getPageSize</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Allocation Granularity&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getAllocationGranularity());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Allocation Granularity"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getAllocationGranularity</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Open Streams Per Process&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxOpenStreamsPerProcess());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Open Streams Per Process"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxOpenStreamsPerProcess</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Symlink Loops&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxSymlinkLoops());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Symlink Loops"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSymlinkLoops</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Terminal Device Name Length&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxTerminalDeviceNameLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Terminal Device Name Length"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxTerminalDeviceNameLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Timezone Name Length&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxTimezoneNameLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Timezone Name Length"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxTimezoneNameLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Line Length&quot;</span>
-			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxLineLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Line Length"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxLineLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Physical Page Count&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getPhysicalPageCount());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Physical Page Count"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getPhysicalPageCount</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Available Physical Page Count&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getAvailablePhysicalPageCount());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Available Physical Page Count"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getAvailablePhysicalPageCount</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Processor Count&quot;</span>
-			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getProcessorCount());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Processor Count"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getProcessorCount</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Processor Count&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxProcessorCount());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Processor Count"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxProcessorCount</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Processors Online&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getProcessorsOnline());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Processors Online"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getProcessorsOnline</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Supplemental Groups Per User&quot;</span>
-			<span class="Constant">&quot;	: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxSupplementalGroupsPerUser());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Supplemental Groups Per User"</font>
+			<font color="#FF0000">"	: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSupplementalGroupsPerUser</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Delay Timer Expirations&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxDelayTimerExpirations());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Delay Timer Expirations"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxDelayTimerExpirations</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Realtime Signals&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxRealtimeSignals());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Realtime Signals"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxRealtimeSignals</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Sempahores Per Process&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxSemaphoresPerProcess());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Sempahores Per Process"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSemaphoresPerProcess</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Semaphore Value&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxSemaphoreValue());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Semaphore Value"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSemaphoreValue</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Signal Queue Length&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxSignalQueueLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Signal Queue Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSignalQueueLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Timers Per Process&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxTimersPerProcess());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Timers Per Process"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxTimersPerProcess</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Suggested Group Entry Buffer Size&quot;</span>
-			<span class="Constant">&quot;	: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getSuggestedGroupEntryBufferSize());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Suggested Group Entry Buffer Size"</font>
+			<font color="#FF0000">"	: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getSuggestedGroupEntryBufferSize</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Suggested Passwd Entry Buffer Size&quot;</span>
-			<span class="Constant">&quot;	: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getSuggestedPasswordEntryBufferSize());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Suggested Passwd Entry Buffer Size"</font>
+			<font color="#FF0000">"	: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getSuggestedPasswordEntryBufferSize</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Min Thread Stack Size&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMinThreadStackSize());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Min Thread Stack Size"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMinThreadStackSize</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Threads Per Process&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxThreadsPerProcess());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Threads Per Process"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxThreadsPerProcess</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Thread Destructor Iterations&quot;</span>
-			<span class="Constant">&quot;		: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getThreadDestructorIterations());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Thread Destructor Iterations"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getThreadDestructorIterations</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Thread Keys&quot;</span>
-			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxThreadKeys());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Thread Keys"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxThreadKeys</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max At-Exit Functions&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxAtExitFunctions());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max At-Exit Functions"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxAtExitFunctions</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;CPUSet Size&quot;</span>
-			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getCpuSetSize());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"CPUSet Size"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getCpuSetSize</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Password Length&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxPasswordLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Password Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxPasswordLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Log Name Length&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxLogNameLength());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Log Name Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxLogNameLength</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Max Process ID&quot;</span>
-			<span class="Constant">&quot;				: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getMaxProcessId());
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Process ID"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxProcessId</font></b><font color="#990000">());</font>
 
-	stdoutput.printf(<span class="Constant">&quot;Directory Separator&quot;</span>
-			<span class="Constant">&quot;			: </span><span class="Special">%c</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
-			sys::getDirectorySeparator());
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Directory Separator"</font>
+			<font color="#FF0000">"			: %c</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getDirectorySeparator</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 <p>Note that not all systems support every piece of information.  If a piece of information is unsupported, then a -1 is returned.</p>
 
-<br>
-<a name="reboot"></a>
-<h3>Reboot</h3>
+<a name="reboot"/><h2>Reboot</h2>
 
 <p>This example reboots the system, when run as root or Administrator.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sys.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
-	<span class="Statement">if</span> (!sys::reboot()) {
-		<span class="Type">char</span>	*err=error::getErrorString();
-		stdoutput.printf(<span class="Constant">&quot;reboot failed: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,err);
-		<span class="Statement">delete</span>[] err;
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>sys<font color="#990000">::</font><b><font color="#000000">reboot</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"reboot failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="shutdown"></a>
-<h3>Shutdown</h3>
+<br/><a name="shutdown"/><h2>Shutdown</h2>
 
 <p>This example performs a graceful system shutdown, when run as root or Administrator.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sys.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
-	<span class="Statement">if</span> (!sys::shutDown()) {
-		<span class="Type">char</span>	*err=error::getErrorString();
-		stdoutput.printf(<span class="Constant">&quot;shutdown failed: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,err);
-		<span class="Statement">delete</span>[] err;
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>sys<font color="#990000">::</font><b><font color="#000000">shutDown</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"shutdown failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
-<br>
-<a name="halt"></a>
-<h3>Halt</h3>
+<br/><a name="halt"/><h2>Halt</h2>
 
 <p>This example performs a less-graceful system halt, when run as root or Administrator.</p>
 
-<blockquote class="code">
-<style>
-<!--
-pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
-body { font-family: monospace; color: #000000; background-color: #ffffff; }
-* { font-size: 1em; }
-.PreProc { color: #6a0dad; }
-.Constant { color: #ff00ff; }
-.Special { color: #6a5acd; }
-.Type { color: #2e8b57; font-weight: bold; }
-.Statement { color: #a52a2a; font-weight: bold; }
--->
-</style>
-<pre id='vimCodeElement'>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/sys.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/error.h&gt;</span>
-<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
-<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
-	<span class="Statement">if</span> (!sys::halt()) {
-		<span class="Type">char</span>	*err=error::getErrorString();
-		stdoutput.printf(<span class="Constant">&quot;halt failed: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,err);
-		<span class="Statement">delete</span>[] err;
-	}
-}
-</pre>
-<!-- vim: set foldmethod=manual : -->
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>sys<font color="#990000">::</font><b><font color="#000000">halt</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"halt failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
 </blockquote>
-
 </body>
 </html>
