@@ -6,7 +6,7 @@ function contains(str,part) {
 }
 
 function setActive(btn,img) {
-	document.getElementById("button-"+btn).style.backgroundImage="url(images/"+img+")";
+	document.getElementById("button-"+btn).style.backgroundImage="url(../images/"+img+")";
 }
 
 function setButton() {
