@@ -52,6 +52,9 @@ install:
 	$(MKINSTALLDIRS) $(docdir)/programming
 	$(CP) programming/*.html $(docdir)/programming
 	$(CHMOD) 755 $(docdir)/programming/*
+	$(MKINSTALLDIRS) $(docdir)/programming/js
+	$(CP) programming/js/* $(docdir)/programming/js
+	$(CHMOD) 644 $(docdir)/programming/js/*
 	$(MKINSTALLDIRS) $(docdir)/slides
 	$(CP) slides/* $(docdir)/slides
 	$(CHMOD) 755 $(docdir)/slides/*
