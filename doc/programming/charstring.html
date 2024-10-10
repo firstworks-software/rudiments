@@ -1,0 +1,710 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the charstring class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the charstring class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#manip">Manipulating Character Strings</a></li>
+<li><a href="#comp">Comparing Character Strings</a></li>
+<li><a href="#find">Finding Data in Character Strings</a></li>
+<li><a href="#trans">Transforming Character Strings</a></li>
+<li><a href="#parsing">Parsing Character Strings</a></li>
+<li><a href="#conversion">Converting Numbers and Amounts</a></li>
+<li><a href="#encoding">Encoding Character Strings</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classcharstring.html">charstring class</a> provides static methods for manipulating C-style character strings.</p>
+
+<p>In addition to some unique methods, analogs for the standard C string functions are provided.  However, unlike the standard C string functions, the charstring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.</p>
+
+<br>
+<a name="manip"></a>
+<h3>Manipulating Character Strings</h3>
+
+<p>The charstring class provides methods for zeroing, duplicating, appending, copying data to, printing formatted data to, and determining the lengths of character strings.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">char</span>		buffer[<span class="Constant">32</span>];
+
+
+	<span class="Comment">// zero the buffer</span>
+	charstring::zero(buffer,<span class="Statement">sizeof</span>(buffer));
+
+
+	<span class="Comment">// append strings, integers and floats</span>
+	charstring::append(buffer,<span class="Constant">&quot;Hello &quot;</span>);
+	charstring::append(buffer,<span class="Constant">&quot;there!&quot;</span>,<span class="Constant">6</span>);
+	charstring::append(buffer,<span class="Constant">&quot; &quot;</span>);
+	charstring::append(buffer,(<span class="Type">uint64_t</span>)<span class="Constant">1</span>);
+	charstring::append(buffer,(<span class="Type">uint64_t</span>)<span class="Constant">2</span>);
+	charstring::append(buffer,(<span class="Type">uint64_t</span>)<span class="Constant">3</span>);
+	charstring::append(buffer,<span class="Constant">&quot; &quot;</span>);
+	charstring::append(buffer,<span class="Constant">1.234</span>,<span class="Constant">4</span>,<span class="Constant">3</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,buffer);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// get length</span>
+	stdoutput.printf(<span class="Constant">&quot;length(buffer)=</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,charstring::getLength(buffer));
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// zero the buffer again</span>
+	charstring::zero(buffer,<span class="Statement">sizeof</span>(buffer));
+
+
+	<span class="Comment">// copy to the beginning of the buffer</span>
+	charstring::copy(buffer,<span class="Constant">&quot;Hello!&quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,buffer);
+
+
+	<span class="Comment">// copy the specified number of bytes to the beginning of the buffer</span>
+	charstring::copy(buffer,<span class="Constant">&quot;Hello again!&quot;</span>,<span class="Constant">6</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,buffer);
+
+
+	<span class="Comment">// copy to the specified offset</span>
+	charstring::copy(buffer,<span class="Constant">6</span>,<span class="Constant">&quot;again!&quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,buffer);
+
+
+	<span class="Comment">// copy the specified number of bytes to the specified offset</span>
+	charstring::copy(buffer,<span class="Constant">12</span>,<span class="Constant">&quot; Hi!  blah blah blah&quot;</span>,<span class="Constant">4</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,buffer);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// get length</span>
+	stdoutput.printf(<span class="Constant">&quot;length(buffer)=</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,charstring::getLength(buffer));
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// zero the buffer again</span>
+	charstring::zero(buffer,<span class="Statement">sizeof</span>(buffer));
+
+
+	<span class="Comment">// safely copy a long string to a smaller buffer</span>
+	charstring::safeCopy(buffer,<span class="Statement">sizeof</span>(buffer),
+				<span class="Constant">&quot;This string is longer than the buffer&quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%.*s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,<span class="Statement">sizeof</span>(buffer),buffer);
+
+
+	<span class="Comment">// safely copy the specified number of bytes of a</span>
+	<span class="Comment">// long string to a smaller buffer</span>
+	charstring::safeCopy(buffer,<span class="Statement">sizeof</span>(buffer),
+				<span class="Constant">&quot;This string is longer than the buffer&quot;</span>,<span class="Constant">36</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%.*s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,<span class="Statement">sizeof</span>(buffer),buffer);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// get length</span>
+	stdoutput.printf(<span class="Constant">&quot;length(buffer)=</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,charstring::getLength(buffer));
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// zero the buffer again</span>
+	charstring::zero(buffer,<span class="Statement">sizeof</span>(buffer));
+
+
+	<span class="Comment">// print formatted data to the buffer</span>
+	charstring::printf(buffer,<span class="Statement">sizeof</span>(buffer),<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">, </span><span class="Special">%05d</span><span class="Constant">, </span><span class="Special">%7.4f</span><span class="Constant">&quot;</span>,
+						<span class="Constant">&quot;hello&quot;</span>,<span class="Constant">100</span>,<span class="Constant">123.4567</span>);
+	stdoutput.printf(<span class="Constant">&quot;buffer: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,buffer);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// get length</span>
+	stdoutput.printf(<span class="Constant">&quot;length(buffer)=</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,charstring::getLength(buffer));
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// duplicate a string</span>
+	<span class="Type">char</span>	*completedup=charstring::duplicate(<span class="Constant">&quot;Hello there!&quot;</span>);
+	<span class="Type">char</span>	*partialdup=charstring::duplicate(<span class="Constant">&quot;Hello there!&quot;</span>,<span class="Constant">5</span>);
+	stdoutput.printf(<span class="Constant">&quot;complete duplicate of </span><span class="Special">\&quot;</span><span class="Constant">Hello there!</span><span class="Special">\&quot;</span><span class="Constant">: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,
+								completedup);
+	stdoutput.printf(<span class="Constant">&quot; partial duplicate of </span><span class="Special">\&quot;</span><span class="Constant">Hello there!</span><span class="Special">\&quot;</span><span class="Constant">: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,
+								partialdup);
+	<span class="Statement">delete</span>[] completedup;
+	<span class="Statement">delete</span>[] partialdup;
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="comp"></a>
+<h3>Comparing Character Strings</h3>
+
+<p>The charstring class also provides methods for performing various character string comparisons.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// comparing string...</span>
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> strings[]={
+		<span class="Constant">&quot;hello&quot;</span>,<span class="Constant">&quot;HELLO&quot;</span>,<span class="Constant">&quot;hello there&quot;</span>,<span class="Constant">&quot;HELLO THERE&quot;</span>,<span class="Constant">NULL</span>
+	};
+
+	stdoutput.write(<span class="Constant">&quot;direct comparison...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *s=strings; *s; s++) {
+		stdoutput.printf(<span class="Constant">&quot;  does </span><span class="Special">\&quot;</span><span class="Constant">hello</span><span class="Special">\&quot;</span><span class="Constant">=</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">  </span><span class="Special">%s</span><span class="Constant">?</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*s,
+			(!charstring::compare(<span class="Constant">&quot;hello&quot;</span>,*s))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.write(<span class="Constant">&quot;only first 5 bytes...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *s=strings; *s; s++) {
+		stdoutput.printf(<span class="Constant">&quot;  does </span><span class="Special">\&quot;</span><span class="Constant">hello</span><span class="Special">\&quot;</span><span class="Constant">=</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*s,
+			(!charstring::compare(<span class="Constant">&quot;hello&quot;</span>,*s,<span class="Constant">5</span>))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.write(<span class="Constant">&quot;ignoring case...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *s=strings; *s; s++) {
+		stdoutput.printf(<span class="Constant">&quot;  does </span><span class="Special">\&quot;</span><span class="Constant">hello</span><span class="Special">\&quot;</span><span class="Constant">=</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*s,
+			(!charstring::compareIgnoringCase(<span class="Constant">&quot;hello&quot;</span>,*s,<span class="Constant">5</span>))?
+								<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.write(<span class="Constant">&quot;ignoring case, only first 5 bytes...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *s=strings; *s; s++) {
+		stdoutput.printf(<span class="Constant">&quot;  does </span><span class="Special">\&quot;</span><span class="Constant">hello</span><span class="Special">\&quot;</span><span class="Constant">=</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*s,
+			(!charstring::compareIgnoringCase(<span class="Constant">&quot;hello&quot;</span>,*s,<span class="Constant">5</span>))?
+								<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+
+	<span class="Comment">// member of a set...</span>
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> greetings[]={
+		<span class="Constant">&quot;hello&quot;</span>,<span class="Constant">&quot;hi&quot;</span>,<span class="Constant">&quot;good morning&quot;</span>,<span class="Constant">NULL</span>
+	};
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> lowercaseexpressions[]={
+		<span class="Constant">&quot;hello&quot;</span>,<span class="Constant">&quot;hi&quot;</span>,<span class="Constant">&quot;bye&quot;</span>,<span class="Constant">&quot;goodbye&quot;</span>,<span class="Constant">NULL</span>
+	};
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> uppercaseexpressions[]={
+		<span class="Constant">&quot;HELLO&quot;</span>,<span class="Constant">&quot;HI&quot;</span>,<span class="Constant">&quot;BYE&quot;</span>,<span class="Constant">&quot;GOODBYE&quot;</span>,<span class="Constant">NULL</span>
+	};
+
+	stdoutput.write(<span class="Constant">&quot;considering case...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *le=lowercaseexpressions; *le; le++) {
+		stdoutput.printf(<span class="Constant">&quot;  is </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant"> a greeting?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*le,
+			(charstring::isInSet(*le,greetings))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.write(<span class="Constant">&quot;ignoring case...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *ue=uppercaseexpressions; *ue; ue++) {
+		stdoutput.printf(<span class="Constant">&quot;  is </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant"> a greeting?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*ue,
+			(charstring::isInSetIgnoringCase(*ue,greetings))?
+								<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// does one string contain another?</span>
+	<span class="Type">const</span> <span class="Type">char</span>	phrase[]=<span class="Constant">&quot;the quick brown fox jumped over the lazy dog&quot;</span>;
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> lowercasewords[]={
+		<span class="Constant">&quot;quick&quot;</span>,<span class="Constant">&quot;brown&quot;</span>,<span class="Constant">&quot;fox&quot;</span>,<span class="Constant">&quot;lazy&quot;</span>,<span class="Constant">&quot;dog&quot;</span>,<span class="Constant">&quot;hello&quot;</span>,<span class="Constant">&quot;goodbye&quot;</span>,<span class="Constant">NULL</span>
+	};
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> uppercasewords[]={
+		<span class="Constant">&quot;QUICK&quot;</span>,<span class="Constant">&quot;BROWN&quot;</span>,<span class="Constant">&quot;FOX&quot;</span>,<span class="Constant">&quot;LAZY&quot;</span>,<span class="Constant">&quot;DOG&quot;</span>,<span class="Constant">&quot;HELLO&quot;</span>,<span class="Constant">&quot;GOODBYE&quot;</span>,<span class="Constant">NULL</span>
+	};
+
+	stdoutput.write(<span class="Constant">&quot;considering case...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *lw=lowercasewords; *lw; lw++) {
+		stdoutput.printf(<span class="Constant">&quot;  does </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant"> contain </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			phrase,*lw,
+			(charstring::contains(phrase,*lw))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.write(<span class="Constant">&quot;ignoring case...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *uw=uppercasewords; *uw; uw++) {
+		stdoutput.printf(<span class="Constant">&quot;  does </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant"> contain </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+			phrase,*uw,
+			(charstring::contains(phrase,*uw))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="find"></a>
+<h3>Finding Data in Character Strings</h3>
+
+<p>The charstring class also provides methods for finding characters or other character strings within character strings.</p>
+
+<p>The findFirst()/findFirstOfSet() and findLast() methods return the first/last instance of a character/string/set within a string, or NULL if no match is found.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// first/last instances of a character or string...</span>
+	<span class="Type">const</span> <span class="Type">char</span>	phrase[]=<span class="Constant">&quot;1 and 2 and 3 and 4&quot;</span>;
+	<span class="Type">const</span> <span class="Type">char</span>	numbers[]=<span class="Constant">&quot;1234&quot;</span>;
+
+	<span class="Type">const</span> <span class="Type">char</span>	*firsta=charstring::findFirst(phrase,<span class="Constant">'a'</span>);
+	<span class="Type">const</span> <span class="Type">char</span>	*firstand=charstring::findFirst(phrase,<span class="Constant">&quot;and&quot;</span>);
+
+	<span class="Type">const</span> <span class="Type">char</span>	*lasta=charstring::findLast(phrase,<span class="Constant">'a'</span>);
+	<span class="Type">const</span> <span class="Type">char</span>	*lastand=charstring::findLast(phrase,<span class="Constant">&quot;and&quot;</span>);
+
+	<span class="Type">const</span> <span class="Type">char</span>	*firstnum=charstring::findFirstOfSet(phrase,numbers);
+
+	stdoutput.printf(<span class="Constant">&quot;in the phrase: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">...</span><span class="Special">\n</span><span class="Constant">&quot;</span>,phrase);
+	stdoutput.printf(<span class="Constant">&quot;  the first 'a' is	: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,firsta);
+	stdoutput.printf(<span class="Constant">&quot;  the first </span><span class="Special">\&quot;</span><span class="Constant">and</span><span class="Special">\&quot;</span><span class="Constant"> is	: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,firstand);
+	stdoutput.printf(<span class="Constant">&quot;  the last 'a' is	: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,lasta);
+	stdoutput.printf(<span class="Constant">&quot;  the last </span><span class="Special">\&quot;</span><span class="Constant">and</span><span class="Special">\&quot;</span><span class="Constant"> is	: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,lastand);
+	stdoutput.printf(<span class="Constant">&quot;  the first number is	: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,firstnum);
+	stdoutput.write(<span class="Special">'\n'</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a href="trans"></a>
+<h3>Transforming Character Strings</h3>
+
+<p>The charstring class also provides methods for transforming character strings.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">char</span>	hellothere[]=<span class="Constant">&quot;   hello there!   &quot;</span>;
+
+	<span class="Comment">// upper-case...</span>
+	charstring::upper(hellothere);
+	stdoutput.printf(<span class="Constant">&quot;upper cased:   </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,hellothere);
+
+	<span class="Comment">// lower-case...</span>
+	charstring::lower(hellothere);
+	stdoutput.printf(<span class="Constant">&quot;lower cased:   </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,hellothere);
+
+	<span class="Comment">// capitalized...</span>
+	charstring::capitalize(hellothere);
+	stdoutput.printf(<span class="Constant">&quot;capitalized:   </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,hellothere);
+
+	<span class="Comment">// right trimmed...</span>
+	charstring::rightTrim(hellothere);
+	stdoutput.printf(<span class="Constant">&quot;right trimmed: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,hellothere);
+
+	<span class="Comment">// left trimmed...</span>
+	charstring::leftTrim(hellothere);
+	stdoutput.printf(<span class="Constant">&quot;left trimmed:  </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,hellothere);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+
+	<span class="Type">char</span>	paragraph[]=<span class="Constant">&quot;Hello there.</span><span class="Special">\n</span><span class="Constant"> This is a paragraph</span><span class="Special">\n</span><span class="Constant"> &quot;</span>
+				<span class="Constant">&quot;with random</span><span class="Special">\n</span><span class="Constant"> carriage returns</span><span class="Special">\n</span><span class="Constant"> &quot;</span>
+				<span class="Constant">&quot;scattered throughout.&quot;</span>;
+
+	<span class="Comment">// original...</span>
+	stdoutput.printf(<span class="Constant">&quot;original text:</span><span class="Special">\n</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,paragraph);
+
+	<span class="Comment">// stripped of carraige returns...</span>
+	charstring::strip(paragraph,<span class="Special">'\n'</span>);
+	stdoutput.printf(<span class="Constant">&quot;text without carriage returns:</span><span class="Special">\n</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,paragraph);
+
+	<span class="Comment">// stripped of </span><span class="Constant">&quot;Hello there.&quot;</span><span class="Comment">...</span>
+	charstring::strip(paragraph,<span class="Constant">&quot;Hello there. &quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;text without </span><span class="Special">\&quot;</span><span class="Constant">Hello There. </span><span class="Special">\&quot;</span><span class="Constant">:</span><span class="Special">\n</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,paragraph);
+
+	<span class="Comment">// with replacements...</span>
+	charstring::replace(paragraph,<span class="Constant">' '</span>,<span class="Constant">'_'</span>);
+	stdoutput.printf(<span class="Constant">&quot;text with spaces replaced by underscores:</span><span class="Special">\n</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,
+								paragraph);
+
+
+
+	<span class="Type">char</span>	paddedtext[]=<span class="Constant">&quot;   hello   &quot;</span>;
+
+	<span class="Comment">// original...</span>
+	stdoutput.printf(<span class="Constant">&quot;original text:   </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,paddedtext);
+
+	<span class="Comment">// left-justified...</span>
+	charstring::leftJustify(paddedtext,charstring::getLength(paddedtext));
+	stdoutput.printf(<span class="Constant">&quot;left-justified:  </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,paddedtext);
+
+	<span class="Comment">// right-justified...</span>
+	charstring::rightJustify(paddedtext,charstring::getLength(paddedtext));
+	stdoutput.printf(<span class="Constant">&quot;right-justified: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,paddedtext);
+
+	<span class="Comment">// centered...</span>
+	charstring::center(paddedtext,charstring::getLength(paddedtext));
+	stdoutput.printf(<span class="Constant">&quot;centered:        </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,paddedtext);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+
+	<span class="Type">const</span> <span class="Type">char</span>	unpaddedtext[]=<span class="Constant">&quot;hellothere&quot;</span>;
+
+	<span class="Comment">// original...</span>
+	stdoutput.printf(<span class="Constant">&quot;original text:      </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,unpaddedtext);
+
+	<span class="Comment">// left-padded</span>
+	<span class="Type">char</span>	*leftpadded=charstring::pad(unpaddedtext,<span class="Constant">' '</span>,-<span class="Constant">1</span>,<span class="Constant">15</span>);
+	stdoutput.printf(<span class="Constant">&quot;left padded text:   </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,leftpadded);
+	<span class="Statement">delete</span>[] leftpadded;
+
+	<span class="Comment">// right-padded</span>
+	<span class="Type">char</span>	*rightpadded=charstring::pad(unpaddedtext,<span class="Constant">' '</span>,<span class="Constant">1</span>,<span class="Constant">15</span>);
+	stdoutput.printf(<span class="Constant">&quot;right padded text:  </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,rightpadded);
+	<span class="Statement">delete</span>[] rightpadded;
+
+	<span class="Comment">// center-padded</span>
+	<span class="Type">char</span>	*centerpadded=charstring::pad(unpaddedtext,<span class="Constant">' '</span>,<span class="Constant">0</span>,<span class="Constant">15</span>);
+	stdoutput.printf(<span class="Constant">&quot;center padded text: </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,centerpadded);
+	<span class="Statement">delete</span>[] centerpadded;
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="parsing"></a>
+<h3>Parsing Character Strings</h3>
+
+<p>The charstring class also provides methods for splitting character strings, finding substrings and inserting text into a character string.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">const</span> <span class="Type">char</span>	str[]=<span class="Constant">&quot;All along the untrodden paths of the future...&quot;</span>;
+
+	<span class="Comment">// split...</span>
+	<span class="Type">char</span>		**parts;
+	<span class="Type">uint64_t</span>	partcount;
+	charstring::split(str,<span class="Constant">&quot; &quot;</span>,<span class="Constant">true</span>,&amp;parts,&amp;partcount);
+
+	stdoutput.printf(<span class="Constant">&quot;original string:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,str);
+	stdoutput.printf(<span class="Constant">&quot;split on space:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">uint64_t</span> i=<span class="Constant">0</span>; i&lt;partcount; i++) {
+		stdoutput.printf(<span class="Constant">&quot;  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,parts[i]);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">for</span> (<span class="Type">uint64_t</span> i=<span class="Constant">0</span>; i&lt;partcount; i++) {
+		<span class="Statement">delete</span>[] parts[i];
+	}
+	<span class="Statement">delete</span>[] parts;
+
+
+
+	<span class="Comment">// substring...</span>
+	<span class="Type">char</span>	*substring1=charstring::getSubString(str,<span class="Constant">14</span>);
+	<span class="Type">char</span>	*substring2=charstring::getSubString(str,<span class="Constant">14</span>,<span class="Constant">28</span>);
+
+	stdoutput.printf(<span class="Constant">&quot;string starting at index 14: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,substring1);
+	stdoutput.printf(<span class="Constant">&quot;string from index 14 to 21 : </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,substring2);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">delete</span>[] substring1;
+	<span class="Statement">delete</span>[] substring2;
+
+
+
+	<span class="Comment">// insert string...</span>
+	<span class="Type">char</span>	*newstr=charstring::insertString(str,
+			<span class="Constant">&quot;, I can see the footprints of an unseen hand&quot;</span>,<span class="Constant">43</span>);
+
+	stdoutput.printf(<span class="Constant">&quot;string after insert:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,newstr);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">delete</span>[] newstr;
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="conversion"></a>
+<h3>Converting Numbers and Amounts</h3>
+
+<p>The charstring class also provides methods for converting numbers and dollar amounts to and from character strings.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// conversion of numbers to strings...</span>
+	<span class="Type">char</span>	*intstr=charstring::parseNumber((<span class="Type">uint64_t</span>)<span class="Constant">12345</span>);
+	<span class="Type">char</span>	*floatstr=charstring::parseNumber((<span class="Type">float</span>)<span class="Constant">12.345</span>,<span class="Constant">5</span>,<span class="Constant">3</span>);
+
+	stdoutput.printf(<span class="Constant">&quot;numbers as strings: </span><span class="Special">%s</span><span class="Constant">, </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,intstr,floatstr);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">delete</span>[] intstr;
+	<span class="Statement">delete</span>[] floatstr;
+
+
+
+	<span class="Comment">// conversion of strings to numbers...</span>
+	<span class="Type">int64_t</span>		intnum=charstring::convertToInteger(<span class="Constant">&quot;12345&quot;</span>);
+	<span class="Type">uint64_t</span>	uintnum=charstring::convertToUnsignedInteger(<span class="Constant">&quot;12345&quot;</span>);
+	<span class="Type">long</span> <span class="Type">double</span>	floatnum=charstring::convertToFloat(<span class="Constant">&quot;12.345&quot;</span>);
+
+	stdoutput.printf(<span class="Constant">&quot;strings as numbers: </span><span class="Special">%lld</span><span class="Constant">, </span><span class="Special">%lld</span><span class="Constant">, </span><span class="Special">%5.3Lf</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						intnum,uintnum,floatnum);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+
+	<span class="Comment">// identification of numeric strings...</span>
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> numbers[]={
+		<span class="Constant">&quot;1&quot;</span>,<span class="Constant">&quot;-1&quot;</span>,<span class="Constant">&quot;1.1&quot;</span>,<span class="Constant">&quot;-1.1&quot;</span>,<span class="Constant">&quot;one&quot;</span>,<span class="Constant">&quot;hello&quot;</span>,<span class="Constant">NULL</span>
+	};
+
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *n=numbers; *n; n++) {
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant"> </span><span class="Special">%s</span><span class="Constant"> a number</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*n,
+				(charstring::isNumber(*n))?<span class="Constant">&quot;is&quot;</span>:<span class="Constant">&quot;is not&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant"> </span><span class="Special">%s</span><span class="Constant"> an integer</span><span class="Special">\n</span><span class="Constant">&quot;</span>,*n,
+				(charstring::isInteger(*n))?<span class="Constant">&quot;is&quot;</span>:<span class="Constant">&quot;is not&quot;</span>);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+
+	<span class="Comment">// integer lengths</span>
+	<span class="Type">uint64_t</span>	integers[]={
+		<span class="Constant">1</span>,<span class="Constant">23</span>,<span class="Constant">456</span>,<span class="Constant">7890</span>,<span class="Constant">12345</span>,<span class="Constant">678901</span>,<span class="Constant">0</span>
+	};
+
+	<span class="Statement">for</span> (<span class="Type">uint64_t</span> *i=integers; *i; i++) {
+		stdoutput.printf(<span class="Constant">&quot;it would take </span><span class="Special">%d</span><span class="Constant"> bytes to store &quot;</span>
+					<span class="Constant">&quot;</span><span class="Special">%lld</span><span class="Constant"> as a string</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					charstring::getIntegerLength(*i),*i);
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+
+	<span class="Comment">// dollar amounts</span>
+	<span class="Type">const</span> <span class="Type">char</span>	dollarstr[]=<span class="Constant">&quot;$123.45&quot;</span>;
+	<span class="Type">int64_t</span>	pennies=charstring::convertAmount(dollarstr);
+	<span class="Type">char</span>	*dollars=charstring::convertAmount(pennies);
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant"> as pennies: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,dollarstr,pennies);
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%lld</span><span class="Constant"> pennies as dollars: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,pennies,dollars);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="encoding"></a>
+<h3>Encoding Character Strings</h3>
+
+<p>The charstring class also provides methods for escaping, encoding and obfuscating character strings.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/charstring.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+
+	<span class="Comment">// backslash-escaping of quote, backslash and space characters...</span>
+	<span class="Type">const</span> <span class="Type">char</span>	path[]=<span class="Constant">&quot;</span><span class="Special">\&quot;</span><span class="Constant">C:</span><span class="Special">\\</span><span class="Constant">Program Files</span><span class="Special">\\</span><span class="Constant">Firstworks</span><span class="Special">\&quot;</span><span class="Constant">&quot;</span>;
+
+	stdoutput.printf(<span class="Constant">&quot;original path:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,path);
+
+	<span class="Type">char</span>	*escapedpath=charstring::escape(path,<span class="Constant">&quot;</span><span class="Special">\&quot;\\</span><span class="Constant"> &quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;escaped path:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,escapedpath);
+
+	<span class="Type">char</span>	*unescapedpath=charstring::unescape(escapedpath);
+	stdoutput.printf(<span class="Constant">&quot;unescaped path:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,unescapedpath);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">delete</span>[] escapedpath;
+	<span class="Statement">delete</span>[] unescapedpath;
+
+
+
+	<span class="Comment">// url encoding...</span>
+	<span class="Type">const</span> <span class="Type">char</span>	urlstr[]=<span class="Constant">&quot;string with spaces and symbols: </span><span class="Special">\\</span><span class="Constant">{}</span><span class="Special">\&quot;\'</span><span class="Constant">&quot;</span>;
+
+	stdoutput.printf(<span class="Constant">&quot;original string:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,urlstr);
+
+	<span class="Type">char</span>	*encodedstr=charstring::urlEncode(urlstr);
+	stdoutput.printf(<span class="Constant">&quot;url encoded string:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,encodedstr);
+
+	<span class="Type">char</span>	*unencodedstr=charstring::urlDecode(encodedstr);
+	stdoutput.printf(<span class="Constant">&quot;url unencoded string:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,unencodedstr);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">delete</span>[] encodedstr;
+	<span class="Statement">delete</span>[] unencodedstr;
+
+
+
+	<span class="Comment">// base-</span><span class="Constant">64</span><span class="Comment"> encoding...</span>
+	<span class="Type">const</span> byte_t	text[]=<span class="Constant">&quot;All along the untrodden &quot;</span>
+					<span class="Constant">&quot;paths of the future...&quot;</span>;
+
+	stdoutput.printf(<span class="Constant">&quot;original text:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,text);
+
+	<span class="Type">char</span>	*encodedtext=charstring::base64Encode(text);
+	stdoutput.printf(<span class="Constant">&quot;encoded text:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,encodedtext);
+
+	byte_t	*decodedtext=charstring::base64Decode(encodedtext);
+	stdoutput.printf(<span class="Constant">&quot;decoded text:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,decodedtext);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Statement">delete</span>[] encodedtext;
+	<span class="Statement">delete</span>[] decodedtext;
+
+
+
+	<span class="Comment">// obfuscation...</span>
+	<span class="Type">char</span>	data[]=<span class="Constant">&quot;sensitive data&quot;</span>;
+
+	stdoutput.printf(<span class="Constant">&quot;original data:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,data);
+
+	charstring::obfuscate(data);
+	stdoutput.write(<span class="Constant">&quot;obfuscated data:</span><span class="Special">\n</span><span class="Constant">  &quot;</span>);
+	stdoutput.safePrint(data);
+	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+	charstring::deobfuscate(data);
+	stdoutput.printf(<span class="Constant">&quot;deobfuscated data:</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,data);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the parameterstring class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the parameterstring class</span><br><br>
+
+<p>Sometimes a function needs to take an arbitrary set of parameters.  For
+example, a function for connecting to a database may need host, port, socket,
+username and password, any of which could be omitted depending on the
+database.  Though C++ support methods which take an arbitrary number of
+parameters, sometimes it is more convenient to for the method to accept a
+single string parameter with name/value pairs in it instead.</p>
+
+<p>The parameterstring class provides methods for parsing and accessing
+a parameter string of the following form:</p>
+
+<blockquote>
+name1='value1';name2='value2';name3='value3'
+</blockquote>
+
+<p>The single quotes are optional.  If a parameter needs to contain a single
+quote, then it can be escaped as follows:</p>
+
+<blockquote>
+name='\'value\''
+</blockquote>
+
+<p>Backslashes can be similarly escaped:</p>
+
+<blockquote>
+name='\\value\\'
+</blockquote>
+
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

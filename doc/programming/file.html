@@ -1,0 +1,1094 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the file class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="file">
+<span class="heading">Using the file class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#create">Creating a File</a></li>
+<li><a href="#remove">Removing a File</a></li>
+<li><a href="#open">Opening and Closing Files</a></li>
+<li><a href="#props">File Properties</a></li>
+<li><a href="#read">Read Access</a></li>
+<li><a href="#write">Write Access</a></li>
+<li><a href="#random">Random Access</a></li>
+<li><a href="#lock">File Locks</a></li>
+<li><a href="#truncate">Truncating a File</a></li>
+<li><a href="#buffers">Buffered File Access</a></li>
+<li><a href="#optimizations">Optimizing File Access</a></li>
+<li><a href="#temp">Temporary Files</a></li>
+<li><a href="#links">Links</a></li>
+<li><a href="#fifos">Fifos</a></li>
+<li><a href="#pipes">Named Pipes</a></li>
+<li><a href="#convenience">Convenience Methods</a></li>
+</ul>
+
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classfile.html">file class</a> provides methods for creating and accessing files.</p>
+
+<p>The filedescriptor class provides methods for generic input and output to file descriptors.  The file class inherits from filedescriptor and adds methods that are specific to files.  However, when using the file class, you will likely make heavy use of filedescriptor methods such as read() and write().</p>
+
+
+<br>
+<a name="create"></a>
+<h3>Creating a File</h3>
+
+<p>The following example demonstrates the different ways to create a file.</p>
+
+<p>Note that when creating a file, the file permissions must be supplied.  Rudiments supports unix-style file permissions, even on Windows.  See the <a href="permissions.html">permissions class</a> for more information.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	file	f;
+
+	<span class="Comment">// Create a file using the create() method, with read-write</span>
+	<span class="Comment">// permissions for everyone.</span>
+	<span class="Statement">if</span> (f.create(<span class="Constant">&quot;testfile1&quot;</span>,permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>))) {
+		stdoutput.write(<span class="Constant">&quot;testfile1 created</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to create testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+
+	<span class="Comment">// Create a file using the open() method and O_CREAT flag,</span>
+	<span class="Comment">// with read-write permissions for everyone.</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile2&quot;</span>,O_CREAT,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>))) {
+		stdoutput.write(<span class="Constant">&quot;testfile2 created</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to create testfile2</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+
+	<span class="Comment">// An attempt to create a file that already exists will just open</span>
+	<span class="Comment">// the file.</span>
+	<span class="Statement">if</span> (f.create(<span class="Constant">&quot;testfile1&quot;</span>,permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>))) {
+		stdoutput.write(<span class="Constant">&quot;testfile1 opened</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+
+	<span class="Comment">// If O_EXCL and O_CREAT are used together, then an attempt to create a</span>
+	<span class="Comment">// file that already exists will fail.</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile2&quot;</span>,O_CREAT|O_EXCL,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>))) {
+		stdoutput.write(<span class="Constant">&quot;testfile2 opened</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile2 &quot;</span>
+				<span class="Constant">&quot;(this is the correct behavior)</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="remove"></a>
+<h3>Removing a File</h3>
+
+<p>The file class provides a static method for removing a file.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// remove testfile1</span>
+	<span class="Statement">if</span> (file::remove(<span class="Constant">&quot;testfile1&quot;</span>)) {
+		stdoutput.write(<span class="Constant">&quot;testfile1 removed</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to remove testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// remove testfile2</span>
+	<span class="Statement">if</span> (file::remove(<span class="Constant">&quot;testfile2&quot;</span>)) {
+		stdoutput.write(<span class="Constant">&quot;testfile2 removed</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to remove testfile2</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="open"></a>
+<h3>Opening a File</h3>
+
+<p>To open a file, call one of the open() methods.</p>
+
+<p>The open() methods take the filename to open and a set of flags.</p>
+
+<p>Flags may include one or more of the following flags, or'ed together.</p>
+
+<ul>
+<li>O_RDONLY - Open the file in read-only mode.</li>
+<li>O_WRONLY - Open the file in write-only mode.</li>
+<li>O_RDWR - Open the file in write-only mode.</li>
+<li>O_APPEND - Set the position to the end of the file.</li>
+<li>O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.</li>
+<li>O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.</li>
+<li>O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the file already exists.  Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.</li>
+</ul>
+
+<p>Many platforms support additional, platform-specific flags.</p>
+
+<p>There are two varieties of the open() method.  They both take filename and flags.  The second also takes permissions.  If the flags include O_CREAT then the permissions are used when creating the file.  If the flags don't include O_CREAT then the permissions are ignored.</p>
+
+<p>Files are closed when the instance of the file class is deleted, or when the same instance is used to open another file, but they can also be closed manually using the close() method.</p>
+
+<p>The following example demonstrates various ways to open and close a file.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	file	f;
+
+	<span class="Comment">// Create a file, or open it for write if it already exists.</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_WRONLY|O_CREAT,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>))) {
+		stdoutput.write(<span class="Constant">&quot;created/opened testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to create/open testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// Attempt to create a file, and fail if it already exists.</span>
+	<span class="Comment">// (the previously open file will be closed automatically)</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_WRONLY|O_CREAT|O_EXCL,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>))) {
+		stdoutput.write(<span class="Constant">&quot;created/opened testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to create/open testfile1 &quot;</span>
+				<span class="Constant">&quot;(this is the correct behavior)</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// Open a file for read, starting at the beginning of the file.</span>
+	<span class="Comment">// (the previously open file will be closed automatically)</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_RDONLY)) {
+		stdoutput.write(<span class="Constant">&quot;opened testfile1 for read</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1 for read</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// Open a file for write, starting at the beginning of the file.</span>
+	<span class="Comment">// (the previously open file will be closed automatically)</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_WRONLY)) {
+		stdoutput.write(<span class="Constant">&quot;opened testfile1 for write</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1 for write</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// You can also close the file manually.</span>
+	f.close();
+
+	<span class="Comment">// Open a file for read and write,</span>
+	<span class="Comment">// starting at the beginning of the file.</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_RDWR)) {
+		stdoutput.write(<span class="Constant">&quot;opened testfile1 for read/write</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1 for read/write</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// Close the file manually.</span>
+	f.close();
+
+	<span class="Comment">// Open a file for write, starting at the end of the file.</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_WRONLY|O_APPEND)) {
+		stdoutput.write(<span class="Constant">&quot;opened testfile1 for append</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1 for append</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// Close the file manually.</span>
+	f.close();
+
+	<span class="Comment">// Open a file for write,</span>
+	<span class="Comment">// first removing the current contents of the file.</span>
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_WRONLY|O_TRUNC)) {
+		stdoutput.write(<span class="Constant">&quot;opened testfile1 for append</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1 for append</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+
+	<span class="Comment">// when main() exits, f will be deleted and the file will be closed.</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="props"></a>
+<h3>File Properties</h3>
+
+<p>The file class provides methods for getting various file properties including permissions, ownership, size, type, and access and modification times.</p>
+
+<p>The following example opens a file and prints out various file properties.  Note that other classes must be used to convert the codes, ids and raw times to human-readable form.</p>
+
+<p>Note that this program depends on the existence of testfile1, so you'll have to touch it, or run one of the programs above to create it.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/userentry.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/groupentry.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// open the file</span>
+	file	f;
+	<span class="Statement">if</span> (f.open(<span class="Constant">&quot;testfile1&quot;</span>,O_RDONLY)) {
+
+		<span class="Comment">// print out various file properties...</span>
+
+		<span class="Comment">// permissions</span>
+		mode_t	perms=f.getPermissions();
+		<span class="Type">char</span>	*permstring=permissions::parsePermOctal(perms);
+		stdoutput.printf(<span class="Constant">&quot;Permissions:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,permstring);
+		<span class="Statement">delete</span>[] permstring;
+
+		<span class="Comment">// owner user/group</span>
+		uid_t	user=f.getOwnerUserId();
+		userentry	ou;
+		ou.open(user);
+		stdoutput.printf(<span class="Constant">&quot;Owner User:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,ou.getName());
+
+		gid_t	group=f.getOwnerGroupId();
+		groupentry	og;
+		og.open(group);
+		stdoutput.printf(<span class="Constant">&quot;Owner Group:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,og.getName());
+
+		<span class="Comment">// sizes</span>
+		stdoutput.printf(<span class="Constant">&quot;File Size:		</span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+							f.getSize());
+		stdoutput.printf(<span class="Constant">&quot;Block Size:		</span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+							f.getBlockSize());
+		stdoutput.printf(<span class="Constant">&quot;Block Count:		</span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+							f.getBlockCount());
+
+		<span class="Comment">// file type</span>
+		stdoutput.printf(<span class="Constant">&quot;Is Socket:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isSocket())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;Is Symbolic Link:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isSymbolicLink())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;Is Regular File:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isRegularFile())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;Is Block Device:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isBlockDevice())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;Is Directory:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isDirectory())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;Is Character Device:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isCharacterDevice())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;Is Fifo:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					(f.isFifo())?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+
+		<span class="Comment">// access/modification times</span>
+		<span class="Type">time_t</span>		access=f.getLastAccessTime();
+		datetime	da;
+		da.init(access);
+		stdoutput.printf(<span class="Constant">&quot;Last Access:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,da.getString());
+
+		<span class="Type">time_t</span>	mod=f.getLastModificationTime();
+		datetime	dm;
+		dm.init(mod);
+		stdoutput.printf(<span class="Constant">&quot;Last Modification:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,dm.getString());
+
+	} <span class="Statement">else</span> {
+		stdoutput.write(<span class="Constant">&quot;failed to open testfile1</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>There are 3 other methods worth mentioning as well:</p>
+
+<dl>
+<dt>getCurrentProperties()</dt>
+<dd>By default, the file class fetches file properties when open() or create() are called.  If a property is changed, then the old value will still be reflected when the method to get it is called, unless this method is called first.</dd>
+<dt>dontGetCurrentPropertiesOnOpen()</dt>
+<dd>By default, the file class fetches file properties when open() or create() are called.  If this method is called, then file properties will not be fetched unless getCurrentProperties() is called manually.</dd>
+<dt>getCurrentPropertiesOnOpen()</dt>
+<dd>Returns the class to its default behavior of fetching file properties when open() or create() are called.</dd>
+</dl>
+
+
+<br>
+<a name="read"></a>
+<h3>Read Access</h3>
+
+<p>The filedescriptor class (which the file class inherits from) provides read() methods to read data from files and file descriptors.</p>
+
+<p>Methods are provided for reading all primitive types directly.  This example opens a file in read-only mode and reads primitive data types from it.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// open the file</span>
+	file	f;
+	f.open(<span class="Constant">&quot;testfile&quot;</span>,O_RDONLY);
+
+
+	<span class="Comment">// read a bool</span>
+	<span class="Type">bool</span>	b;
+	f.read(&amp;b);
+
+
+	<span class="Comment">// read various characters</span>
+	<span class="Type">char</span>	c;
+	f.read(&amp;c);
+
+	byte_t	uc;
+	f.read(&amp;uc);
+
+
+	<span class="Comment">// read various integers</span>
+	<span class="Type">uint16_t</span>	ui16;
+	f.read(&amp;ui16);
+
+	<span class="Type">uint32_t</span>	ui32;
+	f.read(&amp;ui32);
+
+	<span class="Type">uint64_t</span>	ui64;
+	f.read(&amp;ui64);
+
+	<span class="Type">int16_t</span>		i16;
+	f.read(&amp;i16);
+
+	<span class="Type">int32_t</span>		i32;
+	f.read(&amp;i32);
+
+	<span class="Type">int64_t</span>		i64;
+	f.read(&amp;i64);
+
+
+	<span class="Comment">// read various floats</span>
+	<span class="Type">float</span>		fl;
+	f.read(&amp;fl);
+
+	<span class="Type">double</span>		db;
+	f.read(&amp;db);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>Methods are also provided for reading arbitrary data into buffers.  This example approximates the unix "cat" or Windows "type" utility.  It opens a file in read-only mode, reads it in chunks, and prints out each chunk.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	file	f;
+	<span class="Type">char</span>	buffer[<span class="Constant">1024</span>];
+
+	<span class="Comment">// for each file specified on the command line...</span>
+	<span class="Statement">for</span> (<span class="Type">int32_t</span> i=<span class="Constant">1</span>; i&lt;argc; i++) {
+
+		<span class="Comment">// open the file</span>
+		<span class="Statement">if</span> (!f.open(argv[i],O_RDONLY)) {
+			<span class="Statement">continue</span>;
+		}
+
+		<span class="Comment">// read chunks from the file and print each chunk..</span>
+		<span class="Type">ssize_t</span>	bytesread=<span class="Constant">0</span>;
+		<span class="Statement">do</span> {
+
+			<span class="Comment">// attempt to read </span><span class="Constant">1024</span><span class="Comment"> bytes into the buffer</span>
+			bytesread=f.read(buffer,<span class="Constant">1024</span>);
+
+			<span class="Comment">// bytesread will be the number of bytes that were</span>
+			<span class="Comment">// actually read, </span><span class="Constant">0</span><span class="Comment"> at EOF, or a negative number</span>
+			<span class="Comment">// if an error occurred</span>
+			<span class="Statement">if</span> (bytesread&gt;<span class="Constant">0</span>) {
+
+				<span class="Comment">// print the buffer</span>
+				stdoutput.write(buffer,bytesread);
+			}
+
+		<span class="Comment">// exit if we read fewer than </span><span class="Constant">1024</span><span class="Comment"> bytes</span>
+		} <span class="Statement">while</span> (bytesread==<span class="Constant">1024</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>A read() method is also provided that reads until it encounters a specified terminator.  This example reads a file, one line at a time, and prints out each line.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	file	f;
+
+	<span class="Comment">// for each file specified on the command line...</span>
+	<span class="Statement">for</span> (<span class="Type">int32_t</span> i=<span class="Constant">1</span>; i&lt;argc; i++) {
+
+		<span class="Comment">// open the file</span>
+		<span class="Statement">if</span> (!f.open(argv[i],O_RDONLY)) {
+			<span class="Statement">continue</span>;
+		}
+
+		<span class="Comment">// read lines from the file and print each line...</span>
+		<span class="Type">ssize_t</span>	bytesread=<span class="Constant">0</span>;
+		<span class="Statement">do</span> {
+
+			<span class="Comment">// attempt to read a line</span>
+			<span class="Type">char</span>	*line=<span class="Constant">NULL</span>;
+			bytesread=f.read(&amp;line,<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+			<span class="Comment">// bytesread will be the number of bytes that were</span>
+			<span class="Comment">// actually read, </span><span class="Constant">0</span><span class="Comment"> at EOF, or a negative number</span>
+			<span class="Comment">// if an error occurred</span>
+			<span class="Statement">if</span> (bytesread&gt;<span class="Constant">0</span>) {
+
+				<span class="Comment">// print the line</span>
+				stdoutput.write(line);
+			}
+
+			<span class="Comment">// clean up</span>
+			<span class="Statement">delete</span>[] line;
+
+		<span class="Comment">// exit on eof or error</span>
+		} <span class="Statement">while</span> (bytesread&gt;<span class="Constant">0</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="write"></a>
+<h3>Write Access</h3>
+
+<p>The filedescriptor class (which the file class inherits from) provides write() methods to write data to files and file descriptors.</p>
+
+<p>Methods are provided for writing primitive types as well as blocks of character or binary data.  This example creates a file in write-only mode and writes various types of data to it.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// open/create the file</span>
+	file	f;
+	f.open(<span class="Constant">&quot;testfile&quot;</span>,O_WRONLY|O_CREAT,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>));
+
+
+	<span class="Comment">// write a bool</span>
+	<span class="Type">bool</span>	b=<span class="Constant">true</span>;
+	f.write(b);
+
+
+	<span class="Comment">// write various characters</span>
+	<span class="Type">char</span>	c=<span class="Constant">'a'</span>;
+	f.write(c);
+
+	byte_t	uc=<span class="Constant">'a'</span>;
+	f.write(uc);
+
+
+	<span class="Comment">// write various integers</span>
+	<span class="Type">uint16_t</span>	ui16=<span class="Constant">16</span>;
+	f.write(ui16);
+
+	<span class="Type">uint32_t</span>	ui32=<span class="Constant">32</span>;
+	f.write(ui32);
+
+	<span class="Type">uint64_t</span>	ui64=<span class="Constant">64</span>;
+	f.write(ui64);
+
+	<span class="Type">int16_t</span>		i16=-<span class="Constant">16</span>;
+	f.write(i16);
+
+	<span class="Type">int32_t</span>		i32=-<span class="Constant">32</span>;
+	f.write(i32);
+
+	<span class="Type">int64_t</span>		i64=-<span class="Constant">64</span>;
+	f.write(i64);
+
+
+	<span class="Comment">// write various floats</span>
+	<span class="Type">float</span>		fl=<span class="Constant">1.234</span>;
+	f.write(fl);
+
+	<span class="Type">double</span>		db=<span class="Constant">1.234</span>;
+	f.write(db);
+
+
+	<span class="Comment">// write some text</span>
+	<span class="Type">const</span> <span class="Type">char</span>	*text=<span class="Constant">&quot;hello there&quot;</span>;
+	f.write(text);
+
+	<span class="Comment">// write the first </span><span class="Constant">5</span><span class="Comment"> bytes of the same text</span>
+	f.write(text,<span class="Constant">5</span>);
+
+
+	<span class="Comment">// write some binary data</span>
+	byte_t	binary[]={<span class="Constant">1</span>,<span class="Constant">2</span>,<span class="Constant">3</span>,<span class="Constant">4</span>,<span class="Constant">5</span>,<span class="Constant">6</span>,<span class="Constant">7</span>,<span class="Constant">8</span>,<span class="Constant">9</span>,<span class="Constant">0</span>};
+	f.write(binary,<span class="Statement">sizeof</span>(binary));
+
+
+	<span class="Comment">// write arbitary binary data</span>
+	<span class="Type">uint64_t</span>	data[]={<span class="Constant">12345</span>,<span class="Constant">67890</span>,<span class="Constant">12345</span>,<span class="Constant">67890</span>};
+	f.write((<span class="Type">void</span> *)data,<span class="Statement">sizeof</span>(data));
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="random"></a>
+<h3>Random Access</h3>
+
+<p>It is possible to open a file for both reading and writing, write to it, jump around, overwrite parts, jump around some more, and read from it.</p>
+
+<p>This example illustrates random file access.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// open the file</span>
+	file	f;
+	f.open(<span class="Constant">&quot;testfile&quot;</span>,O_RDWR|O_CREAT,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>));
+
+	<span class="Comment">// write </span><span class="Constant">4</span><span class="Comment"> fixed length records to the file,</span>
+	<span class="Comment">// each consiting of two </span><span class="Constant">10</span><span class="Comment">-character fields</span>
+	f.write(<span class="Constant">&quot;                    &quot;</span>);
+	f.write(<span class="Constant">&quot;                    &quot;</span>);
+	f.write(<span class="Constant">&quot;                    &quot;</span>);
+	f.write(<span class="Constant">&quot;                    &quot;</span>);
+
+	<span class="Comment">// go to the first record</span>
+	f.setPositionRelativeToBeginning(<span class="Constant">0</span>);
+
+	<span class="Comment">// overwrite the first record</span>
+	f.write(<span class="Constant">&quot;goodbye   friends   &quot;</span>);
+
+	<span class="Comment">// go to the last record</span>
+	f.setPositionRelativeToEnd(-<span class="Constant">20</span>);
+	f.write(<span class="Constant">&quot;hello     there     &quot;</span>);
+
+	<span class="Comment">// go to the third record</span>
+	f.setPositionRelativeToBeginning(<span class="Constant">40</span>);
+	f.write(<span class="Constant">&quot;bye       folks     &quot;</span>);
+
+	<span class="Comment">// go to the second record</span>
+	f.setPositionRelativeToCurrent(-<span class="Constant">40</span>);
+	f.write(<span class="Constant">&quot;hi        guys      &quot;</span>);
+
+
+	<span class="Comment">// print the records in reverse order</span>
+	<span class="Type">char</span>	record[<span class="Constant">20</span>];
+	<span class="Statement">for</span> (off64_t i=<span class="Constant">1</span>; i&lt;=<span class="Constant">4</span>; i++) {
+		f.setPositionRelativeToEnd(-<span class="Constant">20</span>*i);
+		f.read(record,<span class="Constant">20</span>);
+		stdoutput.write(record,<span class="Constant">20</span>);
+		stdoutput.write(<span class="Special">'\n'</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="lock"></a>
+<h3>File Locks</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="truncate"></a>
+<h3>Truncating a File</h3>
+
+<p>If you want to erase the current contents of a file, there are two options.  The first is to open the file using the O_TRUNC flag.  But, if you want to truncate the file after you've already opened it, you can use the truncate() method.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// open/create a file</span>
+	file	f;
+	f.open(<span class="Constant">&quot;testfile&quot;</span>,O_WRONLY|O_CREAT,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>));
+
+	<span class="Comment">// write some text to it</span>
+	f.write(<span class="Constant">&quot;this is some text</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+	<span class="Comment">// truncate the file</span>
+	f.truncate();
+
+	<span class="Comment">// write some different text to it</span>
+	f.write(<span class="Constant">&quot;this is some different text</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="buffers"></a>
+<h3>Buffered File Access</h3>
+
+<p>If your program does a lot of reads and writes, then you probably want to buffer them.  There are two main reasons for this:</p>
+
+<ul>
+<li>Accessing storage is much slower than accessing memory.</li>
+<li>System calls are generally slower than library calls.</li>
+</ul>
+
+<p>Both file systems and physical storage are typically organized in blocks.  Each block is some number of bytes.  A read or write of the entire block costs the same as reading or writing a single byte.  If you use buffers that are the same size as the file system's block size, then reading or writing the entire buffer takes only marginally more time than reading or writing a single byte.</p>
+
+<p>Also, even if the kernel or disk does some kind of buffering, each read or write still requires a system call.  In effect, the program tells the kernel to do the read or write, hands control over to the kernel, waits for it to do it, and then waits for it to hand control back.  The overhead of the switching involved usually makes the whole process slower than if the program read or wrote directly from a buffer under its own control.</p>
+
+<p>Buffering always helps writes and usually helps reads.  How much is platform-specific.</p>
+
+<p>The filesystem class makes buffered I/O simple.  There are only three methods involved:</p>
+
+<dl>
+<dt>setReadBufferSize()</dt>
+<dd>Sets the size of the buffer used when reading.</dd>
+<dt>setWriteBufferSize()</dt>
+<dd>Sets the size of the buffer used when writing.</dd>
+<dt>flushWriteBuffer()</dt>
+<dd>Makes sure that any data that is buffered but hasn't been written to storage, actually gets written to storage.</dd>
+</dl>
+
+<p>Reading is completely transparent.  The read buffer is filled during the first read, and filled again when all bytes have been read from it.</p>
+
+<p>Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  However, when the program is done writing, it should call flushWriteBuffer() to make sure that any data still in the buffer is written to storage.</p>
+
+<p>The example below illustrates buffered I/O.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/file.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/permissions.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	file		f;
+	<span class="Type">uint32_t</span>	i;
+	<span class="Type">uint32_t</span>	j;
+	<span class="Type">char</span>		c;
+
+	<span class="Comment">// open/create the file</span>
+	f.open(<span class="Constant">&quot;testfile&quot;</span>,O_WRONLY|O_CREAT|O_TRUNC,
+				permissions::parsePermString(<span class="Constant">&quot;rw-rw-rw-&quot;</span>));
+
+	<span class="Comment">// write 1mb of characters to the file, unbuffered</span>
+	stdoutput.write(<span class="Constant">&quot;writing unbuffered...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (i=<span class="Constant">0</span>; i&lt;<span class="Constant">1024</span>*<span class="Constant">1024</span>; i++) {
+		f.write(<span class="Constant">'a'</span>);
+	}
+	stdoutput.write(<span class="Constant">&quot;done</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+	<span class="Comment">// truncate the file</span>
+	f.truncate();
+
+	<span class="Comment">// write 1mb of characters to the file, buffered</span>
+	stdoutput.write(<span class="Constant">&quot;writing buffered...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	f.setWriteBufferSize(<span class="Constant">4096</span>);
+	<span class="Statement">for</span> (i=<span class="Constant">0</span>; i&lt;<span class="Constant">1024</span>*<span class="Constant">1024</span>; i++) {
+		f.write(<span class="Constant">'a'</span>);
+	}
+	f.flushWriteBuffer(-<span class="Constant">1</span>,-<span class="Constant">1</span>);
+	stdoutput.write(<span class="Constant">&quot;done</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+	<span class="Comment">// read 1mb of characters from the file, unbuffered (</span><span class="Constant">10</span><span class="Comment"> times)</span>
+	stdoutput.write(<span class="Constant">&quot;reading unbuffered...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (i=<span class="Constant">0</span>; i&lt;<span class="Constant">10</span>; i++) {
+		f.setPositionRelativeToBeginning(<span class="Constant">0</span>);
+		<span class="Statement">for</span> (j=<span class="Constant">0</span>; j&lt;<span class="Constant">1024</span>*<span class="Constant">1024</span>; j++) {
+			f.read(&amp;c);
+		}
+	}
+	stdoutput.write(<span class="Constant">&quot;done</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+	<span class="Comment">// read 1mb of characters from the file, buffered (</span><span class="Constant">10</span><span class="Comment"> times)</span>
+	stdoutput.write(<span class="Constant">&quot;reading buffered...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (i=<span class="Constant">0</span>; i&lt;<span class="Constant">10</span>; i++) {
+		f.setPositionRelativeToBeginning(<span class="Constant">0</span>);
+		<span class="Statement">for</span> (j=<span class="Constant">0</span>; j&lt;<span class="Constant">1024</span>*<span class="Constant">1024</span>; j++) {
+			f.read(&amp;c);
+		}
+	}
+	stdoutput.write(<span class="Constant">&quot;done</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="optimizations"></a>
+<h3>Optimizing File Access</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="temp"></a>
+<h3>Temporary Files</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+
+<br>
+<a name="links"></a>
+<h3>Links</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="fifos"></a>
+<h3>Fifos</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="pipes"></a>
+<h3>Named Pipes</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+<br>
+<a name="convenience"></a>
+<h3>Convenience Methods</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Todo { color: #0000ff; background-color: #ffff00; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+	<span class="Comment">// </span><span class="Todo">FIXME</span><span class="Comment">: example...</span>
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+
+</body>
+</html>

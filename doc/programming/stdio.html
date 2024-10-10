@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the standard I/O classes</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the standard I/O classes</span><br><br>
+
+<p>The filedescriptor class provides methods for generic input and output to file descriptors.  Rudiments pre-defines three instances: stdinput, stdoutput and stderror, which provide access to standard input, standard output and standard error.</p>
+
+<p>As these classes are ultimately instances of the filedescriptor class, many I/O methods are available, but the most commonly used are read(), write() and printf().  The printf() method features all of the formatting capabilities of the standard C printf() function.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// standard output...</span>
+	stdoutput.write(<span class="Constant">&quot;This line is written to standard output.</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stdoutput.write(<span class="Constant">&quot;Fully functional printf is also available: &quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">, </span><span class="Special">%c</span><span class="Constant">, </span><span class="Special">%05d</span><span class="Special">\n</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;hello&quot;</span>,<span class="Constant">'c'</span>,<span class="Constant">25</span>);
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// standard error...</span>
+	stderror.write(<span class="Constant">&quot;This line is written to standard error.</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	stderror.write(<span class="Constant">&quot;Fully functional printf is also available: &quot;</span>);
+	stderror.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant">, </span><span class="Special">%c</span><span class="Constant">, </span><span class="Special">%05d</span><span class="Special">\n</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;hello&quot;</span>,<span class="Constant">'c'</span>,<span class="Constant">25</span>);
+	stderror.write(<span class="Special">'\n'</span>);
+
+
+	<span class="Comment">// standard input...</span>
+	stdoutput.write(<span class="Constant">&quot;Type something and hit return...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Type">char</span>	input[<span class="Constant">1024</span>];
+	<span class="Type">ssize_t</span>	count=stdinput.read(input,<span class="Statement">sizeof</span>(input));
+	input[count]=<span class="Special">'\0'</span>;
+	stdoutput.printf(<span class="Constant">&quot;You typed: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,input);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

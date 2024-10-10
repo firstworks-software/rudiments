@@ -1,0 +1,185 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the character class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the character class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#isxxx">Analyzing Characters</a></li>
+<li><a href="#toxxx">Transforming Characters</a></li>
+<li><a href="#inset">Member of a Set</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classcharacter.h">character class</a> provides static methods for evaluating and manipulating characters.</p>
+
+<br>
+<a name="isxxx"></a>
+<h3>Analyzing Characters</h3>
+
+<p>Methods are provided for determining if a character is alphabetic, alphanumeric, lower case, upper case, etc.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/character.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// print information about all ascii characters</span>
+	<span class="Statement">for</span> (byte_t uc=<span class="Constant">0</span>; uc&lt;<span class="Constant">128</span>; uc++) {
+
+		<span class="Type">char</span>	c=(<span class="Type">char</span>)uc;
+
+		stdoutput.write(<span class="Constant">&quot;character &quot;</span>);
+		stdoutput.safePrint(c);
+		stdoutput.write(<span class="Constant">&quot;:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+		stdoutput.printf(<span class="Constant">&quot;	is alphanumeric		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isAlphanumeric(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is alphabetical		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isAlphabetical(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is lower case		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isLowerCase(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is upper case		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isUpperCase(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is punctuation		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isPunctuation(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is printable		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isPrintable(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is printable (non-space): </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isPrintableNonSpace(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is control chraracter	: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isControlCharacter(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is digit		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isDigit(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is hex digit		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isHexDigit(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is blank		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isBlank(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is whitespace		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isWhitespace(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+		stdoutput.printf(<span class="Constant">&quot;	is ascii		: </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				(character::isAscii(c))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="toxxx"></a>
+<h3>Transforming Characters</h3>
+
+<p>Methods are also provided for transforming the character to upper or lower case, and to 7-bit ascii, by stripping off the high order bit.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/character.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// perform case conversions on all ascii characters</span>
+	<span class="Statement">for</span> (byte_t uc=<span class="Constant">0</span>; uc&lt;<span class="Constant">128</span>; uc++) {
+
+		<span class="Type">char</span>	c=(<span class="Type">char</span>)uc;
+
+		stdoutput.write(<span class="Constant">&quot;character &quot;</span>);
+		stdoutput.safePrint(c);
+		stdoutput.write(<span class="Constant">&quot;:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+		stdoutput.write(<span class="Constant">&quot;	to upper case	: &quot;</span>);
+		stdoutput.safePrint((<span class="Type">char</span>)character::upper(c));
+		stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+		stdoutput.write(<span class="Constant">&quot;	to lower case	: &quot;</span>);
+		stdoutput.safePrint((<span class="Type">char</span>)character::lower(c));
+		stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+
+		<span class="Comment">// place a </span><span class="Constant">1</span><span class="Comment"> in bit </span><span class="Constant">8</span>
+		c=c|<span class="Constant">0x80</span>;
+
+		stdoutput.write(<span class="Constant">&quot;	to ascii	: &quot;</span>);
+		stdoutput.safePrint((<span class="Type">char</span>)character::convertToAscii(c));
+		stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="inset"></a>
+<h3>Member of a Set</h3>
+
+<p>An inSet() method is also provided which returns true if the specified character is a member of the specified set of characters and false otherwise.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/character.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// define the set</span>
+	<span class="Type">const</span> <span class="Type">char</span>	set[]=<span class="Constant">&quot;abcdefg&quot;</span>;
+
+	<span class="Comment">// loop through the alphabet...</span>
+	<span class="Statement">for</span> (<span class="Type">char</span> c=<span class="Constant">'a'</span>; c&lt;=<span class="Constant">'z'</span>; c++) {
+		stdoutput.printf(<span class="Constant">&quot;is </span><span class="Special">%c</span><span class="Constant"> is in the set </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant">?  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				c,set,(character::isInSet(c,set))?<span class="Constant">&quot;yes&quot;</span>:<span class="Constant">&quot;no&quot;</span>);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

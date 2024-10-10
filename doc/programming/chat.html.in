@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the chat class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the chat class</span><br><br>
+
+<p>The chat class provides a framework for communications across file descriptors with a peer.</p>
+
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
+
+<blockquote class="code">
+@chat.cpp.html@
+</blockquote>
+
+</body>
+</html>

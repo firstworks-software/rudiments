@@ -1,0 +1,363 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the singlylinkedlist class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the singlylinkedlist class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#values">Manipulating Values</a></li>
+<li><a href="#nodes">Manipulating Nodes</a></li>
+<li><a href="#sort">Sorting</a></li>
+<li><a href="#iterate">Iterating Manually</a></li>
+<li><a href="#types">Data Types</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classsinglylinkedlist.html">singlylinkedlist class</a> allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.</p>
+
+<p>Each singlylinkedlist is composed of a series of singlylinkedlistnodes.  Each singlylinkedlistnode contains a value.</p>
+
+<p>This class is similar to the <a href="../classes/html/classlinkedlist.html">linkedlist class</a> but uses less memory and many of its operations are faster.</p>
+
+<p>However, the move, detach and remove operations are much slower.  If your application must run these operations regularly, you should consider using the linkedlist class instead.</p>
+
+<br>
+<a name="values"></a>
+<h3>Manipulating Values</h3>
+
+<p>The singlylinkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
+
+<p>Note that unlike the linkedlist class, there is no method for inserting a value before another value, only a method for inserting a value after another value.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/singlylinkedlist.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	singlylinkedlist&lt;<span class="Type">uint32_t</span>&gt;	sll;
+
+	<span class="Comment">// apppend values to the list</span>
+	sll.append(<span class="Constant">5</span>);
+	sll.append(<span class="Constant">6</span>);
+	sll.append(<span class="Constant">7</span>);
+
+	<span class="Comment">// prepend values to the list</span>
+	sll.prepend(<span class="Constant">2</span>);
+	sll.prepend(<span class="Constant">1</span>);
+	sll.prepend(-<span class="Constant">1</span>);
+	sll.prepend(-<span class="Constant">2</span>);
+	sll.prepend(-<span class="Constant">2</span>);
+	sll.prepend(-<span class="Constant">2</span>);
+
+	<span class="Comment">// insert values before and after other values</span>
+	sll.insertAfter(sll.find(<span class="Constant">2</span>),<span class="Constant">3</span>);
+	sll.insertAfter(sll.find(<span class="Constant">3</span>),<span class="Constant">4</span>);
+
+	<span class="Comment">// remove values from the list</span>
+	sll.remove(-<span class="Constant">1</span>);
+
+	<span class="Comment">// remove all of a particular value from the list</span>
+	sll.removeAll(-<span class="Constant">2</span>);
+
+	<span class="Comment">// count</span>
+	stdoutput.printf(<span class="Constant">&quot;The list contains </span><span class="Special">%lld</span><span class="Constant"> nodes.</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,sll.getCount());
+
+	<span class="Comment">// print the list</span>
+	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	sll.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Comment">// clear the list</span>
+	sll.clear();
+	stdoutput.printf(<span class="Constant">&quot;The list contains </span><span class="Special">%lld</span><span class="Constant"> nodes after clearing it.</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+								sll.getCount());
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="nodes"></a>
+<h3>Manipulating Nodes</h3>
+
+<p>The singlylinkedlist class also provides methods for manipulating list nodes directly.</p>
+
+<p>Note that unlike the linkedlist class, there are no methods for inserting or moving a node before another node, only methods for inserting and moving a node after another node.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/singlylinkedlist.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	singlylinkedlist&lt;<span class="Type">uint32_t</span>&gt;	sll;
+
+	<span class="Comment">// apppend nodes to the list</span>
+	sll.append(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">5</span>));
+	sll.append(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">6</span>));
+	sll.append(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">7</span>));
+
+	<span class="Comment">// prepend nodes to the list</span>
+	sll.prepend(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">2</span>));
+	sll.prepend(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">1</span>));
+	sll.prepend(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">0</span>));
+
+	<span class="Comment">// insert nodes</span>
+	sll.insertAfter(sll.find(<span class="Constant">2</span>),<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">3</span>));
+	sll.insertAfter(sll.find(<span class="Constant">3</span>),<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">4</span>));
+
+	<span class="Comment">// move nodes around</span>
+	sll.prepend(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">8</span>));
+	sll.prepend(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">9</span>));
+	sll.prepend(<span class="Statement">new</span> singlylinkedlistnode&lt;<span class="Type">uint32_t</span>&gt;(<span class="Constant">10</span>));
+	sll.moveAfter(sll.find(<span class="Constant">7</span>),sll.find(<span class="Constant">8</span>));
+	sll.moveAfter(sll.find(<span class="Constant">8</span>),sll.find(<span class="Constant">9</span>));
+	sll.moveAfter(sll.find(<span class="Constant">9</span>),sll.find(<span class="Constant">10</span>));
+
+	<span class="Comment">// count</span>
+	stdoutput.printf(<span class="Constant">&quot;The list contains </span><span class="Special">%lld</span><span class="Constant"> nodes.</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,sll.getCount());
+
+	<span class="Comment">// print the list</span>
+	stdoutput.write(<span class="Constant">&quot;Current contents:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	sll.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="sort"></a>
+<h3>Sorting</h3>
+
+<p>The singlylinkedlist class also provides methods for sorting the list.</p>
+
+<p>Methods for both insertion and heap sort are provided.  Insertion sort is slow, for large lists, but doesn't require any additional memory.  Heap sort is fast, even for large lists, but requires additional memory.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/singlylinkedlist.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/randomnumber.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	singlylinkedlist&lt;<span class="Type">uint32_t</span>&gt;	sllis;
+	singlylinkedlist&lt;<span class="Type">uint32_t</span>&gt;	sllhs;
+
+	<span class="Comment">// generate random numbers and append them to the lists</span>
+	randomnumber	rr;
+	rr.setSeed(randomnumber::getSeed());
+
+	stdoutput.printf(<span class="Constant">&quot;generating numbers...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">uint16_t</span> i=<span class="Constant">0</span>; i&lt;<span class="Constant">20000</span>; i++) {
+
+		<span class="Type">uint32_t</span>	num;
+		rr.generate(&amp;num);
+
+		sllis.append(num);
+		sllhs.append(num);
+	}
+
+	<span class="Comment">// sort one list inexpensively</span>
+	stdoutput.printf(<span class="Constant">&quot;sorting inexpensively...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	sllis.sortInexpensively();
+
+	<span class="Comment">// sort one list quickly</span>
+	stdoutput.printf(<span class="Constant">&quot;sorting quickly...</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	sllhs.sortQuickly();
+
+	<span class="Comment">// print the lists</span>
+	stdoutput.printf(<span class="Constant">&quot;inexpensively sorted list</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	sllis.write();
+	stdoutput.write(<span class="Constant">&quot;...</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;quickly sorted list</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	sllhs.write();
+	stdoutput.write(<span class="Constant">&quot;...</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="iterate"></a>
+<h3>Iterating Manually</h3>
+
+<p>The singlylinkedlist class also provides methods for manually iterating through the list.</p>
+
+<p>Note, that unlike the linkedlistnode class, the singlylinkedlistnode class does not have a getPrevious() method.  Thus, it is impossible to iterate backwards through a singlylinkedlist.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/singlylinkedlist.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	singlylinkedlist&lt;<span class="Type">uint32_t</span>&gt;	sll;
+
+	<span class="Comment">// apppend values to the list</span>
+	<span class="Statement">for</span> (<span class="Type">uint32_t</span> i=<span class="Constant">0</span>; i&lt;<span class="Constant">20</span>; i++) {
+		sll.append(i);
+	}
+
+	<span class="Comment">// print the list forwards, all on one line</span>
+	<span class="Statement">for</span> (listnode&lt;<span class="Type">uint32_t</span>&gt; *n=sll.getFirst(); n; n=n-&gt;getNext()) {
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> &quot;</span>,n-&gt;getValue());
+	}
+	stdoutput.write(<span class="Constant">&quot;</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="types"></a>
+<h3>Data Types</h3>
+
+<p>Since the singlylinkedlist class is template-based, it can store any type of data.</p>
+
+<p>Note that the print() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
+
+<p>Note also that the singlylinkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or the list is cleared.  They must be deleted manually.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/singlylinkedlist.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+
+<span class="Comment">// Define a simple class.  Instances of it will be stored in a list later.</span>
+<span class="Type">class</span> myclass {
+	<span class="Statement">public</span>:
+			myclass(<span class="Type">int64_t</span> v) { value=v; }
+		<span class="Type">void</span>	print() { stdoutput.printf(<span class="Constant">&quot;value: </span><span class="Special">%lld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,value); }
+	<span class="Statement">private</span>:
+		<span class="Type">int64_t</span>	value;
+};
+
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// lists of various types</span>
+	singlylinkedlist&lt;<span class="Type">int16_t</span>&gt;	i16sll;
+	singlylinkedlist&lt;<span class="Type">int64_t</span>&gt;	i64sll;
+	singlylinkedlist&lt; <span class="Type">char</span> * &gt;	ssll;
+	singlylinkedlist&lt; myclass * &gt;	osll;
+
+	<span class="Comment">// populate the lists</span>
+	<span class="Statement">for</span> (<span class="Type">int64_t</span> i=<span class="Constant">0</span>; i&lt;<span class="Constant">20</span>; i++) {
+		i16sll.append(i);
+		i64sll.append(i);
+		ssll.append(charstring::parseNumber(i));
+		osll.append(<span class="Statement">new</span> myclass(i));
+	}
+
+	<span class="Comment">// print the lists of primitive types</span>
+	stdoutput.printf(<span class="Constant">&quot;list of 16-bit integers:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	i16sll.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.printf(<span class="Constant">&quot;list of 64-bit integers:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	i16sll.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	stdoutput.printf(<span class="Constant">&quot;list of strings:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	i16sll.write();
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Comment">// manually print the list of objects</span>
+	stdoutput.printf(<span class="Constant">&quot;list of objects:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (listnode&lt; myclass * &gt; *n=osll.getFirst(); n; n=n-&gt;getNext()) {
+		n-&gt;getValue()-&gt;print();
+	}
+	stdoutput.write(<span class="Special">'\n'</span>);
+
+	<span class="Comment">// clean up</span>
+	<span class="Statement">for</span> (listnode&lt; <span class="Type">char</span> * &gt; *n=ssll.getFirst(); n; n=n-&gt;getNext()) {
+		<span class="Statement">delete</span>[] n-&gt;getValue();
+	}
+	<span class="Statement">for</span> (listnode&lt; myclass * &gt; *n=osll.getFirst(); n; n=n-&gt;getNext()) {
+		<span class="Statement">delete</span> n-&gt;getValue();
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

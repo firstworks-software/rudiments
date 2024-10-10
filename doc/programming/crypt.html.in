@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the crypt class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the crypt class</span><br><br>
+
+<p>The <a href="../classes/html/classcrypt.html">crypt class</a> provides a static encryption method that is commonly used for password encryption.</p>
+
+<blockquote class="code">
+@crypt.cpp.html@
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the dictionary class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the dictionary class</span><br><br>
+
+<p>The <a href="../classes/html/classdictionary.html">dictionary class</a> allows you to store arbitrary numbers of key/value-pair data.</p>
+
+<p>Each dictionary is composed of a set of dictionarynodes.  Each dictionarynode contains the key and value.</p>
+
+<blockquote class="code">
+@dictionary-const.cpp.html@
+</blockquote>
+
+<p>Since the dictionary class is template-based, it can store any type of data.</p>
+
+<p>Note that the print() method works for primitive types and strings, but for more compex types, it only prints out the address of the object.</p>
+
+<p>Note also that the dictionary class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted when a node is removes or when the list is cleared.  The recommended method for removing a node is to detach the node, delete its dynamically allocated members and then delete the node.</p>
+
+<blockquote class="code">
+@dictionary-nonconst.cpp.html@
+</blockquote>
+
+</body>
+</html>

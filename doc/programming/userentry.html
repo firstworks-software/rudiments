@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the userentry class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the userentry class</span><br><br>
+
+<p>The <a href="../classes/html/classuserentry.html">userentry class</a> provides methods for retrieving information about users.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/userentry.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// get the user entry for </span><span class="Constant">&quot;dmuse&quot;</span>
+	userentry	uent;
+	uent.open(<span class="Constant">&quot;dmuse&quot;</span>);
+
+	<span class="Comment">// print out details</span>
+	stdoutput.printf(<span class="Constant">&quot;	Name:			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getName());
+	stdoutput.printf(<span class="Constant">&quot;	Password:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getPassword());
+	stdoutput.printf(<span class="Constant">&quot;	User Id:		</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getUserId());
+	stdoutput.printf(<span class="Constant">&quot;	Primary Group Id:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getPrimaryGroupId());
+	stdoutput.printf(<span class="Constant">&quot;	Real Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getRealName());
+	stdoutput.printf(<span class="Constant">&quot;	Home Directory:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getHomeDirectory());
+	stdoutput.printf(<span class="Constant">&quot;	Shell:			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getShell());
+	stdoutput.printf(<span class="Constant">&quot;	Name: 			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getName());
+	stdoutput.printf(<span class="Constant">&quot;	Encrypted Password:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getEncryptedPassword());
+	stdoutput.printf(<span class="Constant">&quot;	Last Change:		</span><span class="Special">%ld</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getLastChangeDate());
+	stdoutput.printf(<span class="Constant">&quot;	Days Before Change Allowed:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					uent.getDaysBeforeChangeAllowed());
+	stdoutput.printf(<span class="Constant">&quot;	Days Before Change Required:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					uent.getDaysBeforeChangeRequired());
+	stdoutput.printf(<span class="Constant">&quot;	Days Before Expiration Warning:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					uent.getDaysBeforeExpirationWarning());
+	stdoutput.printf(<span class="Constant">&quot;	Days Of Inactivity Allowed:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					uent.getDaysOfInactivityAllowed());
+	stdoutput.printf(<span class="Constant">&quot;	Expiration Date:	</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getExpirationDate());
+	stdoutput.printf(<span class="Constant">&quot;	Flag:			</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getFlag());
+	stdoutput.printf(<span class="Constant">&quot;	SID:			</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+						uent.getSidString());
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

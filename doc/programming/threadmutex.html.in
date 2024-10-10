@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the threadmutex class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the threadmutex class</span><br><br>
+
+<p>The <a href="../classes/html/classthreadmutex.html">threadmutex class</a> provides mutual exclusion locks between separate threads of a single process.</p>
+
+<p>Intances of threadmutex can be used to protect critical sections of code or synchronize threads.</p>
+
+<p>In this example, five threads are spawned.  Each counts from 0 to 4, ten times.  A threadmutex is used to synchronize the threads so that each thread is able to finish its count without being interrupted by another thread.</p>
+
+<blockquote class="code">
+@threadmutex.cpp.html@
+</blockquote>
+
+</body>
+</html>

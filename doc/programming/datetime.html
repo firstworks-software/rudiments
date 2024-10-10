@@ -1,0 +1,245 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the datetime class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="datetime"></a>
+<span class="heading">Using the datetime class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#formats">Output Formats</a></li>
+<li><a href="#sources">Date/Time Sources</a></li>
+<li><a href="#math">Date Math</a></li>
+<li><a href="#timezones">Timezones</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classdatetime.html">datetime class</a> represents a date/time combination and provides methods for getting and setting dates and times, converting date/time formats and accessing various date/time values.</p>
+
+<p>Dealing with dates and times is classically one of the most difficult things to do on a computer.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
+
+<br>
+<a name="formats"></a>
+<h3>Output Formats</h3>
+
+<p>The datetime class provides basic methods for getting the system date and time, and returning it in various formats.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// initialize an instance of datetime to the current system date/time</span>
+	datetime	dt;
+	dt.initFromSystemDateTime();
+
+	<span class="Comment">// the components of the date/time are avaialble in various formats...</span>
+
+	<span class="Comment">// as a string</span>
+	stdoutput.printf(<span class="Constant">&quot;date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString());
+
+	<span class="Comment">// including microseconds</span>
+	stdoutput.printf(<span class="Constant">&quot;date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// as the number of seconds since </span><span class="Constant">1970</span>
+	stdoutput.printf(<span class="Constant">&quot;seconds since 1970: </span><span class="Special">%d</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getEpoch());
+
+	<span class="Comment">// broken down</span>
+	stdoutput.write(<span class="Constant">&quot;date/time: &quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%02d</span><span class="Constant">/</span><span class="Special">%02d</span><span class="Constant">/</span><span class="Special">%04d</span><span class="Constant"> </span><span class="Special">%02d</span><span class="Constant">:</span><span class="Special">%02d</span><span class="Constant">:</span><span class="Special">%02d</span><span class="Constant">.</span><span class="Special">%06d</span><span class="Constant"> </span><span class="Special">%s</span><span class="Constant"> (</span><span class="Special">%d</span><span class="Constant">)</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,
+			dt.getMonth(),dt.getDayOfMonth(),dt.getYear(),
+			dt.getHour(),dt.getMinute(),dt.getSecond(),
+			dt.getMicrosecond(),
+			dt.getTimeZoneString(),dt.getTimeZoneOffset());
+
+	<span class="Comment">// additional date information</span>
+	stdoutput.write(<span class="Constant">&quot;date: &quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Constant"> (</span><span class="Special">%s</span><span class="Constant">) </span><span class="Special">%d</span><span class="Constant">, </span><span class="Special">%04d</span><span class="Constant"> &quot;</span>
+			<span class="Constant">&quot;(day </span><span class="Special">%d</span><span class="Constant"> of year) (day </span><span class="Special">%d</span><span class="Constant"> of week)</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,
+			dt.getMonthName(),dt.getMonthAbbreviation(),
+			dt.getDayOfMonth(),dt.getYear(),dt.getDayOfYear(),
+			dt.getDayOfWeek());
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="sources"></a>
+<h3>Date/Time Sources</h3>
+
+<p>An instance of the datetime class can be initialized from many different sources: the system clock, a formatted string, or from the number of seconds (and optionally microseconds) since 1970.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	datetime	dt;
+
+	<span class="Comment">// initialize from system date/time</span>
+	dt.initFromSystemDateTime();
+	stdoutput.printf(<span class="Constant">&quot;system date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// initialize from a formatted string</span>
+	dt.init(<span class="Constant">&quot;01/02/2000 03:04:05 EDT&quot;</span>);
+	stdoutput.printf(<span class="Constant">&quot;formatted string: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// initialize from the number of seconds since </span><span class="Constant">1970</span>
+	dt.init(<span class="Constant">40000000</span>);
+	stdoutput.printf(<span class="Constant">&quot;seconds since 1970: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// initialize from the number of seconds and microseconds since </span><span class="Constant">1970</span>
+	dt.init(<span class="Constant">40000000</span>,<span class="Constant">100</span>);
+	stdoutput.printf(<span class="Constant">&quot;sec/usec since 1970: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="math"></a>
+<h3>Date Math</h3>
+
+<p>The datetime class also provides methods for doing date math.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	datetime	dt;
+
+	<span class="Comment">// initialize from system date/time</span>
+	dt.initFromSystemDateTime();
+	stdoutput.printf(<span class="Constant">&quot;current date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// add three years, months, days,</span>
+	<span class="Comment">// hours, minutes, seconds, and microseconds</span>
+	dt.addYears(<span class="Constant">3</span>);
+	dt.addMonths(<span class="Constant">3</span>);
+	dt.addDays(<span class="Constant">3</span>);
+	dt.addHours(<span class="Constant">3</span>);
+	dt.addMinutes(<span class="Constant">3</span>);
+	dt.addSeconds(<span class="Constant">3</span>);
+	dt.addMicroseconds(<span class="Constant">3</span>);
+	stdoutput.printf(<span class="Constant">&quot;new date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+
+	<span class="Comment">// subtract three years, months, days,</span>
+	<span class="Comment">// hours, minutes, seconds, and microseconds</span>
+	dt.addYears(-<span class="Constant">3</span>);
+	dt.addMonths(-<span class="Constant">3</span>);
+	dt.addDays(-<span class="Constant">3</span>);
+	dt.addHours(-<span class="Constant">3</span>);
+	dt.addMinutes(-<span class="Constant">3</span>);
+	dt.addSeconds(-<span class="Constant">3</span>);
+	dt.addMicroseconds(-<span class="Constant">3</span>);
+	stdoutput.printf(<span class="Constant">&quot;original date/time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString(<span class="Constant">true</span>));
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="timezones"></a>
+<h3>Timezones</h3>
+
+<p>The datetime class also provides methods for getting information about timezones and converting date/times between timezones.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/datetime.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	datetime	dt;
+
+	<span class="Comment">// initialize from system date/time</span>
+	dt.initFromSystemDateTime();
+	stdoutput.printf(<span class="Constant">&quot;local time: </span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,dt.getString());
+
+	<span class="Comment">// get time zone abbreviations and offsets</span>
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *tzabbr=datetime::getTimeZoneAbbreviations();
+	<span class="Type">const</span> <span class="Type">int32_t</span> *tzoff=datetime::getTimeZoneOffsets();
+
+	<span class="Comment">// show the current time in different timezones around the world...</span>
+	<span class="Statement">while</span> (*tzabbr &amp;&amp; *tzabbr[<span class="Constant">0</span>]) {
+
+		<span class="Comment">// convert timezone</span>
+		dt.setTimeZone(*tzabbr);
+
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">% 14s</span><span class="Constant"> (</span><span class="Special">% 6d</span><span class="Constant"> sec from GMT): </span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+					*tzabbr,*tzoff,dt.getString());
+
+		tzabbr++;
+		tzoff++;
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

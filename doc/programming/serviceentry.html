@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the serviceentry class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the serviceentry class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#name">Lookup By Name</a></li>
+<li><a href="#number">Lookup By Number</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classserviceentry.html">serviceentry class</a> provides methods for retrieving network service definitions.  These are usually defined in a file like /etc/services on unix-like systems or C:\Windows\System32\drivers\etc\services on Windows, or are served from another source via the name-service switch.</p>
+
+<p>Services can be looked up by name or number.</p>
+
+<br>
+<a name="name"></a>
+<h3>Lookup By Name</h3>
+
+<p>In this example, information for the "smtp" service, "tcp" protocol is retrieved.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; }
+.PreProc { color: #6a0dad; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Special { color: #6a5acd; }
+.Statement { color: #a52a2a; font-weight: bold; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Comment">// Copyright (c) </span><span class="Constant">1999</span><span class="Comment">-</span><span class="Constant">2018</span><span class="Comment"> David Muse</span>
+<span class="Comment">// See the file COPYING for more information</span>
+
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/serviceentry.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// get the service information for </span><span class="Constant">&quot;smtp&quot;</span><span class="Comment">,</span><span class="Constant">&quot;tcp&quot;</span><span class="Comment"> protocol</span>
+	serviceentry	se;
+	se.open(<span class="Constant">&quot;smtp&quot;</span>,<span class="Constant">&quot;tcp&quot;</span>);
+
+	<span class="Comment">// print out details</span>
+	stdoutput.printf(<span class="Constant">&quot;	Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getName());
+	stdoutput.printf(<span class="Constant">&quot;	Port:		</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getPort());
+	stdoutput.printf(<span class="Constant">&quot;	Protocol:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getProtocol());
+	stdoutput.printf(<span class="Constant">&quot;	Alias list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">uint32_t</span> i=<span class="Constant">0</span>; se.getAliasList() &amp;&amp; se.getAliasList()[i]; i++) {
+		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getAliasList()[i]);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="number"></a>
+<h3>Lookup By Number</h3>
+
+<p>In this example, information for "service number 25", "tcp" protocol is retrieved.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; }
+.PreProc { color: #6a0dad; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Special { color: #6a5acd; }
+.Statement { color: #a52a2a; font-weight: bold; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="Comment">// Copyright (c) </span><span class="Constant">1999</span><span class="Comment">-</span><span class="Constant">2018</span><span class="Comment"> David Muse</span>
+<span class="Comment">// See the file COPYING for more information</span>
+
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/serviceentry.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Comment">// get the service information for the service</span>
+	<span class="Comment">// that would run on port </span><span class="Constant">25</span><span class="Comment">, </span><span class="Constant">&quot;tcp&quot;</span><span class="Comment"> protocol</span>
+	serviceentry	se;
+	se.open(<span class="Constant">25</span>,<span class="Constant">&quot;tcp&quot;</span>);
+
+	<span class="Comment">// print out details</span>
+	stdoutput.printf(<span class="Constant">&quot;	Name:		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getName());
+	stdoutput.printf(<span class="Constant">&quot;	Port:		</span><span class="Special">%d</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getPort());
+	stdoutput.printf(<span class="Constant">&quot;	Protocol:	</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getProtocol());
+	stdoutput.printf(<span class="Constant">&quot;	Alias list:</span><span class="Special">\n</span><span class="Constant">&quot;</span>);
+	<span class="Statement">for</span> (<span class="Type">uint32_t</span> i=<span class="Constant">0</span>; se.getAliasList() &amp;&amp; se.getAliasList()[i]; i++) {
+		stdoutput.printf(<span class="Constant">&quot;		</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,se.getAliasList()[i]);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+</body>
+</html>

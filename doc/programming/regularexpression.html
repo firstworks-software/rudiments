@@ -1,0 +1,173 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the regularexpression class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the regularexpression class</span><br><br>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#quick">Quick Matches</a></li>
+<li><a href="#overandover">Matching Over and Over</a></li>
+<li><a href="#multiple">Multiple Unique Matches</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classregularexpression.html">regularexpression</a> class provides methods for making comparisons between text and regular expressions.</p>
+
+<p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
+
+<br>
+<a name="quick"></a>
+<h3>Quick Matches</h3>
+
+<p>The regularexpression class provides a static match() method which is useful for a quick yes/no comparison.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/regularexpression.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">const</span> <span class="Type">char</span>	*string=<span class="Constant">&quot;void f(int a, bool b) { exit(0); }&quot;</span>;
+	<span class="Type">const</span> <span class="Type">char</span>	*pattern=<span class="Constant">&quot;(void|int|bool).*f</span><span class="Special">\\</span><span class="Constant">(.*</span><span class="Special">\\</span><span class="Constant">) { .* }&quot;</span>;
+
+	<span class="Type">const</span> <span class="Type">char</span>	*matches;
+	<span class="Statement">if</span> (regularexpression::match(string,pattern)) {
+		matches=<span class="Constant">&quot;matches&quot;</span>;
+	} <span class="Statement">else</span> {
+		matches=<span class="Constant">&quot;doesn't match&quot;</span>;
+	}
+
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">&quot;</span>,string,matches,pattern);
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="overandover"></a>
+<h3>Matching Over and Over</h3>
+
+<p>For patterns that need to be matched over and over, create an instance of the regularexpression class, compile() the pattern, and call match() to compare it to different strings.  The optional study() method can also be used to improve performance with complex patterns.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/regularexpression.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">const</span> <span class="Type">char</span>	*pattern=<span class="Constant">&quot;(void|int|bool).*f</span><span class="Special">\\</span><span class="Constant">(.*</span><span class="Special">\\</span><span class="Constant">) { .* }&quot;</span>;
+	<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> strings[]={
+		<span class="Constant">&quot;class t { public: int f(int a); void f(int a, bool b); };&quot;</span>,
+		<span class="Constant">&quot;void f(int a, bool b) { exit(0); }&quot;</span>,
+		<span class="Constant">&quot;int f(int a) { printf(</span><span class="Special">\&quot;</span><span class="Constant">hello</span><span class="Special">\\</span><span class="Constant">n</span><span class="Special">\&quot;</span><span class="Constant">); }&quot;</span>,
+		<span class="Constant">&quot;struct m { int a; int b; int c; };&quot;</span>,
+		<span class="Constant">NULL</span>
+	};
+
+	regularexpression	re;
+	re.setPattern(pattern);
+	re.study();
+
+	<span class="Statement">for</span> (<span class="Type">const</span> <span class="Type">char</span> * <span class="Type">const</span> *s=strings; *s; s++) {
+
+		<span class="Type">const</span> <span class="Type">char</span>	*matches;
+		<span class="Statement">if</span> (re.match(*s,pattern)) {
+			matches=<span class="Constant">&quot;does match&quot;</span>;
+		} <span class="Statement">else</span> {
+			matches=<span class="Constant">&quot;doesn't match&quot;</span>;
+		}
+
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">%s</span><span class="Special">\n</span><span class="Constant">  </span><span class="Special">%s</span><span class="Special">\n</span><span class="Special">%s</span><span class="Special">\n\n</span><span class="Constant">&quot;</span>,*s,matches,pattern);
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<br>
+<a name="multiple"></a>
+<h3>Multiple Unique Matches</h3>
+
+<p>Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubStringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.</p>
+
+<blockquote class="code">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Statement { color: #a52a2a; font-weight: bold; }
+-->
+</style>
+<pre id='vimCodeElement'>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/regularexpression.h&gt;</span>
+<span class="PreProc">#include </span><span class="Constant">&lt;rudiments/stdio.h&gt;</span>
+
+<span class="Type">int</span> main(<span class="Type">int</span> argc, <span class="Type">const</span> <span class="Type">char</span> **argv) {
+
+	<span class="Type">const</span> <span class="Type">char</span>	*string=<span class="Constant">&quot;hello there everyone&quot;</span>;
+	<span class="Type">const</span> <span class="Type">char</span>	*pattern=<span class="Constant">&quot;(</span><span class="Special">\\</span><span class="Constant">w+) (</span><span class="Special">\\</span><span class="Constant">w+)&quot;</span>;
+
+	regularexpression	re;
+	re.setPattern(pattern);
+	re.match(string);
+
+	stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant"> matches </span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;</span><span class="Constant"> </span><span class="Special">%d</span><span class="Constant"> times</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+				string,pattern,re.getSubstringCount());
+
+	<span class="Statement">for</span> (<span class="Type">int32_t</span> i=<span class="Constant">0</span>; i&lt;re.getSubstringCount(); i++) {
+
+		stdoutput.printf(<span class="Constant">&quot;  match </span><span class="Special">%d</span><span class="Constant"> starts at offset </span><span class="Special">%2d</span><span class="Constant">: &quot;</span>,
+					i,re.getSubstringStartOffset(i));
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,re.getSubstringStart(i));
+
+		stdoutput.printf(<span class="Constant">&quot;  match </span><span class="Special">%d</span><span class="Constant"> ends at offset </span><span class="Special">%2d</span><span class="Constant">  : &quot;</span>,
+					i,re.getSubstringEndOffset(i));
+		stdoutput.printf(<span class="Constant">&quot;</span><span class="Special">\&quot;</span><span class="Special">%s</span><span class="Special">\&quot;\n</span><span class="Constant">&quot;</span>,re.getSubstringEnd(i));
+	}
+}
+</pre>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>Note that only unique matches are returned.  If the exact same pattern of characters is found at multiple locations in the same string, only the first instance of that pattern is returned.</p>
+
+</body>
+</html>

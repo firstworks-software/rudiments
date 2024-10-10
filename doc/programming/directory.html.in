@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the directory class</title>
+<link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="directory"></a>
+<span class="heading">Using the directory class</span><br><br>
+
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
+
+<blockquote class="code">
+@directory.cpp.html@
+</blockquote>
+
+</body>
+</html>
