@@ -13,6 +13,7 @@ install:
 	$(CP) footer.html $(docdir)
 	$(CP) header.html $(docdir)
 	$(CP) index.html $(docdir)
+	$(CP) installing.html $(docdir)
 	$(CP) knowncontent.html $(docdir)
 	$(CP) license.html $(docdir)
 	$(CP) news.html $(docdir)
@@ -23,6 +24,8 @@ install:
 	$(CP) tracker.html $(docdir)
 	$(MKINSTALLDIRS) $(docdir)/css
 	$(CP) css/* $(docdir)/css
+	$(MKINSTALLDIRS) $(docdir)/features
+	$(CP) features/* $(docdir)/features
 	$(MKINSTALLDIRS) $(docdir)/images
 	$(CP) images/* $(docdir)/images
 	$(MKINSTALLDIRS) $(docdir)/js
@@ -34,11 +37,8 @@ install:
 	$(MKINSTALLDIRS) $(docdir)/rudiments
 	$(MKINSTALLDIRS) $(docdir)/rudiments/css
 	$(MKINSTALLDIRS) $(docdir)/rudiments/classes/html
-	$(MKINSTALLDIRS) $(docdir)/rudiments/features
 	$(MKINSTALLDIRS) $(docdir)/rudiments/programming
 	$(MKINSTALLDIRS) $(docdir)/rudiments/images
-	$(CP) rudiments/installing.html $(docdir)/rudiments
-	$(CP) rudiments/index.html $(docdir)/rudiments
 	$(CP) rudiments/css/styles.css $(docdir)/rudiments/css
 	$(CP) rudiments/classes/html/a*.html $(docdir)/rudiments/classes/html
 	$(CP) rudiments/classes/html/b*.html $(docdir)/rudiments/classes/html
@@ -64,18 +64,17 @@ install:
 	$(CP) rudiments/classes/html/*.png $(docdir)/rudiments/classes/html
 	$(CP) rudiments/classes/html/*.css $(docdir)/rudiments/classes/html
 	$(CP) rudiments/classes/html/*.js $(docdir)/rudiments/classes/html
-	$(CP) rudiments/features/*.html $(docdir)/rudiments/features
 	$(CP) rudiments/programming/*.html $(docdir)/rudiments/programming
 	$(CP) rudiments/images/*.png $(docdir)/rudiments/images
 	$(MKINSTALLDIRS) $(docdir)/slides
 	$(CP) slides/* $(docdir)/slides
 	$(CHMOD) 755 $(docdir)/*.html
 	$(CHMOD) 644 $(docdir)/css/*
+	$(CHMOD) 644 $(docdir)/features/*
 	$(CHMOD) 644 $(docdir)/images/*
 	$(CHMOD) 644 $(docdir)/js/*
 	$(CHMOD) 644 $(docdir)/licenses/*
 	$(CHMOD) 755 $(docdir)/presentation/*
-	$(CHMOD) 644 $(docdir)/rudiments/*.html
 	$(CHMOD) 644 $(docdir)/rudiments/css/*
 	$(CHMOD) 644 $(docdir)/rudiments/classes/html/a*.html
 	$(CHMOD) 644 $(docdir)/rudiments/classes/html/b*.html
@@ -127,7 +126,6 @@ install:
 	$(CHMOD) 644 $(docdir)/rudiments/classes/html/*.png
 	$(CHMOD) 644 $(docdir)/rudiments/classes/html/*.css
 	$(CHMOD) 644 $(docdir)/rudiments/classes/html/*.js
-	$(CHMOD) 644 $(docdir)/rudiments/features/*.html
 	$(CHMOD) 644 $(docdir)/rudiments/programming/*.html
 	$(CHMOD) 644 $(docdir)/rudiments/images/*
 	$(CHMOD) 755 $(docdir)/slides/*

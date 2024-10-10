@@ -29,7 +29,15 @@ li {
 	font-size: 13px;
 }
 
+li a {
+	font-size: 13px;
+}
+
 td {
+	font-size: 13px;
+}
+
+td a {
 	font-size: 13px;
 }
 
@@ -156,6 +164,10 @@ body iframe {
 	font-size: 9px;
 }
 
+.listheader {
+	font-weight: bold;
+}
+
 .header {
 	font-weight: bold;
 	font-size: 15px;
@@ -165,6 +177,62 @@ body iframe {
 	margin-left: 10px;
 	margin-right: 10px;
 	vertical-align: middle;
+}
+
+.heading1 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 20pt;
+}
+
+.heading2 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 16pt;
+}
+
+.heading3 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+.heading4 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+.heading {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 14pt;
+}
+
+.subject {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+input {
+	color: black;
+	font-family: courier;
+	font-weight: medium;
+	font-size: 10pt;
+}
+
+.login {
+	color: black;
+	font-family: arial;
+	font-weight: medium;
+	font-size: 10pt;
 }
 
 #slidebuttons {
@@ -273,4 +341,39 @@ body iframe {
 	width: 50%;
 	padding: 10px;
 	vertical-align: top;
+}
+
+.code {
+	margin: 2px;
+	padding: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
+	background: #eef3fa;
+	font-size: 12px;
+}
+
+.code {
+	margin: 2px;
+	padding: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
+	background: #eef3fa;
+	font-size: 12px;
+}
+
+p {
+	background: white;
+	color: black;
+	font-family: arial;
+	font-weight: medium;
+	font-size: 10pt;
+}
+
+pre {
+	color: black;
+	font-family: courier;
+	font-weight: medium;
+	font-size: 10pt;
 }
