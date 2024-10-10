@@ -13,7 +13,7 @@ function setButton() {
 	if (endsWith(document.location.pathname,"index.html")) {
 		setActive("about","lightbluedenim.png");
 	} else if (endsWith(document.location.pathname,"documentation.html") ||
-				contains(document.location.pathname,"/doc/")) {
+			contains(document.location.pathname,"/programming/")) {
 		setActive("documentation","lightbluedenim.png");
 	} else if (endsWith(document.location.pathname,"download.html")) {
 		setActive("download","lightbluedenim.png");
