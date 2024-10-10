@@ -51,7 +51,7 @@ install:
 	$(CHMOD) 644 $(docdir)/licenses/*
 	$(MKINSTALLDIRS) $(docdir)/programming
 	$(CP) programming/*.html $(docdir)/programming
-	$(CHMOD) 644 $(docdir)/programming/*
+	$(CHMOD) 755 $(docdir)/programming/*
 	$(MKINSTALLDIRS) $(docdir)/slides
 	$(CP) slides/* $(docdir)/slides
 	$(CHMOD) 755 $(docdir)/slides/*
