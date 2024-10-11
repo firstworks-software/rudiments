@@ -10,6 +10,7 @@ SRCS = datastructures.wt \
 	frameworks.wt \
 	installing.wt \
 	license.wt \
+	lightweight.wt \
 	utility.wt
 
 OBJS = datastructures.html \
@@ -18,6 +19,7 @@ OBJS = datastructures.html \
 	frameworks.html \
 	installing.html \
 	license.html \
+	lightweight.html \
 	utility.html
 
 .wt.html:
