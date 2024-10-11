@@ -4,14 +4,16 @@ include ../config.mk
 
 .SUFFIXES: .wt .html
 
-SRCS = documentation.wt \
+SRCS = datastructures.wt \
+	documentation.wt \
 	download.wt \
 	frameworks.wt \
 	installing.wt \
 	license.wt \
 	utility.wt
 
-OBJS = documentation.html \
+OBJS = datastructures.html \
+	documentation.html \
 	download.html \
 	frameworks.html \
 	installing.html \

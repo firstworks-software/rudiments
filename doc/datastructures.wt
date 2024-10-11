@@ -1,0 +1,32 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+=== Data Structures ===
+
+For platforms where STL is unavailable or undesirable, Rudiments provides a set of commonly used data structures.
+
+* '''String Storage'''
+ * [programming/stringbuffer.html Using the stringbuffer class]
+* '''Binary Data Storage'''
+ * [programming/bytebuffer.html Using the bytebuffer class]
+ * [programming/memorypool.html Using the memorypool class]
+* '''Containers'''
+ * [programming/dynamicarray.html Using the dynamicarray class]
+ * [programming/staticcarray.html Using the staticcarray class]
+ * [programming/linkedlist.html Using the linkedlist class]
+ * [programming/singlylinkedlist.html Using the singlylinkedlist class]
+ * [programming/dictionary.html Using the dictionary class]
+
+The Rudiments data structures arguably have some advantages over their STL counterparts too.
+
+* Assignments to staticarray and dynamicarray are more intuitive than std::array and std::vector assignments.
+* Unlike std::forward_list, the singlylinkedlist class doesn't require C++11.
+* bytebuffer is far less clumsy than using std::string or std::vector<unsigned char> to store binary data.
+* The dictionary class uses keys and values directly rather than requiring the std::pair intermediary.
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
