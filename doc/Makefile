@@ -13,6 +13,7 @@ SRCS = betterc.wt \
 	installing.wt \
 	license.wt \
 	lightweight.wt \
+	prerequisites.wt \
 	utility.wt
 
 OBJS = betterc.html \
@@ -24,6 +25,7 @@ OBJS = betterc.html \
 	installing.html \
 	license.html \
 	lightweight.html \
+	prerequisites.html \
 	utility.html
 
 .wt.html:

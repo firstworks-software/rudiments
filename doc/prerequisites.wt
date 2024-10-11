@@ -1,0 +1,199 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Installing Rudiments Prerequisites =
+
+* [#platforms Platforms]
+ * [#linux Linux]
+  * [#fedora Fedora]
+  * [#centos CentOS]
+  * [#opensuse OpenSuSE]
+  * [#ubuntu Ubuntu]
+  * [#debian Debian]
+ * [#unix Unix]
+  * [#freebsd FreeBSD]
+  * [#netbsd NetBSD]
+  * [#openbsd OpenBSD]
+  * [#openbsd Minix]
+ * [#windows Windows]
+
+
+[=#platforms]
+== Platforms ==
+
+Rudiments is supported on a variety of Linux/Unix systems and Windows.  Building Rudiments on these platforms requires the installation of a compiler toolchain and other bits of optional software.  Instructions follow for many supported platforms.
+
+[=#linux]
+=== Linux ===
+
+Rudiments is supported on a variety of Linux platforms including Fedora, !CentOS, !OpenSuSE, Debian, and Ubuntu.
+
+[=#fedora]
+==== Fedora ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+dnf -y install gcc-c++ make libedit-devel openssl-devel krb5-devel pcre-devel libcurl-devel
+}}}
+
+The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.
+
+Note that on older Fedora platforms, the yum package manager is used instead of the dnf package manager.  The syntax for the two is the same though, just replace dnf with yum in the command above.
+}}}
+
+[=#centos]
+==== !CentOS ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+yum -y install gcc-c++ make libedit-devel openssl-devel krb5-devel pcre-devel libcurl-devel
+}}}
+
+The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.
+}}}
+
+[=#opensuse]
+==== !OpenSuSE ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+zypper install gcc-c++ make readline-devel libopenssl-devel krb5-devel pcre-devel libcurl-devel
+}}}
+
+The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.
+}}}
+
+[=#ubuntu]
+==== Ubuntu ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+apt-get install g++ make libedit-dev libssl-dev libkrb5-dev libpcre3-dev libcurl4-openssl-dev
+}}}
+
+The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre3-dev package.
+}}}
+
+[=#debian]
+==== Debian ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+apt-get install g++ make libedit-dev libssl-dev libkrb5-dev libpcre3-dev libcurl4-openssl-dev
+}}}
+
+The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre3-dev package.
+}}}
+
+[=#unix]
+=== Unix ===
+
+Rudiments is supported on a variety of Unix platforms including !FreeBSD, !NetBSD, !OpenBSD, and Minix.
+
+[=#freebsd]
+==== !FreeBSD ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+pkg install clang gmake pkgconf readline openssl pcre curl
+}}}
+
+The clang and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.
+
+Note that on older !FreeBSD platforms:
+
+* The pkgtools package manager is used instead of the pkg package manager and the syntax for the two is the different.  Replace "pkg install" with "pkg_add -r " in the command above.
+* Clang is not available, so clang must be replaced with g++.
+
+Kerberos/GSSAPI is installed as part of the base installation.
+}}}
+
+[=#netbsd]
+==== !NetBSD ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+ 
+{{{#!code
+pkgin install g++ gmake readline openssl pcre curl
+}}}
+
+The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.
+
+Kerberos/GSSAPI is installed as part of the base installation.
+}}}
+
+[=#openbsd]
+==== !OpenBSD ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, add a line to /etc/pkg.conf like:
+
+{{{#!code
+installpath = ftp://ftp.usa.openbsd.org/pub/OpenBSD/5.8/packages/amd64/
+}}}
+
+(replacing 5.8 with the version of !OpenBSD that you are using and replacing amd64 with the architecture given by uname -m)
+
+... and execute the following command, as root:
+
+{{{#!code
+pkg_add -r g++ gmake readline heimdal pcre curl
+}}}
+
+The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.
+
+!OpenSSL is installed as part of the base installation.
+}}}
+
+[=#minix]
+==== Minix ====
+
+{{{#!blockquote
+
+To install all of the prerequisites at once, execute the following command, as root:
+
+{{{#!code
+pkgin install clang binutils gmake readline openssl heimdal pcre curl
+}}}
+
+The clang, binutils, and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre packages.
+}}}
+
+[=#windows]
+=== Windows ===
+
+{{{#!blockquote
+
+Rudiments is supported on a variety of Windows platforms.  Building Rudiments on these platforms just requires the installation of a compiler toolchain.
+
+Rudiments can be built using the Microsoft Visual Studio and Visual Studio Express toolchains.  Visual Studio Express can be downloaded for free from [http://www.visualstudio.com Microsoft] and the installer is intuitive.
+}}}
+
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
