@@ -1,12 +1,14 @@
-<!--#include virtual="header.html" -->
+<!--#include virtual="header.html"-->
 
-<!--#include virtual="projectheader.html" -->
+<!--#include virtual="projectheader.html"-->
 
-<!--#include virtual="contentstart.html" -->
+<!--#include virtual="contentstart.html"-->
 
-<span class="header">Compatibility</span>
+<h3>Compatibility</h3>
 
-<p>Rudiments is supported on Linux, Solaris, FreeBSD, NetBSD, OpenBSD, Minix, SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, and Syllable.<br>Other Unix or Unix-like systems may also be supported.</p>
+<p>Rudiments is supported on Linux, Solaris, FreeBSD, NetBSD, OpenBSD, Minix, SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, and Syllable.</p>
+
+<p>Other Unix or Unix-like systems may also be supported.</p>
 
 <p>Modern versions of Windows are also supported.</p>
 
@@ -17,15 +19,16 @@
 <p>Platform-specific functions and variants are used if they exist.  For example:</p>
 
 <ul>
-<li>strcasecmp, strncasecmp, strchrnul, strpbrk, strspn, strcspn</li>
-<li>vdprintf, vasprintf and vsnprintf preferred to vsprintf</li>
-<li>kqueue, epoll, port_create, /dev/poll and poll preferred to select</li>
-<li>CryptGenRandom, arc4random, random and rand preferred to lrand48</li>
-<li>reentrant functions preferred to mutex-protected thread-unsafe versions</li>
-<li>_s functions on Windows</li>
-<li>Win32 API preferred to standard C API</li>
+  <li>strcasecmp, strncasecmp, strchrnul, strpbrk, strspn, strcspn</li>
+  <li>vdprintf, vasprintf and vsnprintf preferred to vsprintf</li>
+  <li>kqueue, epoll, port_create, /dev/poll and poll preferred to select</li>
+  <li>CryptGenRandom, arc4random, random and rand preferred to lrand48</li>
+  <li>reentrant functions preferred to mutex-protected thread-unsafe versions</li>
+  <li>_s functions on Windows</li>
+  <li>Win32 API preferred to standard C API</li>
 </ul>
 
-<!--#include virtual="contentend.html" -->
+<!--#include virtual="contentend.html"-->
 
-<!--#include virtual="footer.html" -->
+<!--#include virtual="footer.html"-->
+

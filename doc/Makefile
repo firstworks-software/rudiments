@@ -4,7 +4,9 @@ include ../config.mk
 
 .SUFFIXES: .wt .html
 
-SRCS = datastructures.wt \
+SRCS = betterc.wt \
+	compatibility.wt \
+	datastructures.wt \
 	documentation.wt \
 	download.wt \
 	frameworks.wt \
@@ -13,7 +15,9 @@ SRCS = datastructures.wt \
 	lightweight.wt \
 	utility.wt
 
-OBJS = datastructures.html \
+OBJS = betterc.html \
+	compatibility.html \
+	datastructures.html \
 	documentation.html \
 	download.html \
 	frameworks.html \

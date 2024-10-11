@@ -1,0 +1,31 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+=== Compatibility ===
+
+Rudiments is supported on Linux, Solaris, !FreeBSD, !NetBSD, !OpenBSD, Minix, SCO !OpenServer, SCO !UnixWare, GNU Hurd, Haiku, and Syllable.
+
+Other Unix or Unix-like systems may also be supported.
+
+Modern versions of Windows are also supported.
+
+x86_64 and x86 platforms are supported, as are non-x86 architectures such as ARM, Sparc, Mips, PPC and others.
+
+uClibc-linux systems are also supported.
+
+Platform-specific functions and variants are used if they exist.  For example:
+
+* strcasecmp, strncasecmp, strchrnul, strpbrk, strspn, strcspn
+* vdprintf, vasprintf and vsnprintf preferred to vsprintf
+* kqueue, epoll, port_create, /dev/poll and poll preferred to select
+* !CryptGenRandom, arc4random, random and rand preferred to lrand48
+* reentrant functions preferred to mutex-protected thread-unsafe versions
+* _s functions on Windows
+* Win32 API preferred to standard C API
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
