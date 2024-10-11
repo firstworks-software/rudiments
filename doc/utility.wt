@@ -8,7 +8,7 @@
 
 Rudiments provides a wide range of utility classes.
 
-* '''Standard Input and Output
+* '''Standard Input and Output'''
  * [programming/stdio.html Using the standard I/O classes]
 * '''Sleeping'''
  * [programming/snooze.html Using the snooze class]
