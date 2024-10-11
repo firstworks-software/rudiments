@@ -6,13 +6,17 @@ include ../config.mk
 
 SRCS = documentation.wt \
 	download.wt \
+	frameworks.wt \
 	installing.wt \
-	license.wt
+	license.wt \
+	utility.wt
 
 OBJS = documentation.html \
 	download.html \
+	frameworks.html \
 	installing.html \
-	license.html
+	license.html \
+	utility.html
 
 .wt.html:
 	wt -i $< -o $@ -xhtml xhtml.conf

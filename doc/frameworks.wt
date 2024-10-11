@@ -1,0 +1,39 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+=== Intuitive Frameworks ===
+
+Rudiments provides intuitive frameworks for developing applications and systems.
+
+* '''Process and Process Environment'''
+ * [programming/process.html Using the process class]
+ * [programming/commandline.html Using the commandline class]
+ * [programming/environment.html Using the environment class]
+* '''Threads'''
+ * [programming/thread.html Using the thread class]
+ * [programming/threadmutex.html Using the threadmutex class]
+* '''Interprocess Communication'''
+ * [programming/sharedmemory.html Using the sharedmemory class]
+ * [programming/semaphoreset.html Using the semaphoreset class]
+ * [programming/signal.html Using the signal classes]
+* '''Clients and Servers'''
+ * [programming/inetsocketserver.html Using the inetsocketserver class]
+ * [programming/inetsocketclient.html Using the inetsocketclient class]
+ * [programming/unixsocketserver.html Using the unixsocketserver class]
+ * [programming/unixsocketclient.html Using the unixsocketclient class]
+ * [programming/listener.html Using the listener class]
+* '''XML'''
+ * [programming/xmldom.html Using the xmldom and domnode classes]
+ * [programming/xmlsax.html Using the xmlsax class]
+* '''Logging'''
+ * [programming/logger.html Using the logger class]
+* '''Compilers'''
+ * [programming/codetree.html Using the codetree class]
+ * [programming/compiler.html Using the compiler class]
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
