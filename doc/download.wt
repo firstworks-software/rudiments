@@ -1,0 +1,27 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+=== Source Tarball ===
+
+{{{#!blockquote
+The current release is [http://downloads.sourceforge.net/rudiments/rudiments-2.0.0.tar.gz rudiments-2.0.0.tar.gz] or [http://downloads.sourceforge.net/rudiments/rudiments-2.0.0.zip rudiments-2.0.0.zip]</a>
+}}}
+
+<hr>
+
+=== Source Snapshots ===
+
+{{{#!blockquote
+To clone the Rudiments GIT repo, run:
+
+{{{#!code
+git clone git://git.code.sf.net/p/rudiments/rudiments
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

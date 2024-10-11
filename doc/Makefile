@@ -2,7 +2,19 @@ top_builddir = ..
 
 include ../config.mk
 
-all:
+.SUFFIXES: .wt .html
+
+SRCS = documentation.wt \
+	download.wt
+
+OBJS = documentation.html \
+	download.html
+
+.wt.html:
+	wt -i $< -o $@ -xhtml xhtml.conf
+
+all: $(OBJS)
+	$(CHMOD) 755 $(OBJS)
 
 install:
 	$(MKINSTALLDIRS) $(docdir)

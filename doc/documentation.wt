@@ -1,0 +1,104 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+=== Installation ===
+
+{{{#!blockquote
+[installing.html Installing Rudiments]
+}}}
+
+----
+
+=== Programming Reference ===
+
+{{{#!blockquote
+[classes/html/annotated.html Rudiments Class Reference]
+}}}
+
+=== Programming Guide ===
+
+* '''Standard Input and Output'''
+ * [programming/stdio.html Using the standard I/O classes]
+ * [programming/prompt.html Using the prompt class]
+* '''Sleeping'''
+ * [programming/snooze.html Using the snooze class]
+* '''Process and Process Environment'''
+ * [programming/process.html Using the process class]
+ * [programming/commandline.html Using the commandline class]
+ * [programming/environment.html Using the environment class]
+* '''Character and String Storage and Manipulation'''
+ * [programming/character.html Using the character class]
+ * [programming/charstring.html Using the charstring class]
+ * [programming/stringbuffer.html Using the stringbuffer class]
+* '''Binary Data Storage and Manipulation'''
+ * [programming/bytestring.html Using the bytestring class]
+ * [programming/bytebuffer.html Using the bytebuffer class]
+ * [programming/memorypool.html Using the memorypool class]
+* '''Regular Expressions'''
+ * [programming/regularexpression.html Using the regularexpression class]
+* '''Random Numbers'''
+ * [programming/randomnumber.html Using the randomnumber class]
+* '''Hashing and Encryption'''
+ * [programming/hash.html Using the md5 and sha1 classes]
+ * [programming/sha1.html Using the sha1 class]
+ * [programming/crypt.html Using the crypt class]
+* '''Date and Time'''
+ * [programming/datetime.html Using the datetime class]
+* '''Containers'''
+ * [programming/dynamicarray.html Using the dynamicarray class]
+ * [programming/staticcarray.html Using the staticcarray class]
+ * [programming/linkedlist.html Using the linkedlist class]
+ * [programming/singlylinkedlist.html Using the singlylinkedlist class]
+ * [programming/avltree.html Using the avltree class]
+ * [programming/dictionary.html Using the dictionary class]
+* '''System Information'''
+ * [programming/error.html Using the error class]
+ * [programming/sys.html Using the sys class]
+ * [programming/userentry.html Using the userentry class]
+ * [programming/groupentry.html Using the groupentry class]
+ * [programming/hostentry.html Using the hostentry class]
+ * [programming/protocolentry.html Using the protocolentry class]
+ * [programming/serviceentry.html Using the serviceentry class]
+* '''Files, File Permissions, Directories and Filesystems'''
+ * [programming/file.html Using the file class]
+ * [programming/permissions.html Using the permissions class]
+ * [programming/directory.html Using the directory class]
+ * [programming/memorymap.html Using the memorymap class]
+ * [programming/filesystem.html Using the filesystem class]
+* '''Threads'''
+ * [programming/thread.html Using the thread class]
+ * [programming/threadmutex.html Using the threadmutex class]
+* '''Interprocess Communication'''
+ * [programming/sharedmemory.html Using the sharedmemory class]
+ * [programming/semaphoreset.html Using the semaphoreset class]
+ * [programming/signal.html Using the signal classes]
+* '''Clients and Servers'''
+ * [programming/inetsocketserver.html Using the inetsocketserver class]
+ * [programming/inetsocketclient.html Using the inetsocketclient class]
+ * [programming/unixsocketserver.html Using the unixsocketserver class]
+ * [programming/unixsocketclient.html Using the unixsocketclient class]
+ * [programming/listener.html Using the listener class]
+ * [programming/gss.html Using the gss classes]
+ * [programming/tls.html Using the tls classes]
+* '''Parameter Strings'''
+ * [programming/parameterstring.html Using the parameterstring class]
+* '''URLs'''
+ * [programming/url.html Using the url class]
+* '''XML'''
+ * [programming/xmldom.html Using the xmldom and domnode classes]
+ * [programming/domevents.html Using the domevents class]
+ * [programming/xmlsax.html Using the xmlsax class]
+* '''Logging'''
+ * [programming/logger.html Using the logger class]
+* '''Dynamic Libraries'''
+ * [programming/dynamiclib.html Using the dynamiclib class]
+* '''Compilers'''
+ * [programming/codetree.html Using the codetree class]
+ * [programming/compiler.html Using the compiler class]
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
