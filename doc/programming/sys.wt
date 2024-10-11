@@ -6,11 +6,11 @@
 
 = Using the sys class =
 
-* [=#intro Introduction]
-* [=#info Getting System Information]
-* [=#reboot Reboot]
-* [=#shutdown Shutdown]
-* [=#halt Halt]
+* [#intro Introduction]
+* [#info Getting System Information]
+* [#reboot Reboot]
+* [#shutdown Shutdown]
+* [#halt Halt]
 
 
 [=#intro]

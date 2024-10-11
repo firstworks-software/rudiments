@@ -1,179 +1,212 @@
-<!--#include virtual="header.html" -->
+<!--#include virtual="header.html"-->
 
-<!--#include virtual="projectheader.html" -->
+<!--#include virtual="projectheader.html"-->
 
-<!--#include virtual="contentstart.html" -->
+<!--#include virtual="contentstart.html"-->
 
-<span class="heading1">Installing Rudiments</span>
+<h1>Installing Rudiments</h1>
 
 <ul>
-<li><a href="#platforms">Supported Platforms</a></li>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#unixlinux">Installation on Linux, Unix or Unix-like Platforms</a></li>
-<ul>
-<li><a href="#downloading">Downloading Rudiments</a></li>
-<li><a href="#extracting">Extracting Rudiments</a></li>
-<li><a href="#building">Building Rudiments</a></li>
-<li><a href="#installing">Installing Rudiments</a></li>
+  <li><a href="#platforms">Supported Platforms</a></li>
+  <li><a href="#prerequisites">Prerequisites</a></li>
+  <li><a href="#unixlinux">Installation on Linux, Unix or Unix-like Platforms</a></li>
+  <ul>
+    <li><a href="#downloading">Downloading Rudiments</a></li>
+    <li><a href="#extracting">Extracting Rudiments</a></li>
+    <li><a href="#building">Building Rudiments</a></li>
+    <li><a href="#installing">Installing Rudiments</a></li>
+  </ul>
+
+  <li><a href="#windows">Installation on Windows</a></li>
+  <ul>
+    <li><a href="#windownloading">Downloading Rudiments</a></li>
+    <li><a href="#winextracting">Extracting Rudiments</a></li>
+    <li><a href="#winbuilding">Building Rudiments</a></li>
+    <li><a href="#wininstalling">Installing Rudiments</a></li>
+  </ul>
+
 </ul>
-<li><a href="#windows">Installation on Windows</a></li>
-<ul>
-<li><a href="#windownloading">Downloading Rudiments</a></li>
-<li><a href="#winextracting">Extracting Rudiments</a></li>
-<li><a href="#winbuilding">Building Rudiments</a></li>
-<li><a href="#wininstalling">Installing Rudiments</a></li>
-</ul>
-</ul>
 
-<a name="platforms"></a>
-<span class="heading2">Supported Platforms</span>
+<br/><a name="name"/><h2>Supported Platforms</h2>
 
-<p>Rudiments should build on relatively modern versions of Linux, Unix, or Unix-like systems including Solaris, FreeBSD, NetBSD, OpenBSD, Minix, SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, and Syllable.  Other Unix or Unix-like systems may also be supported.</p>
+<blockquote>
+  <p>Rudiments should build on relatively modern versions of Linux, Unix, or Unix-like systems including Solaris, FreeBSD, NetBSD, OpenBSD, Minix, SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, and Syllable.  Other Unix or Unix-like systems may also be supported.</p>
 
-<p>x86_64 and x86 platforms are supported, as are non-x86 architectures such as ARM, Sparc, Mips, PPC, and others.</p>
+  <p>x86_64 and x86 platforms are supported, as are non-x86 architectures such as ARM, Sparc, Mips, PPC, and others.</p>
 
-<p>uClibc/Linux-based systems are also supported.</p>
+  <p>Clibc/Linux-based systems are also supported.</p>
 
-<p>Rudiments should build on relatively modern versions of x86 or x64 Windows as well.</p>
+Rudiments should build on relatively modern versions of x86 or x64 Windows as well.
+</blockquote>
+<br/><a name="prerequisites"/><h2>Prerequisites</h2>
 
-<a name="prerequisites"></a>
-<span class="heading2">Prerequisites</span>
+<blockquote>
+  <p>Before you can compile Rudiments, you must install some prerequisites.</p>
 
-<p>Before you can compile Rudiments, you must install some prerequisites.</p>
+  <p>The first thing that you need is a compiler toolchain and make utility.</p>
 
-<p>The first thing that you need is a compiler toolchain and make utility.</p>
+  <p>GNU and clang/LLVM toolchains are supported on Linux/Unix systems.   The native compiler toolchain for SCO UnixWare is also supported.  Native compiler toolchains for other Unix platforms may work as well.  GNU make is also required on Linux/Unix platforms.</p>
 
-<p>GNU and clang/LLVM toolchains are supported on Linux/Unix systems.   The native compiler toolchain for SCO UnixWare is also supported.  Native compiler toolchains for other Unix platforms may work as well.  GNU make is also required on Linux/Unix platforms.</p>
+  <p>Microsoft Visual Studio and Microsoft Visual Studio Express toolchains are supported on Windows.  Versions 2005 and greater should work.  The nmake utility is also required, but it's provided by Visual Studio.</p>
 
-<p>Microsoft Visual Studio and Microsoft Visual Studio Express toolchains are supported on Windows.  Versions 2005 and greater should work.  The nmake utility is also required, but it's provided by Visual Studio.</p>
+  <p>If <a href="OpenSSL">OpenSSL</a>, Kerberos/GSSAPI, Perl Compatible Regular Expressions, or libcurl are present then the build process will detect them and include support for them, but they are not required.</p>
 
-<p>If OpenSSL, Kerberos/GSSAPI, Perl Compatible Regular Expressions, or libcurl are present then the build process will detect them and include support for them, but they are not required.</p>
+  <p>(Note: <a href="OpenSSL">OpenSSL</a>, Kerberos/GSSAPI, Perl Compatible Regular Expressions, and libcurl are not currently supported on Windows)</p>
 
-<p>(Note: OpenSSL, Kerberos/GSSAPI, Perl Compatible Regular Expressions, and libcurl are not currently supported on Windows)</p>
+See <a href="prerequisites.html">Installing Rudiments Prerequisites</a> for detailed information on installing prerequisite software.
+</blockquote>
+<br/><a name="unixlinux"/><h2>Installation on Linux, Unix or Unix-like Platforms</h2>
 
-<p>See <a href="prerequisites.html">Installing Rudiments Prerequisites</a> for detailed information on installing prerequisite software.</p>
+<a name="downloading"/><h3>Downloading Rudiments</h3>
 
+<blockquote>
+  <p>You can download the most current source distribution of Rudiments from <a target="_blank" href="http://rudiments.sourceforge.net/download.html">http://rudiments.sourceforge.net/download.html</a>.</p>
 
-<br>
-<a name="unixlinux"></a>
-<span class="heading1">Installation on Linux, Unix or Unix-like Platforms</span><br><br>
+For Linux or Unix installations, download the tar.gz file.
+</blockquote>
+<br/><a name="extracting"/><h3>Extracting Rudiments</h3>
 
+<blockquote>
+  <p>To extract the distribution on Unix or Linux, move the file to a location on your machine that you have read/write access to and execute the following commands:</p>
 
-<a name="downloading"></a>
-<span class="heading2">Downloading Rudiments</span>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><font color="#008080">gunzip</font> rudiments<font color="#990000">-</font>X<font color="#990000">.</font>XX<font color="#990000">.</font>tar<font color="#990000">.</font>gz
+tar <font color="#008080">xf</font> rudiments<font color="#990000">-</font>X<font color="#990000">.</font>XX<font color="#990000">.</font>tar</tt></pre>
 
-<p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
+  </blockquote>
+  <p>(Where X.XX is replaced with the version of Rudiments that you downloaded.)</p>
 
-<p>For Linux or Unix installations, download the tar.gz file.</p>
+This will create a rudiments-X.XX directory.
+</blockquote>
+<br/><a name="building"/><h3>Building Rudiments</h3>
 
+<blockquote>
+  <p>To build Rudiments, navigate to the directory that was created by the extraction and execute the following commands:</p>
 
-<a name="extracting"></a>
-<span class="heading2">Extracting Rudiments</span>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>configure
+make</tt></pre>
 
-<p>To extract the distribution on Unix or Linux, move the file to a location on your machine that you have read/write access to and execute the following commands:</p>
+  </blockquote>
+  <p>The configure script takes lots of command line options, most of which tell it which features to enable or disable or where to find prerequisite software in case any of it is installed in non-standard locations.  It also takes the --prefix option in case you want to install it somewhere other than /usr/local/firstworks.  For example:</p>
 
-<blockquote><b>
-gunzip rudiments-X.XX.tar.gz<br>
-tar xf rudiments-X.XX.tar
-</b></blockquote>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>configure <font color="#990000">--</font>prefix<font color="#990000">=/</font>usr<font color="#990000">/</font>local</tt></pre>
 
-<p>(Where X.XX is replaced with the version of Rudiments that you downloaded.)</p>
+  </blockquote>
+  <p>This invocation would cause the libraries to be installed in /usr/local/lib, the header files in /usr/local/include, the binaries and scripts to be installed in /usr/local/bin, etc.</p>
 
-<p>This will create a rudiments-X.XX directory.</p>
+  <p>There are also options for using cross-compilers and enabling debug and profiling.  To see the full list of available options, run:</p>
 
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>configure <font color="#990000">--</font>help</tt></pre>
 
-<a name="building"></a>
-<span class="heading2">Building Rudiments</span>
+  </blockquote>
+</blockquote>
+<br/><a name="installing"/><h3>Installing Rudiments</h3>
 
-<p>To build Rudiments, navigate to the directory that was created by the extraction and execute the following commands:</p>
+<blockquote>
+  <p>By default, on Unix or Linux, everything is installed under /usr/local/firstworks by default.  You should either create that directory and give yourself full access permissions or install as root.</p>
 
-<blockquote><b>
-configure<br>
-make
-</b></blockquote>
+  <p>To install Rudiments run:</p>
 
-<p>The configure script takes lots of command line options, most of which tell it which features to enable or disable or where to find prerequisite software in case any of it is installed in non-standard locations.  It also takes the --prefix option in case you want to install it somewhere other than /usr/local/firstworks.  For example:</p>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>make install</tt></pre>
 
-<blockquote><b>
-configure --prefix=/usr/local
-</b></blockquote>
+  </blockquote>
+  <p>To uninstall Rudiments run:</p>
 
-<p>This invocation would cause the libraries to be installed in /usr/local/lib, the header files in /usr/local/include, the binaries and scripts to be installed in /usr/local/bin, etc.</p>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>make uninstall</tt></pre>
 
-<p>There are also options for using cross-compilers and enabling debug and profiling.  To see the full list of available options, run:</p>
+  </blockquote>
+</blockquote>
+<br/><a name="windows"/><h2>Installation on Windows</h2>
 
-<blockquote><b>
-configure --help
-</b></blockquote>
+<a name="windownloading"/><h3>Downloading Rudiments</h3>
 
-<a name="installing"></a>
-<span class="heading2">Installing Rudiments</span>
+<blockquote>
+  <p>You can download the most current source distribution of Rudiments from <a target="_blank" href="http://rudiments.sourceforge.net/download.html">http://rudiments.sourceforge.net/download.html</a>.</p>
 
-<p>By default, on Unix or Linux, everything is installed under /usr/local/firstworks by default.  You should either create that directory and give yourself full access permissions or install as root.</p>
+For a Windows installation, download the zip file.
+</blockquote>
+<br/><a name="winextracting"/><h3>Extracting Rudiments</h3>
 
-<p>To install Rudiments run:</p>
+<blockquote>
+  <p>To extract the distribution, move the zip file to your desktop or a location on your machine that you have read/write access, right click on the file and select "Extract All".</p>
 
-<blockquote><b>
-make install
-</b></blockquote>
+This will create a rudiments-X.XX directory where X.XX is replaced with the rudiments version number.
+</blockquote>
+<br/><a name="winbuilding"/><h3>Building Rudiments</h3>
 
-<p>To uninstall Rudiments run:</p>
+<blockquote>
+  <p>To build Rudiments on Windows, open the Visual Studio Command Prompt.</p>
 
-<blockquote><b>
-make uninstall
-</b></blockquote>
+  <p>To build a 32-bit version of Rudiments, open the Visual Studio Command Prompt for x86.  To build a 64-bit version of Rudiments, open the Visual Studio Command Prompt for x64.</p>
 
+  <p>Navigate to the directory that was created when Rudiments was extracted, and execute the following commands:</p>
 
-<br>
-<a name="windows"></a>
-<span class="heading1">Installation on Windows</span><br><br>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>cscript <font color="#990000">/</font><font color="#008080">nologo</font> configure<font color="#990000">.</font>vbs
+nmake</tt></pre>
 
+  </blockquote>
+</blockquote>
+<br/><a name="installing"/><h3>Installing Rudiments</h3>
 
-<a name="windownloading"></a>
-<span class="heading2">Downloading Rudiments</span>
+<blockquote>
+  <p>By default, on Windows, everything is installed under C:\Program Files\Firstworks.  You should either create that directory and give yourself full access permissions or install as Administrator.</p>
 
-<p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
+  <p>To install Rudiments run:</p>
 
-<p>For a Windows installation, download the zip file.</p>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>nmake install</tt></pre>
 
-<a name="winextracting"></a>
-<span class="heading2">Extracting Rudiments</span>
+  </blockquote>
+  <p>To uninstall Rudiments run:</p>
 
-<p>To extract the distribution, move the zip file to your desktop or a location on your machine that you have read/write access, right click on the file and select "Extract All".</p>
+  <blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>nmake uninstall</tt></pre>
 
-<p>This will create a rudiments-X.XX directory where X.XX is replaced with the rudiments version number.</p>
+  </blockquote>
+</blockquote>
+<br/><!--#include virtual="contentend.html"-->
 
-<a name="winbuilding"></a>
-<span class="heading2">Building Rudiments</span>
+<!--#include virtual="footer.html"-->
 
-<p>To build Rudiments on Windows, open the Visual Studio Command Prompt.</p>
-
-<p>To build a 32-bit version of Rudiments, open the Visual Studio Command Prompt for x86.  To build a 64-bit version of Rudiments, open the Visual Studio Command Prompt for x64.</p>
-
-<p>Navigate to the directory that was created when Rudiments was extracted, and execute the following commands:</p>
-
-<blockquote><b>
-cscript /nologo configure.vbs<br>
-nmake
-</b></blockquote>
-
-<a name="installing"></a>
-<span class="heading2">Installing Rudiments</span>
-
-<p>By default, on Windows, everything is installed under C:\Program Files\Firstworks.  You should either create that directory and give yourself full access permissions or install as Administrator.</p>
-
-<p>To install Rudiments run:</p>
-
-<blockquote><b>
-nmake install
-</b></blockquote>
-
-<p>To uninstall Rudiments run:</p>
-
-<blockquote><b>
-nmake uninstall
-</b></blockquote>
-
-<!--#include virtual="contentend.html" -->
-
-<!--#include virtual="footer.html" -->

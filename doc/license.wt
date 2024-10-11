@@ -1,0 +1,35 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+=== License ===
+
+{{{#!blockquote
+Rudiments is covered by the [licenses/lgpl.txt GNU LGPL 2] and is thus generally free to use and distribute, by itself, as part of a free software project, as part of a commercial system, or otherwise.
+}}}
+
+----
+
+=== Distribution of Modified Versions ===
+
+{{{#!blockquote
+The LGPL license requires that if a modified version of software covered by that license is distributed, then the modified version, including source code must also be released under the same license.
+}}}
+
+----
+
+=== Contributed Code ===
+
+{{{#!blockquote
+Patches and other contributions are welcome.  No copyright assignment or other assignment of interest is required.
+
+For questions, please contact [mailto:licensing@firstworks.com licensing@firstworks.com].
+[[Image(images/us.png,title=native english speaker,nolink)]]
+[[Image(images/br.png,title=falo portugues tambem,nolink)]]
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

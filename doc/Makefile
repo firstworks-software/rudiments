@@ -5,16 +5,23 @@ include ../config.mk
 .SUFFIXES: .wt .html
 
 SRCS = documentation.wt \
-	download.wt
+	download.wt \
+	installing.wt \
+	license.wt
 
 OBJS = documentation.html \
-	download.html
+	download.html \
+	installing.html \
+	license.html
 
 .wt.html:
 	wt -i $< -o $@ -xhtml xhtml.conf
 
 all: $(OBJS)
 	$(CHMOD) 755 $(OBJS)
+
+clean:
+	$(RM) $(OBJS)
 
 install:
 	$(MKINSTALLDIRS) $(docdir)
