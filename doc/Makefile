@@ -29,7 +29,7 @@ OBJS = betterc.html \
 	utility.html
 
 .wt.html:
-	wt -i $< -o $@ -xhtml xhtml.conf
+	wt -i $< -o $@
 
 all: $(OBJS)
 	$(CHMOD) 755 $(OBJS)
@@ -39,6 +39,8 @@ clean:
 
 install:
 	$(MKINSTALLDIRS) $(docdir)
+	$(CP) .htaccess $(docdir)
+	$(CHMOD) 644 $(docdir)/.htaccess
 	$(CP) *.html $(docdir)
 	$(CHMOD) 755 $(docdir)/*.html
 	$(MKINSTALLDIRS) $(docdir)/cards

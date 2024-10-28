@@ -131,7 +131,7 @@ OBJS = avltree.html \
 	xmlsax.html
 
 .wt.html:
-	wt -i $< -o $@ -xhtml xhtml.conf
+	wt -i $< -o $@
 
 all: $(OBJS)
 	$(CHMOD) 755 $(OBJS)
