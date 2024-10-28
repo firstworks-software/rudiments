@@ -6,11 +6,13 @@ function contains(str,part) {
 }
 
 function setActive(btn,img) {
-	document.getElementById("button-"+btn).style.backgroundImage="url(images/"+img+")";
+	document.getElementById("button-"+btn).
+			style.backgroundImage="url(images/"+img+")";
 }
 
 function setButton() {
-	if (endsWith(document.location.pathname,"index.html")) {
+	if (endsWith(document.location.pathname,"index.html") ||
+			endsWith(document.location.pathname,"/")) {
 		setActive("about","lightbluedenim.png");
 	} else if (endsWith(document.location.pathname,"documentation.html") ||
 			contains(document.location.pathname,"/programming/")) {
