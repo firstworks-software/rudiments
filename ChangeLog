@@ -1,4 +1,5 @@
 2.0.1 - added comma-separated host support to inetsocketclient
+	moved entire website into project
 
 2.0.0 - added object, collection class heirarchy
 	added table class
