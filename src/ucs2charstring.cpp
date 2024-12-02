@@ -2406,10 +2406,10 @@ void ucs2charstring::split(const ucs2_t *string,
 				const ucs2_t *delimiter,
 				bool collapse,
 				ucs2_t ***list,
-				uint64_t *listlength) {
+				uint64_t *listcount) {
 	split(string,getLength(string),
 			delimiter,getLength(delimiter),
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void ucs2charstring::split(const ucs2_t *string,
@@ -2417,10 +2417,10 @@ void ucs2charstring::split(const ucs2_t *string,
 				const ucs2_t *delimiter,
 				bool collapse,
 				ucs2_t ***list,
-				uint64_t *listlength) {
+				uint64_t *listcount) {
 	split(string,stringlength,
 			delimiter,getLength(delimiter),
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void ucs2charstring::split(const ucs2_t *string, 
@@ -2428,10 +2428,10 @@ void ucs2charstring::split(const ucs2_t *string,
 				size_t delimiterlength,
 				bool collapse,
 				ucs2_t ***list,
-				uint64_t *listlength) {
+				uint64_t *listcount) {
 	split(string,getLength(string),
 			delimiter,delimiterlength,
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void ucs2charstring::split(const ucs2_t *string,
@@ -2440,10 +2440,10 @@ void ucs2charstring::split(const ucs2_t *string,
 				size_t delimiterlength,
 				bool collapse,
 				ucs2_t ***list,
-				uint64_t *listlength) {
+				uint64_t *listcount) {
 
 	// handle degenerate cases
-	if (!list && !listlength) {
+	if (!list && !listcount) {
 		return;
 	}
 	if (isNullOrEmpty(string) || !stringlength ||
@@ -2451,14 +2451,14 @@ void ucs2charstring::split(const ucs2_t *string,
 		if (list) {
 			(*list)=NULL;
 		}
-		if (listlength) {
-			(*listlength)=0;
+		if (listcount) {
+			(*listcount)=0;
 		}
 		return;
 	}
 
-	// declare local list length
-	uint64_t	ll=0;
+	// declare local list count
+	uint64_t	lc=0;
 
 	// 2 passes,
 	// 1 to count the number of chunks to split the string into,
@@ -2469,8 +2469,8 @@ void ucs2charstring::split(const ucs2_t *string,
 		const ucs2_t	*start=string;
 		const ucs2_t	*end=string+stringlength;
 
-		// initialize the list length
-		ll=0;
+		// initialize the list count
+		lc=0;
 
 		// loop through the string...
 		const ucs2_t	*current=start;
@@ -2497,13 +2497,13 @@ void ucs2charstring::split(const ucs2_t *string,
 						// make a copy of the string
 						// between the last delimiter
 						// and here
-						(*list)[ll]=
+						(*list)[lc]=
 							duplicate(start,
 								current-start);
 					}
 
 					// increment the counter
-					ll++;
+					lc++;
 				}
 
 				if (current==end) {
@@ -2523,13 +2523,13 @@ void ucs2charstring::split(const ucs2_t *string,
 		// if we're done with the first pass,
 		// create the list and reset the counter
 		if (!pass && list) {
-			(*list)=new ucs2_t *[ll];
+			(*list)=new ucs2_t *[lc];
 		}
 	}
 
-	// copy out the listlength
-	if (listlength) {
-		(*listlength)=ll;
+	// copy out the listcount
+	if (listcount) {
+		(*listcount)=lc;
 	}
 }
 

@@ -2355,18 +2355,18 @@ long double wcharstring::convertToFloat(const wchar_t *string,
 
 void wcharstring::split(const wchar_t *string, const wchar_t *delimiter,
 				bool collapse,
-				wchar_t ***list, uint64_t *listlength) {
+				wchar_t ***list, uint64_t *listcount) {
 	split(string,getLength(string),
 			delimiter,getLength(delimiter),
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void wcharstring::split(const wchar_t *string, size_t stringlength,
 				const wchar_t *delimiter, bool collapse,
-				wchar_t ***list, uint64_t *listlength) {
+				wchar_t ***list, uint64_t *listcount) {
 	split(string,stringlength,
 			delimiter,getLength(delimiter),
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void wcharstring::split(const wchar_t *string, 
@@ -2374,10 +2374,10 @@ void wcharstring::split(const wchar_t *string,
 				size_t delimiterlength,
 				bool collapse,
 				wchar_t ***list,
-				uint64_t *listlength) {
+				uint64_t *listcount) {
 	split(string,getLength(string),
 			delimiter,delimiterlength,
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void wcharstring::split(const wchar_t *string,
@@ -2386,10 +2386,10 @@ void wcharstring::split(const wchar_t *string,
 				size_t delimiterlength,
 				bool collapse,
 				wchar_t ***list,
-				uint64_t *listlength) {
+				uint64_t *listcount) {
 
 	// handle degenerate cases
-	if (!list && !listlength) {
+	if (!list && !listcount) {
 		return;
 	}
 	if (isNullOrEmpty(string) || !stringlength ||
@@ -2397,14 +2397,14 @@ void wcharstring::split(const wchar_t *string,
 		if (list) {
 			(*list)=NULL;
 		}
-		if (listlength) {
-			(*listlength)=0;
+		if (listcount) {
+			(*listcount)=0;
 		}
 		return;
 	}
 
-	// declare local list length
-	uint64_t	ll=0;
+	// declare local list count
+	uint64_t	lc=0;
 
 	// 2 passes,
 	// 1 to count the number of chunks to split the string into,
@@ -2415,8 +2415,8 @@ void wcharstring::split(const wchar_t *string,
 		const wchar_t	*start=string;
 		const wchar_t	*end=string+stringlength;
 
-		// initialize the list length
-		ll=0;
+		// initialize the list count
+		lc=0;
 
 		// loop through the string...
 		const wchar_t	*current=start;
@@ -2443,13 +2443,13 @@ void wcharstring::split(const wchar_t *string,
 						// make a copy of the string
 						// between the last delimiter
 						// and here
-						(*list)[ll]=
+						(*list)[lc]=
 							duplicate(start,
 								current-start);
 					}
 
 					// increment the counter
-					ll++;
+					lc++;
 				}
 
 				if (current==end) {
@@ -2469,13 +2469,13 @@ void wcharstring::split(const wchar_t *string,
 		// if we're done with the first pass,
 		// create the list and reset the counter
 		if (!pass && list) {
-			(*list)=new wchar_t *[ll];
+			(*list)=new wchar_t *[lc];
 		}
 	}
 
-	// copy out the listlength
-	if (listlength) {
-		(*listlength)=ll;
+	// copy out the listcount
+	if (listcount) {
+		(*listcount)=lc;
 	}
 }
 

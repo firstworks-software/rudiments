@@ -2398,36 +2398,36 @@ long double charstring::convertToFloat(const char *string,
 
 void charstring::split(const char *string, const char *delimiter,
 				bool collapse,
-				char ***list, uint64_t *listlength) {
+				char ***list, uint64_t *listcount) {
 	split(string,getLength(string),
 			delimiter,getLength(delimiter),
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void charstring::split(const char *string, size_t stringlength,
 				const char *delimiter, bool collapse,
-				char ***list, uint64_t *listlength) {
+				char ***list, uint64_t *listcount) {
 	split(string,stringlength,
 			delimiter,getLength(delimiter),
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void charstring::split(const char *string, 
 				const char *delimiter, size_t delimiterlength,
 				bool collapse,
-				char ***list, uint64_t *listlength) {
+				char ***list, uint64_t *listcount) {
 	split(string,getLength(string),
 			delimiter,delimiterlength,
-			collapse,list,listlength);
+			collapse,list,listcount);
 }
 
 void charstring::split(const char *string, size_t stringlength,
 				const char *delimiter, size_t delimiterlength,
 				bool collapse,
-				char ***list, uint64_t *listlength) {
+				char ***list, uint64_t *listcount) {
 
 	// handle degenerate cases
-	if (!list && !listlength) {
+	if (!list && !listcount) {
 		return;
 	}
 	if (isNullOrEmpty(string) || !stringlength ||
@@ -2435,14 +2435,14 @@ void charstring::split(const char *string, size_t stringlength,
 		if (list) {
 			(*list)=NULL;
 		}
-		if (listlength) {
-			(*listlength)=0;
+		if (listcount) {
+			(*listcount)=0;
 		}
 		return;
 	}
 
-	// declare local list length
-	uint64_t	ll=0;
+	// declare local list count
+	uint64_t	lc=0;
 
 	// 2 passes,
 	// 1 to count the number of chunks to split the string into,
@@ -2453,8 +2453,8 @@ void charstring::split(const char *string, size_t stringlength,
 		const char	*start=string;
 		const char	*end=string+stringlength;
 
-		// initialize the list length
-		ll=0;
+		// initialize the list count
+		lc=0;
 
 		// loop through the string...
 		const char	*current=start;
@@ -2481,13 +2481,13 @@ void charstring::split(const char *string, size_t stringlength,
 						// make a copy of the string
 						// between the last delimiter
 						// and here
-						(*list)[ll]=
+						(*list)[lc]=
 							duplicate(start,
 								current-start);
 					}
 
 					// increment the counter
-					ll++;
+					lc++;
 				}
 
 				if (current==end) {
@@ -2507,13 +2507,13 @@ void charstring::split(const char *string, size_t stringlength,
 		// if we're done with the first pass,
 		// create the list and reset the counter
 		if (!pass && list) {
-			(*list)=new char *[ll];
+			(*list)=new char *[lc];
 		}
 	}
 
-	// copy out the listlength
-	if (listlength) {
-		(*listlength)=ll;
+	// copy out the listcount
+	if (listcount) {
+		(*listcount)=lc;
 	}
 }
 

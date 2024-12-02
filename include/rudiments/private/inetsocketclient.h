@@ -7,4 +7,6 @@
 		}
 
 	private:
+		int32_t	connect(const char *host);
+
 		inetsocketclientprivate	*pvt;

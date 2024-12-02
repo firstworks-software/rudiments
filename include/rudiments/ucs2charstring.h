@@ -1353,7 +1353,7 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 
 		/** Parses "string" of character length "stringlength"
 		 *  delimited by "delimiter" of character length
-		 *  "delimiterlength" and allocates "listlength" elements of
+		 *  "delimiterlength" and allocates "listcount" elements of
 		 *  "list" to return the parts.  If "collapse" is true then
 		 *  multiple instances of the delimiter in a row will be
 		 *  interpreted as one instance of the delimiter.  Each member
@@ -1365,11 +1365,11 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 					size_t delimiterlength,
 					bool collapse,
 					ucs2_t ***list,
-					uint64_t *listlength);
+					uint64_t *listcount);
 
 		/** Parses NULL-terminated "string" delimited by "delimiter" of
 		 *  character length "delimiterlength" and allocates
-		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "listcount" elements of "list" to return the parts.  If
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
@@ -1379,11 +1379,11 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 					size_t delimiterlength,
 					bool collapse,
 					ucs2_t ***list,
-					uint64_t *listlength);
+					uint64_t *listcount);
 
 		/** Parses "string" of character length "stringlength"
 		 *  delimited by NULL-terminated "delimiter" and allocates
-		 *  "listlength" elements of "list" to return the parts.  If
+		 *  "listcount" elements of "list" to return the parts.  If
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
@@ -1393,10 +1393,10 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 					const ucs2_t *delimiter,
 					bool collapse,
 					ucs2_t ***list,
-					uint64_t *listlength);
+					uint64_t *listcount);
 
 		/** Parses NULL-terminated "string" delimited by
-		 *  NULL-terminated "delimiter" and allocates "listlength"
+		 *  NULL-terminated "delimiter" and allocates "listcount"
 		 *  elements of "list" to return the parts.  If "collapse" is
 		 *  true then multiple instances of the delimiter in a row will
 		 *  be interpreted as one instance of the delimiter.  Each
@@ -1406,7 +1406,7 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 					const ucs2_t *delimiter,
 					bool collapse,
 					ucs2_t ***list,
-					uint64_t *listlength);
+					uint64_t *listcount);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",

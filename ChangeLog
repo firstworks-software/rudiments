@@ -1,3 +1,5 @@
+2.0.1 - added comma-separated host support to inetsocketclient
+
 2.0.0 - added object, collection class heirarchy
 	added table class
 	added scalar class

@@ -85,6 +85,66 @@ int32_t inetsocketclient::connect() {
 
 	close();
 
+	//  we may have gotten a comma-separated list of hosts, so split
+	//  whatever we got
+	char		**hosts;
+	uint64_t	hostcount;
+	charstring::split(getHost(),",",true,&hosts,&hostcount);
+
+	// put the array in a list
+	linkedlist<char *>	hostlist;
+	for (uint64_t counter=0; counter<hostcount; counter++) {
+		hostlist.append(hosts[counter]);
+	}
+
+	// clean up
+	hostlist.setManageArrayValues(true);
+	delete[] hosts;
+
+	// attempt to connect to each host...
+	int32_t		retval=RESULT_ERROR;
+	for (uint64_t counter=0; counter<hostcount; counter++) {
+
+		if (process::getShutDownFlag()) {
+			return RESULT_ERROR;
+		}
+
+		// wait the specified amount of time between reconnect tries
+		// unless we're on the very first try
+		if (counter) {
+			snooze::macrosnooze(getRetryWait());
+		}
+
+		// we may need to randomize the hosts
+		listnode<char *> *hostlistnode=hostlist.getFirst();
+		if (pvt->_randomize && hostlist.getCount()>1) {
+			if (!pvt->_seeded) {
+				pvt->_seed=randomnumber::getSeed();
+				pvt->_seeded=true;
+			}
+			pvt->_seed=randomnumber::generate(pvt->_seed);
+			int32_t	skip=randomnumber::scale(pvt->_seed,0,
+							hostlist.getCount()-1);
+			for (int32_t i=0; i<skip; i++) {
+				hostlistnode=hostlistnode->getNext();
+			}
+		}
+
+		// attempt to connect to whichever host we randomly picked
+		retval=connect(hostlistnode->getValue());
+		if (retval==RESULT_SUCCESS) {
+			break;
+		}
+
+		// remove this host from the list and try again
+		hostlist.remove(hostlistnode);
+	}
+
+	return retval;
+}
+
+int32_t inetsocketclient::connect(const char *host) {
+
 	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 
 		// create a hint indicating that SOCK_STREAM should be used
@@ -108,7 +168,7 @@ int32_t inetsocketclient::connect() {
 		error::clearError();
 		do {
 			error::clearError();
-			result=getaddrinfo(getHost(),portstr,&hints,&ai);
+			result=getaddrinfo(host,portstr,&hints,&ai);
 		} while (result!=0 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 		// ...In theory, we should only loop back and try again if
@@ -127,7 +187,7 @@ int32_t inetsocketclient::connect() {
 
 		// get the host entry
 		hostentry	he;
-		if (!he.open(getHost())) {
+		if (!he.open(host)) {
 			return RESULT_ERROR;
 		}
 
@@ -163,7 +223,7 @@ int32_t inetsocketclient::connect() {
 			// we might want to randomize the results, so create
 			// a copy of the list of addrinfo's that we can rummage
 			// through later
-			linkedlist< addrinfo * > addrlist;
+			linkedlist<addrinfo *> addrlist;
 			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
 				addrlist.append(ainfo);
 			}
@@ -173,7 +233,7 @@ int32_t inetsocketclient::connect() {
 			while (addrlist.getCount()) {
 
 				// figure out which addrinfo to try
-				listnode< addrinfo * >
+				listnode<addrinfo *>
 					*addrlistnode=addrlist.getFirst();
 				if (pvt->_randomize && addrlist.getCount()>1) {
 					if (!pvt->_seeded) {
@@ -267,7 +327,7 @@ int32_t inetsocketclient::connect() {
 			// we might want to randomize the results, so create
 			// a copy of the list of addresses that we can rummage
 			// through later
-			linkedlist< const char * > addrlist;
+			linkedlist<const char *> addrlist;
 			for (int32_t addressindex=0;
 					he.getAddressList()[addressindex];
 					addressindex++) {
@@ -280,7 +340,7 @@ int32_t inetsocketclient::connect() {
 			while (addrlist.getCount()) {
 
 				// figure out which addrinfo to try
-				listnode< const char * >
+				listnode<const char *>
 					*addrlistnode=addrlist.getFirst();
 				if (pvt->_randomize && addrlist.getCount()>1) {
 					if (!pvt->_seeded) {

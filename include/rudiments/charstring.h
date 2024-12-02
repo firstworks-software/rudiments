@@ -1517,7 +1517,7 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Parses "string" of character length "stringlen"
 		 *  delimited by "delimiter" of character length
-		 *  "delimiterlen" and allocates "listlen" elements of
+		 *  "delimiterlen" and allocates "listcount" elements of
 		 *  "list" to return the parts.  If "collapse" is true then
 		 *  multiple instances of the delimiter in a row will be
 		 *  interpreted as one instance of the delimiter.  Each member
@@ -1529,11 +1529,11 @@ class RUDIMENTS_DLLSPEC charstring {
 					size_t delimiterlen,
 					bool collapse,
 					char ***list,
-					uint64_t *listlen);
+					uint64_t *listcount);
 
 		/** Parses NULL-terminated "string" delimited by "delimiter" of
 		 *  character length "delimiterlen" and allocates
-		 *  "listlen" elements of "list" to return the parts.  If
+		 *  "listcount" elements of "list" to return the parts.  If
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
@@ -1543,11 +1543,11 @@ class RUDIMENTS_DLLSPEC charstring {
 					size_t delimiterlen,
 					bool collapse,
 					char ***list,
-					uint64_t *listlen);
+					uint64_t *listcount);
 
 		/** Parses "string" of character length "stringlen"
 		 *  delimited by NULL-terminated "delimiter" and allocates
-		 *  "listlen" elements of "list" to return the parts.  If
+		 *  "listcount" elements of "list" to return the parts.  If
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
@@ -1557,10 +1557,10 @@ class RUDIMENTS_DLLSPEC charstring {
 					const char *delimiter,
 					bool collapse,
 					char ***list,
-					uint64_t *listlen);
+					uint64_t *listcount);
 
 		/** Parses NULL-terminated "string" delimited by
-		 *  NULL-terminated "delimiter" and allocates "listlen"
+		 *  NULL-terminated "delimiter" and allocates "listcount"
 		 *  elements of "list" to return the parts.  If "collapse" is
 		 *  true then multiple instances of the delimiter in a row will
 		 *  be interpreted as one instance of the delimiter.  Each
@@ -1570,7 +1570,7 @@ class RUDIMENTS_DLLSPEC charstring {
 					const char *delimiter,
 					bool collapse,
 					char ***list,
-					uint64_t *listlen);
+					uint64_t *listcount);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",

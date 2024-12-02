@@ -28,6 +28,17 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		void	setParameters(
 				dictionary<const char *, const char *> *cd);
 
+		/** "host" may be a list of comma-separated hosts/addresses.
+		 *  This method instructs connect() whether or not to randomize
+		 *  this list.
+		 *
+		 *  Randomizing the list can provide inexpensive load balancing.
+		 *
+		 *  Not randomizing the list can provide inexpensive failover.
+		 *
+		 *  Defaults to true. */
+		void	randomizeHosts(bool randomize);
+
 		/** Instructs connect() whether or not to randomize the list of
 		 *  addresses that "host" resolves to.  Defaults to true.
  		 *
@@ -53,16 +64,31 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *  "tries" attempts, waiting "retrywait" seconds
 		 *  between each attempt.
 		 *
-		 *  If "host" resolves to multiple addresses (ie. if round-robin
-		 *  DNS or another DNS-based load-balancing strategy is used),
-		 *  then an attempt will be made to connect to each address
-		 *  until the attempt succeeds or there are no more addresses
-		 *  left to try.  This process will be tried "tries" times.
+		 *  If "host" is a comma separated list of hosts, then an
+		 *  attempt will be made to connect to each until the attempt
+		 *  succeeds or there are no more hosts left to try.
+		 *
+		 *  If each host resolves to multiple addresses (ie. if
+		 *  round-robin DNS or another DNS-based load-balancing
+		 *  strategy is used), then an attempt will be made to connect
+		 *  to each address until the attempt succeeds or there are no
+		 *  more addresses left to try.  This process will be tried
+		 *  "tries" times.
+		 *
+		 *  For example, if...
+		 *    * "host" is: "serverset1,serverset2"
+		 *    * serverset1 resolves to 10.0.0.1 and 10.0.0.2
+		 *    * serverset2 resolves to 10.0.1.1 and 10.0.1.2
+		 *    * "tries" is set to 2
+		 *  then 2 attempts will be made to connect to each of
+		 *  10.0.0.1, 10.0.0.2, 10.0.1.1, and 10.0.1.2, by default, in
+		 *  random order.
 		 * 
 		 *  Setting "tries" to 0 will cause it to try to 
-		 *  connect indefinitely.  Setting "retrywait" to
-		 *  0 will cause it to try to connect over and over
-		 *  as fast as possible (not recommended).
+		 *  connect to the first host/address indefinitely
+		 *  (not recommended with multiple hosts).  Setting "retrywait"
+		 *  to 0 will cause it to try to connect over and over as fast
+		 *  as possible (not recommended).
 		 * 
 		 *  Each attempt to connect will wait "timeoutsec"
 		 *  seconds and "timeoutusec" microseconds for the
@@ -84,9 +110,9 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *
 		 *  Notes on round-robin DNS and DNS-based load-balancing:
 		 *
-		 *  By default, the connect() method randomizes the list of
-		 *  addresses that "host" resolves to.  This is intended to
-		 *  work around two issues.
+		 *  By default, connect() randomizes the list of addresses that
+		 *  each host resolves to.  This is intended to work around two
+		 *  issues.
 		 *
 		 *
 		 *  Issue 1:
@@ -102,8 +128,8 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *  Rudiments uses getaddrinfo() if it is available, but
 		 *  implementations of getaddrinfo() vary widely.
 		 *
-		 *  Some implementations sort the list of addresses that "host"
-		 *  resolves to rather than returning them in the order
+		 *  Some implementations sort the list of addresses that each
+		 *  host resolves to rather than returning them in the order
 		 *  returned by the DNS server, defeating any attempt at
 		 *  DNS-based load-balancing.
 		 *
@@ -119,11 +145,11 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *  Rudiments doesn't have a good way of knowing how
 		 *  getaddrinfo() is implemented or configured, so to err on
 		 *  the side of caution, connect() randomizes the list of
-		 *  addresses that "host" resolves to.
+		 *  addresses that each host resolves to.
 		 *
 		 *
 		 *  Randomization can be disabled and configured using
-		 *  randomizeAddresses(false).
+		 *  randomizeHosts(false) and/or randomizeAddresses(false).
 		 */
 		int32_t	connect();
 
