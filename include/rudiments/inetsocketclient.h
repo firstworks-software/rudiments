@@ -64,9 +64,9 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		 *  "tries" attempts, waiting "retrywait" seconds
 		 *  between each attempt.
 		 *
-		 *  If "host" is a comma separated list of hosts, then an
+		 *  If "host" is a comma-separated list of hosts, then an
 		 *  attempt will be made to connect to each until the attempt
-		 *  succeeds or there are no more hosts left to try.
+		 *  succeeds, or there are no more hosts left to try.
 		 *
 		 *  If each host resolves to multiple addresses (ie. if
 		 *  round-robin DNS or another DNS-based load-balancing
