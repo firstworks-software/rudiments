@@ -16,10 +16,6 @@
 	#include <unistd.h>
 #endif
 
-#ifdef RUDIMENTS_HAVE_SYSLOG_H
-	#include <syslog.h>
-#endif
-
 logdestination::~logdestination() {}
 
 class filedestinationprivate {
