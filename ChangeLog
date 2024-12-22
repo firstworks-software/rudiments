@@ -1,3 +1,6 @@
+2.0.2 - moved syslog.h to loggerincludes.h
+	added syslog macros to loggerincludes.h
+
 2.0.1 - added comma-separated host support to inetsocketclient
 	moved entire website into project
 
