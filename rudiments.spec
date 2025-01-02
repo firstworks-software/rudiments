@@ -85,7 +85,7 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %{_docdir}/%{name}
 
 %changelog
-* Sun Dec 21 2024 David Muse <david.muse@firstworks.com> - 2.0.2-1
+* Sat Dec 21 2024 David Muse <david.muse@firstworks.com> - 2.0.2-1
 - Updated to version 2.0.2.
 
 * Wed Dec 04 2024 David Muse <david.muse@firstworks.com> - 2.0.1-1
