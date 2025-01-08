@@ -21,20 +21,50 @@ httpresponse::~httpresponse() {
 	delete pvt;
 }
 
-void httpresponse::writeCrLf() {
-	pvt->_sapi->writeHeader("\r\n");
+void httpresponse::writeTextHtmlHeaderBlock() {
+	writeTextHtmlHeader();
+	writeCrLfs();
+}
+
+void httpresponse::writeTextPlainHeaderBlock() {
+	writeTextPlainHeader();
+	writeCrLfs();
+}
+
+void httpresponse::writeContentTypeHeaderBlock(const char *type,
+						const char *subtype) {
+	writeContentTypeHeader(type,subtype);
+	writeCrLfs();
+}
+
+void httpresponse::writeContentTypeHeaderBlock(const char *type,
+						const char *subtype,
+						const char *charset) {
+	writeContentTypeHeader(type,subtype,charset);
+	writeCrLfs();
+}
+
+void httpresponse::writeContentTypeHeaderBlock(const char *type,
+						const char *subtype,
+						const char *charset,
+						const char *boundary) {
+	writeContentTypeHeader(type,subtype,charset,boundary);
+	writeCrLfs();
+}
+
+void httpresponse::writeStatusHeaderBlock(const char *status) {
+	writeStatusHeader(status);
+	writeCrLfs();
 }
 
 void httpresponse::writeTextHtmlHeader() {
 	writeContentTypeHeader("text","html");
-	writeCrLf();
-	writeCrLf();
+	writeCrLfs();
 }
 
 void httpresponse::writeTextPlainHeader() {
 	writeContentTypeHeader("text","plain");
-	writeCrLf();
-	writeCrLf();
+	writeCrLfs();
 }
 
 void httpresponse::writeContentTypeHeader(const char *type,
@@ -60,6 +90,18 @@ void httpresponse::writeContentTypeHeader(const char *type,
 		contenttypestr.append(";boundary=")->append(boundary);
 	}
 	pvt->_sapi->writeHeader("Content-type",contenttypestr.getString());
+}
+
+void httpresponse::writeStatusHeader(const char *status) {
+	pvt->_sapi->writeStatusHeader(status);
+}
+
+void httpresponse::writeCrLf() {
+	pvt->_sapi->writeHeader("\r\n");
+}
+
+void httpresponse::writeCrLfs() {
+	pvt->_sapi->writeHeader("\r\n\r\n");
 }
 
 void httpresponse::writeSetCookie(const char *name, const char *value,
@@ -101,19 +143,12 @@ void httpresponse::writeFinalMultiPartBoundary(output *out) {
 	out->write('\n');
 }
 
-httpresponse *httpresponse::writeStatusHeader(const char *status) {
-	pvt->_sapi->writeStatusHeader(status);
-	return this;
-}
-
-httpresponse *httpresponse::writeHeader(const char *header, const char *value) {
+void httpresponse::writeHeader(const char *header, const char *value) {
 	pvt->_sapi->writeHeader(header,value);
-	return this;
 }
 
-httpresponse *httpresponse::writeHeader(const char *header) {
+void httpresponse::writeHeader(const char *header) {
 	pvt->_sapi->writeHeader(header);
-	return this;
 }
 
 ssize_t httpresponse::write(const byte_t *string, size_t size) {

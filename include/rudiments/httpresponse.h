@@ -19,11 +19,58 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		/** Writes HTTP header:
 		 *  Content-type: text/html
 		 *  followed by two carriage-returns to the browser. */
-		void	writeTextHtmlHeader();
+		void	writeTextHtmlHeaderBlock();
 
 		/** Writes HTTP header:
 		 *  Content-type: text/plain
 		 *  followed by two carriage-returns to the browser. */
+		void	writeTextPlainHeaderBlock();
+
+		/** Writes HTTP header:
+		 *  Content-type: "type"/"subtype"
+		 *  followed by two carriage-returns to the browser. */
+		void	writeContentTypeHeaderBlock(const char *type,
+							const char *subtype);
+
+		/** Writes HTTP header:
+		 *  Content-type: "type"/"subtype"; charset="charset"
+		 *  followed by two carriage-returns to the browser.
+		 *
+		 *  If charset is NULL or an empty string then it will be
+		 *  omitted. */
+		void	writeContentTypeHeaderBlock(const char *type,
+							const char *subtype,
+							const char *charset);
+
+		/** Writes HTTP header:
+		 *  Content-type: "type"/"subtype"; charset="charset";
+		 *  boundary="boundary"
+		 *  followed by two carriage-returns to the browser.
+		 *
+		 *  If either of charset or boundary are NULL or empty strings
+		 *  then it will be omitted. */
+		void	writeContentTypeHeaderBlock(const char *type,
+							const char *subtype,
+							const char *charset,
+							const char *boundary);
+
+		/** Writes HTTP header:
+		 *  Status: "status"
+		 *  followed by two carriage-returns to the browser. */
+		void	writeStatusHeaderBlock(const char *status);
+
+		/** Writes HTTP header:
+		 *  Content-type: text/html
+		 *  to the browser.
+		 *
+		 *  Does not write carriage-returns. */
+		void	writeTextHtmlHeader();
+
+		/** Writes HTTP header:
+		 *  Content-type: text/plain
+		 *  to the browser.
+		 *
+		 *  Does not write carriage-returns. */
 		void	writeTextPlainHeader();
 
 		/** Writes HTTP header:
@@ -60,9 +107,20 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 						const char *charset,
 						const char *boundary);
 
-		/** Writes carriage-return and line-feed (/r/n) to the
+		/** Writes HTTP header:
+		 *  Status: "status"
+		 *  to the browser.
+		 *
+		 *  Does not write carriage-returns. */
+		void	writeStatusHeader(const char *status);
+
+		/** Writes a carriage-return+line-feed (/r/n) to the
 		 *  browser. */
 		void	writeCrLf();
+
+		/** Writes two carriage-return+line-feeds (/r/n) to the
+		 *  browser. */
+		void	writeCrLfs();
 		
 		/** Writes Set-Cookie header to the browser. */
 		void	writeSetCookie(const char *name, const char *value,
@@ -79,14 +137,11 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		/** Writes a final multipart boundary string. */
 		void	writeFinalMultiPartBoundary(output *out);
 
-		/** Writes an http status header. */
-		httpresponse	*writeStatusHeader(const char *status);
+		/** Writes an http header. */
+		void	writeHeader(const char *header);
 
 		/** Writes an http header. */
-		httpresponse	*writeHeader(const char *header);
-
-		/** Writes an http header. */
-		httpresponse	*writeHeader(const char *header,
+		void	writeHeader(const char *header,
 						const char *value);
 
 		/** Writes "size" bytes of "string" to the browser.
