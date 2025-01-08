@@ -1,5 +1,6 @@
 2.1.0 - renamed *httprequest::get*IsAllowed to is*Allowed
 	renamed *serverapi and httpresponse::send* to write*
+	renamed httpresponse::setCookie to writeSetCookie
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
