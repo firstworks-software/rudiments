@@ -28,15 +28,15 @@ static bool httpModuleMain(httpserverapi *sapi) {
 					NULL,resp.getBoundaryString());
 
 	// cookies
-	resp.setCookie("cookievariable","cookievalue",NULL,NULL,NULL,0);
-	resp.setCookie("cookievariable","cookievalue","firstworks.com",
-			NULL,NULL,0);
-	resp.setCookie("cookievariable","cookievalue","firstworks.com",
-			"/stencil",NULL,0);
-	resp.setCookie("cookievariable","cookievalue","firstworks.com",
-			"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",0);
-	resp.setCookie("cookievariable","cookievalue","firstworks.com",
-			"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",1);
+	resp.writeSetCookie("cookievariable","cookievalue",NULL,NULL,NULL,0);
+	resp.writeSetCookie("cookievariable","cookievalue","firstworks.com",
+				NULL,NULL,0);
+	resp.writeSetCookie("cookievariable","cookievalue","firstworks.com",
+				"/stencil",NULL,0);
+	resp.writeSetCookie("cookievariable","cookievalue","firstworks.com",
+				"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",0);
+	resp.writeSetCookie("cookievariable","cookievalue","firstworks.com",
+				"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",1);
 
 	resp.writeHeader("Title","Hello, This is a title.");
 

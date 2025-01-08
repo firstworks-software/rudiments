@@ -65,7 +65,7 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		void	writeCrLf();
 		
 		/** Writes Set-Cookie header to the browser. */
-		void	setCookie(const char *name, const char *value,
+		void	writeSetCookie(const char *name, const char *value,
 					const char *domain, const char *path,
 					const char *expires, bool secure);
 

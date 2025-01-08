@@ -62,9 +62,9 @@ void httpresponse::writeContentTypeHeader(const char *type,
 	pvt->_sapi->writeHeader("Content-type",contenttypestr.getString());
 }
 
-void httpresponse::setCookie(const char *name, const char *value,
-				const char *domain, const char *path,
-				const char *expires, bool secure) {
+void httpresponse::writeSetCookie(const char *name, const char *value,
+					const char *domain, const char *path,
+					const char *expires, bool secure) {
 	stringbuffer	cookiestr;
 	cookiestr.append(name)->append('=')->append(value);
 	if (!charstring::isNullOrEmpty(domain)) {
