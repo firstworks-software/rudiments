@@ -1130,14 +1130,14 @@ void httprequest::buildAllVariables() {
 	pvt->_dirtyallvars=false;
 }
 
-bool httprequest::getMethodIsAllowed(const char *deniedmethods,
+bool httprequest::isMethodAllowed(const char *deniedmethods,
 					const char *allowedmethods) {
-	return getThingIsAllowed(
+	return isThingAllowed(
 			getEnvironmentVariable("REQUEST_METHOD"),true,
 			deniedmethods,allowedmethods);
 }
 
-bool httprequest::getThingIsAllowed(const char *thing,
+bool httprequest::isThingAllowed(const char *thing,
 					bool allowemptything,
 					const char *deniedthings,
 					const char *allowedthings) {
@@ -1161,22 +1161,22 @@ bool httprequest::getThingIsAllowed(const char *thing,
 	return false;
 }
 
-bool httprequest::getContentTypeIsAllowed(
+bool httprequest::isContentTypeAllowed(
 				const char *deniedcontenttypes,
 				const char *allowedcontenttypes) {
-	return getThingIsAllowed(getEnvironmentVariable("CONTENT_TYPE"),true,
+	return isThingAllowed(getEnvironmentVariable("CONTENT_TYPE"),true,
 					deniedcontenttypes,allowedcontenttypes);
 }
 
-bool httprequest::getIpIsAllowed(const char *deniedips,
+bool httprequest::isIpAllowed(const char *deniedips,
 					const char *allowedips) {
-	return getThingIsAllowed(getEnvironmentVariable("REMOTE_ADDR"),false,
+	return isThingAllowed(getEnvironmentVariable("REMOTE_ADDR"),false,
 							deniedips,allowedips);
 }
 
-bool httprequest::getRefererIsAllowed(const char *deniedreferers,
+bool httprequest::isRefererAllowed(const char *deniedreferers,
 					const char *allowedreferers) {
-	return getThingIsAllowed(getEnvironmentVariable("HTTP_REFERER"),true,
+	return isThingAllowed(getEnvironmentVariable("HTTP_REFERER"),true,
 						deniedreferers,allowedreferers);
 }
 

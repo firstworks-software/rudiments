@@ -32,9 +32,9 @@ struct fileparser {
  *  handlePage() below. */
 struct blockparser {
 	output		*out;
-	const char	 	*blockname;
-	blockparser_t		parser;
-	void			*data;
+	const char 	*blockname;
+	blockparser_t	parser;
+	void		*data;
 };
 
 /** The templateengine class provides a framework for registering user-defined

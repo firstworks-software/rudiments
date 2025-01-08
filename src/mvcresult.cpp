@@ -133,7 +133,7 @@ ssize_t mvcresult::writeJson(output *out) {
 
 ssize_t mvcresult::writeJson(output *out, bool indent) {
 
-	ssize_t			retval=0;
+	ssize_t	retval=0;
 
 	size_t	mlen=charstring::getLength(pvt->_message);
 	char	*code=charstring::parseNumber(pvt->_code);

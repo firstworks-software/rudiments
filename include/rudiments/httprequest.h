@@ -403,7 +403,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  request-method-based security. */
-		virtual bool	getMethodIsAllowed(
+		virtual bool	isMethodAllowed(
 					const char *deniedmethods,
 					const char *allowedmethods);
 
@@ -415,7 +415,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  content-type-based security. */
-		virtual bool	getContentTypeIsAllowed(
+		virtual bool	isContentTypeAllowed(
 					const char *deniedcontenttypes,
 					const char *allowedcontenttypes);
 
@@ -426,7 +426,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  ip-based security. */
-		virtual	bool	getIpIsAllowed(
+		virtual	bool	isIpAllowed(
 					const char *deniedips,
 					const char *allowedips);
 
@@ -437,7 +437,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  referrer-based security. */
-		virtual	bool	getRefererIsAllowed(
+		virtual	bool	isRefererAllowed(
 					const char *deniedreferers,
 					const char *allowedreferers);
 

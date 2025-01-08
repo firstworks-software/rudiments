@@ -482,20 +482,20 @@ void urlhttprequest::buildAllVariables() {
 	dirtyAllVars(false);
 }
 
-bool urlhttprequest::getMethodIsAllowed() {
-	return httprequest::getMethodIsAllowed(
+bool urlhttprequest::isMethodAllowed() {
+	return httprequest::isMethodAllowed(
 				getSkinVariable("allowed-methods"),
 				getSkinVariable("denied-methods"));
 }
 
-bool urlhttprequest::getIpIsAllowed() {
-	return httprequest::getIpIsAllowed(
+bool urlhttprequest::isIpAllowed() {
+	return httprequest::isIpAllowed(
 				getSkinVariable("allowed-ips"),
 				getSkinVariable("denied-ips"));
 }
 
-bool urlhttprequest::getRefererIsAllowed() {
-	return httprequest::getRefererIsAllowed(
+bool urlhttprequest::isRefererAllowed() {
+	return httprequest::isRefererAllowed(
 				getSkinVariable("allowed-ips"),
 				getSkinVariable("denied-ips"));
 }

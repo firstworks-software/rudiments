@@ -53,7 +53,7 @@
 		void	buildCookieList();
 		void	buildFileNameList();
 
-		bool	getThingIsAllowed(const char *thing,
+		bool	isThingAllowed(const char *thing,
 					bool allowemptything,
 					const char *deniedthings,
 					const char *allowedthings);
