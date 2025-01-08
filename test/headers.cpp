@@ -18,6 +18,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 		
 	// status line
 	resp.writeHeader("HTTP/1.1 200 OK");
+	resp.writeCrLf();
 
 	// content types
 	resp.writeTextPlainHeader();
@@ -39,6 +40,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 				"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",1);
 
 	resp.writeHeader("Title","Hello, This is a title.");
+	resp.writeCrLfs();
 
 	return true;
 }

@@ -59,12 +59,10 @@ void httpresponse::writeStatusHeaderBlock(const char *status) {
 
 void httpresponse::writeTextHtmlHeader() {
 	writeContentTypeHeader("text","html");
-	writeCrLfs();
 }
 
 void httpresponse::writeTextPlainHeader() {
 	writeContentTypeHeader("text","plain");
-	writeCrLfs();
 }
 
 void httpresponse::writeContentTypeHeader(const char *type,

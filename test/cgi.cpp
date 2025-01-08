@@ -23,7 +23,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	// convenience methods
 
 	// send an http header
-	resp.writeTextPlainHeader();
+	resp.writeTextPlainHeaderBlock();
 	req.writeVariables();
 
 

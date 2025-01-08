@@ -39,7 +39,7 @@ bool mod1mod2::stHtml(output *container,
 			const char *filename,
 			void *data) {
 
-	resp->writeTextHtmlHeader();
+	resp->writeTextHtmlHeaderBlock();
 
 	dictionary<const char *,const char *>	vars;
 	vars.setValues(req->getAllVariables(),req->getAllValues());
