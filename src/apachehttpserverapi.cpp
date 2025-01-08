@@ -546,7 +546,7 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 	pvt->_envdirty=false;
 }
 
-httpserverapi *apachehttpserverapi::sendStatusHeader(const char *string) {
+httpserverapi *apachehttpserverapi::writeStatusHeader(const char *string) {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
@@ -558,7 +558,7 @@ httpserverapi *apachehttpserverapi::sendStatusHeader(const char *string) {
 	return this;
 }
 
-httpserverapi *apachehttpserverapi::sendHeader(const char *variable,
+httpserverapi *apachehttpserverapi::writeHeader(const char *variable,
 							const char *value) {
 
 	request_rec	*r=(request_rec *)
@@ -575,7 +575,7 @@ httpserverapi *apachehttpserverapi::sendHeader(const char *variable,
 	return this;
 }
 
-httpserverapi *apachehttpserverapi::sendHeader(const char *string) {
+httpserverapi *apachehttpserverapi::writeHeader(const char *string) {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;

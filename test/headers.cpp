@@ -17,14 +17,14 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	httpresponse	resp(sapi);
 		
 	// status line
-	resp.sendHeader("HTTP/1.1 200 OK");
+	resp.writeHeader("HTTP/1.1 200 OK");
 
 	// content types
-	resp.sendTextPlainHeader();
-	resp.sendTextHtmlHeader();
-	resp.sendContentTypeHeader("text","html");
-	resp.sendContentTypeHeader("text","html","ISO-8859-4");
-	resp.sendContentTypeHeader("mixed","multipart",
+	resp.writeTextPlainHeader();
+	resp.writeTextHtmlHeader();
+	resp.writeContentTypeHeader("text","html");
+	resp.writeContentTypeHeader("text","html","ISO-8859-4");
+	resp.writeContentTypeHeader("mixed","multipart",
 					NULL,resp.getBoundaryString());
 
 	// cookies
@@ -38,7 +38,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	resp.setCookie("cookievariable","cookievalue","firstworks.com",
 			"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",1);
 
-	resp.sendHeader("Title","Hello, This is a title.");
+	resp.writeHeader("Title","Hello, This is a title.");
 
 	return true;
 }

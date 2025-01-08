@@ -12,7 +12,8 @@
 							const char *value)=0;
 		virtual	void		updateEnvironmentVariables()=0;
 
-		virtual	httpserverapi	*sendStatusHeader(const char *string)=0;
-		virtual	httpserverapi	*sendHeader(const char *variable,
+		virtual	httpserverapi	*writeStatusHeader(
+						const char *string)=0;
+		virtual	httpserverapi	*writeHeader(const char *variable,
 							const char *value)=0;
-		virtual	httpserverapi	*sendHeader(const char *string)=0;
+		virtual	httpserverapi	*writeHeader(const char *string)=0;

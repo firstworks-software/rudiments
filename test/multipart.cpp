@@ -20,7 +20,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	httpresponse	resp(sapi);
 
 	// send http header
-	resp.sendContentTypeHeader("mixed","x-mixed-replace",
+	resp.writeContentTypeHeader("mixed","x-mixed-replace",
 					NULL,resp.getBoundaryString());
 
 	// loop, sending the series of images 5 times
@@ -28,14 +28,14 @@ static bool httpModuleMain(httpserverapi *sapi) {
 		for (uint16_t j=0; j<10; j++) {
 
 			// send the a boundary string
-			resp.sendMultiPartBoundary(NULL);
+			resp.writeMultiPartBoundary(NULL);
 
 			if (i>0) {
 				snooze::macrosnooze(1);
 			}
 
-			resp.sendContentTypeHeader("image","gif");
-			resp.sendCrLf();
+			resp.writeContentTypeHeader("image","gif");
+			resp.writeCrLf();
 
 			// send the image
 			stringbuffer	imagename;
@@ -49,7 +49,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	}
 
 	// send the final boundary string
-	resp.sendFinalMultiPartBoundary(NULL);
+	resp.writeFinalMultiPartBoundary(NULL);
 
 	return true;
 }

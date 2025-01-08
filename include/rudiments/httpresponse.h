@@ -16,37 +16,37 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		/** Deletes this instance of the httpresponse class. */
 		virtual	~httpresponse();
 
-		/** Sends HTTP header:
+		/** Writes HTTP header:
 		 *  Content-type: text/html
 		 *  followed by two carriage-returns to the browser. */
-		void	sendTextHtmlHeader();
+		void	writeTextHtmlHeader();
 
-		/** Sends HTTP header:
+		/** Writes HTTP header:
 		 *  Content-type: text/plain
 		 *  followed by two carriage-returns to the browser. */
-		void	sendTextPlainHeader();
+		void	writeTextPlainHeader();
 
-		/** Sends HTTP header:
+		/** Writes HTTP header:
 		 *  Content-type: "type"/"subtype"
 		 *  to the browser.
 		 *
-		 *  Does not send carriage-returns. */
-		void	sendContentTypeHeader(const char *type,
+		 *  Does not write carriage-returns. */
+		void	writeContentTypeHeader(const char *type,
 						const char *subtype);
 
-		/** Sends HTTP header:
+		/** Writes HTTP header:
 		 *  Content-type: "type"/"subtype"; charset="charset"
 		 *  to the browser.
 		 *
 		 *  If charset is NULL or an empty string then it will be
 		 *  omitted.
 		 *
-		 *  Does not send carriage-returns. */
-		void	sendContentTypeHeader(const char *type,
+		 *  Does not write carriage-returns. */
+		void	writeContentTypeHeader(const char *type,
 						const char *subtype,
 						const char *charset);
 
-		/** Sends HTTP header:
+		/** Writes HTTP header:
 		 *  Content-type: "type"/"subtype"; charset="charset";
 		 *  boundary="boundary"
 		 *  to the browser.
@@ -54,17 +54,17 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		 *  If either of charset or boundary are NULL or empty strings
 		 *  then it will be omitted.
 		 *
-		 *  Does not send carriage-returns. */
-		void	sendContentTypeHeader(const char *type,
+		 *  Does not write carriage-returns. */
+		void	writeContentTypeHeader(const char *type,
 						const char *subtype,
 						const char *charset,
 						const char *boundary);
 
-		/** Sends carriage-return and line-feed (/r/n) to the
+		/** Writes carriage-return and line-feed (/r/n) to the
 		 *  browser. */
-		void	sendCrLf();
+		void	writeCrLf();
 		
-		/** Sends Set-Cookie header to the browser. */
+		/** Writes Set-Cookie header to the browser. */
 		void	setCookie(const char *name, const char *value,
 					const char *domain, const char *path,
 					const char *expires, bool secure);
@@ -73,20 +73,20 @@ class RUDIMENTS_DLLSPEC httpresponse : public output {
 		 *  multipart responses. */
 		const char	*getBoundaryString();
 
-		/** Sends a multipart boundary string. */
-		void	sendMultiPartBoundary(output *out);
+		/** Writes a multipart boundary string. */
+		void	writeMultiPartBoundary(output *out);
 
-		/** Sends a final multipart boundary string. */
-		void	sendFinalMultiPartBoundary(output *out);
+		/** Writes a final multipart boundary string. */
+		void	writeFinalMultiPartBoundary(output *out);
 
-		/** Sends an http status header. */
-		httpresponse	*sendStatusHeader(const char *status);
+		/** Writes an http status header. */
+		httpresponse	*writeStatusHeader(const char *status);
 
-		/** Sends an http header. */
-		httpresponse	*sendHeader(const char *header);
+		/** Writes an http header. */
+		httpresponse	*writeHeader(const char *header);
 
-		/** Sends an http header. */
-		httpresponse	*sendHeader(const char *header,
+		/** Writes an http header. */
+		httpresponse	*writeHeader(const char *header,
 						const char *value);
 
 		/** Writes "size" bytes of "string" to the browser.

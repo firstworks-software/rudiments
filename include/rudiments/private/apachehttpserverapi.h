@@ -27,10 +27,10 @@
 							const char *value);
 		void		updateEnvironmentVariables();
 
-		httpserverapi	*sendStatusHeader(const char *string);
-		httpserverapi	*sendHeader(const char *variable,
+		httpserverapi	*writeStatusHeader(const char *string);
+		httpserverapi	*writeHeader(const char *variable,
 						const char *value);
-		httpserverapi	*sendHeader(const char *string);
+		httpserverapi	*writeHeader(const char *string);
 
 		ssize_t	write(const byte_t *string, size_t size);
 		ssize_t	write(const char *string);
