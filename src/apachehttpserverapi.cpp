@@ -546,41 +546,38 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 	pvt->_envdirty=false;
 }
 
-httpserverapi *apachehttpserverapi::writeStatusHeader(const char *string) {
+void apachehttpserverapi::writeStatusHeader(const char *string) {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	if (!r) {
-		return this;
+		return;
 	}
 
 	charstring::copy((char *)r->status_line,string);
-	return this;
 }
 
-httpserverapi *apachehttpserverapi::writeHeader(const char *variable,
-							const char *value) {
+void apachehttpserverapi::writeHeader(const char *header, const char *value) {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	if (!r) {
-		return this;
+		return;
 	}
 
-	if (!charstring::compare(variable,"Content-type")) {
+	if (!charstring::compare(header,"Content-type")) {
 		r->content_type=value;
 	} else {
-		ap_table_set(r->headers_out,variable,value);
+		ap_table_set(r->headers_out,header,value);
 	}
-	return this;
 }
 
-httpserverapi *apachehttpserverapi::writeHeader(const char *string) {
+void apachehttpserverapi::writeHeader(const char *string) {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
 	if (!r) {
-		return this;
+		return;
 	}
 
 	if (!charstring::compare(string,"\r\n")) {
@@ -590,7 +587,7 @@ httpserverapi *apachehttpserverapi::writeHeader(const char *string) {
 			pvt->_crcount++;
 		}
 	}
-	return this;
+	return;
 }
 
 ssize_t	apachehttpserverapi::write(const byte_t *string, size_t size) {

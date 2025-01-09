@@ -241,23 +241,19 @@ void cgihttpserverapi::updateEnvironmentVariables() {
 	pvt->_envdirty=false;
 }
 
-httpserverapi *cgihttpserverapi::writeStatusHeader(const char *string) {
+void cgihttpserverapi::writeStatusHeader(const char *string) {
 	writeHeader("Status",string);
-	return this;
 }
 
-httpserverapi *cgihttpserverapi::writeHeader(const char *variable,
-						const char *value) {
-	stdoutput.write(variable,charstring::getLength(variable));
+void cgihttpserverapi::writeHeader(const char *header, const char *value) {
+	stdoutput.write(header);
 	stdoutput.write(": ",2);
-	stdoutput.write(value,charstring::getLength(value));
+	stdoutput.write(value);
 	stdoutput.write("\r\n",2);
-	return this;
 }
 
-httpserverapi *cgihttpserverapi::writeHeader(const char *string) {
-	stdoutput.write(string,charstring::getLength(string));
-	return this;
+void cgihttpserverapi::writeHeader(const char *string) {
+	stdoutput.write(string);
 }
 
 ssize_t	cgihttpserverapi::write(const byte_t *string, size_t size) {

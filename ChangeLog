@@ -3,6 +3,7 @@
 	renamed httpresponse::setCookie to writeSetCookie
 	refactored some httpresponse header/stauts methods, added "block"
 		methods that send crlfs
+	removed chaining from httpserverapi writeHeader() methods
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
