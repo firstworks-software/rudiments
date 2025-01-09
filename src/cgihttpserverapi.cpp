@@ -258,7 +258,7 @@ void cgihttpserverapi::writeHeader(const char *header, const char *value) {
 }
 
 void cgihttpserverapi::writeHeaderTerminator() {
-	stdoutput.write("\r\n");
+	stdoutput.write("\r\n",2);
 }
 
 ssize_t	cgihttpserverapi::write(const byte_t *string, size_t size) {
