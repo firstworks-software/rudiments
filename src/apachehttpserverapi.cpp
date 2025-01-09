@@ -58,8 +58,6 @@ class apachehttpserverapiprivate {
 		char		**_envvars;
 		char		**_envvals;
 
-		uint16_t	_crcount;
-
 		#ifdef APACHE_2
 			apr_bucket_brigade	*_brigade;
 			apr_bucket		*_bucket;
@@ -74,7 +72,6 @@ class apachehttpserverapiprivate {
 apachehttpserverapi::apachehttpserverapi(void *apistruct) : httpserverapi() {
 	pvt=new apachehttpserverapiprivate;
 	pvt->_apistruct=apistruct;
-	pvt->_crcount=0;
 	#ifdef APACHE_2
 		pvt->_brigade=NULL;
 		pvt->_bucket=NULL;
@@ -546,7 +543,7 @@ void apachehttpserverapi::updateEnvironmentVariables() {
 	pvt->_envdirty=false;
 }
 
-void apachehttpserverapi::writeStatusHeader(const char *string) {
+void apachehttpserverapi::writeStatusLine(const char *string) {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
@@ -555,6 +552,17 @@ void apachehttpserverapi::writeStatusHeader(const char *string) {
 	}
 
 	charstring::copy((char *)r->status_line,string);
+}
+
+void apachehttpserverapi::writeStatusHeader(const char *string) {
+
+	request_rec	*r=(request_rec *)
+			((apacheapistruct *)pvt->_apistruct)->requestrec;
+	if (!r) {
+		return;
+	}
+
+	r->status=charstring::convertToInteger(string);
 }
 
 void apachehttpserverapi::writeHeader(const char *header, const char *value) {
@@ -572,7 +580,7 @@ void apachehttpserverapi::writeHeader(const char *header, const char *value) {
 	}
 }
 
-void apachehttpserverapi::writeHeader(const char *string) {
+void apachehttpserverapi::writeHeaderTerminator() {
 
 	request_rec	*r=(request_rec *)
 			((apacheapistruct *)pvt->_apistruct)->requestrec;
@@ -580,14 +588,7 @@ void apachehttpserverapi::writeHeader(const char *string) {
 		return;
 	}
 
-	if (!charstring::compare(string,"\r\n")) {
-		if (pvt->_crcount==1) {
-			ap_send_http_header(r);
-		} else {
-			pvt->_crcount++;
-		}
-	}
-	return;
+	ap_send_http_header(r);
 }
 
 ssize_t	apachehttpserverapi::write(const byte_t *string, size_t size) {

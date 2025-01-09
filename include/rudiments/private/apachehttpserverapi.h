@@ -27,9 +27,10 @@
 							const char *value);
 		void		updateEnvironmentVariables();
 
+		void	writeStatusLine(const char *string);
 		void	writeStatusHeader(const char *string);
 		void	writeHeader(const char *header, const char *value);
-		void	writeHeader(const char *string);
+		void	writeHeaderTerminator();
 
 		ssize_t	write(const byte_t *string, size_t size);
 		ssize_t	write(const char *string);

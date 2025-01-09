@@ -35,7 +35,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 			}
 
 			resp.writeContentTypeHeader("image","gif");
-			resp.writeCrLf();
+			resp.writeHeaderTerminator();
 
 			// send the image
 			stringbuffer	imagename;

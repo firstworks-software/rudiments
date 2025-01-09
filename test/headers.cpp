@@ -15,11 +15,10 @@ static bool httpModuleInit(httpserverapi *sapi) {
 static bool httpModuleMain(httpserverapi *sapi) {
 
 	httpresponse	resp(sapi);
-		
-	// status line
-	resp.writeHeader("HTTP/1.1 200 OK");
-	resp.writeCrLf();
 
+	// status line
+        resp.writeStatusLine("HTTP/1.1 200 OK");
+		
 	// content types
 	resp.writeTextPlainHeader();
 	resp.writeTextHtmlHeader();
@@ -40,7 +39,7 @@ static bool httpModuleMain(httpserverapi *sapi) {
 				"/stencil","Sun, 06 Nov 1994 08:49:37 GMT",1);
 
 	resp.writeHeader("Title","Hello, This is a title.");
-	resp.writeCrLfs();
+	resp.writeHeaderTerminator();
 
 	return true;
 }
