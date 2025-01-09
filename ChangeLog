@@ -4,6 +4,10 @@
 	refactored some httpresponse header/stauts methods, added "block"
 		methods that send crlfs
 	removed chaining from httpserverapi writeHeader() methods
+	added httpresponse/serverapi::writeStatusLine() methods
+	replaced httpresponse::writeCrLf() method with writeHeaderTerminator() 
+	updated now apachehttpserverapi handles header termination
+	fixed bug that could cause httprequest to crash when being deleted
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h

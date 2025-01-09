@@ -154,6 +154,9 @@ httprequest::httprequest(httpserverapi *sapi) : object() {
 	// initialize some variables
 	pvt->_boundary=NULL;
 
+	pvt->_fileparameters.setManageArrayKeys(true);
+	pvt->_fileparameters.setManageValues(true);
+
 	pvt->_sapi->initEnvironmentVariables();
 
 	pvt->_cookies.setManageArrayKeys(true);
@@ -298,16 +301,7 @@ void httprequest::cleanParameters() {
 }
 
 void httprequest::cleanFiles() {
-
-	for (listnode<char *> *flnode=
-				pvt->_fileparameters.getKeys()->getFirst();
-				flnode; flnode=flnode->getNext()) {
-		char		*key=flnode->getValue();
-		fileparameter	*value=pvt->_fileparameters.getValue(key);
-		delete[] key;
-		file::remove(value->filename);
-		delete value;
-	}
+	removeTempFiles();
 	delete[] pvt->_filenames;
 }
 
