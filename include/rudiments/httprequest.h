@@ -468,7 +468,7 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 * 				{"phone",false},
 		 * 				NULL};
 		 *  success=requiredParameters(pr); */
-		bool	getRequiredParametersWereProvided(
+		bool	wereRequiredParametersProvided(
 					parameterrequirement **pr);
 
 	#include <rudiments/private/httprequest.h>

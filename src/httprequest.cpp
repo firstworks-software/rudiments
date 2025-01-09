@@ -1174,7 +1174,7 @@ bool httprequest::isRefererAllowed(const char *deniedreferers,
 						deniedreferers,allowedreferers);
 }
 
-bool httprequest::getRequiredParametersWereProvided(parameterrequirement **pr) {
+bool httprequest::wereRequiredParametersProvided(parameterrequirement **pr) {
 
 	for (uint64_t index=0; pr[index]; index++) {
 		const char	*fe=getParameter(pr[index]->variable);
