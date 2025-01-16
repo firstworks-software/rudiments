@@ -164,6 +164,8 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 	incOrErr(&retval,out->write('"'),1) &&
 	incOrErr(&retval,out->write(pvt->_message,mlen),mlen) &&
 	incOrErr(&retval,out->write('"'),1) &&
+	((pvt->_success && pvt->_data.getKeys()->getFirst())?
+			incOrErr(&retval,out->write(','),1):true) &&
 	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 
 	if (pvt->_success) {

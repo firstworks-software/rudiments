@@ -9,6 +9,7 @@
 	replaced httpresponse::writeCrLf() method with writeHeaderTerminator() 
 	updated now apachehttpserverapi handles header termination
 	fixed bug that could cause httprequest to crash when being deleted
+	added missing comma after status message when writing mvcresult
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
