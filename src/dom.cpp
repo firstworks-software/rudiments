@@ -94,6 +94,26 @@ domnode *dom::getNullNode() {
 	return pvt->_nullnode;
 }
 
+domnode *dom::getChildByPath(const char *path) {
+	return getRootNode()->getChildByPath(path);
+}
+
+domnode *dom::getAttributeByPath(const char *path, uint64_t position) {
+	return getRootNode()->getAttributeByPath(path,position);
+}
+
+domnode *dom::getAttributeByPath(const char *path, const char *name) {
+	return getRootNode()->getAttributeByPath(path,name);
+}
+
+const char *dom::getAttributeValueByPath(const char *path, uint64_t position) {
+	return getRootNode()->getAttributeValueByPath(path,position);
+}
+
+const char *dom::getAttributeValueByPath(const char *path,const char *name) {
+	return getRootNode()->getAttributeValueByPath(path,name);
+}
+
 ssize_t dom::writeFile(const char *filename, mode_t perms) {
 	return writeFile(filename,perms,true);
 }

@@ -52,6 +52,69 @@ class RUDIMENTS_DLLSPEC dom : public collection {
 		/** Returns the null node of the DOM tree. */
 		virtual domnode	*getNullNode();
 
+		/** Returns the child element with "path" of the form:
+		 * 
+		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
+		 * 
+		 *  Returns the null node if the specified
+		 *  element was not found. */
+		virtual domnode	*getChildByPath(const char *path);
+
+		/** Returns the attribute node at index
+		 *  "position" of the child element with "path"
+		 *  of the form:
+		 * 
+		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
+		 * 
+		 *  Returns the null node if the specified
+		 *  element was not found. */
+		virtual domnode	*getAttributeByPath(const char *path,
+							uint64_t position);
+
+		/** Returns the attribute node named "name"
+		 *  of the child element with "path" of the form:
+		 * 
+		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
+		 * 
+		 *  Returns the null node if the specified
+		 *  element was not found. */
+		virtual domnode	*getAttributeByPath(const char *path,
+							const char *name);
+
+		/** Returns the value of the attribute at index
+		 *  "position" of the child element with "path"
+		 *  of the form:
+		 * 
+		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
+		 * 
+		 *  Returns the null node if the specified
+		 *  element was not found. */
+		virtual const char	*getAttributeValueByPath(
+							const char *path,
+							uint64_t position);
+
+		/** Returns the value of the attribute named
+		 *  "name" of the child element with "path" of
+		 *  the form:
+		 * 
+		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
+		 * 
+		 *  Returns the null node if the specified
+		 *  element was not found. */
+		virtual const char	*getAttributeValueByPath(
+							const char *path,
+							const char *name);
+
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */
 		virtual void	createRootNode();

@@ -205,7 +205,7 @@ wchar_t *logger::getLogHeader(const wchar_t *name) {
 
 void logger::start(uint8_t level, const char *header,
 				uint32_t indent, const char *string) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	stringbuffer	str;
@@ -221,7 +221,7 @@ void logger::start(uint8_t level, const char *header,
 
 void logger::start(uint8_t level, const wchar_t *header,
 				uint32_t indent, const wchar_t *string) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	wstringbuffer	str;
@@ -237,7 +237,7 @@ void logger::start(uint8_t level, const wchar_t *header,
 
 void logger::write(uint8_t level, const char *header,
 				uint32_t indent, const char *format, ...) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	stringbuffer	str;
@@ -259,7 +259,7 @@ void logger::write(uint8_t level, const char *header,
 
 void logger::write(uint8_t level, const wchar_t *header,
 				uint32_t indent, const wchar_t *format, ...) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	wstringbuffer	str;
@@ -282,7 +282,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 void logger::write(uint8_t level, const char *header,
 				uint32_t indent, const char *format,
 				va_list *argp) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	stringbuffer	str;
@@ -300,7 +300,7 @@ void logger::write(uint8_t level, const char *header,
 void logger::write(uint8_t level, const wchar_t *header,
 				uint32_t indent, const wchar_t *format,
 				va_list *argp) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	wstringbuffer	str;
@@ -316,7 +316,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 }
 
 void logger::end(uint8_t level, const char *header, uint32_t indent) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	stringbuffer	str;
@@ -331,7 +331,7 @@ void logger::end(uint8_t level, const char *header, uint32_t indent) {
 }
 
 void logger::end(uint8_t level, const wchar_t *header, uint32_t indent) {
-	if (level>pvt->_level) {
+	if (pvt->_level>level) {
 		return;
 	}
 	wstringbuffer	str;

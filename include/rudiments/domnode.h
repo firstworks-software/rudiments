@@ -1366,6 +1366,8 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  the following form:
 		 * 
 		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
 		 * 
 		 *  The return value is allocated inside the
 		 *  method and must be deallocated by the calling
@@ -1375,6 +1377,8 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		/** Returns the child element with "path" of the form:
 		 * 
 		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
 		 * 
 		 *  Returns the null node if the specified
 		 *  element was not found. */
@@ -1385,6 +1389,8 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  of the form:
 		 * 
 		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
 		 * 
 		 *  Returns the null node if the specified
 		 *  element was not found. */
@@ -1395,6 +1401,8 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  of the child element with "path" of the form:
 		 * 
 		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
 		 * 
 		 *  Returns the null node if the specified
 		 *  element was not found. */
@@ -1406,6 +1414,8 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  of the form:
 		 * 
 		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
 		 * 
 		 *  Returns the null node if the specified
 		 *  element was not found. */
@@ -1417,6 +1427,8 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  the form:
 		 * 
 		 *  /element[index]/element[index]/...
+		 *
+		 *  (if [index] is omitted, then [0] is implied)
 		 * 
 		 *  Returns the null node if the specified
 		 *  element was not found. */

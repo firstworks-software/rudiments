@@ -1618,11 +1618,32 @@ domnode *domnode::getChildByPath(const char *path) {
 	for (;;) {
 
 		if (!*ptr || *ptr=='@') {
+
+			if (name.getSize()) {
+
+				// get the first child
+				node=node->getFirstChild(name.getString());
+			}
 			break;
+
 		} else if (*ptr=='/') {
+
+			if (name.getSize()) {
+
+				// get the first child
+				node=node->getFirstChild(name.getString());
+
+				// reset the buffers
+				name.clear();
+				indexstring.clear();
+			}
+
 			buffer=&name;
+
 		} else if (*ptr=='[') {
+
 			buffer=&indexstring;
+
 		} else if (*ptr==']') {
 
 			// get the first child
@@ -1641,6 +1662,7 @@ domnode *domnode::getChildByPath(const char *path) {
 			indexstring.clear();
 
 		} else {
+
 			buffer->append(*ptr);
 		}
 

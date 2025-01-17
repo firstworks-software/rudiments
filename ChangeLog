@@ -12,6 +12,9 @@
 	added missing comma after status message when writing mvcresult
 	added wastebasket::write() methods
 	added mvctier::set/getLogger()
+	fixed log-standing log level issue
+	added domnode::get*ByPath()
+	dom paths no longer require indexes
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
