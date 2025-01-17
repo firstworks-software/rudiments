@@ -101,3 +101,22 @@ void wastebasket::attach(object **o) {
 void wastebasket::empty() {
 	pvt->_dict.clear();
 }
+
+ssize_t wastebasket::write() {
+	return write(&stdoutput);
+}
+
+ssize_t wastebasket::write(output *out) {
+	ssize_t	retval=0;
+	for (listnode<const char *> *node=pvt->_dict.getKeys()->getFirst();
+						node; node=node->getNext()) {
+		if (!(incOrErr(&retval,out->write(node->getValue())) &&
+			incOrErr(&retval,out->write(":\n",2),2) &&
+			incOrErr(&retval,pvt->_dict.getValue(
+						node->getValue())->
+						write(out)))) {
+			break;
+		}
+	}
+	return retval;
+}

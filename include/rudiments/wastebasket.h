@@ -121,6 +121,13 @@ class RUDIMENTS_DLLSPEC wastebasket : virtual public object {
 		 *  previously attached using the attach() methods. */
 		void	empty();
 
+		/** Writes a representation of the wastebasket to standard
+		 *  output. */
+		ssize_t	write();
+
+		/** Writes a representation of the wastebasket to "out". */
+		ssize_t	write(output *out);
+
 	#include <rudiments/private/wastebasket.h>
 };
 
