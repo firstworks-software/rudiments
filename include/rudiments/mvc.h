@@ -132,6 +132,13 @@ class RUDIMENTS_DLLSPEC mvctier : virtual public object {
 		 *  call to setSecurity(). */
 		mvcsecurity	*getSecurity();
 
+		/** Sets the instance of logger to use. */
+		void		setLogger(logger *log);
+
+		/** Returns the instance of logger set by a previous call
+		 *  to setLogger(). */
+		logger		*getLogger();
+
 	#include <rudiments/private/mvctier.h>
 };
 

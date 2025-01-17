@@ -9,12 +9,14 @@ class mvctierprivate {
 	private:
 		mvcproperties	*_prop;
 		mvcsecurity	*_sec;
+		logger		*_log;
 };
 
 mvctier::mvctier() : object() {
 	pvt=new mvctierprivate;
 	pvt->_prop=NULL;
 	pvt->_sec=NULL;
+	pvt->_log=NULL;
 }
 
 mvctier::~mvctier() {
@@ -39,4 +41,12 @@ void mvctier::setSecurity(mvcsecurity *sec) {
 
 mvcsecurity *mvctier::getSecurity() {
 	return pvt->_sec;
+}
+
+void mvctier::setLogger(logger *log) {
+	pvt->_log=log;
+}
+
+logger *mvctier::getLogger() {
+	return pvt->_log;
 }
