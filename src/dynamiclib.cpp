@@ -45,7 +45,11 @@ static	threadmutex	*_errormutex=NULL;
 
 dynamiclib::dynamiclib() : object() {
 	pvt=new dynamiclibprivate;
-	pvt->_handle=NULL;
+	#if defined(RUDIMENTS_HAVE_DLOPEN) || \
+		defined(RUDIMENTS_HAVE_LOADLIBRARYEX) || \
+		defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		pvt->_handle=NULL;
+	#endif
 	#if !defined(RUDIMENTS_HAVE_DLOPEN) && \
 		defined(RUDIMENTS_HAVE_NSLINKMODULE)
 		pvt->_nsofi=NULL;
@@ -274,9 +278,13 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 }
 
 bool dynamiclib::close() {
-	if (!pvt->_handle) {
-		return true;
-	}
+	#if defined(RUDIMENTS_HAVE_DLOPEN) || \
+		defined(RUDIMENTS_HAVE_LOADLIBRARYEX) || \
+		defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		if (!pvt->_handle) {
+			return true;
+		}
+	#endif
 	bool	retval=false;
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		int32_t	result;
@@ -315,7 +323,11 @@ bool dynamiclib::close() {
 	#else
 		RUDIMENTS_SET_ENOSYS
 	#endif
-	pvt->_handle=NULL;
+	#if defined(RUDIMENTS_HAVE_DLOPEN) || \
+		defined(RUDIMENTS_HAVE_LOADLIBRARYEX) || \
+		defined(RUDIMENTS_HAVE_NSLINKMODULE)
+		pvt->_handle=NULL;
+	#endif
 	return retval;
 }
 
