@@ -89,14 +89,19 @@ bool stringbuffer::clear(char *initialcontents, size_t initialsize) {
 }
 
 inline
+stringbuffer *stringbuffer::append(const byte_t *string, size_t size) {
+	return (stringbuffer *)bytebuffer::append(string,size);
+}
+
+inline
 stringbuffer *stringbuffer::append(const byte_t *string) {
 	return (stringbuffer *)bytebuffer::append(string,
 				charstring::getLength((const char *)string));
 }
 
 inline
-stringbuffer *stringbuffer::append(const byte_t *string, size_t size) {
-	return (stringbuffer *)bytebuffer::append(string,size);
+stringbuffer *stringbuffer::append(const char *string, size_t length) {
+	return (stringbuffer *)bytebuffer::append(string,length);
 }
 
 inline
@@ -106,38 +111,8 @@ stringbuffer *stringbuffer::append(const char *string) {
 }
 
 inline
-stringbuffer *stringbuffer::append(const char *string, size_t length) {
-	return (stringbuffer *)bytebuffer::append(string,length);
-}
-
-inline
 stringbuffer *stringbuffer::append(char character) {
 	return (stringbuffer *)bytebuffer::append(character);
-}
-
-inline
-stringbuffer *stringbuffer::append(int16_t number) {
-	return append(number,1);
-}
-
-inline
-stringbuffer *stringbuffer::append(int32_t number) {
-	return append(number,1);
-}
-
-inline
-stringbuffer *stringbuffer::append(int64_t number) {
-	return append(number,1);
-}
-
-inline
-stringbuffer *stringbuffer::append(int16_t number, uint16_t zeropadding) {
-	return append((int64_t)number,zeropadding);
-}
-
-inline
-stringbuffer *stringbuffer::append(int32_t number, uint16_t zeropadding) {
-	return append((int64_t)number,zeropadding);
 }
 
 inline
@@ -149,33 +124,33 @@ stringbuffer *stringbuffer::append(int64_t number, uint16_t zeropadding) {
 }
 
 inline
+stringbuffer *stringbuffer::append(int64_t number) {
+	return append(number,1);
+}
+
+inline
+stringbuffer *stringbuffer::append(int32_t number, uint16_t zeropadding) {
+	return append((int64_t)number,zeropadding);
+}
+
+inline
+stringbuffer *stringbuffer::append(int32_t number) {
+	return append(number,1);
+}
+
+inline
+stringbuffer *stringbuffer::append(int16_t number, uint16_t zeropadding) {
+	return append((int64_t)number,zeropadding);
+}
+
+inline
+stringbuffer *stringbuffer::append(int16_t number) {
+	return append(number,1);
+}
+
+inline
 stringbuffer *stringbuffer::append(byte_t character) {
 	return (stringbuffer *)bytebuffer::append(character);
-}
-
-inline
-stringbuffer *stringbuffer::append(uint16_t number) {
-	return append(number,1);
-}
-
-inline
-stringbuffer *stringbuffer::append(uint32_t number) {
-	return append(number,1);
-}
-
-inline
-stringbuffer *stringbuffer::append(uint64_t number) {
-	return append(number,1);
-}
-
-inline
-stringbuffer *stringbuffer::append(uint16_t number, uint16_t zeropadding) {
-	return append((uint64_t)number,zeropadding);
-}
-
-inline
-stringbuffer *stringbuffer::append(uint32_t number, uint16_t zeropadding) {
-	return append((uint64_t)number,zeropadding);
 }
 
 inline
@@ -187,8 +162,28 @@ stringbuffer *stringbuffer::append(uint64_t number, uint16_t zeropadding) {
 }
 
 inline
-stringbuffer *stringbuffer::append(float number) {
-	return append(number,4);
+stringbuffer *stringbuffer::append(uint64_t number) {
+	return append(number,1);
+}
+
+inline
+stringbuffer *stringbuffer::append(uint32_t number, uint16_t zeropadding) {
+	return append((uint64_t)number,zeropadding);
+}
+
+inline
+stringbuffer *stringbuffer::append(uint32_t number) {
+	return append(number,1);
+}
+
+inline
+stringbuffer *stringbuffer::append(uint16_t number, uint16_t zeropadding) {
+	return append((uint64_t)number,zeropadding);
+}
+
+inline
+stringbuffer *stringbuffer::append(uint16_t number) {
+	return append(number,1);
 }
 
 inline
@@ -198,20 +193,14 @@ stringbuffer *stringbuffer::append(float number, uint16_t scale) {
 }
 
 inline
-stringbuffer *stringbuffer::append(float number, uint16_t precision,
-							uint16_t scale) {
-	printf("%*.*f",precision,scale,number);
-	return this;
-}
-
-inline
-stringbuffer *stringbuffer::append(double number) {
+stringbuffer *stringbuffer::append(float number) {
 	return append(number,4);
 }
 
 inline
-stringbuffer *stringbuffer::append(double number, uint16_t scale) {
-	printf("%.*f",scale,number);
+stringbuffer *stringbuffer::append(float number, uint16_t precision,
+							uint16_t scale) {
+	printf("%*.*f",precision,scale,number);
 	return this;
 }
 
@@ -223,9 +212,14 @@ stringbuffer *stringbuffer::append(double number, uint16_t precision,
 }
 
 inline
-ssize_t stringbuffer::write(const byte_t *string) {
-	return bytebuffer::write(string,
-				charstring::getLength((const char *)string));
+stringbuffer *stringbuffer::append(double number, uint16_t scale) {
+	printf("%.*f",scale,number);
+	return this;
+}
+
+inline
+stringbuffer *stringbuffer::append(double number) {
+	return append(number,4);
 }
 
 inline
@@ -234,13 +228,19 @@ ssize_t stringbuffer::write(const byte_t *string, size_t size) {
 }
 
 inline
-ssize_t stringbuffer::write(const char *string) {
-	return bytebuffer::write(string,charstring::getLength(string));
+ssize_t stringbuffer::write(const byte_t *string) {
+	return bytebuffer::write(string,
+				charstring::getLength((const char *)string));
 }
 
 inline
 ssize_t stringbuffer::write(const char *string, size_t length) {
 	return bytebuffer::write(string,length);
+}
+
+inline
+ssize_t stringbuffer::write(const char *string) {
+	return bytebuffer::write(string,charstring::getLength(string));
 }
 
 inline
@@ -284,8 +284,8 @@ ssize_t stringbuffer::write(uint64_t number) {
 }
 
 inline
-ssize_t stringbuffer::write(float number) {
-	return write(number,4);
+ssize_t stringbuffer::write(float number, uint16_t precision, uint16_t scale) {
+	return printf("%*.*f",precision,scale,number);
 }
 
 inline
@@ -294,13 +294,13 @@ ssize_t stringbuffer::write(float number, uint16_t scale) {
 }
 
 inline
-ssize_t stringbuffer::write(float number, uint16_t precision, uint16_t scale) {
-	return printf("%*.*f",precision,scale,number);
+ssize_t stringbuffer::write(float number) {
+	return write(number,4);
 }
 
 inline
-ssize_t stringbuffer::write(double number) {
-	return write(number,4);
+ssize_t stringbuffer::write(double number, uint16_t precision, uint16_t scale) {
+	return printf("%*.*f",precision,scale,number);
 }
 
 inline
@@ -309,8 +309,8 @@ ssize_t stringbuffer::write(double number, uint16_t scale) {
 }
 
 inline
-ssize_t stringbuffer::write(double number, uint16_t precision, uint16_t scale) {
-	return printf("%*.*f",precision,scale,number);
+ssize_t stringbuffer::write(double number) {
+	return write(number,4);
 }
 
 inline
