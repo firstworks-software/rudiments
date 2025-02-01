@@ -264,7 +264,7 @@ then
 		AC_MSG_CHECKING(for GSS)
 		if ( test -z "$GSSLIBS" -a -z "$GSSINCLUDES" )
 		then
-			for path in "" "/usr/lib/mit/bin" "/usr/local/heimdal/bin"
+			for path in "" "/usr/lib/mit/bin" "/usr/local/heimdal/bin" "/usr/kerberos/bin"
 			do
 				KRB5CONFIG="krb5-config"
 				if ( test -n "$path" )

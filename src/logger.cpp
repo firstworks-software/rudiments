@@ -8,6 +8,7 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/wstringbuffer.h>
+#include <rudiments/ucs2stringbuffer.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
@@ -137,7 +138,7 @@ class loggerprivate {
 		uint8_t		_level;
 };
 
-logger::logger() : object() {
+logger::logger() : output() {
 	pvt=new loggerprivate;
 	pvt->_indent='	';
 	pvt->_windent='	';
@@ -216,7 +217,7 @@ void logger::start(uint8_t level, const char *header,
 		str.append(pvt->_indent);
 	}
 	str.append(string)->append(" {\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::start(uint8_t level, const wchar_t *header,
@@ -232,7 +233,7 @@ void logger::start(uint8_t level, const wchar_t *header,
 		str.append(pvt->_windent);
 	}
 	str.append(string)->append(L" {\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::write(uint8_t level, const char *header,
@@ -254,7 +255,7 @@ void logger::write(uint8_t level, const char *header,
 		va_end(argp);
 	}
 	str.append("\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::write(uint8_t level, const wchar_t *header,
@@ -276,7 +277,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 		va_end(argp);
 	}
 	str.append(L"\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::write(uint8_t level, const char *header,
@@ -294,7 +295,7 @@ void logger::write(uint8_t level, const char *header,
 	}
 	str.printf(format,argp);
 	str.append("\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::write(uint8_t level, const wchar_t *header,
@@ -312,7 +313,7 @@ void logger::write(uint8_t level, const wchar_t *header,
 	}
 	str.printf(format,argp);
 	str.append(L"\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::end(uint8_t level, const char *header, uint32_t indent) {
@@ -327,7 +328,7 @@ void logger::end(uint8_t level, const char *header, uint32_t indent) {
 		str.append(pvt->_indent);
 	}
 	str.append("}\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
 void logger::end(uint8_t level, const wchar_t *header, uint32_t indent) {
@@ -342,19 +343,159 @@ void logger::end(uint8_t level, const wchar_t *header, uint32_t indent) {
 		str.append(pvt->_windent);
 	}
 	str.append(L"}\n");
-	write(str.getString());
+	writeToLog(str.getString());
 }
 
-void logger::write(const char *logentry) {
+void logger::writeToLog(const char *logentry) {
 	for (loggerlistnode *current=pvt->_logdestlist.getFirst();
 				current; current=current->getNext()) {
 		current->getValue()->write(logentry);
 	}
 }
 
-void logger::write(const wchar_t *logentry) {
+void logger::writeToLog(const wchar_t *logentry) {
 	for (loggerlistnode *current=pvt->_logdestlist.getFirst();
 				current; current=current->getNext()) {
 		current->getValue()->write(logentry);
 	}
+}
+
+ssize_t	logger::write(const byte_t *string, size_t size) {
+	return write((const char *)string,size);
+}
+
+ssize_t	logger::write(const char *string) {
+	writeToLog(string);
+	return charstring::getLength(string);
+}
+
+ssize_t	logger::write(const char *string, size_t length) {
+	char	*dup=charstring::duplicate(string,length);
+	ssize_t	size=write(dup);
+	delete[] dup;
+	return size;
+}
+
+ssize_t	logger::write(char character) {
+	char	*str;
+	charstring::printf(&str,"%c",character);
+	size_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(const wchar_t *string) {
+	char	*dup=charstring::duplicate(string);
+	ssize_t	size=write(dup);
+	delete[] dup;
+	return size;
+}
+
+ssize_t	logger::write(const wchar_t *string, size_t length) {
+	char	*dup=charstring::duplicate(string,length);
+	ssize_t	size=write(dup);
+	delete[] dup;
+	return size;
+}
+
+ssize_t	logger::write(wchar_t character) {
+	char	dup=character::duplicate(character);
+	return write(dup);
+}
+
+ssize_t	logger::writeUcs2(const ucs2_t *string) {
+	char	*dup=charstring::duplicateUcs2(string);
+	ssize_t	size=write(dup);
+	delete[] dup;
+	return size;
+}
+
+ssize_t	logger::writeUcs2(const ucs2_t *string, size_t length) {
+	char	*dup=charstring::duplicateUcs2(string,length);
+	ssize_t	size=write(dup);
+	delete[] dup;
+	return size;
+}
+
+ssize_t	logger::writeUcs2(ucs2_t character) {
+	char	dup=character::duplicateUcs2(character);
+	return write(dup);
+}
+
+ssize_t	logger::write(int16_t number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(int32_t number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(int64_t number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(byte_t character) {
+	return write((char)character);
+}
+
+ssize_t	logger::write(uint16_t number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(uint32_t number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(uint64_t number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(float number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::write(double number) {
+	char	*str=charstring::parseNumber(number);
+	ssize_t	size=write(str);
+	delete[] str;
+	return size;
+}
+
+ssize_t	logger::printfDelegate(const char *format, va_list *argp) {
+	stringbuffer	b;
+	b.printf(format,argp);
+	return write(b.getString());
+}
+
+ssize_t	logger::printfDelegate(const wchar_t *format, va_list *argp) {
+	wstringbuffer	b;
+	b.printf(format,argp);
+	return write(b.getString());
+}
+
+ssize_t	logger::printfUcs2Delegate(const ucs2_t *format, va_list *argp) {
+	ucs2stringbuffer	b;
+	b.printfUcs2(format,argp);
+	return writeUcs2(b.getString());
 }

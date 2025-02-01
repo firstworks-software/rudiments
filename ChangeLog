@@ -15,6 +15,8 @@
 	fixed log-standing log level issue
 	added domnode::get*ByPath()
 	dom paths no longer require indexes
+	logger inherits from output now
+	added /usr/kerberos/bin to search path for krb5-config
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h

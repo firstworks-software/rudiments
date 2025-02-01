@@ -80,7 +80,7 @@ typedef linkedlist<logdestination *>	loggerlist;
  *  logger class instance using addLogDestination().  Then, each call to a
  *  logger class method will output logging information to each of the
  *  logdestinations in seqence. */
-class RUDIMENTS_DLLSPEC logger : public object {
+class RUDIMENTS_DLLSPEC logger : public output {
 	public:
 
 		/** Creates an instance of the logger class. */
@@ -227,6 +227,126 @@ class RUDIMENTS_DLLSPEC logger : public object {
 		void	end(uint8_t level,
 				const wchar_t *header,
 				uint32_t indent);
+
+		/** Writes "size" bytes of "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(const byte_t *string, size_t size);
+
+		/** Writes NULL-terminated "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(const char *string);
+
+		/** Writes "length" characters of "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
+		ssize_t	write(const char *string, size_t length);
+
+		/** Writes "character" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(char character);
+
+		/** Writes NULL-terminated "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(const wchar_t *string);
+
+		/** Writes "length" characters of "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
+		ssize_t	write(const wchar_t *string, size_t length);
+
+		/** Writes "character" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(wchar_t character);
+
+		/** Writes NULL-terminated "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+ 		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	writeUcs2(const ucs2_t *string);
+
+		/** Writes "length" characters of "string" to the log.
+		 *
+ 		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred.  Note that it is
+		 *  possible to write beyond the string's NULL terminator using
+		 *  this method.  */
+		ssize_t	writeUcs2(const ucs2_t *string, size_t length);
+
+		/** Writes "character" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	writeUcs2(ucs2_t character);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(int16_t number);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(int32_t number);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(int64_t number);
+
+		/** Writes "character" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(byte_t character);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(uint16_t number);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(uint32_t number);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(uint64_t number);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(float number);
+
+		/** Writes "number" to the log.
+		 *
+		 *  Returns the number of bytes that were successfully written
+		 *  or RESULT_ERROR if an error occurred. */
+		ssize_t	write(double number);
 
 	#include <rudiments/private/logger.h>
 };
