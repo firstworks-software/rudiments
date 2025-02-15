@@ -19,6 +19,7 @@
 	added /usr/kerberos/bin to search path for krb5-config
 	reordered some inline methods in stringbuffer for older compilers
 	added some missing #ifdef wrappers to dynamiclib
+	added some missing #if !defined()s to randomnumber
 	gave *node virtual destructors for older compilers
 	made *node's protected members private
 	made nodecollectionnode not inherit from object

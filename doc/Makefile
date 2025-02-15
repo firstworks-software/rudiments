@@ -71,7 +71,30 @@ install:
 	$(CP) classes/html/*.png $(docdir)/classes/html
 	$(CP) classes/html/*.css $(docdir)/classes/html
 	$(CP) classes/html/*.js $(docdir)/classes/html
-	$(CHMOD) 644 $(docdir)/classes/html/*
+	$(CHMOD) 644 $(docdir)/classes/html/a*
+	$(CHMOD) 644 $(docdir)/classes/html/b*
+	$(CHMOD) 644 $(docdir)/classes/html/c*
+	$(CHMOD) 644 $(docdir)/classes/html/d*
+	$(CHMOD) 644 $(docdir)/classes/html/e*
+	$(CHMOD) 644 $(docdir)/classes/html/f*
+	$(CHMOD) 644 $(docdir)/classes/html/g*
+	$(CHMOD) 644 $(docdir)/classes/html/h*
+	$(CHMOD) 644 $(docdir)/classes/html/i*
+	$(CHMOD) 644 $(docdir)/classes/html/j*
+	$(CHMOD) 644 $(docdir)/classes/html/l*
+	$(CHMOD) 644 $(docdir)/classes/html/m*
+	$(CHMOD) 644 $(docdir)/classes/html/n*
+	$(CHMOD) 644 $(docdir)/classes/html/o*
+	$(CHMOD) 644 $(docdir)/classes/html/p*
+	$(CHMOD) 644 $(docdir)/classes/html/r*
+	$(CHMOD) 644 $(docdir)/classes/html/s*
+	$(CHMOD) 644 $(docdir)/classes/html/t*
+	$(CHMOD) 644 $(docdir)/classes/html/u*
+	$(CHMOD) 644 $(docdir)/classes/html/w*
+	$(CHMOD) 644 $(docdir)/classes/html/x*
+	$(CHMOD) 644 $(docdir)/classes/html/*.png
+	$(CHMOD) 644 $(docdir)/classes/html/*.css
+	$(CHMOD) 644 $(docdir)/classes/html/*.js
 	$(MKINSTALLDIRS) $(docdir)/css
 	$(CP) css/* $(docdir)/css
 	$(CHMOD) 644 $(docdir)/css/*
