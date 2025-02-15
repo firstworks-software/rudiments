@@ -9,8 +9,11 @@
 /** The node class is the parent class for the node contained by all rudiments
  *  node-based collections. */
 template <class valuetype>
-class nodecollectionnode : virtual public object {
+class nodecollectionnode {
 	public:
+		/** Deletes this instance of the nodecollectionnode class. */
+		virtual	~nodecollectionnode() {};
+
 		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
 

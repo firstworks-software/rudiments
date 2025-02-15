@@ -11,6 +11,9 @@
 template <class valuetype>
 class listnode : public nodecollectionnode<valuetype> {
 	public:
+		/** Deletes this instance of the listnode class. */
+		virtual ~listnode() {};
+
 		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
 
