@@ -21,7 +21,7 @@
 		#define UN_XOPEN_SOURCE
 	#endif
         // some platforms don't have ifdef wrappers inside of sys/socket.h
-	#ifdef RUDIMENTS_SYS_SOCKET_H
+	#ifndef RUDIMENTS_SYS_SOCKET_H
 		#define RUDIMENTS_SYS_SOCKET_H
 		#include <sys/socket.h>
 	#endif
