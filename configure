@@ -29930,7 +29930,7 @@ printf %s "checking for undefined bind... " >&6; }
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-extern "C" int bind(int, struct sockaddr *);
+extern "C" int bind(int, struct sockaddr *,int);
 int
 main (void)
 {
