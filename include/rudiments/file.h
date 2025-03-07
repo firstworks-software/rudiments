@@ -995,14 +995,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		static bool	isAccessible(const char *filename,
 							int32_t mode);
 
-		/** Sets "ctime" to the last change time of "filename".
-		 *  Returns true on success and false on failure.
-		 *
-		 *  Change time IS affected by changing file
-		 *  permissions, ownership or creating links. */
-		static bool	getLastChangeTime(const char *filename,
-							time_t *ctime);
-
 		/** Sets the permissions of the file to "perms".
 		 *  Returns true on success and false on failure. */
 		static bool	setPermissions(const char *filename,
