@@ -22,7 +22,7 @@
 		void	setLeftHeight(uint8_t height);
 		void	setRightHeight(uint8_t height);
 
-	protected:
+	private:
 		valuetype		value;
 		treenode<valuetype>	*parent;
 		treenode<valuetype>	*left;

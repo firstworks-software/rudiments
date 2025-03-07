@@ -238,6 +238,9 @@
 /* Some systems have AccCtrl.h */
 #define RUDIMENTS_HAVE_ACCCTRL_H 1
 
+/* Some systems have accept */
+#define RUDIMENTS_HAVE_ACCEPT 1
+
 /* Most systems have access() */
 #define RUDIMENTS_HAVE_ACCESS 1
 
@@ -259,8 +262,11 @@
 /* Some systems have backtrace */
 /* #undef RUDIMENTS_HAVE_BACKTRACE */
 
-/* SCO OSR < 5.0.7 has an incorrect struct msghdr definition */
+/* SCO OSR5 has an incorrect struct msghdr definition */
 /* #undef RUDIMENTS_HAVE_BAD_SCO_MSGHDR */
+
+/* Some systems have bind */
+#define RUDIMENTS_HAVE_BIND 1
 
 /* Some systems dont have st_blocks in struct stat */
 /* #undef RUDIMENTS_HAVE_BLKCNT_T */
@@ -661,6 +667,9 @@
 /* Some systems have getsid */
 /* #undef RUDIMENTS_HAVE_GETSID */
 
+/* Some systems have getsockname */
+#define RUDIMENTS_HAVE_GETSOCKNAME 1
+
 /* Some systems have getsockopt */
 #define RUDIMENTS_HAVE_GETSOCKOPT 1
 
@@ -816,6 +825,9 @@
 
 /* Linux style statfs */
 /* #undef RUDIMENTS_HAVE_LINUX_STATFS */
+
+/* Some systems have listen */
+#define RUDIMENTS_HAVE_LISTEN 1
 
 /* Some systems have llabs */
 /* #undef RUDIMENTS_HAVE_LLABS */
@@ -1522,6 +1534,12 @@
 /* Some systems have crypt */
 /* #undef RUDIMENTS_HAVE_UNDECLARED_CRYPT */
 
+/* Some systems have accept but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_ACCEPT */
+
+/* Some systems have bind but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_BIND */
+
 /* Some systems have fsync but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_FSYNC */
 
@@ -1531,8 +1549,14 @@
 /* Some systems have getpeername but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_GETPEERNAME */
 
+/* Some systems have getsockname but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_GETSOCKNAME */
+
 /* Some systems have getsockopt but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_GETSOCKOPT */
+
+/* Some systems have listen but dont define it */
+/* #undef RUDIMENTS_HAVE_UNDEFINED_LISTEN */
 
 /* Some systems have recvmsg but dont define it */
 /* #undef RUDIMENTS_HAVE_UNDEFINED_RECVMSG */

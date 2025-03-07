@@ -4,7 +4,7 @@
 		void	setNext(listnode<valuetype> *next);
 		void	setPrevious(listnode<valuetype> *previous);
 
-	protected:
+	private:
 		valuetype		value;
 		listnode<valuetype>	*next;
 		listnode<valuetype>	*previous;
