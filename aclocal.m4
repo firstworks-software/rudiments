@@ -10549,6 +10549,7 @@ dnl 	defines _SCO_UW
 AC_DEFUN([FW_CHECK_SCO],
 [
 SCO_OSR5=""
+SCO_OSR5_V=""
 SCO_OSR6=""
 SCO_UW=""
 CRTLIB=""
@@ -10569,6 +10570,7 @@ then
 	dnl FIXME: detect versions older than OSR5
 	else
 		SCO_OSR5="yes"
+		SCO_OSR5_V="`uname -v`"
 
 		dnl OSR 5.0.0 needs -D_SVID3
 		if ( test "`uname -v`" = "2" )
@@ -10908,6 +10910,13 @@ dnl tries to use it as "print -r --".  Replace this with "printf %s\\n".
 if ( test -r "libtool" -a -n "$DARWIN" )
 then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+
+dnl on SCO OSR 5.0.5
+if ( test -r "libtool" -a -n "$SCO_OSR5_V" )
+then
+	sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
 	mv libtool.new libtool
 fi
 
@@ -12419,6 +12428,7 @@ dnl 	defines _SCO_UW
 AC_DEFUN([FW_CHECK_SCO],
 [
 SCO_OSR5=""
+SCO_OSR5_V=""
 SCO_OSR6=""
 SCO_UW=""
 CRTLIB=""
@@ -12439,6 +12449,7 @@ then
 	dnl FIXME: detect versions older than OSR5
 	else
 		SCO_OSR5="yes"
+		SCO_OSR5_V="`uname -v`"
 
 		dnl OSR 5.0.0 needs -D_SVID3
 		if ( test "`uname -v`" = "2" )
@@ -12778,6 +12789,13 @@ dnl tries to use it as "print -r --".  Replace this with "printf %s\\n".
 if ( test -r "libtool" -a -n "$DARWIN" )
 then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+
+dnl on SCO OSR 5.0.5
+if ( test -r "libtool" -a -n "$SCO_OSR5_V" )
+then
+	sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
 	mv libtool.new libtool
 fi
 
