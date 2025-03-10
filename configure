@@ -46398,10 +46398,13 @@ then
 	mv libtool.new libtool
 fi
 
-if ( test -r "libtool" -a -n "$SCO_OSR5_V" )
+if ( test -r "libtool" -a -n "$SCO_OSR5" )
 then
-	sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
-	mv libtool.new libtool
+	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
+	then
+		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
 fi
 
 if ( test -r "libtool" -a -n "$SCO_UW" )

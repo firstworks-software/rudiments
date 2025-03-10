@@ -1826,11 +1826,14 @@ then
 	mv libtool.new libtool
 fi
 
-dnl on SCO OSR 5.0.5
-if ( test -r "libtool" -a -n "$SCO_OSR5_V" )
+dnl on SCO OSR 5.0.5 or 5.0.2
+if ( test -r "libtool" -a -n "$SCO_OSR5" )
 then
-	sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
-	mv libtool.new libtool
+	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
+	then
+		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
 fi
 
 dnl On SCO UnixWare...
