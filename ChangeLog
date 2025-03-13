@@ -30,6 +30,7 @@
 	fixed printing on OSR
 	disabled iconv() and iswblank() for OSR
 	disabled non-C locale tests for OSR
+	disabled inode tests for OSR
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h

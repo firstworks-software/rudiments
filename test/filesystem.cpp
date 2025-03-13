@@ -131,8 +131,9 @@ int main(int argc, const char **argv) {
 	test("total blocks",fs1.getTotalBlocks());
 	test("free blocks",fs1.getFreeBlocks());
 
-	// Windows doesn't really have "nodes"
-	#ifndef _WIN32
+	// Windows doesn't really have "nodes",
+	// and OSR5/6 doesn't know them for NFS volumes
+	#if !defined(_WIN32) && !defined(_SCO_OSR5) && !defined(_SCO_OSR6)
 		test("total file nodes",fs1.getTotalFileNodes());
 		test("free file nodes",fs1.getFreeFileNodes());
 	#endif
