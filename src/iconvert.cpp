@@ -55,6 +55,11 @@
 	#endif
 #endif
 
+// iconv() tends to crash on OSR5/6
+#if defined(_SCO_OSR5) || defined(_SCO_OSR6)
+	#undef RUDIMENTS_HAVE_ICONV
+#endif
+
 class iconvertprivate {
 	friend class iconvert;
 	private:

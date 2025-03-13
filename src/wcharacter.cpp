@@ -26,6 +26,11 @@
 	#include <stdlib.h>
 #endif
 
+// iswblank() is unreliable on osr5/6
+#if defined(_SCO_OSR5) || defined(_SCO_OSR6)
+	#undef RUDIMENTS_HAVE_ISWBLANK
+#endif
+
 #include <stdio.h>
 
 bool wcharacter::isAlphanumeric(int32_t c) {
