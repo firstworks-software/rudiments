@@ -1357,8 +1357,8 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 	#else
 		int32_t	diff=0;
 		while (*str1 && *str2 && len) {
-			diff=(wcharacter::upper(*str1)-
-				wcharacter::upper(*str2));
+			diff=(character::upper(*str1)-
+				character::upper(*str2));
 			if (diff) {
 				return diff;
 			}
@@ -1366,8 +1366,8 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 			str2++;
 			len--;
 		}
-		return (len)?wcharacter::upper(*str1)-
-				wcharacter::upper(*str2):0;
+		return (len)?character::upper(*str1)-
+				character::upper(*str2):0;
 	#endif
 }
 
