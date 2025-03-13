@@ -26,8 +26,8 @@
 	#include <stdlib.h>
 #endif
 
-// iswblank() is unreliable on osr5/6
-#if defined(_SCO_OSR5) || defined(_SCO_OSR6)
+// iswblank() is unreliable on osr5
+#if defined(_SCO_OSR5)
 	#undef RUDIMENTS_HAVE_ISWBLANK
 #endif
 

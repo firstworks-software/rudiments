@@ -56,7 +56,8 @@
 #endif
 
 // iconv() tends to crash on OSR5/6
-#if defined(_SCO_OSR5) || defined(_SCO_OSR6)
+//#if defined(_SCO_OSR5) || defined(_SCO_OSR6)
+#if defined(_SCO_OSR5)
 	#undef RUDIMENTS_HAVE_ICONV
 #endif
 
