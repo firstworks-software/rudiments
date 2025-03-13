@@ -33,6 +33,8 @@
 	disabled inode tests for OSR5
 	fixed erroneous wcharacter::upper() calls in
 		charstring::compareIgnoringCase()
+	disabled some getHumanReadable() tests for systems that don't support
+		the long long type
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
