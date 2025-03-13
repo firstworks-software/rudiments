@@ -26,6 +26,7 @@
 	added ifdef wrappers around sys/socket.h for platforms that don't have
 		them internally (ultrix)
 	added support for additional undefined socket functions
+	added -shared -> -G fix for OSR 5.0.5
 	fixed printing on OSR
 
 2.0.2 - moved syslog.h to loggerincludes.h
