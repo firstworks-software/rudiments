@@ -28,9 +28,14 @@
 	added support for additional undefined socket functions
 	added -shared -> -G fix for OSR 5.0.5
 	fixed printing on OSR
-	disabled iconv() and iswblank() for OSR
+	disabled iconv() and iswblank() for OSR5
 	disabled non-C locale tests for OSR
 	disabled inode tests for OSR
+	disabled inode tests for OSR5
+	fixed erroneous wcharacter::upper() calls in
+		charstring::compareIgnoringCase()
+	disabled some getHumanReadable() tests for systems that don't support
+		the long long type
 	fixed long long test for OSR
 
 2.0.2 - moved syslog.h to loggerincludes.h

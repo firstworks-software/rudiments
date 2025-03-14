@@ -1163,6 +1163,7 @@ int main(int argc, const char **argv) {
 	test("getHumanReadable 2.1",!charstring::compare(sval,"2.1"));
 	delete[] sval;
 
+#ifdef RUDIMENTS_HAVE_LONG_LONG
 	uint64_t	ival=((uint64_t)3)*
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024)*
@@ -1225,6 +1226,7 @@ int main(int argc, const char **argv) {
 	sval=charstring::getHumanReadable(sival,true);
 	test("getHumanReadable -3",!charstring::compare(sval,"-3"));
 	delete[] sval;
+#endif
 	stdoutput.printf("\n");
 
 
