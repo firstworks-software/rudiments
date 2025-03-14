@@ -1732,10 +1732,13 @@ AC_TRY_COMPILE([
 AC_MSG_CHECKING(for long long type)
 if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" = "yes" )
 then
-	if ( test "$CXX" = "CC" )
+	if ( test "$CXX" = "CC" -o "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
 	then
 		dnl SCO CC doesn't support long long but throws a warning
 		dnl rather than an error
+		dnl
+		dnl on 5.0.5 and earlier, gcc can handle them, but the c
+		dnl library struggles, especially printf
 		AC_MSG_RESULT(no)
 	else
 		AC_TRY_COMPILE([],
