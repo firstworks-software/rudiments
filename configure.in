@@ -1730,11 +1730,17 @@ AC_TRY_COMPILE([
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for long long type)
-if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" -a "$CXX" = "CC" )
+if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" = "yes" )
 then
-	dnl SCO CC doesn't support long long but throws a warning
-	dnl rather than an error
-	AC_MSG_RESULT(no)
+	if ( test "$CXX" = "CC" )
+	then
+		dnl SCO CC doesn't support long long but throws a warning
+		dnl rather than an error
+		AC_MSG_RESULT(no)
+	else
+		AC_TRY_COMPILE([],
+[long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+	fi
 else
 	AC_TRY_COMPILE([],
 [long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))

@@ -31,6 +31,7 @@
 	disabled iconv() and iswblank() for OSR
 	disabled non-C locale tests for OSR
 	disabled inode tests for OSR
+	fixed long long test for OSR
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
