@@ -6213,6 +6213,7 @@ test -z "$OBJDUMP" && OBJDUMP=objdump
 
 
 
+
 case `pwd` in
   *\ * | *\	*)
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
@@ -46429,6 +46430,15 @@ then
 	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
 	then
 		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
+fi
+
+if ( test -r "libtool" )
+then
+	if ( test -n "$SCO_UW" -o -n "$SCO_OSR5" )
+	then
+				sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
 		mv libtool.new libtool
 	fi
 fi

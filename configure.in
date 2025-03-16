@@ -485,6 +485,7 @@ dnl Checks for libtool.
 echo
 echo "***** Libtool ****************"
 AC_LIBTOOL_WIN32_DLL
+
 AC_PROG_LIBTOOL
 FW_CHECK_USE_SYSTEM_LIBTOOL
 FW_FIX_AR

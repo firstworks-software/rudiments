@@ -10913,12 +10913,23 @@ then
 	mv libtool.new libtool
 fi
 
-dnl on SCO OSR 5.0.5 or 5.0.2
+dnl on SCO OSR 5.0.5-
 if ( test -r "libtool" -a -n "$SCO_OSR5" )
 then
 	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
 	then
 		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
+fi
+
+dnl On SCO UnixWare and SCO OSR5...
+if ( test -r "libtool" )
+then
+	if ( test -n "$SCO_UW" -o -n "$SCO_OSR5" )
+	then
+		dnl The linker doesn't support -R at all
+		sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
 		mv libtool.new libtool
 	fi
 fi
@@ -12795,12 +12806,23 @@ then
 	mv libtool.new libtool
 fi
 
-dnl on SCO OSR 5.0.5 or 5.0.2
+dnl on SCO OSR 5.0.5-
 if ( test -r "libtool" -a -n "$SCO_OSR5" )
 then
 	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
 	then
 		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
+fi
+
+dnl On SCO UnixWare and SCO OSR5...
+if ( test -r "libtool" )
+then
+	if ( test -n "$SCO_UW" -o -n "$SCO_OSR5" )
+	then
+		dnl The linker doesn't support -R at all
+		sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
 		mv libtool.new libtool
 	fi
 fi
