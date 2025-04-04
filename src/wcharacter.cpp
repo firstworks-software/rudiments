@@ -12,6 +12,12 @@
 		#include <varchar.h>
 	#endif
 	#include <wctype.h>
+	// Some platforms (older freebsd) have wctype.h, but it's contents
+	// are surrounded by #if 0.  If WEOF isn't defined, then we'll assume
+	// that this is the case for wctype.h
+	#ifndef WEOF
+		#undef RUDIMENTS_HAVE_WCTYPE_H
+	#endif
 #endif
 #ifdef RUDIMENTS_HAVE_WCHAR_H
 	#ifdef RUDIMENTS_HAVE_VARCHAR_H
