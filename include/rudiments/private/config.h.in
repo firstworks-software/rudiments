@@ -1029,6 +1029,9 @@
 /* Some systems have ntohll */
 #undef RUDIMENTS_HAVE_NTOHLL
 
+/* Old FreeBSD style statfs */
+#undef RUDIMENTS_HAVE_OLDFREEBSD_STATFS
+
 /* Some systems have open */
 #undef RUDIMENTS_HAVE_OPEN
 

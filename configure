@@ -25614,6 +25614,47 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main (void)
 {
+/* old freebsd style */
+struct statfs sfs;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_type=0;
+sfs.f_flags=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_OLDFREEBSD_STATFS 1" >>confdefs.h
+
+printf "%s\n" "#define RUDIMENTS_HAVE_SOME_KIND_OF_STATFS 1" >>confdefs.h
+ STATFS_STYLE="oldfreebsd style"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/param.h>
+#include <sys/mount.h>
+int
+main (void)
+{
 /* netbsd style */
 struct statfs sfs;
 sfs.f_type=0;

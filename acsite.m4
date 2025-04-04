@@ -1213,6 +1213,30 @@ statfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="freebsd style")
 fi
 
+dnl oldfreebsd is a little different than freebsd
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_COMPILE([#include <sys/param.h>
+#include <sys/mount.h>],
+[/* old freebsd style */
+struct statfs sfs;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_type=0;
+sfs.f_flags=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);]
+,AC_DEFINE(RUDIMENTS_HAVE_OLDFREEBSD_STATFS,1,Old FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="oldfreebsd style")
+fi
+
 dnl netbsd is like freebsd but lacks a few fields
 if ( test "$STATFS_STYLE" = "unknown" )
 then

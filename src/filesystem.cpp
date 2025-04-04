@@ -61,6 +61,15 @@
 	};
 #endif
 
+#ifdef RUDIMENTS_HAVE_OLDFREEBSD_STATFS
+#include <sys/param.h>
+// mount.h defines some struct members named "export" but export is a c++
+// keyword (for versions prior to c++11), so we'll redefine them to export_.
+// Since we never use those members directly, this shouldn't present a problem.
+#define export export_
+#include <sys/mount.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_ULTRIX_STATFS
 #include <sys/param.h>
 #include <sys/mount.h>
@@ -411,6 +420,7 @@ int64_t filesystem::getType() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
@@ -575,6 +585,7 @@ int64_t filesystem::getBlockSize() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -598,6 +609,7 @@ int64_t filesystem::getOptimumTransferBlockSize() {
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_bsize;
 #elif defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
@@ -619,6 +631,7 @@ int64_t filesystem::getTotalBlocks() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -637,6 +650,7 @@ int64_t filesystem::getFreeBlocks() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -655,6 +669,7 @@ int64_t filesystem::getAvailableBlocks() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -680,6 +695,7 @@ int64_t filesystem::getTotalFileNodes() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -697,6 +713,7 @@ int64_t filesystem::getFreeFileNodes() {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -775,6 +792,7 @@ int64_t filesystem::getMaximumFileNameLength() {
 
 uid_t filesystem::getOwner() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -809,6 +827,7 @@ int64_t filesystem::getAsyncWrites() {
 
 const char *filesystem::getMountPoint() {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+	defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -980,6 +999,46 @@ const char *filesystem::getTypeName() {
 			return "xiafs";
 		case 0x00BAB10C:
 			return "zfs";
+	}
+	return NULL;
+#elif defined(RUDIMENTS_HAVE_OLDFREEBSD_STATFS)
+	switch (pvt->_st.f_type) {
+		case MOUNT_UFS:
+			return "ufs";
+		case MOUNT_NFS:
+			return "nfs";
+		case MOUNT_MFS:
+			return "mfs";
+		case MOUNT_MSDOS:
+			return "msdos";
+		case MOUNT_LFS:
+			return "lfs";
+		case MOUNT_LOFS:
+			return "lofs";
+		case MOUNT_FDESC:
+			return "fdesc";
+		case MOUNT_PORTAL:
+			return "portal";
+		case MOUNT_NULL:
+			return "null";
+		case MOUNT_UMAP:
+			return "umap";
+		case MOUNT_KERNFS:
+			return "kernfs";
+		case MOUNT_PROCFS:
+			return "procfs";
+		case MOUNT_AFS:
+			return "afs";
+		case MOUNT_CD9660:
+			return "cd9660";
+		case MOUNT_UNION:
+			return "union";
+		case MOUNT_DEVFS:
+			return "devfs";
+		case MOUNT_EXT2FS:
+			return "ext2";
+		case MOUNT_TFS:
+			return "tfs";
 	}
 	return NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
