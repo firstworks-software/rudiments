@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the file COPYING for more information
 
 #include <rudiments/locale.h>
@@ -26,6 +26,7 @@ int main(int argc, const char **argv) {
 	bool	issolaris=!charstring::compare(osname,"SunOS");
 	bool	isdarwin=!charstring::compare(osname,"Darwin");
 	bool	ishpux=!charstring::compare(osname,"HP-UX");
+	bool	isscosv=!charstring::compare(osname,"SCO_SV");
 	delete[] osname;
 
 	// default locale
@@ -86,6 +87,12 @@ int main(int argc, const char **argv) {
 			!charstring::compare(locale::getTelephone(),"C"));
 	}
 	stdoutput.printf("\n");
+
+	// Bail here for SCO_SV.  Though locales other than C are technically
+	// supported, they are rarely installed.
+	if (isscosv) {
+		return 0;
+	}
 
 	// set LC_ALL to another locale...
 

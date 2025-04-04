@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information
 
 #include <rudiments/iconvert.h>
@@ -53,6 +53,11 @@
 	#else
 		#error no EILSEQ, EINVAL, or anything like it...
 	#endif
+#endif
+
+// iconv() tends to crash on OSR5
+#ifdef _SCO_OSR5
+	#undef RUDIMENTS_HAVE_ICONV
 #endif
 
 class iconvertprivate {

@@ -19,6 +19,25 @@
 	added /usr/kerberos/bin to search path for krb5-config
 	reordered some inline methods in stringbuffer for older compilers
 	added some missing #ifdef wrappers to dynamiclib
+	added some missing #if !defined()s to randomnumber
+	gave *node virtual destructors for older compilers
+	made *node's protected members private
+	made nodecollectionnode not inherit from object
+	added ifdef wrappers around sys/socket.h for platforms that don't have
+		them internally (ultrix)
+	added support for additional undefined socket functions
+	added -shared -> -G fix for OSR 5.0.5
+	fixed printing on OSR
+	disabled iconv() and iswblank() for OSR5
+	disabled non-C locale tests for OSR
+	disabled inode tests for OSR
+	disabled inode tests for OSR5
+	fixed erroneous wcharacter::upper() calls in
+		charstring::compareIgnoringCase()
+	disabled some getHumanReadable() tests for systems that don't support
+		the long long type
+	fixed long long detection for OSR
+	removed -R for OSR5
 	added code to detect degenerate wctype.h
 
 2.0.2 - moved syslog.h to loggerincludes.h

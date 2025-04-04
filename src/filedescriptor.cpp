@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information
 
 //#define DEBUG_PASSFD 1
@@ -219,7 +219,9 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 // on some platforms, we should use the stdin/out/err stream directly rather
 // than fdopen()ing a new stream for it
 #if defined(__SGICXX) || defined(__FreeBSD__) || \
-		defined(_SCO_UW) || defined(_ILLUMOS) || defined(_HPUX)
+		defined(_SCO_UW) || \
+		defined(_SCO_OSR5) || defined(_SCO_OSR6) || \
+		defined(_ILLUMOS) || defined(_HPUX)
 	#define USESTDSTREAMS 1
 #endif
 

@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information.
 
 #include <rudiments/private/dll.h>
@@ -7,7 +7,11 @@
 
 // for socklen_t
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	#include <sys/socket.h>
+	// some platforms don't have ifdef wrappers inside of sys/socket.h
+	#ifndef RUDIMENTS_SYS_SOCKET_H
+		#define RUDIMENTS_SYS_SOCKET_H 1
+		#include <sys/socket.h>
+	#endif
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>

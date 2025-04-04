@@ -6213,6 +6213,7 @@ test -z "$OBJDUMP" && OBJDUMP=objdump
 
 
 
+
 case `pwd` in
   *\ * | *\	*)
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
@@ -17994,6 +17995,7 @@ esac
 
 
 SCO_OSR5=""
+SCO_OSR5_V=""
 SCO_OSR6=""
 SCO_UW=""
 CRTLIB=""
@@ -18015,6 +18017,7 @@ printf "%s\n" "OSR6" >&6; }
 
 			else
 		SCO_OSR5="yes"
+		SCO_OSR5_V="`uname -v`"
 
 				if ( test "`uname -v`" = "2" )
 		then
@@ -26561,10 +26564,36 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for long long type" >&5
 printf %s "checking for long long type... " >&6; }
-if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" -a "$CXX" = "CC" )
+if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" = "yes" )
 then
-			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+	if ( test "$CXX" = "CC" -o "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
+	then
+												{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
+	else
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+long long i;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_LONG_LONG 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+	fi
 else
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -29870,6 +29899,298 @@ if ac_fn_cxx_try_link "$LINENO"
 then :
 
 printf "%s\n" "#define RUDIMENTS_HAVE_UNDEFINED_SOCKET 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+
+HAS_BIND=""
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for bind" >&5
+printf %s "checking for bind... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+
+int
+main (void)
+{
+bind(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_BIND 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }; HAS_BIND="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+
+if ( test "$HAS_BIND" = "no" )
+then
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for undefined bind" >&5
+printf %s "checking for undefined bind... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int bind(int, struct sockaddr *,int);
+int
+main (void)
+{
+bind(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_UNDEFINED_BIND 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+
+HAS_GETSOCKNAME=""
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for getsockname" >&5
+printf %s "checking for getsockname... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+
+int
+main (void)
+{
+getsockname(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_GETSOCKNAME 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }; HAS_GETSOCKNAME="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+
+if ( test "$HAS_GETSOCKNAME" = "no" )
+then
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for undefined getsockname" >&5
+printf %s "checking for undefined getsockname... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int getsockname(int, struct sockaddr *, int *);
+int
+main (void)
+{
+getsockname(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_UNDEFINED_GETSOCKNAME 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+
+HAS_LISTEN=""
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for listen" >&5
+printf %s "checking for listen... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+
+int
+main (void)
+{
+listen(0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_LISTEN 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }; HAS_LISTEN="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+
+if ( test "$HAS_LISTEN" = "no" )
+then
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for undefined listen" >&5
+printf %s "checking for undefined listen... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int listen(int, int);
+int
+main (void)
+{
+listen(0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_UNDEFINED_LISTEN 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+
+HAS_ACCEPT=""
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for accept" >&5
+printf %s "checking for accept... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+
+int
+main (void)
+{
+accept(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_ACCEPT 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }; HAS_ACCEPT="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+
+if ( test "$HAS_ACCEPT" = "no" )
+then
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for undefined accept" >&5
+printf %s "checking for undefined accept... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int accept(int, struct sockaddr *, int *);
+int
+main (void)
+{
+accept(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_UNDEFINED_ACCEPT 1" >>confdefs.h
  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 else $as_nop
@@ -46102,6 +46423,24 @@ if ( test -r "libtool" -a -n "$DARWIN" )
 then
 	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
 	mv libtool.new libtool
+fi
+
+if ( test -r "libtool" -a -n "$SCO_OSR5" )
+then
+	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
+	then
+		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
+fi
+
+if ( test -r "libtool" )
+then
+	if ( test -n "$SCO_UW" -o -n "$SCO_OSR5" )
+	then
+				sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
 fi
 
 if ( test -r "libtool" -a -n "$SCO_UW" )

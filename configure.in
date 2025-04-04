@@ -485,6 +485,7 @@ dnl Checks for libtool.
 echo
 echo "***** Libtool ****************"
 AC_LIBTOOL_WIN32_DLL
+
 AC_PROG_LIBTOOL
 FW_CHECK_USE_SYSTEM_LIBTOOL
 FW_FIX_AR
@@ -1730,11 +1731,20 @@ AC_TRY_COMPILE([
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for long long type)
-if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" -a "$CXX" = "CC" )
+if ( test "$SCO_OSR5" = "yes" -o "$SCO_OSR6" = "yes" )
 then
-	dnl SCO CC doesn't support long long but throws a warning
-	dnl rather than an error
-	AC_MSG_RESULT(no)
+	if ( test "$CXX" = "CC" -o "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
+	then
+		dnl SCO CC doesn't support long long but throws a warning
+		dnl rather than an error
+		dnl
+		dnl on 5.0.5 and earlier, gcc can handle them, but the c
+		dnl library struggles, especially printf
+		AC_MSG_RESULT(no)
+	else
+		AC_TRY_COMPILE([],
+[long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+	fi
 else
 	AC_TRY_COMPILE([],
 [long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -2579,6 +2589,126 @@ then
 #endif
 extern "C" int socket(int, int, int);],
 socket(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_SOCKET,1,Some systems have socket but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_BIND=""
+AC_MSG_CHECKING(for bind)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+bind(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_BIND,1,Some systems have bind) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_BIND="no")
+
+if ( test "$HAS_BIND" = "no" )
+then
+	AC_MSG_CHECKING(for undefined bind)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int bind(int, struct sockaddr *,int);],
+bind(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_BIND,1,Some systems have bind but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_GETSOCKNAME=""
+AC_MSG_CHECKING(for getsockname)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+getsockname(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETSOCKNAME,1,Some systems have getsockname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_GETSOCKNAME="no")
+
+if ( test "$HAS_GETSOCKNAME" = "no" )
+then
+	AC_MSG_CHECKING(for undefined getsockname)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int getsockname(int, struct sockaddr *, int *);],
+getsockname(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_GETSOCKNAME,1,Some systems have getsockname but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_LISTEN=""
+AC_MSG_CHECKING(for listen)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+listen(0,0);,AC_DEFINE(RUDIMENTS_HAVE_LISTEN,1,Some systems have listen) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_LISTEN="no")
+
+if ( test "$HAS_LISTEN" = "no" )
+then
+	AC_MSG_CHECKING(for undefined listen)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int listen(int, int);],
+listen(0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_LISTEN,1,Some systems have listen but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
+
+HAS_ACCEPT=""
+AC_MSG_CHECKING(for accept)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+],
+accept(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ACCEPT,1,Some systems have accept) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); HAS_ACCEPT="no")
+
+if ( test "$HAS_ACCEPT" = "no" )
+then
+	AC_MSG_CHECKING(for undefined accept)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+extern "C" int accept(int, struct sockaddr *, int *);],
+accept(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED_ACCEPT,1,Some systems have accept but dont define it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 echo "******************************"

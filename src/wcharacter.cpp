@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information.
 
 #include <rudiments/wcharacter.h>
@@ -30,6 +30,11 @@
 #endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
+#endif
+
+// iswblank() is unreliable on osr5
+#if defined(_SCO_OSR5)
+	#undef RUDIMENTS_HAVE_ISWBLANK
 #endif
 
 #include <stdio.h>

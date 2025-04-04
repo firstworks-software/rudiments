@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the file COPYING for more information
 
 #include <rudiments/wcharstring.h>
@@ -966,6 +966,7 @@ int main(int argc, const char **argv) {
 	test("humanReadable 2.1",!wcharstring::compare(sval,L"2.1"));
 	delete[] sval;
 
+#ifdef RUDIMENTS_HAVE_LONG_LONG
 	uint64_t	ival=((uint64_t)3)*
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024)*
@@ -1029,6 +1030,7 @@ int main(int argc, const char **argv) {
 	sval=wcharstring::getHumanReadable(sival,true);
 	test("humanReadable -3",!wcharstring::compare(sval,L"-3"));
 	delete[] sval;
+#endif
 	stdoutput.printf("\n");
 
 

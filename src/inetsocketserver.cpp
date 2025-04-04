@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information
 
 #include <rudiments/inetsocketserver.h>
@@ -27,6 +27,22 @@ typedef unsigned long	in_addr_t;
 
 #ifdef RUDIMENTS_HAVE_UNDEFINED_SOCKET
 	extern "C" int socket(int,int,int);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_BIND
+	extern "C" int bind(int,struct sockaddr *,int);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_GETSOCKNAME
+	extern "C" int getsockname(int,struct sockaddr *,int *);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_LISTEN
+	extern "C" int listen(int,int);
+#endif
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED_ACCEPT
+	extern "C" int accept(int,struct sockaddr *,int *);
 #endif
 
 class inetsocketserverprivate {
@@ -135,8 +151,14 @@ bool inetsocketserver::bind() {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=::bind(fd(),
-			(struct sockaddr *)getSin(),sizeof(sockaddr_in));
+		#if defined(RUDIMENTS_HAVE_BIND) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_BIND)
+			result=::bind(fd(),
+					(struct sockaddr *)getSin(),
+					sizeof(sockaddr_in));
+		#else
+			#error no bind or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	if (result==-1) {
@@ -154,8 +176,13 @@ bool inetsocketserver::bind() {
 		int32_t	result;
 		error::clearError();
 		do {
-			result=getsockname(fd(),
-				(struct sockaddr *)&socknamesin,&size);
+			#if defined(RUDIMENTS_HAVE_GETSOCKNAME) || \
+				defined(RUDIMENTS_HAVE_UNDEFINED_GETSOCKNAME)
+				result=getsockname(fd(),
+					(struct sockaddr *)&socknamesin,&size);
+			#else
+				#error no getsockname or anything like it
+			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 		if (result!=-1) {
@@ -169,7 +196,12 @@ bool inetsocketserver::listen() {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=::listen(fd(),(int)getBacklog());
+		#if defined(RUDIMENTS_HAVE_LISTEN) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_LISTEN)
+			result=::listen(fd(),(int)getBacklog());
+		#else
+			#error no listen or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	return !result;
@@ -186,8 +218,14 @@ filedescriptor *inetsocketserver::accept() {
 	int32_t	clientsock;
 	error::clearError();
 	do {
-		clientsock=::accept(fd(),
+		#if defined(RUDIMENTS_HAVE_ACCEPT) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED_ACCEPT)
+			clientsock=::accept(fd(),
 				(struct sockaddr *)&clientsin,&size);
+		#else
+			#error no accept or anything like it
+		#endif
+
 	} while (clientsock==-1 && error::getErrorNumber()==EINTR &&
 						!process::getShutDownFlag());
 	if (clientsock==-1) {

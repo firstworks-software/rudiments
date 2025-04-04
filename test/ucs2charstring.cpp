@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the file COPYING for more information
 
 #include <rudiments/ucs2charstring.h>
@@ -1141,6 +1141,7 @@ unimplemented...
 	test("humanReadable 2.1",!ucs2charstring::compare(sval,num2dot1));
 	delete[] sval;
 
+#ifdef RUDIMENTS_HAVE_LONG_LONG
 	uint64_t	ival=((uint64_t)3)*
 				((uint64_t)1024)*((uint64_t)1024)*
 				((uint64_t)1024)*((uint64_t)1024)*
@@ -1217,6 +1218,7 @@ unimplemented...
 	ucs2literal(neg3,"-3");
 	test("humanReadable -3",!ucs2charstring::compare(sval,neg3));
 	delete[] sval;
+#endif
 	stdoutput.printf("\n");
 
 

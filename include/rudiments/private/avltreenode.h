@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information
 
 		void	detach(treenode<valuetype> **treetop);
@@ -22,7 +22,7 @@
 		void	setLeftHeight(uint8_t height);
 		void	setRightHeight(uint8_t height);
 
-	protected:
+	private:
 		valuetype		value;
 		treenode<valuetype>	*parent;
 		treenode<valuetype>	*left;

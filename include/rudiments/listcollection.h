@@ -1,4 +1,4 @@
-// Copyright (c) 1999-2018 David Muse
+// Copyright (c) David Muse
 // See the COPYING file for more information.
 
 #ifndef RUDIMENTS_LISTCOLLECTION_H
@@ -11,6 +11,9 @@
 template <class valuetype>
 class listnode : public nodecollectionnode<valuetype> {
 	public:
+		/** Deletes this instance of the listnode class. */
+		virtual ~listnode() {};
+
 		/** Set the value stored in the node to "value". */
 		virtual	void		setValue(valuetype value)=0;
 
