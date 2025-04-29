@@ -4531,6 +4531,12 @@ then
 	fi
 
 	AC_SUBST(DLLIB)
+
+	AC_MSG_CHECKING(for dlmopen)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_DLFCN_H
+		#include <dlfcn.h>
+	#endif],
+	dlmopen(0,"",0);,AC_DEFINE(RUDIMENTS_HAVE_DLMOPEN,1,Some systems have dlmopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
 if ( test "$DLOPEN" = "yes" )

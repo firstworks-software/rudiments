@@ -39,6 +39,7 @@
 	fixed long long detection for OSR
 	removed -R for OSR5
 	added code to detect degenerate wctype.h
+	added support for linker namespaces to dynamiclib
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h

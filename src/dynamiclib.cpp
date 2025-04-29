@@ -277,6 +277,75 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 	#endif
 }
 
+bool dynamiclib::openInNewNamespace(const char *library,
+					bool loaddependencies, bool global) {
+	#if defined(RUDIMENTS_HAVE_DLMOPEN)
+
+		int32_t	flag=(loaddependencies)?RTLD_NOW:RTLD_LAZY;
+		#ifdef RTLD_GLOBAL
+		if (global) {
+			flag|=RTLD_GLOBAL;
+		}
+		#endif
+		error::clearError();
+		do {
+			dlerror();
+			pvt->_handle=dlmopen(LM_ID_NEWLM,library,flag);
+		} while (!pvt->_handle && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
+		return (pvt->_handle!=NULL);
+
+	#else
+
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+bool dynamiclib::openInNamespace(const char *library, uint64_t nsid,
+					bool loaddependencies, bool global) {
+	#if defined(RUDIMENTS_HAVE_DLMOPEN)
+
+		int32_t	flag=(loaddependencies)?RTLD_NOW:RTLD_LAZY;
+		#ifdef RTLD_GLOBAL
+		if (global) {
+			flag|=RTLD_GLOBAL;
+		}
+		#endif
+		error::clearError();
+		do {
+			dlerror();
+			pvt->_handle=dlmopen((Lmid_t)nsid,library,flag);
+		} while (!pvt->_handle && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
+		return (pvt->_handle!=NULL);
+
+	#else
+
+		RUDIMENTS_SET_ENOSYS
+		return false;
+	#endif
+}
+
+uint64_t dynamiclib::getNamespace() {
+	if (!pvt->_handle) {
+		return 0;
+	}
+	#if defined(RUDIMENTS_HAVE_DLMOPEN)
+		Lmid_t	nsid;
+		int	result=0;
+		error::clearError();
+		do {
+			dlerror();
+			result=dlinfo(pvt->_handle,RTLD_DI_LMID,(void *)&nsid);
+		} while (result && error::getErrorNumber()==EINTR &&
+						!process::getShutDownFlag());
+		return (uint64_t)nsid;
+	#else
+		return 0;
+	#endif
+}
+
 bool dynamiclib::close() {
 	#if defined(RUDIMENTS_HAVE_DLOPEN) || \
 		defined(RUDIMENTS_HAVE_LOADLIBRARYEX) || \
@@ -466,4 +535,12 @@ char *dynamiclib::getError() {
 
 void dynamiclib::setErrorMutex(threadmutex *mtx) {
 	_errormutex=mtx;
+}
+
+void dynamicib::supportsNamespaces() {
+	#if defined(RUDIMENTS_HAVE_DLMOPEN)
+		return true;
+	#else
+		return false;
+	#endif
 }

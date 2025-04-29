@@ -415,6 +415,9 @@
 /* Some systems have dlfcn.h */
 /* #undef RUDIMENTS_HAVE_DLFCN_H */
 
+/* Some systems have dlmopen */
+/* #undef RUDIMENTS_HAVE_DLMOPEN */
+
 /* Some systems have dlopen */
 /* #undef RUDIMENTS_HAVE_DLOPEN */
 

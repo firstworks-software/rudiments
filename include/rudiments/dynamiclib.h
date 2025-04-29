@@ -29,6 +29,38 @@ class RUDIMENTS_DLLSPEC dynamiclib : public object {
 				bool loaddependencies,
 				bool global);
 
+		/** Opens library "library" in a new, isolated namespace.
+		 *  If "loaddependencies" is true, then all libraries required
+		 *  by this library are also loaded, if it is false, they are
+		 *  loaded later, as needed.  If "global" is true, then the
+		 *  symbols defined in the library are made available to
+		 *  libraries which are loaded later, into the same namespace.
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	openInNewNamespace(
+				const char *library,
+				bool loaddependencies,
+				bool global);
+
+		/** Opens library "library" in the isolated namespace "nsid".
+		 *  If "loaddependencies" is true, then all libraries required
+		 *  by this library are also loaded, if it is false, they are
+		 *  loaded later, as needed.  If "global" is true, then the
+		 *  symbols defined in the library are made available to
+		 *  libraries which are loaded later, into the same namespace.
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	openInNamespace(
+				const char *library,
+				uint64_t nsid,
+				bool loaddependencies,
+				bool global);
+
+		/** Returns the namespace that the library opened by the most
+		 * recent call to open(), openInNewNamespace(), or
+		 * openInNamespace() was opened into. */
+		uint64_t	getNamespace();
+
 		/** Closes and unloads the previously opened library. */
 		bool	close();
 
@@ -54,6 +86,11 @@ class RUDIMENTS_DLLSPEC dynamiclib : public object {
 		 *  If you don't supply a mutex, getError() will still work, but
 		 *  will not be thread-safe. */
 		static	void	setErrorMutex(threadmutex *mtx);
+
+
+		/** Returns true if rudiments supports namespaces on this
+		 *  platform, and false otherwise. */
+		static bool	supportsNamespaces();
 
 	#include <rudiments/private/dynamiclib.h>
 };
