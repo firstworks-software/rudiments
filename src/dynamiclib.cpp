@@ -537,7 +537,7 @@ void dynamiclib::setErrorMutex(threadmutex *mtx) {
 	_errormutex=mtx;
 }
 
-void dynamicib::supportsNamespaces() {
+bool dynamiclib::supportsNamespaces() {
 	#if defined(RUDIMENTS_HAVE_DLMOPEN)
 		return true;
 	#else
