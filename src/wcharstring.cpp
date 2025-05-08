@@ -1658,7 +1658,7 @@ const wchar_t *wcharstring::findFirstIgnoringCase(const wchar_t *haystack,
 	for (const wchar_t *ptr=haystack;
 			ptr<haystack+haystacklen;
 			ptr++) {
-		if (wcharacter::lower(*ptr)==needle) {
+		if (wcharacter::lower(*ptr)==(int32_t)needle) {
 			return ptr;
 		}
 	}
