@@ -538,24 +538,36 @@ int main(int argc, const char **argv) {
 
 		// inconsistent across platforms
 		if (!issolaris) {
-			b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
-			test("int currency symbol preceeds positive value",b);
+			// this actually works in glibc-2.3, but not in 2.2,
+			// so we're being a little too conservative
+			if (!(islinux && isoldglibc)) {
+				b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
+				test("int currency symbol preceeds positive value",b);
+			}
 			if (!isfreebsd && !isnetbsd && !isdarwin && !(islinux && isoldglibc)) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 				test("int space separates currency symbol and positive value",b);
 			}
-			m=locale::getInternationalMonetaryPositiveSignPosition();
-			test("int monetary sign position for positive values",
-					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
-			b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
-			test("int currency symbol preceeds negative value",b);
+			// these actually work in glibc-2.3, but not in 2.2,
+			// so we're being a little too conservative
+			if (!(islinux && isoldglibc)) {
+				m=locale::getInternationalMonetaryPositiveSignPosition();
+				test("int monetary sign position for positive values",
+						m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+				b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
+				test("int currency symbol preceeds negative value",b);
+			}
 			if (!isfreebsd && !isnetbsd && !isdarwin && !(islinux && isoldglibc)) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
 				test("int space separates currency symbol and negative value",b);
 			}
-			m=locale::getInternationalMonetaryNegativeSignPosition();
-			test("int monetary sign position for negative values",
-					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+			// these actually work in glibc-2.3, but not in 2.2,
+			// so we're being a little too conservative
+			if (!(islinux && isoldglibc)) {
+				m=locale::getInternationalMonetaryNegativeSignPosition();
+				test("int monetary sign position for negative values",
+						m==MONETARY_SIGN_POSITION_BEFORE_STRING);
+			}
 		}
 		stdoutput.printf("\n");
 	}
