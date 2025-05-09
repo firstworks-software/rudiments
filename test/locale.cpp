@@ -27,6 +27,13 @@ int main(int argc, const char **argv) {
 	bool	isdarwin=!charstring::compare(osname,"Darwin");
 	bool	ishpux=!charstring::compare(osname,"HP-UX");
 	bool	isscosv=!charstring::compare(osname,"SCO_SV");
+	bool	islinux=!charstring::compare(osname,"Linux");
+	bool	isoldglibc=
+#if defined(__GLIBC__) && (__GLIBC__<2 || (__GLIBC__==2 && __GLIBC_MINOR__<=3))
+				true;
+#else
+				false;
+#endif
 	delete[] osname;
 
 	// default locale
@@ -533,7 +540,7 @@ int main(int argc, const char **argv) {
 		if (!issolaris) {
 			b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
 			test("int currency symbol preceeds positive value",b);
-			if (!isfreebsd && !isnetbsd && !isdarwin) {
+			if (!isfreebsd && !isnetbsd && !isdarwin && !(islinux && isoldglibc)) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
 				test("int space separates currency symbol and positive value",b);
 			}
@@ -542,7 +549,7 @@ int main(int argc, const char **argv) {
 					m==MONETARY_SIGN_POSITION_BEFORE_STRING);
 			b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
 			test("int currency symbol preceeds negative value",b);
-			if (!isfreebsd && !isnetbsd && !isdarwin) {
+			if (!isfreebsd && !isnetbsd && !isdarwin && !(islinux && isoldglibc)) {
 				b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
 				test("int space separates currency symbol and negative value",b);
 			}
