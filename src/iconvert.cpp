@@ -272,6 +272,12 @@ bool iconvert::convert() {
 			pvt->_tobufferremaining=pvt->_tobuffersize;
 		}
 
+
+		// On some platforms (freebsd 5) iconv_open() can succeed,
+		// return success, but then set errno to ENOENT.  Lets clear
+		// errno here so our test for errno below doesn't fail.
+		error::clearError();
+
 		// convert a character
 		result=iconv(pvt->_i,
 				#ifdef RUDIMENTS_HAVE_ICONV_WITH_NONCONST_INBUF
@@ -283,6 +289,9 @@ bool iconvert::convert() {
 				&(pvt->_frombufferremaining),
 				(char **)&(pvt->_tobufferptr),
 				&(pvt->_tobufferremaining));
+
+		// Sometimes iconv() fails, but doesn't return -1, instead it
+		// returns 0 and sets errno.  Catch both cases.
 		if (result==(size_t)-1 ||
 			(result==0 && error::getErrorNumber())) {
 			debugPrintf("iconv() failed with result %d "

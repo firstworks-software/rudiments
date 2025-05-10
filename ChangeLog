@@ -41,6 +41,8 @@
 	added code to detect degenerate wctype.h
 	added support for linker namespaces to dynamiclib
 	updated iconvert class to initialize the descriptor to -1 instead of 0
+	added clearError() to iconv() calls to deal with misbehaving
+		iconv_open() on some platforms
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h
