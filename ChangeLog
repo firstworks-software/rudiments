@@ -1,3 +1,5 @@
+2.1.1 - 
+
 2.1.0 - renamed *httprequest::get*IsAllowed to is*Allowed
 	renamed *httprequest::get*WereProvided to were*Provided
 	renamed *serverapi and httpresponse::send* to write*
@@ -43,6 +45,7 @@
 	updated iconvert class to initialize the descriptor to -1 instead of 0
 	added clearError() to iconv() calls to deal with misbehaving
 		iconv_open() on some platforms
+	added dynamiclib::openInNewNamespace()
 
 2.0.2 - moved syslog.h to loggerincludes.h
 	added syslog macros to loggerincludes.h

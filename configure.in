@@ -596,6 +596,10 @@ AC_MSG_CHECKING(for dlfcn.h)
 AC_TRY_COMPILE([#include <dlfcn.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DLFCN_H, 1, Some systems have dlfcn.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for link.h)
+AC_TRY_COMPILE([#include <link.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_LINK_H, 1, Some systems have link.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for mach-o/dyld.h)
 AC_TRY_COMPILE([#include <mach-o/dyld.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_MACH_O_DYLD_H, 1, Some systems have mach-o/dyld.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

@@ -820,6 +820,9 @@
 /* Some systems have link */
 /* #undef RUDIMENTS_HAVE_LINK */
 
+/* Some systems have link.h */
+/* #undef RUDIMENTS_HAVE_LINK_H */
+
 /* Linux libc4 style statfs */
 /* #undef RUDIMENTS_HAVE_LINUX_LIBC4_STATFS */
 

@@ -8,6 +8,9 @@
 
 #if defined(RUDIMENTS_HAVE_DLFCN_H)
 	#include <dlfcn.h>
+	#if defined(RUDIMENTS_HAVE_LINK_H)
+		#include <link.h>
+	#endif
 #elif defined(RUDIMENTS_HAVE_MACH_O_DYLD_H)
 	#include <rudiments/environment.h>
 	#include <rudiments/stringbuffer.h>
