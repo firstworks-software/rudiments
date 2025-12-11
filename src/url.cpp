@@ -1435,8 +1435,16 @@ bool url::curlPerform() {
 	do {
 		// Later, we're going to have to wait.
 		// Figure out how long we shold wait here.
-		uint32_t	sec=60;
-		uint32_t	usec=0;
+		//
+		// Default to 980000us as suggested in the example at:
+		// https://curl.se/libcurl/c/curl_multi_timeout.html
+		// ...which also says:
+		// Note: if libcurl returns a -1 timeout here, it just means
+		// that libcurl currently has no stored timeout value. You must
+		// not wait too long (more than a few seconds perhaps) before
+		// you call curl_multi_perform again. 
+		uint32_t	sec=0;
+		uint32_t	usec=980000;
 		#ifdef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT
 			long		timeout=-1;
 			if (curl_multi_timeout(pvt->_curlm,

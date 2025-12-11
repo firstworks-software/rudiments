@@ -1,4 +1,5 @@
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
+	updated default timeout for curl_multi_timeout
 
 2.1.0 - renamed *httprequest::get*IsAllowed to is*Allowed
 	renamed *httprequest::get*WereProvided to were*Provided
