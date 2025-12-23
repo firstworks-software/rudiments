@@ -26,6 +26,7 @@
 class aes128private {
 	friend class aes128;
 	private:
+		bool	_usegcm;
 		#if defined(RUDIMENTS_HAS_SSL)
 			EVP_CIPHER_CTX	*_context;
 		#else
@@ -39,10 +40,19 @@ class aes128private {
 aes128::aes128() : encryption() {
 	pvt=new aes128private;
 	pvt->_context=NULL;
+	pvt->_usegcm=false;
 }
 
 aes128::~aes128() {
 	freeContext();
+}
+
+void aes128::setUseGcm(bool usegcm) {
+	pvt->_usegcm=usegcm;
+}
+
+bool aes128::getUseGcm() {
+	return pvt->_usegcm;
 }
 
 size_t aes128::getKeySize() {
@@ -92,7 +102,9 @@ const byte_t *aes128::getData(bool encrypt) {
 	newContext();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!EVP_CipherInit_ex(pvt->_context,
-					EVP_aes_128_cbc(),
+					(pvt->_usegcm)?
+						EVP_aes_128_gcm():
+						EVP_aes_128_cbc(),
 					NULL,
 					getKey(),
 					getIv(),
