@@ -43233,12 +43233,12 @@ echo "******************************"
 
 
 
-	eval "RUDIMENTS_VERSION=\"2.2 0\""
+	eval "RUDIMENTS_VERSION=\"2.2.0\""
 
 	if ( test "RUDIMENTS_VERSION" != "SONAME_VERSION_INFO" )
 	then
 
-printf "%s\n" "#define RUDIMENTS_VERSION \"2.2 0\"" >>confdefs.h
+printf "%s\n" "#define RUDIMENTS_VERSION \"2.2.0\"" >>confdefs.h
 
 	fi
 
