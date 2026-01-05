@@ -26,7 +26,6 @@
 class aes128private {
 	friend class aes128;
 	private:
-		bool	_usegcm;
 		#if defined(RUDIMENTS_HAS_SSL)
 			EVP_CIPHER_CTX	*_context;
 		#else
@@ -40,19 +39,10 @@ class aes128private {
 aes128::aes128() : encryption() {
 	pvt=new aes128private;
 	pvt->_context=NULL;
-	pvt->_usegcm=false;
 }
 
 aes128::~aes128() {
 	freeContext();
-}
-
-void aes128::setUseGcm(bool usegcm) {
-	pvt->_usegcm=usegcm;
-}
-
-bool aes128::getUseGcm() {
-	return pvt->_usegcm;
 }
 
 size_t aes128::getKeySize() {
@@ -99,12 +89,56 @@ const byte_t *aes128::getData(bool encrypt) {
 	// re-init if the dirty flag is set
 
 	freeContext();
+
+	// decide on a block cipher mode
+	#if defined(RUDIMENTS_HAS_SSL)
+		const EVP_CIPHER	*mode=NULL;
+		switch (getBlockCipherMode()) {
+			case BLOCK_CIPHER_MODE_CBC:
+				mode=EVP_aes_128_cbc();
+				break;
+			case BLOCK_CIPHER_MODE_CFB1:
+				mode=EVP_aes_128_cfb1();
+				break;
+			case BLOCK_CIPHER_MODE_CFB8:
+				mode=EVP_aes_128_cfb8();
+				break;
+			case BLOCK_CIPHER_MODE_CFB128:
+				mode=EVP_aes_128_cfb128();
+				break;
+			case BLOCK_CIPHER_MODE_ECB:
+				mode=EVP_aes_128_ecb();
+				break;
+			case BLOCK_CIPHER_MODE_OFB:
+				mode=EVP_aes_128_ofb();
+				break;
+			case BLOCK_CIPHER_MODE_GCM:
+				mode=EVP_aes_128_gcm();
+				break;
+			case BLOCK_CIPHER_MODE_CCM:
+				mode=EVP_aes_128_ccm();
+				break;
+			case BLOCK_CIPHER_MODE_CTR:
+				mode=EVP_aes_128_ctr();
+				break;
+			default:
+				encryption::setError(
+					ENCRYPTION_ERROR_UNSUPPORTED);
+				return NULL;
+		}
+	#else
+		// OpenSSL supports a bunch of block cipher modes,
+		// but our non-OpenSSL implementation only supports CBC.
+		if (getBlockCipherMode()!=BLOCK_CIPHER_MODE_CBC) {
+			encryption::setError(ENCRYPTION_ERROR_UNSUPPORTED);
+			return NULL;
+		}
+	#endif
+
 	newContext();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!EVP_CipherInit_ex(pvt->_context,
-					(pvt->_usegcm)?
-						EVP_aes_128_gcm():
-						EVP_aes_128_cbc(),
+					mode,
 					NULL,
 					getKey(),
 					getIv(),
@@ -130,11 +164,12 @@ const byte_t *aes128::getData(bool encrypt) {
 
 
 	// encrypt/decrypt the data...
-	// The OpenSSL implementation uses CBC and CMS padding, so we'll use
-	// that in the non-OpenSSL implementation as well.  OpenSSL allows us
-	// to manually pad (and not have to "finalize") but who knows, OpenSSL
-	// may be optimized in some way (including maybe even using crypto
-	// hardware, if available), so we'll let OpenSSL do as much as possible.
+	// The OpenSSL implementation defaults to CBC and CMS padding, so we'l
+	// use that in the non-OpenSSL implementation as well.  OpenSSL allows
+	// us to manually pad (and not have to "finalize") but who knows,
+	// OpenSSL may be optimized in some way (including maybe even using
+	// crypto hardware, if available), so we'll let OpenSSL do as much as
+	// possible.
 
 
 	// encrypt/decrypt the data in AES_BLOCK_SIZE-sized blocks
@@ -362,4 +397,13 @@ void aes128::freeContext() {
 		#endif
 	}
 	pvt->_context=NULL;
+}
+
+bool aes128::isSupported() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		return true;
+	#else
+		// our own implementation only supports CBC
+		return getBlockCipherMode()==BLOCK_CIPHER_MODE_CBC;
+	#endif
 }

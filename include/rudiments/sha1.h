@@ -33,6 +33,10 @@ class RUDIMENTS_DLLSPEC sha1 : public hash {
  		 *  false if an error occurred. */
 		bool	clear();
 
+		/** Returns true if this platform supports sha1 and false
+		 *  otherwise. */
+		bool	isSupported();
+
 	#include <rudiments/private/sha1.h>
 };
 

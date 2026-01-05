@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 2.1.0
+Version: 2.2.0
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -85,6 +85,9 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %{_docdir}/%{name}
 
 %changelog
+* Mon Jan 05 2025 David Muse <david.muse@firstworks.com> - 2.2.0-1
+- Updated to version 2.2.0.
+
 * Wed Jan 08 2025 David Muse <david.muse@firstworks.com> - 2.1.0-1
 - Updated to version 2.1.0.
 

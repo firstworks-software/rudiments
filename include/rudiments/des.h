@@ -16,31 +16,31 @@ class RUDIMENTS_DLLSPEC des : public hash {
 		/** Deletes this instance of the des class. */
 		~des();
 
-		/** Returns the number of bytes in the salt. */
+		/** Returns the number of bytes in the salt (2). */
 		size_t	getSaltSize();
 
-		/** Interprets the current data as unencrypted.  Encrypts
-		 *  current data using the des algorithm, and the initilization
-		 *  vector as the "salt" (which should be a 2 character string
-		 *  from the set [a-zA-Z0-9./].  Returns the encrypted data on
-		 *  success or NULL if an error occurred.
+		/** Returns the current hash on success or NULL if an error
+		 *  occurred.
 		 *
-		 *  Note that since des is typically used to encrypt
-		 *  passwords, and that the encrypted data that results from
-		 *  this type of encryption is always printable ascii, this
-		 *  method NULL-terminates the encrypted data, and the result
-		 *  can be interpreted as a NULL-terminated string.
+		 *  Data is hashed using the supplied salt, which should be a
+		 *  2 character string from the set [a-zA-Z0-9./].
 		 *
-		 *  Note that the encrypted data returned will be an empty
+		 *  Note that since des is typically used to encrypt passwords,
+		 *  and that the data that results from this type of hash is
+		 *  always printable ascii, this method NULL-terminates the
+		 *  hash, and the result can be interpreted as a
+		 *  NULL-terminated string.
+		 *
+		 *  Note that the current hash will be an empty
 		 *  string if no data has been appended yet. */
 		const byte_t	*getHash();
 
-		/** Returns the number of bytes of encrypted data, not
-		 *  including the NULL-terminator.
+		/** Returns the number of bytes in the hash, including the
+		 *  NULL-terminator.
 		 *
-		 *  Note that since the encrypted data that results from this
-		 *  type of encryption is always printable ascii, this size is
-		 *  equivalent to the string length. */
+		 *  Note that since the resulting hash is always printable
+		 *  ascii, this size is equivalent to the string length,
+		 *  plus 1. */
 		uint64_t	getHashSize();
 
 		/** If your system doesn't support a reentrany crypt function
@@ -55,6 +55,10 @@ class RUDIMENTS_DLLSPEC des : public hash {
 		 *  If your application is not multithreaded, then
 		 *  there is no need to supply a mutex. */
 		void	setMutex(threadmutex *mtx);
+
+		/** Returns true if this platform supports des and false
+		 *  otherwise. */
+		bool	isSupported();
 
 	#include <rudiments/private/des.h>
 };

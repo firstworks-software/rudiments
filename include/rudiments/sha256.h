@@ -33,6 +33,10 @@ class RUDIMENTS_DLLSPEC sha256 : public hash {
  		 *  false if an error occurred. */
 		bool	clear();
 
+		/** Returns true if this platform supports sha256 and false
+		 *  otherwise. */
+		bool	isSupported();
+
 	#include <rudiments/private/sha256.h>
 };
 

@@ -120,3 +120,7 @@ void sha1::setError(int32_t err) {
 		}
 	#endif
 }
+
+bool sha1::isSupported() {
+	return true;
+}

@@ -69,6 +69,10 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
  		 *  fails, and possibly set an error. */
 		virtual	bool	reset();
 
+		/** Returns true if the platforms supports this hash type
+		 *  and false otherwise. */
+		virtual bool	isSupported()=0;
+
 	#include <rudiments/private/hash.h>
 };
 

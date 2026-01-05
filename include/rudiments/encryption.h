@@ -17,6 +17,19 @@ enum encryptionerror_t {
 	ENCRYPTION_ERROR_UNSUPPORTED
 };
 
+/** block cipher modes */
+enum blockciphermode_t {
+	BLOCK_CIPHER_MODE_CBC=0,
+	BLOCK_CIPHER_MODE_CFB1,
+	BLOCK_CIPHER_MODE_CFB8,
+	BLOCK_CIPHER_MODE_CFB128,
+	BLOCK_CIPHER_MODE_ECB,
+	BLOCK_CIPHER_MODE_OFB,
+	BLOCK_CIPHER_MODE_GCM,
+	BLOCK_CIPHER_MODE_CCM,
+	BLOCK_CIPHER_MODE_CTR
+};
+
 /** The encryption class provides a simple encryption interface. */
 class RUDIMENTS_DLLSPEC encryption : virtual public object {
 	public:
@@ -69,6 +82,13 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 
 		/** Returns the number of bytes in the initialization vector. */
 		virtual size_t	getIvSize()=0;
+
+		/** Sets the block cipher mode to "mode".  Defaults to
+		 *  BLOCK_CIPHER_MODE_CBC. */
+		virtual void	setBlockCipherMode(blockciphermode_t mode);
+
+		/** Returns the current block cipher mode. */
+		virtual blockciphermode_t	getBlockCipherMode();
 
 		/** Appends "size" bytes of "data" to the data to be
 		 *  encrypted/decrypted.
@@ -123,6 +143,10 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *  may override this method to return false if something
 		 *  fails, and possibly set an error. */
 		virtual	bool	reset();
+
+		/** Returns true if the platforms supports this encryption type
+		 *  and false otherwise. */
+		virtual bool	isSupported()=0;
 	
 	#include <rudiments/private/encryption.h>
 };

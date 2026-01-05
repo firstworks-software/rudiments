@@ -4,9 +4,6 @@
 		aes128(aes128 &a) {};
 		aes128	&operator=(aes128 &a) { return *this; };
 
-		void	setUseGcm(bool usegcm);
-		bool	getUseGcm();
-
 	private:
 		const byte_t	*getData(bool encrypt);
 

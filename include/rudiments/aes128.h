@@ -35,6 +35,11 @@ class RUDIMENTS_DLLSPEC aes128 : public encryption {
 		 *  appended yet. */
 		const byte_t	*getDecryptedData();
 
+		/** Returns true if the platforms supports aes128, with the
+		 *  block cipher mode specified by setBlockCipherMode() (or the
+		 *  default of CBC) and false otherwise. */
+		bool	isSupported();
+
 	#include <rudiments/private/aes128.h>
 };
 

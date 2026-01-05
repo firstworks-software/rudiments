@@ -154,3 +154,11 @@ void des::setMutex(threadmutex *mtx) {
 		pvt->_desmutex=mtx;
 	#endif
 }
+
+bool des::isSupported() {
+	#if defined(RUDIMENTS_HAVE_CRYPT_R) || defined(RUDIMENTS_HAVE_CRYPT)
+		return true;
+	#else
+		return false;
+	#endif
+}

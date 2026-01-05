@@ -33,6 +33,10 @@ class RUDIMENTS_DLLSPEC md5 : public hash {
  		 *  false if an error occurred. */
 		bool	clear();
 
+		/** Returns true if this platform supports md5 and false
+		 *  otherwise. */
+		bool	isSupported();
+
 	#include <rudiments/private/md5.h>
 };
 

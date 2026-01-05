@@ -13,6 +13,7 @@ class encryptionprivate {
 		bytebuffer		_out;
 		byte_t			*_key;
 		byte_t			*_iv;
+		blockciphermode_t	_mode;
 		bool			_dirty;
 		bool			_encrypted;
 		encryptionerror_t	_err;
@@ -26,6 +27,7 @@ encryption::encryption() : object() {
 void encryption::construct() {
 	pvt->_key=NULL;
 	pvt->_iv=NULL;
+	pvt->_mode=BLOCK_CIPHER_MODE_CBC;
 	pvt->_dirty=true;
 	pvt->_encrypted=true;
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
@@ -114,6 +116,14 @@ void encryption::initIv() {
 		pvt->_iv=new byte_t[getIvSize()];
 		bytestring::zero(pvt->_iv,getIvSize());
 	}
+}
+
+void encryption::setBlockCipherMode(blockciphermode_t mode) {
+	pvt->_mode=mode;
+}
+
+blockciphermode_t encryption::getBlockCipherMode() {
+	return pvt->_mode;
 }
 
 bool encryption::append(const byte_t *data, uint32_t size) {
