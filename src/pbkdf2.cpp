@@ -152,5 +152,9 @@ void pbkdf2::setError(int32_t err) {
 }
 
 bool pbkdf2::isSupported() {
-	return true;
+	#if defined(RUDIMENTS_HAS_SSL)
+		return true;
+	#else
+		return false;
+	#endif
 }
