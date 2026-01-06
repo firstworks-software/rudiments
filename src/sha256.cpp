@@ -48,7 +48,7 @@ bool sha256::append(const byte_t *data, uint32_t size) {
 		return true;
 	#else
 		sha256_update(&pvt->_context,data,size);
-		return false;
+		return true;
 	#endif
 }
 

@@ -1,5 +1,6 @@
 2.2 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128
+	fixed return value of sha256::append() when not using openssl
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout
