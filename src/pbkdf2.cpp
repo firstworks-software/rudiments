@@ -13,11 +13,9 @@
 class pbkdf2private {
 	friend class pbkdf2;
 	private:
-		#if defined(RUDIMENTS_HAS_SSL)
-			pbkdf2algorithm_t	_alg;
-			uint32_t		_iterations;
-			uint32_t		_keysize;
-		#endif
+		pbkdf2algorithm_t	_alg;
+		uint32_t		_iterations;
+		uint32_t		_keysize;
 };
 
 pbkdf2::pbkdf2() : hash() {

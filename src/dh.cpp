@@ -31,11 +31,21 @@ class dhprivate {
 dh::dh() {
 	pvt=new dhprivate;
 	pvt->_err=DH_ERROR_NULL;
-	pvt->_dh=DH_new();
+	pvt->_privkey=NULL;
+	pvt->_privkeysize=0;
+	pvt->_pubkey=NULL;
+	pvt->_pubkeysize=0;
+	pvt->_sharedsecret=NULL;
+	pvt->_sharedsecretsize=0;
+	#if defined(RUDIMENTS_HAS_SSL)
+		pvt->_dh=DH_new();
+	#endif
 }
 
 dh::~dh() {
-	DH_free(pvt->_dh);
+	#if defined(RUDIMENTS_HAS_SSL)
+		DH_free(pvt->_dh);
+	#endif
 	delete pvt;
 }
 
