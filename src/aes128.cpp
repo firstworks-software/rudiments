@@ -94,33 +94,51 @@ const byte_t *aes128::getData(bool encrypt) {
 	#if defined(RUDIMENTS_HAS_SSL)
 		const EVP_CIPHER	*mode=NULL;
 		switch (getBlockCipherMode()) {
+			#ifdef RUDIMENTS_HAS_AES_128_CBC
 			case BLOCK_CIPHER_MODE_CBC:
 				mode=EVP_aes_128_cbc();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_CFB1
 			case BLOCK_CIPHER_MODE_CFB1:
 				mode=EVP_aes_128_cfb1();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_CFB8
 			case BLOCK_CIPHER_MODE_CFB8:
 				mode=EVP_aes_128_cfb8();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_CFB128
 			case BLOCK_CIPHER_MODE_CFB128:
 				mode=EVP_aes_128_cfb128();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_ECB
 			case BLOCK_CIPHER_MODE_ECB:
 				mode=EVP_aes_128_ecb();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_OFB
 			case BLOCK_CIPHER_MODE_OFB:
 				mode=EVP_aes_128_ofb();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_GCM
 			case BLOCK_CIPHER_MODE_GCM:
 				mode=EVP_aes_128_gcm();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_CCM
 			case BLOCK_CIPHER_MODE_CCM:
 				mode=EVP_aes_128_ccm();
 				break;
+			#endif
+			#ifdef RUDIMENTS_HAS_AES_128_CTR
 			case BLOCK_CIPHER_MODE_CTR:
 				mode=EVP_aes_128_ctr();
 				break;
+			#endif
 			default:
 				encryption::setError(
 					ENCRYPTION_ERROR_UNSUPPORTED);
