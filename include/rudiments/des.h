@@ -16,8 +16,10 @@ class RUDIMENTS_DLLSPEC des : public hash {
 		/** Deletes this instance of the des class. */
 		~des();
 
-		/** Returns the number of bytes in the salt (2). */
-		size_t	getSaltSize();
+		/** Sets the salt.  Returns true on success or false if "size"
+		 *  does not equal 2 (the fixed salt size for the des
+		 *  algorithm). */
+		bool	setSalt(const byte_t *salt, size_t size);
 
 		/** Returns the current hash on success or NULL if an error
 		 *  occurred.

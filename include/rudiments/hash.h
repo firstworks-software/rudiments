@@ -25,14 +25,23 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
 		/** Deletes this instance of the hash class. */
 		virtual	~hash();
 
-		/** Sets the salt. */
+		/** Sets the salt.
+		 *
+		 *  This implementation always returns true, but a child class
+		 *  may override this method, for example, to return false if
+		 *  the algorithm requires a fixed salt size and "size" doesn't
+		 *  match it. */
 		virtual bool	setSalt(const byte_t *salt, size_t size);
 
 		/** Returns the salt set by a previous call to setSalt() or
 		 *  NULL if no salt has been set. */
 		virtual const byte_t	*getSalt();
 
-		/** Returns the number of bytes in the salt. */
+		/** This implementation returns the size of the salt set by a
+		 *  previous call to setSalt() or 0 if no salt has been set.
+		 *
+		 *  A child class may override this method to return a
+		 *  fixed salt size. */
 		virtual size_t	getSaltSize();
 
 		/** Appends "size" bytes of "data" to the data to be

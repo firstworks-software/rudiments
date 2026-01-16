@@ -12,6 +12,7 @@ class hashprivate {
 		bytebuffer	_in;
 		bytebuffer	_out;
 		byte_t		*_salt;
+		size_t		_saltsize;
 		bool		_dirty;
 		hasherror_t	_err;
 };
@@ -23,6 +24,7 @@ hash::hash() : object() {
 
 void hash::construct() {
 	pvt->_salt=NULL;
+	pvt->_saltsize=0;
 	pvt->_dirty=true;
 	pvt->_err=HASH_ERROR_SUCCESS;
 }
@@ -33,31 +35,19 @@ hash::~hash() {
 }
 
 bool hash::setSalt(const byte_t *salt, size_t saltsize) {
-	initSalt();
-	if (saltsize!=getSaltSize()) {
-		setError(HASH_ERROR_INVALID_SALT_SIZE);
-		return false;
-	}
 	delete[] pvt->_salt;
+	pvt->_saltsize=saltsize;
 	pvt->_salt=(byte_t *)bytestring::duplicate(salt,saltsize);
 	pvt->_dirty=true;
 	return true;
 }
 
 const byte_t *hash::getSalt() {
-	initSalt();
 	return pvt->_salt;
 }
 
 size_t hash::getSaltSize() {
-	return 0;
-}
-
-void hash::initSalt() {
-	if (!pvt->_salt) {
-		pvt->_salt=new byte_t[getSaltSize()];
-		bytestring::zero(pvt->_salt,getSaltSize());
-	}
+	return pvt->_saltsize;
 }
 
 bool hash::append(const byte_t *data, uint32_t size) {
