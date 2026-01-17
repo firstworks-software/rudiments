@@ -49,7 +49,7 @@ int main(int argc, const char **argv) {
 		for (const char * const *salt=salts; *salt; salt++) {
 
 			stdoutput.printf("salt=%s\n",*salt);
-			c.setSalt((const byte_t *)*salt,c.getSaltSize());
+			c.setSalt((const byte_t *)*salt,2);
 
 			uint16_t	j=0;
 			for (const char * const *str=unencrypted; *str; str++) {
