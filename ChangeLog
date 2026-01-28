@@ -3,6 +3,7 @@
 	fixed return value of sha256::append() when not using openssl
 	added pbkdf2 class
 	added dh class
+	fixed null-safety in charstring::findFirstIgnoringCase()
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout

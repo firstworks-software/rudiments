@@ -1709,6 +1709,9 @@ const char *charstring::findFirst(const char *haystack, const char *needle) {
 
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							const char *needle) {
+	if (!haystack || !needle) {
+		return NULL;
+	}
 	size_t	haystacklen=getLength(haystack);
 	size_t	needlelen=getLength(needle);
 	for (const char *ptr=haystack;
@@ -1727,6 +1730,9 @@ const char *charstring::findFirst(const char *haystack, char needle) {
 
 const char *charstring::findFirstIgnoringCase(const char *haystack,
 							char needle) {
+	if (!haystack) {
+		return NULL;
+	}
 	size_t	haystacklen=getLength(haystack);
 	needle=character::lower(needle);
 	for (const char *ptr=haystack;
