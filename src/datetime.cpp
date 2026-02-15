@@ -1458,14 +1458,14 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 		return true;
 	}
 
-	bool	supportslashdelimiteddate=
-			charstring::contains(datedelimiters,'/');
-	bool	supportdashdelimiteddate=
-			charstring::contains(datedelimiters,'-');
-	bool	supportdotdelimiteddate=
-			charstring::contains(datedelimiters,'.');
-	bool	supportcolondelimiteddate=
-			charstring::contains(datedelimiters,':');
+	bool	supportslashdelimiteddate=(!datedelimiters ||
+				charstring::contains(datedelimiters,'/'));
+	bool	supportdashdelimiteddate=(!datedelimiters ||
+				charstring::contains(datedelimiters,'-'));
+	bool	supportdotdelimiteddate=(!datedelimiters ||
+				charstring::contains(datedelimiters,'.'));
+	bool	supportcolondelimiteddate=(!datedelimiters ||
+				charstring::contains(datedelimiters,':'));
 
 	// dates can be formatted very differently
 	// the number of parts could be:
