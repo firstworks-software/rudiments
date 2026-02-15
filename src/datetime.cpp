@@ -2068,6 +2068,26 @@ bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
 	return retval;
 }
 
+bool datetime::parse(const char *datetime, bool ddmm, bool yyyyddmm,
+			const char *datedelimiters, bool adjustshortyear,
+			int16_t *year, int16_t *month, int16_t *day,
+			int16_t *hour, int16_t *minute, int16_t *second,
+			int32_t *microsecond, bool *isnegative) {
+	if (!parse(datetime,ddmm,yyyyddmm,datedelimiters,
+			year,month,day,hour,minute,second,
+			microsecond,isnegative)) {
+		return false;
+	}
+	if (adjustshortyear && *year<100) {
+		if (*year>50) {
+			*year+=1900;
+		} else {
+			*year+=2000;
+		}
+	}
+	return true;
+}
+
 char *datetime::formatAs(const char *format,
 			int16_t year, int16_t month, int16_t day,
 			int16_t hour, int16_t minute, int16_t second,

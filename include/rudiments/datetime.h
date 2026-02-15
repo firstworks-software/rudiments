@@ -438,6 +438,59 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 					int16_t *minute, int16_t *second,
 					int32_t *microsecond, bool *isnegative);
 
+		/** Attempts to parse "datetime" into its components setting
+		 *  "year", "month", "day", "hour", "minute", "second",
+		 *  "microsecond", and "isnegative" to the different parts, as
+		 *  appropriate.
+		 *
+		 *  Handles a wide variety of date/time formats.
+		 *
+		 *  If "ddmm" is set true then the date format is assumed to
+		 *  be dd/mm/yyyy rather than mm/dd/yyyy when a date with a
+		 *  trailing year is encountered.
+		 *
+		 *  If "yyyyddmm" is set true then the date format is assumed
+		 *  to be yyyy/dd/mm rather than yyyy/mm/dd when a date with
+		 *  a leading year is encountered.
+		 *
+		 *  "datedelimiters" may be set to a set of valid date
+		 *  delimiters and may contain any combination of '/', '-', '.',
+		 *  and ':'.  Eg. "/-" would mean that only '/' and '-' are
+		 *  valid date delimiters.  If left NULL then it defaults to
+		 *  "/-.:"
+		 *
+		 *  If "adjustshortyear" is true then years less than 100, and
+		 *  greater than 50 will be presumed to be 1950+ and years less
+		 *  than 100, and less than 50 will be presumed to be 2000+.
+		 *  If "adjustshortyear" is false then years will not be
+		 *  adjusted.
+		 *
+		 *  If a component isn't found, then it is set to -1.  Eg. if a
+		 *  date is given with no time, then "hour", "minute", "second",
+		 *  and "microsecond" are set to -1.
+		 *
+		 *  Any of "year", "month", "day", "hour", "minute", "second",
+		 *  "microsecond", and "isnegative" may be NULL.  In that case,
+		 *  that component is just not set.
+		 *
+		 *  "isnegative" is set true if the hour component is negative.
+		 *  Eg. if "-10:00" was encountered.  Note that if a negative
+		 *  hour component is encountered, then the "hour" will be set
+		 *  to a positive number, and "isnegative" will be set true.
+		 *  In the example above, "hour" would bet set to 10 and
+		 *  "isnegative" would be set true.
+		 *
+		 *  Returns true if the date/time was successfully parsed and
+		 *  false if it failed to parse the date/time. */
+		static bool	parse(const char *datetime,
+					bool ddmm, bool yyyyddmm,
+					const char *datedelimiters,
+					bool adjustshortyear,
+					int16_t *year, int16_t *month,
+					int16_t *day, int16_t *hour,
+					int16_t *minute, int16_t *second,
+					int32_t *microsecond, bool *isnegative);
+
 		/** Allocates and returns a date/time string, composed of the
 		 *  components "year", "month", "day", "hour", "minute",
 		 *  "second", and "microsecond" as specified by the format
