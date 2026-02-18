@@ -34,6 +34,10 @@ hash::~hash() {
 	delete pvt;
 }
 
+size_t hash::getRequiredSaltSize() {
+	return 0;
+}
+
 bool hash::setSalt(const byte_t *salt, size_t saltsize) {
 	delete[] pvt->_salt;
 	pvt->_saltsize=saltsize;

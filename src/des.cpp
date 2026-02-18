@@ -45,8 +45,12 @@ des::~des() {
 	delete pvt;
 }
 
+size_t des::getRequiredSaltSize() {
+	return 2;
+}
+
 bool des::setSalt(const byte_t *salt, size_t size) {
-	if (size!=2) {
+	if (size!=getRequiredSaltSize()) {
 		setError(HASH_ERROR_INVALID_SALT_SIZE);
 		return false;
 	}
@@ -75,8 +79,8 @@ const byte_t *des::getHash() {
 		if (!getSalt()) {
 			bytestring::zero(salt,3);
 		} else {
-			bytestring::copy(salt,getSalt(),2);
-			salt[2]='\0';
+			bytestring::copy(salt,getSalt(),getRequiredSaltSize());
+			salt[getRequiredSaltSize()]='\0';
 		}
 
 		// get the input buffer as a string

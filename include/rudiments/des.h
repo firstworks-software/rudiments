@@ -16,6 +16,9 @@ class RUDIMENTS_DLLSPEC des : public hash {
 		/** Deletes this instance of the des class. */
 		~des();
 
+		/** Returns 2, the fixed salt size for the des algorithm. */
+		size_t	getRequiredSaltSize();
+
 		/** Sets the salt.  Returns true on success or false if "size"
 		 *  does not equal 2 (the fixed salt size for the des
 		 *  algorithm). */

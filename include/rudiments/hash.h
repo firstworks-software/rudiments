@@ -25,6 +25,18 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
 		/** Deletes this instance of the hash class. */
 		virtual	~hash();
 
+		/** Returns the size of the salt required by the hash
+		 *  implementation, or 0 if the implementation doesn't require
+		 *  a fixed-size salt.
+		 *
+		 *  Note that some hashing algorithms may not require a salt,
+		 *  may not require a salt of a specific size, or may not
+		 *  support a salt at all.
+		 *
+		 *  This implementation returns 0, but a child class may
+		 *  override it to return an implementation-specific size. */
+		virtual size_t	getRequiredSaltSize();
+
 		/** Sets the salt.
 		 *
 		 *  This implementation always returns true, but a child class
@@ -37,11 +49,8 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
 		 *  NULL if no salt has been set. */
 		virtual const byte_t	*getSalt();
 
-		/** This implementation returns the size of the salt set by a
-		 *  previous call to setSalt() or 0 if no salt has been set.
-		 *
-		 *  A child class may override this method to return a
-		 *  fixed salt size. */
+		/** Returns the size of the salt set by a previous call to
+		 *  setSalt() or 0 if no salt has been set. */
 		virtual size_t	getSaltSize();
 
 		/** Appends "size" bytes of "data" to the data to be
