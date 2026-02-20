@@ -6,14 +6,114 @@
 
 <h1>Using the compiler class</h1>
 
-<p>...</p>
+<p>The <a href="../classes/html/classcompiler.html">compiler class</a> provides a generic compiler framework.</p>
+
+<p>Though targeted at code-to-code translation (transcompiling), it could be used as the basis for any type of translation or compilation system.</p>
+
+<p>Translation/compilation is achieved in three steps:</p>
+
+<ul>
+  <li>Pre-processing - A unit of code is passed through a chain of pre-processing modules.  Pre-processing modules should inherit from the compilerpreprocessor class and implement the process() method.</li>
+  <li>Processing - The output of the final pre-processing module is parsed by an instance of the codetree class, producing a DOM tree which represents the code.  The tree is then passed through a chain of processing modules.  Processing modules should inherit from the compilerprocessor class and implement the process() method.</li>
+  <li>Post-processing - The output of the processing step is passed through a chain of post-processing modules.  Post-processing modules should inherit from the compilerpostprocessor class and implement the process() method.</li>
+</ul>
+
+<p>Input and output grammars must be set to define the input and output formats.  See the <a href="codetree.html">codetree class</a> for information on the grammar format.</p>
+
+<p>The following example creates simple preprocessor, processor, and postprocessor classes, defines a grammar, sets the input and output grammars, adds the processing modules, and compiles a string.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt>@<font color="#990000">../../</font>examples<font color="#990000">/</font><font color="#008080">compiler</font> cpp<font color="#990000">.</font>html@</tt></pre>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/compiler.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/codetree.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/domnode.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stringbuffer.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<i><font color="#9A1900">// a simple preprocessor that logs input</font></i>
+<b><font color="#0000FF">class</font></b> <font color="#008080">mypreprocessor</font> <font color="#990000">:</font> <b><font color="#0000FF">public</font></b> compilerpreprocessor <font color="#FF0000">{</font>
+	<b><font color="#0000FF">public</font></b><font color="#990000">:</font>
+		<font color="#009900">bool</font>	<b><font color="#000000">process</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>input<font color="#990000">,</font>
+					<font color="#008080">stringbuffer</font> <font color="#990000">*</font>output<font color="#990000">,</font>
+					<font color="#008080">domnode</font> <font color="#990000">*</font>metadata<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"preprocessor input: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>input<font color="#990000">);</font>
+			output<font color="#990000">-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font>input<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<i><font color="#9A1900">// a simple processor that transforms the code tree</font></i>
+<b><font color="#0000FF">class</font></b> <font color="#008080">myprocessor</font> <font color="#990000">:</font> <b><font color="#0000FF">public</font></b> compilerprocessor <font color="#FF0000">{</font>
+	<b><font color="#0000FF">public</font></b><font color="#990000">:</font>
+		<font color="#009900">bool</font>	<b><font color="#000000">process</font></b><font color="#990000">(</font><font color="#008080">domnode</font> <font color="#990000">*</font>tree<font color="#990000">,</font>
+					<font color="#008080">domnode</font> <font color="#990000">*</font>metadata<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"processor: walking tree</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<i><font color="#9A1900">// a simple postprocessor that logs output</font></i>
+<b><font color="#0000FF">class</font></b> <font color="#008080">mypostprocessor</font> <font color="#990000">:</font> <b><font color="#0000FF">public</font></b> compilerpostprocessor <font color="#FF0000">{</font>
+	<b><font color="#0000FF">public</font></b><font color="#990000">:</font>
+		<font color="#009900">bool</font>	<b><font color="#000000">process</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>input<font color="#990000">,</font>
+					<font color="#008080">stringbuffer</font> <font color="#990000">*</font>output<font color="#990000">,</font>
+					<font color="#008080">domnode</font> <font color="#990000">*</font>metadata<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"postprocessor input: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>input<font color="#990000">);</font>
+			output<font color="#990000">-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font>input<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// define a simple grammar</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>grammar<font color="#990000">=</font>
+		<font color="#FF0000">"&lt;grammar&gt;"</font>
+		<font color="#FF0000">"  &lt;definition name=</font><font color="#CC33CC">\"</font><font color="#FF0000">word</font><font color="#CC33CC">\"</font><font color="#FF0000"> type=</font><font color="#CC33CC">\"</font><font color="#FF0000">literal</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;repetition min=</font><font color="#CC33CC">\"</font><font color="#FF0000">1</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"      &lt;alternation&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">a</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">b</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">c</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"      &lt;/alternation&gt;"</font>
+		<font color="#FF0000">"    &lt;/repetition&gt;"</font>
+		<font color="#FF0000">"  &lt;/definition&gt;"</font>
+		<font color="#FF0000">"&lt;/grammar&gt;"</font><font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// create the compiler</font></i>
+	<font color="#008080">compiler</font>	comp<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// set the input and output grammars</font></i>
+	comp<font color="#990000">.</font><b><font color="#000000">setInputGrammar</font></b><font color="#990000">(</font>grammar<font color="#990000">,</font><font color="#FF0000">"word"</font><font color="#990000">);</font>
+	comp<font color="#990000">.</font><b><font color="#000000">setOutputGrammar</font></b><font color="#990000">(</font>grammar<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// add preprocessor, processor, and postprocessor modules</font></i>
+	<font color="#008080">mypreprocessor</font>	pp<font color="#990000">;</font>
+	<font color="#008080">myprocessor</font>	p<font color="#990000">;</font>
+	<font color="#008080">mypostprocessor</font>	postp<font color="#990000">;</font>
+
+	comp<font color="#990000">.</font><b><font color="#000000">appendPreProcessor</font></b><font color="#990000">(&amp;</font>pp<font color="#990000">);</font>
+	comp<font color="#990000">.</font><b><font color="#000000">appendProcessor</font></b><font color="#990000">(&amp;</font>p<font color="#990000">);</font>
+	comp<font color="#990000">.</font><b><font color="#000000">appendPostProcessor</font></b><font color="#990000">(&amp;</font>postp<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// compile some input</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"compiling: abc</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#008080">stringbuffer</font>	output<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>comp<font color="#990000">.</font><b><font color="#000000">compile</font></b><font color="#990000">(</font><font color="#FF0000">"abc"</font><font color="#990000">,&amp;</font>output<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">compilation succeeded</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"output: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>output<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">compilation failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						comp<font color="#990000">.</font><b><font color="#000000">getError</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
 
 </blockquote>
 <!--#include virtual="contentend.html"-->

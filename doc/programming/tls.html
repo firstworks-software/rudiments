@@ -6,17 +6,91 @@
 
 <h1>Using the tls classes</h1>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>The <a href="../classes/html/classtls.html">tls</a>, <a href="../classes/html/classtlscontext.html">tlscontext</a>, and <a href="../classes/html/classtlscertificate.html">tlscertificate</a> classes provide support for TLS/SSL encryption.</p>
 
-<p>Coming soon...</p>
+<p>The tls class provides a static method for determining whether TLS support is available.</p>
+
+<p>The tlscontext class provides methods for configuring and establishing a TLS session over an existing connection.  The protocol version, peer validation, validation depth, and certificate authority can all be configured.  After a successful handshake, the peer's certificate can be examined.</p>
+
+<p>The following example checks for TLS support, creates and configures a TLS context, connects to an HTTPS server, performs the TLS handshake, and retrieves information from the peer's certificate.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/tls.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/inetsocketclient.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// check if tls is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>tls<font color="#990000">::</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"TLS is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"TLS is supported</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// create a tls context</font></i>
+	<font color="#008080">tlscontext</font>	ctx<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// configure the tls context</font></i>
+	ctx<font color="#990000">.</font><b><font color="#000000">setProtocolVersion</font></b><font color="#990000">(</font><font color="#FF0000">"TLS1.2"</font><font color="#990000">);</font>
+	ctx<font color="#990000">.</font><b><font color="#000000">setValidatePeer</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	ctx<font color="#990000">.</font><b><font color="#000000">setValidationDepth</font></b><font color="#990000">(</font><font color="#993399">9</font><font color="#990000">);</font>
+	ctx<font color="#990000">.</font><b><font color="#000000">setCertificateAuthority</font></b><font color="#990000">(</font><font color="#FF0000">"/etc/pki/tls/certs"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"protocol:     %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ctx<font color="#990000">.</font><b><font color="#000000">getProtocolVersion</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"validate:     %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>ctx<font color="#990000">.</font><b><font color="#000000">getValidatePeer</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"depth:        %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ctx<font color="#990000">.</font><b><font color="#000000">getValidationDepth</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"ca:           %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				ctx<font color="#990000">.</font><b><font color="#000000">getCertificateAuthority</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// connect to a server using tls</font></i>
+	<font color="#008080">inetsocketclient</font>	client<font color="#990000">;</font>
+	client<font color="#990000">.</font><b><font color="#000000">setHost</font></b><font color="#990000">(</font><font color="#FF0000">"www.google.com"</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setPort</font></b><font color="#990000">(</font><font color="#993399">443</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setTimeoutSeconds</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setTimeoutMicroseconds</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setRetryWait</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setTries</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>client<font color="#990000">.</font><b><font color="#000000">connect</font></b><font color="#990000">()!=</font>RESULT_SUCCESS<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to connect</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// associate the tls context with the socket</font></i>
+	ctx<font color="#990000">.</font><b><font color="#000000">setFileDescriptor</font></b><font color="#990000">(&amp;</font>client<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// perform the tls handshake</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>ctx<font color="#990000">.</font><b><font color="#000000">connect</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"TLS handshake succeeded</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+		<i><font color="#9A1900">// get the peer certificate</font></i>
+		<font color="#008080">tlscertificate</font>	<font color="#990000">*</font>cert<font color="#990000">=</font>ctx<font color="#990000">.</font><b><font color="#000000">getPeerCertificate</font></b><font color="#990000">();</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>cert<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"subject:      %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						cert<font color="#990000">-&gt;</font><b><font color="#000000">getSubject</font></b><font color="#990000">());</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"issuer:       %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						cert<font color="#990000">-&gt;</font><b><font color="#000000">getIssuer</font></b><font color="#990000">());</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"common name:  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						cert<font color="#990000">-&gt;</font><b><font color="#000000">getCommonName</font></b><font color="#990000">());</font>
+			<b><font color="#0000FF">delete</font></b> cert<font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		ctx<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"TLS handshake failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						ctx<font color="#990000">.</font><b><font color="#000000">getErrorString</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+
+	client<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

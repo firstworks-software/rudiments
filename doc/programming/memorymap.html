@@ -6,17 +6,75 @@
 
 <h1>Using the memorymap class</h1>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>The <a href="../classes/html/classmemorymap.html">memorymap class</a> provides methods for mapping files or portions of files into memory.</p>
 
-<p>Coming soon...</p>
+<p>Memory-mapped files allow a region of a file to be accessed as if it were a block of memory.  This can be more efficient than traditional read/write calls for some access patterns, and allows multiple processes to share data by mapping the same file.</p>
+
+<p>Changes made to the mapped region can be synced back to the file on disk.  The static isSupported() method can be used to determine if memory mapping is supported on the current platform.</p>
+
+<p>The following example creates a file, maps it into memory, reads and modifies data through the mapping, syncs the changes to disk, and detaches the mapping.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/memorymap.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// check if memory mapping is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>memorymap<font color="#990000">::</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"memory mapping is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// create a file to map</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_RDWR<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// write some data to it</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>data<font color="#990000">=</font><font color="#FF0000">"hello world, this is memory mapped data!"</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>data<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// map the file into memory</font></i>
+	<font color="#008080">memorymap</font>	mm<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>mm<font color="#990000">.</font><b><font color="#000000">attach</font></b><font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">getFileDescriptor</font></b><font color="#990000">(),</font><font color="#993399">0</font><font color="#990000">,</font>f<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">(),</font>
+						PROT_READ<font color="#990000">|</font>PROT_WRITE<font color="#990000">,</font>
+						MAP_SHARED<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to map file</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// read from the mapped region</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>mapped<font color="#990000">=(</font><font color="#009900">char</font> <font color="#990000">*)</font>mm<font color="#990000">.</font><b><font color="#000000">getData</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"mapped data: %.*s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,(</font><font color="#009900">int</font><font color="#990000">)</font>mm<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">(),</font>mapped<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// modify the data through the mapping</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>mapped<font color="#990000">,</font><font color="#FF0000">"HELLO WORLD"</font><font color="#990000">,</font><font color="#993399">11</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"modified:    %.*s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,(</font><font color="#009900">int</font><font color="#990000">)</font>mm<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">(),</font>mapped<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// sync the changes to disk</font></i>
+	mm<font color="#990000">.</font><b><font color="#000000">sync</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">,</font><b><font color="#0000FF">false</font></b><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"synced to disk</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// detach the mapping</font></i>
+	mm<font color="#990000">.</font><b><font color="#000000">detach</font></b><font color="#990000">();</font>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// clean up</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">);</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

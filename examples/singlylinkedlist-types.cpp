@@ -5,8 +5,12 @@
 // Define a simple class.  Instances of it will be stored in a list later.
 class myclass {
 	public:
-			myclass(int64_t v) { value=v; }
-		void	print() { stdoutput.printf("value: %lld\n",value); }
+		myclass(int64_t v) {
+			value=v;
+		}
+		void	print() {
+			stdoutput.printf("value: %lld\n",value);
+		}
 	private:
 		int64_t	value;
 };
@@ -18,7 +22,9 @@ int main(int argc, const char **argv) {
 	singlylinkedlist<int16_t>	i16sll;
 	singlylinkedlist<int64_t>	i64sll;
 	singlylinkedlist< char * >	ssll;
+	ssll.setManageArrayValues(true);
 	singlylinkedlist< myclass * >	osll;
+	osll.setManageValues(true);
 
 	// populate the lists
 	for (int64_t i=0; i<20; i++) {
@@ -49,10 +55,8 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 	// clean up
-	for (listnode< char * > *n=ssll.getFirst(); n; n=n->getNext()) {
-		delete[] n->getValue();
-	}
-	for (listnode< myclass * > *n=osll.getFirst(); n; n=n->getNext()) {
-		delete n->getValue();
-	}
+	// (setManageArrayValues and setManageValues cause
+	// the values to be deleted automatically)
+	ssll.clear();
+	osll.clear();
 }

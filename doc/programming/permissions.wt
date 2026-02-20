@@ -6,9 +6,11 @@
 
 = Using the permissions class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classpermissions.html permissions class] provides static methods for working with file permissions.
 
-Coming soon...
+Rudiments supports unix-style file permissions, even on Windows.  The permissions class provides methods for parsing permission strings (like "rwxr-xr--") into numeric modes, converting numeric modes back to permission strings, and constructing permissions using convenience methods for common combinations.
+
+The following example parses a permission string into a mode, converts a mode back to a string, builds permissions using convenience methods, and displays some common permission values.
 
 {{{#!blockquote
 {{{#!code

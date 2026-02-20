@@ -6,19 +6,55 @@
 
 <h1>Programming with Rudiments using the unixsocketclient class</h1>
 
-<p>Here's the code for a client that can communicate with the <a href="unixsocketserver.html">unixsocketserver program</a>.  This client sends a string to the server, reads what the server sends back and prints it out.</p>
+<p>The <a href="../classes/html/classunixsocketclient.html">unixsocketclient class</a> provides methods for connecting to servers over unix sockets.</p>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>Here's the code for a client that can communicate with the <a href="unixsocketserver.html">unixsocketserver program</a>.  This client connects to a unix socket, sends a string to the server, reads what the server sends back and prints it out.</p>
 
-<p>Coming soon...</p>
+<p>The socket filename, timeout, retry wait, and number of tries are all configurable.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/unixsocketclient.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a client and connect to a unix socket</font></i>
+	<font color="#008080">unixsocketclient</font>	client<font color="#990000">;</font>
+	client<font color="#990000">.</font><b><font color="#000000">setFileName</font></b><font color="#990000">(</font><font color="#FF0000">"/tmp/testsocket"</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setTimeoutSeconds</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setTimeoutMicroseconds</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setRetryWait</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	client<font color="#990000">.</font><b><font color="#000000">setTries</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>client<font color="#990000">.</font><b><font color="#000000">connect</font></b><font color="#990000">()!=</font>RESULT_SUCCESS<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to connect to /tmp/testsocket</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"connected to /tmp/testsocket</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// send a message to the server</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>message<font color="#990000">=</font><font color="#FF0000">"hello from the unix client"</font><font color="#990000">;</font>
+	client<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>message<font color="#990000">,</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>message<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"sent message</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// read the server's response</font></i>
+	<font color="#009900">char</font>	buf<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+	<font color="#008080">ssize_t</font>	bytesread<font color="#990000">=</font>client<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>buf<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buf<font color="#990000">)-</font><font color="#993399">1</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+		buf<font color="#990000">[</font>bytesread<font color="#990000">]=</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">;</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"received: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buf<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// close the connection</font></i>
+	client<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

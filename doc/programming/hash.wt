@@ -4,15 +4,83 @@
 
 {{{#!include contentstart.html}}}
 
-= Using the md5 and sha1 classes =
+= Using the hash classes =
 
-[[Image(../images/traffic_cone.png)]]
+* [#intro Introduction]
+* [#md5 MD5]
+* [#sha1 SHA1]
+* [#sha256 SHA256]
+* [#des DES]
 
-Coming soon...
+
+[=#intro]
+== Introduction ==
+
+The [../classes/html/classmd5.html md5], [../classes/html/classsha1.html sha1], [../classes/html/classsha256.html sha256], and [../classes/html/classdes.html des] classes provide implementations of common hash algorithms.
+
+All four classes inherit from the [../classes/html/classhash.html hash class] and share a common interface: append() to feed in data, getHash() to retrieve the hash, getHashSize() to get the hash length in bytes, and clear() to reset.  The isSupported() method can be used to determine if the hash algorithm is available on the current platform.
+
+The md5, sha1, and sha256 classes produce binary hashes of different sizes.  The des class is different in that it requires a 2-character salt, and its output is printable ASCII, making it useful for the traditional unix password hashing scheme.
+
+
+[=#md5]
+== MD5 ==
+
+The [../classes/html/classmd5.html md5 class] provides an MD5 implementation which produces a 128-bit (16-byte) hash.
+
+The following example hashes a string, prints the result in hexadecimal, clears the hash, and hashes a different string.
 
 {{{#!blockquote
 {{{#!code
-@../../examples/hash.cpp@
+@../../examples/md5.cpp@
+}}}
+}}}
+
+
+[=#sha1]
+== SHA1 ==
+
+The [../classes/html/classsha1.html sha1 class] provides a SHA1 implementation which produces a 160-bit (20-byte) hash.
+
+The following example hashes a string, prints the result in hexadecimal, clears the hash, and hashes a different string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/sha1.cpp@
+}}}
+}}}
+
+
+[=#sha256]
+== SHA256 ==
+
+The [../classes/html/classsha256.html sha256 class] provides a SHA256 implementation which produces a 256-bit (32-byte) hash.
+
+The following example hashes a string, prints the result in hexadecimal, clears the hash, and hashes a different string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/sha256.cpp@
+}}}
+}}}
+
+
+[=#des]
+== DES ==
+
+The [../classes/html/classdes.html des class] provides the hash method commonly used on unix and unix-like platforms for password encryption.
+
+Unlike the other hash classes, the des class requires a 2-character salt from the set [a-zA-Z0-9./].  The salt must be set using setSalt() before calling getHash().  The getRequiredSaltSize() method returns the required salt size, which is always 2 for DES.
+
+The output of getHash() is NULL-terminated printable ASCII, so the result can be used directly as a string.
+
+The same data hashed with different salts will produce different hashes.
+
+The following example hashes a string with one salt, clears and hashes a different string with the same salt, and then hashes the original string again with a different salt to illustrate the effect.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/des.cpp@
 }}}
 }}}
 

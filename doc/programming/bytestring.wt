@@ -47,7 +47,7 @@ The bytestring class also provides a compare() method for comparing two byte str
 [=#find]
 == Finding Data in Byte Strings ==
 
-The charstring class also provides methods for finding characters or other character strings within character strings.
+The bytestring class also provides methods for finding bytes or other byte strings within byte strings.
 
 The findFirst() and findLast() methods return the first/last instance of a character or byte string within a byte string, or NULL if no match is found.
 

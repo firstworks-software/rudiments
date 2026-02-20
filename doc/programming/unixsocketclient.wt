@@ -6,11 +6,11 @@
 
 = Programming with Rudiments using the unixsocketclient class =
 
-Here's the code for a client that can communicate with the [unixsocketserver.html unixsocketserver program].  This client sends a string to the server, reads what the server sends back and prints it out.
+The [../classes/html/classunixsocketclient.html unixsocketclient class] provides methods for connecting to servers over unix sockets.
 
-[[Image(../images/traffic_cone.png)]]
+Here's the code for a client that can communicate with the [unixsocketserver.html unixsocketserver program].  This client connects to a unix socket, sends a string to the server, reads what the server sends back and prints it out.
 
-Coming soon...
+The socket filename, timeout, retry wait, and number of tries are all configurable.
 
 {{{#!blockquote
 {{{#!code

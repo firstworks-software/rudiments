@@ -6,7 +6,11 @@
 
 = Using the dynamicarray class =
 
-...
+The [../classes/html/classdynamicarray.html dynamicarray class] allows you to store an arbitrary number of values and access them with array-like syntax.  Since the dynamicarray class is template-based, you can store arbitrary types of values.
+
+Internally, the class stores values in a series of extents.  The size of the initial and incremental extents are defined in the constructor.  The array grows automatically as new elements are set beyond its current capacity.
+
+The following example creates a dynamicarray of integers, sets some values, grows the array by setting elements beyond its initial size, zeroes all elements, and clears the array.
 
 {{{#!blockquote
 {{{#!code

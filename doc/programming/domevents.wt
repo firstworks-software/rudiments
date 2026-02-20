@@ -6,9 +6,13 @@
 
 = Using the domevents class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classdomevents.html domevents class] provides a framework for processing DOM trees using event-driven transformations.
 
-Coming soon...
+An event tree defines what should happen when specific tags are encountered in the XML tree.  Each tag in the event tree can specify an "event" attribute identifying the handler to invoke.  Custom event handlers are registered with the domevents instance using setEventHandler().
+
+Each handler receives the XML tree node being processed and the event tree node that triggered the event, and returns the node that processing should continue from.
+
+The following example parses some XML, defines an event tree with "rename" and "ignore" events, registers handlers for each, and processes the XML to transform it.
 
 {{{#!blockquote
 {{{#!code

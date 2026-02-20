@@ -30,9 +30,7 @@ myusername:mypassword
 }}}
 }}}
 
-[[Image(../images/traffic_cone.png)]]
-
-Coming soon...
+The following example opens a url for reading, reads the content in a loop, and prints it to standard output.
 
 {{{#!blockquote
 {{{#!code

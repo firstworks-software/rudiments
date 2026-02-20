@@ -6,19 +6,84 @@
 
 <h1>Programming with Rudiments using the listener class</h1>
 
+<p>The <a href="../classes/html/classlistener.html">listener class</a> provides methods for monitoring multiple file descriptors for activity.</p>
+
 <p>Servers commonly need to listen on multiple sockets for client connections.  They can listen on multiple inet sockets, multiple unix sockets, or a combination.  Technically, they could listen on any set of file descriptors, whether they are all sockets or not.  The listener class can be used to make this possible.</p>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
-
-<p>Coming soon...</p>
+<p>The following example creates both an inet socket server and a unix socket server, adds them to a listener, and waits for activity on either socket.  When a socket becomes ready, the program checks which one it is and reports accordingly.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/listener.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/inetsocketserver.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/unixsocketserver.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/singlylinkedlist.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create an inet socket server</font></i>
+	<font color="#008080">inetsocketserver</font>	inetserver<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>inetserver<font color="#990000">.</font><b><font color="#000000">listen</font></b><font color="#990000">(</font>NULL<font color="#990000">,</font><font color="#993399">8002</font><font color="#990000">,</font><font color="#993399">15</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to listen on port 8002</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"listening on port 8002</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// create a unix socket server</font></i>
+	<font color="#008080">unixsocketserver</font>	unixserver<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>unixserver<font color="#990000">.</font><b><font color="#000000">listen</font></b><font color="#990000">(</font><font color="#FF0000">"/tmp/testlistener"</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">15</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to listen on /tmp/testlistener</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"listening on /tmp/testlistener</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// listen for connections on both sockets</font></i>
+	<font color="#008080">listener</font>	lsnr<font color="#990000">;</font>
+	lsnr<font color="#990000">.</font><b><font color="#000000">addReadFileDescriptor</font></b><font color="#990000">(&amp;</font>inetserver<font color="#990000">);</font>
+	lsnr<font color="#990000">.</font><b><font color="#000000">addReadFileDescriptor</font></b><font color="#990000">(&amp;</font>unixserver<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"waiting for a connection "</font>
+			<font color="#FF0000">"on either socket...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// wait up to 10 seconds for activity</font></i>
+	<font color="#008080">int32_t</font>	result<font color="#990000">=</font>lsnr<font color="#990000">.</font><b><font color="#000000">listen</font></b><font color="#990000">(</font><font color="#993399">10</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// check which socket(s) are ready</font></i>
+		<font color="#008080">singlylinkedlist&lt;filedescriptor *&gt;</font>	<font color="#990000">*</font>readylist<font color="#990000">=</font>
+						lsnr<font color="#990000">.</font><b><font color="#000000">getReadReadyList</font></b><font color="#990000">();</font>
+
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>listnode<font color="#990000">&lt;</font>filedescriptor <font color="#990000">*&gt;</font>
+				<font color="#990000">*</font>node<font color="#990000">=</font>readylist<font color="#990000">-&gt;</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font>
+				node<font color="#990000">;</font> node<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+
+			<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">()==</font>
+				<font color="#990000">(</font>filedescriptor <font color="#990000">*)&amp;</font>inetserver<font color="#990000">)</font> <font color="#FF0000">{</font>
+				stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"inet socket is ready</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<font color="#FF0000">}</font>
+			<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">()==</font>
+				<font color="#990000">(</font>filedescriptor <font color="#990000">*)&amp;</font>unixserver<font color="#990000">)</font> <font color="#FF0000">{</font>
+				stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"unix socket is ready</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<font color="#FF0000">}</font>
+		<font color="#FF0000">}</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result<font color="#990000">==</font>RESULT_TIMEOUT<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"timed out</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"error</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// clean up</font></i>
+	inetserver<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	unixserver<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

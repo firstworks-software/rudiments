@@ -10,17 +10,53 @@
 
 <p>If you have an iterative process that requires variable amounts of memory for each iteration, using a memory pool can perform better than allocating memory on-demand and consume less memory than allocating static buffers that are large enough to accommodate the maximum amount of data you may have to store.</p>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>A memory pool is configured with an initial size, an increment size, and a resize interval.  Memory is allocated from the pool using the allocate() method.  When the pool is exhausted, it grows by the increment size.  The clear() method returns the pool to its initial size.</p>
 
-<p>Coming soon...</p>
+<p>The following example creates a memory pool, allocates several blocks of different sizes from it, verifies the data in each block, and then clears the pool.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/memorypool.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a memory pool with initial size 1024, growing by</font></i>
+	<i><font color="#9A1900">// 256 bytes, and resizing every 10 allocations</font></i>
+	<font color="#008080">memorypool</font>	<b><font color="#000000">pool</font></b><font color="#990000">(</font><font color="#993399">1024</font><font color="#990000">,</font><font color="#993399">256</font><font color="#990000">,</font><font color="#993399">10</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"initial size:     %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pool<font color="#990000">.</font><b><font color="#000000">getInitialSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"increment size:   %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pool<font color="#990000">.</font><b><font color="#000000">getIncrementSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"resize interval:  %d</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pool<font color="#990000">.</font><b><font color="#000000">getResizeInterval</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// allocate some blocks from the pool</font></i>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>block1<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">allocate</font></b><font color="#990000">(</font><font color="#993399">100</font><font color="#990000">);</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>block1<font color="#990000">,</font><font color="#FF0000">'A'</font><font color="#990000">,</font><font color="#993399">100</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"allocated 100 bytes</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>block2<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">allocate</font></b><font color="#990000">(</font><font color="#993399">200</font><font color="#990000">);</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>block2<font color="#990000">,</font><font color="#FF0000">'B'</font><font color="#990000">,</font><font color="#993399">200</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"allocated 200 bytes</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>block3<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">allocate</font></b><font color="#990000">(</font><font color="#993399">50</font><font color="#990000">);</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>block3<font color="#990000">,</font><font color="#FF0000">'C'</font><font color="#990000">,</font><font color="#993399">50</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"allocated 50 bytes</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// verify the data</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"block1[0]: %c</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>block1<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">]);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"block2[0]: %c</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>block2<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">]);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"block3[0]: %c</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>block3<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">]);</font>
+
+
+	<i><font color="#9A1900">// clear the pool, shrinking it back to its initial size</font></i>
+	pool<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"pool cleared</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

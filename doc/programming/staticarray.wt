@@ -6,7 +6,11 @@
 
 = Using the staticarray class =
 
-...
+The [../classes/html/classstaticarray.html staticarray class] allows you to store a pre-defined number of values and access them with array-like syntax.  Since the staticarray class is template-based, you can store arbitrary types of values.
+
+Unlike the [dynamicarray.html dynamicarray class], the size of a staticarray is fixed at compile time via a template parameter and cannot grow or shrink.
+
+The following example creates a staticarray of 5 integers, sets and modifies values, zeroes a range of elements, and clears the array.
 
 {{{#!blockquote
 {{{#!code

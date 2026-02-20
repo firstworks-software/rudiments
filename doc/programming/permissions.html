@@ -6,17 +6,58 @@
 
 <h1>Using the permissions class</h1>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>The <a href="../classes/html/classpermissions.html">permissions class</a> provides static methods for working with file permissions.</p>
 
-<p>Coming soon...</p>
+<p>Rudiments supports unix-style file permissions, even on Windows.  The permissions class provides methods for parsing permission strings (like "rwxr-xr--") into numeric modes, converting numeric modes back to permission strings, and constructing permissions using convenience methods for common combinations.</p>
+
+<p>The following example parses a permission string into a mode, converts a mode back to a string, builds permissions using convenience methods, and displays some common permission values.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// parse a permission string into a mode</font></i>
+	<font color="#008080">mode_t</font>	mode<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rwxr-xr--"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"rwxr-xr-- = %04o</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>mode<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// convert a mode back to a permission string</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>permstring<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermOctal</font></b><font color="#990000">(</font>mode<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%04o = %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>mode<font color="#990000">,</font>permstring<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> permstring<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// build permissions using convenience methods</font></i>
+	<font color="#008080">mode_t</font>	perms<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">getOwnerReadWrite</font></b><font color="#990000">()|</font>
+			permissions<font color="#990000">::</font><b><font color="#000000">getGroupRead</font></b><font color="#990000">()|</font>
+			permissions<font color="#990000">::</font><b><font color="#000000">getOthersRead</font></b><font color="#990000">();</font>
+	permstring<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermOctal</font></b><font color="#990000">(</font>perms<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"owner-rw + group-r + others-r = %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							permstring<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> permstring<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// some common permission values</font></i>
+	permstring<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermOctal</font></b><font color="#990000">(</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">getEveryoneReadWrite</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"everyone-rw  = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>permstring<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> permstring<font color="#990000">;</font>
+
+	permstring<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermOctal</font></b><font color="#990000">(</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">getEveryoneReadWriteExecute</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"everyone-rwx = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>permstring<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> permstring<font color="#990000">;</font>
+
+	permstring<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermOctal</font></b><font color="#990000">(</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">getOwnerReadWriteExecute</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"owner-rwx    = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>permstring<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> permstring<font color="#990000">;</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

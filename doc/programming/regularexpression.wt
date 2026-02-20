@@ -47,7 +47,7 @@ For patterns that need to be matched over and over, create an instance of the re
 [=#multiple]
 == Multiple Unique Matches ==
 
-Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubStringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.
+Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubstringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.
 
 {{{#!blockquote
 {{{#!code

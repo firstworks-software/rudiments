@@ -6,11 +6,11 @@
 
 = Programming with Rudiments using the inetsocketclient class =
 
-Here's the code for a client that can communicate with the [inetsocketserver.html inetsocketserver program].  This client sends a string to the server, reads what the server sends back and prints it out.
+The [../classes/html/classinetsocketclient.html inetsocketclient class] provides methods for connecting to servers over inet (TCP/IP) sockets.
 
-[[Image(../images/traffic_cone.png)]]
+Here's the code for a client that can communicate with the [inetsocketserver.html inetsocketserver program].  This client connects to a server, sends a string, reads what the server sends back, and prints it out.
 
-Coming soon...
+The host, port, timeout, retry wait, and number of tries are all configurable.
 
 {{{#!blockquote
 {{{#!code

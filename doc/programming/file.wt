@@ -75,7 +75,7 @@ Flags may include one or more of the following flags, or'ed together.
 
 * O_RDONLY - Open the file in read-only mode.
 * O_WRONLY - Open the file in write-only mode.
-* O_RDWR - Open the file in write-only mode.
+* O_RDWR - Open the file in read-write mode.
 * O_APPEND - Set the position to the end of the file.
 * O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
 * O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.
@@ -187,7 +187,13 @@ This example illustrates random file access.
 [=#lock]
 == File Locks ==
 
-...
+The filedescriptor class provides methods for locking files and regions of files.  File locks are advisory, meaning that they only work if all processes that access the file use them.
+
+The lockFile() and unlockFile() methods lock and unlock the entire file.  The lockRegion() and unlockRegion() methods lock and unlock a specific range of bytes.  The lockRemainder() and unlockRemainder() methods lock and unlock from a specific position to the end of the file.
+
+The checkLockRegion() method can be used to determine if a region can be locked, and if not, to get information about the conflicting lock.
+
+The following example demonstrates whole-file locking, region locking, lock conflict checking, and remainder locking.
 
 {{{#!blockquote
 {{{#!code
@@ -226,7 +232,7 @@ Also, even if the kernel or disk does some kind of buffering, each read or write
 
 Buffering always helps writes and usually helps reads.  How much is platform-specific.
 
-The filesystem class makes buffered I/O simple.  There are only three methods involved:
+The file class makes buffered I/O simple.  There are only three methods involved:
 
 setReadBufferSize():: Sets the size of the buffer used when reading.
 
@@ -251,7 +257,13 @@ The example below illustrates buffered I/O.
 [=#optimizations]
 == Optimizing File Access ==
 
-...
+The file class provides several methods for optimizing file access.
+
+The setGetCurrentPropertiesOnOpen() method can be used to disable the automatic fetching of file properties when a file is opened, which can improve performance when opening many files.
+
+Methods are also provided for advising the kernel about expected access patterns: adviseSequentialAccess(), adviseNormalAccess(), adviseWillNeed(), and adviseWontNeed().  These methods allow the kernel to optimize its caching and read-ahead behavior.
+
+The sync() method forces buffered data to be written to storage.
 
 {{{#!blockquote
 {{{#!code
@@ -264,7 +276,11 @@ The example below illustrates buffered I/O.
 [=#temp]
 == Temporary Files ==
 
-...
+The file class provides static methods for creating temporary files.
+
+The createTemporaryFile() method takes a template filename containing XXXXXX and replaces it with a unique string.  An optional permissions argument can be used to set the permissions on the temporary file.
+
+The following example creates temporary files with and without explicit permissions.
 
 {{{#!blockquote
 {{{#!code
@@ -278,7 +294,11 @@ The example below illustrates buffered I/O.
 [=#links]
 == Links ==
 
-...
+The file class provides static methods for creating hard links and symbolic links.
+
+A hard link is an additional directory entry for a file.  A symbolic link is a special file that contains a path to another file.
+
+The createHardLink() and createSymbolicLink() methods create each type of link.  The resolveSymbolicLink() method returns the target of a symbolic link.  The getNumberOfHardLinks() method returns the number of hard links to a file.
 
 {{{#!blockquote
 {{{#!code
@@ -291,7 +311,9 @@ The example below illustrates buffered I/O.
 [=#fifos]
 == Fifos ==
 
-...
+A fifo (first in, first out) is a special file that acts as a pipe between processes.  One process can write to the fifo and another process can read from it.  Fifos persist in the filesystem and can be accessed by unrelated processes.
+
+The file class provides a static createFifo() method for creating a fifo with specific permissions.
 
 {{{#!blockquote
 {{{#!code
@@ -304,7 +326,11 @@ The example below illustrates buffered I/O.
 [=#pipes]
 == Named Pipes ==
 
-...
+Pipes provide a one-way communication channel between a parent process and a child process.
+
+The filedescriptor class provides a static createPipe() method that creates a pair of file descriptors - one for reading and one for writing.  A typical use is to create the pipe, fork a child process, and have the child write to the pipe while the parent reads from it.
+
+The following example creates a pipe, forks a child process, and uses the pipe to send a message from the child to the parent.
 
 {{{#!blockquote
 {{{#!code
@@ -317,7 +343,15 @@ The example below illustrates buffered I/O.
 [=#convenience]
 == Convenience Methods ==
 
-...
+The file class provides various static convenience methods for common operations.
+
+Methods are provided for creating a file, checking whether a file exists, and checking whether a file is readable, writeable, or executable.
+
+Methods are also provided for getting parts of a pathname: getDirName(), getBaseName(), and getExtension().
+
+The getContents() method reads the entire contents of a file into a string.
+
+The rename() method renames a file, and the remove() method removes it.
 
 {{{#!blockquote
 {{{#!code

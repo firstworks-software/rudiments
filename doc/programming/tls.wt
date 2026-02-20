@@ -6,9 +6,13 @@
 
 = Using the tls classes =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classtls.html tls], [../classes/html/classtlscontext.html tlscontext], and [../classes/html/classtlscertificate.html tlscertificate] classes provide support for TLS/SSL encryption.
 
-Coming soon...
+The tls class provides a static method for determining whether TLS support is available.
+
+The tlscontext class provides methods for configuring and establishing a TLS session over an existing connection.  The protocol version, peer validation, validation depth, and certificate authority can all be configured.  After a successful handshake, the peer's certificate can be examined.
+
+The following example checks for TLS support, creates and configures a TLS context, connects to an HTTPS server, performs the TLS handshake, and retrieves information from the peer's certificate.
 
 {{{#!blockquote
 {{{#!code

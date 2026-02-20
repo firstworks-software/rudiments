@@ -6,9 +6,13 @@
 
 = Using the directory class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classdirectory.html directory class] provides methods for creating, removing, and reading directories.
 
-Coming soon...
+Static methods are provided for creating and removing directories and for getting the current working directory.
+
+An instance of the directory class can be used to open a directory and read its entries.  Methods are also provided for getting the child count, accessing children by index, and getting the maximum filename length supported by the directory's filesystem.
+
+The following example creates a directory, gets the current working directory, opens a directory and reads its contents, and then removes the directory.
 
 {{{#!blockquote
 {{{#!code

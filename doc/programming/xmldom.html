@@ -6,49 +6,82 @@
 
 <h1>Using the xmldom and domnode classes</h1>
 
-<p>The xmldom and domnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
+<p>The <a href="../classes/html/classxmldom.html">xmldom</a> and <a href="../classes/html/classdomnode.html">domnode</a> classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
 
-<p>The following XML file contains an address book.</p>
-
-<blockquote>
-<!-- Generator: GNU source-highlight 3.1.9
-by Lorenzo Bettini
-http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite -->
-<pre><tt><b><font color="#000080">&lt;?xml</font></b> <font color="#009900">version</font><font color="#990000">=</font><font color="#FF0000">"1.0"</font><b><font color="#000080">?&gt;</font></b>
-<b><font color="#000080">&lt;!DOCTYPE</font></b> <font color="#009900">instances</font> <font color="#009900">SYSTEM</font> <font color="#FF0000">"adbook.dtd </font>
-<font color="#FF0000">&lt;addressbook&gt;</font>
-<font color="#FF0000">        &lt;person firstname="</font><font color="#009900">David</font><font color="#FF0000">" middlename="</font><font color="#009900">Lee</font><font color="#FF0000">" lastname="</font><font color="#009900">Muse</font> 
-                &lt;<font color="#009900">phones</font><b><font color="#000080">&gt;</font></b>
-                        <b><font color="#0000FF">&lt;phone</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"home"</font> <font color="#009900">number</font><font color="#990000">=</font><font color="#FF0000">"1-222-333-4444"</font><b><font color="#0000FF">/&gt;</font></b>
-                        <b><font color="#0000FF">&lt;phone</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"work"</font> <font color="#009900">number</font><font color="#990000">=</font><font color="#FF0000">"1-333-444-5555"</font><b><font color="#0000FF">/&gt;</font></b>
-                        <b><font color="#0000FF">&lt;phone</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"mobile"</font> <font color="#009900">number</font><font color="#990000">=</font><font color="#FF0000">"1-444-555-6666"</font><b><font color="#0000FF">/&gt;</font></b>
-                <b><font color="#0000FF">&lt;/phones&gt;</font></b>
-                <b><font color="#0000FF">&lt;addresses&gt;</font></b>
-                        <b><font color="#0000FF">&lt;address</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"home"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"1234 homestreet dr."</font> <font color="#009900">city</font><font color="#990000">=</font><font color="#FF0000">"mycity"</font> <font color="#009900">state</font><font color="#990000">=</font><font color="#FF0000">"GA"</font> <font color="#009900">zip</font><font color="#990000">=</font><font color="#FF0000">"12345"</font><b><font color="#0000FF">/&gt;</font></b>
-                        <b><font color="#0000FF">&lt;address</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"work"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"2345 workstreet dr."</font> <font color="#009900">city</font><font color="#990000">=</font><font color="#FF0000">"mycity"</font> <font color="#009900">state</font><font color="#990000">=</font><font color="#FF0000">"GA"</font> <font color="#009900">zip</font><font color="#990000">=</font><font color="#FF0000">"23456"</font><b><font color="#0000FF">/&gt;</font></b>
-                <b><font color="#0000FF">&lt;/addresses&gt;</font></b>
-                <b><font color="#0000FF">&lt;emails&gt;</font></b>
-                        <b><font color="#0000FF">&lt;email</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"home"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"dmuse@firstworks.com"</font><b><font color="#0000FF">/&gt;</font></b>
-                        <b><font color="#0000FF">&lt;email</font></b> <font color="#009900">location</font><font color="#990000">=</font><font color="#FF0000">"work"</font> <font color="#009900">address</font><font color="#990000">=</font><font color="#FF0000">"dmuse@workemail.com"</font><b><font color="#0000FF">/&gt;</font></b>
-                <b><font color="#0000FF">&lt;/emails&gt;</font></b>
-        <b><font color="#0000FF">&lt;/person&gt;</font></b>
-<b><font color="#0000FF">&lt;/addressbook&gt;</font></b></tt></pre>
-
-</blockquote>
-<p>The following program parses the addressbook and prints it to the screen.</p>
-
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
-
-<p>Coming soon...</p>
+<p>The following program parses an XML string containing a list of animals, accesses the root node, looks up an attribute by path, walks the tree manually to print each animal's name, type and number of legs, and writes the XML tree back to standard output.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/xmldom.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/domnode.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">xmldom</font>	xml<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// parse an xml string</font></i>
+	xml<font color="#990000">.</font><b><font color="#000000">parseString</font></b><font color="#990000">(</font>
+		<font color="#FF0000">"&lt;animals&gt;"</font>
+		<font color="#FF0000">"  &lt;animal type=</font><font color="#CC33CC">\"</font><font color="#FF0000">mammal</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;name&gt;dog&lt;/name&gt;"</font>
+		<font color="#FF0000">"    &lt;legs&gt;4&lt;/legs&gt;"</font>
+		<font color="#FF0000">"  &lt;/animal&gt;"</font>
+		<font color="#FF0000">"  &lt;animal type=</font><font color="#CC33CC">\"</font><font color="#FF0000">bird</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;name&gt;eagle&lt;/name&gt;"</font>
+		<font color="#FF0000">"    &lt;legs&gt;2&lt;/legs&gt;"</font>
+		<font color="#FF0000">"  &lt;/animal&gt;"</font>
+		<font color="#FF0000">"  &lt;animal type=</font><font color="#CC33CC">\"</font><font color="#FF0000">reptile</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;name&gt;snake&lt;/name&gt;"</font>
+		<font color="#FF0000">"    &lt;legs&gt;0&lt;/legs&gt;"</font>
+		<font color="#FF0000">"  &lt;/animal&gt;"</font>
+		<font color="#FF0000">"&lt;/animals&gt;"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get the root node and first child</font></i>
+	<font color="#008080">domnode</font>	<font color="#990000">*</font>root<font color="#990000">=</font>xml<font color="#990000">.</font><b><font color="#000000">getRootNode</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"root: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>root<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// access nodes by path</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>name<font color="#990000">=</font>xml<font color="#990000">.</font><b><font color="#000000">getAttributeValueByPath</font></b><font color="#990000">(</font>
+						<font color="#FF0000">"/animals/animal"</font><font color="#990000">,</font><font color="#FF0000">"type"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"first animal type: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>name<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// walk the tree manually</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all animals:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#008080">domnode</font>	<font color="#990000">*</font>animals<font color="#990000">=</font>root<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">domnode</font> <font color="#990000">*</font>animal<font color="#990000">=</font>animals<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"animal"</font><font color="#990000">);</font>
+			<font color="#990000">!</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">isNullNode</font></b><font color="#990000">();</font>
+			animal<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getNextTagSibling</font></b><font color="#990000">(</font><font color="#FF0000">"animal"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// get the type attribute</font></i>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>type<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getAttributeValue</font></b><font color="#990000">(</font><font color="#FF0000">"type"</font><font color="#990000">);</font>
+
+		<i><font color="#9A1900">// get the name child's text</font></i>
+		<font color="#008080">domnode</font>	<font color="#990000">*</font>namenode<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"name"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>aname<font color="#990000">=</font>
+			namenode<font color="#990000">-&gt;</font><b><font color="#000000">getFirstChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// get the legs child's text</font></i>
+		<font color="#008080">domnode</font>	<font color="#990000">*</font>legsnode<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"legs"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>legs<font color="#990000">=</font>
+			legsnode<font color="#990000">-&gt;</font><b><font color="#000000">getFirstChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">();</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %s (%s) - %s legs</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						aname<font color="#990000">,</font>type<font color="#990000">,</font>legs<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write the xml tree to standard output</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"xml output:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	xml<font color="#990000">.</font><b><font color="#000000">writeXml</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 
@@ -60,19 +93,17 @@ http://www.gnu.org/software/src-highlite -->
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt>David Lee Muse
-<b><font color="#008080">Phones:</font></b>
-        home<font color="#990000">:</font> <font color="#993399">1</font><font color="#990000">-</font><font color="#993399">222</font><font color="#990000">-</font><font color="#993399">333</font><font color="#990000">-</font><font color="#993399">4444</font>
-        work<font color="#990000">:</font> <font color="#993399">1</font><font color="#990000">-</font><font color="#993399">333</font><font color="#990000">-</font><font color="#993399">444</font><font color="#990000">-</font><font color="#993399">5555</font>
-        mobile<font color="#990000">:</font> <font color="#993399">1</font><font color="#990000">-</font><font color="#993399">444</font><font color="#990000">-</font><font color="#993399">555</font><font color="#990000">-</font><font color="#993399">6666</font>
+<pre><tt>root<font color="#990000">:</font> animals
 
-<b><font color="#008080">Addresses:</font></b>
-        home<font color="#990000">:</font> <font color="#993399">1234</font> <font color="#008080">homestreet</font> dr<font color="#990000">.</font> mycity<font color="#990000">,</font> GA <font color="#993399">12345</font>
-        work<font color="#990000">:</font> <font color="#993399">2345</font> <font color="#008080">workstreet</font> dr<font color="#990000">.</font> mycity<font color="#990000">,</font> GA <font color="#993399">23456</font>
+first <font color="#008080">animal</font> type<font color="#990000">:</font> mammal
 
-<b><font color="#008080">Emails:</font></b>
-        home<font color="#990000">:</font> dmuse@firstworks<font color="#990000">.</font>com
-        work<font color="#990000">:</font> dmuse@workemail<font color="#990000">.</font>com</tt></pre>
+<font color="#008080">all</font> animals<font color="#990000">:</font>
+  <b><font color="#000000">dog</font></b> <font color="#990000">(</font>mammal<font color="#990000">)</font> <font color="#990000">-</font> <font color="#993399">4</font> legs
+  <b><font color="#000000">eagle</font></b> <font color="#990000">(</font>bird<font color="#990000">)</font> <font color="#990000">-</font> <font color="#993399">2</font> legs
+  <b><font color="#000000">snake</font></b> <font color="#990000">(</font>reptile<font color="#990000">)</font> <font color="#990000">-</font> <font color="#993399">0</font> legs
+
+<font color="#008080">xml</font> output<font color="#990000">:</font>
+<font color="#990000">&lt;</font>animals<font color="#990000">&gt;</font>  <font color="#990000">&lt;</font><font color="#008080">animal</font> type<font color="#990000">=</font><font color="#FF0000">"mammal"</font><font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>name<font color="#990000">&gt;</font>dog<font color="#990000">&lt;/</font>name<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>legs<font color="#990000">&gt;</font><font color="#993399">4</font><font color="#990000">&lt;/</font>legs<font color="#990000">&gt;</font>  <font color="#990000">&lt;/</font>animal<font color="#990000">&gt;</font>  <font color="#990000">&lt;</font><font color="#008080">animal</font> type<font color="#990000">=</font><font color="#FF0000">"bird"</font><font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>name<font color="#990000">&gt;</font>eagle<font color="#990000">&lt;/</font>name<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>legs<font color="#990000">&gt;</font><font color="#993399">2</font><font color="#990000">&lt;/</font>legs<font color="#990000">&gt;</font>  <font color="#990000">&lt;/</font>animal<font color="#990000">&gt;</font>  <font color="#990000">&lt;</font><font color="#008080">animal</font> type<font color="#990000">=</font><font color="#FF0000">"reptile"</font><font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>name<font color="#990000">&gt;</font>snake<font color="#990000">&lt;/</font>name<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>legs<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">&lt;/</font>legs<font color="#990000">&gt;</font>  <font color="#990000">&lt;/</font>animal<font color="#990000">&gt;&lt;/</font>animals<font color="#990000">&gt;</font></tt></pre>
 
 </blockquote>
 <!--#include virtual="contentend.html"-->

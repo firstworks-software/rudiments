@@ -13,7 +13,6 @@ SRCS = avltree.wt \
 	codetree.wt \
 	commandline.wt \
 	compiler.wt \
-	crypt.wt \
 	datetime.wt \
 	device.wt \
 	dictionary.wt \
@@ -36,8 +35,6 @@ SRCS = avltree.wt \
 	logger.wt \
 	memorymap.wt \
 	memorypool.wt \
-	modemclient.wt \
-	modemserver.wt \
 	parameterstring.wt \
 	permissions.wt \
 	process.wt \
@@ -45,9 +42,8 @@ SRCS = avltree.wt \
 	protocolentry.wt \
 	randomnumber.wt \
 	regularexpression.wt \
+	scalar.wt \
 	semaphoreset.wt \
-	serialportprofile.wt \
-	serialport.wt \
 	serviceentry.wt \
 	sharedmemory.wt \
 	signal.wt \
@@ -57,6 +53,7 @@ SRCS = avltree.wt \
 	stdio.wt \
 	stringbuffer.wt \
 	sys.wt \
+	table.wt \
 	threadmutex.wt \
 	thread.wt \
 	tls.wt \
@@ -76,7 +73,6 @@ OBJS = avltree.html \
 	codetree.html \
 	commandline.html \
 	compiler.html \
-	crypt.html \
 	datetime.html \
 	device.html \
 	dictionary.html \
@@ -99,8 +95,6 @@ OBJS = avltree.html \
 	logger.html \
 	memorymap.html \
 	memorypool.html \
-	modemclient.html \
-	modemserver.html \
 	parameterstring.html \
 	permissions.html \
 	process.html \
@@ -108,9 +102,8 @@ OBJS = avltree.html \
 	protocolentry.html \
 	randomnumber.html \
 	regularexpression.html \
+	scalar.html \
 	semaphoreset.html \
-	serialportprofile.html \
-	serialport.html \
 	serviceentry.html \
 	sharedmemory.html \
 	signal.html \
@@ -120,6 +113,7 @@ OBJS = avltree.html \
 	stdio.html \
 	stringbuffer.html \
 	sys.html \
+	table.html \
 	threadmutex.html \
 	thread.html \
 	tls.html \

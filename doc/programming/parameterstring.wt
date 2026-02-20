@@ -13,7 +13,7 @@ database.  Though C++ support methods which take an arbitrary number of
 parameters, sometimes it is more convenient to for the method to accept a
 single string parameter with name/value pairs in it instead.
 
-The parameterstring class provides methods for parsing and accessing
+The [../classes/html/classparameterstring.html parameterstring class] provides methods for parsing and accessing
 a parameter string of the following form:
 
 {{{#!blockquote
@@ -39,9 +39,9 @@ name='\\value\\'
 }}}
 }}}
 
-[[Image(../images/traffic_cone.png)]]
+The delimiter between parameters defaults to a semicolon, but can be changed using the setDelimiter() method.
 
-Coming soon...
+The following example parses a parameter string, accesses individual values, clears the string, sets a different delimiter, and parses another string.
 
 {{{#!blockquote
 {{{#!code

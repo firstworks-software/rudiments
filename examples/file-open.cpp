@@ -67,9 +67,9 @@ int main(int argc, const char **argv) {
 	// Open a file for write,
 	// first removing the current contents of the file.
 	if (f.open("testfile1",O_WRONLY|O_TRUNC)) {
-		stdoutput.write("opened testfile1 for append\n");
+		stdoutput.write("opened testfile1 for write (truncated)\n");
 	} else {
-		stdoutput.write("failed to open testfile1 for append\n");
+		stdoutput.write("failed to open testfile1 for write (truncated)\n");
 	}
 
 	// when main() exits, f will be deleted and the file will be closed.

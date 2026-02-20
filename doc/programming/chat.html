@@ -6,19 +6,74 @@
 
 <h1>Using the chat class</h1>
 
-<p>The chat class provides a framework for communications across file descriptors with a peer.</p>
+<p>The <a href="../classes/html/classchat.html">chat class</a> provides a framework for running chat scripts across file descriptors.</p>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>Chat scripts are commonly used to communicate with modems and other serial devices.  A chat script consists of a series of send/expect pairs.  The script sends a string to the device and then waits for an expected response.  Timeouts and abort strings can also be defined so the script doesn't hang indefinitely.</p>
 
-<p>Coming soon...</p>
+<p>The chat script is specified as an XML string containing send, expect, timeout, and abort elements.</p>
+
+<p>The following example defines a chat script to initialize a modem, opens a serial device, runs the script, and checks the result.  The result indicates whether the script succeeded, timed out, encountered an error, or was aborted by one of the defined abort strings.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/chat.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/device.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// define a chat script to initialize a modem</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>chatscript<font color="#990000">=</font>
+		<font color="#FF0000">"&lt;script&gt;"</font>
+		<font color="#FF0000">"  &lt;timeout seconds=</font><font color="#CC33CC">\"</font><font color="#FF0000">5</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"  &lt;abort string=</font><font color="#CC33CC">\"</font><font color="#FF0000">ERROR</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"  &lt;abort string=</font><font color="#CC33CC">\"</font><font color="#FF0000">NO CARRIER</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"  &lt;send string=</font><font color="#CC33CC">\"</font><font color="#FF0000">ATZ</font><font color="#CC33CC">\\</font><font color="#FF0000">r</font><font color="#CC33CC">\\</font><font color="#FF0000">n</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"  &lt;expect string=</font><font color="#CC33CC">\"</font><font color="#FF0000">OK</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"  &lt;send string=</font><font color="#CC33CC">\"</font><font color="#FF0000">ATQ0V1E1</font><font color="#CC33CC">\\</font><font color="#FF0000">r</font><font color="#CC33CC">\\</font><font color="#FF0000">n</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"  &lt;expect string=</font><font color="#CC33CC">\"</font><font color="#FF0000">OK</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"&lt;/script&gt;"</font><font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// open a serial device to chat with</font></i>
+	<i><font color="#9A1900">// (will fail without a real serial device)</font></i>
+	<font color="#008080">device</font>	d<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>d<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"/dev/ttyS0"</font><font color="#990000">,</font>O_RDWR<font color="#990000">|</font>O_NOCTTY<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open /dev/ttyS0</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"(no serial device available)</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// create a chat instance and run the script</font></i>
+		<font color="#008080">chat</font>	c<font color="#990000">;</font>
+		c<font color="#990000">.</font><b><font color="#000000">setReadAndWriteFileDescriptor</font></b><font color="#990000">(&amp;</font>d<font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"running chat script...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+		<font color="#009900">char</font>	<font color="#990000">*</font>abortstr<font color="#990000">=</font>NULL<font color="#990000">;</font>
+		<font color="#008080">int32_t</font>	result<font color="#990000">=</font>c<font color="#990000">.</font><b><font color="#000000">runScript</font></b><font color="#990000">(</font>chatscript<font color="#990000">,&amp;</font>abortstr<font color="#990000">);</font>
+
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result<font color="#990000">==</font>RESULT_SUCCESS<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"chat script succeeded</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result<font color="#990000">==</font>RESULT_TIMEOUT<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"chat script timed out</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result<font color="#990000">==</font>RESULT_ERROR<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"chat script error</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"chat script aborted: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+								abortstr<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> abortstr<font color="#990000">;</font>
+		d<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// display the chat script</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"chat script:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>chatscript<font color="#990000">);</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

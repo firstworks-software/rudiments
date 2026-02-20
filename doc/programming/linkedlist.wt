@@ -77,9 +77,9 @@ The linkedlist class also provides methods for manually iterating through the li
 
 Since the linkedlist class is template-based, it can store any type of data.
 
-Note that the print() method works for primitive types and strings, but for more complex types, it only prints the address of the object.
+Note that the write() method works for primitive types and strings, but for more complex types, it only prints the address of the object.
 
-Note also that the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or when the list is cleared.  They must be deleted manually.
+Note also that, by default, the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or when the list is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when a node is removed or the list is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.
 
 {{{#!blockquote
 {{{#!code

@@ -6,9 +6,13 @@
 
 = Using the memorymap class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classmemorymap.html memorymap class] provides methods for mapping files or portions of files into memory.
 
-Coming soon...
+Memory-mapped files allow a region of a file to be accessed as if it were a block of memory.  This can be more efficient than traditional read/write calls for some access patterns, and allows multiple processes to share data by mapping the same file.
+
+Changes made to the mapped region can be synced back to the file on disk.  The static isSupported() method can be used to determine if memory mapping is supported on the current platform.
+
+The following example creates a file, maps it into memory, reads and modifies data through the mapping, syncs the changes to disk, and detaches the mapping.
 
 {{{#!blockquote
 {{{#!code

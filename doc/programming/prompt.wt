@@ -6,9 +6,11 @@
 
 = Using the prompt class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classprompt.html prompt class] provides methods for reading lines of input from the user with line-editing and history support.
 
-Coming soon...
+The prompt class supports configurable history files, history limits, and custom prompt strings.  Lines read from the user are automatically added to the history, and the history can be flushed to a file so it persists across sessions.
+
+The following example configures a history file and limits, sets a prompt string, reads lines from the user in a loop until ctrl-D is pressed, and then flushes the history to disk.
 
 {{{#!blockquote
 {{{#!code

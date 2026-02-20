@@ -6,11 +6,13 @@
 
 = Using the chat class =
 
-The chat class provides a framework for communications across file descriptors with a peer.
+The [../classes/html/classchat.html chat class] provides a framework for running chat scripts across file descriptors.
 
-[[Image(../images/traffic_cone.png)]]
+Chat scripts are commonly used to communicate with modems and other serial devices.  A chat script consists of a series of send/expect pairs.  The script sends a string to the device and then waits for an expected response.  Timeouts and abort strings can also be defined so the script doesn't hang indefinitely.
 
-Coming soon...
+The chat script is specified as an XML string containing send, expect, timeout, and abort elements.
+
+The following example defines a chat script to initialize a modem, opens a serial device, runs the script, and checks the result.  The result indicates whether the script succeeded, timed out, encountered an error, or was aborted by one of the defined abort strings.
 
 {{{#!blockquote
 {{{#!code

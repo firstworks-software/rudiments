@@ -5,8 +5,12 @@
 // Define a simple class.  Instances of it will be stored in a list later.
 class myclass {
 	public:
-			myclass(int64_t v) { value=v; }
-		void	print() { stdoutput.printf("value: %lld\n",value); }
+		myclass(int64_t v) {
+			value=v;
+		}
+		void	print() {
+			stdoutput.printf("value: %lld\n",value);
+		}
 	private:
 		int64_t	value;
 };

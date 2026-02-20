@@ -6,9 +6,17 @@
 
 = Using the gss classes =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classgss.html gss], [../classes/html/classgssmechanism.html gssmechanism], [../classes/html/classgsscredentials.html gsscredentials], and [../classes/html/classgsscontext.html gsscontext] classes provide support for the Generic Security Services API (GSS-API), commonly used with Kerberos.
 
-Coming soon...
+The gss class provides methods for determining whether GSS support is available and for listing the available security mechanisms.
+
+The gssmechanism class represents a security mechanism, identified by an OID string.
+
+The gsscredentials class provides methods for acquiring credentials using one or more desired mechanisms.
+
+The gsscontext class provides methods for establishing a security context with a peer, wrapping and unwrapping data, and reading and writing across the secured connection.
+
+The following example checks for GSS support, lists available mechanisms, opens a mechanism by OID, creates credentials with a desired mechanism and lifetime, and configures a GSS context.
 
 {{{#!blockquote
 {{{#!code

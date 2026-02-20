@@ -6,17 +6,84 @@
 
 <h1>Using the avltree class</h1>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>The <a href="../classes/html/classavltree.html">avltree class</a> implements a self-balancing binary search tree using the AVL algorithm.  Since the avltree class is template-based, you can store arbitrary types of values.</p>
 
-<p>Coming soon...</p>
+<p>AVL trees keep themselves balanced after each insertion or removal, so lookups are always efficient, even in the worst case.</p>
+
+<p>The following example demonstrates how to insert values, get the count, access the top node, traverse the tree in-order, find values, remove values, and clear the tree.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/avltree.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">avltree&lt;int32_t&gt;</font>	tree<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// insert some values</font></i>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">7</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">4</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">6</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">9</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
+	tree<font color="#990000">.</font><b><font color="#000000">insert</font></b><font color="#990000">(</font><font color="#993399">8</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"count: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>tree<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// get the top node</font></i>
+	<font color="#008080">treenode&lt;int32_t&gt;</font>	<font color="#990000">*</font>top<font color="#990000">=</font>tree<font color="#990000">.</font><b><font color="#000000">getTop</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"top value: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>top<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  left height:  %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>top<font color="#990000">-&gt;</font><b><font color="#000000">getLeftHeight</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  right height: %d</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>top<font color="#990000">-&gt;</font><b><font color="#000000">getRightHeight</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// walk the tree in order using getFirst()/getNext()</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"in-order traversal:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">treenode&lt;int32_t&gt;</font> <font color="#990000">*</font>node<font color="#990000">=</font>tree<font color="#990000">.</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font>
+				node<font color="#990000">;</font> node<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// find a value</font></i>
+	<font color="#008080">treenode&lt;int32_t&gt;</font>	<font color="#990000">*</font>found<font color="#990000">=</font>tree<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">7</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>found<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"found: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>found<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// find a value that doesn't exist</font></i>
+	found<font color="#990000">=</font>tree<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">10</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"find 10: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,(</font>found<font color="#990000">)?</font><font color="#FF0000">"found"</font><font color="#990000">:</font><font color="#FF0000">"not found"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// remove a value</font></i>
+	tree<font color="#990000">.</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"removed 5</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"count: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>tree<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// walk again after removal</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"in-order traversal after removal:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">treenode&lt;int32_t&gt;</font> <font color="#990000">*</font>node<font color="#990000">=</font>tree<font color="#990000">.</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font>
+				node<font color="#990000">;</font> node<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// clear the tree</font></i>
+	tree<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after clear, count: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>tree<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

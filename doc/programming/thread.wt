@@ -20,7 +20,7 @@ In this implementation, each instance of the thread class corresponds to a separ
 
 In these examples, two threads are spawned.  Each runs a separate instance of a "count" function which counts from 0 to some number and prints out the numbers.  Each thread is passed in a structure containing a pointer to the thread class, a thread id and a maximum number to count to.  The threads are not synchronized in any way, so the numbers will be printed out in seemingly random blocks.
 
-Note that rudiments supports platforms that don't support threads, and it is possible to explicitly compile rudiments without thread support.  The supportsThreads() method returns true or false, indicating whether thread support is enabled or not.
+Note that rudiments supports platforms that don't support threads, and it is possible to explicitly compile rudiments without thread support.  The isSupported() method returns true or false, indicating whether thread support is enabled or not.
 
 
 [=#ordinary]

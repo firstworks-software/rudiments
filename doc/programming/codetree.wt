@@ -6,9 +6,13 @@
 
 = Using the codetree class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classcodetree.html codetree class] implements a generic parser that can parse source code (or similarly structured input) and create an XML tree representing the code.  The class can also take that XML tree and write it back out as code.
 
-Coming soon...
+A grammar must be specified to parse the input.  Grammars are defined in an XML format based on EBNF with a few extensions.  Each grammar is composed of definitions, each of which defines a nonterminal.  Definitions may contain terminals, nonterminals, alternations, repetitions, concatenations, and other constructs.
+
+The [../classes/html/classcodetreegrammar.html codetreegrammar class] extends xmldom and provides codetree-specific optimizations for working with grammars.
+
+The following example defines a simple grammar for basic math expressions (numbers and addition), parses the string "12+34", prints the resulting tree, and writes the tree back out as code.
 
 {{{#!blockquote
 {{{#!code

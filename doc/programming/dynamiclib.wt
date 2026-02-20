@@ -6,9 +6,13 @@
 
 = Using the dynamiclib class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classdynamiclib.html dynamiclib class] provides methods for loading dynamic libraries (shared objects/DLLs) at runtime and accessing their symbols.
 
-Coming soon...
+This is useful when you want to load a library that might not be available on every system, or when you want to implement a plugin architecture.
+
+The open() method loads the library.  The getSymbol() method looks up a function or variable by name and returns a pointer to it.  The close() method unloads the library.
+
+The following example opens the math library (libm.so), looks up the ceil() and floor() functions by name, calls them, and closes the library.
 
 {{{#!blockquote
 {{{#!code

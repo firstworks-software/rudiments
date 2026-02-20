@@ -42,9 +42,7 @@
 * '''Random Numbers'''
  * [programming/randomnumber.html Using the randomnumber class]
 * '''Hashing and Encryption'''
- * [programming/hash.html Using the md5 and sha1 classes]
- * [programming/sha1.html Using the sha1 class]
- * [programming/crypt.html Using the crypt class]
+ * [programming/hash.html Using the hash classes]
 * '''Date and Time'''
  * [programming/datetime.html Using the datetime class]
 * '''Containers'''

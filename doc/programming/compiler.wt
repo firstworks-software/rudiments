@@ -6,11 +6,23 @@
 
 = Using the compiler class =
 
-...
+The [../classes/html/classcompiler.html compiler class] provides a generic compiler framework.
+
+Though targeted at code-to-code translation (transcompiling), it could be used as the basis for any type of translation or compilation system.
+
+Translation/compilation is achieved in three steps:
+
+* Pre-processing - A unit of code is passed through a chain of pre-processing modules.  Pre-processing modules should inherit from the compilerpreprocessor class and implement the process() method.
+* Processing - The output of the final pre-processing module is parsed by an instance of the codetree class, producing a DOM tree which represents the code.  The tree is then passed through a chain of processing modules.  Processing modules should inherit from the compilerprocessor class and implement the process() method.
+* Post-processing - The output of the processing step is passed through a chain of post-processing modules.  Post-processing modules should inherit from the compilerpostprocessor class and implement the process() method.
+
+Input and output grammars must be set to define the input and output formats.  See the [codetree.html codetree class] for information on the grammar format.
+
+The following example creates simple preprocessor, processor, and postprocessor classes, defines a grammar, sets the input and output grammars, adds the processing modules, and compiles a string.
 
 {{{#!blockquote
 {{{#!code
-@../../examples/compiler cpp.html@
+@../../examples/compiler.cpp@
 }}}
 }}}
 

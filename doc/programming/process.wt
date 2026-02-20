@@ -47,7 +47,7 @@ The exit() method allows you to set an exit status.  Traditionally, an exit stat
 }}}
 }}}
 
-The atExit() method allows you to register functions that will be called when the program exits.  Multiple functions may be registered.  Functions are called in the reverse of the order of their registration.
+The registerExitHandler() method allows you to register functions that will be called when the program exits.  Multiple functions may be registered.  Functions are called in the reverse of the order of their registration.
 
 {{{#!blockquote
 {{{#!code
@@ -69,7 +69,7 @@ The exitImmediately() allows the program to terminate immediately, bypassing any
 
 The process class also provides methods for managing various abnormal shutdown conditions such as a crash or termination by another process.
 
-Ordinarily, if a program encounters a floating point exception, illegal instruction, segmentation fault, bus error, or a few other unusual conditions, it will "crash", display a short message indicating why, and possibly offer to debug the program.  The exitOnCrash() method causes the program to exit more gracefully when one of these conditions occurs by "waiting on child processes" (see [#zombie Managing Zombie Processes] below), calling functions registered with atExit(), and setting the exit status to 1, indicating that an error occurred.
+Ordinarily, if a program encounters a floating point exception, illegal instruction, segmentation fault, bus error, or a few other unusual conditions, it will "crash", display a short message indicating why, and possibly offer to debug the program.  The exitOnCrash() method causes the program to exit more gracefully when one of these conditions occurs by "waiting on child processes" (see [#zombie Managing Zombie Processes] below), calling functions registered with registerExitHandler(), and setting the exit status to 1, indicating that an error occurred.
 
 {{{#!blockquote
 {{{#!code
@@ -77,7 +77,7 @@ Ordinarily, if a program encounters a floating point exception, illegal instruct
 }}}
 }}}
 
-However, if you want to do something different when the program crashes, then you can use the handleCrash() method to specify a function to run when the program crashes.
+However, if you want to do something different when the program crashes, then you can use the setCrashHandler() method to specify a function to run when the program crashes.
 
 {{{#!blockquote
 {{{#!code
@@ -85,7 +85,7 @@ However, if you want to do something different when the program crashes, then yo
 }}}
 }}}
 
-Ordinarily, if a program is shut down, either aborted using ctrl-C or killed, it will exit immediately.  The exitOnShutdown() method causes the program exit more gracefully when it is shut down by "waiting on child processes" (see [#zombie Managing Zombie Processes] below), calling functions registered with atExit(), and setting the exit status to 0, indicating that no error occurred.
+Ordinarily, if a program is shut down, either aborted using ctrl-C or killed, it will exit immediately.  The exitOnShutDown() method causes the program exit more gracefully when it is shut down by "waiting on child processes" (see [#zombie Managing Zombie Processes] below), calling functions registered with registerExitHandler(), and setting the exit status to 0, indicating that no error occurred.
 
 {{{#!blockquote
 {{{#!code
@@ -93,7 +93,7 @@ Ordinarily, if a program is shut down, either aborted using ctrl-C or killed, it
 }}}
 }}}
 
-However, if you want to do something different when the program is shut down, then you can use the handleShutDown() method to specify a function to run when the program is shut down.
+However, if you want to do something different when the program is shut down, then you can use the setShutDownHandler() method to specify a function to run when the program is shut down.
 
 {{{#!blockquote
 {{{#!code
@@ -188,7 +188,7 @@ On unix-like systems, when a process creates a child process, the parent process
 
 This does not happen on non-unix-like systems.
 
-The waitForChildren() method causes the program to automatically "wait on child processes".  The dontWaitForChildren() method disables this behavior.
+The setWaitForChildren(true) method causes the program to automatically "wait on child processes".  The setWaitForChildren(false) method disables this behavior.
 
 {{{#!blockquote
 {{{#!code

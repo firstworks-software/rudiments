@@ -7,11 +7,11 @@ int main(int argc, const char **argv) {
 	dictionary<const char *,const char *>	nvp;
 
 	// set some name-value pairs
-	nvp.setValue("color","blue");
-	nvp.setValue("number","one");
-	nvp.setValue("automobile","car");
-	nvp.setValue("dwelling","house");
-	nvp.setValue("parent","dad");
+	nvp.setValue("dog","mammal");
+	nvp.setValue("eagle","bird");
+	nvp.setValue("snake","reptile");
+	nvp.setValue("frog","amphibian");
+	nvp.setValue("trout","fish");
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");
@@ -19,12 +19,12 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 	// replace some values
-	nvp.setValue("number","two");
-	nvp.setValue("dwelling","apartment");
-	nvp.setValue("parent","mom");
+	nvp.setValue("eagle","raptor");
+	nvp.setValue("frog","poison dart frog");
+	nvp.setValue("trout","freshwater fish");
 
 	// remove a value
-	nvp.remove("color");
+	nvp.remove("dog");
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");
@@ -35,9 +35,9 @@ int main(int argc, const char **argv) {
 	nvp.clear();
 
 	// set some new values
-	nvp.setValue("road","highway");
-	nvp.setValue("furniture","chair");
-	nvp.setValue("tree","elm");
+	nvp.setValue("cat","mammal");
+	nvp.setValue("parrot","bird");
+	nvp.setValue("turtle","reptile");
 
 	// print out the dictionary a different way
 	stdoutput.write("Current contents:\n");

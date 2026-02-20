@@ -6,11 +6,11 @@
 
 = Using the filesystem class =
 
-The filesystem class provides methods for collecting statistics about a filesystem.  The "standard" posix function for getting filesystem statistics is either statfs or statvfs.  Few operating systems implement statvfs though and the structure returned by statfs varies greatly between operating systems.  The filesystem class attempts to remedy this situation.  However, no operating system supports every method in this class.
+The [../classes/html/classfilesystem.html filesystem class] provides methods for collecting statistics about a filesystem.  The "standard" posix function for getting filesystem statistics is either statfs or statvfs.  Few operating systems implement statvfs though and the structure returned by statfs varies greatly between operating systems.  The filesystem class attempts to remedy this situation.  However, no operating system supports every method in this class.
 
-[[Image(../images/traffic_cone.png)]]
+To use the class, open a path on the filesystem of interest and then call the various accessor methods to retrieve statistics.
 
-Coming soon...
+The following example opens the root filesystem and prints various properties including the filesystem type, block size, block counts, file node counts, maximum filename length, mount point, and device name.
 
 {{{#!blockquote
 {{{#!code

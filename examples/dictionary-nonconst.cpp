@@ -9,16 +9,16 @@ int main(int argc, const char **argv) {
 	nvp.setManageArrayValues(true);
 
 	// set some name-value pairs
-	nvp.setValue(charstring::duplicate("color"),
-			charstring::duplicate("blue"));
-	nvp.setValue(charstring::duplicate("number"),
-			charstring::duplicate("one"));
-	nvp.setValue(charstring::duplicate("automobile"),
-			charstring::duplicate("car"));
-	nvp.setValue(charstring::duplicate("dwelling"),
-			charstring::duplicate("house"));
-	nvp.setValue(charstring::duplicate("parent"),
-			charstring::duplicate("dad"));
+	nvp.setValue(charstring::duplicate("dog"),
+			charstring::duplicate("mammal"));
+	nvp.setValue(charstring::duplicate("eagle"),
+			charstring::duplicate("bird"));
+	nvp.setValue(charstring::duplicate("snake"),
+			charstring::duplicate("reptile"));
+	nvp.setValue(charstring::duplicate("frog"),
+			charstring::duplicate("amphibian"));
+	nvp.setValue(charstring::duplicate("trout"),
+			charstring::duplicate("fish"));
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");
@@ -26,7 +26,7 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 	// remove a value
-	nvp.remove((char *)"color");
+	nvp.remove((char *)"dog");
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");

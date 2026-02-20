@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
 	for (const char * const *uw=uppercasewords; *uw; uw++) {
 		stdoutput.printf("  does \"%s\" contain \"%s\"?  %s\n",
 			phrase,*uw,
-			(charstring::contains(phrase,*uw))?"yes":"no");
+			(charstring::containsIgnoringCase(phrase,*uw))?"yes":"no");
 	}
 	stdoutput.write('\n');
 }

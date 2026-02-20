@@ -6,9 +6,11 @@
 
 = Using the device class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classdevice.html device class] provides methods for creating device nodes and performing I/O on device files.
 
-Coming soon...
+The device class inherits from the filedescriptor class and adds a static method for creating device nodes.  Creating device nodes requires root privileges on most systems.
+
+The following example demonstrates creating a character device node, writing data to /dev/null, and reading random bytes from /dev/urandom.
 
 {{{#!blockquote
 {{{#!code

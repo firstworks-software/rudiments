@@ -6,17 +6,67 @@
 
 <h1>Using the device class</h1>
 
-<p><a href="../images/traffic_cone.png"><img src="../images/traffic_cone.png"/></a></p>
+<p>The <a href="../classes/html/classdevice.html">device class</a> provides methods for creating device nodes and performing I/O on device files.</p>
 
-<p>Coming soon...</p>
+<p>The device class inherits from the filedescriptor class and adds a static method for creating device nodes.  Creating device nodes requires root privileges on most systems.</p>
+
+<p>The following example demonstrates creating a character device node, writing data to /dev/null, and reading random bytes from /dev/urandom.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
-	<i><font color="#9A1900">// FIXME: example...</font></i>
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/device.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a character device node</font></i>
+	<i><font color="#9A1900">// (requires root privileges on most systems)</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>device<font color="#990000">::</font><b><font color="#000000">createDeviceNode</font></b><font color="#990000">(</font><font color="#FF0000">"/tmp/testdevice"</font><font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">),</font>
+				<font color="#FF0000">'c'</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created /tmp/testdevice</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create /tmp/testdevice</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"(this operation requires root privileges)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// open a device for write</font></i>
+	<font color="#008080">device</font>	d<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>d<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"/dev/null"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// write some data to /dev/null</font></i>
+		d<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"this goes nowhere</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"wrote to /dev/null</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+		d<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open /dev/null</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// open /dev/urandom for read</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>d<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"/dev/urandom"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// read some random bytes</font></i>
+		<font color="#008080">byte_t</font>	buf<font color="#990000">[</font><font color="#993399">16</font><font color="#990000">];</font>
+		d<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>buf<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buf<font color="#990000">));</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"random bytes: "</font><font color="#990000">);</font>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buf<font color="#990000">);</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%02x"</font><font color="#990000">,</font>buf<font color="#990000">[</font>i<font color="#990000">]);</font>
+		<font color="#FF0000">}</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+		d<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open /dev/urandom</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
 <font color="#FF0000">}</font>
 </tt></pre>
 

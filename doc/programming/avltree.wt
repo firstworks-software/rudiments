@@ -6,9 +6,11 @@
 
 = Using the avltree class =
 
-[[Image(../images/traffic_cone.png)]]
+The [../classes/html/classavltree.html avltree class] implements a self-balancing binary search tree using the AVL algorithm.  Since the avltree class is template-based, you can store arbitrary types of values.
 
-Coming soon...
+AVL trees keep themselves balanced after each insertion or removal, so lookups are always efficient, even in the worst case.
+
+The following example demonstrates how to insert values, get the count, access the top node, traverse the tree in-order, find values, remove values, and clear the tree.
 
 {{{#!blockquote
 {{{#!code
