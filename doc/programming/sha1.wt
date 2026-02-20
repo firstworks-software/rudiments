@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the sha1 class =
+
+The [../classes/html/classsha1.html sha1 class] provides a SHA1 implementation which produces a 160-bit (20-byte) hash.
+
+The sha1 class inherits from the [../classes/html/classhash.html hash class] and shares a common interface with the other hash classes: append() to feed in data, getHash() to retrieve the hash, getHashSize() to get the hash length in bytes, and clear() to reset.  The isSupported() method can be used to determine if the hash algorithm is available on the current platform.
+
+The following example hashes a string, prints the result in hexadecimal, clears the hash, and hashes a different string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/sha1.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

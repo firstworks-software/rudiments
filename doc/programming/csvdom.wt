@@ -1,0 +1,25 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the csvdom class =
+
+The [../classes/html/classcsvdom.html csvdom] class provides a framework for DOM parsing of CSV data.  It parses a file or string of CSV-formatted data and produces a dom tree representing the data.  The first row is treated as a header containing column names.  Since the csvdom class creates a representation of the CSV data in memory, it should not be used to process arbitrarily large files which could exhaust system memory.
+
+The csvdom class also provides convenience methods for accessing data.  The getColumnCount() and getRecordCount() methods return the number of columns and records.  The getField() method returns the value at a given record and column (by index or name).
+
+Additional methods are available for manipulating the CSV data, including renaming, inserting, moving, and deleting columns and records, trimming fields, and upper/lower-casing column names.
+
+The following program parses a CSV string containing a list of animals, uses the convenience methods to print each animal's data, and writes the CSV back to standard output.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/csvdom.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

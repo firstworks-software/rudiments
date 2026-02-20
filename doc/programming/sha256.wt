@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the sha256 class =
+
+The [../classes/html/classsha256.html sha256 class] provides a SHA256 implementation which produces a 256-bit (32-byte) hash.
+
+The sha256 class inherits from the [../classes/html/classhash.html hash class] and shares a common interface with the other hash classes: append() to feed in data, getHash() to retrieve the hash, getHashSize() to get the hash length in bytes, and clear() to reset.  The isSupported() method can be used to determine if the hash algorithm is available on the current platform.
+
+The following example hashes a string, prints the result in hexadecimal, clears the hash, and hashes a different string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/sha256.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

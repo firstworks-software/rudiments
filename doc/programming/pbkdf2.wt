@@ -1,0 +1,33 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the pbkdf2 class =
+
+The [../classes/html/classpbkdf2.html pbkdf2 class] provides a PBKDF2 (Password-Based Key Derivation Function 2) implementation which derives a cryptographic key from a password.
+
+The pbkdf2 class inherits from the [../classes/html/classhash.html hash class].  The append() method feeds in the password data and getHash() retrieves the derived key.  The clear() method resets the data while preserving the salt, iterations, algorithm, and key size settings, and reset() clears everything.
+
+The setAlgorithm() method sets the underlying hash algorithm.  Supported algorithms are PBKDF2_ALGORITHM_SHA1, PBKDF2_ALGORITHM_SHA256, and PBKDF2_ALGORITHM_SHA512.  The default is SHA256.
+
+The setIterations() method sets the number of times the hash algorithm is applied.  The default is 10000.
+
+The setKeySize() method sets the size of the derived key in bytes.
+
+The setSalt() method sets the salt used during key derivation.
+
+The isSupported() method can be used to determine if PBKDF2 is available on the current platform.
+
+The following example derives a key from a password using SHA256, clears and derives from a different password, then resets and derives using SHA512.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/pbkdf2.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

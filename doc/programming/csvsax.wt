@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the csvsax class =
+
+The [../classes/html/classcsvsax.html csvsax class] provides a callback-based framework for parsing CSV data.  When it encounters a column header, field, or record boundary, it calls one of its callback methods.  These methods may be overridden by a child class to perform specific tasks.  The csvsax class is especially useful if you can't afford to load the entire file into memory and use the csvdom class, or if you just need to extract specific data from a CSV file.
+
+The quote and delimiter characters can be configured using setQuote() and setDelimiter().  By default, the quote character is a double-quote and the delimiter is a comma.
+
+The following example creates a child class of csvsax that overrides the headerStart(), column(), headerEnd(), recordStart(), field(), and recordEnd() callback methods to print information about each CSV component encountered during parsing.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/csvsax.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

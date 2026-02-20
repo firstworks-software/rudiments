@@ -4,7 +4,8 @@ include ../../config.mk
 
 .SUFFIXES: .wt .html
 
-SRCS = avltree.wt \
+SRCS = aes128.wt \
+	avltree.wt \
 	bytebuffer.wt \
 	bytestring.wt \
 	character.wt \
@@ -13,8 +14,12 @@ SRCS = avltree.wt \
 	codetree.wt \
 	commandline.wt \
 	compiler.wt \
+	csvdom.wt \
+	csvsax.wt \
 	datetime.wt \
+	des.wt \
 	device.wt \
+	dh.wt \
 	dictionary.wt \
 	directory.wt \
 	domevents.wt \
@@ -26,25 +31,35 @@ SRCS = avltree.wt \
 	file.wt \
 	groupentry.wt \
 	gss.wt \
-	hash.wt \
 	hostentry.wt \
+	inidom.wt \
+	inisax.wt \
 	inetsocketclient.wt \
 	inetsocketserver.wt \
+	jsondom.wt \
+	jsonsax.wt \
 	linkedlist.wt \
 	listener.wt \
 	logger.wt \
+	md5.wt \
 	memorymap.wt \
 	memorypool.wt \
 	parameterstring.wt \
+	pbkdf2.wt \
 	permissions.wt \
 	process.wt \
 	prompt.wt \
+	propdom.wt \
+	propsax.wt \
 	protocolentry.wt \
 	randomnumber.wt \
 	regularexpression.wt \
 	scalar.wt \
+	sensitivevalue.wt \
 	semaphoreset.wt \
 	serviceentry.wt \
+	sha1.wt \
+	sha256.wt \
 	sharedmemory.wt \
 	signal.wt \
 	singlylinkedlist.wt \
@@ -64,7 +79,8 @@ SRCS = avltree.wt \
 	xmldom.wt \
 	xmlsax.wt
 
-OBJS = avltree.html \
+OBJS = aes128.html \
+	avltree.html \
 	bytebuffer.html \
 	bytestring.html \
 	character.html \
@@ -73,8 +89,12 @@ OBJS = avltree.html \
 	codetree.html \
 	commandline.html \
 	compiler.html \
+	csvdom.html \
+	csvsax.html \
 	datetime.html \
+	des.html \
 	device.html \
+	dh.html \
 	dictionary.html \
 	directory.html \
 	domevents.html \
@@ -86,25 +106,35 @@ OBJS = avltree.html \
 	file.html \
 	groupentry.html \
 	gss.html \
-	hash.html \
 	hostentry.html \
+	inidom.html \
+	inisax.html \
 	inetsocketclient.html \
 	inetsocketserver.html \
+	jsondom.html \
+	jsonsax.html \
 	linkedlist.html \
 	listener.html \
 	logger.html \
+	md5.html \
 	memorymap.html \
 	memorypool.html \
 	parameterstring.html \
+	pbkdf2.html \
 	permissions.html \
 	process.html \
 	prompt.html \
+	propdom.html \
+	propsax.html \
 	protocolentry.html \
 	randomnumber.html \
 	regularexpression.html \
 	scalar.html \
+	sensitivevalue.html \
 	semaphoreset.html \
 	serviceentry.html \
+	sha1.html \
+	sha256.html \
 	sharedmemory.html \
 	signal.html \
 	singlylinkedlist.html \

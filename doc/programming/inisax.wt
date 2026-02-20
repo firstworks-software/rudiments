@@ -1,0 +1,21 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the inisax class =
+
+The [../classes/html/classinisax.html inisax class] provides a callback-based framework for parsing INI-formatted data.  When it encounters a section, key, value, or comment, it calls one of its callback methods.  These methods may be overridden by a child class to perform specific tasks.  The inisax class is especially useful if you can't afford to load the entire file into memory and use the inidom class, or if you just need to extract specific data from an INI file.
+
+The following example creates a child class of inisax that overrides the section(), key(), value(), poundComment(), and semicolonComment() callback methods to print information about each INI component encountered during parsing.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/inisax.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

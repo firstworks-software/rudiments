@@ -12,14 +12,17 @@ int main(int argc, const char **argv) {
 		"  <animal type=\"mammal\">"
 		"    <name>dog</name>"
 		"    <legs>4</legs>"
+		"    <domestic>yes</domestic>"
 		"  </animal>"
 		"  <animal type=\"bird\">"
 		"    <name>eagle</name>"
 		"    <legs>2</legs>"
+		"    <domestic>no</domestic>"
 		"  </animal>"
 		"  <animal type=\"reptile\">"
 		"    <name>snake</name>"
 		"    <legs>0</legs>"
+		"    <domestic>no</domestic>"
 		"  </animal>"
 		"</animals>");
 
@@ -55,8 +58,13 @@ int main(int argc, const char **argv) {
 		const char	*legs=
 			legsnode->getFirstChild()->getValue();
 
-		stdoutput.printf("  %s (%s) - %s legs\n",
-						aname,type,legs);
+		// get the domestic child's text
+		domnode	*domesticnode=animal->getFirstTagChild("domestic");
+		const char	*domestic=
+			domesticnode->getFirstChild()->getValue();
+
+		stdoutput.printf("  %s (%s) - %s legs - domestic: %s\n",
+						aname,type,legs,domestic);
 	}
 	stdoutput.write('\n');
 

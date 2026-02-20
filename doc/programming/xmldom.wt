@@ -8,7 +8,7 @@
 
 The [../classes/html/classxmldom.html xmldom] and [../classes/html/classdomnode.html domnode] classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.
 
-The following program parses an XML string containing a list of animals, accesses the root node, looks up an attribute by path, walks the tree manually to print each animal's name, type and number of legs, and writes the XML tree back to standard output.
+The following program parses an XML string containing a list of animals, accesses the root node, looks up an attribute by path, walks the tree manually to print each animal's name, type, number of legs, and whether it is domestic, and writes the XML tree back to standard output.
 
 {{{#!blockquote
 {{{#!code
@@ -25,12 +25,12 @@ root: animals
 first animal type: mammal
 
 all animals:
-  dog (mammal) - 4 legs
-  eagle (bird) - 2 legs
-  snake (reptile) - 0 legs
+  dog (mammal) - 4 legs - domestic: yes
+  eagle (bird) - 2 legs - domestic: no
+  snake (reptile) - 0 legs - domestic: no
 
 xml output:
-<animals>  <animal type="mammal">    <name>dog</name>    <legs>4</legs>  </animal>  <animal type="bird">    <name>eagle</name>    <legs>2</legs>  </animal>  <animal type="reptile">    <name>snake</name>    <legs>0</legs>  </animal></animals>
+<animals>  <animal type="mammal">    <name>dog</name>    <legs>4</legs>    <domestic>yes</domestic>  </animal>  <animal type="bird">    <name>eagle</name>    <legs>2</legs>    <domestic>no</domestic>  </animal>  <animal type="reptile">    <name>snake</name>    <legs>0</legs>    <domestic>no</domestic>  </animal></animals>
 }}}
 }}}
 

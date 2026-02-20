@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the inidom class =
+
+The [../classes/html/classinidom.html inidom] class provides a framework for DOM parsing of INI-formatted data.  It parses a file or string of INI-formatted data and produces a dom tree representing the data.  Since the inidom class creates a representation of the INI data in memory, it should not be used to process arbitrarily large files which could exhaust system memory.
+
+The dom tree uses "s" elements for sections, "k" elements for keys, "p" elements for pound-delimited comments, and "c" elements for semicolon-delimited comments.  Each element has a "v" attribute containing the value.  Each "k" element also has a "k" attribute containing the key name.
+
+The following program parses an INI string containing a list of animals organized into sections, walks the tree to print each animal's properties, and writes the INI data back to standard output.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/inidom.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

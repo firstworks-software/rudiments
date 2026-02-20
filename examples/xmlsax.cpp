@@ -44,10 +44,21 @@ int main(int argc, const char **argv) {
 	// parse an xml string
 	stdoutput.write("parsing xml:\n\n");
 	handler.parseString(
-		"<!-- a list of animals -->"
 		"<animals>"
-		"  <animal type=\"mammal\">dog</animal>"
-		"  <animal type=\"bird\">eagle</animal>"
-		"  <animal type=\"reptile\">snake</animal>"
+		"  <animal type=\"mammal\">"
+		"    <name>dog</name>"
+		"    <legs>4</legs>"
+		"    <domestic>yes</domestic>"
+		"  </animal>"
+		"  <animal type=\"bird\">"
+		"    <name>eagle</name>"
+		"    <legs>2</legs>"
+		"    <domestic>no</domestic>"
+		"  </animal>"
+		"  <animal type=\"reptile\">"
+		"    <name>snake</name>"
+		"    <legs>0</legs>"
+		"    <domestic>no</domestic>"
+		"  </animal>"
 		"</animals>");
 }

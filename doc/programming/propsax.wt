@@ -1,0 +1,21 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the propsax class =
+
+The [../classes/html/classpropsax.html propsax class] provides a callback-based framework for parsing Java-style properties files.  When it encounters a key, value, or comment, it calls one of its callback methods.  These methods may be overridden by a child class to perform specific tasks.  The propsax class is especially useful if you can't afford to load the entire file into memory and use the propdom class, or if you just need to extract specific data from a properties file.
+
+The following example creates a child class of propsax that overrides the key(), value(), poundComment(), and exclamationComment() callback methods to print information about each component encountered during parsing.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/propsax.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

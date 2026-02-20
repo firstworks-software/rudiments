@@ -1,0 +1,21 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the jsonsax class =
+
+The [../classes/html/classjsonsax.html jsonsax class] provides a callback-based framework for parsing JSON data.  When it encounters an object, member, value, or other JSON component, it calls one of its callback methods.  These methods may be overridden by a child class to perform specific tasks.  The jsonsax class is especially useful if you can't afford to load the entire document into memory and use the jsondom class, or if you just need to extract specific data from a JSON file.
+
+The following example creates a child class of jsonsax that overrides the objectStart(), memberName(), stringValue(), numberValue(), trueValue(), falseValue(), arrayStart(), arrayEnd(), and objectEnd() callback methods to print information about each JSON component encountered during parsing.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/jsonsax.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

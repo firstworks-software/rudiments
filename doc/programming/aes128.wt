@@ -1,0 +1,27 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the aes128 class =
+
+The [../classes/html/classaes128.html aes128 class] provides a simple AES-128 encryption/decryption implementation.
+
+The aes128 class inherits from the [../classes/html/classencryption.html encryption class].  The setKey()/setIv() methods set the encryption key and initialization vector, or setRandomKey()/setRandomIv() can be used to generate random values.  The append() method feeds in data, getEncryptedData() encrypts and returns the result, and getDecryptedData() decrypts and returns the result.  The clear() method resets the data while preserving the key and initialization vector, and reset() clears everything.  The isSupported() method can be used to determine if AES-128 is available on the current platform.
+
+The key size and initialization vector size are both 16 bytes for AES-128.  These sizes can be retrieved using getKeySize() and getIvSize().
+
+The default block cipher mode is CBC, but this can be changed using setBlockCipherMode().
+
+The following example encrypts a string, prints the encrypted data in hexadecimal, decrypts it back, clears and encrypts a different string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/aes128.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

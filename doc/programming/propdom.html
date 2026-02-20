@@ -1,0 +1,66 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the propdom class</h1>
+
+<p>The <a href="../classes/html/classpropdom.html">propdom</a> class provides a framework for DOM parsing of Java-style properties files.  It parses a file or string of property-file-formatted data and produces a dom tree representing the data.  Since the propdom class creates a representation of the properties data in memory, it should not be used to process arbitrarily large files which could exhaust system memory.</p>
+
+<p>The dom tree uses "k" elements for keys, "p" elements for pound-delimited comments, and "e" elements for exclamation-delimited comments.  Each element has a "v" attribute containing the value.  Each "k" element also has a "k" attribute containing the key name.</p>
+
+<p>The following program parses a properties string containing a list of animals mapped to their types, walks the tree to print each key-value pair, and writes the properties data back to standard output.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/propdom.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/domnode.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">propdom</font>	prop<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// parse a properties string</font></i>
+	prop<font color="#990000">.</font><b><font color="#000000">parseString</font></b><font color="#990000">(</font>
+		<font color="#FF0000">"# animal types</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"dog=mammal</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"eagle=bird</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"snake=reptile</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// walk the tree</font></i>
+	<i><font color="#9A1900">// the dom tree structure is:</font></i>
+	<i><font color="#9A1900">//   root -&gt; k (key, with "k" and "v" attributes)</font></i>
+	<i><font color="#9A1900">//           p (pound comment, with "v" attribute)</font></i>
+	<font color="#008080">domnode</font>	<font color="#990000">*</font>root<font color="#990000">=</font>prop<font color="#990000">.</font><b><font color="#000000">getRootNode</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all animals:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">domnode</font> <font color="#990000">*</font>node<font color="#990000">=</font>root<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">()-&gt;</font>
+					<b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"k"</font><font color="#990000">);</font>
+			<font color="#990000">!</font>node<font color="#990000">-&gt;</font><b><font color="#000000">isNullNode</font></b><font color="#990000">();</font>
+			node<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getNextTagSibling</font></b><font color="#990000">(</font><font color="#FF0000">"k"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>name<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getAttributeValue</font></b><font color="#990000">(</font><font color="#FF0000">"k"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>type<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getAttributeValue</font></b><font color="#990000">(</font><font color="#FF0000">"v"</font><font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %s = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>name<font color="#990000">,</font>type<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write the properties tree to standard output</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"properties output:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	prop<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the jsondom class =
+
+The [../classes/html/classjsondom.html jsondom] class provides a framework for DOM parsing of JSON data.  It parses a file or string of JSON-formatted data and produces a dom tree representing the data.  Like the xmldom class, the tree can be navigated using the [../classes/html/classdomnode.html domnode] class.  Since the jsondom class creates a representation of the JSON data in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.
+
+The dom tree uses an "r" element for the root, named elements for each object or array, and "v" elements for each array value.  Each element has a "t" attribute indicating the type: "o" for object, "a" for array, "s" for string, "n" for number, "t" for true, "f" for false, and "u" for null.  String and number elements also have a "v" attribute containing the value.
+
+The following program parses a JSON string containing a list of animals, walks the tree to print each animal's name, type, number of legs, and whether it is domestic, and writes the dom tree to standard output.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/jsondom.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

@@ -1,0 +1,29 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the des class =
+
+The [../classes/html/classdes.html des class] provides the hash method commonly used on unix and unix-like platforms for password encryption.
+
+The des class inherits from the [../classes/html/classhash.html hash class] and shares a common interface with the other hash classes: append() to feed in data, getHash() to retrieve the hash, getHashSize() to get the hash length in bytes, and clear() to reset.  The isSupported() method can be used to determine if the hash algorithm is available on the current platform.
+
+Unlike the other hash classes, the des class requires a 2-character salt from the set [a-zA-Z0-9./].  The salt must be set using setSalt() before calling getHash().  The getRequiredSaltSize() method returns the required salt size, which is always 2 for DES.
+
+The output of getHash() is NULL-terminated printable ASCII, so the result can be used directly as a string.
+
+The same data hashed with different salts will produce different hashes.
+
+The following example hashes a string with one salt, clears and hashes a different string with the same salt, and then hashes the original string again with a different salt to illustrate the effect.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/des.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

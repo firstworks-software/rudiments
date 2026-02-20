@@ -42,16 +42,27 @@
 * '''Random Numbers'''
  * [programming/randomnumber.html Using the randomnumber class]
 * '''Hashing and Encryption'''
- * [programming/hash.html Using the hash classes]
+ * [programming/md5.html Using the md5 class]
+ * [programming/sha1.html Using the sha1 class]
+ * [programming/sha256.html Using the sha256 class]
+ * [programming/des.html Using the des class]
+* '''Cryptography'''
+ * [programming/aes128.html Using the aes128 class]
+ * [programming/dh.html Using the dh class]
+ * [programming/pbkdf2.html Using the pbkdf2 class]
+* '''Security'''
+ * [programming/sensitivevalue.html Using the sensitivevalue class]
 * '''Date and Time'''
  * [programming/datetime.html Using the datetime class]
 * '''Containers'''
  * [programming/dynamicarray.html Using the dynamicarray class]
- * [programming/staticcarray.html Using the staticcarray class]
+ * [programming/staticarray.html Using the staticarray class]
  * [programming/linkedlist.html Using the linkedlist class]
  * [programming/singlylinkedlist.html Using the singlylinkedlist class]
  * [programming/avltree.html Using the avltree class]
  * [programming/dictionary.html Using the dictionary class]
+ * [programming/table.html Using the table class]
+ * [programming/scalar.html Using the scalar class]
 * '''System Information'''
  * [programming/error.html Using the error class]
  * [programming/sys.html Using the sys class]
@@ -60,8 +71,9 @@
  * [programming/hostentry.html Using the hostentry class]
  * [programming/protocolentry.html Using the protocolentry class]
  * [programming/serviceentry.html Using the serviceentry class]
-* '''Files, File Permissions, Directories and Filesystems'''
+* '''Files, Devices, Permissions, Directories and Filesystems'''
  * [programming/file.html Using the file class]
+ * [programming/device.html Using the device class]
  * [programming/permissions.html Using the permissions class]
  * [programming/directory.html Using the directory class]
  * [programming/memorymap.html Using the memorymap class]
@@ -79,16 +91,25 @@
  * [programming/unixsocketserver.html Using the unixsocketserver class]
  * [programming/unixsocketclient.html Using the unixsocketclient class]
  * [programming/listener.html Using the listener class]
+ * [programming/chat.html Using the chat class]
  * [programming/gss.html Using the gss classes]
  * [programming/tls.html Using the tls classes]
 * '''Parameter Strings'''
  * [programming/parameterstring.html Using the parameterstring class]
 * '''URLs'''
  * [programming/url.html Using the url class]
-* '''XML'''
+* '''Parsers'''
  * [programming/xmldom.html Using the xmldom and domnode classes]
- * [programming/domevents.html Using the domevents class]
  * [programming/xmlsax.html Using the xmlsax class]
+ * [programming/domevents.html Using the domevents class]
+ * [programming/jsondom.html Using the jsondom class]
+ * [programming/jsonsax.html Using the jsonsax class]
+ * [programming/csvdom.html Using the csvdom class]
+ * [programming/csvsax.html Using the csvsax class]
+ * [programming/inidom.html Using the inidom class]
+ * [programming/inisax.html Using the inisax class]
+ * [programming/propdom.html Using the propdom class]
+ * [programming/propsax.html Using the propsax class]
 * '''Logging'''
  * [programming/logger.html Using the logger class]
 * '''Dynamic Libraries'''

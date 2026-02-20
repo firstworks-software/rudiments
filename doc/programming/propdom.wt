@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the propdom class =
+
+The [../classes/html/classpropdom.html propdom] class provides a framework for DOM parsing of Java-style properties files.  It parses a file or string of property-file-formatted data and produces a dom tree representing the data.  Since the propdom class creates a representation of the properties data in memory, it should not be used to process arbitrarily large files which could exhaust system memory.
+
+The dom tree uses "k" elements for keys, "p" elements for pound-delimited comments, and "e" elements for exclamation-delimited comments.  Each element has a "v" attribute containing the value.  Each "k" element also has a "k" attribute containing the key name.
+
+The following program parses a properties string containing a list of animals mapped to their types, walks the tree to print each key-value pair, and writes the properties data back to standard output.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/propdom.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

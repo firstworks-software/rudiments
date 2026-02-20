@@ -6,6 +6,7 @@ CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(LIBEDITLIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(LIBICONVLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(MASLIB) $(DEBUGLIB)
 
 PROGS0 = \
+	aes128$(EXE) \
 	avltree$(EXE) \
 	bytebuffer$(EXE) \
 	bytestring-compare$(EXE) \
@@ -27,12 +28,15 @@ PROGS0 = \
 	commandline$(EXE) \
 	compiler$(EXE) \
 	complexinetsocketserver$(EXE) \
+	csvdom$(EXE) \
+	csvsax$(EXE) \
 	datetime-basic$(EXE) \
 	datetime-init$(EXE) \
 	datetime-math$(EXE) \
 	datetime-tz$(EXE) \
 	des$(EXE) \
 	device$(EXE) \
+	dh$(EXE) \
 	dictionary-const$(EXE) \
 	dictionary-nonconst$(EXE) \
 	directory$(EXE) \
@@ -65,8 +69,12 @@ PROGS1 = \
 	halt$(EXE) \
 	hostentry-address$(EXE) \
 	hostentry-hostname$(EXE) \
+	inidom$(EXE) \
+	inisax$(EXE) \
 	inetsocketclient$(EXE) \
 	inetsocketserver$(EXE) \
+	jsondom$(EXE) \
+	jsonsax$(EXE) \
 	kill$(EXE) \
 	linkedlist-iterate$(EXE) \
 	linkedlist-nodes$(EXE) \
@@ -79,6 +87,7 @@ PROGS1 = \
 	memorymap$(EXE) \
 	memorypool$(EXE) \
 	parameterstring$(EXE) \
+	pbkdf2$(EXE) \
 	permissions$(EXE) \
 	process-atexit$(EXE) \
 	process-detach$(EXE) \
@@ -98,6 +107,8 @@ PROGS2 = \
 	process-spawn$(EXE) \
 	process-zombie$(EXE) \
 	prompt$(EXE) \
+	propdom$(EXE) \
+	propsax$(EXE) \
 	protocolentry-name$(EXE) \
 	protocolentry-number$(EXE) \
 	randomnumber-multiple$(EXE) \
@@ -107,6 +118,7 @@ PROGS2 = \
 	regularexpression-multiple$(EXE) \
 	regularexpression-static$(EXE) \
 	scalar$(EXE) \
+	sensitivevalue$(EXE) \
 	semaphoreset1$(EXE) \
 	semaphoreset2$(EXE) \
 	serviceentry-name$(EXE) \
@@ -156,6 +168,9 @@ clean:
 	$(RM) $(PROGS2)
 	$(RM) *.lo *.o *.obj shm sem testfile testfile1 testfile2 *.ii
 	$(RMTREE) .libs
+
+aes128$(EXE): aes128.cpp aes128.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ aes128.$(OBJ) $(LIBS)
 
 avltree$(EXE): avltree.cpp avltree.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ avltree.$(OBJ) $(LIBS)
@@ -220,6 +235,12 @@ compiler$(EXE): compiler.cpp compiler.$(OBJ)
 complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserver.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ complexinetsocketserver.$(OBJ) $(LIBS)
 
+csvdom$(EXE): csvdom.cpp csvdom.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ csvdom.$(OBJ) $(LIBS)
+
+csvsax$(EXE): csvsax.cpp csvsax.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ csvsax.$(OBJ) $(LIBS)
+
 datetime-basic$(EXE): datetime-basic.cpp datetime-basic.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ datetime-basic.$(OBJ) $(LIBS)
 
@@ -237,6 +258,9 @@ des$(EXE): des.cpp des.$(OBJ)
 
 device$(EXE): device.cpp device.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ device.$(OBJ) $(LIBS)
+
+dh$(EXE): dh.cpp dh.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ dh.$(OBJ) $(LIBS)
 
 dictionary-const$(EXE): dictionary-const.cpp dictionary-const.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ dictionary-const.$(OBJ) $(LIBS)
@@ -328,11 +352,23 @@ hostentry-address$(EXE): hostentry-address.cpp hostentry-address.$(OBJ)
 hostentry-hostname$(EXE): hostentry-hostname.cpp hostentry-hostname.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ hostentry-hostname.$(OBJ) $(LIBS)
 
+inidom$(EXE): inidom.cpp inidom.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ inidom.$(OBJ) $(LIBS)
+
+inisax$(EXE): inisax.cpp inisax.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ inisax.$(OBJ) $(LIBS)
+
 inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ inetsocketclient.$(OBJ) $(LIBS)
 
 inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ inetsocketserver.$(OBJ) $(LIBS)
+
+jsondom$(EXE): jsondom.cpp jsondom.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ jsondom.$(OBJ) $(LIBS)
+
+jsonsax$(EXE): jsonsax.cpp jsonsax.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ jsonsax.$(OBJ) $(LIBS)
 
 kill$(EXE): kill.cpp kill.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ kill.$(OBJ) $(LIBS)
@@ -369,6 +405,9 @@ memorypool$(EXE): memorypool.cpp memorypool.$(OBJ)
 
 parameterstring$(EXE): parameterstring.cpp parameterstring.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ parameterstring.$(OBJ) $(LIBS)
+
+pbkdf2$(EXE): pbkdf2.cpp pbkdf2.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ pbkdf2.$(OBJ) $(LIBS)
 
 permissions$(EXE): permissions.cpp permissions.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ permissions.$(OBJ) $(LIBS)
@@ -421,6 +460,12 @@ process-zombie$(EXE): process-zombie.cpp process-zombie.$(OBJ)
 prompt$(EXE): prompt.cpp prompt.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ prompt.$(OBJ) $(LIBS)
 
+propdom$(EXE): propdom.cpp propdom.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ propdom.$(OBJ) $(LIBS)
+
+propsax$(EXE): propsax.cpp propsax.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ propsax.$(OBJ) $(LIBS)
+
 protocolentry-name$(EXE): protocolentry-name.cpp protocolentry-name.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ protocolentry-name.$(OBJ) $(LIBS)
 
@@ -447,6 +492,9 @@ regularexpression-static$(EXE): regularexpression-static.cpp regularexpression-s
 
 scalar$(EXE): scalar.cpp scalar.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ scalar.$(OBJ) $(LIBS)
+
+sensitivevalue$(EXE): sensitivevalue.cpp sensitivevalue.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ sensitivevalue.$(OBJ) $(LIBS)
 
 semaphoreset1$(EXE): semaphoreset1.cpp semaphoreset1.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ semaphoreset1.$(OBJ) $(LIBS)

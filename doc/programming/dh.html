@@ -1,0 +1,104 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the dh class</h1>
+
+<p>The <a href="../classes/html/classdh.html">dh class</a> provides a simple Diffie-Hellman key exchange implementation.</p>
+
+<p>Diffie-Hellman allows two parties to agree on a shared secret over an insecure channel.  Both parties agree on a prime modulus and generator, then each generates their own key pair using generateKeys().  Each party shares their public key with the other using setPeerPublicKey(), then independently generates the same shared secret using generateSharedSecret().</p>
+
+<p>The setPrimeModulus() and setGenerator() methods set the agreed-upon parameters.  The generateKeys() method generates an ephemeral private/public key pair.  The getPublicKey() and getPrivateKey() methods retrieve the generated keys.  The setPeerPublicKey() method sets the other party's public key, and generateSharedSecret() computes the shared secret, which can be retrieved using getSharedSecret().  The clear() method resets the keys and shared secret while preserving the prime modulus and generator, and reset() clears everything.</p>
+
+<p>The isSupported() method can be used to determine if Diffie-Hellman is available on the current platform.</p>
+
+<p>The following example simulates a Diffie-Hellman key exchange between two parties (alice and bob) using a well-known 1024-bit prime modulus from RFC 2409.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dh.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">dh</font>	alice<font color="#990000">;</font>
+	<font color="#008080">dh</font>	bob<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// check whether dh is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>alice<font color="#990000">.</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"dh is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// both parties agree on a prime modulus and generator</font></i>
+	<i><font color="#9A1900">// (a well-known 128-byte/1024-bit modular</font></i>
+	<i><font color="#9A1900">// exponentiation group from RFC 2409)</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	dhp<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		<font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font>
+		<font color="#993399">0xC9</font><font color="#990000">,</font><font color="#993399">0x0F</font><font color="#990000">,</font><font color="#993399">0xDA</font><font color="#990000">,</font><font color="#993399">0xA2</font><font color="#990000">,</font><font color="#993399">0x21</font><font color="#990000">,</font><font color="#993399">0x68</font><font color="#990000">,</font><font color="#993399">0xC2</font><font color="#990000">,</font><font color="#993399">0x34</font><font color="#990000">,</font>
+		<font color="#993399">0xC4</font><font color="#990000">,</font><font color="#993399">0xC6</font><font color="#990000">,</font><font color="#993399">0x62</font><font color="#990000">,</font><font color="#993399">0x8B</font><font color="#990000">,</font><font color="#993399">0x80</font><font color="#990000">,</font><font color="#993399">0xDC</font><font color="#990000">,</font><font color="#993399">0x1C</font><font color="#990000">,</font><font color="#993399">0xD1</font><font color="#990000">,</font>
+		<font color="#993399">0x29</font><font color="#990000">,</font><font color="#993399">0x02</font><font color="#990000">,</font><font color="#993399">0x4E</font><font color="#990000">,</font><font color="#993399">0x08</font><font color="#990000">,</font><font color="#993399">0x8A</font><font color="#990000">,</font><font color="#993399">0x67</font><font color="#990000">,</font><font color="#993399">0xCC</font><font color="#990000">,</font><font color="#993399">0x74</font><font color="#990000">,</font>
+		<font color="#993399">0x02</font><font color="#990000">,</font><font color="#993399">0x0B</font><font color="#990000">,</font><font color="#993399">0xBE</font><font color="#990000">,</font><font color="#993399">0xA6</font><font color="#990000">,</font><font color="#993399">0x3B</font><font color="#990000">,</font><font color="#993399">0x13</font><font color="#990000">,</font><font color="#993399">0x9B</font><font color="#990000">,</font><font color="#993399">0x22</font><font color="#990000">,</font>
+		<font color="#993399">0x51</font><font color="#990000">,</font><font color="#993399">0x4A</font><font color="#990000">,</font><font color="#993399">0x08</font><font color="#990000">,</font><font color="#993399">0x79</font><font color="#990000">,</font><font color="#993399">0x8E</font><font color="#990000">,</font><font color="#993399">0x34</font><font color="#990000">,</font><font color="#993399">0x04</font><font color="#990000">,</font><font color="#993399">0xDD</font><font color="#990000">,</font>
+		<font color="#993399">0xEF</font><font color="#990000">,</font><font color="#993399">0x95</font><font color="#990000">,</font><font color="#993399">0x19</font><font color="#990000">,</font><font color="#993399">0xB3</font><font color="#990000">,</font><font color="#993399">0xCD</font><font color="#990000">,</font><font color="#993399">0x3A</font><font color="#990000">,</font><font color="#993399">0x43</font><font color="#990000">,</font><font color="#993399">0x1B</font><font color="#990000">,</font>
+		<font color="#993399">0x30</font><font color="#990000">,</font><font color="#993399">0x2B</font><font color="#990000">,</font><font color="#993399">0x0A</font><font color="#990000">,</font><font color="#993399">0x6D</font><font color="#990000">,</font><font color="#993399">0xF2</font><font color="#990000">,</font><font color="#993399">0x5F</font><font color="#990000">,</font><font color="#993399">0x14</font><font color="#990000">,</font><font color="#993399">0x37</font><font color="#990000">,</font>
+		<font color="#993399">0x4F</font><font color="#990000">,</font><font color="#993399">0xE1</font><font color="#990000">,</font><font color="#993399">0x35</font><font color="#990000">,</font><font color="#993399">0x6D</font><font color="#990000">,</font><font color="#993399">0x6D</font><font color="#990000">,</font><font color="#993399">0x51</font><font color="#990000">,</font><font color="#993399">0xC2</font><font color="#990000">,</font><font color="#993399">0x45</font><font color="#990000">,</font>
+		<font color="#993399">0xE4</font><font color="#990000">,</font><font color="#993399">0x85</font><font color="#990000">,</font><font color="#993399">0xB5</font><font color="#990000">,</font><font color="#993399">0x76</font><font color="#990000">,</font><font color="#993399">0x62</font><font color="#990000">,</font><font color="#993399">0x5E</font><font color="#990000">,</font><font color="#993399">0x7E</font><font color="#990000">,</font><font color="#993399">0xC6</font><font color="#990000">,</font>
+		<font color="#993399">0xF4</font><font color="#990000">,</font><font color="#993399">0x4C</font><font color="#990000">,</font><font color="#993399">0x42</font><font color="#990000">,</font><font color="#993399">0xE9</font><font color="#990000">,</font><font color="#993399">0xA6</font><font color="#990000">,</font><font color="#993399">0x37</font><font color="#990000">,</font><font color="#993399">0xED</font><font color="#990000">,</font><font color="#993399">0x6B</font><font color="#990000">,</font>
+		<font color="#993399">0x0B</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0x5C</font><font color="#990000">,</font><font color="#993399">0xB6</font><font color="#990000">,</font><font color="#993399">0xF4</font><font color="#990000">,</font><font color="#993399">0x06</font><font color="#990000">,</font><font color="#993399">0xB7</font><font color="#990000">,</font><font color="#993399">0xED</font><font color="#990000">,</font>
+		<font color="#993399">0xEE</font><font color="#990000">,</font><font color="#993399">0x38</font><font color="#990000">,</font><font color="#993399">0x6B</font><font color="#990000">,</font><font color="#993399">0xFB</font><font color="#990000">,</font><font color="#993399">0x5A</font><font color="#990000">,</font><font color="#993399">0x89</font><font color="#990000">,</font><font color="#993399">0x9F</font><font color="#990000">,</font><font color="#993399">0xA5</font><font color="#990000">,</font>
+		<font color="#993399">0xAE</font><font color="#990000">,</font><font color="#993399">0x9F</font><font color="#990000">,</font><font color="#993399">0x24</font><font color="#990000">,</font><font color="#993399">0x11</font><font color="#990000">,</font><font color="#993399">0x7C</font><font color="#990000">,</font><font color="#993399">0x4B</font><font color="#990000">,</font><font color="#993399">0x1F</font><font color="#990000">,</font><font color="#993399">0xE6</font><font color="#990000">,</font>
+		<font color="#993399">0x49</font><font color="#990000">,</font><font color="#993399">0x28</font><font color="#990000">,</font><font color="#993399">0x66</font><font color="#990000">,</font><font color="#993399">0x51</font><font color="#990000">,</font><font color="#993399">0xEC</font><font color="#990000">,</font><font color="#993399">0xE6</font><font color="#990000">,</font><font color="#993399">0x53</font><font color="#990000">,</font><font color="#993399">0x81</font><font color="#990000">,</font>
+		<font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font><font color="#990000">,</font><font color="#993399">0xFF</font>
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	dhg<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0x02</font><font color="#FF0000">}</font><font color="#990000">;</font>
+
+	alice<font color="#990000">.</font><b><font color="#000000">setPrimeModulus</font></b><font color="#990000">(</font>dhp<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>dhp<font color="#990000">));</font>
+	alice<font color="#990000">.</font><b><font color="#000000">setGenerator</font></b><font color="#990000">(</font>dhg<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>dhg<font color="#990000">));</font>
+
+	bob<font color="#990000">.</font><b><font color="#000000">setPrimeModulus</font></b><font color="#990000">(</font>dhp<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>dhp<font color="#990000">));</font>
+	bob<font color="#990000">.</font><b><font color="#000000">setGenerator</font></b><font color="#990000">(</font>dhg<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>dhg<font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// each party generates their own key pair</font></i>
+	alice<font color="#990000">.</font><b><font color="#000000">generateKeys</font></b><font color="#990000">();</font>
+	bob<font color="#990000">.</font><b><font color="#000000">generateKeys</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// each party shares their public key with the other</font></i>
+	bob<font color="#990000">.</font><b><font color="#000000">setPeerPublicKey</font></b><font color="#990000">(</font>alice<font color="#990000">.</font><b><font color="#000000">getPublicKey</font></b><font color="#990000">(),</font>alice<font color="#990000">.</font><b><font color="#000000">getPublicKeySize</font></b><font color="#990000">());</font>
+	alice<font color="#990000">.</font><b><font color="#000000">setPeerPublicKey</font></b><font color="#990000">(</font>bob<font color="#990000">.</font><b><font color="#000000">getPublicKey</font></b><font color="#990000">(),</font>bob<font color="#990000">.</font><b><font color="#000000">getPublicKeySize</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// each party independently generates the shared secret</font></i>
+	alice<font color="#990000">.</font><b><font color="#000000">generateSharedSecret</font></b><font color="#990000">();</font>
+	bob<font color="#990000">.</font><b><font color="#000000">generateSharedSecret</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// verify that both shared secrets match</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"alice's shared secret: "</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>alice<font color="#990000">.</font><b><font color="#000000">getSharedSecretSize</font></b><font color="#990000">();</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%02x"</font><font color="#990000">,</font>alice<font color="#990000">.</font><b><font color="#000000">getSharedSecret</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"bob's shared secret:   "</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>bob<font color="#990000">.</font><b><font color="#000000">getSharedSecretSize</font></b><font color="#990000">();</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%02x"</font><font color="#990000">,</font>bob<font color="#990000">.</font><b><font color="#000000">getSharedSecret</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

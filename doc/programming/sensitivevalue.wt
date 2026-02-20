@@ -1,0 +1,33 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the sensitivevalue class =
+
+The [../classes/html/classsensitivevalue.html sensitivevalue class] provides methods for reading sensitive values (such as passwords) from a string, which may optionally include the contents of a file.
+
+Values can be provided verbatim or as a file reference.  By default, if the string passed to parse() begins with "[" and ends with "]", the text between the brackets is interpreted as a file name and the contents of the file are returned as the value.  Otherwise the string itself is used as the value.  The include delimiters can be changed using setIncludeStart() and setIncludeEnd().
+
+The file-inclusion feature is useful for keeping sensitive values out of world-readable files.  For example, a configuration file might need to be world-readable, but contain a database password.  Rather than placing the password directly in the configuration file, a reference like [/etc/myapp/dbpassword] can be placed there instead.  The file it refers to can then be made readable only by the user that runs the application (e.g. root), keeping the password secure even though the configuration file itself is world-readable.
+
+Verbatim values can be provided in text (the default), binary, or hex format, as configured by setVerbatimFormat().  When set to FORMAT_HEX, the string is interpreted as a hex-encoded representation of binary data and converted accordingly.
+
+File values can also be in text (the default), binary, or hex format, as configured by setFileFormat().  By default, trailing carriage returns and line feeds are trimmed from text files.  This can be disabled using setChompTextFile(false).
+
+Files can be searched for using a configurable path (setPath()) and file extensions for text (setTextExtension()), binary (setBinaryExtension()), and hex (setHexExtension()) formats.
+
+The getValue() method returns the parsed value as binary data and getValueSize() returns its size.  The getTextValue() method returns the parsed value as a string and getTextValueLength() returns its length.  The detachValue() and detachTextValue() methods return the value and release ownership to the caller.  The clear() method clears the parsed value while preserving configuration, and reset() clears everything.
+
+The following example parses a verbatim string, a hex-encoded verbatim string, and a value from a file, demonstrating the chomping behavior.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/sensitivevalue.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

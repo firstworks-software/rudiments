@@ -1,0 +1,27 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the dh class =
+
+The [../classes/html/classdh.html dh class] provides a simple Diffie-Hellman key exchange implementation.
+
+Diffie-Hellman allows two parties to agree on a shared secret over an insecure channel.  Both parties agree on a prime modulus and generator, then each generates their own key pair using generateKeys().  Each party shares their public key with the other using setPeerPublicKey(), then independently generates the same shared secret using generateSharedSecret().
+
+The setPrimeModulus() and setGenerator() methods set the agreed-upon parameters.  The generateKeys() method generates an ephemeral private/public key pair.  The getPublicKey() and getPrivateKey() methods retrieve the generated keys.  The setPeerPublicKey() method sets the other party's public key, and generateSharedSecret() computes the shared secret, which can be retrieved using getSharedSecret().  The clear() method resets the keys and shared secret while preserving the prime modulus and generator, and reset() clears everything.
+
+The isSupported() method can be used to determine if Diffie-Hellman is available on the current platform.
+
+The following example simulates a Diffie-Hellman key exchange between two parties (alice and bob) using a well-known 1024-bit prime modulus from RFC 2409.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/dh.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
