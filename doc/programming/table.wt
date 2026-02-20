@@ -1,0 +1,25 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the table class =
+
+The [../classes/html/classtable.html table class] allows you to store an arbitrary number of values in a two-dimensional table with named columns.  Since the table class is template-based, you can store arbitrary types of values.
+
+The table grows automatically as values are set.  Columns can be given names using the setColumnName() method, and values can be accessed by row and column index, or by row index and column name.
+
+By default, the table class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when the table is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when the table is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.
+
+The following example creates a table of animals with named columns, prints the table by index and by column name, and clears it.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/table.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

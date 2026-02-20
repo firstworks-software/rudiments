@@ -1,0 +1,25 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the scalar class =
+
+The [../classes/html/classscalar.html scalar class] allows you to store a single value.  Since the scalar class is template-based, you can store arbitrary types of values.
+
+The setValue() method sets the value and getValue() retrieves it.  The clear() method removes the value, causing getValue() to return NULL or 0.
+
+By default, the scalar class does not manage the data stored in it.  If you store a dynamically allocated string or object, it will not be deleted automatically when the scalar is cleared.  However, if setManageValues(true) is called, then the value will be deleted (using delete) when the scalar is cleared or destroyed.  If setManageArrayValues(true) is called, then the value will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.
+
+The following example stores and updates integer and string values, and demonstrates copying a scalar.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/scalar.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
