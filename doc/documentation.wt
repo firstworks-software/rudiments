@@ -39,6 +39,7 @@
  * [programming/ucs2character.html Using the ucs2character class]
  * [programming/ucs2charstring.html Using the ucs2charstring class]
  * [programming/ucs2stringbuffer.html Using the ucs2stringbuffer class]
+ * [programming/iconvert.html Using the iconvert class]
 * '''Binary Data Storage and Manipulation'''
  * [programming/bytestring.html Using the bytestring class]
  * [programming/bytebuffer.html Using the bytebuffer class]

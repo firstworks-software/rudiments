@@ -32,6 +32,7 @@ SRCS = aes128.wt \
 	groupentry.wt \
 	gss.wt \
 	hostentry.wt \
+	iconvert.wt \
 	inidom.wt \
 	inisax.wt \
 	inetsocketclient.wt \
@@ -113,6 +114,7 @@ OBJS = aes128.html \
 	groupentry.html \
 	gss.html \
 	hostentry.html \
+	iconvert.html \
 	inidom.html \
 	inisax.html \
 	inetsocketclient.html \

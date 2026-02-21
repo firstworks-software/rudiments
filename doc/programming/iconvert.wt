@@ -1,0 +1,25 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the iconvert class =
+
+The [../classes/html/classiconvert.html iconvert class] implements a character encoding converter.
+
+It can be used to convert strings between various character encodings, such as between char, wchar_t, and UCS-2, or between any encodings supported by the system's iconv implementation.
+
+To convert between encodings, create an instance of iconvert, set the from and to encodings, set the from and to buffers and their sizes, and call convert().
+
+The "from encoding" and "to encoding" use standard iconv encoding names.  An empty string for the encoding indicates the default system encoding.  "WCHAR_T" indicates the wchar_t encoding.  "UCS-2BE" and "UCS-2LE" indicate big-endian and little-endian UCS-2 encodings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/iconvert.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

@@ -69,6 +69,7 @@ PROGS1 = \
 	halt$(EXE) \
 	hostentry-address$(EXE) \
 	hostentry-hostname$(EXE) \
+	iconvert$(EXE) \
 	inidom$(EXE) \
 	inisax$(EXE) \
 	inetsocketclient$(EXE) \
@@ -373,6 +374,9 @@ hostentry-address$(EXE): hostentry-address.cpp hostentry-address.$(OBJ)
 
 hostentry-hostname$(EXE): hostentry-hostname.cpp hostentry-hostname.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ hostentry-hostname.$(OBJ) $(LIBS)
+
+iconvert$(EXE): iconvert.cpp iconvert.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ iconvert.$(OBJ) $(LIBS)
 
 inidom$(EXE): inidom.cpp inidom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ inidom.$(OBJ) $(LIBS)
