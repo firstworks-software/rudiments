@@ -1,0 +1,58 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the ucs2character class =
+
+* [#intro Introduction]
+* [#isxxx Analyzing Characters]
+* [#toxxx Transforming Characters]
+* [#inset Member of a Set]
+
+
+[=#intro]
+== Introduction ==
+
+The [../classes/html/classucs2character.html ucs2character class] provides static methods for evaluating and manipulating UCS-2 characters.
+
+
+[=#isxxx]
+== Analyzing Characters ==
+
+Methods are provided for determining if a UCS-2 character is alphabetic, alphanumeric, lower case, upper case, etc.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2character-isxxx.cpp@
+}}}
+}}}
+
+
+[=#toxxx]
+== Transforming Characters ==
+
+Methods are also provided for transforming the UCS-2 character to upper or lower case, and to 7-bit ascii, by clearing the higher order bits.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2character-toxxx.cpp@
+}}}
+}}}
+
+
+[=#inset]
+== Member of a Set ==
+
+An isInSet() method is also provided which returns true if the specified UCS-2 character is a member of the specified set of UCS-2 characters and false otherwise.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2character-inset.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

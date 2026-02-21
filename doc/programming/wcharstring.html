@@ -1,0 +1,568 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the wcharstring class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#manip">Manipulating Wide Character Strings</a></li>
+  <li><a href="#comp">Comparing Wide Character Strings</a></li>
+  <li><a href="#find">Finding Data in Wide Character Strings</a></li>
+  <li><a href="#trans">Transforming Wide Character Strings</a></li>
+  <li><a href="#parsing">Parsing Wide Character Strings</a></li>
+  <li><a href="#conversion">Converting Numbers and Amounts</a></li>
+  <li><a href="#encoding">Encoding Wide Character Strings</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classwcharstring.html">wcharstring class</a> provides static methods for manipulating C-style wide character strings.</p>
+
+<p>In addition to some unique methods, analogs for the standard C wide string functions are provided.  However, unlike the standard C wide string functions, the wcharstring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.</p>
+
+<a name="manip"/><h2>Manipulating Wide Character Strings</h2>
+
+<p>The wcharstring class provides methods for zeroing, duplicating, appending, copying data to, printing formatted data to, and determining the lengths of wide character strings.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#009900">wchar_t</font>		buffer<font color="#990000">[</font><font color="#993399">32</font><font color="#990000">];</font>
+
+
+	<i><font color="#9A1900">// zero the buffer</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// append strings, integers and floats</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>L<font color="#FF0000">"Hello "</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>L<font color="#FF0000">"there!"</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>L<font color="#FF0000">" "</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,(</font>uint64_t<font color="#990000">)</font><font color="#993399">1</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,(</font>uint64_t<font color="#990000">)</font><font color="#993399">2</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,(</font>uint64_t<font color="#990000">)</font><font color="#993399">3</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>L<font color="#FF0000">" "</font><font color="#990000">);</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">append</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">1.234</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get length</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"length(buffer)=%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// zero the buffer again</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy to the beginning of the buffer</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>L<font color="#FF0000">"Hello!"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy the specified number of characters to the beginning of the buffer</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>L<font color="#FF0000">"Hello again!"</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy to the specified offset</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">6</font><font color="#990000">,</font>L<font color="#FF0000">"again!"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy the specified number of characters to the specified offset</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">12</font><font color="#990000">,</font>L<font color="#FF0000">" Hi!  blah blah blah"</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get length</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"length(buffer)=%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// zero the buffer again</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// safely copy a long string to a smaller buffer</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">safeCopy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">,</font>
+				L<font color="#FF0000">"This string is longer than the buffer"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// safely copy the specified number of characters of a</font></i>
+	<i><font color="#9A1900">// long string to a smaller buffer</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">safeCopy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">,</font>
+				L<font color="#FF0000">"This string is longer than the buffer"</font><font color="#990000">,</font><font color="#993399">36</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get length</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"length(buffer)=%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// zero the buffer again</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// print formatted data to the buffer</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">printf</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">32</font><font color="#990000">,</font>L<font color="#FF0000">"%ls, %05d, %7.4f"</font><font color="#990000">,</font>
+					L<font color="#FF0000">"hello"</font><font color="#990000">,</font><font color="#993399">100</font><font color="#990000">,</font><font color="#993399">123.4567</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"buffer: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>buffer<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get length</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"length(buffer)=%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// duplicate a string</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>completedup<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font>L<font color="#FF0000">"Hello there!"</font><font color="#990000">);</font>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>partialdup<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font>L<font color="#FF0000">"Hello there!"</font><font color="#990000">,</font><font color="#993399">5</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"complete duplicate of </font><font color="#CC33CC">\"</font><font color="#FF0000">Hello there!</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							completedup<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">" partial duplicate of </font><font color="#CC33CC">\"</font><font color="#FF0000">Hello there!</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							partialdup<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> completedup<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> partialdup<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="comp"/><h2>Comparing Wide Character Strings</h2>
+
+<p>The wcharstring class also provides methods for performing various wide character string comparisons.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// comparing strings...</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> strings<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"hello"</font><font color="#990000">,</font>L<font color="#FF0000">"HELLO"</font><font color="#990000">,</font>L<font color="#FF0000">"hello there"</font><font color="#990000">,</font>L<font color="#FF0000">"HELLO THERE"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"direct comparison...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>s<font color="#990000">=</font>strings<font color="#990000">;</font> <font color="#990000">*</font>s<font color="#990000">;</font> s<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\"</font><font color="#FF0000">=</font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">  %s?</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>s<font color="#990000">,</font>
+			<font color="#990000">(!</font>wcharstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>L<font color="#FF0000">"hello"</font><font color="#990000">,*</font>s<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"only first 5 characters...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>s<font color="#990000">=</font>strings<font color="#990000">;</font> <font color="#990000">*</font>s<font color="#990000">;</font> s<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\"</font><font color="#FF0000">=</font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>s<font color="#990000">,</font>
+			<font color="#990000">(!</font>wcharstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>L<font color="#FF0000">"hello"</font><font color="#990000">,*</font>s<font color="#990000">,</font><font color="#993399">5</font><font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"ignoring case...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>s<font color="#990000">=</font>strings<font color="#990000">;</font> <font color="#990000">*</font>s<font color="#990000">;</font> s<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\"</font><font color="#FF0000">=</font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>s<font color="#990000">,</font>
+			<font color="#990000">(!</font>wcharstring<font color="#990000">::</font><b><font color="#000000">compareIgnoringCase</font></b><font color="#990000">(</font>L<font color="#FF0000">"hello"</font><font color="#990000">,*</font>s<font color="#990000">))?</font>
+							<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"ignoring case, only first 5 characters...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>s<font color="#990000">=</font>strings<font color="#990000">;</font> <font color="#990000">*</font>s<font color="#990000">;</font> s<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\"</font><font color="#FF0000">=</font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>s<font color="#990000">,</font>
+			<font color="#990000">(!</font>wcharstring<font color="#990000">::</font><b><font color="#000000">compareIgnoringCase</font></b><font color="#990000">(</font>L<font color="#FF0000">"hello"</font><font color="#990000">,*</font>s<font color="#990000">,</font><font color="#993399">5</font><font color="#990000">))?</font>
+							<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+
+	<i><font color="#9A1900">// member of a set...</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> greetings<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"hello"</font><font color="#990000">,</font>L<font color="#FF0000">"hi"</font><font color="#990000">,</font>L<font color="#FF0000">"good morning"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> lowercaseexpressions<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"hello"</font><font color="#990000">,</font>L<font color="#FF0000">"hi"</font><font color="#990000">,</font>L<font color="#FF0000">"bye"</font><font color="#990000">,</font>L<font color="#FF0000">"goodbye"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> uppercaseexpressions<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"HELLO"</font><font color="#990000">,</font>L<font color="#FF0000">"HI"</font><font color="#990000">,</font>L<font color="#FF0000">"BYE"</font><font color="#990000">,</font>L<font color="#FF0000">"GOODBYE"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"considering case...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>le<font color="#990000">=</font>lowercaseexpressions<font color="#990000">;</font> <font color="#990000">*</font>le<font color="#990000">;</font> le<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  is </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000"> a greeting?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>le<font color="#990000">,</font>
+			<font color="#990000">(</font>wcharstring<font color="#990000">::</font><b><font color="#000000">isInSet</font></b><font color="#990000">(*</font>le<font color="#990000">,</font>greetings<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"ignoring case...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>ue<font color="#990000">=</font>uppercaseexpressions<font color="#990000">;</font> <font color="#990000">*</font>ue<font color="#990000">;</font> ue<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  is </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000"> a greeting?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>ue<font color="#990000">,</font>
+			<font color="#990000">(</font>wcharstring<font color="#990000">::</font><b><font color="#000000">isInSetIgnoringCase</font></b><font color="#990000">(*</font>ue<font color="#990000">,</font>greetings<font color="#990000">))?</font>
+							<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// does one string contain another?</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	phrase<font color="#990000">[]=</font>L<font color="#FF0000">"the quick brown fox jumped over the lazy dog"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> lowercasewords<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"quick"</font><font color="#990000">,</font>L<font color="#FF0000">"brown"</font><font color="#990000">,</font>L<font color="#FF0000">"fox"</font><font color="#990000">,</font>L<font color="#FF0000">"lazy"</font><font color="#990000">,</font>L<font color="#FF0000">"dog"</font><font color="#990000">,</font>L<font color="#FF0000">"hello"</font><font color="#990000">,</font>L<font color="#FF0000">"goodbye"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> uppercasewords<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"QUICK"</font><font color="#990000">,</font>L<font color="#FF0000">"BROWN"</font><font color="#990000">,</font>L<font color="#FF0000">"FOX"</font><font color="#990000">,</font>L<font color="#FF0000">"LAZY"</font><font color="#990000">,</font>L<font color="#FF0000">"DOG"</font><font color="#990000">,</font>L<font color="#FF0000">"HELLO"</font><font color="#990000">,</font>L<font color="#FF0000">"GOODBYE"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"considering case...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>lw<font color="#990000">=</font>lowercasewords<font color="#990000">;</font> <font color="#990000">*</font>lw<font color="#990000">;</font> lw<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000"> contain </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			phrase<font color="#990000">,*</font>lw<font color="#990000">,</font>
+			<font color="#990000">(</font>wcharstring<font color="#990000">::</font><b><font color="#000000">contains</font></b><font color="#990000">(</font>phrase<font color="#990000">,*</font>lw<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"ignoring case...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>uw<font color="#990000">=</font>uppercasewords<font color="#990000">;</font> <font color="#990000">*</font>uw<font color="#990000">;</font> uw<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000"> contain </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			phrase<font color="#990000">,*</font>uw<font color="#990000">,</font>
+			<font color="#990000">(</font>wcharstring<font color="#990000">::</font><b><font color="#000000">containsIgnoringCase</font></b><font color="#990000">(</font>phrase<font color="#990000">,*</font>uw<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="find"/><h2>Finding Data in Wide Character Strings</h2>
+
+<p>The wcharstring class also provides methods for finding characters or other wide character strings within wide character strings.</p>
+
+<p>The findFirst()/findFirstOfSet() and findLast() methods return the first/last instance of a character/string/set within a string, or NULL if no match is found.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// first/last instances of a character or string...</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	phrase<font color="#990000">[]=</font>L<font color="#FF0000">"1 and 2 and 3 and 4"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	numbers<font color="#990000">[]=</font>L<font color="#FF0000">"1234"</font><font color="#990000">;</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	<font color="#990000">*</font>firsta<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">findFirst</font></b><font color="#990000">(</font>phrase<font color="#990000">,</font>L<font color="#FF0000">'a'</font><font color="#990000">);</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	<font color="#990000">*</font>firstand<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">findFirst</font></b><font color="#990000">(</font>phrase<font color="#990000">,</font>L<font color="#FF0000">"and"</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	<font color="#990000">*</font>lasta<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">findLast</font></b><font color="#990000">(</font>phrase<font color="#990000">,</font>L<font color="#FF0000">'a'</font><font color="#990000">);</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	<font color="#990000">*</font>lastand<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">findLast</font></b><font color="#990000">(</font>phrase<font color="#990000">,</font>L<font color="#FF0000">"and"</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	<font color="#990000">*</font>firstnum<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">findFirstOfSet</font></b><font color="#990000">(</font>phrase<font color="#990000">,</font>numbers<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"in the phrase: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>phrase<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  the first 'a' is	: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>firsta<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  the first </font><font color="#CC33CC">\"</font><font color="#FF0000">and</font><font color="#CC33CC">\"</font><font color="#FF0000"> is	: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>firstand<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  the last 'a' is	: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>lasta<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  the last </font><font color="#CC33CC">\"</font><font color="#FF0000">and</font><font color="#CC33CC">\"</font><font color="#FF0000"> is	: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>lastand<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  the first number is	: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>firstnum<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="trans"/><h2>Transforming Wide Character Strings</h2>
+
+<p>The wcharstring class also provides methods for transforming wide character strings.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#009900">wchar_t</font>	hellothere<font color="#990000">[]=</font>L<font color="#FF0000">"   hello there!   "</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// upper-case...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">upper</font></b><font color="#990000">(</font>hellothere<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"upper cased:   </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hellothere<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// lower-case...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">lower</font></b><font color="#990000">(</font>hellothere<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"lower cased:   </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hellothere<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// capitalized...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">capitalize</font></b><font color="#990000">(</font>hellothere<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"capitalized:   </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hellothere<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// right trimmed...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">rightTrim</font></b><font color="#990000">(</font>hellothere<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"right trimmed: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hellothere<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// left trimmed...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">leftTrim</font></b><font color="#990000">(</font>hellothere<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"left trimmed:  </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hellothere<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+
+	<font color="#009900">wchar_t</font>	paragraph<font color="#990000">[]=</font>L<font color="#FF0000">"Hello there.</font><font color="#CC33CC">\n</font><font color="#FF0000"> This is a paragraph</font><font color="#CC33CC">\n</font><font color="#FF0000"> "</font>
+				L<font color="#FF0000">"with random</font><font color="#CC33CC">\n</font><font color="#FF0000"> carriage returns</font><font color="#CC33CC">\n</font><font color="#FF0000"> "</font>
+				L<font color="#FF0000">"scattered throughout."</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// original...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original text:</font><font color="#CC33CC">\n</font><font color="#FF0000">%ls</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paragraph<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// stripped of carriage returns...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">strip</font></b><font color="#990000">(</font>paragraph<font color="#990000">,</font>L<font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"text without carriage returns:</font><font color="#CC33CC">\n</font><font color="#FF0000">%ls</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paragraph<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// stripped of "Hello there."...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">strip</font></b><font color="#990000">(</font>paragraph<font color="#990000">,</font>L<font color="#FF0000">"Hello there. "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"text without </font><font color="#CC33CC">\"</font><font color="#FF0000">Hello There. </font><font color="#CC33CC">\"</font><font color="#FF0000">:</font><font color="#CC33CC">\n</font><font color="#FF0000">%ls</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paragraph<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// with replacements...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">replace</font></b><font color="#990000">(</font>paragraph<font color="#990000">,</font>L<font color="#FF0000">' '</font><font color="#990000">,</font>L<font color="#FF0000">'_'</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"text with spaces replaced by underscores:</font><font color="#CC33CC">\n</font><font color="#FF0000">%ls</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							paragraph<font color="#990000">);</font>
+
+
+
+	<font color="#009900">wchar_t</font>	paddedtext<font color="#990000">[]=</font>L<font color="#FF0000">"   hello   "</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// original...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original text:   </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paddedtext<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// left-justified...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">leftJustify</font></b><font color="#990000">(</font>paddedtext<font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>paddedtext<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"left-justified:  </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paddedtext<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// right-justified...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">rightJustify</font></b><font color="#990000">(</font>paddedtext<font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>paddedtext<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"right-justified: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paddedtext<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// centered...</font></i>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">center</font></b><font color="#990000">(</font>paddedtext<font color="#990000">,</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>paddedtext<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"centered:        </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>paddedtext<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	unpaddedtext<font color="#990000">[]=</font>L<font color="#FF0000">"hellothere"</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// original...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original text:      </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>unpaddedtext<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// left-padded</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>leftpadded<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">pad</font></b><font color="#990000">(</font>unpaddedtext<font color="#990000">,</font>L<font color="#FF0000">' '</font><font color="#990000">,-</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">15</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"left padded text:   </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>leftpadded<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> leftpadded<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// right-padded</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>rightpadded<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">pad</font></b><font color="#990000">(</font>unpaddedtext<font color="#990000">,</font>L<font color="#FF0000">' '</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">15</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"right padded text:  </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>rightpadded<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> rightpadded<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// center-padded</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>centerpadded<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">pad</font></b><font color="#990000">(</font>unpaddedtext<font color="#990000">,</font>L<font color="#FF0000">' '</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">15</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"center padded text: </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>centerpadded<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> centerpadded<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="parsing"/><h2>Parsing Wide Character Strings</h2>
+
+<p>The wcharstring class also provides methods for splitting wide character strings, finding substrings and inserting text into a wide character string.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	str<font color="#990000">[]=</font>L<font color="#FF0000">"All along the untrodden paths of the future..."</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// split...</font></i>
+	<font color="#009900">wchar_t</font>		<font color="#990000">**</font>parts<font color="#990000">;</font>
+	<font color="#008080">uint64_t</font>	partcount<font color="#990000">;</font>
+	wcharstring<font color="#990000">::</font><b><font color="#000000">split</font></b><font color="#990000">(</font>str<font color="#990000">,</font>L<font color="#FF0000">" "</font><font color="#990000">,</font><b><font color="#0000FF">true</font></b><font color="#990000">,&amp;</font>parts<font color="#990000">,&amp;</font>partcount<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original string:</font><font color="#CC33CC">\n</font><font color="#FF0000">  %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>str<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"split on space:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>partcount<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>parts<font color="#990000">[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>partcount<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> parts<font color="#990000">[</font>i<font color="#990000">];</font>
+	<font color="#FF0000">}</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> parts<font color="#990000">;</font>
+
+
+
+	<i><font color="#9A1900">// substring...</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>substring1<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getSubString</font></b><font color="#990000">(</font>str<font color="#990000">,</font><font color="#993399">14</font><font color="#990000">);</font>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>substring2<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">getSubString</font></b><font color="#990000">(</font>str<font color="#990000">,</font><font color="#993399">14</font><font color="#990000">,</font><font color="#993399">28</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"string starting at index 14: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>substring1<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"string from index 14 to 21 : %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>substring2<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> substring1<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> substring2<font color="#990000">;</font>
+
+
+
+	<i><font color="#9A1900">// insert string...</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>newstr<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">insertString</font></b><font color="#990000">(</font>str<font color="#990000">,</font>
+		L<font color="#FF0000">", I can see the footprints of an unseen hand"</font><font color="#990000">,</font><font color="#993399">43</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"string after insert:</font><font color="#CC33CC">\n</font><font color="#FF0000">  %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>newstr<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> newstr<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="conversion"/><h2>Converting Numbers and Amounts</h2>
+
+<p>The wcharstring class also provides methods for converting numbers and dollar amounts to and from wide character strings.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// conversion of numbers to strings...</font></i>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>intstr<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">parseNumber</font></b><font color="#990000">((</font>uint64_t<font color="#990000">)</font><font color="#993399">12345</font><font color="#990000">);</font>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>floatstr<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">parseNumber</font></b><font color="#990000">((</font><font color="#009900">float</font><font color="#990000">)</font><font color="#993399">12.345</font><font color="#990000">,</font><font color="#993399">5</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"numbers as strings: %ls, %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>intstr<font color="#990000">,</font>floatstr<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> intstr<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> floatstr<font color="#990000">;</font>
+
+
+
+	<i><font color="#9A1900">// conversion of strings to numbers...</font></i>
+	<font color="#008080">int64_t</font>		intnum<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">convertToInteger</font></b><font color="#990000">(</font>L<font color="#FF0000">"12345"</font><font color="#990000">);</font>
+	<font color="#008080">uint64_t</font>	uintnum<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">convertToUnsignedInteger</font></b><font color="#990000">(</font>L<font color="#FF0000">"12345"</font><font color="#990000">);</font>
+	<font color="#009900">long</font> <font color="#009900">double</font>	floatnum<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">convertToFloat</font></b><font color="#990000">(</font>L<font color="#FF0000">"12.345"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"strings as numbers: %lld, %lld, %5.3Lf</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					intnum<font color="#990000">,</font>uintnum<font color="#990000">,</font>floatnum<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+
+	<i><font color="#9A1900">// identification of numeric strings...</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> numbers<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		L<font color="#FF0000">"1"</font><font color="#990000">,</font>L<font color="#FF0000">"-1"</font><font color="#990000">,</font>L<font color="#FF0000">"1.1"</font><font color="#990000">,</font>L<font color="#FF0000">"-1.1"</font><font color="#990000">,</font>L<font color="#FF0000">"one"</font><font color="#990000">,</font>L<font color="#FF0000">"hello"</font><font color="#990000">,</font>NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>n<font color="#990000">=</font>numbers<font color="#990000">;</font> <font color="#990000">*</font>n<font color="#990000">;</font> n<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%ls %s a number</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>n<font color="#990000">,</font>
+				<font color="#990000">(</font>wcharstring<font color="#990000">::</font><b><font color="#000000">isNumber</font></b><font color="#990000">(*</font>n<font color="#990000">))?</font><font color="#FF0000">"is"</font><font color="#990000">:</font><font color="#FF0000">"is not"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%ls %s an integer</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>n<font color="#990000">,</font>
+				<font color="#990000">(</font>wcharstring<font color="#990000">::</font><b><font color="#000000">isInteger</font></b><font color="#990000">(*</font>n<font color="#990000">))?</font><font color="#FF0000">"is"</font><font color="#990000">:</font><font color="#FF0000">"is not"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+
+	<i><font color="#9A1900">// integer lengths</font></i>
+	<font color="#008080">uint64_t</font>	integers<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		<font color="#993399">1</font><font color="#990000">,</font><font color="#993399">23</font><font color="#990000">,</font><font color="#993399">456</font><font color="#990000">,</font><font color="#993399">7890</font><font color="#990000">,</font><font color="#993399">12345</font><font color="#990000">,</font><font color="#993399">678901</font><font color="#990000">,</font><font color="#993399">0</font>
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> <font color="#990000">*</font>i<font color="#990000">=</font>integers<font color="#990000">;</font> <font color="#990000">*</font>i<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"it would take %d characters to store "</font>
+				<font color="#FF0000">"%lld as a string</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				wcharstring<font color="#990000">::</font><b><font color="#000000">getIntegerLength</font></b><font color="#990000">(*</font>i<font color="#990000">),*</font>i<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+
+	<i><font color="#9A1900">// dollar amounts</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	dollarstr<font color="#990000">[]=</font>L<font color="#FF0000">"$123.45"</font><font color="#990000">;</font>
+	<font color="#008080">int64_t</font>	pennies<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">convertAmount</font></b><font color="#990000">(</font>dollarstr<font color="#990000">);</font>
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>dollars<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">convertAmount</font></b><font color="#990000">(</font>pennies<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%ls as pennies: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dollarstr<font color="#990000">,</font>pennies<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%lld pennies as dollars: %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pennies<font color="#990000">,</font>dollars<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="encoding"/><h2>Encoding Wide Character Strings</h2>
+
+<p>The wcharstring class also provides methods for escaping wide character strings.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// backslash-escaping of quote, backslash and space characters...</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	path<font color="#990000">[]=</font>L<font color="#FF0000">"</font><font color="#CC33CC">\"</font><font color="#FF0000">C:</font><font color="#CC33CC">\\</font><font color="#FF0000">Program Files</font><font color="#CC33CC">\\</font><font color="#FF0000">Firstworks</font><font color="#CC33CC">\"</font><font color="#FF0000">"</font><font color="#990000">;</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original path:</font><font color="#CC33CC">\n</font><font color="#FF0000">  %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>path<font color="#990000">);</font>
+
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>escapedpath<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">escape</font></b><font color="#990000">(</font>path<font color="#990000">,</font>L<font color="#FF0000">"</font><font color="#CC33CC">\"\\</font><font color="#FF0000"> "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"escaped path:</font><font color="#CC33CC">\n</font><font color="#FF0000">  %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>escapedpath<font color="#990000">);</font>
+
+	<font color="#009900">wchar_t</font>	<font color="#990000">*</font>unescapedpath<font color="#990000">=</font>wcharstring<font color="#990000">::</font><b><font color="#000000">unescape</font></b><font color="#990000">(</font>escapedpath<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"unescaped path:</font><font color="#CC33CC">\n</font><font color="#FF0000">  %ls</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>unescapedpath<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> escapedpath<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> unescapedpath<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

@@ -33,6 +33,12 @@
  * [programming/character.html Using the character class]
  * [programming/charstring.html Using the charstring class]
  * [programming/stringbuffer.html Using the stringbuffer class]
+ * [programming/wcharacter.html Using the wcharacter class]
+ * [programming/wcharstring.html Using the wcharstring class]
+ * [programming/wstringbuffer.html Using the wstringbuffer class]
+ * [programming/ucs2character.html Using the ucs2character class]
+ * [programming/ucs2charstring.html Using the ucs2charstring class]
+ * [programming/ucs2stringbuffer.html Using the ucs2stringbuffer class]
 * '''Binary Data Storage and Manipulation'''
  * [programming/bytestring.html Using the bytestring class]
  * [programming/bytebuffer.html Using the bytebuffer class]

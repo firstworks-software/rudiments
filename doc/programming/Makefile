@@ -74,8 +74,14 @@ SRCS = aes128.wt \
 	tls.wt \
 	unixsocketclient.wt \
 	unixsocketserver.wt \
+	ucs2character.wt \
+	ucs2charstring.wt \
+	ucs2stringbuffer.wt \
 	url.wt \
 	userentry.wt \
+	wcharacter.wt \
+	wcharstring.wt \
+	wstringbuffer.wt \
 	xmldom.wt \
 	xmlsax.wt
 
@@ -149,8 +155,14 @@ OBJS = aes128.html \
 	tls.html \
 	unixsocketclient.html \
 	unixsocketserver.html \
+	ucs2character.html \
+	ucs2charstring.html \
+	ucs2stringbuffer.html \
 	url.html \
 	userentry.html \
+	wcharacter.html \
+	wcharstring.html \
+	wstringbuffer.html \
 	xmldom.html \
 	xmlsax.html
 

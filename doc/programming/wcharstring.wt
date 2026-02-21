@@ -1,0 +1,114 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the wcharstring class =
+
+* [#intro Introduction]
+* [#manip Manipulating Wide Character Strings]
+* [#comp Comparing Wide Character Strings]
+* [#find Finding Data in Wide Character Strings]
+* [#trans Transforming Wide Character Strings]
+* [#parsing Parsing Wide Character Strings]
+* [#conversion Converting Numbers and Amounts]
+* [#encoding Encoding Wide Character Strings]
+
+
+[=#intro]
+== Introduction ==
+
+The [../classes/html/classwcharstring.html wcharstring class] provides static methods for manipulating C-style wide character strings.
+
+In addition to some unique methods, analogs for the standard C wide string functions are provided.  However, unlike the standard C wide string functions, the wcharstring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.
+
+
+[=#manip]
+== Manipulating Wide Character Strings ==
+
+The wcharstring class provides methods for zeroing, duplicating, appending, copying data to, printing formatted data to, and determining the lengths of wide character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-copy.cpp@
+}}}
+}}}
+
+
+[=#comp]
+== Comparing Wide Character Strings ==
+
+The wcharstring class also provides methods for performing various wide character string comparisons.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-compare.cpp@
+}}}
+}}}
+
+
+[=#find]
+== Finding Data in Wide Character Strings ==
+
+The wcharstring class also provides methods for finding characters or other wide character strings within wide character strings.
+
+The findFirst()/findFirstOfSet() and findLast() methods return the first/last instance of a character/string/set within a string, or NULL if no match is found.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-find.cpp@
+}}}
+}}}
+
+
+[=#trans]
+== Transforming Wide Character Strings ==
+
+The wcharstring class also provides methods for transforming wide character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-transform.cpp@
+}}}
+}}}
+
+
+[=#parsing]
+== Parsing Wide Character Strings ==
+
+The wcharstring class also provides methods for splitting wide character strings, finding substrings and inserting text into a wide character string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-split.cpp@
+}}}
+}}}
+
+
+[=#conversion]
+== Converting Numbers and Amounts ==
+
+The wcharstring class also provides methods for converting numbers and dollar amounts to and from wide character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-numbers.cpp@
+}}}
+}}}
+
+
+[=#encoding]
+== Encoding Wide Character Strings ==
+
+The wcharstring class also provides methods for escaping wide character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wcharstring-encode.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

@@ -1,0 +1,138 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the wcharacter class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#isxxx">Analyzing Characters</a></li>
+  <li><a href="#toxxx">Transforming Characters</a></li>
+  <li><a href="#inset">Member of a Set</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classwcharacter.html">wcharacter class</a> provides static methods for evaluating and manipulating wide characters.</p>
+
+<a name="isxxx"/><h2>Analyzing Characters</h2>
+
+<p>Methods are provided for determining if a wide character is alphabetic, alphanumeric, lower case, upper case, etc.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharacter.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// print information about all ascii characters</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">int32_t</font> uc<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> uc<font color="#990000">&lt;</font><font color="#993399">128</font><font color="#990000">;</font> uc<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<font color="#009900">wchar_t</font>	c<font color="#990000">=(</font><font color="#009900">wchar_t</font><font color="#990000">)</font>uc<font color="#990000">;</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"character %lc:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>c<font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is alphanumeric		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isAlphanumeric</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is alphabetical		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isAlphabetical</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is lower case		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isLowerCase</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is upper case		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isUpperCase</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is punctuation		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isPunctuation</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is printable		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isPrintable</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is printable (non-space): %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isPrintableNonSpace</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is control character	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isControlCharacter</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is digit		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isDigit</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is hex digit		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isHexDigit</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is blank		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isBlank</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is whitespace		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isWhitespace</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	is ascii		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isAscii</font></b><font color="#990000">(</font>c<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="toxxx"/><h2>Transforming Characters</h2>
+
+<p>Methods are also provided for transforming the wide character to upper or lower case, and to 7-bit ascii, by clearing the higher order bits.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharacter.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// perform case conversions on all ascii characters</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">int32_t</font> uc<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> uc<font color="#990000">&lt;</font><font color="#993399">128</font><font color="#990000">;</font> uc<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<font color="#009900">wchar_t</font>	c<font color="#990000">=(</font><font color="#009900">wchar_t</font><font color="#990000">)</font>uc<font color="#990000">;</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"character %lc:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>c<font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	to upper case	: %lc</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font><font color="#009900">wchar_t</font><font color="#990000">)</font>wcharacter<font color="#990000">::</font><b><font color="#000000">upper</font></b><font color="#990000">(</font>c<font color="#990000">));</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	to lower case	: %lc</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font><font color="#009900">wchar_t</font><font color="#990000">)</font>wcharacter<font color="#990000">::</font><b><font color="#000000">lower</font></b><font color="#990000">(</font>c<font color="#990000">));</font>
+
+		<i><font color="#9A1900">// place a 1 in bit 8</font></i>
+		c<font color="#990000">=</font>c<font color="#990000">|</font><font color="#993399">0x80</font><font color="#990000">;</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	to ascii	: %lc</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font><font color="#009900">wchar_t</font><font color="#990000">)</font>wcharacter<font color="#990000">::</font><b><font color="#000000">convertToAscii</font></b><font color="#990000">(</font>c<font color="#990000">));</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="inset"/><h2>Member of a Set</h2>
+
+<p>An isInSet() method is also provided which returns true if the specified wide character is a member of the specified set of wide characters and false otherwise.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wcharacter.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// define the set</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">wchar_t</font>	set<font color="#990000">[]=</font>L<font color="#FF0000">"abcdefg"</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// loop through the alphabet...</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#009900">wchar_t</font> c<font color="#990000">=</font>L<font color="#FF0000">'a'</font><font color="#990000">;</font> c<font color="#990000">&lt;=</font>L<font color="#FF0000">'z'</font><font color="#990000">;</font> c<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"is %lc in the set </font><font color="#CC33CC">\"</font><font color="#FF0000">%ls</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				c<font color="#990000">,</font>set<font color="#990000">,(</font>wcharacter<font color="#990000">::</font><b><font color="#000000">isInSet</font></b><font color="#990000">(</font>c<font color="#990000">,</font>set<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

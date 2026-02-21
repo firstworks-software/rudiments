@@ -147,6 +147,28 @@ PROGS2 = \
 	unixsocketclient$(EXE) \
 	unixsocketserver$(EXE) \
 	userentry$(EXE) \
+	ucs2character-inset$(EXE) \
+	ucs2character-isxxx$(EXE) \
+	ucs2character-toxxx$(EXE) \
+	ucs2charstring-compare$(EXE) \
+	ucs2charstring-copy$(EXE) \
+	ucs2charstring-encode$(EXE) \
+	ucs2charstring-find$(EXE) \
+	ucs2charstring-numbers$(EXE) \
+	ucs2charstring-split$(EXE) \
+	ucs2charstring-transform$(EXE) \
+	ucs2stringbuffer$(EXE) \
+	wcharacter-inset$(EXE) \
+	wcharacter-isxxx$(EXE) \
+	wcharacter-toxxx$(EXE) \
+	wcharstring-compare$(EXE) \
+	wcharstring-copy$(EXE) \
+	wcharstring-encode$(EXE) \
+	wcharstring-find$(EXE) \
+	wcharstring-numbers$(EXE) \
+	wcharstring-split$(EXE) \
+	wcharstring-transform$(EXE) \
+	wstringbuffer$(EXE) \
 	xmldom$(EXE) \
 	xmlsax$(EXE)
 
@@ -579,6 +601,72 @@ unixsocketserver$(EXE): unixsocketserver.cpp unixsocketserver.$(OBJ)
 
 userentry$(EXE): userentry.cpp userentry.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ userentry.$(OBJ) $(LIBS)
+
+ucs2character-inset$(EXE): ucs2character-inset.cpp ucs2character-inset.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2character-inset.$(OBJ) $(LIBS)
+
+ucs2character-isxxx$(EXE): ucs2character-isxxx.cpp ucs2character-isxxx.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2character-isxxx.$(OBJ) $(LIBS)
+
+ucs2character-toxxx$(EXE): ucs2character-toxxx.cpp ucs2character-toxxx.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2character-toxxx.$(OBJ) $(LIBS)
+
+ucs2charstring-compare$(EXE): ucs2charstring-compare.cpp ucs2charstring-compare.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-compare.$(OBJ) $(LIBS)
+
+ucs2charstring-copy$(EXE): ucs2charstring-copy.cpp ucs2charstring-copy.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-copy.$(OBJ) $(LIBS)
+
+ucs2charstring-encode$(EXE): ucs2charstring-encode.cpp ucs2charstring-encode.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-encode.$(OBJ) $(LIBS)
+
+ucs2charstring-find$(EXE): ucs2charstring-find.cpp ucs2charstring-find.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-find.$(OBJ) $(LIBS)
+
+ucs2charstring-numbers$(EXE): ucs2charstring-numbers.cpp ucs2charstring-numbers.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-numbers.$(OBJ) $(LIBS)
+
+ucs2charstring-split$(EXE): ucs2charstring-split.cpp ucs2charstring-split.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-split.$(OBJ) $(LIBS)
+
+ucs2charstring-transform$(EXE): ucs2charstring-transform.cpp ucs2charstring-transform.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2charstring-transform.$(OBJ) $(LIBS)
+
+ucs2stringbuffer$(EXE): ucs2stringbuffer.cpp ucs2stringbuffer.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ ucs2stringbuffer.$(OBJ) $(LIBS)
+
+wcharacter-inset$(EXE): wcharacter-inset.cpp wcharacter-inset.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharacter-inset.$(OBJ) $(LIBS)
+
+wcharacter-isxxx$(EXE): wcharacter-isxxx.cpp wcharacter-isxxx.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharacter-isxxx.$(OBJ) $(LIBS)
+
+wcharacter-toxxx$(EXE): wcharacter-toxxx.cpp wcharacter-toxxx.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharacter-toxxx.$(OBJ) $(LIBS)
+
+wcharstring-compare$(EXE): wcharstring-compare.cpp wcharstring-compare.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-compare.$(OBJ) $(LIBS)
+
+wcharstring-copy$(EXE): wcharstring-copy.cpp wcharstring-copy.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-copy.$(OBJ) $(LIBS)
+
+wcharstring-encode$(EXE): wcharstring-encode.cpp wcharstring-encode.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-encode.$(OBJ) $(LIBS)
+
+wcharstring-find$(EXE): wcharstring-find.cpp wcharstring-find.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-find.$(OBJ) $(LIBS)
+
+wcharstring-numbers$(EXE): wcharstring-numbers.cpp wcharstring-numbers.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-numbers.$(OBJ) $(LIBS)
+
+wcharstring-split$(EXE): wcharstring-split.cpp wcharstring-split.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-split.$(OBJ) $(LIBS)
+
+wcharstring-transform$(EXE): wcharstring-transform.cpp wcharstring-transform.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wcharstring-transform.$(OBJ) $(LIBS)
+
+wstringbuffer$(EXE): wstringbuffer.cpp wstringbuffer.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wstringbuffer.$(OBJ) $(LIBS)
 
 xmldom$(EXE): xmldom.cpp xmldom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ xmldom.$(OBJ) $(LIBS)

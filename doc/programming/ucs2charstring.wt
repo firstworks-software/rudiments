@@ -1,0 +1,114 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the ucs2charstring class =
+
+* [#intro Introduction]
+* [#manip Manipulating UCS-2 Character Strings]
+* [#comp Comparing UCS-2 Character Strings]
+* [#find Finding Data in UCS-2 Character Strings]
+* [#trans Transforming UCS-2 Character Strings]
+* [#parsing Parsing UCS-2 Character Strings]
+* [#conversion Converting Numbers and Amounts]
+* [#encoding Encoding UCS-2 Character Strings]
+
+
+[=#intro]
+== Introduction ==
+
+The [../classes/html/classucs2charstring.html ucs2charstring class] provides static methods for manipulating C-style UCS-2 character strings.
+
+In addition to some unique methods, analogs for the standard C string functions are provided.  However, unlike the standard C string functions, the ucs2charstring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.
+
+
+[=#manip]
+== Manipulating UCS-2 Character Strings ==
+
+The ucs2charstring class provides methods for zeroing, duplicating, appending, copying data to, printing formatted data to, and determining the lengths of UCS-2 character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-copy.cpp@
+}}}
+}}}
+
+
+[=#comp]
+== Comparing UCS-2 Character Strings ==
+
+The ucs2charstring class also provides methods for performing various UCS-2 character string comparisons.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-compare.cpp@
+}}}
+}}}
+
+
+[=#find]
+== Finding Data in UCS-2 Character Strings ==
+
+The ucs2charstring class also provides methods for finding characters or other UCS-2 character strings within UCS-2 character strings.
+
+The findFirst()/findFirstOfSet() and findLast() methods return the first/last instance of a character/string/set within a string, or NULL if no match is found.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-find.cpp@
+}}}
+}}}
+
+
+[=#trans]
+== Transforming UCS-2 Character Strings ==
+
+The ucs2charstring class also provides methods for transforming UCS-2 character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-transform.cpp@
+}}}
+}}}
+
+
+[=#parsing]
+== Parsing UCS-2 Character Strings ==
+
+The ucs2charstring class also provides methods for splitting UCS-2 character strings, finding substrings and inserting text into a UCS-2 character string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-split.cpp@
+}}}
+}}}
+
+
+[=#conversion]
+== Converting Numbers and Amounts ==
+
+The ucs2charstring class also provides methods for converting numbers and dollar amounts to and from UCS-2 character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-numbers.cpp@
+}}}
+}}}
+
+
+[=#encoding]
+== Encoding UCS-2 Character Strings ==
+
+The ucs2charstring class also provides methods for escaping UCS-2 character strings.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/ucs2charstring-encode.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
