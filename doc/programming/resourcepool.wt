@@ -1,0 +1,25 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the resourcepool class =
+
+The [../classes/html/classresourcepool.html resourcepool class] provides a pool of objects.  Objects can be borrowed from and returned to the pool.
+
+The pool contains a configurable minimum number of objects that are allocated when the pool is initialized.  When all of those objects have been borrowed, the pool can allocate a configurable number of additional objects on-demand, up to a configurable maximum.
+
+The pool is a template class, parameterized by the type of object it contains.
+
+The resourcepool class is targeted for use with the MVC classes, but it can be used in non-MVC projects as well.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/resourcepool.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

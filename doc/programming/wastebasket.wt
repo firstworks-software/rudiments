@@ -1,0 +1,23 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the wastebasket class =
+
+The [../classes/html/classwastebasket.html wastebasket class] provides a garbage collection object.  Arbitrary arrays of primitives, objects, and arrays of objects can be attached to it and deleted at a later date.
+
+This is useful for holding on to dependencies of an object until the object no longer needs them.  For example, a function might create several related objects, return one of them, and attach the others to a wastebasket.  The caller can use the returned object and then empty the wastebasket to clean everything up at once.
+
+The wastebasket class is targeted for use with the MVC classes, but it can be used in non-MVC projects as well.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/wastebasket.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}
