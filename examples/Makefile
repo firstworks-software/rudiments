@@ -120,6 +120,7 @@ PROGS2 = \
 	regularexpression-compile$(EXE) \
 	regularexpression-multiple$(EXE) \
 	regularexpression-static$(EXE) \
+	resourcepool$(EXE) \
 	scalar$(EXE) \
 	sensitivevalue$(EXE) \
 	semaphoreset1$(EXE) \
@@ -161,6 +162,7 @@ PROGS2 = \
 	ucs2charstring-split$(EXE) \
 	ucs2charstring-transform$(EXE) \
 	ucs2stringbuffer$(EXE) \
+	wastebasket$(EXE) \
 	wcharacter-inset$(EXE) \
 	wcharacter-isxxx$(EXE) \
 	wcharacter-toxxx$(EXE) \
@@ -524,6 +526,9 @@ regularexpression-multiple$(EXE): regularexpression-multiple.cpp regularexpressi
 regularexpression-static$(EXE): regularexpression-static.cpp regularexpression-static.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ regularexpression-static.$(OBJ) $(LIBS)
 
+resourcepool$(EXE): resourcepool.cpp resourcepool.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ resourcepool.$(OBJ) $(LIBS)
+
 scalar$(EXE): scalar.cpp scalar.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ scalar.$(OBJ) $(LIBS)
 
@@ -646,6 +651,9 @@ ucs2charstring-transform$(EXE): ucs2charstring-transform.cpp ucs2charstring-tran
 
 ucs2stringbuffer$(EXE): ucs2stringbuffer.cpp ucs2stringbuffer.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ ucs2stringbuffer.$(OBJ) $(LIBS)
+
+wastebasket$(EXE): wastebasket.cpp wastebasket.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ wastebasket.$(OBJ) $(LIBS)
 
 wcharacter-inset$(EXE): wcharacter-inset.cpp wcharacter-inset.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ wcharacter-inset.$(OBJ) $(LIBS)

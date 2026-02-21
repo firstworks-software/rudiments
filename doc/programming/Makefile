@@ -57,6 +57,7 @@ SRCS = aes128.wt \
 	protocolentry.wt \
 	randomnumber.wt \
 	regularexpression.wt \
+	resourcepool.wt \
 	scalar.wt \
 	sensitivevalue.wt \
 	semaphoreset.wt \
@@ -82,6 +83,7 @@ SRCS = aes128.wt \
 	ucs2stringbuffer.wt \
 	url.wt \
 	userentry.wt \
+	wastebasket.wt \
 	wcharacter.wt \
 	wcharstring.wt \
 	wstringbuffer.wt \
@@ -141,6 +143,7 @@ OBJS = aes128.html \
 	protocolentry.html \
 	randomnumber.html \
 	regularexpression.html \
+	resourcepool.html \
 	scalar.html \
 	sensitivevalue.html \
 	semaphoreset.html \
@@ -166,6 +169,7 @@ OBJS = aes128.html \
 	ucs2stringbuffer.html \
 	url.html \
 	userentry.html \
+	wastebasket.html \
 	wcharacter.html \
 	wcharstring.html \
 	wstringbuffer.html \
