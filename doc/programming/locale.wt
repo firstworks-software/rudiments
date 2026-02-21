@@ -1,0 +1,50 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the locale class =
+
+* [#intro Introduction]
+* [#categories Locale Categories]
+* [#numeric Numeric Formatting]
+* [#monetary Monetary Formatting]
+
+
+[=#intro]
+== Introduction ==
+
+The [../classes/html/classlocale.html locale class] provides static methods for accessing and manipulating locale categories.
+
+Locale categories control various aspects of how programs format numbers, currency, dates, and other locale-sensitive data.
+
+
+[=#categories]
+== Locale Categories ==
+
+The locale class provides methods for getting and setting standard locale categories such as LC_ALL, LC_COLLATE, LC_CTYPE, LC_MESSAGES, LC_MONETARY, LC_NUMERIC, and LC_TIME.  Additional categories such as LC_ADDRESS, LC_IDENTIFICATION, LC_MEASUREMENT, LC_NAME, LC_PAPER, and LC_TELEPHONE are also supported, where available.
+
+Each category has a set/get pair and an isSupported method.
+
+
+[=#numeric]
+== Numeric Formatting ==
+
+Methods are provided for getting the numeric decimal point string, digit group separator, and digit group counts for the current locale.
+
+
+[=#monetary]
+== Monetary Formatting ==
+
+Methods are provided for getting monetary formatting information including the decimal point, digit group separator, currency symbol, positive/negative signs, sign positions, and the number of decimal digits for both local and international formats.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/locale.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

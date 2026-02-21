@@ -28,6 +28,7 @@ PROGS0 = \
 	commandline$(EXE) \
 	compiler$(EXE) \
 	complexinetsocketserver$(EXE) \
+	cronschedule$(EXE) \
 	csvdom$(EXE) \
 	csvsax$(EXE) \
 	datetime-basic$(EXE) \
@@ -82,6 +83,7 @@ PROGS1 = \
 	linkedlist-sort$(EXE) \
 	linkedlist-types$(EXE) \
 	linkedlist-values$(EXE) \
+	locale$(EXE) \
 	listener$(EXE) \
 	logger$(EXE) \
 	md5$(EXE) \
@@ -258,6 +260,9 @@ compiler$(EXE): compiler.cpp compiler.$(OBJ)
 complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserver.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ complexinetsocketserver.$(OBJ) $(LIBS)
 
+cronschedule$(EXE): cronschedule.cpp cronschedule.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ cronschedule.$(OBJ) $(LIBS)
+
 csvdom$(EXE): csvdom.cpp csvdom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ csvdom.$(OBJ) $(LIBS)
 
@@ -413,6 +418,9 @@ linkedlist-types$(EXE): linkedlist-types.cpp linkedlist-types.$(OBJ)
 
 linkedlist-values$(EXE): linkedlist-values.cpp linkedlist-values.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ linkedlist-values.$(OBJ) $(LIBS)
+
+locale$(EXE): locale.cpp locale.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ locale.$(OBJ) $(LIBS)
 
 listener$(EXE): listener.cpp listener.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ listener.$(OBJ) $(LIBS)

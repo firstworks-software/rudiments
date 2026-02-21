@@ -14,6 +14,7 @@ SRCS = aes128.wt \
 	codetree.wt \
 	commandline.wt \
 	compiler.wt \
+	cronschedule.wt \
 	csvdom.wt \
 	csvsax.wt \
 	datetime.wt \
@@ -40,6 +41,7 @@ SRCS = aes128.wt \
 	jsondom.wt \
 	jsonsax.wt \
 	linkedlist.wt \
+	locale.wt \
 	listener.wt \
 	logger.wt \
 	md5.wt \
@@ -96,6 +98,7 @@ OBJS = aes128.html \
 	codetree.html \
 	commandline.html \
 	compiler.html \
+	cronschedule.html \
 	csvdom.html \
 	csvsax.html \
 	datetime.html \
@@ -122,6 +125,7 @@ OBJS = aes128.html \
 	jsondom.html \
 	jsonsax.html \
 	linkedlist.html \
+	locale.html \
 	listener.html \
 	logger.html \
 	md5.html \

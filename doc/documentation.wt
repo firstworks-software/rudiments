@@ -61,6 +61,10 @@
  * [programming/sensitivevalue.html Using the sensitivevalue class]
 * '''Date and Time'''
  * [programming/datetime.html Using the datetime class]
+* '''Cron'''
+ * [programming/cronschedule.html Using the cronschedule class]
+* '''Locale'''
+ * [programming/locale.html Using the locale class]
 * '''Containers'''
  * [programming/dynamicarray.html Using the dynamicarray class]
  * [programming/staticarray.html Using the staticarray class]
