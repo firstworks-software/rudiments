@@ -7,6 +7,7 @@
 	fixed date::parse() so that NULL datedelimiters enables all delimiters
 	added date::parse() with adjustshortyears option
 	added hash::getRequiredSaltSize()
+	fixed debugprintf macros to use updated methods
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout

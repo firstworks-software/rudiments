@@ -35,14 +35,14 @@
 	// working debug macros for more modern compilers
 	#ifdef DEBUG_MESSAGES
 		#ifdef DEBUG_TO_FILE
-			#define debugFunction() { if (f.getFileDescriptor()==-1) { f.dontGetCurrentPropertiesOnOpen(); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::evalPermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printf("%s:%s():%d:\n",__FILE__,__FUNCTION__,__LINE__); } }
+			#define debugFunction() { if (f.getFileDescriptor()==-1) { f.setGetCurrentPropertiesOnOpen(false); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::parsePermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printf("%s:%s():%d:\n",__FILE__,__FUNCTION__,__LINE__); } }
 			#ifdef _MSC_VER
-				#define debugPrintf(args,...) { if (f.getFileDescriptor()==-1) { f.dontGetCurrentPropertiesOnOpen(); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::evalPermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printf(args,__VA_ARGS__); } }
+				#define debugPrintf(args,...) { if (f.getFileDescriptor()==-1) { f.setGetCurrentPropertiesOnOpen(false); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::parsePermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printf(args,__VA_ARGS__); } }
 			#else
-				#define debugPrintf(args...) { if (f.getFileDescriptor()==-1) { f.dontGetCurrentPropertiesOnOpen(); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::evalPermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printf(args); } }
+				#define debugPrintf(args...) { if (f.getFileDescriptor()==-1) { f.setGetCurrentPropertiesOnOpen(false); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::parsePermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printf(args); } }
 			#endif
-			#define debugSafePrint(a,b) { if (f.getFileDescriptor()==-1) { f.dontGetCurrentPropertiesOnOpen(); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::evalPermString("rw-r--r--")); } f.safePrint(a,b); }
-			#define debugPrintBits(a) { if (f.getFileDescriptor()==-1) { f.dontGetCurrentPropertiesOnOpen(); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::evalPermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printBits(a); } }
+			#define debugSafePrint(a,b) { if (f.getFileDescriptor()==-1) { f.setGetCurrentPropertiesOnOpen(false); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::parsePermString("rw-r--r--")); } f.safePrint(a,b); }
+			#define debugPrintBits(a) { if (f.getFileDescriptor()==-1) { f.setGetCurrentPropertiesOnOpen(false); f.open(debugfile,O_RDWR|O_APPEND|O_CREAT,permissions::parsePermString("rw-r--r--")); } if (f.getFileDescriptor()!=-1) { f.printBits(a); } }
 		#else
 			#define debugFunction() stdoutput.printf("%s:%s():%d:\n",__FILE__,__FUNCTION__,__LINE__); stdoutput.flush();
 			#ifdef _MSC_VER
