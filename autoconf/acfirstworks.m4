@@ -1361,6 +1361,23 @@ AC_SUBST(FDECLSPEC)
 ])
 
 
+dnl checks to see if -std=c+98 compiler option works or not
+dnl if it does, then it sets the variable STDCXX98="-std=c++98"
+dnl if it does not , then it sets the variable STDCXX98=""
+AC_DEFUN([FW_CHECK_STDCXX98],
+[
+AC_MSG_CHECKING(for -std=c++98 option)
+FW_TRY_LINK([],[int a; a=1;],[-std=c++98],[],[],[STDCXX98="-std=c++98"],[STDCXX98=""])
+if ( test -n "$STDCXX98" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(STDCXX98)
+])
+
+
 
 
 dnl checks for minix platform and adds some defines to CPPFLAGS if it is
