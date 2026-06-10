@@ -1372,6 +1372,7 @@ if ( test -n "$STDCXX98" )
 then
 	AC_MSG_RESULT(yes)
 else
+	AC_MSG_RESULT(no)
 	AC_MSG_CHECKING(for -std=gnu++98 option)
 	FW_TRY_LINK([],[int a; a=1;],[-std=gnu++98],[],[],[STDCXX98="-std=gnu++98"],[STDCXX98=""])
 	if ( test -n "$STDCXX98" )
