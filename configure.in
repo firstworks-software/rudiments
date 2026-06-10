@@ -574,6 +574,7 @@ FW_CHECK_NULL_REDEFINE
 FW_CHECK_F_NO_BUILTIN
 
 FW_CHECK_RELRO_FPIC
+FW_CHECK_STDCXX98
 echo "******************************"
 
 dnl Checks for header files.
