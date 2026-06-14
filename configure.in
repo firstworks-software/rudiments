@@ -4542,6 +4542,40 @@ then
 		#include <dlfcn.h>
 	#endif],
 	dlmopen(0,"",0);,AC_DEFINE(RUDIMENTS_HAVE_DLMOPEN,1,Some systems have dlmopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for RTLD_NEXT)
+	FW_TRY_LINK([#define _GNU_SOURCE
+#ifdef RUDIMENTS_HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif],[void *rud_next=RTLD_NEXT;],[$CPPFLAGS],[$DLLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_RTLD_NEXT,1,Some systems have RTLD_NEXT) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	AC_MSG_CHECKING(for dlvsym)
+	FW_TRY_LINK([#define _GNU_SOURCE
+#ifdef RUDIMENTS_HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif],[dlvsym(0,"","");],[$CPPFLAGS],[$DLLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_DLVSYM,1,Some systems have dlvsym) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+	AC_MSG_CHECKING(for the glibc dlsym symbol version)
+	RUDIMENTS_DLSYMVER=""
+	for rud_dllib in libdl.so.2 libc.so.6
+	do
+		rud_dlpath=`$CC -print-file-name=$rud_dllib 2> /dev/null`
+		if ( test -r "$rud_dlpath" )
+		then
+			RUDIMENTS_DLSYMVER=`readelf -sW "$rud_dlpath" 2> /dev/null | grep ' dlsym@@' | sed 's/.*dlsym@@//' | head -1`
+			if ( test -n "$RUDIMENTS_DLSYMVER" )
+			then
+				break
+			fi
+		fi
+	done
+	if ( test -n "$RUDIMENTS_DLSYMVER" )
+	then
+		AC_DEFINE_UNQUOTED(RUDIMENTS_GLIBC_DLSYM_VERSION,"$RUDIMENTS_DLSYMVER",glibc dlsym symbol version for dlvsym)
+		AC_MSG_RESULT($RUDIMENTS_DLSYMVER)
+	else
+		AC_MSG_RESULT(none)
+	fi
 fi
 
 if ( test "$DLOPEN" = "yes" )

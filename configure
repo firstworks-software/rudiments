@@ -38732,6 +38732,117 @@ else $as_nop
 printf "%s\n" "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for RTLD_NEXT" >&5
+printf %s "checking for RTLD_NEXT... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS"
+LIBS="$DLLIB"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#define _GNU_SOURCE
+#ifdef RUDIMENTS_HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif
+int
+main (void)
+{
+void *rud_next=RTLD_NEXT;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_RTLD_NEXT 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for dlvsym" >&5
+printf %s "checking for dlvsym... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS"
+LIBS="$DLLIB"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#define _GNU_SOURCE
+#ifdef RUDIMENTS_HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif
+int
+main (void)
+{
+dlvsym(0,"","");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAVE_DLVSYM 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for the glibc dlsym symbol version" >&5
+printf %s "checking for the glibc dlsym symbol version... " >&6; }
+	RUDIMENTS_DLSYMVER=""
+	for rud_dllib in libdl.so.2 libc.so.6
+	do
+		rud_dlpath=`$CC -print-file-name=$rud_dllib 2> /dev/null`
+		if ( test -r "$rud_dlpath" )
+		then
+			RUDIMENTS_DLSYMVER=`readelf -sW "$rud_dlpath" 2> /dev/null | grep ' dlsym@@' | sed 's/.*dlsym@@//' | head -1`
+			if ( test -n "$RUDIMENTS_DLSYMVER" )
+			then
+				break
+			fi
+		fi
+	done
+	if ( test -n "$RUDIMENTS_DLSYMVER" )
+	then
+
+printf "%s\n" "#define RUDIMENTS_GLIBC_DLSYM_VERSION \"$RUDIMENTS_DLSYMVER\"" >>confdefs.h
+
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $RUDIMENTS_DLSYMVER" >&5
+printf "%s\n" "$RUDIMENTS_DLSYMVER" >&6; }
+	else
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: none" >&5
+printf "%s\n" "none" >&6; }
+	fi
 fi
 
 if ( test "$DLOPEN" = "yes" )

@@ -66,6 +66,9 @@
 /* getsockopt has a void * on most systems */
 #undef RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE
 
+/* glibc dlsym symbol version for dlvsym */
+#undef RUDIMENTS_GLIBC_DLSYM_VERSION
+
 /* SSL has ASN1_STRING_get0_data */
 #undef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA
 
@@ -458,6 +461,9 @@
 
 /* Some systems have dlopen */
 #undef RUDIMENTS_HAVE_DLOPEN
+
+/* Some systems have dlvsym */
+#undef RUDIMENTS_HAVE_DLVSYM
 
 /* Some systems have dup */
 #undef RUDIMENTS_HAVE_DUP
@@ -1202,6 +1208,9 @@
 
 /* Do we have real-time-clock RTC_SET_TIME support */
 #undef RUDIMENTS_HAVE_RTC_SET_TIME
+
+/* Some systems have RTLD_NEXT */
+#undef RUDIMENTS_HAVE_RTLD_NEXT
 
 /* On some systems you cant include byteswap.h after netinet/in.h */
 #undef RUDIMENTS_HAVE_SAFE_BYTESWAP_H_AFTER_NETINET_IN_H

@@ -454,6 +454,15 @@
 /* Some systems have dlopen */
 /* #undef RUDIMENTS_HAVE_DLOPEN */
 
+/* Some systems have dlvsym */
+/* #undef RUDIMENTS_HAVE_DLVSYM */
+
+/* Some systems have RTLD_NEXT */
+/* #undef RUDIMENTS_HAVE_RTLD_NEXT */
+
+/* glibc dlsym symbol version for dlvsym */
+/* #undef RUDIMENTS_GLIBC_DLSYM_VERSION */
+
 /* Some systems have dup */
 /* #undef RUDIMENTS_HAVE_DUP */
 

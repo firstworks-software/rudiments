@@ -470,6 +470,33 @@ void *dynamiclib::getSymbol(const char *symbol) {
 	#endif
 }
 
+void *dynamiclib::getNextSymbol(const char *symbol) {
+	#if defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+		#if defined(RUDIMENTS_HAVE_DLVSYM) && \
+			defined(RUDIMENTS_GLIBC_DLSYM_VERSION)
+			// Once dlsym() has been interposed, dlsym() can't be used
+			// to find the real dlsym(), and on glibc dlsym is a
+			// versioned symbol, so use dlvsym() with the glibc dlsym
+			// symbol version that configure detected.
+			if (!charstring::compare(symbol,"dlsym")) {
+				return dlvsym(RTLD_NEXT,"dlsym",
+						RUDIMENTS_GLIBC_DLSYM_VERSION);
+			}
+		#endif
+		// look the symbol up in the next object in the load order,
+		// reusing getSymbol() with an RTLD_NEXT handle
+		dynamiclib	dl;
+		dl.pvt->_handle=RTLD_NEXT;
+		void	*sym=dl.getSymbol(symbol);
+		// don't let the destructor dlclose() RTLD_NEXT
+		dl.pvt->_handle=NULL;
+		return sym;
+	#else
+		RUDIMENTS_SET_ENOSYS
+		return NULL;
+	#endif
+}
+
 char *dynamiclib::getError() {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		if (_errormutex && !_errormutex->lock()) {

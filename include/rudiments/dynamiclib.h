@@ -69,6 +69,13 @@ class RUDIMENTS_DLLSPEC dynamiclib : public object {
 		 *  an error occurs or if no library is currently open. */
 		void	*getSymbol(const char *symbol);
 
+		/** Returns a handle to the next definition of "symbol" in
+		 *  the load order after the caller (the platform's RTLD_NEXT),
+		 *  so an interposed function can call through to the real
+		 *  one, or NULL if there is no such definition or the
+		 *  platform has no equivalent.  No library need be open. */
+		static void	*getNextSymbol(const char *symbol);
+
 		/** Returns a human-readable description of the previous
 		 *  error that occurred, or NULL if no error has
 		 *  occurred.
