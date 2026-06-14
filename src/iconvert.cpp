@@ -945,13 +945,13 @@ size_t iconvert::getToBufferRemaining() {
 void iconvert::close() {
 	if (pvt->_open) {
 		#ifdef RUDIMENTS_HAVE_ICONV
-			// NOTE: some platforms (SCO UW 7.0.1) crash on
-			// iconv_close(-1).  If iconv_open() returned -1 then
-			// code above should have set pvt->_open=false, so
-			// so iconv_close(-1) should never be called, but it's
-			// worth mentioning in case any of this code gets
-			// changed in the future.
-			iconv_close(pvt->_i);
+			// Some native iconvs (Solaris 11, SCO UW 7.0.1) crash on
+			// iconv_close(-1), and iconv_open() can fail (returning -1)
+			// when a codeset is unsupported, so only close a valid
+			// descriptor.
+			if (pvt->_i!=(iconv_t)-1) {
+				iconv_close(pvt->_i);
+			}
 			pvt->_i=(iconv_t)-1;
 		#endif
 		pvt->_open=false;
