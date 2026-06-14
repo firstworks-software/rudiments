@@ -23935,6 +23935,123 @@ export LD_LIBRARY_PATH
 
 
 
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SHA512_CTX" >&5
+printf %s "checking for SHA512_CTX... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+LIBS="$SSLLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <openssl/sha.h>
+int
+main (void)
+{
+SHA512_CTX c;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAS_SHA512_CTX 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for PKCS5_PBKDF2_HMAC" >&5
+printf %s "checking for PKCS5_PBKDF2_HMAC... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+LIBS="$SSLLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <openssl/evp.h>
+int
+main (void)
+{
+PKCS5_PBKDF2_HMAC(0,0,0,0,0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for PKCS5_PBKDF2_HMAC_SHA1" >&5
+printf %s "checking for PKCS5_PBKDF2_HMAC_SHA1... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+LIBS="$SSLLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <openssl/evp.h>
+int
+main (void)
+{
+PKCS5_PBKDF2_HMAC_SHA1(0,0,0,0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC_SHA1 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
 		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for EVP_CIPHER_CTX_new" >&5
 printf %s "checking for EVP_CIPHER_CTX_new... " >&6; }
 

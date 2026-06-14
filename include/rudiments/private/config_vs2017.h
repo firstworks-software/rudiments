@@ -174,8 +174,17 @@
 /* Rudiments supports PCRE */
 /* #undef RUDIMENTS_HAS_PCRE */
 
+/* SSL has generic PKCS5_PBKDF2_HMAC */
+/* #undef RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC */
+
+/* SSL has PKCS5_PBKDF2_HMAC_SHA1 */
+/* #undef RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC_SHA1 */
+
 /* SSL has SHA256_CTX */
 /* #undef RUDIMENTS_HAS_SHA256_CTX */
+
+/* SSL has SHA512_CTX */
+/* #undef RUDIMENTS_HAS_SHA512_CTX */
 
 /* Rudiments supports SSL */
 /* #undef RUDIMENTS_HAS_SSL */
