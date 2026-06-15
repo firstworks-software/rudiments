@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: David Muse <david.muse@firstworks.com>
 Homepage: http://rudiments.sourceforge.net
 Standards-Version: 3.9.6
-Build-Depends: debhelper (>=9),autotools-dev, libedit-dev, @LIBSSL_DEV@, libcurl4-openssl-dev, libkrb5-dev
+Build-Depends: debhelper (>=9),autotools-dev, libedit-dev, @LIBSSL_DEV@, libcurl4-openssl-dev, libkrb5-dev, apache2-dev
 
 Package: rudiments
 Section: libs
@@ -21,7 +21,7 @@ Description: C++ class library for developing systems and applications
 Package: rudiments-dev
 Section: libdevel
 Architecture: any
-Depends: rudiments (= ${binary:Version}), ${misc:Depends}
+Depends: rudiments (= ${binary:Version}), ${misc:Depends}, libedit-dev, @LIBSSL_DEV@, libcurl4-openssl-dev, libkrb5-dev, apache2-dev
 Description: Development files for rudiments
  Development files for rudiments.
 

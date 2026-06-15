@@ -11,6 +11,7 @@
 	made pbkdf2 build against pre-1.0.0 openssl (falls back to sha-1)
 	fixed iconvert crash (iconv_close(-1)) when iconv_open() fails (e.g. native solaris iconv)
 	added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol wrapper)
+	added dependency info to the debian/ubuntu package control file
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout
