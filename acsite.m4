@@ -1249,31 +1249,11 @@ statfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="freebsd style")
 fi
 
-dnl oldfreebsd is a little different than freebsd
-if ( test "$STATFS_STYLE" = "unknown" )
-then
-AC_TRY_COMPILE([#include <sys/param.h>
-#include <sys/mount.h>],
-[/* old freebsd style */
-struct statfs sfs;
-sfs.f_bsize=0;
-sfs.f_iosize=0;
-sfs.f_blocks=0;
-sfs.f_bfree=0;
-sfs.f_bavail=0;
-sfs.f_files=0;
-sfs.f_ffree=0;
-sfs.f_fsid.val[0]=0;
-sfs.f_owner=0;
-sfs.f_type=0;
-sfs.f_flags=0;
-sfs.f_mntonname[0]=0;
-sfs.f_mntfromname[0]=0;
-statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_OLDFREEBSD_STATFS,1,Old FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="oldfreebsd style")
-fi
-
-dnl netbsd is like freebsd but lacks a few fields
+dnl netbsd is like freebsd but with extra fields (f_syncwrites, etc.).
+dnl test it before oldfreebsd: netbsd's struct statfs also satisfies the
+dnl oldfreebsd probe below, so oldfreebsd would match netbsd first if it
+dnl came first, and getTypeName would then switch on integer MOUNT_*
+dnl constants that netbsd does not define (see #8280).
 if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/param.h>
@@ -1298,6 +1278,30 @@ sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATFS,1,NetBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="old netbsd style")
+fi
+
+dnl oldfreebsd is a little different than freebsd
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_COMPILE([#include <sys/param.h>
+#include <sys/mount.h>],
+[/* old freebsd style */
+struct statfs sfs;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_type=0;
+sfs.f_flags=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);]
+,AC_DEFINE(RUDIMENTS_HAVE_OLDFREEBSD_STATFS,1,Old FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="oldfreebsd style")
 fi
 
 dnl netbsd-3.0 is called statvfs and is different from real statvfs
