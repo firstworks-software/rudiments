@@ -4313,8 +4313,11 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 pathconf("",0);,AC_DEFINE(RUDIMENTS_HAVE_PATHCONF,1,Some systems have pathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+dnl make sure to link this one, FreeBSD 3.x (and other old systems)
+dnl declare it in the headers but do not define it in the threaded
+dnl libc (libc_r) that -pthread links against
 AC_MSG_CHECKING(for fpathconf)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
 fpathconf(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FPATHCONF,1,Some systems have fpathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))

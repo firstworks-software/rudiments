@@ -94,8 +94,10 @@ bool dh::generateKeys() {
 		// set the prime modulus and generator/base
 		// FIXME: test for DH_set0_pqg in configure
 		// and use the result here
-		#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
-				!defined(LIBRESSL_VERSION_NUMBER)
+		#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && \
+				!defined(LIBRESSL_VERSION_NUMBER)) || \
+				(defined(LIBRESSL_VERSION_NUMBER) && \
+				LIBRESSL_VERSION_NUMBER >= 0x2070000fL)
 			DH_set0_pqg(pvt->_dh,
 				BN_bin2bn(pvt->_dhp.getBuffer(),
 						pvt->_dhp.getSize(),NULL),
@@ -130,8 +132,10 @@ bool dh::generateKeys() {
 		const BIGNUM	*pubkey=NULL;
 		// FIXME: test for DH_get0_key in configure
 		// and use the result here
-		#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
-				!defined(LIBRESSL_VERSION_NUMBER)
+		#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && \
+				!defined(LIBRESSL_VERSION_NUMBER)) || \
+				(defined(LIBRESSL_VERSION_NUMBER) && \
+				LIBRESSL_VERSION_NUMBER >= 0x2070000fL)
 			DH_get0_key(pvt->_dh,&pubkey,&privkey);
 		#else
 			privkey=pvt->_dh->priv_key;

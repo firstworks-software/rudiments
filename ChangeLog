@@ -1,4 +1,5 @@
 2.2 - added isSupported() to encryption/hash
+	fixed statfs-style detection so NetBSD 2.x is not mis-detected as old FreeBSD (filesystem.cpp getTypeName failed to compile)
 	added block cipher modes to encryption and aes128
 	fixed return value of sha256::append() when not using openssl
 	added pbkdf2 class
@@ -12,6 +13,7 @@
 	fixed iconvert crash (iconv_close(-1)) when iconv_open() fails (e.g. native solaris iconv)
 	added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol wrapper)
 	added dependency info to the debian/ubuntu package control file
+	fixed dh class build on modern LibreSSL (opaque DH struct)
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout
