@@ -503,6 +503,7 @@ class RUDIMENTS_DLLSPEC datetime : public object {
 		 *  D - 1 or 2 digit day, not left padded with 0
 		 *  MM - 2 digit month, left padded with 0
 		 *  MON - uppercase, 3-character month abbreviation
+		 *  Mon - mixed-case, 3-character month abbreviation
 		 *  Month - mixed-case full name of the month
 		 *  YYYY - 4 digit year, left padded with 0
 		 *  YY - 2 digit year, left padded with 0

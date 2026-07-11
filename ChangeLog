@@ -14,6 +14,7 @@
 	added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol wrapper)
 	added dependency info to the debian/ubuntu package control file
 	fixed dh class build on modern LibreSSL (opaque DH struct)
+	added Mon (mixed-case month abbreviation) format string to datetime::formatAs()
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout

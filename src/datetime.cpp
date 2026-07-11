@@ -2135,6 +2135,9 @@ char *datetime::formatAs(const char *format,
 		} else if (!charstring::compare(ptr,"Month",5)) {
 			output.append(longmonths[month-1]);
 			ptr=ptr+5;
+		} else if (!charstring::compare(ptr,"Mon",3)) {
+			output.append(_monthabbr[month-1]);
+			ptr=ptr+3;
 		} else if (!charstring::compare(ptr,"YYYY",4)) {
 			charstring::printf(buf,7,"%04d",year);
 			output.append(buf);
