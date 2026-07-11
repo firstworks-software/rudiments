@@ -19,6 +19,13 @@
 	#ifdef RUDIMENTS_HAVE_VARCHAR_H
 		#include <varchar.h>
 	#endif
+	// Solaris 2.5.1 <widec.h> (pulled in by <wctype.h>) defines getwc/
+	// putwc/getwchar/putwchar as macros that clash with the <wchar.h>
+	// prototypes; drop them first.
+	#undef getwc
+	#undef putwc
+	#undef getwchar
+	#undef putwchar
 	#include <wchar.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WCSTR_H

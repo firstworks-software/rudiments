@@ -43,6 +43,14 @@ thread::thread() : object() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pvt->_thr=0;
 		pthread_attr_init(&pvt->_attr);
+		#ifdef PTHREAD_SCOPE_SYSTEM
+			// request bound (system-scope) threads.  on M:N thread
+			// libraries like Solaris 2.x, process-scope threads can share
+			// one LWP and livelock two compute-bound threads; system scope
+			// binds each to its own kernel thread.  a no-op where system
+			// scope is already the default (Linux, modern Solaris).
+			pthread_attr_setscope(&pvt->_attr,PTHREAD_SCOPE_SYSTEM);
+		#endif
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		pvt->_thr=INVALID_HANDLE_VALUE;
 		pvt->_stacksize=sys::getMinThreadStackSize();

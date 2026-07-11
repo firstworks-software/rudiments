@@ -390,7 +390,7 @@ char *sys::getHostName() {
 		}
 
 		// bail if there weren't any
-		if (!nodenames.getLength()) {
+		if (!nodenames.getCount()) {
 			return NULL;
 		}
 
@@ -404,8 +404,9 @@ char *sys::getHostName() {
 		fname.append("/etc/")->append(nodenames.getFirst()->getValue());
 		char	*hostname=file::getContents(fname.getString());
 
-		// clean up the list
-		nodenames.clearAndArrayDelete();
+		// clean up the list (each name was allocated with new[])
+		nodenames.setManageArrayValues(true);
+		nodenames.clear();
 
 		// return the hostname
 		return (!charstring::isNullOrEmpty(hostname))?hostname:NULL;
