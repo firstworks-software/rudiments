@@ -28,6 +28,7 @@ int main(int argc, const char **argv) {
 	bool	ishpux=!charstring::compare(osname,"HP-UX");
 	bool	isscosv=!charstring::compare(osname,"SCO_SV");
 	bool	islinux=!charstring::compare(osname,"Linux");
+	bool	iswindows=!charstring::compare(osname,"Windows");
 	bool	isoldglibc=
 #if defined(__GLIBC__) && (__GLIBC__<2 || (__GLIBC__==2 && __GLIBC_MINOR__<=3))
 				true;
@@ -95,9 +96,86 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
-	// Bail here for SCO_SV.  Though locales other than C are technically
-	// supported, they are rarely installed.
-	if (isscosv) {
+	stdoutput.printf("strings and settings for the C locale:\n");
+	char	*c=NULL;
+	uint8_t	n=0;
+	bool	b=false;
+	monetary_sign_position_t	m;
+	c=locale::getNumericDecimalPoint();
+	test("numeric decimal point",!charstring::compare(c,"."));
+	delete[] c;
+	c=locale::getNumericDigitGroupSeparator();
+	test("numeric digit group separator",!charstring::compare(c,""));
+	delete[] c;
+	n=locale::getNumericDigitGroupCount(0);
+	test("numeric digit group count(0)",n==0);
+	c=locale::getMonetaryDecimalPoint();
+	test("monetary decimal point",!charstring::compare(c,""));
+	delete[] c;
+	c=locale::getMonetaryDigitGroupSeparator();
+	test("monetary digit group separator",!charstring::compare(c,""));
+	delete[] c;
+	n=locale::getMonetaryDigitGroupCount(0);
+	test("monetary digit group count(0)",n==0);
+	c=locale::getMonetaryPositiveSign();
+	test("monetary positive sign",!charstring::compare(c,""));
+	delete[] c;
+	c=locale::getMonetaryNegativeSign();
+	test("monetary negative sign",!charstring::compare(c,""));
+	delete[] c;
+
+	c=locale::getLocalCurrencySymbol();
+	test("local currency symbol",!charstring::compare(c,""));
+	delete[] c;
+	n=locale::getLocalMonetaryDecimalDigits();
+	test("local monetary decimal digits",n==255);
+	b=locale::getLocalCurrencySymbolPreceedsPositiveValue();
+	test("local currency symbol preceeds positive value",!b);
+	b=locale::getLocalSpaceSeparatesCurrencySymbolAndPositiveValue();
+	test("local space separates currency symbol and positive value",!b);
+	m=locale::getLocalMonetaryPositiveSignPosition();
+	test("local monetary sign position for positive values",
+			m==MONETARY_SIGN_POSITION_ERROR);
+	b=locale::getLocalCurrencySymbolPreceedsNegativeValue();
+	test("local currency symbol preceeds negative value",!b);
+	b=locale::getLocalSpaceSeparatesCurrencySymbolAndNegativeValue();
+	test("local space separates currency symbol and negative value",!b);
+	m=locale::getLocalMonetaryNegativeSignPosition();
+	test("local monetary sign position for negative values",
+			m==MONETARY_SIGN_POSITION_ERROR);
+	c=locale::getInternationalCurrencySymbol();
+	test("int currency symbol",!charstring::compare(c,""));
+	delete[] c;
+	c=locale::getInternationalCurrencySymbolSeparator();
+	test("int currency separator",!charstring::compare(c,""));
+	delete[] c;
+	n=locale::getInternationalMonetaryDecimalDigits();
+	test("int monetary decimal digits",n==255);
+	c=locale::getInternationalCurrencySymbol();
+	test("int currency symbol",!charstring::compare(c,""));
+	delete[] c;
+	b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
+	test("int currency symbol preceeds positive value",!b);
+	b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
+	test("int space separates currency symbol and positive value",!b);
+	m=locale::getInternationalMonetaryPositiveSignPosition();
+	test("int monetary sign position for positive values",
+			m==MONETARY_SIGN_POSITION_ERROR);
+	b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
+	test("int currency symbol preceeds negative value",!b);
+	b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
+	test("int space separates currency symbol and negative value",!b);
+	m=locale::getInternationalMonetaryNegativeSignPosition();
+	test("int monetary sign position for negative values",
+			m==MONETARY_SIGN_POSITION_ERROR);
+	stdoutput.printf("\n");
+
+	// Bail here for SCO_SV and Windows.  On SCO_SV, locales other than C
+	// are technically supported but rarely installed.  On Windows, the
+	// MSVC C runtime's setlocale doesn't accept POSIX-style names like
+	// "en_US.UTF-8" or "POSIX", so there's no portable non-C locale name
+	// to set below.
+	if (isscosv || iswindows) {
 		return 0;
 	}
 
@@ -396,80 +474,6 @@ int main(int argc, const char **argv) {
 		test("getTelephone",
 			!charstring::compare(locale::getTelephone(),"C"));
 	}
-	stdoutput.printf("\n");
-
-	stdoutput.printf("strings and settings for the C locale:\n");
-	char	*c=NULL;
-	uint8_t	n=0;
-	bool	b=false;
-	monetary_sign_position_t	m;
-	c=locale::getNumericDecimalPoint();
-	test("numeric decimal point",!charstring::compare(c,"."));
-	delete[] c;
-	c=locale::getNumericDigitGroupSeparator();
-	test("numeric digit group separator",!charstring::compare(c,""));
-	delete[] c;
-	n=locale::getNumericDigitGroupCount(0);
-	test("numeric digit group count(0)",n==0);
-	c=locale::getMonetaryDecimalPoint();
-	test("monetary decimal point",!charstring::compare(c,""));
-	delete[] c;
-	c=locale::getMonetaryDigitGroupSeparator();
-	test("monetary digit group separator",!charstring::compare(c,""));
-	delete[] c;
-	n=locale::getMonetaryDigitGroupCount(0);
-	test("monetary digit group count(0)",n==0);
-	c=locale::getMonetaryPositiveSign();
-	test("monetary positive sign",!charstring::compare(c,""));
-	delete[] c;
-	c=locale::getMonetaryNegativeSign();
-	test("monetary negative sign",!charstring::compare(c,""));
-	delete[] c;
-
-	c=locale::getLocalCurrencySymbol();
-	test("local currency symbol",!charstring::compare(c,""));
-	delete[] c;
-	n=locale::getLocalMonetaryDecimalDigits();
-	test("local monetary decimal digits",n==255);
-	b=locale::getLocalCurrencySymbolPreceedsPositiveValue();
-	test("local currency symbol preceeds positive value",!b);
-	b=locale::getLocalSpaceSeparatesCurrencySymbolAndPositiveValue();
-	test("local space separates currency symbol and positive value",!b);
-	m=locale::getLocalMonetaryPositiveSignPosition();
-	test("local monetary sign position for positive values",
-			m==MONETARY_SIGN_POSITION_ERROR);
-	b=locale::getLocalCurrencySymbolPreceedsNegativeValue();
-	test("local currency symbol preceeds negative value",!b);
-	b=locale::getLocalSpaceSeparatesCurrencySymbolAndNegativeValue();
-	test("local space separates currency symbol and negative value",!b);
-	m=locale::getLocalMonetaryNegativeSignPosition();
-	test("local monetary sign position for negative values",
-			m==MONETARY_SIGN_POSITION_ERROR);
-	c=locale::getInternationalCurrencySymbol();
-	test("int currency symbol",!charstring::compare(c,""));
-	delete[] c;
-	c=locale::getInternationalCurrencySymbolSeparator();
-	test("int currency separator",!charstring::compare(c,""));
-	delete[] c;
-	n=locale::getInternationalMonetaryDecimalDigits();
-	test("int monetary decimal digits",n==255);
-	c=locale::getInternationalCurrencySymbol();
-	test("int currency symbol",!charstring::compare(c,""));
-	delete[] c;
-	b=locale::getInternationalCurrencySymbolPreceedsPositiveValue();
-	test("int currency symbol preceeds positive value",!b);
-	b=locale::getInternationalSpaceSeparatesCurrencySymbolAndPositiveValue();
-	test("int space separates currency symbol and positive value",!b);
-	m=locale::getInternationalMonetaryPositiveSignPosition();
-	test("int monetary sign position for positive values",
-			m==MONETARY_SIGN_POSITION_ERROR);
-	b=locale::getInternationalCurrencySymbolPreceedsNegativeValue();
-	test("int currency symbol preceeds negative value",!b);
-	b=locale::getInternationalSpaceSeparatesCurrencySymbolAndNegativeValue();
-	test("int space separates currency symbol and negative value",!b);
-	m=locale::getInternationalMonetaryNegativeSignPosition();
-	test("int monetary sign position for negative values",
-			m==MONETARY_SIGN_POSITION_ERROR);
 	stdoutput.printf("\n");
 
 	// openbsd's en_US.UTF-8 is very inconsistent, compared to other
