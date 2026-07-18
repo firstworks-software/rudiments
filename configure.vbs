@@ -48,6 +48,7 @@ srcs="winsock.cpp "+_
 	"client.cpp "+_
 	"commandline.cpp "+_
 	"des.cpp "+_
+	"dh.cpp "+_
 	"datetime.cpp "+_
 	"device.cpp "+_
 	"directory.cpp "+_
@@ -152,6 +153,7 @@ lobjs="winsock.obj "+_
 	"client.obj "+_
 	"commandline.obj "+_
 	"des.obj "+_
+	"dh.obj "+_
 	"datetime.obj "+_
 	"device.obj "+_
 	"directory.obj "+_
@@ -261,6 +263,7 @@ headers1="table.h "+_
 	"client.h "+_
 	"commandline.h "+_
 	"des.h "+_
+	"dh.h "+_
 	"datetime.h "+_
 	"device.h "+_
 	"directory.h "+_
@@ -397,6 +400,8 @@ privateheaders1="inttypes.h "+_
 	"commandlineincludes.h "+_
 	"des.h "+_
 	"desincludes.h "+_
+	"dh.h "+_
+	"dhincludes.h "+_
 	"datetime.h "+_
 	"datetimeincludes.h "+_
 	"device.h "+_
