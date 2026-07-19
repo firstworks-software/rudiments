@@ -337,9 +337,6 @@
 /* Some systems have dbghelp.h */
 #define RUDIMENTS_HAVE_DBGHELP_H 1
 
-/* Some systems have char16_t */
-/* #undef RUDIMENTS_HAVE_CHAR16_T */
-
 /* Some systems have char32_t */
 /* #undef RUDIMENTS_HAVE_CHAR32_T */
 

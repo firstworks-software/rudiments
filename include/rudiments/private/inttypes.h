@@ -201,13 +201,9 @@
 	typedef uint8_t	byte_t;
 #endif
 
-// define char(8|16|32)_t
+// define char(8|32)_t
 #ifndef RUDIMENTS_HAVE_CHAR8_T
 	typedef	uint8_t		char8_t;
-#endif
-#if !defined(RUDIMENTS_HAVE_CHAR16_T) && \
-	defined(__cplusplus) && (__cplusplus<201103L)
-	typedef	uint16_t	char16_t;
 #endif
 #ifndef RUDIMENTS_HAVE_CHAR32_T
 	typedef	uint32_t	char32_t;

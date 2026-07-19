@@ -342,9 +342,6 @@
 /* Some systems have CaptureStackBackTrace */
 #undef RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE
 
-/* Some systems have char16_t */
-#undef RUDIMENTS_HAVE_CHAR16_T
-
 /* Some systems have char32_t */
 #undef RUDIMENTS_HAVE_CHAR32_T
 
