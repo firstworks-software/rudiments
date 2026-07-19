@@ -6,6 +6,16 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 
+// glibc's dlfcn.h keeps RTLD_NEXT and dlvsym behind __USE_GNU, so on old glibc
+// (eg. redhat 7.2) the RUDIMENTS_HAVE_RTLD_NEXT guard is true yet RTLD_NEXT is
+// undeclared unless these are defined before dlfcn.h is included
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
+
 #if defined(RUDIMENTS_HAVE_DLFCN_H)
 	#include <dlfcn.h>
 	#if defined(RUDIMENTS_HAVE_LINK_H)
