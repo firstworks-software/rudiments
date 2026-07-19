@@ -404,6 +404,62 @@ then
 		AC_MSG_WARN(gss_oid_to_str and gss_release_oid are required for GSS.)
 	fi
 
+	dnl The ssl/pcre/curl/apache checks fold their includes into
+	dnl BASECPPFLAGS ahead of GSSINCLUDES, so on a host with two krb5 stacks
+	dnl the build can compile gssapi.h from one implementation while GSSLIBS
+	dnl links the other.  On NetBSD 10 (base Heimdal in /usr/lib, pkgsrc MIT
+	dnl in /usr/pkg/lib) the ssl check leaks -I/usr/pkg/include, so gss.cpp
+	dnl compiles against MIT headers but links base Heimdal -lgssapi, leaving
+	dnl GSS_C_NT_USER_NAME and GSS_C_NT_HOSTBASED_SERVICE undefined.  Verify
+	dnl the gss name-type symbols link against GSSLIBS using the includes the
+	dnl build will use (SSLINCLUDES is already set here); if not, try other
+	dnl krb5-config's until one is consistent.  On single-stack hosts the
+	dnl first check passes and nothing changes.
+	if ( test -n "$GSSLIBS" )
+	then
+		AC_MSG_CHECKING(whether GSS libs match the build's gssapi.h)
+		GSSCONSISTENT=""
+		FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_USER_NAME; gss_OID b=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $SSLINCLUDES $GSSINCLUDES],[$GSSLIBS],[],[GSSCONSISTENT="yes"],[])
+		if ( test -n "$GSSCONSISTENT" )
+		then
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+			for altkrb5config in /usr/pkg/bin/krb5-config /usr/lib/mit/bin/krb5-config /usr/local/bin/krb5-config
+			do
+				if ( test ! -x "$altkrb5config" )
+				then
+					continue
+				fi
+				ALTGSSLIBS=`$altkrb5config --libs gssapi 2> /dev/null | grep -v Unknown`
+				if ( test -z "$ALTGSSLIBS" )
+				then
+					continue
+				fi
+				ALTKRBLIBS=`$altkrb5config --libs krb5 2> /dev/null | grep -v Unknown`
+				ALTGSSLIBS="$ALTGSSLIBS $ALTKRBLIBS"
+				ALTGSSINCLUDES=`$altkrb5config --cflags gssapi 2> /dev/null | grep -v Unknown`
+				ALTKRBINCLUDES=`$altkrb5config --cflags krb5 2> /dev/null | grep -v Unknown`
+				if ( test -n "$ALTGSSINCLUDES" )
+				then
+					ALTGSSINCLUDES="$ALTGSSINCLUDES $ALTKRBINCLUDES"
+				fi
+				AC_MSG_CHECKING(whether $altkrb5config gives consistent GSS libs)
+				ALTCONSISTENT=""
+				FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_USER_NAME; gss_OID b=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $SSLINCLUDES $ALTGSSINCLUDES],[$ALTGSSLIBS],[],[ALTCONSISTENT="yes"],[])
+				if ( test -n "$ALTCONSISTENT" )
+				then
+					AC_MSG_RESULT(yes)
+					GSSLIBS="$ALTGSSLIBS"
+					GSSINCLUDES="$ALTGSSINCLUDES"
+					break
+				else
+					AC_MSG_RESULT(no)
+				fi
+			done
+		fi
+	fi
+
 	if ( test -n "$GSSLIBS" )
 	then
 		HAVE_GSS="yes"
