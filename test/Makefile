@@ -79,6 +79,7 @@ PROGS3= handoff \
 	mvcproperties \
 	aes128 \
 	pbkdf2 \
+	dh \
 	table \
 	scalar \
 	sensitivevalue \
@@ -329,6 +330,9 @@ aes128: aes128.cpp aes128.$(OBJ)
 
 pbkdf2: pbkdf2.cpp pbkdf2.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pbkdf2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+dh: dh.cpp dh.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dh.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 table: table.cpp table.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) table.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

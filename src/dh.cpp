@@ -92,26 +92,30 @@ bool dh::generateKeys() {
 	#if defined(RUDIMENTS_HAS_SSL)
 
 		// set the prime modulus and generator/base
-		// FIXME: test for DH_set0_pqg in configure
-		// and use the result here
-		#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && \
-				!defined(LIBRESSL_VERSION_NUMBER)) || \
-				(defined(LIBRESSL_VERSION_NUMBER) && \
-				LIBRESSL_VERSION_NUMBER >= 0x2070000fL)
-			DH_set0_pqg(pvt->_dh,
-				BN_bin2bn(pvt->_dhp.getBuffer(),
-						pvt->_dhp.getSize(),NULL),
-				NULL,
-				BN_bin2bn(pvt->_dhg.getBuffer(),
-						pvt->_dhg.getSize(),NULL));
+		#if defined(RUDIMENTS_HAS_DH_SET0_PQG)
+			// DH_set0_pqg() takes ownership of the BIGNUMs on
+			// success but not on failure, so free them ourselves
+			// if it fails
+			BIGNUM	*p=BN_bin2bn(pvt->_dhp.getBuffer(),
+						pvt->_dhp.getSize(),NULL);
+			BIGNUM	*g=BN_bin2bn(pvt->_dhg.getBuffer(),
+						pvt->_dhg.getSize(),NULL);
+			if (!DH_set0_pqg(pvt->_dh,p,NULL,g)) {
+				BN_free(p);
+				BN_free(g);
+				setError(DH_ERROR_INVALID_PARAMETERS);
+				return false;
+			}
 		#else
+			// assigning to ->p and ->g transfers ownership to the
+			// DH; the old values (NULL on the first call) are freed
+			// here before being replaced
 			BN_free(pvt->_dh->p);
 			pvt->_dh->p=BN_bin2bn(pvt->_dhp.getBuffer(),
 						pvt->_dhp.getSize(),NULL);
 			BN_free(pvt->_dh->g);
 			pvt->_dh->g=BN_bin2bn(pvt->_dhg.getBuffer(),
 						pvt->_dhg.getSize(),NULL);
-			// FIXME: free these BIGNUMs
 		#endif
 
 		// check for invalid parameters
@@ -130,12 +134,7 @@ bool dh::generateKeys() {
 		// get the keys
 		const BIGNUM	*privkey=NULL;
 		const BIGNUM	*pubkey=NULL;
-		// FIXME: test for DH_get0_key in configure
-		// and use the result here
-		#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && \
-				!defined(LIBRESSL_VERSION_NUMBER)) || \
-				(defined(LIBRESSL_VERSION_NUMBER) && \
-				LIBRESSL_VERSION_NUMBER >= 0x2070000fL)
+		#if defined(RUDIMENTS_HAS_DH_GET0_KEY)
 			DH_get0_key(pvt->_dh,&pubkey,&privkey);
 		#else
 			privkey=pvt->_dh->priv_key;

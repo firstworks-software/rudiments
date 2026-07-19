@@ -87,6 +87,12 @@
 /* libcurl has curl_version_info */
 #undef RUDIMENTS_HAS_CURL_VERSION_INFO
 
+/* SSL has DH_get0_key */
+#undef RUDIMENTS_HAS_DH_GET0_KEY
+
+/* SSL has DH_set0_pqg */
+#undef RUDIMENTS_HAS_DH_SET0_PQG
+
 /* SSL has EVP_AES_128_CBC */
 #undef RUDIMENTS_HAS_EVP_AES_128_CBC
 
