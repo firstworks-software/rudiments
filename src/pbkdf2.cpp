@@ -143,7 +143,7 @@ const byte_t *pbkdf2::getHash() {
 		#endif
 
 		if (!success) {
-			// FIXME: setError(...)
+			setError(ERR_GET_REASON(ERR_get_error()));
 			delete[] key;
 			return NULL;
 		}
