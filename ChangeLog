@@ -15,6 +15,7 @@
 	added dependency info to the debian/ubuntu package control file
 	fixed dh class build on modern LibreSSL (opaque DH struct)
 	added Mon (mixed-case month abbreviation) format string to datetime::formatAs()
+	fixed pthread detection on FreeBSD 15 (configure left PTHREADLIB empty because the probe only link-tested pthread_exit, which libc resolves with a weak stub; now it also tests pthread_create and links -lpthread, which libtool keeps, so librudiments.so needs libthr)
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout
