@@ -3,6 +3,7 @@
 
 #include <rudiments/dom.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/dictionary.h>
 #include <rudiments/filesystem.h>
 #include <rudiments/file.h>
@@ -217,6 +218,22 @@ ssize_t dom::writeXml(output *out, bool indent) {
 	return dom::writeNode(getRootNode(),out,indent,&indentlevel);
 }
 
+static bool isIgnorableWhitespace(domnode *dn) {
+	if (dn->getType()!=TEXT_DOMNODETYPE) {
+		return false;
+	}
+	const char	*value=dn->getValue();
+	if (!value) {
+		return true;
+	}
+	for (const char *c=value; *c; c++) {
+		if (!character::isWhitespace(*c)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 ssize_t dom::writeNode(domnode *dn, output *out,
 				bool indent, uint16_t *indentlevel) {
 
@@ -277,10 +294,23 @@ ssize_t dom::writeNode(domnode *dn, output *out,
 				if (!incOrErr(&retval,out->write('>'),1)) {
 					return retval;
 				}
+				// in indent mode, ignore whitespace-only text
+				// nodes left by the parse, so the auto-indent
+				// isn't corrupted by insignificant whitespace
+				domnode	*firstcontent=current;
 				if (indent && indentlevel) {
-					if (current->getType()!=
+					while (!firstcontent->isNullNode() &&
+						isIgnorableWhitespace(
+								firstcontent)) {
+						firstcontent=firstcontent->
+							getNextSibling();
+					}
+				}
+				if (indent && indentlevel) {
+					if (!firstcontent->isNullNode() &&
+						firstcontent->getType()!=
 							TEXT_DOMNODETYPE &&
-						current->getType()!=
+						firstcontent->getType()!=
 							CDATA_DOMNODETYPE) {
 						if (!incOrErr(&retval,
 							out->write('\n'),1)) {
@@ -289,8 +319,16 @@ ssize_t dom::writeNode(domnode *dn, output *out,
 					}
 					*indentlevel=*indentlevel+2;
 				}
-				domnodetype	prevtype=current->getType();
+				domnodetype	prevtype=
+					(firstcontent->isNullNode())?
+						TEXT_DOMNODETYPE:
+						firstcontent->getType();
 				while (!current->isNullNode()) {
+					if (indent && indentlevel &&
+						isIgnorableWhitespace(current)) {
+						current=current->getNextSibling();
+						continue;
+					}
 					if (!incOrErr(&retval,
 						dom::writeNode(current,out,
 							indent,indentlevel))) {
