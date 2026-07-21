@@ -2,10 +2,36 @@ top_builddir = ../..
 
 include ../../config.mk
 
+VDPROJ   = setupx64.vdproj
+SKEL     = setupx64.vdproj.skel
+DAT      = setupx64-vdproj.dat
+STAGE    = $(MAKEDIR)\stage
+PRODROOT = $(STAGE)\C\Program Files\Firstworks
+
 # .vdproj installers build only under devenv, and only vs 2010 handles .vdproj
 # without an extension, so pin vs 2010's devenv (%VS100COMNTOOLS%), not PATH's
-all:
-	"$(VS100COMNTOOLS)..\IDE\devenv.com" setupx64.sln /build Release
+DEVENV = "$(VS100COMNTOOLS)..\IDE\devenv.com"
+
+all: release
+
+release: $(VDPROJ)
+	$(DEVENV) setupx64.sln /build Release
+
+debug: $(VDPROJ)
+	$(DEVENV) setupx64.sln /build Debug
+
+# stage a make install into an in-tree dir (DESTDIR is honored by cp.vbs and
+# mkinstalldirs.vbs), then generate the .vdproj by walking it, so added/removed
+# files, executables, libraries and headers are picked up automatically.  the
+# icon is copied into the staged tree so the generator can key the arp icon to
+# it.
+$(VDPROJ): $(SKEL) $(DAT) gen-vdproj.vbs
+	-$(RMTREE) stage
+	cd /d $(top_builddir) $(AND) set DESTDIR=$(STAGE)$(AND) $(MAKE) install
+	$(MKINSTALLDIRS) "$(PRODROOT)\doc"
+	$(CP) $(top_builddir)\doc\rudiments-icon.ico "$(PRODROOT)\doc"
+	cscript /nologo gen-vdproj.vbs $(SKEL) $(DAT) stage $(VDPROJ) $(RUDIMENTS_VERSION)
 
 clean:
-	$(RMTREE) Release Debug
+	-$(RMTREE) Release Debug stage
+	-$(RM) $(VDPROJ)

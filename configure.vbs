@@ -864,9 +864,7 @@ infiles=Array(_
 	"src\\Makefile.in",_
 	"include\\Makefile.in",_
 	"bin\\rudiments-config.in",_
-	"rudiments.pc.in",_
-	"msvc\\setupx64\\setupx64.vdproj.in",_
-	"msvc\\setupx86\\setupx86.vdproj.in"_
+	"rudiments.pc.in"_
 	)
 outfiles=Array(_
 	"config.mk",_
@@ -874,9 +872,7 @@ outfiles=Array(_
 	"src\\Makefile",_
 	"include\\Makefile",_
 	"bin\\rudiments-config",_
-	"rudiments.pc",_
-	"msvc\\setupx64\\setupx64.vdproj",_
-	"msvc\\setupx86\\setupx86.vdproj"_
+	"rudiments.pc"_
 	)
 
 

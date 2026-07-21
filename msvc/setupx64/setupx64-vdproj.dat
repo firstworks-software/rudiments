@@ -1,0 +1,4 @@
+# vdproj generator config for rudiments (x64)
+VERSIONTOKEN|@RUDIMENTS_VERSION@
+ROOT|C/Program Files/Firstworks|product|#1925|[ProgramFiles64Folder]\Firstworks|TARGETDIR|-
+KEYREF|@KEY_ICON@|C/Program Files/Firstworks/doc/rudiments-icon.ico
