@@ -2,29 +2,23 @@ top_builddir = ../..
 
 include ../../config.mk
 
-VDPROJ   = setupx86.vdproj
-SKEL     = setupx86.vdproj.skel
-DAT      = setupx86-vdproj.dat
-STAGE    = $(MAKEDIR)\stage
+SLN = setupx86.sln
+VDPROJ = setupx86.vdproj
+SKEL = setupx86.vdproj.skel
+DAT = setupx86-vdproj.dat
+STAGE = $(MAKEDIR)\stage
 PRODROOT = $(STAGE)\C\Program Files\Firstworks
 
-# .vdproj installers build only under devenv, and only vs 2010 handles .vdproj
-# without an extension, so pin vs 2010's devenv (%VS100COMNTOOLS%), not PATH's
 DEVENV = "$(VS100COMNTOOLS)..\IDE\devenv.com"
 
 all: release
 
 release: $(VDPROJ)
-	$(DEVENV) setupx86.sln /build Release
+	$(DEVENV) $(SLN) /build Release
 
 debug: $(VDPROJ)
-	$(DEVENV) setupx86.sln /build Debug
+	$(DEVENV) $(SLN) /build Debug
 
-# stage a make install into an in-tree dir (DESTDIR is honored by cp.vbs and
-# mkinstalldirs.vbs), then generate the .vdproj by walking it, so added/removed
-# files, executables, libraries and headers are picked up automatically.  the
-# icon is copied into the staged tree so the generator can key the arp icon to
-# it.
 $(VDPROJ): $(SKEL) $(DAT) gen-vdproj.vbs
 	-$(RMTREE) stage
 	cd /d $(top_builddir) $(AND) set DESTDIR=$(STAGE)$(AND) $(MAKE) install
