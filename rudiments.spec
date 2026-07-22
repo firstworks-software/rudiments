@@ -59,8 +59,6 @@ echo "d /run/%{name} 0777 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.con
 %{_libdir}/librudiments.so.*
 %{_libdir}/librudiments-apache.so.*
 %doc AUTHORS ChangeLog
-%exclude %{_libdir}/librudiments.la
-%exclude %{_libdir}/librudiments-apache.la
 %if 0%{?fedora}
 %license COPYING
 %exclude %{_datadir}/licenses/rudiments
