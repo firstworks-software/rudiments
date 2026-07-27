@@ -8,7 +8,16 @@ License: LGPLv2
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-BuildRequires: gcc-c++, libedit-devel, pcre-devel, openssl-devel, libcurl-devel, krb5-devel, httpd-devel
+BuildRequires: gcc-c++, libedit-devel, openssl-devel, libcurl-devel, krb5-devel, httpd-devel
+
+# el10 dropped PCRE1, which is end-of-life, for PCRE2, and configure only knows
+# PCRE1, so there is nothing to require there.  configure auto-detects, so the
+# el10 build just reports no PCRE - which is already what the build farm's build
+# tier produces on that host.  0%{?rhel} is 0 on Fedora, so Fedora and el9 and
+# older still require it.
+%if 0%{?rhel} < 10
+BuildRequires: pcre-devel
+%endif
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
