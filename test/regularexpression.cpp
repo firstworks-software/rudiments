@@ -173,5 +173,44 @@ printMatches(&re);
 	test("match end",!re.getSubstringEnd(0));
         stdoutput.printf("\n");
 
+
+        stdoutput.printf("clear\n");
+
+	// clear() then destruct
+	{
+		regularexpression	re2;
+		test("setPattern",re2.setPattern("Dave"));
+		test("match",re2.match("Hello Dave",10));
+		test("clear",re2.clear());
+	}
+
+	// clear() twice
+	{
+		regularexpression	re2;
+		test("setPattern",re2.setPattern("Dave"));
+		test("match",re2.match("Hello Dave",10));
+		test("clear",re2.clear());
+		test("clear again",re2.clear());
+	}
+
+	// clear() then re-use
+	{
+		regularexpression	re2;
+		test("setPattern",re2.setPattern("Dave"));
+		test("match",re2.match("Hello Dave",10));
+		test("clear",re2.clear());
+		test("match after clear",!re2.match("Hello Dave",10));
+		test("setPattern after clear",re2.setPattern("Goodbye"));
+		test("match",re2.match("Hello Goodbye",13));
+	}
+
+	// clear() with no pattern set
+	{
+		regularexpression	re2;
+		test("clear",re2.clear());
+		test("match after clear",!re2.match("Hello Dave",10));
+	}
+        stdoutput.printf("\n");
+
 	return 0;
 }

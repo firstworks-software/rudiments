@@ -47,6 +47,7 @@ class regularexpressionprivate {
 			pcre_extra	*_extra;
 		#else
 			regex_t	_expr;
+			bool	_compiled;
 			char	*_strcopy;
 		#endif
 	
@@ -87,6 +88,7 @@ void regularexpression::construct() {
 		pvt->_extra=NULL;
 	#else
 		bytestring::zero(&pvt->_expr,sizeof(pvt->_expr));
+		pvt->_compiled=false;
 		pvt->_strcopy=NULL;
 	#endif
 	pvt->_null=false;
@@ -125,8 +127,15 @@ bool regularexpression::clear() {
 			pvt->_extra=NULL;
 		}
 	#else
-		regfree(&pvt->_expr);
+		// regfree() takes the regex_t by address, so there is no
+		// pointer to NULL out afterward like the PCRE arms do.
+		// _compiled stands in for it.
+		if (pvt->_compiled) {
+			regfree(&pvt->_expr);
+			pvt->_compiled=false;
+		}
 		delete[] pvt->_strcopy;
+		pvt->_strcopy=NULL;
 	#endif
 	return true;
 }
@@ -161,8 +170,12 @@ bool regularexpression::setPattern(const char *pattern) {
 		return (pvt->_expr=pcre_compile(pattern,0,&error,
 						&erroroffset,NULL))!=NULL;
 	#else
-		regfree(&pvt->_expr);
-		return !regcomp(&pvt->_expr,pattern,REG_EXTENDED);
+		if (pvt->_compiled) {
+			regfree(&pvt->_expr);
+			pvt->_compiled=false;
+		}
+		return (pvt->_compiled=
+			!regcomp(&pvt->_expr,pattern,REG_EXTENDED));
 	#endif
 }
 
@@ -234,8 +247,10 @@ bool regularexpression::match(const char *str) {
 			pvt->_matches[i].rm_so=-1;
 		}
 		pvt->_matchcount=-1;
-		bool	retval=!regexec(&pvt->_expr,pvt->_str,
-				RUDIMENTS_REGEX_MATCHES,pvt->_matches,0);
+		bool	retval=(pvt->_compiled &&
+				!regexec(&pvt->_expr,pvt->_str,
+					RUDIMENTS_REGEX_MATCHES,
+					pvt->_matches,0));
 		getSubstringCount();
 		return retval;
 	#endif
