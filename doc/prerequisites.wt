@@ -39,10 +39,10 @@ Rudiments is supported on a variety of Linux platforms including Fedora, !CentOS
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-dnf -y install gcc-c++ make libedit-devel openssl-devel krb5-devel pcre-devel libcurl-devel
+dnf -y install gcc-c++ make libedit-devel openssl-devel krb5-devel pcre2-devel libcurl-devel
 }}}
 
-The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.
+The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2-devel package.
 
 Note that on older Fedora platforms, the yum package manager is used instead of the dnf package manager.  The syntax for the two is the same though, just replace dnf with yum in the command above.
 }}}
@@ -55,10 +55,10 @@ Note that on older Fedora platforms, the yum package manager is used instead of 
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-yum -y install gcc-c++ make libedit-devel openssl-devel krb5-devel pcre-devel libcurl-devel
+yum -y install gcc-c++ make libedit-devel openssl-devel krb5-devel pcre2-devel libcurl-devel
 }}}
 
-The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.
+The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2-devel package.
 }}}
 
 [=#opensuse]
@@ -69,10 +69,10 @@ The gcc-c++ and make packages are required, but the rest are optional and may be
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-zypper install gcc-c++ make readline-devel libopenssl-devel krb5-devel pcre-devel libcurl-devel
+zypper install gcc-c++ make readline-devel libopenssl-devel krb5-devel pcre2-devel libcurl-devel
 }}}
 
-The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.
+The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2-devel package.
 }}}
 
 [=#ubuntu]
@@ -83,10 +83,10 @@ The gcc-c++ and make packages are required, but the rest are optional and may be
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-apt-get install g++ make libedit-dev libssl-dev libkrb5-dev libpcre3-dev libcurl4-openssl-dev
+apt-get install g++ make libedit-dev libssl-dev libkrb5-dev libpcre2-dev libcurl4-openssl-dev
 }}}
 
-The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre3-dev package.
+The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre2-dev package.
 }}}
 
 [=#debian]
@@ -97,10 +97,10 @@ The g++ and make packages are required, but the rest are optional and may be omi
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-apt-get install g++ make libedit-dev libssl-dev libkrb5-dev libpcre3-dev libcurl4-openssl-dev
+apt-get install g++ make libedit-dev libssl-dev libkrb5-dev libpcre2-dev libcurl4-openssl-dev
 }}}
 
-The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre3-dev package.
+The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre2-dev package.
 }}}
 
 [=#unix]
@@ -116,10 +116,10 @@ Rudiments is supported on a variety of Unix platforms including !FreeBSD, !NetBS
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-pkg install clang gmake pkgconf readline openssl pcre curl
+pkg install clang gmake pkgconf readline openssl pcre2 curl
 }}}
 
-The clang and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.
+The clang and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2 package.
 
 Note that on older !FreeBSD platforms:
 
@@ -137,10 +137,10 @@ Kerberos/GSSAPI is installed as part of the base installation.
 To install all of the prerequisites at once, execute the following command, as root:
  
 {{{#!code
-pkgin install g++ gmake readline openssl pcre curl
+pkgin install g++ gmake readline openssl pcre2 curl
 }}}
 
-The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.
+The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2 package.
 
 Kerberos/GSSAPI is installed as part of the base installation.
 }}}
@@ -161,10 +161,10 @@ installpath = ftp://ftp.usa.openbsd.org/pub/OpenBSD/5.8/packages/amd64/
 ... and execute the following command, as root:
 
 {{{#!code
-pkg_add -r g++ gmake readline heimdal pcre curl
+pkg_add -r g++ gmake readline heimdal pcre2 curl
 }}}
 
-The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.
+The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2 package.
 
 !OpenSSL is installed as part of the base installation.
 }}}
@@ -177,10 +177,10 @@ The g++ and gmake packages are required, but the rest are optional and may be om
 To install all of the prerequisites at once, execute the following command, as root:
 
 {{{#!code
-pkgin install clang binutils gmake readline openssl heimdal pcre curl
+pkgin install clang binutils gmake readline openssl heimdal pcre2 curl
 }}}
 
-The clang, binutils, and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre packages.
+The clang, binutils, and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre2 packages.
 }}}
 
 [=#windows]

@@ -490,13 +490,14 @@ AC_SUBST(GSSLIBS)
 
 
 
-dnl checks for the pcre library
+dnl checks for the pcre2 library, falling back to the pcre library
 dnl requires:  cross_compiling
 dnl sets the substitution variable PCRELIBS
 AC_DEFUN([FW_CHECK_PCRE],
 [
 
 HAVE_PCRE=""
+HAVE_PCRE2=""
 if ( test "$ENABLE_RUDIMENTS_PCRE" = "yes" )
 then
 
@@ -507,24 +508,37 @@ then
 		echo "cross compiling"
 		if ( test -n "$PCRELIBS" -o -n "$PCREINCLUDES" )
 		then
-			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+			dnl trust whichever flavor we were pointed at
+			case "$PCRELIBS $PCREINCLUDES" in
+				*pcre2* )
+					AC_DEFINE(RUDIMENTS_HAS_PCRE2,1,Rudiments supports PCRE2)
+					;;
+				* )
+					AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+					;;
+			esac
 		fi
 
 	else
 
-		AC_MSG_CHECKING(for pcre)
+		dnl the pcre1 probe below has to start from what the user
+		dnl gave us, not from whatever the pcre2 probe found
+		SAVEPCREINCLUDES="$PCREINCLUDES"
+		SAVEPCRELIBS="$PCRELIBS"
+
+		AC_MSG_CHECKING(for pcre2)
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			PCRELIBS=`pcre-config --libs 2> /dev/null`
+			PCRELIBS=`pcre2-config --libs8 2> /dev/null`
 			if ( test -n "$PCRELIBS" )
 			then
-				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+				PCREINCLUDES=`pcre2-config --cflags 2> /dev/null`
 			fi
 		fi
 
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre],[pcre/pcre.h],[pcre],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre2],[pcre2.h],[pcre2-8],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
 		fi
 
 		if ( test -n "$PCRELIBS" )
@@ -532,9 +546,43 @@ then
 			FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 				#include <stdlib.h>
 #endif
-#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>],[pcre2_code *code=pcre2_compile(NULL,0,0,NULL,NULL,NULL);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; HAVE_PCRE2="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE2,1,Rudiments supports PCRE2) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
 		else
 			AC_MSG_RESULT(no)
+		fi
+
+		dnl fall back to pcre1 on systems that don't have pcre2
+		if ( test -z "$HAVE_PCRE" )
+		then
+
+			PCREINCLUDES="$SAVEPCREINCLUDES"
+			PCRELIBS="$SAVEPCRELIBS"
+
+			AC_MSG_CHECKING(for pcre)
+			if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+			then
+				PCRELIBS=`pcre-config --libs 2> /dev/null`
+				if ( test -n "$PCRELIBS" )
+				then
+					PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+				fi
+			fi
+
+			if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+			then
+				FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre],[pcre/pcre.h],[pcre],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
+			fi
+
+			if ( test -n "$PCRELIBS" )
+			then
+				FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+					#include <stdlib.h>
+#endif
+#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
+			else
+				AC_MSG_RESULT(no)
+			fi
 		fi
 	fi
 

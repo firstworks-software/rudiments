@@ -28994,6 +28994,7 @@ then
 
 
 HAVE_PCRE=""
+HAVE_PCRE2=""
 if ( test "$ENABLE_RUDIMENTS_PCRE" = "yes" )
 then
 
@@ -29003,21 +29004,33 @@ then
 				echo "cross compiling"
 		if ( test -n "$PCRELIBS" -o -n "$PCREINCLUDES" )
 		then
+						case "$PCRELIBS $PCREINCLUDES" in
+				*pcre2* )
+
+printf "%s\n" "#define RUDIMENTS_HAS_PCRE2 1" >>confdefs.h
+
+					;;
+				* )
 
 printf "%s\n" "#define RUDIMENTS_HAS_PCRE 1" >>confdefs.h
 
+					;;
+			esac
 		fi
 
 	else
 
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre" >&5
-printf %s "checking for pcre... " >&6; }
+						SAVEPCREINCLUDES="$PCREINCLUDES"
+		SAVEPCRELIBS="$PCRELIBS"
+
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre2" >&5
+printf %s "checking for pcre2... " >&6; }
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			PCRELIBS=`pcre-config --libs 2> /dev/null`
+			PCRELIBS=`pcre2-config --libs8 2> /dev/null`
 			if ( test -n "$PCRELIBS" )
 			then
-				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+				PCREINCLUDES=`pcre2-config --cflags 2> /dev/null`
 			fi
 		fi
 
@@ -29026,9 +29039,9 @@ printf %s "checking for pcre... " >&6; }
 
 
 SEARCHPATH=/usr
-NAME=pcre
-HEADER=pcre/pcre.h
-LIBNAME=pcre
+NAME=pcre2
+HEADER=pcre2.h
+LIBNAME=pcre2-8
 LINKSTATIC=""
 LINKRPATH=""
 USEFULLLIBPATH=
@@ -29501,6 +29514,535 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 				#include <stdlib.h>
 #endif
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
+int
+main (void)
+{
+pcre2_code *code=pcre2_compile(NULL,0,0,NULL,NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+  HAVE_PCRE="yes"; HAVE_PCRE2="yes";
+printf "%s\n" "#define RUDIMENTS_HAS_PCRE2 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  PCREINCLUDES=""; PCRELIBS=""; { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		else
+			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+		fi
+
+				if ( test -z "$HAVE_PCRE" )
+		then
+
+			PCREINCLUDES="$SAVEPCREINCLUDES"
+			PCRELIBS="$SAVEPCRELIBS"
+
+			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre" >&5
+printf %s "checking for pcre... " >&6; }
+			if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+			then
+				PCRELIBS=`pcre-config --libs 2> /dev/null`
+				if ( test -n "$PCRELIBS" )
+				then
+					PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+				fi
+			fi
+
+			if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+			then
+
+
+SEARCHPATH=/usr
+NAME=pcre
+HEADER=pcre/pcre.h
+LIBNAME=pcre
+LINKSTATIC=""
+LINKRPATH=""
+USEFULLLIBPATH=
+INCLUDESTRING=""
+LIBSTRING=""
+LIBPATH=""
+STATIC=""
+HEADERSANDLIBSPATH=""
+
+eval "PCREINCLUDES=\"\""
+eval "PCRELIBS=\"\""
+eval "PCRELIBPATH=\"\""
+eval "PCRESTATIC=\"\""
+if ( test -n "" )
+then
+	eval "=\"\""
+fi
+
+
+EXTRAPATH="$SEARCHPATH"
+NAME="$NAME"
+SUFFIX=""
+
+SWPREFIXES="$EXTRAPATH / /usr"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/local/$NAME /opt/$NAME /usr/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/local /usr/pkg"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/pkg/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /opt/sfw"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /opt/sfw/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/sfw"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /usr/sfw/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /opt/csw /sw /usr/freeware /boot/common /resources/index"
+SWPREFIXES="$SWPREFIXES /resources/firstworks"
+if ( test -n "$NAME" )
+then
+	SWPREFIXES="$SWPREFIXES /Library/$NAME"
+fi
+SWPREFIXES="$SWPREFIXES /usr/local/firstworks"
+
+if ( test -n "$SUFFIX" )
+then
+	SWPATHS=""
+	for p in $SWPREFIXES
+	do
+		if ( test "$p" = "/" )
+		then
+			SWPATHS="$SWPATHS /$SUFFIX"
+		else
+			SWPATHS="$SWPATHS $p/$SUFFIX"
+		fi
+	done
+	eval "SEARCHPATHS=\"$SWPATHS\""
+else
+	eval "SEARCHPATHS=\"$SWPREFIXES\""
+fi
+
+for path in $SEARCHPATHS
+do
+
+		if ( test -z "$path" -o ! -d "$path" )
+	then
+		continue
+	fi
+
+		if ( test -n "$LIBARCHDIR" )
+	then
+
+		if ( test "$path" = "/" )
+		then
+
+
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBARCHDIR\"; LIBSTRING=\"-Wl,/$LIBARCHDIR/lib$LIBNAME.$SOSUFFIX\""
+	fi
+elif ( test -n "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/$LIBARCHDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBARCHDIR\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+elif ( test -n "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+
+if ( test -r "/$LIBARCHDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+		else
+
+						for libpath in \
+				"$path/$LIBARCHDIR" \
+				"$path/$LIBARCHDIR/$NAME" \
+				"$path/$LIBARCHDIR/opt" \
+				"$path/$LIBARCHDIR/$MULTIARCHDIR"
+			do
+				for includepath in "$path/include" "$path/include/$NAME"
+				do
+					if ( test "$USEFULLLIBPATH" = "yes" )
+					then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+					else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+					fi
+					if ( test -n "$LIBSTRING" )
+					then
+						break
+					fi
+				done
+				if ( test -n "$LIBSTRING" )
+				then
+					break
+				fi
+			done
+		fi
+
+				if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+	fi
+
+		if ( test -z "$LIBSTRING" )
+	then
+
+								if ( test "$LIBARCHDIR" = "lib" )
+		then
+			continue
+		fi
+
+										if ( test "$path" = "/" -o "$path" = "/usr" )
+		then
+			continue
+		fi
+
+				for libpath in \
+			"$path/lib" \
+			"$path/lib/$NAME" \
+			"$path/lib/opt" \
+			"$path/lib/$MULTIARCHDIR"
+		do
+			for includepath in "$path/include" "$path/include/$NAME"
+			do
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+	if ( test -n "$FOUNDHEADER" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
+	fi
+elif ( test -n "$libpath/lib$LIBNAME.a" )
+then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+	if ( test -n "$FOUNDLIB" )
+	then
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				fi
+				if ( test -n "$LIBSTRING" )
+				then
+					break
+				fi
+			done
+			if ( test -n "$LIBSTRING" )
+			then
+				break
+			fi
+		done
+
+				if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+	fi
+
+done
+
+INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
+
+eval "PCREINCLUDES=\"$INCLUDESTRING\""
+eval "PCRELIBS=\"$LIBSTRING\""
+eval "PCRELIBPATH=\"$LIBPATH\""
+eval "PCRESTATIC=\"$STATIC\""
+if ( test -n "" )
+then
+	eval "=\"$HEADERSANDLIBSPATH\""
+fi
+
+			fi
+
+			if ( test -n "$PCRELIBS" )
+			then
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $PCREINCLUDES"
+LIBS="$PCRELIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+					#include <stdlib.h>
+#endif
 #include <pcre.h>
 int
 main (void)
@@ -29527,9 +30069,10 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-		else
-			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+			else
+				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
+			fi
 		fi
 	fi
 
@@ -47328,9 +47871,12 @@ echo "***** Summary ****************"
 echo " Version      : $RUDIMENTS_VERSION"
 
 PCREBUILD="no "
-if ( test -n "$HAVE_PCRE" )
+if ( test -n "$HAVE_PCRE2" )
 then
-	PCREBUILD="yes"
+	PCREBUILD="yes (PCRE2)"
+elif ( test -n "$HAVE_PCRE" )
+then
+	PCREBUILD="yes (PCRE1)"
 fi
 
 LIBCURLBUILD="no "

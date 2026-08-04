@@ -174,6 +174,9 @@
 /* Rudiments supports PCRE */
 /* #undef RUDIMENTS_HAS_PCRE */
 
+/* Rudiments supports PCRE2 */
+/* #undef RUDIMENTS_HAS_PCRE2 */
+
 /* SSL has generic PKCS5_PBKDF2_HMAC */
 /* #undef RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC */
 

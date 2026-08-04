@@ -6358,9 +6358,12 @@ echo "***** Summary ****************"
 echo " Version      : $RUDIMENTS_VERSION"
 
 PCREBUILD="no "
-if ( test -n "$HAVE_PCRE" )
+if ( test -n "$HAVE_PCRE2" )
 then
-	PCREBUILD="yes"
+	PCREBUILD="yes (PCRE2)"
+elif ( test -n "$HAVE_PCRE" )
+then
+	PCREBUILD="yes (PCRE1)"
 fi
 
 LIBCURLBUILD="no "

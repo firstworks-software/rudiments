@@ -4,7 +4,10 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/bytestring.h>
 
-#if defined(RUDIMENTS_HAS_PCRE)
+#if defined(RUDIMENTS_HAS_PCRE2)
+	#define PCRE2_CODE_UNIT_WIDTH 8
+	#include <pcre2.h>
+#elif defined(RUDIMENTS_HAS_PCRE)
 	#include <pcre.h>
 #elif defined(RUDIMENTS_HAVE_REGCOMP)
 	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -26,7 +29,7 @@
 	#include <stdlib.h>
 #endif
 #include <stdio.h>
-#ifdef RUDIMENTS_HAS_PCRE
+#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
 	#include <rudiments/charstring.h>
 #endif
 
@@ -36,7 +39,10 @@ class regularexpressionprivate {
 		bool		_null;
 		const char	*_pattern;
 
-		#ifdef RUDIMENTS_HAS_PCRE
+		#if defined(RUDIMENTS_HAS_PCRE2)
+			pcre2_code		*_expr;
+			pcre2_match_data	*_matchdata;
+		#elif defined(RUDIMENTS_HAS_PCRE)
 			pcre		*_expr;
 			pcre_extra	*_extra;
 		#else
@@ -48,7 +54,9 @@ class regularexpressionprivate {
 		int32_t		_matchcount;
 		const char	*_str;
 
-		#ifdef RUDIMENTS_HAS_PCRE
+		#if defined(RUDIMENTS_HAS_PCRE2)
+		PCRE2_SIZE	*_matches;
+		#elif defined(RUDIMENTS_HAS_PCRE)
 		int32_t		_matches[RUDIMENTS_REGEX_MATCHES*3];
 		#else
 		regmatch_t	_matches[RUDIMENTS_REGEX_MATCHES];
@@ -66,7 +74,15 @@ regularexpression::regularexpression(const char *pattern) : object() {
 
 void regularexpression::construct() {
 	pvt=new regularexpressionprivate;
-	#ifdef RUDIMENTS_HAS_PCRE
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		pvt->_expr=NULL;
+		// The ovector lives inside the match data and is never
+		// reallocated, so this pointer is good for the life of
+		// the object.
+		pvt->_matchdata=pcre2_match_data_create(
+					RUDIMENTS_REGEX_MATCHES,NULL);
+		pvt->_matches=pcre2_get_ovector_pointer(pvt->_matchdata);
+	#elif defined(RUDIMENTS_HAS_PCRE)
 		pvt->_expr=NULL;
 		pvt->_extra=NULL;
 	#else
@@ -77,21 +93,36 @@ void regularexpression::construct() {
 	pvt->_pattern=NULL;
 	pvt->_matchcount=0;
 	pvt->_str=NULL;
-	bytestring::zero(pvt->_matches,sizeof(pvt->_matches));
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		bytestring::zero(pvt->_matches,
+				sizeof(PCRE2_SIZE)*RUDIMENTS_REGEX_MATCHES*2);
+	#else
+		bytestring::zero(pvt->_matches,sizeof(pvt->_matches));
+	#endif
 }
 
 regularexpression::~regularexpression() {
 	clear();
+	#ifdef RUDIMENTS_HAS_PCRE2
+		pcre2_match_data_free(pvt->_matchdata);
+	#endif
 	delete pvt;
 }
 
 bool regularexpression::clear() {
-	#ifdef RUDIMENTS_HAS_PCRE
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		if (pvt->_expr) {
+			pcre2_code_free(pvt->_expr);
+			pvt->_expr=NULL;
+		}
+	#elif defined(RUDIMENTS_HAS_PCRE)
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
+			pvt->_expr=NULL;
 		}
 		if (pvt->_extra) {
 			pcre_free(pvt->_extra);
+			pvt->_extra=NULL;
 		}
 	#else
 		regfree(&pvt->_expr);
@@ -107,7 +138,17 @@ bool regularexpression::setPattern(const char *pattern) {
 		return true;
 	}
 	pvt->_pattern=pattern;
-	#ifdef RUDIMENTS_HAS_PCRE
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		if (pvt->_expr) {
+			pcre2_code_free(pvt->_expr);
+		}
+		int32_t		error;
+		PCRE2_SIZE	erroroffset;
+		return (pvt->_expr=pcre2_compile((PCRE2_SPTR)pattern,
+						PCRE2_ZERO_TERMINATED,0,
+						&error,&erroroffset,
+						NULL))!=NULL;
+	#elif defined(RUDIMENTS_HAS_PCRE)
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
 		}
@@ -133,7 +174,15 @@ bool regularexpression::study() {
 	if (pvt->_null) {
 		return true;
 	}
-	#ifdef RUDIMENTS_HAS_PCRE
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		// A library built without jit support returns
+		// PCRE2_ERROR_JIT_BADOPTION.  That just means there was
+		// nothing to do, like pcre1's pcre_study() returning NULL
+		// with no error.
+		int32_t	result=pcre2_jit_compile(pvt->_expr,
+						PCRE2_JIT_COMPLETE);
+		return (!result || result==PCRE2_ERROR_JIT_BADOPTION);
+	#elif defined(RUDIMENTS_HAS_PCRE)
 		const char	*error;
 		if (pvt->_extra) {
 			pcre_free(pvt->_extra);
@@ -150,7 +199,15 @@ bool regularexpression::match(const char *str, size_t length) {
 	if (!str) {
 		return pvt->_null;
 	}
-	#ifdef RUDIMENTS_HAS_PCRE
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		pvt->_str=str;
+		pvt->_matchcount=-1;
+		return (pvt->_expr &&
+			(pvt->_matchcount=pcre2_match(pvt->_expr,
+						(PCRE2_SPTR)pvt->_str,length,
+						0,0,pvt->_matchdata,
+						NULL))>-1);
+	#elif defined(RUDIMENTS_HAS_PCRE)
 		pvt->_str=str;
 		pvt->_matchcount=-1;
 		return (pvt->_expr &&
@@ -169,7 +226,7 @@ bool regularexpression::match(const char *str) {
 	if (!str) {
 		return pvt->_null;
 	}
-	#ifdef RUDIMENTS_HAS_PCRE
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
 		return match(str,charstring::getLength(str));
 	#else
 		pvt->_str=str;
@@ -188,7 +245,7 @@ int32_t regularexpression::getSubstringCount() {
 	if (pvt->_null) {
 		return 0;
 	}
-	#ifndef RUDIMENTS_HAS_PCRE
+	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
 		if (pvt->_matchcount==-1) {
 			for (int32_t i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
 				if (pvt->_matches[i].rm_so==-1) {
@@ -208,8 +265,10 @@ int32_t regularexpression::getSubstringStartOffset(int32_t index) {
 	if (pvt->_null || index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
-	#ifdef RUDIMENTS_HAS_PCRE
-		return pvt->_matches[index*2];
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+		// An unset offset is PCRE2_UNSET under pcre2, which casts
+		// to the same -1 that pcre1 stores directly.
+		return (int32_t)pvt->_matches[index*2];
 	#else
 		return pvt->_matches[index].rm_so;
 	#endif
@@ -219,8 +278,8 @@ int32_t regularexpression::getSubstringEndOffset(int32_t index) {
 	if (pvt->_null || index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
-	#ifdef RUDIMENTS_HAS_PCRE
-		return pvt->_matches[index*2+1];
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+		return (int32_t)pvt->_matches[index*2+1];
 	#else
 		return pvt->_matches[index].rm_eo;
 	#endif
