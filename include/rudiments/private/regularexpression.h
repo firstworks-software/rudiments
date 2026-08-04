@@ -6,8 +6,6 @@
 			return *this;
 		};
 
-		bool	clear();
-
 	private:
 		void	construct();
 

@@ -174,41 +174,40 @@ printMatches(&re);
         stdoutput.printf("\n");
 
 
-        stdoutput.printf("clear\n");
+        stdoutput.printf("lifecycle\n");
 
-	// clear() then destruct
+	// destruct after a match with a length, which allocates the
+	// string copy on the POSIX regex arm
 	{
 		regularexpression	re2;
 		test("setPattern",re2.setPattern("Dave"));
 		test("match",re2.match("Hello Dave",10));
-		test("clear",re2.clear());
 	}
 
-	// clear() twice
+	// destruct with no pattern ever set
 	{
 		regularexpression	re2;
-		test("setPattern",re2.setPattern("Dave"));
-		test("match",re2.match("Hello Dave",10));
-		test("clear",re2.clear());
-		test("clear again",re2.clear());
 	}
 
-	// clear() then re-use
+	// match with no pattern ever set
+	{
+		regularexpression	re2;
+		test("match",!re2.match("Hello Dave",10));
+		test("match count",!re2.getSubstringCount());
+		test("match start",!re2.getSubstringStart(0));
+		test("match end",!re2.getSubstringEnd(0));
+	}
+
+	// re-use with a new pattern
 	{
 		regularexpression	re2;
 		test("setPattern",re2.setPattern("Dave"));
 		test("match",re2.match("Hello Dave",10));
-		test("clear",re2.clear());
-		test("match after clear",!re2.match("Hello Dave",10));
-		test("setPattern after clear",re2.setPattern("Goodbye"));
+		test("setPattern again",re2.setPattern("Goodbye"));
 		test("match",re2.match("Hello Goodbye",13));
-	}
-
-	// clear() with no pattern set
-	{
-		regularexpression	re2;
-		test("clear",re2.clear());
-		test("match after clear",!re2.match("Hello Dave",10));
+		test("match count",re2.getSubstringCount()==1);
+		test("no match",!re2.match("Hello Dave",10));
+		test("match count",!re2.getSubstringCount());
 	}
         stdoutput.printf("\n");
 

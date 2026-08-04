@@ -104,40 +104,28 @@ void regularexpression::construct() {
 }
 
 regularexpression::~regularexpression() {
-	clear();
-	#ifdef RUDIMENTS_HAS_PCRE2
-		pcre2_match_data_free(pvt->_matchdata);
-	#endif
-	delete pvt;
-}
-
-bool regularexpression::clear() {
 	#if defined(RUDIMENTS_HAS_PCRE2)
 		if (pvt->_expr) {
 			pcre2_code_free(pvt->_expr);
-			pvt->_expr=NULL;
 		}
+		pcre2_match_data_free(pvt->_matchdata);
 	#elif defined(RUDIMENTS_HAS_PCRE)
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
-			pvt->_expr=NULL;
 		}
 		if (pvt->_extra) {
 			pcre_free(pvt->_extra);
-			pvt->_extra=NULL;
 		}
 	#else
 		// regfree() takes the regex_t by address, so there is no
-		// pointer to NULL out afterward like the PCRE arms do.
-		// _compiled stands in for it.
+		// pointer to test like the PCRE arms have.  _compiled stands
+		// in for it.
 		if (pvt->_compiled) {
 			regfree(&pvt->_expr);
-			pvt->_compiled=false;
 		}
 		delete[] pvt->_strcopy;
-		pvt->_strcopy=NULL;
 	#endif
-	return true;
+	delete pvt;
 }
 
 bool regularexpression::setPattern(const char *pattern) {
