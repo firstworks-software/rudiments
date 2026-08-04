@@ -1,4 +1,5 @@
 2.2.1 - bumped the version to 2.2.1
+	fixed buffer overflow when unix socket file name is too long
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128

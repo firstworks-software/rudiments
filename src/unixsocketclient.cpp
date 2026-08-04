@@ -77,9 +77,16 @@ int32_t unixsocketclient::connect() {
 	}
 	return result;
 #else
+	// make sure the filename fits in the socket structure
+	if (charstring::getLength(getFileName())>=sizeof(getSun()->sun_path)) {
+		error::setErrorNumber(ENAMETOOLONG);
+		return RESULT_ERROR;
+	}
+
 	// set the filename to connect to
 	getSun()->sun_family=AF_UNIX;
-	charstring::copy(getSun()->sun_path,getFileName());
+	charstring::safeCopy(getSun()->sun_path,
+				sizeof(getSun()->sun_path),getFileName());
 
 	// create a unix socket
 	error::clearError();

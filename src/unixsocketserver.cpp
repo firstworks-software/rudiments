@@ -97,11 +97,18 @@ bool unixsocketserver::open() {
 	return false;
 #else
 
+	// make sure the filename fits in the socket structure
+	if (charstring::getLength(filename)>=sizeof(getSun()->sun_path)) {
+		error::setErrorNumber(ENAMETOOLONG);
+		return false;
+	}
+
 	// init the socket structure
 	file::remove(filename);
 	bytestring::zero(getSun(),sizeof(sockaddr_un));
 	getSun()->sun_family=AF_UNIX;
-	charstring::copy(getSun()->sun_path,filename);
+	charstring::safeCopy(getSun()->sun_path,
+				sizeof(getSun()->sun_path),filename);
 
 	// create the socket
 	error::clearError();
