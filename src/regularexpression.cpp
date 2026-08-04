@@ -262,7 +262,7 @@ int32_t regularexpression::getSubstringCount() {
 }
 
 int32_t regularexpression::getSubstringStartOffset(int32_t index) {
-	if (pvt->_null || index<0 || index>pvt->_matchcount) {
+	if (pvt->_null || index<0 || index>=pvt->_matchcount) {
 		return -1;
 	}
 	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
@@ -275,7 +275,7 @@ int32_t regularexpression::getSubstringStartOffset(int32_t index) {
 }
 
 int32_t regularexpression::getSubstringEndOffset(int32_t index) {
-	if (pvt->_null || index<0 || index>pvt->_matchcount) {
+	if (pvt->_null || index<0 || index>=pvt->_matchcount) {
 		return -1;
 	}
 	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
