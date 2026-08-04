@@ -1,4 +1,4 @@
-2.2 - added isSupported() to encryption/hash
+2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128
 	fixed return value of sha256::append() when not using openssl
 	added pbkdf2 class
