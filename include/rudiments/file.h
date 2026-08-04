@@ -1056,7 +1056,12 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		static char	*getBaseName(const char *filename);
 
 		/** Returns the non-directory portion of
-		 *  "filename", truncating "ext".
+		 *  "filename", truncating "ext" if the
+		 *  non-directory portion ends with it, and
+		 *  returning the non-directory portion
+		 *  unmodified if it doesn't.  Returns NULL if
+		 *  "filename" is NULL.  The comparison of "ext"
+		 *  is case-sensitive.
 		 *  This method allocates a buffer internally
 		 *  and returns it.  The calling program must
 		 *  deallocate the buffer. */

@@ -1,5 +1,6 @@
 2.2.1 - bumped the version to 2.2.1
 	fixed buffer overflow when unix socket file name is too long
+	fixed segfault in file::getBaseName(filename,ext) when the base name doesn't end in ext, when either argument is NULL, or when the base name is entirely the extension - it now truncates ext only if the base name ends with it and returns the base name unmodified otherwise
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128

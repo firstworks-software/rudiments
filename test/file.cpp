@@ -141,6 +141,43 @@ int main(int argc, const char **argv) {
 		test("basename again",!charstring::compare(basename,"file"));
 		delete[] basename;
 
+		// extensions the base name doesn't have
+		basename=file::getBaseName(path,".xml");
+		test("basename wrong extension",
+				!charstring::compare(basename,"file.h"));
+		delete[] basename;
+
+		basename=file::getBaseName(path,".H");
+		test("basename extension case",
+				!charstring::compare(basename,"file.h"));
+		delete[] basename;
+
+		basename=file::getBaseName(path,"file.h.longer");
+		test("basename extension longer than base name",
+				!charstring::compare(basename,"file.h"));
+		delete[] basename;
+
+		// base name that is entirely the extension
+		basename=file::getBaseName("/usr/local/.h",".h");
+		test("basename extension only",
+				!charstring::compare(basename,""));
+		delete[] basename;
+
+		// null and empty arguments
+		basename=file::getBaseName(NULL,".h");
+		test("basename null file name",basename==NULL);
+		delete[] basename;
+
+		basename=file::getBaseName(path,NULL);
+		test("basename null extension",
+				!charstring::compare(basename,"file.h"));
+		delete[] basename;
+
+		basename=file::getBaseName(path,"");
+		test("basename empty extension",
+				!charstring::compare(basename,"file.h"));
+		delete[] basename;
+
 		test("key",file::generateKey(testfiletxt,1)!=0);
 
 		char	*pwd=directory::getCurrentWorkingDirectory();

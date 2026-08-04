@@ -1729,10 +1729,18 @@ char *file::getBaseName(const char *filename) {
 }
 
 char *file::getBaseName(const char *filename, const char *ext) {
+
 	char	*retval=getBaseName(filename);
-	char	*ptr=charstring::findLast(retval,ext);
-	if (!(*(ptr+charstring::getLength(ext)))) {
-		(*ptr)='\0';
+	if (!retval) {
+		return NULL;
+	}
+
+	// truncate the extension, but only if the base name ends with it
+	size_t	retvallen=charstring::getLength(retval);
+	size_t	extlen=charstring::getLength(ext);
+	if (extlen && extlen<=retvallen &&
+		!charstring::compare(retval+retvallen-extlen,ext)) {
+		retval[retvallen-extlen]='\0';
 	}
 	return retval;
 }
