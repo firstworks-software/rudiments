@@ -18,7 +18,7 @@ The current release is [http://downloads.sourceforge.net/rudiments/rudiments-2.2
 To clone the Rudiments GIT repo, run:
 
 {{{#!code
-git clone git://git.code.sf.net/p/rudiments/rudiments
+git clone https://github.com/firstworks-software/rudiments.git
 }}}
 }}}
 
