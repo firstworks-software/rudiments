@@ -561,8 +561,14 @@ char *charstring::replace(const char *str,
 		// starts - pcre1 reports that for a \K inside a lookahead -
 		// and resuming at the end would move backward and spin
 		// forever, so that counts as empty too.
+		//
+		// Move on from the match rather than from the resume point.
+		// The engine returns the leftmost match at or after the
+		// offset, so nothing at all matches in between, and bumping
+		// the offset by one would just re-run the whole expression
+		// once per character to arrive at the same empty match.
 		if (fromend<=fromstart) {
-			offset++;
+			offset=fromstart+1;
 			continue;
 		}
 

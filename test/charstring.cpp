@@ -1004,6 +1004,16 @@ int main(int argc, const char **argv) {
 		!charstring::compare(newstr,"abc"));
 	delete[] newstr;
 
+	// an empty match can also come back from well past the resume
+	// point, and is skipped from where it was found rather than from
+	// the resume point
+	original="abc";
+	from.setPattern("$");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (empty match ahead)",
+		!charstring::compare(newstr,"abc"));
+	delete[] newstr;
+
 	// degenerate inputs
 	original="";
 	from.setPattern("a");
