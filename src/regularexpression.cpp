@@ -52,6 +52,7 @@ class regularexpressionprivate {
 		#endif
 	
 		#define RUDIMENTS_REGEX_MATCHES 128
+		int32_t		_substringcount;
 		int32_t		_matchcount;
 		const char	*_str;
 
@@ -93,6 +94,7 @@ void regularexpression::construct() {
 	#endif
 	pvt->_null=false;
 	pvt->_pattern=NULL;
+	pvt->_substringcount=0;
 	pvt->_matchcount=0;
 	pvt->_str=NULL;
 	#if defined(RUDIMENTS_HAS_PCRE2)
@@ -130,21 +132,31 @@ regularexpression::~regularexpression() {
 
 bool regularexpression::setPattern(const char *pattern) {
 	pvt->_null=false;
+	pvt->_substringcount=0;
+	pvt->_matchcount=0;
 	if (!pattern) {
 		pvt->_null=true;
 		return true;
 	}
 	pvt->_pattern=pattern;
+
+	// compile, and get the count of capture groups from the pattern
+	int32_t	capturecount=0;
 	#if defined(RUDIMENTS_HAS_PCRE2)
 		if (pvt->_expr) {
 			pcre2_code_free(pvt->_expr);
 		}
 		int32_t		error;
 		PCRE2_SIZE	erroroffset;
-		return (pvt->_expr=pcre2_compile((PCRE2_SPTR)pattern,
+		if (!(pvt->_expr=pcre2_compile((PCRE2_SPTR)pattern,
 						PCRE2_ZERO_TERMINATED,0,
 						&error,&erroroffset,
-						NULL))!=NULL;
+						NULL))) {
+			return false;
+		}
+		uint32_t	cc=0;
+		pcre2_pattern_info(pvt->_expr,PCRE2_INFO_CAPTURECOUNT,&cc);
+		capturecount=(int32_t)cc;
 	#elif defined(RUDIMENTS_HAS_PCRE)
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
@@ -155,16 +167,30 @@ bool regularexpression::setPattern(const char *pattern) {
 		}
 		const char	*error;
 		int32_t		erroroffset;
-		return (pvt->_expr=pcre_compile(pattern,0,&error,
-						&erroroffset,NULL))!=NULL;
+		if (!(pvt->_expr=pcre_compile(pattern,0,&error,
+						&erroroffset,NULL))) {
+			return false;
+		}
+		int	cc=0;
+		pcre_fullinfo(pvt->_expr,NULL,PCRE_INFO_CAPTURECOUNT,&cc);
+		capturecount=(int32_t)cc;
 	#else
 		if (pvt->_compiled) {
 			regfree(&pvt->_expr);
 			pvt->_compiled=false;
 		}
-		return (pvt->_compiled=
-			!regcomp(&pvt->_expr,pattern,REG_EXTENDED));
+		if (regcomp(&pvt->_expr,pattern,REG_EXTENDED)) {
+			return false;
+		}
+		pvt->_compiled=true;
+		capturecount=(int32_t)pvt->_expr.re_nsub;
 	#endif
+
+	// the whole match, plus a substring per capture group, but no more
+	// than the match array can hold
+	pvt->_substringcount=(capturecount+1>RUDIMENTS_REGEX_MATCHES)?
+				RUDIMENTS_REGEX_MATCHES:capturecount+1;
+	return true;
 }
 
 const char *regularexpression::getPattern() {
@@ -200,26 +226,30 @@ bool regularexpression::match(const char *str, size_t length) {
 	if (!str) {
 		return pvt->_null;
 	}
-	#if defined(RUDIMENTS_HAS_PCRE2)
-		pvt->_str=str;
-		pvt->_matchcount=-1;
-		return (pvt->_expr &&
-			(pvt->_matchcount=pcre2_match(pvt->_expr,
-						(PCRE2_SPTR)pvt->_str,length,
-						0,0,pvt->_matchdata,
-						NULL))>-1);
-	#elif defined(RUDIMENTS_HAS_PCRE)
-		pvt->_str=str;
-		pvt->_matchcount=-1;
-		return (pvt->_expr &&
-			(pvt->_matchcount=pcre_exec(pvt->_expr,pvt->_extra,
-						pvt->_str,length,
-						0,0,pvt->_matches,
-						RUDIMENTS_REGEX_MATCHES*3))>-1);
-	#else
+	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
 		delete[] pvt->_strcopy;
 		pvt->_strcopy=charstring::duplicate(str,length);
 		return match(pvt->_strcopy);
+	#else
+		pvt->_str=str;
+		pvt->_matchcount=0;
+		#if defined(RUDIMENTS_HAS_PCRE2)
+			bool	retval=(pvt->_expr &&
+					pcre2_match(pvt->_expr,
+						(PCRE2_SPTR)pvt->_str,length,
+						0,0,pvt->_matchdata,
+						NULL)>-1);
+		#else
+			bool	retval=(pvt->_expr &&
+					pcre_exec(pvt->_expr,pvt->_extra,
+						pvt->_str,length,
+						0,0,pvt->_matches,
+						RUDIMENTS_REGEX_MATCHES*3)>-1);
+		#endif
+		if (retval) {
+			pvt->_matchcount=pvt->_substringcount;
+		}
+		return retval;
 	#endif
 }
 
@@ -231,34 +261,20 @@ bool regularexpression::match(const char *str) {
 		return match(str,charstring::getLength(str));
 	#else
 		pvt->_str=str;
-		for (int32_t i=0; i<pvt->_matchcount; i++) {
-			pvt->_matches[i].rm_so=-1;
-		}
-		pvt->_matchcount=-1;
+		pvt->_matchcount=0;
 		bool	retval=(pvt->_compiled &&
 				!regexec(&pvt->_expr,pvt->_str,
 					RUDIMENTS_REGEX_MATCHES,
 					pvt->_matches,0));
-		getSubstringCount();
+		if (retval) {
+			pvt->_matchcount=pvt->_substringcount;
+		}
 		return retval;
 	#endif
 }
 
 int32_t regularexpression::getSubstringCount() {
 	if (pvt->_null) {
-		return 0;
-	}
-	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
-		if (pvt->_matchcount==-1) {
-			for (int32_t i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
-				if (pvt->_matches[i].rm_so==-1) {
-					pvt->_matchcount=i;
-					break;
-				}
-			}
-		}
-	#endif
-	if (pvt->_matchcount==-1) {
 		return 0;
 	}
 	return pvt->_matchcount;

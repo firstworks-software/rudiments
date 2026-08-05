@@ -886,6 +886,21 @@ int main(int argc, const char **argv) {
 			"numbers,12345678,234567,3456,45"));
 	delete[] newstr;
 
+	// the whole match gets replaced, not one of the capture groups
+	original="xayb";
+	from.setPattern("(a)(b)?");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (capture groups)",
+		!charstring::compare(newstr,"xZyb"));
+	delete[] newstr;
+
+	original="ab cd";
+	from.setPattern("(\\w)(\\w)");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (whole match)",
+		!charstring::compare(newstr,"Z Z"));
+	delete[] newstr;
+
 	stdoutput.printf("\n");
 	
 

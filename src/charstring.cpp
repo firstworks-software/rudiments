@@ -499,9 +499,8 @@ char *charstring::replace(const char *str,
 		}
 
 		// get the bounds of the matching chunk
-		int32_t		fi=from->getSubstringCount()-1;
-		const char	*fromstart=from->getSubstringStart(fi);
-		const char	*fromend=from->getSubstringEnd(fi);
+		const char	*fromstart=from->getSubstringStart(0);
+		const char	*fromend=from->getSubstringEnd(0);
 
 		// move on if they're the same
 		if (fromend==fromstart) {

@@ -163,6 +163,59 @@ printMatches(&re);
 	delete[] osname;
 
 
+        stdoutput.printf("non-participating groups\n");
+
+	// a group that didn't participate must not hide the groups after it
+	test("setPattern",re.setPattern("(a)?(b)"));
+        str="b";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==3);
+	test("match 0 start",re.getSubstringStart(0)==str);
+	test("match 0 end",re.getSubstringEnd(0)==(str+1));
+	test("match 1 start",!re.getSubstringStart(1));
+	test("match 1 end",!re.getSubstringEnd(1));
+	test("match 1 start offset",re.getSubstringStartOffset(1)==-1);
+	test("match 1 end offset",re.getSubstringEndOffset(1)==-1);
+	test("match 2 start",re.getSubstringStart(2)==str);
+	test("match 2 end",re.getSubstringEnd(2)==(str+1));
+
+	// ...and a trailing group that didn't participate must still be
+	// a valid index
+	test("setPattern",re.setPattern("(a)(b)?"));
+        str="a";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==3);
+	test("match 0 start",re.getSubstringStart(0)==str);
+	test("match 0 end",re.getSubstringEnd(0)==(str+1));
+	test("match 1 start",re.getSubstringStart(1)==str);
+	test("match 1 end",re.getSubstringEnd(1)==(str+1));
+	test("match 2 start",!re.getSubstringStart(2));
+	test("match 2 end",!re.getSubstringEnd(2));
+	test("match 2 start offset",re.getSubstringStartOffset(2)==-1);
+	test("match 2 end offset",re.getSubstringEndOffset(2)==-1);
+
+	// a group count is a property of the pattern, so it doesn't change
+	// when the match fails, only the reported substring count does
+        str="c";
+        test(str,!re.match(str));
+	test("match count",!re.getSubstringCount());
+	test("match start",!re.getSubstringStart(0));
+	test("match end",!re.getSubstringEnd(0));
+
+	// past the last group
+	test("setPattern",re.setPattern("(a)(b)"));
+        str="ab";
+        test(str,re.match(str));
+	test("match count",re.getSubstringCount()==3);
+	test("past the end start",!re.getSubstringStart(3));
+	test("past the end end",!re.getSubstringEnd(3));
+	test("past the end start offset",re.getSubstringStartOffset(3)==-1);
+	test("past the end end offset",re.getSubstringEndOffset(3)==-1);
+        stdoutput.printf("\n");
+
+
         stdoutput.printf("NULLs\n");
 	test("setPattern",re.setPattern(NULL));
 	test("study",re.study());

@@ -4,6 +4,8 @@
 	added PCRE2 support - configure now prefers PCRE2, falls back to PCRE1, then POSIX regex, so regularexpression still uses PCRE on distros that have dropped PCRE1 (debian 13, el10)
 	fixed double free in regularexpression::clear() on builds without PCRE (POSIX regex or the built-in regex, which is what windows uses) - clear() left its string copy dangling, so clear() followed by the destructor, a second clear(), or another match() aborted
 	removed regularexpression::clear(), which was public but undocumented and never appeared in the api reference - the destructor does its work now, so the object can no longer be left holding pointers to memory it just freed
+	fixed regularexpression::getSubstringCount() so a capture group that didn't participate in the match no longer hides the groups after it - the count now comes from the compiled pattern rather than from a scan of the match array, so (a)?(b) against "b" reports 3 substrings on every build, not just the PCRE ones
+	fixed charstring::replace(str,regularexpression,to,global) so it replaces the whole match rather than the pattern's last capture group - for pattern (a)(b) against "ab" it replaced only "b"
 	fixed datetime::parse() so fractional seconds followed by an am/pm meridian scale correctly - the fraction was measured with its meridian attached, so "01:01:01:123PM" was scaled as a 5-digit fraction and yielded 1230 microseconds instead of 123000
 
 2.2.0 - added isSupported() to encryption/hash

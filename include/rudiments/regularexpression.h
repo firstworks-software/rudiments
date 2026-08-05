@@ -69,25 +69,38 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  false if it was not. */
 		bool	match(const char *str, size_t length);
 
-		/** Returns the number of substrings of "str" passed into
-		 *  match() that match "pattern" passed into compile(). */
+		/** Returns the number of substrings that the last
+		 *  successful call to match() can report, or 0 if the
+		 *  last call to match() failed.
+		 *
+		 *  This is one for the whole match, plus one for each
+		 *  capture group in the pattern, whether or not the
+		 *  group participated in the match.  A group that did
+		 *  not participate is still a valid index, but reports
+		 *  no substring. */
 		int32_t	getSubstringCount();
 
-		/** Returns the "index"'th matching substring or NULL
-		 *  if index is invalid. */
+		/** Returns the "index"'th matching substring, or NULL
+		 *  if index is invalid or if the capture group at
+		 *  "index" did not participate in the match. */
 		const char	*getSubstringStart(int32_t index);
 
 		/** Returns the data directly after the "index"'th
-		 *  matching substring or NULL if index is invalid. */
+		 *  matching substring, or NULL if index is invalid or
+		 *  if the capture group at "index" did not participate
+		 *  in the match. */
 		const char	*getSubstringEnd(int32_t index);
 
 		/** Returns the offset of the "index"'th matching
-		 *  substring or -1 if index is invalid. */
+		 *  substring, or -1 if index is invalid or if the
+		 *  capture group at "index" did not participate in the
+		 *  match. */
 		int32_t	getSubstringStartOffset(int32_t index);
 
 		/** Returns the offset of the data directly after the
-		 *  "index"'th matching substring or -1 if index is
-		 *  invalid. */
+		 *  "index"'th matching substring, or -1 if index is
+		 *  invalid or if the capture group at "index" did not
+		 *  participate in the match. */
 		int32_t	getSubstringEndOffset(int32_t index);
 
 	#include <rudiments/private/regularexpression.h>
