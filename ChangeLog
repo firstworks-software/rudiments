@@ -4,6 +4,7 @@
 	added PCRE2 support - configure now prefers PCRE2, falls back to PCRE1, then POSIX regex, so regularexpression still uses PCRE on distros that have dropped PCRE1 (debian 13, el10)
 	fixed double free in regularexpression::clear() on builds without PCRE (POSIX regex or the built-in regex, which is what windows uses) - clear() left its string copy dangling, so clear() followed by the destructor, a second clear(), or another match() aborted
 	removed regularexpression::clear(), which was public but undocumented and never appeared in the api reference - the destructor does its work now, so the object can no longer be left holding pointers to memory it just freed
+	fixed datetime::parse() so fractional seconds followed by an am/pm meridian scale correctly - the fraction was measured with its meridian attached, so "01:01:01:123PM" was scaled as a 5-digit fraction and yielded 1230 microseconds instead of 123000
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128

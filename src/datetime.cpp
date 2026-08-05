@@ -1381,7 +1381,14 @@ int32_t datetime::fractionToMicroseconds(const char *fraction) {
 		return 0;
 	}
 
-	size_t	len=charstring::getLength(fraction);
+	// the fraction may be followed by an am/pm meridian
+	// (eg. "123PM"), so only measure the leading digits
+	const char	*c=fraction;
+	while (character::isDigit(*c)) {
+		c++;
+	}
+	size_t	len=c-fraction;
+
 	while (len<6) {
 		val=val*10;
 		len++;

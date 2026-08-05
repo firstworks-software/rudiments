@@ -518,6 +518,61 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	// parse fractional seconds
+	stdoutput.printf("parse fractional seconds:\n");
+	const char	*fractiondates[]={
+		"Jan  1 2001 01:01:01:1",
+		"Jan  1 2001 01:01:01:12",
+		"Jan  1 2001 01:01:01:123",
+		"Jan  1 2001 01:01:01:1234",
+		"Jan  1 2001 01:01:01:123456",
+		"Jan  1 2001 01:01:01.1",
+		"Jan  1 2001 01:01:01.12",
+		"Jan  1 2001 01:01:01.123",
+		"Jan  1 2001 01:01:01.1234",
+		"Jan  1 2001 01:01:01.123456",
+		"Jan  1 2001 01:01:01:1PM",
+		"Jan  1 2001 01:01:01:12PM",
+		"Jan  1 2001 01:01:01:123PM",
+		"Jan  1 2001 01:01:01:1234PM",
+		"Jan  1 2001 01:01:01:123456PM",
+		"Jan  1 2001 01:01:01.1PM",
+		"Jan  1 2001 01:01:01.12PM",
+		"Jan  1 2001 01:01:01.123PM",
+		"Jan  1 2001 01:01:01.1234PM",
+		"Jan  1 2001 01:01:01.123456PM",
+		NULL
+	};
+	int32_t	fractionusecs[]={
+		100000,120000,123000,123400,123456,
+		100000,120000,123000,123400,123456,
+		100000,120000,123000,123400,123456,
+		100000,120000,123000,123400,123456
+	};
+	int16_t	fractionhours[]={
+		1,1,1,1,1,
+		1,1,1,1,1,
+		13,13,13,13,13,
+		13,13,13,13,13
+	};
+	uint16_t	f=0;
+	for (const char **d=fractiondates; *d; d++, f++) {
+		stdoutput.printf("%s\n",*d);
+		datetime::parse(*d,false,false,dd,
+				&year,&month,&day,
+				&hour,&minute,&second,
+				&microsecond,&isnegative);
+		test("year",year==2001);
+		test("month",month==1);
+		test("day",day==1);
+		test("hour",hour==fractionhours[f]);
+		test("minute",minute==1);
+		test("second",second==1);
+		test("microsecond",microsecond==fractionusecs[f]);
+		test("isnegative",!isnegative);
+	}
+	stdoutput.printf("\n");
+
 	// set
 	stdoutput.printf("set:\n");
 	datetime	d;
