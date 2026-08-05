@@ -64,10 +64,38 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		/** Matches the first "length" character of "str" against the
 		 *  regular expression compiled earlier using the compile
 		 *  method.
-		 * 
+		 *
 		 *  Returns true if the match was successful and
 		 *  false if it was not. */
 		bool	match(const char *str, size_t length);
+
+		/** Matches the first "length" characters of "str" against
+		 *  the regular expression compiled earlier using the
+		 *  compile method, starting at "offset" characters into
+		 *  "str" rather than at the beginning.
+		 *
+		 *  The part of "str" before "offset" is not matched
+		 *  against, but the expression is still evaluated as
+		 *  though it were there.  So ^ does not match at "offset",
+		 *  and a lookbehind can see the characters before it.
+		 *  This is what a global substitution needs, where each
+		 *  match resumes where the previous one left off.
+		 *
+		 *  Offsets reported by getSubstringStartOffset() and
+		 *  getSubstringEndOffset() remain relative to the start of
+		 *  "str", not to "offset".
+		 *
+		 *  Note that on platforms without PCRE, this class falls
+		 *  back to a POSIX regular expression engine, and only
+		 *  the ^ anchor is handled correctly there.  Those
+		 *  engines have no lookbehind at all, and they compute a
+		 *  word boundary as though the subject began at
+		 *  "offset", so \b can match there when it should not.
+		 *
+		 *  Returns true if the match was successful and
+		 *  false if it was not, including if "offset" is negative
+		 *  or past "length". */
+		bool	match(const char *str, size_t length, int32_t offset);
 
 		/** Returns the number of substrings that the last
 		 *  successful call to match() can report, or 0 if the

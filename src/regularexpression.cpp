@@ -223,27 +223,38 @@ bool regularexpression::study() {
 }
 
 bool regularexpression::match(const char *str, size_t length) {
+	return match(str,length,0);
+}
+
+bool regularexpression::match(const char *str, size_t length,
+						int32_t offset) {
 	if (!str) {
 		return pvt->_null;
 	}
+	pvt->_matchcount=0;
+	if (offset<0 || (size_t)offset>length) {
+		return false;
+	}
 	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
+		// regexec() needs a null-terminated subject, but the
+		// substrings still have to be reported relative to str
 		delete[] pvt->_strcopy;
 		pvt->_strcopy=charstring::duplicate(str,length);
-		return match(pvt->_strcopy);
+		pvt->_str=str;
+		return runRegexec(pvt->_strcopy,offset);
 	#else
 		pvt->_str=str;
-		pvt->_matchcount=0;
 		#if defined(RUDIMENTS_HAS_PCRE2)
 			bool	retval=(pvt->_expr &&
 					pcre2_match(pvt->_expr,
 						(PCRE2_SPTR)pvt->_str,length,
-						0,0,pvt->_matchdata,
+						offset,0,pvt->_matchdata,
 						NULL)>-1);
 		#else
 			bool	retval=(pvt->_expr &&
 					pcre_exec(pvt->_expr,pvt->_extra,
 						pvt->_str,length,
-						0,0,pvt->_matches,
+						offset,0,pvt->_matches,
 						RUDIMENTS_REGEX_MATCHES*3)>-1);
 		#endif
 		if (retval) {
@@ -258,20 +269,45 @@ bool regularexpression::match(const char *str) {
 		return pvt->_null;
 	}
 	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
-		return match(str,charstring::getLength(str));
+		return match(str,charstring::getLength(str),0);
 	#else
+		// no copy is needed, str is already null-terminated
 		pvt->_str=str;
-		pvt->_matchcount=0;
-		bool	retval=(pvt->_compiled &&
-				!regexec(&pvt->_expr,pvt->_str,
-					RUDIMENTS_REGEX_MATCHES,
-					pvt->_matches,0));
-		if (retval) {
-			pvt->_matchcount=pvt->_substringcount;
-		}
-		return retval;
+		return runRegexec(str,0);
 	#endif
 }
+
+#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
+bool regularexpression::runRegexec(const char *subject, int32_t offset) {
+
+	pvt->_matchcount=0;
+
+	// regexec() has no start offset, so it has to be pointed at the
+	// resume point instead.  REG_NOTBOL keeps ^ from matching there,
+	// which is the whole reason for taking an offset rather than
+	// letting the caller pass a pointer into the middle of the string.
+	if (!pvt->_compiled ||
+		regexec(&pvt->_expr,subject+offset,
+				RUDIMENTS_REGEX_MATCHES,
+				pvt->_matches,(offset)?REG_NOTBOL:0)) {
+		return false;
+	}
+
+	// regexec() reports positions relative to where it was pointed, but
+	// they have to come back relative to the start of the subject
+	if (offset) {
+		for (int32_t i=0; i<pvt->_substringcount; i++) {
+			if (pvt->_matches[i].rm_so>-1) {
+				pvt->_matches[i].rm_so+=offset;
+				pvt->_matches[i].rm_eo+=offset;
+			}
+		}
+	}
+
+	pvt->_matchcount=pvt->_substringcount;
+	return true;
+}
+#endif
 
 int32_t regularexpression::getSubstringCount() {
 	if (pvt->_null) {

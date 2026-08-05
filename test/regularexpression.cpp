@@ -216,10 +216,96 @@ printMatches(&re);
         stdoutput.printf("\n");
 
 
+        stdoutput.printf("match with an offset\n");
+
+	test("setPattern",re.setPattern("a"));
+        str="aXa";
+	test("offset 0",re.match(str,3,0));
+	test("offset 0 start offset",re.getSubstringStartOffset(0)==0);
+	test("offset 0 end offset",re.getSubstringEndOffset(0)==1);
+	// a pointer into str, not into the copy the POSIX arms make of it
+	test("offset 0 start",re.getSubstringStart(0)==str);
+	test("offset 0 end",re.getSubstringEnd(0)==(str+1));
+
+	// resuming past the first match finds the second one, and the
+	// offsets stay relative to the start of str, not to the offset
+	test("offset 1",re.match(str,3,1));
+	test("offset 1 start offset",re.getSubstringStartOffset(0)==2);
+	test("offset 1 end offset",re.getSubstringEndOffset(0)==3);
+	test("offset 1 start",re.getSubstringStart(0)==(str+2));
+	test("offset 1 end",re.getSubstringEnd(0)==(str+3));
+	test("offset 2",re.match(str,3,2));
+	test("offset 2 start offset",re.getSubstringStartOffset(0)==2);
+
+	// an offset at the end of the subject is valid, it just can't match
+	test("offset at the end",!re.match(str,3,3));
+	test("match count",!re.getSubstringCount());
+
+	// an offset past the end, or a negative one, fails
+	test("offset past the end",!re.match(str,3,4));
+	test("negative offset",!re.match(str,3,-1));
+
+	// the length still bounds the subject
+	test("length bound",!re.match(str,2,2));
+
+	// ^ doesn't match at the offset, the way it does when the caller
+	// passes a pointer into the middle of the subject instead
+	test("setPattern",re.setPattern("^b"));
+        str="ab";
+	test("^ at an offset",!re.match(str,2,1));
+	test("^ with a pointer into the middle",re.match(str+1,1,0));
+
+	// capture group offsets get the same treatment
+	test("setPattern",re.setPattern("(x)(y)"));
+        str="xy-xy";
+	test("groups at an offset",re.match(str,5,2));
+	test("group 0 start offset",re.getSubstringStartOffset(0)==3);
+	test("group 0 end offset",re.getSubstringEndOffset(0)==5);
+	test("group 1 start offset",re.getSubstringStartOffset(1)==3);
+	test("group 1 end offset",re.getSubstringEndOffset(1)==4);
+	test("group 2 start offset",re.getSubstringStartOffset(2)==4);
+	test("group 2 end offset",re.getSubstringEndOffset(2)==5);
+	test("group 2 start",re.getSubstringStart(2)==(str+4));
+	test("group 2 end",re.getSubstringEnd(2)==(str+5));
+
+	// ...except a group that didn't participate, which stays unset
+	test("setPattern",re.setPattern("(a)?(b)"));
+        str="zzb";
+	test("optional group at an offset",re.match(str,3,1));
+	test("group 1 start offset",re.getSubstringStartOffset(1)==-1);
+	test("group 1 end offset",re.getSubstringEndOffset(1)==-1);
+	test("group 2 start offset",re.getSubstringStartOffset(2)==2);
+	test("group 2 end offset",re.getSubstringEndOffset(2)==3);
+
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+	// lookbehind can see what precedes the offset, which it can't when
+	// the caller passes a pointer into the middle of the subject
+	test("setPattern",re.setPattern("(?<=a)b"));
+        str="ab";
+	test("lookbehind at an offset",re.match(str,2,1));
+	test("lookbehind start offset",re.getSubstringStartOffset(0)==1);
+	test("lookbehind with a pointer into the middle",!re.match(str+1,1,0));
+	#endif
+
+	// walk a subject the way a global substitution does
+	test("setPattern",re.setPattern("o"));
+        str="foo boo";
+	int32_t	walkoffset=0;
+	int32_t	walkcount=0;
+	while (re.match(str,7,walkoffset)) {
+		walkcount++;
+		walkoffset=re.getSubstringEndOffset(0);
+	}
+	test("global walk",walkcount==4);
+	test("global walk offset",walkoffset==7);
+        stdoutput.printf("\n");
+
+
         stdoutput.printf("NULLs\n");
 	test("setPattern",re.setPattern(NULL));
 	test("study",re.study());
         test("match",re.match(NULL));
+        test("match with an offset",re.match(NULL,0,0));
 	//printMatches(&re);
 	test("match count",!re.getSubstringCount());
 	test("match start",!re.getSubstringStart(0));
@@ -246,6 +332,7 @@ printMatches(&re);
 	{
 		regularexpression	re2;
 		test("match",!re2.match("Hello Dave",10));
+		test("match with an offset",!re2.match("Hello Dave",10,6));
 		test("match count",!re2.getSubstringCount());
 		test("match start",!re2.getSubstringStart(0));
 		test("match end",!re2.getSubstringEnd(0));
