@@ -7959,7 +7959,11 @@ regcomp (regex_t *preg, const char *pattern, int cflags)
 	= (RE_TRANSLATE_TYPE) malloc (CHAR_SET_SIZE
 				      * sizeof (*(RE_TRANSLATE_TYPE)0));
       if (preg->translate == NULL)
-        return (int) REG_ESPACE;
+        {
+          /* DLM - don't leak the fastmap  */
+          regfree (preg);
+          return (int) REG_ESPACE;
+        }
 
       /* Map uppercase characters to corresponding lowercase ones.  */
       for (i = 0; i < CHAR_SET_SIZE; i++)
@@ -8006,6 +8010,13 @@ regcomp (regex_t *preg, const char *pattern, int cflags)
 	  preg->fastmap = NULL;
 	}
     }
+
+  /* DLM - the error paths out of regex_compile() don't free the buffer,
+     fastmap, or translate, and the caller can't either, since POSIX only
+     allows regfree() after a successful compile.  They all return through
+     this ret, and regfree() skips whichever pointers are still null.  */
+  if (ret != REG_NOERROR)
+    regfree (preg);
 
   return (int) ret;
 }
