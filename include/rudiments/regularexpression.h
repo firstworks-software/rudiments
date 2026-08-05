@@ -6,6 +6,14 @@
 
 #include <rudiments/private/regularexpressionincludes.h>
 
+/** regular expression compile options, or'ed together and passed to
+ *  regularexpression::setPattern() */
+enum regularexpressionoption_t {
+	REGULAR_EXPRESSION_CASE_INSENSITIVE=1,
+	REGULAR_EXPRESSION_MULTILINE=2,
+	REGULAR_EXPRESSION_DOT_ALL=4
+};
+
 /** The regularexpression class provides methods for making comparisons
  *  between text and regular expressions.
  * 
@@ -40,6 +48,39 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  Returns true if the compilation succeeded and false
 		 *  if it failed. */
 		bool	setPattern(const char *pattern);
+
+		/** Sets the regular expression of this instance to
+		 *  "pattern", compiled with "options", which is 0 or
+		 *  some of the following or'ed together.
+		 *
+		 *  REGULAR_EXPRESSION_CASE_INSENSITIVE - letters match
+		 *  either case.
+		 *
+		 *  REGULAR_EXPRESSION_MULTILINE - ^ and $ match at every
+		 *  newline in the subject, not just at its start and end.
+		 *
+		 *  REGULAR_EXPRESSION_DOT_ALL - . matches a newline too.
+		 *
+		 *  An option that the platform's regular expression
+		 *  engine cannot honor is ignored rather than failing the
+		 *  compilation.  Case-insensitivity is honored
+		 *  everywhere.
+		 *
+		 *  On platforms without PCRE, where this class falls back
+		 *  to a POSIX engine, multiline and dot-all are a single
+		 *  switch rather than two.  Asking for multiline also
+		 *  stops . and a negated character class like [^x] from
+		 *  matching a newline, so asking for both gets multiline
+		 *  and drops dot-all.  Note also that on those platforms
+		 *  . matches a newline unless multiline is asked for, so a
+		 *  pattern compiled with no options at all behaves there
+		 *  as though dot-all were on.
+		 *
+		 *  An option that isn't one of the above is ignored.
+		 *
+		 *  Returns true if the compilation succeeded and false
+		 *  if it failed. */
+		bool	setPattern(const char *pattern, uint32_t options);
 
 		/** Returns the regular expression of this instance. */
 		const char	*getPattern();

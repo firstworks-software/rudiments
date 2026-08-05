@@ -301,6 +301,102 @@ printMatches(&re);
         stdoutput.printf("\n");
 
 
+        stdoutput.printf("compile options\n");
+
+	// case insensitivity, which every arm can honor
+	test("setPattern",re.setPattern("dave"));
+        str="Hello DAVE";
+	test("no options",!re.match(str));
+	test("setPattern",
+		re.setPattern("dave",REGULAR_EXPRESSION_CASE_INSENSITIVE));
+	test("case insensitive",re.match(str));
+	test("start",re.getSubstringStart(0)==(str+6));
+        str="Hello dave";
+	test("case insensitive, same case",re.match(str));
+        str="Hello Steve";
+	test("case insensitive, no match",!re.match(str));
+
+	// multiline, which makes ^ match after a newline
+	test("setPattern",re.setPattern("^b"));
+        str="a\nb";
+	test("no options",!re.match(str));
+	test("setPattern",re.setPattern("^b",REGULAR_EXPRESSION_MULTILINE));
+	test("multiline",re.match(str));
+	test("start",re.getSubstringStart(0)==(str+2));
+
+	// options or'ed together
+	test("setPattern",re.setPattern("^b",
+				REGULAR_EXPRESSION_MULTILINE|
+				REGULAR_EXPRESSION_CASE_INSENSITIVE));
+        str="a\nB";
+	test("multiline and case insensitive",re.match(str));
+
+	// an option that isn't one of the flags is ignored, rather than
+	// reaching the engine and failing the compile
+	test("setPattern",re.setPattern("dave",0x8000));
+        str="Hello DAVE";
+	test("unknown option",!re.match(str));
+	test("setPattern",re.setPattern("dave",
+				0x8000|REGULAR_EXPRESSION_CASE_INSENSITIVE));
+	test("unknown option alongside a real one",re.match(str));
+
+	// dot-all, which the two arms spell differently.  On PCRE, . doesn't
+	// match a newline without it.  On the POSIX arms it does with or
+	// without, and asking for multiline is what turns it off, since
+	// there they're one switch rather than two.
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+	test("setPattern",re.setPattern("a.b"));
+        str="a\nb";
+	test("no options",!re.match(str));
+	test("setPattern",re.setPattern("a.b",REGULAR_EXPRESSION_DOT_ALL));
+	test("dot all",re.match(str));
+	test("setPattern",re.setPattern("a.b",
+				REGULAR_EXPRESSION_DOT_ALL|
+				REGULAR_EXPRESSION_MULTILINE));
+	test("dot all and multiline",re.match(str));
+	// a negated character class isn't affected by multiline here
+	test("setPattern",re.setPattern("a[^x]b"));
+	test("negated class",re.match(str));
+	test("setPattern",re.setPattern("a[^x]b",
+				REGULAR_EXPRESSION_MULTILINE));
+	test("negated class, multiline",re.match(str));
+	#else
+	test("setPattern",re.setPattern("a.b"));
+        str="a\nb";
+	test("no options",re.match(str));
+	test("setPattern",re.setPattern("a.b",REGULAR_EXPRESSION_DOT_ALL));
+	test("dot all",re.match(str));
+	// multiline drags dot-all off with it, so this one can't match
+	test("setPattern",re.setPattern("a.b",
+				REGULAR_EXPRESSION_DOT_ALL|
+				REGULAR_EXPRESSION_MULTILINE));
+	test("dot all dropped for multiline",!re.match(str));
+	// ...and it takes a negated character class with it, which is the
+	// third thing REG_NEWLINE does
+	test("setPattern",re.setPattern("a[^x]b"));
+	test("negated class",re.match(str));
+	test("setPattern",re.setPattern("a[^x]b",
+				REGULAR_EXPRESSION_MULTILINE));
+	test("negated class, multiline",!re.match(str));
+	#endif
+
+	// the one-argument setPattern() still compiles with no options
+	test("setPattern",re.setPattern("dave"));
+        str="Hello DAVE";
+	test("still case sensitive",!re.match(str));
+	test("setPattern",re.setPattern("dave",0));
+	test("no options is the same thing",!re.match(str));
+
+	// a bad pattern still fails to compile, with options or without
+	test("bad pattern",!re.setPattern("(unterminated"));
+	test("bad pattern with options",
+		!re.setPattern("(unterminated",
+				REGULAR_EXPRESSION_CASE_INSENSITIVE));
+	test("no match",!re.match(str));
+	test("match count",!re.getSubstringCount());
+        stdoutput.printf("\n");
+
+
         stdoutput.printf("named capture groups\n");
 
 	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)

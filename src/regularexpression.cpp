@@ -131,6 +131,10 @@ regularexpression::~regularexpression() {
 }
 
 bool regularexpression::setPattern(const char *pattern) {
+	return setPattern(pattern,0);
+}
+
+bool regularexpression::setPattern(const char *pattern, uint32_t options) {
 	pvt->_null=false;
 	pvt->_substringcount=0;
 	pvt->_matchcount=0;
@@ -139,6 +143,45 @@ bool regularexpression::setPattern(const char *pattern) {
 		return true;
 	}
 	pvt->_pattern=pattern;
+
+	// map the portable options onto the ones this engine spells them with
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+		uint32_t	engineoptions=0;
+		if (options&REGULAR_EXPRESSION_CASE_INSENSITIVE) {
+			#if defined(RUDIMENTS_HAS_PCRE2)
+				engineoptions|=PCRE2_CASELESS;
+			#else
+				engineoptions|=PCRE_CASELESS;
+			#endif
+		}
+		if (options&REGULAR_EXPRESSION_MULTILINE) {
+			#if defined(RUDIMENTS_HAS_PCRE2)
+				engineoptions|=PCRE2_MULTILINE;
+			#else
+				engineoptions|=PCRE_MULTILINE;
+			#endif
+		}
+		if (options&REGULAR_EXPRESSION_DOT_ALL) {
+			#if defined(RUDIMENTS_HAS_PCRE2)
+				engineoptions|=PCRE2_DOTALL;
+			#else
+				engineoptions|=PCRE_DOTALL;
+			#endif
+		}
+	#else
+		int	engineoptions=REG_EXTENDED;
+		if (options&REGULAR_EXPRESSION_CASE_INSENSITIVE) {
+			engineoptions|=REG_ICASE;
+		}
+		// REG_NEWLINE is the closest thing POSIX has to multiline,
+		// but it also stops . from matching a newline, which is the
+		// opposite of dot-all.  Dot-all is what these engines do
+		// without it, so it needs no flag of its own, and it's the
+		// one that gets dropped when both are asked for.
+		if (options&REGULAR_EXPRESSION_MULTILINE) {
+			engineoptions|=REG_NEWLINE;
+		}
+	#endif
 
 	// compile, and get the count of capture groups from the pattern
 	int32_t	capturecount=0;
@@ -149,7 +192,8 @@ bool regularexpression::setPattern(const char *pattern) {
 		int32_t		error;
 		PCRE2_SIZE	erroroffset;
 		if (!(pvt->_expr=pcre2_compile((PCRE2_SPTR)pattern,
-						PCRE2_ZERO_TERMINATED,0,
+						PCRE2_ZERO_TERMINATED,
+						engineoptions,
 						&error,&erroroffset,
 						NULL))) {
 			return false;
@@ -167,7 +211,7 @@ bool regularexpression::setPattern(const char *pattern) {
 		}
 		const char	*error;
 		int32_t		erroroffset;
-		if (!(pvt->_expr=pcre_compile(pattern,0,&error,
+		if (!(pvt->_expr=pcre_compile(pattern,engineoptions,&error,
 						&erroroffset,NULL))) {
 			return false;
 		}
@@ -179,7 +223,7 @@ bool regularexpression::setPattern(const char *pattern) {
 			regfree(&pvt->_expr);
 			pvt->_compiled=false;
 		}
-		if (regcomp(&pvt->_expr,pattern,REG_EXTENDED)) {
+		if (regcomp(&pvt->_expr,pattern,engineoptions)) {
 			return false;
 		}
 		pvt->_compiled=true;
