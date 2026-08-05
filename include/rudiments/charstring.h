@@ -1047,6 +1047,33 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  parts that match "from" have been replaced with "to".
+		 *  The part replaced is the whole match, not any one of
+		 *  the pattern's capture groups.
+		 *
+		 *  In "to", a backslash followed by a digit is replaced
+		 *  with what that capture group matched - \\0 for the
+		 *  whole match, \\1 for the first group, and so on
+		 *  through \\9.  A group that didn't participate in the
+		 *  match, or that the pattern doesn't have at all,
+		 *  contributes nothing.  Only the first 9 groups can be
+		 *  referred to this way.
+		 *
+		 *  A backslash followed by a backslash is replaced with a
+		 *  single backslash.  A backslash followed by anything
+		 *  else, or a backslash at the end of "to", is left as it
+		 *  is.
+		 *
+		 *  A part that matches but is empty is skipped rather
+		 *  than replaced.
+		 *
+		 *  Each match after the first resumes where the previous
+		 *  one ended, but the expression is still evaluated
+		 *  against the whole of "str".  So ^ matches only at the
+		 *  real start of "str", not at each resume point.  On
+		 *  platforms with PCRE, a lookbehind and \\b also see
+		 *  what precedes the resume point; on platforms where
+		 *  this class falls back to a POSIX engine, only ^ is
+		 *  handled that way.
 		 *
 		 *  If "global" is true then all matching parts are
 		 *  replaced.  If "global" is false then only the first

@@ -901,6 +901,126 @@ int main(int argc, const char **argv) {
 		!charstring::compare(newstr,"Z Z"));
 	delete[] newstr;
 
+	// backrefs - swap two groups, s/([a-z]+) ([a-z]+)/\2 \1/
+	original="hello world";
+	from.setPattern("([a-z]+) ([a-z]+)");
+	newstr=charstring::replace(original,&from,"\\2 \\1",true);
+	test("replace regex/from-to (swap groups)",
+		!charstring::compare(newstr,"world hello"));
+	delete[] newstr;
+
+	// \0 is the whole match
+	original="a1b2";
+	from.setPattern("[0-9]");
+	newstr=charstring::replace(original,&from,"<\\0>",true);
+	test("replace regex/from-to (whole match backref)",
+		!charstring::compare(newstr,"a<1>b<2>"));
+	delete[] newstr;
+
+	// a backref alongside literal text, more than once each
+	original="2026-08-05";
+	from.setPattern("([0-9]{4})-([0-9]{2})-([0-9]{2})");
+	newstr=charstring::replace(original,&from,"\\2/\\3/\\1 (\\1)",false);
+	test("replace regex/from-to (backrefs and literals)",
+		!charstring::compare(newstr,"08/05/2026 (2026)"));
+	delete[] newstr;
+
+	// a group that didn't participate expands to nothing
+	original="xayb";
+	from.setPattern("(a)(b)?");
+	newstr=charstring::replace(original,&from,"[\\1|\\2]",true);
+	test("replace regex/from-to (non-participating group)",
+		!charstring::compare(newstr,"x[a|]yb"));
+	delete[] newstr;
+
+	// ...and so does a backref past the group count
+	original="ab";
+	from.setPattern("(a)");
+	newstr=charstring::replace(original,&from,"[\\1|\\5]",true);
+	test("replace regex/from-to (backref past the count)",
+		!charstring::compare(newstr,"[a|]b"));
+	delete[] newstr;
+
+	// a doubled backslash is one backslash, and an escape this doesn't
+	// know keeps both characters
+	original="ab";
+	from.setPattern("a");
+	newstr=charstring::replace(original,&from,"\\\\\\1\\q\\",true);
+	test("replace regex/from-to (backslashes)",
+		!charstring::compare(newstr,"\\\\q\\b"));
+	delete[] newstr;
+
+	// a replacement with no backrefs at all is untouched
+	original="a.b";
+	from.setPattern("\\.");
+	newstr=charstring::replace(original,&from,"---",true);
+	test("replace regex/from-to (no backrefs)",
+		!charstring::compare(newstr,"a---b"));
+	delete[] newstr;
+
+	// matching from an offset rather than from a pointer into the
+	// middle of the subject, so ^ only matches at the real start
+	original="aaa";
+	from.setPattern("^a");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (anchored)",
+		!charstring::compare(newstr,"Zaa"));
+	delete[] newstr;
+
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+	// ...and a lookbehind can see what precedes the resume point,
+	// which only the PCRE engines have
+	original="xaya";
+	from.setPattern("(?<=x)a");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (lookbehind)",
+		!charstring::compare(newstr,"xZya"));
+	delete[] newstr;
+
+	// a word boundary is computed with the preceding character in hand
+	original="aa";
+	from.setPattern("\\ba");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (word boundary)",
+		!charstring::compare(newstr,"Za"));
+	delete[] newstr;
+	#else
+	// the POSIX engines compute a word boundary as though the subject
+	// began at the resume point, so the second "a" looks like one too
+	original="aa";
+	from.setPattern("\\ba");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (word boundary)",
+		!charstring::compare(newstr,"ZZ"));
+	delete[] newstr;
+	#endif
+
+	// an empty match is skipped rather than replaced, so a pattern
+	// that can match nothing still terminates
+	original="abc";
+	from.setPattern("x*");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (empty match)",
+		!charstring::compare(newstr,"abc"));
+	delete[] newstr;
+
+	// degenerate inputs
+	original="";
+	from.setPattern("a");
+	newstr=charstring::replace(original,&from,"Z",true);
+	test("replace regex/from-to (empty string)",
+		!charstring::compare(newstr,""));
+	delete[] newstr;
+
+	test("replace regex/from-to (NULL string)",
+		!charstring::replace((const char *)NULL,&from,"Z",true));
+
+	original="ab";
+	newstr=charstring::replace(original,&from,NULL,true);
+	test("replace regex/from-to (NULL replacement)",
+		!charstring::compare(newstr,"b"));
+	delete[] newstr;
+
 	stdoutput.printf("\n");
 	
 

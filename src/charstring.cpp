@@ -476,6 +476,55 @@ char *charstring::replaceIgnoringCase(const char *str,
 	return newstring.detachString();
 }
 
+// appends "to" to "newstring", expanding \0 through \9 into the substrings
+// that "from" matched, and \\ into a single backslash
+static void appendExpandingBackrefs(stringbuffer *newstring,
+					regularexpression *from,
+					const char *to) {
+
+	if (!to) {
+		return;
+	}
+
+	for (const char *ptr=to; *ptr; ptr++) {
+
+		if (*ptr!='\\') {
+			newstring->append(*ptr);
+			continue;
+		}
+
+		// a trailing backslash is just a backslash
+		if (!*(ptr+1)) {
+			newstring->append(*ptr);
+			continue;
+		}
+
+		ptr++;
+
+		if (*ptr=='\\') {
+			newstring->append('\\');
+			continue;
+		}
+
+		// anything but a backslash or a digit isn't an escape this
+		// method knows, so both characters are kept as they were
+		if (!character::isDigit((unsigned char)*ptr)) {
+			newstring->append('\\')->append(*ptr);
+			continue;
+		}
+
+		// a backref to a group that didn't participate in the
+		// match, or that the pattern doesn't have at all, expands
+		// to nothing
+		int32_t		index=*ptr-'0';
+		const char	*substart=from->getSubstringStart(index);
+		if (substart) {
+			newstring->append(substart,
+					from->getSubstringEnd(index)-substart);
+		}
+	}
+}
+
 char *charstring::replace(const char *str,
 				regularexpression *from,
 				const char *to,
@@ -483,40 +532,49 @@ char *charstring::replace(const char *str,
 	if (!str) {
 		return NULL;
 	}
-	
+
 	// declare buffer for new string
 	stringbuffer	newstring;
 
-	const char	*start=str;
-	const char	*ptr=start;
+	size_t		length=getLength(str);
+	int32_t		start=0;
+	int32_t		offset=0;
 	for (;;) {
 
-		// look for a matching part
-		if (!*ptr || !from->match(ptr) || !from->getSubstringCount()) {
+		// look for a matching part.  Matching from an offset rather
+		// than from a pointer into the middle of str keeps the
+		// engine from thinking each resume point is the start of
+		// the subject, so ^, \b, and lookbehind still work.
+		if ((size_t)offset>=length ||
+			!from->match(str,length,offset) ||
+			!from->getSubstringCount()) {
 
 			// bail if no match is found
 			break;
 		}
 
 		// get the bounds of the matching chunk
-		const char	*fromstart=from->getSubstringStart(0);
-		const char	*fromend=from->getSubstringEnd(0);
+		int32_t	fromstart=from->getSubstringStartOffset(0);
+		int32_t	fromend=from->getSubstringEndOffset(0);
 
-		// move on if they're the same
-		if (fromend==fromstart) {
-			ptr++;
+		// Move on if the match is empty.  It can also end before it
+		// starts - pcre1 reports that for a \K inside a lookahead -
+		// and resuming at the end would move backward and spin
+		// forever, so that counts as empty too.
+		if (fromend<=fromstart) {
+			offset++;
 			continue;
 		}
 
 		// append the previous, non-matching part of the chunk
-		newstring.append(start,fromstart-start);
+		newstring.append(str+start,fromstart-start);
 
 		// append the replacement part
-		newstring.append(to);
+		appendExpandingBackrefs(&newstring,from,to);
 
 		// move the start forward in the matching chunk
 		start=fromend;
-		ptr=start;
+		offset=start;
 
 		// bail if we're not replacing globally
 		if (!global) {
@@ -525,7 +583,7 @@ char *charstring::replace(const char *str,
 	}
 
 	// append the rest of the chunk
-	newstring.append(start);
+	newstring.append(str+start);
 
 	// return the string that contains the replacements
 	return newstring.detachString();
