@@ -301,11 +301,104 @@ printMatches(&re);
         stdoutput.printf("\n");
 
 
+        stdoutput.printf("named capture groups\n");
+
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+	test("setPattern",re.setPattern("(?<year>[0-9]{4})-(?<month>[0-9]{2})"));
+        str="on 2026-08 sometime";
+        test(str,re.match(str));
+
+	// a name resolves to the index of the group that has it
+	test("year index",re.getSubstringIndex("year")==1);
+	test("month index",re.getSubstringIndex("month")==2);
+
+	// ...and an unknown one, or a NULL one, resolves to nothing
+	test("unknown index",re.getSubstringIndex("day")==-1);
+	test("NULL index",re.getSubstringIndex(NULL)==-1);
+
+	// the name-taking getters agree with the index-taking ones
+	test("year start",re.getSubstringStart("year")==(str+3));
+	test("year end",re.getSubstringEnd("year")==(str+7));
+	test("year start offset",re.getSubstringStartOffset("year")==3);
+	test("year end offset",re.getSubstringEndOffset("year")==7);
+	test("month start",re.getSubstringStart("month")==(str+8));
+	test("month end",re.getSubstringEnd("month")==(str+10));
+	test("month start offset",re.getSubstringStartOffset("month")==8);
+	test("month end offset",re.getSubstringEndOffset("month")==10);
+	test("year start by index",
+		re.getSubstringStart("year")==re.getSubstringStart(1));
+	test("month start by index",
+		re.getSubstringStart("month")==re.getSubstringStart(2));
+
+	// an unknown name reports nothing rather than the whole match
+	test("unknown start",!re.getSubstringStart("day"));
+	test("unknown end",!re.getSubstringEnd("day"));
+	test("unknown start offset",re.getSubstringStartOffset("day")==-1);
+	test("unknown end offset",re.getSubstringEndOffset("day")==-1);
+	test("NULL start",!re.getSubstringStart((const char *)NULL));
+	test("NULL end",!re.getSubstringEnd((const char *)NULL));
+
+	// a named group that didn't participate keeps its index, but
+	// reports no substring
+	test("setPattern",re.setPattern("(?<a>x)?(?<b>y)"));
+        str="y";
+        test(str,re.match(str));
+	test("a index",re.getSubstringIndex("a")==1);
+	test("b index",re.getSubstringIndex("b")==2);
+	test("a start",!re.getSubstringStart("a"));
+	test("a start offset",re.getSubstringStartOffset("a")==-1);
+	test("b start",re.getSubstringStart("b")==str);
+	test("b end offset",re.getSubstringEndOffset("b")==1);
+
+	// a name that more than one group has resolves to nothing, since
+	// there's no single index to report.  (?J) turns duplicate names
+	// on from inside the pattern, so this is reachable even though
+	// setPattern() never asks for them.
+	test("setPattern",re.setPattern("(?J)(?<n>aa)|(?<n>bb)"));
+        str="zzaa";
+        test(str,re.match(str));
+	test("duplicate name index",re.getSubstringIndex("n")==-1);
+	test("duplicate name start",!re.getSubstringStart("n"));
+	test("duplicate name start offset",re.getSubstringStartOffset("n")==-1);
+
+	// ...but a branch reset gives every branch the same index, so the
+	// name still resolves
+	test("setPattern",re.setPattern("(?|(?<n>aa)|(?<n>bb))"));
+        str="zzbb";
+        test(str,re.match(str));
+	test("branch reset index",re.getSubstringIndex("n")==1);
+	test("branch reset start",re.getSubstringStart("n")==(str+2));
+	test("branch reset end",re.getSubstringEnd("n")==(str+4));
+
+	// the index is a property of the pattern, so it resolves before a
+	// match has been tried, and stops resolving when the pattern changes
+	test("setPattern",re.setPattern("(?<zzz>z)"));
+	test("index before a match",re.getSubstringIndex("zzz")==1);
+	test("no substring before a match",!re.getSubstringStart("zzz"));
+	test("setPattern",re.setPattern("(z)"));
+	test("index after a new pattern",re.getSubstringIndex("zzz")==-1);
+	#else
+	// the POSIX engines have no named capture groups
+	test("setPattern",re.setPattern("(a)(b)"));
+        str="ab";
+        test(str,re.match(str));
+	test("index",re.getSubstringIndex("a")==-1);
+	test("NULL index",re.getSubstringIndex(NULL)==-1);
+	test("start",!re.getSubstringStart("a"));
+	test("end",!re.getSubstringEnd("a"));
+	test("start offset",re.getSubstringStartOffset("a")==-1);
+	test("end offset",re.getSubstringEndOffset("a")==-1);
+	#endif
+        stdoutput.printf("\n");
+
+
         stdoutput.printf("NULLs\n");
 	test("setPattern",re.setPattern(NULL));
 	test("study",re.study());
         test("match",re.match(NULL));
         test("match with an offset",re.match(NULL,0,0));
+	test("index by name",re.getSubstringIndex("name")==-1);
+	test("start by name",!re.getSubstringStart("name"));
 	//printMatches(&re);
 	test("match count",!re.getSubstringCount());
 	test("match start",!re.getSubstringStart(0));

@@ -131,6 +131,50 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  participate in the match. */
 		int32_t	getSubstringEndOffset(int32_t index);
 
+		/** Returns the index of the capture group named "name",
+		 *  or -1 if the pattern has no group by that name.
+		 *
+		 *  A pattern names a capture group by writing it as
+		 *  (?\<name\>...) and refers to it later as \\k\<name\>.
+		 *
+		 *  Named capture groups are a PCRE feature.  The POSIX
+		 *  regular expression engines that this class falls back
+		 *  to, on platforms without PCRE, do not have them, so
+		 *  this method returns -1 on those platforms.  It also
+		 *  returns -1 if more than one group has the name, since
+		 *  there is then no single index to return.
+		 *
+		 *  Note that passing a literal NULL to the methods below
+		 *  that take a "name" is ambiguous with the ones that
+		 *  take an "index" on some compilers, and picks the index
+		 *  0 - the whole match - on others.  Cast it to
+		 *  const char * if you must pass one. */
+		int32_t	getSubstringIndex(const char *name);
+
+		/** Returns the substring matched by the capture group
+		 *  named "name", or NULL if the pattern has no group by
+		 *  that name or if the group did not participate in the
+		 *  match. */
+		const char	*getSubstringStart(const char *name);
+
+		/** Returns the data directly after the substring matched
+		 *  by the capture group named "name", or NULL if the
+		 *  pattern has no group by that name or if the group did
+		 *  not participate in the match. */
+		const char	*getSubstringEnd(const char *name);
+
+		/** Returns the offset of the substring matched by the
+		 *  capture group named "name", or -1 if the pattern has
+		 *  no group by that name or if the group did not
+		 *  participate in the match. */
+		int32_t	getSubstringStartOffset(const char *name);
+
+		/** Returns the offset of the data directly after the
+		 *  substring matched by the capture group named "name",
+		 *  or -1 if the pattern has no group by that name or if
+		 *  the group did not participate in the match. */
+		int32_t	getSubstringEndOffset(const char *name);
+
 	#include <rudiments/private/regularexpression.h>
 };
 

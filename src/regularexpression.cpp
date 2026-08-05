@@ -350,6 +350,57 @@ const char *regularexpression::getSubstringEnd(int32_t index) {
 	return (offset>-1)?(pvt->_str+offset):NULL;
 }
 
+int32_t regularexpression::getSubstringIndex(const char *name) {
+	if (pvt->_null || !name) {
+		return -1;
+	}
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		if (!pvt->_expr) {
+			return -1;
+		}
+		int32_t	index=pcre2_substring_number_from_name(
+						pvt->_expr,(PCRE2_SPTR)name);
+	#elif defined(RUDIMENTS_HAS_PCRE)
+		if (!pvt->_expr) {
+			return -1;
+		}
+		// Unlike pcre2, pcre1 returns one of the numbers when more
+		// than one group has the name, and doesn't define which.
+		// The name table has to be consulted to rule that out.
+		char	*first;
+		char	*last;
+		if (pcre_get_stringtable_entries(pvt->_expr,name,
+							&first,&last)<0 ||
+			first!=last) {
+			return -1;
+		}
+		int32_t	index=pcre_get_stringnumber(pvt->_expr,name);
+	#else
+		// the POSIX regular expression engines have no named
+		// capture groups
+		int32_t	index=-1;
+	#endif
+	// an unknown name, or one used by more than one group, comes back
+	// as a negative error code
+	return (index<0)?-1:index;
+}
+
+int32_t regularexpression::getSubstringStartOffset(const char *name) {
+	return getSubstringStartOffset(getSubstringIndex(name));
+}
+
+int32_t regularexpression::getSubstringEndOffset(const char *name) {
+	return getSubstringEndOffset(getSubstringIndex(name));
+}
+
+const char *regularexpression::getSubstringStart(const char *name) {
+	return getSubstringStart(getSubstringIndex(name));
+}
+
+const char *regularexpression::getSubstringEnd(const char *name) {
+	return getSubstringEnd(getSubstringIndex(name));
+}
+
 bool regularexpression::match(const char *str, size_t length,
 						const char *pattern) {
 	regularexpression	re;
