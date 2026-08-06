@@ -81,7 +81,6 @@ srcs="winsock.cpp "+_
 	"protocolentry.cpp "+_
 	"randomnumber.cpp "+_
 	"bytestring.cpp "+_
-	"regex.cpp "+_
 	"regularexpression.cpp "+_
 	"semaphoreset.cpp "+_
 	"server.cpp "+_
@@ -187,7 +186,6 @@ lobjs="winsock.obj "+_
 	"protocolentry.obj "+_
 	"randomnumber.obj "+_
 	"bytestring.obj "+_
-	"regex.obj "+_
 	"regularexpression.obj "+_
 	"semaphoreset.obj "+_
 	"server.obj "+_

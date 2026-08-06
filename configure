@@ -44991,12 +44991,6 @@ then
 	LOBJS="$LOBJS regularexpression.lo"
 fi
 
-if ( test "$USE_BUILT_IN_REGULAREXPRESSION" = "1" )
-then
-	SRCS="$SRCS regex.cpp"
-	LOBJS="$LOBJS regex.lo"
-fi
-
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
 	HEADERS2="$HEADERS2 semaphoreset.h"

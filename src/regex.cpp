@@ -28,7 +28,9 @@
 /*#include <features.h>*/
 #include <stdlib.h>
 #include <string.h>
+#ifndef STDC_HEADERS
 #define STDC_HEADERS
+#endif
 
 /* AIX requires this to be the first thing in the file. */
 #if defined _AIX && !defined REGEX_MALLOC
@@ -7924,3 +7926,89 @@ weak_alias (__regfree, regfree)
 # undef WCHAR
 
 # define DEFINED_ONCE
+
+
+/* rudiments: this file is included into regularexpression.cpp, so undefine
+   the macros it would otherwise leave defined for the rest of that file.
+   Guarded, because the recursive passes above still need them.  */
+#ifndef INSIDE_RECURSION
+# undef alloca
+# undef assert
+# undef BYTEWIDTH
+# undef bzero
+# undef CHAR_CLASS_MAX_LENGTH
+# undef CHAR_SET_SIZE
+# undef COMPILE_STACK_EMPTY
+# undef COMPILE_STACK_FULL
+# undef COMPILE_STACK_TOP
+# undef DEBUG_PRINT1
+# undef DEBUG_PRINT2
+# undef DEBUG_PRINT3
+# undef DEBUG_PRINT4
+# undef DEBUG_STATEMENT
+# undef DEFINED_ONCE
+# undef ELSE_EXTEND_BUFFER_HIGH_BOUND
+# undef EVER_MATCHED_SOMETHING
+# undef FAIL_STACK_EMPTY
+# undef FAIL_STACK_FULL
+# undef FAIL_STACK_PTR_EMPTY
+# undef false
+# undef FIRST_STRING_P
+# undef gettext
+# undef gettext_noop
+# undef INIT_COMPILE_STACK_SIZE
+# undef INIT_FAILURE_ALLOC
+# undef IS_ACTIVE
+# undef ISALNUM
+# undef ISALPHA
+# undef ISASCII
+# undef ISBLANK
+# undef IS_CHAR_CLASS
+# undef ISCNTRL
+# undef ISDIGIT
+# undef ISGRAPH
+# undef ISLOWER
+# undef ISPRINT
+# undef ISPUNCT
+# undef ISSPACE
+# undef ISUPPER
+# undef ISXDIGIT
+# undef MATCHED_SOMETHING
+# undef MATCHING_IN_FIRST_STRING
+# undef MATCH_MAY_ALLOCATE
+# undef MATCH_NULL_UNSET_VALUE
+# undef MAX
+# undef MAX_BUF_SIZE
+# undef MAX_FAILURE_ITEMS
+# undef MAX_REGNUM
+# undef MB_LEN_MAX
+# undef MIN
+# undef MOVE_BUFFER_POINTER
+# undef NUM_FAILURE_ITEMS
+# undef NUM_NONREG_ITEMS
+# undef NUM_REG_ITEMS
+# undef PARAMS
+# undef REALLOC
+# undef REGEX_ALLOCATE
+# undef REGEX_ALLOCATE_STACK
+# undef REGEX_FREE
+# undef REGEX_FREE_STACK
+# undef REGEX_REALLOCATE
+# undef REGEX_REALLOCATE_STACK
+# undef REGEX_TALLOC
+# undef REG_MATCH_NULL_STRING_P
+# undef REMAINING_AVAIL_SLOTS
+# undef RETALLOC
+# undef RETALLOC_IF
+# undef SET_LIST_BIT
+# undef SET_REGS_MATCHED
+# undef SIGN_EXTEND_CHAR
+# undef STDC_HEADERS
+# undef STREQ
+# undef SWITCH_ENUM_CAST
+# undef Sword
+# undef SYNTAX
+# undef TALLOC
+# undef TOLOWER
+# undef true
+#endif /* not INSIDE_RECURSION */

@@ -22,7 +22,7 @@
 		#include <sys/types.h>
 	#endif
 	#include <rudiments/charstring.h>
-	#include "regex.h"
+	#include "regex.cpp"
 #endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
