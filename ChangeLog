@@ -1,4 +1,4 @@
-2.2.1 - bumped the version to 2.2.1
+2.3.0 - bumped the version to 2.3.0
 	fixed buffer overflow when unix socket file name is too long
 	fixed segfault in file::getBaseName(filename,ext) when the base name doesn't end in ext, when either argument is NULL, or when the base name is entirely the extension - it now truncates ext only if the base name ends with it and returns the base name unmodified otherwise
 	added PCRE2 support - configure now prefers PCRE2, falls back to PCRE1, then POSIX regex, so regularexpression still uses PCRE on distros that have dropped PCRE1 (debian 13, el10)
@@ -35,6 +35,7 @@
 	fixed regularexpression::getSubstringCount() so a capture group that didn't participate in the match no longer hides the groups after it - the count now comes from the compiled pattern rather than from a scan of the match array, so (a)?(b) against "b" reports 3 substrings on every build, not just the PCRE ones
 	fixed charstring::replace(str,regularexpression,to,global) so it replaces the whole match rather than the pattern's last capture group - for pattern (a)(b) against "ab" it replaced only "b"
 	fixed datetime::parse() so fractional seconds followed by an am/pm meridian scale correctly - the fraction was measured with its meridian attached, so "01:01:01:123PM" was scaled as a 5-digit fraction and yielded 1230 microseconds instead of 123000
+	bumped the soname from librudiments.so.12 to librudiments.so.13 - this release removes exported symbols rather than only adding them, which is the case libtool's rules say has to move the soname, so anything linked against .so.12 has to be rebuilt against .so.13
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128

@@ -638,7 +638,7 @@ privateheaders7="staticarray.h "+_
 	"locale.h "
 
 ' version
-RUDIMENTS_VERSION="2.2.1"
+RUDIMENTS_VERSION="2.3.0"
 
 ' paths
 pfix="C:\\Program Files\\Firstworks"
