@@ -32,10 +32,9 @@
 #define STDC_HEADERS
 #endif
 
-/* AIX requires this to be the first thing in the file. */
-#if defined _AIX && !defined REGEX_MALLOC
-  #pragma alloca
-#endif
+/* DLM - removed the AIX "#pragma alloca" that was here.  It is C-only on
+   classic xlC, unsupported on Open XL C/C++ 17, and an unknown-pragma error
+   under -Wall -Werror.  Upstream glibc dropped it in 2.3.  */
 
 #undef	_GNU_SOURCE
 #define _GNU_SOURCE
