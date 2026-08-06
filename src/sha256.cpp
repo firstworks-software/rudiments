@@ -94,7 +94,7 @@ bool sha256::clear() {
 	#else
 		bytestring::zero(pvt->_hash.u.u8,sizeof(pvt->_hash.u.u8));
 		sha256_init(&pvt->_context);
-		return false;
+		return true;
 	#endif
 }
 
