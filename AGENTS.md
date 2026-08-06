@@ -78,6 +78,20 @@ built library - there are no external services to stand up (a few use the TLS
 certs generated under `test/certificates/`). To run just one:
 `cd test && make charstring && ./charstring`.
 
+Run a single test through its libtool wrapper, not the binary under test/.libs.
+The wrapper prepends src/.libs, so the test links the library you just built.
+The binary under test/.libs resolves librudiments from the install prefix
+instead, so it silently tests the installed library - it will happily pass
+while your change is not in it. testall.sh runs the wrappers, so make tests is
+unaffected.
+
+```
+cd test
+make charstring
+./charstring          # the wrapper - links the build tree
+./.libs/charstring    # links the INSTALLED library, not what you want
+```
+
 ## Conventions worth knowing
 
 - **C++ standard is C++98.** Configure compiles with `-std=gnu++98` when the
