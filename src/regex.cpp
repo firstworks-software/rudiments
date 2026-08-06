@@ -2102,21 +2102,30 @@ static reg_errcode_t byte_compile_range _RE_ARGS ((unsigned int range_start,
 #  define EXTEND_BUFFER()						\
   do {									\
     UCHAR_T *old_buffer = COMPILED_BUFFER_VAR;				\
+    UCHAR_T *new_buffer;						\
+    unsigned long int new_allocated;					\
     int wchar_count;							\
     if (bufp->allocated + sizeof(UCHAR_T) > MAX_BUF_SIZE)		\
       FREE_STACK_RETURN (REG_ESIZE);					\
-    bufp->allocated <<= 1;						\
-    if (bufp->allocated > MAX_BUF_SIZE)					\
-      bufp->allocated = MAX_BUF_SIZE;					\
+    new_allocated = bufp->allocated << 1;				\
+    if (new_allocated > MAX_BUF_SIZE)					\
+      new_allocated = MAX_BUF_SIZE;					\
     /* How many characters the new buffer can have?  */			\
-    wchar_count = bufp->allocated / sizeof(UCHAR_T);			\
+    wchar_count = new_allocated / sizeof(UCHAR_T);			\
     if (wchar_count == 0) wchar_count = 1;				\
     /* Truncate the buffer to CHAR_T align.  */			\
-    bufp->allocated = wchar_count * sizeof(UCHAR_T);			\
-    RETALLOC (COMPILED_BUFFER_VAR, wchar_count, UCHAR_T);		\
-    bufp->buffer = (char*)COMPILED_BUFFER_VAR;				\
-    if (COMPILED_BUFFER_VAR == NULL)					\
+    new_allocated = wchar_count * sizeof(UCHAR_T);			\
+    /* Into a temporary.  realloc returns NULL on failure and leaves	\
+       the old block allocated, so assigning its result over the only	\
+       pointer to that block would lose it.  Same for the size - it	\
+       stays put until there is a bigger buffer to describe.  */	\
+    new_buffer = (UCHAR_T *) REALLOC (COMPILED_BUFFER_VAR,		\
+						new_allocated);		\
+    if (new_buffer == NULL)						\
       FREE_STACK_RETURN (REG_ESPACE);					\
+    COMPILED_BUFFER_VAR = new_buffer;					\
+    bufp->allocated = new_allocated;					\
+    bufp->buffer = (char*)COMPILED_BUFFER_VAR;				\
     /* If the buffer moved, move all the pointers into it.  */		\
     if (old_buffer != COMPILED_BUFFER_VAR)				\
       {									\
@@ -2136,15 +2145,23 @@ static reg_errcode_t byte_compile_range _RE_ARGS ((unsigned int range_start,
 #  define EXTEND_BUFFER()						\
   do {									\
     UCHAR_T *old_buffer = COMPILED_BUFFER_VAR;				\
+    UCHAR_T *new_buffer;						\
+    unsigned long int new_allocated;					\
     if (bufp->allocated == MAX_BUF_SIZE)				\
       FREE_STACK_RETURN (REG_ESIZE);					\
-    bufp->allocated <<= 1;						\
-    if (bufp->allocated > MAX_BUF_SIZE)					\
-      bufp->allocated = MAX_BUF_SIZE;					\
-    bufp->buffer = (UCHAR_T *) REALLOC (COMPILED_BUFFER_VAR,		\
-						bufp->allocated);	\
-    if (COMPILED_BUFFER_VAR == NULL)					\
+    new_allocated = bufp->allocated << 1;				\
+    if (new_allocated > MAX_BUF_SIZE)					\
+      new_allocated = MAX_BUF_SIZE;					\
+    /* Into a temporary.  realloc returns NULL on failure and leaves	\
+       the old block allocated, so assigning its result over the only	\
+       pointer to that block would lose it.  Same for the size - it	\
+       stays put until there is a bigger buffer to describe.  */	\
+    new_buffer = (UCHAR_T *) REALLOC (COMPILED_BUFFER_VAR,		\
+						new_allocated);		\
+    if (new_buffer == NULL)						\
       FREE_STACK_RETURN (REG_ESPACE);					\
+    COMPILED_BUFFER_VAR = new_buffer;					\
+    bufp->allocated = new_allocated;					\
     /* If the buffer moved, move all the pointers into it.  */		\
     if (old_buffer != COMPILED_BUFFER_VAR)				\
       {									\
@@ -3724,10 +3741,19 @@ PREFIX(regex_compile) (const char *ARG_PREFIX(pattern), size_t ARG_PREFIX(size),
 
               if (COMPILE_STACK_FULL)
                 {
-                  RETALLOC (compile_stack.stack, compile_stack.size << 1,
-                            compile_stack_elt_t);
-                  if (compile_stack.stack == NULL)
+                  /* Into a temporary.  realloc returns NULL on failure
+                     and leaves the old stack allocated, so assigning
+                     its result over the only pointer to that stack
+                     would lose it - and FREE_STACK_RETURN below would
+                     then have nothing left to free.  */
+                  compile_stack_elt_t *new_stack
+                    = (compile_stack_elt_t *)
+                        realloc (compile_stack.stack,
+                                 (compile_stack.size << 1)
+                                   * sizeof (compile_stack_elt_t));
+                  if (new_stack == NULL)
                     FREE_STACK_RETURN (REG_ESPACE);
+                  compile_stack.stack = new_stack;
 
                   compile_stack.size <<= 1;
                 }
