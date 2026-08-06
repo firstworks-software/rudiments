@@ -7177,6 +7177,10 @@ byte_re_match_2_internal (struct re_pattern_buffer *bufp, const char *string1, i
             POP_FAILURE_POINT (sdummy, pdummy,
                                dummy_low_reg, dummy_high_reg,
                                reg_dummy, reg_dummy, reg_info_dummy);
+
+            /* Nothing but the debug prints reads these back.  */
+            (void) sdummy;
+            (void) pdummy;
           }
 	  /* Note fall through.  */
 
