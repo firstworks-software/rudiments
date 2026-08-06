@@ -51,6 +51,7 @@ for program in \
 	sensitivevalue \
 	serviceentry \
 	sha1 \
+	sha256 \
 	sharedmemory \
 	signal \
 	singlylinkedlist \

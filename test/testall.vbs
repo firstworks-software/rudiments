@@ -50,6 +50,7 @@ tests=Array(_
 	"sensitivevalue",_
 	"serviceentry",_
 	"sha1",_
+	"sha256",_
 	"sharedmemory",_
 	"signal",_
 	"singlylinkedlist",_
