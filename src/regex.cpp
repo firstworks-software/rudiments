@@ -1386,9 +1386,9 @@ convert_mbs_to_wcs (CHAR_T *dest, const unsigned char *src, size_t len, int *off
 #   if defined MATCH_MAY_ALLOCATE
 /* 4400 was enough to cause a crash on Alpha OSF/1,
    whose default stack limit is 2mb.  */
-long int re_max_failures = 4000;
+static long int re_max_failures = 4000;
 #   else
-long int re_max_failures = 2000;
+static long int re_max_failures = 2000;
 #   endif
 #  endif
 
@@ -1413,9 +1413,9 @@ typedef struct
 #   if defined MATCH_MAY_ALLOCATE
 /* 4400 was enough to cause a crash on Alpha OSF/1,
    whose default stack limit is 2mb.  */
-int re_max_failures = 4000;
+static int re_max_failures = 4000;
 #   else
-int re_max_failures = 2000;
+static int re_max_failures = 2000;
 #   endif
 #  endif
 
@@ -4841,7 +4841,7 @@ PREFIX(re_compile_fastmap) (struct re_pattern_buffer *bufp)
 
 #else /* not INSIDE_RECURSION */
 
-int
+static int
 re_compile_fastmap (struct re_pattern_buffer *bufp)
 {
 # ifdef MBS_SUPPORT
@@ -4861,7 +4861,7 @@ weak_alias (__re_compile_fastmap, re_compile_fastmap)
 /* Like re_search_2, below, but only one string is specified, and
    doesn't let you say where to stop matching.  */
 
-int
+static int
 re_search (struct re_pattern_buffer *bufp, const char *string, int size, int startpos, int range, struct re_registers *regs)
 {
   return re_search_2 (bufp, NULL, 0, string, size, startpos, range,
@@ -4893,7 +4893,7 @@ weak_alias (__re_search, re_search)
    found, -1 if no match, or -2 if error (such as failure
    stack overflow).  */
 
-int
+static int
 re_search_2 (struct re_pattern_buffer *bufp, const char *string1, int size1, const char *string2, int size2, int startpos, int range, struct re_registers *regs, int stop)
 {
 # ifdef MBS_SUPPORT
@@ -7666,7 +7666,7 @@ PREFIX(bcmp_translate) (const CHAR_T *s1, const CHAR_T *s2, register int len, RE
    It returns 0 if it succeeds, nonzero if it doesn't.  (See regex.h for
    the return codes and their meanings.)  */
 
-int
+static int
 regcomp (regex_t *preg, const char *pattern, int cflags)
 {
   reg_errcode_t ret;
@@ -7770,7 +7770,7 @@ weak_alias (__regcomp, regcomp)
 
    We return 0 if we find a match and REG_NOMATCH if not.  */
 
-int
+static int
 regexec (const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags)
 {
   int ret;
@@ -7831,7 +7831,7 @@ weak_alias (__regexec, regexec)
 
 /* Free dynamically allocated space used by PREG.  */
 
-void
+static void
 regfree (regex_t *preg)
 {
   if (preg->buffer != NULL)

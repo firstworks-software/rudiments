@@ -457,7 +457,7 @@ typedef struct
 /* Compile a fastmap for the compiled pattern in BUFFER; used to
    accelerate searches.  Return 0 if successful and -2 if was an
    internal error.  */
-extern int re_compile_fastmap _RE_ARGS ((struct re_pattern_buffer *buffer));
+static int re_compile_fastmap _RE_ARGS ((struct re_pattern_buffer *buffer));
 
 
 /* Search in the string STRING (with length LENGTH) for the pattern
@@ -465,14 +465,14 @@ extern int re_compile_fastmap _RE_ARGS ((struct re_pattern_buffer *buffer));
    characters.  Return the starting position of the match, -1 for no
    match, or -2 for an internal error.  Also return register
    information in REGS (if REGS and BUFFER->no_sub are nonzero).  */
-extern int re_search
+static int re_search
   _RE_ARGS ((struct re_pattern_buffer *buffer, const char *string,
             int length, int start, int range, struct re_registers *regs));
 
 
 /* Like `re_search', but search in the concatenation of STRING1 and
    STRING2.  Also, stop searching at index START + STOP.  */
-extern int re_search_2
+static int re_search_2
   _RE_ARGS ((struct re_pattern_buffer *buffer, const char *string1,
              int length1, const char *string2, int length2,
              int start, int range, struct re_registers *regs, int stop));
@@ -502,16 +502,16 @@ extern int re_search_2
 #  define __restrict_arr
 
 /* POSIX compatibility.  */
-extern int regcomp _RE_ARGS ((regex_t *__restrict __preg,
+static int regcomp _RE_ARGS ((regex_t *__restrict __preg,
 			      const char *__restrict __pattern,
 			      int __cflags));
 
-extern int regexec _RE_ARGS ((const regex_t *__restrict __preg,
+static int regexec _RE_ARGS ((const regex_t *__restrict __preg,
 			      const char *__restrict __string, size_t __nmatch,
 			      regmatch_t __pmatch[__restrict_arr],
 			      int __eflags));
 
-extern void regfree _RE_ARGS ((regex_t *__preg));
+static void regfree _RE_ARGS ((regex_t *__preg));
 
 
 #ifdef __cplusplus
