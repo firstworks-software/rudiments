@@ -10,6 +10,7 @@
 * [#quick Quick Matches]
 * [#overandover Matching Over and Over]
 * [#multiple Multiple Unique Matches]
+* [#everymatch Every Match]
 
 
 [=#intro]
@@ -55,7 +56,17 @@ Some patterns return multiple unique matches.  The methods getSubstringCount(), 
 }}}
 }}}
 
-Note that only unique matches are returned.  If the exact same pattern of characters is found at multiple locations in the same string, only the first instance of that pattern is returned.
+Note that these are the parts of a single match, not the places the pattern was found.  match() reports the first match in the string and stops there.
+
+
+[=#everymatch]
+== Every Match ==
+
+To get the rest of them, call matchNext() after match(), over and over, until it returns false.  Each call moves to the next match in the same string, and the methods above report that match instead.  The string given to match() has to still be there while the walk runs, since the class never copies it.
+
+So a pattern of "Dave" against "Dave, Dave, Dave!" gives all three, and a pattern of "(\w+) (\w+)" against "hello world hello world" gives "hello world" and then "hello world" again, with its own capture groups each time.
+
+A match that is empty is reported like any other, including one at the very end of the string, and the walk moves one character past where it started so the same empty match never comes back twice.  Note that the replace() method of the charstring class skips empty matches rather than replacing them, which is a substitution policy rather than a different idea of where the matches are.
 
 {{{#!include contentend.html}}}
 

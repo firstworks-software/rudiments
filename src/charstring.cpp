@@ -602,39 +602,26 @@ char *charstring::replace(const char *str,
 	// declare buffer for new string
 	stringbuffer	newstring;
 
-	size_t		length=getLength(str);
-	int32_t		start=0;
-	int32_t		offset=0;
-	for (;;) {
-
-		// look for a matching part.  Matching from an offset rather
-		// than from a pointer into the middle of str keeps the
-		// engine from thinking each resume point is the start of
-		// the subject, so ^, \b, and lookbehind still work.
-		if ((size_t)offset>=length ||
-			!from->match(str,length,offset) ||
-			!from->getSubstringCount()) {
-
-			// bail if no match is found
-			break;
-		}
+	// Walk every match with the regularexpression class rather than
+	// resuming by hand.  It knows where the next match starts, it keeps
+	// the engine from thinking each resume point is the start of the
+	// subject - so ^, \b, and lookbehind still work - and it doesn't
+	// re-copy the subject at every step the way a loop over
+	// match(str,length,offset) does on the platforms without PCRE.
+	int32_t	start=0;
+	for (bool matched=from->match(str,getLength(str));
+			matched; matched=from->matchNext()) {
 
 		// get the bounds of the matching chunk
 		int32_t	fromstart=from->getSubstringStartOffset(0);
 		int32_t	fromend=from->getSubstringEndOffset(0);
 
-		// Move on if the match is empty.  It can also end before it
-		// starts - pcre1 reports that for a \K inside a lookahead -
-		// and resuming at the end would move backward and spin
-		// forever, so that counts as empty too.
-		//
-		// Move on from the match rather than from the resume point.
-		// The engine returns the leftmost match at or after the
-		// offset, so nothing at all matches in between, and bumping
-		// the offset by one would just re-run the whole expression
-		// once per character to arrive at the same empty match.
+		// Skip the match if it's empty.  matchNext() reports empty
+		// matches, but replacing one would insert "to" between every
+		// pair of characters, so a substitution steps over them.  A
+		// match can also end before it starts - pcre1 reports that
+		// for a \K inside a lookahead - which counts as empty too.
 		if (fromend<=fromstart) {
-			offset=fromstart+1;
 			continue;
 		}
 
@@ -646,7 +633,6 @@ char *charstring::replace(const char *str,
 
 		// move the start forward in the matching chunk
 		start=fromend;
-		offset=start;
 
 		// bail if we're not replacing globally
 		if (!global) {

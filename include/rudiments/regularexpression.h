@@ -97,7 +97,10 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 
 		/** Matches "str" against the regular expression
 		 *  compiled earlier using the compile method.
-		 * 
+		 *
+		 *  Only the first match in "str" is reported.  Call
+		 *  matchNext() afterward to walk the rest of them.
+		 *
 		 *  Returns true if the match was successful and
 		 *  false if it was not. */
 		bool	match(const char *str);
@@ -138,9 +141,54 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  or past "length". */
 		bool	match(const char *str, size_t length, int32_t offset);
 
+		/** Matches the regular expression against the subject
+		 *  given to the last successful call to match(),
+		 *  resuming after the previous match rather than at the
+		 *  start of the subject.
+		 *
+		 *  Calling match() and then matchNext() over and over
+		 *  reports every match in the subject, in order, rather
+		 *  than only the first.  It continues the subject given
+		 *  to any of the match() methods that take one, and
+		 *  takes no subject of its own, so it cannot be handed
+		 *  one that disagrees with the walk in progress.  The
+		 *  substring methods report the new match each time.
+		 *
+		 *  A match that is empty is reported like any other,
+		 *  including one at the very end of the subject, and
+		 *  the walk resumes one character past where an empty
+		 *  match started, so the same one is never reported
+		 *  twice.  Note that this is not what
+		 *  charstring::replace() does with a regular expression
+		 *  - it skips an empty match rather than replacing it,
+		 *  which is a substitution policy rather than a
+		 *  disagreement about where the matches are.  Both are
+		 *  deliberate.
+		 *
+		 *  The subject given to match() must still be valid and
+		 *  unchanged.  This class never copies it, and a walk
+		 *  holds it across every call.  One instance can walk
+		 *  only one subject at a time, so calling match() on
+		 *  this instance from inside the walk ends the walk and
+		 *  starts a new one.
+		 *
+		 *  Note that a walk advances by one character over an
+		 *  empty match, and that setPattern() compiles patterns
+		 *  without UTF support, so a character is a byte.
+		 *
+		 *  Calling setPattern() ends the walk.
+		 *
+		 *  Returns true if another match was found and false if
+		 *  it was not, including if there was no successful call
+		 *  to match() to continue from.  When it returns false
+		 *  the substring methods report nothing, just as they do
+		 *  after a failed match(), and calling it again keeps
+		 *  returning false.  Call match() to start over. */
+		bool	matchNext();
+
 		/** Returns the number of substrings that the last
-		 *  successful call to match() can report, or 0 if the
-		 *  last call to match() failed.
+		 *  successful call to match() or matchNext() can report,
+		 *  or 0 if that call failed.
 		 *
 		 *  This is one for the whole match, plus one for each
 		 *  capture group in the pattern, whether or not the

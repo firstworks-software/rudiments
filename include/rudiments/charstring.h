@@ -1081,7 +1081,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  is left as it is too.
 		 *
 		 *  A part that matches but is empty is skipped rather
-		 *  than replaced.
+		 *  than replaced.  Replacing one would insert "to"
+		 *  between every pair of characters.  Note that this is
+		 *  a substitution policy, and not a disagreement about
+		 *  where the matches are -
+		 *  regularexpression::matchNext(), which walks a
+		 *  subject rather than rewriting it, reports empty
+		 *  matches like any other.  Both are deliberate.
 		 *
 		 *  Each match after the first resumes where the previous
 		 *  one ended, but the expression is still evaluated

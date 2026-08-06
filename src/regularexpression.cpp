@@ -55,6 +55,20 @@ class regularexpressionprivate {
 		int32_t		_substringcount;
 		int32_t		_matchcount;
 		const char	*_str;
+		size_t		_length;
+
+		// True between a successful match and the failed match that
+		// ends the walk.  It can't be inferred from _matchcount,
+		// because match(NULL) returns early without touching it.
+		bool		_walking;
+
+		#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
+		// The null-terminated buffer regexec() gets pointed at, which
+		// isn't always _str - match(str) hands it the caller's string
+		// and match(str,length) hands it _strcopy.  Remembering which
+		// keeps a walk from duplicating the subject at every step.
+		const char	*_subject;
+		#endif
 
 		#if defined(RUDIMENTS_HAS_PCRE2)
 		PCRE2_SIZE	*_matches;
@@ -91,12 +105,15 @@ void regularexpression::construct() {
 		bytestring::zero(&pvt->_expr,sizeof(pvt->_expr));
 		pvt->_compiled=false;
 		pvt->_strcopy=NULL;
+		pvt->_subject=NULL;
 	#endif
 	pvt->_null=false;
 	pvt->_pattern=NULL;
 	pvt->_substringcount=0;
 	pvt->_matchcount=0;
 	pvt->_str=NULL;
+	pvt->_length=0;
+	pvt->_walking=false;
 	#if defined(RUDIMENTS_HAS_PCRE2)
 		bytestring::zero(pvt->_matches,
 				sizeof(PCRE2_SIZE)*RUDIMENTS_REGEX_MATCHES*2);
@@ -138,6 +155,7 @@ bool regularexpression::setPattern(const char *pattern, uint32_t options) {
 	pvt->_null=false;
 	pvt->_substringcount=0;
 	pvt->_matchcount=0;
+	pvt->_walking=false;
 	if (!pattern) {
 		pvt->_null=true;
 		return true;
@@ -275,37 +293,16 @@ bool regularexpression::match(const char *str, size_t length,
 	if (!str) {
 		return pvt->_null;
 	}
-	pvt->_matchcount=0;
-	if (offset<0 || (size_t)offset>length) {
-		return false;
-	}
+	pvt->_str=str;
+	pvt->_length=length;
 	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
 		// regexec() needs a null-terminated subject, but the
 		// substrings still have to be reported relative to str
 		delete[] pvt->_strcopy;
 		pvt->_strcopy=charstring::duplicate(str,length);
-		pvt->_str=str;
-		return runRegexec(pvt->_strcopy,offset);
-	#else
-		pvt->_str=str;
-		#if defined(RUDIMENTS_HAS_PCRE2)
-			bool	retval=(pvt->_expr &&
-					pcre2_match(pvt->_expr,
-						(PCRE2_SPTR)pvt->_str,length,
-						offset,0,pvt->_matchdata,
-						NULL)>-1);
-		#else
-			bool	retval=(pvt->_expr &&
-					pcre_exec(pvt->_expr,pvt->_extra,
-						pvt->_str,length,
-						offset,0,pvt->_matches,
-						RUDIMENTS_REGEX_MATCHES*3)>-1);
-		#endif
-		if (retval) {
-			pvt->_matchcount=pvt->_substringcount;
-		}
-		return retval;
+		pvt->_subject=pvt->_strcopy;
 	#endif
+	return runMatch(offset);
 }
 
 bool regularexpression::match(const char *str) {
@@ -317,14 +314,73 @@ bool regularexpression::match(const char *str) {
 	#else
 		// no copy is needed, str is already null-terminated
 		pvt->_str=str;
-		return runRegexec(str,0);
+		pvt->_length=charstring::getLength(str);
+		pvt->_subject=str;
+		return runMatch(0);
 	#endif
+}
+
+bool regularexpression::matchNext() {
+
+	// nothing to continue - the same state a failed match() leaves,
+	// so the substring methods already report nothing
+	if (!pvt->_walking || pvt->_null) {
+		return false;
+	}
+
+	// Resume after the previous match.  A non-empty match resumes at
+	// its end and an empty one resumes one character past its start,
+	// so the same empty match can't come back twice.  Bumping from the
+	// start rather than from the end also covers a match that ends
+	// before it starts, which pcre1 reports for a \K inside a
+	// lookahead, where resuming at the end would move backward and
+	// spin forever.  Either way the offset strictly increases, so the
+	// walk terminates.
+	int32_t	fromstart=getSubstringStartOffset(0);
+	int32_t	fromend=getSubstringEndOffset(0);
+	return runMatch((fromend>fromstart)?fromend:fromstart+1);
+}
+
+// Runs the engine against the subject that the last match() was given,
+// starting at "offset".  match() and matchNext() differ only in that offset,
+// so this is the one place the engine is actually called.
+bool regularexpression::runMatch(int32_t offset) {
+
+	pvt->_matchcount=0;
+	pvt->_walking=false;
+
+	// An offset equal to the length is still matchable - that's where an
+	// empty match at the very end of the subject is found.
+	if (offset<0 || (size_t)offset>pvt->_length) {
+		return false;
+	}
+
+	#if defined(RUDIMENTS_HAS_PCRE2)
+		bool	success=(pvt->_expr &&
+				pcre2_match(pvt->_expr,
+					(PCRE2_SPTR)pvt->_str,pvt->_length,
+					offset,0,pvt->_matchdata,NULL)>-1);
+	#elif defined(RUDIMENTS_HAS_PCRE)
+		bool	success=(pvt->_expr &&
+				pcre_exec(pvt->_expr,pvt->_extra,
+					pvt->_str,pvt->_length,
+					offset,0,pvt->_matches,
+					RUDIMENTS_REGEX_MATCHES*3)>-1);
+	#else
+		bool	success=runRegexec(pvt->_subject,offset);
+	#endif
+
+	if (!success) {
+		return false;
+	}
+
+	pvt->_matchcount=pvt->_substringcount;
+	pvt->_walking=true;
+	return true;
 }
 
 #if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
 bool regularexpression::runRegexec(const char *subject, int32_t offset) {
-
-	pvt->_matchcount=0;
 
 	// regexec() has no start offset, so it has to be pointed at the
 	// resume point instead.  REG_NOTBOL keeps ^ from matching there,
@@ -348,7 +404,6 @@ bool regularexpression::runRegexec(const char *subject, int32_t offset) {
 		}
 	}
 
-	pvt->_matchcount=pvt->_substringcount;
 	return true;
 }
 #endif
