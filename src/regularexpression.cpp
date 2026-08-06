@@ -297,10 +297,16 @@ bool regularexpression::match(const char *str, size_t length,
 	pvt->_length=length;
 	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
 		// regexec() needs a null-terminated subject, but the
-		// substrings still have to be reported relative to str
-		delete[] pvt->_strcopy;
-		pvt->_strcopy=charstring::duplicate(str,length);
-		pvt->_subject=pvt->_strcopy;
+		// substrings still have to be reported relative to str.
+		// Only worth copying for an offset runMatch() will accept -
+		// it turns an out-of-range one away without running the
+		// engine, so the copy would be for nothing.  Keep this test
+		// in step with the one there.
+		if (offset>=0 && (size_t)offset<=length) {
+			delete[] pvt->_strcopy;
+			pvt->_strcopy=charstring::duplicate(str,length);
+			pvt->_subject=pvt->_strcopy;
+		}
 	#endif
 	return runMatch(offset);
 }

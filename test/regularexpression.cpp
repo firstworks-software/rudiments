@@ -241,9 +241,20 @@ printMatches(&re);
 	test("offset at the end",!re.match(str,3,3));
 	test("match count",!re.getSubstringCount());
 
-	// an offset past the end, or a negative one, fails
+	// an offset past the end, or a negative one, fails, and leaves
+	// nothing to report
 	test("offset past the end",!re.match(str,3,4));
+	test("match count past the end",!re.getSubstringCount());
 	test("negative offset",!re.match(str,3,-1));
+	test("match count negative",!re.getSubstringCount());
+
+	// the POSIX arms skip their copy of the subject for an offset they
+	// won't run the engine at, so the match after one has to set it up
+	// itself rather than inherit it
+	test("match after an out-of-range offset",re.match(str,3,0));
+	test("start offset after",re.getSubstringStartOffset(0)==0);
+	test("end offset after",re.getSubstringEndOffset(0)==1);
+	test("start after",re.getSubstringStart(0)==str);
 
 	// the length still bounds the subject
 	test("length bound",!re.match(str,2,2));
