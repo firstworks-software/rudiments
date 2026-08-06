@@ -210,18 +210,18 @@ static void add(struct sha256_ctx *ctx, const void *p, size_t len)
 	}
 }
 
-void sha256_init(struct sha256_ctx *ctx)
+static void sha256_init(struct sha256_ctx *ctx)
 {
 	struct sha256_ctx init = SHA256_INIT;
 	*ctx = init;
 }
 
-void sha256_update(struct sha256_ctx *ctx, const void *p, size_t size)
+static void sha256_update(struct sha256_ctx *ctx, const void *p, size_t size)
 {
 	add(ctx, p, size);
 }
 
-void sha256_done(struct sha256_ctx *ctx, struct sha256_t *res)
+static void sha256_done(struct sha256_ctx *ctx, struct sha256_t *res)
 {
 	static const unsigned char pad[64] = {0x80};
 	uint64_t sizedesc;
