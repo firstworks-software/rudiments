@@ -6,12 +6,14 @@ echo >> testresults.log
 exitcode=0
 
 for program in \
+	aes128 \
 	character \
 	charstring \
 	commandline \
 	csvdom \
 	datetime \
 	des \
+	dh \
 	dictionary \
 	directory \
 	domevents \
@@ -36,6 +38,7 @@ for program in \
 	memorypool \
 	mvcproperties \
 	parameterstring \
+	pbkdf2 \
 	permissions \
 	process \
 	propdom \

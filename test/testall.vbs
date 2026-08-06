@@ -5,12 +5,14 @@ if instr(lcase(WScript.FullName),"cscript")=0 Then
 end if
 
 tests=Array(_
+	"aes128",_
 	"character",_
 	"charstring",_
 	"commandline",_
 	"csvdom",_
 	"datetime",_
 	"des",_
+	"dh",_
 	"dictionary",_
 	"directory",_
 	"domevents",_
@@ -35,6 +37,7 @@ tests=Array(_
 	"memorypool",_
 	"mvcproperties",_
 	"parameterstring",_
+	"pbkdf2",_
 	"permissions",_
 	"process",_
 	"propdom",_
