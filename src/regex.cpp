@@ -3726,7 +3726,8 @@ PREFIX(regex_compile) (const char *ARG_PREFIX(pattern), size_t ARG_PREFIX(size),
                 {
                   RETALLOC (compile_stack.stack, compile_stack.size << 1,
                             compile_stack_elt_t);
-                  if (compile_stack.stack == NULL) return REG_ESPACE;
+                  if (compile_stack.stack == NULL)
+                    FREE_STACK_RETURN (REG_ESPACE);
 
                   compile_stack.size <<= 1;
                 }
