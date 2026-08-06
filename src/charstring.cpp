@@ -476,8 +476,54 @@ char *charstring::replaceIgnoringCase(const char *str,
 	return newstring.detachString();
 }
 
-// appends "to" to "newstring", expanding \0 through \9 into the substrings
-// that "from" matched, and \\ into a single backslash
+// appends the "index"'th substring that "from" matched to "newstring".  A
+// group that didn't participate in the match, or that the pattern doesn't
+// have at all, contributes nothing.
+static void appendSubstring(stringbuffer *newstring,
+					regularexpression *from,
+					int32_t index) {
+	const char	*substart=from->getSubstringStart(index);
+	if (substart) {
+		newstring->append(substart,
+				from->getSubstringEnd(index)-substart);
+	}
+}
+
+// resolves the body of a \g<...> backref - a non-empty, all-digits body is a
+// group number, anything else is a group name - to a group index, or to -1 if
+// the pattern has no group by that name
+static int32_t resolveGroupIndex(regularexpression *from,
+					const char *start,
+					const char *end) {
+
+	bool	number=(end>start);
+	for (const char *d=start; number && d<end; d++) {
+		number=character::isDigit((unsigned char)*d);
+	}
+
+	if (!number) {
+
+		// the name lookup needs it null-terminated
+		char	*name=charstring::duplicate(start,end-start);
+		int32_t	index=from->getSubstringIndex(name);
+		delete[] name;
+		return index;
+	}
+
+	// A number past the group count is out of range no matter what digits
+	// follow it, so the scan stops growing the index there.  That also
+	// keeps a long run of digits from overflowing it.
+	int32_t	count=from->getSubstringCount();
+	int32_t	index=0;
+	for (const char *d=start; d<end && index<count; d++) {
+		index=index*10+(*d-'0');
+	}
+	return index;
+}
+
+// appends "to" to "newstring", expanding \0 through \9, \g<number>, and
+// \g<name> into the substrings that "from" matched, and \\ into a single
+// backslash
 static void appendExpandingBackrefs(stringbuffer *newstring,
 					regularexpression *from,
 					const char *to) {
@@ -506,6 +552,34 @@ static void appendExpandingBackrefs(stringbuffer *newstring,
 			continue;
 		}
 
+		// \g<...> refers to a group by number or by name, reaching
+		// the groups past the ninth, which a single digit can't name
+		if (*ptr=='g' && *(ptr+1)=='<') {
+
+			// find the closing >
+			const char	*bodystart=ptr+2;
+			const char	*bodyend=bodystart;
+			while (*bodyend && *bodyend!='>') {
+				bodyend++;
+			}
+
+			// an unterminated form is kept as it was, like any
+			// other escape this method doesn't know.  The rest
+			// of it is appended by the normal path.
+			if (!*bodyend) {
+				newstring->append('\\')->append(*ptr);
+				continue;
+			}
+
+			appendSubstring(newstring,from,
+					resolveGroupIndex(from,
+							bodystart,bodyend));
+
+			// step onto the >, which the loop steps past
+			ptr=bodyend;
+			continue;
+		}
+
 		// anything but a backslash or a digit isn't an escape this
 		// method knows, so both characters are kept as they were
 		if (!character::isDigit((unsigned char)*ptr)) {
@@ -513,15 +587,7 @@ static void appendExpandingBackrefs(stringbuffer *newstring,
 			continue;
 		}
 
-		// a backref to a group that didn't participate in the
-		// match, or that the pattern doesn't have at all, expands
-		// to nothing
-		int32_t		index=*ptr-'0';
-		const char	*substart=from->getSubstringStart(index);
-		if (substart) {
-			newstring->append(substart,
-					from->getSubstringEnd(index)-substart);
-		}
+		appendSubstring(newstring,from,*ptr-'0');
 	}
 }
 

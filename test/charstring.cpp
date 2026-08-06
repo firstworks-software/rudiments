@@ -958,6 +958,122 @@ int main(int argc, const char **argv) {
 		!charstring::compare(newstr,"a---b"));
 	delete[] newstr;
 
+	// \g<n> names a group by number, just like \n does
+	original="hello world";
+	from.setPattern("([a-z]+) ([a-z]+)");
+	newstr=charstring::replace(original,&from,"\\g<2> \\g<1>",true);
+	test("replace regex/from-to (swap groups by number)",
+		!charstring::compare(newstr,"world hello"));
+	delete[] newstr;
+
+	// ...but it reaches the groups past the ninth, which a single
+	// digit can't name
+	original="abcdefghijkl";
+	from.setPattern("([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])"
+			"([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])");
+	newstr=charstring::replace(original,&from,
+					"\\g<10>\\g<11>\\g<12>",true);
+	test("replace regex/from-to (groups past the ninth)",
+		!charstring::compare(newstr,"jkl"));
+	delete[] newstr;
+
+	// which is why the digit form doesn't get greedy about digits -
+	// \12 is still group 1 and then a literal 2, not group 12
+	newstr=charstring::replace(original,&from,"\\12",true);
+	test("replace regex/from-to (digit form isn't greedy)",
+		!charstring::compare(newstr,"a2"));
+	delete[] newstr;
+
+	// \g<0> is the whole match
+	original="a1b2";
+	from.setPattern("[0-9]");
+	newstr=charstring::replace(original,&from,"<\\g<0>>",true);
+	test("replace regex/from-to (whole match by number)",
+		!charstring::compare(newstr,"a<1>b<2>"));
+	delete[] newstr;
+
+	// a numbered group past the group count expands to nothing
+	original="ab";
+	from.setPattern("(a)");
+	newstr=charstring::replace(original,&from,"[\\g<1>|\\g<5>]",true);
+	test("replace regex/from-to (number past the count)",
+		!charstring::compare(newstr,"[a|]b"));
+	delete[] newstr;
+
+	// ...and so does a run of digits too long to fit in the index,
+	// which stops growing rather than overflowing
+	newstr=charstring::replace(original,&from,
+					"[\\g<99999999999999>]",true);
+	test("replace regex/from-to (long digit run)",
+		!charstring::compare(newstr,"[]b"));
+	delete[] newstr;
+
+	// a group that didn't participate expands to nothing too
+	original="xayb";
+	from.setPattern("(a)(b)?");
+	newstr=charstring::replace(original,&from,"[\\g<1>|\\g<2>]",true);
+	test("replace regex/from-to (non-participating by number)",
+		!charstring::compare(newstr,"x[a|]yb"));
+	delete[] newstr;
+
+	// an unterminated \g< keeps its characters as they were
+	original="ab";
+	from.setPattern("(a)");
+	newstr=charstring::replace(original,&from,"\\g<12",true);
+	test("replace regex/from-to (unterminated)",
+		!charstring::compare(newstr,"\\g<12b"));
+	delete[] newstr;
+
+	newstr=charstring::replace(original,&from,"\\g<",true);
+	test("replace regex/from-to (unterminated, no body)",
+		!charstring::compare(newstr,"\\g<b"));
+	delete[] newstr;
+
+	// a \g that isn't the start of a \g< is just an escape this
+	// doesn't know, so both characters are kept
+	newstr=charstring::replace(original,&from,"\\g1",true);
+	test("replace regex/from-to (bare backslash-g)",
+		!charstring::compare(newstr,"\\g1b"));
+	delete[] newstr;
+
+	// an empty body and a body that isn't all digits are both group
+	// names, and neither names a group here
+	newstr=charstring::replace(original,&from,"[\\g<>|\\g<1a>]",true);
+	test("replace regex/from-to (empty and mixed bodies)",
+		!charstring::compare(newstr,"[|]b"));
+	delete[] newstr;
+
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+	// a \g<name> is resolved with getSubstringIndex(), which only the
+	// PCRE engines can answer - the POSIX engines have no named capture
+	// groups, so a pattern that declares one won't compile there at all
+	original="2026-08-05";
+	from.setPattern("(?<year>[0-9]{4})-(?<month>[0-9]{2})-"
+			"(?<day>[0-9]{2})");
+	newstr=charstring::replace(original,&from,
+				"\\g<month>/\\g<day>/\\g<year>",false);
+	test("replace regex/from-to (named groups)",
+		!charstring::compare(newstr,"08/05/2026"));
+	delete[] newstr;
+
+	// a name the pattern doesn't have expands to nothing
+	newstr=charstring::replace(original,&from,
+					"[\\g<year>|\\g<era>]",false);
+	test("replace regex/from-to (unknown name)",
+		!charstring::compare(newstr,"[2026|]"));
+	delete[] newstr;
+	#else
+	// the POSIX engines have no named groups at all, so every name is
+	// an unknown one and expands to nothing
+	original="2026-08-05";
+	from.setPattern("([0-9]{4})-([0-9]{2})-([0-9]{2})");
+	newstr=charstring::replace(original,&from,
+					"[\\g<1>|\\g<year>]",false);
+	test("replace regex/from-to (unknown name)",
+		!charstring::compare(newstr,"[2026|]"));
+	delete[] newstr;
+	#endif
+
 	// matching from an offset rather than from a pointer into the
 	// middle of the subject, so ^ only matches at the real start
 	original="aaa";

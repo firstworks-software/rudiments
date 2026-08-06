@@ -1053,15 +1053,32 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  In "to", a backslash followed by a digit is replaced
 		 *  with what that capture group matched - \\0 for the
 		 *  whole match, \\1 for the first group, and so on
-		 *  through \\9.  A group that didn't participate in the
-		 *  match, or that the pattern doesn't have at all,
-		 *  contributes nothing.  Only the first 9 groups can be
-		 *  referred to this way.
+		 *  through \\9.  Groups past the ninth are referred to
+		 *  as \\g\<12\>, with the group number between the angle
+		 *  brackets.
+		 *
+		 *  A capture group can also be referred to by name, as
+		 *  \\g\<name\>.  A non-empty, all-digits body between
+		 *  the angle brackets is a group number.  Anything else,
+		 *  including an empty body, is a group name, and is
+		 *  looked up with
+		 *  regularexpression::getSubstringIndex().
+		 *
+		 *  Named capture groups are a PCRE feature.  The POSIX
+		 *  regular expression engines that the regularexpression
+		 *  class falls back to, on platforms without PCRE, do
+		 *  not have them, so \\g\<name\> contributes nothing on
+		 *  those platforms.
+		 *
+		 *  A group that didn't participate in the match, or that
+		 *  the pattern doesn't have at all, contributes nothing.
+		 *  So does a name that no group in the pattern has.
 		 *
 		 *  A backslash followed by a backslash is replaced with a
 		 *  single backslash.  A backslash followed by anything
 		 *  else, or a backslash at the end of "to", is left as it
-		 *  is.
+		 *  is.  A \\g\< with no closing \> before the end of "to"
+		 *  is left as it is too.
 		 *
 		 *  A part that matches but is empty is skipped rather
 		 *  than replaced.
