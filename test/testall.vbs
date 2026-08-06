@@ -6,6 +6,9 @@ end if
 
 tests=Array(_
 	"aes128",_
+	"avltree",_
+	"bytebuffer",_
+	"bytestring",_
 	"character",_
 	"charstring",_
 	"commandline",_

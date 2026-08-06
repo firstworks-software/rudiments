@@ -7,6 +7,9 @@ exitcode=0
 
 for program in \
 	aes128 \
+	avltree \
+	bytebuffer \
+	bytestring \
 	character \
 	charstring \
 	commandline \
