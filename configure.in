@@ -2189,6 +2189,12 @@ else
 	AC_MSG_RESULT(no)
 fi
 
+dnl The built-in regex allocates with alloca unless REGEX_MALLOC is defined.
+dnl GCC and clang define alloca to a builtin and windows defines REGEX_MALLOC,
+dnl but every other compiler needs alloca.h, and the bundled source tests
+dnl HAVE_ALLOCA_H to decide whether to include it.
+AC_FUNC_ALLOCA
+
 echo "******************************"
 
 
