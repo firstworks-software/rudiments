@@ -704,6 +704,25 @@ printMatches(&re);
 		test("match end",!re2.getSubstringEnd(0));
 	}
 
+	// a pattern too big to compile - the built-in regex gives up once the
+	// compiled pattern passes 64k, and unwinding from there is its own
+	// path out of the compiler.  The other arms have no such limit and
+	// compile this happily, so only the built-in one can assert on it.
+	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE) && \
+					!defined(RUDIMENTS_HAVE_REGCOMP)
+	{
+		size_t	patternsize=100000;
+		char	*pattern=new char[patternsize+1];
+		for (size_t i=0; i<patternsize; i++) {
+			pattern[i]='a';
+		}
+		pattern[patternsize]='\0';
+		regularexpression	re2;
+		test("pattern too big",!re2.setPattern(pattern));
+		delete[] pattern;
+	}
+	#endif
+
 	// re-use with a new pattern
 	{
 		regularexpression	re2;

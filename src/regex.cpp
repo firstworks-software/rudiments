@@ -2104,7 +2104,7 @@ static reg_errcode_t byte_compile_range _RE_ARGS ((unsigned int range_start,
     UCHAR_T *old_buffer = COMPILED_BUFFER_VAR;				\
     int wchar_count;							\
     if (bufp->allocated + sizeof(UCHAR_T) > MAX_BUF_SIZE)		\
-      return REG_ESIZE;							\
+      FREE_STACK_RETURN (REG_ESIZE);					\
     bufp->allocated <<= 1;						\
     if (bufp->allocated > MAX_BUF_SIZE)					\
       bufp->allocated = MAX_BUF_SIZE;					\
@@ -2116,7 +2116,7 @@ static reg_errcode_t byte_compile_range _RE_ARGS ((unsigned int range_start,
     RETALLOC (COMPILED_BUFFER_VAR, wchar_count, UCHAR_T);		\
     bufp->buffer = (char*)COMPILED_BUFFER_VAR;				\
     if (COMPILED_BUFFER_VAR == NULL)					\
-      return REG_ESPACE;						\
+      FREE_STACK_RETURN (REG_ESPACE);					\
     /* If the buffer moved, move all the pointers into it.  */		\
     if (old_buffer != COMPILED_BUFFER_VAR)				\
       {									\
@@ -2137,14 +2137,14 @@ static reg_errcode_t byte_compile_range _RE_ARGS ((unsigned int range_start,
   do {									\
     UCHAR_T *old_buffer = COMPILED_BUFFER_VAR;				\
     if (bufp->allocated == MAX_BUF_SIZE)				\
-      return REG_ESIZE;							\
+      FREE_STACK_RETURN (REG_ESIZE);					\
     bufp->allocated <<= 1;						\
     if (bufp->allocated > MAX_BUF_SIZE)					\
       bufp->allocated = MAX_BUF_SIZE;					\
     bufp->buffer = (UCHAR_T *) REALLOC (COMPILED_BUFFER_VAR,		\
 						bufp->allocated);	\
     if (COMPILED_BUFFER_VAR == NULL)					\
-      return REG_ESPACE;						\
+      FREE_STACK_RETURN (REG_ESPACE);					\
     /* If the buffer moved, move all the pointers into it.  */		\
     if (old_buffer != COMPILED_BUFFER_VAR)				\
       {									\
