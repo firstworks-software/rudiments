@@ -7928,8 +7928,8 @@ weak_alias (__regfree, regfree)
 # define DEFINED_ONCE
 
 
-/* rudiments: this file is included into regularexpression.cpp, so undefine
-   the macros it would otherwise leave defined for the rest of that file.
+/* DLM - this file is included into regularexpression.cpp, so undefine the
+   macros it would otherwise leave defined for the rest of that file.
    Guarded, because the recursive passes above still need them.  */
 #ifndef INSIDE_RECURSION
 # undef alloca
