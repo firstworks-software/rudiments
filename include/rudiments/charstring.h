@@ -1053,11 +1053,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  In "to", a backslash followed by a digit is replaced
 		 *  with what that capture group matched - \\0 for the
 		 *  whole match, \\1 for the first group, and so on
-		 *  through \\9.  Groups past the ninth are referred to
-		 *  as \\g\<12\>, with the group number between the angle
-		 *  brackets.
+		 *  through \\9.  Any group can also be written with its
+		 *  number between angle brackets, as \\g\<12\>, which is
+		 *  the only way to reach the groups past the ninth.
 		 *
-		 *  A capture group can also be referred to by name, as
+		 *  A capture group can be referred to by name too, as
 		 *  \\g\<name\>.  A non-empty, all-digits body between
 		 *  the angle brackets is a group number.  Anything else,
 		 *  including an empty body, is a group name, and is
