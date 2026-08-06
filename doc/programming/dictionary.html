@@ -106,4 +106,64 @@ http://www.gnu.org/software/src-highlite -->
 
 <p>Note that the write() method works for primitive types and strings, but for more complex types, it only prints out the address of the object.</p>
 
-Note also that, by default, the dictionary class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or the dictionary is cleared.  However, if setManageKeys(true) or setManageValues(true) is called, then keys or values will be deleted (using delete) when a node is removed or the dictionary is cleared or destroyed.  If setManageArrayKeys(true) or setManageArrayValues(true) is called, then keys or values will be deleted using delete
+<p>Note also that, by default, the dictionary class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or the dictionary is cleared.  However, if setManageKeys(true) or setManageValues(true) is called, then keys or values will be deleted (using delete) when a node is removed or the dictionary is cleared or destroyed.  If setManageArrayKeys(true) or setManageArrayValues(true) is called, then keys or values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dictionary.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a dictionary of name-value pairs</font></i>
+	<font color="#008080">dictionary&lt;char *,char *&gt;</font>	nvp<font color="#990000">;</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setManageArrayKeys</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setManageArrayValues</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// set some name-value pairs</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"dog"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"mammal"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"eagle"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"bird"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"snake"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"reptile"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"frog"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"amphibian"</font><font color="#990000">));</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"trout"</font><font color="#990000">),</font>
+			charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"fish"</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// remove a value</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">remove</font></b><font color="#990000">((</font><font color="#009900">char</font> <font color="#990000">*)</font><font color="#FF0000">"dog"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// clear the dictionary</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+</div> <!-- content -->
+
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="../images/us.png"/> <img style="vertical-align: text-bottom;" title="falo português também" src="../images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+
+

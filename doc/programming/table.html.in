@@ -10,4 +10,81 @@
 
 <p>The table grows automatically as values are set.  Columns can be given names using the setColumnName() method, and values can be accessed by row and column index, or by row index and column name.</p>
 
-By default, the table class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when the table is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when the table is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete
+<p>By default, the table class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when the table is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when the table is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+
+<p>The following example creates a table of animals with named columns, prints the table by index and by column name, and clears it.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/table.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">table&lt;const char *&gt;</font>	t<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// set column names</font></i>
+	t<font color="#990000">.</font><b><font color="#000000">setColumnName</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#FF0000">"animal"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setColumnName</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">,</font><font color="#FF0000">"type"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setColumnName</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">,</font><font color="#FF0000">"legs"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// set values</font></i>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#FF0000">"dog"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#FF0000">"mammal"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#FF0000">"4"</font><font color="#990000">);</font>
+
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#FF0000">"eagle"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#FF0000">"bird"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#FF0000">"2"</font><font color="#990000">);</font>
+
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#FF0000">"snake"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#FF0000">"reptile"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#FF0000">"0"</font><font color="#990000">);</font>
+
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#FF0000">"frog"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#FF0000">"amphibian"</font><font color="#990000">);</font>
+	t<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#FF0000">"4"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print the table dimensions</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%lld columns, %lld rows</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				t<font color="#990000">.</font><b><font color="#000000">getColumnCount</font></b><font color="#990000">(),</font>t<font color="#990000">.</font><b><font color="#000000">getRowCount</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// print column names</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> col<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> col<font color="#990000">&lt;</font>t<font color="#990000">.</font><b><font color="#000000">getColumnCount</font></b><font color="#990000">();</font> col<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%-12s"</font><font color="#990000">,</font>t<font color="#990000">.</font><b><font color="#000000">getColumnName</font></b><font color="#990000">(</font>col<font color="#990000">));</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print values by row and column index</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> row<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> row<font color="#990000">&lt;</font>t<font color="#990000">.</font><b><font color="#000000">getRowCount</font></b><font color="#990000">();</font> row<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> col<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> col<font color="#990000">&lt;</font>t<font color="#990000">.</font><b><font color="#000000">getColumnCount</font></b><font color="#990000">();</font> col<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%-12s"</font><font color="#990000">,</font>t<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font>row<font color="#990000">,</font>col<font color="#990000">));</font>
+		<font color="#FF0000">}</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// access values by column name</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> row<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> row<font color="#990000">&lt;</font>t<font color="#990000">.</font><b><font color="#000000">getRowCount</font></b><font color="#990000">();</font> row<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s is a %s with %s legs</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					t<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font>row<font color="#990000">,</font><font color="#FF0000">"animal"</font><font color="#990000">),</font>
+					t<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font>row<font color="#990000">,</font><font color="#FF0000">"type"</font><font color="#990000">),</font>
+					t<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font>row<font color="#990000">,</font><font color="#FF0000">"legs"</font><font color="#990000">));</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// clear the table</font></i>
+	t<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after clearing: %lld columns, %lld rows</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				t<font color="#990000">.</font><b><font color="#000000">getColumnCount</font></b><font color="#990000">(),</font>t<font color="#990000">.</font><b><font color="#000000">getRowCount</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

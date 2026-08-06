@@ -254,4 +254,86 @@ http://www.gnu.org/software/src-highlite -->
 
 <p>Note that the write() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
 
-Note also that, by default, the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or when the list is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when a node is removed or the list is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete
+<p>Note also that, by default, the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or when the list is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when a node is removed or the list is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/linkedlist.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+
+<i><font color="#9A1900">// Define a simple class.  Instances of it will be stored in a list later.</font></i>
+<b><font color="#0000FF">class</font></b> <font color="#008080">myclass</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">public</font></b><font color="#990000">:</font>
+		<b><font color="#000000">myclass</font></b><font color="#990000">(</font><font color="#008080">int64_t</font> v<font color="#990000">)</font> <font color="#FF0000">{</font>
+			value<font color="#990000">=</font>v<font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+		<font color="#009900">void</font>	<b><font color="#000000">print</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"value: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>value<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+	<b><font color="#0000FF">private</font></b><font color="#990000">:</font>
+		<font color="#008080">int64_t</font>	value<font color="#990000">;</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// lists of various types</font></i>
+	<font color="#008080">linkedlist&lt;int16_t&gt;</font>	i16ll<font color="#990000">;</font>
+	<font color="#008080">linkedlist&lt;int64_t&gt;</font>	i64ll<font color="#990000">;</font>
+	<font color="#008080">linkedlist&lt; char * &gt;</font>	sll<font color="#990000">;</font>
+	sll<font color="#990000">.</font><b><font color="#000000">setManageArrayValues</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	<font color="#008080">linkedlist&lt; myclass * &gt;</font>	oll<font color="#990000">;</font>
+	oll<font color="#990000">.</font><b><font color="#000000">setManageValues</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// populate the lists</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">int64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">20</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		i16ll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>i<font color="#990000">);</font>
+		i64ll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>i<font color="#990000">);</font>
+		sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">parseNumber</font></b><font color="#990000">(</font>i<font color="#990000">));</font>
+		oll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> <b><font color="#000000">myclass</font></b><font color="#990000">(</font>i<font color="#990000">));</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// print the lists of primitive types</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"list of 16-bit integers:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	i16ll<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"list of 64-bit integers:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	i16ll<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"list of strings:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	i16ll<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// manually print the list of objects</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"list of objects:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">listnode&lt; myclass * &gt;</font> <font color="#990000">*</font>n<font color="#990000">=</font>oll<font color="#990000">.</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font> n<font color="#990000">;</font> n<font color="#990000">=</font>n<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		n<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">print</font></b><font color="#990000">();</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// clean up</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	oll<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+</div> <!-- content -->
+
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="../images/us.png"/> <img style="vertical-align: text-bottom;" title="falo português também" src="../images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+
+

@@ -42,4 +42,61 @@
 
 <p>The setValue() method sets the value and getValue() retrieves it.  The clear() method removes the value, causing getValue() to return NULL or 0.</p>
 
-By default, the scalar class does not manage the data stored in it.  If you store a dynamically allocated string or object, it will not be deleted automatically when the scalar is cleared.  However, if setManageValues(true) is called, then the value will be deleted (using delete) when the scalar is cleared or destroyed.  If setManageArrayValues(true) is called, then the value will be deleted using delete
+<p>By default, the scalar class does not manage the data stored in it.  If you store a dynamically allocated string or object, it will not be deleted automatically when the scalar is cleared.  However, if setManageValues(true) is called, then the value will be deleted (using delete) when the scalar is cleared or destroyed.  If setManageArrayValues(true) is called, then the value will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+
+<p>The following example stores and updates integer and string values, and demonstrates copying a scalar.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/scalar.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// store an integer value</font></i>
+	<font color="#008080">scalar&lt;int64_t&gt;</font>	i<font color="#990000">;</font>
+	i<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">4</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"integer value: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>i<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// update the value</font></i>
+	i<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">8</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"updated value: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>i<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// clear the value</font></i>
+	i<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after clearing: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>i<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// store a string value</font></i>
+	<font color="#008080">scalar&lt;const char *&gt;</font>	s<font color="#990000">;</font>
+	s<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"dog"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"string value: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>s<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+
+	s<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"eagle"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"updated value: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>s<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// copy a scalar</font></i>
+	<font color="#008080">scalar&lt;int64_t&gt;</font>	a<font color="#990000">;</font>
+	a<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#993399">10</font><font color="#990000">);</font>
+	<font color="#008080">scalar&lt;int64_t&gt;</font>	<b><font color="#000000">b</font></b><font color="#990000">(</font>a<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>a<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"copy: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>b<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+</div> <!-- content -->
+
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="../images/us.png"/> <img style="vertical-align: text-bottom;" title="falo português também" src="../images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+
+
