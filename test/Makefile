@@ -67,7 +67,7 @@ PROGS3= handoff \
 	url \
 	gssserver \
 	gssclient \
-	md5sum \
+	md5 \
 	sha1 \
 	sha256 \
 	csvdom \
@@ -296,8 +296,8 @@ gssserver: gssserver.cpp gssserver.$(OBJ)
 gssclient: gssclient.cpp gssclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-md5sum: md5sum.cpp md5sum.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) md5sum.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+md5: md5.cpp md5.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) md5.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 sha1: sha1.cpp sha1.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sha1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

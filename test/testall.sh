@@ -36,7 +36,7 @@ for program in \
 	listener \
 	locale \
 	logger \
-	md5sum \
+	md5 \
 	memorymap \
 	memorypool \
 	mvcproperties \

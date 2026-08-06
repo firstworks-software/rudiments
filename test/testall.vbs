@@ -35,7 +35,7 @@ tests=Array(_
 	"listener",_
 	"locale",_
 	"logger",_
-	"md5sum",_
+	"md5",_
 	"memorymap",_
 	"memorypool",_
 	"mvcproperties",_
