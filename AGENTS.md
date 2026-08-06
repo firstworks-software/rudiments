@@ -126,7 +126,8 @@ make charstring
 - **ChangeLog.** Append entries for user-facing changes under the current
   version section at the top of the file (the newest section is first). Don't
   log test-only changes.
-- **Windows build is separate**: `config_windows.mk`, `config_windows.h`,
+- **Windows build is separate**: `config_windows.mk`,
+  `include/rudiments/private/config_vs*.h` (one per Visual Studio version),
   `configure.vbs`, and the `msvc/` solutions. Changes that touch build
   variables usually need to be mirrored there.
 - **License**: the library (`src/` and `include/`) is LGPL 2; see `COPYING`,
