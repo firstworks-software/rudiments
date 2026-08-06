@@ -49,6 +49,7 @@ tests=Array(_
 	"semaphoreset",_
 	"sensitivevalue",_
 	"serviceentry",_
+	"sha1",_
 	"sharedmemory",_
 	"signal",_
 	"singlylinkedlist",_

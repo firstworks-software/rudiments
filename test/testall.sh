@@ -50,6 +50,7 @@ for program in \
 	semaphoreset \
 	sensitivevalue \
 	serviceentry \
+	sha1 \
 	sharedmemory \
 	signal \
 	singlylinkedlist \
