@@ -58,7 +58,7 @@ const byte_t *md5::getHash() {
 		#if defined(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT)
 			if (!MD5_Final(pvt->_hash,&pvt->_context)) {
 				setError(ERR_GET_REASON(ERR_get_error()));
-				return (const byte_t *)"";
+				return NULL;
 			}
 		#else
 			MD5_Final(pvt->_hash,&pvt->_context);
