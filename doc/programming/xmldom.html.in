@@ -1,0 +1,120 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the xmldom and domnode classes</h1>
+
+<p>The <a href="../classes/html/classxmldom.html">xmldom</a> and <a href="../classes/html/classdomnode.html">domnode</a> classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the domnode class.  The domnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
+
+<p>The following program parses an XML string containing a list of animals, accesses the root node, looks up an attribute by path, walks the tree manually to print each animal's name, type, number of legs, and whether it is domestic, and writes the XML tree back to standard output.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/xmldom.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/domnode.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">xmldom</font>	xml<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// parse an xml string</font></i>
+	xml<font color="#990000">.</font><b><font color="#000000">parseString</font></b><font color="#990000">(</font>
+		<font color="#FF0000">"&lt;animals&gt;"</font>
+		<font color="#FF0000">"  &lt;animal type=</font><font color="#CC33CC">\"</font><font color="#FF0000">mammal</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;name&gt;dog&lt;/name&gt;"</font>
+		<font color="#FF0000">"    &lt;legs&gt;4&lt;/legs&gt;"</font>
+		<font color="#FF0000">"    &lt;domestic&gt;yes&lt;/domestic&gt;"</font>
+		<font color="#FF0000">"  &lt;/animal&gt;"</font>
+		<font color="#FF0000">"  &lt;animal type=</font><font color="#CC33CC">\"</font><font color="#FF0000">bird</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;name&gt;eagle&lt;/name&gt;"</font>
+		<font color="#FF0000">"    &lt;legs&gt;2&lt;/legs&gt;"</font>
+		<font color="#FF0000">"    &lt;domestic&gt;no&lt;/domestic&gt;"</font>
+		<font color="#FF0000">"  &lt;/animal&gt;"</font>
+		<font color="#FF0000">"  &lt;animal type=</font><font color="#CC33CC">\"</font><font color="#FF0000">reptile</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;name&gt;snake&lt;/name&gt;"</font>
+		<font color="#FF0000">"    &lt;legs&gt;0&lt;/legs&gt;"</font>
+		<font color="#FF0000">"    &lt;domestic&gt;no&lt;/domestic&gt;"</font>
+		<font color="#FF0000">"  &lt;/animal&gt;"</font>
+		<font color="#FF0000">"&lt;/animals&gt;"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get the root node and first child</font></i>
+	<font color="#008080">domnode</font>	<font color="#990000">*</font>root<font color="#990000">=</font>xml<font color="#990000">.</font><b><font color="#000000">getRootNode</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"root: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>root<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// access nodes by path</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>name<font color="#990000">=</font>xml<font color="#990000">.</font><b><font color="#000000">getAttributeValueByPath</font></b><font color="#990000">(</font>
+						<font color="#FF0000">"/animals/animal"</font><font color="#990000">,</font><font color="#FF0000">"type"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"first animal type: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>name<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// walk the tree manually</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all animals:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#008080">domnode</font>	<font color="#990000">*</font>animals<font color="#990000">=</font>root<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">domnode</font> <font color="#990000">*</font>animal<font color="#990000">=</font>animals<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"animal"</font><font color="#990000">);</font>
+			<font color="#990000">!</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">isNullNode</font></b><font color="#990000">();</font>
+			animal<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getNextTagSibling</font></b><font color="#990000">(</font><font color="#FF0000">"animal"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// get the type attribute</font></i>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>type<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getAttributeValue</font></b><font color="#990000">(</font><font color="#FF0000">"type"</font><font color="#990000">);</font>
+
+		<i><font color="#9A1900">// get the name child's text</font></i>
+		<font color="#008080">domnode</font>	<font color="#990000">*</font>namenode<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"name"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>aname<font color="#990000">=</font>
+			namenode<font color="#990000">-&gt;</font><b><font color="#000000">getFirstChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// get the legs child's text</font></i>
+		<font color="#008080">domnode</font>	<font color="#990000">*</font>legsnode<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"legs"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>legs<font color="#990000">=</font>
+			legsnode<font color="#990000">-&gt;</font><b><font color="#000000">getFirstChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// get the domestic child's text</font></i>
+		<font color="#008080">domnode</font>	<font color="#990000">*</font>domesticnode<font color="#990000">=</font>animal<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">(</font><font color="#FF0000">"domestic"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>domestic<font color="#990000">=</font>
+			domesticnode<font color="#990000">-&gt;</font><b><font color="#000000">getFirstChild</font></b><font color="#990000">()-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">();</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %s (%s) - %s legs - domestic: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						aname<font color="#990000">,</font>type<font color="#990000">,</font>legs<font color="#990000">,</font>domestic<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write the xml tree to standard output</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"xml output:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	xml<font color="#990000">.</font><b><font color="#000000">writeXml</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>Here is the output of the program above.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>root<font color="#990000">:</font> animals
+
+first <font color="#008080">animal</font> type<font color="#990000">:</font> mammal
+
+<font color="#008080">all</font> animals<font color="#990000">:</font>
+  <b><font color="#000000">dog</font></b> <font color="#990000">(</font>mammal<font color="#990000">)</font> <font color="#990000">-</font> <font color="#993399">4</font> legs <font color="#990000">-</font> domestic<font color="#990000">:</font> yes
+  <b><font color="#000000">eagle</font></b> <font color="#990000">(</font>bird<font color="#990000">)</font> <font color="#990000">-</font> <font color="#993399">2</font> legs <font color="#990000">-</font> domestic<font color="#990000">:</font> no
+  <b><font color="#000000">snake</font></b> <font color="#990000">(</font>reptile<font color="#990000">)</font> <font color="#990000">-</font> <font color="#993399">0</font> legs <font color="#990000">-</font> domestic<font color="#990000">:</font> no
+
+<font color="#008080">xml</font> output<font color="#990000">:</font>
+<font color="#990000">&lt;</font>animals<font color="#990000">&gt;</font>  <font color="#990000">&lt;</font><font color="#008080">animal</font> type<font color="#990000">=</font><font color="#FF0000">"mammal"</font><font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>name<font color="#990000">&gt;</font>dog<font color="#990000">&lt;/</font>name<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>legs<font color="#990000">&gt;</font><font color="#993399">4</font><font color="#990000">&lt;/</font>legs<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>domestic<font color="#990000">&gt;</font>yes<font color="#990000">&lt;/</font>domestic<font color="#990000">&gt;</font>  <font color="#990000">&lt;/</font>animal<font color="#990000">&gt;</font>  <font color="#990000">&lt;</font><font color="#008080">animal</font> type<font color="#990000">=</font><font color="#FF0000">"bird"</font><font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>name<font color="#990000">&gt;</font>eagle<font color="#990000">&lt;/</font>name<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>legs<font color="#990000">&gt;</font><font color="#993399">2</font><font color="#990000">&lt;/</font>legs<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>domestic<font color="#990000">&gt;</font>no<font color="#990000">&lt;/</font>domestic<font color="#990000">&gt;</font>  <font color="#990000">&lt;/</font>animal<font color="#990000">&gt;</font>  <font color="#990000">&lt;</font><font color="#008080">animal</font> type<font color="#990000">=</font><font color="#FF0000">"reptile"</font><font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>name<font color="#990000">&gt;</font>snake<font color="#990000">&lt;/</font>name<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>legs<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">&lt;/</font>legs<font color="#990000">&gt;</font>    <font color="#990000">&lt;</font>domestic<font color="#990000">&gt;</font>no<font color="#990000">&lt;/</font>domestic<font color="#990000">&gt;</font>  <font color="#990000">&lt;/</font>animal<font color="#990000">&gt;&lt;/</font>animals<font color="#990000">&gt;</font></tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

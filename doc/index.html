@@ -1,11 +1,350 @@
-<!--#include virtual="header.html" -->
+<html>
+<head>
+	<title>firstworks: rudiments</title>
 
-<!--#include virtual="projectheader.html" -->
+	<link rel="stylesheet" href="css/style.css"/>
+	<!-- nothing -->
 
-<!--#include virtual="slides.html" -->
+	<script language="Javascript" src="js/rotate.js"></script>
+	<script language="Javascript" src="js/button.js"></script>
+	<script language="Javascript" src="js/iframe.js"></script>
+</head>
+<body onload="rotate(); setButton();">
 
-<!--#include virtual="news.html" -->
 
-<!--#include virtual="cards.html" -->
+<div style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 100;">
 
-<!--#include virtual="footer.html" -->
+<span id="firstworks">a <b><a href="http://www.firstworks.com">firstworks</a></b> project</span>
+
+<div id="projectbox"><a href="index.html"><img src="images/rudiments-icon.png"/><span id="name">Rudiments</span></a></div>
+
+<table id="projectbuttons">
+<tr>
+<td style="width: 50%;"></td>
+<td class="button nonlastbutton"><a id="button-about" href="index.html">About</a></td>
+<td class="button nonlastbutton"><a id="button-documentation" href="documentation.html">Documentation</a></td>
+<td class="button nonlastbutton"><a id="button-download" href="download.html">Download</a></td>
+<td class="button nonlastbutton"><a id="button-license" href="license.html">Licensing</a></td>
+<td class="button"><a id="button-news" target="_blank" href="http://software.firstworks.com/">News</a></td>
+<td style="width: 50%;"></td>
+</tr>
+</table>
+
+</div>
+
+<div style="position: absolute; top: 84px; width: 100%;">
+
+
+<div id="slidebuttons">
+
+<div class="centered">
+
+<a href="javascript: slide(0);"><img class="slidebutton" src="images/denimdot.png"/></a>
+<!--<a href="javascript: slide(1);"><img class="slidebutton" src="images/graydenimdot.png"/></a>-->
+
+</div>
+
+</div>
+
+<div class="slide" style="background-image: url('images/chalkboard.jpg');">
+
+<div class="slidecontent">
+
+<blockquote>
+
+<img class="metaphor" style="float: right; margin-top: 28px; margin-right: 90px;" src="images/colored-pencils.jpg"/>
+
+<p style="margin-left: 75; margin-top: 25px; font-size: 18pt;">Rudiments...</p>
+
+<p style="margin-left: 95; margin-top: 35px; font-size: 13pt;">The C++ class library for developing applications and systems.</p>
+
+</blockquote>
+
+</div>
+
+</div>
+
+
+
+<div id="newsbox"><center><iframe src="http://trails.firstworks.com/firstworks/newsbox1.php" scrolling="no"></iframe></center></div>
+
+
+<center>
+<p style="font-size: 16px;"><b>Rudiments</b> - the C++ library for developing applications and systems.</p>
+</center>
+
+
+<hr style="clear: both;"/>
+
+<a href="frameworks.html">
+<div style="margin: 0 auto; width: 800px;">
+<p><b>Intuitive Frameworks</b></p>
+
+<img class="metaphor-small" style="float: left; margin-top: 10px; margin-left: 25px;" src="images/coarse.jpg"/>
+
+<ul style="float: left; margin-left: 50px;">
+
+<li><b>Process and Process Environment Classes</b></li>
+<ul>
+<li>process</li>
+<li>commandline</li>
+<li>environment</li>
+</ul>
+
+<li><b>Thread Classes</b></li>
+<ul>
+<li>thread</li>
+<li>threadmutex</li>
+</ul>
+
+<li><b>Interprocess Communication Classes</b></li>
+<ul>
+<li>sharedmemory</li>
+<li>semaphoreset</li>
+<li>signal</li>
+</ul>
+
+<li><b>Logging Classes</b></li>
+<ul>
+<li>logger</li>
+</ul>
+
+</ul>
+
+<ul style="float: left;">
+
+<li><b>Client and Server Classes</b></li>
+<ul>
+<li>inetsocketserver</li>
+<li>inetsocketclient</li>
+<li>unixsocketserver</li>
+<li>unixsocketclient</li>
+<li>listener</li>
+</ul>
+
+<li><b>XML Classes</b></li>
+<ul>
+<li>xmlsax</li>
+<li>xmldom</li>
+<li>xmldomnode</li>
+</ul>
+
+<li><b>Compiler Classes</b></li>
+<ul>
+<li>codetree</li>
+<li>compiler</li>
+</ul>
+
+</ul>
+
+</div>
+</a>
+
+<hr style="clear: both;"/>
+
+<a href="utility.html">
+<div style="margin: 0 auto; width: 800px;">
+<p><b>Comprehensive Utility Classes</b></p>
+
+<img class="metaphor-small" style="float: left; margin-top: 10px; margin-left: 25px;" src="images/quilt.jpg"/>
+
+<ul style="float: left; margin-left: 50px;">
+
+<li ><b>Standard Input and Output</b></li>
+<ul>
+<li>stdinput</li>
+<li>stdoutput</li>
+<li>stderror</li>
+</ul>
+
+<li ><b>Characters and Strings</b></li>
+<ul>
+<li>character</li>
+<li>charstring</li>
+<li>bytestring</li>
+</ul>
+
+<li ><b>Regular Expressions</b></li>
+<ul>
+<li>regularexpression</li>
+</ul>
+
+<li ><b>Random Numbers</b></li>
+<ul>
+<li>randomnumber</li>
+</ul>
+
+</ul>
+
+<ul style="float: left;">
+
+	<li ><b>Encryption</b></li>
+<ul>
+<li>crypt</li>
+</ul>
+
+<li ><b>Date and Time</b></li>
+<ul>
+<li>datetime</li>
+</ul>
+
+<li ><b>System Information</b></li>
+<ul>
+<li>error</li>
+<li>sys</li>
+<li>userentry</li>
+<li>groupentry</li>
+<li>hostentry</li>
+<li>protocolentry</li>
+<li>serviceentry</li>
+</ul>
+
+</ul>
+
+<ul style="float: left;">
+
+	<li ><b>Parameter Strings</b></li>
+<ul>
+<li>parameterstring</li>
+</ul>
+
+<li ><b>Dynamic Libraries</b></li>
+<ul>
+<li>dynamiclib</li>
+</ul>
+
+<li ><b>Files, Directories, and Filesystems</b></li>
+<ul>
+<li>file</li>
+<li>permissions</li>
+<li>directory</li>
+<li>memorymap</li>
+<li>filesystem</li>
+</ul>
+
+</ul>
+
+</div>
+</a>
+
+<hr style="clear: both;"/>
+
+<a href="datastructures.html">
+<div style="margin: 0 auto; width: 800px;">
+<p><b>Concise Data Structures</b></p>
+
+<img class="metaphor-small" style="float: left; margin-top: 10px; margin-left: 25px;" src="images/fabric.jpg"/>
+
+<ul style="float: left; margin-left: 50px;">
+
+<li ><b>String and Binary Data Classes</b></li>
+<ul>
+<li>stringbuffer</li>
+<li>bytebuffer</li>
+<li>memorypool</li>
+</ul>
+
+</ul>
+
+<ul style="float: left;">
+
+<li ><b>Container Classes</b></li>
+<ul>
+<li>dynamicarray</li>
+<li>staticcarray</li>
+<li>linkedlist</li>
+<li>singlylinkedlist</li>
+<li>dictionary</li>
+<li>avltree</li>
+</ul>
+
+</ul>
+
+</div>
+</a>
+
+<hr style="clear: both;"/>
+
+<a href="lightweight.html">
+<div style="margin: 0 auto; width: 800px;">
+<p><b>Lightweight Implementation</b></p>
+
+<img class="metaphor-small" style="float: left; margin-top: 10px; margin-left: 25px; margin-bottom: 20px;" src="images/silver-valley.jpg"/>
+
+<div style="float: left; margin-left: 50px;">
+
+<p>Tight wrappers.  Minimal reinvention.  Frugal inlines.</p>
+
+<p>500 Kb release build on x64 linux</p>
+
+<p>275 Kb on arm-uclibc-linux with small-code optimizations</p>
+
+</div>
+
+</div>
+</a>
+
+<hr style="clear: both;"/>
+
+<a href="betterc.html">
+<div style="margin: 0 auto; width: 800px;">
+<p><b>C++ As a Better C</b></p>
+
+<img class="metaphor-small" style="float: left; margin-top: 10px; margin-left: 25px;" src="images/sofa.jpg"/>
+
+<div style="float: left; margin-left: 50px;">
+
+<p>Implements C paradigms in an object oriented manner.</p>
+
+<ul>
+<li>C types used throughout.</li>
+<li>Primitives passed by value.</li>
+<li>Arrays and objects passed by reference.</li>
+<li>Templates only in data structures.</li>
+<li>Shallow and sane class heirarchies.</li>
+<li>File I/O - open(), read(), write(), close()</li>
+<li>Network I/O - connect(), read(), write(), close()</li>
+<li>Standard I/O - read(), write(), printf()</li>
+</ul>
+
+</div>
+
+</div>
+</a>
+
+<hr style="clear: both;"/>
+
+<a href="compatibility.html">
+<div style="margin: 0 auto; width: 800px;">
+<p><b>Compatibility</b></p>
+
+<img class="metaphor-small" style="float: left; margin-top: 10px; margin-left: 25px;" src="images/wildwood.jpg"/>
+
+<div style="float: left; margin-left: 50px;">
+
+<p>Linux, Solaris, FreeBSD, NetBSD, OpenBSD, Minix,<br>
+SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, Sylable.</p>
+
+<p>Windows 7+, Windows Server 2003+</p>
+
+<p>x64, x86, ARM, Sparc, Mips, PPC</p>
+
+<p>glibc, uClibc</p>
+
+</div>
+
+</div>
+</a>
+
+<hr style="clear: both;"/>
+
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="images/us.png"/> <img style="vertical-align: text-bottom;" title="falo portugues tambem" src="images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+

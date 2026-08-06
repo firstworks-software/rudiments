@@ -1,0 +1,114 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the resourcepool class</h1>
+
+<p>The <a href="../classes/html/classresourcepool.html">resourcepool class</a> provides a pool of objects.  Objects can be borrowed from and returned to the pool.</p>
+
+<p>The pool contains a configurable minimum number of objects that are allocated when the pool is initialized.  When all of those objects have been borrowed, the pool can allocate a configurable number of additional objects on-demand, up to a configurable maximum.</p>
+
+<p>The pool is a template class, parameterized by the type of object it contains.</p>
+
+<p>The resourcepool class is targeted for use with the MVC classes, but it can be used in non-MVC projects as well.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/resourcepool.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stringbuffer.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a pool of stringbuffers...</font></i>
+	<font color="#008080">resourcepool&lt;stringbuffer&gt;</font>	pool<font color="#990000">;</font>
+	pool<font color="#990000">.</font><b><font color="#000000">setMin</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	pool<font color="#990000">.</font><b><font color="#000000">setMax</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">);</font>
+	pool<font color="#990000">.</font><b><font color="#000000">setGrowBy</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	pool<font color="#990000">.</font><b><font color="#000000">create</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"pool created:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  min:             %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pool<font color="#990000">.</font><b><font color="#000000">getMin</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  max:             %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pool<font color="#990000">.</font><b><font color="#000000">getMax</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  growby:          %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>pool<font color="#990000">.</font><b><font color="#000000">getGrowBy</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available init:  %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableInitialResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available ondem: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableOnDemandResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// borrow a resource from the pool...</font></i>
+	<font color="#008080">stringbuffer</font>	<font color="#990000">*</font>sb1<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">borrowResource</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after borrowing 1:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available init:  %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableInitialResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// use the resource...</font></i>
+	sb1<font color="#990000">-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">"hello, "</font><font color="#990000">);</font>
+	sb1<font color="#990000">-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">"goodbye."</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"sb1 contents: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sb1<font color="#990000">-&gt;</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// borrow the remaining initial resources...</font></i>
+	<font color="#008080">stringbuffer</font>	<font color="#990000">*</font>sb2<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">borrowResource</font></b><font color="#990000">();</font>
+	<font color="#008080">stringbuffer</font>	<font color="#990000">*</font>sb3<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">borrowResource</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after borrowing all initial resources:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available init:  %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableInitialResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available ondem: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableOnDemandResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// borrow one more, which triggers on-demand creation...</font></i>
+	<font color="#008080">stringbuffer</font>	<font color="#990000">*</font>sb4<font color="#990000">=</font>pool<font color="#990000">.</font><b><font color="#000000">borrowResource</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after borrowing 1 on-demand:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available init:  %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableInitialResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available ondem: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableOnDemandResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// return resources to the pool...</font></i>
+	pool<font color="#990000">.</font><b><font color="#000000">returnResource</font></b><font color="#990000">(</font>sb1<font color="#990000">);</font>
+	pool<font color="#990000">.</font><b><font color="#000000">returnResource</font></b><font color="#990000">(</font>sb2<font color="#990000">);</font>
+	pool<font color="#990000">.</font><b><font color="#000000">returnResource</font></b><font color="#990000">(</font>sb3<font color="#990000">);</font>
+	pool<font color="#990000">.</font><b><font color="#000000">returnResource</font></b><font color="#990000">(</font>sb4<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after returning all resources:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available init:  %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableInitialResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available ondem: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableOnDemandResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// clear the pool...</font></i>
+	pool<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"after clear:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available init:  %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableInitialResourceCount</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  available ondem: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				pool<font color="#990000">.</font><b><font color="#000000">getAvailableOnDemandResourceCount</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

@@ -1,0 +1,84 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the prompt class</h1>
+
+<p>The <a href="../classes/html/classprompt.html">prompt class</a> provides methods for reading lines of input from the user with line-editing and history support.</p>
+
+<p>The prompt class supports configurable history files, history limits, and custom prompt strings.  Lines read from the user are automatically added to the history, and the history can be flushed to a file so it persists across sessions.</p>
+
+<p>The following example configures a history file and limits, sets a prompt string, reads lines from the user in a loop until ctrl-D is pressed, and then flushes the history to disk.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/prompt.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">prompt</font>	p<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// configure the history file and limits</font></i>
+	p<font color="#990000">.</font><b><font color="#000000">setHistoryFile</font></b><font color="#990000">(</font><font color="#FF0000">"/tmp/.prompt_example_history"</font><font color="#990000">);</font>
+	p<font color="#990000">.</font><b><font color="#000000">setMaxHistoryLines</font></b><font color="#990000">(</font><font color="#993399">100</font><font color="#990000">);</font>
+	p<font color="#990000">.</font><b><font color="#000000">setMaxHistoryQueue</font></b><font color="#990000">(</font><font color="#993399">10</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// display the history configuration</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"history file: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>p<font color="#990000">.</font><b><font color="#000000">getHistoryFile</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"max history lines: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>p<font color="#990000">.</font><b><font color="#000000">getMaxHistoryLines</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"max history queue: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>p<font color="#990000">.</font><b><font color="#000000">getMaxHistoryQueue</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// set the prompt and display it</font></i>
+	p<font color="#990000">.</font><b><font color="#000000">setPrompt</font></b><font color="#990000">(</font><font color="#FF0000">"enter a command&gt; "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"prompt: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>p<font color="#990000">.</font><b><font color="#000000">getPrompt</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// read lines until ctrl-D is pressed</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Type lines of input and press enter.</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Press ctrl-D to exit.</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(;;)</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// read a line</font></i>
+		<font color="#009900">char</font>	<font color="#990000">*</font>line<font color="#990000">=</font>p<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// NULL means ctrl-D was pressed</font></i>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>line<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"done</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">break</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<i><font color="#9A1900">// an empty string means enter was hit by itself</font></i>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>line<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">])</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"(empty line)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> line<font color="#990000">;</font>
+			<b><font color="#0000FF">continue</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<i><font color="#9A1900">// print the line</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"you entered: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>line<font color="#990000">);</font>
+
+		<i><font color="#9A1900">// clean up</font></i>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> line<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// flush history to the history file</font></i>
+	p<font color="#990000">.</font><b><font color="#000000">flushHistory</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

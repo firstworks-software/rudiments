@@ -1,0 +1,194 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the datetime class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#formats">Output Formats</a></li>
+  <li><a href="#sources">Date/Time Sources</a></li>
+  <li><a href="#math">Date Math</a></li>
+  <li><a href="#timezones">Timezones</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classdatetime.html">datetime class</a> represents a date/time combination and provides methods for getting and setting dates and times, converting date/time formats and accessing various date/time values.</p>
+
+<p>Dealing with dates and times is classically one of the most difficult things to do on a computer.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
+
+<a name="formats"/><h2>Output Formats</h2>
+
+<p>The datetime class provides basic methods for getting the system date and time, and returning it in various formats.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/datetime.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// initialize an instance of datetime to the current system date/time</font></i>
+	<font color="#008080">datetime</font>	dt<font color="#990000">;</font>
+	dt<font color="#990000">.</font><b><font color="#000000">initFromSystemDateTime</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// the components of the date/time are avaialble in various formats...</font></i>
+
+	<i><font color="#9A1900">// as a string</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"date/time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// including microseconds</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"date/time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// as the number of seconds since 1970</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"seconds since 1970: %d</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getEpoch</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// broken down</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"date/time: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%02d/%02d/%04d %02d:%02d:%02d.%06d %s (%d)</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getMonth</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getDayOfMonth</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getYear</font></b><font color="#990000">(),</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getHour</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getMinute</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getSecond</font></b><font color="#990000">(),</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getMicrosecond</font></b><font color="#990000">(),</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getTimeZoneString</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getTimeZoneOffset</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// additional date information</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"date: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s (%s) %d, %04d "</font>
+			<font color="#FF0000">"(day %d of year) (day %d of week)</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getMonthName</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getMonthAbbreviation</font></b><font color="#990000">(),</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getDayOfMonth</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getYear</font></b><font color="#990000">(),</font>dt<font color="#990000">.</font><b><font color="#000000">getDayOfYear</font></b><font color="#990000">(),</font>
+			dt<font color="#990000">.</font><b><font color="#000000">getDayOfWeek</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="sources"/><h2>Date/Time Sources</h2>
+
+<p>An instance of the datetime class can be initialized from many different sources: the system clock, a formatted string, or from the number of seconds (and optionally microseconds) since 1970.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/datetime.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">datetime</font>	dt<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// initialize from system date/time</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">initFromSystemDateTime</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"system date/time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// initialize from a formatted string</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">init</font></b><font color="#990000">(</font><font color="#FF0000">"01/02/2000 03:04:05 EDT"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"formatted string: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// initialize from the number of seconds since 1970</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">init</font></b><font color="#990000">(</font><font color="#993399">40000000</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"seconds since 1970: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// initialize from the number of seconds and microseconds since 1970</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">init</font></b><font color="#990000">(</font><font color="#993399">40000000</font><font color="#990000">,</font><font color="#993399">100</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"sec/usec since 1970: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="math"/><h2>Date Math</h2>
+
+<p>The datetime class also provides methods for doing date math.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/datetime.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">datetime</font>	dt<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// initialize from system date/time</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">initFromSystemDateTime</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"current date/time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// add three years, months, days,</font></i>
+	<i><font color="#9A1900">// hours, minutes, seconds, and microseconds</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">addYears</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addMonths</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addDays</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addHours</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addMinutes</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addSeconds</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addMicroseconds</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"new date/time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// subtract three years, months, days,</font></i>
+	<i><font color="#9A1900">// hours, minutes, seconds, and microseconds</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">addYears</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addMonths</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addDays</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addHours</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addMinutes</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addSeconds</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	dt<font color="#990000">.</font><b><font color="#000000">addMicroseconds</font></b><font color="#990000">(-</font><font color="#993399">3</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"original date/time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><b><font color="#0000FF">true</font></b><font color="#990000">));</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="timezones"/><h2>Timezones</h2>
+
+<p>The datetime class also provides methods for getting information about timezones and converting date/times between timezones.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/datetime.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">datetime</font>	dt<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// initialize from system date/time</font></i>
+	dt<font color="#990000">.</font><b><font color="#000000">initFromSystemDateTime</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"local time: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// get time zone abbreviations and offsets</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>tzabbr<font color="#990000">=</font>datetime<font color="#990000">::</font><b><font color="#000000">getTimeZoneAbbreviations</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">const</font></b> <font color="#008080">int32_t</font> <font color="#990000">*</font>tzoff<font color="#990000">=</font>datetime<font color="#990000">::</font><b><font color="#000000">getTimeZoneOffsets</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// show the current time in different timezones around the world...</font></i>
+	<b><font color="#0000FF">while</font></b> <font color="#990000">(*</font>tzabbr <font color="#990000">&amp;&amp;</font> <font color="#990000">*</font>tzabbr<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">])</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// convert timezone</font></i>
+		dt<font color="#990000">.</font><b><font color="#000000">setTimeZone</font></b><font color="#990000">(*</font>tzabbr<font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"% 14s (% 6d sec from GMT): %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">*</font>tzabbr<font color="#990000">,*</font>tzoff<font color="#990000">,</font>dt<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+		tzabbr<font color="#990000">++;</font>
+		tzoff<font color="#990000">++;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

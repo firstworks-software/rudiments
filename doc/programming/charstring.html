@@ -1,8 +1,40 @@
-<!--#include virtual="header.html"-->
+<html>
+<head>
+	<title>firstworks: rudiments</title>
 
-<!--#include virtual="projectheader.html"-->
+	<link rel="stylesheet" href="../css/style.css"/>
+	<!-- nothing -->
 
-<!--#include virtual="contentstart.html"-->
+	<script language="Javascript" src="js/button.js"></script>
+</head>
+<body onload="setButton();">
+
+
+<div style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 100;">
+
+<span id="firstworks">a <b><a href="http://www.firstworks.com">firstworks</a></b> project</span>
+
+<div id="projectbox"><a href="index.html"><img src="../images/rudiments-icon.png"/><span id="name">Rudiments</span></a></div>
+
+<table id="projectbuttons">
+<tr>
+<td style="width: 50%;"></td>
+<td class="button nonlastbutton"><a id="button-about" href="../index.html">About</a></td>
+<td class="button nonlastbutton"><a id="button-documentation" href="../documentation.html">Documentation</a></td>
+<td class="button nonlastbutton"><a id="button-download" href="../download.html">Download</a></td>
+<td class="button nonlastbutton"><a id="button-license" href="../license.html">Licensing</a></td>
+<td class="button"><a id="button-news" target="_blank" href="http://software.firstworks.com/">News</a></td>
+<td style="width: 50%;"></td>
+</tr>
+</table>
+
+</div>
+
+<div style="position: absolute; top: 84px; width: 100%;">
+
+
+<div id="content">
+
 
 <h1>Using the charstring class</h1>
 
@@ -244,7 +276,7 @@ http://www.gnu.org/software/src-highlite -->
 	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>uw<font color="#990000">=</font>uppercasewords<font color="#990000">;</font> <font color="#990000">*</font>uw<font color="#990000">;</font> uw<font color="#990000">++)</font> <font color="#FF0000">{</font>
 		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"</font><font color="#FF0000"> contain </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"</font><font color="#FF0000">?  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
 			phrase<font color="#990000">,*</font>uw<font color="#990000">,</font>
-			<font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">contains</font></b><font color="#990000">(</font>phrase<font color="#990000">,*</font>uw<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+			<font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">containsIgnoringCase</font></b><font color="#990000">(</font>phrase<font color="#990000">,*</font>uw<font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
 	<font color="#FF0000">}</font>
 	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
 <font color="#FF0000">}</font>
@@ -613,7 +645,16 @@ http://www.gnu.org/software/src-highlite -->
 </tt></pre>
 
 </blockquote>
-<!--#include virtual="contentend.html"-->
+</div> <!-- content -->
 
-<!--#include virtual="footer.html"-->
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="../images/us.png"/> <img style="vertical-align: text-bottom;" title="falo português também" src="../images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+
 

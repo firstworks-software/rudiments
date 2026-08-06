@@ -1,0 +1,97 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the threadmutex class</h1>
+
+<p>The <a href="../classes/html/classthreadmutex.html">threadmutex class</a> provides mutual exclusion locks between separate threads of a single process.</p>
+
+<p>Intances of threadmutex can be used to protect critical sections of code or synchronize threads.</p>
+
+<p>In this example, five threads are spawned.  Each counts from 0 to 4, ten times.  A threadmutex is used to synchronize the threads so that each thread is able to finish its count without being interrupted by another thread.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/thread.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/threadmutex.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<i><font color="#9A1900">// struct for passing arguments into the thread</font></i>
+<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font> <font color="#FF0000">{</font>
+	<font color="#008080">thread</font>		<font color="#990000">*</font>th<font color="#990000">;</font>
+	<font color="#008080">threadmutex</font>	<font color="#990000">*</font>tm<font color="#990000">;</font>
+	<font color="#008080">int32_t</font>		id<font color="#990000">;</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<i><font color="#9A1900">// function that will be spawned as a thread</font></i>
+<font color="#009900">void</font> <b><font color="#000000">count</font></b><font color="#990000">(</font><font color="#009900">void</font> <font color="#990000">*</font>args<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	<font color="#990000">*</font>a<font color="#990000">=(</font><b><font color="#0000FF">struct</font></b> <font color="#008080">args</font> <font color="#990000">*)</font>args<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// lock the mutex</font></i>
+	a<font color="#990000">-&gt;</font>tm<font color="#990000">-&gt;</font><b><font color="#000000">lock</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// count to 5, ten times</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"thread %d: "</font><font color="#990000">,</font>a<font color="#990000">-&gt;</font>id<font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> oc<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> oc<font color="#990000">&lt;</font><font color="#993399">10</font><font color="#990000">;</font> oc<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> ic<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> ic<font color="#990000">&lt;</font><font color="#993399">5</font><font color="#990000">;</font> ic<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%d"</font><font color="#990000">,</font>ic<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// unlock the mutex</font></i>
+	a<font color="#990000">-&gt;</font>tm<font color="#990000">-&gt;</font><b><font color="#000000">unlock</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// exit</font></i>
+	a<font color="#990000">-&gt;</font>th<font color="#990000">-&gt;</font><b><font color="#000000">exit</font></b><font color="#990000">(&amp;(</font>a<font color="#990000">-&gt;</font>id<font color="#990000">));</font>
+<font color="#FF0000">}</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create 5 threads</font></i>
+	<font color="#008080">thread</font>		t<font color="#990000">[</font><font color="#993399">5</font><font color="#990000">];</font>
+
+	<i><font color="#9A1900">// create a mutex to synchronize them</font></i>
+	<font color="#008080">threadmutex</font>	tm<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// initialize threads</font></i>
+	<b><font color="#0000FF">struct</font></b> <font color="#008080">args</font>	a<font color="#990000">[</font><font color="#993399">5</font><font color="#990000">];</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">5</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		a<font color="#990000">[</font>i<font color="#990000">].</font>th<font color="#990000">=&amp;</font>t<font color="#990000">[</font>i<font color="#990000">];</font>
+		a<font color="#990000">[</font>i<font color="#990000">].</font>tm<font color="#990000">=&amp;</font>tm<font color="#990000">;</font>
+		a<font color="#990000">[</font>i<font color="#990000">].</font>id<font color="#990000">=</font>i<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// lock the mutex</font></i>
+	tm<font color="#990000">.</font><b><font color="#000000">lock</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// spawn threads (each will block on the mutex)</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> j<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> j<font color="#990000">&lt;</font><font color="#993399">5</font><font color="#990000">;</font> j<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>t<font color="#990000">[</font>j<font color="#990000">].</font><b><font color="#000000">spawn</font></b><font color="#990000">((</font><font color="#009900">void</font><font color="#990000">*(*)(</font><font color="#009900">void</font><font color="#990000">*))</font>count<font color="#990000">,(</font><font color="#009900">void</font> <font color="#990000">*)&amp;</font>a<font color="#990000">[</font>j<font color="#990000">],</font><b><font color="#0000FF">false</font></b><font color="#990000">))</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">" %d: spawn failed</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>j<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// unlock the mutex (allows the threads to proceed)</font></i>
+	tm<font color="#990000">.</font><b><font color="#000000">unlock</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// wait for the threads to exit</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> k<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> k<font color="#990000">&lt;</font><font color="#993399">5</font><font color="#990000">;</font> k<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		<font color="#008080">int32_t</font>	tstatus<font color="#990000">=-</font><font color="#993399">1</font><font color="#990000">;</font>
+		t<font color="#990000">[</font>k<font color="#990000">].</font><b><font color="#000000">wait</font></b><font color="#990000">(&amp;</font>tstatus<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"thread %d status: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>k<font color="#990000">,</font>tstatus<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

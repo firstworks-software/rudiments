@@ -1,0 +1,94 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the gss classes</h1>
+
+<p>The <a href="../classes/html/classgss.html">gss</a>, <a href="../classes/html/classgssmechanism.html">gssmechanism</a>, <a href="../classes/html/classgsscredentials.html">gsscredentials</a>, and <a href="../classes/html/classgsscontext.html">gsscontext</a> classes provide support for the Generic Security Services API (GSS-API), commonly used with Kerberos.</p>
+
+<p>The gss class provides methods for determining whether GSS support is available and for listing the available security mechanisms.</p>
+
+<p>The gssmechanism class represents a security mechanism, identified by an OID string.</p>
+
+<p>The gsscredentials class provides methods for acquiring credentials using one or more desired mechanisms.</p>
+
+<p>The gsscontext class provides methods for establishing a security context with a peer, wrapping and unwrapping data, and reading and writing across the secured connection.</p>
+
+<p>The following example checks for GSS support, lists available mechanisms, opens a mechanism by OID, creates credentials with a desired mechanism and lifetime, and configures a GSS context.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/gss.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// check if gss is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>gss<font color="#990000">::</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"GSS is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"GSS is supported</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get the available mechanisms</font></i>
+	<font color="#008080">gss</font>	g<font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b>	<font color="#990000">*</font>mechs<font color="#990000">=</font>g<font color="#990000">.</font><b><font color="#000000">getAvailableMechanisms</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>mechs<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"available mechanisms:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> mechs<font color="#990000">[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>mechs<font color="#990000">[</font>i<font color="#990000">]);</font>
+		<font color="#FF0000">}</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// open a mechanism by OID string</font></i>
+	<font color="#008080">gssmechanism</font>	mech<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>mech<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"{ 1 2 840 113554 1 2 2 }"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"opened mechanism: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+						mech<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// create credentials</font></i>
+	<font color="#008080">gsscredentials</font>	cred<font color="#990000">;</font>
+	cred<font color="#990000">.</font><b><font color="#000000">addDesiredMechanism</font></b><font color="#990000">(&amp;</font>mech<font color="#990000">);</font>
+	cred<font color="#990000">.</font><b><font color="#000000">setDesiredLifetime</font></b><font color="#990000">(</font><font color="#993399">600</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"desired lifetime:  %d seconds</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					cred<font color="#990000">.</font><b><font color="#000000">getDesiredLifetime</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"desired mechanism count: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				<font color="#990000">(</font><font color="#009900">long</font> <font color="#009900">long</font><font color="#990000">)</font>cred<font color="#990000">.</font><b><font color="#000000">getDesiredMechanismCount</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// create a gss context</font></i>
+	<font color="#008080">gsscontext</font>	ctx<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// configure the context</font></i>
+	ctx<font color="#990000">.</font><b><font color="#000000">setCredentials</font></b><font color="#990000">(&amp;</font>cred<font color="#990000">);</font>
+	ctx<font color="#990000">.</font><b><font color="#000000">setDesiredMechanism</font></b><font color="#990000">(&amp;</font>mech<font color="#990000">);</font>
+	ctx<font color="#990000">.</font><b><font color="#000000">setDesiredLifetime</font></b><font color="#990000">(</font><font color="#993399">600</font><font color="#990000">);</font>
+	ctx<font color="#990000">.</font><b><font color="#000000">setService</font></b><font color="#990000">(</font><font color="#FF0000">"host"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"service: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ctx<font color="#990000">.</font><b><font color="#000000">getService</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"desired lifetime: %d seconds</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					ctx<font color="#990000">.</font><b><font color="#000000">getDesiredLifetime</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// clean up</font></i>
+	mech<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	cred<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

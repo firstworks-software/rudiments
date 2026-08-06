@@ -64,6 +64,7 @@ CP = cp
 CHMOD = chmod
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
 LTFINISH = $(LIBTOOL) --mode=finish
+SSI = $(top_builddir)/ssi.sh
 
 # uninstall/clean commands
 LTUNINSTALL = $(LIBTOOL) --mode=uninstall

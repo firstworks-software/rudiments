@@ -1,0 +1,29 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h3>Source Tarball</h3>
+
+<blockquote>
+The current release is <a target="_blank" href="http://downloads.sourceforge.net/rudiments/rudiments-2.2.1.tar.gz">rudiments-2.2.1.tar.gz</a> or <a target="_blank" href="http://downloads.sourceforge.net/rudiments/rudiments-2.2.1.zip">rudiments-2.2.1.zip</a></a>
+</blockquote>
+<p><hr></p>
+
+<h3>Source Snapshots</h3>
+
+<blockquote>
+  <p>To clone the Rudiments GIT repo, run:</p>
+
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>git <font color="#008080">clone</font> https<font color="#990000">:</font><i><font color="#9A1900">//github.com/firstworks-software/rudiments.git</font></i></tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

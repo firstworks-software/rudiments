@@ -1,0 +1,58 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the environment class</h1>
+
+<p>The  <a href="environment">class</a> provides methods for accessing and manipulating environment variables.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/environment.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// Print the PATH environment variable.</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"PATH=%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>environment<font color="#990000">::</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"PATH"</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// Set TEST=testvalue and print the TEST.</font></i>
+	environment<font color="#990000">::</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">,</font><font color="#FF0000">"testvalue"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"TEST=%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>environment<font color="#990000">::</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// Remove TEST and print it.</font></i>
+	environment<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"TEST=%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>environment<font color="#990000">::</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"TEST"</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// Print all environment variable/value pairs.</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"All Variables:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>v<font color="#990000">=</font>environment<font color="#990000">::</font><b><font color="#000000">getVariables</font></b><font color="#990000">();</font> v <font color="#990000">&amp;&amp;</font> <font color="#990000">*</font>v<font color="#990000">;</font> v<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>v<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// Clear the environment and atttempt to print all</font></i>
+	<i><font color="#9A1900">// environment variable/value pairs.  Should print nothing.</font></i>
+	environment<font color="#990000">::</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"All Variables (should be empty now):</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>v<font color="#990000">=</font>environment<font color="#990000">::</font><b><font color="#000000">getVariables</font></b><font color="#990000">();</font> v <font color="#990000">&amp;&amp;</font> <font color="#990000">*</font>v<font color="#990000">;</font> v<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>v<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

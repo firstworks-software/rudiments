@@ -1,0 +1,81 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the inisax class</h1>
+
+<p>The <a href="../classes/html/classinisax.html">inisax class</a> provides a callback-based framework for parsing INI-formatted data.  When it encounters a section, key, value, or comment, it calls one of its callback methods.  These methods may be overridden by a child class to perform specific tasks.  The inisax class is especially useful if you can't afford to load the entire file into memory and use the inidom class, or if you just need to extract specific data from an INI file.</p>
+
+<p>The following example creates a child class of inisax that overrides the section(), key(), value(), poundComment(), and semicolonComment() callback methods to print information about each INI component encountered during parsing.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/inisax.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<i><font color="#9A1900">// create an ini sax handler by inheriting from inisax</font></i>
+<b><font color="#0000FF">class</font></b> <font color="#008080">myinihandler</font> <font color="#990000">:</font> <b><font color="#0000FF">public</font></b> inisax <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">protected</font></b><font color="#990000">:</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">section</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>s<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"section: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>s<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">key</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>k<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  key: %s"</font><font color="#990000">,</font>k<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">value</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>v<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">" = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>v<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">poundComment</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>c<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"# %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>c<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">semicolonComment</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>c<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"; %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>c<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">myinihandler</font>	handler<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// parse an ini string</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"parsing ini:</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	handler<font color="#990000">.</font><b><font color="#000000">parseString</font></b><font color="#990000">(</font>
+		<font color="#FF0000">"# a list of animals</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"[dog]</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"type=mammal</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"legs=4</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"domestic=yes</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"[eagle]</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"type=bird</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"legs=2</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"domestic=no</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"[snake]</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"type=reptile</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"legs=0</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font>
+		<font color="#FF0000">"domestic=no</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

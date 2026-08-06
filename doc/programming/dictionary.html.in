@@ -1,0 +1,77 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the dictionary class</h1>
+
+<p>The <a href="../classes/html/classdictionary.html">dictionary class</a> allows you to store arbitrary numbers of key/value-pair data.</p>
+
+<p>Each dictionary is composed of a set of dictionarynodes.  Each dictionarynode contains the key and value.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dictionary.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a dictionary of name-value pairs</font></i>
+	<font color="#008080">dictionary&lt;const char *,const char *&gt;</font>	nvp<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// set some name-value pairs</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"dog"</font><font color="#990000">,</font><font color="#FF0000">"mammal"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"eagle"</font><font color="#990000">,</font><font color="#FF0000">"bird"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"snake"</font><font color="#990000">,</font><font color="#FF0000">"reptile"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"frog"</font><font color="#990000">,</font><font color="#FF0000">"amphibian"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"trout"</font><font color="#990000">,</font><font color="#FF0000">"fish"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// replace some values</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"eagle"</font><font color="#990000">,</font><font color="#FF0000">"raptor"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"frog"</font><font color="#990000">,</font><font color="#FF0000">"poison dart frog"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"trout"</font><font color="#990000">,</font><font color="#FF0000">"freshwater fish"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// remove a value</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"dog"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print the dictionary</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// clear the dictionary</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// set some new values</font></i>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"cat"</font><font color="#990000">,</font><font color="#FF0000">"mammal"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"parrot"</font><font color="#990000">,</font><font color="#FF0000">"bird"</font><font color="#990000">);</font>
+	nvp<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"turtle"</font><font color="#990000">,</font><font color="#FF0000">"reptile"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print out the dictionary a different way</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#008080">linkedlist&lt;const char *&gt;</font>	<font color="#990000">*</font>keys<font color="#990000">=</font>nvp<font color="#990000">.</font><b><font color="#000000">getKeys</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">listnode&lt;const char *&gt;</font> <font color="#990000">*</font>kn<font color="#990000">=</font>keys<font color="#990000">-&gt;</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font>
+						kn<font color="#990000">;</font> kn<font color="#990000">=</font>kn<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s=%s "</font><font color="#990000">,</font>
+			kn<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">(),</font>nvp<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font>kn<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">()));</font>
+	<font color="#FF0000">}</font>
+	<b><font color="#0000FF">delete</font></b> keys<font color="#990000">;</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>Since the dictionary class is template-based, it can store any type of data.</p>
+
+<p>Note that the write() method works for primitive types and strings, but for more complex types, it only prints out the address of the object.</p>
+
+Note also that, by default, the dictionary class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or the dictionary is cleared.  However, if setManageKeys(true) or setManageValues(true) is called, then keys or values will be deleted (using delete) when a node is removed or the dictionary is cleared or destroyed.  If setManageArrayKeys(true) or setManageArrayValues(true) is called, then keys or values will be deleted using delete

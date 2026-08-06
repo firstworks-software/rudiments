@@ -1,0 +1,11 @@
+<!--#include virtual="header.html" -->
+
+<!--#include virtual="projectheader.html" -->
+
+<!--#include virtual="slides.html" -->
+
+<!--#include virtual="news.html" -->
+
+<!--#include virtual="cards.html" -->
+
+<!--#include virtual="footer.html" -->

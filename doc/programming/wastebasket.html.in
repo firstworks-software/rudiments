@@ -1,0 +1,75 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the wastebasket class</h1>
+
+<p>The <a href="../classes/html/classwastebasket.html">wastebasket class</a> provides a garbage collection object.  Arbitrary arrays of primitives, objects, and arrays of objects can be attached to it and deleted at a later date.</p>
+
+<p>This is useful for holding on to dependencies of an object until the object no longer needs them.  For example, a function might create several related objects, return one of them, and attach the others to a wastebasket.  The caller can use the returned object and then empty the wastebasket to clean everything up at once.</p>
+
+<p>The wastebasket class is targeted for use with the MVC classes, but it can be used in non-MVC projects as well.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/wastebasket.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stringbuffer.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">wastebasket</font>	wb<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// attach dynamically allocated strings...</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>str1<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"hello"</font><font color="#990000">);</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>str2<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"goodbye"</font><font color="#990000">);</font>
+	wb<font color="#990000">.</font><b><font color="#000000">attach</font></b><font color="#990000">(</font>str1<font color="#990000">);</font>
+	wb<font color="#990000">.</font><b><font color="#000000">attach</font></b><font color="#990000">(</font>str2<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// the strings are still usable...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"str1: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>str1<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"str2: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>str2<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// attach dynamically allocated arrays of primitives...</font></i>
+	<font color="#008080">int64_t</font>	<font color="#990000">*</font>nums<font color="#990000">=</font><b><font color="#0000FF">new</font></b> int64_t<font color="#990000">[</font><font color="#993399">3</font><font color="#990000">];</font>
+	nums<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">]=</font><font color="#993399">100</font><font color="#990000">;</font>
+	nums<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">]=</font><font color="#993399">200</font><font color="#990000">;</font>
+	nums<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">]=</font><font color="#993399">300</font><font color="#990000">;</font>
+	wb<font color="#990000">.</font><b><font color="#000000">attach</font></b><font color="#990000">(</font>nums<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"nums: %lld, %lld, %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			nums<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">],</font>nums<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font>nums<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">]);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// attach a dynamically allocated object...</font></i>
+	<font color="#008080">stringbuffer</font>	<font color="#990000">*</font>sb<font color="#990000">=</font><b><font color="#0000FF">new</font></b> <b><font color="#000000">stringbuffer</font></b><font color="#990000">();</font>
+	sb<font color="#990000">-&gt;</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#FF0000">"hello from stringbuffer"</font><font color="#990000">);</font>
+	wb<font color="#990000">.</font><b><font color="#000000">attach</font></b><font color="#990000">(</font>sb<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"sb: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sb<font color="#990000">-&gt;</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// empty the wastebasket, deleting all attached values...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"emptying the wastebasket...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	wb<font color="#990000">.</font><b><font color="#000000">empty</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"done</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// str1, str2, nums, and sb are no longer valid</font></i>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

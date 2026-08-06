@@ -1,0 +1,141 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the semaphoreset class</h1>
+
+<p>Semaphores allow seperate processes or threads to synchronize activities.  The <a href="../classes/html/classsemaphoreset.html">semaphoreset class</a> provides methods for creating and accessing semaphores.</p>
+
+<p>This program creates a set of semaphores and prints out 2 and 4, using the semaphores to synchronize with a second program.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/semaphoreset.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a file named "sem"</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">createFile</font></b><font color="#990000">(</font><font color="#FF0000">"sem"</font><font color="#990000">,</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-------"</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// generate a unique semaphore id based on the file</font></i>
+	<font color="#008080">key_t</font>	semid<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">generateKey</font></b><font color="#990000">(</font><font color="#FF0000">"sem"</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// Create a semaphore set, containing 2 semaphores.</font></i>
+	<i><font color="#9A1900">// Initialize them to 0 and 1 respectively.</font></i>
+	<font color="#008080">int32_t</font>	vals<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">1</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	<font color="#008080">semaphoreset</font>	sem<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>sem<font color="#990000">.</font><b><font color="#000000">create</font></b><font color="#990000">(</font>semid<font color="#990000">,</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-------"</font><font color="#990000">),</font><font color="#993399">2</font><font color="#990000">,</font>vals<font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// loop 10 times, printing 2 and 4, using the</font></i>
+		<i><font color="#9A1900">// semaphores to synchronize with another process</font></i>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#009900">int</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">10</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+	
+			sem<font color="#990000">.</font><b><font color="#000000">wait</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"2</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			sem<font color="#990000">.</font><b><font color="#000000">signal</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	
+			sem<font color="#990000">.</font><b><font color="#000000">wait</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"4</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			sem<font color="#990000">.</font><b><font color="#000000">signal</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// an error must have occurred</font></i>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// remove the file "sem"</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"sem"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>This program attaches to the semaphore set created by the first program and prints out 1 and 3, using the semaphores to synchronize with the first program.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/semaphoreset.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// generate a semaphore id based on the file "sem"</font></i>
+	<i><font color="#9A1900">// (which was created by the other process)</font></i>
+	<font color="#008080">key_t</font>	semid<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">generateKey</font></b><font color="#990000">(</font><font color="#FF0000">"sem"</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// attach to the semaphore set keyed to sem containing 2 semaphores</font></i>
+	<font color="#008080">semaphoreset</font>	sem<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>sem<font color="#990000">.</font><b><font color="#000000">attach</font></b><font color="#990000">(</font>semid<font color="#990000">,</font><font color="#993399">2</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// loop 10 times, printing 1 and 3, using the</font></i>
+		<i><font color="#9A1900">// semaphores to synchronize with another process</font></i>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#009900">int</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">10</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+			sem<font color="#990000">.</font><b><font color="#000000">wait</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			sem<font color="#990000">.</font><b><font color="#000000">signal</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+
+			sem<font color="#990000">.</font><b><font color="#000000">wait</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"3</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			sem<font color="#990000">.</font><b><font color="#000000">signal</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// an error must have occurred</font></i>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>These programs must both be run to the background.</p>
+
+<p>No matter what order the programs are started in, they will always print out:</p>
+
+<p>12341234etc.</p>
+
+<p>Note that on unix-like systems, the first program should not be killed.  Semaphore sets are persistent in the kernel and remain unless specifically removed.  The semaphoreset class will remove the semaphore set that it created when the instance of the class is destroyed, but if the first process is killed then the semaphore set will persist and subsequent attempts to run the program will fail with a cryptic error like "File exists" or similar.</p>
+
+<p>If this happens, most unix-like systems provide utilites for examining and cleaning up semaphore sets.</p>
+
+<p>Running <i>ipcs -s</i> allows you to examine semaphore sets.  It ought to return something like:</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><font color="#990000">------</font> <font color="#008080">Semaphore</font> Arrays <font color="#990000">--------</font>
+key        semid      owner      perms      nsems
+<font color="#993399">0x010114f4</font> <font color="#993399">188678177</font>  dmuse      <font color="#993399">600</font>        <font color="#993399">2</font></tt></pre>
+
+</blockquote>
+<p>The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -s 188678177</i></p>
+
+<p>None of this is an issue on Windows systems.</p>
+
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

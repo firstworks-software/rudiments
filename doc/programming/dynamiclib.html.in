@@ -1,0 +1,75 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the dynamiclib class</h1>
+
+<p>The <a href="../classes/html/classdynamiclib.html">dynamiclib class</a> provides methods for loading dynamic libraries (shared objects/DLLs) at runtime and accessing their symbols.</p>
+
+<p>This is useful when you want to load a library that might not be available on every system, or when you want to implement a plugin architecture.</p>
+
+<p>The open() method loads the library.  The getSymbol() method looks up a function or variable by name and returns a pointer to it.  The close() method unloads the library.</p>
+
+<p>The following example opens the math library (libm.so), looks up the ceil() and floor() functions by name, calls them, and closes the library.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dynamiclib.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">dynamiclib</font>	dl<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// open the math library</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>dl<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"libm.so"</font><font color="#990000">,</font><b><font color="#0000FF">true</font></b><font color="#990000">,</font><b><font color="#0000FF">true</font></b><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open libm.so</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened libm.so</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// look up the ceil() function</font></i>
+	<font color="#009900">double</font> <font color="#990000">(*</font>ceilfn<font color="#990000">)(</font><font color="#009900">double</font><font color="#990000">)=</font>
+			<font color="#990000">(</font><font color="#009900">double</font> <font color="#990000">(*)(</font><font color="#009900">double</font><font color="#990000">))</font>dl<font color="#990000">.</font><b><font color="#000000">getSymbol</font></b><font color="#990000">(</font><font color="#FF0000">"ceil"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>ceilfn<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to find ceil()</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		dl<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// call ceil()</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"ceil(1.1) = %g</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font><b><font color="#000000">ceilfn</font></b><font color="#990000">(</font><font color="#993399">1.1</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"ceil(1.9) = %g</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font><b><font color="#000000">ceilfn</font></b><font color="#990000">(</font><font color="#993399">1.9</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// look up the floor() function</font></i>
+	<font color="#009900">double</font> <font color="#990000">(*</font>floorfn<font color="#990000">)(</font><font color="#009900">double</font><font color="#990000">)=</font>
+			<font color="#990000">(</font><font color="#009900">double</font> <font color="#990000">(*)(</font><font color="#009900">double</font><font color="#990000">))</font>dl<font color="#990000">.</font><b><font color="#000000">getSymbol</font></b><font color="#990000">(</font><font color="#FF0000">"floor"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>floorfn<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to find floor()</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		dl<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// call floor()</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"floor(1.1) = %g</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font><b><font color="#000000">floorfn</font></b><font color="#990000">(</font><font color="#993399">1.1</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"floor(1.9) = %g</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font><b><font color="#000000">floorfn</font></b><font color="#990000">(</font><font color="#993399">1.9</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// close the library</font></i>
+	dl<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"closed libm.so</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

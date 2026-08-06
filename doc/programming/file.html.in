@@ -1,0 +1,1208 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the file class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#create">Creating a File</a></li>
+  <li><a href="#remove">Removing a File</a></li>
+  <li><a href="#open">Opening and Closing Files</a></li>
+  <li><a href="#props">File Properties</a></li>
+  <li><a href="#read">Read Access</a></li>
+  <li><a href="#write">Write Access</a></li>
+  <li><a href="#random">Random Access</a></li>
+  <li><a href="#lock">File Locks</a></li>
+  <li><a href="#truncate">Truncating a File</a></li>
+  <li><a href="#buffers">Buffered File Access</a></li>
+  <li><a href="#optimizations">Optimizing File Access</a></li>
+  <li><a href="#temp">Temporary Files</a></li>
+  <li><a href="#links">Links</a></li>
+  <li><a href="#fifos">Fifos</a></li>
+  <li><a href="#pipes">Named Pipes</a></li>
+  <li><a href="#convenience">Convenience Methods</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classfile.html">file class</a> provides methods for creating and accessing files.</p>
+
+<p>The filedescriptor class provides methods for generic input and output to file descriptors.  The file class inherits from filedescriptor and adds methods that are specific to files.  However, when using the file class, you will likely make heavy use of filedescriptor methods such as read() and write().</p>
+
+<a name="create"/><h2>Creating a File</h2>
+
+<p>The following example demonstrates the different ways to create a file.</p>
+
+<p>Note that when creating a file, the file permissions must be supplied.  Rudiments supports unix-style file permissions, even on Windows.  See the <a href="permissions.html">permissions class</a> for more information.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// Create a file using the create() method, with read-write</font></i>
+	<i><font color="#9A1900">// permissions for everyone.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">create</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1 created</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// Create a file using the open() method and O_CREAT flag,</font></i>
+	<i><font color="#9A1900">// with read-write permissions for everyone.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile2"</font><font color="#990000">,</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"testfile2 created</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create testfile2</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// An attempt to create a file that already exists will just open</font></i>
+	<i><font color="#9A1900">// the file.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">create</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1 opened</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// If O_EXCL and O_CREAT are used together, then an attempt to create a</font></i>
+	<i><font color="#9A1900">// file that already exists will fail.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile2"</font><font color="#990000">,</font>O_CREAT<font color="#990000">|</font>O_EXCL<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"testfile2 opened</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile2 "</font>
+				<font color="#FF0000">"(this is the correct behavior)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="remove"/><h2>Removing a File</h2>
+
+<p>The file class provides a static method for removing a file.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	
+	<i><font color="#9A1900">// remove testfile1</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1 removed</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to remove testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// remove testfile2</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile2"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"testfile2 removed</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to remove testfile2</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="open"/><h2>Opening a File</h2>
+
+<p>To open a file, call one of the open() methods.</p>
+
+<p>The open() methods take the filename to open and a set of flags.</p>
+
+<p>Flags may include one or more of the following flags, or'ed together.</p>
+
+<ul>
+  <li>O_RDONLY - Open the file in read-only mode.</li>
+  <li>O_WRONLY - Open the file in write-only mode.</li>
+  <li>O_RDWR - Open the file in read-write mode.</li>
+  <li>O_APPEND - Set the position to the end of the file.</li>
+  <li>O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.</li>
+  <li>O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.</li>
+  <li>O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the file already exists.  Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.</li>
+</ul>
+
+<br/><p>Many platforms support additional, platform-specific flags.</p>
+
+<p>There are two varieties of the open() method.  They both take filename and flags.  The second also takes permissions.  If the flags include O_CREAT then the permissions are used when creating the file.  If the flags don't include O_CREAT then the permissions are ignored.</p>
+
+<p>Files are closed when the instance of the file class is deleted, or when the same instance is used to open another file, but they can also be closed manually using the close() method.</p>
+
+<p>The following example demonstrates various ways to open and close a file.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// Create a file, or open it for write if it already exists.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created/opened testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create/open testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// Attempt to create a file, and fail if it already exists.</font></i>
+	<i><font color="#9A1900">// (the previously open file will be closed automatically)</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_CREAT<font color="#990000">|</font>O_EXCL<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created/opened testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create/open testfile1 "</font>
+				<font color="#FF0000">"(this is the correct behavior)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// Open a file for read, starting at the beginning of the file.</font></i>
+	<i><font color="#9A1900">// (the previously open file will be closed automatically)</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened testfile1 for read</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1 for read</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// Open a file for write, starting at the beginning of the file.</font></i>
+	<i><font color="#9A1900">// (the previously open file will be closed automatically)</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened testfile1 for write</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1 for write</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// You can also close the file manually.</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// Open a file for read and write,</font></i>
+	<i><font color="#9A1900">// starting at the beginning of the file.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_RDWR<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened testfile1 for read/write</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1 for read/write</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// Close the file manually.</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// Open a file for write, starting at the end of the file.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_APPEND<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened testfile1 for append</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1 for append</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// Close the file manually.</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// Open a file for write,</font></i>
+	<i><font color="#9A1900">// first removing the current contents of the file.</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_TRUNC<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened testfile1 for write (truncated)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1 for write (truncated)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// when main() exits, f will be deleted and the file will be closed.</font></i>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="props"/><h2>File Properties</h2>
+
+<p>The file class provides methods for getting various file properties including permissions, ownership, size, type, and access and modification times.</p>
+
+<p>The following example opens a file and prints out various file properties.  Note that other classes must be used to convert the codes, ids and raw times to human-readable form.</p>
+
+<p>Note that this program depends on the existence of testfile1, so you'll have to touch it, or run one of the programs above to create it.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/userentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/groupentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/datetime.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// open the file</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile1"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// print out various file properties...</font></i>
+
+		<i><font color="#9A1900">// permissions</font></i>
+		<font color="#008080">mode_t</font>	perms<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">getPermissions</font></b><font color="#990000">();</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>permstring<font color="#990000">=</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermOctal</font></b><font color="#990000">(</font>perms<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Permissions:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>permstring<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> permstring<font color="#990000">;</font>
+
+		<i><font color="#9A1900">// owner user/group</font></i>
+		<font color="#008080">uid_t</font>	user<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">getOwnerUserId</font></b><font color="#990000">();</font>
+		<font color="#008080">userentry</font>	ou<font color="#990000">;</font>
+		ou<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>user<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Owner User:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ou<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+
+		<font color="#008080">gid_t</font>	group<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">getOwnerGroupId</font></b><font color="#990000">();</font>
+		<font color="#008080">groupentry</font>	og<font color="#990000">;</font>
+		og<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>group<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Owner Group:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>og<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+
+		<i><font color="#9A1900">// sizes</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"File Size:		%lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							f<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Block Size:		%lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							f<font color="#990000">.</font><b><font color="#000000">getBlockSize</font></b><font color="#990000">());</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Block Count:		%lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+							f<font color="#990000">.</font><b><font color="#000000">getBlockCount</font></b><font color="#990000">());</font>
+
+		<i><font color="#9A1900">// file type</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Socket:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isSocket</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Symbolic Link:	%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isSymbolicLink</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Regular File:	%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isRegularFile</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Block Device:	%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isBlockDevice</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Directory:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isDirectory</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Character Device:	%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isCharacterDevice</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Is Fifo:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					<font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">isFifo</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+
+		<i><font color="#9A1900">// access/modification times</font></i>
+		<font color="#008080">time_t</font>		access<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">getLastAccessTime</font></b><font color="#990000">();</font>
+		<font color="#008080">datetime</font>	da<font color="#990000">;</font>
+		da<font color="#990000">.</font><b><font color="#000000">init</font></b><font color="#990000">(</font>access<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Last Access:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>da<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+		<font color="#008080">time_t</font>	mod<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">getLastModificationTime</font></b><font color="#990000">();</font>
+		<font color="#008080">datetime</font>	dm<font color="#990000">;</font>
+		dm<font color="#990000">.</font><b><font color="#000000">init</font></b><font color="#990000">(</font>mod<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Last Modification:	%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dm<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open testfile1</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>There are 3 other methods worth mentioning as well:</p>
+
+<dl>
+  <dt>getCurrentProperties()</dt>
+  <dd>By default, the file class fetches file properties when open() or create() are called.  If a property is changed, then the old value will still be reflected when the method to get it is called, unless this method is called first.</dd>
+  <dt>dontGetCurrentPropertiesOnOpen()</dt>
+  <dd>By default, the file class fetches file properties when open() or create() are called.  If this method is called, then file properties will not be fetched unless getCurrentProperties() is called manually.</dd>
+  <dt>getCurrentPropertiesOnOpen()</dt>
+  <dd>Returns the class to its default behavior of fetching file properties when open() or create() are called.</dd>
+</dl>
+
+<a name="read"/><h2>Read Access</h2>
+
+<p>The filedescriptor class (which the file class inherits from) provides read() methods to read data from files and file descriptors.</p>
+
+<p>Methods are provided for reading all primitive types directly.  This example opens a file in read-only mode and reads primitive data types from it.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// open the file</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// read a bool</font></i>
+	<font color="#009900">bool</font>	b<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>b<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// read various characters</font></i>
+	<font color="#009900">char</font>	c<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>c<font color="#990000">);</font>
+
+	<font color="#008080">byte_t</font>	uc<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>uc<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// read various integers</font></i>
+	<font color="#008080">uint16_t</font>	ui16<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>ui16<font color="#990000">);</font>
+
+	<font color="#008080">uint32_t</font>	ui32<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>ui32<font color="#990000">);</font>
+
+	<font color="#008080">uint64_t</font>	ui64<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>ui64<font color="#990000">);</font>
+
+	<font color="#008080">int16_t</font>		i16<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>i16<font color="#990000">);</font>
+
+	<font color="#008080">int32_t</font>		i32<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>i32<font color="#990000">);</font>
+
+	<font color="#008080">int64_t</font>		i64<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>i64<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// read various floats</font></i>
+	<font color="#009900">float</font>		fl<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>fl<font color="#990000">);</font>
+
+	<font color="#009900">double</font>		db<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>db<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>Methods are also provided for reading arbitrary data into buffers.  This example approximates the unix "cat" or Windows "type" utility.  It opens a file in read-only mode, reads it in chunks, and prints out each chunk.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	<font color="#009900">char</font>	buffer<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+
+	<i><font color="#9A1900">// for each file specified on the command line...</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">int32_t</font> i<font color="#990000">=</font><font color="#993399">1</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>argc<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// open the file</font></i>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>argv<font color="#990000">[</font>i<font color="#990000">],</font>O_RDONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+			<b><font color="#0000FF">continue</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<i><font color="#9A1900">// read chunks from the file and print each chunk..</font></i>
+		<font color="#008080">ssize_t</font>	bytesread<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font>
+		<b><font color="#0000FF">do</font></b> <font color="#FF0000">{</font>
+
+			<i><font color="#9A1900">// attempt to read 1024 bytes into the buffer</font></i>
+			bytesread<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">1024</font><font color="#990000">);</font>
+
+			<i><font color="#9A1900">// bytesread will be the number of bytes that were</font></i>
+			<i><font color="#9A1900">// actually read, 0 at EOF, or a negative number</font></i>
+			<i><font color="#9A1900">// if an error occurred</font></i>
+			<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+
+				<i><font color="#9A1900">// print the buffer</font></i>
+				stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>bytesread<font color="#990000">);</font>
+			<font color="#FF0000">}</font>
+
+		<i><font color="#9A1900">// exit if we read fewer than 1024 bytes</font></i>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">while</font></b> <font color="#990000">(</font>bytesread<font color="#990000">==</font><font color="#993399">1024</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>A read() method is also provided that reads until it encounters a specified terminator.  This example reads a file, one line at a time, and prints out each line.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// for each file specified on the command line...</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">int32_t</font> i<font color="#990000">=</font><font color="#993399">1</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>argc<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// open the file</font></i>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>argv<font color="#990000">[</font>i<font color="#990000">],</font>O_RDONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+			<b><font color="#0000FF">continue</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<i><font color="#9A1900">// read lines from the file and print each line...</font></i>
+		<font color="#008080">ssize_t</font>	bytesread<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font>
+		<b><font color="#0000FF">do</font></b> <font color="#FF0000">{</font>
+
+			<i><font color="#9A1900">// attempt to read a line</font></i>
+			<font color="#009900">char</font>	<font color="#990000">*</font>line<font color="#990000">=</font>NULL<font color="#990000">;</font>
+			bytesread<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>line<font color="#990000">,</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+			<i><font color="#9A1900">// bytesread will be the number of bytes that were</font></i>
+			<i><font color="#9A1900">// actually read, 0 at EOF, or a negative number</font></i>
+			<i><font color="#9A1900">// if an error occurred</font></i>
+			<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+
+				<i><font color="#9A1900">// print the line</font></i>
+				stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>line<font color="#990000">);</font>
+			<font color="#FF0000">}</font>
+
+			<i><font color="#9A1900">// clean up</font></i>
+			<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> line<font color="#990000">;</font>
+
+		<i><font color="#9A1900">// exit on eof or error</font></i>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">while</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="write"/><h2>Write Access</h2>
+
+<p>The filedescriptor class (which the file class inherits from) provides write() methods to write data to files and file descriptors.</p>
+
+<p>Methods are provided for writing primitive types as well as blocks of character or binary data.  This example creates a file in write-only mode and writes various types of data to it.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// open/create the file</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// write a bool</font></i>
+	<font color="#009900">bool</font>	b<font color="#990000">=</font><b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>b<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write various characters</font></i>
+	<font color="#009900">char</font>	c<font color="#990000">=</font><font color="#FF0000">'a'</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>c<font color="#990000">);</font>
+
+	<font color="#008080">byte_t</font>	uc<font color="#990000">=</font><font color="#FF0000">'a'</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>uc<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write various integers</font></i>
+	<font color="#008080">uint16_t</font>	ui16<font color="#990000">=</font><font color="#993399">16</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>ui16<font color="#990000">);</font>
+
+	<font color="#008080">uint32_t</font>	ui32<font color="#990000">=</font><font color="#993399">32</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>ui32<font color="#990000">);</font>
+
+	<font color="#008080">uint64_t</font>	ui64<font color="#990000">=</font><font color="#993399">64</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>ui64<font color="#990000">);</font>
+
+	<font color="#008080">int16_t</font>		i16<font color="#990000">=-</font><font color="#993399">16</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>i16<font color="#990000">);</font>
+
+	<font color="#008080">int32_t</font>		i32<font color="#990000">=-</font><font color="#993399">32</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>i32<font color="#990000">);</font>
+
+	<font color="#008080">int64_t</font>		i64<font color="#990000">=-</font><font color="#993399">64</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>i64<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write various floats</font></i>
+	<font color="#009900">float</font>		fl<font color="#990000">=</font><font color="#993399">1.234</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>fl<font color="#990000">);</font>
+
+	<font color="#009900">double</font>		db<font color="#990000">=</font><font color="#993399">1.234</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>db<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write some text</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>text<font color="#990000">=</font><font color="#FF0000">"hello there"</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>text<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// write the first 5 bytes of the same text</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>text<font color="#990000">,</font><font color="#993399">5</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// write some binary data</font></i>
+	<font color="#008080">byte_t</font>	binary<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">5</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">,</font><font color="#993399">7</font><font color="#990000">,</font><font color="#993399">8</font><font color="#990000">,</font><font color="#993399">9</font><font color="#990000">,</font><font color="#993399">0</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>binary<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>binary<font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// write arbitary binary data</font></i>
+	<font color="#008080">uint64_t</font>	data<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">12345</font><font color="#990000">,</font><font color="#993399">67890</font><font color="#990000">,</font><font color="#993399">12345</font><font color="#990000">,</font><font color="#993399">67890</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">((</font><font color="#009900">void</font> <font color="#990000">*)</font>data<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="random"/><h2>Random Access</h2>
+
+<p>It is possible to open a file for both reading and writing, write to it, jump around, overwrite parts, jump around some more, and read from it.</p>
+
+<p>This example illustrates random file access.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// open the file</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_RDWR<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// write 4 fixed length records to the file,</font></i>
+	<i><font color="#9A1900">// each consiting of two 10-character fields</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"                    "</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"                    "</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"                    "</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"                    "</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// go to the first record</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// overwrite the first record</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"goodbye   friends   "</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// go to the last record</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToEnd</font></b><font color="#990000">(-</font><font color="#993399">20</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hello     there     "</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// go to the third record</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">40</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"bye       folks     "</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// go to the second record</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToCurrent</font></b><font color="#990000">(-</font><font color="#993399">40</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hi        guys      "</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// print the records in reverse order</font></i>
+	<font color="#009900">char</font>	record<font color="#990000">[</font><font color="#993399">20</font><font color="#990000">];</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">off64_t</font> i<font color="#990000">=</font><font color="#993399">1</font><font color="#990000">;</font> i<font color="#990000">&lt;=</font><font color="#993399">4</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToEnd</font></b><font color="#990000">(-</font><font color="#993399">20</font><font color="#990000">*</font>i<font color="#990000">);</font>
+		f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>record<font color="#990000">,</font><font color="#993399">20</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>record<font color="#990000">,</font><font color="#993399">20</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="lock"/><h2>File Locks</h2>
+
+<p>The filedescriptor class provides methods for locking files and regions of files.  File locks are advisory, meaning that they only work if all processes that access the file use them.</p>
+
+<p>The lockFile() and unlockFile() methods lock and unlock the entire file.  The lockRegion() and unlockRegion() methods lock and unlock a specific range of bytes.  The lockRemainder() and unlockRemainder() methods lock and unlock from a specific position to the end of the file.</p>
+
+<p>The checkLockRegion() method can be used to determine if a region can be locked, and if not, to get information about the conflicting lock.</p>
+
+<p>The following example demonstrates whole-file locking, region locking, lock conflict checking, and remainder locking.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// open/create a file</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_RDWR<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hello world, this is a test file</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// lock the entire file for writing</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">lockFile</font></b><font color="#990000">(</font>F_WRLCK<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"locked entire file for write</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// unlock the entire file</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">unlockFile</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"unlocked entire file</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// lock a region of the file for reading</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">lockRegion</font></b><font color="#990000">(</font>F_RDLCK<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">10</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"locked bytes 0-10 for read</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// check if the region can be write-locked</font></i>
+	<font color="#008080">int16_t</font>		conftype<font color="#990000">;</font>
+	<font color="#008080">int16_t</font>		confwhence<font color="#990000">;</font>
+	<font color="#008080">off64_t</font>		confstart<font color="#990000">;</font>
+	<font color="#008080">off64_t</font>		conflen<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>f<font color="#990000">.</font><b><font color="#000000">checkLockRegion</font></b><font color="#990000">(</font>F_WRLCK<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">10</font><font color="#990000">,</font>
+				<font color="#990000">&amp;</font>conftype<font color="#990000">,&amp;</font>confwhence<font color="#990000">,</font>
+				<font color="#990000">&amp;</font>confstart<font color="#990000">,&amp;</font>conflen<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"cannot write-lock: "</font>
+				<font color="#FF0000">"conflicting lock at %lld for %lld bytes</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				confstart<font color="#990000">,</font>conflen<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// unlock the region</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">unlockRegion</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">10</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"unlocked bytes 0-10</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// try to lock the remainder of the file from position 5</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">lockRemainder</font></b><font color="#990000">(</font>F_WRLCK<font color="#990000">,</font><font color="#993399">5</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"locked remainder from byte 5</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// unlock the remainder</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>f<font color="#990000">.</font><b><font color="#000000">unlockRemainder</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"unlocked remainder from byte 5</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="truncate"/><h2>Truncating a File</h2>
+
+<p>If you want to erase the current contents of a file, there are two options.  The first is to open the file using the O_TRUNC flag.  But, if you want to truncate the file after you've already opened it, you can use the truncate() method.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// open/create a file</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// write some text to it</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"this is some text</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// truncate the file</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">truncate</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// write some different text to it</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"this is some different text</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="buffers"/><h2>Buffered File Access</h2>
+
+<p>If your program does a lot of reads and writes, then you probably want to buffer them.  There are two main reasons for this:</p>
+
+<ul>
+  <li>Accessing storage is much slower than accessing memory.</li>
+  <li>System calls are generally slower than library calls.</li>
+</ul>
+
+<br/><p>Both file systems and physical storage are typically organized in blocks.  Each block is some number of bytes.  A read or write of the entire block costs the same as reading or writing a single byte.  If you use buffers that are the same size as the file system's block size, then reading or writing the entire buffer takes only marginally more time than reading or writing a single byte.</p>
+
+<p>Also, even if the kernel or disk does some kind of buffering, each read or write still requires a system call.  In effect, the program tells the kernel to do the read or write, hands control over to the kernel, waits for it to do it, and then waits for it to hand control back.  The overhead of the switching involved usually makes the whole process slower than if the program read or wrote directly from a buffer under its own control.</p>
+
+<p>Buffering always helps writes and usually helps reads.  How much is platform-specific.</p>
+
+<p>The file class makes buffered I/O simple.  There are only three methods involved:</p>
+
+<dl>
+  <dt>setReadBufferSize()</dt>
+  <dd>Sets the size of the buffer used when reading.</dd>
+  <dt>setWriteBufferSize()</dt>
+  <dd>Sets the size of the buffer used when writing.</dd>
+  <dt>flushWriteBuffer()</dt>
+  <dd>Makes sure that any data that is buffered but hasn't been written to storage, actually gets written to storage.</dd>
+</dl>
+
+<p>Reading is completely transparent.  The read buffer is filled during the first read, and filled again when all bytes have been read from it.</p>
+
+<p>Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  However, when the program is done writing, it should call flushWriteBuffer() to make sure that any data still in the buffer is written to storage.</p>
+
+<p>The example below illustrates buffered I/O.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/datetime.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">file</font>		f<font color="#990000">;</font>
+	<font color="#008080">uint32_t</font>	i<font color="#990000">;</font>
+	<font color="#008080">uint32_t</font>	j<font color="#990000">;</font>
+	<font color="#009900">char</font>		c<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// open/create the file</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">|</font>O_CREAT<font color="#990000">|</font>O_TRUNC<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// write 1mb of characters to the file, unbuffered</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"writing unbuffered...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">1024</font><font color="#990000">*</font><font color="#993399">1024</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'a'</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"done</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// truncate the file</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">truncate</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// write 1mb of characters to the file, buffered</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"writing buffered...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">setWriteBufferSize</font></b><font color="#990000">(</font><font color="#993399">4096</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">1024</font><font color="#990000">*</font><font color="#993399">1024</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'a'</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	f<font color="#990000">.</font><b><font color="#000000">flushWriteBuffer</font></b><font color="#990000">(-</font><font color="#993399">1</font><font color="#990000">,-</font><font color="#993399">1</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"done</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// read 1mb of characters from the file, unbuffered (10 times)</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"reading unbuffered...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">10</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>j<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> j<font color="#990000">&lt;</font><font color="#993399">1024</font><font color="#990000">*</font><font color="#993399">1024</font><font color="#990000">;</font> j<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>c<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"done</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// read 1mb of characters from the file, buffered (10 times)</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"reading buffered...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">10</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font>j<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> j<font color="#990000">&lt;</font><font color="#993399">1024</font><font color="#990000">*</font><font color="#993399">1024</font><font color="#990000">;</font> j<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(&amp;</font>c<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"done</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="optimizations"/><h2>Optimizing File Access</h2>
+
+<p>The file class provides several methods for optimizing file access.</p>
+
+<p>The setGetCurrentPropertiesOnOpen() method can be used to disable the automatic fetching of file properties when a file is opened, which can improve performance when opening many files.</p>
+
+<p>Methods are also provided for advising the kernel about expected access patterns: adviseSequentialAccess(), adviseNormalAccess(), adviseWillNeed(), and adviseWontNeed().  These methods allow the kernel to optimize its caching and read-ahead behavior.</p>
+
+<p>The sync() method forces buffered data to be written to storage.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// disable getCurrentProperties() on open for a performance</font></i>
+	<i><font color="#9A1900">// improvement when opening many files</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">setGetCurrentPropertiesOnOpen</font></b><font color="#990000">(</font><b><font color="#0000FF">false</font></b><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// open a file</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_RDWR<font color="#990000">|</font>O_CREAT<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hello world, this is test data for optimization testing</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"opened file with properties-on-open disabled</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// advise the kernel that we will access the file sequentially</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">adviseSequentialAccess</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font>f<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"advised sequential access</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// advise the kernel that we will need the data soon</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">adviseWillNeed</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font>f<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"advised will-need</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// read the file</font></i>
+	<font color="#009900">char</font>	buf<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+	f<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	<font color="#008080">ssize_t</font>	bytesread<font color="#990000">=</font>f<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>buf<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buf<font color="#990000">)-</font><font color="#993399">1</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+		buf<font color="#990000">[</font>bytesread<font color="#990000">]=</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">;</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"read: %s"</font><font color="#990000">,</font>buf<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// advise the kernel that we are done with the data</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">adviseWontNeed</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font>f<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"advised wont-need</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// reset to normal access pattern</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">adviseNormalAccess</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">,</font>f<font color="#990000">.</font><b><font color="#000000">getSize</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"advised normal access</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// sync data to disk</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">sync</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"synced to disk</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="temp"/><h2>Temporary Files</h2>
+
+<p>The file class provides static methods for creating temporary files.</p>
+
+<p>The createTemporaryFile() method takes a template filename containing XXXXXX and replaces it with a unique string.  An optional permissions argument can be used to set the permissions on the temporary file.</p>
+
+<p>The following example creates temporary files with and without explicit permissions.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a temporary file</font></i>
+	<font color="#009900">char</font>	templatename1<font color="#990000">[]=</font><font color="#FF0000">"/tmp/testfileXXXXXX"</font><font color="#990000">;</font>
+	<font color="#008080">int32_t</font>	fd<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">createTemporaryFile</font></b><font color="#990000">(</font>templatename1<font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>fd<font color="#990000">&gt;-</font><font color="#993399">1</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"created temp file: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>templatename1<font color="#990000">);</font>
+
+		<i><font color="#9A1900">// clean up</font></i>
+		file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font>templatename1<font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create temp file</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// create a temporary file with specific permissions</font></i>
+	<font color="#009900">char</font>	templatename2<font color="#990000">[]=</font><font color="#FF0000">"/tmp/testfileXXXXXX"</font><font color="#990000">;</font>
+	fd<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">createTemporaryFile</font></b><font color="#990000">(</font>templatename2<font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-------"</font><font color="#990000">));</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>fd<font color="#990000">&gt;-</font><font color="#993399">1</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"created temp file: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>templatename2<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  permissions: owner read/write only</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+		<i><font color="#9A1900">// clean up</font></i>
+		file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font>templatename2<font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create temp file</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="links"/><h2>Links</h2>
+
+<p>The file class provides static methods for creating hard links and symbolic links.</p>
+
+<p>A hard link is an additional directory entry for a file.  A symbolic link is a special file that contains a path to another file.</p>
+
+<p>The createHardLink() and createSymbolicLink() methods create each type of link.  The resolveSymbolicLink() method returns the target of a symbolic link.  The getNumberOfHardLinks() method returns the number of hard links to a file.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a file to link to</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">create</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hello from testfile</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// create a hard link</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">createHardLink</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font><font color="#FF0000">"testfile-hardlink"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created hard link: testfile-hardlink</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create hard link</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// create a symbolic link</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">createSymbolicLink</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font><font color="#FF0000">"testfile-symlink"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created symbolic link: testfile-symlink</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create symbolic link</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// resolve the symbolic link</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>target<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">resolveSymbolicLink</font></b><font color="#990000">(</font><font color="#FF0000">"testfile-symlink"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>target<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"testfile-symlink -&gt; %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>target<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> target<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// check the number of hard links</font></i>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"hard link count: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					f<font color="#990000">.</font><b><font color="#000000">getNumberOfHardLinks</font></b><font color="#990000">());</font>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// clean up</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile-hardlink"</font><font color="#990000">);</font>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile-symlink"</font><font color="#990000">);</font>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="fifos"/><h2>Fifos</h2>
+
+<p>A fifo (first in, first out) is a special file that acts as a pipe between processes.  One process can write to the fifo and another process can read from it.  Fifos persist in the filesystem and can be accessed by unrelated processes.</p>
+
+<p>The file class provides a static createFifo() method for creating a fifo with specific permissions.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a fifo</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">createFifo</font></b><font color="#990000">(</font><font color="#FF0000">"testfifo"</font><font color="#990000">,</font>
+				permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">)))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created testfifo</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create testfifo</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// verify that it is a fifo</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfifo"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">|</font>O_NONBLOCK<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"is fifo: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,(</font>f<font color="#990000">.</font><b><font color="#000000">isFifo</font></b><font color="#990000">())?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// clean up</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfifo"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"removed testfifo</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="pipes"/><h2>Named Pipes</h2>
+
+<p>Pipes provide a one-way communication channel between a parent process and a child process.</p>
+
+<p>The filedescriptor class provides a static createPipe() method that creates a pair of file descriptors - one for reading and one for writing.  A typical use is to create the pipe, fork a child process, and have the child write to the pipe while the parent reads from it.</p>
+
+<p>The following example creates a pipe, forks a child process, and uses the pipe to send a message from the child to the parent.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/filedescriptor.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a pipe</font></i>
+	<font color="#008080">filedescriptor</font>	readfd<font color="#990000">;</font>
+	<font color="#008080">filedescriptor</font>	writefd<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>filedescriptor<font color="#990000">::</font><b><font color="#000000">createPipe</font></b><font color="#990000">(&amp;</font>readfd<font color="#990000">,&amp;</font>writefd<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"failed to create pipe</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created pipe</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// fork a child process</font></i>
+	<font color="#008080">pid_t</font>	pid<font color="#990000">=</font>process<font color="#990000">::</font><b><font color="#000000">fork</font></b><font color="#990000">();</font>
+
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>pid<font color="#990000">==</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// child process...</font></i>
+		<i><font color="#9A1900">// close the read side</font></i>
+		readfd<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// write a message to the parent</font></i>
+		writefd<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hello from the child</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		writefd<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>pid<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// parent process...</font></i>
+		<i><font color="#9A1900">// close the write side</font></i>
+		writefd<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// read the message from the child</font></i>
+		<font color="#009900">char</font>	buf<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+		<font color="#008080">ssize_t</font>	bytesread<font color="#990000">=</font>readfd<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>buf<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buf<font color="#990000">)-</font><font color="#993399">1</font><font color="#990000">);</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&gt;</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+			buf<font color="#990000">[</font>bytesread<font color="#990000">]=</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">;</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"parent received: %s"</font><font color="#990000">,</font>buf<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+		readfd<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+		<i><font color="#9A1900">// wait for the child to exit</font></i>
+		process<font color="#990000">::</font><b><font color="#000000">wait</font></b><font color="#990000">(</font>pid<font color="#990000">);</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"fork failed</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="convenience"/><h2>Convenience Methods</h2>
+
+<p>The file class provides various static convenience methods for common operations.</p>
+
+<p>Methods are provided for creating a file, checking whether a file exists, and checking whether a file is readable, writeable, or executable.</p>
+
+<p>Methods are also provided for getting parts of a pathname: getDirName(), getBaseName(), and getExtension().</p>
+
+<p>The getContents() method reads the entire contents of a file into a string.</p>
+
+<p>The rename() method renames a file, and the remove() method removes it.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a file using the static method</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">createFile</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>
+			permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rw-rw-rw-"</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created testfile</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// check if the file exists and its access properties</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"exists:      %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			<font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">exists</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"readable:    %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			<font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">isReadable</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"writeable:   %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			<font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">isWriteable</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"executable:  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			<font color="#990000">(</font>file<font color="#990000">::</font><b><font color="#000000">isExecutable</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">))?</font><font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// get parts of a pathname</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>dir<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">getDirName</font></b><font color="#990000">(</font><font color="#FF0000">"/home/user/testfile.txt"</font><font color="#990000">);</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>base<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">getBaseName</font></b><font color="#990000">(</font><font color="#FF0000">"/home/user/testfile.txt"</font><font color="#990000">);</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>ext<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">getExtension</font></b><font color="#990000">(</font><font color="#FF0000">"/home/user/testfile.txt"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"dirname:   %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>dir<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"basename:  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>base<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"extension: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ext<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> dir<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> base<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> ext<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// get the contents of a file using the static method</font></i>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"hello there"</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>contents<font color="#990000">=</font>file<font color="#990000">::</font><b><font color="#000000">getContents</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"contents: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>contents<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> contents<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// rename the file</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">rename</font></b><font color="#990000">(</font><font color="#FF0000">"testfile"</font><font color="#990000">,</font><font color="#FF0000">"testfile-renamed"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"renamed testfile to testfile-renamed</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// remove the file</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testfile-renamed"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"removed testfile-renamed</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

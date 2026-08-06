@@ -1,0 +1,108 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the jsonsax class</h1>
+
+<p>The <a href="../classes/html/classjsonsax.html">jsonsax class</a> provides a callback-based framework for parsing JSON data.  When it encounters an object, member, value, or other JSON component, it calls one of its callback methods.  These methods may be overridden by a child class to perform specific tasks.  The jsonsax class is especially useful if you can't afford to load the entire document into memory and use the jsondom class, or if you just need to extract specific data from a JSON file.</p>
+
+<p>The following example creates a child class of jsonsax that overrides the objectStart(), memberName(), stringValue(), numberValue(), trueValue(), falseValue(), arrayStart(), arrayEnd(), and objectEnd() callback methods to print information about each JSON component encountered during parsing.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/jsonsax.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<i><font color="#9A1900">// create a json sax handler by inheriting from jsonsax</font></i>
+<b><font color="#0000FF">class</font></b> <font color="#008080">myjsonhandler</font> <font color="#990000">:</font> <b><font color="#0000FF">public</font></b> jsonsax <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">protected</font></b><font color="#990000">:</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">objectStart</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"object start</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">memberName</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>name<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  member: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>name<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">stringValue</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>value<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"    string: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>value<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">numberValue</font></b><font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font>value<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"    number: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>value<font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">trueValue</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"    true</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">falseValue</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"    false</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">arrayStart</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  array start</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">arrayEnd</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  array end</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		<font color="#009900">bool</font> <b><font color="#000000">objectEnd</font></b><font color="#990000">()</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"object end</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+			<b><font color="#0000FF">return</font></b> <b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">myjsonhandler</font>	handler<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// parse a json string</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"parsing json:</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	handler<font color="#990000">.</font><b><font color="#000000">parseString</font></b><font color="#990000">(</font>
+		<font color="#FF0000">"{"</font>
+		<font color="#FF0000">"  </font><font color="#CC33CC">\"</font><font color="#FF0000">animals</font><font color="#CC33CC">\"</font><font color="#FF0000">: ["</font>
+		<font color="#FF0000">"    {"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">name</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">dog</font><font color="#CC33CC">\"</font><font color="#FF0000">,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">type</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">mammal</font><font color="#CC33CC">\"</font><font color="#FF0000">,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">legs</font><font color="#CC33CC">\"</font><font color="#FF0000">: 4,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">domestic</font><font color="#CC33CC">\"</font><font color="#FF0000">: true"</font>
+		<font color="#FF0000">"    },"</font>
+		<font color="#FF0000">"    {"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">name</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">eagle</font><font color="#CC33CC">\"</font><font color="#FF0000">,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">type</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">bird</font><font color="#CC33CC">\"</font><font color="#FF0000">,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">legs</font><font color="#CC33CC">\"</font><font color="#FF0000">: 2,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">domestic</font><font color="#CC33CC">\"</font><font color="#FF0000">: false"</font>
+		<font color="#FF0000">"    },"</font>
+		<font color="#FF0000">"    {"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">name</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">snake</font><font color="#CC33CC">\"</font><font color="#FF0000">,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">type</font><font color="#CC33CC">\"</font><font color="#FF0000">: </font><font color="#CC33CC">\"</font><font color="#FF0000">reptile</font><font color="#CC33CC">\"</font><font color="#FF0000">,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">legs</font><font color="#CC33CC">\"</font><font color="#FF0000">: 0,"</font>
+		<font color="#FF0000">"      </font><font color="#CC33CC">\"</font><font color="#FF0000">domestic</font><font color="#CC33CC">\"</font><font color="#FF0000">: false"</font>
+		<font color="#FF0000">"    }"</font>
+		<font color="#FF0000">"  ]"</font>
+		<font color="#FF0000">"}"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

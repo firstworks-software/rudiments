@@ -1,0 +1,288 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the sys class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#info">Getting System Information</a></li>
+  <li><a href="#reboot">Reboot</a></li>
+  <li><a href="#shutdown">Shutdown</a></li>
+  <li><a href="#halt">Halt</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classsys.html">sys class</a> provides methods for getting information about the operating system and controlling the state of the operating system.</p>
+
+<a name="info"/><h2>Getting System Information</h2>
+
+<p>In this example, various bits of system information are printed out.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>osname<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemName</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Name		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>osname<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> osname<font color="#990000">;</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>release<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemRelease</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Release	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>release<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> release<font color="#990000">;</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>version<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemVersion</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Version	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>version<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> version<font color="#990000">;</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>arch<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getOperatingSystemArchitecture</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"OS Arch		: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>arch<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> arch<font color="#990000">;</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>hostname<font color="#990000">=</font>sys<font color="#990000">::</font><b><font color="#000000">getHostName</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Host Name	: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>hostname<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> hostname<font color="#990000">;</font>
+
+	<font color="#009900">double</font>	onemin<font color="#990000">;</font>
+	<font color="#009900">double</font>	fivemin<font color="#990000">;</font>
+	<font color="#009900">double</font>	fifteenmin<font color="#990000">;</font>
+	sys<font color="#990000">::</font><b><font color="#000000">getLoadAverages</font></b><font color="#990000">(&amp;</font>onemin<font color="#990000">,&amp;</font>fivemin<font color="#990000">,&amp;</font>fifteenmin<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Load Averages	: %0.2f  %0.2f  %0.2f</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					onemin<font color="#990000">,</font>fivemin<font color="#990000">,</font>fifteenmin<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Cmd Line Arg Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxCommandLineArgumentLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Processes Per User"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxProcessesPerUser</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Host Name Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxHostNameLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Login Name Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxLoginNameLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Clock Ticks Per Second"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getClockTicksPerSecond</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Open Files Per Process"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxOpenFilesPerProcess</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Page Size"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getPageSize</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Allocation Granularity"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getAllocationGranularity</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Open Streams Per Process"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxOpenStreamsPerProcess</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Symlink Loops"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSymlinkLoops</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Terminal Device Name Length"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxTerminalDeviceNameLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Timezone Name Length"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxTimezoneNameLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Line Length"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxLineLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Physical Page Count"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getPhysicalPageCount</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Available Physical Page Count"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getAvailablePhysicalPageCount</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Processor Count"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getProcessorCount</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Processor Count"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxProcessorCount</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Processors Online"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getProcessorsOnline</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Supplemental Groups Per User"</font>
+			<font color="#FF0000">"	: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSupplementalGroupsPerUser</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Delay Timer Expirations"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxDelayTimerExpirations</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Realtime Signals"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxRealtimeSignals</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Sempahores Per Process"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSemaphoresPerProcess</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Semaphore Value"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSemaphoreValue</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Signal Queue Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxSignalQueueLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Timers Per Process"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxTimersPerProcess</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Suggested Group Entry Buffer Size"</font>
+			<font color="#FF0000">"	: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getSuggestedGroupEntryBufferSize</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Suggested Passwd Entry Buffer Size"</font>
+			<font color="#FF0000">"	: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getSuggestedPasswordEntryBufferSize</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Min Thread Stack Size"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMinThreadStackSize</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Threads Per Process"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxThreadsPerProcess</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Thread Destructor Iterations"</font>
+			<font color="#FF0000">"		: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getThreadDestructorIterations</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Thread Keys"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxThreadKeys</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max At-Exit Functions"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxAtExitFunctions</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"CPUSet Size"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getCpuSetSize</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Password Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxPasswordLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Log Name Length"</font>
+			<font color="#FF0000">"			: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxLogNameLength</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Max Process ID"</font>
+			<font color="#FF0000">"				: %lld</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getMaxProcessId</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Directory Separator"</font>
+			<font color="#FF0000">"			: %c</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			sys<font color="#990000">::</font><b><font color="#000000">getDirectorySeparator</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>Note that not all systems support every piece of information.  If a piece of information is unsupported, then a -1 is returned.</p>
+
+<a name="reboot"/><h2>Reboot</h2>
+
+<p>This example reboots the system, when run as root or Administrator.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>sys<font color="#990000">::</font><b><font color="#000000">reboot</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"reboot failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="shutdown"/><h2>Shutdown</h2>
+
+<p>This example performs a graceful system shutdown, when run as root or Administrator.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>sys<font color="#990000">::</font><b><font color="#000000">shutDown</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"shutdown failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="halt"/><h2>Halt</h2>
+
+<p>This example performs a less-graceful system halt, when run as root or Administrator.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sys.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>sys<font color="#990000">::</font><b><font color="#000000">halt</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"halt failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

@@ -1,0 +1,49 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the standard I/O classes</h1>
+
+<p>The filedescriptor class provides methods for generic input and output to file descriptors.  Rudiments pre-defines three instances: stdinput, stdoutput and stderror, which provide access to standard input, standard output and standard error.</p>
+
+<p>As these classes are ultimately instances of the filedescriptor class, many I/O methods are available, but the most commonly used are read(), write() and printf().  The printf() method features all of the formatting capabilities of the standard C printf() function.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// standard output...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"This line is written to standard output.</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Fully functional printf is also available: "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s, %c, %05d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font> <font color="#FF0000">"hello"</font><font color="#990000">,</font><font color="#FF0000">'c'</font><font color="#990000">,</font><font color="#993399">25</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// standard error...</font></i>
+	stderror<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"This line is written to standard error.</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stderror<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Fully functional printf is also available: "</font><font color="#990000">);</font>
+	stderror<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s, %c, %05d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font> <font color="#FF0000">"hello"</font><font color="#990000">,</font><font color="#FF0000">'c'</font><font color="#990000">,</font><font color="#993399">25</font><font color="#990000">);</font>
+	stderror<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// standard input...</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Type something and hit return...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#009900">char</font>	input<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+	<font color="#008080">ssize_t</font>	count<font color="#990000">=</font>stdinput<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>input<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>input<font color="#990000">));</font>
+	input<font color="#990000">[</font>count<font color="#990000">]=</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">;</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"You typed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>input<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

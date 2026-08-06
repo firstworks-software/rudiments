@@ -60,6 +60,7 @@ CP = cscript /nologo @top_builddir@\cp.vbs
 CHMOD = echo
 MKINSTALLDIRS = cscript /nologo @top_builddir@\mkinstalldirs.vbs
 LTFINISH = echo
+SSI = cscript /nologo @top_builddir@\ssi.vbs
 
 # uninstall/clean commands
 LTUNINSTALL =

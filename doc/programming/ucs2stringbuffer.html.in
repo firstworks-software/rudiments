@@ -1,0 +1,100 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the ucs2stringbuffer class</h1>
+
+<p>The <a href="../classes/html/classucs2stringbuffer.html">ucs2stringbuffer class</a> can be used to store UCS-2 strings of arbitrary length.</p>
+
+<p>Internally, the class stores this data in a series of extents which are coalesced when getString() or detachString() are called.  The size of the initial and incremental extents may be defined in the constructor, if desired.</p>
+
+<p>When cleared, all extents are freed except for the initial extent.</p>
+
+<p>It is generally more efficient to reuse the same ucs2stringbuffer over and over than to allocate a new one for each operation.</p>
+
+<p>The ucs2stringbuffer class provides methods for appending data, writing to arbitrary locations, clearing and truncating the buffer, getting the data stored in the buffer as a C-style UCS-2 string, getting the length of the string, and detaching the data from the buffer as a C-style UCS-2 string.</p>
+
+<p>When data is detached, it is no longer associated with the buffer and must be freed by the calling program.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/ucs2stringbuffer.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">ucs2stringbuffer</font>	ustrb<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// append strings, numbers, and characters...</font></i>
+	<b><font color="#000000">ucs2literal</font></b><font color="#990000">(</font>hello<font color="#990000">,</font><font color="#FF0000">"hello, "</font><font color="#990000">);</font>
+	<b><font color="#000000">ucs2literal</font></b><font color="#990000">(</font>goodbye<font color="#990000">,</font><font color="#FF0000">"goodbye, "</font><font color="#990000">);</font>
+	<b><font color="#000000">ucs2literal</font></b><font color="#990000">(</font>comma<font color="#990000">,</font><font color="#FF0000">", "</font><font color="#990000">);</font>
+	ustrb<font color="#990000">.</font><b><font color="#000000">appendUcs2</font></b><font color="#990000">(</font>hello<font color="#990000">)-&gt;</font><b><font color="#000000">appendUcs2</font></b><font color="#990000">(</font>goodbye<font color="#990000">);</font>
+	ustrb<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">((</font>uint64_t<font color="#990000">)</font><font color="#993399">1</font><font color="#990000">)-&gt;</font><b><font color="#000000">appendUcs2</font></b><font color="#990000">(</font>comma<font color="#990000">);</font>
+	ustrb<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">((</font><font color="#009900">double</font><font color="#990000">)</font><font color="#993399">1.234</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">)-&gt;</font><b><font color="#000000">appendUcs2</font></b><font color="#990000">((</font>ucs2_t<font color="#990000">)</font><font color="#FF0000">'.'</font><font color="#990000">);</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>str<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicateUcs2</font></b><font color="#990000">(</font>ustrb<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after initial append:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  contents: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>str<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"    length: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ustrb<font color="#990000">.</font><b><font color="#000000">getStringLength</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> str<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// clear the buffer and append more data to it</font></i>
+	ustrb<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	<b><font color="#000000">ucs2literal</font></b><font color="#990000">(</font>numbers<font color="#990000">,</font><font color="#FF0000">"1 2 3 4 5 6 7 8 9 0"</font><font color="#990000">);</font>
+	ustrb<font color="#990000">.</font><b><font color="#000000">appendUcs2</font></b><font color="#990000">(</font>numbers<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// overwrite the first 5 numbers...</font></i>
+	ustrb<font color="#990000">.</font><b><font color="#000000">setPositionRelativeToBeginning</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	<b><font color="#000000">ucs2literal</font></b><font color="#990000">(</font>revnumbers<font color="#990000">,</font><font color="#FF0000">"0 9 8 7 6"</font><font color="#990000">);</font>
+	ustrb<font color="#990000">.</font><b><font color="#000000">writeUcs2</font></b><font color="#990000">(</font>revnumbers<font color="#990000">);</font>
+
+	str<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicateUcs2</font></b><font color="#990000">(</font>ustrb<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after overwrite:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  contents: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>str<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"    length: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ustrb<font color="#990000">.</font><b><font color="#000000">getStringLength</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> str<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// truncate the string after the first 2 numbers</font></i>
+	ustrb<font color="#990000">.</font><b><font color="#000000">truncate</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+
+	str<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicateUcs2</font></b><font color="#990000">(</font>ustrb<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after truncate:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  contents: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>str<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"    length: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ustrb<font color="#990000">.</font><b><font color="#000000">getStringLength</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> str<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// detach the string</font></i>
+	<font color="#008080">ucs2_t</font>	<font color="#990000">*</font>detached<font color="#990000">=</font>ustrb<font color="#990000">.</font><b><font color="#000000">detachString</font></b><font color="#990000">();</font>
+
+	<font color="#009900">char</font>	<font color="#990000">*</font>contentsstr<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicateUcs2</font></b><font color="#990000">(</font>ustrb<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>detachedstr<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicateUcs2</font></b><font color="#990000">(</font>detached<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after detach:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"         contents: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>contentsstr<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"           length: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ustrb<font color="#990000">.</font><b><font color="#000000">getStringLength</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  detached string: </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>detachedstr<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> contentsstr<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> detachedstr<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> detached<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

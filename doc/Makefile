@@ -2,7 +2,7 @@ top_builddir = ..
 
 include ../config.mk
 
-.SUFFIXES: .wt .html
+.SUFFIXES: .wt .html.in .html
 
 SRCS = betterc.wt \
 	compatibility.wt \
@@ -16,36 +16,99 @@ SRCS = betterc.wt \
 	prerequisites.wt \
 	utility.wt
 
+INS = betterc.html.in \
+	cards.html.in \
+	compatibility.html.in \
+	datastructures.html.in \
+	documentation.html.in \
+	download.html.in \
+	frameworks.html.in \
+	header.html.in \
+	index.html.in \
+	installing.html.in \
+	license.html.in \
+	lightweight.html.in \
+	prerequisites.html.in \
+	slides.html.in \
+	utility.html.in
+
+# the subset of INS that wt generates from SRCS; the rest are checkout files
+WTOBJS = betterc.html.in \
+	compatibility.html.in \
+	datastructures.html.in \
+	documentation.html.in \
+	download.html.in \
+	frameworks.html.in \
+	installing.html.in \
+	license.html.in \
+	lightweight.html.in \
+	prerequisites.html.in \
+	utility.html.in
+
 OBJS = betterc.html \
+	cards.html \
 	compatibility.html \
 	datastructures.html \
 	documentation.html \
 	download.html \
 	frameworks.html \
+	header.html \
+	index.html \
 	installing.html \
 	license.html \
 	lightweight.html \
 	prerequisites.html \
+	slides.html \
 	utility.html
 
-.wt.html:
+# fragments the pages here include; editing one rebuilds all of them
+FRAGMENTS = cards.html.in \
+	cards/betterc.html \
+	cards/compat.html \
+	cards/datastructures.html \
+	cards/frameworks.html \
+	cards/lightweight.html \
+	cards/title.html \
+	cards/utility.html \
+	contentend.html \
+	contentstart.html \
+	footer.html \
+	header.html.in \
+	news.html \
+	projectheader.html \
+	slides.html.in \
+	slides/presenting.html \
+	title.html \
+	tracker.html
+
+.PRECIOUS: $(INS)
+
+.wt.html.in:
 	wt -i $< -o $@
 
+.html.in.html:
+	$(SSI) $<
+
 all: $(OBJS)
-	$(CHMOD) 755 $(OBJS)
+	$(CHMOD) 644 $(OBJS)
+	cd programming $(AND) $(MAKE)
+
+$(OBJS): $(FRAGMENTS)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(WTOBJS)
+	cd programming $(AND) $(MAKE) clean
 
+# The .html files are in version control, so install just copies them.  It
+# deliberately does not depend on all - building needs wt, which is not
+# installed everywhere (see #8838).  Run make here by hand to regenerate.
 install:
 	$(MKINSTALLDIRS) $(docdir)
-	$(CP) .htaccess $(docdir)
-	$(CHMOD) 644 $(docdir)/.htaccess
 	$(CP) *.html $(docdir)
-	$(CHMOD) 755 $(docdir)/*.html
+	$(CHMOD) 644 $(docdir)/*.html
 	$(MKINSTALLDIRS) $(docdir)/cards
 	$(CP) cards/* $(docdir)/cards
-	$(CHMOD) 755 $(docdir)/cards/*
+	$(CHMOD) 644 $(docdir)/cards/*
 	$(MKINSTALLDIRS) $(docdir)/classes/html
 	$(CP) classes/html/a*.html $(docdir)/classes/html
 	$(CP) classes/html/b*.html $(docdir)/classes/html
@@ -109,13 +172,13 @@ install:
 	$(CHMOD) 644 $(docdir)/licenses/*
 	$(MKINSTALLDIRS) $(docdir)/programming
 	$(CP) programming/*.html $(docdir)/programming
-	$(CHMOD) 755 $(docdir)/programming/*
+	$(CHMOD) 644 $(docdir)/programming/*
 	$(MKINSTALLDIRS) $(docdir)/programming/js
 	$(CP) programming/js/* $(docdir)/programming/js
 	$(CHMOD) 644 $(docdir)/programming/js/*
 	$(MKINSTALLDIRS) $(docdir)/slides
 	$(CP) slides/* $(docdir)/slides
-	$(CHMOD) 755 $(docdir)/slides/*
+	$(CHMOD) 644 $(docdir)/slides/*
 
 uninstall:
 	$(RMTREE) $(docdir)

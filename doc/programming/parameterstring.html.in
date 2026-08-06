@@ -1,0 +1,88 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the parameterstring class</h1>
+
+<p>Sometimes a function needs to take an arbitrary set of parameters.  For
+example, a function for connecting to a database may need host, port, socket,
+username and password, any of which could be omitted depending on the
+database.  Though C++ support methods which take an arbitrary number of
+parameters, sometimes it is more convenient to for the method to accept a
+single string parameter with name/value pairs in it instead.</p>
+
+<p>The <a href="../classes/html/classparameterstring.html">parameterstring class</a> provides methods for parsing and accessing
+a parameter string of the following form:</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>name1<font color="#990000">=</font><font color="#FF0000">'value1'</font><font color="#990000">;</font>name2<font color="#990000">=</font><font color="#FF0000">'value2'</font><font color="#990000">;</font>name3<font color="#990000">=</font><font color="#FF0000">'value3'</font></tt></pre>
+
+</blockquote>
+<p>The single quotes are optional.  If a parameter needs to contain a single
+quote, then it can be escaped as follows:</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>name<font color="#990000">=</font><font color="#FF0000">'</font><font color="#CC33CC">\'</font><font color="#FF0000">value</font><font color="#CC33CC">\'</font><font color="#FF0000">'</font></tt></pre>
+
+</blockquote>
+<p>Backslashes can be similarly escaped:</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>name<font color="#990000">=</font><font color="#FF0000">'</font><font color="#CC33CC">\\</font><font color="#FF0000">value</font><font color="#CC33CC">\\</font><font color="#FF0000">'</font></tt></pre>
+
+</blockquote>
+<p>The delimiter between parameters defaults to a semicolon, but can be changed using the setDelimiter() method.</p>
+
+<p>The following example parses a parameter string, accesses individual values, clears the string, sets a different delimiter, and parses another string.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/parameterstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">parameterstring</font>	ps<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// parse a parameter string with the default semicolon delimiter</font></i>
+	ps<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"host=localhost;port=9000;user='testuser';password='testpwd'"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// access individual values</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"host:     %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ps<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"host"</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"port:     %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ps<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"port"</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"user:     %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ps<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"user"</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"password: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ps<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"password"</font><font color="#990000">));</font>
+
+
+	<i><font color="#9A1900">// clear and parse with a different delimiter</font></i>
+	ps<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	ps<font color="#990000">.</font><b><font color="#000000">setDelimiter</font></b><font color="#990000">(</font><font color="#FF0000">','</font><font color="#990000">);</font>
+	ps<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"name=hello,value=world"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"name:  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ps<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"name"</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"value: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>ps<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"value"</font><font color="#990000">));</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

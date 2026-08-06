@@ -1,0 +1,13 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the table class</h1>
+
+<p>The <a href="../classes/html/classtable.html">table class</a> allows you to store an arbitrary number of values in a two-dimensional table with named columns.  Since the table class is template-based, you can store arbitrary types of values.</p>
+
+<p>The table grows automatically as values are set.  Columns can be given names using the setColumnName() method, and values can be accessed by row and column index, or by row index and column name.</p>
+
+By default, the table class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when the table is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when the table is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete

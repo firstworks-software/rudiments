@@ -1,0 +1,81 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the url class</h1>
+
+<p>The <a href="../classes/html/classurl.html">url class</a> provides read access to urls.</p>
+
+<p>Its parent class: file provides provides open(), read(), and close() methods.</p>
+
+<p>http urls, with Basic Authentication, are supported on all platforms.</p>
+
+<p>urls for other protocols, including ftp, https, scp, sftp, and others, are supported if rudiments was compiled with support for libcurl.</p>
+
+<p>Examples of supported urls include:</p>
+
+<ul>
+  <li>http://somedomain.com/path/to/file.html</li>
+  <li>http://user:password@somedomain.com/path/to/file.html</li>
+  <li>http://<a href="/path/to/userpwdfile">/path/to/userpwdfile</a>@somedomain.com/path/to/file.html</li>
+</ul>
+
+<p>The url class supports storing the user:password portion of a url in a user-password file.  These files may be referenced in the url by enclosing the full pathname of the file in square brackets.  The file should consist of a single line containing the user and password, separated by a colon.</p>
+
+<p>For example:</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>myusername<font color="#990000">:</font>mypassword</tt></pre>
+
+</blockquote>
+<p>The following example opens a url for reading, reads the content in a loop, and prints it to standard output.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/url.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">url</font>	u<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// open a url for read</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>u<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"http://www.google.com"</font><font color="#990000">,</font>O_RDONLY<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"failed to open url: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>u<font color="#990000">.</font><b><font color="#000000">getError</font></b><font color="#990000">());</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// read and display the content</font></i>
+	<font color="#009900">char</font>	buf<font color="#990000">[</font><font color="#993399">1024</font><font color="#990000">];</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(;;)</font> <font color="#FF0000">{</font>
+
+		<font color="#008080">ssize_t</font>	bytesread<font color="#990000">=</font>u<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">(</font>buf<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buf<font color="#990000">)-</font><font color="#993399">1</font><font color="#990000">);</font>
+
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>bytesread<font color="#990000">&lt;=</font><font color="#993399">0</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+			<b><font color="#0000FF">break</font></b><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		buf<font color="#990000">[</font>bytesread<font color="#990000">]=</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">;</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>buf<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	u<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

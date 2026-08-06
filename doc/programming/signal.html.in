@@ -1,0 +1,130 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the signal classes</h1>
+
+<p>Signals allow one processes to interrupt the execution of another process.</p>
+
+<p>Signal handlers allow processes to intercept and react to the signals sent to them.</p>
+
+<p>Rudiments provides 3 classes for working with signals: <a href="../classes/html/classsignalset.html">signalset</a>, <a href="../classes/html/classsignalmanager.html">signalmanager</a> and <a href="../classes/html/classsignalhandler.html">signalhandler</a>.</p>
+
+<p>A signal set is just a collection of signals.  The <a href="../classes/html/classsignalset.html">signalset class</a> allows a programmer to build up a collection of signals.</p>
+
+<p>The <a href="../classes/html/classsignalmanager.html">signalmanager class</a> provides methods for sending signals, ignoring signals, waiting for signals and examining blocked signals.</p>
+
+<p>The <a href="../classes/html/classsignalhandler.html">signalhandler class</a> provides methods for catching and handling signals.</p>
+
+<p>This program illustrates the use of all three classes.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><i><font color="#9A1900">// Copyright (c) 1999-2018 David Muse</font></i>
+<i><font color="#9A1900">// See the file COPYING for more information</font></i>
+
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/signalclasses.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">bool</font>	gotsigterm<font color="#990000">=</font><b><font color="#0000FF">false</font></b><font color="#990000">;</font>
+
+<font color="#009900">void</font> <b><font color="#000000">handleSigterm</font></b><font color="#990000">(</font><font color="#008080">int32_t</font> sig<font color="#990000">)</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Got a SIGTERM!</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	gotsigterm<font color="#990000">=</font><b><font color="#0000FF">true</font></b><font color="#990000">;</font>
+<font color="#FF0000">}</font>
+
+<b><font color="#000080">#ifdef</font></b> SIGALRM
+<font color="#009900">void</font> <b><font color="#000000">handleAlarm</font></b><font color="#990000">(</font><font color="#008080">int32_t</font> sig<font color="#990000">)</font> <font color="#FF0000">{</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"alarm!</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+<b><font color="#000080">#endif</font></b>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// ignore all signals except SIGTERM and SIGALRM</font></i>
+	<font color="#008080">signalset</font>	ignoreset<font color="#990000">;</font>
+	ignoreset<font color="#990000">.</font><b><font color="#000000">addAllSignals</font></b><font color="#990000">();</font>
+	ignoreset<font color="#990000">.</font><b><font color="#000000">removeSignal</font></b><font color="#990000">(</font>SIGTERM<font color="#990000">);</font>
+<b><font color="#000080">	#ifdef</font></b> SIGALRM
+	ignoreset<font color="#990000">.</font><b><font color="#000000">removeSignal</font></b><font color="#990000">(</font>SIGALRM<font color="#990000">);</font>
+<b><font color="#000080">	#endif</font></b>
+	signalmanager<font color="#990000">::</font><b><font color="#000000">ignoreSignals</font></b><font color="#990000">(&amp;</font>ignoreset<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// run handleSigterm() when a SIGTERM is received</font></i>
+	<font color="#008080">signalhandler</font>	termhandler<font color="#990000">;</font>
+	termhandler<font color="#990000">.</font><b><font color="#000000">setHandler</font></b><font color="#990000">(</font>handleSigterm<font color="#990000">);</font>
+	termhandler<font color="#990000">.</font><b><font color="#000000">handleSignal</font></b><font color="#990000">(</font>SIGTERM<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// run handleAlarm() when a SIGALRM is received</font></i>
+<b><font color="#000080">	#ifdef</font></b> SIGALRM
+	<font color="#008080">signalhandler</font>	alarmhandler<font color="#990000">;</font>
+	alarmhandler<font color="#990000">.</font><b><font color="#000000">setHandler</font></b><font color="#990000">(</font>handleAlarm<font color="#990000">);</font>
+	alarmhandler<font color="#990000">.</font><b><font color="#000000">handleSignal</font></b><font color="#990000">(</font>SIGALRM<font color="#990000">);</font>
+<b><font color="#000080">	#endif</font></b>
+
+	<i><font color="#9A1900">// Loop forever, waiting to receive a signal that we are not ignoring.</font></i>
+	signalmanager<font color="#990000">::</font><b><font color="#000000">alarm</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
+	<b><font color="#0000FF">while</font></b> <font color="#990000">(!</font>gotsigterm<font color="#990000">)</font> <font color="#FF0000">{</font>
+		signalmanager<font color="#990000">::</font><b><font color="#000000">waitForSignals</font></b><font color="#990000">(&amp;</font>ignoreset<font color="#990000">);</font>
+		signalmanager<font color="#990000">::</font><b><font color="#000000">alarm</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>It should print out "alarm!" every 2 seconds and, if killed, should print out "Got a SIGTERM!" before exiting.  If killed with a signal other than SIGTERM (the default), then it will ignore the signal.</p>
+
+<p>Windows systems don't have signals or the <i>kill</i> program.  Signals are more-or-less simulated on Windows platforms though, and the following program provides an approximation of the <i>kill</i> program as found on unix-like systems, that should work on Windows.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/process.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>argc<font color="#990000">&lt;</font><font color="#993399">3</font><font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"usage: kill signal processid</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<font color="#008080">int32_t</font>	sig<font color="#990000">=</font>SIGTERM<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGINT"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGINT<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGABRT"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGABRT<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGFPE"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGFPE<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGILL"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGILL<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGSEGV"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGSEGV<font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>charstring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">],</font><font color="#FF0000">"SIGKILL"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		sig<font color="#990000">=</font>SIGKILL<font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<font color="#008080">pid_t</font>	pid<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">convertToInteger</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">]);</font>
+
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>process<font color="#990000">::</font><b><font color="#000000">sendSignal</font></b><font color="#990000">(</font>pid<font color="#990000">,</font>sig<font color="#990000">))</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"kill failed: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">());</font>
+		process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	process<font color="#990000">::</font><b><font color="#000000">exit</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

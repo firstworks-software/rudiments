@@ -1,0 +1,78 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the directory class</h1>
+
+<p>The <a href="../classes/html/classdirectory.html">directory class</a> provides methods for creating, removing, and reading directories.</p>
+
+<p>Static methods are provided for creating and removing directories and for getting the current working directory.</p>
+
+<p>An instance of the directory class can be used to open a directory and read its entries.  Methods are also provided for getting the child count, accessing children by index, and getting the maximum filename length supported by the directory's filesystem.</p>
+
+<p>The following example creates a directory, gets the current working directory, opens a directory and reads its contents, and then removes the directory.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/directory.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/permissions.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a directory</font></i>
+	directory<font color="#990000">::</font><b><font color="#000000">create</font></b><font color="#990000">(</font><font color="#FF0000">"testdir"</font><font color="#990000">,</font>
+			permissions<font color="#990000">::</font><b><font color="#000000">parsePermString</font></b><font color="#990000">(</font><font color="#FF0000">"rwxr-xr-x"</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"created testdir</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// print the current working directory</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>cwd<font color="#990000">=</font>directory<font color="#990000">::</font><b><font color="#000000">getCurrentWorkingDirectory</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"current directory: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>cwd<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> cwd<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// open the directory and read its contents</font></i>
+	<font color="#008080">directory</font>	d<font color="#990000">;</font>
+	d<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"."</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"directory contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>entry<font color="#990000">=</font>d<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">();</font>
+	<b><font color="#0000FF">while</font></b> <font color="#990000">(</font>entry<font color="#990000">)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>entry<font color="#990000">);</font>
+		<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> entry<font color="#990000">;</font>
+		entry<font color="#990000">=</font>d<font color="#990000">.</font><b><font color="#000000">read</font></b><font color="#990000">();</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print the child count</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"child count: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>d<font color="#990000">.</font><b><font color="#000000">getChildCount</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// print the name of the first child</font></i>
+	<font color="#009900">char</font>	<font color="#990000">*</font>child<font color="#990000">=</font>d<font color="#990000">.</font><b><font color="#000000">getChildName</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"first child: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>child<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> child<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// print max filename length</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"max filename length: %lld</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+					d<font color="#990000">.</font><b><font color="#000000">getMaxFileNameLength</font></b><font color="#990000">());</font>
+
+	d<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// remove the directory</font></i>
+	directory<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"testdir"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"removed testdir</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

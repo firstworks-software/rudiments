@@ -2,7 +2,7 @@ top_builddir = ../..
 
 include ../../config.mk
 
-.SUFFIXES: .wt .html
+.SUFFIXES: .wt .html.in .html
 
 SRCS = aes128.wt \
 	avltree.wt \
@@ -90,6 +90,180 @@ SRCS = aes128.wt \
 	xmldom.wt \
 	xmlsax.wt
 
+INS = aes128.html.in \
+	avltree.html.in \
+	bytebuffer.html.in \
+	bytestring.html.in \
+	character.html.in \
+	charstring.html.in \
+	chat.html.in \
+	codetree.html.in \
+	commandline.html.in \
+	compiler.html.in \
+	cronschedule.html.in \
+	csvdom.html.in \
+	csvsax.html.in \
+	datetime.html.in \
+	des.html.in \
+	device.html.in \
+	dh.html.in \
+	dictionary.html.in \
+	directory.html.in \
+	domevents.html.in \
+	dynamicarray.html.in \
+	dynamiclib.html.in \
+	environment.html.in \
+	error.html.in \
+	file.html.in \
+	filesystem.html.in \
+	groupentry.html.in \
+	gss.html.in \
+	header.html.in \
+	hostentry.html.in \
+	iconvert.html.in \
+	inetsocketclient.html.in \
+	inetsocketserver.html.in \
+	inidom.html.in \
+	inisax.html.in \
+	jsondom.html.in \
+	jsonsax.html.in \
+	linkedlist.html.in \
+	listener.html.in \
+	locale.html.in \
+	logger.html.in \
+	md5.html.in \
+	memorymap.html.in \
+	memorypool.html.in \
+	parameterstring.html.in \
+	pbkdf2.html.in \
+	permissions.html.in \
+	process.html.in \
+	prompt.html.in \
+	propdom.html.in \
+	propsax.html.in \
+	protocolentry.html.in \
+	randomnumber.html.in \
+	regularexpression.html.in \
+	resourcepool.html.in \
+	scalar.html.in \
+	semaphoreset.html.in \
+	sensitivevalue.html.in \
+	serviceentry.html.in \
+	sha1.html.in \
+	sha256.html.in \
+	sharedmemory.html.in \
+	signal.html.in \
+	singlylinkedlist.html.in \
+	snooze.html.in \
+	staticarray.html.in \
+	stdio.html.in \
+	stringbuffer.html.in \
+	sys.html.in \
+	table.html.in \
+	thread.html.in \
+	threadmutex.html.in \
+	tls.html.in \
+	ucs2character.html.in \
+	ucs2charstring.html.in \
+	ucs2stringbuffer.html.in \
+	unixsocketclient.html.in \
+	unixsocketserver.html.in \
+	url.html.in \
+	userentry.html.in \
+	wastebasket.html.in \
+	wcharacter.html.in \
+	wcharstring.html.in \
+	wstringbuffer.html.in \
+	xmldom.html.in \
+	xmlsax.html.in
+
+# the subset of INS that wt generates from SRCS; the rest are checkout files
+WTOBJS = aes128.html.in \
+	avltree.html.in \
+	bytebuffer.html.in \
+	bytestring.html.in \
+	character.html.in \
+	charstring.html.in \
+	chat.html.in \
+	codetree.html.in \
+	commandline.html.in \
+	compiler.html.in \
+	cronschedule.html.in \
+	csvdom.html.in \
+	csvsax.html.in \
+	datetime.html.in \
+	des.html.in \
+	device.html.in \
+	dh.html.in \
+	dictionary.html.in \
+	directory.html.in \
+	domevents.html.in \
+	dynamicarray.html.in \
+	dynamiclib.html.in \
+	environment.html.in \
+	error.html.in \
+	file.html.in \
+	filesystem.html.in \
+	groupentry.html.in \
+	gss.html.in \
+	hostentry.html.in \
+	iconvert.html.in \
+	inetsocketclient.html.in \
+	inetsocketserver.html.in \
+	inidom.html.in \
+	inisax.html.in \
+	jsondom.html.in \
+	jsonsax.html.in \
+	linkedlist.html.in \
+	listener.html.in \
+	locale.html.in \
+	logger.html.in \
+	md5.html.in \
+	memorymap.html.in \
+	memorypool.html.in \
+	parameterstring.html.in \
+	pbkdf2.html.in \
+	permissions.html.in \
+	process.html.in \
+	prompt.html.in \
+	propdom.html.in \
+	propsax.html.in \
+	protocolentry.html.in \
+	randomnumber.html.in \
+	regularexpression.html.in \
+	resourcepool.html.in \
+	scalar.html.in \
+	semaphoreset.html.in \
+	sensitivevalue.html.in \
+	serviceentry.html.in \
+	sha1.html.in \
+	sha256.html.in \
+	sharedmemory.html.in \
+	signal.html.in \
+	singlylinkedlist.html.in \
+	snooze.html.in \
+	staticarray.html.in \
+	stdio.html.in \
+	stringbuffer.html.in \
+	sys.html.in \
+	table.html.in \
+	thread.html.in \
+	threadmutex.html.in \
+	tls.html.in \
+	ucs2character.html.in \
+	ucs2charstring.html.in \
+	ucs2stringbuffer.html.in \
+	unixsocketclient.html.in \
+	unixsocketserver.html.in \
+	url.html.in \
+	userentry.html.in \
+	wastebasket.html.in \
+	wcharacter.html.in \
+	wcharstring.html.in \
+	wstringbuffer.html.in \
+	xmldom.html.in \
+	xmlsax.html.in
+
 OBJS = aes128.html \
 	avltree.html \
 	bytebuffer.html \
@@ -114,21 +288,22 @@ OBJS = aes128.html \
 	dynamiclib.html \
 	environment.html \
 	error.html \
-	filesystem.html \
 	file.html \
+	filesystem.html \
 	groupentry.html \
 	gss.html \
+	header.html \
 	hostentry.html \
 	iconvert.html \
-	inidom.html \
-	inisax.html \
 	inetsocketclient.html \
 	inetsocketserver.html \
+	inidom.html \
+	inisax.html \
 	jsondom.html \
 	jsonsax.html \
 	linkedlist.html \
-	locale.html \
 	listener.html \
+	locale.html \
 	logger.html \
 	md5.html \
 	memorymap.html \
@@ -145,8 +320,8 @@ OBJS = aes128.html \
 	regularexpression.html \
 	resourcepool.html \
 	scalar.html \
-	sensitivevalue.html \
 	semaphoreset.html \
+	sensitivevalue.html \
 	serviceentry.html \
 	sha1.html \
 	sha256.html \
@@ -159,14 +334,14 @@ OBJS = aes128.html \
 	stringbuffer.html \
 	sys.html \
 	table.html \
-	threadmutex.html \
 	thread.html \
+	threadmutex.html \
 	tls.html \
-	unixsocketclient.html \
-	unixsocketserver.html \
 	ucs2character.html \
 	ucs2charstring.html \
 	ucs2stringbuffer.html \
+	unixsocketclient.html \
+	unixsocketserver.html \
 	url.html \
 	userentry.html \
 	wastebasket.html \
@@ -176,11 +351,27 @@ OBJS = aes128.html \
 	xmldom.html \
 	xmlsax.html
 
-.wt.html:
+# fragments the pages here include; editing one rebuilds all of them
+FRAGMENTS = contentend.html \
+	contentstart.html \
+	footer.html \
+	header.html.in \
+	projectheader.html \
+	title.html \
+	tracker.html
+
+.PRECIOUS: $(INS)
+
+.wt.html.in:
 	wt -i $< -o $@
 
+.html.in.html:
+	$(SSI) $<
+
 all: $(OBJS)
-	$(CHMOD) 755 $(OBJS)
+	$(CHMOD) 644 $(OBJS)
+
+$(OBJS): $(FRAGMENTS)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(WTOBJS)

@@ -1,0 +1,121 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the codetree class</h1>
+
+<p>The <a href="../classes/html/classcodetree.html">codetree class</a> implements a generic parser that can parse source code (or similarly structured input) and create an XML tree representing the code.  The class can also take that XML tree and write it back out as code.</p>
+
+<p>A grammar must be specified to parse the input.  Grammars are defined in an XML format based on EBNF with a few extensions.  Each grammar is composed of definitions, each of which defines a nonterminal.  Definitions may contain terminals, nonterminals, alternations, repetitions, concatenations, and other constructs.</p>
+
+<p>The <a href="../classes/html/classcodetreegrammar.html">codetreegrammar class</a> extends xmldom and provides codetree-specific optimizations for working with grammars.</p>
+
+<p>The following example defines a simple grammar for basic math expressions (numbers and addition), parses the string "12+34", prints the resulting tree, and writes the tree back out as code.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/codetree.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/domnode.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stringbuffer.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<i><font color="#9A1900">// helper function to print a code tree</font></i>
+<b><font color="#0000FF">static</font></b> <font color="#009900">void</font> <b><font color="#000000">printtree</font></b><font color="#990000">(</font><font color="#008080">domnode</font> <font color="#990000">*</font>node<font color="#990000">,</font> <font color="#009900">int</font> indent<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">domnode</font> <font color="#990000">*</font>n<font color="#990000">=</font>node<font color="#990000">-&gt;</font><b><font color="#000000">getFirstTagChild</font></b><font color="#990000">();</font>
+			<font color="#990000">!</font>n<font color="#990000">-&gt;</font><b><font color="#000000">isNullNode</font></b><font color="#990000">();</font>
+			n<font color="#990000">=</font>n<font color="#990000">-&gt;</font><b><font color="#000000">getNextTagSibling</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+
+		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#009900">int</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>indent<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"  "</font><font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s"</font><font color="#990000">,</font>n<font color="#990000">-&gt;</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>value<font color="#990000">=</font>n<font color="#990000">-&gt;</font><b><font color="#000000">getAttributeValue</font></b><font color="#990000">(</font><font color="#FF0000">"value"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>value<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">": %s"</font><font color="#990000">,</font>value<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+		<b><font color="#000000">printtree</font></b><font color="#990000">(</font>n<font color="#990000">,</font>indent<font color="#990000">+</font><font color="#993399">1</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">codetree</font>	ct<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// define a simple grammar for basic math expressions</font></i>
+	<i><font color="#9A1900">// (numbers and addition)</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>grammar<font color="#990000">=</font>
+		<font color="#FF0000">"&lt;grammar&gt;"</font>
+		<font color="#FF0000">"  &lt;definition name=</font><font color="#CC33CC">\"</font><font color="#FF0000">expression</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;concatenation&gt;"</font>
+		<font color="#FF0000">"      &lt;nonterminal name=</font><font color="#CC33CC">\"</font><font color="#FF0000">number</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"      &lt;repetition min=</font><font color="#CC33CC">\"</font><font color="#FF0000">0</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"        &lt;concatenation&gt;"</font>
+		<font color="#FF0000">"          &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">+</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"          &lt;nonterminal name=</font><font color="#CC33CC">\"</font><font color="#FF0000">number</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;/concatenation&gt;"</font>
+		<font color="#FF0000">"      &lt;/repetition&gt;"</font>
+		<font color="#FF0000">"    &lt;/concatenation&gt;"</font>
+		<font color="#FF0000">"  &lt;/definition&gt;"</font>
+		<font color="#FF0000">"  &lt;definition name=</font><font color="#CC33CC">\"</font><font color="#FF0000">number</font><font color="#CC33CC">\"</font><font color="#FF0000"> type=</font><font color="#CC33CC">\"</font><font color="#FF0000">literal</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"    &lt;repetition min=</font><font color="#CC33CC">\"</font><font color="#FF0000">1</font><font color="#CC33CC">\"</font><font color="#FF0000">&gt;"</font>
+		<font color="#FF0000">"      &lt;alternation&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">0</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">1</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">2</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">3</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">4</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">5</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">6</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">7</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">8</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"        &lt;terminal value=</font><font color="#CC33CC">\"</font><font color="#FF0000">9</font><font color="#CC33CC">\"</font><font color="#FF0000">/&gt;"</font>
+		<font color="#FF0000">"      &lt;/alternation&gt;"</font>
+		<font color="#FF0000">"    &lt;/repetition&gt;"</font>
+		<font color="#FF0000">"  &lt;/definition&gt;"</font>
+		<font color="#FF0000">"&lt;/grammar&gt;"</font><font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// parse some input</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"parsing: 12+34</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+	<font color="#008080">domnode</font>		<font color="#990000">*</font>out<font color="#990000">=</font><b><font color="#0000FF">new</font></b> <b><font color="#000000">domnode</font></b><font color="#990000">(</font>NULL<font color="#990000">);</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>codeposition<font color="#990000">=</font>NULL<font color="#990000">;</font>
+
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>ct<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"12+34"</font><font color="#990000">,</font>grammar<font color="#990000">,</font><font color="#FF0000">"expression"</font><font color="#990000">,</font>out<font color="#990000">,&amp;</font>codeposition<font color="#990000">))</font> <font color="#FF0000">{</font>
+
+		<i><font color="#9A1900">// print the resulting tree</font></i>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"parse tree:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#000000">printtree</font></b><font color="#990000">(</font>out<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+		<i><font color="#9A1900">// write the tree back out as code</font></i>
+		<font color="#008080">stringbuffer</font>	sb<font color="#990000">;</font>
+		ct<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font>out<font color="#990000">,</font>grammar<font color="#990000">,&amp;</font>sb<font color="#990000">);</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"write output: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sb<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"parse failed"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>codeposition<font color="#990000">)</font> <font color="#FF0000">{</font>
+			stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">" at: %s"</font><font color="#990000">,</font>codeposition<font color="#990000">);</font>
+		<font color="#FF0000">}</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<b><font color="#0000FF">delete</font></b> out<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

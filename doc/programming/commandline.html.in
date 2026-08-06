@@ -1,0 +1,66 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the commandline class</h1>
+
+<p>The <a href="../classes/html/classcommandline.html">commandline class</a> provides methods for parsing command line arguments.</p>
+
+<p>Most programs take command line options in the option/value pair format:</p>
+
+<blockquote>
+program -option value -option value ...
+</blockquote>
+<p>or</p>
+
+<blockquote>
+program --option=value --option=value ...
+</blockquote>
+<p>The commandline class makes it easy to deal with command line options of
+either of these formats.</p>
+
+<p>The isFound() method returns true if the option is found and false otherwise.  The getValue() method returns the value of the option or an empty string if the option wasn't specified.</p>
+
+<p>The following program greets the user and takes two arguments:</p>
+
+<ul>
+  <li>-hello</li>
+  <li>-name <i>name</i></li>
+</ul>
+
+<p>If -hello is specified then the user is greeted with "hello", rather than "hi".  If -name is specified then the user is greeted by name.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/commandline.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// initialize an instance of the commandline class</font></i>
+	<font color="#008080">commandline</font>	<b><font color="#000000">cmdl</font></b><font color="#990000">(</font>argc<font color="#990000">,</font>argv<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// determine the greeting</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>greeting<font color="#990000">=</font><font color="#FF0000">"hi"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>cmdl<font color="#990000">.</font><b><font color="#000000">isFound</font></b><font color="#990000">(</font><font color="#FF0000">"hello"</font><font color="#990000">))</font> <font color="#FF0000">{</font>
+		greeting<font color="#990000">=</font><font color="#FF0000">"hello"</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// get the name</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>name<font color="#990000">=</font>cmdl<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">(</font><font color="#FF0000">"name"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print the greeting</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>greeting<font color="#990000">,</font>name<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

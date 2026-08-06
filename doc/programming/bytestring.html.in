@@ -1,0 +1,203 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the bytestring class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#manip">Manipulating Byte Strings</a></li>
+  <li><a href="#comp">Comparing Byte Strings</a></li>
+  <li><a href="#find">Finding Data in Byte Strings</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The bytestring class provides methods for manipulating byte strings.</p>
+
+<p>In addition to some unique methods, analogs for the standard C "memory" functions are provided.  However, unlike the standard C functions, the bytestring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.</p>
+
+<a name="manip"/><h2>Manipulating Byte Strings</h2>
+
+<p>The bytestring class provides methods for zeroing, initializing, duplicating, and copying byte strings.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">byte_t</font>	buffer<font color="#990000">[</font><font color="#993399">9</font><font color="#990000">];</font>
+
+
+	<i><font color="#9A1900">// zero the buffer</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all zeros:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// set the buffer to all ones</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"all ones:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy some data into the buffer</font></i>
+	<font color="#008080">byte_t</font>	data<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">3</font><font color="#990000">,</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">5</font><font color="#990000">,</font><font color="#993399">6</font><font color="#990000">,</font><font color="#993399">7</font><font color="#990000">,</font><font color="#993399">8</font><font color="#FF0000">}</font><font color="#990000">;</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>data<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying 0-8:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy some overlapping data from one part of the buffer to another</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copyWithOverlap</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>buffer<font color="#990000">+</font><font color="#993399">3</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-</font><font color="#993399">3</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying with overlap:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy a string into the buffer</font></i>
+	<font color="#008080">byte_t</font>	str<font color="#990000">[]=</font><font color="#FF0000">"hello"</font><font color="#990000">;</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copyUntil</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>str<font color="#990000">,</font><font color="#FF0000">'</font><font color="#CC33CC">\0</font><font color="#FF0000">'</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>str<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying </font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\"</font><font color="#FF0000">:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// copy some data into the buffer, swapping bytes as they are copied</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copySwapBytes</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font>data<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"after copying 0-8, swapping bytes:</font><font color="#CC33CC">\n</font><font color="#FF0000">  "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="comp"/><h2>Comparing Byte Strings</h2>
+
+<p>The bytestring class also provides a compare() method for comparing two byte strings.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">byte_t</font>	buffer1<font color="#990000">[</font><font color="#993399">8</font><font color="#990000">];</font>
+	<font color="#008080">byte_t</font>	buffer2<font color="#990000">[</font><font color="#993399">8</font><font color="#990000">];</font>
+
+
+	<i><font color="#9A1900">// zero the buffers</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">));</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer2<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"both zeroed:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does buffer1=buffer2?  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+		<font color="#990000">(!</font>bytestring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">)))?</font>
+								<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// set buffer2 to all ones</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>buffer2<font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer2<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"buffer2 is all ones:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does buffer1=buffer2?  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+		<font color="#990000">(!</font>bytestring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">)))?</font>
+								<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// set the first half of buffer2 to zeros</font></i>
+	<i><font color="#9A1900">// and only compare the first half</font></i>
+	bytestring<font color="#990000">::</font><b><font color="#000000">set</font></b><font color="#990000">(</font>buffer2<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer2<font color="#990000">)/</font><font color="#993399">2</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"first half of buffer2 is all zeros:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  does 1/2 buffer1 = 1/2 buffer2?  %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+		<font color="#990000">(!</font>bytestring<font color="#990000">::</font><b><font color="#000000">compare</font></b><font color="#990000">(</font>buffer1<font color="#990000">,</font>buffer2<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer1<font color="#990000">)/</font><font color="#993399">2</font><font color="#990000">))?</font>
+								<font color="#FF0000">"yes"</font><font color="#990000">:</font><font color="#FF0000">"no"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="find"/><h2>Finding Data in Byte Strings</h2>
+
+<p>The bytestring class also provides methods for finding bytes or other byte strings within byte strings.</p>
+
+<p>The findFirst() and findLast() methods return the first/last instance of a character or byte string within a byte string, or NULL if no match is found.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// initialize buffer</font></i>
+	<font color="#008080">byte_t</font>	buffer<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#FF0000">}</font><font color="#990000">;</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"buffer : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// find first and last 0</font></i>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>firstzero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findFirst</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>lastzero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findLast</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><font color="#993399">0</font><font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"first 0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>firstzero<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>firstzero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">" last 0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>lastzero<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>lastzero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// find first and last 0,2,0 patterns</font></i>
+	<font color="#008080">byte_t</font>	pattern<font color="#990000">[]=</font><font color="#FF0000">{</font><font color="#993399">0</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">,</font><font color="#993399">0</font><font color="#FF0000">}</font><font color="#990000">;</font>
+
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>firstzerotwozero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findFirst</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">),</font>
+						pattern<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>pattern<font color="#990000">));</font>
+	<font color="#008080">byte_t</font>	<font color="#990000">*</font>lastzerotwozero<font color="#990000">=(</font>byte_t <font color="#990000">*)</font>
+			bytestring<font color="#990000">::</font><b><font color="#000000">findLast</font></b><font color="#990000">(</font>buffer<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">),</font>
+						pattern<font color="#990000">,</font><b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>pattern<font color="#990000">));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"first 0,2,0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>firstzerotwozero<font color="#990000">,</font>
+				<b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>firstzerotwozero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">" last 0,2,0 : "</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">safePrint</font></b><font color="#990000">(</font>lastzerotwozero<font color="#990000">,</font>
+				<b><font color="#0000FF">sizeof</font></b><font color="#990000">(</font>buffer<font color="#990000">)-(</font>lastzerotwozero<font color="#990000">-</font>buffer<font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

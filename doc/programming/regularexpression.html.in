@@ -1,0 +1,145 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the regularexpression class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#quick">Quick Matches</a></li>
+  <li><a href="#overandover">Matching Over and Over</a></li>
+  <li><a href="#multiple">Multiple Unique Matches</a></li>
+  <li><a href="#everymatch">Every Match</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classregularexpression.html">regularexpression</a> class provides methods for making comparisons between text and regular expressions.</p>
+
+<p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
+
+<a name="quick"/><h2>Quick Matches</h2>
+
+<p>The regularexpression class provides a static match() method which is useful for a quick yes/no comparison.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/regularexpression.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>string<font color="#990000">=</font><font color="#FF0000">"void f(int a, bool b) { exit(0); }"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>pattern<font color="#990000">=</font><font color="#FF0000">"(void|int|bool).*f</font><font color="#CC33CC">\\</font><font color="#FF0000">(.*</font><font color="#CC33CC">\\</font><font color="#FF0000">) { .* }"</font><font color="#990000">;</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>matches<font color="#990000">;</font>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>regularexpression<font color="#990000">::</font><b><font color="#000000">match</font></b><font color="#990000">(</font>string<font color="#990000">,</font>pattern<font color="#990000">))</font> <font color="#FF0000">{</font>
+		matches<font color="#990000">=</font><font color="#FF0000">"matches"</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+		matches<font color="#990000">=</font><font color="#FF0000">"doesn't match"</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>string<font color="#990000">,</font>matches<font color="#990000">,</font>pattern<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="overandover"/><h2>Matching Over and Over</h2>
+
+<p>For patterns that need to be matched over and over, create an instance of the regularexpression class, compile() the pattern, and call match() to compare it to different strings.  The optional study() method can also be used to improve performance with complex patterns.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/regularexpression.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>pattern<font color="#990000">=</font><font color="#FF0000">"(void|int|bool).*f</font><font color="#CC33CC">\\</font><font color="#FF0000">(.*</font><font color="#CC33CC">\\</font><font color="#FF0000">) { .* }"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> strings<font color="#990000">[]=</font><font color="#FF0000">{</font>
+		<font color="#FF0000">"class t { public: int f(int a); void f(int a, bool b); };"</font><font color="#990000">,</font>
+		<font color="#FF0000">"void f(int a, bool b) { exit(0); }"</font><font color="#990000">,</font>
+		<font color="#FF0000">"int f(int a) { printf(</font><font color="#CC33CC">\"</font><font color="#FF0000">hello</font><font color="#CC33CC">\\</font><font color="#FF0000">n</font><font color="#CC33CC">\"</font><font color="#FF0000">); }"</font><font color="#990000">,</font>
+		<font color="#FF0000">"struct m { int a; int b; int c; };"</font><font color="#990000">,</font>
+		NULL
+	<font color="#FF0000">}</font><font color="#990000">;</font>
+
+	<font color="#008080">regularexpression</font>	re<font color="#990000">;</font>
+	re<font color="#990000">.</font><b><font color="#000000">setPattern</font></b><font color="#990000">(</font>pattern<font color="#990000">);</font>
+	re<font color="#990000">.</font><b><font color="#000000">study</font></b><font color="#990000">();</font>
+
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*</font> <b><font color="#0000FF">const</font></b> <font color="#990000">*</font>s<font color="#990000">=</font>strings<font color="#990000">;</font> <font color="#990000">*</font>s<font color="#990000">;</font> s<font color="#990000">++)</font> <font color="#FF0000">{</font>
+	
+		<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>matches<font color="#990000">;</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font>re<font color="#990000">.</font><b><font color="#000000">match</font></b><font color="#990000">(*</font>s<font color="#990000">,</font>pattern<font color="#990000">))</font> <font color="#FF0000">{</font>
+			matches<font color="#990000">=</font><font color="#FF0000">"does match"</font><font color="#990000">;</font>
+		<font color="#FF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#FF0000">{</font>
+			matches<font color="#990000">=</font><font color="#FF0000">"doesn't match"</font><font color="#990000">;</font>
+		<font color="#FF0000">}</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%s</font><font color="#CC33CC">\n</font><font color="#FF0000">  %s</font><font color="#CC33CC">\n</font><font color="#FF0000">%s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,*</font>s<font color="#990000">,</font>matches<font color="#990000">,</font>pattern<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="multiple"/><h2>Multiple Unique Matches</h2>
+
+<p>Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubstringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/regularexpression.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>string<font color="#990000">=</font><font color="#FF0000">"hello there everyone"</font><font color="#990000">;</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>pattern<font color="#990000">=</font><font color="#FF0000">"(</font><font color="#CC33CC">\\</font><font color="#FF0000">w+) (</font><font color="#CC33CC">\\</font><font color="#FF0000">w+)"</font><font color="#990000">;</font>
+
+	<font color="#008080">regularexpression</font>	re<font color="#990000">;</font>
+	re<font color="#990000">.</font><b><font color="#000000">setPattern</font></b><font color="#990000">(</font>pattern<font color="#990000">);</font>
+	re<font color="#990000">.</font><b><font color="#000000">match</font></b><font color="#990000">(</font>string<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"</font><font color="#FF0000"> matches </font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"</font><font color="#FF0000"> %d times</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				string<font color="#990000">,</font>pattern<font color="#990000">,</font>re<font color="#990000">.</font><b><font color="#000000">getSubstringCount</font></b><font color="#990000">());</font>
+
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">int32_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>re<font color="#990000">.</font><b><font color="#000000">getSubstringCount</font></b><font color="#990000">();</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  match %d starts at offset %2d: "</font><font color="#990000">,</font>
+					i<font color="#990000">,</font>re<font color="#990000">.</font><b><font color="#000000">getSubstringStartOffset</font></b><font color="#990000">(</font>i<font color="#990000">));</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>re<font color="#990000">.</font><b><font color="#000000">getSubstringStart</font></b><font color="#990000">(</font>i<font color="#990000">));</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  match %d ends at offset %2d  : "</font><font color="#990000">,</font>
+					i<font color="#990000">,</font>re<font color="#990000">.</font><b><font color="#000000">getSubstringEndOffset</font></b><font color="#990000">(</font>i<font color="#990000">));</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\"</font><font color="#FF0000">%s</font><font color="#CC33CC">\"\n</font><font color="#FF0000">"</font><font color="#990000">,</font>re<font color="#990000">.</font><b><font color="#000000">getSubstringEnd</font></b><font color="#990000">(</font>i<font color="#990000">));</font>
+	<font color="#FF0000">}</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<p>Note that these are the parts of a single match, not the places the pattern was found.  match() reports the first match in the string and stops there.</p>
+
+<a name="everymatch"/><h2>Every Match</h2>
+
+<p>To get the rest of them, call matchNext() after match(), over and over, until it returns false.  Each call moves to the next match in the same string, and the methods above report that match instead.  The string given to match() has to still be there while the walk runs, since the class never copies it.</p>
+
+<p>So a pattern of "Dave" against "Dave, Dave, Dave!" gives all three, and a pattern of "(\w+) (\w+)" against "hello world hello world" gives "hello world" and then "hello world" again, with its own capture groups each time.</p>
+
+<p>A match that is empty is reported like any other, including one at the very end of the string, and the walk moves one character past where it started so the same empty match never comes back twice.  Note that the replace() method of the charstring class skips empty matches rather than replacing them, which is a substitution policy rather than a different idea of where the matches are.</p>
+
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

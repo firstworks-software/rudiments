@@ -1,0 +1,99 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the randomnumber class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#afew">Generating a Few Numbers</a></li>
+  <li><a href="#lots">Generating Lots of Numbers</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classrandomnumber.html">randomnumber class</a> provides methods for generating and scaling random numbers.</p>
+
+<p>Superfluous background:</p>
+
+<p>There is no such thing as true randomness.   Many random number generators just return values from a highly divergent series.  Others collect "entropy" from system hardware returning numbers that are actually associated with system activity but in an indiscernible way.  In most cases, entropy-based systems are just used to seed systems that return values from a highly divergnet series.</p>
+
+<p>If there is only one running process generating random numbers using a highly divergent series, successive calls to generateNumber() will never return the same value until all numbers between 0 and the number returned by getRandMax() (usually 2^31-1 but could be 2^32-1 or 2^15-1 on some systems) have been returned.  At that point, the entire sequence will repeat.</p>
+
+<p>Calls to the methods that generate scaled numbers may return the same value before all numbers in the range have been returned because they just scale down unique numbers returned from a larger range.</p>
+
+<a name="afew"/><h2>Generating a Few Numbers</h2>
+
+<p>The randomnumber class provides several static methods that are useful if you need to generate a few numbers here and there.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/randomnumber.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"random number between 0 and %d: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			randomnumber<font color="#990000">::</font><b><font color="#000000">getRandMax</font></b><font color="#990000">(),</font>
+			randomnumber<font color="#990000">::</font><b><font color="#000000">generate</font></b><font color="#990000">(</font>randomnumber<font color="#990000">::</font><b><font color="#000000">getSeed</font></b><font color="#990000">()));</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"random number between 1 and 10: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			randomnumber<font color="#990000">::</font><b><font color="#000000">generate</font></b><font color="#990000">(</font>randomnumber<font color="#990000">::</font><b><font color="#000000">getSeed</font></b><font color="#990000">(),</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">10</font><font color="#990000">));</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="lots"/><h2>Generating Lots of Numbers</h2>
+
+<p>If you need to generate lots of numbers though, you should create an instance, seed it, and use it over and over to generate numbers.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/randomnumber.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create an instance and seed it</font></i>
+	<font color="#008080">randomnumber</font>	rn<font color="#990000">;</font>
+	rn<font color="#990000">.</font><b><font color="#000000">setSeed</font></b><font color="#990000">(</font>randomnumber<font color="#990000">::</font><b><font color="#000000">getSeed</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// generate some unscaled numbers</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"generating some random numbers:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">20</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<font color="#008080">uint32_t</font>	unscalednum<font color="#990000">;</font>
+		rn<font color="#990000">.</font><b><font color="#000000">generate</font></b><font color="#990000">(&amp;</font>unscalednum<font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%d, "</font><font color="#990000">,</font>unscalednum<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// generate some scaled numbers</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"generating some scaled random numbers:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> j<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> j<font color="#990000">&lt;</font><font color="#993399">20</font><font color="#990000">;</font> j<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<font color="#008080">int32_t</font>		scalednum<font color="#990000">;</font>
+		rn<font color="#990000">.</font><b><font color="#000000">generate</font></b><font color="#990000">(&amp;</font>scalednum<font color="#990000">,</font><font color="#993399">1</font><font color="#990000">,</font><font color="#993399">10</font><font color="#990000">);</font>
+
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%d, "</font><font color="#990000">,</font>scalednum<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

@@ -1,0 +1,53 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the error class</h1>
+
+<p>The <a href="../classes/html/classerror.html">error class</a> provides static methods for getting and setting posix and native system errors.</p>
+
+<p>On more-or-less posix-compliant systems, most system calls and C-library functions set the "posix system error" when they fail.  Since rudiments uses these functions, when many rudiments methods fail, the posix system error is also set.</p>
+
+<p>Posix defines a bunch of standard error codes like EINTR, ENOMEM, etc.  If an error occurs, the posix system error will be set to one of these.</p>
+
+<p>Some platforms, like Windows have their own, "native system error" as well.  These platforms usually set both the "native system error" and "posix system error" when a system call or C-library function fails.</p>
+
+<p>Both posix and native system errors can be accessed via the error class.</p>
+
+<p>For platforms that only have posix system errors, the methods for accessing the native sytem error just return the posix system error.</p>
+
+<p>In this example, the posix system error is manipulated directly.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/error.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	error<font color="#990000">::</font><b><font color="#000000">setErrorNumber</font></b><font color="#990000">(</font>EINTR<font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error number: %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>error<font color="#990000">::</font><b><font color="#000000">getErrorNumber</font></b><font color="#990000">());</font>
+	<font color="#009900">char</font>	<font color="#990000">*</font>err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error string: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+
+	error<font color="#990000">::</font><b><font color="#000000">clearError</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error number (after clear): %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>error<font color="#990000">::</font><b><font color="#000000">getErrorNumber</font></b><font color="#990000">());</font>
+	err<font color="#990000">=</font>error<font color="#990000">::</font><b><font color="#000000">getErrorString</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"error string (after clear) : %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>err<font color="#990000">);</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> err<font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

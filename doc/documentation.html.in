@@ -1,0 +1,216 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h3>Installation</h3>
+
+<blockquote>
+<a href="installing.html">Installing Rudiments</a>
+</blockquote>
+<hr/>
+
+<h3>Programming Reference</h3>
+
+<blockquote>
+<a href="classes/html/annotated.html">Rudiments Class Reference</a>
+</blockquote>
+<h3>Programming Guide</h3>
+
+<ul>
+  <li><b>Standard Input and Output</b></li>
+  <ul>
+    <li><a href="programming/stdio.html">Using the standard I/O classes</a></li>
+    <li><a href="programming/prompt.html">Using the prompt class</a></li>
+  </ul>
+
+  <li><b>Sleeping</b></li>
+  <ul>
+    <li><a href="programming/snooze.html">Using the snooze class</a></li>
+  </ul>
+
+  <li><b>Process and Process Environment</b></li>
+  <ul>
+    <li><a href="programming/process.html">Using the process class</a></li>
+    <li><a href="programming/commandline.html">Using the commandline class</a></li>
+    <li><a href="programming/environment.html">Using the environment class</a></li>
+  </ul>
+
+  <li><b>Character and String Storage and Manipulation</b></li>
+  <ul>
+    <li><a href="programming/character.html">Using the character class</a></li>
+    <li><a href="programming/charstring.html">Using the charstring class</a></li>
+    <li><a href="programming/stringbuffer.html">Using the stringbuffer class</a></li>
+    <li><a href="programming/wcharacter.html">Using the wcharacter class</a></li>
+    <li><a href="programming/wcharstring.html">Using the wcharstring class</a></li>
+    <li><a href="programming/wstringbuffer.html">Using the wstringbuffer class</a></li>
+    <li><a href="programming/ucs2character.html">Using the ucs2character class</a></li>
+    <li><a href="programming/ucs2charstring.html">Using the ucs2charstring class</a></li>
+    <li><a href="programming/ucs2stringbuffer.html">Using the ucs2stringbuffer class</a></li>
+    <li><a href="programming/iconvert.html">Using the iconvert class</a></li>
+  </ul>
+
+  <li><b>Binary Data Storage and Manipulation</b></li>
+  <ul>
+    <li><a href="programming/bytestring.html">Using the bytestring class</a></li>
+    <li><a href="programming/bytebuffer.html">Using the bytebuffer class</a></li>
+    <li><a href="programming/memorypool.html">Using the memorypool class</a></li>
+  </ul>
+
+  <li><b>Regular Expressions</b></li>
+  <ul>
+    <li><a href="programming/regularexpression.html">Using the regularexpression class</a></li>
+  </ul>
+
+  <li><b>Random Numbers</b></li>
+  <ul>
+    <li><a href="programming/randomnumber.html">Using the randomnumber class</a></li>
+  </ul>
+
+  <li><b>Hashing and Encryption</b></li>
+  <ul>
+    <li><a href="programming/md5.html">Using the md5 class</a></li>
+    <li><a href="programming/sha1.html">Using the sha1 class</a></li>
+    <li><a href="programming/sha256.html">Using the sha256 class</a></li>
+    <li><a href="programming/des.html">Using the des class</a></li>
+  </ul>
+
+  <li><b>Cryptography</b></li>
+  <ul>
+    <li><a href="programming/aes128.html">Using the aes128 class</a></li>
+    <li><a href="programming/dh.html">Using the dh class</a></li>
+    <li><a href="programming/pbkdf2.html">Using the pbkdf2 class</a></li>
+  </ul>
+
+  <li><b>Security</b></li>
+  <ul>
+    <li><a href="programming/sensitivevalue.html">Using the sensitivevalue class</a></li>
+  </ul>
+
+  <li><b>Date and Time</b></li>
+  <ul>
+    <li><a href="programming/datetime.html">Using the datetime class</a></li>
+  </ul>
+
+  <li><b>Cron</b></li>
+  <ul>
+    <li><a href="programming/cronschedule.html">Using the cronschedule class</a></li>
+  </ul>
+
+  <li><b>Locale</b></li>
+  <ul>
+    <li><a href="programming/locale.html">Using the locale class</a></li>
+  </ul>
+
+  <li><b>Containers</b></li>
+  <ul>
+    <li><a href="programming/dynamicarray.html">Using the dynamicarray class</a></li>
+    <li><a href="programming/staticarray.html">Using the staticarray class</a></li>
+    <li><a href="programming/linkedlist.html">Using the linkedlist class</a></li>
+    <li><a href="programming/singlylinkedlist.html">Using the singlylinkedlist class</a></li>
+    <li><a href="programming/avltree.html">Using the avltree class</a></li>
+    <li><a href="programming/dictionary.html">Using the dictionary class</a></li>
+    <li><a href="programming/table.html">Using the table class</a></li>
+    <li><a href="programming/scalar.html">Using the scalar class</a></li>
+  </ul>
+
+  <li><b>System Information</b></li>
+  <ul>
+    <li><a href="programming/error.html">Using the error class</a></li>
+    <li><a href="programming/sys.html">Using the sys class</a></li>
+    <li><a href="programming/userentry.html">Using the userentry class</a></li>
+    <li><a href="programming/groupentry.html">Using the groupentry class</a></li>
+    <li><a href="programming/hostentry.html">Using the hostentry class</a></li>
+    <li><a href="programming/protocolentry.html">Using the protocolentry class</a></li>
+    <li><a href="programming/serviceentry.html">Using the serviceentry class</a></li>
+  </ul>
+
+  <li><b>Files, Devices, Permissions, Directories and Filesystems</b></li>
+  <ul>
+    <li><a href="programming/file.html">Using the file class</a></li>
+    <li><a href="programming/device.html">Using the device class</a></li>
+    <li><a href="programming/permissions.html">Using the permissions class</a></li>
+    <li><a href="programming/directory.html">Using the directory class</a></li>
+    <li><a href="programming/memorymap.html">Using the memorymap class</a></li>
+    <li><a href="programming/filesystem.html">Using the filesystem class</a></li>
+  </ul>
+
+  <li><b>Threads</b></li>
+  <ul>
+    <li><a href="programming/thread.html">Using the thread class</a></li>
+    <li><a href="programming/threadmutex.html">Using the threadmutex class</a></li>
+  </ul>
+
+  <li><b>Interprocess Communication</b></li>
+  <ul>
+    <li><a href="programming/sharedmemory.html">Using the sharedmemory class</a></li>
+    <li><a href="programming/semaphoreset.html">Using the semaphoreset class</a></li>
+    <li><a href="programming/signal.html">Using the signal classes</a></li>
+  </ul>
+
+  <li><b>Clients and Servers</b></li>
+  <ul>
+    <li><a href="programming/inetsocketserver.html">Using the inetsocketserver class</a></li>
+    <li><a href="programming/inetsocketclient.html">Using the inetsocketclient class</a></li>
+    <li><a href="programming/unixsocketserver.html">Using the unixsocketserver class</a></li>
+    <li><a href="programming/unixsocketclient.html">Using the unixsocketclient class</a></li>
+    <li><a href="programming/listener.html">Using the listener class</a></li>
+    <li><a href="programming/chat.html">Using the chat class</a></li>
+    <li><a href="programming/gss.html">Using the gss classes</a></li>
+    <li><a href="programming/tls.html">Using the tls classes</a></li>
+  </ul>
+
+  <li><b>Parameter Strings</b></li>
+  <ul>
+    <li><a href="programming/parameterstring.html">Using the parameterstring class</a></li>
+  </ul>
+
+  <li><b>URLs</b></li>
+  <ul>
+    <li><a href="programming/url.html">Using the url class</a></li>
+  </ul>
+
+  <li><b>Parsers</b></li>
+  <ul>
+    <li><a href="programming/xmldom.html">Using the xmldom and domnode classes</a></li>
+    <li><a href="programming/xmlsax.html">Using the xmlsax class</a></li>
+    <li><a href="programming/domevents.html">Using the domevents class</a></li>
+    <li><a href="programming/jsondom.html">Using the jsondom class</a></li>
+    <li><a href="programming/jsonsax.html">Using the jsonsax class</a></li>
+    <li><a href="programming/csvdom.html">Using the csvdom class</a></li>
+    <li><a href="programming/csvsax.html">Using the csvsax class</a></li>
+    <li><a href="programming/inidom.html">Using the inidom class</a></li>
+    <li><a href="programming/inisax.html">Using the inisax class</a></li>
+    <li><a href="programming/propdom.html">Using the propdom class</a></li>
+    <li><a href="programming/propsax.html">Using the propsax class</a></li>
+  </ul>
+
+  <li><b>Logging</b></li>
+  <ul>
+    <li><a href="programming/logger.html">Using the logger class</a></li>
+  </ul>
+
+  <li><b>Dynamic Libraries</b></li>
+  <ul>
+    <li><a href="programming/dynamiclib.html">Using the dynamiclib class</a></li>
+  </ul>
+
+  <li><b>Compilers</b></li>
+  <ul>
+    <li><a href="programming/codetree.html">Using the codetree class</a></li>
+    <li><a href="programming/compiler.html">Using the compiler class</a></li>
+  </ul>
+
+  <li><b>Model-View-Controller</b></li>
+  <ul>
+    <li><a href="programming/resourcepool.html">Using the resourcepool class</a></li>
+    <li><a href="programming/wastebasket.html">Using the wastebasket class</a></li>
+  </ul>
+
+</ul>
+
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

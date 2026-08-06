@@ -1,8 +1,42 @@
-<!--#include virtual="header.html"-->
+<html>
+<head>
+	<title>firstworks: rudiments</title>
 
-<!--#include virtual="projectheader.html"-->
+	<link rel="stylesheet" href="css/style.css"/>
+	<!-- nothing -->
 
-<!--#include virtual="contentstart.html"-->
+	<script language="Javascript" src="js/rotate.js"></script>
+	<script language="Javascript" src="js/button.js"></script>
+	<script language="Javascript" src="js/iframe.js"></script>
+</head>
+<body onload="rotate(); setButton();">
+
+
+<div style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 100;">
+
+<span id="firstworks">a <b><a href="http://www.firstworks.com">firstworks</a></b> project</span>
+
+<div id="projectbox"><a href="index.html"><img src="images/rudiments-icon.png"/><span id="name">Rudiments</span></a></div>
+
+<table id="projectbuttons">
+<tr>
+<td style="width: 50%;"></td>
+<td class="button nonlastbutton"><a id="button-about" href="index.html">About</a></td>
+<td class="button nonlastbutton"><a id="button-documentation" href="documentation.html">Documentation</a></td>
+<td class="button nonlastbutton"><a id="button-download" href="download.html">Download</a></td>
+<td class="button nonlastbutton"><a id="button-license" href="license.html">Licensing</a></td>
+<td class="button"><a id="button-news" target="_blank" href="http://software.firstworks.com/">News</a></td>
+<td style="width: 50%;"></td>
+</tr>
+</table>
+
+</div>
+
+<div style="position: absolute; top: 84px; width: 100%;">
+
+
+<div id="content">
+
 
 <h3>License</h3>
 
@@ -27,7 +61,16 @@ For questions, please contact <a href="mailto:licensing@firstworks.com">licensin
 <img style="title: native english speaker; " src="images/us.png"/>
 <img style="title: falo portugues tambem; " src="images/br.png"/>
 </blockquote>
-<!--#include virtual="contentend.html"-->
+</div> <!-- content -->
 
-<!--#include virtual="footer.html"-->
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="images/us.png"/> <img style="vertical-align: text-bottom;" title="falo portugues tambem" src="images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+
 

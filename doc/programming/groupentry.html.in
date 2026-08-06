@@ -1,0 +1,47 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the groupentry class</h1>
+
+<p>The <a href="../classes/html/classgroupentry.html">groupentry class</a> provides methods for retrieving information about groups.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/groupentry.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<b><font color="#000080">#ifdef</font></b> _WIN32
+<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>groupname<font color="#990000">=</font><font color="#FF0000">"None"</font><font color="#990000">;</font>
+<b><font color="#000080">#else</font></b>
+<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>groupname<font color="#990000">=</font><font color="#FF0000">"bin"</font><font color="#990000">;</font>
+<b><font color="#000080">#endif</font></b>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// get the group entry</font></i>
+	<font color="#008080">groupentry</font>	grent<font color="#990000">;</font>
+	grent<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font>groupname<font color="#990000">);</font>
+
+	<i><font color="#9A1900">// print out details</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Name:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getName</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Group Id:	%d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getGroupId</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	Members:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint32_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> grent<font color="#990000">.</font><b><font color="#000000">getMembers</font></b><font color="#990000">()</font> <font color="#990000">&amp;&amp;</font> grent<font color="#990000">.</font><b><font color="#000000">getMembers</font></b><font color="#990000">()[</font>i<font color="#990000">];</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getMembers</font></b><font color="#990000">()[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"	SID:		%s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>grent<font color="#990000">.</font><b><font color="#000000">getSidString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

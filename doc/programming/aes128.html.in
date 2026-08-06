@@ -1,0 +1,102 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the aes128 class</h1>
+
+<p>The <a href="../classes/html/classaes128.html">aes128 class</a> provides a simple AES-128 encryption/decryption implementation.</p>
+
+<p>The aes128 class inherits from the <a href="../classes/html/classencryption.html">encryption class</a>.  The setKey()/setIv() methods set the encryption key and initialization vector, or setRandomKey()/setRandomIv() can be used to generate random values.  The append() method feeds in data, getEncryptedData() encrypts and returns the result, and getDecryptedData() decrypts and returns the result.  The clear() method resets the data while preserving the key and initialization vector, and reset() clears everything.  The isSupported() method can be used to determine if AES-128 is available on the current platform.</p>
+
+<p>The key size and initialization vector size are both 16 bytes for AES-128.  These sizes can be retrieved using getKeySize() and getIvSize().</p>
+
+<p>The default block cipher mode is CBC, but this can be changed using setBlockCipherMode().</p>
+
+<p>The following example encrypts a string, prints the encrypted data in hexadecimal, decrypts it back, clears and encrypts a different string.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/aes128.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">aes128</font>	a<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// check whether aes128 is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font>a<font color="#990000">.</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"aes128 is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// set a random key and initialization vector</font></i>
+	a<font color="#990000">.</font><b><font color="#000000">setRandomKey</font></b><font color="#990000">();</font>
+	a<font color="#990000">.</font><b><font color="#000000">setRandomIv</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// encrypt some data</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>data<font color="#990000">=</font><font color="#FF0000">"hello world"</font><font color="#990000">;</font>
+	a<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">((</font><b><font color="#0000FF">const</font></b> byte_t <font color="#990000">*)</font>data<font color="#990000">,</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	<font color="#990000">*</font>enc<font color="#990000">=</font>a<font color="#990000">.</font><b><font color="#000000">getEncryptedData</font></b><font color="#990000">();</font>
+	<font color="#008080">uint64_t</font>	encsize<font color="#990000">=</font>a<font color="#990000">.</font><b><font color="#000000">getEncryptedDataSize</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// print the encrypted data in hexadecimal</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"encrypted: "</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>encsize<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%02x"</font><font color="#990000">,</font>enc<font color="#990000">[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// decrypt using the same key and initialization vector</font></i>
+	<font color="#008080">aes128</font>	b<font color="#990000">;</font>
+	b<font color="#990000">.</font><b><font color="#000000">setKey</font></b><font color="#990000">(</font>a<font color="#990000">.</font><b><font color="#000000">getKey</font></b><font color="#990000">(),</font>a<font color="#990000">.</font><b><font color="#000000">getKeySize</font></b><font color="#990000">());</font>
+	b<font color="#990000">.</font><b><font color="#000000">setIv</font></b><font color="#990000">(</font>a<font color="#990000">.</font><b><font color="#000000">getIv</font></b><font color="#990000">(),</font>a<font color="#990000">.</font><b><font color="#000000">getIvSize</font></b><font color="#990000">());</font>
+
+	b<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>enc<font color="#990000">,</font>encsize<font color="#990000">);</font>
+
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	<font color="#990000">*</font>dec<font color="#990000">=</font>b<font color="#990000">.</font><b><font color="#000000">getDecryptedData</font></b><font color="#990000">();</font>
+	<font color="#008080">uint64_t</font>	decsize<font color="#990000">=</font>b<font color="#990000">.</font><b><font color="#000000">getDecryptedDataSize</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"decrypted: %.*s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>decsize<font color="#990000">,</font>dec<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// clear and encrypt different data</font></i>
+	a<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+
+	data<font color="#990000">=</font><font color="#FF0000">"goodbye world"</font><font color="#990000">;</font>
+	a<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">((</font><b><font color="#0000FF">const</font></b> byte_t <font color="#990000">*)</font>data<font color="#990000">,</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>data<font color="#990000">));</font>
+
+	enc<font color="#990000">=</font>a<font color="#990000">.</font><b><font color="#000000">getEncryptedData</font></b><font color="#990000">();</font>
+	encsize<font color="#990000">=</font>a<font color="#990000">.</font><b><font color="#000000">getEncryptedDataSize</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"encrypted: "</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>encsize<font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%02x"</font><font color="#990000">,</font>enc<font color="#990000">[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// decrypt</font></i>
+	b<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	b<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>enc<font color="#990000">,</font>encsize<font color="#990000">);</font>
+
+	dec<font color="#990000">=</font>b<font color="#990000">.</font><b><font color="#000000">getDecryptedData</font></b><font color="#990000">();</font>
+	decsize<font color="#990000">=</font>b<font color="#990000">.</font><b><font color="#000000">getDecryptedDataSize</font></b><font color="#990000">();</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"decrypted: %.*s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>decsize<font color="#990000">,</font>dec<font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

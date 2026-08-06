@@ -1,0 +1,72 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the dynamicarray class</h1>
+
+<p>The <a href="../classes/html/classdynamicarray.html">dynamicarray class</a> allows you to store an arbitrary number of values and access them with array-like syntax.  Since the dynamicarray class is template-based, you can store arbitrary types of values.</p>
+
+<p>Internally, the class stores values in a series of extents.  The size of the initial and incremental extents are defined in the constructor.  The array grows automatically as new elements are set beyond its current capacity.</p>
+
+<p>The following example creates a dynamicarray of integers, sets some values, grows the array by setting elements beyond its initial size, zeroes all elements, and clears the array.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/dynamicarray.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// create a dynamic array with an initial extent of 4</font></i>
+	<i><font color="#9A1900">// and incremental extents of 2</font></i>
+	<font color="#008080">dynamicarray&lt;int&gt;</font>	<b><font color="#000000">da</font></b><font color="#990000">(</font><font color="#993399">4</font><font color="#990000">,</font><font color="#993399">2</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// set values</font></i>
+	da<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">]=</font><font color="#993399">0</font><font color="#990000">;</font>
+	da<font color="#990000">[</font><font color="#993399">1</font><font color="#990000">]=</font><font color="#993399">10</font><font color="#990000">;</font>
+	da<font color="#990000">[</font><font color="#993399">2</font><font color="#990000">]=</font><font color="#993399">20</font><font color="#990000">;</font>
+	da<font color="#990000">[</font><font color="#993399">3</font><font color="#990000">]=</font><font color="#993399">30</font><font color="#990000">;</font>
+
+	<i><font color="#9A1900">// print the array</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"Array (%lld elements):</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">();</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  [%lld] = %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>i<font color="#990000">,</font>da<font color="#990000">[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// the array grows automatically when new elements are set</font></i>
+	da<font color="#990000">[</font><font color="#993399">4</font><font color="#990000">]=</font><font color="#993399">40</font><font color="#990000">;</font>
+	da<font color="#990000">[</font><font color="#993399">5</font><font color="#990000">]=</font><font color="#993399">50</font><font color="#990000">;</font>
+	da<font color="#990000">[</font><font color="#993399">6</font><font color="#990000">]=</font><font color="#993399">60</font><font color="#990000">;</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"After growing (%lld elements):</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">();</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  [%lld] = %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>i<font color="#990000">,</font>da<font color="#990000">[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// zero out all elements</font></i>
+	da<font color="#990000">.</font><b><font color="#000000">zero</font></b><font color="#990000">(</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"After zeroing:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint64_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">();</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"  [%lld] = %d</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>i<font color="#990000">,</font>da<font color="#990000">[</font>i<font color="#990000">]);</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// clear the array</font></i>
+	da<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"After clearing: %lld elements</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>da<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

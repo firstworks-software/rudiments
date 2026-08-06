@@ -1,0 +1,227 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the singlylinkedlist class</h1>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#values">Manipulating Values</a></li>
+  <li><a href="#nodes">Manipulating Nodes</a></li>
+  <li><a href="#sort">Sorting</a></li>
+  <li><a href="#iterate">Iterating Manually</a></li>
+  <li><a href="#types">Data Types</a></li>
+</ul>
+
+<br/><a name="intro"/><h2>Introduction</h2>
+
+<p>The <a href="../classes/html/classsinglylinkedlist.html">singlylinkedlist class</a> allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.</p>
+
+<p>Each singlylinkedlist is composed of a series of singlylinkedlistnodes.  Each singlylinkedlistnode contains a value.</p>
+
+<p>This class is similar to the <a href="../classes/html/classlinkedlist.html">linkedlist class</a> but uses less memory and many of its operations are faster.</p>
+
+<p>However, the move, detach and remove operations are much slower.  If your application must run these operations regularly, you should consider using the linkedlist class instead.</p>
+
+<a name="values"/><h2>Manipulating Values</h2>
+
+<p>The singlylinkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
+
+<p>Note that unlike the linkedlist class, there is no method for inserting a value before another value, only a method for inserting a value after another value.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/singlylinkedlist.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">singlylinkedlist&lt;uint32_t&gt;</font>	sll<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// apppend values to the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#993399">6</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><font color="#993399">7</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// prepend values to the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><font color="#993399">1</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(-</font><font color="#993399">1</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(-</font><font color="#993399">2</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(-</font><font color="#993399">2</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(-</font><font color="#993399">2</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// insert values before and after other values</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">insertAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">),</font><font color="#993399">3</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">insertAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">),</font><font color="#993399">4</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// remove values from the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">remove</font></b><font color="#990000">(-</font><font color="#993399">1</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// remove all of a particular value from the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">removeAll</font></b><font color="#990000">(-</font><font color="#993399">2</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// count</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"The list contains %lld nodes.</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sll<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// print the list</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+
+	<i><font color="#9A1900">// clear the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">clear</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"The list contains %lld nodes after clearing it.</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+								sll<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="nodes"/><h2>Manipulating Nodes</h2>
+
+<p>The singlylinkedlist class also provides methods for manipulating list nodes directly.</p>
+
+<p>Note that unlike the linkedlist class, there are no methods for inserting or moving a node before another node, only methods for inserting and moving a node after another node.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/singlylinkedlist.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">singlylinkedlist&lt;uint32_t&gt;</font>	sll<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// apppend nodes to the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">5</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">6</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">7</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// prepend nodes to the list</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">2</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">1</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">0</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// insert nodes</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">insertAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">),</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">3</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">insertAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">),</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">4</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// move nodes around</font></i>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">8</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">9</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">prepend</font></b><font color="#990000">(</font><b><font color="#0000FF">new</font></b> singlylinkedlistnode<font color="#990000">&lt;</font>uint32_t<font color="#990000">&gt;(</font><font color="#993399">10</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">moveAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">7</font><font color="#990000">),</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">8</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">moveAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">8</font><font color="#990000">),</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">9</font><font color="#990000">));</font>
+	sll<font color="#990000">.</font><b><font color="#000000">moveAfter</font></b><font color="#990000">(</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">9</font><font color="#990000">),</font>sll<font color="#990000">.</font><b><font color="#000000">find</font></b><font color="#990000">(</font><font color="#993399">10</font><font color="#990000">));</font>
+
+	<i><font color="#9A1900">// count</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"The list contains %lld nodes.</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sll<font color="#990000">.</font><b><font color="#000000">getCount</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// print the list</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Current contents:</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	sll<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">'</font><font color="#CC33CC">\n</font><font color="#FF0000">'</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="sort"/><h2>Sorting</h2>
+
+<p>The singlylinkedlist class also provides methods for sorting the list.</p>
+
+<p>Methods for both insertion and heap sort are provided.  Insertion sort is slow, for large lists, but doesn't require any additional memory.  Heap sort is fast, even for large lists, but requires additional memory.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/singlylinkedlist.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/randomnumber.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">singlylinkedlist&lt;uint32_t&gt;</font>	sllis<font color="#990000">;</font>
+	<font color="#008080">singlylinkedlist&lt;uint32_t&gt;</font>	sllhs<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// generate random numbers and append them to the lists</font></i>
+	<font color="#008080">randomnumber</font>	rr<font color="#990000">;</font>
+	rr<font color="#990000">.</font><b><font color="#000000">setSeed</font></b><font color="#990000">(</font>randomnumber<font color="#990000">::</font><b><font color="#000000">getSeed</font></b><font color="#990000">());</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"generating numbers...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint16_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">20000</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+
+		<font color="#008080">uint32_t</font>	num<font color="#990000">;</font>
+		rr<font color="#990000">.</font><b><font color="#000000">generate</font></b><font color="#990000">(&amp;</font>num<font color="#990000">);</font>
+
+		sllis<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>num<font color="#990000">);</font>
+		sllhs<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>num<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// sort one list inexpensively</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"sorting inexpensively...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	sllis<font color="#990000">.</font><b><font color="#000000">sortInexpensively</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// sort one list quickly</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"sorting quickly...</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	sllhs<font color="#990000">.</font><b><font color="#000000">sortQuickly</font></b><font color="#990000">();</font>
+
+	<i><font color="#9A1900">// print the lists</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"inexpensively sorted list</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	sllis<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"...</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"quickly sorted list</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	sllhs<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">();</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"...</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="iterate"/><h2>Iterating Manually</h2>
+
+<p>The singlylinkedlist class also provides methods for manually iterating through the list.</p>
+
+<p>Note, that unlike the linkedlistnode class, the singlylinkedlistnode class does not have a getPrevious() method.  Thus, it is impossible to iterate backwards through a singlylinkedlist.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/singlylinkedlist.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">singlylinkedlist&lt;uint32_t&gt;</font>	sll<font color="#990000">;</font>
+
+	<i><font color="#9A1900">// apppend values to the list</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">uint32_t</font> i<font color="#990000">=</font><font color="#993399">0</font><font color="#990000">;</font> i<font color="#990000">&lt;</font><font color="#993399">20</font><font color="#990000">;</font> i<font color="#990000">++)</font> <font color="#FF0000">{</font>
+		sll<font color="#990000">.</font><b><font color="#000000">append</font></b><font color="#990000">(</font>i<font color="#990000">);</font>
+	<font color="#FF0000">}</font>
+
+	<i><font color="#9A1900">// print the list forwards, all on one line</font></i>
+	<b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008080">listnode&lt;uint32_t&gt;</font> <font color="#990000">*</font>n<font color="#990000">=</font>sll<font color="#990000">.</font><b><font color="#000000">getFirst</font></b><font color="#990000">();</font> n<font color="#990000">;</font> n<font color="#990000">=</font>n<font color="#990000">-&gt;</font><b><font color="#000000">getNext</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"%d "</font><font color="#990000">,</font>n<font color="#990000">-&gt;</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+	<font color="#FF0000">}</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<br/><a name="types"/><h2>Data Types</h2>
+
+<p>Since the singlylinkedlist class is template-based, it can store any type of data.</p>
+
+<p>Note that the write() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
+
+Note also that, by default, the singlylinkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or the list is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when a node is removed or the list is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete

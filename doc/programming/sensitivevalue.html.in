@@ -1,0 +1,90 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the sensitivevalue class</h1>
+
+<p>The <a href="../classes/html/classsensitivevalue.html">sensitivevalue class</a> provides methods for reading sensitive values (such as passwords) from a string, which may optionally include the contents of a file.</p>
+
+<p>Values can be provided verbatim or as a file reference.  By default, if the string passed to parse() begins with "<a href=""">and ends with "</a>", the text between the brackets is interpreted as a file name and the contents of the file are returned as the value.  Otherwise the string itself is used as the value.  The include delimiters can be changed using setIncludeStart() and setIncludeEnd().</p>
+
+<p>The file-inclusion feature is useful for keeping sensitive values out of world-readable files.  For example, a configuration file might need to be world-readable, but contain a database password.  Rather than placing the password directly in the configuration file, a reference like <a href="/etc/myapp/dbpassword">/etc/myapp/dbpassword</a> can be placed there instead.  The file it refers to can then be made readable only by the user that runs the application (e.g. root), keeping the password secure even though the configuration file itself is world-readable.</p>
+
+<p>Verbatim values can be provided in text (the default), binary, or hex format, as configured by setVerbatimFormat().  When set to FORMAT_HEX, the string is interpreted as a hex-encoded representation of binary data and converted accordingly.</p>
+
+<p>File values can also be in text (the default), binary, or hex format, as configured by setFileFormat().  By default, trailing carriage returns and line feeds are trimmed from text files.  This can be disabled using setChompTextFile(false).</p>
+
+<p>Files can be searched for using a configurable path (setPath()) and file extensions for text (setTextExtension()), binary (setBinaryExtension()), and hex (setHexExtension()) formats.</p>
+
+<p>The getValue() method returns the parsed value as binary data and getValueSize() returns its size.  The getTextValue() method returns the parsed value as a string and getTextValueLength() returns its length.  The detachValue() and detachTextValue() methods return the value and release ownership to the caller.  The clear() method clears the parsed value while preserving configuration, and reset() clears everything.</p>
+
+<p>The following example parses a verbatim string, a hex-encoded verbatim string, and a value from a file, demonstrating the chomping behavior.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/sensitivevalue.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/file.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<font color="#008080">sensitivevalue</font>	sv<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// parse a verbatim string</font></i>
+	sv<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"Passw0rd"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"verbatim: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sv<font color="#990000">.</font><b><font color="#000000">getTextValue</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// parse a hex-encoded verbatim string</font></i>
+	sv<font color="#990000">.</font><b><font color="#000000">setVerbatimFormat</font></b><font color="#990000">(</font>FORMAT_HEX<font color="#990000">);</font>
+
+	sv<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"5061737377307264"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"from hex: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sv<font color="#990000">.</font><b><font color="#000000">getTextValue</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// reset to defaults</font></i>
+	sv<font color="#990000">.</font><b><font color="#000000">reset</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// write a password to a file</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">createFile</font></b><font color="#990000">(</font><font color="#FF0000">"password.txt"</font><font color="#990000">,</font><font color="#993399">0600</font><font color="#990000">);</font>
+	<font color="#008080">file</font>	f<font color="#990000">;</font>
+	f<font color="#990000">.</font><b><font color="#000000">open</font></b><font color="#990000">(</font><font color="#FF0000">"password.txt"</font><font color="#990000">,</font>O_WRONLY<font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"Passw0rd</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+	f<font color="#990000">.</font><b><font color="#000000">close</font></b><font color="#990000">();</font>
+
+
+	<i><font color="#9A1900">// parse a value from a file</font></i>
+	<i><font color="#9A1900">// (the brackets indicate that the value</font></i>
+	<i><font color="#9A1900">// should be read from the specified file)</font></i>
+	sv<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"[password.txt]"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"from file: %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sv<font color="#990000">.</font><b><font color="#000000">getTextValue</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// parse a value from a file without chomping</font></i>
+	sv<font color="#990000">.</font><b><font color="#000000">setChompTextFile</font></b><font color="#990000">(</font><b><font color="#0000FF">false</font></b><font color="#990000">);</font>
+
+	sv<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font><font color="#FF0000">"[password.txt]"</font><font color="#990000">);</font>
+
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"from file (unchomped): %s"</font><font color="#990000">,</font>sv<font color="#990000">.</font><b><font color="#000000">getTextValue</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// clean up</font></i>
+	file<font color="#990000">::</font><b><font color="#000000">remove</font></b><font color="#990000">(</font><font color="#FF0000">"password.txt"</font><font color="#990000">);</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+
