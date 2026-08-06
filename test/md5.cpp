@@ -148,6 +148,15 @@ int main(int argc, const char **argv) {
 	checkhash("reuse after clear",&reused,ok,
 		"900150983cd24fb0d6963f7d28e17f72");
 
+	// reset() has to clear the hash, not just the salt
+	md5	afterreset;
+	afterreset.append((const byte_t *)"hello world",11);
+	afterreset.getHash();
+	test("reset",afterreset.reset());
+	bool	resetok=afterreset.append((const byte_t *)"abc",3);
+	checkhash("reuse after reset",&afterreset,resetok,
+		"900150983cd24fb0d6963f7d28e17f72");
+
 	stdoutput.printf("\n");
 
 	return 0;

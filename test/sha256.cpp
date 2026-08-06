@@ -142,6 +142,16 @@ int main(int argc, const char **argv) {
 		"ba7816bf8f01cfea414140de5dae2223b00361a3"
 		"96177a9cb410ff61f20015ad");
 
+	// reset() has to clear the hash, not just the salt
+	sha256	afterreset;
+	afterreset.append((const byte_t *)"hello world",11);
+	afterreset.getHash();
+	test("reset",afterreset.reset());
+	bool	resetok=afterreset.append((const byte_t *)"abc",3);
+	checkhash("reuse after reset",&afterreset,resetok,
+		"ba7816bf8f01cfea414140de5dae2223b00361a3"
+		"96177a9cb410ff61f20015ad");
+
 	stdoutput.printf("\n");
 
 	return 0;

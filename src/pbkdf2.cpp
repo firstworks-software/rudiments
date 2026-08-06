@@ -167,7 +167,7 @@ const byte_t *pbkdf2::getHash() {
 }
 
 bool pbkdf2::reset() {
-	if (!clear()) {
+	if (!hash::reset()) {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)

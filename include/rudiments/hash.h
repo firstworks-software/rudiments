@@ -82,9 +82,12 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
 		/** Clears the current hash and any data that had
  		 *  previously been appended, and the salt.
  		 *
- 		 *  This implementation always returns true, but a child class
- 		 *  may override this method to return false if something
- 		 *  fails, and possibly set an error. */
+ 		 *  This implementation calls clear(), so a child class that
+ 		 *  overrides clear() to clear its own hash doesn't have to
+ 		 *  override this method too.
+ 		 *
+ 		 *  Returns true on success, or false if clear() failed, in
+ 		 *  which case the error clear() set is left in place. */
 		virtual	bool	reset();
 
 		/** Returns true if the platforms supports this hash type

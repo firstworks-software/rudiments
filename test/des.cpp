@@ -68,6 +68,14 @@ int main(int argc, const char **argv) {
 			i++;
 		}
 
+		// reset() drops the salt, clear() keeps it
+		class des	s;
+		s.setSalt((const byte_t *)"FW",s.getRequiredSaltSize());
+		s.clear();
+		test("clear keeps the salt",s.getSalt()!=NULL);
+		s.reset();
+		test("reset drops the salt",s.getSalt()==NULL);
+
 	} else {
 
 		stdoutput.printf("not supported\n");

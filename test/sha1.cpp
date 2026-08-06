@@ -130,6 +130,15 @@ int main(int argc, const char **argv) {
 	checkhash("reuse after clear",&reused,ok,
 		"a9993e364706816aba3e25717850c26c9cd0d89d");
 
+	// reset() has to clear the hash, not just the salt
+	sha1	afterreset;
+	afterreset.append((const byte_t *)"hello world",11);
+	afterreset.getHash();
+	test("reset",afterreset.reset());
+	bool	resetok=afterreset.append((const byte_t *)"abc",3);
+	checkhash("reuse after reset",&afterreset,resetok,
+		"a9993e364706816aba3e25717850c26c9cd0d89d");
+
 	// an append() after getHash(), with no clear() in between, is the one
 	// error path that is reachable - shaInputTooLong needs more than 2^64
 	// bits.  Openssl allows it and rfc 3174 doesn't, so accept either, but
