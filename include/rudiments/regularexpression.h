@@ -168,9 +168,12 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  The subject given to match() must still be valid and
 		 *  unchanged.  This class never copies it, and a walk
 		 *  holds it across every call.  One instance can walk
-		 *  only one subject at a time, so calling match() on
-		 *  this instance from inside the walk ends the walk and
-		 *  starts a new one.
+		 *  only one subject at a time, so calling match() with
+		 *  another subject, from inside the walk, ends the walk
+		 *  and starts a new one.  Note that match(NULL) is not
+		 *  such a call - it only reports whether the pattern is
+		 *  NULL too, and neither starts a walk nor ends one
+		 *  that is already running.
 		 *
 		 *  Note that a walk advances by one character over an
 		 *  empty match, and that setPattern() compiles patterns
@@ -183,7 +186,8 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  to match() to continue from.  When it returns false
 		 *  the substring methods report nothing, just as they do
 		 *  after a failed match(), and calling it again keeps
-		 *  returning false.  Call match() to start over. */
+		 *  returning false.  Call match() with a subject to
+		 *  start over. */
 		bool	matchNext();
 
 		/** Returns the number of substrings that the last
