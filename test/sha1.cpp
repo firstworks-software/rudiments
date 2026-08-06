@@ -130,6 +130,17 @@ int main(int argc, const char **argv) {
 	checkhash("reuse after clear",&reused,ok,
 		"a9993e364706816aba3e25717850c26c9cd0d89d");
 
+	// an append() after getHash(), with no clear() in between, is the one
+	// error path that is reachable - shaInputTooLong needs more than 2^64
+	// bits.  Openssl allows it and rfc 3174 doesn't, so accept either, but
+	// a refusal has to be reported as a state error rather than a success.
+	sha1	stateerror;
+	stateerror.append((const byte_t *)"hello world",11);
+	stateerror.getHash();
+	test("state error",
+		stateerror.append((const byte_t *)"abc",3) ||
+		stateerror.getError()==HASH_ERROR_STATE_ERROR);
+
 	stdoutput.printf("\n");
 
 	return 0;

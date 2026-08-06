@@ -109,14 +109,25 @@ void sha1::setError(int32_t err) {
 		while (ERR_get_error()) {}
 	#else
 		switch (err) {
+			case shaSuccess:
+				hash::setError(HASH_ERROR_SUCCESS);
+				break;
 			case shaNull:
 				hash::setError(HASH_ERROR_NULL);
+				break;
 			case shaInputTooLong:
 				hash::setError(HASH_ERROR_INPUT_TOO_LONG);
+				break;
 			case shaStateError:
 				hash::setError(HASH_ERROR_STATE_ERROR);
+				break;
 			default:
-				hash::setError(HASH_ERROR_SUCCESS);
+				// The 4 cases above cover every value
+				// sha1rfc3174.cpp returns, so this is
+				// unreachable, but an unrecognized code
+				// is not a success.
+				hash::setError(HASH_ERROR_NULL);
+				break;
 		}
 	#endif
 }
