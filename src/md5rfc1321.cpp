@@ -34,6 +34,17 @@
 #include <rudiments/private/inttypes.h>
 #include <rudiments/charstring.h>
 
+/* DLM - moved up from below the class, so that it is not pulled into the
+   anonymous namespace.  It is the only inclusion of the system stdio.h in
+   this translation unit, and md5.cpp is compiled after it.  */
+#include <stdio.h>
+
+/* DLM - this file is included into md5.cpp, so its class has no reason to
+   be visible outside that translation unit.  The anonymous namespace keeps
+   class MD5 out of the global namespace, where another copy of this same
+   reference source would produce the same mangled names.  */
+namespace {
+
 //---------------------------------------------------------------------- 
 //typedefs
 typedef unsigned char *POINTER;
@@ -70,8 +81,6 @@ class MD5
 
 	MD5(){};
 };
-
-#include <stdio.h>
 
 // Constants for MD5Transform routine.
 #define S11 7
@@ -358,4 +367,7 @@ void MD5::MD5_memset (POINTER output,int value,uint64_t len)
 	uint64_t i;
 	for (i = 0; i < len; i++)
 		((char *)output)[i] = (char)value;
+}
+
+/* DLM - end of the anonymous namespace opened above the typedefs  */
 }
