@@ -401,6 +401,9 @@ typedef unsigned long int uintptr_t;
 
 /* (Re)Allocate N items of type T using malloc, or fail.  */
 # define TALLOC(n, t) ((t *) malloc ((n) * sizeof (t)))
+/* RETALLOC reallocs ADDR into itself, so a failure loses the block ADDR
+   was pointing at.  Don't use it on a pointer that has to survive one.
+   Realloc into a temporary and assign only on success instead.  */
 # define RETALLOC(addr, n, t) ((addr) = (t *) realloc (addr, (n) * sizeof (t)))
 # define RETALLOC_IF(addr, n, t) \
   if (addr) RETALLOC((addr), (n), t); else (addr) = TALLOC ((n), t)
@@ -2509,7 +2512,16 @@ PREFIX(regex_compile) (const char *ARG_PREFIX(pattern), size_t ARG_PREFIX(size),
           COMPILED_BUFFER_VAR = TALLOC (INIT_BUF_SIZE/sizeof(UCHAR_T),
 					UCHAR_T);
 #else
-          RETALLOC (COMPILED_BUFFER_VAR, INIT_BUF_SIZE, UCHAR_T);
+	  /* Into a temporary, so a failure leaves the caller holding the
+	     buffer it gave us rather than a NULL.  */
+	  {
+	    UCHAR_T *new_buffer = (UCHAR_T *) realloc (COMPILED_BUFFER_VAR,
+						       INIT_BUF_SIZE);
+	    if (new_buffer)
+	      COMPILED_BUFFER_VAR = new_buffer;
+	    else
+	      FREE_STACK_RETURN (REG_ESPACE);
+	  }
 #endif /* WCHAR */
         }
       else
@@ -6055,14 +6067,28 @@ byte_re_match_2_internal (struct re_pattern_buffer *bufp, const char *string1, i
                      leave it alone.  */
                   if (regs->num_regs < num_regs + 1)
                     {
-                      regs->num_regs = num_regs + 1;
-                      RETALLOC (regs->start, regs->num_regs, regoff_t);
-                      RETALLOC (regs->end, regs->num_regs, regoff_t);
-                      if (regs->start == NULL || regs->end == NULL)
+                      /* Into temporaries, so a failure leaves the
+                         caller holding the arrays it gave us rather
+                         than a pair of NULLs.  num_regs follows them,
+                         so it never describes arrays that were never
+                         grown.  */
+                      unsigned new_num_regs = num_regs + 1;
+                      regoff_t *new_start
+                        = (regoff_t *) realloc (regs->start,
+                                    new_num_regs * sizeof (regoff_t));
+                      if (new_start)
+                        regs->start = new_start;
+                      regoff_t *new_end
+                        = (regoff_t *) realloc (regs->end,
+                                    new_num_regs * sizeof (regoff_t));
+                      if (new_end)
+                        regs->end = new_end;
+                      if (new_start == NULL || new_end == NULL)
 			{
 			  FREE_VARIABLES ();
 			  return -2;
 			}
+                      regs->num_regs = new_num_regs;
                     }
                 }
               else
