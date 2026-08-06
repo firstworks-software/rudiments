@@ -11,19 +11,6 @@
 
 /* #define FULL_UNROLL */
 #define AES_SMALL_TABLES
-extern const uint32_t Te0[256];
-extern const uint32_t Te1[256];
-extern const uint32_t Te2[256];
-extern const uint32_t Te3[256];
-extern const uint32_t Te4[256];
-extern const uint32_t Td0[256];
-extern const uint32_t Td1[256];
-extern const uint32_t Td2[256];
-extern const uint32_t Td3[256];
-extern const uint32_t Td4[256];
-extern const uint32_t rcon[10];
-extern const unsigned char Td4s[256];
-extern const unsigned char rcons[10];
 #ifndef AES_SMALL_TABLES
 #define RCON(i) rcon[(i)]
 #define TE0(i) Te0[((i) >> 24) & 0xff]
