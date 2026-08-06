@@ -120,11 +120,12 @@ int main(int argc, const char **argv) {
 		"hello world",1,
 		"2aae6c35c94fcfb415dbe95f408b9ce91ee846ed");
 
-	// clear() has to put the instance back where it started
+	// clear() has to report success, and put the instance back where it
+	// started
 	sha1	reused;
 	reused.append((const byte_t *)"hello world",11);
 	reused.getHash();
-	reused.clear();
+	test("clear",reused.clear());
 	bool	ok=reused.append((const byte_t *)"abc",3);
 	checkhash("reuse after clear",&reused,ok,
 		"a9993e364706816aba3e25717850c26c9cd0d89d");
