@@ -32,5 +32,17 @@ clean:
 override_dh_autoreconf:
 	./autogen.sh
 
+# no package ships the static archives, and rudiments.spec configures the same
+# way, so don't build them just to throw them away
+override_dh_auto_configure:
+	dh_auto_configure -- --disable-static
+
+# librudiments-apache takes its ap_ and apr_ symbols from the httpd process it
+# is loaded into, and links no apache library, so dpkg-shlibdeps can't resolve
+# them and warns about every one.  librudiments is still scanned, and that is
+# where the real dependencies come from.
+override_dh_shlibdeps:
+	dh_shlibdeps -Xlibrudiments-apache
+
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip

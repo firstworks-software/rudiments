@@ -37,6 +37,8 @@
 	fixed datetime::parse() so fractional seconds followed by an am/pm meridian scale correctly - the fraction was measured with its meridian attached, so "01:01:01:123PM" was scaled as a 5-digit fraction and yielded 1230 microseconds instead of 123000
 	bumped the soname from librudiments.so.12 to librudiments.so.13 - this release removes exported symbols rather than only adding them, which is the case libtool's rules say has to move the soname, so anything linked against .so.12 has to be rebuilt against .so.13
 	fixed the debian packaging, which built librudiments-apache and then dropped it - debian/control build-depends on apache2-dev, so the apache library was always built and installed, but neither .install file matched it, since usr/lib/*/librudiments.so.* and usr/lib/*/librudiments.so need "librudiments.so" literally and the file is librudiments-apache.so - it appeared in no deb at all, while the rpm has listed both libraries all along, and debian/compat is 10, where dh_install drops an unmatched file silently rather than failing
+	the deb build doesn't compile static archives anymore - debian/rules passes --disable-static now, the way rudiments.spec always has, so librudiments.a and librudiments-apache.a aren't built just to be thrown away, since no package ships them
+	the deb build doesn't warn about the apache library's undefined symbols anymore - dh_shlibdeps skips librudiments-apache, which takes its ap_ and apr_ symbols from the httpd process it's loaded into and links no apache library, so scanning it produced 14 unresolvable-symbol warnings once it started being packaged
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128
