@@ -351,8 +351,27 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 					pvt->_inputgrammar,
 					pvt->_startsymbol,
 					root,&codeposition)) {
-			pvt->_errorstr.append("failed to parse input at:\n");
-			pvt->_errorstr.append(codeposition,10);
+			// The offset is into the pre-processed input,
+			// not into the original input, so show the text
+			// on either side of it too.  Also, fewer than 40
+			// bytes may remain, so don't just append 40.
+			size_t	before=(size_t)(codeposition-inptr);
+			if (before>40) {
+				before=40;
+			}
+			size_t	after=charstring::getLength(codeposition);
+			if (after>40) {
+				after=40;
+			}
+			pvt->_errorstr.append("failed to parse the "
+						"pre-processed input "
+						"at offset ");
+			pvt->_errorstr.append(
+					(uint64_t)(codeposition-inptr));
+			pvt->_errorstr.append("\nafter: ");
+			pvt->_errorstr.append(codeposition-before,before);
+			pvt->_errorstr.append("\nat:    ");
+			pvt->_errorstr.append(codeposition,after);
 			return false;
 		}
 
