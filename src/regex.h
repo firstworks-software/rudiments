@@ -168,11 +168,6 @@ typedef unsigned long int reg_syntax_t;
    If not set, then case is significant.  */
 #define RE_ICASE (RE_INVALID_INTERVAL_ORD << 1)
 
-/* This global variable defines the particular regexp syntax to use (for
-   some interfaces).  When a regexp is compiled, the syntax used is
-   stored in the pattern buffer, so changing this does not affect
-   already-compiled regexps.  */
-extern reg_syntax_t re_syntax_options;
 
 /* Define combinations of the above bits for the standard possibilities.
    (The [[[ comments delimit what gets put into the Texinfo file, so
@@ -458,17 +453,6 @@ typedef struct
 
 #endif /* not __STDC__ */
 
-/* Sets the current default syntax to SYNTAX, and return the old syntax.
-   You can also simply assign to the `re_syntax_options' variable.  */
-extern reg_syntax_t re_set_syntax _RE_ARGS ((reg_syntax_t syntax));
-
-/* Compile the regular expression PATTERN, with length LENGTH
-   and syntax given by the global `re_syntax_options', into the buffer
-   BUFFER.  Return NULL if successful, and an error string if not.  */
-extern const char *re_compile_pattern
-  _RE_ARGS ((const char *pattern, size_t length,
-             struct re_pattern_buffer *buffer));
-
 
 /* Compile a fastmap for the compiled pattern in BUFFER; used to
    accelerate searches.  Return 0 if successful and -2 if was an
@@ -493,44 +477,6 @@ extern int re_search_2
              int length1, const char *string2, int length2,
              int start, int range, struct re_registers *regs, int stop));
 
-
-/* Like `re_search', but return how many characters in STRING the regexp
-   in BUFFER matched, starting at position START.  */
-extern int re_match
-  _RE_ARGS ((struct re_pattern_buffer *buffer, const char *string,
-             int length, int start, struct re_registers *regs));
-
-
-/* Relates to `re_match' as `re_search_2' relates to `re_search'.  */
-extern int re_match_2
-  _RE_ARGS ((struct re_pattern_buffer *buffer, const char *string1,
-             int length1, const char *string2, int length2,
-             int start, struct re_registers *regs, int stop));
-
-
-/* Set REGS to hold NUM_REGS registers, storing them in STARTS and
-   ENDS.  Subsequent matches using BUFFER and REGS will use this memory
-   for recording register information.  STARTS and ENDS must be
-   allocated with malloc, and must each be at least `NUM_REGS * sizeof
-   (regoff_t)' bytes long.
-
-   If NUM_REGS == 0, then subsequent matches should allocate their own
-   register data.
-
-   Unless this function is called, the first search or match using
-   PATTERN_BUFFER will allocate its own register data, without
-   freeing the old data.  */
-extern void re_set_registers
-  _RE_ARGS ((struct re_pattern_buffer *buffer, struct re_registers *regs,
-             unsigned num_regs, regoff_t *starts, regoff_t *ends));
-
-#if defined _REGEX_RE_COMP || defined _LIBC
-# ifndef _CRAY
-/* 4.2 bsd compatibility.  */
-extern char *re_comp _RE_ARGS ((const char *));
-extern int re_exec _RE_ARGS ((const char *));
-# endif
-#endif
 
 /* DLM commented these out and added empty defines below */
 /* GCC 2.95 and later have "__restrict"; C99 compilers have
@@ -564,9 +510,6 @@ extern int regexec _RE_ARGS ((const regex_t *__restrict __preg,
 			      const char *__restrict __string, size_t __nmatch,
 			      regmatch_t __pmatch[__restrict_arr],
 			      int __eflags));
-
-extern size_t regerror _RE_ARGS ((int __errcode, const regex_t *__preg,
-				  char *__errbuf, size_t __errbuf_size));
 
 extern void regfree _RE_ARGS ((regex_t *__preg));
 

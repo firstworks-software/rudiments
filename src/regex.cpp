@@ -24,7 +24,6 @@
 /* To exclude some unwanted junk.... */
 #undef _LIBC
 #undef emacs
-#define _REGEX_RE_COMP
 /* DLM commented this out */
 /*#include <features.h>*/
 #include <stdlib.h>
@@ -1320,119 +1319,6 @@ convert_mbs_to_wcs (CHAR_T *dest, const unsigned char *src, size_t len, int *off
 
 #else /* not INSIDE_RECURSION */
 
-/* Set by `re_set_syntax' to the current regexp syntax to recognize.  Can
-   also be assigned to arbitrarily: each pattern buffer stores its own
-   syntax, so it can be changed between regex compilations.  */
-/* This has no initializer because initialized variables in Emacs
-   become read-only after dumping.  */
-reg_syntax_t re_syntax_options;
-
-
-/* Specify the precise syntax of regexps for compilation.  This provides
-   for compatibility for various utilities which historically have
-   different, incompatible syntaxes.
-
-   The argument SYNTAX is a bit mask comprised of the various bits
-   defined in regex.h.  We return the old syntax.  */
-
-reg_syntax_t
-re_set_syntax (reg_syntax_t syntax)
-{
-  reg_syntax_t ret = re_syntax_options;
-
-  re_syntax_options = syntax;
-# ifdef DEBUG
-  if (syntax & RE_DEBUG)
-    debug = 1;
-  else if (debug) /* was on but now is not */
-    debug = 0;
-# endif /* DEBUG */
-  return ret;
-}
-# ifdef _LIBC
-weak_alias (__re_set_syntax, re_set_syntax)
-# endif
-
-/* This table gives an error message for each of the error codes listed
-   in regex.h.  Obviously the order here has to be same as there.
-   POSIX doesn't require that we do anything for REG_NOERROR,
-   but why not be nice?  */
-
-static const char re_error_msgid[] =
-  {
-# define REG_NOERROR_IDX	0
-    gettext_noop ("Success")	/* REG_NOERROR */
-    "\0"
-# define REG_NOMATCH_IDX (REG_NOERROR_IDX + sizeof "Success")
-    gettext_noop ("No match")	/* REG_NOMATCH */
-    "\0"
-# define REG_BADPAT_IDX	(REG_NOMATCH_IDX + sizeof "No match")
-    gettext_noop ("Invalid regular expression") /* REG_BADPAT */
-    "\0"
-# define REG_ECOLLATE_IDX (REG_BADPAT_IDX + sizeof "Invalid regular expression")
-    gettext_noop ("Invalid collation character") /* REG_ECOLLATE */
-    "\0"
-# define REG_ECTYPE_IDX	(REG_ECOLLATE_IDX + sizeof "Invalid collation character")
-    gettext_noop ("Invalid character class name") /* REG_ECTYPE */
-    "\0"
-# define REG_EESCAPE_IDX	(REG_ECTYPE_IDX + sizeof "Invalid character class name")
-    gettext_noop ("Trailing backslash") /* REG_EESCAPE */
-    "\0"
-# define REG_ESUBREG_IDX	(REG_EESCAPE_IDX + sizeof "Trailing backslash")
-    gettext_noop ("Invalid back reference") /* REG_ESUBREG */
-    "\0"
-# define REG_EBRACK_IDX	(REG_ESUBREG_IDX + sizeof "Invalid back reference")
-    gettext_noop ("Unmatched [ or [^")	/* REG_EBRACK */
-    "\0"
-# define REG_EPAREN_IDX	(REG_EBRACK_IDX + sizeof "Unmatched [ or [^")
-    gettext_noop ("Unmatched ( or \\(") /* REG_EPAREN */
-    "\0"
-# define REG_EBRACE_IDX	(REG_EPAREN_IDX + sizeof "Unmatched ( or \\(")
-    gettext_noop ("Unmatched \\{") /* REG_EBRACE */
-    "\0"
-# define REG_BADBR_IDX	(REG_EBRACE_IDX + sizeof "Unmatched \\{")
-    gettext_noop ("Invalid content of \\{\\}") /* REG_BADBR */
-    "\0"
-# define REG_ERANGE_IDX	(REG_BADBR_IDX + sizeof "Invalid content of \\{\\}")
-    gettext_noop ("Invalid range end")	/* REG_ERANGE */
-    "\0"
-# define REG_ESPACE_IDX	(REG_ERANGE_IDX + sizeof "Invalid range end")
-    gettext_noop ("Memory exhausted") /* REG_ESPACE */
-    "\0"
-# define REG_BADRPT_IDX	(REG_ESPACE_IDX + sizeof "Memory exhausted")
-    gettext_noop ("Invalid preceding regular expression") /* REG_BADRPT */
-    "\0"
-# define REG_EEND_IDX	(REG_BADRPT_IDX + sizeof "Invalid preceding regular expression")
-    gettext_noop ("Premature end of regular expression") /* REG_EEND */
-    "\0"
-# define REG_ESIZE_IDX	(REG_EEND_IDX + sizeof "Premature end of regular expression")
-    gettext_noop ("Regular expression too big") /* REG_ESIZE */
-    "\0"
-# define REG_ERPAREN_IDX	(REG_ESIZE_IDX + sizeof "Regular expression too big")
-    gettext_noop ("Unmatched ) or \\)") /* REG_ERPAREN */
-  };
-
-static const size_t re_error_msgid_idx[] =
-  {
-    REG_NOERROR_IDX,
-    REG_NOMATCH_IDX,
-    REG_BADPAT_IDX,
-    REG_ECOLLATE_IDX,
-    REG_ECTYPE_IDX,
-    REG_EESCAPE_IDX,
-    REG_ESUBREG_IDX,
-    REG_EBRACK_IDX,
-    REG_EPAREN_IDX,
-    REG_EBRACE_IDX,
-    REG_BADBR_IDX,
-    REG_ERANGE_IDX,
-    REG_ESPACE_IDX,
-    REG_BADRPT_IDX,
-    REG_EEND_IDX,
-    REG_ESIZE_IDX,
-    REG_ERPAREN_IDX
-  };
-
 #endif /* INSIDE_RECURSION */
 
 #ifndef DEFINED_ONCE
@@ -4968,40 +4854,6 @@ weak_alias (__re_compile_fastmap, re_compile_fastmap)
 #endif
 
 
-/* Set REGS to hold NUM_REGS registers, storing them in STARTS and
-   ENDS.  Subsequent matches using PATTERN_BUFFER and REGS will use
-   this memory for recording register information.  STARTS and ENDS
-   must be allocated using the malloc library routine, and must each
-   be at least NUM_REGS * sizeof (regoff_t) bytes long.
-
-   If NUM_REGS == 0, then subsequent matches should allocate their own
-   register data.
-
-   Unless this function is called, the first search or match using
-   PATTERN_BUFFER will allocate its own register data, without
-   freeing the old data.  */
-
-void
-re_set_registers (struct re_pattern_buffer *bufp, struct re_registers *regs, unsigned num_regs, regoff_t *starts, regoff_t *ends)
-{
-  if (num_regs)
-    {
-      bufp->regs_allocated = REGS_REALLOCATE;
-      regs->num_regs = num_regs;
-      regs->start = starts;
-      regs->end = ends;
-    }
-  else
-    {
-      bufp->regs_allocated = REGS_UNALLOCATED;
-      regs->num_regs = 0;
-      regs->start = regs->end = (regoff_t *) 0;
-    }
-}
-#ifdef _LIBC
-weak_alias (__re_set_registers, re_set_registers)
-#endif
-
 /* Searching routines.  */
 
 /* Like re_search_2, below, but only one string is specified, and
@@ -5475,33 +5327,6 @@ PREFIX(re_search_2) (struct re_pattern_buffer *bufp, const char *string1, int si
 #else /* not INSIDE_RECURSION */
 /* Matching routines.  */
 
-#ifndef emacs   /* Emacs never uses this.  */
-/* re_match is like re_match_2 except it takes only a single string.  */
-
-int
-re_match (struct re_pattern_buffer *bufp, const char *string, int size, int pos, struct re_registers *regs)
-{
-  int result;
-# ifdef MBS_SUPPORT
-  if (MB_CUR_MAX != 1)
-    result = wcs_re_match_2_internal (bufp, NULL, 0, string, size,
-				      pos, regs, size,
-				      NULL, 0, NULL, 0, NULL, NULL);
-  else
-# endif
-    result = byte_re_match_2_internal (bufp, NULL, 0, string, size,
-				  pos, regs, size);
-# ifndef REGEX_MALLOC
-#  ifdef C_ALLOCA
-  alloca (0);
-#  endif
-# endif
-  return result;
-}
-# ifdef _LIBC
-weak_alias (__re_match, re_match)
-# endif
-#endif /* not emacs */
 
 #endif /* not INSIDE_RECURSION */
 
@@ -5519,43 +5344,6 @@ static int PREFIX(bcmp_translate) _RE_ARGS ((const CHAR_T *s1, const CHAR_T *s2,
 				     int len, char *translate));
 #else /* not INSIDE_RECURSION */
 
-/* re_match_2 matches the compiled pattern in BUFP against the
-   the (virtual) concatenation of STRING1 and STRING2 (of length SIZE1
-   and SIZE2, respectively).  We start matching at POS, and stop
-   matching at STOP.
-
-   If REGS is non-null and the `no_sub' field of BUFP is nonzero, we
-   store offsets for the substring each group matched in REGS.  See the
-   documentation for exactly how many groups we fill.
-
-   We return -1 if no match, -2 if an internal error (such as the
-   failure stack overflowing).  Otherwise, we return the length of the
-   matched substring.  */
-
-int
-re_match_2 (struct re_pattern_buffer *bufp, const char *string1, int size1, const char *string2, int size2, int pos, struct re_registers *regs, int stop)
-{
-  int result;
-# ifdef MBS_SUPPORT
-  if (MB_CUR_MAX != 1)
-    result = wcs_re_match_2_internal (bufp, string1, size1, string2, size2,
-				      pos, regs, stop,
-				      NULL, 0, NULL, 0, NULL, NULL);
-  else
-# endif
-    result = byte_re_match_2_internal (bufp, string1, size1, string2, size2,
-				  pos, regs, stop);
-
-#ifndef REGEX_MALLOC
-# ifdef C_ALLOCA
-  alloca (0);
-# endif
-#endif
-  return result;
-}
-#ifdef _LIBC
-weak_alias (__re_match_2, re_match_2)
-#endif
 
 #endif /* not INSIDE_RECURSION */
 
@@ -7836,122 +7624,6 @@ PREFIX(bcmp_translate) (const CHAR_T *s1, const CHAR_T *s2, register int len, RE
 
 #else /* not INSIDE_RECURSION */
 
-/* Entry points for GNU code.  */
-
-/* re_compile_pattern is the GNU regular expression compiler: it
-   compiles PATTERN (of length SIZE) and puts the result in BUFP.
-   Returns 0 if the pattern was valid, otherwise an error string.
-
-   Assumes the `allocated' (and perhaps `buffer') and `translate' fields
-   are set in BUFP on entry.
-
-   We call regex_compile to do the actual compilation.  */
-
-const char *
-re_compile_pattern (const char *pattern, size_t length, struct re_pattern_buffer *bufp)
-{
-  reg_errcode_t ret;
-
-  /* GNU code is written to assume at least RE_NREGS registers will be set
-     (and at least one extra will be -1).  */
-  bufp->regs_allocated = REGS_UNALLOCATED;
-
-  /* And GNU code determines whether or not to get register information
-     by passing null for the REGS argument to re_match, etc., not by
-     setting no_sub.  */
-  bufp->no_sub = 0;
-
-  /* Match anchors at newline.  */
-  bufp->newline_anchor = 1;
-
-# ifdef MBS_SUPPORT
-  if (MB_CUR_MAX != 1)
-    ret = wcs_regex_compile (pattern, length, re_syntax_options, bufp);
-  else
-# endif
-    ret = byte_regex_compile (pattern, length, re_syntax_options, bufp);
-
-  if (!ret)
-    return NULL;
-  return gettext (re_error_msgid + re_error_msgid_idx[(int) ret]);
-}
-#ifdef _LIBC
-weak_alias (__re_compile_pattern, re_compile_pattern)
-#endif
-
-/* Entry points compatible with 4.2 BSD regex library.  We don't define
-   them unless specifically requested.  */
-
-#if defined _REGEX_RE_COMP || defined _LIBC
-
-/* BSD has one and only one pattern buffer.  */
-static struct re_pattern_buffer re_comp_buf;
-
-char *
-#ifdef _LIBC
-/* Make these definitions weak in libc, so POSIX programs can redefine
-   these names if they don't use our functions, and still use
-   regcomp/regexec below without link errors.  */
-weak_function
-#endif
-re_comp (const char *s)
-{
-  reg_errcode_t ret;
-
-  if (!s)
-    {
-      if (!re_comp_buf.buffer)
-	return (char *)gettext ("No previous regular expression");
-      return 0;
-    }
-
-  if (!re_comp_buf.buffer)
-    {
-      re_comp_buf.buffer = (unsigned char *) malloc (200);
-      if (re_comp_buf.buffer == NULL)
-        return (char *) gettext (re_error_msgid
-				 + re_error_msgid_idx[(int) REG_ESPACE]);
-      re_comp_buf.allocated = 200;
-
-      re_comp_buf.fastmap = (char *) malloc (1 << BYTEWIDTH);
-      if (re_comp_buf.fastmap == NULL)
-	return (char *) gettext (re_error_msgid
-				 + re_error_msgid_idx[(int) REG_ESPACE]);
-    }
-
-  /* Since `re_exec' always passes NULL for the `regs' argument, we
-     don't need to initialize the pattern buffer fields which affect it.  */
-
-  /* Match anchors at newlines.  */
-  re_comp_buf.newline_anchor = 1;
-
-# ifdef MBS_SUPPORT
-  if (MB_CUR_MAX != 1)
-    ret = wcs_regex_compile (s, strlen (s), re_syntax_options, &re_comp_buf);
-  else
-# endif
-    ret = byte_regex_compile (s, strlen (s), re_syntax_options, &re_comp_buf);
-
-  if (!ret)
-    return NULL;
-
-  /* Yes, we're discarding `const' here if !HAVE_LIBINTL.  */
-  return (char *) gettext (re_error_msgid + re_error_msgid_idx[(int) ret]);
-}
-
-
-int
-#ifdef _LIBC
-weak_function
-#endif
-re_exec (const char *s)
-{
-  const int len = strlen (s);
-  return
-    0 <= re_search (&re_comp_buf, s, len, 0, len, (struct re_registers *) 0);
-}
-
-#endif /* _REGEX_RE_COMP */
 
 /* POSIX.2 functions.  Don't define these for Emacs.  */
 
@@ -8152,50 +7824,6 @@ regexec (const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmat
 }
 #ifdef _LIBC
 weak_alias (__regexec, regexec)
-#endif
-
-
-/* Returns a message corresponding to an error code, ERRCODE, returned
-   from either regcomp or regexec.   We don't use PREG here.  */
-
-size_t
-regerror (int errcode, const regex_t *preg, char *errbuf, size_t errbuf_size)
-{
-  const char *msg;
-  size_t msg_size;
-
-  if (errcode < 0
-      || errcode >= (int) (sizeof (re_error_msgid_idx)
-			   / sizeof (re_error_msgid_idx[0])))
-    /* Only error codes returned by the rest of the code should be passed
-       to this routine.  If we are given anything else, or if other regex
-       code generates an invalid error code, then the program has a bug.
-       Dump core so we can fix it.  */
-    abort ();
-
-  msg = gettext (re_error_msgid + re_error_msgid_idx[errcode]);
-
-  msg_size = strlen (msg) + 1; /* Includes the null.  */
-
-  if (errbuf_size != 0)
-    {
-      if (msg_size > errbuf_size)
-        {
-#if defined HAVE_MEMPCPY || defined _LIBC
-	  *((char *) __mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
-#else
-          memcpy (errbuf, msg, errbuf_size - 1);
-          errbuf[errbuf_size - 1] = 0;
-#endif
-        }
-      else
-        memcpy (errbuf, msg, msg_size);
-    }
-
-  return msg_size;
-}
-#ifdef _LIBC
-weak_alias (__regerror, regerror)
 #endif
 
 
