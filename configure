@@ -45608,7 +45608,16 @@ echo
 echo "***** Output Files ***********"
 ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
 
-ac_config_files="$ac_config_files config.mk src/Makefile include/Makefile bin/rudiments-config rudiments.pc test/certificates/config/ca.cnf"
+ac_config_files="$ac_config_files config.mk src/Makefile include/Makefile rudiments.pc test/certificates/config/ca.cnf"
+
+
+ac_config_files="$ac_config_files bin/rudiments-config"
+
+
+
+ac_config_commands="$ac_config_commands libtool-fixups"
+
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -46680,6 +46689,10 @@ fi
 
 
 
+DARWIN='$DARWIN'
+SCO_UW='$SCO_UW'
+SCO_OSR5='$SCO_OSR5'
+SCO_OSR5_V='$SCO_OSR5_V'
 
 _ACEOF
 
@@ -46694,9 +46707,10 @@ do
     "config.mk") CONFIG_FILES="$CONFIG_FILES config.mk" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
-    "bin/rudiments-config") CONFIG_FILES="$CONFIG_FILES bin/rudiments-config" ;;
     "rudiments.pc") CONFIG_FILES="$CONFIG_FILES rudiments.pc" ;;
     "test/certificates/config/ca.cnf") CONFIG_FILES="$CONFIG_FILES test/certificates/config/ca.cnf" ;;
+    "bin/rudiments-config") CONFIG_FILES="$CONFIG_FILES bin/rudiments-config" ;;
+    "libtool-fixups") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool-fixups" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -47972,6 +47986,65 @@ compiler_lib_search_path=$lt_compiler_lib_search_path_CXX
 _LT_EOF
 
  ;;
+    "bin/rudiments-config":F) chmod 755 "$ac_file" ;;
+    "libtool-fixups":C)
+
+# Some versions of NetBSD create a libtool with -lgcc_s -lgcc in it, but don't
+# provide a shared libgcc.
+# Also, some versions of NetBSD create a libtool with -lgcc_s_pic in it, but
+# don't provide a shraed libgcc_s_pic.
+# These cause all kinds of link failures.  Fix them
+if ( test -r "libtool" )
+then
+	sed -e "s|-lgcc_s -lgcc |-lgcc_s |g" \
+		-e "s|-lgcc_s -lgcc\"|-lgcc_s\"|g" \
+		-e "s|-lgcc_s_pic|-lgcc_s|g" \
+		libtool > libtool.new
+	mv libtool.new libtool
+fi
+
+# On some versions of OS X, the libtool config erroneusly finds "Print" and
+# tries to use it as "print -r --".  Replace this with "printf %s\\n".
+if ( test -r "libtool" -a -n "$DARWIN" )
+then
+	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+
+# on SCO OSR 5.0.5-
+if ( test -r "libtool" -a -n "$SCO_OSR5" )
+then
+	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
+	then
+		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
+fi
+
+# On SCO UnixWare and SCO OSR5...
+if ( test -r "libtool" )
+then
+	if ( test -n "$SCO_UW" -o -n "$SCO_OSR5" )
+	then
+		# The linker doesn't support -R at all
+		sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
+		mv libtool.new libtool
+	fi
+fi
+
+# On SCO UnixWare...
+if ( test -r "libtool" -a -n "$SCO_UW" )
+then
+	# The linker doesn't support -R at all
+	sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
+	mv libtool.new libtool
+
+	# And libtool wants to use the -Wl,-h option which causes all kinds
+	# of problems.
+	sed -e "s|\\\\\$wl-h,\\\\\$soname ||g" libtool > libtool.new
+	mv libtool.new libtool
+fi
+ ;;
 
   esac
 done # for ac_tag
@@ -48010,56 +48083,8 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
 printf "%s\n" "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
-chmod 755 bin/rudiments-config
 echo "******************************"
 echo
-
-
-
-
-
-if ( test -r "libtool" )
-then
-	sed -e "s|-lgcc_s -lgcc |-lgcc_s |g" \
-		-e "s|-lgcc_s -lgcc\"|-lgcc_s\"|g" \
-		-e "s|-lgcc_s_pic|-lgcc_s|g" \
-		libtool > libtool.new
-	mv libtool.new libtool
-fi
-
-if ( test -r "libtool" -a -n "$DARWIN" )
-then
-	sed -e "s|print -r --|printf %s\\\\\\\\n|g" libtool > libtool.new
-	mv libtool.new libtool
-fi
-
-if ( test -r "libtool" -a -n "$SCO_OSR5" )
-then
-	if ( test "$SCO_OSR5_V" = "5.0.5" -o "$SCO_OSR5_V" = "2" )
-	then
-		sed -e "s|CC -shared|CC -G|g" libtool > libtool.new
-		mv libtool.new libtool
-	fi
-fi
-
-if ( test -r "libtool" )
-then
-	if ( test -n "$SCO_UW" -o -n "$SCO_OSR5" )
-	then
-				sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
-		mv libtool.new libtool
-	fi
-fi
-
-if ( test -r "libtool" -a -n "$SCO_UW" )
-then
-		sed -e "s|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"\"|g" libtool > libtool.new
-	mv libtool.new libtool
-
-			sed -e "s|\\\\\$wl-h,\\\\\$soname ||g" libtool > libtool.new
-	mv libtool.new libtool
-fi
-
 
 
 

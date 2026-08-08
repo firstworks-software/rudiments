@@ -6339,15 +6339,18 @@ dnl Output files.
 echo
 echo "***** Output Files ***********"
 AC_CONFIG_HEADER(include/rudiments/private/config.h)
-AC_CONFIG_FILES(config.mk src/Makefile include/Makefile bin/rudiments-config rudiments.pc test/certificates/config/ca.cnf)
-AC_OUTPUT
-chmod 755 bin/rudiments-config
-echo "******************************"
-echo
+AC_CONFIG_FILES(config.mk src/Makefile include/Makefile rudiments.pc test/certificates/config/ca.cnf)
 
-
+dnl bin/rudiments-config needs to be executable, but that has to be attached
+dnl to the file itself rather than run after AC_OUTPUT, otherwise
+dnl regenerating it with config.status alone would skip it
+AC_CONFIG_FILES([bin/rudiments-config], [chmod 755 "$ac_file"])
 
 FW_FIX_LIBTOOL
+
+AC_OUTPUT
+echo "******************************"
+echo
 
 
 
