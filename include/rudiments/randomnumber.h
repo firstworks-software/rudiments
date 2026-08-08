@@ -47,6 +47,33 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 *  Returns true on success and false on failure. */
 		bool	generate(uint32_t *result);
 
+		/** Allocates a new buffer of "size" bytes, fills it with
+		 *  random bytes and returns it.  The caller is responsible
+		 *  for calling delete[] on the returned buffer.
+		 *
+		 *  Returns NULL on failure. */
+		byte_t	*generateBytes(size_t size);
+
+		/** Fills the first "size" bytes of "buffer" (which is
+		 *  "buffersize" bytes long) with random bytes.
+		 *
+		 *  Returns false, without modifying "buffer", if "size" is
+		 *  greater than "buffersize".  Returns true on success and
+		 *  false on failure. */
+		bool	generateBytes(byte_t *buffer, size_t buffersize,
+							size_t size);
+
+		/** Fills "buffer", which is "buffersize" bytes long, entirely
+		 *  with random bytes.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	generateBytes(byte_t *buffer, size_t buffersize);
+
+		/** Appends "size" random bytes to "buffer".
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	generateBytes(bytebuffer *buffer, size_t size);
+
 		/** Generates a random number between "lower" and "upper"
 		 *  and sets "result" to this number.
 		 *

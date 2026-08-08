@@ -6,3 +6,4 @@
 #include <rudiments/threadmutex.h>
 
 class randomnumberprivate;
+class bytebuffer;

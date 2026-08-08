@@ -2,6 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/randomnumber.h>
+#include <rudiments/bytebuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/device.h>
 #include <rudiments/datetime.h>
 #include <rudiments/process.h>
@@ -181,6 +183,50 @@ bool randomnumber::generate(uint32_t *result) {
 	#else
 		#error "Couldn't find a suitable replacement for rand/srand"
 	#endif
+}
+
+byte_t *randomnumber::generateBytes(size_t size) {
+	byte_t	*buffer=new byte_t[size];
+	if (!generateBytes(buffer,size,size)) {
+		delete[] buffer;
+		return NULL;
+	}
+	return buffer;
+}
+
+bool randomnumber::generateBytes(byte_t *buffer, size_t buffersize,
+							size_t size) {
+	if (size>buffersize) {
+		return false;
+	}
+	byte_t	*ptr=buffer;
+	size_t	remaining=size;
+	while (remaining) {
+		uint32_t	chunk;
+		if (!generate(&chunk)) {
+			return false;
+		}
+		size_t	blocksize=(remaining<sizeof(uint32_t))?
+					remaining:sizeof(uint32_t);
+		bytestring::copy(ptr,(byte_t *)&chunk,blocksize);
+		ptr+=blocksize;
+		remaining-=blocksize;
+	}
+	return true;
+}
+
+bool randomnumber::generateBytes(byte_t *buffer, size_t buffersize) {
+	return generateBytes(buffer,buffersize,buffersize);
+}
+
+bool randomnumber::generateBytes(bytebuffer *buffer, size_t size) {
+	byte_t	*bytes=generateBytes(size);
+	if (!bytes) {
+		return false;
+	}
+	buffer->append(bytes,size);
+	delete[] bytes;
+	return true;
 }
 
 bool randomnumber::generate(int32_t *result, int32_t lower, int32_t upper) {

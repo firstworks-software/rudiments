@@ -87,25 +87,9 @@ void encryption::setRandomIv() {
 
 void encryption::setRandomBuffer(byte_t *buffer, size_t buffersize) {
 	randomnumber	r;
-	uint32_t	seed=randomnumber::getSeed();
-	size_t		remaining=buffersize;
-	byte_t		*ptr=buffer;
-	for (;;) {
-		seed=randomnumber::generate(seed);
-		size_t	blocksize=remaining%sizeof(uint32_t);
-		if (!blocksize) {
-			blocksize=sizeof(uint32_t);
-		}
-		bytestring::copy(ptr,(byte_t *)&seed,blocksize);
-		if (blocksize<sizeof(uint32_t)) {
-			break;
-		}
-		ptr+=sizeof(uint32_t);
-		remaining-=sizeof(uint32_t);
-		if (!remaining) {
-			break;
-		}
-	}
+	// seed explicitly, some platforms don't self-seed on construction
+	r.setSeed(randomnumber::getSeed());
+	r.generateBytes(buffer,buffersize);
 }
 
 byte_t *encryption::getIv() {
