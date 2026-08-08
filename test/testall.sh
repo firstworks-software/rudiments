@@ -7,6 +7,8 @@ exitcode=0
 
 for program in \
 	aes128 \
+	aes192 \
+	aes256 \
 	avltree \
 	bytebuffer \
 	bytestring \
@@ -55,6 +57,7 @@ for program in \
 	serviceentry \
 	sha1 \
 	sha256 \
+	sha512 \
 	sharedmemory \
 	signal \
 	singlylinkedlist \

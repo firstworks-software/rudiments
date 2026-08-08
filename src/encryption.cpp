@@ -14,6 +14,7 @@ class encryptionprivate {
 		byte_t			*_key;
 		byte_t			*_iv;
 		blockciphermode_t	_mode;
+		bool			_padding;
 		bool			_dirty;
 		bool			_encrypted;
 		encryptionerror_t	_err;
@@ -28,6 +29,7 @@ void encryption::construct() {
 	pvt->_key=NULL;
 	pvt->_iv=NULL;
 	pvt->_mode=BLOCK_CIPHER_MODE_CBC;
+	pvt->_padding=true;
 	pvt->_dirty=true;
 	pvt->_encrypted=true;
 	pvt->_err=ENCRYPTION_ERROR_SUCCESS;
@@ -124,6 +126,15 @@ void encryption::setBlockCipherMode(blockciphermode_t mode) {
 
 blockciphermode_t encryption::getBlockCipherMode() {
 	return pvt->_mode;
+}
+
+void encryption::setPadding(bool padding) {
+	pvt->_padding=padding;
+	pvt->_dirty=true;
+}
+
+bool encryption::getPadding() {
+	return pvt->_padding;
 }
 
 bool encryption::append(const byte_t *data, uint32_t size) {

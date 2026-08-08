@@ -112,6 +112,60 @@
 /* SSL has EVP_AES_128_OFB */
 /* #undef RUDIMENTS_HAS_EVP_AES_128_OFB */
 
+/* SSL has EVP_AES_192_CBC */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_CBC */
+
+/* SSL has EVP_AES_192_CCM */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_CCM */
+
+/* SSL has EVP_AES_192_CFB1 */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_CFB1 */
+
+/* SSL has EVP_AES_192_CFB128 */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_CFB128 */
+
+/* SSL has EVP_AES_192_CFB8 */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_CFB8 */
+
+/* SSL has EVP_AES_192_CTR */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_CTR */
+
+/* SSL has EVP_AES_192_ECB */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_ECB */
+
+/* SSL has EVP_AES_192_GCM */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_GCM */
+
+/* SSL has EVP_AES_192_OFB */
+/* #undef RUDIMENTS_HAS_EVP_AES_192_OFB */
+
+/* SSL has EVP_AES_256_CBC */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_CBC */
+
+/* SSL has EVP_AES_256_CCM */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_CCM */
+
+/* SSL has EVP_AES_256_CFB1 */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_CFB1 */
+
+/* SSL has EVP_AES_256_CFB128 */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_CFB128 */
+
+/* SSL has EVP_AES_256_CFB8 */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_CFB8 */
+
+/* SSL has EVP_AES_256_CTR */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_CTR */
+
+/* SSL has EVP_AES_256_ECB */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_ECB */
+
+/* SSL has EVP_AES_256_GCM */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_GCM */
+
+/* SSL has EVP_AES_256_OFB */
+/* #undef RUDIMENTS_HAS_EVP_AES_256_OFB */
+
 /* SSL has EVP_CIPHER_CTX_NEW */
 /* #undef RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW */
 
@@ -189,6 +243,9 @@
 
 /* SSL has SHA512_CTX */
 /* #undef RUDIMENTS_HAS_SHA512_CTX */
+
+/* SSL has SHA512_Init/Update/Final returning int */
+/* #undef RUDIMENTS_HAS_SHA512_INIT_RETURNING_INT */
 
 /* Rudiments supports SSL */
 /* #undef RUDIMENTS_HAS_SSL */

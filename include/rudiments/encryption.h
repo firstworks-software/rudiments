@@ -90,6 +90,23 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		/** Returns the current block cipher mode. */
 		virtual blockciphermode_t	getBlockCipherMode();
 
+		/** Sets whether CMS (PKCS#5/#7) padding is applied to the
+		 *  data during encryption, and removed during decryption,
+		 *  to "padding".  Defaults to true.
+		 *
+		 *  If "padding" is false, then the cipher is used as a raw
+		 *  block transform.  No padding is added during encryption
+		 *  and none is removed during decryption.  The caller is
+		 *  responsible for making sure that the data to be
+		 *  encrypted/decrypted is a multiple of the block size.
+		 *  If it isn't, then encryption/decryption fails and the
+		 *  error is set to ENCRYPTION_ERROR_INVALID_PADDING. */
+		virtual void	setPadding(bool padding);
+
+		/** Returns true if padding is applied/removed during
+		 *  encryption/decryption and false otherwise. */
+		virtual bool	getPadding();
+
 		/** Appends "size" bytes of "data" to the data to be
 		 *  encrypted/decrypted.
 		 *

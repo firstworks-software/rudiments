@@ -70,6 +70,7 @@ PROGS3= handoff \
 	md5 \
 	sha1 \
 	sha256 \
+	sha512 \
 	csvdom \
 	jsondom \
 	cgi.cgi \
@@ -80,6 +81,8 @@ PROGS3= handoff \
 	propdom \
 	mvcproperties \
 	aes128 \
+	aes192 \
+	aes256 \
 	pbkdf2 \
 	dh \
 	table \
@@ -305,6 +308,9 @@ sha1: sha1.cpp sha1.$(OBJ)
 sha256: sha256.cpp sha256.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sha256.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
+sha512: sha512.cpp sha512.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sha512.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
 csvdom: csvdom.cpp csvdom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csvdom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
@@ -335,6 +341,12 @@ mvcproperties: mvcproperties.cpp mvcproperties.$(OBJ)
 
 aes128: aes128.cpp aes128.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes128.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+aes192: aes192.cpp aes192.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes192.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+aes256: aes256.cpp aes256.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes256.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 pbkdf2: pbkdf2.cpp pbkdf2.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pbkdf2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

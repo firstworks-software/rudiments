@@ -1,16 +1,16 @@
 // Copyright (c) David Muse
 // See the file COPYING for more information
 
-#include <rudiments/aes128.h>
+#include <rudiments/aes256.h>
 #include <rudiments/randomnumber.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
 
-	header("aes128");
+	header("aes256");
 
-	aes128	a;
-	aes128	b;
+	aes256	a;
+	aes256	b;
 	
 	// key and iv
 	a.setRandomKey();
@@ -18,7 +18,7 @@ int main(int argc, const char **argv) {
 	b.setKey(a.getKey(),a.getKeySize());
 	b.setIv(a.getIv(),a.getIvSize());
 	size_t		keysize=a.getKeySize();
-	test("keysize",keysize==16);
+	test("keysize",keysize==32);
 	byte_t	*blankkey=new byte_t[keysize];
 	bytestring::zero(blankkey,keysize);
 	byte_t	*key=a.getKey();
@@ -41,8 +41,8 @@ int main(int argc, const char **argv) {
 	}
 
 	// padding off: block-aligned data round-trips with no length change
-	aes128	padoff;
-	aes128	padoffb;
+	aes256	padoff;
+	aes256	padoffb;
 	padoff.setRandomKey();
 	padoff.setIv(zeroiv,sizeof(zeroiv));
 	padoff.setPadding(false);
@@ -69,8 +69,8 @@ int main(int argc, const char **argv) {
 	// padding on (the default, unchanged from before setPadding()
 	// existed) still round-trips, and grows the ciphertext by a block,
 	// unlike the padding-off case above
-	aes128	padon;
-	aes128	padonb;
+	aes256	padon;
+	aes256	padonb;
 	padon.setRandomKey();
 	padon.setIv(zeroiv,sizeof(zeroiv));
 	test("padding on by default",padon.getPadding());
@@ -90,7 +90,7 @@ int main(int argc, const char **argv) {
 		!bytestring::compare(decpad,blockaligned,sizeof(blockaligned)));
 
 	// padding off: a non-block-aligned buffer must fail
-	aes128	padoffbad;
+	aes256	padoffbad;
 	padoffbad.setKey(padoff.getKey(),padoff.getKeySize());
 	padoffbad.setIv(zeroiv,sizeof(zeroiv));
 	padoffbad.setPadding(false);

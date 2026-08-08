@@ -1,7 +1,7 @@
 // Copyright (c) David Muse
 // See the COPYING file for more information
 
-#include <rudiments/aes128.h>
+#include <rudiments/aes256.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/bytebuffer.h>
 #include <rudiments/stdio.h>
@@ -23,8 +23,8 @@
 	#define EVP_MAX_BLOCK_LENGTH 0
 #endif
 
-class aes128private {
-	friend class aes128;
+class aes256private {
+	friend class aes256;
 	private:
 		#if defined(RUDIMENTS_HAS_SSL)
 			EVP_CIPHER_CTX	*_context;
@@ -36,32 +36,32 @@ class aes128private {
 		int	_outlen;
 };
 
-aes128::aes128() : encryption() {
-	pvt=new aes128private;
+aes256::aes256() : encryption() {
+	pvt=new aes256private;
 	pvt->_context=NULL;
 }
 
-aes128::~aes128() {
+aes256::~aes256() {
 	freeContext();
 }
 
-size_t aes128::getKeySize() {
-	return 16;
+size_t aes256::getKeySize() {
+	return 32;
 }
 
-size_t aes128::getIvSize() {
+size_t aes256::getIvSize() {
 	return AES_BLOCK_SIZE;
 }
 
-const byte_t *aes128::getEncryptedData() {
+const byte_t *aes256::getEncryptedData() {
 	return getData(true);
 }
 
-const byte_t *aes128::getDecryptedData() {
+const byte_t *aes256::getDecryptedData() {
 	return getData(false);
 }
 
-const byte_t *aes128::getData(bool encrypt) {
+const byte_t *aes256::getData(bool encrypt) {
 
 	// reset the error
 	encryption::setError(ENCRYPTION_ERROR_SUCCESS);
@@ -101,49 +101,49 @@ const byte_t *aes128::getData(bool encrypt) {
 	#if defined(RUDIMENTS_HAS_SSL)
 		const EVP_CIPHER	*mode=NULL;
 		switch (getBlockCipherMode()) {
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_CBC
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_CBC
 			case BLOCK_CIPHER_MODE_CBC:
-				mode=EVP_aes_128_cbc();
+				mode=EVP_aes_256_cbc();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_CFB1
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_CFB1
 			case BLOCK_CIPHER_MODE_CFB1:
-				mode=EVP_aes_128_cfb1();
+				mode=EVP_aes_256_cfb1();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_CFB8
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_CFB8
 			case BLOCK_CIPHER_MODE_CFB8:
-				mode=EVP_aes_128_cfb8();
+				mode=EVP_aes_256_cfb8();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_CFB128
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_CFB128
 			case BLOCK_CIPHER_MODE_CFB128:
-				mode=EVP_aes_128_cfb128();
+				mode=EVP_aes_256_cfb128();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_ECB
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_ECB
 			case BLOCK_CIPHER_MODE_ECB:
-				mode=EVP_aes_128_ecb();
+				mode=EVP_aes_256_ecb();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_OFB
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_OFB
 			case BLOCK_CIPHER_MODE_OFB:
-				mode=EVP_aes_128_ofb();
+				mode=EVP_aes_256_ofb();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_GCM
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_GCM
 			case BLOCK_CIPHER_MODE_GCM:
-				mode=EVP_aes_128_gcm();
+				mode=EVP_aes_256_gcm();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_CCM
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_CCM
 			case BLOCK_CIPHER_MODE_CCM:
-				mode=EVP_aes_128_ccm();
+				mode=EVP_aes_256_ccm();
 				break;
 			#endif
-			#ifdef RUDIMENTS_HAS_EVP_AES_128_CTR
+			#ifdef RUDIMENTS_HAS_EVP_AES_256_CTR
 			case BLOCK_CIPHER_MODE_CTR:
-				mode=EVP_aes_128_ctr();
+				mode=EVP_aes_256_ctr();
 				break;
 			#endif
 			default:
@@ -399,7 +399,7 @@ const byte_t *aes128::getData(bool encrypt) {
 	return getOut()->getBuffer();
 }
 
-void aes128::setError(int32_t err) {
+void aes256::setError(int32_t err) {
 	#if defined(RUDIMENTS_HAS_SSL)
 		encryption::setError(ENCRYPTION_ERROR_NULL);
 		// FIXME: implement this...
@@ -410,7 +410,7 @@ void aes128::setError(int32_t err) {
 	#endif
 }
 
-void aes128::newContext() {
+void aes256::newContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		pvt->_context=EVP_CIPHER_CTX_new();
 	#else
@@ -422,7 +422,7 @@ void aes128::newContext() {
 	#endif
 }
 
-void aes128::freeContext() {
+void aes256::freeContext() {
 	if (pvt->_context) {
 		#if defined(RUDIMENTS_HAS_SSL)
 			EVP_CIPHER_CTX_free(pvt->_context);
@@ -437,7 +437,7 @@ void aes128::freeContext() {
 	pvt->_context=NULL;
 }
 
-bool aes128::isSupported() {
+bool aes256::isSupported() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		return true;
 	#else
