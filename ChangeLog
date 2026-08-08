@@ -1,4 +1,5 @@
 2.3.0 - bumped the version to 2.3.0
+	fixed collection::writeValue() and writeJsonValue() printing pointers with %08x, which only consumes 4 bytes, so on LP64 half of a 64-bit pointer was silently dropped and two distinct objects could print as the same value - the ten sites in include/rudiments/private/collectioninlines.h now use %p, which is correct at every pointer width
 	fixed buffer overflow when unix socket file name is too long
 	fixed segfault in file::getBaseName(filename,ext) when the base name doesn't end in ext, when either argument is NULL, or when the base name is entirely the extension - it now truncates ext only if the base name ends with it and returns the base name unmodified otherwise
 	added PCRE2 support - configure now prefers PCRE2, falls back to PCRE1, then POSIX regex, so regularexpression still uses PCRE on distros that have dropped PCRE1 (debian 13, el10)

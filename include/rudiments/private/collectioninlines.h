@@ -227,26 +227,26 @@ ssize_t collection::writeValue(output *out, long double value) {
 
 inline
 ssize_t collection::writeValue(output *out, const void *value) {
-	return out->printf("%08x",value);
+	return out->printf("%p",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, void *value) {
-	return out->printf("%08x",value);
+	return out->printf("%p",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, const object *value) {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
-	return out->printf("%08x",(const void *)value);
+	return out->printf("%p",(const void *)value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, object *value) {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
-	return out->printf("%08x",(const void *)value);
+	return out->printf("%p",(const void *)value);
 }
 
 template <class valuetype>
@@ -254,7 +254,7 @@ inline
 ssize_t collection::writeValue(output *out, const valuetype &value) {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
-	return out->printf("%08x",(const void *)&value);
+	return out->printf("%p",(const void *)&value);
 }
 
 inline
@@ -404,7 +404,7 @@ ssize_t collection::writeJsonValue(output *out, const void *value) {
 	if (!value) {
 		return out->write("null");
 	}
-	return out->printf("\"%08x\"",value);
+	return out->printf("\"%p\"",value);
 }
 
 inline
@@ -412,7 +412,7 @@ ssize_t collection::writeJsonValue(output *out, void *value) {
 	if (!value) {
 		return out->write("null");
 	}
-	return out->printf("\"%08x\"",value);
+	return out->printf("\"%p\"",value);
 }
 
 inline
@@ -422,7 +422,7 @@ ssize_t collection::writeJsonValue(output *out, const object *value) {
 	}
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
-	return out->printf("\"%08x\"",(const void *)value);
+	return out->printf("\"%p\"",(const void *)value);
 }
 
 inline
@@ -432,7 +432,7 @@ ssize_t collection::writeJsonValue(output *out, object *value) {
 	}
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
-	return out->printf("\"%08x\"",(const void *)value);
+	return out->printf("\"%p\"",(const void *)value);
 }
 
 template <class valuetype>
@@ -440,5 +440,5 @@ inline
 ssize_t collection::writeJsonValue(output *out, const valuetype &value) {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
-	return out->printf("\"%08x\"",(const void *)&value);
+	return out->printf("\"%p\"",(const void *)&value);
 }
