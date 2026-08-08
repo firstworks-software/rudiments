@@ -15,6 +15,7 @@ for program in \
 	character \
 	charstring \
 	commandline \
+	csrandomnumber \
 	csvdom \
 	datetime \
 	des \

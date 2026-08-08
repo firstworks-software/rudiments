@@ -1,4 +1,5 @@
 2.3.0 - bumped the version to 2.3.0
+	added a csrandomnumber class, a cryptographically secure counterpart to randomnumber - it offers the same generate(uint32_t*), generate(int32_t*,lower,upper) and generateBytes() shapes, but no setSeed()/getSeed() or seed-driven generate(), since a reproducible sequence is exactly what "cryptographically secure" rules out - SQL Relay's oracle_userlist.cpp needs unpredictable bytes for O5LOGON session keys and salts (SQL Relay #9206) and had to reach past rudiments to openssl's RAND_bytes() directly, because nothing in rudiments filled that role; it uses RAND_bytes() when openssl is available, CryptGenRandom() on windows, and /dev/urandom otherwise, and isSupported() reports whether a backend is compiled in
 	added randomnumber::generateBytes(), four overloads for filling a
 	buffer of raw random bytes in one call instead of one uint32_t at a
 	time - generateBytes(size_t) allocates and returns a byte_t* of that

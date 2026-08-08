@@ -915,6 +915,7 @@ enable_permissions
 enable_process
 enable_protocolentry
 enable_randomnumber
+enable_csrandomnumber
 enable_bytestring
 enable_regularexpression
 enable_semaphoreset
@@ -1656,6 +1657,7 @@ Optional Features:
   --disable-process       Don't build process
   --disable-protocolentry Don't build protocolentry class
   --disable-randomnumber  Don't build randomnumber
+  --disable-csrandomnumber Don't build csrandomnumber
   --disable-bytestring    Don't build bytestring class
   --disable-regularexpression    Don't build regularexpression
   --disable-semaphoreset  Don't build semaphoreset
@@ -3867,6 +3869,14 @@ then :
   enableval=$enable_randomnumber; INCLUDE_RANDOMNUMBER="0"
 else $as_nop
   INCLUDE_RANDOMNUMBER="1"
+fi
+
+# Check whether --enable-csrandomnumber was given.
+if test ${enable_csrandomnumber+y}
+then :
+  enableval=$enable_csrandomnumber; INCLUDE_CSRANDOMNUMBER="0"
+else $as_nop
+  INCLUDE_CSRANDOMNUMBER="1"
 fi
 
 # Check whether --enable-bytestring was given.
@@ -45917,6 +45927,14 @@ then
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 randomnumber.h randomnumberincludes.h"
 	SRCS="$SRCS randomnumber.cpp"
 	LOBJS="$LOBJS randomnumber.lo"
+fi
+
+if ( test "$INCLUDE_CSRANDOMNUMBER" = "1" )
+then
+	HEADERS2="$HEADERS2 csrandomnumber.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 csrandomnumber.h csrandomnumberincludes.h"
+	SRCS="$SRCS csrandomnumber.cpp"
+	LOBJS="$LOBJS csrandomnumber.lo"
 fi
 
 if ( test "$INCLUDE_BYTESTRING" = "1" )

@@ -302,6 +302,10 @@ AC_ARG_ENABLE(randomnumber,
 	[  --disable-randomnumber  Don't build randomnumber],
 	INCLUDE_RANDOMNUMBER="0",
 	INCLUDE_RANDOMNUMBER="1")
+AC_ARG_ENABLE(csrandomnumber,
+	[  --disable-csrandomnumber Don't build csrandomnumber],
+	INCLUDE_CSRANDOMNUMBER="0",
+	INCLUDE_CSRANDOMNUMBER="1")
 AC_ARG_ENABLE(bytestring,
 	[  --disable-bytestring    Don't build bytestring class],
 	INCLUDE_BYTESTRING="0",
@@ -5908,6 +5912,14 @@ then
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 randomnumber.h randomnumberincludes.h"
 	SRCS="$SRCS randomnumber.cpp"
 	LOBJS="$LOBJS randomnumber.lo"
+fi
+
+if ( test "$INCLUDE_CSRANDOMNUMBER" = "1" )
+then
+	HEADERS2="$HEADERS2 csrandomnumber.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 csrandomnumber.h csrandomnumberincludes.h"
+	SRCS="$SRCS csrandomnumber.cpp"
+	LOBJS="$LOBJS csrandomnumber.lo"
 fi
 
 if ( test "$INCLUDE_BYTESTRING" = "1" )

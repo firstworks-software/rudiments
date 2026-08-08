@@ -32,6 +32,7 @@ PROGS1= dictionary \
 	listmetrics \
 	memorypool \
 	randomnumber \
+	csrandomnumber \
 	sharedmemory \
 	signal \
 	kill \
@@ -211,6 +212,9 @@ dictionary: dictionary.cpp dictionary.$(OBJ)
 
 randomnumber: randomnumber.cpp randomnumber.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) randomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+csrandomnumber: csrandomnumber.cpp csrandomnumber.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csrandomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 signal: signal.cpp signal.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) signal.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
