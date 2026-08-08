@@ -6,9 +6,18 @@
 
 #include <rudiments/private/randomnumberincludes.h>
 
-/** The randomnumber class provides methods for generating and scaling 
+/** The randomnumber class provides methods for generating and scaling
  *  random numbers.
- * 
+ *
+ *  randomnumber is not cryptographically secure.  Given a known seed, it
+ *  produces a fully deterministic series of numbers - the same seed always
+ *  yields the same series, and anyone who knows or can guess the seed can
+ *  predict every number that follows.  That makes it well suited to
+ *  scaling, jitter, and reproducible test fixtures, where a repeatable
+ *  series is a feature.  It must not be used to generate secrets - keys,
+ *  tokens, salts, nonces, or anything else that needs to be unpredictable.
+ *  Use csrandomnumber for those.
+ *
  *  Superfluous background:
  * 
  *  There is no such thing as true randomness.   Many random number generators

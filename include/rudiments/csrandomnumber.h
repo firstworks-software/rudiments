@@ -16,6 +16,10 @@
  *  you need a reproducible sequence (eg. for scaling, jitter, or test
  *  fixtures).
  *
+ *  csrandomnumber is intended for secrets - keys, tokens, salts, nonces,
+ *  session ids, and anything else that must be unpredictable even to
+ *  someone who can observe other output from the same process.
+ *
  *  csrandomnumber uses openssl's RAND_bytes() when available, the Windows
  *  CryptGenRandom() API when building for Windows, and /dev/urandom
  *  otherwise. */
