@@ -53,6 +53,46 @@ int main(int argc, const char **argv) {
 				numbers,numbercount,lowerrange,upperrange);
 	delete[] numbers;
 
+	// getRandMax() - always the full uint32_t range
+	test("getRandMax()",csrandomnumber::getRandMax()==4294967295U);
+
+	// scale() - stays in range, including the range-endpoint overshoot
+	// clamp: scale(getRandMax(),lower,upper) should never exceed upper
+	stdoutput.printf("\n	%d scaled numbers between %d and %d:\n",
+					numbercount,lowerrange,upperrange);
+	int32_t	*scaled=new int32_t[numbercount];
+	for (uint16_t j=0; j<numbercount; j++) {
+		scaled[j]=csrandomnumber::scale(
+				(uint32_t)(j*(csrandomnumber::getRandMax()/
+							numbercount)),
+				lowerrange,upperrange);
+	}
+	testRange("scale() - in range",scaled,numbercount,
+						lowerrange,upperrange);
+	delete[] scaled;
+	int32_t	overshoot=csrandomnumber::scale(4294967295U,
+						lowerrange,upperrange);
+	test("scale() - overshoot clamped to upper",overshoot<=upperrange);
+
+	// static generate() - not all identical
+	uint32_t	g1=csrandomnumber::generate();
+	uint32_t	g2=csrandomnumber::generate();
+	uint32_t	g3=csrandomnumber::generate();
+	test("static generate() - not all identical",
+				!(g1==g2 && g2==g3));
+
+	// static generate(lower,upper) - stays in range
+	int32_t	*sgnumbers=new int32_t[numbercount];
+	stdoutput.printf("\n	%d static-generated numbers between "
+					"%d and %d:\n",
+					numbercount,lowerrange,upperrange);
+	for (uint16_t j=0; j<numbercount; j++) {
+		sgnumbers[j]=csrandomnumber::generate(lowerrange,upperrange);
+	}
+	testRange("static generate(lower,upper) - in range",
+				sgnumbers,numbercount,lowerrange,upperrange);
+	delete[] sgnumbers;
+
 	stdoutput.printf("\n	generateBytes...\n\n");
 
 	const size_t	bytesize=32;

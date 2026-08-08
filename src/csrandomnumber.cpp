@@ -65,6 +65,29 @@ csrandomnumber::~csrandomnumber() {
 	delete pvt;
 }
 
+bool csrandomnumber::generate(uint32_t *result) {
+	return generateBytes((byte_t *)result,sizeof(uint32_t),
+						sizeof(uint32_t));
+}
+
+bool csrandomnumber::generate(int32_t *result, int32_t lower, int32_t upper) {
+	uint32_t	res;
+	if (!generate(&res)) {
+		return false;
+	}
+	*result=scale(res,lower,upper);
+	return true;
+}
+
+byte_t *csrandomnumber::generateBytes(size_t size) {
+	byte_t	*buffer=new byte_t[size];
+	if (!generateBytes(buffer,size,size)) {
+		delete[] buffer;
+		return NULL;
+	}
+	return buffer;
+}
+
 bool csrandomnumber::generateBytes(byte_t *buffer, size_t buffersize,
 							size_t size) {
 	if (size>buffersize) {
@@ -81,15 +104,6 @@ bool csrandomnumber::generateBytes(byte_t *buffer, size_t buffersize,
 	#endif
 }
 
-byte_t *csrandomnumber::generateBytes(size_t size) {
-	byte_t	*buffer=new byte_t[size];
-	if (!generateBytes(buffer,size,size)) {
-		delete[] buffer;
-		return NULL;
-	}
-	return buffer;
-}
-
 bool csrandomnumber::generateBytes(byte_t *buffer, size_t buffersize) {
 	return generateBytes(buffer,buffersize,buffersize);
 }
@@ -104,30 +118,36 @@ bool csrandomnumber::generateBytes(bytebuffer *buffer, size_t size) {
 	return true;
 }
 
-bool csrandomnumber::generate(uint32_t *result) {
-	return generateBytes((byte_t *)result,sizeof(uint32_t),
-						sizeof(uint32_t));
+uint32_t csrandomnumber::generate() {
+	csrandomnumber	r;
+	uint32_t	result;
+	return (r.generate(&result))?result:0;
 }
 
-bool csrandomnumber::generate(int32_t *result, int32_t lower, int32_t upper) {
-	uint32_t	res;
-	if (!generate(&res)) {
-		return false;
-	}
-	// scale "res" from its full 0..2^32-1 range to lower..upper, the
+int32_t csrandomnumber::generate(int32_t lower, int32_t upper) {
+	csrandomnumber	r;
+	int32_t		result;
+	return (r.generate(&result,lower,upper))?result:0;
+}
+
+int32_t csrandomnumber::scale(uint32_t number, int32_t lower, int32_t upper) {
+	// scale "number" from its full 0..2^32-1 range to lower..upper, the
 	// same approach randomnumber::scale() uses, but against a fixed
-	// 2^32 range since generate(uint32_t*) above always spans the
-	// full range, regardless of which backend is in use
-	float	originalrange=4294967296.0f;
+	// 2^32 range since generate(uint32_t*) always spans the full
+	// range, regardless of which backend is in use
+	float	originalrange=(int64_t)getRandMax()+1;
 	float	newrange=(float)abs(upper-lower)+1.0f;
-	float	shrunk=((float)res)/originalrange;
+	float	shrunk=((float)number)/originalrange;
 	float	expanded=shrunk*newrange;
 	int32_t	shifted=lower+(int32_t)expanded;
-	// float only carries 24 bits of precision, so for res near
+	// float only carries 24 bits of precision, so for number near
 	// UINT32_MAX, shrunk can round up to exactly 1.0 and push shifted
 	// one past upper - clamp it back into range
-	*result=(shifted>upper)?upper:shifted;
-	return true;
+	return (shifted>upper)?upper:shifted;
+}
+
+uint32_t csrandomnumber::getRandMax() {
+	return 4294967295U;
 }
 
 bool csrandomnumber::isSupported() {

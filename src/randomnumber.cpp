@@ -185,6 +185,15 @@ bool randomnumber::generate(uint32_t *result) {
 	#endif
 }
 
+bool randomnumber::generate(int32_t *result, int32_t lower, int32_t upper) {
+	uint32_t	res;
+	if (!generate(&res)) {
+		return false;
+	}
+	*result=scale(res,lower,upper);
+	return true;
+}
+
 byte_t *randomnumber::generateBytes(size_t size) {
 	byte_t	*buffer=new byte_t[size];
 	if (!generateBytes(buffer,size,size)) {
@@ -229,15 +238,6 @@ bool randomnumber::generateBytes(bytebuffer *buffer, size_t size) {
 	return true;
 }
 
-bool randomnumber::generate(int32_t *result, int32_t lower, int32_t upper) {
-	uint32_t	res;
-	if (!generate(&res)) {
-		return false;
-	}
-	*result=scale(res,lower,upper);
-	return true;
-}
-
 uint32_t randomnumber::getSeed() {
 
 	// first try /dev/urandom
@@ -269,13 +269,42 @@ int32_t randomnumber::generate(uint32_t seed, int32_t lower, int32_t upper) {
 		r.generate(&result,lower,upper))?result:0;
 }
 
+byte_t *randomnumber::generateBytes(uint32_t seed, size_t size) {
+	randomnumber	r;
+	return (r.setSeed(seed))?r.generateBytes(size):NULL;
+}
+
+bool randomnumber::generateBytes(uint32_t seed, byte_t *buffer,
+						size_t buffersize, size_t size) {
+	randomnumber	r;
+	return r.setSeed(seed) &&
+		r.generateBytes(buffer,buffersize,size);
+}
+
+bool randomnumber::generateBytes(uint32_t seed, byte_t *buffer,
+						size_t buffersize) {
+	randomnumber	r;
+	return r.setSeed(seed) &&
+		r.generateBytes(buffer,buffersize);
+}
+
+bool randomnumber::generateBytes(uint32_t seed, bytebuffer *buffer,
+						size_t size) {
+	randomnumber	r;
+	return r.setSeed(seed) &&
+		r.generateBytes(buffer,size);
+}
+
 int32_t randomnumber::scale(uint32_t number, int32_t lower, int32_t upper) {
 	float	originalrange=(int64_t)getRandMax()+1;
 	float	newrange=(float)abs(upper-lower)+1.0;
 	float	shrunk=((float)number)/originalrange;
 	float	expanded=shrunk*newrange;
 	int32_t	shifted=lower+(int32_t)expanded;
-	return shifted;
+	// float only carries 24 bits of precision, so for number near
+	// getRandMax(), shrunk can round up to exactly 1.0 and push shifted
+	// one past upper - clamp it back into range
+	return (shifted>upper)?upper:shifted;
 }
 
 uint32_t randomnumber::getRandMax() {

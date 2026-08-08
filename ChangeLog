@@ -1,4 +1,13 @@
 2.3.0 - bumped the version to 2.3.0
+	fixed randomnumber::scale() to clamp its result to "upper" - float only
+	carries 24 bits of precision, so for a "number" near getRandMax(), the
+	scaled value could round up to exactly 1.0 and push the result one
+	past "upper"; callers that use scale() to index a fixed-size array,
+	such as file::createTemporaryFile() and
+	directory::createTemporaryDirectory(), could read one element past
+	the end
+	added csrandomnumber::scale(), getRandMax(), and static generate()/generate(lower,upper) - scale() and getRandMax() give csrandomnumber the same number-range helpers randomnumber already has, and the static generate() overloads let a one-off cryptographically secure draw be made without keeping an instance around, mirroring randomnumber's seeded static generate(), except csrandomnumber's isn't seeded, since a reproducible sequence is exactly what "cryptographically secure" rules out - there's no static generateBytes() to go with them, since unlike generate(), it would need the same parameter list as the instance overloads, with no seed to distinguish it by, which c++ doesn't allow
+	added randomnumber's seed-first static generateBytes() overloads - four overloads mirroring the existing instance generateBytes() shapes but taking a seed first, so a reproducible byte sequence can be generated without keeping an instance around, the same way the existing static generate(seed,...) family already could for single numbers - generateBytes(seed,size) allocates and returns a byte_t*, two overloads fill a caller-supplied buffer, and one appends to a bytebuffer
 	added a csrandomnumber class, a cryptographically secure counterpart to randomnumber - it offers the same generate(uint32_t*), generate(int32_t*,lower,upper) and generateBytes() shapes, but no setSeed()/getSeed() or seed-driven generate(), since a reproducible sequence is exactly what "cryptographically secure" rules out - SQL Relay's oracle_userlist.cpp needs unpredictable bytes for O5LOGON session keys and salts (SQL Relay #9206) and had to reach past rudiments to openssl's RAND_bytes() directly, because nothing in rudiments filled that role; it uses RAND_bytes() when openssl is available, CryptGenRandom() on windows, and /dev/urandom otherwise, and isSupported() reports whether a backend is compiled in
 	added randomnumber::generateBytes(), four overloads for filling a
 	buffer of raw random bytes in one call instead of one uint32_t at a

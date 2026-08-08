@@ -56,6 +56,12 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 *  Returns true on success and false on failure. */
 		bool	generate(uint32_t *result);
 
+		/** Generates a random number between "lower" and "upper"
+		 *  and sets "result" to this number.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	generate(int32_t *result, int32_t lower, int32_t upper);
+
 		/** Allocates a new buffer of "size" bytes, fills it with
 		 *  random bytes and returns it.  The caller is responsible
 		 *  for calling delete[] on the returned buffer.
@@ -82,12 +88,6 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	generateBytes(bytebuffer *buffer, size_t size);
-
-		/** Generates a random number between "lower" and "upper"
-		 *  and sets "result" to this number.
-		 *
-		 *  Returns true on success and false on failure. */
-		bool	generate(int32_t *result, int32_t lower, int32_t upper);
 
 		/** Generates a random number seed by first attempting
 		 *  to get one from /dev/urandom and if that fails,
@@ -121,7 +121,59 @@ class RUDIMENTS_DLLSPEC randomnumber : public object {
 		static	int32_t	generate(uint32_t seed, int32_t lower,
 							int32_t upper);
 
-		/** Scales "number" to be between "lower" and "upper" and 
+		/** Allocates a new buffer of "size" bytes, fills it with
+		 *  random bytes, based on "seed", and returns it.  The
+		 *  caller is responsible for calling delete[] on the
+		 *  returned buffer.
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns NULL on failure. */
+		static	byte_t	*generateBytes(uint32_t seed, size_t size);
+
+		/** Fills the first "size" bytes of "buffer" (which is
+		 *  "buffersize" bytes long) with random bytes, based on
+		 *  "seed".
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns false, without modifying "buffer", if "size" is
+		 *  greater than "buffersize".  Returns true on success and
+		 *  false on failure. */
+		static	bool	generateBytes(uint32_t seed, byte_t *buffer,
+							size_t buffersize,
+							size_t size);
+
+		/** Fills "buffer", which is "buffersize" bytes long, entirely
+		 *  with random bytes, based on "seed".
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns true on success and false on failure. */
+		static	bool	generateBytes(uint32_t seed, byte_t *buffer,
+							size_t buffersize);
+
+		/** Appends "size" random bytes to "buffer", based on "seed".
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns true on success and false on failure. */
+		static	bool	generateBytes(uint32_t seed, bytebuffer *buffer,
+							size_t size);
+
+		/** Scales "number" to be between "lower" and "upper" and
 		 *  returns it.
 		 * 
 		 *  It is NOT ok to use the result of this method as 

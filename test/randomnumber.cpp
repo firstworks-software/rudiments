@@ -17,7 +17,7 @@ void testRange(const char *title, int32_t *numbers, uint16_t count,
 						int32_t bottom, int32_t top) {
 	bool	success=true;
 	for (uint16_t i=0; i<count && success; i++) {
-		if (numbers[i]<bottom && numbers[i]>top) {
+		if (numbers[i]<bottom || numbers[i]>top) {
 			success=false;
 		}
 	}
@@ -136,6 +136,109 @@ int main(int argc, const char **argv) {
 	test("generateBytes(bytebuffer,size) - success",appendok);
 	test("generateBytes(bytebuffer,size) - grew by size",
 			bb.getSize()==sizebefore+bytesize);
+
+	stdoutput.printf("\n	static generateBytes...\n\n");
+
+	uint32_t	byteseed=randomnumber::getSeed();
+
+	// static generateBytes(seed,size) - allocates and fills a new
+	// buffer.  On backends where setSeed() actually seeds the
+	// generator, this is reproducible for the same seed.  (On
+	// backends like arc4random, setSeed() is a no-op by design - see
+	// randomnumber::setSeed() - so reproducibility can't be assumed
+	// there.)
+	byte_t	*sbytes1=randomnumber::generateBytes(byteseed,bytesize);
+	test("static generateBytes(seed,size) - non-NULL",sbytes1!=NULL);
+	byte_t	*sbytes2=randomnumber::generateBytes(byteseed,bytesize);
+	test("static generateBytes(seed,size) - non-NULL again",
+							sbytes2!=NULL);
+	#ifndef RUDIMENTS_HAVE_ARC4RANDOM
+		test("static generateBytes(seed,size) - "
+				"same seed produces same bytes",
+				!bytestring::compare(sbytes1,sbytes2,
+								bytesize));
+	#endif
+	delete[] sbytes2;
+
+	// a fresh seed from getSeed() should very likely produce different
+	// bytes than the previous seed did
+	uint32_t	byteseed2=randomnumber::getSeed();
+	byte_t	*sbytes3=randomnumber::generateBytes(byteseed2,bytesize);
+	test("static generateBytes(seed,size) - non-NULL for new seed",
+							sbytes3!=NULL);
+	test("static generateBytes(seed,size) - "
+			"different seeds produce different bytes",
+			bytestring::compare(sbytes1,sbytes3,bytesize));
+	delete[] sbytes1;
+	delete[] sbytes3;
+
+	// static generateBytes(seed,byte_t*,buffersize,size) with
+	// size<=buffersize - only the first "size" bytes should be touched,
+	// and the same seed should reproduce the same bytes
+	byte_t	*sbuffer=new byte_t[buffersize];
+	bytestring::set(sbuffer,0xFF,buffersize);
+	bool	sfilledok=randomnumber::generateBytes(byteseed,sbuffer,
+							buffersize,bytesize);
+	test("static generateBytes(seed,buffer,buffersize,size) - success",
+							sfilledok);
+	bool	suntouched=true;
+	for (size_t i=bytesize; i<buffersize; i++) {
+		if (sbuffer[i]!=0xFF) {
+			suntouched=false;
+			break;
+		}
+	}
+	test("static generateBytes(seed,buffer,buffersize,size) - "
+			"bytes past size untouched",suntouched);
+	#ifndef RUDIMENTS_HAVE_ARC4RANDOM
+		byte_t	*sbuffer2=new byte_t[buffersize];
+		bytestring::set(sbuffer2,0xFF,buffersize);
+		randomnumber::generateBytes(byteseed,sbuffer2,
+							buffersize,bytesize);
+		test("static generateBytes(seed,buffer,buffersize,size) - "
+				"same seed produces same bytes",
+				!bytestring::compare(sbuffer,sbuffer2,
+								bytesize));
+		delete[] sbuffer2;
+	#endif
+	delete[] sbuffer;
+
+	// static generateBytes(seed,byte_t*,buffersize,size) with
+	// size>buffersize - fail
+	byte_t	stoosmall[bytesize];
+	test("static generateBytes(seed,buffer,buffersize,size) - "
+			"size>buffersize fails",
+			!randomnumber::generateBytes(byteseed,stoosmall,
+							bytesize,buffersize));
+
+	// static generateBytes(seed,byte_t*,buffersize) - fills the entire
+	// buffer
+	byte_t	*swholebuffer=new byte_t[buffersize];
+	bytestring::set(swholebuffer,0xFF,buffersize);
+	bool	swholeok=randomnumber::generateBytes(byteseed,swholebuffer,
+								buffersize);
+	test("static generateBytes(seed,buffer,buffersize) - success",
+								swholeok);
+	bool	schanged=false;
+	for (size_t i=0; i<buffersize; i++) {
+		if (swholebuffer[i]!=0xFF) {
+			schanged=true;
+			break;
+		}
+	}
+	test("static generateBytes(seed,buffer,buffersize) - "
+			"buffer was written",schanged);
+	delete[] swholebuffer;
+
+	// static generateBytes(seed,bytebuffer*,size) - appends "size"
+	// bytes
+	bytebuffer	sbb;
+	size_t	ssizebefore=sbb.getSize();
+	bool	sappendok=randomnumber::generateBytes(byteseed,&sbb,bytesize);
+	test("static generateBytes(seed,bytebuffer,size) - success",
+								sappendok);
+	test("static generateBytes(seed,bytebuffer,size) - grew by size",
+			sbb.getSize()==ssizebefore+bytesize);
 
 	return 0;
 }

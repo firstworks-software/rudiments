@@ -74,6 +74,45 @@ class RUDIMENTS_DLLSPEC csrandomnumber : public object {
 		 *  Returns true on success and false on failure. */
 		bool	generateBytes(bytebuffer *buffer, size_t size);
 
+		// There is no static generateBytes().  Unlike static
+		// generate() below, a static generateBytes() would need the
+		// same parameter list as the instance overloads above, since
+		// there's no seed to distinguish them by, and C++ doesn't
+		// allow that.  Construct a short-lived csrandomnumber instead.
+
+		/** Generates a cryptographically secure random number between
+		 *  0 and 2^32-1 and returns it, or 0 on failure.
+		 *
+		 *  Unlike randomnumber::generate(seed), this is not seeded and
+		 *  not reproducible - each call is an independent
+		 *  cryptographically secure draw.  Each call also opens and
+		 *  closes the underlying source, so code making many draws in
+		 *  a loop is better off using an instance of csrandomnumber
+		 *  directly. */
+		static	uint32_t	generate();
+
+		/** Generates a cryptographically secure random number between
+		 *  "lower" and "upper" and returns it, or 0 on failure.
+		 *
+		 *  Unlike randomnumber::generate(seed,lower,upper), this is
+		 *  not seeded and not reproducible - each call is an
+		 *  independent cryptographically secure draw.  Each call also
+		 *  opens and closes the underlying source, so code making many
+		 *  draws in a loop is better off using an instance of
+		 *  csrandomnumber directly. */
+		static	int32_t	generate(int32_t lower, int32_t upper);
+
+		/** Scales "number" to be between "lower" and "upper" and
+		 *  returns it. */
+		static	int32_t	scale(uint32_t number, int32_t lower,
+								int32_t upper);
+
+		/** Returns the largest number generate(uint32_t*) could
+		 *  produce.  Unlike randomnumber::getRandMax(), this is not
+		 *  backend-dependent - generate(uint32_t*) always spans the
+		 *  full 0..2^32-1 range, so this always returns 4294967295U. */
+		static	uint32_t	getRandMax();
+
 		/** Returns true if a cryptographically secure backend
 		 *  (openssl, CryptGenRandom, or /dev/urandom) is available
 		 *  and false otherwise. */
