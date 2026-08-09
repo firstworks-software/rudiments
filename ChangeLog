@@ -1,4 +1,14 @@
-2.3.0 - bumped the version to 2.3.0
+2.3.0 - tlscontext now binds openssl's BIO to a custom BIO_METHOD instead of
+	BIO_s_fd(), so its read/write callbacks go through filedescriptor's
+	lowLevelRead()/lowLevelWrite() virtuals instead of openssl making raw
+	read(2)/write(2) syscalls directly on the file descriptor - a
+	filedescriptor subclass can now interpose a layer (framing,
+	tunnelling, etc.) between the tls engine and the socket, which
+	nothing could do before; retry flags are set from the same
+	EAGAIN/EWOULDBLOCK/EINTR conditions the old BIO_s_fd handled, so
+	blocking and non-blocking sockets behave the same as before; SQL
+	Relay's tds protocol module needs this to tunnel its TLS handshake
+	inside TDS packet framing
 	added an rng abstract base class, and renamed randomnumber to prng and
 	csrandomnumber to csprng - rng declares the 7 instance methods
 	(setSeed(), generate(uint32_t*), generate(int32_t*,lower,upper), and

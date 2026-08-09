@@ -29,6 +29,10 @@
 	#include <limits.h>
 #endif
 
+#ifndef EWOULDBLOCK
+	#define EWOULDBLOCK	WSAEWOULDBLOCK
+#endif
+
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
 #ifndef SSIZE_MAX
@@ -199,14 +203,165 @@ void tlscontext::initContext() {
 	#endif
 }
 
+#if defined(RUDIMENTS_HAS_SSL)
+
+// the bio method is process-wide, like the rest of the openssl state
+// that initTLS() sets up, and like it, is never torn down
+static threadmutex	_biomethodmutex;
+static char		_biomethodname[]="rudiments filedescriptor";
+#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
+	static BIO_METHOD	*_biomethod=NULL;
+#else
+	static BIO_METHOD	_biomethod;
+	static bool		_biomethodinit=false;
+#endif
+
+int tlscontext::bioRead(struct bio_st *b, char *buf, int len) {
+
+	#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
+		filedescriptor	*fd=(filedescriptor *)BIO_get_data(b);
+	#else
+		filedescriptor	*fd=(filedescriptor *)b->ptr;
+	#endif
+	if (!fd) {
+		return -1;
+	}
+
+	BIO_clear_retry_flags(b);
+
+	int	ret=(int)fd->lowLevelRead(buf,(size_t)len);
+
+	// openssl needs the retry flag to tell a would-block from a
+	// hard error, and needs the error number that the read left
+	// behind, so don't do anything else in between
+	if (ret<0) {
+		int32_t	err=error::getErrorNumber();
+		if (err==EAGAIN || err==EWOULDBLOCK || err==EINTR) {
+			BIO_set_retry_read(b);
+		}
+	}
+	return ret;
+}
+
+int tlscontext::bioWrite(struct bio_st *b, const char *buf, int len) {
+
+	#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
+		filedescriptor	*fd=(filedescriptor *)BIO_get_data(b);
+	#else
+		filedescriptor	*fd=(filedescriptor *)b->ptr;
+	#endif
+	if (!fd) {
+		return -1;
+	}
+
+	BIO_clear_retry_flags(b);
+
+	int	ret=(int)fd->lowLevelWrite(buf,(size_t)len);
+
+	if (ret<0) {
+		int32_t	err=error::getErrorNumber();
+		if (err==EAGAIN || err==EWOULDBLOCK || err==EINTR) {
+			BIO_set_retry_write(b);
+		}
+	}
+	return ret;
+}
+
+long tlscontext::bioCtrl(struct bio_st *b, int cmd, long num, void *ptr) {
+	switch (cmd) {
+		case BIO_CTRL_FLUSH:
+		case BIO_CTRL_DUP:
+		case BIO_CTRL_SET_CLOSE:
+			// openssl treats 0 as failure for these
+			return 1;
+		case BIO_CTRL_GET_CLOSE:
+			// the filedescriptor isn't ours to close
+			return BIO_NOCLOSE;
+		default:
+			return 0;
+	}
+}
+
+int tlscontext::bioCreate(struct bio_st *b) {
+	#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
+		BIO_set_init(b,1);
+		BIO_set_data(b,NULL);
+	#else
+		b->init=1;
+		b->num=0;
+		b->ptr=NULL;
+		b->flags=0;
+	#endif
+	return 1;
+}
+
+int tlscontext::bioDestroy(struct bio_st *b) {
+	// nothing to do, the filedescriptor isn't ours to close
+	return 1;
+}
+
+#endif
+
 void tlscontext::initSubContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (pvt->_ctx) {
-			// create bio and set the file descriptor
-			pvt->_bio=BIO_new(BIO_s_fd());
-			BIO_set_fd(pvt->_bio,
-				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
-				BIO_NOCLOSE);
+
+			// create the bio method, once
+			_biomethodmutex.lock();
+			#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
+			if (!_biomethod) {
+				_biomethod=BIO_meth_new(
+						BIO_get_new_index()|
+						BIO_TYPE_SOURCE_SINK,
+						_biomethodname);
+				if (_biomethod) {
+					BIO_meth_set_write(
+						_biomethod,bioWrite);
+					BIO_meth_set_read(
+						_biomethod,bioRead);
+					BIO_meth_set_ctrl(
+						_biomethod,bioCtrl);
+					BIO_meth_set_create(
+						_biomethod,bioCreate);
+					BIO_meth_set_destroy(
+						_biomethod,bioDestroy);
+				}
+			}
+			#else
+			if (!_biomethodinit) {
+				// BIO_get_new_index() doesn't exist pre-1.1.0,
+				// so just pick a type number that's unlikely
+				// to collide with openssl's built-in bio types
+				_biomethod.type=100|BIO_TYPE_SOURCE_SINK;
+				_biomethod.name=_biomethodname;
+				_biomethod.bwrite=bioWrite;
+				_biomethod.bread=bioRead;
+				_biomethod.bputs=NULL;
+				_biomethod.bgets=NULL;
+				_biomethod.ctrl=bioCtrl;
+				_biomethod.create=bioCreate;
+				_biomethod.destroy=bioDestroy;
+				_biomethod.callback_ctrl=NULL;
+				_biomethodinit=true;
+			}
+			#endif
+			_biomethodmutex.unlock();
+
+			// create bio and set the filedescriptor
+			// (the filedescriptor itself, rather than the
+			// raw file descriptor, so reads and writes go
+			// through it, and can be overridden)
+			#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
+			pvt->_bio=(_biomethod)?BIO_new(_biomethod):NULL;
+			if (pvt->_bio) {
+				BIO_set_data(pvt->_bio,pvt->_fd);
+			}
+			#else
+			pvt->_bio=BIO_new(&_biomethod);
+			if (pvt->_bio) {
+				pvt->_bio->ptr=(void *)pvt->_fd;
+			}
+			#endif
 
 			// create ssl and attach bio
 			pvt->_ssl=SSL_new(pvt->_ctx);

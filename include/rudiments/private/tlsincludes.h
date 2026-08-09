@@ -14,3 +14,7 @@ class tlscertificate;
 class tlscertificateprivate;
 
 class filedescriptor;
+
+// openssl's BIO, forward-declared so the public header doesn't
+// have to include openssl
+struct bio_st;

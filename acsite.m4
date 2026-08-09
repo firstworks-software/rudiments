@@ -190,6 +190,9 @@ then
 		AC_MSG_CHECKING(for DH_get0_key)
 		FW_TRY_LINK([#include <openssl/dh.h>],[DH_get0_key((const DH *)0,(const BIGNUM **)0,(const BIGNUM **)0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_DH_GET0_KEY,1,SSL has DH_get0_key) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		AC_MSG_CHECKING(for BIO_meth_new)
+		FW_TRY_LINK([#include <openssl/bio.h>],[BIO_meth_new(0,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_BIO_METH_NEW,1,SSL has BIO_meth_new) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 		AC_MSG_CHECKING(for EVP_CIPHER_CTX_new)
 		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_CIPHER_CTX_new();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW,1,SSL has EVP_CIPHER_CTX_NEW) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
