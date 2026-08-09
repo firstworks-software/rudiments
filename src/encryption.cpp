@@ -112,12 +112,12 @@ blockciphermode_t encryption::getBlockCipherMode() {
 	return pvt->_mode;
 }
 
-void encryption::setPadding(bool padding) {
-	pvt->_padding=padding;
+void encryption::setUsePadding(bool usepadding) {
+	pvt->_padding=usepadding;
 	pvt->_dirty=true;
 }
 
-bool encryption::getPadding() {
+bool encryption::getUsePadding() {
 	return pvt->_padding;
 }
 

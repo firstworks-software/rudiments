@@ -68,7 +68,7 @@ const byte_t *aes128::getData(bool encrypt) {
 
 	// without padding, the data must already be a
 	// multiple of AES_BLOCK_SIZE in length
-	if (!getPadding() && (getIn()->getSize()%AES_BLOCK_SIZE)) {
+	if (!getUsePadding() && (getIn()->getSize()%AES_BLOCK_SIZE)) {
 		encryption::setError(ENCRYPTION_ERROR_INVALID_PADDING);
 		return NULL;
 	}
@@ -174,7 +174,7 @@ const byte_t *aes128::getData(bool encrypt) {
 		}
 
 		// enable/disable padding
-		EVP_CIPHER_CTX_set_padding(pvt->_context,(getPadding())?1:0);
+		EVP_CIPHER_CTX_set_padding(pvt->_context,(getUsePadding())?1:0);
 	#else
 		if (!pvt->_context) {
 			// FIXME: set error
@@ -221,7 +221,7 @@ const byte_t *aes128::getData(bool encrypt) {
 		#else
 		// without padding there's no pad block, so 0 bytes
 		// of input produce 0 bytes of output
-		if (!getPadding() && !inremaining) {
+		if (!getUsePadding() && !inremaining) {
 			break;
 		}
 		#endif
@@ -284,7 +284,7 @@ const byte_t *aes128::getData(bool encrypt) {
 				// Figure out how many bytes of padding we need
 				// and XOR the remaining bytes of the CBC buffer
 				// against that number.
-				if (getPadding()) {
+				if (getUsePadding()) {
 					padbytes=AES_BLOCK_SIZE-readsize;
 					for (byte_t i=readsize;
 							i<AES_BLOCK_SIZE; i++) {
@@ -364,7 +364,7 @@ const byte_t *aes128::getData(bool encrypt) {
 			//
 			// Append a full block of 16's (AES_BLOCK_SIZE).
 			uint64_t	insize=getIn()->getSize();
-			if (getPadding() && insize &&
+			if (getUsePadding() && insize &&
 					!(insize%AES_BLOCK_SIZE)) {
 				for (byte_t i=0; i<AES_BLOCK_SIZE; i++) {
 					pvt->_cbc[i]^=AES_BLOCK_SIZE;
@@ -373,7 +373,7 @@ const byte_t *aes128::getData(bool encrypt) {
 				getOut()->append(pvt->_out,AES_BLOCK_SIZE);
 			}
 
-		} else if (getPadding()) {
+		} else if (getUsePadding()) {
 
 			// Truncate padding...
 			//

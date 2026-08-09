@@ -31,7 +31,7 @@ int main(int argc, const char **argv) {
 	test("sane iv",bytestring::compare(iv,blankiv,ivsize));
 	stdoutput.printf("\n");
 
-	// setPadding() - used by e.g. Oracle's O5LOGON protocol: AES-CBC,
+	// setUsePadding() - used by e.g. Oracle's O5LOGON protocol: AES-CBC,
 	// zero IV, no padding, block-aligned data only
 	byte_t	zeroiv[16];
 	bytestring::zero(zeroiv,sizeof(zeroiv));
@@ -45,11 +45,11 @@ int main(int argc, const char **argv) {
 	aes256	padoffb;
 	padoff.setRandomKey();
 	padoff.setIv(zeroiv,sizeof(zeroiv));
-	padoff.setPadding(false);
-	test("padding off",!padoff.getPadding());
+	padoff.setUsePadding(false);
+	test("padding off",!padoff.getUsePadding());
 	padoffb.setKey(padoff.getKey(),padoff.getKeySize());
 	padoffb.setIv(zeroiv,sizeof(zeroiv));
-	padoffb.setPadding(false);
+	padoffb.setUsePadding(false);
 	test("padding off: encrypt append",
 		padoff.append(blockaligned,sizeof(blockaligned)));
 	const byte_t	*encna=padoff.getEncryptedData();
@@ -66,14 +66,14 @@ int main(int argc, const char **argv) {
 	test("padding off: round trip matches",
 		!bytestring::compare(decna,blockaligned,sizeof(blockaligned)));
 
-	// padding on (the default, unchanged from before setPadding()
+	// padding on (the default, unchanged from before setUsePadding()
 	// existed) still round-trips, and grows the ciphertext by a block,
 	// unlike the padding-off case above
 	aes256	padon;
 	aes256	padonb;
 	padon.setRandomKey();
 	padon.setIv(zeroiv,sizeof(zeroiv));
-	test("padding on by default",padon.getPadding());
+	test("padding on by default",padon.getUsePadding());
 	padonb.setKey(padon.getKey(),padon.getKeySize());
 	padonb.setIv(zeroiv,sizeof(zeroiv));
 	test("padding on: encrypt append",
@@ -93,7 +93,7 @@ int main(int argc, const char **argv) {
 	aes256	padoffbad;
 	padoffbad.setKey(padoff.getKey(),padoff.getKeySize());
 	padoffbad.setIv(zeroiv,sizeof(zeroiv));
-	padoffbad.setPadding(false);
+	padoffbad.setUsePadding(false);
 	byte_t	notblockaligned[17];
 	bytestring::zero(notblockaligned,sizeof(notblockaligned));
 	padoffbad.append(notblockaligned,sizeof(notblockaligned));
